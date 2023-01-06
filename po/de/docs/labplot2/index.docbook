@@ -1,0 +1,2398 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY latex "L<superscript>A</superscript>T<subscript>E</subscript>X">
+  <!ENTITY tex "T<subscript>E</subscript>X">
+  <!ENTITY LabPlot "<application>LabPlot</application>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+]>
+
+<book lang="&language;">
+<bookinfo>
+<title>The &LabPlot; Handbook</title>
+
+<authorgroup>
+	<author>
+		<firstname>Stefan</firstname>
+		<surname>Gerlach</surname>
+		<affiliation>
+			<address><email>stefan.gerlach@uni-konstanz.de</email></address>
+		</affiliation>
+	</author>
+	<author>
+		<firstname>Alexander</firstname>
+		<surname>Semke</surname>
+		<affiliation>
+			<address><email>Alexander.Semke@web.de</email></address>
+		</affiliation>
+	</author>
+	<author>
+		<firstname>Yuri</firstname>
+		<surname>Chornoivan</surname>
+		<affiliation>
+			<address><email>yurchor@ukr.net</email></address>
+		</affiliation>
+	</author>
+	<author>
+		<firstname>Garvit</firstname>
+		<surname>Khatri</surname>
+		<affiliation>
+			<address><email>garvitdelhi@gmail.com</email></address>
+		</affiliation>
+	</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<copyright>
+  <year>2007-2016</year>
+	<holder>Stefan Gerlach</holder>
+</copyright>
+<copyright>
+  <year>2008-2015</year>
+	<holder>Alexander Semke</holder>
+</copyright>
+<copyright>
+  <year>2014</year>
+	<holder>Yuri Chornoivan</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+<date>2016-12-24</date>
+<releaseinfo>3.3.1</releaseinfo>
+
+<abstract>
+	<para>
+		&LabPlot; is a program for two-dimensional function plotting and data analysis.
+	</para>
+</abstract>
+
+<keywordset>
+	<keyword>KDE</keyword>
+	<keyword>LabPlot</keyword>
+	<keyword>plot</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title>Introduction</title>
+<para>
+&LabPlot; is a &kde; application for interactive graphing and analysis of scientific data. &LabPlot; provides an easy way to create, manage and edit plots.
+</para>
+
+<para>
+Features:
+<itemizedlist>
+<listitem><para>Project-based management of data</para></listitem>
+<listitem><para>Project-explorer for management and organization of created objects in different folders and sub-folders</para></listitem>
+<listitem><para>Spreadsheet with basic functionality for manual data entry or for generation of uniform and non-uniform random numbers</para></listitem>
+<listitem><para>Import of external ASCII-data into the project for further editing and visualization</para></listitem>
+<listitem><para>Export of spreadsheet to an ASCII-file</para></listitem>
+<listitem><para>Worksheet as the main parent object for plots, labels &etc;, supports different layouts and zooming functions</para></listitem>
+<listitem><para>Export of worksheet to different formats (pdf, eps, png and svg)</para></listitem>
+<listitem><para>Great variety of editing capabilities for properties of worksheet and its objects</para></listitem>
+<listitem><para>Cartesian plots, created either from imported or manually created data sets or via mathematical equation</para></listitem>
+<listitem><para>Definition of mathematical formulas is supported by syntax-highlighting and completion and by the list of thematicaly grouped mathematical and physical constants and functions</para></listitem>
+<listitem><para>Investigation of plotted data is supported by many zooming and navigation features</para></listitem>
+<listitem><para>Several analysis functions and methods for data reduction, differentiation, integration, interpolation, smoothing, (nonlinear) fitting, Fourier filter and Fourier transform</para></listitem>
+<listitem><para>Linear and non-linear fits to data, several fit-models are predefined and custom models with arbitrary number of parameters can be provided</para></listitem>
+<listitem><para>Supports many CAS backends like Maxima, Python, KAlgebra, Sage</para></listitem>
+<listitem><para>Nice Worksheet view for evaluating expressions</para></listitem>
+<listitem><para>Easy plugin based structure to add different Backends</para></listitem>
+<listitem><para>Plugin based assistant dialogs for common tasks (like integrating a function or entering a matrix)</para></listitem>
+<listitem><para>Datapicker for manual or (semi-)automatic data extraction from imported images containing plots and curves.</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+&LabPlot; can be found on its homepage at kde.org:
+<ulink url="https://labplot.kde.org/">https://labplot.kde.org/</ulink>.
+</para>
+
+</chapter>
+
+
+<chapter id="using-LabPlot">
+<title>Using &LabPlot;</title>
+<sect1 id="interface-overview">
+  <title>Interface Overview</title>
+  <para>
+&LabPlot; follows the MDI (Multiple Document Interface) philosophy - all the created application objects are placed as sub-windows in the <link linkend="main-area">Main Area</link> of the application window. The <link linkend="project-explorer">Project Explorer</link> serves as the tool to create and organize those objects in a tree-like structure.
+
+The <link linkend="properties-explorer">Properties Explorer</link> is used to modify the properties of the currently selected object(s).
+Many functions are reachable via the main menu and via object specific toolbars and context menus. Additional information and application notifications are shown in the status bar.
+</para>
+
+  <screenshot>
+    <screeninfo>The default &LabPlot; window</screeninfo>
+    <mediaobjectco>
+      <imageobjectco>
+	<areaspec units="other" otherunits="imagemap">
+	  <!--these ids are used only internally by DocBook so we keep them short-->
+	  <area id="im-win1a1" linkends="project-explorer" coords="28,69,234,724" />
+	  <area id="im-win1a2" linkends="worksheet" coords="456,382,804,688" />
+	  <area id="im-win1a3" linkends="spreadsheet" coords="249,78,553,390" />
+	  <area id="im-win1a4" linkends="toolbar" coords="1,46,640,68" />
+	  <area id="im-win1a5" linkends="commands" coords="1,19,432,45" />
+<!-- 	  <area id="im-win1a6" linkends="statusbar" coords="38,742,1294,777" /> -->
+	  <area id="im-win1a7" linkends="properties-explorer" coords="834,69,1279,724" />
+	</areaspec>
+	<imageobject>
+	  <imagedata fileref="labplot.png" format="PNG"/>
+	</imageobject>
+      </imageobjectco>
+    </mediaobjectco>
+  </screenshot>
+<!--  <para>
+    The default &LabPlot; window has the <link linkend="project-explorer">Project Explorer</link> pane on the left, the <link linkend="properties-explorer">Properties</link> pane on the right, <link linkend="spreadsheet">spreadsheet</link>/<link linkend="worksheet">worksheet</link> area in the center, the <link linkend="toolbar">main toolbar</link> on the top and the status bar on the bottom.
+  </para>-->
+</sect1>
+
+<sect1 id="project-explorer">
+<title>Project Explorer</title>
+<para>
+The Project Explorer is the main part of &LabPlot; aimed to handle its objects. Objects are organized in a tree-like structure representing the parent-child relations between the different objects.
+Folders and sub-folders can introduce additional grouping for the different objects.
+</para>
+<para>
+Project explorer is a dockable window and can be placed at an arbitrary place. The user can determine which columns should be shown by selecting/deselecting the columns of interest in the context menu (&RMB; click on an empty place in the tree-view or its header). Furthermore, the list of shown objects can be reduced by providing a filter in the <guilabel>Search/Filter</guilabel> text field.
+</para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="project-explorer.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</sect1>
+
+<sect1 id="main-area">
+<title>Main Area</title>
+<para>
+Created objects having a view (like worksheet, spreadsheet &etc;) are placed in the main area of the application. Depending on the current setting for the user interface, windows are placed either as independent and freely moveable sub-windows (interface "Sub-window view") or as tabs in a tabbed view (interface "Tabbed view").
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="sub_window_tabbed_view_interfaces.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+When sub-windows are used, all windows of objects belonging to the currently selected folder only are shown. Alternatively, the visibility of windows can be extended to the currently selected folder and its sub-folders or to all windows in the project. This behaviour is controlled via the parameter "Window visibility policy" accessible via the context menu of the project explorer.
+</para>
+</sect1>
+
+<sect1 id="properties-explorer">
+<title>Properties Explorer</title>
+<para>
+Properties explorer allows the user to modify the currently selected object in the project explorer. A great variety of object properties can be edited in undoable/redoable way. Editing of multiple objects of the same time is also possible. 
+</para>
+<para>
+Properties explorer is a dockable window and can be placed at an arbitrary place.
+</para>
+</sect1>
+
+<sect1 id="spreadsheet">
+<title>Spreadsheet</title>
+<para>
+The spreadsheet is the main part of &LabPlot; when working with data and consists of columns.
+Column is the basic data set in &LabPlot; used for plotting and data analysis.
+Every column of the spreadsheet is specified by its name and the type - numeric, text, month names, day names and date and time.
+Also, for each type different representation formats can be assigned like decimal or scientific format for numeric columns &etc;
+</para>
+<para>
+You can mask selected data points in the spreadsheet (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu).
+Masked data is not plotted and is also excluded from data analysis functions like fitting &etc;
+Alternatively, you can mask or drop values in a column (<menuchoice><guimenu>Mask Values</guimenu></menuchoice> or <menuchoice><guimenu>Drop Values</guimenu></menuchoice> from the column context menu) by specifying a range.
+When specifying which values to mask or to drop, several operators (“equal to”, “greater than”, “lesser than”, &etc;) are available.
+These operations can help to hide or to remove some outliers in the data set prior to, &eg;, performing a fit to this data set.
+</para>
+<para>
+Any spreadsheet function can be reached via the context menu (&RMB; click).
+You can cut, copy and paste between spreadsheets, generate, normalize and sort data and finally make plots out of your data.
+</para>
+
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="spreadsheet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+
+<para>
+New data can be produced either by entering it manually in the spreadsheet or by generating the data according to a certain prescription.
+&LabPlot; provides 5 different methods to generate data, accessible via the context menu of the column:
+
+<itemizedlist>
+<listitem>
+<para>
+Row Numbers - values in the column are set according to its row number, this provide an easy way to quickly create an index.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Const Values - values in the column are set to a constant value provided by the user.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Equidistant values (for numeric columns only) - given the minimal and the maximal values, the equidistant values can be either generated 
+by fixing the total number of values in that range or by fixing the increment (distance).
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="spreadsheet_generate_equidistant_values.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Random values (for numeric columns only) - values are randomly generated according to the selected distribution.
+To generate uniformly distributed random numbers, select "Flat" distribution.
+</para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="spreadsheet_generate_random_values.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+<para>
+In the simplest cases a non-uniform distribution is calculated analytically from the uniform distribution of a random number generator by applying
+an appropriate transformation. More complicated distributions are created by the acceptance-rejection method, which compares the desired distribution
+against a distribution which is similar and known analytically.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Function values (for numeric columns only) - values are generated according to a mathematical function provided by the user, 
+a column (data set) containing the function arguments has to be provided.
+It is possible to define a multivariant function and to provide a data set (a column in a spreadsheet) for each of the variables.
+The corresponding dialog supports the creation of arbitrary number of variables.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="spreadsheet_generate_multivariant_function_values.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+</listitem>
+
+</itemizedlist>
+
+</para>
+
+
+<para>
+Already existing data can be imported into a spreadsheet from external files via the <link linkend="importdialog">"Import Data" dialog</link>.
+Imported data will be stored in the project file. Changes on data, performed either in the spreadsheet or in the external file after the import, are not synchronized anymore.
+</para>
+
+<para>
+The data in the spreadsheet can be exported to an external file (see <link linkend="exportdialog">Export Dialog</link>).
+</para>
+</sect1>
+
+<sect1 id="matrix">
+<title>Matrix</title>
+<para>
+Matrix is another container for matrix-like data. This container is presented like a table or, alternatively, as a two-dimensional greyscale image.
+The elements of such a table/matrix can be thought as being the Z-values, Z=Z(X,Y), with X and Y values being the row and column numbers, respectively.
+The transition from the row and column numbers to the logical coordinates is done via an explicit user-defined mapping of both representations.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="matrix.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+The matrix data can either be entered manually or via an import from an external file.
+Similar to the data generation for a column in a spreadsheet, the matrix can be filled with constant values or via a formula, too.
+The screenshot below shows the image view of a matrix together with the formula that was used to generate the matrix elements:
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="matrix_function_values.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+</sect1>
+
+
+<sect1 id="workbook">
+<title>Workbook</title>
+<para>
+Workbook helps the user to better organize and to group different data containers (Spreadsheet and Matrix).
+This object serves as the parent container for multiple Spreadsheet- and/or Matrix-objects and puts them together in a view with multiple tabs:
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="workbook.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+<para>
+With folders it is already possible to bring some structure in the <link linkend="project-explorer">Project Explorer</link> and to group together several related objects
+(spreadsheets with data stemming from text files of similar origin, red, green and blue values of an image imported into three different matrices, &etc;).
+With Workbook the user has the possibility for another additional grouping.
+</para>
+
+</sect1>
+
+
+<sect1 id="worksheet">
+<title>Worksheet</title>
+<para>
+The worksheet is, besides the data containers <link linkend="spreadsheet">Spreadsheet</link> and <link linkend="matrix">Matrix</link>, another central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels &etc;
+</para>
+<para>
+Worksheets can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter &etc;) or they can fill out the complete available area for the worksheet window. Multiple plots can be arranged on the worksheet in a vertical, horizontal or grid layouts.
+</para>
+<para>
+Many properties of the worksheet like size, background colour and layout settings can be changed in the "Worksheet properties" pane.
+</para>
+
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="worksheet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Different worksheet actions dealing with the creation of new objects, changing of the current mouse mode or zooming can be accessed via the toolbar, main menu or the context menu of the worksheet in the <link linkend="project-explorer">project explorer</link>.
+</para>
+
+<para>
+The results shown on the worksheet can be exported to different formats via the <link linkend="exportdialog">export dialog</link>.
+</para>
+</sect1>
+
+<sect1 id="CASworksheet">
+<title>CAS Worksheet</title>
+<para>
+The CAS worksheet is, besides the <link linkend="worksheet">worksheet</link>, the third central part of the application and provides an area to you use your favorite mathematical applications from within an elegant Worksheet Interface.
+</para>
+<para>
+  &LabPlot; offers you several choices for the backends you wish to use with it. The choice to make depends on what you want to achieve.
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="worksheet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+<para>
+  Currently the following backends are available:
+  <variablelist>
+    <varlistentry>
+      <term>Sage:</term>
+      <listitem>
+	<para>
+	  Sage is a free open-source mathematics software system licensed under the GPL.
+	  It combines the power of many existing open-source packages, within a common Python-based interface.
+	  See <ulink url="http://sagemath.org">http://sagemath.org</ulink> for more information.
+	</para>
+	</listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Maxima:</term>
+      <listitem>
+	<para>
+	  Maxima is a system for the manipulation of symbolic and numeric expressions,
+	  including differentiation, integration, Taylor series, Laplace transforms,
+	  ordinary differential equations, systems of linear equations, polynomials, sets,
+	  lists, vectors, matrices, and tensors. Maxima yields high-precision numeric results
+	  by using exact fractions, arbitrary precision integers, and variable precision
+	  floating point numbers. Maxima can plot functions and data in two and three dimensions.
+	  See <ulink url="http://maxima.sourceforge.net">http://maxima.sourceforge.net</ulink> for more information.
+	</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>R:</term>
+      <listitem>
+	<para>
+	  R is a language and environment for statistical computing and graphics, similar to the S language and environment.
+	  It provides a wide variety of statistical (linear and nonlinear modelling,
+	  classical statistical tests, time-series analysis, classification, clustering, ...)
+	  and graphical techniques, and is highly extensible. The S language is often the
+	  vehicle of choice for research in statistical methodology,
+	  and R provides an open-source route to this.
+	  See <ulink url="http://www.r-project.org">http://www.r-project.org</ulink> for more information.
+	</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>&kalgebra;:</term>
+      <listitem>
+	<para>
+	  &kalgebra; is a MathML-based graph calculator, that ships with &kde; Education project.
+	  See <ulink url="http://edu.kde.org/kalgebra/">http://edu.kde.org/kalgebra/</ulink> for more information.
+	  </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Qalculate!:</term>
+      <listitem>
+  <para>
+    Qalculate! is not your regular software replication of the cheapest
+    available calculator. Qalculate! aims to make full use of the superior
+    interface, power and flexibility of modern computers. The center of
+    attention in Qalculate! is the expression entry. Instead of entering each
+    number in a mathematical expression separately, you can directly write the
+    whole expression and later modify it. The interpretation of expressions is
+    flexible and fault tolerant, and if you nevertheless do something wrong,
+    Qalculate! will tell you so. Not fully solvable expressions are however not
+    errors. Qalculate! will simplify as far as it can and answer with an
+    expression. In addition to numbers and arithmetic operators, an expression
+    may contain any combination of variables, units, and functions.
+    See <ulink url="http://qalculate.sourceforge.net/">http://qalculate.sourceforge.net/</ulink> for more information.
+  </para>
+  </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Python2:</term>
+      <listitem>
+  <para>
+    Python is a remarkably powerful dynamic programming language that is used
+in a wide variety of application domains. There are several Python packages
+to scientific programming.
+  </para>
+  <para>Python is distributed under Python Software Foundation license (GPL compatible).
+    See the <ulink url="http://www.python.org/">official website</ulink> for more information.
+  </para>
+  <note>
+    <para>
+      This backend adds an additional item to the &cantor;'s main menu, <guimenu>Package</guimenu>. The only item of this menu is <menuchoice><guimenu>Package</guimenu><guimenuitem>Import Package</guimenuitem></menuchoice>. This item can be used to import Python packages to the worksheet.
+    </para>
+  </note>
+  <warning>
+    <para>
+      This backend supports Python 2 only.
+    </para>
+  </warning>
+  </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Scilab:</term>
+      <listitem>
+  <para>
+    Scilab is an free software, cross-platform numerical computational package
+    and a high-level, numerically oriented programming language.
+  </para>
+  <para>Scilab is distributed under CeCILL license (GPL compatible).
+    See <ulink url="http://www.scilab.org/">http://www.scilab.org/</ulink> for more information.
+  </para>
+  <warning>
+    <para>
+      You need Scilab version 5.5 or higher to be installed in your system to make this backend usable.
+    </para>
+  </warning>
+  </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Octave:</term>
+      <listitem>
+  <para>
+    &GNU; Octave is a high-level language, primarily intended for numerical
+    computations. It provides a convenient command line interface for
+    solving linear and nonlinear problems numerically, and for performing other
+    numerical experiments using a language that is mostly compatible with <ulink url="http://www.mathworks.com/products/matlab/">MATLAB</ulink>.
+    See <ulink url="http://www.gnu.org/software/octave/">http://www.gnu.org/software/octave/</ulink> for more information.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Lua:</term>
+      <listitem>
+  <para>
+    Lua is a fast and lightweight scripting language, with a simple procedural syntax. There are several libraries in Lua aimed at math and science.
+  </para>
+  <para>
+    See <ulink url="http://www.lua.org/">http://www.lua.org/</ulink> for more information.
+  </para>
+  <para>
+    This backend supports <ulink url="http://luajit.org/">luajit 2</ulink>.
+  </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+</para>
+</sect1>
+
+
+<sect1 id="file_data_source">
+<title>File Data Source</title>
+<para>
+A file data source is very similar in spirit to a spreadsheet with imported data from an external file. The difference is that the imported data cannot be shown and edited in &LabPlot; after the import anymore. This can be sufficient &eg; if you only want to plot the data stemming from a calculation in an external program (and exported to an ASCII-file afterwards).
+</para>
+<para>
+Since no spreadsheet has to be filled with the imported data, the import into a file data source is faster than into a spreadsheet which can be advantageously when dealing with big files.
+</para>
+<para>
+It is possible to store the link to the external file in the project file only and not its content. Each time the project file is opened in &LabPlot;, the content is read from the external file again. Also, it is possible to let &LabPlot; watch the file for changes - the content of the file data source is updated if the external file was changed.
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="file_data_source.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+<para>
+The additional options determining the import of the data are equivalent to those provided in <link linkend="importdialog">Import Dialog</link>.
+</para>
+</sect1>
+
+
+<sect1 id="datapicker">
+<title>Datapicker</title>
+<para>
+Datapicker is a tool that allows you to easily extract data from image files. The process of extraction consists mainly out of the following steps:
+<itemizedlist>
+<listitem><para>Import an image containing plots and curves where you want to read the data points from.</para></listitem>
+<listitem><para>Select the plot type (cartesian, polar, &etc;).</para></listitem>
+<listitem><para>Select tree reference points and provide values for them. With the help of these points the logical coordinate system is determined.</para></listitem>
+<listitem><para>Create a new datapicker curve and set the type of the error bars.</para></listitem>
+<listitem><para>Switch to the mouse mode "Set Curve Points" and start selecting points on the imported image - the coordinates for the selected points are determined and added to the spreadsheet "Data".</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+It is possible to add more then one datapicker curve. This is useful in case the imported image contains several curves that need to be digitized.
+The datapicker curve that is currently being selected in the <link linkend="project-explorer">Project Explorer </link> is the "active" one - points clicked on the datapicker image will be calculated and added to its data spreadsheet.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_active_curve_data_spreadsheet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Calculated values are stored in different columns in data spreadsheets in the datapicker. These columns behave exactly the same like other columns
+in usual spreadsheets and can be directly used as source columns for curves in your own plots.
+</para>
+
+<para>
+Datapicker supports the process of the data extraction with several helpers. To place the points more precisely, a magnification glass with different magnification levels is available.
+Also, the last selected point can be shifted with the help of the navigation keys.
+Furthermore, when reading data points having error bars, datapicker automatically creates bars indicating the end points of the error bars.
+Those bars can be pulled with the mouse until the required length (the distance to the data point) is reached.
+</para>
+
+
+<para>
+The procedure for the extraction of data from an imported plot as described above is feasible when dealing with a limited number of points.
+In case the curves in the imported image are given as solid lines, the datapicker tool in &LabPlot; allows to read them (semi-)automatically.
+For this, after a new datapicker curve was added as described above, switch to the mouse mode "Select Curve Segments". The curves on the plot are recognized and highlighted.
+By clicking on a highlighted curve (or one of its segments), points along this curve are created.
+The length of a segment and the density of created points (separation between two points) are adjustable parameters.
+On the screenshots below, after switching to the segment mode all black lines were highlighted (green colour).
+In this specific case, the curve was recognized as a single segment and a single mouse-click on this segment is sufficient to digitize this curve and to automatically place points along the curve.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_segments.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+In many cases the plot is not as simple as above (single black curve on white background) and contains grid lines, many curves of different colour and thinness and a non-white background.
+In such a case the automatic detection fails (too many or no objects are highlighted). To help the datapicker to determine the curve(s) correctly, the user has to limit the allowed ranges in the HSV (or HSI) colour spaces.
+To subtract the non-white background it is possible to limit the range for the foreground colour, too.
+Internally, each pixel of the image is converted to black and white where only the points fitting into the user-defined ranges for hue, saturation, value, intensity and foreground are set to black.
+</para>
+
+<para>
+On the screenshots below, the blue curves in the original image were projected onto by having appropriately reduced the allowed ranges in the colour space (note the peak for blue in the histogram for the hue).
+The transformed black and white image contains only the curves the user is interested in and it is now an easy task for the datapicker to determine the curves and to place points on them.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_original_transformed_segments.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Similar to <link linkend="worksheet">Worksheet</link>, the currently visible area in the datapicker can be exported.
+The supported image formats as described in the section <link linkend="exportdialog">Export Dialog</link>.
+</para>
+</sect1>
+
+<sect1 id="importdialog">
+<title>Import Dialog</title>
+<para>
+In the import dialog you can import data into one of the available spreadsheets or matrices in &LabPlot;.
+The supported data formats are
+<itemizedlist>
+<listitem><para>ASCII</para></listitem>
+<listitem><para>Binary</para></listitem>
+<listitem><para>Image</para></listitem>
+<listitem><para>NetCDF</para></listitem>
+<listitem><para>HDF5</para></listitem>
+<listitem><para>FITS</para></listitem>
+</itemizedlist>
+Preview of all supported file types is available in the import dialog.
+For data formats with complex internal structures (like NetCDF, HDF5 and FITS),
+the content of the file is presented in a tree view that allows comfortable navigation
+through the file. A versatile dialog to edit the headers (keywords) of a FITS file is also
+provided.
+</para>
+
+<para>
+Import of ascii and binary data compressed with gzip, bzip2 or xz can be done directly as the decompression happens transparently for the user.
+</para>
+
+
+<para>
+The name of the file containing the data to import has to be provided. The <guibutton>File Info</guibutton> button opens a dialog where some information about the selected file is shown. The type of the data can be specified - currently, only ASCII files containing several data sets (vectors) stored as columns are supported.
+The filter - automatic or custom - determines how the file has to be parsed. Selecting the filter "custom", several parameters like separating character &etc; can be provided manually in this case.
+</para>
+<para>
+The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
+</para>
+<screenshot>
+  <screeninfo>Importing data into &LabPlot;</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="import-dialog.png" format="PNG" />
+    </imageobject>
+    <textobject>
+      <phrase>Importing data into &LabPlot;</phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+
+</sect1>
+
+
+<sect1 id="exportdialog">
+<title>Export Dialog</title>
+<para>
+	A worksheet can be exported to several graphics format (vector and raster).
+	The export is done via the export dialog reachable via the
+	<guibutton>Export</guibutton> in the main toolbar or
+	<menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice>
+	in the main menu.
+</para>
+<para>
+	Besides the graphics format, the user can specify which part of the worksheet
+	has to be exported and whether the background has to be exported or not.
+	Also, for raster graphics the image resolution can be provided.
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="export_worksheet_dialog.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+<para>
+	The content of a spreadsheet can be exported to an external text or FITS file.
+	In the export dialog for spreadsheets the user can specify the character
+	separating values of different columns. Optionally, the header of the spreadsheet
+	(names of the columns in the spreadsheet) can be exported.
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="export_spreadsheet_dialog.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+</sect1>
+
+</chapter>
+
+<chapter id="commands">
+<title>Command Reference</title>
+
+<sect1 id="file-menu">
+<title>The File Menu</title>
+
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>N</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new &LabPlot; project file.</action></para>
+<para> In a project file all settings and all plots are stored in ASCII
+format.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>O</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Open</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a &LabPlot; project file.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guisubmenu>Open Recent</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Opens a recent &LabPlot; project file.</action></para>
+<para> Here the last used 10 project files are listed.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>S</keycap></keycombo></shortcut>
+<guimenu><accel>F</accel>ile</guimenu><guimenuitem><accel>S</accel>ave</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the actual project.</action></para>
+<para>If you haven't saved the project before the project is saved under a temporary project file name.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guimenuitem>Save As</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>
+Saves the actual project under a different name.
+</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>P</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Print</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Prints the active plot.</action></para>
+<para>
+Here a print dialog is opened where you can select the printer, different paper sizes, &etc;
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guimenuitem>Print Preview</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open a print preview window.</action> &LabPlot; allows you to choose print settings using the toolbar of this window and view the result immediately.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>=</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guisubmenu>New</guisubmenu><guimenuitem>Spreadsheet</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new spreadsheet in the current folder of &LabPlot; project.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Alt;<keycap>X</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guisubmenu>New</guisubmenu><guimenuitem>Worksheet</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new worksheet in the current folder of &LabPlot; project.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guisubmenu>New</guisubmenu><guimenuitem>Folder</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new spreadsheet in the current folder of &LabPlot; project.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guisubmenu>New</guisubmenu><guimenuitem>File Data Source</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens <guilabel>Import data to spreadsheet/matrix</guilabel> window.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;&Shift;<keycap>L</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Import</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para><action>Import data into the active spreadsheet</action></para>
+<para>
+This item can be used to import data into &LabPlot;. Please read more in the <link linkend="importdialog">import dialog</link>
+section.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu><guimenuitem>Export</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves the active plot as special format.</action></para>
+<para>Currently supported are Encapsulated Postscript (EPS), Portable Document Format (PDF), Scalable Vector Graphics (SVG) and Portable Network Graphics (PNG).</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>W</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Closes the current opened &LabPlot; project file.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><shortcut>
+<keycombo>&Ctrl;<keycap>Q</keycap></keycombo></shortcut>
+<guimenu>File</guimenu><guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quit &LabPlot;.</action></para>
+</listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="edit-menu">
+<title>The Edit Menu</title>
+
+<para><variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Undo/Redo History</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the &LabPlot; action history window.</action> Select an item in the list to navigate to the corresponding step.
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="worksheet-menu">
+<title>The Worksheet Menu</title>
+<para>
+This menu contains all the items that can also be found in the context menu (right mouse) of a worksheet. 
+The menu is only available when a worksheet object is selected on the <guilabel>Project Explorer</guilabel> panel.
+</para>
+</sect1>
+
+<sect1 id="spreadsheet-menu">
+<title>The Spreadsheet Menu</title>
+<para>
+This menu contains all the items that can also be found in the context menu (right mouse) of a spreadsheet. 
+The menu is only available when a spreadsheet object is selected on the <guilabel>Project Explorer</guilabel> panel.
+</para>
+</sect1>
+
+<sect1 id="CASworksheet-menu">
+<title>The CAS Worksheet Menu</title>
+<para>
+This menu contains all the items that can also be found in the context menu (right mouse) of a CAS worksheet.
+The menu is only available when a worksheet object is selected on the <guilabel>Project Explorer</guilabel> panel.
+</para>
+</sect1>
+<sect1 id="datapicker-menu">
+<title>The Datapicker Menu</title>
+<para>
+This menu contains all the items that can also be found in the context menu (right mouse) of a datapicker. 
+The menu is only available when a datapicker object is selected on the <guilabel>Project Explorer</guilabel> panel.
+</para>
+</sect1>
+
+<sect1 id="settings-menu">
+<title>The Settings Menu</title>
+
+<para>This menu gives you the ability to change user settings.</para>
+
+<para>Apart from the common &kde; Settings menu entries described in the <ulink url="help:/fundamentals/menus.html#menus-settings">Settings Menu</ulink> chapter of the &kde; Fundamentals &LabPlot; has this application specific menu entry:
+</para>
+
+<variablelist>
+<varlistentry><term><menuchoice><shortcut>
+<keycombo>&Ctrl;&Shift;<keycap>F</keycap></keycombo></shortcut>
+<guimenu>Settings</guimenu><guimenuitem>Full Screen Mode</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show the workspace in full screen mode.</action></para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+
+
+<sect1 id="help-menu">
+<title>The Help Menu</title>
+
+<para>
+  Additionally, &LabPlot; has the common &kde; Help menu items. For more information, read the section about the <ulink url="help:/fundamentals/menus.html#menus-help">Help Menu</ulink> of the &kde; Fundamentals.
+</para>
+
+</sect1>
+
+<sect1 id="toolbar">
+<title>Toolbar</title>
+
+<para>
+  The main toolbar contains the main items that you can find in the different menus. More details on this can be found in the <ulink url="help:/fundamentals/config.html#toolbars">&kde; Fundamentals manual</ulink>.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="plotting">
+<title>Plotting</title>
+
+<sect1 id="plots">
+  <title>Plots</title>
+  <para>
+      Plots can be created inside a worksheet via "Add new" in the context menu or in the application menu via "Worksheet"
+      by selecting "xy-plot" and the type of plot you like to have.
+  </para>
+  <para>
+    Within this xy-plot you can add a xy-curve containing data to show (again via the context menu or application menu).
+  </para>
+  <para>
+    The settings of a plot can be changed in the corresponding dock widget. There are general settings like geometry 
+    but also the range of the x- and y-axis (including scaling). The plot title can be set in the "Title" tab of the
+    dock widget. Background and border styles can be changed in the "Plot Area" tab.
+  </para>
+</sect1>
+  
+<sect1 id="curves">
+  <title>Curves</title>
+  <para>
+    Curves contain data points that can be shown in a plot. 
+    There are three different method to create curves: the standard xy-curve, a xy-curve from a mathematical expression
+    and a xy-curve from a data analysis function.
+    </para>
+    <para>
+    The standard xy-curve can be filled with values of a spreadsheet by selecting the x-data and y-data as column of the 
+    spreadsheet in the xy-curve dock widget. Another method to fill a curve is to use a mathematical expression. Here you can
+    select any mathematical function and range to create the curve.
+    The third method to create a curve is to use a data analysis function. The data and the analysis function can be
+    selected in the dock widget of the analysis function.
+  </para>
+  <para>
+   For all types of curves the line and symbols styles can be changed in the dock widget. Also annotated values
+   and error bar settings can be changed here.
+  </para>
+</sect1>
+
+<sect1 id="legends">
+  <title>Legends</title>
+  <para>
+    A legend can be easily added to a plot by using the context of application menu. It contains information
+    about all curves in a plot.
+  </para>
+  <para>
+    The settings of a legend (format and geometry) can be changed in the legend dock widget. Also the legend title
+    settings, the legend background and the layout can be changed in the corresponding tab of the legend dock widget.
+  </para>
+</sect1>
+  
+</chapter>
+
+<chapter id="analysis">
+  <title>Analysis functions</title>
+  <sect1 id="analysis_overview">
+    <title>Overview</title>
+  <para>
+    &LabPlot; supports a wide variety of data analysis functions:
+    </para>
+      <itemizedlist>
+	<listitem><para>Data reduction</para></listitem>
+	<listitem><para>Differentiation</para></listitem>
+	<listitem><para>Integration</para></listitem>
+	<listitem><para>Interpolation</para></listitem>
+	<listitem><para>Smoothing</para></listitem>
+	<listitem><para>Nonlinear curve fitting</para></listitem>
+	<listitem><para>Fourier filter</para></listitem>
+	<listitem><para>Fourier transform</para></listitem>
+      </itemizedlist>
+    <para>
+    All of them can be applied to any data consisting of x- and y-columns. 
+    The analysis functions can be accessed using the Analysis menu or the context menu of a worksheet.
+    The newly created curves can be customized (line style, symbol style, &etc;) like any other x-y-curve.
+    </para>
+    </sect1>
+
+  <sect1 id="data_reduction">
+    <title>Data reduction</title>
+    <para>
+      To reduce the number of data points without losing the features of a data set
+      you can apply one of several line simplification algorithm:
+    </para>
+      <itemizedlist>
+	<listitem><para>Douglas-Peucker</para></listitem>
+	<listitem><para>Visvalingam-Whyatt</para></listitem>
+	<listitem><para>Reumann-Witkam</para></listitem>
+	<listitem><para>Perpendicular distance simplification</para></listitem>
+	<listitem><para>n-th point simplification</para></listitem>
+	<listitem><para>Radial distance simplification</para></listitem>
+	<listitem><para>Interpolation (nearest neighbor)</para></listitem>
+	<listitem><para>Opheim</para></listitem>
+	<listitem><para>Lang</para></listitem>
+      </itemizedlist>
+    <para>
+      The desired tolerance is automatically calculated from the data but can also be changed
+      in the dock widget.
+    </para>
+  </sect1>
+
+  <sect1 id="differentiation">
+    <title>Differentiation</title>
+    <para>
+      Numerical differentiation of data can be done specifying:
+    </para>
+      <itemizedlist>
+	<listitem><para>order of derivation (first to sixth order)</para></listitem>
+	<listitem><para>order of accuracy (up to 4th order, depending on derivation order)</para></listitem>
+      </itemizedlist>
+  </sect1>
+  
+  <sect1 id="integration">
+    <title>Integration</title>
+    <para>
+      Numerical integration of data can be done specifying one of the methods
+    </para>
+      <itemizedlist>
+	<listitem><para>rectangle (1-point) rule</para></listitem>
+	<listitem><para>trapezoid (2-point) rule</para></listitem>
+	<listitem><para>Simpson-1/3 (3-point) rule</para></listitem>
+	<listitem><para>Simpson-3/8 (4-point) rule</para></listitem>
+      </itemizedlist>
+   <para>
+     The default method (trapezoid) should be suitable for most cases. 
+     The number of resulting data points is reduced for both Simpson-rules due to the properties of these methods.
+   </para>
+  </sect1> 
+
+  <sect1 id="interpolation">
+    <title>Interpolation</title>
+    <para>
+      Interpolation of data can be done with several algorithm:
+    </para>
+      <itemizedlist>
+	<listitem><para>linear</para></listitem>
+	<listitem><para>polynomial (if number of data points &lt; 100)</para></listitem>
+	<listitem><para>cubic spline</para></listitem>
+	<listitem><para>cubic spline (periodic)</para></listitem>
+	<listitem><para>Akima spline</para></listitem>
+	<listitem><para>Akima spline (periodic)</para></listitem>
+	<listitem><para>Steffen spline (needs GSL &ge; 2.0)</para></listitem>
+	<listitem><para>cosine</para></listitem>
+	<listitem><para>exponential</para></listitem>
+	<listitem><para>piecewise cubic Hermite (finite differences, Catmull-Rom, cardinal, Kochanek-Bartels)</para></listitem>
+	<listitem><para>rational functions</para></listitem>
+      </itemizedlist>
+    <para>
+	The interpolating function is calculated with the given number n of data points and evaluated as:
+    </para>
+      <itemizedlist>
+	<listitem><para>function</para></listitem>
+	<listitem><para>derivative</para></listitem>
+	<listitem><para>second derivative</para></listitem>
+	<listitem><para>integral (starting from zero)</para></listitem>
+      </itemizedlist>
+  </sect1>
+
+    <sect1 id="smoothing">
+    <title>Smoothing</title>
+    <para>
+      A number of different smoothing methods are supported:
+    </para>
+      <itemizedlist>
+	<listitem><para>Moving average (central)</para></listitem>
+	<listitem><para>Moving average (lagged)</para></listitem>
+	<listitem><para>Percentile filter</para></listitem>
+	<listitem><para>Savitzky-Golay</para></listitem>
+      </itemizedlist>
+    <para>
+      All smoothing methods support several padding modes (constant, periodic, mirror, nearest, etc.) for the beginning and end
+      of the data set. The moving averages support several weight functions (uniform, triangular, binomial, parabolic, tricubic, etc.)
+      which can be selected to weight the selected data points depending on their distance.
+      </para>
+  </sect1>
+  
+  <sect1 id="fitting">
+    <title>Curve fitting</title>
+    <para>
+      Linear and non-linear curve fitting of data can be done with several predefined fit-models 
+      (for instance polynomial, exponential, Gaussian or custom) to data consisting of x- and y-columns 
+      with an optional weight column. With a custom model any function with unlimited number of parameters
+      can be used for fitting. The results including statistical properties are displayed in the results text.
+    </para>
+    <para>
+    The start values of the parameter can be set in the parameter dialog. It is also possible to fix any parameter and set lower and upper limits to the values here. Be aware that reducing the parameter space by fixing parameter or specifying limits can slow down convergence or avoid finding a good result. It's always a good idea to remove any parameter limitations when good start values are found.
+    </para>
+    <para>
+        Following options can be set in the options dialog to optimize the fitting:
+    </para>
+      <itemizedlist>
+	<listitem><para>Max. iterations: number of maximum iterations</para></listitem>
+	<listitem><para>Tolerance: desired tolerance for result</para></listitem>
+	<listitem><para>Evaluated points: number of points to evaluate the fit function</para></listitem>
+	<listitem><para>Evaluate full range: evaluate the fit function for the full data range instead of evaluating only for the given x range</para></listitem>
+	<listitem><para>Use results as new start values: results will be the new parameter start values</para></listitem>
+	</itemizedlist>
+
+    </sect1>
+  
+  <sect1 id="filter">
+    <title>Fourier filter</title>
+    <para>
+      This function can be used to apply a Fourier filter to any data consisting of x- and y-columns. Supported
+      filter types are:
+    </para>
+      <itemizedlist>
+	<listitem><para>Low pass</para></listitem>
+	<listitem><para>High pass</para></listitem>
+	<listitem><para>Band pass</para></listitem>
+	<listitem><para>Band reject (band block)</para></listitem>
+	</itemizedlist>
+    <para>
+      where any of them can have the form
+    </para>
+      <itemizedlist>
+	<listitem><para>Ideal</para></listitem>
+	<listitem><para>Butterworth (order 1 to 10)</para></listitem>
+	<listitem><para>Chebyshev type I or II (order 1 to 10)</para></listitem>
+	<listitem><para>Optimal "L"egendre (order 1 to 10)</para></listitem>
+	<listitem><para>Bessel-Thomson (any order)</para></listitem>
+      </itemizedlist>
+    <para>
+	The cutoff value(s) can be specified in the units frequency (Hertz), fraction (0.0 to 1.0) or index
+	of the data points.
+    </para>
+  </sect1>
+
+  <sect1 id="dft">
+    <title>Fourier transform</title>
+    <para>
+      To convert a signal from time to frequency domain or to change between other conjugate variables like
+      position and momentum (k-space) a discrete Fourier transform can be applied.
+      Following options can be used to suite one needs:
+    </para>
+      <itemizedlist>
+	<listitem><para>Window function (Welch, Hann, Hamming, etc.) to avoid leakage effects</para></listitem>
+	<listitem><para>Output (magnitude, amplitude, phase, dB, etc.)</para></listitem>
+	<listitem><para>One or two sided spectrum with or without shifting</para></listitem>
+	<listitem><para>X axis scaling to frequency, index or period</para></listitem>
+      </itemizedlist>
+  </sect1>
+</chapter>
+
+<chapter id="digitization">
+<title>Curve Tracing</title>
+
+<sect1 id="uploadimage">
+  <title>Upload Image</title>
+  <para>
+    Datapicker can be created inside a project via <guimenuitem>Add new</guimenuitem> in the context menu of project/folder or in the main toolbar.
+    After that a new image can be added and can be changed via <guilabel>Plot</guilabel> in the corresponding dock widget.
+  </para>
+  <para>
+    After uploading image different zooming options can be used from the context menu/datapicker toolbar to change width and 
+    height of image. Image can also be rotated to an angle using <guilabel>Rotation</guilabel> in the "edit" section of dock widget. After this
+    user have to <link linkend="axispoint">set axis points</link>.
+  </para>
+</sect1>
+  
+<sect1 id="symbols">
+  <title>Symbols</title>
+  <para>
+    Symbols are the points that can be drawn over image of datapicker. Symbols can be directly created by mouse
+     right click over the image. Symbols are mainly of two types, with and without error-bar depending on the type of 
+    <link linkend="datapickercurve">curve</link> they belong.
+    </para>
+  <para>
+    Every curve of datapicker can have its own symbol style that can be changed in the <guilabel>Symbols</guilabel> section of dock widget.
+    "SelectAndMove" mouse mode can be used to select multiple points/symbols and can be moved by using navigation keys.
+  </para>
+</sect1>
+
+<sect1 id="axispoint">
+  <title>Axis Points</title>
+  <para>
+    Axis Points are the set of three reference  <link linkend="symbols">points</link> over image of datapicker. These points 
+    can be set via <guimenuitem>Set Axis Points</guimenuitem> in the context menu of datapicker. After selecting points over image user have to update
+    their coordinate system type via <guilabel>Plot Type</guilabel> and logical positions via <guilabel>Ref. Points</guilabel> in the dock widget.
+  </para>
+</sect1>
+
+<sect1 id="datapickercurve">
+  <title>Datapicker Curve</title>
+  <para>
+    Datapicker-Curve can be created inside datapicker via <guimenuitem>New Curve</guimenuitem> in the context menu of datapicker. A curve can have 
+    different types of X and Y errors (No-error, symmetric, asymmetric). This depends on the type of errors dock widget 
+    of datapicker have at the point of creation.
+    </para>
+  <para>
+    Every curve object contains all the curve <link linkend="symbols">points</link> (hidden) and  a spreadsheet that contains 
+    logical positions of all its curve points, and provides options to update spreadsheet and to toggle visibility 
+    of its curve points using the context menu. Mode <guimenuitem>Set Curve Points</guimenuitem> in the context menu of datapicker should be 
+    selected in order to create curve points.
+  </para>
+  <para>
+    Multiple curve can be created for same datapicker. The created curve points always correspond to the active
+    curve of datapicker which can be changed via <guimenuitem>Active Curve</guimenuitem> option in the context menu and dock widget of datapicker.
+    Every curve of datapicker can have its own symbol style that can be changed in the <guilabel>Symbols</guilabel> section of dock widget.
+  </para>
+</sect1>
+
+<sect1 id="curvesegments">
+  <title>Curve Segments</title>
+  <para>
+    Curve segment for datapicker can be created over image by switching mode to <guimenuitem>Select Curve Segments</guimenuitem> in the context menu of
+    datapicker. A segment is a selectable object over image which can be selected by mouse right click over it.
+    </para>
+  <para>
+    Segments are created by processing of image on the basis range of colour attributes in order to automatically
+    trace curves. To improve results these range and types of colour attributes can be changed in the "edit"
+    section of dock-widget. Dock-widget also provides options to switch among processed image and original image,
+    and to set the minimum possible length of segments.
+  </para>
+  <para>
+    Once a segment is selected it will create curve points over it with a minimum specified distance among them.
+    The minimum specified distance among the points can be changed in the dock widget of datapicker. User might have
+    to select the segments again in order to observe the changes.
+  </para>
+</sect1>
+
+</chapter>
+
+<!-- TODO:
+
+Describe import of ascii-data. Import can be done either by importing the 
+data to an already available spreadsheet or by adding a "File data source". 
+The latter is more useful for bigger data sets where you don't need a view on 
+it. A file data source can be updated on file changes and all the xy-curves 
+consuming the data from this data source will also be updated.
+-->
+
+<chapter id="advanced_topics">
+<title>Advanced Topics</title>
+<para>
+Here you will find some explanations of advanced topics.
+</para>
+
+<sect1 id="topics">
+<title>Topics</title>
+<sect2 id="errorbar">
+<title>Error bars</title>
+<para>If you want to plot data with error bars just import your data with the <link linkend="importdialog">import dialog</link> into your project. Then use the <guilabel>Error bars</guilabel> tab of <link linkend="properties-explorer">the curve properties</link> to select <guilabel>Error type</guilabel>, choose the error column from the <guilabel>Data, +-</guilabel> list. Format of the error bars can be defined using the <guilabel>Format:</guilabel> pane.</para>
+</sect2>
+
+<sect2 id="texlabel">
+<title>TeX label</title>
+<para>For using TeX label you just have to activate the switch button <guiicon>TeX</guiicon> in the <guilabel>Title</guilabel> tab. With that every text you enter in the text box is rendered by TeX and plotted accordingly. Since this conversion takes some time you may see a certain delay when redrawing the plot.</para>
+</sect2>
+
+</sect1>
+</chapter>
+
+
+<!-- TODO:
+
+A short tutorial for the basic workflow (create new project, import data, 
+create worksheet, create plots and layout them, add curves, select columns as 
+data sources for the curves, add legends, export everything to pdf) would also help to become familiar with the software more quickly.
+-->
+
+<chapter id="tutorials">
+<title>Short Tutorials</title>
+<sect1 id="sineplot">
+  <title>Building a sine graph with &LabPlot;</title>
+  <para>
+    In this chapter you will find explanations on how to build a simple plot for a curve in the Cartesian coordinates from a mathematical equation.
+  </para>
+  <screenshot>
+    <screeninfo>&LabPlot; window after the first start</screeninfo>
+    <mediaobject>
+      <imageobject>
+	<imagedata fileref="tutorial-xy-function1.png" format="PNG" />
+      </imageobject>
+      <textobject>
+	<phrase>&LabPlot; window after the first start</phrase>
+      </textobject>
+    </mediaobject>
+  </screenshot>
+  <procedure>
+    <step>
+      <para>
+	Click on the <guibutton>New</guibutton> button or press <keycombo>&Ctrl;<keycap>N</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>New &LabPlot; project</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function2.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>New &LabPlot; project</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Worksheet</guimenuitem></menuchoice> or press <keycombo>&Alt;<keycap>X</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new &LabPlot; worksheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function3.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new &LabPlot; worksheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guisubmenu>xy-plot</guisubmenu><guimenuitem>two axes, centered</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding axes to the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function4.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding axes to the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>xy-curve from a mathematical equation</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new curve</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function5.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new curve</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Use the <guilabel>xy-equation-curve properties</guilabel> pane on the right to enter <userinput>sin(x)</userinput> into the <guilabel>y=f(x)</guilabel> field (for the list of available functions please see <xref linkend="parser"/>), <userinput>-6</userinput> into the <guilabel>x, min</guilabel> field, <userinput>6</userinput> into the <guilabel>x, max</guilabel> field and click on the <guibutton>Recalculate</guibutton> button to see the result.
+      </para>
+      <screenshot>
+      <screeninfo>The default curve plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function6.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>The default curve plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      <note>
+	<para>
+	  &LabPlot; highlights unknown syntax in the <guilabel>y=f(x)</guilabel> field. This is useful to control the correctness of the input.
+	</para>
+      </note>
+      <important>
+	<para>
+	  The list of the known functions can be found in <link linkend="parser">corresponding section of this manual</link>.
+	</para>
+      </important>
+    </step>
+    <step>
+      <para>
+	Switch to the <guilabel>Line</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>cubic spline (natural)</guimenuitem> from the <guilabel>Type</guilabel> drop down box.
+      </para>
+      <screenshot>
+      <screeninfo>Choosing the line type</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function7.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding the line type</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Switch to the <guilabel>Symbol</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>none</guimenuitem> from the <guilabel>Style</guilabel> drop down list.
+      </para>
+      <screenshot>
+      <screeninfo>Removing symbols from the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function8.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Removing symbols from the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>legend</guimenuitem></menuchoice>. Switch to the <guilabel>Title</guilabel> tab on the <guilabel>Cartesian plot legend properties</guilabel> pane and enter <userinput>Graph of sine</userinput> into the <guilabel>Text</guilabel> field. 
+      </para>
+      <screenshot>
+      <screeninfo>Changing the legend title</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function9.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Changing the legend title</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice> from the main menu. Select the place and the format to save the plot.
+      </para>
+      <screenshot>
+      <screeninfo>Exporting the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function10.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Exporting the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+  </procedure>
+</sect1>
+
+<sect1 id="spreadsheetplot">
+  <title>Building a graph from spreadsheet data with &LabPlot;</title>
+  <para>
+    In this chapter you will find explanations on how to build a simple plot from spreadsheet data.
+  </para>
+  <screenshot>
+    <screeninfo>&LabPlot; window after the first start</screeninfo>
+    <mediaobject>
+      <imageobject>
+	<imagedata fileref="tutorial-xy-function1.png" format="PNG" />
+      </imageobject>
+      <textobject>
+	<phrase>&LabPlot; window after the first start</phrase>
+      </textobject>
+    </mediaobject>
+  </screenshot>
+  <procedure>
+    <step>
+      <para>
+	Click on the <guibutton>New</guibutton> button or press <keycombo>&Ctrl;<keycap>N</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>New &LabPlot; project</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function2.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>New &LabPlot; project</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Spreadsheet</guimenuitem></menuchoice> or press <keycombo>&Ctrl;<keycap>=</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new &LabPlot; spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet1.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new &LabPlot; spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the header of the first column of the spreadsheet with the &LMB; then click on any of its cells with &RMB; and choose <menuchoice><guimenu>Selection</guimenu><guisubmenu>Fill Selection with</guisubmenu><guimenuitem>Row Numbers</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Filling the first column of the spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet2.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Filling the first column of the spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      <para>
+	Select <guimenuitem>Automatic (g)</guimenuitem> from the <guilabel>Format</guilabel> drop down box on the <guilabel>Column properties</guilabel> right dock to enhance data presentation for the first column.
+      </para>
+    </step>
+    <step>
+      <para>
+	Click on the header of the second column of the spreadsheet with the &RMB; and choose <menuchoice><guimenu>Generate Data</guimenu><guimenuitem>Random Values</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Filling the second column of the spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet3.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Filling the second column of the spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Worksheet</guimenuitem></menuchoice> or press <keycombo>&Alt;<keycap>X</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new &LabPlot; worksheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet4.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new &LabPlot; worksheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guisubmenu>xy-plot</guisubmenu><guimenuitem>box plot, four axes</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding axes to the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet5.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding axes to the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>xy-curve</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new curve</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet6.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new curve</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Use the <guilabel>xy-curve properties</guilabel> pane on the right to select <menuchoice><guimenu>Project</guimenu><guisubmenu>Spreadsheet</guisubmenu><guimenuitem>1</guimenuitem></menuchoice> in the <guilabel>x-data</guilabel> field (just click on the item and press &Enter;). Use the same procedure to  select <guimenuitem>2</guimenuitem> for the <guilabel>y-data</guilabel> field. The results will be shown on the worksheet immediately.
+      </para>
+      <screenshot>
+      <screeninfo>The plot for the unsorted data</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet7.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>The plot for the unsorted data</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Spreadsheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &LMB; then click on the second column header with the &RMB; and choose <menuchoice><guimenu>Sort</guimenu><guimenuitem>Ascending</guimenuitem></menuchoice>. 
+      </para>
+      <screenshot>
+      <screeninfo>Sorting the second column of the spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet8.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Sorting the second column of the spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &LMB; to see the results. 
+      </para>
+      <screenshot>
+      <screeninfo>The plot for the sorted data</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet9.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>The plot for the sorted data</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+  </procedure>
+</sect1>
+</chapter>
+
+<chapter id="examples">
+<title>Examples</title>
+<sect1 id="example-2d-plotting">
+    <title>2D Plotting</title>
+    <para>Coming soon ...
+        </para>
+    </sect1>
+<sect1 id="example-signal">
+    <title>Signal processing</title>
+    <para>
+        </para>
+    <variablelist>
+    <varlistentry>
+    <term>Fourier filter</term>
+    <listitem>
+        <para>A time signal containing Morse code is Fourier transformed to frequency space to see the main component. By applying a narrow band pass filter the Morse signal is extracted and a nice ‘SOS’ can be seen:
+        </para>
+        
+        <screenshot>
+        <mediaobject><imageobject><imagedata fileref="example-fourier_filter-1024x532.png"/>
+        </imageobject></mediaobject>            
+        </screenshot>
+        
+        </listitem>
+    </varlistentry>
+    </variablelist>
+    </sect1>
+<sect1 id="example-computing">
+    <title>Computing</title>
+    <para>
+        </para>
+    <variablelist>
+    <varlistentry>
+    <term>Maxima</term>
+    <listitem>
+        <para>Maxima session showing the chaotic dynamics of the Duffing oscillator.
+            The differential equation of the forced oscillator are solved with Maxima.
+            Plots of the trajectory, the phase space of the oscillator and the corresponding Poincaré map are done with LabPlot:
+        </para>
+        
+        <screenshot>
+        <mediaobject><imageobject><imagedata fileref="example-maxima_2-1024x532.png"/>
+        </imageobject></mediaobject>            
+        </screenshot>
+        
+        </listitem>
+    </varlistentry>
+    <varlistentry>
+    <term>Python</term>
+    <listitem>
+        <para>Python session illustrating the effect of Blackman windowing on the Fourier transform:
+        </para>
+        
+        <screenshot>
+        <mediaobject><imageobject><imagedata fileref="example-FFT_python-1024x532.png"/>
+        </imageobject></mediaobject>            
+        </screenshot>
+        
+        </listitem>
+    </varlistentry>
+    </variablelist>
+    </sect1>
+<sect1 id="example-import-export">
+    <title>Import/Export</title>
+    <para>Coming soon ...
+        </para>
+    </sect1>
+<sect1 id="example-tools">
+    <title>Tools</title>
+    <para>Coming soon ...
+        </para>
+    </sect1>
+    
+</chapter>
+
+
+<chapter id="parser">
+<title>Parser functions</title>
+<para>
+The &LabPlot; parser allows you to use following functions:
+</para>
+
+<sect1 id="parser-standard">
+<title>Standard functions</title>
+
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Function</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+<row><entry>cbrt(x)</entry><entry><action>Cube root</action></entry></row>
+<row><entry>ceil(x)</entry><entry><action>Truncate upward to integer</action></entry></row>
+<row><entry>fabs(x)</entry><entry><action>Absolute value</action></entry></row>
+<row><entry>gamma(x)</entry><entry><action>Gamma function</action></entry></row>
+<row><entry>ldexp(x,y)</entry><entry><action>x * 2<superscript>y</superscript></action></entry></row>
+<row><entry>ln(x)</entry><entry><action>Logarithm, base e</action></entry></row>
+<row><entry>log(x)</entry><entry><action>Logarithm, base e</action></entry></row>
+<row><entry>log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
+<row><entry>log10(x)</entry><entry><action>Logarithm, base 10</action></entry></row>
+<row><entry>logb(x)</entry><entry><action>Radix-independent exponent</action></entry></row>
+<row><entry>pow(x,n)</entry><entry><action>power function x<superscript>n</superscript></action></entry></row>
+<row><entry>powint(x,n)</entry><entry><action>integer power function x<superscript>n</superscript></action></entry></row>
+<row><entry>pow2(x)</entry><entry><action>power function x<superscript>2</superscript></action></entry></row>
+<row><entry>pow3(x)</entry><entry><action>power function x<superscript>3</superscript></action></entry></row>
+<row><entry>pow4(x)</entry><entry><action>power function x<superscript>4</superscript></action></entry></row>
+<row><entry>pow5(x)</entry><entry><action>power function x<superscript>5</superscript></action></entry></row>
+<row><entry>pow6(x)</entry><entry><action>power function x<superscript>6</superscript></action></entry></row>
+<row><entry>pow7(x)</entry><entry><action>power function x<superscript>7</superscript></action></entry></row>
+<row><entry>pow8(x)</entry><entry><action>power function x<superscript>8</superscript></action></entry></row>
+<row><entry>pow9(x)</entry><entry><action>power function x<superscript>9</superscript></action></entry></row>
+<row><entry>rint(x)</entry><entry><action>round to nearest integer</action></entry></row>
+<row><entry>round(x)</entry><entry><action>round to nearest integer</action></entry></row>
+<row><entry>sqrt(x)</entry><entry><action>Square root</action></entry></row>
+<row><entry>tgamma(x)</entry><entry><action>Gamma function</action></entry></row>
+<row><entry>trunc(x)</entry><entry><action>Returns the greatest integer less than or equal to x</action></entry></row>
+
+</tbody></tgroup></informaltable>
+</sect1>
+
+<sect1 id="parser-trig">
+<title>Trigonometric functions</title>
+
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Function</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+    <row><entry>sin(x)</entry><entry><action>Sine</action></entry></row>
+    <row><entry>cos(x)</entry><entry><action>Cosine</action></entry></row>
+    <row><entry>tan(x)</entry><entry><action>Tangent</action></entry></row>
+    <row><entry>asin(x)</entry><entry><action>Inverse sine</action></entry></row>
+    <row><entry>acos(x)</entry><entry><action>Inverse cosine</action></entry></row>
+    <row><entry>atan(x)</entry><entry><action>Inverse tangent</action></entry></row>
+    <row><entry>atan2(y,x)</entry><entry><action>Inverse tangent function of two variables</action></entry></row>
+    <row><entry>sinh(x)</entry><entry><action>Hyperbolic sine</action></entry></row>
+    <row><entry>cosh(x)</entry><entry><action>Hyperbolic cosine</action></entry></row>
+    <row><entry>tanh(x)</entry><entry><action>Hyperbolic tangent</action></entry></row>
+    <row><entry>asinh(x)</entry><entry><action>Inverse hyperbolic sine</action></entry></row>
+    <row><entry>acosh(x)</entry><entry><action>Inverse hyperbolic cosine</action></entry></row>
+    <row><entry>atanh(x)</entry><entry><action>Inverse hyperbolic tangent</action></entry></row>
+    <row><entry>sec(x)</entry><entry><action>Secant</action></entry></row>
+    <row><entry>csc(x)</entry><entry><action>Cosecant</action></entry></row>
+    <row><entry>cot(x)</entry><entry><action>Cotangent</action></entry></row>
+    <row><entry>asec(x)</entry><entry><action>Inverse secant</action></entry></row>
+    <row><entry>acsc(x)</entry><entry><action>Inverse cosecant</action></entry></row>
+    <row><entry>acot(x)</entry><entry><action>Inverse cotangent</action></entry></row>
+    <row><entry>sech(x)</entry><entry><action>Hyperbolic secant</action></entry></row>
+    <row><entry>csch(x)</entry><entry><action>Hyperbolic cosecant</action></entry></row>
+    <row><entry>coth(x)</entry><entry><action>Hyperbolic cotangent</action></entry></row>
+    <row><entry>asech(x)</entry><entry><action>Inverse hyperbolic secant</action></entry></row>
+    <row><entry>acsch(x)</entry><entry><action>Inverse hyperbolic cosecant</action></entry></row>
+    <row><entry>acoth(x)</entry><entry><action>Inverse hyperbolic cotangent</action></entry></row>
+    <row><entry>sinc(x)</entry><entry><action>Sinc function sin(&pi; x) / (&pi; x)</action></entry></row>
+    <row><entry>logsinh(x)</entry><entry><action>log(sinh(x)) for x &gt; 0</action></entry></row>
+    <row><entry>logcosh(x)</entry><entry><action>log(cosh(x))</action></entry></row>
+    <row><entry>hypot(x,y)</entry><entry><action>Hypotenuse function &radic;{x<superscript>2</superscript> + y<superscript>2</superscript>}</action></entry></row>
+    <row><entry>hypot3(x,y,z)</entry><entry><action>&radic;{x<superscript>2</superscript> + y<superscript>2</superscript> + z<superscript>2</superscript>}</action></entry></row>
+    <row><entry>anglesymm(&alpha;)</entry><entry><action>force the angle &alpha; to lie in the range (-&pi;,&pi;]</action></entry></row>
+    <row><entry>anglepos(&alpha;)</entry><entry><action>force the angle &alpha; to lie in the range (0,2&pi;]</action></entry></row>
+
+</tbody></tgroup></informaltable>
+</sect1>
+
+
+<sect1 id="parser-gsl">
+<title>Special functions</title>
+<para>
+For more information about the functions see the documentation of GSL.
+</para>
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Function</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+<row><entry>Ai(x)</entry><entry><action>Airy function Ai(x)</action></entry></row>
+<row><entry>Bi(x)</entry><entry><action>Airy function Bi(x)</action></entry></row>
+<row><entry>Ais(x)</entry><entry><action>scaled version of the Airy function S<subscript>Ai</subscript>(x)</action></entry></row>
+<row><entry>Bis(x)</entry><entry><action>scaled version of the Airy function S<subscript>Bi</subscript>(x)</action></entry></row>
+<row><entry>Aid(x)</entry><entry><action>Airy function derivative Ai'(x)</action></entry></row>
+<row><entry>Bid(x)</entry><entry><action>Airy function derivative Bi'(x)</action></entry></row>
+<row><entry>Aids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>Ai</subscript>(x)</action></entry></row>
+<row><entry>Bids(x)</entry><entry><action>derivative of the scaled Airy function S<subscript>Bi</subscript>(x)</action></entry></row>
+<row><entry>Ai0(s)</entry><entry><action>s-th zero of the Airy function Ai(x)</action></entry></row>
+<row><entry>Bi0(s)</entry><entry><action>s-th zero of the Airy function Bi(x)</action></entry></row>
+<row><entry>Aid0(s)</entry><entry><action>s-th zero of the Airy function derivative Ai'(x)</action></entry></row>
+<row><entry>Bid0(s)</entry><entry><action>s-th zero of the Airy function derivative Bi'(x)</action></entry></row>
+<row><entry>J0(x)</entry><entry><action>regular cylindrical Bessel function of zeroth order, J<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>J1(x)</entry><entry><action>regular cylindrical Bessel function of first order, J<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Jn(n,x)</entry><entry><action>regular cylindrical Bessel function of order n, J<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>Y0(x)</entry><entry><action>irregular cylindrical Bessel function of zeroth order, Y<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>Y1(x)</entry><entry><action>irregular cylindrical Bessel function of first order, Y<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Yn(n,x)</entry><entry><action>irregular cylindrical Bessel function of order n, Y<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>I0(x)</entry><entry><action>regular modified cylindrical Bessel function of zeroth order, I<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>I1(x)</entry><entry><action>regular modified cylindrical Bessel function of first order, I<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>In(n,x)</entry><entry><action>regular modified cylindrical Bessel function of order n, I<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>I0s(x)</entry><entry><action>scaled regular modified cylindrical Bessel function of zeroth order, exp (-|x|) I<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>I1s(x)</entry><entry><action>scaled regular modified cylindrical Bessel function of first order, exp(-|x|) I<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Ins(n,x)</entry><entry><action>scaled regular modified cylindrical Bessel function of order n, exp(-|x|) I<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>K0(x)</entry><entry><action>irregular modified cylindrical Bessel function of zeroth order, K<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>K1(x)</entry><entry><action>irregular modified cylindrical Bessel function of first order, K<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Kn(n,x)</entry><entry><action>irregular modified cylindrical Bessel function of order n, K<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>K0s(x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of zeroth order, exp(x) K<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>K1s(x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of first order, exp(x) K<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Kns(n,x)</entry><entry><action>scaled irregular modified cylindrical Bessel function of order n, exp(x) K<subscript>n</subscript>(x)</action></entry></row>
+<row><entry>j0(x)</entry><entry><action>regular spherical Bessel function of zeroth order, j<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>j1(x)</entry><entry><action>regular spherical Bessel function of first order, j<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>j2(x)</entry><entry><action>regular spherical Bessel function of second order, j<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>jl(l,x)</entry><entry><action>regular spherical Bessel function of order l, j<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>y0(x)</entry><entry><action>irregular spherical Bessel function of zeroth order, y<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>y1(x)</entry><entry><action>irregular spherical Bessel function of first order, y<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>y2(x)</entry><entry><action>irregular spherical Bessel function of second order, y<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>yl(l,x)</entry><entry><action>irregular spherical Bessel function of order l, y<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>i0s(x)</entry><entry><action>scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) i<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>i1s(x)</entry><entry><action>scaled regular modified spherical Bessel function of first order, exp(-|x|) i<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>i2s(x)</entry><entry><action>scaled regular modified spherical Bessel function of second order, exp(-|x|) i<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>ils(l,x)</entry><entry><action>scaled regular modified spherical Bessel function of order l, exp(-|x|) i<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>k0s(x)</entry><entry><action>scaled irregular modified spherical Bessel function of zeroth order, exp(x) k<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>k1s(x)</entry><entry><action>scaled irregular modified spherical Bessel function of first order, exp(x) k<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>k2s(x)</entry><entry><action>scaled irregular modified spherical Bessel function of second order, exp(x) k<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>kls(l,x)</entry><entry><action>scaled irregular modified spherical Bessel function of order l, exp(x) k<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>Jnu(&nu;,x)</entry><entry><action>regular cylindrical Bessel function of fractional order &nu;, J<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Ynu(&nu;,x)</entry><entry><action>irregular cylindrical Bessel function of fractional order &nu;, Y<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Inu(&nu;,x)</entry><entry><action>regular modified Bessel function of fractional order &nu;, I<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Inus(&nu;,x)</entry><entry><action>scaled regular modified Bessel function of fractional order &nu;, exp(-|x|) I<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>Knu(&nu;,x)</entry><entry><action>irregular modified Bessel function of fractional order &nu;, K<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>lnKnu(&nu;,x)</entry><entry><action>logarithm of the irregular modified Bessel function of fractional order &nu;,ln(K<subscript>&nu;</subscript>(x))</action></entry></row>
+<row><entry>Knus(&nu;,x)</entry><entry><action>scaled irregular modified Bessel function of fractional order &nu;, exp(|x|) K<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>J0_0(s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>J1_0(s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Jnu_0(nu,s)</entry><entry><action>s-th positive zero of the Bessel function J<subscript>&nu;</subscript>(x)</action></entry></row>
+<row><entry>clausen(x)</entry><entry><action>Clausen integral Cl<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>hydrogenicR_1(Z,R)</entry><entry><action>lowest-order normalized hydrogenic bound state radial wavefunction R<subscript>1</subscript> := 2Z &radic;Z exp(-Z r)</action></entry></row>
+<row><entry>hydrogenicR(n,l,Z,R)</entry><entry><action>n-th normalized hydrogenic bound state radial wavefunction</action></entry></row>
+<row><entry>dawson(x)</entry><entry><action>Dawson's integral</action></entry></row>
+<row><entry>D1(x)</entry><entry><action>first-order Debye function D<subscript>1</subscript>(x) = (1/x) &int;<subscript>0</subscript><superscript>x</superscript>(t/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D2(x)</entry><entry><action>second-order Debye function D<subscript>2</subscript>(x) = (2/x<superscript>2</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>2</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D3(x)</entry><entry><action>third-order Debye function D<subscript>3</subscript>(x) =  (3/x<superscript>3</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>3</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D4(x)</entry><entry><action>fourth-order Debye function D<subscript>4</subscript>(x) =  (4/x<superscript>4</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>4</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D5(x)</entry><entry><action>fifth-order Debye function D<subscript>5</subscript>(x) =  (5/x<superscript>5</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>5</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>D6(x)</entry><entry><action>sixth-order Debye function D<subscript>6</subscript>(x) =  (6/x<superscript>6</superscript>) &int;<subscript>0</subscript><superscript>x</superscript> (t<superscript>6</superscript>/(e<superscript>t</superscript> - 1)) dt</action></entry></row>
+<row><entry>Li2(x)</entry><entry><action>dilogarithm</action></entry></row>
+<row><entry>Kc(k)</entry><entry><action>complete elliptic integral K(k)</action></entry></row>
+<row><entry>Ec(k)</entry><entry><action>complete elliptic integral E(k)</action></entry></row>
+<row><entry>F(phi,k)</entry><entry><action>incomplete elliptic integral F(phi,k)</action></entry></row>
+<row><entry>E(phi,k)</entry><entry><action>incomplete elliptic integral E(phi,k)</action></entry></row>
+<row><entry>P(phi,k,n)</entry><entry><action>incomplete elliptic integral P(phi,k,n)</action></entry></row>
+<row><entry>D(phi,k,n)</entry><entry><action>incomplete elliptic integral D(phi,k,n)</action></entry></row>
+<row><entry>RC(x,y)</entry><entry><action>incomplete elliptic integral RC(x,y)</action></entry></row>
+<row><entry>RD(x,y,z)</entry><entry><action>incomplete elliptic integral RD(x,y,z)</action></entry></row>
+<row><entry>RF(x,y,z)</entry><entry><action>incomplete elliptic integral RF(x,y,z)</action></entry></row>
+<row><entry>RJ(x,y,z)</entry><entry><action>incomplete elliptic integral RJ(x,y,z,p)</action></entry></row>
+<row><entry>erf(x)</entry><entry><action>error function erf(x) = 2/&radic;&pi; &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
+<row><entry>erfc(x)</entry><entry><action>complementary error function erfc(x) = 1 - erf(x) = 2/&radic;&pi; &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>) dt</action></entry></row>
+<row><entry>log_erfc(x)</entry><entry><action>logarithm of the complementary error function log(erfc(x))</action></entry></row>
+<row><entry>erf_Z(x)</entry><entry><action>Gaussian probability function Z(x) = (1/(2&pi;)) exp(-x<superscript>2</superscript>/2)</action></entry></row>
+<row><entry>erf_Q(x)</entry><entry><action>upper tail of the Gaussian probability function Q(x) = (1/(2&pi;)) &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>/2) dt</action></entry></row>
+<row><entry>hazard(x)</entry><entry><action>hazard function for the normal distribution</action></entry></row>
+<row><entry>exp(x)</entry><entry><action>Exponential, base e</action></entry></row>
+<row><entry>expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
+<row><entry>exp_mult(x,y)</entry><entry><action>exponentiate x and multiply by the factor y to return the product y exp(x)</action></entry></row>
+<row><entry>exprel(x)</entry><entry><action>(exp(x)-1)/x using an algorithm that is accurate for small x</action></entry></row>
+<row><entry>exprel2(x)</entry><entry><action>2(exp(x)-1-x)/x<superscript>2</superscript> using an algorithm that is accurate for small x</action></entry></row>
+<row><entry>expreln(n,x)</entry><entry><action>n-relative exponential, which is the n-th generalization of the functions `exprel'</action></entry></row>
+<row><entry>E1(x)</entry><entry><action>exponential integral E<subscript>1</subscript>(x), E<subscript>1</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t dt</action></entry></row>
+<row><entry>E2(x)</entry><entry><action>second-order exponential integral E<subscript>2</subscript>(x), E<subscript>2</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>2</superscript> dt</action></entry></row>
+<row><entry>En(x)</entry><entry><action>exponential integral E_n(x) of order n, E<subscript>n</subscript>(x) := Re &int;<subscript>1</subscript><superscript>&infin;</superscript> exp(-xt)/t<superscript>n</superscript> dt)</action></entry></row>
+<row><entry>Ei(x)</entry><entry><action>exponential integral E_i(x), Ei(x) := PV(&int;<subscript>-x</subscript><superscript>&infin;</superscript> exp(-t)/t dt)</action></entry></row>
+<row><entry>shi(x)</entry><entry><action>Shi(x) = &int;<subscript>0</subscript><superscript>x</superscript> sinh(t)/t dt</action></entry></row>
+<row><entry>chi(x)</entry><entry><action>integral Chi(x) := Re[ &gamma;<subscript>E</subscript> + log(x) + &int;<subscript>0</subscript><superscript>x</superscript> (cosh[t]-1)/t dt ]</action></entry></row>
+<row><entry>Ei3(x)</entry><entry><action>exponential integral Ei<subscript>3</subscript>(x) = &int;<subscript>0</subscript><superscript>x</superscript> exp(-t<superscript>3</superscript>) dt for x &gt;= 0</action></entry></row>
+<row><entry>si(x)</entry><entry><action>Sine integral Si(x) = &int;<subscript>0</subscript><superscript>x</superscript> sin(t)/t dt</action></entry></row>
+<row><entry>ci(x)</entry><entry><action>Cosine integral Ci(x) = -&int;<subscript>x</subscript><superscript>&infin;</superscript> cos(t)/t dt for x &gt; 0</action></entry></row>
+<row><entry>atanint(x)</entry><entry><action>Arctangent integral AtanInt(x) = &int;<subscript>0</subscript><superscript>x</superscript> arctan(t)/t dt</action></entry></row>
+<row><entry>Fm1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of -1, F<subscript>-1</subscript>(x) = e<superscript>x</superscript> / (1 + e<superscript>x</superscript>)</action></entry></row>
+<row><entry>F0(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 0, F<subscript>0</subscript>(x) = ln(1 + e<superscript>x</superscript>)</action></entry></row>
+<row><entry>F1(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 1, F<subscript>1</subscript>(x) = &int;<subscript>0</subscript><superscript>&infin;</superscript> (t /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>F2(x)</entry><entry><action>complete Fermi-Dirac integral with an index of 2, F<subscript>2</subscript>(x) = (1/2) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>2</superscript> /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>Fj(j,x)</entry><entry><action>complete Fermi-Dirac integral with an index of j, F<subscript>j</subscript>(x) = (1/&Gamma;(j+1)) &int;<subscript>0</subscript><superscript>&infin;</superscript> (t<superscript>j</superscript> /(exp(t-x)+1)) dt</action></entry></row>
+<row><entry>Fmhalf(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>-1/2</subscript>(x)</action></entry></row>
+<row><entry>Fhalf(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>1/2</subscript>(x)</action></entry></row>
+<row><entry>F3half(x)</entry><entry><action>complete Fermi-Dirac integral F<subscript>3/2</subscript>(x)</action></entry></row>
+<row><entry>Finc0(x,b)</entry><entry><action>incomplete Fermi-Dirac integral with an index of zero, F<subscript>0</subscript>(x,b) = ln(1 + e<superscript>b-x</superscript>) - (b-x)</action></entry></row>
+<row><entry>lngamma(x)</entry><entry><action>logarithm of the Gamma function</action></entry></row>
+<row><entry>gammastar(x)</entry><entry><action>regulated Gamma Function &Gamma;<superscript>*</superscript>(x) for x &gt; 0</action></entry></row>
+<row><entry>gammainv(x)</entry><entry><action>reciprocal of the gamma function, 1/&Gamma;(x) using the real Lanczos method.</action></entry></row>
+<row><entry>fact(n)</entry><entry><action>factorial n!</action></entry></row>
+<row><entry>doublefact(n)</entry><entry><action>double factorial n!! = n(n-2)(n-4)...</action></entry></row>
+<row><entry>lnfact(n)</entry><entry><action>logarithm of the factorial of n, log(n!)</action></entry></row>
+<row><entry>lndoublefact(n)</entry><entry><action>logarithm of the double factorial log(n!!)</action></entry></row>
+<row><entry>choose(n,m)</entry><entry><action>combinatorial factor `n choose m' = n!/(m!(n-m)!)</action></entry></row>
+<row><entry>lnchoose(n,m)</entry><entry><action>logarithm of `n choose m'</action></entry></row>
+<row><entry>taylor(n,x)</entry><entry><action>Taylor coefficient x<superscript>n</superscript> / n! for x >= 0, n >= 0</action></entry></row>
+<row><entry>poch(a,x)</entry><entry><action>Pochhammer symbol (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(x)</action></entry></row>
+<row><entry>lnpoch(a,x)</entry><entry><action>logarithm of the Pochhammer symbol (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(x)</action></entry></row>
+<row><entry>pochrel(a,x)</entry><entry><action>relative Pochhammer symbol ((a,x) - 1)/x where (a,x) = (a)<subscript>x</subscript> := &Gamma;(a + x)/&Gamma;(a)</action></entry></row>
+<row><entry>gammainc(a,x)</entry><entry><action>incomplete Gamma Function &Gamma;(a,x) = &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>gammaincQ(a,x)</entry><entry><action>normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>x</subscript><superscript>&infin;</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>gammaincP(a,x)</entry><entry><action>complementary normalized incomplete Gamma Function P(a,x) = 1/&Gamma;(a) &int;<subscript>0</subscript><superscript>x</superscript> t<superscript>a-1</superscript> exp(-t) dt for a &gt; 0, x &gt;= 0</action></entry></row>
+<row><entry>beta(a,b)</entry><entry><action>Beta Function, B(a,b) = &Gamma;(a) &Gamma;(b)/&Gamma;(a+b) for a &gt; 0, b &gt; 0</action></entry></row>
+<row><entry>lnbeta(a,b)</entry><entry><action>logarithm of the Beta Function, log(B(a,b)) for a &gt; 0, b &gt; 0</action></entry></row>
+<row><entry>betainc(a,b,x)</entry><entry><action>normalize incomplete Beta function B_x(a,b)/B(a,b) for a &gt; 0, b &gt; 0 </action></entry></row>
+<row><entry>C1(&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>1</subscript>(x)</action></entry></row>
+<row><entry>C2(&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>2</subscript>(x)</action></entry></row>
+<row><entry>C3(&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>3</subscript>(x)</action></entry></row>
+<row><entry>Cn(n,&lambda;,x)</entry><entry><action>Gegenbauer polynomial C<superscript>&lambda;</superscript><subscript>n</subscript>(x)</action></entry></row>
+<row><entry>hyperg_0F1(c,x)</entry><entry><action>hypergeometric function <subscript>0</subscript>F<subscript>1</subscript>(c,x)</action></entry></row>
+<row><entry>hyperg_1F1i(m,n,x)</entry><entry><action>confluent hypergeometric function <subscript>1</subscript>F<subscript>1</subscript>(m,n,x) = M(m,n,x) for integer parameters m, n</action></entry></row>
+<row><entry>hyperg_1F1(a,b,x)</entry><entry><action>confluent hypergeometric function <subscript>1</subscript>F<subscript>1</subscript>(a,b,x) = M(a,b,x) for general parameters a,b</action></entry></row>
+<row><entry>hyperg_Ui(m,n,x)</entry><entry><action>confluent hypergeometric function U(m,n,x) for integer parameters m,n</action></entry></row>
+<row><entry>hyperg_U(a,b,x)</entry><entry><action>confluent hypergeometric function U(a,b,x)</action></entry></row>
+<row><entry>hyperg_2F1(a,b,c,x)</entry><entry><action>Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x)</action></entry></row>
+<row><entry>hyperg_2F1c(a<subscript>R</subscript>,a<subscript>I</subscript>,c,x)</entry><entry><action>Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) with complex parameters</action></entry></row>
+<row><entry>hyperg_2F1r(a<subscript>R</subscript>,a<subscript>I</subscript>,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a,b,c,x) / &Gamma;(c)</action></entry></row>
+<row><entry>hyperg_2F1cr(a<subscript>R</subscript>,a<subscript>I</subscript>,c,x)</entry><entry><action>renormalized Gauss hypergeometric function <subscript>2</subscript>F<subscript>1</subscript>(a<subscript>R</subscript> + i a<subscript>I</subscript>, a<subscript>R</subscript> - i a<subscript>I</subscript>, c, x) / &Gamma;(c)</action></entry></row>
+<row><entry>hyperg_2F0(a,b,x)</entry><entry><action>hypergeometric function <subscript>2</subscript>F<subscript>0</subscript>(a,b,x)</action></entry></row>
+<row><entry>L1(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>1</subscript>(x)</action></entry></row>
+<row><entry>L2(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>2</subscript>(x)</action></entry></row>
+<row><entry>L3(a,x)</entry><entry><action>generalized Laguerre polynomials L<superscript>a</superscript><subscript>3</subscript>(x)</action></entry></row>
+<row><entry>W0(x)</entry><entry><action>principal branch of the Lambert W function, W<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>Wm1(x)</entry><entry><action>secondary real-valued branch of the Lambert W function, W<subscript>-1</subscript>(x)</action></entry></row>
+<row><entry>P1(x)</entry><entry><action>Legendre polynomials P<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>P2(x)</entry><entry><action>Legendre polynomials P<subscript>2</subscript>(x)</action></entry></row>
+<row><entry>P3(x)</entry><entry><action>Legendre polynomials P<subscript>3</subscript>(x)</action></entry></row>
+<row><entry>Pl(l,x)</entry><entry><action>Legendre polynomials P<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>Q0(x)</entry><entry><action>Legendre polynomials Q<subscript>0</subscript>(x)</action></entry></row>
+<row><entry>Q1(x)</entry><entry><action>Legendre polynomials Q<subscript>1</subscript>(x)</action></entry></row>
+<row><entry>Ql(l,x)</entry><entry><action>Legendre polynomials Q<subscript>l</subscript>(x)</action></entry></row>
+<row><entry>Plm(l,m,x)</entry><entry><action>associated Legendre polynomial P<subscript>l</subscript><superscript>m</superscript>(x)</action></entry></row>
+<row><entry>Pslm(l,m,x)</entry><entry><action>normalized associated Legendre polynomial &radic;{(2l+1)/(4&pi;)} &radic;{(l-m)!/(l+m)!} P<subscript>l</subscript><superscript>m</superscript>(x) suitable for use in spherical harmonics</action></entry></row>
+<row><entry>Phalf(&lambda;,x)</entry><entry><action>irregular Spherical Conical Function P<superscript>1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pmhalf(&lambda;,x)</entry><entry><action>regular Spherical Conical Function P<superscript>-1/2</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pc0(&lambda;,x)</entry><entry><action>conical function P<superscript>0</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Pc1(&lambda;,x)</entry><entry><action>conical function P<superscript>1</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1</action></entry></row>
+<row><entry>Psr(l,&lambda;,x)</entry><entry><action>Regular Spherical Conical Function P<superscript>-1/2-l</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, l &gt;= -1</action></entry></row>
+<row><entry>Pcr(l,&lambda;,x)</entry><entry><action>Regular Cylindrical Conical Function P<superscript>-m</superscript><subscript>-1/2 + i &lambda;</subscript>(x) for x &gt; -1, m &gt;= -1</action></entry></row>
+<row><entry>H3d0(&lambda;,&eta;)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>0</subscript>(&lambda;,,&eta;) := sin(&lambda; &eta;)/(&lambda; sinh(&eta;)) for &eta; &gt;= 0</action></entry></row>
+<row><entry>H3d1(&lambda;,&eta;)</entry><entry><action>zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space, L<superscript>H3d</superscript><subscript>1</subscript>(&lambda;,&eta;) := 1/&radic;{&lambda;<superscript>2</superscript> + 1} sin(&lambda; &eta;)/(&lambda; sinh(&eta;)) (coth(&eta;) - &lambda; cot(&lambda; &eta;)) for &eta; &gt;= 0</action></entry></row>
+<row><entry>H3d(l,&lambda;,&eta;)</entry><entry><action>L'th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space eta &gt;= 0, l &gt;= 0</action></entry></row>
+<row><entry>logabs(x)</entry><entry><action>logarithm of the magnitude of X, log(|x|)</action></entry></row>
+<row><entry>logp(x)</entry><entry><action>log(1 + x) for x &gt; -1 using an algorithm that is accurate for small x</action></entry></row>
+<row><entry>logm(x)</entry><entry><action>log(1 + x) - x for x &gt; -1 using an algorithm that is accurate for small x</action></entry></row>
+<row><entry>psiint(n)</entry><entry><action>digamma function &psi;(n) for positive integer n</action></entry></row>
+<row><entry>psi(x)</entry><entry><action>digamma function &psi;(n) for general x</action></entry></row>
+<row><entry>psi1piy(y)</entry><entry><action>real part of the digamma function on the line 1+i y, Re[&psi;(1 + i y)]</action></entry></row>
+<row><entry>psi1int(n)</entry><entry><action>Trigamma function &psi;'(n) for positive integer n</action></entry></row>
+<row><entry>psi1(n)</entry><entry><action>Trigamma function &psi;'(x) for general x</action></entry></row>
+<row><entry>psin(m,x)</entry><entry><action>polygamma function &psi;<superscript>(m)</superscript>(x) for m &gt;= 0, x &gt; 0</action></entry></row>
+<row><entry>synchrotron1(x)</entry><entry><action>first synchrotron function x &int;<subscript>x</subscript><superscript>&infin;</superscript> K<subscript>5/3</subscript>(t) dt for x &gt;= 0</action></entry></row>
+<row><entry>synchrotron2(x)</entry><entry><action>second synchrotron function x K<subscript>2/3</subscript>(x) for x &gt;= 0</action></entry></row>
+<row><entry>J2(x)</entry><entry><action>transport function J(2,x)</action></entry></row>
+<row><entry>J3(x)</entry><entry><action>transport function J(3,x)</action></entry></row>
+<row><entry>J4(x)</entry><entry><action>transport function J(4,x)</action></entry></row>
+<row><entry>J5(x)</entry><entry><action>transport function J(5,x)</action></entry></row>
+<row><entry>zetaint(n)</entry><entry><action>Riemann zeta function &zeta;(n) for integer n</action></entry></row>
+<row><entry>zeta(s)</entry><entry><action>Riemann zeta function &zeta;(s) for arbitrary s</action></entry></row>
+<row><entry>zetam1int(n)</entry><entry><action>Riemann &zeta; function minus 1 for integer n</action></entry></row>
+<row><entry>zetam1(s)</entry><entry><action>Riemann &zeta; function minus 1</action></entry></row>
+<row><entry>zetaintm1(s)</entry><entry><action>Riemann &zeta; function for integer n minus 1</action></entry></row>
+<row><entry>hzeta(s,q)</entry><entry><action>Hurwitz zeta function &zeta;(s,q) for s &gt; 1, q &gt; 0</action></entry></row>
+<row><entry>etaint(n)</entry><entry><action>eta function &eta;(n) for integer n</action></entry></row>
+<row><entry>eta(s)</entry><entry><action>eta function &eta;(s) for arbitrary s</action></entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="parser-ran-gsl">
+<title>Random number distributions</title>
+<para>
+For more information about the functions see the documentation of GSL.
+</para>
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Function</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+<row><entry>gaussian(x,&sigma;)</entry><entry><action>probability density p(x) for a Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>ugaussian(x)</entry><entry><action>unit Gaussian distribution.  They are equivalent to the functions above with a standard deviation of &sigma; = 1</action></entry></row>
+<row><entry>gaussianP(x,&sigma;)</entry><entry><action>cumulative distribution functions P(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianQ(x,&sigma;)</entry><entry><action>cumulative distribution functions Q(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianPinv(P,&sigma;)</entry><entry><action>inverse cumulative distribution functions P(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>gaussianQinv(Q,&sigma;)</entry><entry><action>inverse cumulative distribution functions Q(x) for the Gaussian distribution with standard deviation &sigma;</action></entry></row>
+<row><entry>ugaussianP(x)</entry><entry><action>cumulative distribution function P(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianQ(x)</entry><entry><action>cumulative distribution function Q(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianPinv(P)</entry><entry><action>inverse cumulative distribution function P(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>ugaussianQinv(Q)</entry><entry><action>inverse cumulative distribution function Q(x) for the unit Gaussian distribution</action></entry></row>
+<row><entry>gaussiantail(x,a,&sigma;)</entry><entry><action>probability density p(x) for a Gaussian tail distribution with standard deviation &sigma; and lower limit a</action></entry></row>
+<row><entry>ugaussiantail(x,a)</entry><entry><action>tail of a unit Gaussian distribution. They are equivalent to the functions above with a standard deviation of &sigma; = 1</action></entry></row>
+<row><entry>gaussianbi(x,y,&sigma;<subscript>x</subscript>,&sigma;<subscript>y</subscript>,&rho;)</entry><entry><action>probability density p(x,y) for a bivariate gaussian distribution 
+      with standard deviations &sigma;<subscript>x</subscript>, &sigma;<subscript>y</subscript> and correlation coefficient &rho;</action></entry></row>
+<row><entry>exponential(x,&mu;)</entry><entry><action>probability density p(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialP(x,&mu;)</entry><entry><action>cumulative distribution function P(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialQ(x,&mu;)</entry><entry><action>cumulative distribution function Q(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialPinv(P,&mu;)</entry><entry><action>inverse cumulative distribution function P(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>exponentialQinv(Q,&mu;)</entry><entry><action>inverse cumulative distribution function Q(x) for an exponential distribution with mean &mu;</action></entry></row>
+<row><entry>laplace(x,a)</entry><entry><action>probability density p(x) for a Laplace distribution with width a</action></entry></row>
+<row><entry>laplaceP(x,a)</entry><entry><action>cumulative distribution function P(x) for a Laplace distribution with width a</action></entry></row>
+<row><entry>laplaceQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a Laplace distribution with width a</action></entry></row>
+<row><entry>laplacePinv(P,a)</entry><entry><action>inverse cumulative distribution function P(x) for an Laplace distribution with width a</action></entry></row>
+<row><entry>laplaceQinv(Q,a)</entry><entry><action>inverse cumulative distribution function Q(x) for an Laplace distribution with width a</action></entry></row>
+<row><entry>exppow(x,a,b)</entry><entry><action>probability density p(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
+<row><entry>exppowP(x,a,b)</entry><entry><action>cumulative probability density P(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
+<row><entry>exppowQ(x,a,b)</entry><entry><action>cumulative probability density Q(x) for an exponential power distribution with scale parameter a and exponent b</action></entry></row>
+<row><entry>cauchy(x,a)</entry><entry><action>probability density p(x) for a Cauchy (Lorentz) distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyP(x,a)</entry><entry><action>cumulative distribution function P(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyPinv(P,a)</entry><entry><action>inverse cumulative distribution function P(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>cauchyQinv(Q,a)</entry><entry><action>inverse cumulative distribution function Q(x) for a Cauchy distribution with scale parameter a</action></entry></row>
+<row><entry>rayleigh(x,&sigma;)</entry><entry><action>probability density p(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighP(x,&sigma;)</entry><entry><action>cumulative distribution function P(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighQ(x,&sigma;)</entry><entry><action>cumulative distribution function Q(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighPinv(P,&sigma;)</entry><entry><action>inverse cumulative distribution function P(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleighQinv(Q,&sigma;)</entry><entry><action>inverse cumulative distribution function Q(x) for a Rayleigh distribution with scale parameter &sigma;</action></entry></row>
+<row><entry>rayleigh_tail(x,a,&sigma;)</entry><entry><action>probability density p(x) for a Rayleigh tail distribution with scale parameter &sigma; and lower limit a</action></entry></row>
+<row><entry>landau(x)</entry><entry><action>probability density p(x) for the Landau distribution</action></entry></row>
+<row><entry>gammapdf(x,a,b)</entry><entry><action>probability density p(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>gammaQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a gamma distribution with parameters a and b</action></entry></row>
+<row><entry>flat(x,a,b)</entry><entry><action>probability density p(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>flatQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a uniform distribution from a to b</action></entry></row>
+<row><entry>lognormal(x,&zeta;,&sigma;)</entry><entry><action>probability density p(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalP(x,&zeta;,&sigma;)</entry><entry><action>cumulative distribution function P(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalQ(x,&zeta;,&sigma;)</entry><entry><action>cumulative distribution function Q(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalPinv(P,&zeta;,&sigma;)</entry><entry><action>inverse cumulative distribution function P(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>lognormalQinv(Q,&zeta;,&sigma;)</entry><entry><action>inverse cumulative distribution function Q(x) for a lognormal distribution with parameters &zeta; and &sigma;</action></entry></row>
+<row><entry>chisq(x,&nu;)</entry><entry><action>probability density p(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqP(x,&nu;)</entry><entry><action>cumulative distribution function P(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqQ(x,&nu;)</entry><entry><action>cumulative distribution function Q(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqPinv(P,&nu;)</entry><entry><action>inverse cumulative distribution function P(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>chisqQinv(Q,&nu;)</entry><entry><action>inverse cumulative distribution function Q(x) for a &chi;<superscript>2</superscript> distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>fdist(x,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>probability density p(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistP(x,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>cumulative distribution function P(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistQ(x,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>cumulative distribution function Q(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistPinv(P,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>inverse cumulative distribution function P(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>fdistQinv(Q,&nu;<subscript>1</subscript>,&nu;<subscript>2</subscript>)</entry><entry><action>inverse cumulative distribution function Q(x) for an F-distribution with &nu;<subscript>1</subscript> and &nu;<subscript>2</subscript> degrees of freedom</action></entry></row>
+<row><entry>tdist(x,&nu;)</entry><entry><action>probability density p(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistP(x,&nu;)</entry><entry><action>cumulative distribution function P(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistQ(x,&nu;)</entry><entry><action>cumulative distribution function Q(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistPinv(P,&nu;)</entry><entry><action>inverse cumulative distribution function P(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>tdistQinv(Q,&nu;)</entry><entry><action>inverse cumulative distribution function Q(x) for a t-distribution with &nu; degrees of freedom</action></entry></row>
+<row><entry>betapdf(x,a,b)</entry><entry><action>probability density p(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>betaQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a beta distribution with parameters a and b</action></entry></row>
+<row><entry>logistic(x,a)</entry><entry><action>probability density p(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticP(x,a)</entry><entry><action>cumulative distribution function P(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticQ(x,a)</entry><entry><action>cumulative distribution function Q(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticPinv(P,a)</entry><entry><action>inverse cumulative distribution function P(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>logisticQinv(Q,a)</entry><entry><action>inverse cumulative distribution function Q(x) for a logistic distribution with scale parameter a</action></entry></row>
+<row><entry>pareto(x,a,b)</entry><entry><action>probability density p(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>paretoQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Pareto distribution with exponent a and scale b</action></entry></row>
+<row><entry>weibull(x,a,b)</entry><entry><action>probability density p(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullP(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullQ(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullPinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>weibullQinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Weibull distribution with scale a and exponent b</action></entry></row>
+<row><entry>gumbel1(x,a,b)</entry><entry><action>probability density p(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1P(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1Q(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1Pinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel1Qinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Type-1 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel2(x,a,b)</entry><entry><action>probability density p(x) at X for a Type-2 Gumbel distribution with parameters A and B</action></entry></row>
+<row><entry>gumbel2P(x,a,b)</entry><entry><action>cumulative distribution function P(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel2Q(x,a,b)</entry><entry><action>cumulative distribution function Q(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel2Pinv(P,a,b)</entry><entry><action>inverse cumulative distribution function P(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>gumbel2Qinv(Q,a,b)</entry><entry><action>inverse cumulative distribution function Q(x) for a Type-2 Gumbel distribution with parameters a and b</action></entry></row>
+<row><entry>poisson(k,&mu;)</entry><entry><action>probability p(k) of obtaining k from a Poisson distribution with mean &mu;</action></entry></row>
+<row><entry>poissonP(k,&mu;)</entry><entry><action>cumulative distribution functions P(k) for a Poisson distribution with mean &mu;</action></entry></row>
+<row><entry>poissonQ(k,&mu;)</entry><entry><action>cumulative distribution functions Q(k) for a Poisson distribution with mean &mu;</action></entry></row>
+<row><entry>bernoulli(k,p)</entry><entry><action>probability p(k) of obtaining k from a Bernoulli distribution with probability parameter p</action></entry></row>
+<row><entry>binomial(k,p,n)</entry><entry><action>probability p(k) of obtaining p from a binomial distribution with parameters p and n</action></entry></row>
+<row><entry>binomialP(k,p,n)</entry><entry><action>cumulative distribution functions P(k) for a binomial distribution with parameters p and n</action></entry></row>
+<row><entry>binomialQ(k,p,n)</entry><entry><action>cumulative distribution functions Q(k) for a binomial distribution with parameters p and n</action></entry></row>
+<row><entry>nbinomial(k,p,n)</entry><entry><action>probability p(k) of obtaining k from a negative binomial distribution with parameters p and n</action></entry></row>
+<row><entry>nbinomialP(k,p,n)</entry><entry><action>cumulative distribution functions P(k) for a negative binomial distribution with parameters p and n</action></entry></row>
+<row><entry>nbinomialQ(k,p,n)</entry><entry><action>cumulative distribution functions Q(k) for a negative binomial distribution with parameters p and n</action></entry></row>
+<row><entry>pascal(k,p,n)</entry><entry><action>probability p(k) of obtaining k from a Pascal distribution with parameters p and n</action></entry></row>
+<row><entry>pascalP(k,p,n)</entry><entry><action>cumulative distribution functions P(k) for a Pascal distribution with parameters p and n</action></entry></row>
+<row><entry>pascalQ(k,p,n)</entry><entry><action>cumulative distribution functions Q(k) for a Pascal distribution with parameters p and n</action></entry></row>
+<row><entry>geometric(k,p)</entry><entry><action>probability p(k) of obtaining k from a geometric distribution with probability parameter p</action></entry></row>
+<row><entry>geometricP(k,p)</entry><entry><action>cumulative distribution functions P(k) for a geometric distribution with parameter p</action></entry></row>
+<row><entry>geometricQ(k,p)</entry><entry><action>cumulative distribution functions Q(k) for a geometric distribution with parameter p</action></entry></row>
+<row><entry>hypergeometric(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>probability p(k) of obtaining k from a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
+<row><entry>hypergeometricP(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>cumulative distribution function P(k) for a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
+<row><entry>hypergeometricQ(k,n<subscript>1</subscript>,n<subscript>2</subscript>,t)</entry><entry><action>cumulative distribution function Q(k) for a hypergeometric distribution with parameters n<subscript>1</subscript>, n<subscript>2</subscript>, t</action></entry></row>
+<row><entry>logarithmic(k,p)</entry><entry><action>probability p(k) of obtaining K from a logarithmic distribution with probability parameter p</action></entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+</sect1>
+
+<sect1 id="parser-const">
+<title>Constants</title>
+
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Constant</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+<row><entry>e</entry><entry><action>The base of natural logarithms</action></entry></row>
+<row><entry>pi</entry><entry><action>&pi;</action></entry></row>
+
+</tbody></tgroup></informaltable>
+</sect1>
+
+<sect1 id="parser-const-gsl">
+<title>GSL constants</title>
+<para>
+For more information about this constants see the documentation of GSL.
+</para>
+<informaltable pgwide="1"><tgroup cols="2">
+
+<thead><row><entry>Constant</entry><entry>Description</entry></row></thead>
+
+<tbody>
+
+<row><entry>c</entry><entry><action> The speed of light in vacuum</action></entry></row>
+<row><entry>mu0</entry><entry><action>The permeability of free space</action></entry></row>
+<row><entry>e0</entry><entry><action>The permittivity of free space</action></entry></row>
+<row><entry>h</entry><entry><action>The Planck constant h</action></entry></row>
+<row><entry>hbar</entry><entry><action>The reduced Planck constant &planck;</action></entry></row>
+<row><entry>na</entry><entry><action>Avogadro's number</action></entry></row>
+<row><entry>f</entry><entry><action>The molar charge of 1 Faraday</action></entry></row>
+<row><entry>k</entry><entry><action>The Boltzmann constant</action></entry></row>
+<row><entry>r0</entry><entry><action>The molar gas constant</action></entry></row>
+<row><entry>v0</entry><entry><action>The standard gas volume</action></entry></row>
+<row><entry>sigma</entry><entry><action>The Stefan–Boltzmann constant</action></entry></row>
+<row><entry>gauss</entry><entry><action>The magnetic field of 1 Gauss</action></entry></row>
+<row><entry>au</entry><entry><action>The length of 1 astronomical unit (mean earth-sun distance)</action></entry></row>
+<row><entry>G</entry><entry><action>The gravitational constant</action></entry></row>
+<row><entry>ly</entry><entry><action>The distance of 1 light-year</action></entry></row>
+<row><entry>pc</entry><entry><action>The distance of 1 parsec</action></entry></row>
+<row><entry>gg</entry><entry><action>The standard gravitational acceleration on Earth</action></entry></row>
+<row><entry>ms</entry><entry><action>The mass of the Sun</action></entry></row>
+<row><entry>ee</entry><entry><action>The charge of the electron</action></entry></row>
+<row><entry>eV</entry><entry><action>The energy of 1 electron volt</action></entry></row>
+<row><entry>amu</entry><entry><action>The unified atomic mass</action></entry></row>
+<row><entry>me</entry><entry><action>The mass of the electron</action></entry></row>
+<row><entry>mmu</entry><entry><action>The mass of the muon</action></entry></row>
+<row><entry>mp</entry><entry><action>The mass of the proton</action></entry></row>
+<row><entry>mn</entry><entry><action>The mass of the neutron</action></entry></row>
+<row><entry>alpha</entry><entry><action>The electromagnetic fine structure constant</action></entry></row>
+<row><entry>ry</entry><entry><action>The Rydberg constant</action></entry></row>
+<row><entry>a0</entry><entry><action>The Bohr radius</action></entry></row>
+<row><entry>a</entry><entry><action>The length of 1 angstrom</action></entry></row>
+<row><entry>barn</entry><entry><action> The area of 1 barn</action></entry></row>
+<row><entry>muB</entry><entry><action>The Bohr Magneton</action></entry></row>
+<row><entry>mun</entry><entry><action>The Nuclear Magneton</action></entry></row>
+<row><entry>mue</entry><entry><action>The magnetic moment of the electron</action></entry></row>
+<row><entry>mup</entry><entry><action>The magnetic moment of the proton</action></entry></row>
+<row><entry>sigmaT</entry><entry><action>The Thomson cross section for an electron</action></entry></row>
+<row><entry>pD</entry><entry><action>The debye</action></entry></row>
+<row><entry>min</entry><entry><action>The number of seconds in 1 minute</action></entry></row>
+<row><entry>h</entry><entry><action>The number of seconds in 1 hour</action></entry></row>
+<row><entry>d</entry><entry><action> The number of seconds in 1 day</action></entry></row>
+<row><entry>week</entry><entry><action>The number of seconds in 1 week</action></entry></row>
+<row><entry>in</entry><entry><action>The length of 1 inch</action></entry></row>
+<row><entry>ft</entry><entry><action>The length of 1 foot</action></entry></row>
+<row><entry>yard</entry><entry><action>The length of 1 yard</action></entry></row>
+<row><entry>mil</entry><entry><action>The length of 1 mil (1/1000th of an inch)</action></entry></row>
+<row><entry>v_km_per_h</entry><entry><action>The speed of 1 kilometer per hour</action></entry></row>
+<row><entry>v_mile_per_h</entry><entry><action>The speed of 1 mile per hour</action></entry></row>
+<row><entry>nmile</entry><entry><action>The length of 1 nautical mile</action></entry></row>
+<row><entry>fathom</entry><entry><action>The length of 1 fathom</action></entry></row>
+<row><entry>knot</entry><entry><action>The speed of 1 knot</action></entry></row>
+<row><entry>pt</entry><entry><action> The length of 1 printer's point (1/72 inch)</action></entry></row>
+<row><entry>texpt</entry><entry><action>The length of 1 TeX point (1/72.27 inch)</action></entry></row>
+<row><entry>micron</entry><entry><action>The length of 1 micrometre</action></entry></row>
+<row><entry>hectare</entry><entry><action>The area of 1 hectare</action></entry></row>
+<row><entry>acre</entry><entry><action>The area of 1 acre</action></entry></row>
+<row><entry>liter</entry><entry><action>The volume of 1 liter</action></entry></row>
+<row><entry>us_gallon</entry><entry><action>The volume of 1 US gallon</action></entry></row>
+<row><entry>can_gallon</entry><entry><action>The volume of 1 Canadian gallon</action></entry></row>
+<row><entry>uk_gallon</entry><entry><action>The volume of 1 UK gallon</action></entry></row>
+<row><entry>quart</entry><entry><action>The volume of 1 quart</action></entry></row>
+<row><entry>pint</entry><entry><action>The volume of 1 pint</action></entry></row>
+<row><entry>pound</entry><entry><action>The mass of 1 pound</action></entry></row>
+<row><entry>ounce</entry><entry><action>The mass of 1 ounce</action></entry></row>
+<row><entry>ton</entry><entry><action>The mass of 1 ton</action></entry></row>
+<row><entry>mton</entry><entry><action>The mass of 1 metric ton (1000 kg)</action></entry></row>
+<row><entry>uk_ton</entry><entry><action>The mass of 1 UK ton</action></entry></row>
+<row><entry>troy_ounce</entry><entry><action>The mass of 1 troy ounce</action></entry></row>
+<row><entry>carat</entry><entry><action>The mass of 1 carat</action></entry></row>
+<row><entry>gram_force</entry><entry><action>The force of 1 gram weight</action></entry></row>
+<row><entry>pound_force</entry><entry><action>The force of 1 pound weight</action></entry></row>
+<row><entry>kilepound_force</entry><entry><action>The force of 1 kilopound weight</action></entry></row>
+<row><entry>poundal</entry><entry><action>The force of 1 poundal</action></entry></row>
+<row><entry>cal</entry><entry><action>The energy of 1 calorie</action></entry></row>
+<row><entry>btu</entry><entry><action>The energy of 1 British Thermal Unit</action></entry></row>
+<row><entry>therm</entry><entry><action>The energy of 1 Therm</action></entry></row>
+<row><entry>hp</entry><entry><action>The power of 1 horsepower</action></entry></row>
+<row><entry>bar</entry><entry><action>The pressure of 1 bar</action></entry></row>
+<row><entry>atm</entry><entry><action>The pressure of 1 standard atmosphere</action></entry></row>
+<row><entry>torr</entry><entry><action>The pressure of 1 torr</action></entry></row>
+<row><entry>mhg</entry><entry><action>The pressure of 1 meter of mercury</action></entry></row>
+<row><entry>inhg</entry><entry><action>The pressure of 1 inch of mercury</action></entry></row>
+<row><entry>inh2o</entry><entry><action>The pressure of 1 inch of water</action></entry></row>
+<row><entry>psi</entry><entry><action>The pressure of 1 pound per square inch</action></entry></row>
+<row><entry>poise</entry><entry><action>The dynamic viscosity of 1 poise</action></entry></row>
+<row><entry>stokes</entry><entry><action>The kinematic viscosity of 1 stokes</action></entry></row>
+<row><entry>stilb</entry><entry><action>The luminance of 1 stilb</action></entry></row>
+<row><entry>lumen</entry><entry><action>The luminous flux of 1 lumen</action></entry></row>
+<row><entry>lux</entry><entry><action>The illuminance of 1 lux</action></entry></row>
+<row><entry>phot</entry><entry><action>The illuminance of 1 phot</action></entry></row>
+<row><entry>ftcandle</entry><entry><action>The illuminance of 1 footcandle</action></entry></row>
+<row><entry>lambert</entry><entry><action>The luminance of 1 lambert</action></entry></row>
+<row><entry>ftlambert</entry><entry><action>The luminance of 1 footlambert</action></entry></row>
+<row><entry>curie</entry><entry><action>The activity of 1 curie</action></entry></row>
+<row><entry>roentgen</entry><entry><action>The exposure of 1 roentgen</action></entry></row>
+<row><entry>rad</entry><entry><action>The absorbed dose of 1 rad</action></entry></row>
+<row><entry>N</entry><entry><action>The force of 1 newton</action></entry></row>
+<row><entry>dyne</entry><entry><action>The force of 1 dyne</action></entry></row>
+<row><entry>J</entry><entry><action>The energy of 1 joule</action></entry></row>
+<row><entry>erg</entry><entry><action>The energy of 1 erg</action></entry></row>
+
+</tbody></tgroup></informaltable>
+
+</sect1>
+
+</chapter>
+
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+<qandaset id="faqlist">
+
+<qandaentry>
+<question>
+<para>For which platforms is &LabPlot; available?</para>
+</question>
+<answer>
+<para>
+&LabPlot; is developed for Unix platforms and uses the &Qt; toolkit and &kde-frameworks;. Normally you can expect &LabPlot;
+to build and run on every platform &kde-frameworks; supports.
+A recent list of supported platforms and tips for compiling and running &LabPlot; can be found on
+<ulink url="http://labplot.wiki.sourceforge.net/Download">
+http://labplot.wiki.sourceforge.net/Download</ulink>.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry><question>
+<para>How do I export the active worksheet as image?</para>
+</question>
+<answer><para>
+The standard way is to use <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice>. All &Qt; supported image formats are allowed. Just select the desired format and the active worksheet is exported.
+</para></answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>How do I use Greek letters for title, axes label, &etc;?</para>
+</question>
+<answer>
+<para>
+  Use <guiicon>&pi;</guiicon> button to open character selector window or <guiicon>&tex;</guiicon> to generate Greek letters and other symbols using &latex;.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>I miss an important feature. What can I do?</para>
+</question>
+<answer>
+<para>
+Please take a look at the TODO file in the documentation of &LabPlot;.
+Here, all planned features are listed in more or
+less sorted order which I will implement in future releases of &LabPlot;.
+If you like to have additional
+features or like to have a listed feature soon, mail me your wishes and, if possible, send me
+example data or a short
+description of what you like to do.
+It is not unlikely that your feature will appear in the next stable release
+of &LabPlot; :-)
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry><question>
+<para>Many Analysis functions are disabled. What can I do?</para>
+</question>
+<answer><para>
+It looks like your &LabPlot; package was compiled without GSL (&GNU; Scientific Library) support. &LabPlot; was designed to even work on systems that
+are missing most of the standard libraries. Many distributions are shipping &LabPlot; packages without this additional functionality. In this case some functions are not available. Fortunately some programs (like <application>pstoedit</application> or <application>texvc</application>) can be added without recompiling &LabPlot;. You can always check your system environment in the help menu of &LabPlot;.
+</para>
+<para>
+The packages provided on the official download page are always built with the standard libraries (GSL, &etc;). You should use them
+to have all the features.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry><question>
+<para>I want to help. How can I contribute to &LabPlot;?</para>
+</question>
+<answer><para>
+Yes, of course. There are a lot things to do. Even if you don't know anything about programming we always
+need people to find bugs, test things and make suggestions. Also the translation and documentation always
+needs a lot of work.
+</para></answer>
+</qandaentry>
+
+
+</qandaset>
+</chapter>
+
+<chapter id="license">
+
+<title>License</title>
+
+<para>&LabPlot;</para>
+<para>
+Program copyright &copy; 2007-2016 Stefan Gerlach <email>stefan.gerlach@uni-konstanz.de</email>
+Program copyright &copy; 2008-2016 Alexander Semke <email>Alexander.Semke@web.de</email>
+</para>
+
+<important>
+<para>
+&LabPlot; is still under development. There is a long list of missing features that will be implemented in later versions of &LabPlot;.
+</para>
+</important>
+
+<para>
+Because there are a lot things to do, developers need every help you can give. Any contribution like wishes, corrections,
+patches, bug reports or screen shots is welcome.
+</para>
+
+<para>
+Documentation copyright &copy; 2007-2016 Stefan Gerlach
+<email>stefan.gerlach@uni-konstanz.de</email>
+
+Documentation copyright &copy; 2008-2015 Alexander Semke
+<email>Alexander.Semke@web.de</email>
+
+Documentation copyright &copy; 2014 Yuri Chornoivan
+<email>yurchor@ukr.net</email>
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;
+&underGPL;
+
+</chapter>
+
+
+
+
+&documentation.index;
+</book>

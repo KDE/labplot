@@ -3,13 +3,13 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:43+0000\n"
-"PO-Revision-Date: 2022-12-26 11:23+0200\n"
+"PO-Revision-Date: 2023-01-05 08:43+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -9326,10 +9326,9 @@ msgstr "&Пошук"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Column Statistics..."
-msgstr "Статистика щодо стовпчиків"
+msgstr "Статистика щодо стовпчиків…"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
 #, kde-format
@@ -9764,10 +9763,9 @@ msgid "%1: column statistics"
 msgstr "%1: статистика щодо стовпчиків"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Selection in %1"
-msgstr "Позначене"
+msgstr "Позначене у %1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
 #, kde-format

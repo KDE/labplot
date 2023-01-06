@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Burkhard Lück <lueck@hube-lueck.de>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 # Frederik Schwarzer <schwarzer@kde.org>, 2014, 2016, 2020, 2022.
-# Stefan Gerlach <stefan.gerlach@uni.kn>, 2017, 2018, 2019, 2020, 2021, 2022.
+# Stefan Gerlach <stefan.gerlach@uni.kn>, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-05 00:43+0000\n"
-"PO-Revision-Date: 2022-12-19 14:05+0100\n"
+"PO-Revision-Date: 2023-01-04 10:27+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-doc@kde.org>\n"
 "Language: de\n"
@@ -12464,15 +12464,14 @@ msgstr ""
 "Berechnungszeit beim Laden des Projektes"
 
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:264
-#, fuzzy, kde-format
-#| msgid "%1 matrices: template \"%2\" loaded"
+#, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
-msgstr "%1-Matrizen: Vorlage \"%2\" wurde geladen"
+msgstr "%1 Referenzlinie: Vorlage \"%2\" geladen"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:172
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
-msgstr "%1-Tabellen: Vorlage \"%2\" wurde geladen"
+msgstr "%1 Tabellen: Vorlage \"%2\" geladen"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:43
 #, kde-format
@@ -14713,7 +14712,7 @@ msgstr "Durch Wert teilen"
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, kde-format
 msgid "&Add"
-msgstr "&Adsieren"
+msgstr "&Addieren"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:110
 #, kde-format
@@ -17376,15 +17375,13 @@ msgstr "Schrittweite:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:704
-#, fuzzy, kde-format
-#| msgid "1st Tick at:"
+#, kde-format
 msgid "1st Tick at:"
 msgstr "1. Tick bei:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:714
-#, fuzzy, kde-format
-#| msgid "1st Tick Value:"
+#, kde-format
 msgid "1st Tick Value:"
 msgstr "Wert des 1. Ticks:"
 
@@ -17400,8 +17397,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:737
-#, fuzzy, kde-format
-#| msgid "1st Tick Offset:"
+#, kde-format
 msgid "1st Tick Offset:"
 msgstr "Versatz des 1. Ticks:"
 
@@ -19235,17 +19231,15 @@ msgstr "Anpassung starten"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1114
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgid "Run"
-msgstr "Anpassung starten"
+msgstr "Start"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1131
-#, fuzzy, kde-format
-#| msgid "Dilogarithm"
+#, kde-format
 msgid "Algorithm:"
-msgstr "Dilogarithmus"
+msgstr "Algorithmus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilter)
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:212
