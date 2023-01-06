@@ -1088,7 +1088,7 @@ void XYFitCurveDock::parametersChanged(bool updateParameterWidget) {
 	vars << QStringLiteral("x"); // TODO: generalize when we support other XYEquationCurve::EquationType
 	uiGeneralTab.teEquation->setVariables(vars);
 
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK
 
 	if (updateParameterWidget)
 		fitParametersWidget->setFitData(&m_fitData);
@@ -1207,7 +1207,7 @@ void XYFitCurveDock::expressionChanged() {
 }
 
 void XYFitCurveDock::enableRecalculate() {
-	DEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing);
 	if (m_initializing || !m_fitCurve)
 		return;
 
