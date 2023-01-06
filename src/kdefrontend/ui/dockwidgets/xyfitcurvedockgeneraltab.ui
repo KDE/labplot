@@ -1126,7 +1126,7 @@
     <widget class="QComboBox" name="cbPlotRanges"/>
    </item>
    <item row="24" column="0" colspan="2">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lAlgorithm">
      <property name="text">
       <string>Algorithm:</string>
      </property>

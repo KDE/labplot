@@ -736,6 +736,15 @@ void XYFitCurveDock::categoryChanged(int index) {
 	uiGeneralTab.cbModel->show();
 	uiGeneralTab.lModel->show();
 
+	// enable algorithm selection only for distributions
+	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+		uiGeneralTab.lAlgorithm->show();
+		uiGeneralTab.cbAlgorithm->show();
+	} else {
+		uiGeneralTab.lAlgorithm->hide();
+		uiGeneralTab.cbAlgorithm->hide();
+	}
+
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
 		for (int i = 0; i < NSL_FIT_MODEL_BASIC_COUNT; i++)
@@ -765,13 +774,11 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 		for (int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			if (m_fitData.algorithm == nsl_fit_algorithm_ml) {
-				// only these are available for ML (add more when supported)
-				if (i != nsl_sf_stats_gaussian && i != nsl_sf_stats_exponential && i != nsl_sf_stats_laplace && i != nsl_sf_stats_cauchy_lorentz
-					&& i != nsl_sf_stats_lognormal && i != nsl_sf_stats_poisson && i != nsl_sf_stats_binomial) {
+				if (!nsl_sf_stats_distribution_supports_ML((nsl_sf_stats_distribution)i)) {
 					auto* item = model->item(i);
 					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 				}
-			} else {
+			} else { // LM
 				// unused distributions
 				if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_bernoulli) {
 					auto* item = model->item(i);
@@ -897,6 +904,19 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	case nsl_fit_model_custom:
 		uiGeneralTab.lDegree->setVisible(false);
 		uiGeneralTab.sbDegree->setVisible(false);
+	}
+
+	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+		// enable ML only for supported distros
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
+		auto* item = model->item(nsl_fit_algorithm_ml);
+
+		if (nsl_sf_stats_distribution_supports_ML((nsl_sf_stats_distribution)index))
+			item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+		else { // switch to LM
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+			uiGeneralTab.cbAlgorithm->setCurrentIndex(nsl_fit_algorithm_lm);
+		}
 	}
 
 	if (!m_initializing)
