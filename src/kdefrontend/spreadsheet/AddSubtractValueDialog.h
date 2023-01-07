@@ -37,10 +37,10 @@ private:
 	QString getMessage(const QString&);
 	void updateWidgetsVisiblity();
 
-	bool setIntValue(int& value) const;
-	bool setBigIntValue(qint64& value) const;
-	bool setDoubleValue(double& value) const;
-	bool setDateTimeValue(qint64& value) const;
+	bool setIntValue(int& value, int columnIndex = 0) const;
+	bool setBigIntValue(qint64& value, int columnIndex = 0) const;
+	bool setDoubleValue(double& value, int columnIndex = 0) const;
+	bool setDateTimeValue(qint64& value, int columnIndex = 0) const;
 
 	Ui::AddSubtractValueWidget ui;
 	QVector<Column*> m_columns;

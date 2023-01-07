@@ -25,6 +25,7 @@
 
 #include <cmath>
 
+enum class ValueType {CustomValue, Difference, Minimum, Maximum, Median, Mean};
 /*!
 	\class AddSubtractValueDialog
 	\brief Dialog for adding/subtracting a value from column values.
@@ -80,46 +81,36 @@ AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget*
 }
 
 void AddSubtractValueDialog::init() {
-	switch (m_operation) {
-	case Add:
-		setWindowTitle(i18nc("@title:window", "Add Value"));
-		break;
-	case Subtract:
-		setWindowTitle(i18nc("@title:window", "Subtract Value"));
-		break;
-	case Multiply:
-		setWindowTitle(i18nc("@title:window", "Multiply by Value"));
-		break;
-	case Divide:
-		setWindowTitle(i18nc("@title:window", "Divide by Value"));
-		break;
-	}
 	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-
 	ui.gridLayout->addWidget(btnBox, 7, 0, 1, 3);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 
 	switch (m_operation) {
 	case Add:
+		setWindowTitle(i18nc("@title:window", "Add Value"));
 		m_okButton->setText(i18n("&Add"));
 		break;
 	case Subtract:
+		setWindowTitle(i18nc("@title:window", "Subtract Value"));
+		ui.lType->setText(i18n("Subtract:")); // only relevant for Add and for Subtract, Add is set in the ui file
 		m_okButton->setText(i18n("&Subtract"));
 		break;
 	case Multiply:
+		setWindowTitle(i18nc("@title:window", "Multiply by Value"));
 		m_okButton->setText(i18n("&Multiply"));
 		break;
 	case Divide:
+		setWindowTitle(i18nc("@title:window", "Divide by Value"));
 		m_okButton->setText(i18n("&Divide"));
 		break;
 	}
 
 	if (m_operation == Add || m_operation == Subtract) {
-		ui.cbType->addItem(i18n("Absolute Value"));
-		ui.cbType->addItem(i18n("Difference"));
+		ui.cbType->addItem(i18n("Custom Value"), static_cast<int>(ValueType::CustomValue));
+		ui.cbType->addItem(i18n("Difference"), static_cast<int>(ValueType::Difference));
 		for (int i = 0; i < ENUM_COUNT(AbstractColumn, TimeUnit); i++)
 			ui.cbTimeUnits->addItem(AbstractColumn::timeUnitString((AbstractColumn::TimeUnit)i));
 	} else {
@@ -157,7 +148,7 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 
 	// depending on the current column mode, activate/deactivate the corresponding widgets
 	// and show the first valid value in the first selected column as the value to add/subtract
-	const Column* column = m_columns.first();
+	const auto* column = m_columns.first();
 	const auto numberLocale = QLocale();
 
 	switch (column->columnMode()) {
@@ -225,6 +216,20 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 	}
 	}
 
+	if (m_operation == Subtract && m_numeric) {
+		int curIndex = ui.cbType->currentIndex();
+		ui.cbType->insertItem(0, i18n("Minimum"), static_cast<int>(ValueType::Minimum));
+		ui.cbType->insertItem(1, i18n("Maximum"), static_cast<int>(ValueType::Maximum));
+		if (column->columnMode() == AbstractColumn::ColumnMode::Double) {
+			ui.cbType->insertItem(2, i18n("Median"), static_cast<int>(ValueType::Median));
+			ui.cbType->insertItem(3, i18n("Mean"), static_cast<int>(ValueType::Mean));
+			ui.cbType->insertSeparator(4);
+		} else
+			ui.cbType->insertSeparator(2);
+
+		ui.cbType->setCurrentIndex(curIndex);
+	}
+
 	updateWidgetsVisiblity();
 }
 
@@ -260,7 +265,8 @@ void AddSubtractValueDialog::setMatrices() {
 }
 
 void AddSubtractValueDialog::typeChanged(int index) {
-	bool diff = (index != 0);
+	auto type = static_cast<ValueType>(ui.cbType->itemData(index).toInt());
+	bool diff = (type == ValueType::Difference);
 	if (m_numeric) {
 		ui.lValue->setVisible(!diff);
 		ui.leValue->setVisible(!diff);
@@ -268,6 +274,30 @@ void AddSubtractValueDialog::typeChanged(int index) {
 		ui.leValueStart->setVisible(diff);
 		ui.lValueEnd->setVisible(diff);
 		ui.leValueEnd->setVisible(diff);
+
+		if (type == ValueType::Minimum || type == ValueType::Maximum || type == ValueType::Median || type == ValueType::Mean) {
+			if (m_columns.count() > 1) {
+				ui.lValue->hide();
+				ui.leValue->hide();
+			} else {
+				// one single column was selected, show the actual minimum value of it, etc.
+				const auto& statistics = m_columns.constFirst()->statistics();
+				double value = 0.;
+				if (type == ValueType::Minimum)
+					value = statistics.minimum;
+				else if (type == ValueType::Maximum)
+					value = statistics.maximum;
+				else if (type == ValueType::Median)
+					value = statistics.median;
+				else if (type == ValueType::Mean)
+					value = statistics.arithmeticMean;
+
+				const auto numberLocale = QLocale();
+				ui.leValue->setText(numberLocale.toString(value));
+				ui.leValue->setEnabled(false);
+			}
+		} else
+			ui.leValue->setEnabled(true);
 	} else {
 		ui.lTimeValue->setVisible(!diff);
 		ui.leTimeValue->setVisible(!diff);
@@ -277,6 +307,7 @@ void AddSubtractValueDialog::typeChanged(int index) {
 		ui.lTimeValueEnd->setVisible(diff);
 		ui.dteTimeValueEnd->setVisible(diff);
 	}
+
 }
 
 void AddSubtractValueDialog::updateWidgetsVisiblity() {
@@ -367,17 +398,22 @@ void AddSubtractValueDialog::generateForColumns() {
 
 		switch (m_operation) {
 		case Subtract:
-			value *= -1;
-			// fall through
-		case Add:
+		case Add: {
+			int colIndex = 0;
 			for (auto* col : m_columns) {
 				auto* data = static_cast<QVector<int>*>(col->data());
+				setIntValue(value, colIndex);
+				if (m_operation == Subtract)
+					value *= -1.;
+
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) + value;
 
 				col->replaceInteger(0, new_data);
+				++colIndex;
 			}
 			break;
+		}
 		case Multiply:
 			for (auto* col : m_columns) {
 				auto* data = static_cast<QVector<int>*>(col->data());
@@ -412,17 +448,22 @@ void AddSubtractValueDialog::generateForColumns() {
 
 		switch (m_operation) {
 		case Subtract:
-			value *= -1;
-			// fall through
-		case Add:
+		case Add: {
+			int colIndex = 0;
 			for (auto* col : m_columns) {
 				auto* data = static_cast<QVector<qint64>*>(col->data());
+				setBigIntValue(value, colIndex);
+				if (m_operation == Subtract)
+					value *= -1.;
+
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) + value;
 
 				col->replaceBigInt(0, new_data);
+				++colIndex;
 			}
 			break;
+		}
 		case Multiply:
 			for (auto* col : m_columns) {
 				auto* data = static_cast<QVector<qint64>*>(col->data());
@@ -457,17 +498,22 @@ void AddSubtractValueDialog::generateForColumns() {
 
 		switch (m_operation) {
 		case Subtract:
-			value *= -1.;
-			// fall through
-		case Add:
+		case Add: {
+			int colIndex = 0;
 			for (auto* col : m_columns) {
 				auto* data = static_cast<QVector<double>*>(col->data());
+				setDoubleValue(value, colIndex);
+				if (m_operation == Subtract)
+					value *= -1.;
+
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) + value;
 
 				col->replaceValues(0, new_data);
+				++colIndex;
 			}
 			break;
+		}
 		case Multiply:
 			for (auto* col : m_columns) {
 				auto* data = static_cast<QVector<double>*>(col->data());
@@ -700,49 +746,108 @@ void AddSubtractValueDialog::generateForMatrices() {
 	RESET_CURSOR;
 }
 
-bool AddSubtractValueDialog::setIntValue(int& value) const {
-	bool ok;
+bool AddSubtractValueDialog::setIntValue(int& value, int columnIndex) const {
+	if (columnIndex < 0 || columnIndex >= m_columns.count()) // should never happen...
+		return false;
+
+	bool ok = false;
+	auto type = static_cast<ValueType>(ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
 	const auto numberLocale = QLocale();
 	if (m_operation == Add || m_operation == Subtract) {
-		if (ui.cbType->currentIndex() == 0) // add/subtract an absolute value
+		switch (type) {
+		case ValueType::CustomValue:
 			value = numberLocale.toInt(ui.leValue->text(), &ok);
-		else // add/subtract a difference
+			break;
+		case ValueType::Difference:
 			value = numberLocale.toInt(ui.leValueEnd->text(), &ok) - numberLocale.toInt(ui.leValueStart->text(), &ok);
+			break;
+		case ValueType::Minimum:
+			value = m_columns.at(columnIndex)->statistics().minimum;
+			break;
+		case ValueType::Maximum:
+			value = m_columns.at(columnIndex)->statistics().maximum;
+			break;
+		case ValueType::Median:
+		case ValueType::Mean:
+			// not supported
+			break;
+		}
 	} else
 		value = numberLocale.toInt(ui.leValue->text(), &ok);
 
 	return ok;
 }
 
-bool AddSubtractValueDialog::setBigIntValue(qint64& value) const {
-	bool ok;
+bool AddSubtractValueDialog::setBigIntValue(qint64& value, int columnIndex) const {
+	if (columnIndex < 0 || columnIndex >= m_columns.count()) // should never happen...
+		return false;
+
+	bool ok = true;
+	auto type = static_cast<ValueType>(ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
 	const auto numberLocale = QLocale();
 	if (m_operation == Add || m_operation == Subtract) {
-		if (ui.cbType->currentIndex() == 0) // add/subtract an absolute value
+		switch (type) {
+		case ValueType::CustomValue:
 			value = numberLocale.toLongLong(ui.leValue->text(), &ok);
-		else // add/subtract a difference
+			break;
+		case ValueType::Difference:
 			value = numberLocale.toLongLong(ui.leValueEnd->text(), &ok) - numberLocale.toLongLong(ui.leValueStart->text(), &ok);
+			break;
+		case ValueType::Minimum:
+			value = m_columns.at(columnIndex)->statistics().minimum;
+			break;
+		case ValueType::Maximum:
+			value = m_columns.at(columnIndex)->statistics().maximum;
+			break;
+		case ValueType::Median:
+		case ValueType::Mean:
+			// not supported
+			break;
+		}
 	} else
 		value = numberLocale.toLongLong(ui.leValue->text(), &ok);
 
 	return ok;
 }
 
-bool AddSubtractValueDialog::setDoubleValue(double& value) const {
-	bool ok;
+bool AddSubtractValueDialog::setDoubleValue(double& value, int columnIndex) const {
+	if (columnIndex < 0 || columnIndex >= m_columns.count()) // should never happen...
+		return false;
+
+	bool ok = true;
+	auto type = static_cast<ValueType>(ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
 	const auto numberLocale = QLocale();
 	if (m_operation == Add || m_operation == Subtract) {
-		if (ui.cbType->currentIndex() == 0) // add/subtract an absolute value
+		switch (type) {
+		case ValueType::CustomValue:
 			value = numberLocale.toDouble(ui.leValue->text(), &ok);
-		else // add/subtract a difference
+			break;
+		case ValueType::Difference:
 			value = numberLocale.toDouble(ui.leValueEnd->text(), &ok) - numberLocale.toDouble(ui.leValueStart->text(), &ok);
+			break;
+		case ValueType::Minimum:
+			value = m_columns.at(columnIndex)->statistics().minimum;
+			break;
+		case ValueType::Maximum:
+			value = m_columns.at(columnIndex)->statistics().maximum;
+			break;
+		case ValueType::Median:
+			value = m_columns.at(columnIndex)->statistics().median;
+			break;
+		case ValueType::Mean:
+			value = m_columns.at(columnIndex)->statistics().arithmeticMean;
+			break;
+		}
 	} else
 		value = numberLocale.toDouble(ui.leValue->text(), &ok);
 
 	return ok;
 }
 
-bool AddSubtractValueDialog::setDateTimeValue(qint64& value) const {
+bool AddSubtractValueDialog::setDateTimeValue(qint64& value, int columnIndex) const {
+	if (columnIndex < 0 || columnIndex >= m_columns.count()) // should never happen...
+		return false;
+
 	if (m_operation == Add || m_operation == Subtract) {
 		if (ui.cbType->currentIndex() == 0) { // add/subtract an absolute value
 			const auto numberLocale = QLocale();
