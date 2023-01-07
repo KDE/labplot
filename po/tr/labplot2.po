@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:43+0000\n"
+"POT-Creation-Date: 2023-01-07 00:44+0000\n"
 "PO-Revision-Date: 2023-01-05 22:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2186,7 +2186,7 @@ msgstr "%1: %2 konumundan içe aktar"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1951
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1176
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1196
 #, kde-format
 msgid "Success"
 msgstr "Başarılı"
@@ -5674,7 +5674,7 @@ msgstr "İstatistik (Dağılımlar)"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1069
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:237
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:293
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:785
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:792
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:86
 #, kde-format
 msgid "Custom"
@@ -12229,17 +12229,17 @@ msgid "Expand all curves"
 msgstr "Tüm eğrileri genişlet"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1307
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1313
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1319
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1327
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1333
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1339
 #, kde-format
 msgid "Copy Selection"
 msgstr "Seçimi Kopyala"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1308
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1314
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1320
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1328
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1334
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1340
 #, kde-format
 msgid "Copy All"
 msgstr "Tümünü Kopyala"
@@ -12875,28 +12875,28 @@ msgid "Histogram:"
 msgstr "Histogram:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:833
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:840
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:620
 #, kde-format
 msgid "Degree:"
 msgstr "Derece:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:890
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:897
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Zirveler sayısı:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1177
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1197
 #, kde-format
 msgid "Fit status: %1"
 msgstr "Uyma durumu: %1"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1354
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1374
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%​%1 daha düşük özgüven düzeyi"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1355
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1375
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%​%1 daha yüksek özgüven düzeyi"
@@ -13601,8 +13601,9 @@ msgstr ""
 "platform veri görselleştirme ve çözümleme yazılımıdır."
 
 #: src/kdefrontend/LabPlot.cpp:94
-#, kde-format
-msgid "(c) 2007-2022"
+#, fuzzy, kde-format
+#| msgid "(c) 2007-2022"
+msgid "(c) 2007-2023"
 msgstr "(c) 2007-2022"
 
 #: src/kdefrontend/LabPlot.cpp:97
@@ -19229,7 +19230,7 @@ msgstr "Uyum çalıştır"
 msgid "Run"
 msgstr "Çalıştır"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1131
 #, kde-format
 msgid "Algorithm:"

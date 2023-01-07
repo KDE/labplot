@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:43+0000\n"
-"PO-Revision-Date: 2023-01-02 20:17+0100\n"
+"POT-Creation-Date: 2023-01-07 00:44+0000\n"
+"PO-Revision-Date: 2023-01-06 09:30+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2193,7 +2193,7 @@ msgstr "%1: uvozi iz %2"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1951
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1176
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1196
 #, kde-format
 msgid "Success"
 msgstr "Uspešno"
@@ -5700,7 +5700,7 @@ msgstr "Statistika (porazdelitve)"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1069
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:237
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:293
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:785
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:792
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:86
 #, kde-format
 msgid "Custom"
@@ -9297,10 +9297,9 @@ msgstr "Poi&šči"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Column Statistics..."
-msgstr "Statistika stolpca"
+msgstr "Statistika stolpca..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
 #, kde-format
@@ -9735,10 +9734,9 @@ msgid "%1: column statistics"
 msgstr "%1: statistike stolpca"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Selection in %1"
-msgstr "Izbor"
+msgstr "Izbor v %1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
 #, kde-format
@@ -12302,17 +12300,17 @@ msgid "Expand all curves"
 msgstr "Razširi vse krivulje"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1307
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1313
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1319
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1327
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1333
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1339
 #, kde-format
 msgid "Copy Selection"
 msgstr "Kopiraj izbor"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1308
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1314
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1320
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1328
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1334
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1340
 #, kde-format
 msgid "Copy All"
 msgstr "Kopiraj &vse"
@@ -12949,28 +12947,28 @@ msgid "Histogram:"
 msgstr "Histogram:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:833
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:840
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:620
 #, kde-format
 msgid "Degree:"
 msgstr "Stopinja:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:890
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:897
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Število vrhov:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1177
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1197
 #, kde-format
 msgid "Fit status: %1"
 msgstr "Stanje prileganja: %1"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1354
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1374
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % nižja raven zaupanja"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1355
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1375
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % višja raven zaupanja"
@@ -13676,8 +13674,9 @@ msgstr ""
 "vizualizacijo in analizo podatkov, ki je dostopna vsem."
 
 #: src/kdefrontend/LabPlot.cpp:94
-#, kde-format
-msgid "(c) 2007-2022"
+#, fuzzy, kde-format
+#| msgid "(c) 2007-2022"
+msgid "(c) 2007-2023"
 msgstr "(c) 2007-2022"
 
 #: src/kdefrontend/LabPlot.cpp:97
@@ -19313,7 +19312,7 @@ msgstr "Zaženi prileganje"
 msgid "Run"
 msgstr "Zaženi"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1131
 #, kde-format
 msgid "Algorithm:"

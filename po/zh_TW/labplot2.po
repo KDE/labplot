@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-05 00:43+0000\n"
+"POT-Creation-Date: 2023-01-07 00:44+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -2239,7 +2239,7 @@ msgstr "匯入"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1951
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1176
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1196
 #, kde-format
 msgid "Success"
 msgstr ""
@@ -5786,7 +5786,7 @@ msgstr "方向"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1069
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:237
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:293
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:785
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:792
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:86
 #, kde-format
 msgid "Custom"
@@ -12399,17 +12399,17 @@ msgid "Expand all curves"
 msgstr "全部展開"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1307
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1313
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1319
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1327
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1333
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1339
 #, fuzzy, kde-format
 msgid "Copy Selection"
 msgstr "選擇"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1308
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1314
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1320
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1328
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1334
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1340
 #, fuzzy, kde-format
 msgid "Copy All"
 msgstr "全部折疊"
@@ -13066,31 +13066,31 @@ msgid "Histogram:"
 msgstr "欄位屬性"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:833
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:840
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:620
 #, fuzzy, kde-format
 #| msgid "green"
 msgid "Degree:"
 msgstr "綠"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:890
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:897
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Number of peaks:"
 msgstr "點數"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1177
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1197
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Fit status: %1"
 msgstr "統計"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1354
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1374
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1355
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1375
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -13820,7 +13820,7 @@ msgstr ""
 
 #: src/kdefrontend/LabPlot.cpp:94
 #, fuzzy, kde-format
-msgid "(c) 2007-2022"
+msgid "(c) 2007-2023"
 msgstr "C"
 
 #: src/kdefrontend/LabPlot.cpp:97
@@ -19582,7 +19582,7 @@ msgstr "自動調適"
 msgid "Run"
 msgstr "自動調適"
 
-#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1131
 #, kde-format
 msgid "Algorithm:"
