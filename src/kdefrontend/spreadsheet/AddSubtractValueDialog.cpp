@@ -25,7 +25,7 @@
 
 #include <cmath>
 
-enum class ValueType {CustomValue, Difference, Minimum, Maximum, Median, Mean};
+enum class ValueType { CustomValue, Difference, Minimum, Maximum, Median, Mean };
 /*!
 	\class AddSubtractValueDialog
 	\brief Dialog for adding/subtracting a value from column values.
@@ -307,7 +307,6 @@ void AddSubtractValueDialog::typeChanged(int index) {
 		ui.lTimeValueEnd->setVisible(diff);
 		ui.dteTimeValueEnd->setVisible(diff);
 	}
-
 }
 
 void AddSubtractValueDialog::updateWidgetsVisiblity() {

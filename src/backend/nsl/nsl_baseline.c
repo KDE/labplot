@@ -10,6 +10,7 @@
 #include "nsl_baseline.h"
 #include "nsl_stats.h"
 
+#include "gsl/gsl_fit.h"
 #include "gsl/gsl_sort.h"
 #include "gsl/gsl_statistics_double.h"
 
@@ -50,4 +51,33 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 		data[i] -= median;
 
 	free(tmp_data);
+}
+
+/* do a linear interpolation using first and last point and substract that */
+int nsl_baseline_remove_endpoints(double* xdata, double* ydata, const size_t n) {
+	// not possible
+	if (xdata[0] == xdata[n - 1])
+		return -1;
+
+	for (size_t i = 0; i < n; i++) {
+		// y = y1 + (x-x1)*(y2-y1)/(x2-x1)
+		const double y = ydata[0] + (xdata[i] - xdata[0]) * (ydata[n - 1] - ydata[0]) / (xdata[n - 1] - xdata[0]);
+		ydata[i] -= y;
+	}
+
+	return 0;
+}
+
+/* do a linear regression and substract that */
+int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
+	double c0, c1, cov00, cov01, cov11, chisq;
+	gsl_fit_linear(xdata, 1, ydata, 1, n, &c0, &c1, &cov00, &cov01, &cov11, &chisq);
+
+	for (size_t i = 0; i < n; i++) {
+		double y, y_err;
+		gsl_fit_linear_est(xdata[i], c0, c1, cov00, cov01, cov11, &y, &y_err);
+		ydata[i] -= y;
+	}
+
+	return 0;
 }

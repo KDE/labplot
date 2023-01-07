@@ -21,6 +21,12 @@ void nsl_baseline_remove_mean(double* data, size_t n);
 /* remove median base line from data */
 void nsl_baseline_remove_median(double* data, size_t n);
 
-/* TODO: end points, lin. regression */
+/* remove base line through end points (first and last point). xdata and ydata must be of same size n */
+int nsl_baseline_remove_endpoints(double* xdata, double* ydata, size_t n);
+
+/* remove linear regression. xdata and ydata must be of same size n */
+int nsl_baseline_remove_linreg(double* xdata, double* ydata, size_t n);
+
+/* TODO: ALS */
 
 #endif

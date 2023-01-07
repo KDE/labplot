@@ -24,6 +24,9 @@ private Q_SLOTS:
 	void testBaselineMean2();
 	void testBaselineMedian();
 	void testBaselineMedian2();
+
+	void testBaselineEndpoints();
+	void testBaselineLinReg();
 	// performance
 	// void testPerformance();
 };
