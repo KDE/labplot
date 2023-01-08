@@ -39,7 +39,6 @@ public:
 	static QIcon staticIcon();
 	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;
-	void finalizeAdd() override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
