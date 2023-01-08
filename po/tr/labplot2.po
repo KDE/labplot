@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-07 00:44+0000\n"
-"PO-Revision-Date: 2023-01-05 22:10+0300\n"
+"POT-Creation-Date: 2023-01-08 00:54+0000\n"
+"PO-Revision-Date: 2023-01-07 22:37+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2728,6 +2728,7 @@ msgstr "Boyut"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:159
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:221
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:60
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
 #, kde-format
@@ -2736,6 +2737,7 @@ msgstr "En düşük değer"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:160 src/backend/nsl/nsl_conv.c:23
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:222
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:61
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
@@ -2753,6 +2755,7 @@ msgstr "Aritmetik ortalama"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/ExpressionParser.cpp:162
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:224
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:503
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
@@ -11739,7 +11742,6 @@ msgid "Custom column"
 msgstr "Özel sütun"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:279
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
 #, kde-format
 msgid "Absolute Value"
 msgstr "Mutlak Değer"
@@ -13601,10 +13603,9 @@ msgstr ""
 "platform veri görselleştirme ve çözümleme yazılımıdır."
 
 #: src/kdefrontend/LabPlot.cpp:94
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2022"
+#, kde-format
 msgid "(c) 2007-2023"
-msgstr "(c) 2007-2022"
+msgstr "(c) 2007-2023"
 
 #: src/kdefrontend/LabPlot.cpp:97
 #, kde-format
@@ -14644,124 +14645,143 @@ msgstr "'dvips' bulunamadı. LaTeX dizgisi olanaklı değil."
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Ghostscript bulunamadı. LaTeX dizgisi olanaklı değil."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:45
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:46
 #, kde-format
 msgid "Add the specified value to column values"
 msgstr "Sütun değerlerine belirtilen değeri ekle"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:48
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:49
 #, kde-format
 msgid "Subtract the specified value from column values"
 msgstr "Sütun değerlerinden belirtilen değeri çıkar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:51
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:52
 #, kde-format
 msgid "Multiply column values by the specified value"
 msgstr "Sütun değerlerini belirtilen değerle çarp"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:54
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:55
 #, kde-format
 msgid "Divide column values by the specified value"
 msgstr "Sütun değerlerini belirtilen değere böl"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:69
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:70
 #, kde-format
 msgid "Add the specified value to matrix values"
 msgstr "Matris değerlerine belirtilen değeri ekle"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:72
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:73
 #, kde-format
 msgid "Subtract the specified value from matrix values"
 msgstr "Matris değerlerinden belirtilen değeri çıkar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:75
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:76
 #, kde-format
 msgid "Multiply matrix values by the specified value"
 msgstr "Matris değerlerini belirtilen değerle çarp"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:78
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:79
 #, kde-format
 msgid "Divide matrix values by the specified value"
 msgstr "Matris değerlerini belirtilen değere böl"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:85
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:93
 #, kde-format
 msgctxt "@title:window"
 msgid "Add Value"
 msgstr "Değer Ekle"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:88
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:94
+#: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
+#, kde-format
+msgid "&Add"
+msgstr "&Ekle"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:97
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Değeri Çıkar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:91
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:98
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Subtract:"
+msgstr "Çıkar"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:99
+#, kde-format
+msgid "&Subtract"
+msgstr "&Çıkar"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:102
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr "Değerle Çarp"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:94
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:103
+#, kde-format
+msgid "&Multiply"
+msgstr "&Çarp"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:106
 #, kde-format
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr "Değere Böl"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
-#: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
-#, kde-format
-msgid "&Add"
-msgstr "&Ekle"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:110
-#, kde-format
-msgid "&Subtract"
-msgstr "&Çıkar"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
-#, kde-format
-msgid "&Multiply"
-msgstr "&Çarp"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
 #, kde-format
 msgid "&Divide"
 msgstr "&Böl"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
+#, fuzzy, kde-format
+#| msgid "Custom Query"
+msgid "Custom Value"
+msgstr "Özel Sorgu"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
 #, kde-format
 msgid "Difference"
 msgstr "Fark"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:324
+#. i18n: ectx: property (text), widget (QRadioButton, rbMean)
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:225
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:493
+#, kde-format
+msgid "Mean"
+msgstr "Ortalama"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:354
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: Sütun değerlerine %2 ekle"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:327
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:357
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: Sütun değerlerinden %2 çıkar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:330
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:360
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: Sütun değerlerini %2 ile çarp"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:333
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:363
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: Sütun değerlerini %2 ile böl"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:361
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:406
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:451
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:496
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:547
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:589
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:631
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:673
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:391
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:441
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:491
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:541
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:592
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:634
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:676
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:718
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr "Geçersiz sayısal değer sağlandı."
@@ -17772,12 +17792,6 @@ msgstr "Orta Çizgi"
 #, kde-format
 msgid "Markers"
 msgstr "İmleyiciler"
-
-#. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:493
-#, kde-format
-msgid "Mean"
-msgstr "Ortalama"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbOutlier)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:510

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-07 00:44+0000\n"
-"PO-Revision-Date: 2023-01-05 08:43+0200\n"
+"POT-Creation-Date: 2023-01-08 00:54+0000\n"
+"PO-Revision-Date: 2023-01-07 09:02+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -2751,6 +2751,7 @@ msgstr "Розмір"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:159
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:221
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:60
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
 #, kde-format
@@ -2759,6 +2760,7 @@ msgstr "Мінімум"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:160 src/backend/nsl/nsl_conv.c:23
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:222
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:61
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
@@ -2776,6 +2778,7 @@ msgstr "Арифметичне середнє"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/ExpressionParser.cpp:162
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:224
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:503
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
@@ -11848,7 +11851,6 @@ msgid "Custom column"
 msgstr "Нетиповий стовпчик"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:279
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
 #, kde-format
 msgid "Absolute Value"
 msgstr "Модуль"
@@ -13718,10 +13720,9 @@ msgstr ""
 "аналіз даних."
 
 #: src/kdefrontend/LabPlot.cpp:94
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2022"
+#, kde-format
 msgid "(c) 2007-2023"
-msgstr "© 2007–2022"
+msgstr "© 2007–2023"
 
 #: src/kdefrontend/LabPlot.cpp:97
 #, kde-format
@@ -14764,124 +14765,143 @@ msgstr "Не знайдено програми «dvips». Верстання ф�
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Не знайдено комплексу Ghostscript. Верстання формул у LaTeX неможливе."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:45
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:46
 #, kde-format
 msgid "Add the specified value to column values"
 msgstr "Додати вказане значення до значень у стовпчику"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:48
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:49
 #, kde-format
 msgid "Subtract the specified value from column values"
 msgstr "Відняти вказане значення від значень у стовпчику"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:51
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:52
 #, kde-format
 msgid "Multiply column values by the specified value"
 msgstr "Помножити значення у стовпчику на вказане значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:54
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:55
 #, kde-format
 msgid "Divide column values by the specified value"
 msgstr "Поділити значення у стовпчику на вказане значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:69
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:70
 #, kde-format
 msgid "Add the specified value to matrix values"
 msgstr "Додати вказане значення до значень у матриці"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:72
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:73
 #, kde-format
 msgid "Subtract the specified value from matrix values"
 msgstr "Відняти вказане значення від значень у матриці"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:75
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:76
 #, kde-format
 msgid "Multiply matrix values by the specified value"
 msgstr "Помножити значення у матриці на вказане значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:78
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:79
 #, kde-format
 msgid "Divide matrix values by the specified value"
 msgstr "Поділити значення у матриці на вказане значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:85
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:93
 #, kde-format
 msgctxt "@title:window"
 msgid "Add Value"
 msgstr "Додати значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:88
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:94
+#: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
+#, kde-format
+msgid "&Add"
+msgstr "&Додати"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:97
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Відняти значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:91
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:98
+#, fuzzy, kde-format
+#| msgid "Subtract"
+msgid "Subtract:"
+msgstr "Відняти"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:99
+#, kde-format
+msgid "&Subtract"
+msgstr "&Відняти"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:102
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr "Помножити на значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:94
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:103
+#, kde-format
+msgid "&Multiply"
+msgstr "По&множити"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:106
 #, kde-format
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr "Поділити на значення"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
-#: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
-#, kde-format
-msgid "&Add"
-msgstr "&Додати"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:110
-#, kde-format
-msgid "&Subtract"
-msgstr "&Відняти"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
-#, kde-format
-msgid "&Multiply"
-msgstr "По&множити"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
 #, kde-format
 msgid "&Divide"
 msgstr "По&ділити"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
+#, fuzzy, kde-format
+#| msgid "Custom Query"
+msgid "Custom Value"
+msgstr "Нетиповий запит"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
 #, kde-format
 msgid "Difference"
 msgstr "Різниця"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:324
+#. i18n: ectx: property (text), widget (QRadioButton, rbMean)
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:225
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:493
+#, kde-format
+msgid "Mean"
+msgstr "Середнє"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:354
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: додавання %2 до значень у стовпчику"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:327
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:357
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: віднімання %2 від значень у стовпчику"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:330
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:360
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: множення значень у стовпчику на %2"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:333
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:363
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: ділення значень у стовпчику на %2"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:361
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:406
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:451
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:496
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:547
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:589
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:631
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:673
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:391
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:441
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:491
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:541
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:592
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:634
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:676
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:718
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr "Надано помилкове числове значення."
@@ -17912,12 +17932,6 @@ msgstr "Лінія медіани"
 #, kde-format
 msgid "Markers"
 msgstr "Позначки"
-
-#. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:493
-#, kde-format
-msgid "Mean"
-msgstr "Середнє"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbOutlier)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:510
