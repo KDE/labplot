@@ -184,16 +184,6 @@ void BoxPlot::init() {
 	d->rugOffset = group.readEntry("RugOffset", 0.0);
 }
 
-void BoxPlot::finalizeAdd() {
-	WorksheetElement::finalizeAdd();
-
-	// in case we're loading an older project where it was not possible to change the properties
-	// for each data column independently of each other and there was only one single Background, etc.
-	// add here additional elements to fit the current number of data columns after the project load.
-	Q_D(BoxPlot);
-	d->adjustPropertiesContainers();
-}
-
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -2017,6 +2007,44 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	d->dataColumns.resize(d->dataColumnPaths.size());
+
+	// in case we're loading an older project where it was not possible to change the properties
+	// for each data column independently of each other and there was only one single Background, etc.
+	// add here additional elements to fit the current number of data columns after the project load
+	// and set the saved properties for all newly added objects.
+	int diff = d->dataColumns.size() - d->backgrounds.size();
+	if (diff > 0) {
+		KConfig config;
+		KConfigGroup group = config.group(QLatin1String("XYCurve"));
+
+		const auto* background = d->backgrounds.constFirst();
+		const auto* borderLine = d->borderLines.constFirst();
+		const auto* medianLine = d->medianLines.constFirst();
+		for (int i = 0; i < diff; ++i) {
+			auto* newBackground = d->addBackground(group);
+			newBackground->setEnabled(background->enabled());
+			newBackground->setType(background->type());
+			newBackground->setColorStyle(background->colorStyle());
+			newBackground->setImageStyle(background->imageStyle());
+			newBackground->setBrushStyle(background->brushStyle());
+			newBackground->setFirstColor(background->firstColor());
+			newBackground->setSecondColor(background->secondColor());
+			newBackground->setFileName(background->fileName());
+			newBackground->setOpacity(background->opacity());
+
+			auto* newBorderLine = d->addBorderLine(group);
+			newBorderLine->setStyle(borderLine->style());
+			newBorderLine->setColor(borderLine->color());
+			newBorderLine->setWidth(borderLine->width());
+			newBorderLine->setOpacity(borderLine->opacity());
+
+			auto* newMedianLine = d->addMedianLine(group);
+			newMedianLine->setStyle(medianLine->style());
+			newMedianLine->setColor(medianLine->color());
+			newMedianLine->setWidth(medianLine->width());
+			newMedianLine->setOpacity(medianLine->opacity());
+		}
+	}
 
 	return true;
 }
