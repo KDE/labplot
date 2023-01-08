@@ -133,6 +133,7 @@ public:
 
 	const AbstractColumn::ColumnStatistics& statistics() const;
 	void* data() const;
+	void setData(void*);
 	bool hasValues() const;
 	bool hasValueLabels() const;
 	void removeValueLabel(const QString&);

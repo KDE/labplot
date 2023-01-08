@@ -31,7 +31,8 @@ public:
 							  int actualRows,
 							  int actualCols,
 							  QStringList colNameList = QStringList(),
-							  QVector<AbstractColumn::ColumnMode> = QVector<AbstractColumn::ColumnMode>()) = 0;
+							  QVector<AbstractColumn::ColumnMode> = QVector<AbstractColumn::ColumnMode>(),
+							  bool initializeDataContainer = true) = 0;
 	virtual void finalizeImport(size_t columnOffset = 0,
 								size_t startColumn = 0,
 								size_t endColumn = 0,

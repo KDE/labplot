@@ -126,6 +126,10 @@ void ColumnPrivate::initIOFilters() {
 }
 
 ColumnPrivate::~ColumnPrivate() {
+	deleteData();
+}
+
+void ColumnPrivate::deleteData() {
 	if (!m_data)
 		return;
 
@@ -148,6 +152,7 @@ ColumnPrivate::~ColumnPrivate() {
 		delete static_cast<QVector<QDateTime>*>(m_data);
 		break;
 	}
+	m_data = nullptr;
 }
 
 AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
@@ -1093,6 +1098,16 @@ int ColumnPrivate::width() const {
  */
 void ColumnPrivate::setWidth(int value) {
 	m_width = value;
+}
+
+/**
+ * @brief ColumnPrivate::setData
+ * Set new column data
+ */
+void ColumnPrivate::setData(void* data) {
+	deleteData();
+
+	m_data = data;
 }
 
 /**

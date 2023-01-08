@@ -54,7 +54,9 @@ public:
 	int width() const;
 	void setWidth(int);
 
+	void setData(void*);
 	void* data() const;
+	void deleteData();
 	bool hasValueLabels() const;
 	void removeValueLabel(const QString&);
 	void clearValueLabels();

@@ -27,6 +27,7 @@ class MQTTSubscriptionWidget;
 class AbstractFileFilter;
 class AsciiOptionsWidget;
 class BinaryOptionsWidget;
+class CANOptionsWidget;
 class HDF5OptionsWidget;
 class ImageOptionsWidget;
 class MatioOptionsWidget;
@@ -58,10 +59,12 @@ public:
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;
+	QString dbcFileName() const;
 	QString selectedObject() const;
 	bool isFileEmpty() const;
 	bool excelUseFirstRowAsColNames() const;
 	const QStringList selectedHDF5Names() const;
+	//	const QStringList selectedVectorBLFNames() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedMatioNames() const;
 	const QStringList selectedFITSExtensions() const;
@@ -93,6 +96,7 @@ private:
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
 	std::unique_ptr<ExcelOptionsWidget> m_excelOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
+	std::unique_ptr<CANOptionsWidget> m_canOptionsWidget;
 	std::unique_ptr<MatioOptionsWidget> m_matioOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
@@ -103,6 +107,7 @@ private:
 	AbstractAspect* m_targetContainer{nullptr};
 	QTableWidget* m_twPreview{nullptr};
 	KUrlComboBox* m_cbFileName{nullptr};
+	KUrlComboBox* m_cbDBCFileName{nullptr};
 	const QString& m_fileName;
 	bool m_fileEmpty{false};
 	bool m_liveDataSource;
@@ -127,8 +132,10 @@ private Q_SLOTS:
 
 	void saveFilter();
 	void manageFilters();
+	void hidePropertyWidgets();
 	void filterChanged(int);
 	void selectFile();
+	void selectDBCFile();
 	void showFileInfo();
 	void refreshPreview();
 	void updateStartRow(int);

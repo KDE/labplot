@@ -22,5 +22,6 @@
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/ReadStatFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"
+#include "backend/datasources/filters/VectorBLFFilter.h"
 
 #endif

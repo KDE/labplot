@@ -1297,7 +1297,8 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer,
 						  int actualRows,
 						  int actualCols,
 						  QStringList /*colNameList*/,
-						  QVector<AbstractColumn::ColumnMode> columnMode) {
+						  QVector<AbstractColumn::ColumnMode> columnMode,
+						  bool initializeDataContainer) {
 	auto newColumnMode = columnMode.at(0); // only first column mode used
 	DEBUG(Q_FUNC_INFO << ", rows = " << actualRows << " cols = " << actualCols << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode)
 					  << ", column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, newColumnMode))
@@ -1335,50 +1336,53 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer,
 
 	DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << "/" << actualCols)
 	// data() returns a void* which is a pointer to a matrix of any data type (see ColumnPrivate.cpp)
-	dataContainer.resize(actualCols);
-	switch (newColumnMode) { // prepare all columns
-	case AbstractColumn::ColumnMode::Double:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
+	if (initializeDataContainer) {
+		dataContainer.resize(actualCols);
+
+		switch (newColumnMode) { // prepare all columns
+		case AbstractColumn::ColumnMode::Double:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::Double;
+			break;
+		case AbstractColumn::ColumnMode::Integer:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<int>* vector = &(static_cast<QVector<QVector<int>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::Integer;
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<qint64>* vector = &(static_cast<QVector<QVector<qint64>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::BigInt;
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<QString>* vector = &(static_cast<QVector<QVector<QString>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::Text;
+			break;
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::DateTime:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<QDateTime>* vector = &(static_cast<QVector<QVector<QDateTime>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::DateTime;
+			break;
 		}
-		d->mode = AbstractColumn::ColumnMode::Double;
-		break;
-	case AbstractColumn::ColumnMode::Integer:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<int>* vector = &(static_cast<QVector<QVector<int>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::Integer;
-		break;
-	case AbstractColumn::ColumnMode::BigInt:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<qint64>* vector = &(static_cast<QVector<QVector<qint64>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::BigInt;
-		break;
-	case AbstractColumn::ColumnMode::Text:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<QString>* vector = &(static_cast<QVector<QVector<QString>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::Text;
-		break;
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::DateTime:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<QDateTime>* vector = &(static_cast<QVector<QVector<QDateTime>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::DateTime;
-		break;
 	}
 
 	return columnOffset;

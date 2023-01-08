@@ -822,6 +822,10 @@ const Column::ColumnStatistics& Column::statistics() const {
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+void Column::setData(void* data) {
+	d->setData(data);
+}
+
 void* Column::data() const {
 	return d->data();
 }
