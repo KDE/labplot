@@ -36,6 +36,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/colormaps/ColorMapsWidget.cpp
 	${KDEFRONTEND_DIR}/colormaps/ColorMapsDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/CANOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
@@ -167,6 +168,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/settingsdatasetspage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/CANOptionsWidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/datasetmetadatamanagerwidget.ui
@@ -325,6 +327,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
 	${BACKEND_DIR}/datasources/filters/ReadStatFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ROOTFilter.cpp
+	${BACKEND_DIR}/datasources/filters/VectorBLFFilter.cpp
+	${BACKEND_DIR}/datasources/filters/DBCParser.cpp
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
@@ -527,7 +531,15 @@ target_link_libraries( labplot2lib
 	${LZ4_LIBRARIES}
 	${MATIO_LIBRARIES}
 	${ZLIB_LIBRARIES}
+	PkgConfig::Vector_BLF
 	)
+    if (${LOCAL_DBC_PARSER})
+        target_link_libraries(labplot2lib dbc)
+        get_target_property(DBC_INCLUDE_DIRECTORIES dbc INCLUDE_DIRECTORIES)
+        target_include_directories(labplot2lib PUBLIC ${DBC_INCLUDE_DIRECTORIES})
+    else()
+        target_link_libraries(labplot2lib PkgConfig::dbc)
+    endif()
 
 IF (Qt5SerialPort_FOUND)
 	target_link_libraries( labplot2lib Qt5::SerialPort )

@@ -215,10 +215,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for special types
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
-			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel) {
+			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel
+			|| fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
 			QStringList names;
 			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
+			else if (fileType == AbstractFileFilter::FileType::VECTOR_BLF)
+				names = QStringList({QStringLiteral("TODO")}); // m_importFileWidget->selectedVectorBLFNames();
 			else if (fileType == AbstractFileFilter::FileType::NETCDF)
 				names = m_importFileWidget->selectedNetCDFNames();
 			else if (fileType == AbstractFileFilter::FileType::ROOT)
@@ -287,6 +290,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<HDF5Filter*>(filter)->setCurrentDataSetName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::NETCDF)
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names.at(i));
+				else if (fileType == AbstractFileFilter::FileType::VECTOR_BLF)
+					static_cast<VectorBLFFilter*>(filter); //->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::MATIO)
 					static_cast<MatioFilter*>(filter)->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::Excel) {

@@ -929,7 +929,8 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 							   int actualRows,
 							   int actualCols,
 							   QStringList colNameList,
-							   QVector<AbstractColumn::ColumnMode> columnMode) {
+							   QVector<AbstractColumn::ColumnMode> columnMode,
+							   bool initializeContainer) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
@@ -959,7 +960,8 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 		return -1;
 	}
 
-	dataContainer.resize(actualCols);
+	if (initializeContainer)
+		dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		Column* column = this->child<Column>(columnOffset + n);
@@ -975,34 +977,38 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 		else
 			column->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 
-		switch (columnMode[n]) {
-		case AbstractColumn::ColumnMode::Double: {
-			auto* vector = static_cast<QVector<double>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::Integer: {
-			auto* vector = static_cast<QVector<int>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::BigInt: {
-			auto* vector = static_cast<QVector<qint64>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::Text: {
-			auto* vector = static_cast<QVector<QString>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::DateTime: {
-			auto* vector = static_cast<QVector<QDateTime>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
+		if (initializeContainer) {
+			switch (columnMode[n]) {
+			case AbstractColumn::ColumnMode::Double: {
+				auto* vector = static_cast<QVector<double>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::Integer: {
+				auto* vector = static_cast<QVector<int>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::BigInt: {
+				auto* vector = static_cast<QVector<qint64>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::Text: {
+				auto* vector = static_cast<QVector<QString>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime: {
+				auto* vector = static_cast<QVector<QDateTime>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			}
+		} else {
+			column->setData(dataContainer[n]);
 		}
 	}
 	//	QDEBUG("dataPointers =" << dataPointers);
