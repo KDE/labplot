@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-08 00:54+0000\n"
+"POT-Creation-Date: 2023-01-09 00:52+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -62,7 +62,7 @@ msgstr ""
 #: src/backend/worksheet/Line.cpp:225
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2906
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1915
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4582
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:943
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
@@ -108,7 +108,7 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:468
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3035
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2013
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2003
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:447
 #: src/backend/worksheet/plots/PlotArea.cpp:405
@@ -1681,7 +1681,7 @@ msgid "Valid JSON document"
 msgstr ""
 
 #: src/backend/datasources/filters/JsonFilter.cpp:274
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:328
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:318
 #, kde-format
 msgid "index"
 msgstr ""
@@ -6505,7 +6505,7 @@ msgstr "設定背景影像..."
 #: src/backend/worksheet/InfoElement.cpp:173
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:248
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:228
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:218
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:134
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:85
@@ -6677,7 +6677,7 @@ msgstr "設定不透明度"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:257
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:237
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:103
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:253
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
@@ -6693,7 +6693,7 @@ msgstr "水平"
 #. Orientation
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:260
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:240
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:230
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:106
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:254
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:58
@@ -6709,7 +6709,7 @@ msgstr "垂直"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:280
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:248
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:238
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:123
 #, kde-format
 msgid "Orientation"
@@ -7007,7 +7007,7 @@ msgid "%1: set x column"
 msgstr "%1：插入 %2 欄"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:244
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:469
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:459
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
@@ -7020,7 +7020,7 @@ msgid "%1: set type"
 msgstr "設定佈局"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:496
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:486
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:197
 #, fuzzy, kde-format
 #| msgid "%1: set creation time"
@@ -7028,99 +7028,99 @@ msgid "%1: set orientation"
 msgstr "%1：設定建立時間"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:510
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:500
 #, fuzzy, kde-format
 msgid "%1: width factor changed"
 msgstr "（已改變）"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:313
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:183
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:332
 #, fuzzy, kde-format
 msgid "%1 - Data"
 msgstr "資料"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:329
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:319
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "1st quartile"
 msgstr "方向"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:330
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:320
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "3rd quartile"
 msgstr "方向"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:331
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:321
 #, fuzzy, kde-format
 #| msgid "StandardDev"
 msgid "median"
 msgstr "標準差"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:332
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:322
 #, fuzzy, kde-format
 msgid "whiskers min"
 msgstr "資料"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:333
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
 #, kde-format
 msgid "whiskers max"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:334
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:324
 #, kde-format
 msgid "data points count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:335
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:325
 #, fuzzy, kde-format
 #| msgid "Constants"
 msgid "outliers count"
 msgstr "常數"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:336
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:326
 #, kde-format
 msgid "far out points count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:489
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:479
 #, fuzzy, kde-format
 msgid "%1: set ordering"
 msgstr "設定字型"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:503
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
 #, fuzzy, kde-format
 msgid "%1: variable width changed"
 msgstr "設定背景影像..."
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:517
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: changed notches"
 msgstr "%1：變更註解"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:515
 #, fuzzy, kde-format
 msgid "%1: set whiskers type"
 msgstr "資料"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:522
 #, fuzzy, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "資料"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
 #, fuzzy, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "資料"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:547
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
 #, fuzzy, kde-format
 msgid "%1: jitterring changed"
 msgstr "設定背景影像..."
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:555
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:545
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:537
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:634
 #, fuzzy, kde-format
@@ -7128,7 +7128,7 @@ msgstr "設定背景影像..."
 msgid "%1: change rug enabled"
 msgstr "%1：設定建立時間"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:562
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:552
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:544
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:648
 #, fuzzy, kde-format
@@ -7136,7 +7136,7 @@ msgstr "%1：設定建立時間"
 msgid "%1: change rug width"
 msgstr "%1：變更註解"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:569
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:559
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:551
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:655
 #, fuzzy, kde-format
@@ -7144,7 +7144,7 @@ msgstr "%1：變更註解"
 msgid "%1: change rug length"
 msgstr "%1：變更註解"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:576
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:566
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:558
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:662
 #, fuzzy, kde-format

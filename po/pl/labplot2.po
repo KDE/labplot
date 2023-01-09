@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-08 00:54+0000\n"
+"POT-Creation-Date: 2023-01-09 00:52+0000\n"
 "PO-Revision-Date: 2022-08-06 09:40+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -65,7 +65,7 @@ msgstr "Nie można znaleźć wtyczek paneli. Sprawdź swoją instalację."
 #: src/backend/worksheet/Line.cpp:225
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2906
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1915
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4582
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:943
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
@@ -111,7 +111,7 @@ msgstr "Brak atrybutu '%1' lub jest pusty, użyto domyślnej wartości"
 #: src/backend/worksheet/Image.cpp:468
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3035
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2013
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2003
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:447
 #: src/backend/worksheet/plots/PlotArea.cpp:405
@@ -1672,7 +1672,7 @@ msgid "Valid JSON document"
 msgstr "Prawidłowy dokument JSON"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:274
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:328
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:318
 #, kde-format
 msgid "index"
 msgstr "indeks"
@@ -6548,7 +6548,7 @@ msgstr "%1: ustaw obraz tła"
 #: src/backend/worksheet/InfoElement.cpp:173
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:248
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:228
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:218
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:134
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:85
@@ -6716,7 +6716,7 @@ msgstr "%1: ustaw wypełnienie od dołu"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:257
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:237
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:103
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:253
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
@@ -6732,7 +6732,7 @@ msgstr "W poziomie"
 #. Orientation
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:260
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:240
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:230
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:106
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:254
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:58
@@ -6748,7 +6748,7 @@ msgstr "W pionie"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:280
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:248
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:238
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:123
 #, kde-format
 msgid "Orientation"
@@ -7042,7 +7042,7 @@ msgid "%1: set x column"
 msgstr "%1: ustaw kolumnę danych"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:244
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:469
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:459
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: ustaw kolumny danych"
@@ -7054,19 +7054,19 @@ msgid "%1: set type"
 msgstr "%1: ustaw rodzaj strzałki"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:496
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:486
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:197
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: ustaw kierunek"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:510
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:500
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: zmieniono współczynnik szerokości"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:313
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:183
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:332
 #, fuzzy, kde-format
@@ -7074,110 +7074,110 @@ msgstr "%1: zmieniono współczynnik szerokości"
 msgid "%1 - Data"
 msgstr "Brak danych"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:329
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:319
 #, fuzzy, kde-format
 #| msgid "First Quartile"
 msgid "1st quartile"
 msgstr "Pierwszy kwartyl"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:330
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:320
 #, fuzzy, kde-format
 #| msgid "Third Quartile"
 msgid "3rd quartile"
 msgstr "Trzeci kwartyl"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:331
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:321
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "median"
 msgstr "Mediana"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:332
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:322
 #, fuzzy, kde-format
 #| msgid "Whiskers"
 msgid "whiskers min"
 msgstr "Wąsy"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:333
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
 #, fuzzy, kde-format
 #| msgid "Whiskers"
 msgid "whiskers max"
 msgstr "Wąsy"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:334
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:324
 #, kde-format
 msgid "data points count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:335
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:325
 #, fuzzy, kde-format
 #| msgid "Euler's constant"
 msgid "outliers count"
 msgstr "Stała Eulera"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:336
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:326
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "far out points count"
 msgstr "Liczba punktów"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:489
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:479
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: ustaw porządek"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:503
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: zmieniono szerokość zmiennej"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:517
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: zmieniono nacięcia"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:515
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: ustaw rodzaj wąsów"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:522
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: ustaw parametr zakresu wąsów"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: ustaw rozmiar zakończenia wąsów"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:547
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
 #, kde-format
 msgid "%1: jitterring changed"
 msgstr "%1: postrzępienie uległo zmianie"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:555
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:545
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:537
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:634
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: włączono zmianę dywanu"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:562
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:552
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:544
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:648
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: zmień szerokość dywanu"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:569
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:559
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:551
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:655
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: zmień długość dywanu"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:576
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:566
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:558
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:662
 #, kde-format

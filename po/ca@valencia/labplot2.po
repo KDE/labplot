@@ -1,17 +1,17 @@
 # Translation of labplot2.po to Catalan (Valencian)
-# Copyright (C) 2015-2022 This_file_is_part_of_KDE
+# Copyright (C) 2015-2023 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
-# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-08 00:54+0000\n"
-"PO-Revision-Date: 2022-12-27 08:07+0100\n"
+"POT-Creation-Date: 2023-01-09 00:52+0000\n"
+"PO-Revision-Date: 2023-01-08 11:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -70,7 +70,7 @@ msgstr ""
 #: src/backend/worksheet/Line.cpp:225
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2906
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1915
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4582
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:943
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
@@ -116,7 +116,7 @@ msgstr "L'atribut «%1» falta o està buit, s'utilitzarà el valor predetermina
 #: src/backend/worksheet/Image.cpp:468
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3035
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2013
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2003
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:447
 #: src/backend/worksheet/plots/PlotArea.cpp:405
@@ -1670,7 +1670,7 @@ msgid "Valid JSON document"
 msgstr "Document JSON vàlid"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:274
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:328
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:318
 #, kde-format
 msgid "index"
 msgstr "Índex"
@@ -6464,7 +6464,7 @@ msgstr "%1: establix l'opacitat del fons"
 #: src/backend/worksheet/InfoElement.cpp:173
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:248
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:228
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:218
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:134
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:85
@@ -6630,7 +6630,7 @@ msgstr "%1: establix un farciment a la part inferior"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:257
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:237
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:103
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:253
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
@@ -6646,7 +6646,7 @@ msgstr "Horitzontal"
 #. Orientation
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:260
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:240
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:230
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:106
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:254
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:58
@@ -6662,7 +6662,7 @@ msgstr "Vertical"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:280
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:248
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:238
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:123
 #, kde-format
 msgid "Orientation"
@@ -6953,7 +6953,7 @@ msgid "%1: set x column"
 msgstr "%1: establix la columna X"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:244
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:469
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:459
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: establix les columnes de dades"
@@ -6964,127 +6964,127 @@ msgid "%1: set type"
 msgstr "%1: establix el tipus"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:496
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:486
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:197
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: establix l'orientació"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:510
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:500
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: s'ha canviat el factor d'amplària"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:313
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:183
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:332
 #, kde-format
 msgid "%1 - Data"
 msgstr "%1 - Dades"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:329
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:319
 #, kde-format
 msgid "1st quartile"
 msgstr "1r quartil"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:330
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:320
 #, kde-format
 msgid "3rd quartile"
 msgstr "3r quartil"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:331
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:321
 #, kde-format
 msgid "median"
 msgstr "mediana"
 
 # https://ca.wikipedia.org/wiki/Diagrama_de_caixa
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:332
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:322
 #, kde-format
 msgid "whiskers min"
 msgstr "mín. bigots"
 
 # https://ca.wikipedia.org/wiki/Diagrama_de_caixa
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:333
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
 #, kde-format
 msgid "whiskers max"
 msgstr "màx. bigots"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:334
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:324
 #, kde-format
 msgid "data points count"
 msgstr "comptador de punts de dades"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:335
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:325
 #, kde-format
 msgid "outliers count"
 msgstr "comptador de valors atípics"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:336
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:326
 #, kde-format
 msgid "far out points count"
 msgstr "comptador de punts molt llunyans"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:489
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:479
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: establix l'ordenació"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:503
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: s'ha canviat l'amplària variable"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:517
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: s'han canviat els nivells"
 
 # skip-rule: da-pel
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:515
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: establix el tipus de bigots"
 
 # skip-rule: da-pel
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:522
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: establix el paràmetre d'interval dels bigots"
 
 # skip-rule: da-pel
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: establix la mida de l'extrem dels bigots"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:547
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
 #, kde-format
 msgid "%1: jitterring changed"
 msgstr "%1: s'ha canviat «jitter»"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:555
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:545
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:537
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:634
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: s'ha habilitat el canvi d'estora"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:562
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:552
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:544
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:648
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: canvia l'amplària d'estora"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:569
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:559
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:551
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:655
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: canvia la llargària d'estora"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:576
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:566
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:558
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:662
 #, kde-format
@@ -9354,10 +9354,9 @@ msgstr "Bu&sca"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Column Statistics..."
-msgstr "Estadístiques de les columnes"
+msgstr "Estadístiques de les columnes..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
 #, kde-format
@@ -9788,10 +9787,9 @@ msgid "%1: column statistics"
 msgstr "%1: estadístiques de les columnes"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Selection in %1"
-msgstr "Selecció"
+msgstr "Selecció en %1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
 #, kde-format
@@ -13756,10 +13754,9 @@ msgstr ""
 "obert i multiplataforma, accessible a tothom."
 
 #: src/kdefrontend/LabPlot.cpp:94
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2022"
+#, kde-format
 msgid "(c) 2007-2023"
-msgstr "(c) 2007-2022"
+msgstr "(c) 2007-2023"
 
 #: src/kdefrontend/LabPlot.cpp:97
 #, kde-format
@@ -14867,13 +14864,12 @@ msgstr "Afi&g"
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Value"
-msgstr "Sostrau el valor"
+msgstr "Sostracció de valor"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Subtract"
+#, kde-format
 msgid "Subtract:"
-msgstr "Sostrau"
+msgstr "Sostracció:"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:99
 #, kde-format
@@ -14903,10 +14899,9 @@ msgid "&Divide"
 msgstr "&Dividix"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
-#, fuzzy, kde-format
-#| msgid "Custom Query"
+#, kde-format
 msgid "Custom Value"
-msgstr "Consulta personalitzada"
+msgstr "Valor personalitzat"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
 #, kde-format
@@ -21501,9 +21496,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Statisti&cs..."
-#~ msgstr "Estadísti&ques..."
-
-#~ msgid "Column Statisti&cs"
-#~ msgstr "Estadístiques de les &columnes"
