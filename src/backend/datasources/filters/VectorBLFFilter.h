@@ -9,13 +9,13 @@
 #ifndef VECTORBLFFILTER_H
 #define VECTORBLFFILTER_H
 
-#include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/datasources/filters/CANFilter.h"
 
 class QStringList;
 class QTreeWidgetItem;
 class VectorBLFFilterPrivate;
 
-class VectorBLFFilter : public AbstractFileFilter {
+class VectorBLFFilter : public CANFilter {
 	Q_OBJECT
 
 public:
@@ -29,34 +29,6 @@ public:
 	 * \return
 	 */
 	static QString fileInfoString(const QString&);
-	QVector<QStringList> preview(const QString& filename, int lines);
-
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
-	void write(const QString& fileName, AbstractDataSource*) override;
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
-
-	QStringList vectorNames() const;
-	const QVector<AbstractColumn::ColumnMode> columnModes() const;
-
-	enum class TimeHandling {
-		Separate, // separate timestamp for every message id
-		ConcatNAN, // common timestamp vector for all messages, but NAN if the current value is not available
-		ConcatPrevious // common timestamp vector for all messages, but use the previous value if available, otherwise 0
-	};
-
-	void setConvertTimeToSeconds(bool);
-	void setTimeHandlingMode(TimeHandling);
-
-	/*!
-	 * \brief setDBCFile
-	 * Sets dbc file which is used to decode the messages
-	 * \param file
-	 * \return
-	 */
-	bool setDBCFile(const QString& file);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;

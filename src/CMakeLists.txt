@@ -328,6 +328,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/ReadStatFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ROOTFilter.cpp
 	${BACKEND_DIR}/datasources/filters/VectorBLFFilter.cpp
+	${BACKEND_DIR}/datasources/filters/CANFilter.cpp
 	${BACKEND_DIR}/datasources/filters/DBCParser.cpp
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
