@@ -25,6 +25,7 @@ New features:
 		* Column statistics (size, mean, stddev, etc.) are available in the function dialog
 		* Function values dialog supports accessing arbitrary cells of columns with cell(f(index), g(column,..)) and other moving functions
 		* Allow to subtract and add a value by providing a difference between two values
+		* Allow to subtract a baseline
 	* [matrix]
 		* Zooming in the image view
 	* [import]

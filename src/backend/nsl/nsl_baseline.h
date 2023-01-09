@@ -27,6 +27,9 @@ int nsl_baseline_remove_endpoints(double* xdata, double* ydata, size_t n);
 /* remove linear regression. xdata and ydata must be of same size n */
 int nsl_baseline_remove_linreg(double* xdata, double* ydata, size_t n);
 
-/* TODO: ALS */
+/* ALS algorithm, see https://irfpy.irf.se/projects/ica/_modules/irfpy/ica/baseline.html */
+/*  baseline correction by asymmetrically reweighted penalized least square (arPLS) */
+int nsl_baseline_remove_arpls(double* data, size_t n, double p, double lambda, int niter);
+/* TODO: ALS - asymmetric least square, airPLS - adaptive iteratively reweighted Penalized Least Squares */
 
 #endif

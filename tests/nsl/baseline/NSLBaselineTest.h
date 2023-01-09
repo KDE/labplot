@@ -27,6 +27,10 @@ private Q_SLOTS:
 
 	void testBaselineEndpoints();
 	void testBaselineLinReg();
+
+	void testBaselineARPLS();
+	void testBaselineARPLSSpectrum();
+	void testBaselineARPLS_XRD();
 	// performance
 	// void testPerformance();
 };

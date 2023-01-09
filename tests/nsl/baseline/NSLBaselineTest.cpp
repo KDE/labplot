@@ -10,6 +10,8 @@
 
 #include "NSLBaselineTest.h"
 
+#include <fstream>
+
 extern "C" {
 #include "backend/nsl/nsl_baseline.h"
 }
@@ -127,6 +129,64 @@ void NSLBaselineTest::testBaselineLinReg() {
 
 	for (size_t i = 0; i < N; ++i)
 		QCOMPARE(ydata[i], result[i]);
+}
+
+void NSLBaselineTest::testBaselineARPLS() {
+	double data[] = {1, 2, 3, 2, 4, 1, 3, 2, 3, 2};
+	double result[] = {-0.605556598278328,
+					   0.29922426449953,
+					   1.20406568260443,
+					   0.108998357316374,
+					   2.0139914015879,
+					   -1.0809969643924,
+					   0.823990535656255,
+					   -0.270980722318351,
+					   0.634078132872751,
+					   -0.460816930930479};
+
+	const size_t N = 10;
+
+	nsl_baseline_remove_arpls(data, N, 1.e-3, 1.e4, 10);
+
+	for (size_t i = 0; i < N; ++i)
+		QCOMPARE(data[i], result[i]);
+}
+
+void NSLBaselineTest::testBaselineARPLSSpectrum() {
+	std::ifstream d(QFINDTESTDATA(QLatin1String("data/spectrum.dat")).toStdString());
+	std::ifstream r(QFINDTESTDATA(QLatin1String("data/spectrum_arpls.dat")).toStdString());
+	const size_t N = 1000;
+
+	double data[N], result[N];
+	for (size_t i = 0; i < N; i++) {
+		d >> data[i];
+		r >> result[i];
+	}
+
+	nsl_baseline_remove_arpls(data, N, 1.e-2, 1.e4, 10);
+
+	for (size_t i = 0; i < N; ++i)
+		FuzzyCompare(data[i], result[i], 2.e-5);
+}
+
+void NSLBaselineTest::testBaselineARPLS_XRD() {
+	std::ifstream d(QFINDTESTDATA(QLatin1String("data/XRD.dat")).toStdString());
+	std::ifstream r(QFINDTESTDATA(QLatin1String("data/XRD_arpls.dat")).toStdString());
+	const size_t N = 1764;
+
+	double data[N], result[N];
+	for (size_t i = 0; i < N; i++) {
+		d >> data[i];
+		r >> result[i];
+	}
+
+	nsl_baseline_remove_arpls(data, N, 1.e-3, 1.e6, 20);
+
+	// std::ofstream o("out.dat");
+	for (size_t i = 0; i < N; ++i) {
+		// o << data[i] << std::endl;
+		FuzzyCompare(data[i], result[i], 1.e-5);
+	}
 }
 
 QTEST_MAIN(NSLBaselineTest)
