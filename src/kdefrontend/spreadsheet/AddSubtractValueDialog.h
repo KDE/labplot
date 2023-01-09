@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for adding/subtracting a value from column values
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,6 +16,8 @@
 class Column;
 class Spreadsheet;
 class Matrix;
+class Project;
+class XYCurve;
 class QPushButton;
 
 class AddSubtractValueDialog : public QDialog {
@@ -24,15 +26,15 @@ class AddSubtractValueDialog : public QDialog {
 public:
 	enum Operation { Add, Subtract, Multiply, Divide };
 
-	explicit AddSubtractValueDialog(Spreadsheet*, Operation, QWidget* parent = nullptr);
+	explicit AddSubtractValueDialog(Spreadsheet*, const QVector<Column*>&, Operation, QWidget* parent = nullptr);
 	explicit AddSubtractValueDialog(Matrix*, Operation, QWidget* parent = nullptr);
 	~AddSubtractValueDialog() override;
-	void setColumns(const QVector<Column*>&);
-	void setMatrices();
 
 private:
 	void init();
+	void processColumns();
 	void generateForColumns();
+	void generateForColumn(Column* col, int colIndex);
 	void generateForMatrices();
 	QString getMessage(const QString&);
 	void updateWidgetsVisiblity();
@@ -43,16 +45,22 @@ private:
 	bool setDateTimeValue(qint64& value, int columnIndex = 0) const;
 
 	Ui::AddSubtractValueWidget ui;
+	Spreadsheet* m_spreadsheet{nullptr};
 	QVector<Column*> m_columns;
-	Spreadsheet* m_spreadsheet = nullptr;
-	Matrix* m_matrix = nullptr;
-	QPushButton* m_okButton;
+	Matrix* m_matrix{nullptr};
+	QPushButton* m_okButton{nullptr};
 	Operation m_operation;
 	bool m_numeric{false};
+	Project* m_project{nullptr};
+	XYCurve* m_curveOrigin{nullptr};
+	XYCurve* m_curveBaseline{nullptr};
+	XYCurve* m_curveResult{nullptr};
 
 private Q_SLOTS:
 	void generate();
 	void typeChanged(int);
+	void previewChanged(bool);
+	void updatePreview();
 };
 
 #endif

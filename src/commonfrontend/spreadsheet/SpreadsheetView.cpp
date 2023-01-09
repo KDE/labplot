@@ -2643,8 +2643,7 @@ void SpreadsheetView::modifyValues() {
 
 	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
 	auto op = (AddSubtractValueDialog::Operation)action->data().toInt();
-	auto* dlg = new AddSubtractValueDialog(m_spreadsheet, op);
-	dlg->setColumns(columns);
+	auto* dlg = new AddSubtractValueDialog(m_spreadsheet, columns, op);
 	dlg->exec();
 }
 
