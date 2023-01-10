@@ -201,6 +201,7 @@ void ExpressionParser::initFunctions() {
 	index++;
 	for (int i = 0; i < 7; i++)
 		m_functionsGroupIndex << index;
+	index++; // separator
 
 	// Airy Functions and Derivatives
 	m_functionsNames << i18n("Airy function of the first kind");
@@ -621,7 +622,6 @@ void ExpressionParser::initFunctions() {
 	index++;
 	for (int i = 0; i < 7; i++)
 		m_functionsGroupIndex << index;
-
 	index++; // separator
 
 	// GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html
@@ -646,7 +646,6 @@ void ExpressionParser::initFunctions() {
 	index++;
 	for (int i = 0; i < 16; i++)
 		m_functionsGroupIndex << index;
-
 	index++; // separator
 
 	// GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html
