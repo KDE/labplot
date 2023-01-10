@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-09 00:52+0000\n"
+"POT-Creation-Date: 2023-01-10 00:52+0000\n"
 "PO-Revision-Date: 2023-01-08 12:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2728,7 +2728,7 @@ msgstr "Boyut"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:159
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:284
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:60
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
 #, kde-format
@@ -2737,7 +2737,7 @@ msgstr "En düşük değer"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:160 src/backend/nsl/nsl_conv.c:23
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:222
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:285
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:61
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
@@ -2755,7 +2755,7 @@ msgstr "Aritmetik ortalama"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/ExpressionParser.cpp:162
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:224
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:286
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:503
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
@@ -5189,13 +5189,13 @@ msgid "unexpected end of document"
 msgstr "beklenmedik belge sonu"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
 #, kde-format
 msgid "FITS image"
 msgstr "FITS görseli"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
 #, kde-format
 msgid "FITS table"
 msgstr "FITS tablosu"
@@ -8802,16 +8802,16 @@ msgid "Curve"
 msgstr "Eğri"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3776
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3830
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, kde-format
 msgid "Failed to export"
 msgstr "Dışa aktarılamadı"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3776
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3830
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9576,14 +9576,14 @@ msgstr "%1: Seçili sütunları kaldır"
 msgid "%1: clear selected columns"
 msgstr "%1: Seçili sütunları temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2657
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: Sütunu ters çevir"
 msgstr[1] "%1: Sütunları ters çevir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2730
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2729
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -9591,145 +9591,145 @@ msgid ""
 msgstr ""
 "Seçili sütunlarda farklı veri türleri var ve bu yüzden düzleştirilemiyorlar. "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2767
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: Sütunları normalleştir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2788
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2787
 #, kde-format
 msgid "Sum = 0"
 msgstr "Toplam = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2799
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2798
 #, kde-format
 msgid "Min = 0"
 msgstr "En Küçük = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2810
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2809
 #, kde-format
 msgid "Max = 0"
 msgstr "En Büyük = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2821
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2820
 #, kde-format
 msgid "Count = 0"
 msgstr "Sayım = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2832
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2831
 #, kde-format
 msgid "Mean = 0"
 msgstr "Ortalama = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2843
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2842
 #, kde-format
 msgid "Median = 0"
 msgstr "Orta = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2855
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2854
 #, kde-format
 msgid "Mode = 0"
 msgstr "Kip = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2857
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2856
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'Kip tanımlanmamış'"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2868
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2867
 #, kde-format
 msgid "Range = 0"
 msgstr "Erim = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2879
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2913
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2878
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2912
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2890
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2925
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2889
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2924
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2901
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2937
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2900
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2936
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2949
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2948
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "En büyük - en küçük = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2968
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2967
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normalleştirme olanaklı değil"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2980
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2979
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: Sütunları üs dönüştür"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3102
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3101
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: Sütun istatistikleri"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Selection in %1"
 msgstr "%1 İçindeki Seçim"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3176
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: Satır istatistikleri"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3186
 #, kde-format
 msgid "Row %1"
 msgstr "%1. Satır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3211
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3250
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Birden çok satır ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3213
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3252
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Eklenecek satır sayısını gir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3232
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3271
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3231
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3270
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: Boş satır ekle"
 msgstr[1] "%1: Boş satırlar ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3287
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3286
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: Seçili satırları kaldır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3300
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3299
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr "%1: Seçili satırları temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3351
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3350
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: Seçili hücreleri temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3410
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3409
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -9737,28 +9737,28 @@ msgstr "%1: Seçili hücreleri temizle"
 msgid "Search..."
 msgstr "Ara..."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3419
 #, kde-format
 msgid "End Search"
 msgstr "Aramayı Bitir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3594
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3593
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Hesap Tablosunu Yazdır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4189
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4188
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "%1 SQLite veritabanı oluşturulamadı.."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4221
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4220
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "%1 SQLite veritabanında tablo oluşturulamadı.."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4274
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4273
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Tabloya veriler eklenemedi."
@@ -14645,141 +14645,159 @@ msgstr "'dvips' bulunamadı. LaTeX dizgisi olanaklı değil."
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Ghostscript bulunamadı. LaTeX dizgisi olanaklı değil."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:46
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:57
 #, kde-format
 msgid "Add the specified value to column values"
 msgstr "Sütun değerlerine belirtilen değeri ekle"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:49
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:60
 #, kde-format
 msgid "Subtract the specified value from column values"
 msgstr "Sütun değerlerinden belirtilen değeri çıkar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:52
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:63
 #, kde-format
 msgid "Multiply column values by the specified value"
 msgstr "Sütun değerlerini belirtilen değerle çarp"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:55
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:66
 #, kde-format
 msgid "Divide column values by the specified value"
 msgstr "Sütun değerlerini belirtilen değere böl"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:70
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:83
 #, kde-format
 msgid "Add the specified value to matrix values"
 msgstr "Matris değerlerine belirtilen değeri ekle"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:73
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:86
 #, kde-format
 msgid "Subtract the specified value from matrix values"
 msgstr "Matris değerlerinden belirtilen değeri çıkar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:76
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:89
 #, kde-format
 msgid "Multiply matrix values by the specified value"
 msgstr "Matris değerlerini belirtilen değerle çarp"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:79
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:92
 #, kde-format
 msgid "Divide matrix values by the specified value"
 msgstr "Matris değerlerini belirtilen değere böl"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:93
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #, kde-format
 msgctxt "@title:window"
 msgid "Add Value"
 msgstr "Değer Ekle"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:94
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, kde-format
 msgid "&Add"
 msgstr "&Ekle"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:97
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Değeri Çıkar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:98
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
 #, kde-format
 msgid "Subtract:"
 msgstr "Çıkar:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:99
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
 #, kde-format
 msgid "&Subtract"
 msgstr "&Çıkar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:102
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:144
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr "Değerle Çarp"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:103
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:145
 #, kde-format
 msgid "&Multiply"
 msgstr "&Çarp"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:106
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:148
 #, kde-format
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr "Değere Böl"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:149
 #, kde-format
 msgid "&Divide"
 msgstr "&Böl"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:154
 #, kde-format
 msgid "Custom Value"
 msgstr "Özel Değer"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:155
 #, kde-format
 msgid "Difference"
 msgstr "Fark"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:225
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:287
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:493
 #, kde-format
 msgid "Mean"
 msgstr "Ortalama"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:354
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:433
+#, fuzzy, kde-format
+#| msgid "Binary data"
+msgid "raw data"
+msgstr "İkili veri"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:440
+#, fuzzy, kde-format
+#| msgid "Dash line"
+msgid "baseline"
+msgstr "Kısa çizgi"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:451
+#, fuzzy, kde-format
+#| msgid "Results:"
+msgid "result"
+msgstr "Sonuçlar:"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:506
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: Sütun değerlerine %2 ekle"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:357
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:509
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: Sütun değerlerinden %2 çıkar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:360
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:512
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: Sütun değerlerini %2 ile çarp"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:363
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:515
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: Sütun değerlerini %2 ile böl"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:391
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:441
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:491
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:541
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:592
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:634
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:676
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:718
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:540
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:547
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:554
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:561
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:717
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:759
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:801
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:843
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr "Geçersiz sayısal değer sağlandı."
@@ -14796,8 +14814,8 @@ msgstr "Değer Etiketi Ekle"
 #: src/kdefrontend/ui/constantswidget.ui:57
 #: src/kdefrontend/ui/datapickerimagewidget.ui:731
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:46
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:75
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:130
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:185
 #, kde-format
 msgid "Value:"
 msgstr "Değer:"
@@ -19858,8 +19876,10 @@ msgstr "İletişim Kutusu"
 msgid "Installed Templates:"
 msgstr "Kurulu Şablonlar:"
 
+#. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:47
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:30
 #, kde-format
 msgid "Preview:"
 msgstr "Önizleme:"
@@ -20130,32 +20150,32 @@ msgstr "Çift arabelleği etkinleştir"
 msgid "Typesetting engine:"
 msgstr "Dizgi işletkesi:"
 
-#. i18n: ectx: property (text), widget (QLabel, lType)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
-#, kde-format
-msgid "Add:"
-msgstr "Ekle:"
-
-#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:59
-#, kde-format
-msgid "End Value:"
-msgstr "Bitiş Değeri:"
-
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:104
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
 #, kde-format
 msgid "Start Time:"
 msgstr "Başlangıç Zamanı:"
 
+#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
+#, kde-format
+msgid "End Value:"
+msgstr "Bitiş Değeri:"
+
+#. i18n: ectx: property (text), widget (QLabel, lType)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
+#, kde-format
+msgid "Add:"
+msgstr "Ekle:"
+
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:120
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:146
 #, kde-format
 msgid "End Time:"
 msgstr "Bitiş Zamanı:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:172
 #, kde-format
 msgid "Start Value:"
 msgstr "Başlangıç Değeri:"

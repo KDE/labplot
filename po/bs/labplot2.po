@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-09 00:52+0000\n"
+"POT-Creation-Date: 2023-01-10 00:52+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -2945,7 +2945,7 @@ msgstr "Veličina"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:159
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:284
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:60
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
 #, kde-format
@@ -2954,7 +2954,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:160 src/backend/nsl/nsl_conv.c:23
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:222
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:285
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:61
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
@@ -2972,7 +2972,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/ExpressionParser.cpp:162
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:224
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:286
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:503
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
@@ -5489,14 +5489,14 @@ msgid "unexpected end of document"
 msgstr "neočekivan kraj dokumenta"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "FITS image"
 msgstr "slika"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -9455,8 +9455,8 @@ msgid "Curve"
 msgstr "xy-kriva"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3776
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3830
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -9464,8 +9464,8 @@ msgid "Failed to export"
 msgstr "Otvaranje neuspješno"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3776
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3830
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10300,7 +10300,7 @@ msgstr "%1: ukloni selektovane kolone"
 msgid "%1: clear selected columns"
 msgstr "%1: očisti selektovane kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2657
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
 #, fuzzy, kde-format
 #| msgid "%1: remove 1 column"
 #| msgid_plural "%1: remove %2 columns"
@@ -10310,141 +10310,141 @@ msgstr[0] "%1: ukloni %2 kolonu"
 msgstr[1] "%1: ukloni %2 kolone"
 msgstr[2] "%1: ukloni %2 kolona"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2730
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2729
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2767
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: normalizuj kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2788
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2787
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2799
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2798
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2810
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2809
 #, kde-format
 msgid "Max = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2821
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2820
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Count = 0"
 msgstr "centar"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2832
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2831
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean = 0"
 msgstr "Srednje"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2843
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2842
 #, fuzzy, kde-format
 #| msgid "mean absolute error"
 msgid "Median = 0"
 msgstr "srednja apsolutna greška"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2855
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2854
 #, fuzzy, kde-format
 #| msgid "Model"
 msgid "Mode = 0"
 msgstr "Model"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2857
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2856
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2868
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2867
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "Range = 0"
 msgstr "x-Domet:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2879
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2913
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2878
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2912
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2890
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2925
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2889
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2924
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2901
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2937
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2900
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2936
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2949
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2948
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2968
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2967
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2980
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2979
 #, fuzzy, kde-format
 #| msgid "%1: sort columns"
 msgid "%1: power transform columns"
 msgstr "%1: sortiraj kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3102
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3101
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "%1: column statistics"
 msgstr "Statisti&ka Kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Selection in %1"
 msgstr "Odabiranje"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3176
 #, fuzzy, kde-format
 #| msgid "Row Statisti&cs"
 msgid "%1: row statistics"
 msgstr "Statisti&ka Reda"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3186
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3211
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3250
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "Insert multiple rows"
 msgstr "&Umetni prazne redove"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3213
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3252
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
 #, fuzzy, kde-format
 #| msgid "Enter number of rows"
 msgid "Enter the number of rows to insert"
 msgstr "Unesi broj redova"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3232
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3271
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3231
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3270
 #, fuzzy, kde-format
 #| msgid "%1: insert empty rows"
 msgid "%1: insert empty row"
@@ -10453,22 +10453,22 @@ msgstr[0] "%1: umetni prazne redov"
 msgstr[1] "%1: umetni prazne redov"
 msgstr[2] "%1: umetni prazne redov"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3287
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3286
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: ukloni selektovane redove"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3300
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3299
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr "%1: očisti selektovane redove"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3351
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3350
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: očisti selektovane ćelije"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3410
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3409
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -10476,31 +10476,31 @@ msgstr "%1: očisti selektovane ćelije"
 msgid "Search..."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3419
 #, fuzzy, kde-format
 #| msgid "Search/Filter:"
 msgid "End Search"
 msgstr "Traži/Filtriraj:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3594
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3593
 #, fuzzy, kde-format
 #| msgid "Print spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Ispiši tabelarni prikaz"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4189
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4188
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4221
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4220
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Otvaranje neuspješno"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4274
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4273
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -15660,156 +15660,174 @@ msgstr ""
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:46
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:57
 #, kde-format
 msgid "Add the specified value to column values"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:49
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:60
 #, fuzzy, kde-format
 #| msgid "%1: set values column"
 msgid "Subtract the specified value from column values"
 msgstr "%1: postavi kolonu vrijednosti"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:52
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:63
 #, kde-format
 msgid "Multiply column values by the specified value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:55
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:66
 #, kde-format
 msgid "Divide column values by the specified value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:70
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:83
 #, fuzzy, kde-format
 #| msgid "%1: set values column"
 msgid "Add the specified value to matrix values"
 msgstr "%1: postavi kolonu vrijednosti"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:73
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:86
 #, fuzzy, kde-format
 #| msgid "%1: set values column"
 msgid "Subtract the specified value from matrix values"
 msgstr "%1: postavi kolonu vrijednosti"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:76
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:89
 #, kde-format
 msgid "Multiply matrix values by the specified value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:79
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:92
 #, kde-format
 msgid "Divide matrix values by the specified value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:93
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #, fuzzy, kde-format
 #| msgid "Value"
 msgctxt "@title:window"
 msgid "Add Value"
 msgstr "Vrijednost"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:94
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, fuzzy, kde-format
 #| msgid "&Add Rows"
 msgid "&Add"
 msgstr "&Dodaj redove"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:97
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Početna vrijednost"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:98
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgid "Subtract:"
 msgstr "Početna vrijednost"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:99
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
 #, kde-format
 msgid "&Subtract"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:102
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:144
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:103
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:145
 #, kde-format
 msgid "&Multiply"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:106
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:148
 #, fuzzy, kde-format
 #| msgid "invalid y end value"
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr "pogrešna y krajnja vrijednost"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:149
 #, kde-format
 msgid "&Divide"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:154
 #, fuzzy, kde-format
 #| msgid "Custom grid"
 msgid "Custom Value"
 msgstr "Podesi meržu"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:155
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "Difference"
 msgstr "Orijentacija"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:225
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:287
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:493
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean"
 msgstr "Srednje"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:354
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:433
+#, fuzzy, kde-format
+#| msgid "Reading binary data..."
+msgid "raw data"
+msgstr "Čitanje binarne podataka..."
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:440
+#, fuzzy, kde-format
+#| msgid "dash line"
+msgid "baseline"
+msgstr "crtkasta linija"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:451
+#, fuzzy, kde-format
+#| msgid "Results:"
+msgid "result"
+msgstr "Rezultati:"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:506
 #, fuzzy, kde-format
 #| msgid "%1: add %2 column"
 #| msgid_plural "%1: add %2 columns"
 msgid "%1: add %2 to column values"
 msgstr "%1: dodaj %2 kolonu"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:357
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:509
 #, fuzzy, kde-format
 #| msgid "%1: set values column"
 msgid "%1: subtract %2 from column values"
 msgstr "%1: postavi kolonu vrijednosti"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:360
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:512
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:363
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:515
 #, fuzzy, kde-format
 #| msgid "%1: clear column %2"
 msgid "%1: divide column values by %2"
 msgstr "%1: očisti kolonu %2"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:391
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:441
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:491
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:541
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:592
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:634
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:676
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:718
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:540
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:547
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:554
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:561
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:717
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:759
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:801
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:843
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Wrong numeric value provided."
@@ -15828,8 +15846,8 @@ msgstr "Vrijednost"
 #: src/kdefrontend/ui/constantswidget.ui:57
 #: src/kdefrontend/ui/datapickerimagewidget.ui:731
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:46
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:75
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:130
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:185
 #, kde-format
 msgid "Value:"
 msgstr "Vrijednost:"
@@ -21298,8 +21316,10 @@ msgstr ""
 msgid "Installed Templates:"
 msgstr "Sačuvaj kao"
 
+#. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:47
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:30
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgid "Preview:"
@@ -21593,35 +21613,35 @@ msgstr ""
 msgid "Typesetting engine:"
 msgstr "Opcije stabla"
 
-#. i18n: ectx: property (text), widget (QLabel, lType)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
-#, kde-format
-msgid "Add:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:59
-#, fuzzy, kde-format
-#| msgid "Value:"
-msgid "End Value:"
-msgstr "Vrijednost:"
-
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:104
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
 #, fuzzy, kde-format
 #| msgid "Start"
 msgid "Start Time:"
 msgstr "Početak"
 
+#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
+#, fuzzy, kde-format
+#| msgid "Value:"
+msgid "End Value:"
+msgstr "Vrijednost:"
+
+#. i18n: ectx: property (text), widget (QLabel, lType)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
+#, kde-format
+msgid "Add:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:120
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:146
 #, fuzzy, kde-format
 #| msgid "Date and Time"
 msgid "End Time:"
 msgstr "Datum i vrijeme"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:172
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgid "Start Value:"

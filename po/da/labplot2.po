@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-09 00:52+0000\n"
+"POT-Creation-Date: 2023-01-10 00:52+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -2936,7 +2936,7 @@ msgstr "Størrelse"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:159
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:284
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:60
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
 #, kde-format
@@ -2945,7 +2945,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:160 src/backend/nsl/nsl_conv.c:23
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:222
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:285
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:61
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
@@ -2963,7 +2963,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/ExpressionParser.cpp:162
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:224
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:286
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:503
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
@@ -5438,14 +5438,14 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "FITS image"
 msgstr "Billeder"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -9317,8 +9317,8 @@ msgid "Curve"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3776
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3830
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
@@ -9326,8 +9326,8 @@ msgid "Failed to export"
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3776
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3830
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10169,7 +10169,7 @@ msgstr "%1: Klip markerede celler"
 msgid "%1: clear selected columns"
 msgstr "%1: Klip markerede celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2657
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
 #, fuzzy, kde-format
 #| msgid "Remo&ve Columns"
 msgid "%1: reverse column"
@@ -10177,140 +10177,140 @@ msgid_plural "%1: reverse columns"
 msgstr[0] "Fjer&n kolonner"
 msgstr[1] "Fjer&n kolonner"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2730
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2729
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2767
 #, fuzzy, kde-format
 #| msgid "%1: add %2 column(s)"
 msgid "%1: normalize columns"
 msgstr "%1: Tilføj %2 kolonner"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2788
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2787
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2799
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2798
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2810
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2809
 #, kde-format
 msgid "Max = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2821
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2820
 #, kde-format
 msgid "Count = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2832
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2831
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean = 0"
 msgstr "Gennemsnit"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2843
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2842
 #, fuzzy, kde-format
 #| msgid "StandardDev"
 msgid "Median = 0"
 msgstr "StandardDev"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2855
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2854
 #, kde-format
 msgid "Mode = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2857
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2856
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2868
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2867
 #, fuzzy, kde-format
 #| msgid "Data, -"
 msgid "Range = 0"
 msgstr "Data, -"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2879
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2913
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2878
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2912
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2890
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2925
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2889
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2924
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2901
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2937
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2900
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2936
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2949
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2948
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2968
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2967
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2980
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2979
 #, fuzzy, kde-format
 #| msgid "%1: add %2 column(s)"
 msgid "%1: power transform columns"
 msgstr "%1: Tilføj %2 kolonner"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3102
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3101
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: column statistics"
 msgstr "Statistik"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, fuzzy, kde-format
 #| msgid "Clea&r Columns"
 msgid "Selection in %1"
 msgstr "&Ryd kolonner"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3176
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: row statistics"
 msgstr "Statistik"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3186
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3211
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3250
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "Insert multiple rows"
 msgstr "&Indsæt tomme rækker"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3213
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3252
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
 #, fuzzy, kde-format
 #| msgid "File name"
 msgid "Enter the number of rows to insert"
 msgstr "Filnavn"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3232
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3271
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3231
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3270
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: insert empty row"
@@ -10318,25 +10318,25 @@ msgid_plural "%1: insert empty rows"
 msgstr[0] "&Indsæt tomme rækker"
 msgstr[1] "&Indsæt tomme rækker"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3287
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3286
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "%1: remove selected rows"
 msgstr "%1: Klip markerede celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3300
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3299
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "%1: clear selected rows"
 msgstr "%1: Klip markerede celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3351
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3350
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "%1: clear selected cells"
 msgstr "%1: Klip markerede celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3410
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3409
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -10344,31 +10344,31 @@ msgstr "%1: Klip markerede celler"
 msgid "Search..."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3419
 #, fuzzy, kde-format
 #| msgid "Data options"
 msgid "End Search"
 msgstr "Datatilvalg"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3594
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3593
 #, fuzzy, kde-format
 #| msgid "Print spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Udskriv regneark"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4189
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4188
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4221
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4220
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4274
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4273
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to insert values into the table."
@@ -15384,153 +15384,169 @@ msgstr ""
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:46
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:57
 #, kde-format
 msgid "Add the specified value to column values"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:49
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:60
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Subtract the specified value from column values"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:52
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:63
 #, kde-format
 msgid "Multiply column values by the specified value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:55
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:66
 #, kde-format
 msgid "Divide column values by the specified value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:70
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:83
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Add the specified value to matrix values"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:73
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:86
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Subtract the specified value from matrix values"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:76
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:89
 #, kde-format
 msgid "Multiply matrix values by the specified value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:79
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:92
 #, kde-format
 msgid "Divide matrix values by the specified value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:93
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #, fuzzy, kde-format
 #| msgid "Values"
 msgctxt "@title:window"
 msgid "Add Value"
 msgstr "Værdier"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:94
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, fuzzy, kde-format
 #| msgid "&Add Rows"
 msgid "&Add"
 msgstr "&Tilføj rækker"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:97
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
 #, fuzzy, kde-format
 #| msgid "Startup"
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Opstart"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:98
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
 #, fuzzy, kde-format
 #| msgid "Startup"
 msgid "Subtract:"
 msgstr "Opstart"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:99
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
 #, kde-format
 msgid "&Subtract"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:102
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:144
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:103
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:145
 #, kde-format
 msgid "&Multiply"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:106
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:148
 #, kde-format
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:149
 #, kde-format
 msgid "&Divide"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:154
 #, fuzzy, kde-format
 #| msgid "Custom grid"
 msgid "Custom Value"
 msgstr "Brugertilpasset gitter"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:155
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Difference"
 msgstr "Retning"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:225
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:287
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:493
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean"
 msgstr "Gennemsnit"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:354
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:433
+#, kde-format
+msgid "raw data"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:440
+#, fuzzy, kde-format
+#| msgid "Values"
+msgid "baseline"
+msgstr "Værdier"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:451
+#, kde-format
+msgid "result"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:506
 #, fuzzy, kde-format
 #| msgid "%1: add %2 column(s)"
 msgid "%1: add %2 to column values"
 msgstr "%1: Tilføj %2 kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:357
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:509
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: subtract %2 from column values"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:360
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:512
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:363
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:515
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:391
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:441
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:491
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:541
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:592
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:634
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:676
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:718
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:540
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:547
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:554
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:561
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:717
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:759
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:801
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:843
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "Wrong numeric value provided."
@@ -15549,8 +15565,8 @@ msgstr "Værdier"
 #: src/kdefrontend/ui/constantswidget.ui:57
 #: src/kdefrontend/ui/datapickerimagewidget.ui:731
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:46
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:75
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:130
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:185
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "Value:"
@@ -20935,8 +20951,10 @@ msgstr ""
 msgid "Installed Templates:"
 msgstr "Gem som"
 
+#. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:47
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:30
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgid "Preview:"
@@ -21226,35 +21244,35 @@ msgstr ""
 msgid "Typesetting engine:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lType)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
-#, kde-format
-msgid "Add:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:59
-#, fuzzy, kde-format
-#| msgid "Values"
-msgid "End Value:"
-msgstr "Værdier"
-
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:104
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
 #, fuzzy, kde-format
 #| msgid "Start"
 msgid "Start Time:"
 msgstr "Start"
 
+#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
+#, fuzzy, kde-format
+#| msgid "Values"
+msgid "End Value:"
+msgstr "Værdier"
+
+#. i18n: ectx: property (text), widget (QLabel, lType)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
+#, kde-format
+msgid "Add:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:120
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:146
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "End Time:"
 msgstr "Eksportér til fil"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:172
 #, fuzzy, kde-format
 #| msgid "Startup"
 msgid "Start Value:"
