@@ -78,6 +78,33 @@ bool VectorBLFFilterPrivate::isValid(const QString& filename) const {
 	return VectorBLFFilter::isValid(filename);
 }
 
+bool getTime(const Vector::BLF::ObjectHeaderBase* ohb, uint64_t& timestamp) {
+	/* ObjectHeader */
+	auto* oh = dynamic_cast<const Vector::BLF::ObjectHeader*>(ohb);
+	if (oh != nullptr) {
+		timestamp = oh->objectTimeStamp;
+		switch (oh->objectFlags) {
+		case Vector::BLF::ObjectHeader::ObjectFlags::TimeTenMics:
+			return false;
+		case Vector::BLF::ObjectHeader::ObjectFlags::TimeOneNans:
+			return true;
+		}
+	}
+
+	/* ObjectHeader2 */
+	auto* oh2 = dynamic_cast<const Vector::BLF::ObjectHeader2*>(ohb);
+	if (oh2 != nullptr) {
+		timestamp = oh2->objectTimeStamp;
+		switch (oh2->objectFlags) {
+		case Vector::BLF::ObjectHeader2::ObjectFlags::TimeTenMics:
+			return false;
+		case Vector::BLF::ObjectHeader2::ObjectFlags::TimeOneNans:
+			return true;
+		}
+	}
+	return true;
+}
+
 int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, int lines) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	if (!isValid(fileName) || !m_dbcParser.isValid())
@@ -95,9 +122,6 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	Vector::BLF::ObjectHeaderBase* ohb = nullptr;
 	QVector<uint32_t> ids;
 	uint64_t message_counter = 0;
-	QVector<qint64>* timestamps = new QVector<qint64>();
-	QVector<double>* timestamps_seconds = new QVector<double>();
-	bool timestamp_nanoseconds = true;
 	{
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String("Parsing BLF file"));
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
@@ -112,52 +136,12 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2 && ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE)
 				continue;
 
-			double timestamp_seconds;
-			uint64_t timestamp;
-			// TODO: why there exist 2 object headers?
-			/* ObjectHeader */
-			auto* oh = dynamic_cast<Vector::BLF::ObjectHeader*>(ohb);
-			if (oh != nullptr) {
-				timestamp = oh->objectTimeStamp;
-				switch (oh->objectFlags) {
-				case Vector::BLF::ObjectHeader::ObjectFlags::TimeTenMics:
-					timestamp_seconds = (double)timestamp / pow(10, 5);
-					timestamp_nanoseconds = false;
-					break;
-				case Vector::BLF::ObjectHeader::ObjectFlags::TimeOneNans:
-					timestamp_seconds = (double)timestamp / pow(10, 9);
-					timestamp_nanoseconds = true;
-					break;
-				}
-			}
-
-			/* ObjectHeader2 */
-			auto* oh2 = dynamic_cast<Vector::BLF::ObjectHeader2*>(ohb);
-			if (oh2 != nullptr) {
-				timestamp = oh2->objectTimeStamp;
-				switch (oh2->objectFlags) {
-				case Vector::BLF::ObjectHeader2::ObjectFlags::TimeTenMics:
-					timestamp_seconds = (double)timestamp / pow(10, 5);
-					timestamp_nanoseconds = false;
-					break;
-				case Vector::BLF::ObjectHeader2::ObjectFlags::TimeOneNans:
-					timestamp_seconds = (double)timestamp / pow(10, 9);
-					timestamp_nanoseconds = true;
-					break;
-				}
-			}
-
-			if (convertTimeToSeconds)
-				timestamps_seconds->append(timestamp_seconds);
-			else
-				timestamps->append(timestamp);
-
 			int id;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
-				const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(ohb);
+				const auto message = reinterpret_cast<Vector::BLF::CanMessage*>(ohb);
 				id = message->id;
 			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_cast<Vector::BLF::CanMessage*>(ohb);
+				const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(ohb);
 				id = message->id;
 			} else
 				return 0;
@@ -174,24 +158,23 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	vectorNames = m_dbcParser.signals(ids, idIndexTable);
 
 	// Assign timestamps and allocate memory
-	if (convertTimeToSeconds)
-		m_DataContainer.appendVector<double>(timestamps_seconds, AbstractColumn::ColumnMode::Double);
-	else
-		m_DataContainer.appendVector<qint64>(timestamps, AbstractColumn::ColumnMode::BigInt); // BigInt is qint64 and not quint64!
+	if (convertTimeToSeconds) {
+		auto* vector = new QVector<double>();
+		vector->resize(message_counter);
+		m_DataContainer.appendVector<double>(vector, AbstractColumn::ColumnMode::Double);
+	} else {
+		auto* vector = new QVector<qint64>();
+		vector->resize(message_counter);
+		m_DataContainer.appendVector<qint64>(vector, AbstractColumn::ColumnMode::BigInt); // BigInt is qint64 and not quint64!
+	}
 	for (int i = 0; i < vectorNames.length(); i++) {
 		auto* vector = new QVector<double>();
 		vector->resize(message_counter);
 		m_DataContainer.appendVector(vector, AbstractColumn::ColumnMode::Double);
 	}
 
-	if (convertTimeToSeconds)
-		vectorNames.prepend(QObject::tr("Time_s")); // Must be done after allocating memory
-	else if (timestamp_nanoseconds)
-		vectorNames.prepend(QObject::tr("Time_ns")); // Must be done after allocating memory
-	else
-		vectorNames.prepend(QObject::tr("Time_10µs")); // Must be done after allocating memory
-
 	int message_index = 0;
+	bool timeInNS = true;
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
 		for (const auto ohb : v) {
 			int id;
@@ -210,8 +193,22 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (values.size() == 0) {
 				// id is not available in the dbc file, so it is not possible to decode
 				DEBUG("Unable to decode message: " << id);
-				// continue;
+				continue;
 			}
+
+			uint64_t timestamp;
+			timeInNS = getTime(ohb, timestamp);
+			if (convertTimeToSeconds) {
+				double timestamp_seconds;
+				if (timeInNS)
+					timestamp_seconds = (double)timestamp / pow(10, 9); // TimeOneNans
+				else
+					timestamp_seconds = (double)timestamp / pow(10, 5); // TimeTenMics
+
+				m_DataContainer.setData<double>(0, message_index, timestamp_seconds);
+			} else
+				m_DataContainer.setData<qint64>(0, message_index, timestamp);
+
 			const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
 			for (int i = 1; i < startIndex; i++) {
 				m_DataContainer.setData<double>(i, message_index, NAN);
@@ -225,52 +222,8 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			message_index++;
 		}
 	} else {
-		// Use previous value
-		auto it = v.constBegin();
-		bool valid = false;
-		do {
-			const auto ohb = *it;
-			if (!ohb)
-				break;
-			int id;
-			std::vector<double> values;
-			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
-				const auto message = reinterpret_cast<const Vector::BLF::CanMessage*>(ohb);
-				id = message->id;
-				m_dbcParser.parseMessage(message->id, message->data, values);
-			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
-				id = message->id;
-				m_dbcParser.parseMessage(message->id, message->data, values);
-			} else
-				return 0; // TODO: might lead to a memory leak! Timestamps vectors
-			it++;
-			if (values.size() == 0) {
-				// id is not available in the dbc file, so it is not possible to decode
-				DEBUG("Unable to decode message: " << id);
-				// continue;
-			}
-			valid = true; // message was in the dbc file and can be parsed
-			// Fill all data with zeros, because no previous value is available
-			const std::vector<double>::size_type startIndex = idIndexTable.value(id) + 1; // +1 because of time
-			for (std::vector<double>::size_type i = 1; i < startIndex; i++) {
-				m_DataContainer.setData<double>(i, 0, 0);
-			}
-			// Fill with first valid message
-			for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++) {
-				m_DataContainer.setData<double>(i, 0, values.at(i - startIndex));
-			}
-			// Fill all data with zeros, because no previous value is available
-			for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
-				m_DataContainer.setData<double>(i, 0, 0);
-			}
-		} while (!valid);
-
-		message_index = 1;
-		for (; it != v.end(); it++) {
-			const auto ohb = *it;
-			if (!ohb)
-				break;
+		bool firstMessageValid = false;
+		for (const auto ohb : v) {
 			int id;
 			std::vector<double> values;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
@@ -283,37 +236,67 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 				m_dbcParser.parseMessage(message->id, message->data, values);
 			} else
 				return 0;
+
 			if (values.size() == 0) {
 				// id is not available in the dbc file, so it is not possible to decode
 				DEBUG("Unable to decode message: " << id);
-				// continue;
+				continue;
 			}
-			const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
-			for (std::vector<double>::size_type i = 1; i < startIndex; i++) {
-				const auto prevValue = m_DataContainer.data<double>(i, message_index - 1);
-				m_DataContainer.setData<double>(i, message_index, prevValue);
-			}
-			for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++) {
-				m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
-			}
-			for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
-				const auto prevValue = m_DataContainer.data<double>(i, message_index - 1);
-				m_DataContainer.setData<double>(i, message_index, prevValue);
+
+			uint64_t timestamp;
+			timeInNS = getTime(ohb, timestamp);
+			if (convertTimeToSeconds) {
+				double timestamp_seconds;
+				if (timeInNS)
+					timestamp_seconds = (double)timestamp / pow(10, 9); // TimeOneNans
+				else
+					timestamp_seconds = (double)timestamp / pow(10, 5); // TimeTenMics
+
+				m_DataContainer.setData<double>(0, message_index, timestamp_seconds);
+			} else
+				m_DataContainer.setData<qint64>(0, message_index, timestamp);
+
+			if (firstMessageValid) {
+				const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
+				for (std::vector<double>::size_type i = 1; i < startIndex; i++) {
+					const auto prevValue = m_DataContainer.data<double>(i, message_index - 1);
+					m_DataContainer.setData<double>(i, message_index, prevValue);
+				}
+				for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++) {
+					m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
+				}
+				for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
+					const auto prevValue = m_DataContainer.data<double>(i, message_index - 1);
+					m_DataContainer.setData<double>(i, message_index, prevValue);
+				}
+			} else {
+				const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
+				for (std::vector<double>::size_type i = 1; i < startIndex; i++) {
+					m_DataContainer.setData<double>(i, message_index, 0);
+				}
+				for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++) {
+					m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
+				}
+				for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
+					m_DataContainer.setData<double>(i, message_index, 0);
+				}
+				firstMessageValid = true;
 			}
 			message_index++;
 		}
 	}
 
-	// The other one is assigned to the datacontainer
 	if (convertTimeToSeconds)
-		delete timestamps;
+		vectorNames.prepend(QObject::tr("Time_s")); // Must be done after allocating memory
+	else if (timeInNS)
+		vectorNames.prepend(QObject::tr("Time_ns")); // Must be done after allocating memory
 	else
-		delete timestamps_seconds;
+		vectorNames.prepend(QObject::tr("Time_10µs")); // Must be done after allocating memory
 
 	for (const auto& message : v)
 		delete message;
 
-	if (!m_DataContainer.squeeze())
+	if (!m_DataContainer.resize(message_index))
 		return 0;
 
 	m_parseState = ParseState(message_counter);

@@ -99,7 +99,7 @@ protected:
 		std::vector<void*> dataContainer() const;
 		AbstractColumn::ColumnMode columnMode(int index) const;
 		const void* datas(int index) const;
-		bool squeeze() const;
+		bool resize(uint32_t) const;
 
 	private:
 		QVector<AbstractColumn::ColumnMode> m_columnModes;

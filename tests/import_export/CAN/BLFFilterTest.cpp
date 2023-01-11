@@ -9,9 +9,8 @@
 */
 
 #include "BLFFilterTest.h"
+#include "backend/datasources/filters/CANFilterPrivate.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
-#include "backend/datasources/filters/VectorBLFFilterPrivate.h"
-		 "
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "qtestcase.h"
 #include <math.h>
@@ -456,38 +455,32 @@ void BLFFilterTest::testUndefinedMessagePreviousValue() {
 
 	// Valid blf and valid dbc
 	filter.setDBCFile(dbcFile.fileName());
-	QCOMPARE(filter.d->readDataFromFile(blfFileName.fileName(), 4), 4);
+	QCOMPARE(filter.d->readDataFromFile(blfFileName.fileName(), 4), 2);
 	const auto dc = filter.d->m_DataContainer.dataContainer();
 	QCOMPARE(dc.size(), 3); // Time + First message with 2 signals
 
 	{
 		// Time
 		const auto* v = static_cast<QVector<double>*>(dc.at(0));
-		QCOMPARE(v->length(), 4);
+		QCOMPARE(v->length(), 2);
 		QCOMPARE(v->at(0), 5e-9);
-		QCOMPARE(v->at(1), 6e-9);
-		QCOMPARE(v->at(2), 8e-9);
-		QCOMPARE(v->at(3), 10e-9);
+		QCOMPARE(v->at(1), 10e-9);
 	}
 
 	{
 		// Msg1Sig1
 		const auto* v = static_cast<QVector<double>*>(dc.at(1));
-		QCOMPARE(v->length(), 4);
+		QCOMPARE(v->length(), 2);
 		QCOMPARE(v->at(0), 0x01);
-		QCOMPARE(v->at(1), 0x01);
-		QCOMPARE(v->at(2), 0x01);
-		QCOMPARE(v->at(3), 0xD3);
+		QCOMPARE(v->at(1), 0xD3);
 	}
 
 	{
 		// Msg1Sig2
 		const auto* v = static_cast<QVector<double>*>(dc.at(2));
-		QCOMPARE(v->length(), 4);
+		QCOMPARE(v->length(), 2);
 		QCOMPARE(v->at(0), 0x02);
-		QCOMPARE(v->at(1), 0x02);
-		QCOMPARE(v->at(2), 0x02);
-		QCOMPARE(v->at(3), 0xB2);
+		QCOMPARE(v->at(1), 0xB2);
 	}
 }
 
@@ -522,38 +515,32 @@ void BLFFilterTest::testUndefinedMessageNAN() {
 
 	// Valid blf and valid dbc
 	filter.setDBCFile(dbcFile.fileName());
-	QCOMPARE(filter.d->readDataFromFile(blfFileName.fileName(), 4), 4);
+	QCOMPARE(filter.d->readDataFromFile(blfFileName.fileName(), 4), 2);
 	const auto dc = filter.d->m_DataContainer.dataContainer();
 	QCOMPARE(dc.size(), 3); // Time + First message with 2 signals
 
 	{
 		// Time
 		const auto* v = static_cast<QVector<double>*>(dc.at(0));
-		QCOMPARE(v->length(), 4);
+		QCOMPARE(v->length(), 2);
 		QCOMPARE(v->at(0), 5e-9);
-		QCOMPARE(v->at(1), 6e-9);
-		QCOMPARE(v->at(2), 8e-9);
-		QCOMPARE(v->at(3), 10e-9);
+		QCOMPARE(v->at(1), 10e-9);
 	}
 
 	{
 		// Msg1Sig1
 		const auto* v = static_cast<QVector<double>*>(dc.at(1));
-		QCOMPARE(v->length(), 4);
+		QCOMPARE(v->length(), 2);
 		QCOMPARE(v->at(0), 0x01);
-		QCOMPARE(v->at(1), NAN);
-		QCOMPARE(v->at(2), NAN);
-		QCOMPARE(v->at(3), 0xD3);
+		QCOMPARE(v->at(1), 0xD3);
 	}
 
 	{
 		// Msg1Sig2
 		const auto* v = static_cast<QVector<double>*>(dc.at(2));
-		QCOMPARE(v->length(), 4);
+		QCOMPARE(v->length(), 2);
 		QCOMPARE(v->at(0), 0x02);
-		QCOMPARE(v->at(1), NAN);
-		QCOMPARE(v->at(2), NAN);
-		QCOMPARE(v->at(3), 0xB2);
+		QCOMPARE(v->at(1), 0xB2);
 	}
 }
 
