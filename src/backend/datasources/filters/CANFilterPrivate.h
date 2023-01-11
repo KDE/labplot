@@ -25,6 +25,7 @@ class CANFilter;
 class CANFilterPrivate {
 public:
 	explicit CANFilterPrivate(CANFilter*);
+    virtual ~CANFilterPrivate() {}
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	void readDataFromFile(const QString& fileName,
 						  AbstractDataSource* = nullptr,
@@ -39,8 +40,6 @@ public:
 	 * \return number of messages read
 	 */
 	int readDataFromFile(const QString& fileName, int lines = -1);
-	virtual int readDataFromFileCommonTime(const QString& fileName, int lines = -1) = 0;
-	virtual int readDataFromFileSeparateTime(const QString& fileName, int lines = -1) = 0;
 	void write(const QString& fileName, AbstractDataSource*);
 	bool setDBCFile(const QString& filename);
 
@@ -60,6 +59,10 @@ public:
 	QStringList vectorNames;
 	CANFilter::TimeHandling timeHandlingMode{CANFilter::TimeHandling::ConcatPrevious};
 	bool convertTimeToSeconds{true};
+
+private:
+    virtual int readDataFromFileCommonTime(const QString& fileName, int lines = -1) = 0;
+    virtual int readDataFromFileSeparateTime(const QString& fileName, int lines = -1) = 0;
 
 protected:
 	DbcParser m_dbcParser;
@@ -101,6 +104,8 @@ protected:
 		QVector<AbstractColumn::ColumnMode> m_columnModes;
 		std::vector<void*> m_dataContainer; // pointers to the actual data containers
 	};
+
+
 	DataContainer m_DataContainer;
 
 	struct ParseState {
@@ -115,6 +120,7 @@ protected:
 	};
 
 	ParseState m_parseState;
+    friend class BLFFilterTest;
 };
 
 #endif // CANFILTERPRIVATE_H

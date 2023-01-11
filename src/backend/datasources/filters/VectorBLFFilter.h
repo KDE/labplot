@@ -35,7 +35,7 @@ public:
 
 private:
 	std::unique_ptr<VectorBLFFilterPrivate> const d;
-	friend class VectorBLFFilterPrivate;
+    friend class BLFFilterTest;
 };
 
 #endif // VECTORBLFFILTER_H
