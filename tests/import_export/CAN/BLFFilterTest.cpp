@@ -127,7 +127,7 @@ void BLFFilterTest::testValidBLFValidDBCSingleMessage() {
 	QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
 	QVERIFY(blfFileName.open());
     std::vector<uint8_t> data{0x01, 0x02};
-    QVector<Vector::BLF::CanMessage2*> messages{createCANMessage(234, 5, data)};
+    QVector<Vector::BLF::CanMessage2*> messages{createCANMessage(234, 5, data)}; // time is in nanoseconds
     createBLFFile(blfFileName.fileName(), messages);
 
     QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
@@ -153,7 +153,7 @@ void BLFFilterTest::testValidBLFValidDBCSingleMessage() {
         // Time
         const auto* c = s.column(0);
         QCOMPARE(c->rowCount(), 1);
-        QCOMPARE(c->valueAt(0), 5);
+        QCOMPARE(c->valueAt(0), 5e-9); // nanoseconds
     }
 
     {
