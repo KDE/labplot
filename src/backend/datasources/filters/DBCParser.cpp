@@ -19,14 +19,22 @@ bool DbcParser::parseFile(const QString& filename) {
 	return m_valid;
 }
 
-QVector<double> DbcParser::parseMessage(const uint32_t id, const std::vector<uint8_t>& data) {
+bool DbcParser::parseMessage(const uint32_t id, const std::vector<uint8_t>& data, std::vector<double>& out) {
 	if (!m_valid)
-		return QVector<double>();
+		return false;
 
-	std::vector<double> values;
-	m_parser.parseMessage(id, data, values);
+	m_parser.parseMessage(id, data, out);
 
-	return QVector<double>(values.begin(), values.end());
+	return true;
+}
+
+bool DbcParser::parseMessage(const uint32_t id, const std::array<uint8_t, 8>& data, std::vector<double>& out) {
+	if (!m_valid)
+		return false;
+
+	m_parser.parseMessage(id, data, out);
+
+	return true;
 }
 
 /*!
