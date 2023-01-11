@@ -919,6 +919,8 @@ void ImportFileWidget::selectDBCFile() {
 	m_cbDBCFileName->setUrls(urls);
 	m_cbDBCFileName->setCurrentText(urls.first());
 	DEBUG("	combobox text = " << STDSTRING(m_cbDBCFileName->currentText()))
+
+	refreshPreview();
 }
 
 /*!
@@ -1664,7 +1666,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::VECTOR_BLF: {
 		ui.tePreview->clear();
 		auto filter = static_cast<VectorBLFFilter*>(currentFileFilter());
-		filter->setDBCFile(dbcFile); // TODO: do only when changed!
+		filter->setDBCFile(dbcFile);
 		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
