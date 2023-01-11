@@ -146,17 +146,17 @@ const void* CANFilterPrivate::DataContainer::datas(int index) const {
 	return nullptr;
 }
 
-bool CANFilterPrivate::DataContainer::squeeze() const {
+bool CANFilterPrivate::DataContainer::resize(uint32_t s) const {
 	for (uint32_t i = 0; i < m_dataContainer.size(); i++) {
 		switch (m_columnModes.at(i)) {
 		case AbstractColumn::ColumnMode::BigInt:
-			static_cast<QVector<qint64>*>(m_dataContainer[i])->squeeze();
+			static_cast<QVector<qint64>*>(m_dataContainer[i])->resize(s);
 			break;
 		case AbstractColumn::ColumnMode::Integer:
-			static_cast<QVector<qint32>*>(m_dataContainer[i])->squeeze();
+			static_cast<QVector<qint32>*>(m_dataContainer[i])->resize(s);
 			break;
 		case AbstractColumn::ColumnMode::Double: {
-			static_cast<QVector<double>*>(m_dataContainer[i])->squeeze();
+			static_cast<QVector<double>*>(m_dataContainer[i])->resize(s);
 			break;
 		}
 			// TODO: implement missing cases
