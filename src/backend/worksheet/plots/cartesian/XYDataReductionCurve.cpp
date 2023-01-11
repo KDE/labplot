@@ -87,34 +87,14 @@ XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* o
 // when the parent aspect is removed
 XYDataReductionCurvePrivate::~XYDataReductionCurvePrivate() = default;
 
-void XYDataReductionCurvePrivate::recalculate() {
+bool XYDataReductionCurvePrivate::recalculateSpecific() {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create dataReduction result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
 
 	// clear the previous result
 	dataReductionResult = XYDataReductionCurve::DataReductionResult();
 
+	// TODO: move this too?
 	// determine the data source columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
@@ -129,10 +109,8 @@ void XYDataReductionCurvePrivate::recalculate() {
 	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	// copy all valid data point for the data reduction to temporary vectors
@@ -157,10 +135,8 @@ void XYDataReductionCurvePrivate::recalculate() {
 		dataReductionResult.available = true;
 		dataReductionResult.valid = false;
 		dataReductionResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -252,12 +228,10 @@ void XYDataReductionCurvePrivate::recalculate() {
 	dataReductionResult.posError = posError;
 	dataReductionResult.areaError = areaError;
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 
 	Q_EMIT q->completed(100);
+	return true;
 }
 
 //##############################################################################

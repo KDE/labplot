@@ -92,30 +92,9 @@ XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner)
 // when the parent aspect is removed
 XYIntegrationCurvePrivate::~XYIntegrationCurvePrivate() = default;
 
-void XYIntegrationCurvePrivate::recalculate() {
+bool XYIntegrationCurvePrivate::recalculateSpecific() {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create integration result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
 
 	// clear the previous result
 	integrationResult = XYIntegrationCurve::IntegrationResult();
@@ -134,10 +113,8 @@ void XYIntegrationCurvePrivate::recalculate() {
 	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	// copy all valid data point for the integration to temporary vectors
@@ -161,10 +138,8 @@ void XYIntegrationCurvePrivate::recalculate() {
 		integrationResult.available = true;
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -209,10 +184,9 @@ void XYIntegrationCurvePrivate::recalculate() {
 	integrationResult.elapsedTime = timer.elapsed();
 	integrationResult.value = ydata[np - 1];
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
+
+	return true;
 }
 
 //##############################################################################

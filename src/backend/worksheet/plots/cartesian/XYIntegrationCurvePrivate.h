@@ -21,7 +21,7 @@ public:
 	explicit XYIntegrationCurvePrivate(XYIntegrationCurve*);
 	~XYIntegrationCurvePrivate() override;
 
-	void recalculate();
+	virtual bool recalculateSpecific() override;
 
 	XYIntegrationCurve::IntegrationData integrationData;
 	XYIntegrationCurve::IntegrationResult integrationResult;

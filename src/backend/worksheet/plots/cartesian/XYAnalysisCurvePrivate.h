@@ -24,6 +24,9 @@ public:
 	XYAnalysisCurve::DataSourceType dataSourceType{XYAnalysisCurve::DataSourceType::Spreadsheet};
 	const XYCurve* dataSourceCurve{nullptr};
 
+	void recalculate();
+	virtual bool recalculateSpecific() = 0;
+
 	const AbstractColumn* xDataColumn{nullptr}; //<! column storing the values for the input x-data for the analysis function
 	const AbstractColumn* yDataColumn{nullptr}; //<! column storing the values for the input y-data for the analysis function
 	const AbstractColumn* y2DataColumn{nullptr}; //<! column storing the values for the optional second input y-data

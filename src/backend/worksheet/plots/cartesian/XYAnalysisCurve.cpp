@@ -30,11 +30,6 @@
 #include <KLocalizedString>
 #include <QDateTime>
 
-XYAnalysisCurve::XYAnalysisCurve(const QString& name, AspectType type)
-	: XYCurve(name, new XYAnalysisCurvePrivate(this), type) {
-	init();
-}
-
 XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type)
 	: XYCurve(name, dd, type) {
 	init();
@@ -374,6 +369,37 @@ XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner)
 // no need to delete xColumn and yColumn, they are deleted
 // when the parent aspect is removed
 XYAnalysisCurvePrivate::~XYAnalysisCurvePrivate() = default;
+
+void XYAnalysisCurvePrivate::recalculate() {
+	// create filter result columns if not available yet, clear them otherwise
+	if (!xColumn) {
+		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
+		xVector = static_cast<QVector<double>*>(xColumn->data());
+		yVector = static_cast<QVector<double>*>(yColumn->data());
+
+		xColumn->setHidden(true);
+		q->addChild(xColumn);
+		yColumn->setHidden(true);
+		q->addChild(yColumn);
+
+		q->setUndoAware(false);
+		q->setXColumn(xColumn);
+		q->setYColumn(yColumn);
+		q->setUndoAware(true);
+	} else {
+		xColumn->invalidateProperties();
+		yColumn->invalidateProperties();
+		xVector->clear();
+		yVector->clear();
+	}
+
+	if (recalculateSpecific()) {
+		// redraw the curve
+		recalcLogicalPoints();
+		Q_EMIT q->dataChanged();
+	}
+}
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################

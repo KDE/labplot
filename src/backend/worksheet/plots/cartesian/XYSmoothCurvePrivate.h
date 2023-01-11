@@ -22,7 +22,7 @@ public:
 	explicit XYSmoothCurvePrivate(XYSmoothCurve*);
 	~XYSmoothCurvePrivate() override;
 
-	void recalculate();
+	virtual bool recalculateSpecific() override;
 
 	XYSmoothCurve::SmoothData smoothData;
 	XYSmoothCurve::SmoothResult smoothResult;

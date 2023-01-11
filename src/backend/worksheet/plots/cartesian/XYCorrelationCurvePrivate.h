@@ -21,7 +21,7 @@ public:
 	explicit XYCorrelationCurvePrivate(XYCorrelationCurve*);
 	~XYCorrelationCurvePrivate() override;
 
-	void recalculate();
+	virtual bool recalculateSpecific() override;
 
 	XYCorrelationCurve::CorrelationData correlationData;
 	XYCorrelationCurve::CorrelationResult correlationResult;

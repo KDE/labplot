@@ -22,7 +22,7 @@ public:
 	explicit XYInterpolationCurvePrivate(XYInterpolationCurve*);
 	~XYInterpolationCurvePrivate() override;
 
-	void recalculate();
+	virtual bool recalculateSpecific() override;
 
 	XYInterpolationCurve::InterpolationData interpolationData;
 	XYInterpolationCurve::InterpolationResult interpolationResult;

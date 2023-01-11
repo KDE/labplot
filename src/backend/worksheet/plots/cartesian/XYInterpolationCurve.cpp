@@ -95,30 +95,9 @@ XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* o
 // when the parent aspect is removed
 XYInterpolationCurvePrivate::~XYInterpolationCurvePrivate() = default;
 
-void XYInterpolationCurvePrivate::recalculate() {
+bool XYInterpolationCurvePrivate::recalculateSpecific() {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create interpolation result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
 
 	// clear the previous result
 	interpolationResult = XYInterpolationCurve::InterpolationResult();
@@ -135,10 +114,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	// check column sizes
@@ -146,10 +123,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Number of x and y data points must be equal.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	// copy all valid data point for the interpolation to temporary vectors
@@ -185,10 +160,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -199,7 +172,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 			DEBUG("ERROR: x data not strictly increasing: x_{i-1} >= x_i @ i = " << i << ": " << xdata[i - 1] << " >= " << xdata[i])
 			interpolationResult.status = i18n("interpolation failed since x data is not strictly monotonic increasing!");
 			interpolationResult.available = true;
-			return;
+			return false;
 		}
 	}
 
@@ -423,10 +396,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 	interpolationResult.status = gslErrorToString(status);
 	interpolationResult.elapsedTime = timer.elapsed();
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
 //##############################################################################

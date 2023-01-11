@@ -41,7 +41,6 @@ public:
 		FourierFilter
 	};
 
-	XYAnalysisCurve(const QString&, AspectType);
 	~XYAnalysisCurve() override;
 
 	static void copyData(QVector<double>& xData,

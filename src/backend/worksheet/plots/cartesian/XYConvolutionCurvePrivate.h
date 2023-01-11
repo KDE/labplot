@@ -21,7 +21,7 @@ public:
 	explicit XYConvolutionCurvePrivate(XYConvolutionCurve*);
 	~XYConvolutionCurvePrivate() override;
 
-	void recalculate();
+	virtual bool recalculateSpecific() override;
 
 	XYConvolutionCurve::ConvolutionData convolutionData;
 	XYConvolutionCurve::ConvolutionResult convolutionResult;

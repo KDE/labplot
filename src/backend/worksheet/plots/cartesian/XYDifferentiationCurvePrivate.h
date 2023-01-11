@@ -22,7 +22,7 @@ public:
 	explicit XYDifferentiationCurvePrivate(XYDifferentiationCurve*);
 	~XYDifferentiationCurvePrivate() override;
 
-	void recalculate();
+	virtual bool recalculateSpecific() override;
 
 	XYDifferentiationCurve::DifferentiationData differentiationData;
 	XYDifferentiationCurve::DifferentiationResult differentiationResult;

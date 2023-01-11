@@ -66,7 +66,11 @@ void XYFitCurve::recalculate() {
 
 void XYFitCurve::evaluate(bool preview) {
 	Q_D(XYFitCurve);
-	d->evaluate(preview);
+	if (d->evaluate(preview)) {
+		// redraw the curve
+		recalcLogicalPoints();
+		Q_EMIT dataChanged();
+	}
 }
 
 bool XYFitCurve::resultAvailable() const {
@@ -1797,7 +1801,7 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	}
 }
 
-void XYFitCurvePrivate::recalculate() {
+bool XYFitCurvePrivate::recalculateSpecific() {
 	QElapsedTimer timer;
 	timer.start();
 
@@ -1849,7 +1853,7 @@ void XYFitCurvePrivate::recalculate() {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data columns failed!");
 		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return false;
 	}
 
 	// determine range of data
@@ -1898,7 +1902,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 	}
 
-	evaluate(); // calculate the fit function (vectors)
+	const bool result = evaluate(); // calculate the fit function (vectors)
 
 	// ML uses dataSourceHistogram->bins() as x for residuals
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram && fitData.algorithm == nsl_fit_algorithm_ml)
@@ -1943,6 +1947,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.elapsedTime = timer.elapsed();
 
 	sourceDataChangedSinceLastRecalc = false;
+	return result;
 }
 
 void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn, const double norm) {
@@ -2577,7 +2582,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 }
 
 /* evaluate fit function (preview == true: use start values, default: false) */
-void XYFitCurvePrivate::evaluate(bool preview) {
+bool XYFitCurvePrivate::evaluate(bool preview) {
 	DEBUG(Q_FUNC_INFO << ", preview = " << preview);
 
 	// prepare source data columns
@@ -2598,28 +2603,22 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	if (!tmpXDataColumn) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data column failed!");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		return;
+		return true;
 	}
 
 	// only needed for preview (else we have all columns)
 	//  should not harm even if not in preview now that residuals are not cleared
 	if (preview)
-		prepareResultColumns();
+		prepareResultColumns(); // TODO: invalidatePropeties of xColumn and yColumn!
 
 	if (!xVector || !yVector) {
 		DEBUG(Q_FUNC_INFO << ", xVector or yVector not defined!");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		return;
+		return true;
 	}
 
 	if (fitData.model.simplified().isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no fit-model specified.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		return;
+		return true;
 	}
 
 	auto* parser = ExpressionParser::getInstance();
@@ -2646,8 +2645,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		residualsVector->clear();
 	}
 
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
+	return true;
 }
 
 /*!

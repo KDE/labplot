@@ -99,35 +99,13 @@ XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner)
 // when the parent aspect is removed
 XYSmoothCurvePrivate::~XYSmoothCurvePrivate() = default;
 
-void XYSmoothCurvePrivate::recalculate() {
+bool XYSmoothCurvePrivate::recalculateSpecific() {
 	DEBUG(Q_FUNC_INFO)
 	QElapsedTimer timer;
 	timer.start();
 
-	// create smooth result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-		if (roughVector)
-			roughVector->clear();
-	}
+	if (roughVector)
+		roughVector->clear();
 
 	if (!roughColumn) {
 		roughColumn = new Column(QStringLiteral("rough"), AbstractColumn::ColumnMode::Double);
@@ -155,7 +133,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return false;
 	}
 
 	// check column sizes
@@ -163,10 +141,8 @@ void XYSmoothCurvePrivate::recalculate() {
 		smoothResult.available = true;
 		smoothResult.valid = false;
 		smoothResult.status = i18n("Number of x and y data points must be equal.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	// copy all valid data point for the smooth to temporary vectors
@@ -191,10 +167,8 @@ void XYSmoothCurvePrivate::recalculate() {
 		smoothResult.available = true;
 		smoothResult.valid = false;
 		smoothResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -263,10 +237,8 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	delete[] ydataOriginal;
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
 //##############################################################################

@@ -93,30 +93,9 @@ XYDifferentiationCurvePrivate::~XYDifferentiationCurvePrivate() = default;
 
 // ...
 // see XYFitCurvePrivate
-void XYDifferentiationCurvePrivate::recalculate() {
+bool XYDifferentiationCurvePrivate::recalculateSpecific() {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create differentiation result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
 
 	// clear the previous result
 	differentiationResult = XYDifferentiationCurve::DifferentiationResult();
@@ -136,9 +115,10 @@ void XYDifferentiationCurvePrivate::recalculate() {
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		Q_EMIT q->dataChanged();
+		// TODO: why no recalculation like in the other analysisCurves?
 		sourceDataChangedSinceLastRecalc = false;
 		DEBUG(Q_FUNC_INFO << ", MISSING DATA COLUMN")
-		return;
+		return false;
 	}
 
 	// copy all valid data point for the differentiation to temporary vectors
@@ -163,10 +143,8 @@ void XYDifferentiationCurvePrivate::recalculate() {
 		differentiationResult.available = true;
 		differentiationResult.valid = false;
 		differentiationResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -221,10 +199,8 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	differentiationResult.status = QString::number(status);
 	differentiationResult.elapsedTime = timer.elapsed();
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
 //##############################################################################

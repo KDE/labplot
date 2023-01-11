@@ -93,41 +93,18 @@ XYHilbertTransformCurvePrivate::XYHilbertTransformCurvePrivate(XYHilbertTransfor
 // when the parent aspect is removed
 XYHilbertTransformCurvePrivate::~XYHilbertTransformCurvePrivate() = default;
 
-void XYHilbertTransformCurvePrivate::recalculate() {
+bool XYHilbertTransformCurvePrivate::recalculateSpecific() {
 	DEBUG(Q_FUNC_INFO)
 	QElapsedTimer timer;
 	timer.start();
-
-	// create transform result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
 
 	// clear the previous result
 	transformResult = XYHilbertTransformCurve::TransformResult();
 
 	if (!xDataColumn || !yDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		DEBUG(Q_FUNC_INFO << "no data columns!")
-		return;
+		return true;
 	}
 
 	// copy all valid data point for the transform to temporary vectors
@@ -163,11 +140,9 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		DEBUG(Q_FUNC_INFO << "no data (n = 0)!")
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -208,10 +183,8 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 	transformResult.status = gslErrorToString(status);
 	transformResult.elapsedTime = timer.elapsed();
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
 //##############################################################################

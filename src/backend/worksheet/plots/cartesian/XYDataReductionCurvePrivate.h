@@ -22,7 +22,7 @@ public:
 	explicit XYDataReductionCurvePrivate(XYDataReductionCurve*);
 	~XYDataReductionCurvePrivate() override;
 
-	void recalculate();
+	virtual bool recalculateSpecific() override;
 
 	XYDataReductionCurve::DataReductionData dataReductionData;
 	XYDataReductionCurve::DataReductionResult dataReductionResult;
