@@ -941,6 +941,7 @@ void CartesianPlotTest::autoScaleFitCurveCalculation() {
 	f.modelType = nsl_fit_model_polynomial;
 	f.degree = 1; // linear
 	f.model = QStringLiteral("c0 + c1*x");
+	fitCurve->initFitData(f); // Important, otherwise paramNames gets not filled
 	fitCurve->setFitData(f);
 	fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 	fitCurve->setDataSourceCurve(equationCurve);
