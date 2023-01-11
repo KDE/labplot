@@ -69,6 +69,8 @@ public:
 
 private:
 	std::unique_ptr<CANFilterPrivate> const d;
+
+	friend class BLFFilterTest;
 };
 
 #endif // CANFILTER_H

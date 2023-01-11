@@ -79,6 +79,7 @@ bool VectorBLFFilterPrivate::isValid(const QString& filename) const {
 }
 
 int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, int lines) {
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	if (!isValid(fileName) || !m_dbcParser.isValid())
 		return 0;
 
@@ -98,7 +99,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	QVector<double>* timestamps_seconds = new QVector<double>();
 	bool timestamp_nanoseconds = true;
 	{
-		PERFTRACE(QLatin1String(Q_FUNC_INFO));
+		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String("Parsing BLF file"));
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
 			try {
 				ohb = file.read();
@@ -168,6 +169,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		}
 	}
 
+	// Create vector names and fill datacontainer
 	QHash<uint32_t, int> idIndexTable;
 	vectorNames = m_dbcParser.signals(ids, idIndexTable);
 
@@ -183,14 +185,14 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	}
 
 	if (convertTimeToSeconds)
-		vectorNames.prepend(QStringLiteral("Time_s")); // Must be done after allocating memory
+		vectorNames.prepend(QObject::tr("Time_s")); // Must be done after allocating memory
 	else if (timestamp_nanoseconds)
-		vectorNames.prepend(QStringLiteral("Time_ns")); // Must be done after allocating memory
+		vectorNames.prepend(QObject::tr("Time_ns")); // Must be done after allocating memory
 	else
-		vectorNames.prepend(QStringLiteral("Time_10µs")); // Must be done after allocating memory
+		vectorNames.prepend(QObject::tr("Time_10µs")); // Must be done after allocating memory
 
+	int message_index = 0;
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
-		int message_index = 0;
 		for (const auto ohb : v) {
 			int id;
 			std::vector<double> values;
@@ -208,7 +210,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (values.size() == 0) {
 				// id is not available in the dbc file, so it is not possible to decode
 				DEBUG("Unable to decode message: " << id);
-				continue;
+				// continue;
 			}
 			const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
 			for (int i = 1; i < startIndex; i++) {
@@ -246,7 +248,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (values.size() == 0) {
 				// id is not available in the dbc file, so it is not possible to decode
 				DEBUG("Unable to decode message: " << id);
-				continue;
+				// continue;
 			}
 			valid = true; // message was in the dbc file and can be parsed
 			// Fill all data with zeros, because no previous value is available
@@ -264,7 +266,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			}
 		} while (!valid);
 
-		int message_index = 1;
+		message_index = 1;
 		for (; it != v.end(); it++) {
 			const auto ohb = *it;
 			if (!ohb)
@@ -284,7 +286,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (values.size() == 0) {
 				// id is not available in the dbc file, so it is not possible to decode
 				DEBUG("Unable to decode message: " << id);
-				continue;
+				// continue;
 			}
 			const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
 			for (std::vector<double>::size_type i = 1; i < startIndex; i++) {
@@ -315,7 +317,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		return 0;
 
 	m_parseState = ParseState(message_counter);
-	return message_counter;
+	return message_index;
 }
 
 int VectorBLFFilterPrivate::readDataFromFileSeparateTime(const QString& fileName, int lines) {
