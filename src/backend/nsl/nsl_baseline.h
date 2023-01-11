@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL baseline detection and subtraction methods
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 

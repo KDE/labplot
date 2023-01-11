@@ -409,6 +409,7 @@ set(NSL_SOURCES
 	${BACKEND_DIR}/nsl/nsl_interp.c
 	${BACKEND_DIR}/nsl/nsl_kde.c
 	${BACKEND_DIR}/nsl/nsl_math.c
+	${BACKEND_DIR}/nsl/nsl_peak.c
 	${BACKEND_DIR}/nsl/nsl_sf_basic.c
 	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
 	${BACKEND_DIR}/nsl/nsl_sf_poly.c
