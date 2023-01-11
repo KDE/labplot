@@ -1769,23 +1769,22 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 void XYFitCurvePrivate::prepareResultColumns() {
 	// DEBUG(Q_FUNC_INFO)
 	// create fit result columns if not available yet, clear them otherwise
+
+	// Done also in XYAnalysisCurve, but this function will be also called directly() from evaluate()
+	// and not over recalculate(). So this is also needed here!
 	if (!xColumn) { // all columns are treated together
 		DEBUG("	Creating columns")
 		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		residualsColumn = new Column(QStringLiteral("residuals"), AbstractColumn::ColumnMode::Double);
+
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
-		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
 
 		yColumn->setHidden(true);
 		q->addChild(yColumn);
-
-		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
-		q->addChild(residualsColumn);
 
 		q->setUndoAware(false);
 		q->setXColumn(xColumn);
@@ -1798,6 +1797,13 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		xVector->clear();
 		yVector->clear();
 		// TODO: residualsVector->clear();
+	}
+
+	if (!residualsColumn) {
+		residualsColumn = new Column(QStringLiteral("residuals"), AbstractColumn::ColumnMode::Double);
+		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
+		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+		q->addChild(residualsColumn);
 	}
 }
 
