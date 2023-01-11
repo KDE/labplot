@@ -34,7 +34,6 @@ public:
 	bool load(XmlStreamReader*) override;
 
 private:
-	std::unique_ptr<VectorBLFFilterPrivate> const d;
 	friend class BLFFilterTest;
 };
 
