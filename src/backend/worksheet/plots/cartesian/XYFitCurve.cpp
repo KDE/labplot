@@ -1908,24 +1908,25 @@ bool XYFitCurvePrivate::recalculateSpecific() {
 	}
 	}
 
-	const bool result = evaluate(); // calculate the fit function (vectors)
+	const bool update = evaluate(); // calculate the fit function (vectors)
 
 	// ML uses dataSourceHistogram->bins() as x for residuals
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram && fitData.algorithm == nsl_fit_algorithm_ml)
 		tmpXDataColumn = dataSourceHistogram->bins();
 
 	if (fitData.autoRange || fitData.algorithm == nsl_fit_algorithm_ml) { // evaluate residuals
-		xVector->resize(rowCount);
+		QVector<double> v;
+		v.resize(rowCount);
 		for (size_t i = 0; i < rowCount; i++)
 			if (tmpXDataColumn->isNumeric())
-				(*xVector)[i] = tmpXDataColumn->valueAt(i);
+				v[i] = tmpXDataColumn->valueAt(i);
 			else if (tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::DateTime)
-				(*xVector)[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
+				v[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
 
 		auto* parser = ExpressionParser::getInstance();
 		// fill residualsVector with model values
-		// QDEBUG("xVector: " << *xVector)
-		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector, fitData.paramNames, fitResult.paramValues);
+		// QDEBUG("xVector: " << v)
+		bool rc = parser->evaluateCartesian(fitData.model, &v, residualsVector, fitData.paramNames, fitResult.paramValues);
 		// QDEBUG("residualsVector: " << *residualsVector)
 		if (rc) {
 			switch (fitData.algorithm) {
@@ -1953,7 +1954,7 @@ bool XYFitCurvePrivate::recalculateSpecific() {
 	fitResult.elapsedTime = timer.elapsed();
 
 	sourceDataChangedSinceLastRecalc = false;
-	return result;
+	return update;
 }
 
 void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn, const double norm) {
@@ -2615,7 +2616,7 @@ bool XYFitCurvePrivate::evaluate(bool preview) {
 	// only needed for preview (else we have all columns)
 	//  should not harm even if not in preview now that residuals are not cleared
 	if (preview)
-		prepareResultColumns(); // TODO: invalidatePropeties of xColumn and yColumn!
+		prepareResultColumns();
 
 	if (!xVector || !yVector) {
 		DEBUG(Q_FUNC_INFO << ", xVector or yVector not defined!");
