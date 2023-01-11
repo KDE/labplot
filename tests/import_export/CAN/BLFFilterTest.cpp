@@ -45,6 +45,7 @@ Vector::BLF::CanMessage2* BLFFilterTest::createCANMessage(uint32_t id, uint64_t 
 	canMessage->dlc = std::min<uint8_t>(data.size(), 8);
 	canMessage->id = id;
 	canMessage->objectTimeStamp = timestamp;
+    canMessage->objectFlags = Vector::BLF::ObjectHeader::ObjectFlags::TimeOneNans;
 	if (canMessage->data.size() < canMessage->dlc)
 		canMessage->data.resize(canMessage->dlc);
 
@@ -366,6 +367,58 @@ BO_ 123 MSG2: 8 Vector__XXX
 			QCOMPARE(c->valueAt(i), refData.at(i));
 		}
 	}
+}
+
+void BLFFilterTest::testTimeNative() {
+    /* open file for writing */
+    QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
+    QVERIFY(blfFileName.open());
+    QVector<Vector::BLF::CanMessage2*> messages{
+        createCANMessage(234, 5, {0x01, 0x02}),
+        createCANMessage(123, 6, {0xFF, 0xA2}),
+        createCANMessage(123, 8, {0x23, 0xE2}),
+        createCANMessage(234, 10, {0xD3, 0xB2}),
+        createCANMessage(234, 12, {0xE1, 0xC7}),
+        createCANMessage(234, 14, {0xD1, 0xC7}),
+    }; // time is in nanoseconds
+    createBLFFile(blfFileName.fileName(), messages);
+
+    QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
+    QVERIFY(dbcFile.open());
+    const auto dbcContent = R"(BO_ 234 MSG1: 8 Vector__XXX
+ SG_ Msg1Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
+ SG_ Msg1Sig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "km/h" Vector__XXX
+BO_ 123 MSG2: 8 Vector__XXX
+ SG_ Msg2Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "mm" Vector__XXX
+ SG_ Msg2Sig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "m" Vector__XXX
+)";
+    createDBCFile(dbcFile.fileName(), dbcContent);
+
+    // Start Test
+
+    VectorBLFFilter filter;
+    filter.setConvertTimeToSeconds(false);
+    filter.setTimeHandlingMode(CANFilter::TimeHandling::ConcatNAN);
+    QCOMPARE(filter.isValid(blfFileName.fileName()), true);
+
+    // Valid blf and valid dbc
+    filter.setDBCFile(dbcFile.fileName());
+    Spreadsheet s(QStringLiteral("TestSpreadsheet"), false);
+    filter.readDataFromFile(blfFileName.fileName(), &s);
+    QCOMPARE(s.columnCount(), 5); // time + Msg1Sig1 + Msg1Sig2 + Msg2Sig1 + Msg2Sig2
+
+    {
+        // Time
+        const auto* c = s.column(0);
+        QCOMPARE(c->name(), QStringLiteral("Time_ns"));
+        QCOMPARE(c->rowCount(), 6);
+
+        QVector<double> refData{5, 6, 8, 10, 12, 14};
+        QCOMPARE(refData.size(), 6);
+        for (int i = 0; i < c->rowCount(); i++) {
+            QCOMPARE(c->valueAt(i), refData.at(i));
+        }
+    }
 }
 
 QTEST_MAIN(BLFFilterTest)
