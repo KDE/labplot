@@ -18,6 +18,8 @@ class BLFFilterTest : public CommonTest {
 
 private Q_SLOTS:
 	void test();
+    void testInvalidBLF();
+    void testNotFoundBLF();
 
 private:
 };

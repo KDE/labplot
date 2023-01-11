@@ -39,6 +39,25 @@ BU_: DBG DRIVER IO MOTOR SENSOR
 		std::fclose(file);                                                                                                                                     \
 	} while (false);
 
+void BLFFilterTest::testInvalidBLF() {
+    VectorBLFFilter filter;
+    QCOMPARE(filter.isValid(QStringLiteral("UnavailableBLFFile.blf")), false); // File not available
+
+    // Create invalid blf file
+    QTemporaryFile invalidBLFFile;
+    QVERIFY(invalidBLFFile.open());
+    QFile f(invalidBLFFile.fileName());
+    QVERIFY(f.open(QIODevice::WriteOnly));
+    f.write(QStringLiteral("InvalidFile.blf").toStdString().c_str());
+    f.close();
+    QCOMPARE(filter.isValid(invalidBLFFile.fileName()), false);
+}
+
+void BLFFilterTest::testNotFoundBLF() {
+    VectorBLFFilter filter;
+    QCOMPARE(filter.isValid(QStringLiteral("UnavailableBLFFile.blf")), false); // File not available
+}
+
 void BLFFilterTest::test() {
 	QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
 	QVERIFY(dbcFile.open());
@@ -82,17 +101,7 @@ void BLFFilterTest::test() {
 
 	// Start Test
 
-	VectorBLFFilter filter;
-	QCOMPARE(filter.isValid(QStringLiteral("UnavailableBLFFile.blf")), false); // File not available
-	{
-		QTemporaryFile invalidBLFFile;
-		QVERIFY(invalidBLFFile.open());
-		QFile f(invalidBLFFile.fileName());
-		QVERIFY(f.open(QIODevice::WriteOnly));
-		f.write(QStringLiteral("InvalidFile.blf").toStdString().c_str());
-		f.close();
-		QCOMPARE(filter.isValid(invalidBLFFile.fileName()), false);
-	}
+    VectorBLFFilter filter;
 	QCOMPARE(filter.isValid(blfFileName.fileName()), true);
 
 	{
