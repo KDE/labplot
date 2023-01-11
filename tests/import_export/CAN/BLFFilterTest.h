@@ -29,6 +29,7 @@ private Q_SLOTS:
 	void testValidBLFValidDBCSingleMessage();
 	void testUsePreviousValue();
 	void testUseNAN();
+    void testTimeNative();
 
 private:
 	// Helper functions
