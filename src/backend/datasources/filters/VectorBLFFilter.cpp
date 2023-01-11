@@ -55,12 +55,12 @@ bool VectorBLFFilter::isValid(const QString& filename) {
 	try {
 		Vector::BLF::File f;
 		f.open(filename.toLocal8Bit().data());
-        if (!f.is_open())
-            return false; // No file
-        f.close();
-        return true;
+		if (!f.is_open())
+			return false; // No file
+		f.close();
+		return true;
 	} catch (Vector::BLF::Exception e) {
-        return false; // Signature was invalid or something else
+		return false; // Signature was invalid or something else
 	}
 	return false;
 }
@@ -90,7 +90,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	Vector::BLF::File file;
 	file.open(fileName.toLocal8Bit().data());
 
-	QVector<const Vector::BLF::CanMessage2*> v;
+	QVector<const Vector::BLF::ObjectHeaderBase*> v;
 	Vector::BLF::ObjectHeaderBase* ohb = nullptr;
 	QVector<uint32_t> ids;
 	uint64_t message_counter = 0;
@@ -107,7 +107,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (ohb == nullptr)
 				break;
 
-			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
+			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2 && ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE)
 				continue;
 
 			double timestamp_seconds;
@@ -146,9 +146,17 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			else
 				timestamps->append(timestamp);
 
-			const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(ohb);
-			v.append(message);
-			const int id = message->id;
+			int id;
+			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
+				const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(ohb);
+				id = message->id;
+			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
+				const auto message = reinterpret_cast<Vector::BLF::CanMessage*>(ohb);
+				id = message->id;
+			} else
+				return 0;
+
+			v.append(ohb);
 			if (!ids.contains(id))
 				ids.append(id);
 			message_counter++;
@@ -173,21 +181,33 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
 		int message_index = 0;
-		for (const auto& message : v) {
-			const auto values = m_dbcParser.parseMessage(message->id, message->data);
-			if (values.length() == 0) {
+		for (const auto& ohb : v) {
+			int id;
+			std::vector<double> values;
+			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
+				const auto message = reinterpret_cast<const Vector::BLF::CanMessage*>(ohb);
+				id = message->id;
+				m_dbcParser.parseMessage(message->id, message->data, values);
+			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
+				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
+				id = message->id;
+				m_dbcParser.parseMessage(message->id, message->data, values);
+			} else
+				return 0;
+
+			if (values.size() == 0) {
 				// id is not available in the dbc file, so it is not possible to decode
-				DEBUG("Unable to decode message: " << message->id);
+				DEBUG("Unable to decode message: " << id);
 				continue;
 			}
-			const auto startIndex = idIndexTable.value(message->id) + 1; // +1 because of time
+			const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
 			for (int i = 1; i < startIndex; i++) {
 				m_DataContainer.setData<double>(i, message_index, NAN);
 			}
-			for (int i = startIndex; i < startIndex + values.length(); i++) {
+			for (int i = startIndex; i < startIndex + values.size(); i++) {
 				m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
 			}
-			for (int i = startIndex + values.length(); i < m_DataContainer.size(); i++) {
+			for (int i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
 				m_DataContainer.setData<double>(i, message_index, NAN);
 			}
 			message_index++;
@@ -197,25 +217,39 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		auto it = v.constBegin();
 		bool valid = false;
 		do {
-			const auto message = *it;
-			if (!message)
+			const auto ohb = *it;
+			if (!ohb)
 				break;
-			const auto values = m_dbcParser.parseMessage(message->id, message->data);
+			int id;
+			std::vector<double> values;
+			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
+				const auto message = reinterpret_cast<const Vector::BLF::CanMessage*>(ohb);
+				id = message->id;
+				m_dbcParser.parseMessage(message->id, message->data, values);
+			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
+				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
+				id = message->id;
+				m_dbcParser.parseMessage(message->id, message->data, values);
+			} else
+				return 0; // TODO: might lead to a memory leak! Timestamps vectors
 			it++;
-			if (values.length() == 0) {
+			if (values.size() == 0) {
 				// id is not available in the dbc file, so it is not possible to decode
-				DEBUG("Unable to decode message: " << message->id);
+				DEBUG("Unable to decode message: " << id);
 				continue;
 			}
-			valid = true;
-			const auto startIndex = idIndexTable.value(message->id) + 1; // +1 because of time
-			for (int i = 1; i < startIndex; i++) {
+			valid = true; // message was in the dbc file and can be parsed
+			// Fill all data with zeros, because no previous value is available
+			const std::vector<double>::size_type startIndex = idIndexTable.value(id) + 1; // +1 because of time
+			for (std::vector<double>::size_type i = 1; i < startIndex; i++) {
 				m_DataContainer.setData<double>(i, 0, 0);
 			}
-			for (int i = startIndex; i < startIndex + values.length(); i++) {
+			// Fill with first valid message
+			for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++) {
 				m_DataContainer.setData<double>(i, 0, values.at(i - startIndex));
 			}
-			for (int i = startIndex + values.length(); i < m_DataContainer.size(); i++) {
+			// Fill all data with zeros, because no previous value is available
+			for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
 				m_DataContainer.setData<double>(i, 0, 0);
 			}
 		} while (!valid);
@@ -223,23 +257,34 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		int message_index = 1;
 		for (; it != v.end(); it++) {
 			const auto message = *it;
-            if (!message)
-                break;
-			const auto values = m_dbcParser.parseMessage(message->id, message->data);
-			if (values.length() == 0) {
+			if (!message)
+				break;
+			int id;
+			std::vector<double> values;
+			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
+				const auto message = reinterpret_cast<const Vector::BLF::CanMessage*>(ohb);
+				id = message->id;
+				m_dbcParser.parseMessage(message->id, message->data, values);
+			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
+				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
+				id = message->id;
+				m_dbcParser.parseMessage(message->id, message->data, values);
+			} else
+				return 0;
+			if (values.size() == 0) {
 				// id is not available in the dbc file, so it is not possible to decode
-				DEBUG("Unable to decode message: " << message->id);
+				DEBUG("Unable to decode message: " << id);
 				continue;
 			}
-			const auto startIndex = idIndexTable.value(message->id) + 1; // +1 because of time
-			for (int i = 1; i < startIndex; i++) {
+			const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
+			for (std::vector<double>::size_type i = 1; i < startIndex; i++) {
 				const auto prevValue = m_DataContainer.data<double>(i, message_index - 1);
 				m_DataContainer.setData<double>(i, message_index, prevValue);
 			}
-			for (int i = startIndex; i < startIndex + values.length(); i++) {
+			for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++) {
 				m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
 			}
-			for (int i = startIndex + values.length(); i < m_DataContainer.size(); i++) {
+			for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
 				const auto prevValue = m_DataContainer.data<double>(i, message_index - 1);
 				m_DataContainer.setData<double>(i, message_index, prevValue);
 			}
@@ -253,8 +298,8 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	else
 		delete timestamps_seconds;
 
-    for (const auto& message : v)
-        delete message;
+	for (const auto& message : v)
+		delete message;
 
 	if (!m_DataContainer.squeeze())
 		return 0;

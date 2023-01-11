@@ -11,7 +11,8 @@ public:
 	bool isValid();
 	bool parseFile(const QString& filename);
 
-	QVector<double> parseMessage(const uint32_t id, const std::vector<uint8_t>& data);
+	bool parseMessage(const uint32_t id, const std::vector<uint8_t>& data, std::vector<double>& out);
+	bool parseMessage(const uint32_t id, const std::array<uint8_t, 8>& data, std::vector<double>& out);
 
 	/*!
 	 * \brief numberSignals

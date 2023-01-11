@@ -17,7 +17,8 @@ class BLFFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-    void test();
+	void test();
+
 private:
 };
 #endif // BLFFILTERTEST_H
