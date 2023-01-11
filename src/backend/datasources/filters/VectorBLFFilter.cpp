@@ -181,7 +181,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
 		int message_index = 0;
-		for (const auto& ohb : v) {
+		for (const auto ohb : v) {
 			int id;
 			std::vector<double> values;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
@@ -256,8 +256,8 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 		int message_index = 1;
 		for (; it != v.end(); it++) {
-			const auto message = *it;
-			if (!message)
+			const auto ohb = *it;
+			if (!ohb)
 				break;
 			int id;
 			std::vector<double> values;

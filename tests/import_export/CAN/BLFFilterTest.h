@@ -13,15 +13,27 @@
 #include "../../CommonTest.h"
 #include <QtTest>
 
+namespace Vector {
+namespace BLF {
+class CanMessage2;
+} // namespace BLF
+} // namespace Vector
+
 class BLFFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-    void testInvalidBLF();
-    void testNotFoundBLF();
-    void testInvalidDBC();
-    void testValidBLFValidDBCSingleMessage();
+	void testInvalidBLF();
+	void testNotFoundBLF();
+	void testInvalidDBC();
+	void testValidBLFValidDBCSingleMessage();
+	void testUsePreviousValue();
+	void testUseNAN();
 
 private:
+	// Helper functions
+	void createDBCFile(const QString& filename, const std::string& content);
+	Vector::BLF::CanMessage2* createCANMessage(uint32_t id, uint64_t timestamp, const std::vector<uint8_t>& data);
+	void createBLFFile(const QString& filename, QVector<Vector::BLF::CanMessage2*> messages);
 };
 #endif // BLFFILTERTEST_H
