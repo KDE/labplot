@@ -118,6 +118,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	Vector::BLF::File file;
 	file.open(fileName.toLocal8Bit().data());
 
+	// 1. Reading in messages
 	QVector<const Vector::BLF::ObjectHeaderBase*> v;
 	Vector::BLF::ObjectHeaderBase* ohb = nullptr;
 	QVector<uint32_t> ids;
@@ -153,11 +154,11 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		}
 	}
 
-	// Create vector names and fill datacontainer
+	// 2. Create vector names
 	QHash<uint32_t, int> idIndexTable;
 	vectorNames = m_dbcParser.signals(ids, idIndexTable);
 
-	// Assign timestamps and allocate memory
+	// 3. allocate memory
 	if (convertTimeToSeconds) {
 		auto* vector = new QVector<double>();
 		vector->resize(message_counter);
@@ -173,6 +174,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		m_DataContainer.appendVector(vector, AbstractColumn::ColumnMode::Double);
 	}
 
+	// 4. fill datacontainer
 	int message_index = 0;
 	bool timeInNS = true;
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
@@ -286,6 +288,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		}
 	}
 
+	// 5. add Time column to vector Names
 	if (convertTimeToSeconds)
 		vectorNames.prepend(QObject::tr("Time_s")); // Must be done after allocating memory
 	else if (timeInNS)
@@ -299,6 +302,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	if (!m_DataContainer.resize(message_index))
 		return 0;
 
+	// Use message_counter here, because it will be used as reference for caching
 	m_parseState = ParseState(message_counter);
 	return message_index;
 }
