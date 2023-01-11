@@ -17,9 +17,10 @@ class BLFFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void test();
     void testInvalidBLF();
     void testNotFoundBLF();
+    void testInvalidDBC();
+    void testValidBLFValidDBCSingleMessage();
 
 private:
 };
