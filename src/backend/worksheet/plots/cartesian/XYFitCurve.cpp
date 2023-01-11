@@ -1789,6 +1789,8 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		q->setUndoAware(true);
 	} else {
 		DEBUG(Q_FUNC_INFO << ", Clear columns")
+		xColumn->invalidateProperties();
+		yColumn->invalidateProperties();
 		xVector->clear();
 		yVector->clear();
 		// TODO: residualsVector->clear();
