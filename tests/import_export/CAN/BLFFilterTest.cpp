@@ -282,16 +282,17 @@ void BLFFilterTest::testUseNAN() {
 	QVERIFY(dbcFile.open());
 	const auto dbcContent = R"(BO_ 234 MSG1: 8 Vector__XXX
  SG_ Msg1Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
- SG_ MsgSig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
+ SG_ Msg1Sig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "km/h" Vector__XXX
 BO_ 123 MSG2: 8 Vector__XXX
- SG_ Msg2Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
- SG_ Msg2Sig1 : 8|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
+ SG_ Msg2Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "mm" Vector__XXX
+ SG_ Msg2Sig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "m" Vector__XXX
 )";
 	createDBCFile(dbcFile.fileName(), dbcContent);
 
 	// Start Test
 
 	VectorBLFFilter filter;
+	filter.setConvertTimeToSeconds(true);
 	filter.setTimeHandlingMode(CANFilter::TimeHandling::ConcatNAN);
 	QCOMPARE(filter.isValid(blfFileName.fileName()), true);
 
@@ -304,6 +305,7 @@ BO_ 123 MSG2: 8 Vector__XXX
 	{
 		// Time
 		const auto* c = s.column(0);
+		QCOMPARE(c->name(), QStringLiteral("Time_s"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{5e-9, 6e-9, 8e-9, 10e-9, 12e-9, 14e-9};
@@ -316,6 +318,7 @@ BO_ 123 MSG2: 8 Vector__XXX
 	{
 		// Msg1Sig1
 		const auto* c = s.column(1);
+		QCOMPARE(c->name(), QStringLiteral("Msg1Sig1_C"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{0x01, NAN, NAN, 0xD3, 0xE1, 0xD1};
@@ -328,6 +331,7 @@ BO_ 123 MSG2: 8 Vector__XXX
 	{
 		// Msg1Sig2
 		const auto* c = s.column(2);
+		QCOMPARE(c->name(), QStringLiteral("Msg1Sig2_km/h"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{0x02, NAN, NAN, 0xB2, 0xC7, 0xC7};
@@ -340,6 +344,7 @@ BO_ 123 MSG2: 8 Vector__XXX
 	{
 		// Msg2Sig1
 		const auto* c = s.column(3);
+		QCOMPARE(c->name(), QStringLiteral("Msg2Sig1_mm"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{NAN, 0xFF, 0x23, NAN, NAN, NAN};
@@ -352,6 +357,7 @@ BO_ 123 MSG2: 8 Vector__XXX
 	{
 		// Msg2Sig2
 		const auto* c = s.column(4);
+		QCOMPARE(c->name(), QStringLiteral("Msg2Sig2_m"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{NAN, 0xA2, 0xE2, NAN, NAN, NAN};
