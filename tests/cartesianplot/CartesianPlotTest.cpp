@@ -23,7 +23,9 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 
 #include <QAction>
 #include <QUndoStack>
@@ -895,6 +897,57 @@ void CartesianPlotTest::invalidcSystem() {
 		// CHECK_SCALE_PLOT(plot, 1, Dimension::X, ax, bx, 0);
 		// CHECK_SCALE_PLOT(plot, 1, Dimension::Y, ay, by, 0);
 	}
+}
+
+void CartesianPlotTest::autoScaleFitCurveCalculation() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	QVERIFY(view != nullptr);
+	Q_EMIT worksheet->useViewSizeRequested(); /* To init the worksheet view actions */
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* equationCurve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	equationCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+	plot->addChild(equationCurve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("1");
+	data.count = 10;
+	data.expression1 = QStringLiteral("x");
+	equationCurve->setEquationData(data);
+	equationCurve->recalculate();
+
+	CHECK_RANGE(plot, equationCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, 0, 1);
+
+	auto* fitCurve = new XYFitCurve(QStringLiteral("Fit"));
+	fitCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+	plot->addChild(fitCurve);
+
+	XYFitCurve::FitData f;
+	f.autoRange = false;
+	f.fitRange = Range<double>(0, 1);
+	f.autoEvalRange = false;
+	f.evalRange = Range<double>(0, 3); // larger than fit range
+	f.modelCategory = nsl_fit_model_basic;
+	f.modelType = nsl_fit_model_polynomial;
+	f.degree = 1; // linear
+	f.model = QStringLiteral("c0 + c1*x");
+	fitCurve->setFitData(f);
+	fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+	fitCurve->setDataSourceCurve(equationCurve);
+	fitCurve->recalculate();
+
+	CHECK_RANGE(plot, equationCurve, Dimension::X, 0, 3);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, 0, 3);
 }
 
 QTEST_MAIN(CartesianPlotTest)
