@@ -277,6 +277,8 @@ void CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSou
 		return;
 
 	int rows = readDataFromFile(fileName, lines);
+    if (rows == 0)
+        return;
 
 	auto dc = m_DataContainer.dataContainer();
 	const int columnOffset = dataSource->prepareImport(dc, mode, rows, vectorNames.length(), vectorNames, columnModes(), false);

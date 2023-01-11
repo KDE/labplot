@@ -55,10 +55,12 @@ bool VectorBLFFilter::isValid(const QString& filename) {
 	try {
 		Vector::BLF::File f;
 		f.open(filename.toLocal8Bit().data());
-		f.close();
-		return true;
+        if (!f.is_open())
+            return false; // No file
+        f.close();
+        return true;
 	} catch (Vector::BLF::Exception e) {
-		return false;
+        return false; // Signature was invalid or something else
 	}
 	return false;
 }
@@ -221,6 +223,8 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		int message_index = 1;
 		for (; it != v.end(); it++) {
 			const auto message = *it;
+            if (!message)
+                break;
 			const auto values = m_dbcParser.parseMessage(message->id, message->data);
 			if (values.length() == 0) {
 				// id is not available in the dbc file, so it is not possible to decode
@@ -249,12 +253,11 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	else
 		delete timestamps_seconds;
 
+    for (const auto& message : v)
+        delete message;
+
 	if (!m_DataContainer.squeeze())
 		return 0;
-
-	for (const auto& message : v) {
-		delete message;
-	}
 
 	m_parseState = ParseState(message_counter);
 	return message_counter;
