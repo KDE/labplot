@@ -18,7 +18,7 @@ public:
 
 	void applyFilterSettings(VectorBLFFilter* filter) const;
 
-	void saveSettings();
+	void saveSettings() const;
 	void loadSettings() const;
 
 private:

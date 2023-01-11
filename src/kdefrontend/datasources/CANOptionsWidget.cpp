@@ -14,6 +14,8 @@ CANOptionsWidget::CANOptionsWidget(QWidget* parent)
 	ui->cbImportMode->addItem(tr("Use previous value"), (int)VectorBLFFilter::TimeHandling::ConcatPrevious);
 	// Not yet implemented
 	// ui->cbImportMode->addItem(tr("Separate time columns"), (int)VectorBLFFilter::TimeHandling::Separate);
+
+	loadSettings();
 }
 
 CANOptionsWidget::~CANOptionsWidget() {
@@ -23,9 +25,11 @@ CANOptionsWidget::~CANOptionsWidget() {
 void CANOptionsWidget::applyFilterSettings(VectorBLFFilter* filter) const {
 	filter->setConvertTimeToSeconds(ui->cbConvertSeconds->isChecked());
 	filter->setTimeHandlingMode(static_cast<VectorBLFFilter::TimeHandling>(ui->cbImportMode->itemData(ui->cbImportMode->currentIndex()).toInt()));
+
+	saveSettings();
 }
 
-void CANOptionsWidget::saveSettings() {
+void CANOptionsWidget::saveSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportCANOptions");
 
 	conf.writeEntry("ConvertSeconds", ui->cbConvertSeconds->isChecked());
