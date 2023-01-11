@@ -96,6 +96,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	uint64_t message_counter = 0;
 	QVector<qint64>* timestamps = new QVector<qint64>();
 	QVector<double>* timestamps_seconds = new QVector<double>();
+	bool timestamp_nanoseconds = true;
 	{
 		PERFTRACE(QLatin1String(Q_FUNC_INFO));
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
@@ -120,9 +121,11 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 				switch (oh->objectFlags) {
 				case Vector::BLF::ObjectHeader::ObjectFlags::TimeTenMics:
 					timestamp_seconds = (double)timestamp / pow(10, 5);
+					timestamp_nanoseconds = false;
 					break;
 				case Vector::BLF::ObjectHeader::ObjectFlags::TimeOneNans:
 					timestamp_seconds = (double)timestamp / pow(10, 9);
+					timestamp_nanoseconds = true;
 					break;
 				}
 			}
@@ -134,9 +137,11 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 				switch (oh2->objectFlags) {
 				case Vector::BLF::ObjectHeader2::ObjectFlags::TimeTenMics:
 					timestamp_seconds = (double)timestamp / pow(10, 5);
+					timestamp_nanoseconds = false;
 					break;
 				case Vector::BLF::ObjectHeader2::ObjectFlags::TimeOneNans:
 					timestamp_seconds = (double)timestamp / pow(10, 9);
+					timestamp_nanoseconds = true;
 					break;
 				}
 			}
@@ -177,7 +182,12 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		m_DataContainer.appendVector(vector, AbstractColumn::ColumnMode::Double);
 	}
 
-	vectorNames.prepend(QStringLiteral("Time")); // Must be done after allocating memory
+	if (convertTimeToSeconds)
+		vectorNames.prepend(QStringLiteral("Time_s")); // Must be done after allocating memory
+	else if (timestamp_nanoseconds)
+		vectorNames.prepend(QStringLiteral("Time_ns")); // Must be done after allocating memory
+	else
+		vectorNames.prepend(QStringLiteral("Time_10µs")); // Must be done after allocating memory
 
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
 		int message_index = 0;
