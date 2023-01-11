@@ -102,8 +102,8 @@ void BLFFilterTest::test() {
     }
 
     {
+        // Valid blf and valid dbc
         filter.setDBCFile(dbcFile.fileName());
-        // File is valid, but dbc file not
         Spreadsheet s(QStringLiteral("TestSpreadsheet"), false);
         filter.readDataFromFile(blfFileName.fileName(), &s);
         QCOMPARE(s.columnCount(), 1);
