@@ -10,11 +10,9 @@
 
 #include "NSLPeakTest.h"
 
-#include <fstream>
-
-extern "C" {
 #include "backend/nsl/nsl_peak.h"
-}
+
+#include <fstream>
 
 //##############################################################################
 //#################  simple peak find

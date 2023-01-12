@@ -10,13 +10,11 @@
 #ifndef NSL_PEAK_H
 #define NSL_PEAK_H
 
-#include <stdlib.h>
+#include <cmath>
 
-/* simple peak detection by checking values */
-/* returns indices of the peaks in data. np is the number of them */
-/* caller must free memory */
-size_t* nsl_peak_detect(double* data, size_t n, size_t* np);
+template<typename T>
+size_t* nsl_peak_detect(T* data, size_t n, size_t* np, T height = -INFINITY, size_t distance = 0);
 
-/* more advanced peak detection (CWT, etc.)*/
+/* TODO: more advanced peak detection (CWT, etc.)*/
 
 #endif

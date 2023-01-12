@@ -1,5 +1,5 @@
 /*
-	File                 : nsl_peak.c
+	File                 : nsl_peak.cpp
 	Project              : LabPlot
 	Description          : NSL peak detection and releated methods
 	--------------------------------------------------------------------
@@ -8,33 +8,19 @@
 */
 
 #include "nsl_peak.h"
+#include "backend/lib/macros.h"
 
-#include <math.h>
-#include <stdio.h>
-
-/* simple peak detection
- */
-/* default options for nsl_peak_detect() */
-nsl_peak_detect_options nsl_peak_detect_default_options() {
-	nsl_peak_detect_options options;
-
-	options.height = -INFINITY;
-	options.distance = 0;
-
-	return options;
-}
-size_t* nsl_peak_detect(double* data, size_t n, size_t* np) {
-	return nsl_peak_detect_opt(data, n, np, nsl_peak_detect_default_options());
-}
-size_t* nsl_peak_detect_opt(double* data, size_t n, size_t* np, nsl_peak_detect_options options) {
-	printf("options: h=%g d=%lu\n", options.height, options.distance);
+// simple peak detection
+template<typename T>
+size_t* nsl_peak_detect(T* data, size_t n, size_t* np, T height, size_t distance) {
+	DEBUG(Q_FUNC_INFO << ", h = " << height << ", d = " << distance)
 	if (n <= 1) // nothing to do
-		return NULL;
+		return nullptr;
 
 	size_t* peaks = (size_t*)malloc(n * sizeof(size_t));
 	if (!peaks) {
-		fprintf(stderr, "ERROR allocating memory for peak detection\n");
-		return NULL;
+		WARN("ERROR allocating memory for peak detection")
+		return nullptr;
 	}
 
 	// find peaks
@@ -54,10 +40,13 @@ size_t* nsl_peak_detect_opt(double* data, size_t n, size_t* np, nsl_peak_detect_
 	}
 
 	if (!realloc(peaks, *np * sizeof(size_t))) { // should never happen since *np <= n
-		fprintf(stderr, "ERROR reallocating memory for peak detection\n");
+		WARN("ERROR reallocating memory for peak detection")
 		free(peaks);
-		return NULL;
+		return nullptr;
 	}
 
 	return peaks;
 }
+
+// needs explicit instantiation
+template size_t* nsl_peak_detect<double>(double* data, size_t n, size_t* np, double height, size_t distance);
