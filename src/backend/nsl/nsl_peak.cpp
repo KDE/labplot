@@ -50,3 +50,5 @@ size_t* nsl_peak_detect(T* data, size_t n, size_t* np, T height, size_t distance
 
 // needs explicit instantiation
 template size_t* nsl_peak_detect<double>(double* data, size_t n, size_t* np, double height, size_t distance);
+template size_t* nsl_peak_detect<int>(int* data, size_t n, size_t* np, int height, size_t distance);
+template size_t* nsl_peak_detect<qint64>(qint64* data, size_t n, size_t* np, qint64 height, size_t distance);
