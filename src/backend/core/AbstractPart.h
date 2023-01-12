@@ -12,7 +12,7 @@
 
 #include "AbstractAspect.h"
 
-class PartMdiView;
+class ContentDockWidget;
 class QMenu;
 
 class AbstractPart : public AbstractAspect {
@@ -25,7 +25,7 @@ public:
 	virtual QWidget* view() const = 0;
 	void deleteView() const;
 
-	PartMdiView* mdiSubWindow() const;
+	ContentDockWidget* dockWidget() const;
 	bool hasMdiSubWindow() const;
 
 	QMenu* createContextMenu() override;
@@ -41,7 +41,7 @@ public:
 	virtual void unregisterShortcuts(){};
 
 private:
-	mutable PartMdiView* m_mdiWindow{nullptr};
+	mutable ContentDockWidget* m_dockWidget{nullptr};
 
 protected:
 	mutable QWidget* m_partView{nullptr};

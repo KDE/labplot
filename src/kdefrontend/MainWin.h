@@ -56,6 +56,10 @@ class KRecentFilesAction;
 class KToggleAction;
 class KToggleFullScreenAction;
 
+namespace ads {
+class CDockManager;
+}
+
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/Provider>
 #endif
@@ -87,7 +91,7 @@ public:
 #endif
 
 private:
-	QMdiArea* m_mdiArea{nullptr};
+	ads::CDockManager* m_DockManager;
 	KColorSchemeManager* m_schemeManager{nullptr};
 	QMdiSubWindow* m_currentSubWindow{nullptr};
 	Project* m_project{nullptr};
@@ -208,9 +212,10 @@ private Q_SLOTS:
 	void initGUI(const QString&);
 	// 	QQuickWidget* createWelcomeScreen();
 	// 	void resetWelcomeScreen();
-	void createMdiArea();
+	// void createMdiArea();
+	void createADS();
 	void updateGUI();
-	void updateGUIOnProjectChanges();
+	void updateGUIOnProjectChanges(const QByteArray& windowState = QByteArray());
 	void undo();
 	void redo();
 
@@ -262,7 +267,7 @@ private Q_SLOTS:
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*);
 	void handleCurrentAspectChanged(AbstractAspect*);
-	void handleCurrentSubWindowChanged(QMdiSubWindow*);
+	//	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleShowSubWindowRequested();
 
 	void handleSettingsChanges();

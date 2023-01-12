@@ -153,6 +153,7 @@ public:
 	QDateTime modificationTime;
 	Project* const q;
 	QString fileName;
+	QString windowState;
 	QString author;
 	bool saveCalculations{true};
 	QUndoStack undo_stack;
@@ -264,6 +265,7 @@ Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
 }
 
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
+CLASS_D_ACCESSOR_IMPL(Project, QString, windowState, WindowState, windowState);
 BASIC_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
 BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
@@ -547,6 +549,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
 	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
+	writer->writeAttribute(QStringLiteral("windowState"), d->windowState);
 
 	QString image;
 	if (!thumbnail.isNull()) {
@@ -1067,6 +1070,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 
 	d->author = attribs.value(QStringLiteral("author")).toString();
 	d->saveCalculations = attribs.value(QStringLiteral("saveCalculations")).toInt();
+	d->windowState = attribs.value(QStringLiteral("windowState")).toString();
 
 	return true;
 }

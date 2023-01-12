@@ -449,7 +449,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
-	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
+	${COMMONFRONTEND_DIR}/core/ContentDockWidget.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
 	${COMMONFRONTEND_DIR}/widgets/MemoryWidget.cpp
@@ -536,6 +536,7 @@ target_link_libraries( labplot2lib
 	${LZ4_LIBRARIES}
 	${MATIO_LIBRARIES}
 	${ZLIB_LIBRARIES}
+	ads::qtadvanceddocking
 	)
 
 IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)

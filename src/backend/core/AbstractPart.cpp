@@ -9,7 +9,7 @@
 */
 
 #include "backend/core/AbstractPart.h"
-#include "commonfrontend/core/PartMdiView.h"
+#include "commonfrontend/core/ContentDockWidget.h"
 
 #include <QMenu>
 #include <QStyle>
@@ -25,8 +25,8 @@ AbstractPart::AbstractPart(const QString& name, AspectType type)
 }
 
 AbstractPart::~AbstractPart() {
-	if (m_mdiWindow)
-		delete m_mdiWindow;
+	if (m_dockWidget)
+		delete m_dockWidget;
 }
 
 /**
@@ -45,16 +45,16 @@ AbstractPart::~AbstractPart() {
  * A new view is only created the first time this method is called;
  * after that, a pointer to the pre-existing view is returned.
  */
-PartMdiView* AbstractPart::mdiSubWindow() const {
+ContentDockWidget* AbstractPart::dockWidget() const {
 #ifndef SDK
-	if (!m_mdiWindow)
-		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this));
+	if (!m_dockWidget)
+		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
 #endif
-	return m_mdiWindow;
+	return m_dockWidget;
 }
 
 bool AbstractPart::hasMdiSubWindow() const {
-	return m_mdiWindow;
+	return m_dockWidget;
 }
 
 /*!
@@ -75,7 +75,7 @@ void AbstractPart::deleteView() const {
 	if (m_partView) {
 		delete m_partView;
 		m_partView = nullptr;
-		m_mdiWindow = nullptr;
+		m_dockWidget = nullptr;
 	}
 }
 
@@ -107,22 +107,22 @@ QMenu* AbstractPart::createContextMenu() {
 	menu->addSeparator();
 
 	// window state related actions
-	if (m_mdiWindow) {
-		const QStyle* style = m_mdiWindow->style();
-		if (m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
-			auto* action = menu->addAction(i18n("&Restore"), m_mdiWindow, &QMdiSubWindow::showNormal);
-			action->setIcon(style->standardIcon(QStyle::SP_TitleBarNormalButton));
-		}
+	if (m_dockWidget) {
+		const QStyle* style = m_dockWidget->style();
+		// if (m_dockWidget->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
+		//     auto* action = menu->addAction(i18n("&Restore"), m_dockWidget, &QMdiSubWindow::showNormal);
+		//			action->setIcon(style->standardIcon(QStyle::SP_TitleBarNormalButton));
+		//		}
 
-		if (!(m_mdiWindow->windowState() & Qt::WindowMinimized)) {
-			auto* action = menu->addAction(i18n("Mi&nimize"), m_mdiWindow, &QMdiSubWindow::showMinimized);
-			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMinButton));
-		}
+		// if (!(m_dockWidget->windowState() & Qt::WindowMinimized)) {
+		//     auto* action = menu->addAction(i18n("Mi&nimize"), m_dockWidget, &QMdiSubWindow::showMinimized);
+		//			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMinButton));
+		//		}
 
-		if (!(m_mdiWindow->windowState() & Qt::WindowMaximized)) {
-			auto* action = menu->addAction(i18n("Ma&ximize"), m_mdiWindow, &QMdiSubWindow::showMaximized);
-			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMaxButton));
-		}
+		// if (!(m_dockWidget->windowState() & Qt::WindowMaximized)) {
+		//     auto* action = menu->addAction(i18n("Ma&ximize"), m_dockWidget, &QMdiSubWindow::showMaximized);
+		//			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMaxButton));
+		//		}
 	} else {
 		// if the mdi window was closed, add the "Show" action.
 		// Don't add it for:

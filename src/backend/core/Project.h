@@ -51,6 +51,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, author, Author)
 	CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
 	BASIC_D_ACCESSOR_DECL(bool, saveCalculations, SaveCalculations)
+	CLASS_D_ACCESSOR_DECL(QString, windowState, WindowState)
 
 	void setChanged(const bool value = true);
 	bool hasChanged() const;

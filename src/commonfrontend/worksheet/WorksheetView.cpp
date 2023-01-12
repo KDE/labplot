@@ -22,7 +22,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
-#include "commonfrontend/core/PartMdiView.h"
+#include "commonfrontend/core/ContentDockWidget.h"
 #include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
@@ -55,6 +55,8 @@
 #include <QToolButton>
 #include <QWheelEvent>
 #include <QWidgetAction>
+
+#include <DockManager.h>
 
 #include <limits>
 
@@ -1338,7 +1340,7 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 
 	// select the worksheet in the project explorer and bring the view to the foreground
 	m_worksheet->setSelectedInView(true);
-	m_worksheet->mdiSubWindow()->mdiArea()->setActiveSubWindow(m_worksheet->mdiSubWindow());
+	m_worksheet->dockWidget()->dockManager()->setDockWidgetFocused(m_worksheet->dockWidget());
 
 	event->setAccepted(true);
 }

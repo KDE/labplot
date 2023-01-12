@@ -74,6 +74,9 @@ OPTIONAL_COMPONENTS
 	Parts
 	SyntaxHighlighting
 )
+
+find_package(qtadvanceddocking CONFIG REQUIRED)
+
 # TODO: make NewStuff optional?
 IF (KF${KF_MAJOR_VERSION}NewStuff_FOUND)
 	add_definitions (-DHAVE_KF5_NEW_STUFF)
