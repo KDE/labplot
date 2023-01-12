@@ -471,8 +471,6 @@ void MainWin::createADS() {
 			m_DockManager->removeDockWidget(m.value(e));
 		}
 	});
-	//	connect(m_tileWindowsAction, &QAction::triggered, m_mdiArea, &QMdiArea::tileSubWindows);
-	//	connect(m_cascadeWindowsAction, &QAction::triggered, m_mdiArea, &QMdiArea::cascadeSubWindows);
 	//	connect(m_nextWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
 	//	connect(m_prevWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
 }
@@ -669,14 +667,6 @@ void MainWin::initActions() {
 	m_closeAllWindowsAction = new QAction(i18n("Close &All"), this);
 	m_closeAllWindowsAction->setStatusTip(i18n("Close all the windows"));
 	actionCollection()->addAction(QLatin1String("close all windows"), m_closeAllWindowsAction);
-
-	m_tileWindowsAction = new QAction(i18n("&Tile"), this);
-	m_tileWindowsAction->setStatusTip(i18n("Tile the windows"));
-	actionCollection()->addAction(QLatin1String("tile windows"), m_tileWindowsAction);
-
-	m_cascadeWindowsAction = new QAction(i18n("&Cascade"), this);
-	m_cascadeWindowsAction->setStatusTip(i18n("Cascade the windows"));
-	actionCollection()->addAction(QLatin1String("cascade windows"), m_cascadeWindowsAction);
 
 	m_nextWindowAction = new QAction(QIcon::fromTheme(QLatin1String("go-next-view")), i18n("Ne&xt"), this);
 	actionCollection()->setDefaultShortcut(m_nextWindowAction, QKeySequence::NextChild);

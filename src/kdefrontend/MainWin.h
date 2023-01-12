@@ -163,8 +163,6 @@ private:
 	QAction* m_redoAction;
 	QAction* m_closeWindowAction;
 	QAction* m_closeAllWindowsAction;
-	QAction* m_tileWindowsAction;
-	QAction* m_cascadeWindowsAction;
 	QAction* m_nextWindowAction;
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
