@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-11 00:53+0000\n"
-"PO-Revision-Date: 2023-01-08 10:07+0100\n"
+"PO-Revision-Date: 2023-01-10 07:04+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -14837,10 +14837,9 @@ msgid "Subtract Value"
 msgstr "Valeur de soustraction"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Subtract"
+#, kde-format
 msgid "Subtract:"
-msgstr "Soustraire"
+msgstr "Soustraire :"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
 #, kde-format
@@ -14870,10 +14869,9 @@ msgid "&Divide"
 msgstr "&Diviser"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "Custom Query"
+#, kde-format
 msgid "Custom Value"
-msgstr "Recherche personnalisée"
+msgstr "Valeur personnalisée"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:155
 #, kde-format
