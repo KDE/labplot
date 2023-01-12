@@ -448,47 +448,55 @@ void MainWin::resetWelcomeScreen() {
 */
 
 void MainWin::createADS() {
+	KToolBar* toolbar = toolBar();
+	if (toolbar)
+		toolbar->setVisible(true);
+
+	// Save welcome screen's dimensions.
+	// 	if (m_showWelcomeScreen)
+	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
+
 	m_DockManager = new ads::CDockManager(this);
 	m_DockManager->setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
+	connect(m_DockManager, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
 	// setCentralWidget(m_DockManager); // Automatically done by CDockManager
+
+	connect(m_closeWindowAction, &QAction::triggered, [this] {
+		m_DockManager->removeDockWidget(m_currentDock);
+	});
+	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
+		QMap<QString, ads::CDockWidget*> m(m_DockManager->dockWidgetsMap());
+		QList<ads::CDockWidget*> l;
+		for (auto e : m.keys()) {
+			m_DockManager->removeDockWidget(m.value(e));
+		}
+	});
+	//	connect(m_tileWindowsAction, &QAction::triggered, m_mdiArea, &QMdiArea::tileSubWindows);
+	//	connect(m_cascadeWindowsAction, &QAction::triggered, m_mdiArea, &QMdiArea::cascadeSubWindows);
+	//	connect(m_nextWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
+	//	connect(m_prevWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
 }
 
-///**
-// * @brief Creates a new MDI area, to replace the Welcome Screen as central widget
-// */
-// void MainWin::createMdiArea() {
-//	KToolBar* toolbar = toolBar();
-//	if (toolbar)
-//		toolbar->setVisible(true);
+void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
+	Q_UNUSED(old);
+	if (!now) {
+		updateGUI();
+		return;
+	}
 
-//	// Save welcome screen's dimensions.
-//	// 	if (m_showWelcomeScreen)
-//	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
+	auto* view = static_cast<ContentDockWidget*>(now);
+	if (view == m_currentDock) {
+		// do nothing, if the current sub-window gets selected again.
+		// This event happens, when labplot loses the focus (modal window is opened or the user switches to another application)
+		// and gets it back (modal window is closed or the user switches back to labplot).
+		return;
+	} else
+		m_currentDock = view;
 
-//	m_mdiArea = new QMdiArea;
-//	setCentralWidget(m_mdiArea);
-//	connect(m_mdiArea, &QMdiArea::subWindowActivated, this, &MainWin::handleCurrentSubWindowChanged);
-
-//	// set the view mode of the mdi area
-//	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_General");
-//	int viewMode = group.readEntry("ViewMode", 0);
-//	if (viewMode == 1) {
-//		m_mdiArea->setViewMode(QMdiArea::TabbedView);
-//		int tabPosition = group.readEntry("TabPosition", 0);
-//		m_mdiArea->setTabPosition(QTabWidget::TabPosition(tabPosition));
-//		m_mdiArea->setTabsClosable(true);
-//		m_mdiArea->setTabsMovable(true);
-//		m_tileWindowsAction->setVisible(false);
-//		m_cascadeWindowsAction->setVisible(false);
-//	}
-
-//	connect(m_closeWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::closeActiveSubWindow);
-//	connect(m_closeAllWindowsAction, &QAction::triggered, m_mdiArea, &QMdiArea::closeAllSubWindows);
-//	connect(m_tileWindowsAction, &QAction::triggered, m_mdiArea, &QMdiArea::tileSubWindows);
-//	connect(m_cascadeWindowsAction, &QAction::triggered, m_mdiArea, &QMdiArea::cascadeSubWindows);
-//	connect(m_nextWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
-//	connect(m_prevWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
-//}
+	updateGUI();
+	if (!m_suppressCurrentSubWindowChangedEvent)
+		m_projectExplorer->setCurrentAspect(view->part());
+}
 
 void MainWin::initActions() {
 	// ******************** File-menu *******************************
@@ -1981,26 +1989,6 @@ void MainWin::projectChanged() {
 	m_saveAction->setEnabled(true);
 	m_undoAction->setEnabled(true);
 }
-
-// void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
-//	if (!win) {
-//		updateGUI();
-//		return;
-//	}
-
-// auto* view = static_cast<ContentDockWidget*>(win);
-//	if (view == m_currentSubWindow) {
-//		// do nothing, if the current sub-window gets selected again.
-//		// This event happens, when labplot loses the focus (modal window is opened or the user switches to another application)
-//		// and gets it back (modal window is closed or the user switches back to labplot).
-//		return;
-//	} else
-//		m_currentSubWindow = view;
-
-//	updateGUI();
-//	if (!m_suppressCurrentSubWindowChangedEvent)
-//		m_projectExplorer->setCurrentAspect(view->part());
-//}
 
 void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	// register the signal-slot connections for aspects having a view.

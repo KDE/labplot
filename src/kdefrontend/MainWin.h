@@ -29,6 +29,7 @@ class Spreadsheet;
 class Matrix;
 class GuiObserver;
 class CursorDock;
+class ContentDockWidget;
 class MemoryWidget;
 class CartesianPlot;
 class InfoElementDialog;
@@ -58,6 +59,7 @@ class KToggleFullScreenAction;
 
 namespace ads {
 class CDockManager;
+class CDockWidget;
 }
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -93,7 +95,7 @@ public:
 private:
 	ads::CDockManager* m_DockManager;
 	KColorSchemeManager* m_schemeManager{nullptr};
-	QMdiSubWindow* m_currentSubWindow{nullptr};
+	ContentDockWidget* m_currentDock{nullptr}; // Currently selected dock
 	Project* m_project{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	ProjectExplorer* m_projectExplorer{nullptr};
@@ -214,6 +216,7 @@ private Q_SLOTS:
 	// 	void resetWelcomeScreen();
 	// void createMdiArea();
 	void createADS();
+	void dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now);
 	void updateGUI();
 	void updateGUIOnProjectChanges(const QByteArray& windowState = QByteArray());
 	void undo();
