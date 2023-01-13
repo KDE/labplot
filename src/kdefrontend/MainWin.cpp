@@ -2427,8 +2427,6 @@ void MainWin::handleSettingsChanges() {
 	//			this->updateMdiWindowVisibility();
 	//	}
 
-	m_tileWindowsAction->setVisible(true);
-	m_cascadeWindowsAction->setVisible(true);
 	// 	}
 
 	// window visibility
