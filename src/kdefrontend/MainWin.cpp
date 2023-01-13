@@ -82,7 +82,6 @@
 #include <QDockWidget>
 #include <QElapsedTimer>
 #include <QFileDialog>
-#include <QMdiArea>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMimeData>
@@ -471,8 +470,8 @@ void MainWin::createADS() {
 			m_DockManager->removeDockWidget(m.value(e));
 		}
 	});
-	//	connect(m_nextWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
-	//	connect(m_prevWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
+	// connect(m_nextWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
+	// connect(m_prevWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
 }
 
 void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
@@ -684,18 +683,18 @@ void MainWin::initActions() {
 
 	m_visibilityFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder")), i18n("Current &Folder Only"), windowVisibilityActions);
 	m_visibilityFolderAction->setCheckable(true);
-	m_visibilityFolderAction->setData(static_cast<int>(Project::MdiWindowVisibility::folderOnly));
+	m_visibilityFolderAction->setData(static_cast<int>(Project::DockVisibility::folderOnly));
 
 	m_visibilitySubfolderAction =
 		new QAction(QIcon::fromTheme(QLatin1String("folder-documents")), i18n("Current Folder and &Subfolders"), windowVisibilityActions);
 	m_visibilitySubfolderAction->setCheckable(true);
-	m_visibilitySubfolderAction->setData(static_cast<int>(Project::MdiWindowVisibility::folderAndSubfolders));
+	m_visibilitySubfolderAction->setData(static_cast<int>(Project::DockVisibility::folderAndSubfolders));
 
 	m_visibilityAllAction = new QAction(i18n("&All"), windowVisibilityActions);
 	m_visibilityAllAction->setCheckable(true);
-	m_visibilityAllAction->setData(static_cast<int>(Project::MdiWindowVisibility::allMdiWindows));
+	m_visibilityAllAction->setData(static_cast<int>(Project::DockVisibility::allDocks));
 
-	connect(windowVisibilityActions, &QActionGroup::triggered, this, &MainWin::setMdiWindowVisibility);
+	connect(windowVisibilityActions, &QActionGroup::triggered, this, &MainWin::setDockVisibility);
 
 	// show/hide the status and menu bars
 	//  KMainWindow should provide a menu that allows showing/hiding of the statusbar via showStatusbar()
@@ -981,7 +980,7 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		m_exportAction->setEnabled(false);
 	}
 
-    if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
+	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
@@ -1052,7 +1051,7 @@ void MainWin::updateGUI() {
 	m_touchBar->addSeparator();
 #endif
 
-	if (!m_DockManager /* || !m_DockManager->currentSubWindow()*/) {
+	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
@@ -1275,11 +1274,11 @@ bool MainWin::newProject() {
 	m_currentFolder = m_project;
 
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	auto vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
-	m_project->setMdiWindowVisibility(vis);
-	if (vis == Project::MdiWindowVisibility::folderOnly)
+	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
+	m_project->setDockVisibility(vis);
+	if (vis == Project::DockVisibility::folderOnly)
 		m_visibilityFolderAction->setChecked(true);
-	else if (vis == Project::MdiWindowVisibility::folderAndSubfolders)
+	else if (vis == Project::DockVisibility::folderAndSubfolders)
 		m_visibilitySubfolderAction->setChecked(true);
 	else
 		m_visibilityAllAction->setChecked(true);
@@ -1351,7 +1350,7 @@ bool MainWin::newProject() {
 	connect(m_project, &Project::changed, this, &MainWin::projectChanged);
 	connect(m_project, &Project::requestProjectContextMenu, this, &MainWin::createContextMenu);
 	connect(m_project, &Project::requestFolderContextMenu, this, &MainWin::createFolderContextMenu);
-	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateMdiWindowVisibility);
+	connect(m_project, &Project::mdiWindowVisibilityChanged, this, &MainWin::updateDockWindowVisibility);
 	connect(m_project, &Project::closeRequested, this, &MainWin::closeProject);
 
 	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
@@ -1566,7 +1565,7 @@ void MainWin::openProject(const QString& filename) {
 	updateTitleBar();
 	updateGUIOnProjectChanges(m_project->windowState().toUtf8());
 	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
-	// updateMdiWindowVisibility();
+	updateDockWindowVisibility();
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
 
@@ -2048,7 +2047,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect* aspect) {
 	m_suppressCurrentSubWindowChangedEvent = true;
 	if (aspect->folder() != m_currentFolder) {
 		m_currentFolder = aspect->folder();
-		updateMdiWindowVisibility();
+		updateDockWindowVisibility();
 	}
 
 	m_currentAspect = aspect;
@@ -2079,8 +2078,8 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 		else
 			win = part->dockWidget();
 
-        auto* dock = m_DockManager->findDockWidget(win->windowTitle());
-        if (m_DockManager && dock == nullptr) {
+		auto* dock = m_DockManager->findDockWidget(win->windowTitle());
+		if (m_DockManager && dock == nullptr) {
 			if (dynamic_cast<const Note*>(part))
 				m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win);
 			else
@@ -2092,9 +2091,9 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 			// remove the shortcuts in the system menu to avoid this collision.
 			for (QAction* action : win->titleBarActions())
 				action->setShortcut(QKeySequence());
-        } else if (m_DockManager && dock->isClosed()) {
-            dock->toggleView(true);
-        }
+		} else if (m_DockManager && dock->isClosed()) {
+			dock->toggleView(true);
+		}
 		if (m_DockManager)
 			m_DockManager->setDockWidgetFocused(win);
 	} else {
@@ -2121,8 +2120,8 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 	return;
 }
 
-void MainWin::setMdiWindowVisibility(QAction* action) {
-	m_project->setMdiWindowVisibility((Project::MdiWindowVisibility)(action->data().toInt()));
+void MainWin::setDockVisibility(QAction* action) {
+	m_project->setDockVisibility((Project::DockVisibility)(action->data().toInt()));
 }
 
 /*!
@@ -2148,13 +2147,9 @@ void MainWin::createContextMenu(QMenu* menu) const {
 
 	menu->insertMenu(firstAction, m_newMenu);
 
-	// The tabbed view collides with the visibility policy for the subwindows.
-	// Hide the menus for the visibility policy if the tabbed view is used.
-	if (1 /*m_mdiArea->viewMode() != QMdiArea::TabbedView */) {
-		menu->insertSeparator(firstAction);
-		menu->insertMenu(firstAction, m_visibilityMenu);
-		menu->insertSeparator(firstAction);
-	}
+	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, m_visibilityMenu);
+	menu->insertSeparator(firstAction);
 }
 
 /*!
@@ -2190,24 +2185,24 @@ void MainWin::redo() {
 }
 
 /*!
-	Shows/hides mdi sub-windows depending on the current visibility policy.
+	Shows/hides docks depending on the current visibility policy.
 */
-void MainWin::updateMdiWindowVisibility() const {
+void MainWin::updateDockWindowVisibility() const {
 	auto windows = m_DockManager->dockWidgetsMap();
-	switch (m_project->mdiWindowVisibility()) {
-	case Project::MdiWindowVisibility::allMdiWindows:
+	switch (m_project->dockVisibility()) {
+	case Project::DockVisibility::allDocks:
 		for (auto* window : windows)
 			window->show();
 
 		break;
-	case Project::MdiWindowVisibility::folderOnly:
+	case Project::DockVisibility::folderOnly:
 		for (auto* window : windows) {
 			auto* view = static_cast<ContentDockWidget*>(window);
 			bool visible = view->part()->folder() == m_currentFolder;
 			window->setVisible(visible);
 		}
 		break;
-	case Project::MdiWindowVisibility::folderAndSubfolders:
+	case Project::DockVisibility::folderAndSubfolders:
 		for (auto* window : windows) {
 			auto* view = static_cast<ContentDockWidget*>(window);
 			bool visible = view->part()->isDescendantOf(m_currentFolder);
@@ -2430,15 +2425,15 @@ void MainWin::handleSettingsChanges() {
 	// 	}
 
 	// window visibility
-	auto vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
-	if (m_project && (vis != m_project->mdiWindowVisibility())) {
-		if (vis == Project::MdiWindowVisibility::folderOnly)
+	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
+	if (m_project && (vis != m_project->dockVisibility())) {
+		if (vis == Project::DockVisibility::folderOnly)
 			m_visibilityFolderAction->setChecked(true);
-		else if (vis == Project::MdiWindowVisibility::folderAndSubfolders)
+		else if (vis == Project::DockVisibility::folderAndSubfolders)
 			m_visibilitySubfolderAction->setChecked(true);
 		else
 			m_visibilityAllAction->setChecked(true);
-		m_project->setMdiWindowVisibility(vis);
+		m_project->setDockVisibility(vis);
 	}
 
 	// autosave

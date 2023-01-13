@@ -273,8 +273,8 @@ private Q_SLOTS:
 
 	void handleSettingsChanges();
 
-	void setMdiWindowVisibility(QAction*);
-	void updateMdiWindowVisibility() const;
+	void setDockVisibility(QAction*);
+	void updateDockWindowVisibility() const;
 	void toggleDockWidget(QAction*);
 	void toggleStatusBar(bool);
 	void toggleMenuBar(bool);

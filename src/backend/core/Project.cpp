@@ -142,7 +142,7 @@ public:
 		return mXmlVersion;
 	}
 
-	MdiWindowVisibility mdiWindowVisibility{Project::MdiWindowVisibility::folderOnly};
+	DockVisibility dockVisibility{DockVisibility::folderOnly};
 	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
 
@@ -255,13 +255,13 @@ QMenu* Project::createFolderContextMenu(const Folder* folder) {
 	return menu;
 }
 
-void Project::setMdiWindowVisibility(MdiWindowVisibility visibility) {
-	d->mdiWindowVisibility = visibility;
+void Project::setDockVisibility(DockVisibility visibility) {
+	d->dockVisibility = visibility;
 	Q_EMIT mdiWindowVisibilityChanged();
 }
 
-Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
-	return d->mdiWindowVisibility;
+Project::DockVisibility Project::dockVisibility() const {
+	return d->dockVisibility;
 }
 
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
