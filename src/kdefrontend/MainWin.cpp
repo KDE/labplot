@@ -981,7 +981,7 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		m_exportAction->setEnabled(false);
 	}
 
-	if (!m_DockManager /* || !m_DockManager->currentSubWindow()*/) {
+    if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
