@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-11 00:53+0000\n"
-"PO-Revision-Date: 2023-01-02 07:11\n"
+"PO-Revision-Date: 2023-01-12 10:31\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -9174,10 +9174,9 @@ msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Column Statistics..."
-msgstr "详情"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
 #, kde-format
@@ -9601,10 +9600,9 @@ msgid "%1: column statistics"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Selection in %1"
-msgstr "已选项目"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3176
 #, kde-format
@@ -14430,10 +14428,9 @@ msgid "Subtract Value"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "&Subtract"
+#, kde-format
 msgid "Subtract:"
-msgstr "&减去"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
 #, kde-format
@@ -14463,10 +14460,9 @@ msgid "&Divide"
 msgstr "&拆分"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgid "Custom Value"
-msgstr "自定义"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:155
 #, kde-format
@@ -14481,22 +14477,19 @@ msgid "Mean"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:433
-#, fuzzy, kde-format
-#| msgid "Binary data"
+#, kde-format
 msgid "raw data"
-msgstr "二进制数据"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:440
-#, fuzzy, kde-format
-#| msgid "line"
+#, kde-format
 msgid "baseline"
-msgstr "直线"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:451
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "result"
-msgstr "结果："
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:506
 #, kde-format

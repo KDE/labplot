@@ -6410,12 +6410,12 @@ msgstr "cel·la no vàlida (ignorada en totes les operacions)"
 #: src/backend/worksheet/Background.cpp:103
 #, kde-format
 msgid "%1: filling changed"
-msgstr "%1: s'ha canviat l'ompliment"
+msgstr "%1: s'ha canviat l'emplenament"
 
 #: src/backend/worksheet/Background.cpp:110
 #, kde-format
 msgid "%1: filling position changed"
-msgstr "%1: s'ha canviat la posició de l'ompliment"
+msgstr "%1: s'ha canviat la posició de l'emplenament"
 
 #: src/backend/worksheet/Background.cpp:117
 #, kde-format
@@ -7776,7 +7776,7 @@ msgstr "%1: establix la normalització de l'histograma"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:420
 #, kde-format
 msgid "%1: set binning method"
-msgstr "%1: establix el mètode de l'ompliment"
+msgstr "%1: establix el mètode d'emplenament"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:427
 #, kde-format
@@ -7842,7 +7842,7 @@ msgstr "%1: gira els símbols"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:172
 #, kde-format
 msgid "%1: set symbol filling"
-msgstr "%1: establix l'ompliment del símbol"
+msgstr "%1: establix l'emplenament del símbol"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:179
 #, kde-format
@@ -9128,7 +9128,7 @@ msgstr "Introduïx una fila"
 #: src/commonfrontend/matrix/MatrixView.cpp:614
 #, kde-format
 msgid "Fill the matrix with constant value"
-msgstr "Òmpliga la matriu amb un valor constant"
+msgstr "Emplena la matriu amb un valor constant"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:633
 #, kde-format
@@ -9626,24 +9626,24 @@ msgstr "%1: desemmascara les cel·les seleccionades"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2049
 #, kde-format
 msgid "%1: fill cells with row numbers"
-msgstr "%1: òmpliga les cel·les amb el número de fila"
+msgstr "%1: emplena les cel·les amb el número de fila"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2114
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
-msgstr[0] "%1: òmpliga la columna amb els números de fila"
-msgstr[1] "%1: òmpliga les columnes amb els números de fila"
+msgstr[0] "%1: emplena la columna amb els números de fila"
+msgstr[1] "%1: emplena les columnes amb els números de fila"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2156
 #, kde-format
 msgid "%1: fill cells with random values"
-msgstr "%1: òmpliga les cel·les amb valors aleatoris"
+msgstr "%1: emplena les cel·les amb valors aleatoris"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2276
 #, kde-format
 msgid "%1: fill cells with const values"
-msgstr "%1: òmpliga les cel·les amb valors constants"
+msgstr "%1: emplena les cel·les amb valors constants"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2284
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2306
@@ -9651,7 +9651,7 @@ msgstr "%1: òmpliga les cel·les amb valors constants"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2341
 #, kde-format
 msgid "Fill the selection with constant value"
-msgstr "Òmpliga la selecció amb un valor constant"
+msgstr "Emplena la selecció amb un valor constant"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2426
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2460
@@ -14464,7 +14464,7 @@ msgstr "Genera els valors de la funció"
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:197
 #, kde-format
 msgid "%1: fill matrix with function values"
-msgstr "%1: òmpliga la matriu amb els valors de la funció"
+msgstr "%1: emplena la matriu amb els valors de la funció"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:40
 #, kde-format
@@ -15341,7 +15341,7 @@ msgstr "Variable:"
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
-msgstr[0] "%1: òmpliga la columna amb els valors de la funció"
+msgstr[0] "%1: emplena la columna amb els valors de la funció"
 msgstr[1] "%1: òmpliga les columnes amb els valors de la funció"
 
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:34
@@ -15552,8 +15552,8 @@ msgstr ""
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
-msgstr[0] "%1: òmpliga la columna amb nombres aleatoris no uniformes"
-msgstr[1] "%1: òmpliga les columnes amb nombres aleatoris no uniformes"
+msgstr[0] "%1: emplena la columna amb nombres aleatoris no uniformes"
+msgstr[1] "%1: emplena les columnes amb nombres aleatoris no uniformes"
 
 #: src/kdefrontend/spreadsheet/RescaleDialog.cpp:31
 #, kde-format
