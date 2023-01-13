@@ -2079,7 +2079,8 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 		else
 			win = part->dockWidget();
 
-		if (m_DockManager && m_DockManager->findDockWidget(win->windowTitle()) == nullptr) {
+        auto* dock = m_DockManager->findDockWidget(win->windowTitle());
+        if (m_DockManager && dock == nullptr) {
 			if (dynamic_cast<const Note*>(part))
 				m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win);
 			else
@@ -2091,7 +2092,9 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 			// remove the shortcuts in the system menu to avoid this collision.
 			for (QAction* action : win->titleBarActions())
 				action->setShortcut(QKeySequence());
-		}
+        } else if (m_DockManager && dock->isClosed()) {
+            dock->toggleView(true);
+        }
 		if (m_DockManager)
 			m_DockManager->setDockWidgetFocused(win);
 	} else {
