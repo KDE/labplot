@@ -257,9 +257,9 @@ void DatapickerTest::mapPolarInRadiansToCartesian() {
 	points.logicalPos[0].setX(1);
 	points.logicalPos[0].setY(0);
 	points.logicalPos[1].setX(3);
-	points.logicalPos[1].setY(2.1);
+	points.logicalPos[1].setY(2.1f);
 	points.logicalPos[2].setX(5);
-	points.logicalPos[2].setY(3.8);
+	points.logicalPos[2].setY(3.8f);
 	points.scenePos[0].setX(6.21);
 	points.scenePos[0].setY(7.23);
 	points.scenePos[1].setX(-51.2);
@@ -334,7 +334,7 @@ void DatapickerTest::mapCartesianToLinear() {
 	QPointF point{5, 2343.23};
 
 	Transform t;
-	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(5, 2343.23, 0));
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(5, 2343.23f, 0));
 }
 
 void DatapickerTest::mapCartesianToLnX() {
@@ -343,7 +343,7 @@ void DatapickerTest::mapCartesianToLnX() {
 	QPointF point{5, 2343.23};
 
 	Transform t;
-	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(exp(5), 2343.23, 0));
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(exp(5), 2343.23f, 0));
 }
 
 void DatapickerTest::mapCartesianToLnY() {
@@ -370,7 +370,7 @@ void DatapickerTest::mapCartesianToLog10X() {
 	QPointF point{5, 2343.23};
 
 	Transform t;
-	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(pow(10, 5), 2343.23, 0));
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(pow(10, 5), 2343.23f, 0));
 }
 
 void DatapickerTest::mapCartesianToLog10Y() {
@@ -397,7 +397,7 @@ void DatapickerTest::mapCartesianToPolarInDegree() {
 	QPointF point{5, 30};
 
 	Transform t;
-	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(30.413812651491, 80.537677791974, 0));
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(30.413812651491f, 80.537677791974f, 0));
 }
 
 void DatapickerTest::mapCartesianToPolarInRadians() {
@@ -406,7 +406,7 @@ void DatapickerTest::mapCartesianToPolarInRadians() {
 	QPointF point{5, 30};
 
 	Transform t;
-	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(30.413812651491, 1.4056476493803, 0)); // first is radius, second theta
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(30.413812651491f, 1.4056476493803f, 0)); // first is radius, second theta
 }
 
 // TODO: implement Ternary
@@ -931,7 +931,7 @@ void DatapickerTest::imageAxisPointsChanged() {
 	DatapickerImage::ReferencePoints points;
 	points.logicalPos[0] = QVector3D(-1, 2, 4);
 	points.logicalPos[1] = QVector3D(-5, -867, 236);
-	points.logicalPos[2] = QVector3D(43, -231.2, 234);
+	points.logicalPos[2] = QVector3D(43, -231.2f, 234);
 	points.scenePos[0] = QPointF(-3, 2);
 	points.scenePos[1] = QPointF(-291, 3249);
 	points.scenePos[2] = QPointF(-239, 349);
