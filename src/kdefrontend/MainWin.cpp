@@ -457,6 +457,7 @@ void MainWin::createADS() {
 
 	m_DockManager = new ads::CDockManager(this);
 	m_DockManager->setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
+    //m_DockManager->setConfigFlag(ads::CDockManager::FocusHighlighting, true);
 	connect(m_DockManager, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
 	// setCentralWidget(m_DockManager); // Automatically done by CDockManager
 
@@ -2080,10 +2081,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 
 		auto* dock = m_DockManager->findDockWidget(win->windowTitle());
 		if (m_DockManager && dock == nullptr) {
-			if (dynamic_cast<const Note*>(part))
-				m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win);
-			else
-				m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win);
+            m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win);
 			win->show();
 
 			// Qt provides its own "system menu" for every sub-window. The shortcut for the close-action
