@@ -99,7 +99,23 @@ XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner)
 // when the parent aspect is removed
 XYSmoothCurvePrivate::~XYSmoothCurvePrivate() = default;
 
-bool XYSmoothCurvePrivate::recalculateSpecific() {
+void XYSmoothCurvePrivate::resetResults() {
+	smoothResult = XYSmoothCurve::SmoothResult();
+}
+
+void XYSmoothCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+		// spreadsheet columns as data source
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
+	} else {
+		// curve columns as data source
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+}
+
+bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	DEBUG(Q_FUNC_INFO)
 	QElapsedTimer timer;
 	timer.start();
@@ -112,28 +128,6 @@ bool XYSmoothCurvePrivate::recalculateSpecific() {
 		roughColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		roughVector = static_cast<QVector<double>*>(roughColumn->data());
 		q->addChild(roughColumn);
-	}
-
-	// clear the previous result
-	smoothResult = XYSmoothCurve::SmoothResult();
-
-	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
-	} else {
-		// curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return false;
 	}
 
 	// check column sizes

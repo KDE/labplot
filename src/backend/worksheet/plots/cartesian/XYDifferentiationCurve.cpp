@@ -91,35 +91,28 @@ XYDifferentiationCurvePrivate::XYDifferentiationCurvePrivate(XYDifferentiationCu
 // when the parent aspect is removed
 XYDifferentiationCurvePrivate::~XYDifferentiationCurvePrivate() = default;
 
-// ...
-// see XYFitCurvePrivate
-bool XYDifferentiationCurvePrivate::recalculateSpecific() {
-	QElapsedTimer timer;
-	timer.start();
-
-	// clear the previous result
+void XYDifferentiationCurvePrivate::resetResults() {
 	differentiationResult = XYDifferentiationCurve::DifferentiationResult();
+}
 
+void XYDifferentiationCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
 	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
 	} else {
 		// curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
 	}
+}
 
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		Q_EMIT q->dataChanged();
-		// TODO: why no recalculation like in the other analysisCurves?
-		sourceDataChangedSinceLastRecalc = false;
-		DEBUG(Q_FUNC_INFO << ", MISSING DATA COLUMN")
-		return false;
-	}
+// ...
+// see XYFitCurvePrivate
+bool XYDifferentiationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	QElapsedTimer timer;
+	timer.start();
 
 	// copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;

@@ -91,32 +91,38 @@ XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner)
 // when the parent aspect is removed
 XYCorrelationCurvePrivate::~XYCorrelationCurvePrivate() = default;
 
-bool XYCorrelationCurvePrivate::recalculateSpecific() {
+void XYCorrelationCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+		// spreadsheet columns as data source
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
+	} else {
+		// curve columns as data source (autocorrelation)
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+}
+
+void XYCorrelationCurvePrivate::resetResults() {
+	correlationResult = XYCorrelationCurve::CorrelationResult();
+}
+
+bool XYCorrelationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	DEBUG(Q_FUNC_INFO);
 	QElapsedTimer timer;
 	timer.start();
 
-	// clear the previous result
-	correlationResult = XYCorrelationCurve::CorrelationResult();
-
 	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
 	const AbstractColumn* tmpY2DataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
 		tmpY2DataColumn = y2DataColumn;
 	} else {
 		// curve columns as data source (autocorrelation)
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
 		tmpY2DataColumn = dataSourceCurve->yColumn();
 	}
 
-	if (tmpYDataColumn == nullptr || tmpY2DataColumn == nullptr) {
-		sourceDataChangedSinceLastRecalc = false;
+	if (tmpY2DataColumn == nullptr) {
 		return true;
 	}
 

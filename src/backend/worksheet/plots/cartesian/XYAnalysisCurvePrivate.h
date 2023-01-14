@@ -10,6 +10,7 @@
 #ifndef XYANALYSISCURVEPRIVATE_H
 #define XYANALYSISCURVEPRIVATE_H
 
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 
 class XYAnalysisCurve;
@@ -25,7 +26,9 @@ public:
 	const XYCurve* dataSourceCurve{nullptr};
 
 	void recalculate();
-	virtual bool recalculateSpecific() = 0;
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) = 0;
+	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) = 0;
+	virtual void resetResults() = 0; // Clear the results of the previous calculation
 
 	const AbstractColumn* xDataColumn{nullptr}; //<! column storing the values for the input x-data for the analysis function
 	const AbstractColumn* yDataColumn{nullptr}; //<! column storing the values for the input y-data for the analysis function

@@ -95,35 +95,29 @@ XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* o
 // when the parent aspect is removed
 XYInterpolationCurvePrivate::~XYInterpolationCurvePrivate() = default;
 
-bool XYInterpolationCurvePrivate::recalculateSpecific() {
+void XYInterpolationCurvePrivate::resetResults() {
+	interpolationResult = XYInterpolationCurve::InterpolationResult();
+}
+
+void XYInterpolationCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
+	} else { // curve columns as data source
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+}
+
+bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
-
-	// clear the previous result
-	interpolationResult = XYInterpolationCurve::InterpolationResult();
-
-	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
-	} else { // curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		sourceDataChangedSinceLastRecalc = false;
-		return true;
-	}
 
 	// check column sizes
 	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Number of x and y data points must be equal.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -160,7 +154,6 @@ bool XYInterpolationCurvePrivate::recalculateSpecific() {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Not enough data points available.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -396,7 +389,6 @@ bool XYInterpolationCurvePrivate::recalculateSpecific() {
 	interpolationResult.status = gslErrorToString(status);
 	interpolationResult.elapsedTime = timer.elapsed();
 
-	sourceDataChangedSinceLastRecalc = false;
 	return true;
 }
 

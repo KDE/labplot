@@ -91,32 +91,34 @@ XYConvolutionCurvePrivate::XYConvolutionCurvePrivate(XYConvolutionCurve* owner)
 // when the parent aspect is removed
 XYConvolutionCurvePrivate::~XYConvolutionCurvePrivate() = default;
 
-bool XYConvolutionCurvePrivate::recalculateSpecific() {
+void XYConvolutionCurvePrivate::resetResults() {
+	convolutionResult = XYConvolutionCurve::ConvolutionResult();
+}
+
+void XYConvolutionCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+		// spreadsheet columns as data source
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
+	} else {
+		// curve columns as data source
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+}
+
+bool XYConvolutionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
 
-	// clear the previous result
-	convolutionResult = XYConvolutionCurve::ConvolutionResult();
-
 	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
 	const AbstractColumn* tmpY2DataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
 		tmpY2DataColumn = y2DataColumn;
 	} else {
 		// curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
 		// no y2 column: use standard kernel
-	}
-
-	if (tmpYDataColumn == nullptr) {
-		sourceDataChangedSinceLastRecalc = false;
-		return true;
 	}
 
 	// copy all valid data point for the convolution to temporary vectors

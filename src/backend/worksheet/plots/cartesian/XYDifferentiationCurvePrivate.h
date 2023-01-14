@@ -22,7 +22,9 @@ public:
 	explicit XYDifferentiationCurvePrivate(XYDifferentiationCurve*);
 	~XYDifferentiationCurvePrivate() override;
 
-	virtual bool recalculateSpecific() override;
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
+	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) override;
+	virtual void resetResults() override;
 
 	XYDifferentiationCurve::DifferentiationData differentiationData;
 	XYDifferentiationCurve::DifferentiationResult differentiationResult;

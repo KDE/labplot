@@ -97,29 +97,25 @@ XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* o
 // when the parent aspect is removed
 XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() = default;
 
-bool XYFourierFilterCurvePrivate::recalculateSpecific() {
-	QElapsedTimer timer;
-	timer.start();
-	// clear the previous result
+void XYFourierFilterCurvePrivate::resetResults() {
 	filterResult = XYFourierFilterCurve::FilterResult();
+}
 
-	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
+void XYFourierFilterCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
 	} else {
 		// curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
 	}
+}
 
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		sourceDataChangedSinceLastRecalc = false;
-		return true;
-	}
+bool XYFourierFilterCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	QElapsedTimer timer;
+	timer.start();
 
 	// copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
@@ -189,7 +185,6 @@ bool XYFourierFilterCurvePrivate::recalculateSpecific() {
 		filterResult.available = true;
 		filterResult.valid = false;
 		filterResult.status = i18n("No data points available.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -259,7 +254,6 @@ bool XYFourierFilterCurvePrivate::recalculateSpecific() {
 	filterResult.valid = (status == GSL_SUCCESS);
 	filterResult.status = gslErrorToString(status);
 	filterResult.elapsedTime = timer.elapsed();
-	sourceDataChangedSinceLastRecalc = false;
 	return true;
 }
 

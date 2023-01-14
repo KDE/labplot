@@ -394,7 +394,23 @@ void XYAnalysisCurvePrivate::recalculate() {
 		yVector->clear();
 	}
 
-	if (recalculateSpecific()) {
+	resetResults();
+
+	const AbstractColumn* tmpXDataColumn = nullptr;
+	const AbstractColumn* tmpYDataColumn = nullptr;
+	prepareTmpDataColumn(&tmpXDataColumn, &tmpYDataColumn);
+
+	if (!tmpXDataColumn || !tmpYDataColumn) {
+		sourceDataChangedSinceLastRecalc = false;
+		// recalcLogicalPoints(); TODO: needed?
+		Q_EMIT q->dataChanged();
+		return;
+	}
+
+	bool result = recalculateSpecific(tmpXDataColumn, tmpYDataColumn);
+	sourceDataChangedSinceLastRecalc = false;
+
+	if (result) {
 		// redraw the curve
 		recalcLogicalPoints();
 		Q_EMIT q->dataChanged();

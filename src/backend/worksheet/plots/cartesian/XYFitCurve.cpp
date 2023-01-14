@@ -1807,43 +1807,39 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	}
 }
 
-bool XYFitCurvePrivate::recalculateSpecific() {
-	QElapsedTimer timer;
-	timer.start();
-
-	// clear the previous result
+void XYFitCurvePrivate::resetResults() {
 	fitResult = XYFitCurve::FitResult();
+}
 
+void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
 	// prepare source data columns
 	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
 	switch (dataSourceType) {
 	case XYAnalysisCurve::DataSourceType::Spreadsheet:
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
 		break;
 	case XYAnalysisCurve::DataSourceType::Curve:
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
 		break;
 	case XYAnalysisCurve::DataSourceType::Histogram:
 		switch (fitData.algorithm) {
 		case nsl_fit_algorithm_lm:
-			tmpXDataColumn = dataSourceHistogram->bins(); // bins
+			*tmpXDataColumn = dataSourceHistogram->bins(); // bins
 			switch (dataSourceHistogram->normalization()) { // TODO: not exactly
 			case Histogram::Normalization::Count:
 			case Histogram::Normalization::CountDensity:
-				tmpYDataColumn = dataSourceHistogram->binValues(); // values
+				*tmpYDataColumn = dataSourceHistogram->binValues(); // values
 				break;
 			case Histogram::Normalization::Probability:
 			case Histogram::Normalization::ProbabilityDensity:
-				tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
+				*tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
 			}
 			break;
 		case nsl_fit_algorithm_ml:
-			tmpXDataColumn = dataSourceHistogram->dataColumn(); // data
-			tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
+			*tmpXDataColumn = dataSourceHistogram->dataColumn(); // data
+			*tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
 		}
 		// debug
 		/*for (int i = 0; i < dataSourceHistogram->bins()->rowCount(); i++)
@@ -1854,13 +1850,11 @@ bool XYFitCurvePrivate::recalculateSpecific() {
 			DEBUG("BINPDValues @ " << i << ": " << dataSourceHistogram->binPDValues()->valueAt(i))
 		*/
 	}
+}
 
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data columns failed!");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return false;
-	}
+bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	QElapsedTimer timer;
+	timer.start();
 
 	// determine range of data
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};

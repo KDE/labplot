@@ -94,17 +94,18 @@ XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransfor
 // when the parent aspect is removed
 XYFourierTransformCurvePrivate::~XYFourierTransformCurvePrivate() = default;
 
-bool XYFourierTransformCurvePrivate::recalculateSpecific() {
+void XYFourierTransformCurvePrivate::resetResults() {
+	transformResult = XYFourierTransformCurve::TransformResult();
+}
+
+void XYFourierTransformCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+	*tmpXDataColumn = xDataColumn;
+	*tmpYDataColumn = yDataColumn;
+}
+
+bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
-
-	// clear the previous result
-	transformResult = XYFourierTransformCurve::TransformResult();
-
-	if (!xDataColumn || !yDataColumn) {
-		sourceDataChangedSinceLastRecalc = false;
-		return true;
-	}
 
 	// copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
@@ -112,16 +113,17 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific() {
 	const double xmin = transformData.xRange.first();
 	const double xmax = transformData.xRange.last();
 
-	int rowCount = std::min(xDataColumn->rowCount(), yDataColumn->rowCount());
+	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
 		// only copy those data where _all_ values (for x and y, if given) are valid
-		if (std::isnan(xDataColumn->valueAt(row)) || std::isnan(yDataColumn->valueAt(row)) || xDataColumn->isMasked(row) || yDataColumn->isMasked(row))
+		if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row)) || tmpXDataColumn->isMasked(row)
+			|| tmpYDataColumn->isMasked(row))
 			continue;
 
 		// only when inside given range
-		if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+		if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+			xdataVector.append(tmpXDataColumn->valueAt(row));
+			ydataVector.append(tmpYDataColumn->valueAt(row));
 		}
 	}
 
@@ -131,7 +133,6 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific() {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -216,7 +217,6 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific() {
 	transformResult.status = gslErrorToString(status);
 	transformResult.elapsedTime = timer.elapsed();
 
-	sourceDataChangedSinceLastRecalc = false;
 	return true;
 }
 

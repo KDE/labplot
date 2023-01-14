@@ -22,7 +22,9 @@ public:
 	explicit XYDataReductionCurvePrivate(XYDataReductionCurve*);
 	~XYDataReductionCurvePrivate() override;
 
-	virtual bool recalculateSpecific() override;
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
+	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) override;
+	virtual void resetResults() override;
 
 	XYDataReductionCurve::DataReductionData dataReductionData;
 	XYDataReductionCurve::DataReductionResult dataReductionResult;

@@ -87,31 +87,25 @@ XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* o
 // when the parent aspect is removed
 XYDataReductionCurvePrivate::~XYDataReductionCurvePrivate() = default;
 
-bool XYDataReductionCurvePrivate::recalculateSpecific() {
-	QElapsedTimer timer;
-	timer.start();
-
-	// clear the previous result
+void XYDataReductionCurvePrivate::resetResults() {
 	dataReductionResult = XYDataReductionCurve::DataReductionResult();
+}
 
-	// TODO: move this too?
-	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
+void XYDataReductionCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
 	} else {
 		// curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
 	}
+}
 
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		sourceDataChangedSinceLastRecalc = false;
-		return true;
-	}
+bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	QElapsedTimer timer;
+	timer.start();
 
 	// copy all valid data point for the data reduction to temporary vectors
 	QVector<double> xdataVector;

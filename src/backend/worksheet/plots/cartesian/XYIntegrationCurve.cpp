@@ -88,34 +88,29 @@ XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner)
 	, q(owner) {
 }
 
+void XYIntegrationCurvePrivate::resetResults() {
+	integrationResult = XYIntegrationCurve::IntegrationResult();
+}
+
+void XYIntegrationCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+		// spreadsheet columns as data source
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
+	} else {
+		// curve columns as data source
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+}
+
 // no need to delete xColumn and yColumn, they are deleted
 // when the parent aspect is removed
 XYIntegrationCurvePrivate::~XYIntegrationCurvePrivate() = default;
 
-bool XYIntegrationCurvePrivate::recalculateSpecific() {
+bool XYIntegrationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
-
-	// clear the previous result
-	integrationResult = XYIntegrationCurve::IntegrationResult();
-
-	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
-	} else {
-		// curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		sourceDataChangedSinceLastRecalc = false;
-		return true;
-	}
 
 	// copy all valid data point for the integration to temporary vectors
 	QVector<double> xdataVector;

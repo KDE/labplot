@@ -20,7 +20,9 @@ class XYHilbertTransformCurvePrivate : public XYAnalysisCurvePrivate {
 public:
 	explicit XYHilbertTransformCurvePrivate(XYHilbertTransformCurve*);
 	~XYHilbertTransformCurvePrivate() override;
-	virtual bool recalculateSpecific() override;
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
+	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) override;
+	virtual void resetResults() override;
 
 	XYHilbertTransformCurve::TransformData transformData;
 	XYHilbertTransformCurve::TransformResult transformResult;
