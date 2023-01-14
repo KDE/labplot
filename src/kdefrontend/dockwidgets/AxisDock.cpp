@@ -592,7 +592,11 @@ void AxisDock::colorChanged(const QColor& color) {
 	// - Minor tick color
 	// - Tick label color
 
-	m_axis->beginMacro(i18n("set axis color"));
+	const int axesCount = m_axesList.count();
+	if (axesCount == 1) {
+		m_axis->beginMacro(i18n("%1: set axis color", m_axis->name()));
+	} else
+		m_axis->beginMacro(i18n("%1 axes: set color", axesCount));
 
 	lineWidget->setColor(color);
 	ui.kcbLabelsFontColor->setColor(color);
