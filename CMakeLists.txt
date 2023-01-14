@@ -75,7 +75,7 @@ OPTIONAL_COMPONENTS
 	SyntaxHighlighting
 )
 
-find_package(qtadvanceddocking CONFIG REQUIRED)
+add_subdirectory(thirdParty)
 
 # TODO: make NewStuff optional?
 IF (KF${KF_MAJOR_VERSION}NewStuff_FOUND)
