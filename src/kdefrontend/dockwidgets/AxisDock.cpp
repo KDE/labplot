@@ -593,9 +593,9 @@ void AxisDock::colorChanged(const QColor& color) {
 	// - Tick label color
 
 	const int axesCount = m_axesList.count();
-	if (axesCount == 1) {
+	if (axesCount == 1)
 		m_axis->beginMacro(i18n("%1: set axis color", m_axis->name()));
-	} else
+	else
 		m_axis->beginMacro(i18n("%1 axes: set color", axesCount));
 
 	lineWidget->setColor(color);
