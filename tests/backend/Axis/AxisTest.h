@@ -26,6 +26,12 @@ private Q_SLOTS:
 	void TestAddingVerticalAxis();
 	void tickLabelRepresentationAutomatic();
 	void tickLabelRepresentationManual();
+	void setAxisColor(); // Set color of all elements
+	void setTitleColor();
+	void setMajorTickColor();
+	void setMinorTickColor();
+	void setLineColor();
+	void setTickLabelColor();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

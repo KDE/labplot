@@ -207,7 +207,7 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(lineWidget, &LineWidget::colorChanged, this, &AxisDock::setAxisColor);
 	connect(majorTicksLineWidget, &LineWidget::colorChanged, this, &AxisDock::setAxisColor);
 	connect(minorTicksLineWidget, &LineWidget::colorChanged, this, &AxisDock::setAxisColor);
-	connect(labelWidget, &LabelWidget::fontColorChangedSignal, this, &AxisDock::setAxisColor);
+	connect(labelWidget, &LabelWidget::labelFontColorChangedSignal, this, &AxisDock::setAxisColor);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -592,18 +592,21 @@ void AxisDock::colorChanged(const QColor& color) {
 	// - Minor tick color
 	// - Tick label color
 
+	m_axis->beginMacro(i18n("set axis color"));
+
+	lineWidget->setColor(color);
 	ui.kcbLabelsFontColor->setColor(color);
+	majorTicksLineWidget->setColor(color);
+	minorTicksLineWidget->setColor(color);
 
 	for (auto* axis : m_axesList) {
-		axis->beginMacro(i18n("%1: set axis color", axis->name()));
-		lineWidget->colorChanged(color);
 		labelWidget->fontColorChanged(color);
 		labelWidget->labelFontColorChanged(color);
-		majorTicksLineWidget->colorChanged(color);
-		minorTicksLineWidget->colorChanged(color);
+		// must be done, because kcbLabelsFontColor is in this class and
+		// because of the CONDITIONAL_LOCK_RETURN this function will not be called
 		axis->setLabelsColor(color);
-		axis->endMacro();
 	}
+	m_axis->endMacro();
 }
 
 /*!
@@ -1453,6 +1456,8 @@ void AxisDock::labelsFontColorChanged(const QColor& color) {
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsColor(color);
+
+	updateAxisColor();
 }
 
 void AxisDock::labelsBackgroundTypeChanged(int index) {
@@ -1721,6 +1726,7 @@ void AxisDock::axisLabelsFontChanged(const QFont& font) {
 }
 void AxisDock::axisLabelsFontColorChanged(const QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
+	updateAxisColor();
 	ui.kcbLabelsFontColor->setColor(color);
 }
 void AxisDock::axisLabelsBackgroundTypeChanged(Axis::LabelsBackgroundType type) {

@@ -42,7 +42,7 @@ private:
 	QList<Axis*> m_axesList;
 	Axis* m_axis{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	LabelWidget* labelWidget;
+	LabelWidget* labelWidget; // Title
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
 	TreeViewComboBox* cbLabelsTextColumn;

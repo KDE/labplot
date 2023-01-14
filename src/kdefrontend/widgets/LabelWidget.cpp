@@ -722,7 +722,6 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 		for (auto* label : m_labelsList)
 			label->setFontColor(color);
 	}
-	Q_EMIT fontColorChangedSignal(color);
 }
 
 void LabelWidget::backgroundColorChanged(const QColor& color) {
@@ -1214,6 +1213,8 @@ void LabelWidget::labelTeXFontChanged(const QFont& font) {
 // this function is only called when the theme is changed. Otherwise the color is coded in the html text.
 // when the theme changes, the whole text should change color regardless of the color it has
 void LabelWidget::labelFontColorChanged(const QColor& color) {
+	Q_EMIT labelFontColorChangedSignal(color);
+
 	QDEBUG(Q_FUNC_INFO << ", COLOR = " << color)
 	CONDITIONAL_LOCK_RETURN;
 	ui.kcbFontColor->setColor(color);

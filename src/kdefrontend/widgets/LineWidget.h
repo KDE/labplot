@@ -30,6 +30,8 @@ public:
 	void loadConfig(const KConfigGroup&);
 	void saveConfig(KConfigGroup&) const;
 
+	void setColor(const QColor&);
+
 private:
 	Ui::LineWidget ui;
 	Line* m_line{nullptr};
@@ -60,6 +62,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void colorChanged(const QColor&);
+
+	friend class AxisTest;
 };
 
 #endif // LINEWIDGET_H

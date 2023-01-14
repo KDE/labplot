@@ -12,10 +12,14 @@
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "src/backend/worksheet/Line.h"
+#include "src/backend/worksheet/TextLabel.h"
 #include "src/backend/worksheet/WorksheetElement.h"
 #include "src/backend/worksheet/plots/cartesian/Axis.h" // already included in CartesianPlot
 #include "src/backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "src/kdefrontend/dockwidgets/AxisDock.h" // access ui elements
+#include "src/kdefrontend/widgets/LabelWidget.h"
+#include "src/kdefrontend/widgets/LineWidget.h"
 
 #include <QUndoStack>
 
@@ -515,5 +519,187 @@ void AxisTest::tickLabelRepresentationManual() {
 }
 
 // TODO: write test switching between numeric and datetime
+
+#define CHECK_TITLE_COLOR(color_)                                                                                                                              \
+	QCOMPARE(a->title()->fontColor(), color_);                                                                                                                 \
+	QCOMPARE(dock.labelWidget->ui.kcbFontColor->color(), color_);
+
+#define CHECK_MAJOR_TICKS_LINE_COLOR(color_)                                                                                                                   \
+	QCOMPARE(a->majorTicksLine()->color(), color_);                                                                                                            \
+	QCOMPARE(dock.majorTicksLineWidget->ui.kcbColor->color(), color_);
+
+#define CHECK_MINOR_TICKS_LINE_COLOR(color_)                                                                                                                   \
+	QCOMPARE(a->minorTicksLine()->color(), color_);                                                                                                            \
+	QCOMPARE(dock.minorTicksLineWidget->ui.kcbColor->color(), color_);
+
+#define CHECK_LINE_COLOR(color_)                                                                                                                               \
+	QCOMPARE(a->line()->color(), color_);                                                                                                                      \
+	QCOMPARE(dock.lineWidget->ui.kcbColor->color(), color_);
+
+#define CHECK_TICK_LABLES_COLOR(color_)                                                                                                                        \
+	QCOMPARE(a->labelsColor(), color_);                                                                                                                        \
+	QCOMPARE(dock.ui.kcbLabelsFontColor->color(), color_);
+
+#define CHECK_COMMON_COLOR(color_)                                                                                                                             \
+	CHECK_TITLE_COLOR(color_);                                                                                                                                 \
+	CHECK_MAJOR_TICKS_LINE_COLOR(color_);                                                                                                                      \
+	CHECK_MINOR_TICKS_LINE_COLOR(color_);                                                                                                                      \
+	CHECK_LINE_COLOR(color_);                                                                                                                                  \
+	CHECK_TICK_LABLES_COLOR(color_);                                                                                                                           \
+	QCOMPARE(dock.ui.kcbAxisColor->color(), color_);
+
+#define CREATE_PROJECT                                                                                                                                         \
+	Project project;                                                                                                                                           \
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));                                                                                                     \
+	QVERIFY(ws != nullptr);                                                                                                                                    \
+	project.addChild(ws);                                                                                                                                      \
+                                                                                                                                                               \
+	auto* p = new CartesianPlot(QStringLiteral("plot"));                                                                                                       \
+	p->setType(CartesianPlot::Type::TwoAxes); /* Otherwise no axis are created */                                                                              \
+	QVERIFY(p != nullptr);                                                                                                                                     \
+	ws->addChild(p);                                                                                                                                           \
+                                                                                                                                                               \
+	auto axes = p->children<Axis>();                                                                                                                           \
+	QCOMPARE(axes.count(), 2);                                                                                                                                 \
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));                                                                                                         \
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));                                                                                                         \
+	auto a = axes.at(0);                                                                                                                                       \
+	AxisDock dock(nullptr);                                                                                                                                    \
+	dock.setAxes({a});                                                                                                                                         \
+	CHECK_COMMON_COLOR(Qt::black);
+
+void AxisTest::setAxisColor() {
+	CREATE_PROJECT
+
+	// set axis color
+	dock.ui.kcbAxisColor->setColor(Qt::red);
+	CHECK_COMMON_COLOR(Qt::red);
+
+	// undo/redo
+	a->undoStack()->undo();
+	CHECK_COMMON_COLOR(Qt::black);
+	a->undoStack()->redo();
+	CHECK_COMMON_COLOR(Qt::red);
+}
+
+void AxisTest::setTitleColor() {
+	CREATE_PROJECT
+
+	// change title color
+	dock.labelWidget->ui.kcbFontColor->setColor(Qt::green);
+	CHECK_TITLE_COLOR(Qt::green);
+	QCOMPARE(dock.ui.kcbAxisColor->color(), Qt::transparent);
+	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_MINOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_LINE_COLOR(Qt::black);
+	CHECK_TICK_LABLES_COLOR(Qt::black);
+
+	a->undoStack()->undo();
+	CHECK_COMMON_COLOR(Qt::black);
+
+	a->undoStack()->redo();
+	CHECK_TITLE_COLOR(Qt::green);
+	QCOMPARE(dock.ui.kcbAxisColor->color(), Qt::transparent);
+	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_MINOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_LINE_COLOR(Qt::black);
+	CHECK_TICK_LABLES_COLOR(Qt::black);
+}
+
+void AxisTest::setMajorTickColor() {
+	CREATE_PROJECT
+
+	// change title color
+	dock.majorTicksLineWidget->setColor(Qt::green);
+	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::green);
+	QCOMPARE(dock.ui.kcbAxisColor->color(), Qt::transparent);
+	CHECK_TITLE_COLOR(Qt::black);
+	CHECK_MINOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_LINE_COLOR(Qt::black);
+	CHECK_TICK_LABLES_COLOR(Qt::black);
+
+	a->undoStack()->undo();
+	CHECK_COMMON_COLOR(Qt::black);
+
+	a->undoStack()->redo();
+	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::green);
+	QCOMPARE(dock.ui.kcbAxisColor->color(), Qt::transparent);
+	CHECK_TITLE_COLOR(Qt::black);
+	CHECK_MINOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_LINE_COLOR(Qt::black);
+	CHECK_TICK_LABLES_COLOR(Qt::black);
+}
+
+void AxisTest::setMinorTickColor() {
+	CREATE_PROJECT
+
+	// change title color
+	dock.minorTicksLineWidget->setColor(Qt::green);
+	CHECK_MINOR_TICKS_LINE_COLOR(Qt::green);
+	QCOMPARE(dock.ui.kcbAxisColor->color(), Qt::transparent);
+	CHECK_TITLE_COLOR(Qt::black);
+	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_LINE_COLOR(Qt::black);
+	CHECK_TICK_LABLES_COLOR(Qt::black);
+
+	a->undoStack()->undo();
+	CHECK_COMMON_COLOR(Qt::black);
+
+	a->undoStack()->redo();
+	CHECK_MINOR_TICKS_LINE_COLOR(Qt::green);
+	QCOMPARE(dock.ui.kcbAxisColor->color(), Qt::transparent);
+	CHECK_TITLE_COLOR(Qt::black);
+	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_LINE_COLOR(Qt::black);
+	CHECK_TICK_LABLES_COLOR(Qt::black);
+}
+
+void AxisTest::setLineColor() {
+	CREATE_PROJECT
+
+	// change title color
+	dock.lineWidget->setColor(Qt::green);
+	CHECK_LINE_COLOR(Qt::green);
+	QCOMPARE(dock.ui.kcbAxisColor->color(), Qt::transparent);
+	CHECK_TITLE_COLOR(Qt::black);
+	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_MINOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_TICK_LABLES_COLOR(Qt::black);
+
+	a->undoStack()->undo();
+	CHECK_COMMON_COLOR(Qt::black);
+
+	a->undoStack()->redo();
+	CHECK_LINE_COLOR(Qt::green);
+	QCOMPARE(dock.ui.kcbAxisColor->color(), Qt::transparent);
+	CHECK_TITLE_COLOR(Qt::black);
+	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_MINOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_TICK_LABLES_COLOR(Qt::black);
+}
+
+void AxisTest::setTickLabelColor() {
+	CREATE_PROJECT
+
+	// change title color
+	dock.ui.kcbLabelsFontColor->setColor(Qt::green);
+	CHECK_TICK_LABLES_COLOR(Qt::green);
+	QCOMPARE(dock.ui.kcbAxisColor->color(), Qt::transparent);
+	CHECK_TITLE_COLOR(Qt::black);
+	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_MINOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_LINE_COLOR(Qt::black);
+
+	a->undoStack()->undo();
+	CHECK_COMMON_COLOR(Qt::black);
+
+	a->undoStack()->redo();
+	CHECK_TICK_LABLES_COLOR(Qt::green);
+	QCOMPARE(dock.ui.kcbAxisColor->color(), Qt::transparent);
+	CHECK_TITLE_COLOR(Qt::black);
+	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_MINOR_TICKS_LINE_COLOR(Qt::black);
+	CHECK_LINE_COLOR(Qt::black);
+}
 
 QTEST_MAIN(AxisTest)

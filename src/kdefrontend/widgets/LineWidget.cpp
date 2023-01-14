@@ -232,7 +232,6 @@ void LineWidget::colorChangedSlot(const QColor& color) {
 		line->setColor(color);
 
 	GuiTools::updatePenStyles(ui.cbStyle, color);
-	Q_EMIT colorChanged(color);
 }
 
 void LineWidget::widthChanged(double value) {
@@ -279,6 +278,8 @@ void LineWidget::lineStyleChanged(Qt::PenStyle style) {
 }
 
 void LineWidget::lineColorChanged(const QColor& color) {
+	Q_EMIT colorChanged(color);
+
 	CONDITIONAL_LOCK_RETURN;
 	ui.kcbColor->setColor(color);
 }
@@ -309,7 +310,7 @@ void LineWidget::load() {
 	} else if (m_prefix == QLatin1String("DropLine"))
 		ui.cbType->setCurrentIndex(static_cast<int>(m_line->dropLineType()));
 
-	ui.kcbColor->setColor(m_line->color());
+	setColor(m_line->color());
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_line->width(), Worksheet::Unit::Point));
 	ui.sbOpacity->setValue(m_line->opacity() * 100);
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
@@ -328,7 +329,7 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 		ui.cbType->setCurrentIndex(group.readEntry("DropLineType", static_cast<int>(m_line->dropLineType())));
 
 	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Style"), static_cast<int>(m_line->style())));
-	ui.kcbColor->setColor(group.readEntry(m_prefix + QStringLiteral("Color"), m_line->color()));
+	setColor(group.readEntry(m_prefix + QStringLiteral("Color"), m_line->color()));
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("Width"), m_line->width()), Worksheet::Unit::Point));
 	ui.sbOpacity->setValue(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_line->opacity()) * 100);
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
@@ -346,4 +347,8 @@ void LineWidget::saveConfig(KConfigGroup& group) const {
 	group.writeEntry(m_prefix + QStringLiteral("Color"), ui.kcbColor->color());
 	group.writeEntry(m_prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry(m_prefix + QStringLiteral("Opacity"), ui.sbOpacity->value() / 100.0);
+}
+
+void LineWidget::setColor(const QColor& color) {
+	ui.kcbColor->setColor(color);
 }
