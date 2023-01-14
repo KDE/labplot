@@ -1224,7 +1224,7 @@ private:
 	CartesianPlot::Private* m_target;
 	int m_index;
 	Dimension m_dimension;
-	Range<double> m_otherValue;
+	Range<double> m_otherValue; // old value in redo, new value in undo
 };
 
 void CartesianPlot::setRange(const Dimension dim, const int index, const Range<double>& range) {

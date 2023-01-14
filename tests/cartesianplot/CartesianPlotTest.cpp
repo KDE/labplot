@@ -19,6 +19,7 @@
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotPrivate.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
@@ -756,8 +757,6 @@ void CartesianPlotTest::rangeFormatNonDefaultRange() {
  * Plot with 2 CoordinateSystems (with common x range), but the second has invalid start end (0, 0).
  * This scenario shall not destroy the x range when zooming in
  *
- * This is a legacy test, which is now anymore possible, because setting a range with same start
- * and end point is anymore possible
  */
 void CartesianPlotTest::invalidcSystem() {
 	Project project;
@@ -812,8 +811,38 @@ void CartesianPlotTest::invalidcSystem() {
 	range.setFormat(RangeT::Format::Numeric);
 	range.setAutoScale(false);
 	range.setScale(RangeT::Scale::Linear);
-	// does not change the range, because it is invalid
-	plot->setRange(Dimension::Y, 1, range);
+
+	{
+		// plot->setRange(Dimension::Y, 1, range); // does not work
+		// Implementation of setRange() must be used, because setRange() uses check to check if
+		// the range is valid, which it isn't in this test. To test neverthless and not removing a test
+		// use directly the implementation
+		int index = 1;
+		auto dimension = Dimension::Y;
+		auto otherValue = range;
+		auto plotPrivate = plot->d_func();
+		plotPrivate->setRangeDirty(dimension, index, true);
+		auto tmp = plotPrivate->rangeConst(dimension, index);
+		plotPrivate->setRange(dimension, index, otherValue);
+		otherValue = tmp;
+		plotPrivate->retransformScale(dimension, index, true);
+		Dimension dim_other = Dimension::Y;
+		if (dimension == Dimension::Y)
+			dim_other = Dimension::X;
+
+		QVector<int> scaledIndices;
+		for (int i = 0; i < plotPrivate->q->coordinateSystemCount(); i++) {
+			auto cs = plotPrivate->q->coordinateSystem(i);
+			auto index_other = cs->index(dim_other);
+			if (cs->index(dimension) == index && scaledIndices.indexOf(index_other) == -1) {
+				scaledIndices << index_other;
+				if (plotPrivate->q->autoScale(dim_other, index_other) && plotPrivate->q->scaleAuto(dim_other, index_other, false))
+					plotPrivate->retransformScale(dim_other, index_other);
+			}
+		}
+		plotPrivate->q->WorksheetElementContainer::retransform();
+		Q_EMIT plotPrivate->q->rangeChanged(dimension, index, plotPrivate->rangeConst(dimension, index));
+	}
 
 	// Recalculate scales is triggered
 	{
@@ -822,7 +851,7 @@ void CartesianPlotTest::invalidcSystem() {
 		CHECK_RANGE_CSYSTEMINDEX(plot, 0, Dimension::X, 0, 1);
 		CHECK_RANGE_CSYSTEMINDEX(plot, 0, Dimension::Y, 0, 1);
 		CHECK_RANGE_CSYSTEMINDEX(plot, 1, Dimension::X, 0, 1);
-		CHECK_RANGE_CSYSTEMINDEX(plot, 1, Dimension::Y, 0, 1); // Because not changed it is not (0, 0)
+		CHECK_RANGE_CSYSTEMINDEX(plot, 1, Dimension::Y, 0, 0);
 		const Range<double> plotSceneRangeX = {plot->dataRect().x(), plot->dataRect().x() + plot->dataRect().width()};
 		const Range<double> plotSceneRangeY = {plot->dataRect().y() + plot->dataRect().height(), plot->dataRect().y()};
 
@@ -834,37 +863,38 @@ void CartesianPlotTest::invalidcSystem() {
 
 		CHECK_SCALE_PLOT(plot, 0, Dimension::X, ax, bx, 0);
 		CHECK_SCALE_PLOT(plot, 0, Dimension::Y, ay, by, 0);
+		// Don't care what the second cSystem has, because it is invalid
 		// CHECK_SCALE_PLOT(plot, 1, Dimension::X, ax, bx, 0);
 		// CHECK_SCALE_PLOT(plot, 1, Dimension::Y, ay, by, 0);
 	}
 
-	//	QCOMPARE(plot->mouseMode(), CartesianPlot::MouseMode::ZoomXSelection);
-	//	plot->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
-	//	plot->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
-	//	plot->mouseReleaseZoomSelectionMode(-1);
+	QCOMPARE(plot->mouseMode(), CartesianPlot::MouseMode::ZoomXSelection);
+	plot->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
+	plot->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
+	plot->mouseReleaseZoomSelectionMode(-1);
 
-	//	{
-	//		QCOMPARE(plot->coordinateSystemCount(), 2);
+	{
+		QCOMPARE(plot->coordinateSystemCount(), 2);
 
-	//		CHECK_RANGE_CSYSTEMINDEX(plot, 0, Dimension::X, 0.2, 0.6);
-	//		CHECK_RANGE_CSYSTEMINDEX(plot, 0, Dimension::Y, 0, 1);
-	//		CHECK_RANGE_CSYSTEMINDEX(plot, 1, Dimension::X, 0.2, 0.6);
-	//		CHECK_RANGE_CSYSTEMINDEX(plot, 1, Dimension::Y, 0, 0);
-	//		const Range<double> plotSceneRangeX = {plot->dataRect().x(), plot->dataRect().x() + plot->dataRect().width()};
-	//		const Range<double> plotSceneRangeY = {plot->dataRect().y() + plot->dataRect().height(), plot->dataRect().y()};
+		CHECK_RANGE_CSYSTEMINDEX(plot, 0, Dimension::X, 0.2, 0.6);
+		CHECK_RANGE_CSYSTEMINDEX(plot, 0, Dimension::Y, 0, 1);
+		CHECK_RANGE_CSYSTEMINDEX(plot, 1, Dimension::X, 0.2, 0.6);
+		CHECK_RANGE_CSYSTEMINDEX(plot, 1, Dimension::Y, 0, 0);
+		const Range<double> plotSceneRangeX = {plot->dataRect().x(), plot->dataRect().x() + plot->dataRect().width()};
+		const Range<double> plotSceneRangeY = {plot->dataRect().y() + plot->dataRect().height(), plot->dataRect().y()};
 
-	//		double bx = plotSceneRangeX.size() / (0.6 - 0.2);
-	//		double ax = plotSceneRangeX.start() - bx * 0.2;
+		double bx = plotSceneRangeX.size() / (0.6 - 0.2);
+		double ax = plotSceneRangeX.start() - bx * 0.2;
 
-	//		double by = plotSceneRangeY.size() / (1 - 0);
-	//		double ay = plotSceneRangeY.start() - by * 0;
+		double by = plotSceneRangeY.size() / (1 - 0);
+		double ay = plotSceneRangeY.start() - by * 0;
 
-	//		CHECK_SCALE_PLOT(plot, 0, Dimension::X, ax, bx, 0);
-	//		CHECK_SCALE_PLOT(plot, 0, Dimension::Y, ay, by, 0);
-	//		// Don't care what the second cSystem has, because it is invalid
-	//		// CHECK_SCALE_PLOT(plot, 1, Dimension::X, ax, bx, 0);
-	//		// CHECK_SCALE_PLOT(plot, 1, Dimension::Y, ay, by, 0);
-	//	}
+		CHECK_SCALE_PLOT(plot, 0, Dimension::X, ax, bx, 0);
+		CHECK_SCALE_PLOT(plot, 0, Dimension::Y, ay, by, 0);
+		// Don't care what the second cSystem has, because it is invalid
+		// CHECK_SCALE_PLOT(plot, 1, Dimension::X, ax, bx, 0);
+		// CHECK_SCALE_PLOT(plot, 1, Dimension::Y, ay, by, 0);
+	}
 }
 
 QTEST_MAIN(CartesianPlotTest)
