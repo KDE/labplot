@@ -100,6 +100,7 @@ private Q_SLOTS:
 	void setRightOffset();
 	void setUnityScale();
 	void setUnityRange();
+	void setAxisColor();
 
 	// Line-Tab
 	void updateArrowLineColor(const QColor&);

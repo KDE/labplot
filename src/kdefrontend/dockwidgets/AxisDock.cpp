@@ -204,22 +204,10 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.sbLabelsOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::labelsOpacityChanged);
 
 	// Updating the axis color widget if one of the other color widgets color changes
-	connect(lineWidget, &LineWidget::colorChanged, [this] {
-		CONDITIONAL_LOCK_RETURN;
-		updateAxisColor();
-	});
-	connect(majorTicksLineWidget, &LineWidget::colorChanged, [this] {
-		CONDITIONAL_LOCK_RETURN;
-		updateAxisColor();
-	});
-	connect(minorTicksLineWidget, &LineWidget::colorChanged, [this] {
-		CONDITIONAL_LOCK_RETURN;
-		updateAxisColor();
-	});
-	connect(labelWidget, &LabelWidget::fontColorChangedSignal, [this] {
-		CONDITIONAL_LOCK_RETURN;
-		updateAxisColor();
-	});
+	connect(lineWidget, &LineWidget::colorChanged, this, &AxisDock::setAxisColor);
+	connect(majorTicksLineWidget, &LineWidget::colorChanged, this, &AxisDock::setAxisColor);
+	connect(minorTicksLineWidget, &LineWidget::colorChanged, this, &AxisDock::setAxisColor);
+	connect(labelWidget, &LabelWidget::fontColorChangedSignal, this, &AxisDock::setAxisColor);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -1932,6 +1920,11 @@ void AxisDock::load() {
 	minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
 	labelsTextTypeChanged(ui.cbLabelsTextType->currentIndex());
 	labelsTextColumnChanged(cbLabelsTextColumn->currentModelIndex());
+}
+
+void AxisDock::setAxisColor() {
+	CONDITIONAL_LOCK_RETURN;
+	updateAxisColor();
 }
 
 void AxisDock::updateAxisColor() {
