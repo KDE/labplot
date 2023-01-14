@@ -36,8 +36,8 @@ private:
 	void generateForColumns();
 	void generateForColumn(Column* col, int colIndex);
 	void generateForMatrices();
+	void subtractBaseline(QVector<double>&);
 	QString getMessage(const QString&);
-	void updateWidgetsVisiblity();
 
 	bool setIntValue(int& value, int columnIndex = 0) const;
 	bool setBigIntValue(qint64& value, int columnIndex = 0) const;
@@ -51,10 +51,15 @@ private:
 	QPushButton* m_okButton{nullptr};
 	Operation m_operation;
 	bool m_numeric{false};
+	bool m_previewDirty{false};
 	Project* m_project{nullptr};
 	XYCurve* m_curveOrigin{nullptr};
 	XYCurve* m_curveBaseline{nullptr};
 	XYCurve* m_curveResult{nullptr};
+	Column* m_xColumnBaseline{nullptr};
+	Column* m_yColumnBaseline{nullptr};
+	Column* m_yColumnResult{nullptr};
+	bool m_baselineCurveInvalid{false};
 
 private Q_SLOTS:
 	void generate();
