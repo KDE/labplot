@@ -92,18 +92,6 @@ void XYIntegrationCurvePrivate::resetResults() {
 	integrationResult = XYIntegrationCurve::IntegrationResult();
 }
 
-void XYIntegrationCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		// spreadsheet columns as data source
-		*tmpXDataColumn = xDataColumn;
-		*tmpYDataColumn = yDataColumn;
-	} else {
-		// curve columns as data source
-		*tmpXDataColumn = dataSourceCurve->xColumn();
-		*tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-}
-
 // no need to delete xColumn and yColumn, they are deleted
 // when the parent aspect is removed
 XYIntegrationCurvePrivate::~XYIntegrationCurvePrivate() = default;

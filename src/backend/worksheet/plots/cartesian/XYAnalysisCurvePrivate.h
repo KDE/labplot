@@ -27,7 +27,7 @@ public:
 
 	void recalculate();
 	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) = 0;
-	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) = 0;
+	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn);
 	virtual void resetResults() = 0; // Clear the results of the previous calculation
 
 	const AbstractColumn* xDataColumn{nullptr}; //<! column storing the values for the input x-data for the analysis function

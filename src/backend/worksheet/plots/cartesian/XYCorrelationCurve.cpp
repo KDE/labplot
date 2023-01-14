@@ -91,18 +91,6 @@ XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner)
 // when the parent aspect is removed
 XYCorrelationCurvePrivate::~XYCorrelationCurvePrivate() = default;
 
-void XYCorrelationCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		// spreadsheet columns as data source
-		*tmpXDataColumn = xDataColumn;
-		*tmpYDataColumn = yDataColumn;
-	} else {
-		// curve columns as data source (autocorrelation)
-		*tmpXDataColumn = dataSourceCurve->xColumn();
-		*tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-}
-
 void XYCorrelationCurvePrivate::resetResults() {
 	correlationResult = XYCorrelationCurve::CorrelationResult();
 }

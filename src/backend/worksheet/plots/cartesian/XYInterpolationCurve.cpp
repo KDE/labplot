@@ -99,16 +99,6 @@ void XYInterpolationCurvePrivate::resetResults() {
 	interpolationResult = XYInterpolationCurve::InterpolationResult();
 }
 
-void XYInterpolationCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		*tmpXDataColumn = xDataColumn;
-		*tmpYDataColumn = yDataColumn;
-	} else { // curve columns as data source
-		*tmpXDataColumn = dataSourceCurve->xColumn();
-		*tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-}
-
 bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();

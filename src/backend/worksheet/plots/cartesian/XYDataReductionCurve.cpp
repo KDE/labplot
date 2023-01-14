@@ -91,18 +91,6 @@ void XYDataReductionCurvePrivate::resetResults() {
 	dataReductionResult = XYDataReductionCurve::DataReductionResult();
 }
 
-void XYDataReductionCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		// spreadsheet columns as data source
-		*tmpXDataColumn = xDataColumn;
-		*tmpYDataColumn = yDataColumn;
-	} else {
-		// curve columns as data source
-		*tmpXDataColumn = dataSourceCurve->xColumn();
-		*tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-}
-
 bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();

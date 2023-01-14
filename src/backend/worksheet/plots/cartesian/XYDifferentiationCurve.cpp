@@ -95,19 +95,6 @@ void XYDifferentiationCurvePrivate::resetResults() {
 	differentiationResult = XYDifferentiationCurve::DifferentiationResult();
 }
 
-void XYDifferentiationCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
-	// determine the data source columns
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		// spreadsheet columns as data source
-		*tmpXDataColumn = xDataColumn;
-		*tmpYDataColumn = yDataColumn;
-	} else {
-		// curve columns as data source
-		*tmpXDataColumn = dataSourceCurve->xColumn();
-		*tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-}
-
 // ...
 // see XYFitCurvePrivate
 bool XYDifferentiationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
