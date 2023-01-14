@@ -129,7 +129,6 @@ bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 		dataReductionResult.available = true;
 		dataReductionResult.valid = false;
 		dataReductionResult.status = i18n("Not enough data points available.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -221,8 +220,6 @@ bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	dataReductionResult.npoints = npoints;
 	dataReductionResult.posError = posError;
 	dataReductionResult.areaError = areaError;
-
-	sourceDataChangedSinceLastRecalc = false;
 
 	Q_EMIT q->completed(100);
 	return true;

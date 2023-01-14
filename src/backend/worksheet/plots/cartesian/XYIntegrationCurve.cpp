@@ -133,7 +133,6 @@ bool XYIntegrationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 		integrationResult.available = true;
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Not enough data points available.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -178,8 +177,6 @@ bool XYIntegrationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	integrationResult.status = QString::number(status);
 	integrationResult.elapsedTime = timer.elapsed();
 	integrationResult.value = ydata[np - 1];
-
-	sourceDataChangedSinceLastRecalc = false;
 
 	return true;
 }

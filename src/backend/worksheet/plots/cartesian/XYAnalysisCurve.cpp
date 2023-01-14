@@ -403,18 +403,16 @@ void XYAnalysisCurvePrivate::recalculate() {
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		sourceDataChangedSinceLastRecalc = false;
 		// recalcLogicalPoints(); TODO: needed?
-		Q_EMIT q->dataChanged();
-		return;
-	}
+	} else {
+		bool result = recalculateSpecific(tmpXDataColumn, tmpYDataColumn);
+		sourceDataChangedSinceLastRecalc = false;
 
-	bool result = recalculateSpecific(tmpXDataColumn, tmpYDataColumn);
-	sourceDataChangedSinceLastRecalc = false;
-
-	if (result) {
-		// redraw the curve
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
+		if (result) {
+			// redraw the curve
+			recalcLogicalPoints();
+		}
 	}
+	Q_EMIT q->dataChanged();
 }
 
 //##############################################################################

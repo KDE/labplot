@@ -135,7 +135,6 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 		smoothResult.available = true;
 		smoothResult.valid = false;
 		smoothResult.status = i18n("Number of x and y data points must be equal.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -161,7 +160,6 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 		smoothResult.available = true;
 		smoothResult.valid = false;
 		smoothResult.status = i18n("Not enough data points available.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -231,7 +229,6 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 
 	delete[] ydataOriginal;
 
-	sourceDataChangedSinceLastRecalc = false;
 	return true;
 }
 

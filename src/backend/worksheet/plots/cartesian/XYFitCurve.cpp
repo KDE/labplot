@@ -1947,7 +1947,6 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 
 	fitResult.elapsedTime = timer.elapsed();
 
-	sourceDataChangedSinceLastRecalc = false;
 	return update;
 }
 
@@ -2143,8 +2142,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -2152,8 +2149,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Not sufficient weight data points provided.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -2231,8 +2226,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("No data points available.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -2240,8 +2233,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -2249,8 +2240,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Fit model not specified.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 

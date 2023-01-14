@@ -173,7 +173,6 @@ bool XYConvolutionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 		convolutionResult.available = true;
 		convolutionResult.valid = false;
 		convolutionResult.status = i18n("Not enough data points available.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -236,7 +235,6 @@ bool XYConvolutionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	convolutionResult.status = QString::number(status);
 	convolutionResult.elapsedTime = timer.elapsed();
 
-	sourceDataChangedSinceLastRecalc = false;
 	return true;
 }
 

@@ -136,7 +136,6 @@ bool XYDifferentiationCurvePrivate::recalculateSpecific(const AbstractColumn* tm
 		differentiationResult.available = true;
 		differentiationResult.valid = false;
 		differentiationResult.status = i18n("Not enough data points available.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -192,7 +191,6 @@ bool XYDifferentiationCurvePrivate::recalculateSpecific(const AbstractColumn* tm
 	differentiationResult.status = QString::number(status);
 	differentiationResult.elapsedTime = timer.elapsed();
 
-	sourceDataChangedSinceLastRecalc = false;
 	return true;
 }
 

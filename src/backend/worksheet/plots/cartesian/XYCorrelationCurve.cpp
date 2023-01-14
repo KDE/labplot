@@ -168,7 +168,6 @@ bool XYCorrelationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 		correlationResult.available = true;
 		correlationResult.valid = false;
 		correlationResult.status = i18n("Not enough data points available.");
-		sourceDataChangedSinceLastRecalc = false;
 		return true;
 	}
 
@@ -223,7 +222,6 @@ bool XYCorrelationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	correlationResult.status = QString::number(status);
 	correlationResult.elapsedTime = timer.elapsed();
 
-	sourceDataChangedSinceLastRecalc = false;
 	return true;
 }
 
