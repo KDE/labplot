@@ -24,15 +24,15 @@ void NSLPeakTest::testPeakSimple() {
 	const size_t result[] = {0, 2, 4, 7};
 
 	size_t np;
-	size_t* indices = nsl_peak_detect(data, N, &np);
+	size_t* indices = nsl_peak_detect(data, N, np);
 	if (!indices) {
 		WARN("Error getting peaks")
 		return;
 	}
 
-	QCOMPARE(np, 4);
+	QCOMPARE(np, 4ul);
 
-	for (size_t i = 0; i < np; ++i)
+	for (size_t i = 0; i < np; i++)
 		QCOMPARE(indices[i], result[i]);
 	free(indices);
 }
