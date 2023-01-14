@@ -60,8 +60,6 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void colorChanged(const QColor&);
-
-	friend class AxisDock;
 };
 
 #endif // LINEWIDGET_H

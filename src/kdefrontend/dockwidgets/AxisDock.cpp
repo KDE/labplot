@@ -203,6 +203,24 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.leLabelsSuffix, &QLineEdit::textChanged, this, &AxisDock::labelsSuffixChanged);
 	connect(ui.sbLabelsOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::labelsOpacityChanged);
 
+	// Updating the axis color widget if one of the other color widgets color changes
+	connect(lineWidget, &LineWidget::colorChanged, [this] {
+		CONDITIONAL_LOCK_RETURN;
+		updateAxisColor();
+	});
+	connect(majorTicksLineWidget, &LineWidget::colorChanged, [this] {
+		CONDITIONAL_LOCK_RETURN;
+		updateAxisColor();
+	});
+	connect(minorTicksLineWidget, &LineWidget::colorChanged, [this] {
+		CONDITIONAL_LOCK_RETURN;
+		updateAxisColor();
+	});
+	connect(labelWidget, &LabelWidget::fontColorChangedSignal, [this] {
+		CONDITIONAL_LOCK_RETURN;
+		updateAxisColor();
+	});
+
 	// template handler
 	auto* frame = new QFrame(this);
 	auto* hlayout = new QHBoxLayout(frame);
@@ -1761,19 +1779,7 @@ void AxisDock::load() {
 	// General
 	ui.chkVisible->setChecked(m_axis->isVisible());
 
-	// Set colors of all other ui elements
-	// - Line widget color
-	// - Title color
-	// - Major tick color
-	// - Minor tick color
-	// - Tick label color
-	QColor color = m_axis->line()->color();
-	if (m_axis->title()->fontColor() == color && m_axis->majorTicksLine()->color() == color && m_axis->minorTicksLine()->color() == color
-		&& m_axis->labelsColor() == color) {
-		// All have same color
-		ui.kcbAxisColor->setColor(color);
-	} else
-		ui.kcbAxisColor->setColor(QColor(0, 0, 0, 0));
+	updateAxisColor();
 
 	Axis::Orientation orientation = m_axis->orientation();
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
@@ -1926,6 +1932,22 @@ void AxisDock::load() {
 	minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
 	labelsTextTypeChanged(ui.cbLabelsTextType->currentIndex());
 	labelsTextColumnChanged(cbLabelsTextColumn->currentModelIndex());
+}
+
+void AxisDock::updateAxisColor() {
+	// Set color of the global
+	// - Line widget color
+	// - Title color
+	// - Major tick color
+	// - Minor tick color
+	// - Tick label color
+	QColor color = m_axis->line()->color();
+	if (m_axis->title()->fontColor() == color && m_axis->majorTicksLine()->color() == color && m_axis->minorTicksLine()->color() == color
+		&& m_axis->labelsColor() == color) {
+		// All have same color
+		ui.kcbAxisColor->setColor(color);
+	} else
+		ui.kcbAxisColor->setColor(QColor(0, 0, 0, 0));
 }
 
 void AxisDock::loadConfigFromTemplate(KConfig& config) {

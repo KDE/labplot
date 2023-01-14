@@ -722,6 +722,7 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 		for (auto* label : m_labelsList)
 			label->setFontColor(color);
 	}
+	Q_EMIT fontColorChangedSignal(color);
 }
 
 void LabelWidget::backgroundColorChanged(const QColor& color) {

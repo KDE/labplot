@@ -63,6 +63,7 @@ private:
 	void loadConfig(KConfig&);
 	void updatePositionText(Axis::Orientation);
 	void updateLabelsPosition(Axis::LabelsPosition);
+	void updateAxisColor();
 
 	void setOffset(double);
 
