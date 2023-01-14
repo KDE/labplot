@@ -98,11 +98,6 @@ void XYFourierTransformCurvePrivate::resetResults() {
 	transformResult = XYFourierTransformCurve::TransformResult();
 }
 
-void XYFourierTransformCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
-	*tmpXDataColumn = xDataColumn;
-	*tmpYDataColumn = yDataColumn;
-}
-
 bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();

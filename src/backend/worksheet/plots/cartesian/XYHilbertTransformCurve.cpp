@@ -97,11 +97,6 @@ void XYHilbertTransformCurvePrivate::resetResults() {
 	transformResult = XYHilbertTransformCurve::TransformResult();
 }
 
-void XYHilbertTransformCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
-	*tmpXDataColumn = xDataColumn;
-	*tmpYDataColumn = yDataColumn;
-}
-
 bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	DEBUG(Q_FUNC_INFO)
 	QElapsedTimer timer;
