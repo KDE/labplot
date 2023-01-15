@@ -12,12 +12,12 @@
 #define XYHILBERTTRANSFORMCURVEDOCK_H
 
 #include "backend/worksheet/plots/cartesian/XYHilbertTransformCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyhilberttransformcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYHilbertTransformCurveDock : public XYCurveDock {
+class XYHilbertTransformCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:

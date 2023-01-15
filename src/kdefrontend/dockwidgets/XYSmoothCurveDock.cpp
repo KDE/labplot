@@ -33,7 +33,7 @@
 */
 
 XYSmoothCurveDock::XYSmoothCurveDock(QWidget* parent)
-	: XYCurveDock(parent) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -556,32 +556,7 @@ void XYSmoothCurveDock::enableRecalculate() const {
  * show the result and details of the smooth
  */
 void XYSmoothCurveDock::showSmoothResult() {
-	const XYSmoothCurve::SmoothResult& smoothResult = m_smoothCurve->result();
-	if (!smoothResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
-
-	// const XYSmoothCurve::SmoothData& smoothData = m_smoothCurve->smoothData();
-	QString str = i18n("status: %1", smoothResult.status) + QStringLiteral("<br>");
-
-	if (!smoothResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	const auto numberLocale = QLocale();
-	if (smoothResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(smoothResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(smoothResult.elapsedTime)) + QStringLiteral("<br>");
-
-	str += QStringLiteral("<br><br>");
-
-	uiGeneralTab.teResult->setText(str);
-
-	// enable the "recalculate"-button if the source data was changed since the last smooth
-	uiGeneralTab.pbRecalculate->setEnabled(m_smoothCurve->isSourceDataChangedSinceLastRecalc());
+	showResult(m_smoothCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
 }
 
 //*************************************************************

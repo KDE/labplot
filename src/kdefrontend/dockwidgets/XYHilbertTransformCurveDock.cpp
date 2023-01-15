@@ -29,7 +29,7 @@
 */
 
 XYHilbertTransformCurveDock::XYHilbertTransformCurveDock(QWidget* parent)
-	: XYCurveDock(parent) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -275,28 +275,7 @@ void XYHilbertTransformCurveDock::enableRecalculate() const {
  * show the result and details of the transform
  */
 void XYHilbertTransformCurveDock::showTransformResult() {
-	const XYHilbertTransformCurve::TransformResult& transformResult = m_transformCurve->result();
-	if (!transformResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
-
-	QString str = i18n("status: %1", transformResult.status) + QStringLiteral("<br>");
-
-	if (!transformResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	const auto numberLocale = QLocale();
-	if (transformResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(transformResult.elapsedTime)) + QStringLiteral("<br>");
-
-	str += QStringLiteral("<br><br>");
-
-	uiGeneralTab.teResult->setText(str);
+	showResult(m_transformCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
 }
 
 //*************************************************************
