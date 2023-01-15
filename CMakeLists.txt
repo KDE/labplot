@@ -29,6 +29,20 @@ include(FeatureSummary)
 
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
+
+set(QT_MAJOR_VERSION 5)
+find_package(QT NAMES Qt5 COMPONENTS
+    Concurrent
+    Gui
+# 	Qml
+# 	Quick
+# 	QuickWidgets
+    PrintSupport
+    Sql
+    Svg
+    Widgets
+    Test
+    REQUIRED)
 find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
 	Gui
@@ -249,7 +263,6 @@ option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_EXCEL "Build with Excel (xlsx) support" ON)
 option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" ON)
-option(LOCAL_DBC_PARSER "Use local build of dbc parser" OFF)
 IF (APPLE)
 	option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
 ENDIF ()
@@ -271,18 +284,7 @@ IF (Poppler_FOUND)
 	add_definitions (-DHAVE_POPPLER)
 ENDIF ()
 
-### Vector BLF (included ###############################
-FIND_PACKAGE(PkgConfig REQUIRED)
-IF (ENABLE_VECTOR_BLF)
-  if (${LOCAL_DBC_PARSER})
-      add_subdirectory(thirdParty/dbc_parser_cpp)
-  else ()
-    pkg_check_modules(dbc REQUIRED IMPORTED_TARGET dbc)
-  endif()
 
-    pkg_check_modules(Vector_BLF REQUIRED IMPORTED_TARGET Vector_BLF)
-    add_definitions (-DHAVE_VECTOR_BLF)
-ENDIF()
 
 ### liborigin (included) ###############################
 IF (ENABLE_LIBORIGIN)

@@ -63,3 +63,75 @@ ENDIF ()
 # preview.sty
 install(FILES preview.sty DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME}/latex)
 
+Include(FetchContent)
+
+### Vector BLF ###############################
+FIND_PACKAGE(PkgConfig REQUIRED)
+option(LOCAL_DBC_PARSER "Use local build of dbc parser" OFF)
+option(LOCAL_VECTOR_BLF "Use local build of Vector BLF" OFF)
+if (ENABLE_VECTOR_BLF)
+  set(OPTION_RUN_DOXYGEN OFF CACHE BOOL "" FORCE) # disable running doxygen
+  if (${LOCAL_DBC_PARSER})
+      # Dependency of dbc_parser_cpp
+      FetchContent_Declare(
+        FastFloat
+        GIT_REPOSITORY https://github.com/fastfloat/fast_float.git
+        GIT_TAG 1ea4f27b2aeee2859a1354a3c24cff52a116cad1
+        FIND_PACKAGE_ARGS # because dbc_parser_cpp uses find_package
+      )
+      FetchContent_MakeAvailable(FastFloat)
+      # headerfiles of the projects are referring to <FastFloat/someheader.h> and therefore
+      # the path must be added
+      include_directories(${FastFloat_SOURCE_DIR}/include)
+      #target_include_directories(labplot2lib PUBLIC ${FastFloat_SOURCE_DIR}/include)
+
+      FetchContent_Declare(
+        dbc_parser_cpp
+        GIT_REPOSITORY https://github.com/Murmele/dbc_parser_cpp.git
+        GIT_TAG parsingMessage
+        #GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
+        #GIT_TAG        master
+      )
+      FetchContent_MakeAvailable(dbc_parser_cpp)
+      # headerfiles of the projects are referring to <Vector/BLF/someheader.h> and therefore
+      # the path must be added
+      include_directories(${dbc_parser_cpp_SOURCE_DIR}/include)
+      target_include_directories(labplot2lib PUBLIC ${dbc_parser_cpp_SOURCE_DIR}/include)
+      #target_include_directories(dbc PUBLIC ${dbc_parser_cpp_SOURCE_DIR}/include)
+      target_link_libraries(labplot2lib dbc)
+
+      #get_target_property(DBC_INCLUDE_DIRECTORIES dbc INCLUDE_DIRECTORIES)
+      # Includes are not installed, therefore they must be added manually
+      #target_include_directories(labplot2lib PUBLIC ${DBC_INCLUDE_DIRECTORIES})
+  else ()
+    pkg_check_modules(dbc REQUIRED IMPORTED_TARGET dbc)
+    target_link_libraries(labplot2lib PkgConfig::dbc)
+  endif()
+  
+  if (${LOCAL_VECTOR_BLF})
+    FetchContent_Declare(
+        vector_blf
+        GIT_REPOSITORY https://github.com/Technica-Engineering/vector_blf.git
+        GIT_TAG 02f0a2fe1f7915da1e24025869b98f6d15de937b
+      )
+      FetchContent_MakeAvailable(vector_blf)
+      # headerfiles of the projects are referring to <Vector/BLF/someheader.h> and therefore
+      # the path must be added
+#      include_directories(${vector_blf_SOURCE_DIR}/src
+#                          ${vector_blf_BINARY_DIR}/src) # config.h is in there
+      target_include_directories(labplot2lib PUBLIC ${vector_blf_SOURCE_DIR}/src
+                         ${vector_blf_BINARY_DIR}/src) # config.h is in there
+      target_include_directories(Vector_BLF PUBLIC ${vector_blf_SOURCE_DIR}/src
+                          ${vector_blf_BINARY_DIR}/src) # config.h is in there
+      #add_dependencies(labplot2lib Vector_BLF)
+      target_link_libraries(labplot2lib Vector_BLF)
+      #get_target_property(Vector_BLF_INCLUDE_DIRECTORIES Vector_BLF INCLUDE_DIRECTORIES)
+      # Includes are not installed, therefore they must be added manually
+      #target_include_directories(labplot2lib PUBLIC ${Vector_BLF_INCLUDE_DIRECTORIES})
+  else()
+    pkg_check_modules(Vector_BLF REQUIRED IMPORTED_TARGET Vector_BLF)
+    target_link_libraries(labplot2lib PkgConfig::Vector_BLF)
+  endif()
+    target_compile_definitions(labplot2lib PRIVATE HAVE_VECTOR_BLF)
+endif()
+
