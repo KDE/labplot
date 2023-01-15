@@ -95,6 +95,11 @@ void XYConvolutionCurvePrivate::resetResults() {
 	convolutionResult = XYConvolutionCurve::ConvolutionResult();
 }
 
+bool XYConvolutionCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	// X is not important here
+	return tmpYDataColumn != nullptr;
+}
+
 bool XYConvolutionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();

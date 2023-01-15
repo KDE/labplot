@@ -416,7 +416,7 @@ void XYAnalysisCurvePrivate::recalculate() {
 	const AbstractColumn* tmpYDataColumn = nullptr;
 	prepareTmpDataColumn(&tmpXDataColumn, &tmpYDataColumn);
 
-	if (!tmpXDataColumn || !tmpYDataColumn) {
+	if (!preparationValid(tmpXDataColumn, tmpYDataColumn)) {
 		sourceDataChangedSinceLastRecalc = false;
 		// recalcLogicalPoints(); TODO: needed?
 	} else {
@@ -429,6 +429,10 @@ void XYAnalysisCurvePrivate::recalculate() {
 		}
 	}
 	Q_EMIT q->dataChanged();
+}
+
+bool XYAnalysisCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	return tmpXDataColumn && tmpYDataColumn;
 }
 
 //##############################################################################
