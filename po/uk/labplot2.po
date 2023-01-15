@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-14 16:30+0000\n"
-"PO-Revision-Date: 2023-01-10 21:37+0200\n"
+"POT-Creation-Date: 2023-01-15 00:52+0000\n"
+"PO-Revision-Date: 2023-01-14 22:28+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -68,7 +68,7 @@ msgstr ""
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:223
 #: src/backend/worksheet/Image.cpp:433
 #: src/backend/worksheet/InfoElement.cpp:1158
-#: src/backend/worksheet/Line.cpp:225
+#: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2906
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
@@ -6553,43 +6553,43 @@ msgstr "%1: встановити індекс точки прилипання"
 msgid "%1: set connectionline curve name"
 msgstr "%1: встановити назву кривої лінії з'єднання"
 
-#: src/backend/worksheet/Line.cpp:107
+#: src/backend/worksheet/Line.cpp:106
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:414
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: змінено тип лінії"
 
-#: src/backend/worksheet/Line.cpp:119
+#: src/backend/worksheet/Line.cpp:118
 #, kde-format
 msgid "%1: set error bar cap size"
 msgstr "%1: встановити розмір кінчика позначки похибки"
 
-#: src/backend/worksheet/Line.cpp:126
+#: src/backend/worksheet/Line.cpp:125
 #, kde-format
 msgid "%1: error bar type changed"
 msgstr "%1: змінено тип позначки похибки"
 
-#: src/backend/worksheet/Line.cpp:133
+#: src/backend/worksheet/Line.cpp:132
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr "%1: змінено тип лінії тіні"
 
-#: src/backend/worksheet/Line.cpp:140
+#: src/backend/worksheet/Line.cpp:139
 #, kde-format
 msgid "%1: set line style"
 msgstr "%1: встановити стиль лінії"
 
-#: src/backend/worksheet/Line.cpp:147
+#: src/backend/worksheet/Line.cpp:146
 #, kde-format
 msgid "%1: set line width"
 msgstr "%1: встановити товщину лінії"
 
-#: src/backend/worksheet/Line.cpp:154
+#: src/backend/worksheet/Line.cpp:153
 #, kde-format
 msgid "%1: set line pen"
 msgstr "%1: встановити перо для лінії"
 
-#: src/backend/worksheet/Line.cpp:161
+#: src/backend/worksheet/Line.cpp:160
 #, kde-format
 msgid "%1: set line opacity"
 msgstr "%1: встановити рівень непрозорості лінії"
@@ -11911,16 +11911,14 @@ msgid "Transparent"
 msgstr "Прозорий"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:597
-#, fuzzy, kde-format
-#| msgid "%1: set values color"
+#, kde-format
 msgid "%1: set axis color"
-msgstr "%1: встановлення значення кольору"
+msgstr "%1: встановлення кольору вісі"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:599
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1 axes: set color"
-msgstr "%1: встановити колір шрифту"
+msgstr "%1, вісі: встановлення кольору"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1967
 #, kde-format

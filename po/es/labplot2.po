@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-14 16:30+0000\n"
-"PO-Revision-Date: 2023-01-11 00:36+0100\n"
+"POT-Creation-Date: 2023-01-15 00:52+0000\n"
+"PO-Revision-Date: 2023-01-15 00:22+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -63,7 +63,7 @@ msgstr "No se han encontrado complementos del panel. Compruebe su instalación."
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:223
 #: src/backend/worksheet/Image.cpp:433
 #: src/backend/worksheet/InfoElement.cpp:1158
-#: src/backend/worksheet/Line.cpp:225
+#: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2906
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
@@ -6487,43 +6487,43 @@ msgstr "%1: definir índice del punto de adhesión"
 msgid "%1: set connectionline curve name"
 msgstr "%1: definir nombre de curva de la línea de conexión"
 
-#: src/backend/worksheet/Line.cpp:107
+#: src/backend/worksheet/Line.cpp:106
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:414
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: tipo de línea cambiado"
 
-#: src/backend/worksheet/Line.cpp:119
+#: src/backend/worksheet/Line.cpp:118
 #, kde-format
 msgid "%1: set error bar cap size"
 msgstr "%1: definir tamaño del remate de la barra de errores"
 
-#: src/backend/worksheet/Line.cpp:126
+#: src/backend/worksheet/Line.cpp:125
 #, kde-format
 msgid "%1: error bar type changed"
 msgstr "%1: tipo de barra de errores cambiado"
 
-#: src/backend/worksheet/Line.cpp:133
+#: src/backend/worksheet/Line.cpp:132
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr "%1: ha cambiado el tipo de línea de proyección"
 
-#: src/backend/worksheet/Line.cpp:140
+#: src/backend/worksheet/Line.cpp:139
 #, kde-format
 msgid "%1: set line style"
 msgstr "%1: definir estilo de la línea"
 
-#: src/backend/worksheet/Line.cpp:147
+#: src/backend/worksheet/Line.cpp:146
 #, kde-format
 msgid "%1: set line width"
 msgstr "%1: definir ancho de la línea"
 
-#: src/backend/worksheet/Line.cpp:154
+#: src/backend/worksheet/Line.cpp:153
 #, kde-format
 msgid "%1: set line pen"
 msgstr "%1: definir trazo de la línea"
 
-#: src/backend/worksheet/Line.cpp:161
+#: src/backend/worksheet/Line.cpp:160
 #, kde-format
 msgid "%1: set line opacity"
 msgstr "%1: definir opacidad de la línea"
@@ -11840,16 +11840,14 @@ msgid "Transparent"
 msgstr "Transparente"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:597
-#, fuzzy, kde-format
-#| msgid "%1: set values color"
+#, kde-format
 msgid "%1: set axis color"
-msgstr "%1: definir color de los valores"
+msgstr "%1: definir color del eje"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:599
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1 axes: set color"
-msgstr "%1: definir color del tipo de letra"
+msgstr "%1 ejes: definir color"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1967
 #, kde-format

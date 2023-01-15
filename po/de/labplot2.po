@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-14 16:30+0000\n"
+"POT-Creation-Date: 2023-01-15 00:52+0000\n"
 "PO-Revision-Date: 2023-01-06 09:44+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-doc@kde.org>\n"
@@ -67,7 +67,7 @@ msgstr ""
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:223
 #: src/backend/worksheet/Image.cpp:433
 #: src/backend/worksheet/InfoElement.cpp:1158
-#: src/backend/worksheet/Line.cpp:225
+#: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2906
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
@@ -6502,43 +6502,43 @@ msgstr "%1: Klebepunktindex festlegen"
 msgid "%1: set connectionline curve name"
 msgstr "%1: Namen der Verbindungslinienkurve festlegen"
 
-#: src/backend/worksheet/Line.cpp:107
+#: src/backend/worksheet/Line.cpp:106
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:414
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: Linientyp geändert"
 
-#: src/backend/worksheet/Line.cpp:119
+#: src/backend/worksheet/Line.cpp:118
 #, kde-format
 msgid "%1: set error bar cap size"
 msgstr "%1 Größe der Enden der Fehlerbalken festlegen"
 
-#: src/backend/worksheet/Line.cpp:126
+#: src/backend/worksheet/Line.cpp:125
 #, kde-format
 msgid "%1: error bar type changed"
 msgstr "%1: Fehlerbalkentyp geändert"
 
-#: src/backend/worksheet/Line.cpp:133
+#: src/backend/worksheet/Line.cpp:132
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr "%1: Typ der Verbindungslinie geändert"
 
-#: src/backend/worksheet/Line.cpp:140
+#: src/backend/worksheet/Line.cpp:139
 #, kde-format
 msgid "%1: set line style"
 msgstr "%1: Linienstil festlegen"
 
-#: src/backend/worksheet/Line.cpp:147
+#: src/backend/worksheet/Line.cpp:146
 #, kde-format
 msgid "%1: set line width"
 msgstr "%1: Linienbreite festlegen"
 
-#: src/backend/worksheet/Line.cpp:154
+#: src/backend/worksheet/Line.cpp:153
 #, kde-format
 msgid "%1: set line pen"
 msgstr "%1: Linienstil festlegen"
 
-#: src/backend/worksheet/Line.cpp:161
+#: src/backend/worksheet/Line.cpp:160
 #, kde-format
 msgid "%1: set line opacity"
 msgstr "%1: Linien-Deckkraft festlegen"
