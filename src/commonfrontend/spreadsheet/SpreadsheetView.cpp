@@ -994,7 +994,7 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_columns);
-	action_statistics_columns->setEnabled((numeric || text) && hasValues);
+	action_statistics_columns->setEnabled(hasValues);
 }
 
 // SLOTS
@@ -1389,7 +1389,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			m_plotDataMenu->setEnabled(plottable && hasValues);
 			m_analyzePlotMenu->setEnabled(numeric && hasValues);
 			m_columnSetAsMenu->setEnabled(numeric);
-			action_statistics_columns->setEnabled((numeric || text) && hasValues);
+			action_statistics_columns->setEnabled(hasValues);
 			action_clear_columns->setEnabled(hasValues);
 			m_formattingMenu->setEnabled(hasValues);
 			action_formatting_remove->setVisible(hasFormat);
@@ -1478,21 +1478,9 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	action_sort_spreadsheet->setEnabled(cellsAvail);
 	action_go_to_cell->setEnabled(cellsAvail);
 
-	const auto& columns = m_spreadsheet->children<Column>();
-
-	// deactivate "Statistics" action if no numeric or text data is available
-	bool hasNumericTextValues = false;
-	for (auto* column : columns) {
-		if ((column->isNumeric() || column->columnMode() == AbstractColumn::ColumnMode::Text) && column->hasValues()) {
-			hasNumericTextValues = true;
-			break;
-		}
-	}
-
-	action_statistics_all_columns->setEnabled(hasNumericTextValues);
-
 	// deactivate the "Clear masks" action if there are no masked cells
 	bool hasMasked = false;
+	const auto& columns = m_spreadsheet->children<Column>();
 	for (auto* column : columns) {
 		if (column->maskedIntervals().size() > 0) {
 			hasMasked = true;
@@ -3109,7 +3097,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 	if (forAll || indexes.size() <= 1) {
 		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
 			auto* column = m_spreadsheet->column(col);
-			if ((column->isNumeric() || column->columnMode() == AbstractColumn::ColumnMode::Text) && column->hasValues())
+			if (column->hasValues())
 				columns << column;
 		}
 	} else {
