@@ -229,8 +229,8 @@ void StatisticsColumnWidget::showOverview() {
 	} else { // datetime
 		auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
 		m_teOverview->setHtml(m_htmlOverview.arg(QString::number(statistics.size),
-												QDateTime::fromMSecsSinceEpoch(statistics.minimum, Qt::UTC).toString(filter->format()),
-												QDateTime::fromMSecsSinceEpoch(statistics.maximum, Qt::UTC).toString(filter->format())));
+												 QDateTime::fromMSecsSinceEpoch(statistics.minimum, Qt::UTC).toString(filter->format()),
+												 QDateTime::fromMSecsSinceEpoch(statistics.maximum, Qt::UTC).toString(filter->format())));
 	}
 
 	m_overviewInitialized = true;
