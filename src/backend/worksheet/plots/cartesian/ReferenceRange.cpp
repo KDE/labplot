@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Reference range on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -50,10 +50,10 @@ void ReferenceRange::init() {
 	Q_D(ReferenceRange);
 
 	KConfig config;
-	KConfigGroup group = config.group("ReferenceRange");
+	KConfigGroup group = config.group(QStringLiteral("ReferenceRange"));
 
 	d->coordinateBindingEnabled = true;
-	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
+	d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
 	d->updateOrientation();
 
 	// default position - 10% of the plot width/height positioned around the center
@@ -76,9 +76,6 @@ void ReferenceRange::init() {
 	connect(d->background, &Background::updateRequested, [=] {
 		d->update();
 	});
-	// connect(d->background, &Background::updatePositionRequested, [=] {
-	// 	d->updateFilling();
-	// });
 
 	// border
 	d->line = new Line(QString());
@@ -99,7 +96,7 @@ void ReferenceRange::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon ReferenceRange::icon() const {
-	return QIcon::fromTheme(QLatin1String("draw-rectangle"));
+	return QIcon::fromTheme(QStringLiteral("draw-rectangle"));
 }
 
 void ReferenceRange::initActions() {
@@ -112,10 +109,10 @@ void ReferenceRange::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &ReferenceRange::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 
 	// Line
@@ -133,20 +130,20 @@ void ReferenceRange::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")));
+	orientationMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 
 	// Line
-	lineMenu = new QMenu(i18n("Border"));
-	lineMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-line")));
+	lineMenu = new QMenu(i18n("Border Line"));
+	lineMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-line")));
 	lineStyleMenu = new QMenu(i18n("Style"), lineMenu);
-	lineStyleMenu->setIcon(QIcon::fromTheme(QLatin1String("object-stroke-style")));
-	lineMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-line")));
+	lineStyleMenu->setIcon(QIcon::fromTheme(QStringLiteral("object-stroke-style")));
+	lineMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-line")));
 	lineMenu->addMenu(lineStyleMenu);
 
 	lineColorMenu = new QMenu(i18n("Color"), lineMenu);
-	lineColorMenu->setIcon(QIcon::fromTheme(QLatin1String("fill-color")));
+	lineColorMenu->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
 	GuiTools::fillColorMenu(lineColorMenu, lineColorActionGroup);
 	lineMenu->addMenu(lineColorMenu);
 }
@@ -170,9 +167,10 @@ QMenu* ReferenceRange::createContextMenu() {
 	menu->insertMenu(firstAction, orientationMenu);
 
 	// Border line styles
-	// GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, d->borderPen.color());
-	// GuiTools::selectPenStyleAction(lineStyleActionGroup, d->borderPen.style());
-	// GuiTools::selectColorAction(lineColorActionGroup, d->borderPen.color());
+	const auto& pen = d->line->pen();
+	GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, pen.color());
+	GuiTools::selectPenStyleAction(lineStyleActionGroup, pen.style());
+	GuiTools::selectColorAction(lineColorActionGroup, pen.color());
 
 	menu->insertMenu(firstAction, lineMenu);
 	menu->insertSeparator(firstAction);
@@ -240,17 +238,13 @@ void ReferenceRange::orientationChangedSlot(QAction* action) {
 }
 
 void ReferenceRange::lineStyleChanged(QAction* action) {
-	// Q_D(const ReferenceRange);
-	// QPen pen = d->borderPen;
-	// pen.setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
-	// this->setBorderPen(pen);
+	Q_D(const ReferenceRange);
+	d->line->setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
 }
 
 void ReferenceRange::lineColorChanged(QAction* action) {
-	// Q_D(const ReferenceRange);
-	// QPen pen = d->borderPen;
-	// pen.setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-	// this->setBorderPen(pen);
+	Q_D(const ReferenceRange);
+	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
 }
 
 void ReferenceRange::visibilityChangedSlot() {
@@ -423,9 +417,36 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 	if (!m_visible)
 		return;
 
-	// draw the area
-	painter->setOpacity(background->opacity());
-	painter->setPen(Qt::NoPen);
+	// draw filling
+	if (background->enabled()) {
+		painter->setOpacity(background->opacity());
+		painter->setPen(Qt::NoPen);
+		drawFilling(painter);
+	}
+
+	// draw the background
+	painter->drawRect(rect);
+
+	// draw the border
+	if (line->style() != Qt::NoPen) {
+		painter->setPen(line->pen());
+		painter->setBrush(Qt::NoBrush);
+		painter->setOpacity(line->opacity());
+	}
+	painter->drawRect(rect);
+
+	if (m_hovered && !isSelected() && !q->isPrinting()) {
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
+		painter->drawPath(rangeShape);
+	}
+
+	if (isSelected() && !q->isPrinting()) {
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
+		painter->drawPath(rangeShape);
+	}
+}
+
+void ReferenceRangePrivate::drawFilling(QPainter* painter) const {
 	if (background->type() == Background::Type::Color) {
 		switch (background->colorStyle()) {
 		case  Background::ColorStyle::SingleColor: {
@@ -500,27 +521,6 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 		}
 	} else if (background->type() == Background::Type::Pattern) {
 		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-	}
-
-	// draw the background
-	painter->drawRect(rect);
-
-	// draw the border
-	if (line->style() != Qt::NoPen) {
-		painter->setPen(line->pen());
-		painter->setBrush(Qt::NoBrush);
-		painter->setOpacity(line->opacity());
-	}
-	painter->drawRect(rect);
-
-	if (m_hovered && !isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(rangeShape);
-	}
-
-	if (isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(rangeShape);
 	}
 }
 
@@ -637,12 +637,13 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
-void ReferenceRange::loadThemeConfig(const KConfig&) {
+void ReferenceRange::loadThemeConfig(const KConfig& config) {
 	// determine the index of the current range in the list of all range children
 	// and apply the theme color for this index
 	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
 	if (!plot)
 		return;
+
 	int index = 0;
 	const auto& children = plot->children<WorksheetElement>();
 	for (auto* child : children) {
@@ -653,8 +654,15 @@ void ReferenceRange::loadThemeConfig(const KConfig&) {
 			++index;
 	}
 
-	// Q_D(ReferenceRange);
-	// const QColor themeColor = plot->themeColorPalette(index);
-	// d->line->saveThemeConfig(group, themeColor);
-	// d->background->saveThemeConfig(group);
+	const auto& themeColor = plot->themeColorPalette(index);
+
+	KConfigGroup group;
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("Axis")); // when loading from the theme config, use the same properties as for Axis
+	else
+		group = config.group(QStringLiteral("ReferenceRange"));
+
+	Q_D(ReferenceRange);
+	d->line->loadThemeConfig(group);
+	d->background->loadThemeConfig(group, themeColor);
 }

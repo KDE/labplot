@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference range on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -42,8 +42,6 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	lineWidget = new LineWidget(ui.tabGeneral);
 	layout->addWidget(lineWidget, 15, 0, 1, 3);
 
-	updateLocale();
-
 	// SLOTS
 	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &ReferenceRangeDock::nameChanged);
@@ -59,7 +57,7 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 }
 
 void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_rangeList = list;
 	m_range = list.first();
 	setAspects(list);
@@ -242,8 +240,7 @@ void ReferenceRangeDock::positionLogicalDateTimeEndChanged(const QDateTime& date
 }
 
 void ReferenceRangeDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* range : m_rangeList)
 		range->setVisible(state);
