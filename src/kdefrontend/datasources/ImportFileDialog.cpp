@@ -290,8 +290,6 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<HDF5Filter*>(filter)->setCurrentDataSetName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::NETCDF)
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names.at(i));
-				else if (fileType == AbstractFileFilter::FileType::VECTOR_BLF)
-					static_cast<VectorBLFFilter*>(filter); //->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::MATIO)
 					static_cast<MatioFilter*>(filter)->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::Excel) {
