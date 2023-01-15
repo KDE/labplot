@@ -16,7 +16,6 @@
 #include "CANFilter.h"
 #include "DBCParser.h"
 #include <cmath>
-#include <libdbc/dbc.hpp>
 
 class AbstractDataSource;
 class QTreeWidgetItem;

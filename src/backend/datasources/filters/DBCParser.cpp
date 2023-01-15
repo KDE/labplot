@@ -10,20 +10,23 @@ bool DbcParser::isValid() {
 }
 bool DbcParser::parseFile(const QString& filename) {
 	m_valid = false;
+#ifdef HAVE_DBC_PARSER
 	try {
 		m_parser.parse_file(filename.toStdString());
 		m_valid = true;
 	} catch (libdbc::validity_error e) {
 		// e.what(); // TODO: turn on
 	}
+#endif
 	return m_valid;
 }
 
 bool DbcParser::parseMessage(const uint32_t id, const std::vector<uint8_t>& data, std::vector<double>& out) {
 	if (!m_valid)
 		return false;
-
+#ifdef HAVE_DBC_PARSER
 	m_parser.parseMessage(id, data, out);
+#endif
 
 	return true;
 }
@@ -32,7 +35,9 @@ bool DbcParser::parseMessage(const uint32_t id, const std::array<uint8_t, 8>& da
 	if (!m_valid)
 		return false;
 
+#ifdef HAVE_DBC_PARSER
 	m_parser.parseMessage(id, data, out);
+#endif
 
 	return true;
 }
@@ -45,6 +50,7 @@ bool DbcParser::parseMessage(const uint32_t id, const std::array<uint8_t, 8>& da
  */
 QStringList DbcParser::signals(const QVector<uint32_t> ids, QHash<uint32_t, int>& idIndex) {
 	QStringList s;
+#ifdef HAVE_DBC_PARSER
 	for (const auto id : ids) {
 		const auto messages = m_parser.get_messages();
 		for (const auto& message : messages) {
@@ -58,5 +64,6 @@ QStringList DbcParser::signals(const QVector<uint32_t> ids, QHash<uint32_t, int>
 			}
 		}
 	}
+#endif
 	return s;
 }
