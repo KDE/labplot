@@ -950,7 +950,7 @@ void MultiRangeTest::mouseWheelXAxisApplyToAllX() {
 	view->m_selectedElement = horAxisP1;
 
 	int counter = 0;
-	connect(p1, &CartesianPlot::wheelEventSignal, [&counter](int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+	connect(p1, &CartesianPlot::wheelEventSignal, [&counter](int delta, int xIndex, int /*yIndex*/, bool considerDimension, Dimension dim) {
 		QCOMPARE(delta, 10);
 		QCOMPARE(xIndex, 0); // x Range of horAxisP1
 		QCOMPARE(considerDimension, true);
@@ -1050,7 +1050,7 @@ void MultiRangeTest::mouseWheelXAxisApplyToSelected() {
 	view->m_selectedElement = horAxisP1;
 
 	int counter = 0;
-	connect(p1, &CartesianPlot::wheelEventSignal, [&counter](int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+	connect(p1, &CartesianPlot::wheelEventSignal, [&counter](int delta, int xIndex, int /*yIndex*/, bool considerDimension, Dimension dim) {
 		QCOMPARE(delta, 10);
 		QCOMPARE(xIndex, 0); // x Range of horAxisP1
 		QCOMPARE(considerDimension, true);

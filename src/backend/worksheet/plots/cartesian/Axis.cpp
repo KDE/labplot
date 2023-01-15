@@ -3089,13 +3089,13 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	}
 
 	// Major grid
-	if (firstAxis) {
+	if (firstAxis)
 		d->majorGridLine->setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::SolidLine));
-		d->majorGridLine->setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)));
-		d->majorGridLine->setWidth(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	} else
+	else
 		d->majorGridLine->setStyle(Qt::NoPen);
 
+	d->majorGridLine->setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)));
+	d->majorGridLine->setWidth(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->majorGridLine->setOpacity(group.readEntry("MajorGridOpacity", 1.0));
 
 	// Major ticks
@@ -3104,12 +3104,13 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	d->majorTicksLine->loadThemeConfig(group);
 
 	// Minor grid
-	if (firstAxis) {
+	if (firstAxis)
 		d->minorGridLine->setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle", (int)Qt::DotLine));
-		d->minorGridLine->setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
-		d->minorGridLine->setWidth(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	} else
+	else
 		d->minorGridLine->setStyle(Qt::NoPen);
+
+	d->minorGridLine->setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
+	d->minorGridLine->setWidth(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->minorGridLine->setOpacity(group.readEntry("MinorGridOpacity", 1.0));
 
 	// Minor ticks

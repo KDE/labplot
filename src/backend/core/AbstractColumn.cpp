@@ -124,6 +124,27 @@ QStringList AbstractColumn::dateTimeFormats() {
 }
 
 /**
+ * \brief Convenience method for getting time unit string
+ * translated since used in UI
+ */
+QString AbstractColumn::timeUnitString(TimeUnit unit) {
+	switch (unit) {
+	case TimeUnit::Milliseconds:
+		return i18n("Milliseconds");
+	case TimeUnit::Seconds:
+		return i18n("Seconds");
+	case TimeUnit::Minutes:
+		return i18n("Minutes");
+	case TimeUnit::Hours:
+		return i18n("Hours");
+	case TimeUnit::Days:
+		return i18n("Days");
+	}
+
+	return {};
+}
+
+/**
  * \brief Convenience method for getting plot designation string
  * translated since used in UI
  */
@@ -369,7 +390,7 @@ bool AbstractColumn::isNumeric() const {
 
 bool AbstractColumn::isPlottable() const {
 	const auto mode = columnMode();
-	return (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::DateTime);
+	return (isNumeric() || mode == ColumnMode::DateTime);
 }
 
 /**

@@ -184,6 +184,7 @@ private:
 	void initLabels();
 	void initDictionary();
 	void calculateTextStatistics();
+	void calculateDateTimeStatistics();
 	void connectFormulaColumn(const AbstractColumn*);
 
 private Q_SLOTS:

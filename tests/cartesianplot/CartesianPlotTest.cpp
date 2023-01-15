@@ -19,6 +19,7 @@
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotPrivate.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
@@ -755,6 +756,7 @@ void CartesianPlotTest::rangeFormatNonDefaultRange() {
  * \brief CartesianPlotTest::invalidcSystem
  * Plot with 2 CoordinateSystems (with common x range), but the second has invalid start end (0, 0).
  * This scenario shall not destroy the x range when zooming in
+ *
  */
 void CartesianPlotTest::invalidcSystem() {
 	Project project;
@@ -809,7 +811,38 @@ void CartesianPlotTest::invalidcSystem() {
 	range.setFormat(RangeT::Format::Numeric);
 	range.setAutoScale(false);
 	range.setScale(RangeT::Scale::Linear);
-	plot->setRange(Dimension::Y, 1, range);
+
+	{
+		// plot->setRange(Dimension::Y, 1, range); // does not work
+		// Implementation of setRange() must be used, because setRange() uses check to check if
+		// the range is valid, which it isn't in this test. To test neverthless and not removing a test
+		// use directly the implementation
+		int index = 1;
+		auto dimension = Dimension::Y;
+		auto otherValue = range;
+		auto plotPrivate = plot->d_func();
+		plotPrivate->setRangeDirty(dimension, index, true);
+		auto tmp = plotPrivate->rangeConst(dimension, index);
+		plotPrivate->setRange(dimension, index, otherValue);
+		otherValue = tmp;
+		plotPrivate->retransformScale(dimension, index, true);
+		Dimension dim_other = Dimension::Y;
+		if (dimension == Dimension::Y)
+			dim_other = Dimension::X;
+
+		QVector<int> scaledIndices;
+		for (int i = 0; i < plotPrivate->q->coordinateSystemCount(); i++) {
+			auto cs = plotPrivate->q->coordinateSystem(i);
+			auto index_other = cs->index(dim_other);
+			if (cs->index(dimension) == index && scaledIndices.indexOf(index_other) == -1) {
+				scaledIndices << index_other;
+				if (plotPrivate->q->autoScale(dim_other, index_other) && plotPrivate->q->scaleAuto(dim_other, index_other, false))
+					plotPrivate->retransformScale(dim_other, index_other);
+			}
+		}
+		plotPrivate->q->WorksheetElementContainer::retransform();
+		Q_EMIT plotPrivate->q->rangeChanged(dimension, index, plotPrivate->rangeConst(dimension, index));
+	}
 
 	// Recalculate scales is triggered
 	{

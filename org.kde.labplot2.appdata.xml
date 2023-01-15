@@ -126,6 +126,7 @@
       <caption xml:lang="ar">تصوير البيانات</caption>
       <caption xml:lang="ca">Visualització bàsica de dades</caption>
       <caption xml:lang="ca-valencia">Visualització bàsica de dades</caption>
+      <caption xml:lang="cs">Základní vizualizace dat</caption>
       <caption xml:lang="de">Einfache Visualisierung von Daten</caption>
       <caption xml:lang="en-GB">Basic visualisation of data</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
@@ -152,6 +153,7 @@
       <caption xml:lang="ar">تصوير البيانات</caption>
       <caption xml:lang="ca">Visualització bàsica de dades</caption>
       <caption xml:lang="ca-valencia">Visualització bàsica de dades</caption>
+      <caption xml:lang="cs">Základní vizualizace dat</caption>
       <caption xml:lang="de">Einfache Visualisierung von Daten</caption>
       <caption xml:lang="en-GB">Basic visualisation of data</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
@@ -332,6 +334,7 @@
       <caption xml:lang="ar">تحليل الإشارات</caption>
       <caption xml:lang="ca">Anàlisi de senyals</caption>
       <caption xml:lang="ca-valencia">Anàlisi de senyals</caption>
+      <caption xml:lang="cs">Analýza signálu</caption>
       <caption xml:lang="de">Signalanalyse</caption>
       <caption xml:lang="en-GB">Signal analysis</caption>
       <caption xml:lang="es">Análisis de señales</caption>

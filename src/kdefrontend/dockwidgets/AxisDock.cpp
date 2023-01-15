@@ -124,6 +124,8 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.teComment, &QTextEdit::textChanged, this, &AxisDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &AxisDock::visibilityChanged);
 
+	connect(ui.kcbAxisColor, &KColorButton::changed, this, &AxisDock::colorChanged);
+
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::orientationChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&AxisDock::positionChanged));
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
@@ -200,6 +202,12 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.leLabelsPrefix, &QLineEdit::textChanged, this, &AxisDock::labelsPrefixChanged);
 	connect(ui.leLabelsSuffix, &QLineEdit::textChanged, this, &AxisDock::labelsSuffixChanged);
 	connect(ui.sbLabelsOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::labelsOpacityChanged);
+
+	// Updating the axis color widget if one of the other color widgets color changes
+	connect(lineWidget, &LineWidget::colorChanged, this, &AxisDock::setAxisColor);
+	connect(majorTicksLineWidget, &LineWidget::colorChanged, this, &AxisDock::setAxisColor);
+	connect(minorTicksLineWidget, &LineWidget::colorChanged, this, &AxisDock::setAxisColor);
+	connect(labelWidget, &LabelWidget::labelFontColorChangedSignal, this, &AxisDock::setAxisColor);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -571,6 +579,41 @@ void AxisDock::visibilityChanged(bool state) {
 }
 
 /*!
+ * \brief AxisDock::colorChanged
+ * The general color of the axis changes (Title, line, ticks, labels, ...)
+ */
+void AxisDock::colorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+
+	// Set colors of all other ui elements
+	// - Line widget color
+	// - Title color
+	// - Major tick color
+	// - Minor tick color
+	// - Tick label color
+
+	const int axesCount = m_axesList.count();
+	if (axesCount == 1)
+		m_axis->beginMacro(i18n("%1: set axis color", m_axis->name()));
+	else
+		m_axis->beginMacro(i18n("%1 axes: set color", axesCount));
+
+	lineWidget->setColor(color);
+	ui.kcbLabelsFontColor->setColor(color);
+	majorTicksLineWidget->setColor(color);
+	minorTicksLineWidget->setColor(color);
+
+	for (auto* axis : m_axesList) {
+		labelWidget->fontColorChanged(color);
+		labelWidget->labelFontColorChanged(color);
+		// must be done, because kcbLabelsFontColor is in this class and
+		// because of the CONDITIONAL_LOCK_RETURN this function will not be called
+		axis->setLabelsColor(color);
+	}
+	m_axis->endMacro();
+}
+
+/*!
 	called if the orientation (horizontal or vertical) of the current axis is changed.
 */
 void AxisDock::orientationChanged(int item) {
@@ -895,17 +938,28 @@ void AxisDock::arrowSizeChanged(int value) {
 void AxisDock::majorTicksDirectionChanged(int index) {
 	const auto direction = Axis::TicksDirection(index);
 	const bool b = (direction != Axis::noTicks);
-	ui.lMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksType->setEnabled(b);
-	ui.lMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksType->setEnabled(b);
-	ui.lMajorTicksNumber->setEnabled(b);
-	ui.sbMajorTicksNumber->setEnabled(b);
-	ui.lMajorTicksSpacingNumeric->setEnabled(b);
+	ui.cbMajorTicksAutoNumber->setEnabled(b);
+
+	if (b) {
+		if (ui.cbMajorTicksAutoNumber->isChecked())
+			ui.sbMajorTicksNumber->setEnabled(false);
+		else
+			ui.sbMajorTicksNumber->setEnabled(true);
+	} else
+		ui.sbMajorTicksNumber->setEnabled(false);
+
 	ui.sbMajorTicksSpacingNumeric->setEnabled(b);
-	ui.lMajorTicksIncrementDateTime->setEnabled(b);
 	dtsbMajorTicksIncrement->setEnabled(b);
-	dtsbMinorTicksIncrement->setEnabled(b);
+	ui.cbMajorTicksStartType->setEnabled(b);
+	ui.sbMajorTickStartValue->setEnabled(b);
+	ui.sbMajorTickStartOffset->setEnabled(b);
+	ui.tbFirstTickData->setEnabled(b);
+	ui.tbFirstTickAuto->setEnabled(b);
+	cbMajorTicksColumn->setEnabled(b);
+	ui.cbLabelsTextType->setEnabled(b);
+	cbLabelsTextColumn->setEnabled(b);
 	ui.sbMajorTicksLength->setEnabled(b);
 	majorTicksLineWidget->setEnabled(b);
 
@@ -1099,15 +1153,18 @@ void AxisDock::majorTicksLengthChanged(double value) {
 void AxisDock::minorTicksDirectionChanged(int index) {
 	const auto direction = Axis::TicksDirection(index);
 	const bool b = (direction != Axis::noTicks);
-	ui.lMinorTicksType->setEnabled(b);
 	ui.cbMinorTicksType->setEnabled(b);
-	ui.lMinorTicksType->setEnabled(b);
 	ui.cbMinorTicksType->setEnabled(b);
-	ui.lMinorTicksNumber->setEnabled(b);
-	ui.sbMinorTicksNumber->setEnabled(b);
-	ui.lMinorTicksSpacingNumeric->setEnabled(b);
+
+	if (b) {
+		if (ui.cbMinorTicksAutoNumber->isChecked())
+			ui.sbMinorTicksNumber->setEnabled(false);
+		else
+			ui.sbMinorTicksNumber->setEnabled(true);
+	} else
+		ui.sbMinorTicksNumber->setEnabled(false);
+
 	ui.sbMinorTicksSpacingNumeric->setEnabled(b);
-	ui.lMinorTicksIncrementDateTime->setEnabled(b);
 	dtsbMinorTicksIncrement->setEnabled(b);
 	ui.sbMinorTicksLength->setEnabled(b);
 	minorTicksLineWidget->setEnabled(b);
@@ -1301,10 +1358,9 @@ void AxisDock::labelsTextTypeChanged(int index) {
 
 		bool numeric = m_axis->isNumeric();
 		ui.lLabelsFormat->setVisible(numeric);
-		ui.cbLabelsFormat->setVisible(numeric);
-		ui.chkLabelsAutoPrecision->setVisible(numeric);
+		ui.frameLabelsFormat->setVisible(numeric);
 		ui.lLabelsPrecision->setVisible(numeric);
-		ui.sbLabelsPrecision->setVisible(numeric);
+		ui.frameLabelsPrecision->setVisible(numeric);
 		ui.lLabelsDateTimeFormat->setVisible(!numeric);
 		ui.cbLabelsDateTimeFormat->setVisible(!numeric);
 	} else {
@@ -1331,17 +1387,17 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		case AbstractColumn::ColumnMode::Integer:
 		case AbstractColumn::ColumnMode::BigInt:
 			ui.lLabelsFormat->show();
-			ui.cbLabelsFormat->show();
+			ui.frameLabelsFormat->show();
 			ui.lLabelsPrecision->show();
-			ui.framePrecision->show();
+			ui.frameLabelsPrecision->show();
 			ui.lLabelsDateTimeFormat->hide();
 			ui.cbLabelsDateTimeFormat->hide();
 			break;
 		case AbstractColumn::ColumnMode::Text:
 			ui.lLabelsFormat->hide();
-			ui.cbLabelsFormat->hide();
+			ui.frameLabelsFormat->hide();
 			ui.lLabelsPrecision->hide();
-			ui.framePrecision->hide();
+			ui.frameLabelsPrecision->hide();
 			ui.lLabelsDateTimeFormat->hide();
 			ui.cbLabelsDateTimeFormat->hide();
 			break;
@@ -1349,9 +1405,9 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 			ui.lLabelsFormat->hide();
-			ui.cbLabelsFormat->hide();
+			ui.frameLabelsFormat->hide();
 			ui.lLabelsPrecision->hide();
-			ui.framePrecision->hide();
+			ui.frameLabelsPrecision->hide();
 			ui.lLabelsDateTimeFormat->show();
 			ui.cbLabelsDateTimeFormat->show();
 			break;
@@ -1360,9 +1416,9 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		auto type = Axis::LabelsTextType(ui.cbLabelsTextType->currentIndex());
 		if (type == Axis::LabelsTextType::CustomValues) {
 			ui.lLabelsFormat->hide();
-			ui.cbLabelsFormat->hide();
+			ui.frameLabelsFormat->hide();
 			ui.lLabelsPrecision->hide();
-			ui.framePrecision->hide();
+			ui.frameLabelsPrecision->hide();
 			ui.lLabelsDateTimeFormat->hide();
 			ui.cbLabelsDateTimeFormat->hide();
 		}
@@ -1404,6 +1460,8 @@ void AxisDock::labelsFontColorChanged(const QColor& color) {
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsColor(color);
+
+	updateAxisColor();
 }
 
 void AxisDock::labelsBackgroundTypeChanged(int index) {
@@ -1672,6 +1730,7 @@ void AxisDock::axisLabelsFontChanged(const QFont& font) {
 }
 void AxisDock::axisLabelsFontColorChanged(const QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
+	updateAxisColor();
 	ui.kcbLabelsFontColor->setColor(color);
 }
 void AxisDock::axisLabelsBackgroundTypeChanged(Axis::LabelsBackgroundType type) {
@@ -1717,6 +1776,8 @@ void AxisDock::axisVisibilityChanged(bool on) {
 void AxisDock::load() {
 	// General
 	ui.chkVisible->setChecked(m_axis->isVisible());
+
+	updateAxisColor();
 
 	Axis::Orientation orientation = m_axis->orientation();
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
@@ -1869,6 +1930,27 @@ void AxisDock::load() {
 	minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
 	labelsTextTypeChanged(ui.cbLabelsTextType->currentIndex());
 	labelsTextColumnChanged(cbLabelsTextColumn->currentModelIndex());
+}
+
+void AxisDock::setAxisColor() {
+	CONDITIONAL_LOCK_RETURN;
+	updateAxisColor();
+}
+
+void AxisDock::updateAxisColor() {
+	// Set color of the global
+	// - Line widget color
+	// - Title color
+	// - Major tick color
+	// - Minor tick color
+	// - Tick label color
+	QColor color = m_axis->line()->color();
+	if (m_axis->title()->fontColor() == color && m_axis->majorTicksLine()->color() == color && m_axis->minorTicksLine()->color() == color
+		&& m_axis->labelsColor() == color) {
+		// All have same color
+		ui.kcbAxisColor->setColor(color);
+	} else
+		ui.kcbAxisColor->setColor(QColor(0, 0, 0, 0));
 }
 
 void AxisDock::loadConfigFromTemplate(KConfig& config) {

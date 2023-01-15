@@ -71,6 +71,12 @@ private:
 
 Q_SIGNALS:
 	void dataChanged(bool);
+	/*!
+	 * \brief fontColorChangedSignal
+	 * Used to send out that font color has changed. So in the case of the axis
+	 * the axisdock can update the axis color widget
+	 */
+	void labelFontColorChangedSignal(const QColor&);
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in LabelWidget
@@ -144,6 +150,8 @@ private Q_SLOTS:
 	void labelModeChanged(TextLabel::Mode);
 
 	friend TextLabelTest;
+	friend class AxisTest;
+	friend class AxisDock; // fontColorChanged() is a private method of LabelWidget, needs to be called
 };
 
 #endif // LABELWIDGET_H

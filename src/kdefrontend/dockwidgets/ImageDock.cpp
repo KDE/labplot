@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for image properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,6 +14,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
+#include "kdefrontend/widgets/LineWidget.h"
 
 #include <QCompleter>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
@@ -68,6 +69,10 @@ ImageDock::ImageDock(QWidget* parent)
 	ui.cbVerticalAlignment->addItem(i18n("Center"));
 	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 
+	auto* layout = static_cast<QHBoxLayout*>(ui.tabBorder->layout());
+	borderLineWidget = new LineWidget(ui.tabBorder);
+	layout->insertWidget(0, borderLineWidget);
+
 	QString suffix;
 	if (m_units == BaseDock::Units::Metric)
 		suffix = QStringLiteral(" cm");
@@ -78,14 +83,6 @@ ImageDock::ImageDock(QWidget* parent)
 	ui.sbHeight->setSuffix(suffix);
 	ui.sbPositionX->setSuffix(suffix);
 	ui.sbPositionY->setSuffix(suffix);
-
-	// border
-	ui.cbBorderStyle->addItem(i18n("No line"));
-	ui.cbBorderStyle->addItem(i18n("Solid line"));
-	ui.cbBorderStyle->addItem(i18n("Dash line"));
-	ui.cbBorderStyle->addItem(i18n("Dot line"));
-	ui.cbBorderStyle->addItem(i18n("Dash dot line"));
-	ui.cbBorderStyle->addItem(i18n("Dash dot dot line"));
 
 	ImageDock::updateLocale();
 
@@ -114,12 +111,6 @@ ImageDock::ImageDock(QWidget* parent)
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::rotationChanged);
 
 	connect(ui.chbVisible, &QCheckBox::clicked, this, &ImageDock::visibilityChanged);
-
-	// Border
-	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::borderStyleChanged);
-	connect(ui.kcbBorderColor, &KColorButton::changed, this, &ImageDock::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::borderWidthChanged);
-	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::borderOpacityChanged);
 }
 
 void ImageDock::setImages(QList<Image*> list) {
@@ -151,6 +142,12 @@ void ImageDock::setImages(QList<Image*> list) {
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
 
+	QList<Line*> lines;
+	for (auto* image : m_imageList)
+		lines << image->borderLine();
+
+	borderLineWidget->setLines(lines);
+
 	// show the properties of the first image
 	this->load();
 
@@ -172,10 +169,6 @@ void ImageDock::setImages(QList<Image*> list) {
 	connect(m_image, &Image::horizontalAlignmentChanged, this, &ImageDock::imageHorizontalAlignmentChanged);
 	connect(m_image, &Image::verticalAlignmentChanged, this, &ImageDock::imageVerticalAlignmentChanged);
 	connect(m_image, &Image::rotationAngleChanged, this, &ImageDock::imageRotationAngleChanged);
-
-	// Border
-	connect(m_image, &Image::borderPenChanged, this, &ImageDock::imageBorderPenChanged);
-	connect(m_image, &Image::borderOpacityChanged, this, &ImageDock::imageBorderOpacityChanged);
 }
 
 /*
@@ -187,7 +180,7 @@ void ImageDock::updateLocale() {
 	ui.sbHeight->setLocale(numberLocale);
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
+	borderLineWidget->updateLocale();
 }
 
 void ImageDock::updateUnits() {
@@ -250,20 +243,26 @@ void ImageDock::embeddedChanged(int state) {
 
 	CONDITIONAL_LOCK_RETURN;
 
+	for (auto* image : m_imageList)
+		image->setEmbedded(embedded);
+
+	// embedded property was set, update the file name LineEdit after this
 	if (embedded) {
 		QFileInfo fi(m_image->fileName());
 		ui.leFileName->setText(fi.fileName());
 	} else
 		ui.leFileName->setText(m_image->fileName());
-
-	for (auto* image : m_imageList)
-		image->setEmbedded(embedded);
 }
 
 void ImageDock::fileNameChanged() {
 	const QString& fileName = ui.leFileName->text();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
-	GuiTools::highlight(ui.leFileName, invalid);
+
+	if (!m_image->embedded()) {
+		bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+		GuiTools::highlight(ui.leFileName, invalid);
+		ui.chbEmbedded->setEnabled(!invalid);
+	} else
+		GuiTools::highlight(ui.leFileName, false);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -280,10 +279,6 @@ void ImageDock::opacityChanged(int value) {
 }
 
 // Size
-void ImageDock::sizeChanged(int /*index*/) {
-	CONDITIONAL_LOCK_RETURN;
-}
-
 void ImageDock::widthChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
@@ -314,7 +309,7 @@ void ImageDock::keepRatioChanged(int state) {
 void ImageDock::positionXChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	WorksheetElement::PositionWrapper position = m_image->position();
+	auto position = m_image->position();
 	position.horizontalPosition = WorksheetElement::HorizontalPosition(index);
 	for (auto* image : m_imageList)
 		image->setPosition(position);
@@ -382,51 +377,6 @@ void ImageDock::visibilityChanged(bool state) {
 		image->setVisible(state);
 }
 
-// border
-void ImageDock::borderStyleChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* image : m_imageList) {
-		pen = image->borderPen();
-		pen.setStyle(penStyle);
-		image->setBorderPen(pen);
-	}
-}
-
-void ImageDock::borderColorChanged(const QColor& color) {
-	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-
-	CONDITIONAL_LOCK_RETURN;
-
-	QPen pen;
-	for (auto* image : m_imageList) {
-		pen = image->borderPen();
-		pen.setColor(color);
-		image->setBorderPen(pen);
-	}
-}
-
-void ImageDock::borderWidthChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	QPen pen;
-	for (auto* image : m_imageList) {
-		pen = image->borderPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		image->setBorderPen(pen);
-	}
-}
-
-void ImageDock::borderOpacityChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-
-	qreal opacity = value / 100.;
-	for (auto* image : m_imageList)
-		image->setBorderOpacity(opacity);
-}
-
 //*************************************************************
 //********** SLOTs for changes triggered in Image *************
 //*************************************************************
@@ -490,22 +440,6 @@ void ImageDock::imageVisibleChanged(bool on) {
 	ui.chbVisible->setChecked(on);
 }
 
-// Border
-void ImageDock::imageBorderPenChanged(const QPen& pen) {
-	CONDITIONAL_LOCK_RETURN;
-	if (ui.cbBorderStyle->currentIndex() != pen.style())
-		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if (ui.kcbBorderColor->color() != pen.color())
-		ui.kcbBorderColor->setColor(pen.color());
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point)); // No if!
-}
-
-void ImageDock::imageBorderOpacityChanged(float value) {
-	CONDITIONAL_LOCK_RETURN;
-	float v = (float)value * 100.;
-	ui.sbBorderOpacity->setValue(v);
-}
-
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
@@ -536,11 +470,4 @@ void ImageDock::load() {
 	ui.cbHorizontalAlignment->setCurrentIndex((int)m_image->horizontalAlignment());
 	ui.cbVerticalAlignment->setCurrentIndex((int)m_image->verticalAlignment());
 	ui.sbRotation->setValue(m_image->rotationAngle());
-
-	// Border
-	ui.kcbBorderColor->setColor(m_image->borderPen().color());
-	ui.cbBorderStyle->setCurrentIndex((int)m_image->borderPen().style());
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(m_image->borderPen().widthF(), Worksheet::Unit::Point));
-	ui.sbBorderOpacity->setValue(round(m_image->borderOpacity() * 100));
-	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 }

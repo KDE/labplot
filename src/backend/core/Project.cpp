@@ -168,15 +168,9 @@ Project::Project()
 	KConfig config;
 	KConfigGroup group = config.group("Project");
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 	QString user = qEnvironmentVariable("USER"); // !Windows
 	if (user.isEmpty())
 		user = qEnvironmentVariable("USERNAME"); // Windows
-#else
-	QString user = qgetenv("USER"); // !Windows
-	if (user.isEmpty())
-		user = qgetenv("USERNAME"); // Windows
-#endif
 	d->author = group.readEntry("Author", user);
 
 	// we don't have direct access to the members name and comment

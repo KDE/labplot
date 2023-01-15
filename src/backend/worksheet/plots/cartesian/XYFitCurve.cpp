@@ -554,7 +554,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
 			default:
-				model = QStringLiteral("1./sqrt(2*pi) * (");
+				model = QStringLiteral("1/sqrt(2*pi) * (");
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
@@ -574,7 +574,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
 				break;
 			default:
-				model = QStringLiteral("1./pi * (");
+				model = QStringLiteral("1/pi * (");
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)

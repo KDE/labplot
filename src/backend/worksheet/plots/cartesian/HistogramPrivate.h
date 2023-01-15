@@ -11,8 +11,6 @@
 #ifndef HISTOGRAMPRIVATE_H
 #define HISTOGRAMPRIVATE_H
 
-// #include "backend/worksheet/plots/cartesian/XYCurve.h"
-
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <vector>
 

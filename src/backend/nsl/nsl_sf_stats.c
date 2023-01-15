@@ -115,3 +115,11 @@ const char* nsl_sf_stats_distribution_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-m
 													"a/2/s * sech(pi/2*(x-mu)/s)",
 													"a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))",
 													"a * g/s*((x-mu)/s)^(-g-1) * exp(-((x-mu)/s)^(-g))"};
+
+bool nsl_sf_stats_distribution_supports_ML(nsl_sf_stats_distribution d) {
+	if (d == nsl_sf_stats_gaussian || d == nsl_sf_stats_exponential || d == nsl_sf_stats_laplace || d == nsl_sf_stats_cauchy_lorentz
+		|| d == nsl_sf_stats_lognormal || d == nsl_sf_stats_poisson || d == nsl_sf_stats_binomial)
+		return true;
+
+	return false;
+}

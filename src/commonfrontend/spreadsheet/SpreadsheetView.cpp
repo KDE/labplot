@@ -63,6 +63,7 @@
 #include <QPrintPreviewDialog>
 #include <QPrinter>
 #include <QProcess>
+#include <QRandomGenerator>
 #include <QRegularExpression>
 #include <QScrollBar>
 #include <QSqlDatabase>
@@ -72,9 +73,6 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QToolBar>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-#include <QRandomGenerator>
-#endif
 
 #include <algorithm> //for std::reverse
 
@@ -293,7 +291,7 @@ void SpreadsheetView::initActions() {
 	action_go_to_cell = new QAction(QIcon::fromTheme(QStringLiteral("go-jump")), i18n("&Go to Cell..."), this);
 	action_search = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Search"), this);
 	action_search->setShortcut(QKeySequence::Find);
-	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Statisti&cs..."), this);
+	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
@@ -426,7 +424,7 @@ void SpreadsheetView::initActions() {
 	action_sort_columns = new QAction(QIcon::fromTheme(QString()), i18n("&Selected Columns"), this);
 	action_sort_asc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("&Ascending"), this);
 	action_sort_desc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("&Descending"), this);
-	action_statistics_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statisti&cs"), this);
+	action_statistics_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
 	// conditional formatting
 	action_formatting_heatmap = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Heatmap"), this);
@@ -758,7 +756,7 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
-	m_spreadsheetMenu->addAction(action_statistics_all_columns);
+	m_spreadsheetMenu->addAction(action_statistics_columns);
 
 	// Row menu
 	m_rowMenu = new QMenu(this);
@@ -996,7 +994,7 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_columns);
-	action_statistics_columns->setEnabled((numeric || text) && hasValues);
+	action_statistics_columns->setEnabled(hasValues);
 }
 
 // SLOTS
@@ -1391,7 +1389,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			m_plotDataMenu->setEnabled(plottable && hasValues);
 			m_analyzePlotMenu->setEnabled(numeric && hasValues);
 			m_columnSetAsMenu->setEnabled(numeric);
-			action_statistics_columns->setEnabled((numeric || text) && hasValues);
+			action_statistics_columns->setEnabled(hasValues);
 			action_clear_columns->setEnabled(hasValues);
 			m_formattingMenu->setEnabled(hasValues);
 			action_formatting_remove->setVisible(hasFormat);
@@ -1480,21 +1478,9 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	action_sort_spreadsheet->setEnabled(cellsAvail);
 	action_go_to_cell->setEnabled(cellsAvail);
 
-	const auto& columns = m_spreadsheet->children<Column>();
-
-	// deactivate "Statistics" action if no numeric data is available
-	bool hasNumericValues = false;
-	for (auto* column : columns) {
-		if (column->isNumeric() && column->hasValues()) {
-			hasNumericValues = true;
-			break;
-		}
-	}
-
-	action_statistics_all_columns->setEnabled(hasNumericValues);
-
 	// deactivate the "Clear masks" action if there are no masked cells
 	bool hasMasked = false;
+	const auto& columns = m_spreadsheet->children<Column>();
 	for (auto* column : columns) {
 		if (column->maskedIntervals().size() > 0) {
 			hasMasked = true;
@@ -1954,9 +1940,11 @@ void SpreadsheetView::maskSelection() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: mask selected cells", m_spreadsheet->name()));
 
+	const auto& columns = selectedColumns(false);
 	QVector<CartesianPlot*> plots;
+
 	// determine the dependent plots
-	for (auto* column : selectedColumns(false))
+	for (auto* column : columns)
 		column->addUsedInPlots(plots);
 
 	// suppress retransform in the dependent plots
@@ -1964,7 +1952,7 @@ void SpreadsheetView::maskSelection() {
 		plot->setSuppressRetransform(true);
 
 	// mask the selected cells
-	for (auto* column : selectedColumns(false)) {
+	for (auto* column : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col))
@@ -1994,9 +1982,11 @@ void SpreadsheetView::unmaskSelection() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: unmask selected cells", m_spreadsheet->name()));
 
+	const auto& columns = selectedColumns(false);
 	QVector<CartesianPlot*> plots;
+
 	// determine the dependent plots
-	for (auto* column : selectedColumns(false))
+	for (auto* column : columns)
 		column->addUsedInPlots(plots);
 
 	// suppress retransform in the dependent plots
@@ -2004,7 +1994,7 @@ void SpreadsheetView::unmaskSelection() {
 		plot->setSuppressRetransform(true);
 
 	// unmask the selected cells
-	for (auto* column : selectedColumns(false)) {
+	for (auto* column : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col))
@@ -2156,11 +2146,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with random values", m_spreadsheet->name()));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 	QRandomGenerator rng(QTime::currentTime().msec());
-#else
-	qsrand(QTime::currentTime().msec());
-#endif
 	for (auto* col_ptr : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
@@ -2169,11 +2155,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 			QVector<double> results(last - first + 1);
 			for (int row = first; row <= last; row++)
 				if (isCellSelected(row, col))
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 					results[row - first] = rng.generateDouble();
-#else
-					results[row - first] = double(qrand()) / double(RAND_MAX);
-#endif
 				else
 					results[row - first] = col_ptr->valueAt(row);
 			col_ptr->replaceValues(first, results);
@@ -2183,11 +2165,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 			QVector<int> results(last - first + 1);
 			for (int row = first; row <= last; row++)
 				if (isCellSelected(row, col))
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 					results[row - first] = QRandomGenerator::global()->generate();
-#else
-					results[row - first] = qrand();
-#endif
 				else
 					results[row - first] = col_ptr->integerAt(row);
 			col_ptr->replaceInteger(first, results);
@@ -2197,11 +2175,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 			QVector<qint64> results(last - first + 1);
 			for (int row = first; row <= last; row++)
 				if (isCellSelected(row, col))
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 					results[row - first] = QRandomGenerator::global()->generate64();
-#else
-					results[row - first] = qrand();
-#endif
 				else
 					results[row - first] = col_ptr->bigIntAt(row);
 			col_ptr->replaceBigInt(first, results);
@@ -2211,11 +2185,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 			QVector<QString> results;
 			for (int row = first; row <= last; row++)
 				if (isCellSelected(row, col))
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 					results[row - first] = QString::number(QRandomGenerator::global()->generateDouble());
-#else
-					results << QString::number(double(qrand()) / double(RAND_MAX));
-#endif
 				else
 					results << col_ptr->textAt(row);
 			col_ptr->replaceTexts(first, results);
@@ -2230,13 +2200,8 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 			QTime midnight(0, 0, 0, 0);
 			for (int row = first; row <= last; row++)
 				if (isCellSelected(row, col))
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 					results << QDateTime(earliestDate.addDays((QRandomGenerator::global()->generateDouble()) * ((double)earliestDate.daysTo(latestDate))),
 										 midnight.addMSecs((QRandomGenerator::global()->generateDouble()) * 1000 * 60 * 60 * 24));
-#else
-					results << QDateTime(earliestDate.addDays(((double)qrand()) * ((double)earliestDate.daysTo(latestDate)) / ((double)RAND_MAX)),
-										 midnight.addMSecs(((qint64)qrand()) * 1000 * 60 * 60 * 24 / RAND_MAX));
-#endif
 				else
 					results << col_ptr->dateTimeAt(row);
 			col_ptr->replaceDateTimes(first, results);
@@ -2670,8 +2635,7 @@ void SpreadsheetView::modifyValues() {
 
 	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
 	auto op = (AddSubtractValueDialog::Operation)action->data().toInt();
-	auto* dlg = new AddSubtractValueDialog(m_spreadsheet, op);
-	dlg->setColumns(columns);
+	auto* dlg = new AddSubtractValueDialog(m_spreadsheet, columns, op);
 	dlg->exec();
 }
 
@@ -3129,13 +3093,65 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 	QString dlgTitle(i18n("%1: column statistics", m_spreadsheet->name()));
 	QVector<Column*> columns;
 
-	if (!forAll)
-		columns = selectedColumns();
-	else {
+	// Column statistics can be shown for:
+	// * all columns in the spreadsheet - called via the action_statistics_all_columns or when one single cell is selected (=no selection)
+	// * all selected columns in the speadsheet - called via the context menu of the header
+	// * selected column cells - called via the context menu in the spreadsheet with multiple selected cells
+	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
+	if (forAll || indexes.size() <= 1) {
 		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
 			auto* column = m_spreadsheet->column(col);
-			if (column->isNumeric() && column->hasValues())
+			if (column->hasValues())
 				columns << column;
+		}
+	} else {
+		columns = selectedColumns(true);
+
+		// if no columns are fully selected, copy the selected cells into new Columns which will be processes in the statistics dialog
+		if (columns.isEmpty()) {
+			const auto& children = m_spreadsheet->children<Column>();
+			Column* sourceColumn{nullptr};
+			Column* targetColumn{nullptr};
+			QMap<int, int> columnMappings; // key = child column index in the spreadsheet, value = column index in the vector of new colums
+			QMap<int, int> rowMappings; // key = child column index in the spreadsheet, value = last row index
+			for (const auto& index : indexes) {
+				int col = index.column();
+				int row = index.row();
+				sourceColumn = children.at(col);
+
+				if (columnMappings.contains(col))
+					targetColumn = columns.at(columnMappings[col]);
+				else {
+					targetColumn = new Column(i18n("Selection in %1", sourceColumn->name()), sourceColumn->columnMode());
+					columns << targetColumn;
+					columnMappings[col] = columns.count() - 1;
+					rowMappings[col] = 0;
+				}
+
+				int targetRow = rowMappings[col];
+
+				switch (targetColumn->columnMode()) {
+				case AbstractColumn::ColumnMode::Double:
+					targetColumn->setValueAt(targetRow, sourceColumn->valueAt(row));
+					break;
+				case AbstractColumn::ColumnMode::Integer:
+					targetColumn->setIntegerAt(targetRow, sourceColumn->integerAt(row));
+					break;
+				case AbstractColumn::ColumnMode::BigInt:
+					targetColumn->setBigIntAt(targetRow, sourceColumn->bigIntAt(row));
+					break;
+				case AbstractColumn::ColumnMode::Text:
+					targetColumn->setTextAt(targetRow, sourceColumn->textAt(row));
+					break;
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Day:
+					targetColumn->setDateTimeAt(targetRow, sourceColumn->dateTimeAt(row));
+					break;
+				}
+
+				rowMappings[col] = targetRow + 1;
+			}
 		}
 	}
 

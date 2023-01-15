@@ -768,7 +768,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		// don't use setPosition here, because then all small changes are on the undo stack
 		// setPosition is used then in mouseReleaseEvent
 		if (coordinateBindingEnabled) {
-			if (q->cSystem->isValid())
+			if (!q->cSystem->isValid())
 				return QGraphicsItem::itemChange(change, value);
 			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
