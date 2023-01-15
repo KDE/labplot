@@ -52,11 +52,6 @@ void XYInterpolationCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYInterpolationCurve::resultAvailable() const {
-	Q_D(const XYInterpolationCurve);
-	return d->interpolationResult.available;
-}
-
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -69,7 +64,7 @@ QIcon XYInterpolationCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, XYInterpolationCurve::InterpolationData, interpolationData, interpolationData)
 
-const XYInterpolationCurve::InterpolationResult& XYInterpolationCurve::interpolationResult() const {
+const XYAnalysisCurve::Result& XYInterpolationCurve::result() const {
 	Q_D(const XYInterpolationCurve);
 	return d->interpolationResult;
 }

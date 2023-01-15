@@ -24,6 +24,7 @@ public:
 
 	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
 	virtual void resetResults() override;
+	const XYAnalysisCurve::Result& result() const;
 
 	XYDataReductionCurve::DataReductionData dataReductionData;
 	XYDataReductionCurve::DataReductionResult dataReductionResult;

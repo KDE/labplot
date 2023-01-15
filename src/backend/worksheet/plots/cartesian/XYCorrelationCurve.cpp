@@ -47,9 +47,9 @@ void XYCorrelationCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYCorrelationCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYCorrelationCurve::result() const {
 	Q_D(const XYCorrelationCurve);
-	return d->correlationResult.available;
+	return d->correlationResult;
 }
 
 /*!

@@ -524,7 +524,7 @@ void XYSmoothCurveDock::recalculateClicked() {
 		static_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	Q_EMIT info(i18n("Smoothing status: %1", m_smoothCurve->smoothResult().status));
+	Q_EMIT info(i18n("Smoothing status: %1", m_smoothCurve->result().status));
 	QApplication::restoreOverrideCursor();
 }
 
@@ -556,7 +556,7 @@ void XYSmoothCurveDock::enableRecalculate() const {
  * show the result and details of the smooth
  */
 void XYSmoothCurveDock::showSmoothResult() {
-	const XYSmoothCurve::SmoothResult& smoothResult = m_smoothCurve->smoothResult();
+	const XYSmoothCurve::SmoothResult& smoothResult = m_smoothCurve->result();
 	if (!smoothResult.available) {
 		uiGeneralTab.teResult->clear();
 		return;

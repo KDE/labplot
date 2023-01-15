@@ -54,9 +54,9 @@ void XYFourierFilterCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYFourierFilterCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYFourierFilterCurve::result() const {
 	Q_D(const XYFourierFilterCurve);
-	return d->filterResult.available;
+	return d->filterResult;
 }
 
 /*!

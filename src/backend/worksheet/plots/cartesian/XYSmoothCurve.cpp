@@ -51,11 +51,6 @@ void XYSmoothCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYSmoothCurve::resultAvailable() const {
-	Q_D(const XYSmoothCurve);
-	return d->smoothResult.available;
-}
-
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -73,7 +68,7 @@ const AbstractColumn* XYSmoothCurve::roughsColumn() const {
 
 BASIC_SHARED_D_READER_IMPL(XYSmoothCurve, XYSmoothCurve::SmoothData, smoothData, smoothData)
 
-const XYSmoothCurve::SmoothResult& XYSmoothCurve::smoothResult() const {
+const XYAnalysisCurve::Result& XYSmoothCurve::result() const {
 	Q_D(const XYSmoothCurve);
 	return d->smoothResult;
 }
@@ -100,7 +95,7 @@ XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner)
 XYSmoothCurvePrivate::~XYSmoothCurvePrivate() = default;
 
 void XYSmoothCurvePrivate::resetResults() {
-	smoothResult = XYSmoothCurve::SmoothResult();
+	smoothResult = XYAnalysisCurve::Result();
 }
 
 bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {

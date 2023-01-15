@@ -32,25 +32,19 @@ public:
 		// TODO: use Range
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
-	struct DifferentiationResult {
-		DifferentiationResult(){};
-
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
-	};
 
 	explicit XYDifferentiationCurve(const QString& name);
 	~XYDifferentiationCurve() override;
 
 	void recalculate() override;
-	bool resultAvailable() const override;
+	virtual const Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
 	CLASS_D_ACCESSOR_DECL(DifferentiationData, differentiationData, DifferentiationData)
+
+	typedef XYAnalysisCurve::Result DifferentiationResult;
 	const DifferentiationResult& differentiationResult() const;
 
 	typedef XYDifferentiationCurvePrivate Private;

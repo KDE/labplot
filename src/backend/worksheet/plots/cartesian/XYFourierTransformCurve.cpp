@@ -51,11 +51,6 @@ void XYFourierTransformCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYFourierTransformCurve::resultAvailable() const {
-	Q_D(const XYFourierTransformCurve);
-	return d->transformResult.available;
-}
-
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -68,7 +63,7 @@ QIcon XYFourierTransformCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFourierTransformCurve, XYFourierTransformCurve::TransformData, transformData, transformData)
 
-const XYFourierTransformCurve::TransformResult& XYFourierTransformCurve::transformResult() const {
+const XYAnalysisCurve::Result& XYFourierTransformCurve::result() const {
 	Q_D(const XYFourierTransformCurve);
 	return d->transformResult;
 }

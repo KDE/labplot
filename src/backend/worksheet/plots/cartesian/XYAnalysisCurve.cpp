@@ -45,6 +45,10 @@ void XYAnalysisCurve::init() {
 	d->symbol->setStyle(Symbol::Style::NoSymbols);
 }
 
+bool XYAnalysisCurve::resultAvailable() const {
+	return result().available;
+}
+
 // copy valid data from x/y data columns to x/y data vectors
 // for analysis functions
 // avgUniqueX: average y values for duplicate x values

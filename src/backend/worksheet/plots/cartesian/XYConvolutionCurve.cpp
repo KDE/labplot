@@ -47,9 +47,9 @@ void XYConvolutionCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYConvolutionCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYConvolutionCurve::result() const {
 	Q_D(const XYConvolutionCurve);
-	return d->convolutionResult.available;
+	return d->convolutionResult;
 }
 
 /*!

@@ -50,9 +50,9 @@ void XYHilbertTransformCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYHilbertTransformCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYHilbertTransformCurve::result() const {
 	Q_D(const XYHilbertTransformCurve);
-	return d->transformResult.available;
+	return d->transformResult;
 }
 
 /*!
@@ -66,11 +66,6 @@ QIcon XYHilbertTransformCurve::icon() const {
 //##########################  getter methods  ##################################
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYHilbertTransformCurve, XYHilbertTransformCurve::TransformData, transformData, transformData)
-
-const XYHilbertTransformCurve::TransformResult& XYHilbertTransformCurve::transformResult() const {
-	Q_D(const XYHilbertTransformCurve);
-	return d->transformResult;
-}
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################

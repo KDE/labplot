@@ -45,9 +45,9 @@ void XYDataReductionCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYDataReductionCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYDataReductionCurve::result() const {
 	Q_D(const XYDataReductionCurve);
-	return d->dataReductionResult.available;
+	return d->dataReductionResult;
 }
 /*!
 	Returns an icon to be used in the project explorer.
@@ -89,6 +89,10 @@ XYDataReductionCurvePrivate::~XYDataReductionCurvePrivate() = default;
 
 void XYDataReductionCurvePrivate::resetResults() {
 	dataReductionResult = XYDataReductionCurve::DataReductionResult();
+}
+
+const XYAnalysisCurve::Result& XYDataReductionCurvePrivate::result() const {
+	return dataReductionResult;
 }
 
 bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {

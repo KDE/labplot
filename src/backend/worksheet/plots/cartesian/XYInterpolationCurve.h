@@ -37,26 +37,19 @@ public:
 		// TODO: use Range
 		QVector<double> xRange{0, 0}; // x range for interpolation
 	};
-	struct InterpolationResult {
-		InterpolationResult(){};
-
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
-	};
 
 	explicit XYInterpolationCurve(const QString& name);
 	~XYInterpolationCurve() override;
 
 	void recalculate() override;
-	bool resultAvailable() const override;
+
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
 	CLASS_D_ACCESSOR_DECL(InterpolationData, interpolationData, InterpolationData)
-	const InterpolationResult& interpolationResult() const;
+	typedef XYAnalysisCurve::Result InterpolationResult;
+	virtual const XYAnalysisCurve::Result& result() const override;
 
 	typedef XYInterpolationCurvePrivate Private;
 

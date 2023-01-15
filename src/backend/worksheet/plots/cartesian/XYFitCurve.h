@@ -62,16 +62,12 @@ public:
 		Range<double> evalRange{0., 0.}; // x range to evaluate fit function
 	};
 
-	struct FitResult {
+	struct FitResult : public XYAnalysisCurve::Result {
 		FitResult() {
 		}
 		void calculateResult(size_t n, unsigned int np); // calculate depending results (uses dof, sse, sst)
 
-		bool available{false};
-		bool valid{false};
-		QString status;
 		int iterations{0};
-		qint64 elapsedTime{0};
 		double dof{0}; // degrees of freedom
 		// residuals: r_i = y_i - Y_i
 		double sse{0}; // sum of squared errors (SSE) / residual sum of squares (RSS) / sum of sq. residuals (SSR) / S = chi^2 = \sum_i^n r_i^2
@@ -108,7 +104,7 @@ public:
 
 	void recalculate() override;
 	void evaluate(bool preview);
-	bool resultAvailable() const override;
+	virtual const XYAnalysisCurve::Result& result() const override;
 	void initStartValues(const XYCurve*);
 	void initStartValues(XYFitCurve::FitData&, const XYCurve*);
 	void initFitData(XYAnalysisCurve::AnalysisAction);

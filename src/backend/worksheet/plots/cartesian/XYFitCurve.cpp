@@ -73,11 +73,10 @@ void XYFitCurve::evaluate(bool preview) {
 	}
 }
 
-bool XYFitCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYFitCurve::result() const {
 	Q_D(const XYFitCurve);
-	return d->fitResult.available;
+	return d->fitResult;
 }
-
 void XYFitCurve::initStartValues(const XYCurve* curve) {
 	Q_D(XYFitCurve);
 	XYFitCurve::FitData& fitData = d->fitData;

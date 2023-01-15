@@ -49,9 +49,9 @@ void XYIntegrationCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYIntegrationCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYIntegrationCurve::result() const {
 	Q_D(const XYIntegrationCurve);
-	return d->integrationResult.available;
+	return d->integrationResult;
 }
 
 /*!
