@@ -13,6 +13,7 @@ New features:
 			* Symbols for whisker end points
 			* Allow to modify box properties (color, etc.) for every data set independently of each other
 			* Draw a legend item for every dataset in the box plot
+		* Reference Range - custom area on the plot to highlight a certain x- or y-range
 	* [spreadsheet]
 		* Use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns
