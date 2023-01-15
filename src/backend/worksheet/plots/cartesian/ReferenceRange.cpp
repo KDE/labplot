@@ -294,9 +294,7 @@ void ReferenceRangePrivate::retransform() {
 
 	prevPositionLogical = positionLogical;
 
-// 	qDebug() << "logical rect " << rect;
-
-	//TODO: taken from BoxPlotPrivate::updateFillingRect(), maybe a more simpler version is possible here
+	// TODO: taken from BoxPlotPrivate::updateFillingRect(), maybe a more simpler version is possible here
 	Lines lines;
 	lines << QLineF(rect.topLeft(), rect.topRight());
 	lines << QLineF(rect.topRight(), rect.bottomRight());
@@ -449,39 +447,39 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 void ReferenceRangePrivate::drawFilling(QPainter* painter) const {
 	if (background->type() == Background::Type::Color) {
 		switch (background->colorStyle()) {
-		case  Background::ColorStyle::SingleColor: {
+		case Background::ColorStyle::SingleColor: {
 			painter->setBrush(QBrush(background->firstColor()));
 			break;
 		}
-		case  Background::ColorStyle::HorizontalLinearGradient: {
+		case Background::ColorStyle::HorizontalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
 			linearGrad.setColorAt(0, background->firstColor());
 			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case  Background::ColorStyle::VerticalLinearGradient: {
+		case Background::ColorStyle::VerticalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
 			linearGrad.setColorAt(0, background->firstColor());
 			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case  Background::ColorStyle::TopLeftDiagonalLinearGradient: {
+		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
 			linearGrad.setColorAt(0, background->firstColor());
 			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case  Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
+		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
 			linearGrad.setColorAt(0, background->firstColor());
 			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case  Background::ColorStyle::RadialGradient: {
+		case Background::ColorStyle::RadialGradient: {
 			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
 			radialGrad.setColorAt(0, background->firstColor());
 			radialGrad.setColorAt(1, background->secondColor());
