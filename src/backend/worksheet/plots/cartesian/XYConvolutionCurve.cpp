@@ -96,7 +96,7 @@ void XYConvolutionCurvePrivate::resetResults() {
 }
 
 bool XYConvolutionCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
-	// X is not important here
+	Q_UNUSED(tmpXDataColumn);
 	return tmpYDataColumn != nullptr;
 }
 

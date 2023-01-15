@@ -95,6 +95,11 @@ void XYCorrelationCurvePrivate::resetResults() {
 	correlationResult = XYCorrelationCurve::CorrelationResult();
 }
 
+bool XYCorrelationCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	Q_UNUSED(tmpXDataColumn);
+	return tmpYDataColumn != nullptr;
+}
+
 bool XYCorrelationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	DEBUG(Q_FUNC_INFO);
 	QElapsedTimer timer;
