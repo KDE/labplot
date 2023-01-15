@@ -6,10 +6,11 @@ FMT=""
 FOLDERS=("src/backend" "src/commonfrontend" "src/kdefrontend" "src/tools" "tests")
 
 # Some distros just call it clang-format. Others (e.g. Ubuntu) are insistent
-# that the version number be part of the command. We prefer clang-format if
-# that's present, otherwise we check clang-format-13 
-for clangfmt in clang-format{,-13}; do
+# that the version number be part of the command. We prefer clang-format-13 if
+# that's present, otherwise we check clang-format 
+for clangfmt in clang-format{-13,}; do
     if which "$clangfmt" &>/dev/null; then
+        echo "$clangfmt --version"
         FMT="$clangfmt"
         break
     fi
