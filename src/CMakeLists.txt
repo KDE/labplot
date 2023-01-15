@@ -532,15 +532,7 @@ target_link_libraries( labplot2lib
 	${LZ4_LIBRARIES}
 	${MATIO_LIBRARIES}
 	${ZLIB_LIBRARIES}
-	PkgConfig::Vector_BLF
 	)
-    if (${LOCAL_DBC_PARSER})
-        target_link_libraries(labplot2lib dbc)
-        get_target_property(DBC_INCLUDE_DIRECTORIES dbc INCLUDE_DIRECTORIES)
-        target_include_directories(labplot2lib PUBLIC ${DBC_INCLUDE_DIRECTORIES})
-    else()
-        target_link_libraries(labplot2lib PkgConfig::dbc)
-    endif()
 
 IF (Qt5SerialPort_FOUND)
 	target_link_libraries( labplot2lib Qt5::SerialPort )
