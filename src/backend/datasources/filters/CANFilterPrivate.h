@@ -110,12 +110,14 @@ protected:
 	struct ParseState {
 		ParseState() {
 		}
-		ParseState(int lines)
+		ParseState(int requestedLines, int readLines)
 			: ready(true)
-			, lines(lines) {
+			, requestedLines(requestedLines)
+			, readLines(readLines) {
 		}
 		bool ready{false}; // If true m_DataContainer is up to date and it is not needed to update
-		int lines{0};
+		int requestedLines{0}; // Lines requested during read
+		int readLines{0}; // Lines after read (Because file does not contain that much messages, a lot of message are not parsable, ...)
 	};
 
 	ParseState m_parseState;
