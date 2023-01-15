@@ -115,8 +115,8 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	if (!isValid(fileName) || !m_dbcParser.isValid())
 		return 0;
 
-	if (m_parseState.ready && m_parseState.lines == lines)
-		return m_parseState.lines;
+	if (m_parseState.ready && m_parseState.requestedLines == lines)
+		return m_parseState.readLines;
 
 	m_DataContainer.clear();
 
@@ -308,7 +308,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		return 0;
 
 	// Use message_counter here, because it will be used as reference for caching
-	m_parseState = ParseState(message_counter);
+	m_parseState = ParseState(message_counter, message_index);
 	return message_index;
 #else
 	return 0;
