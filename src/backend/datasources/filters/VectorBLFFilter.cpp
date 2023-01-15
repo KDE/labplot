@@ -20,9 +20,10 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 
+#ifdef HAVE_VECTOR_BLF
 #include <Vector/BLF/Exceptions.h>
 #include <Vector/BLF/File.h>
-#include <libdbc/dbc.hpp>
+#endif
 
 #include <KLocalizedString>
 #include <QFile>
@@ -52,6 +53,7 @@ QString VectorBLFFilter::fileInfoString(const QString& fileName) {
 }
 
 bool VectorBLFFilter::isValid(const QString& filename) {
+#ifdef HAVE_VECTOR_BLF
 	try {
 		Vector::BLF::File f;
 		f.open(filename.toLocal8Bit().data());
@@ -62,6 +64,7 @@ bool VectorBLFFilter::isValid(const QString& filename) {
 	} catch (Vector::BLF::Exception e) {
 		return false; // Signature was invalid or something else
 	}
+#endif
 	return false;
 }
 
@@ -78,6 +81,7 @@ bool VectorBLFFilterPrivate::isValid(const QString& filename) const {
 	return VectorBLFFilter::isValid(filename);
 }
 
+#ifdef HAVE_VECTOR_BLF
 bool getTime(const Vector::BLF::ObjectHeaderBase* ohb, uint64_t& timestamp) {
 	/* ObjectHeader */
 	auto* oh = dynamic_cast<const Vector::BLF::ObjectHeader*>(ohb);
@@ -104,6 +108,7 @@ bool getTime(const Vector::BLF::ObjectHeaderBase* ohb, uint64_t& timestamp) {
 	}
 	return true;
 }
+#endif
 
 int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, int lines) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
@@ -114,6 +119,8 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		return m_parseState.lines;
 
 	m_DataContainer.clear();
+
+#ifdef HAVE_VECTOR_BLF
 
 	Vector::BLF::File file;
 	file.open(fileName.toLocal8Bit().data());
@@ -305,6 +312,9 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	// Use message_counter here, because it will be used as reference for caching
 	m_parseState = ParseState(message_counter);
 	return message_index;
+#else
+	return 0;
+#endif // HAVE_VECTOR_BLF
 }
 
 int VectorBLFFilterPrivate::readDataFromFileSeparateTime(const QString& fileName, int lines) {

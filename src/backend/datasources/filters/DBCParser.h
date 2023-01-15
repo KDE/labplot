@@ -2,7 +2,9 @@
 #define DBCPARSER_H
 
 #include <QVector>
+#ifdef HAVE_DBC_PARSER
 #include <libdbc/dbc.hpp>
+#endif
 
 class QString;
 
@@ -25,7 +27,9 @@ public:
 private:
 	bool m_valid{false};
 	// QMap<uint32_t, libdbc::Message> m_messages;
+#ifdef HAVE_DBC_PARSER
 	libdbc::DbcParser m_parser{libdbc::DbcParser(true)};
+#endif
 };
 
 #endif // DBCPARSER_H

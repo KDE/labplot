@@ -97,6 +97,7 @@ if (ENABLE_VECTOR_BLF)
     pkg_check_modules(dbc REQUIRED IMPORTED_TARGET dbc)
     target_link_libraries(labplot2lib PkgConfig::dbc)
   endif()
+  target_compile_definitions(labplot2lib PRIVATE HAVE_DBC_PARSER)
   
   if (${LOCAL_VECTOR_BLF})
     FetchContent_Declare(

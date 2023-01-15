@@ -13,10 +13,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
-#include <Vector/BLF/Exceptions.h>
-#include <Vector/BLF/File.h>
-#include <libdbc/dbc.hpp>
-
 #include <KLocalizedString>
 #include <QFile>
 #include <QProcess>
