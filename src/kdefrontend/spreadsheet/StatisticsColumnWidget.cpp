@@ -54,6 +54,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	setLayout(layout);
 
 	const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
+	// clang-format off
 	if (column->isNumeric()) {
 		m_htmlOverview = QStringLiteral("<table border=0 width=100%><tr><td colspan=2 align=center bgcolor=") + htmlColor
 			+ QStringLiteral("><b><big>") + i18n("Location Measures") + QStringLiteral("</big><b></td></tr>")
@@ -99,6 +100,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 			+ QStringLiteral("<tr><td><b>") + i18n("Maximum") + QStringLiteral("<b></td><td>%3</td></tr>")
 			+ QStringLiteral("</table>");
 	}
+	// clang-format on
 
 	// create tab widgets for every column and show the initial text with the placeholders
 	m_teOverview = new QTextEdit(this);

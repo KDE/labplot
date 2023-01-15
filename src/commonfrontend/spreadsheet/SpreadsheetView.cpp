@@ -1940,9 +1940,11 @@ void SpreadsheetView::maskSelection() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: mask selected cells", m_spreadsheet->name()));
 
+	const auto& columns = selectedColumns(false);
 	QVector<CartesianPlot*> plots;
+
 	// determine the dependent plots
-	for (auto* column : selectedColumns(false))
+	for (auto* column : columns)
 		column->addUsedInPlots(plots);
 
 	// suppress retransform in the dependent plots
@@ -1950,7 +1952,7 @@ void SpreadsheetView::maskSelection() {
 		plot->setSuppressRetransform(true);
 
 	// mask the selected cells
-	for (auto* column : selectedColumns(false)) {
+	for (auto* column : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col))
@@ -1980,9 +1982,11 @@ void SpreadsheetView::unmaskSelection() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: unmask selected cells", m_spreadsheet->name()));
 
+	const auto& columns = selectedColumns(false);
 	QVector<CartesianPlot*> plots;
+
 	// determine the dependent plots
-	for (auto* column : selectedColumns(false))
+	for (auto* column : columns)
 		column->addUsedInPlots(plots);
 
 	// suppress retransform in the dependent plots
@@ -1990,7 +1994,7 @@ void SpreadsheetView::unmaskSelection() {
 		plot->setSuppressRetransform(true);
 
 	// unmask the selected cells
-	for (auto* column : selectedColumns(false)) {
+	for (auto* column : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col))
