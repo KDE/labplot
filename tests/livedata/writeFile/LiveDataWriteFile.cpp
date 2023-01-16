@@ -1,7 +1,7 @@
 #include <QFile>
 #include <QString>
 #include <QThread>
-#include <math.h>
+#include <cmath>
 
 int main() {
 	QFile f(QStringLiteral(EXPORT_FILE));
