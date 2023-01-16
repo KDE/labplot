@@ -132,6 +132,9 @@ public:
 	void finalizeLoad();
 
 private:
+	void initializeInterface();
+
+private:
 	QString m_fileName;
 	QString m_dirName;
 	QString m_serialPortName;
