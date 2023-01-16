@@ -11,12 +11,18 @@
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPRIVATE_H
 
+#include "AbstractFileFilter.h"
+
+#include <QString>
+
 class KFilterDev;
 class AbstractDataSource;
 class AbstractColumn;
 class AbstractAspect;
 class Spreadsheet;
 class MQTTTopic;
+class AsciiFilter;
+class QIODevice;
 
 class AsciiFilterPrivate {
 public:
