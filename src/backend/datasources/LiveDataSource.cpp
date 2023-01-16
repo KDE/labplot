@@ -320,17 +320,17 @@ void LiveDataSource::setUpdateType(UpdateType updatetype) {
 			m_fileSystemWatcher->removePaths(m_fileSystemWatcher->files());
 
 		bool watching = m_fileSystemWatcher->addPath(m_fileName);
-		qDebug() << QStringLiteral("Watching file '%1':%2").arg(m_fileName).arg(watching);
+		qDebug() << QStringLiteral("Watching file '%1':%2").arg(m_fileName, watching);
 
 		QFileInfo file(m_fileName);
 		// If the watched file currently does not exist (because it is recreated for instance), watch its containing
 		// directory instead. Once the file exists again, switch to watching the file in readOnUpdate().
 		// Reading will only start 100ms after the last update, to prevent continuous re-reading while the file is updated.
 		// If the watched file intentionally is updated more often than that, the user should switch to periodic reading.
-		if (m_fileSystemWatcher->files().contains(m_fileName))
-			m_fileSystemWatcher->removePath(file.absolutePath());
+		if (watching)
+			m_fileSystemWatcher->removePath(file.absolutePath()); // remove directory
 		else
-			m_fileSystemWatcher->addPath(file.absolutePath());
+			m_fileSystemWatcher->addPath(file.absolutePath()); // add directory of the file, because it does not exist yet
 
 		connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged, this, [&]() {
 			m_watchTimer->start();
