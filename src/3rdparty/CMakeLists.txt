@@ -72,15 +72,6 @@ option(LOCAL_VECTOR_BLF "Use local build of Vector BLF" ON)
 if (ENABLE_VECTOR_BLF)
   set(OPTION_RUN_DOXYGEN OFF CACHE BOOL "" FORCE) # disable running doxygen
   if (${LOCAL_DBC_PARSER})
-      # Dependency of dbc_parser_cpp
-      FetchContent_Declare(
-        FastFloat
-        GIT_REPOSITORY https://github.com/fastfloat/fast_float.git
-        GIT_TAG 1ea4f27b2aeee2859a1354a3c24cff52a116cad1
-        FIND_PACKAGE_ARGS # because dbc_parser_cpp uses find_package
-      )
-      FetchContent_MakeAvailable(FastFloat)
-
       FetchContent_Declare(
         dbc_parser_cpp
         GIT_REPOSITORY https://github.com/Murmele/dbc_parser_cpp.git
