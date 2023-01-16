@@ -49,9 +49,11 @@ void LiveDataWriteFileTest::testRefresh() {
 
 	qint64 lastUpdate = 0;
 	int counter = 0;
-	connect(dataSource, &LiveDataSource::readOnUpdateCalled, [&lastUpdate, &counter] {
+	connect(dataSource, &LiveDataSource::readOnUpdateCalled, [&lastUpdate, &counter](bool paused) {
 		const qint64 t = QDateTime::currentDateTime().toMSecsSinceEpoch();
 		counter++;
+
+		QCOMPARE(paused, false);
 
 		if (lastUpdate > 0) {
 			QVERIFY(abs(lastUpdate - t - SLEEP_TIME_MS) < static_cast<double>(SLEEP_TIME_MS) / 10); // maximum 10% of delay
