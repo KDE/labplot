@@ -32,12 +32,12 @@ void LiveDataWriteFileTest::testRefresh() {
 	filter->setAutoModeEnabled(false);
 
 	filter->setCreateTimestampEnabled(false);
-	filter->setStartRow(1);
+	// filter->setStartRow(1);
 	filter->setEndRow(-1);
 	filter->setStartColumn(0);
 	filter->setEndColumn(-1);
 	filter->setHeaderEnabled(true); // header in line 1
-	filter->setHeaderLine(1);
+	filter->setHeaderLine(0);
 	filter->setSeparatingCharacter(QStringLiteral(","));
 
 	dataSource->setFilter(filter);
@@ -65,7 +65,15 @@ void LiveDataWriteFileTest::testRefresh() {
 	bool timeout = false;
 	while (counter < 100 && !timeout) {
 		const qint64 currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-		timeout = (currTime - startTime) > (100 * SLEEP_TIME_MS) * 1.1;
+		timeout = (currTime - startTime) > (SLEEP_TIME_MS)*6; // 200% tolearance
+		startTime = currTime;
+		if (timeout)
+			qDebug() << QLatin1String("Counter: %1, Timeout: %2. Currtime: %3, StartTime: %4, Diff: %5")
+							.arg(QString::number(counter),
+								 QString::number(timeout),
+								 QString::number(currTime),
+								 QString::number(startTime),
+								 QString::number(currTime - startTime));
 		QApplication::processEvents();
 	}
 

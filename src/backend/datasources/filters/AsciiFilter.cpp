@@ -392,6 +392,8 @@ QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() {
 
 void AsciiFilter::setStartRow(const int r) {
 	d->startRow = r;
+	if (d->headerLine >= r)
+		d->startRow++;
 }
 int AsciiFilter::startRow() const {
 	return d->startRow;

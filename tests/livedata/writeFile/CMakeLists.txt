@@ -5,7 +5,7 @@ target_link_libraries(LiveDataWriteFileTest labplot2lib Qt5::Test labplot2test)
 add_test(NAME LiveDataWriteFileTest COMMAND LiveDataWriteFileTest)
 
 set(EXPORT_FILE "${CMAKE_CURRENT_BINARY_DIR}/exportFile.csv")
-set(SLEEP_TIME_MS 1000)
+set(SLEEP_TIME_MS 100)
 
 add_executable (LiveDataWriteFile LiveDataWriteFile.cpp)
 set_property(TARGET LiveDataWriteFile PROPERTY AUTOMOC ON)
