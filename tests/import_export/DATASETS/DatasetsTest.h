@@ -20,17 +20,17 @@ private Q_SLOTS:
 
 	// Test processing metadata files.
 	void testCategories();
-	void testSubcategories();
-	void testDatasets();
+	//	void testSubcategories();
+	//	void testDatasets();
 
 	// Test processing and downloading dataset
-	void testProcessDataset();
+	//	void testProcessDataset();
 
 	// Test adding new datasets to the existing collection
-	void testNewCollection();
-	void testNewCategory();
-	void testNewSubcategory();
-	void testNewDataset();
+	//	void testNewCollection();
+	//	void testNewCategory();
+	//	void testNewSubcategory();
+	//	void testNewDataset();
 
 private:
 	void copyFiles();

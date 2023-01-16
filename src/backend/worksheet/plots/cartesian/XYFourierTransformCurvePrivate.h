@@ -21,7 +21,8 @@ class XYFourierTransformCurvePrivate : public XYAnalysisCurvePrivate {
 public:
 	explicit XYFourierTransformCurvePrivate(XYFourierTransformCurve*);
 	~XYFourierTransformCurvePrivate() override;
-	void recalculate();
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
+	virtual void resetResults() override;
 
 	XYFourierTransformCurve::TransformData transformData;
 	XYFourierTransformCurve::TransformResult transformResult;

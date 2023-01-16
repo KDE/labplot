@@ -47,9 +47,9 @@ void XYConvolutionCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYConvolutionCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYConvolutionCurve::result() const {
 	Q_D(const XYConvolutionCurve);
-	return d->convolutionResult.available;
+	return d->convolutionResult;
 }
 
 /*!
@@ -91,55 +91,27 @@ XYConvolutionCurvePrivate::XYConvolutionCurvePrivate(XYConvolutionCurve* owner)
 // when the parent aspect is removed
 XYConvolutionCurvePrivate::~XYConvolutionCurvePrivate() = default;
 
-void XYConvolutionCurvePrivate::recalculate() {
+void XYConvolutionCurvePrivate::resetResults() {
+	convolutionResult = XYConvolutionCurve::ConvolutionResult();
+}
+
+bool XYConvolutionCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	Q_UNUSED(tmpXDataColumn);
+	return tmpYDataColumn != nullptr;
+}
+
+bool XYConvolutionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
 
-	// create convolution result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	convolutionResult = XYConvolutionCurve::ConvolutionResult();
-
 	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
 	const AbstractColumn* tmpY2DataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
 		tmpY2DataColumn = y2DataColumn;
 	} else {
 		// curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
 		// no y2 column: use standard kernel
-	}
-
-	if (tmpYDataColumn == nullptr) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
 	}
 
 	// copy all valid data point for the convolution to temporary vectors
@@ -194,10 +166,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		convolutionResult.available = true;
 		convolutionResult.valid = false;
 		convolutionResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -259,10 +228,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	convolutionResult.status = QString::number(status);
 	convolutionResult.elapsedTime = timer.elapsed();
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
 //##############################################################################

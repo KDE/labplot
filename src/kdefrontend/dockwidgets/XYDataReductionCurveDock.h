@@ -13,14 +13,14 @@
 #define XYDATAREDUCTIONCURVEDOCK_H
 
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xydatareductioncurvedockgeneraltab.h"
 
 class XYAnalysisCurve;
 class TreeViewComboBox;
 class QStatusBar;
 
-class XYDataReductionCurveDock : public XYCurveDock {
+class XYDataReductionCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
@@ -34,6 +34,7 @@ private:
 	void updateTolerance();
 	void updateTolerance2();
 	void showDataReductionResult();
+	virtual QString customText() const override;
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
 	QStatusBar* statusBar; // main status bar to display progress

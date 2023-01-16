@@ -12,6 +12,7 @@
 #define PLOTPRIVATE_H
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 class PlotPrivate : public WorksheetElementPrivate {
 public:

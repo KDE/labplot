@@ -29,7 +29,7 @@
 */
 
 XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget* parent)
-	: XYCurveDock(parent) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -300,7 +300,7 @@ void XYFourierTransformCurveDock::recalculateClicked() {
 		static_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	Q_EMIT info(i18n("Fourier transformation status: %1", m_transformCurve->transformResult().status));
+	Q_EMIT info(i18n("Fourier transformation status: %1", m_transformCurve->result().status));
 	QApplication::restoreOverrideCursor();
 }
 
@@ -327,28 +327,7 @@ void XYFourierTransformCurveDock::enableRecalculate() const {
  * show the result and details of the transform
  */
 void XYFourierTransformCurveDock::showTransformResult() {
-	const XYFourierTransformCurve::TransformResult& transformResult = m_transformCurve->transformResult();
-	if (!transformResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
-
-	QString str = i18n("status: %1", transformResult.status) + QStringLiteral("<br>");
-
-	if (!transformResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	const auto numberLocale = QLocale();
-	if (transformResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(transformResult.elapsedTime)) + QStringLiteral("<br>");
-
-	str += QStringLiteral("<br><br>");
-
-	uiGeneralTab.teResult->setText(str);
+	showResult(m_transformCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
 }
 
 //*************************************************************

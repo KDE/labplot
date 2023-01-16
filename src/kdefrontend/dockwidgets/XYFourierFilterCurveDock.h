@@ -12,12 +12,12 @@
 #define XYFOURIERFILTERCURVEDOCK_H
 
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyfourierfiltercurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYFourierFilterCurveDock : public XYCurveDock {
+class XYFourierFilterCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:

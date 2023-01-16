@@ -37,7 +37,7 @@ extern "C" {
 */
 
 XYDifferentiationCurveDock::XYDifferentiationCurveDock(QWidget* parent)
-	: XYCurveDock(parent) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -525,31 +525,7 @@ void XYDifferentiationCurveDock::enableRecalculate() const {
  * show the result and details of the differentiation
  */
 void XYDifferentiationCurveDock::showDifferentiationResult() {
-	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = m_differentiationCurve->differentiationResult();
-	if (!differentiationResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
-
-	QString str = i18n("status: %1", differentiationResult.status) + QStringLiteral("<br>");
-
-	if (!differentiationResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	const auto numberLocale = QLocale();
-	if (differentiationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(differentiationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(differentiationResult.elapsedTime)) + QStringLiteral("<br>");
-
-	str += QStringLiteral("<br><br>");
-
-	uiGeneralTab.teResult->setText(str);
-
-	// enable the "recalculate"-button if the source data was changed since the last differentiation
-	uiGeneralTab.pbRecalculate->setEnabled(m_differentiationCurve->isSourceDataChangedSinceLastRecalc());
+	showResult(m_differentiationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
 }
 
 //*************************************************************

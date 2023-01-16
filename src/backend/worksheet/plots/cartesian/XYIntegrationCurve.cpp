@@ -49,9 +49,9 @@ void XYIntegrationCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYIntegrationCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYIntegrationCurve::result() const {
 	Q_D(const XYIntegrationCurve);
-	return d->integrationResult.available;
+	return d->integrationResult;
 }
 
 /*!
@@ -88,57 +88,17 @@ XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner)
 	, q(owner) {
 }
 
+void XYIntegrationCurvePrivate::resetResults() {
+	integrationResult = XYIntegrationCurve::IntegrationResult();
+}
+
 // no need to delete xColumn and yColumn, they are deleted
 // when the parent aspect is removed
 XYIntegrationCurvePrivate::~XYIntegrationCurvePrivate() = default;
 
-void XYIntegrationCurvePrivate::recalculate() {
+bool XYIntegrationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create integration result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	integrationResult = XYIntegrationCurve::IntegrationResult();
-
-	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
-	} else {
-		// curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
 
 	// copy all valid data point for the integration to temporary vectors
 	QVector<double> xdataVector;
@@ -161,10 +121,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 		integrationResult.available = true;
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -209,10 +166,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 	integrationResult.elapsedTime = timer.elapsed();
 	integrationResult.value = ydata[np - 1];
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
 //##############################################################################

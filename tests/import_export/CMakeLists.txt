@@ -29,4 +29,4 @@ IF (QXLSX_LIBRARIES)
 	add_subdirectory(XLSX)
 ENDIF ()
 
-# add_subdirectory(DATASETS)
+add_subdirectory(DATASETS)

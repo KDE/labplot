@@ -13,12 +13,12 @@
 
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyinterpolationcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYInterpolationCurveDock : public XYCurveDock {
+class XYInterpolationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:

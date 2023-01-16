@@ -22,7 +22,8 @@ public:
 	explicit XYSmoothCurvePrivate(XYSmoothCurve*);
 	~XYSmoothCurvePrivate() override;
 
-	void recalculate();
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
+	virtual void resetResults() override;
 
 	XYSmoothCurve::SmoothData smoothData;
 	XYSmoothCurve::SmoothResult smoothResult;

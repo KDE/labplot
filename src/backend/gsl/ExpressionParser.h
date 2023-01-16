@@ -45,7 +45,7 @@ public:
 	bool evaluateCartesian(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
 	bool evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector);
 	bool evaluateCartesian(const QString& expr,
-						   QVector<double>* xVector,
+						   const QVector<double>* xVector,
 						   QVector<double>* yVector,
 						   const QStringList& paramNames,
 						   const QVector<double>& paramValues);

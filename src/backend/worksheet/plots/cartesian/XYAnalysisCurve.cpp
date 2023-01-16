@@ -30,11 +30,6 @@
 #include <KLocalizedString>
 #include <QDateTime>
 
-XYAnalysisCurve::XYAnalysisCurve(const QString& name, AspectType type)
-	: XYCurve(name, new XYAnalysisCurvePrivate(this), type) {
-	init();
-}
-
 XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type)
 	: XYCurve(name, dd, type) {
 	init();
@@ -48,6 +43,10 @@ void XYAnalysisCurve::init() {
 	Q_D(XYAnalysisCurve);
 	d->lineType = XYCurve::LineType::Line;
 	d->symbol->setStyle(Symbol::Style::NoSymbols);
+}
+
+bool XYAnalysisCurve::resultAvailable() const {
+	return result().available;
 }
 
 // copy valid data from x/y data columns to x/y data vectors
@@ -374,6 +373,67 @@ XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner)
 // no need to delete xColumn and yColumn, they are deleted
 // when the parent aspect is removed
 XYAnalysisCurvePrivate::~XYAnalysisCurvePrivate() = default;
+
+void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+		// spreadsheet columns as data source
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
+	} else {
+		// curve columns as data source
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
+	}
+}
+
+void XYAnalysisCurvePrivate::recalculate() {
+	// create filter result columns if not available yet, clear them otherwise
+	if (!xColumn) {
+		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
+		xVector = static_cast<QVector<double>*>(xColumn->data());
+		yVector = static_cast<QVector<double>*>(yColumn->data());
+
+		xColumn->setHidden(true);
+		q->addChild(xColumn);
+		yColumn->setHidden(true);
+		q->addChild(yColumn);
+
+		q->setUndoAware(false);
+		q->setXColumn(xColumn);
+		q->setYColumn(yColumn);
+		q->setUndoAware(true);
+	} else {
+		xColumn->invalidateProperties();
+		yColumn->invalidateProperties();
+		xVector->clear();
+		yVector->clear();
+	}
+
+	resetResults();
+
+	const AbstractColumn* tmpXDataColumn = nullptr;
+	const AbstractColumn* tmpYDataColumn = nullptr;
+	prepareTmpDataColumn(&tmpXDataColumn, &tmpYDataColumn);
+
+	if (!preparationValid(tmpXDataColumn, tmpYDataColumn)) {
+		sourceDataChangedSinceLastRecalc = false;
+		// recalcLogicalPoints(); TODO: needed?
+	} else {
+		bool result = recalculateSpecific(tmpXDataColumn, tmpYDataColumn);
+		sourceDataChangedSinceLastRecalc = false;
+
+		if (result) {
+			// redraw the curve
+			recalcLogicalPoints();
+		}
+	}
+	Q_EMIT q->dataChanged();
+}
+
+bool XYAnalysisCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	return tmpXDataColumn && tmpYDataColumn;
+}
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################

@@ -39,7 +39,7 @@ extern "C" {
 */
 
 XYCorrelationCurveDock::XYCorrelationCurveDock(QWidget* parent)
-	: XYCurveDock(parent) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -427,31 +427,7 @@ void XYCorrelationCurveDock::enableRecalculate() const {
  * show the result and details of the correlation
  */
 void XYCorrelationCurveDock::showCorrelationResult() {
-	const XYCorrelationCurve::CorrelationResult& correlationResult = m_correlationCurve->correlationResult();
-	if (!correlationResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
-
-	QString str = i18n("status: %1", correlationResult.status) + QStringLiteral("<br>");
-
-	if (!correlationResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	const auto numberLocale = QLocale();
-	if (correlationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(correlationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(correlationResult.elapsedTime)) + QStringLiteral("<br>");
-
-	str += QStringLiteral("<br><br>");
-
-	uiGeneralTab.teResult->setText(str);
-
-	// enable the "recalculate"-button if the source data was changed since the last correlation
-	uiGeneralTab.pbRecalculate->setEnabled(m_correlationCurve->isSourceDataChangedSinceLastRecalc());
+	showResult(m_correlationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
 }
 
 //*************************************************************

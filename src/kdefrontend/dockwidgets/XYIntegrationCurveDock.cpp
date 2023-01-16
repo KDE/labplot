@@ -37,7 +37,7 @@ extern "C" {
 */
 
 XYIntegrationCurveDock::XYIntegrationCurveDock(QWidget* parent)
-	: XYCurveDock(parent) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -450,32 +450,12 @@ void XYIntegrationCurveDock::enableRecalculate() const {
  * show the result and details of the integration
  */
 void XYIntegrationCurveDock::showIntegrationResult() {
-	const XYIntegrationCurve::IntegrationResult& integrationResult = m_integrationCurve->integrationResult();
-	if (!integrationResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
+	showResult(m_integrationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+}
 
-	QString str = i18n("status: %1", integrationResult.status) + QStringLiteral("<br>");
-
-	if (!integrationResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
+QString XYIntegrationCurveDock::customText() const {
 	const auto numberLocale = QLocale();
-	if (integrationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(integrationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(integrationResult.elapsedTime)) + QStringLiteral("<br>");
-
-	str += i18n("value: %1", numberLocale.toString(integrationResult.value)) + QStringLiteral("<br>");
-	str += QStringLiteral("<br><br>");
-
-	uiGeneralTab.teResult->setText(str);
-
-	// enable the "recalculate"-button if the source data was changed since the last integration
-	uiGeneralTab.pbRecalculate->setEnabled(m_integrationCurve->isSourceDataChangedSinceLastRecalc());
+	return i18n("value: %1", numberLocale.toString(m_integrationCurve->integrationResult().value)) + QStringLiteral("<br>");
 }
 
 //*************************************************************

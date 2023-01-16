@@ -12,12 +12,12 @@
 #define XYSMOOTHCURVEDOCK_H
 
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xysmoothcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYSmoothCurveDock : public XYCurveDock {
+class XYSmoothCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:

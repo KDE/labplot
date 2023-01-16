@@ -52,11 +52,6 @@ void XYInterpolationCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYInterpolationCurve::resultAvailable() const {
-	Q_D(const XYInterpolationCurve);
-	return d->interpolationResult.available;
-}
-
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -69,7 +64,7 @@ QIcon XYInterpolationCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, XYInterpolationCurve::InterpolationData, interpolationData, interpolationData)
 
-const XYInterpolationCurve::InterpolationResult& XYInterpolationCurve::interpolationResult() const {
+const XYAnalysisCurve::Result& XYInterpolationCurve::result() const {
 	Q_D(const XYInterpolationCurve);
 	return d->interpolationResult;
 }
@@ -95,61 +90,20 @@ XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* o
 // when the parent aspect is removed
 XYInterpolationCurvePrivate::~XYInterpolationCurvePrivate() = default;
 
-void XYInterpolationCurvePrivate::recalculate() {
+void XYInterpolationCurvePrivate::resetResults() {
+	interpolationResult = XYInterpolationCurve::InterpolationResult();
+}
+
+bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create interpolation result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	interpolationResult = XYInterpolationCurve::InterpolationResult();
-
-	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
-	} else { // curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
 
 	// check column sizes
 	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Number of x and y data points must be equal.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	// copy all valid data point for the interpolation to temporary vectors
@@ -185,10 +139,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -199,7 +150,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 			DEBUG("ERROR: x data not strictly increasing: x_{i-1} >= x_i @ i = " << i << ": " << xdata[i - 1] << " >= " << xdata[i])
 			interpolationResult.status = i18n("interpolation failed since x data is not strictly monotonic increasing!");
 			interpolationResult.available = true;
-			return;
+			return false;
 		}
 	}
 
@@ -423,10 +374,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	interpolationResult.status = gslErrorToString(status);
 	interpolationResult.elapsedTime = timer.elapsed();
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
 //##############################################################################
