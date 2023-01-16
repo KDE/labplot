@@ -15,16 +15,22 @@
 
 #include <QProcess>
 
+void LiveDataWriteFileTest::init() {
+	m_process.setProgram(QStringLiteral(LIVEDATAWRITEFILE_EXEC));
+	m_process.start();
+	QVERIFY(m_process.waitForStarted());
+}
+
+void LiveDataWriteFileTest::cleanup() {
+	m_process.terminate();
+	QVERIFY(m_process.waitForFinished());
+}
+
 /*!
  * \brief LiveDataWriteFileTest::testRefresh
  * Testing if the refresh is comming at the correct rate
  */
 void LiveDataWriteFileTest::testRefresh() {
-	QProcess process;
-	process.setProgram(QStringLiteral(LIVEDATAWRITEFILE_EXEC));
-	process.start();
-	QVERIFY(process.waitForStarted());
-
 	auto* dataSource = new LiveDataSource(i18n("Live data source%1", 1), false);
 	dataSource->setFileType(AbstractFileFilter::FileType::Ascii);
 
@@ -76,10 +82,6 @@ void LiveDataWriteFileTest::testRefresh() {
 								 QString::number(currTime - startTime));
 		QApplication::processEvents();
 	}
-
-	process.terminate();
-	QVERIFY(process.waitForFinished());
 	QCOMPARE(timeout, false);
 }
-
 QTEST_MAIN(LiveDataWriteFileTest)

@@ -12,11 +12,19 @@
 #define LIVEDATAWRITEFILETEST_H
 
 #include "tests/CommonTest.h"
+#include <QProcess>
 
 class LiveDataWriteFileTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void init(); // Called before each test is executed
+	void cleanup(); // Called after each test is executed
+
+private Q_SLOTS:
 	void testRefresh();
+
+private:
+	QProcess m_process;
 };
 #endif // LIVEDATAWRITEFILETEST_H
