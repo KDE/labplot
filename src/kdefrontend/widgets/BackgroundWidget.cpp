@@ -427,7 +427,7 @@ void BackgroundWidget::load() {
 }
 
 void BackgroundWidget::loadConfig(const KConfigGroup& group) {
-	CONDITIONAL_LOCK_RETURN;  // need to lock here since this function is also called from outside
+	CONDITIONAL_LOCK_RETURN; // need to lock here since this function is also called from outside
 
 	ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), (int)m_background->type()));
 	ui.cbColorStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ColorStyle"), (int)m_background->colorStyle()));

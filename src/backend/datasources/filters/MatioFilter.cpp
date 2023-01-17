@@ -963,7 +963,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 									continue;
 								}
 								if (i == 0) { // first line
-									if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16)
+									if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16) // valgrind: invalid read of size 2
 										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf16((const mat_uint16_t*)cell->data);
 									else if (cell->data_type == MAT_T_UTF8)
 										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf8((const char*)cell->data);
