@@ -37,6 +37,7 @@ LineWidget::LineWidget(QWidget* parent)
 }
 
 void LineWidget::setLines(const QList<Line*>& lines) {
+	CONDITIONAL_LOCK_RETURN;
 	m_lines = lines;
 	m_line = m_lines.first();
 	m_prefix = m_line->prefix();
@@ -48,7 +49,6 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 		ui.sbErrorBarsCapSize->hide();
 
 		if (ui.cbType->count() == 0) {
-			CONDITIONAL_LOCK_RETURN;
 			ui.cbType->addItem(i18n("None"));
 			ui.cbType->addItem(i18n("Bars"));
 			ui.cbType->addItem(i18n("Envelope"));
@@ -62,7 +62,6 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 		ui.sbErrorBarsCapSize->show();
 
 		if (ui.cbType->count() == 0) {
-			CONDITIONAL_LOCK_RETURN;
 			QPainter pa;
 			int iconSize = 20;
 			QPixmap pm(iconSize, iconSize);
@@ -96,7 +95,6 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 		ui.sbErrorBarsCapSize->hide();
 
 		if (ui.cbType->count() == 0) {
-			CONDITIONAL_LOCK_RETURN;
 			ui.cbType->addItem(i18n("No Drop Lines"));
 			ui.cbType->addItem(i18n("Drop Lines, X"));
 			ui.cbType->addItem(i18n("Drop Lines, Y"));
@@ -299,8 +297,6 @@ void LineWidget::lineOpacityChanged(double value) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void LineWidget::load() {
-	CONDITIONAL_LOCK_RETURN;
-
 	if (m_line->histogramLineTypeAvailable())
 		ui.cbType->setCurrentIndex(static_cast<int>(m_line->histogramLineType()));
 	else if (m_line->errorBarsTypeAvailable()) {
@@ -318,6 +314,8 @@ void LineWidget::load() {
 }
 
 void LineWidget::loadConfig(const KConfigGroup& group) {
+	CONDITIONAL_LOCK_RETURN; // need to lock here since this function is also called from outside
+
 	if (m_line->histogramLineTypeAvailable())
 		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), static_cast<int>(m_line->histogramLineType())));
 	else if (m_line->errorBarsTypeAvailable()) {
