@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-16 00:52+0000\n"
-"PO-Revision-Date: 2023-01-14 19:26+0100\n"
+"PO-Revision-Date: 2023-01-16 18:12+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -11902,16 +11902,14 @@ msgid "Transparent"
 msgstr "Transparent"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:597
-#, fuzzy, kde-format
-#| msgid "%1: set values color"
+#, kde-format
 msgid "%1: set axis color"
-msgstr "%1 : définir la couleur des valeurs"
+msgstr "%1 : définir la couleur des axes"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:599
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1 axes: set color"
-msgstr "%1 : définir la couleur de police"
+msgstr "%1 axes : définir la couleur"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1967
 #, kde-format
