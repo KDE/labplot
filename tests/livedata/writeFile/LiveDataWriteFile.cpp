@@ -13,7 +13,7 @@ int main() {
 		if (!f.open(QIODevice::WriteOnly))
 			return -1;
 
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < FILE_NUMBER_LINES; i++) {
 			// generating lines
 			const auto cos = std::cos(x);
 			const auto sin = std::sin(x);

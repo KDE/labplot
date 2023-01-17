@@ -23,7 +23,7 @@ private Q_SLOTS:
 
 private Q_SLOTS:
 	void testRefresh();
-    //void testRefreshHeaderLine();
+	// void testRefreshHeaderLine();
 
 private:
 	QProcess m_process;

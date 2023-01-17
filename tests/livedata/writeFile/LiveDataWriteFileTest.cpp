@@ -55,90 +55,92 @@ void LiveDataWriteFileTest::testRefresh() {
 
 	qint64 lastUpdate = 0;
 	int counter = 0;
-	connect(dataSource, &LiveDataSource::readOnUpdateCalled, [&lastUpdate, &counter](bool paused) {
+	bool timeoutReadOnUpdateCalled = false;
+	connect(dataSource, &LiveDataSource::readOnUpdateCalled, [&lastUpdate, &counter, &timeoutReadOnUpdateCalled](bool paused) {
 		const qint64 t = QDateTime::currentDateTime().toMSecsSinceEpoch();
 		counter++;
 
 		QCOMPARE(paused, false);
 
 		if (lastUpdate > 0) {
-			QVERIFY(abs(lastUpdate - t - SLEEP_TIME_MS) < static_cast<double>(SLEEP_TIME_MS) / 10); // maximum 10% of delay
-			lastUpdate = t;
+			const auto diff = lastUpdate - t;
+			const auto timeout = abs(diff - SLEEP_TIME_MS) < static_cast<double>(SLEEP_TIME_MS) / 10; // maximum 10% of delay
+			if (timeout)
+				timeoutReadOnUpdateCalled = true;
 		}
+		lastUpdate = t;
 	});
 
-	qint64 startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	const auto startTime = std::chrono::high_resolution_clock::now();
 	bool timeout = false;
+	const qint64 timeoutTime = 100 * SLEEP_TIME_MS * 1.1; // 1.1; // 10% tolearance
 	while (counter < 100 && !timeout) {
-		const qint64 currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-		timeout = (currTime - startTime) > (SLEEP_TIME_MS)*6; // 200% tolearance
-		startTime = currTime;
-		if (timeout)
-			qDebug() << QLatin1String("Counter: %1, Timeout: %2. Currtime: %3, StartTime: %4, Diff: %5")
-							.arg(QString::number(counter),
-								 QString::number(timeout),
-								 QString::number(currTime),
-								 QString::number(startTime),
-								 QString::number(currTime - startTime));
+		const auto currTime = std::chrono::high_resolution_clock::now();
+		const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(currTime - startTime).count();
+		if (diff > timeoutTime) {
+			timeout = true;
+		}
 		QApplication::processEvents();
 	}
+	QCOMPARE(timeoutReadOnUpdateCalled, false);
 	QCOMPARE(timeout, false);
 }
 
 // setHeaderLine is set greater than 0
 // It should not crash
-//void LiveDataWriteFileTest::testRefreshHeaderLine() {
-//    auto* dataSource = new LiveDataSource(i18n("Live data source%1", 1), false);
-//    dataSource->setFileType(AbstractFileFilter::FileType::Ascii);
+// void LiveDataWriteFileTest::testRefreshHeaderLine() {
+//	auto* dataSource = new LiveDataSource(i18n("Live data source%1", 1), false);
+//	dataSource->setFileType(AbstractFileFilter::FileType::Ascii);
 
-//    AsciiFilter* filter = new AsciiFilter();
-//    filter->setAutoModeEnabled(false);
+//	AsciiFilter* filter = new AsciiFilter();
+//	filter->setAutoModeEnabled(false);
 
-//    filter->setCreateTimestampEnabled(false);
-//    // filter->setStartRow(1);
-//    filter->setEndRow(-1);
-//    filter->setStartColumn(0);
-//    filter->setEndColumn(-1);
-//    filter->setHeaderEnabled(true); // header in line 1
-//    filter->setHeaderLine(1);
-//    filter->setSeparatingCharacter(QStringLiteral(","));
+//	filter->setCreateTimestampEnabled(false);
+//	// filter->setStartRow(1);
+//	filter->setEndRow(-1);
+//	filter->setStartColumn(0);
+//	filter->setEndColumn(-1);
+//	filter->setHeaderEnabled(true); // header in line 1
+//    filter->setHeaderLine(1); // Header line set to a value greater than 1!
+//	filter->setSeparatingCharacter(QStringLiteral(","));
 
-//    dataSource->setFilter(filter);
-//    // dataSource->setUpdateInterval(1000); // Not relevant
-//    dataSource->setSourceType(LiveDataSource::SourceType::FileOrPipe);
-//    dataSource->setReadingType(LiveDataSource::ReadingType::WholeFile);
-//    dataSource->setFileName(QStringLiteral(EXPORT_FILE));
-//    dataSource->setUpdateType(LiveDataSource::UpdateType::NewData);
+//	dataSource->setFilter(filter);
+//	// dataSource->setUpdateInterval(1000); // Not relevant
+//	dataSource->setSourceType(LiveDataSource::SourceType::FileOrPipe);
+//	dataSource->setReadingType(LiveDataSource::ReadingType::WholeFile);
+//	dataSource->setFileName(QStringLiteral(EXPORT_FILE));
+//	dataSource->setUpdateType(LiveDataSource::UpdateType::NewData);
 
-//    qint64 lastUpdate = 0;
-//    int counter = 0;
-//    connect(dataSource, &LiveDataSource::readOnUpdateCalled, [&lastUpdate, &counter](bool paused) {
-//        const qint64 t = QDateTime::currentDateTime().toMSecsSinceEpoch();
-//        counter++;
+//	qint64 lastUpdate = 0;
+//	int counter = 0;
+//	bool timeoutReadOnUpdateCalled = false;
+//	connect(dataSource, &LiveDataSource::readOnUpdateCalled, [&lastUpdate, &counter, &timeoutReadOnUpdateCalled](bool paused) {
+//		const qint64 t = QDateTime::currentDateTime().toMSecsSinceEpoch();
+//		counter++;
 
-//        QCOMPARE(paused, false);
+//		QCOMPARE(paused, false);
 
-//        if (lastUpdate > 0) {
-//            QVERIFY(abs(lastUpdate - t - SLEEP_TIME_MS) < static_cast<double>(SLEEP_TIME_MS) / 10); // maximum 10% of delay
-//            lastUpdate = t;
-//        }
-//    });
+//		if (lastUpdate > 0) {
+//			const auto diff = lastUpdate - t;
+//			const auto timeout = abs(diff - SLEEP_TIME_MS) < static_cast<double>(SLEEP_TIME_MS) / 10; // maximum 10% of delay
+//			if (timeout)
+//				timeoutReadOnUpdateCalled = true;
+//		}
+//		lastUpdate = t;
+//	});
 
-//    qint64 startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-//    bool timeout = false;
-//    while (counter < 100 && !timeout) {
-//        const qint64 currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-//        timeout = (currTime - startTime) > (SLEEP_TIME_MS)*6; // 200% tolearance
-//        startTime = currTime;
-//        if (timeout)
-//            qDebug() << QLatin1String("Counter: %1, Timeout: %2. Currtime: %3, StartTime: %4, Diff: %5")
-//                            .arg(QString::number(counter),
-//                                 QString::number(timeout),
-//                                 QString::number(currTime),
-//                                 QString::number(startTime),
-//                                 QString::number(currTime - startTime));
-//        QApplication::processEvents();
-//    }
-//    QCOMPARE(timeout, false);
+//	const auto startTime = std::chrono::high_resolution_clock::now();
+//	bool timeout = false;
+//	const qint64 timeoutTime = 100 * SLEEP_TIME_MS * 1.1; // 1.1; // 10% tolearance
+//	while (counter < 100 && !timeout) {
+//		const auto currTime = std::chrono::high_resolution_clock::now();
+//		const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(currTime - startTime).count();
+//		if (diff > timeoutTime) {
+//			timeout = true;
+//		}
+//		QApplication::processEvents();
+//	}
+//	QCOMPARE(timeoutReadOnUpdateCalled, false);
+//	QCOMPARE(timeout, false);
 //}
 QTEST_MAIN(LiveDataWriteFileTest)
