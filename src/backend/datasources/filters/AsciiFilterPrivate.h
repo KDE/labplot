@@ -42,7 +42,7 @@ public:
 	readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void readFromLiveDeviceNotFile(QIODevice&, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	qint64 readFromLiveDevice(QIODevice&, AbstractDataSource*, qint64 from = -1);
-    int readDataFromDevice(const LiveDataSource* source, QIODevice& device, QVector<QString>& newData, LiveDataSource::ReadingType readingType);
+	int readDataFromDevice(const LiveDataSource* source, QIODevice& device, QVector<QString>& newData, LiveDataSource::ReadingType readingType);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 
 	// write
