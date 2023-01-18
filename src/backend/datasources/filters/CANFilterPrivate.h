@@ -77,14 +77,12 @@ protected:
 
 		template<class T>
 		void setData(int indexDataContainer, int indexData, T value) {
-			auto* v = static_cast<QVector<T>*>(m_dataContainer.at(indexDataContainer));
-			v->operator[](indexData) = value;
+			static_cast<QVector<T>*>(m_dataContainer.at(indexDataContainer))->operator[](indexData) = value;
 		}
 
 		template<class T>
 		T data(int indexDataContainer, int indexData) {
-			auto* v = static_cast<QVector<T>*>(m_dataContainer.at(indexDataContainer));
-			return v->at(indexData);
+			return static_cast<QVector<T>*>(m_dataContainer.at(indexDataContainer))->at(indexData);
 		}
 
 		int size() const;
