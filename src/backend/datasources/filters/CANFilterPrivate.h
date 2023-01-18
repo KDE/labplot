@@ -120,6 +120,7 @@ protected:
 
 	ParseState m_parseState;
 	friend class BLFFilterTest;
+	friend class CANFilter;
 };
 
 #endif // CANFILTERPRIVATE_H

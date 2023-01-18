@@ -456,7 +456,7 @@ void BLFFilterTest::testUndefinedMessagePreviousValue() {
 	// Valid blf and valid dbc
 	filter.setDBCFile(dbcFile.fileName());
 	QCOMPARE(filter.d->readDataFromFile(blfFileName.fileName(), 4), 2);
-	const auto dc = filter.d->m_DataContainer.dataContainer();
+	const auto dc = filter.dataContainer();
 	QCOMPARE(dc.size(), 3); // Time + First message with 2 signals
 
 	{
@@ -516,7 +516,7 @@ void BLFFilterTest::testUndefinedMessageNAN() {
 	// Valid blf and valid dbc
 	filter.setDBCFile(dbcFile.fileName());
 	QCOMPARE(filter.d->readDataFromFile(blfFileName.fileName(), 4), 2);
-	const auto dc = filter.d->m_DataContainer.dataContainer();
+	const auto dc = filter.dataContainer();
 	QCOMPARE(dc.size(), 3); // Time + First message with 2 signals
 
 	{
