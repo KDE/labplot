@@ -789,8 +789,8 @@ bool AsciiFilterPrivate::prepareLiveDevice(LiveDataSource* liveDataSource, QIODe
 	DEBUG(Q_FUNC_INFO << ", data source resized to col: " << m_actualCols);
 	DEBUG(Q_FUNC_INFO << ", data source rowCount: " << liveDataSource->rowCount());
 	DEBUG(Q_FUNC_INFO << ", Prepared!");
-	return true;
 	m_prepared = true;
+	return true;
 }
 
 int AsciiFilterPrivate::readDataFromDevice(const LiveDataSource* liveDataSource,
@@ -911,7 +911,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	QVector<QString> newData;
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
 		newData.resize(liveDataSource->sampleSize());
-
 	int newLinesTillEnd = readDataFromDevice(liveDataSource, device, newData, readingType);
 
 	// now we reset the readingType
