@@ -700,6 +700,68 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	readingFile = false;
 }
 
+int AsciiFilterPrivate::readDataFromDevice(const LiveDataSource* liveDataSource, QIODevice& device, QVector<QString>& newData, LiveDataSource::ReadingType readingType) {
+#ifdef PERFTRACE_LIVE_IMPORT
+	PERFTRACE(QStringLiteral("AsciiLiveDataImportReadingFromFile: "));
+#endif
+	int newDataIdx = 0;
+	int newLinesForSampleSizeNotTillEnd = 0;
+	int newLinesTillEnd = 0;
+	DEBUG("	source type = " << ENUM_TO_STRING(LiveDataSource, SourceType, liveDataSource->sourceType()));
+	while (!device.atEnd()) {
+		if (readingType != LiveDataSource::ReadingType::TillEnd) {
+			switch (liveDataSource->sourceType()) { // different sources need different read methods
+			case LiveDataSource::SourceType::LocalSocket:
+				newData[newDataIdx++] = QLatin1String(device.readAll());
+				break;
+			case LiveDataSource::SourceType::NetworkUDPSocket:
+				newData[newDataIdx++] = QLatin1String(device.read(device.bytesAvailable()));
+				break;
+			case LiveDataSource::SourceType::FileOrPipe:
+				newData.push_back(QLatin1String(device.readLine()));
+				break;
+			case LiveDataSource::SourceType::NetworkTCPSocket:
+			// TODO: check serial port
+			case LiveDataSource::SourceType::SerialPort:
+				newData[newDataIdx++] = QLatin1String(device.read(device.bytesAvailable()));
+				break;
+			case LiveDataSource::SourceType::MQTT:
+				break;
+			}
+		} else { // ReadingType::TillEnd
+			switch (liveDataSource->sourceType()) { // different sources need different read methods
+			case LiveDataSource::SourceType::LocalSocket:
+				newData.push_back(QLatin1String(device.readAll()));
+				break;
+			case LiveDataSource::SourceType::NetworkUDPSocket:
+				newData.push_back(QLatin1String(device.read(device.bytesAvailable())));
+				break;
+			case LiveDataSource::SourceType::FileOrPipe:
+				newData.push_back(QLatin1String(device.readLine()));
+				break;
+			case LiveDataSource::SourceType::NetworkTCPSocket:
+			// TODO: check serial port
+			case LiveDataSource::SourceType::SerialPort:
+				newData.push_back(QLatin1String(device.read(device.bytesAvailable())));
+				break;
+			case LiveDataSource::SourceType::MQTT:
+				break;
+			}
+		}
+		newLinesTillEnd++;
+
+		if (readingType != LiveDataSource::ReadingType::TillEnd) {
+			newLinesForSampleSizeNotTillEnd++;
+			// for Continuous reading and FromEnd we read sample rate number of lines if possible
+			// here TillEnd and Whole file behave the same
+			if (newLinesForSampleSizeNotTillEnd == liveDataSource->sampleSize())
+				break;
+		}
+	}
+	QDEBUG(Q_FUNC_INFO << ", data read:" << newData);
+	return newLinesTillEnd;
+}
+
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {
 	DEBUG(Q_FUNC_INFO << ", bytes available = " << device.bytesAvailable() << ", from = " << from);
 	if (device.bytesAvailable() <= 0) {
@@ -834,70 +896,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	// count the new lines, increase actualrows on each
 	// now we read all the new lines, if we want to use sample rate
 	// then here we can do it, if we have actually sample rate number of lines :-?
-	int newLinesForSampleSizeNotTillEnd = 0;
-	int newLinesTillEnd = 0;
 	QVector<QString> newData;
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
 		newData.resize(liveDataSource->sampleSize());
 
-	int newDataIdx = 0;
-	{
-#ifdef PERFTRACE_LIVE_IMPORT
-		PERFTRACE(QStringLiteral("AsciiLiveDataImportReadingFromFile: "));
-#endif
-		DEBUG("	source type = " << ENUM_TO_STRING(LiveDataSource, SourceType, liveDataSource->sourceType()));
-		while (!device.atEnd()) {
-			if (readingType != LiveDataSource::ReadingType::TillEnd) {
-				switch (liveDataSource->sourceType()) { // different sources need different read methods
-				case LiveDataSource::SourceType::LocalSocket:
-					newData[newDataIdx++] = QLatin1String(device.readAll());
-					break;
-				case LiveDataSource::SourceType::NetworkUDPSocket:
-					newData[newDataIdx++] = QLatin1String(device.read(device.bytesAvailable()));
-					break;
-				case LiveDataSource::SourceType::FileOrPipe:
-					newData.push_back(QLatin1String(device.readLine()));
-					break;
-				case LiveDataSource::SourceType::NetworkTCPSocket:
-				// TODO: check serial port
-				case LiveDataSource::SourceType::SerialPort:
-					newData[newDataIdx++] = QLatin1String(device.read(device.bytesAvailable()));
-					break;
-				case LiveDataSource::SourceType::MQTT:
-					break;
-				}
-			} else { // ReadingType::TillEnd
-				switch (liveDataSource->sourceType()) { // different sources need different read methods
-				case LiveDataSource::SourceType::LocalSocket:
-					newData.push_back(QLatin1String(device.readAll()));
-					break;
-				case LiveDataSource::SourceType::NetworkUDPSocket:
-					newData.push_back(QLatin1String(device.read(device.bytesAvailable())));
-					break;
-				case LiveDataSource::SourceType::FileOrPipe:
-					newData.push_back(QLatin1String(device.readLine()));
-					break;
-				case LiveDataSource::SourceType::NetworkTCPSocket:
-				// TODO: check serial port
-				case LiveDataSource::SourceType::SerialPort:
-					newData.push_back(QLatin1String(device.read(device.bytesAvailable())));
-					break;
-				case LiveDataSource::SourceType::MQTT:
-					break;
-				}
-			}
-			newLinesTillEnd++;
-
-			if (readingType != LiveDataSource::ReadingType::TillEnd) {
-				newLinesForSampleSizeNotTillEnd++;
-				// for Continuous reading and FromEnd we read sample rate number of lines if possible
-				// here TillEnd and Whole file behave the same
-				if (newLinesForSampleSizeNotTillEnd == liveDataSource->sampleSize())
-					break;
-			}
-		}
-		QDEBUG(Q_FUNC_INFO << ", data read:" << newData);
-	}
+    int newLinesTillEnd = readDataFromDevice(liveDataSource, device, newData, readingType);
 
 	// now we reset the readingType
 	if (liveDataSource->readingType() == LiveDataSource::ReadingType::FromEnd)
@@ -1134,7 +1137,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	// from the last row we read the new data in the spreadsheet
 	DEBUG(Q_FUNC_INFO << ", reading from line " << currentRow << " till end line " << newLinesTillEnd);
 	DEBUG(Q_FUNC_INFO << ", lines to read:" << linesToRead << ", actual rows:" << m_actualRows << ", actual cols:" << m_actualCols);
-	newDataIdx = 0;
+	int newDataIdx = 0;
 	if (readingType == LiveDataSource::ReadingType::FromEnd) {
 		if (m_prepared) {
 			if (newData.size() > liveDataSource->sampleSize())
