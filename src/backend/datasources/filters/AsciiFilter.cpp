@@ -700,7 +700,103 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	readingFile = false;
 }
 
-int AsciiFilterPrivate::readDataFromDevice(const LiveDataSource* liveDataSource, QIODevice& device, QVector<QString>& newData, LiveDataSource::ReadingType readingType) {
+bool AsciiFilterPrivate::prepareLiveDevice(LiveDataSource* liveDataSource, QIODevice& device) {
+	if (m_prepared)
+		return true;
+
+	DEBUG(Q_FUNC_INFO << ", Preparing ..");
+
+	switch (liveDataSource->sourceType()) {
+	case LiveDataSource::SourceType::FileOrPipe: {
+		const int deviceError = prepareDeviceToRead(device);
+		if (deviceError != 0) {
+			DEBUG(Q_FUNC_INFO << ", Device ERROR: " << deviceError);
+			return 0;
+		}
+		break;
+	}
+	case LiveDataSource::SourceType::NetworkTCPSocket:
+	case LiveDataSource::SourceType::NetworkUDPSocket:
+	case LiveDataSource::SourceType::LocalSocket:
+	case LiveDataSource::SourceType::SerialPort:
+		m_actualRows = 1;
+		m_actualCols = 1;
+		columnModes.clear();
+		if (createIndexEnabled) {
+			columnModes << AbstractColumn::ColumnMode::Integer;
+			columnNames << i18n("Index");
+			m_actualCols++;
+		}
+
+		if (createTimestampEnabled) {
+			columnModes << AbstractColumn::ColumnMode::DateTime;
+			columnNames << i18n("Timestamp");
+			m_actualCols++;
+		}
+
+		// add column for the actual value
+		columnModes << AbstractColumn::ColumnMode::Double;
+		columnNames << i18n("Value");
+
+		QDEBUG(Q_FUNC_INFO << ", column names = " << columnNames);
+		break;
+	case LiveDataSource::SourceType::MQTT:
+		break;
+	}
+
+	// prepare import for spreadsheet
+	liveDataSource->setUndoAware(false);
+	liveDataSource->resize(AbstractFileFilter::ImportMode::Replace, columnNames, m_actualCols);
+
+	// set the plot designation for columns Index, Timestamp and Values, if available
+	// index column
+	if (createIndexEnabled)
+		liveDataSource->column(0)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+
+	// timestamp column
+	if (createTimestampEnabled) {
+		const int index = (int)createIndexEnabled;
+		liveDataSource->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+	}
+
+	// value column, available only when reading from sockets and serial port
+	auto type = liveDataSource->sourceType();
+	if (type == LiveDataSource::SourceType::NetworkTCPSocket || type == LiveDataSource::SourceType::NetworkUDPSocket
+		|| type == LiveDataSource::SourceType::LocalSocket || type == LiveDataSource::SourceType::SerialPort) {
+		const int index = (int)createIndexEnabled + (int)createTimestampEnabled;
+		liveDataSource->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+	}
+
+	// columns in a file data source don't have any manual changes.
+	// make the available columns undo unaware and suppress the "data changed" signal.
+	// data changes will be propagated via an explicit Column::setChanged() call once new data was read.
+	for (auto* c : liveDataSource->children<Column>()) {
+		c->setUndoAware(false);
+		c->setSuppressDataChangedSignal(true);
+	}
+
+	int keepNValues = liveDataSource->keepNValues();
+	if (keepNValues == 0)
+		liveDataSource->setRowCount(m_actualRows > 1 ? m_actualRows : 1);
+	else {
+		liveDataSource->setRowCount(keepNValues);
+		m_actualRows = keepNValues;
+	}
+
+	m_dataContainer.resize(m_actualCols);
+	initDataContainer(liveDataSource);
+
+	DEBUG(Q_FUNC_INFO << ", data source resized to col: " << m_actualCols);
+	DEBUG(Q_FUNC_INFO << ", data source rowCount: " << liveDataSource->rowCount());
+	DEBUG(Q_FUNC_INFO << ", Prepared!");
+	return true;
+	m_prepared = true;
+}
+
+int AsciiFilterPrivate::readDataFromDevice(const LiveDataSource* liveDataSource,
+										   QIODevice& device,
+										   QVector<QString>& newData,
+										   LiveDataSource::ReadingType readingType) {
 #ifdef PERFTRACE_LIVE_IMPORT
 	PERFTRACE(QStringLiteral("AsciiLiveDataImportReadingFromFile: "));
 #endif
@@ -778,93 +874,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		if (device.isSequential() && device.bytesAvailable() < (int)sizeof(quint16))
 			return 0;
 
-	if (!m_prepared) {
-		DEBUG(Q_FUNC_INFO << ", Preparing ..");
-
-		switch (liveDataSource->sourceType()) {
-		case LiveDataSource::SourceType::FileOrPipe: {
-			const int deviceError = prepareDeviceToRead(device);
-			if (deviceError != 0) {
-				DEBUG(Q_FUNC_INFO << ", Device ERROR: " << deviceError);
-				return 0;
-			}
-			break;
-		}
-		case LiveDataSource::SourceType::NetworkTCPSocket:
-		case LiveDataSource::SourceType::NetworkUDPSocket:
-		case LiveDataSource::SourceType::LocalSocket:
-		case LiveDataSource::SourceType::SerialPort:
-			m_actualRows = 1;
-			m_actualCols = 1;
-			columnModes.clear();
-			if (createIndexEnabled) {
-				columnModes << AbstractColumn::ColumnMode::Integer;
-				columnNames << i18n("Index");
-				m_actualCols++;
-			}
-
-			if (createTimestampEnabled) {
-				columnModes << AbstractColumn::ColumnMode::DateTime;
-				columnNames << i18n("Timestamp");
-				m_actualCols++;
-			}
-
-			// add column for the actual value
-			columnModes << AbstractColumn::ColumnMode::Double;
-			columnNames << i18n("Value");
-
-			QDEBUG(Q_FUNC_INFO << ", column names = " << columnNames);
-			break;
-		case LiveDataSource::SourceType::MQTT:
-			break;
-		}
-
-		// prepare import for spreadsheet
-		liveDataSource->setUndoAware(false);
-		liveDataSource->resize(AbstractFileFilter::ImportMode::Replace, columnNames, m_actualCols);
-
-		// set the plot designation for columns Index, Timestamp and Values, if available
-		// index column
-		if (createIndexEnabled)
-			liveDataSource->column(0)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
-
-		// timestamp column
-		if (createTimestampEnabled) {
-			const int index = (int)createIndexEnabled;
-			liveDataSource->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
-		}
-
-		// value column, available only when reading from sockets and serial port
-		auto type = liveDataSource->sourceType();
-		if (type == LiveDataSource::SourceType::NetworkTCPSocket || type == LiveDataSource::SourceType::NetworkUDPSocket
-			|| type == LiveDataSource::SourceType::LocalSocket || type == LiveDataSource::SourceType::SerialPort) {
-			const int index = (int)createIndexEnabled + (int)createTimestampEnabled;
-			liveDataSource->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
-		}
-
-		// columns in a file data source don't have any manual changes.
-		// make the available columns undo unaware and suppress the "data changed" signal.
-		// data changes will be propagated via an explicit Column::setChanged() call once new data was read.
-		for (auto* c : liveDataSource->children<Column>()) {
-			c->setUndoAware(false);
-			c->setSuppressDataChangedSignal(true);
-		}
-
-		int keepNValues = liveDataSource->keepNValues();
-		if (keepNValues == 0)
-			liveDataSource->setRowCount(m_actualRows > 1 ? m_actualRows : 1);
-		else {
-			liveDataSource->setRowCount(keepNValues);
-			m_actualRows = keepNValues;
-		}
-
-		m_dataContainer.resize(m_actualCols);
-		initDataContainer(liveDataSource);
-
-		DEBUG(Q_FUNC_INFO << ", data source resized to col: " << m_actualCols);
-		DEBUG(Q_FUNC_INFO << ", data source rowCount: " << liveDataSource->rowCount());
-		DEBUG(Q_FUNC_INFO << ", Prepared!");
-	}
+	const bool prepared = m_prepared;
+	if (!prepareLiveDevice(liveDataSource, device))
+		return 0;
 
 	qint64 bytesread = 0;
 
@@ -872,7 +884,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	PERFTRACE(QStringLiteral("AsciiLiveDataImportTotal: "));
 #endif
 	LiveDataSource::ReadingType readingType;
-	if (!m_prepared) {
+	if (!prepared) {
 		readingType = LiveDataSource::ReadingType::TillEnd;
 	} else {
 		// we have to read all the data when reading from end
@@ -900,7 +912,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
 		newData.resize(liveDataSource->sampleSize());
 
-    int newLinesTillEnd = readDataFromDevice(liveDataSource, device, newData, readingType);
+	int newLinesTillEnd = readDataFromDevice(liveDataSource, device, newData, readingType);
 
 	// now we reset the readingType
 	if (liveDataSource->readingType() == LiveDataSource::ReadingType::FromEnd)
@@ -915,7 +927,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		device.seek(from);
 
 	// split newData to get data columns (only TCP atm)
-	if (!m_prepared && liveDataSource->sourceType() == LiveDataSource::SourceType::NetworkTCPSocket) {
+	if (!prepared && liveDataSource->sourceType() == LiveDataSource::SourceType::NetworkTCPSocket) {
 		DEBUG("TCP: COLUMN count = " << m_actualCols)
 		QString firstRowData = newData.at(0);
 		QStringList dataStringList;
@@ -978,7 +990,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	int keepNValues = liveDataSource->keepNValues();
 
 	DEBUG(Q_FUNC_INFO << ", Increase row count. keepNValues = " << keepNValues);
-	if (m_prepared) {
+	if (prepared) {
 		// increase row count if we don't have a fixed size
 		// but only after the preparation step
 		if (keepNValues == 0) {
@@ -1040,7 +1052,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		if (liveDataSource->rowCount() < m_actualRows)
 			liveDataSource->setRowCount(m_actualRows);
 
-		if (!m_prepared)
+		if (!prepared)
 			currentRow = 0;
 		else {
 			// indexes the position in the vector(column)
@@ -1051,12 +1063,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 
 		// if we have fixed size, we do this only once in preparation, here we can use
-		// m_prepared and we need something to decide whether it has a fixed size or increasing
+		// prepared and we need something to decide whether it has a fixed size or increasing
 		initDataContainer(liveDataSource);
 	} else { // fixed size
 		// when we have a fixed size we have to pop sampleSize number of lines if specified
 		// here popping, setting currentRow
-		if (!m_prepared) {
+		if (!prepared) {
 			if (liveDataSource->readingType() == LiveDataSource::ReadingType::WholeFile)
 				currentRow = 0;
 			else
@@ -1078,7 +1090,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 		}
 
-		if (m_prepared) {
+		if (prepared) {
 #ifdef PERFTRACE_LIVE_IMPORT
 			PERFTRACE(QLatin1String("AsciiLiveDataImportPopping: "));
 #endif
@@ -1139,7 +1151,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	DEBUG(Q_FUNC_INFO << ", lines to read:" << linesToRead << ", actual rows:" << m_actualRows << ", actual cols:" << m_actualCols);
 	int newDataIdx = 0;
 	if (readingType == LiveDataSource::ReadingType::FromEnd) {
-		if (m_prepared) {
+		if (prepared) {
 			if (newData.size() > liveDataSource->sampleSize())
 				newDataIdx = newData.size() - liveDataSource->sampleSize();
 			// since we skip a couple of lines, we need to count those bytes too
@@ -1158,7 +1170,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		if (readingType == LiveDataSource::ReadingType::TillEnd || (readingType == LiveDataSource::ReadingType::ContinuousFixed)) {
 			if (headerEnabled) {
-				if (!m_prepared) {
+				if (!prepared) {
 					row = 1;
 					bytesread += newData.at(0).size();
 				}
@@ -1241,7 +1253,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 	}
 
-	if (m_prepared) {
+	if (prepared) {
 		// notify all affected columns and plots about the changes
 		PERFTRACE(QLatin1String("AsciiLiveDataImport, notify affected columns and plots"));
 
@@ -1262,8 +1274,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			plot->setSuppressRetransform(false);
 			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
 		}
-	} else
-		m_prepared = true;
+	}
 
 	DEBUG(Q_FUNC_INFO << ", DONE");
 	return bytesread;

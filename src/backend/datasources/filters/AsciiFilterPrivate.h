@@ -65,6 +65,10 @@ public:
 	void setPreparedForMQTT(bool, MQTTTopic*, const QString&);
 #endif
 
+private:
+	bool prepareLiveDevice(LiveDataSource* liveDataSource, QIODevice& device);
+
+public:
 	const AsciiFilter* q;
 
 	QString commentCharacter{QStringLiteral("#")};
