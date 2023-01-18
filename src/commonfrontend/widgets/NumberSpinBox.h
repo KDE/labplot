@@ -87,7 +87,7 @@ private:
 	QString m_valueStr;
 	// See https://invent.kde.org/education/labplot/-/merge_requests/167
 	// for explanation of the feature
-	bool m_feedback{false}; // defines if the spinbox expects a feedback
+	bool m_feedback{true}; // defines if the spinbox expects a feedback
 	bool m_waitFeedback{false};
 
 	bool m_strongFocus{true};
