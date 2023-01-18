@@ -70,6 +70,8 @@ public:
 private:
 	std::unique_ptr<CANFilterPrivate> const d;
 
+	std::vector<void*> dataContainer() const;
+
 	friend class BLFFilterTest;
 };
 

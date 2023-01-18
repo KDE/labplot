@@ -93,6 +93,10 @@ const QVector<AbstractColumn::ColumnMode> CANFilter::columnModes() const {
 	return d->columnModes();
 }
 
+std::vector<void*> CANFilter::dataContainer() const {
+	return d->m_DataContainer.dataContainer();
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
