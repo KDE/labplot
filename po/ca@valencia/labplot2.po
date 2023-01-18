@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-16 00:52+0000\n"
+"POT-Creation-Date: 2023-01-18 00:53+0000\n"
 "PO-Revision-Date: 2023-01-15 11:20+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -57,7 +57,7 @@ msgstr ""
 #: src/backend/datapicker/DatapickerCurve.cpp:501
 #: src/backend/datapicker/DatapickerImage.cpp:511
 #: src/backend/datapicker/DatapickerPoint.cpp:498
-#: src/backend/datasources/filters/AsciiFilter.cpp:1979
+#: src/backend/datasources/filters/AsciiFilter.cpp:1981
 #: src/backend/datasources/filters/BinaryFilter.cpp:562
 #: src/backend/datasources/filters/JsonFilter.cpp:776
 #: src/backend/datasources/filters/ROOTFilter.cpp:119
@@ -289,7 +289,7 @@ msgstr "Dies"
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
 #: src/kdefrontend/GuiTools.cpp:145
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:121
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:122
 #: src/kdefrontend/widgets/LineWidget.cpp:52
 #, kde-format
 msgid "None"
@@ -1117,7 +1117,7 @@ msgstr "No hi ha present un URL de baixada en el fitxer de metadades!"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:362
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1494
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:94
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:130
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:131
 #, kde-format
 msgid "Image"
 msgstr "Imatge"
@@ -1192,19 +1192,19 @@ msgid "Number of lines: %1"
 msgstr "Nombre de línies: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:548
-#: src/backend/datasources/filters/AsciiFilter.cpp:744
-#: src/backend/datasources/filters/AsciiFilter.cpp:951
-#: src/backend/datasources/filters/AsciiFilter.cpp:1509
-#: src/backend/datasources/filters/AsciiFilter.cpp:2059
+#: src/backend/datasources/filters/AsciiFilter.cpp:746
+#: src/backend/datasources/filters/AsciiFilter.cpp:953
+#: src/backend/datasources/filters/AsciiFilter.cpp:1511
+#: src/backend/datasources/filters/AsciiFilter.cpp:2061
 #, kde-format
 msgid "Timestamp"
 msgstr "Marca horària"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:552
-#: src/backend/datasources/filters/AsciiFilter.cpp:738
-#: src/backend/datasources/filters/AsciiFilter.cpp:949
-#: src/backend/datasources/filters/AsciiFilter.cpp:1504
-#: src/backend/datasources/filters/AsciiFilter.cpp:2053
+#: src/backend/datasources/filters/AsciiFilter.cpp:740
+#: src/backend/datasources/filters/AsciiFilter.cpp:951
+#: src/backend/datasources/filters/AsciiFilter.cpp:1506
+#: src/backend/datasources/filters/AsciiFilter.cpp:2055
 #: src/backend/datasources/filters/BinaryFilter.cpp:303
 #: src/backend/datasources/filters/BinaryFilter.cpp:447
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1213,10 +1213,10 @@ msgid "Index"
 msgstr "Índex"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/AsciiFilter.cpp:750
-#: src/backend/datasources/filters/AsciiFilter.cpp:956
-#: src/backend/datasources/filters/AsciiFilter.cpp:1528
-#: src/backend/datasources/filters/AsciiFilter.cpp:2072
+#: src/backend/datasources/filters/AsciiFilter.cpp:752
+#: src/backend/datasources/filters/AsciiFilter.cpp:958
+#: src/backend/datasources/filters/AsciiFilter.cpp:1530
+#: src/backend/datasources/filters/AsciiFilter.cpp:2074
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:614
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2277
@@ -1231,9 +1231,9 @@ msgstr "Índex"
 msgid "Value"
 msgstr "Valor"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:958
-#: src/backend/datasources/filters/AsciiFilter.cpp:1530
-#: src/backend/datasources/filters/AsciiFilter.cpp:2074
+#: src/backend/datasources/filters/AsciiFilter.cpp:960
+#: src/backend/datasources/filters/AsciiFilter.cpp:1532
+#: src/backend/datasources/filters/AsciiFilter.cpp:2076
 #, kde-format
 msgid "Value %1"
 msgstr "Valor %1"
@@ -6683,7 +6683,7 @@ msgstr "Orientació"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1389
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:235
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:26
-#: src/kdefrontend/widgets/SymbolWidget.cpp:108
+#: src/kdefrontend/widgets/SymbolWidget.cpp:109
 #, kde-format
 msgid "Line"
 msgstr "Línia"
@@ -6697,7 +6697,7 @@ msgstr "Estil"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:293
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:136
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:318
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:129
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:130
 #, kde-format
 msgid "Color"
 msgstr "Color"
@@ -11717,7 +11717,7 @@ msgid "Bottom"
 msgstr "Baix"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:239
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:145
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:146
 #, kde-format
 msgid "Centered"
 msgstr "Centrada"
@@ -11799,7 +11799,7 @@ msgstr "Mig farcida, gran"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
 #: src/kdefrontend/SettingsGeneralPage.cpp:189
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:125
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:126
 #: src/kdefrontend/widgets/LabelWidget.cpp:135
 #: src/kdefrontend/widgets/LabelWidget.cpp:152
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
@@ -11818,7 +11818,7 @@ msgstr "Esquerra"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:66
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
 #: src/kdefrontend/SettingsGeneralPage.cpp:190
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:126
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:127
 #: src/kdefrontend/widgets/LabelWidget.cpp:137
 #: src/kdefrontend/widgets/LabelWidget.cpp:154
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
@@ -11955,7 +11955,7 @@ msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1773
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:722
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:417
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:763
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:761
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:294
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:266
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
@@ -12030,7 +12030,7 @@ msgstr "Columna:"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:530
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:735
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:761
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:759
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1302
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
@@ -12528,7 +12528,7 @@ msgstr "Valors d'error personalitzats, simètrics"
 msgid "Custom Error Values, asymmetric"
 msgstr "Valors d'error personalitzats, asimètrics"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:556
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:554
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:952
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1007
 #, kde-format
@@ -12538,7 +12538,7 @@ msgstr "Dades, +-:"
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:563
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:561
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:959
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1014
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:407
@@ -12790,14 +12790,14 @@ msgid "Custom Column"
 msgstr "Columna personalitzada"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:368
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:122
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:123
 #: src/kdefrontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "Sobre"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:369
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:123
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:124
 #: src/kdefrontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
@@ -16047,9 +16047,9 @@ msgstr "Estil:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:388
 #: src/kdefrontend/ui/labelwidget.ui:147 src/kdefrontend/ui/symbolwidget.ui:192
 #: src/kdefrontend/ui/symbolwidget.ui:247
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:208
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:232
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:260
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:209
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:233
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:261
 #: src/kdefrontend/worksheet/GridDialog.cpp:65
 #, kde-format
 msgid "Color:"
@@ -17816,8 +17816,8 @@ msgstr "Habilitat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFirstColor)
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:155
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:212
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:264
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:213
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:265
 #, kde-format
 msgid "First color:"
 msgstr "Primer color:"
@@ -17882,7 +17882,7 @@ msgstr "Y:"
 #. i18n: ectx: attribute (title), widget (QWidget, tabBars)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:236
 #: src/kdefrontend/widgets/LineWidget.cpp:53
-#: src/kdefrontend/widgets/LineWidget.cpp:75
+#: src/kdefrontend/widgets/LineWidget.cpp:74
 #, kde-format
 msgid "Bars"
 msgstr "Barres"
@@ -17895,7 +17895,7 @@ msgstr "Barres"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:551
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:457
 #: src/kdefrontend/ui/labelwidget.ui:686 src/kdefrontend/ui/symbolwidget.ui:230
-#: src/kdefrontend/widgets/SymbolWidget.cpp:104
+#: src/kdefrontend/widgets/SymbolWidget.cpp:105
 #, kde-format
 msgid "Border"
 msgstr "Vora"
@@ -20692,72 +20692,72 @@ msgstr "Exporta el fons:"
 msgid "Resolution:"
 msgstr "Resolució:"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:124
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:125
 #, kde-format
 msgid "Zero Baseline"
 msgstr "Línia base zero"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:131
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
 msgid "Pattern"
 msgstr "Patró"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:134
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:135
 #, kde-format
 msgid "Single Color"
 msgstr "Un sol color"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:135
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:136
 #, kde-format
 msgid "Horizontal Gradient"
 msgstr "Degradat en horitzontal"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:136
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:137
 #, kde-format
 msgid "Vertical Gradient"
 msgstr "Degradat en vertical"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:137
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:138
 #, kde-format
 msgid "Diag. Gradient (From Top Left)"
 msgstr "Degradat en diag. (des de dalt a l'esquerra)"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:138
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:139
 #, kde-format
 msgid "Diag. Gradient (From Bottom Left)"
 msgstr "Degradat en diag. (des de baix a l'esquerra)"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:139
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:140
 #, kde-format
 msgid "Radial Gradient"
 msgstr "Degradat radial"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:142
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:143
 #, kde-format
 msgid "Scaled and Cropped"
 msgstr "Escalada i escapçada"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:143
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:144
 #, kde-format
 msgid "Scaled"
 msgstr "Escalada"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:144
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:145
 #, kde-format
 msgid "Scaled, Keep Proportions"
 msgstr "Escalada, mantenint les proporcions"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:146
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:147
 #, kde-format
 msgid "Tiled"
 msgstr "En mosaic"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:147
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:148
 #, kde-format
 msgid "Center Tiled"
 msgstr "Mosaic centrat"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:273
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:274
 #, kde-format
 msgid "%1 elements: background color style changed"
 msgstr "%1 elements: s'ha canviat l'estil del color de fons"
@@ -21246,42 +21246,42 @@ msgstr "Derivació de les línies"
 msgid "Half-Bars"
 msgstr "Semibarres"
 
-#: src/kdefrontend/widgets/LineWidget.cpp:89
+#: src/kdefrontend/widgets/LineWidget.cpp:88
 #, kde-format
 msgid "Bars with Ends"
 msgstr "Barres amb extrems"
 
-#: src/kdefrontend/widgets/LineWidget.cpp:100
+#: src/kdefrontend/widgets/LineWidget.cpp:98
 #, kde-format
 msgid "No Drop Lines"
 msgstr "Sense derivació de les línies"
 
-#: src/kdefrontend/widgets/LineWidget.cpp:101
+#: src/kdefrontend/widgets/LineWidget.cpp:99
 #, kde-format
 msgid "Drop Lines, X"
 msgstr "Derivació de les línies, X"
 
-#: src/kdefrontend/widgets/LineWidget.cpp:102
+#: src/kdefrontend/widgets/LineWidget.cpp:100
 #, kde-format
 msgid "Drop Lines, Y"
 msgstr "Derivació de les línies, Y"
 
-#: src/kdefrontend/widgets/LineWidget.cpp:103
+#: src/kdefrontend/widgets/LineWidget.cpp:101
 #, kde-format
 msgid "Drop Lines, XY"
 msgstr "Derivació de les línies, XY"
 
-#: src/kdefrontend/widgets/LineWidget.cpp:104
+#: src/kdefrontend/widgets/LineWidget.cpp:102
 #, kde-format
 msgid "Drop Lines, X, Zero Baseline"
 msgstr "Derivació de les línies, X, línia base zero"
 
-#: src/kdefrontend/widgets/LineWidget.cpp:105
+#: src/kdefrontend/widgets/LineWidget.cpp:103
 #, kde-format
 msgid "Drop Lines, X, Min Baseline"
 msgstr "Derivació de les línies, X, línia base mínima"
 
-#: src/kdefrontend/widgets/LineWidget.cpp:106
+#: src/kdefrontend/widgets/LineWidget.cpp:104
 #, kde-format
 msgid "Drop Lines, X, Max Baseline"
 msgstr "Derivació de les línies, X, línia base màxima"
