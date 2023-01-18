@@ -641,7 +641,7 @@ QString XYDataReductionCurveDock::customText() const {
 	str += i18n("area error: %1", numberLocale.toString(result.areaError)) + QStringLiteral("<br>");
 
 	return str;
-};
+}
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********

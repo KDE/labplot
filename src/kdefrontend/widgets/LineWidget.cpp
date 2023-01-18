@@ -190,7 +190,7 @@ void LineWidget::typeChanged(int index) {
 				line->setErrorBarsType(type);
 		}
 	} else if (m_prefix == QLatin1String("DropLine")) {
-		auto type = XYCurve::DropLineType(index);
+		auto type = static_cast<XYCurve::DropLineType>(index);
 		enabled = (type != XYCurve::DropLineType::NoDropLine);
 
 		if (!m_initializing) {
@@ -219,7 +219,7 @@ void LineWidget::capSizeChanged(double value) {
 
 void LineWidget::styleChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
-	auto style = Qt::PenStyle(index);
+	auto style = static_cast<Qt::PenStyle>(index);
 	for (auto* line : m_lines)
 		line->setStyle(style);
 }
@@ -289,8 +289,7 @@ void LineWidget::lineWidthChanged(double width) {
 
 void LineWidget::lineOpacityChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	double v = (double)value * 100.;
-	ui.sbOpacity->setValue(v);
+	ui.sbOpacity->setValue(round(value * 100));
 }
 
 //**********************************************************
@@ -308,7 +307,7 @@ void LineWidget::load() {
 
 	setColor(m_line->color());
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_line->width(), Worksheet::Unit::Point));
-	ui.sbOpacity->setValue(m_line->opacity() * 100);
+	ui.sbOpacity->setValue(round(m_line->opacity() * 100));
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 	ui.cbStyle->setCurrentIndex(static_cast<int>(m_line->style()));
 }

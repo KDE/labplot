@@ -39,4 +39,4 @@ void XYAnalysisCurveDock::showResult(const XYAnalysisCurve* curve, QTextEdit* te
 
 QString XYAnalysisCurveDock::customText() const {
 	return QStringLiteral("");
-};
+}

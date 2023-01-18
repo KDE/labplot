@@ -639,8 +639,7 @@ void BoxPlotDock::plotVisibilityChanged(bool on) {
 // box
 void BoxPlotDock::plotWidthFactorChanged(double factor) {
 	CONDITIONAL_LOCK_RETURN;
-	// 	float v = (float)value*100.;
-	ui.sbWidthFactor->setValue(factor * 100);
+	ui.sbWidthFactor->setValue(round(factor * 100));
 }
 
 // symbols
