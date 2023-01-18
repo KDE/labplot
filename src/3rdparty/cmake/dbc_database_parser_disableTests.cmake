@@ -1,0 +1,1 @@
+set(ENABLE_TESTS OFF)

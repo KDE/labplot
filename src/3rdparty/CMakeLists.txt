@@ -79,6 +79,9 @@ if (ENABLE_VECTOR_BLF)
         #GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
         #GIT_TAG        master
       )
+      # dbc is the root project name
+      # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
+      set(CMAKE_PROJECT_dbc_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbc_database_parser_disableTests.cmake")
       FetchContent_MakeAvailable(dbc_parser_cpp)
       # headerfiles of the projects are referring to <libdbc/someheader.h> and therefore
       # the path must be added
