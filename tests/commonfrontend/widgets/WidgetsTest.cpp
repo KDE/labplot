@@ -858,6 +858,35 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", 5));
 }
 
+void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
+	NumberSpinBox sb(5.11);
+	sb.setFeedback(true);
+
+	int valueChangedCounter = 0;
+	double lastValue = NAN;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter, &lastValue](double value) {
+		valueChangedCounter++;
+		sb.setValue(value);
+	});
+
+	sb.lineEdit()->setCursorPosition(3); // after first 1
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(valueChangedCounter, 1);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
+	QCOMPARE(sb.value(), 5.21);
+	QCOMPARE(sb.toolTip(), QStringLiteral(""));
+
+	// another time key up
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(valueChangedCounter, 2);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
+	QCOMPARE(sb.value(), 5.31);
+	QCOMPARE(sb.toolTip(), QStringLiteral(""));
+}
+
 void WidgetsTest::numberSpinBoxDecimals() {
 	{
 		NumberSpinBox sb(5);
