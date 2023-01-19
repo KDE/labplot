@@ -166,6 +166,8 @@ Q_SIGNALS:
 	void moveEnd(); // called, at the end of execMoveInFrontOf or execMoveBehind is called
 
 	void plotRangeListChanged();
+
+	friend class WorksheetElementTest;
 };
 
 #endif

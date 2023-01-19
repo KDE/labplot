@@ -1958,7 +1958,7 @@ void CartesianPlot::addCustomPoint() {
 		d->calledFromContextMenu = false;
 	} else {
 		auto p = point->position();
-		p.point = QPointF(0, 0);
+		p.point = QPointF(0, 0); // Exactly in the middle of the plot in scene coordinates
 		point->setPosition(p);
 		point->setCoordinateBindingEnabled(true);
 	}
