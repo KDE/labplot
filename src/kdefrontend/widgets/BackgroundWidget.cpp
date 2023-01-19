@@ -59,6 +59,7 @@ void BackgroundWidget::setBackgrounds(const QList<Background*>& backgrounds) {
 	m_background = m_backgrounds.first();
 	m_prefix = m_background->prefix();
 
+	CONDITIONAL_LOCK_RETURN;
 	load();
 
 	connect(m_background, &Background::enabledChanged, this, &BackgroundWidget::backgroundEnabledChanged);
@@ -152,8 +153,6 @@ void BackgroundWidget::retranslateUi() {
 //******** SLOTs for changes triggered in BackgroundWidget ****
 //*************************************************************
 void BackgroundWidget::enabledChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
 	ui.cbType->setEnabled(state);
 	ui.cbColorStyle->setEnabled(state);
 	ui.cbBrushStyle->setEnabled(state);
@@ -163,6 +162,8 @@ void BackgroundWidget::enabledChanged(bool state) {
 	ui.leFileName->setEnabled(state);
 	ui.bOpen->setEnabled(state);
 	ui.sbOpacity->setEnabled(state);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* background : m_backgrounds)
 		background->setEnabled(state);
@@ -328,11 +329,11 @@ void BackgroundWidget::selectFile() {
 }
 
 void BackgroundWidget::fileNameChanged() {
-	CONDITIONAL_LOCK_RETURN;
-
 	const QString& fileName = ui.leFileName->text();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* background : m_backgrounds)
 		background->setFileName(fileName);
@@ -395,7 +396,6 @@ void BackgroundWidget::backgroundOpacityChanged(float opacity) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void BackgroundWidget::load() {
-	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)m_background->type());
 	ui.cbColorStyle->setCurrentIndex((int)m_background->colorStyle());
 	ui.cbImageStyle->setCurrentIndex((int)m_background->imageStyle());
@@ -427,6 +427,8 @@ void BackgroundWidget::load() {
 }
 
 void BackgroundWidget::loadConfig(const KConfigGroup& group) {
+	CONDITIONAL_LOCK_RETURN; // need to lock here since this function is also called from outside
+
 	ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), (int)m_background->type()));
 	ui.cbColorStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ColorStyle"), (int)m_background->colorStyle()));
 	ui.cbImageStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ImageStyle"), (int)m_background->imageStyle()));
