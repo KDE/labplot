@@ -54,7 +54,17 @@ void ReferenceRange::init() {
 
 	d->coordinateBindingEnabled = true;
 	d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
-	d->updateOrientation();
+	switch (d->orientation) {
+	case WorksheetElement::Orientation::Horizontal:
+		d->position.positionLimit = WorksheetElement::PositionLimit::Y;
+		break;
+	case WorksheetElement::Orientation::Vertical:
+		d->position.positionLimit = WorksheetElement::PositionLimit::X;
+		break;
+	case WorksheetElement::Orientation::Both:
+		d->position.positionLimit = WorksheetElement::PositionLimit::None;
+		break;
+	}
 
 	// default position - 10% of the plot width/height positioned around the center
 	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
