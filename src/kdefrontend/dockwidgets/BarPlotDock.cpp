@@ -236,7 +236,6 @@ void BarPlotDock::loadDataColumns() {
 		addDataColumn();
 
 	int count = m_barPlot->dataColumns().count();
-	const int currentBarIndex = ui.cbNumber->currentIndex();
 	ui.cbNumber->clear();
 
 	if (count != 0) {
@@ -273,10 +272,8 @@ void BarPlotDock::loadDataColumns() {
 	for (auto* b : m_removeButtons)
 		b->setVisible(enabled);
 
-	if (currentBarIndex != -1)
-		ui.cbNumber->setCurrentIndex(currentBarIndex);
-	else
-		ui.cbNumber->setCurrentIndex(0);
+	// select the first column after all of them were added to the combobox
+	ui.cbNumber->setCurrentIndex(0);
 }
 
 void BarPlotDock::setDataColumns() const {
@@ -493,8 +490,7 @@ void BarPlotDock::plotVisibilityChanged(bool on) {
 // box
 void BarPlotDock::plotWidthFactorChanged(double factor) {
 	CONDITIONAL_LOCK_RETURN;
-	// 	float v = (float)value*100.;
-	ui.sbWidthFactor->setValue(factor * 100);
+	ui.sbWidthFactor->setValue(round(factor * 100));
 }
 
 //**********************************************************

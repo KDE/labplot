@@ -564,7 +564,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", device position after first line and comments = " << device.pos());
+	// valgrind: Conditional jump or move depends on uninitialised value(s)
 	firstLine.remove(QRegularExpression(QStringLiteral("[\\n\\r]"))); // remove any newline
+
 	if (removeQuotesEnabled)
 		firstLine = firstLine.remove(QLatin1Char('"'));
 	DEBUG(Q_FUNC_INFO << ", First line: \'" << STDSTRING(firstLine) << '\'');

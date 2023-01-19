@@ -37,6 +37,7 @@ LineWidget::LineWidget(QWidget* parent)
 }
 
 void LineWidget::setLines(const QList<Line*>& lines) {
+	CONDITIONAL_LOCK_RETURN;
 	m_lines = lines;
 	m_line = m_lines.first();
 	m_prefix = m_line->prefix();
@@ -48,7 +49,6 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 		ui.sbErrorBarsCapSize->hide();
 
 		if (ui.cbType->count() == 0) {
-			CONDITIONAL_LOCK_RETURN;
 			ui.cbType->addItem(i18n("None"));
 			ui.cbType->addItem(i18n("Bars"));
 			ui.cbType->addItem(i18n("Envelope"));
@@ -62,7 +62,6 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 		ui.sbErrorBarsCapSize->show();
 
 		if (ui.cbType->count() == 0) {
-			CONDITIONAL_LOCK_RETURN;
 			QPainter pa;
 			int iconSize = 20;
 			QPixmap pm(iconSize, iconSize);
@@ -96,7 +95,6 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 		ui.sbErrorBarsCapSize->hide();
 
 		if (ui.cbType->count() == 0) {
-			CONDITIONAL_LOCK_RETURN;
 			ui.cbType->addItem(i18n("No Drop Lines"));
 			ui.cbType->addItem(i18n("Drop Lines, X"));
 			ui.cbType->addItem(i18n("Drop Lines, Y"));
@@ -192,7 +190,7 @@ void LineWidget::typeChanged(int index) {
 				line->setErrorBarsType(type);
 		}
 	} else if (m_prefix == QLatin1String("DropLine")) {
-		auto type = XYCurve::DropLineType(index);
+		auto type = static_cast<XYCurve::DropLineType>(index);
 		enabled = (type != XYCurve::DropLineType::NoDropLine);
 
 		if (!m_initializing) {
@@ -221,7 +219,7 @@ void LineWidget::capSizeChanged(double value) {
 
 void LineWidget::styleChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
-	auto style = Qt::PenStyle(index);
+	auto style = static_cast<Qt::PenStyle>(index);
 	for (auto* line : m_lines)
 		line->setStyle(style);
 }
@@ -291,16 +289,13 @@ void LineWidget::lineWidthChanged(double width) {
 
 void LineWidget::lineOpacityChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	double v = (double)value * 100.;
-	ui.sbOpacity->setValue(v);
+	ui.sbOpacity->setValue(round(value * 100));
 }
 
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
 void LineWidget::load() {
-	CONDITIONAL_LOCK_RETURN;
-
 	if (m_line->histogramLineTypeAvailable())
 		ui.cbType->setCurrentIndex(static_cast<int>(m_line->histogramLineType()));
 	else if (m_line->errorBarsTypeAvailable()) {
@@ -312,12 +307,14 @@ void LineWidget::load() {
 
 	setColor(m_line->color());
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_line->width(), Worksheet::Unit::Point));
-	ui.sbOpacity->setValue(m_line->opacity() * 100);
+	ui.sbOpacity->setValue(round(m_line->opacity() * 100));
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 	ui.cbStyle->setCurrentIndex(static_cast<int>(m_line->style()));
 }
 
 void LineWidget::loadConfig(const KConfigGroup& group) {
+	CONDITIONAL_LOCK_RETURN; // need to lock here since this function is also called from outside
+
 	if (m_line->histogramLineTypeAvailable())
 		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), static_cast<int>(m_line->histogramLineType())));
 	else if (m_line->errorBarsTypeAvailable()) {

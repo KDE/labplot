@@ -260,7 +260,7 @@ void DatapickerImage::setRotationAngle(float angle) {
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetAxisPoints, DatapickerImage::ReferencePoints, axisPoints)
 void DatapickerImage::setAxisPoints(const DatapickerImage::ReferencePoints& points) {
-	if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0)
+	if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0) // valgrind: Conditional jump or move depends on uninitialised value(s)
 		exec(new DatapickerImageSetAxisPointsCmd(d, points, ki18n("%1: set Axis points")));
 }
 
