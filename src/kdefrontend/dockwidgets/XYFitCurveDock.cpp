@@ -119,7 +119,8 @@ void XYFitCurveDock::setupGeneral() {
 
 	// use white background in the preview label
 	QPalette p;
-	p.setColor(QPalette::Window, Qt::white);
+	// dark or light mode
+	(palette().color(QPalette::Base).lightness() < 128) ? p.setColor(QPalette::Window, Qt::black) : p.setColor(QPalette::Window, Qt::white);
 	uiGeneralTab.lFuncPic->setAutoFillBackground(true);
 	uiGeneralTab.lFuncPic->setPalette(p);
 
@@ -1009,6 +1010,9 @@ void XYFitCurveDock::updateModelEquation() {
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
 		QImage image = GuiTools::importPDFFile(file);
+		// invert image if in dark mode
+		if (palette().color(QPalette::Base).lightness() < 128)
+			image.invertPixels();
 
 		if (image.isNull()) {
 			uiGeneralTab.lEquation->hide();
