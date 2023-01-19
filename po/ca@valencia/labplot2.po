@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-18 00:53+0000\n"
+"POT-Creation-Date: 2023-01-19 00:53+0000\n"
 "PO-Revision-Date: 2023-01-15 11:20+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -11950,8 +11950,8 @@ msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1969
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:532
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:737
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:528
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:733
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1773
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:722
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:417
@@ -11999,10 +11999,10 @@ msgstr ""
 "en relació amb el seu valor predeterminat, aplicant-se a totes les barres"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:370
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:396
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:380
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:405
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:367
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:393
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:377
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:402
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:85
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:115
@@ -12016,8 +12016,8 @@ msgstr "Columnes:"
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:398
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:409
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:395
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:406
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:48
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:800
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:982
@@ -12028,8 +12028,8 @@ msgstr "Columnes:"
 msgid "Column:"
 msgstr "Columna:"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:530
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:735
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:526
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:731
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:759
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1302
 #, kde-format
