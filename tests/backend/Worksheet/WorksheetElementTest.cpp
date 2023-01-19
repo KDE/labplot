@@ -161,6 +161,78 @@ void WorksheetElementTest::customPointKeyPressMove() {
 	VALUES_EQUAL(point->positionLogical().y(), 0.5);
 }
 
+// Switching between setCoordinateBindingEnabled true and false should not move the point
+void WorksheetElementTest::customPointEnableDisableCoordBinding() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	p->setHorizontalPadding(0);
+	p->setVerticalPadding(0);
+	p->setRightPadding(0);
+	p->setBottomPadding(0);
+	p->setRect(QRectF(0, 0, 100, 100));
+
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
+	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
+
+	QCOMPARE(p->dataRect().x(), -50);
+	QCOMPARE(p->dataRect().y(), -50);
+	QCOMPARE(p->dataRect().width(), 100);
+	QCOMPARE(p->dataRect().height(), 100);
+
+	auto* point = new CustomPoint(p, QStringLiteral("point"));
+	p->addChild(point);
+	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = point->position();
+	pp.point = QPointF(0, 0);
+	point->setPosition(pp);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+
+	point->setCoordinateBindingEnabled(true);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+
+	// Set position to another than the origin
+	point->setPositionLogical(QPointF(0.85, 0.7));
+
+	VALUES_EQUAL(point->position().point.x(), 35);
+	VALUES_EQUAL(point->position().point.y(), 20);
+	VALUES_EQUAL(point->positionLogical().x(), 0.85);
+	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+
+	point->setCoordinateBindingEnabled(false);
+
+	VALUES_EQUAL(point->position().point.x(), 35);
+	VALUES_EQUAL(point->position().point.y(), 20);
+	VALUES_EQUAL(point->positionLogical().x(), 0.85);
+	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+
+	point->setCoordinateBindingEnabled(true);
+
+	VALUES_EQUAL(point->position().point.x(), 35);
+	VALUES_EQUAL(point->position().point.y(), 20);
+	VALUES_EQUAL(point->positionLogical().x(), 0.85);
+	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+}
+
 // Zoom in cartesianplot leads to move the CustomPoint
 // Testing without setCoordinateBindingEnabled
 
