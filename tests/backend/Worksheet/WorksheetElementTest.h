@@ -20,6 +20,7 @@ private Q_SLOTS:
 	void customPointSetPositionLogical();
 	void customPointMouseMove();
 	void customPointKeyPressMove();
+	void customPointEnableDisableCoordBinding();
 };
 
 #endif // WORKSHEETELEMENTTEST_H
