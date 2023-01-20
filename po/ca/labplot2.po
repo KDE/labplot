@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-19 00:53+0000\n"
+"POT-Creation-Date: 2023-01-20 00:53+0000\n"
 "PO-Revision-Date: 2023-01-15 11:20+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -1225,7 +1225,7 @@ msgstr "Índex"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2298
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2316
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2333
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:160
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:161
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:187
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:62
@@ -2212,7 +2212,7 @@ msgstr "%1: Importa des de %2"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1196
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1200
 #, kde-format
 msgid "Success"
 msgstr "Correcte"
@@ -5763,7 +5763,7 @@ msgstr "Estadístiques (distribucions)"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1069
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:245
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:293
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:792
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:793
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:86
 #, kde-format
 msgid "Custom"
@@ -12390,17 +12390,17 @@ msgid "Expand all curves"
 msgstr "Expandeix totes les corbes"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1327
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1333
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1339
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1331
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1337
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1343
 #, kde-format
 msgid "Copy Selection"
 msgstr "Copia la selecció"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1328
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1334
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1340
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1332
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1338
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1344
 #, kde-format
 msgid "Copy All"
 msgstr "Copia-ho tot"
@@ -12962,38 +12962,38 @@ msgstr "t, mín"
 msgid "t, max"
 msgstr "t, màx"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:160
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:161
 #, kde-format
 msgid "Uncertainty"
 msgstr "Incertesa"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:160
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:161
 #, kde-format
 msgid "Uncertainty, %"
 msgstr "Incertesa, %"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:160
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:161
 #, kde-format
 msgid "t statistic"
 msgstr "Estadística t"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:161
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:162
 #, kde-format
 msgid "Lower"
 msgstr "Inferior"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:161
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:162
 #, kde-format
 msgid "Upper"
 msgstr "Superior"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:192
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:193
 #, kde-format
 msgid "test"
 msgstr "test"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:439
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:440
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:113
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:228
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:108
@@ -13007,34 +13007,34 @@ msgstr "test"
 msgid "Curve:"
 msgstr "Corba:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:459
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:460
 #, kde-format
 msgid "Histogram:"
 msgstr "Histograma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:840
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:841
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:620
 #, kde-format
 msgid "Degree:"
 msgstr "Grau:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:897
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:898
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Nombre de pics:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1197
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1201
 #, kde-format
 msgid "Fit status: %1"
 msgstr "Estat de l'ajust: %1"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1374
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1378
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "Nivell inferior de confiança %1 %"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1375
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1379
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "Nivell superior de confiança %1 %"
