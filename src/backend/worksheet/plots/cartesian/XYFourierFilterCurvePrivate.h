@@ -21,7 +21,8 @@ class XYFourierFilterCurvePrivate : public XYAnalysisCurvePrivate {
 public:
 	explicit XYFourierFilterCurvePrivate(XYFourierFilterCurve*);
 	~XYFourierFilterCurvePrivate() override;
-	void recalculate();
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
+	virtual void resetResults() override;
 
 	XYFourierFilterCurve::FilterData filterData;
 	XYFourierFilterCurve::FilterResult filterResult;

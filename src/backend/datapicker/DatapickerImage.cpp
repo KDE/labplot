@@ -85,7 +85,7 @@ void DatapickerImage::init() {
 	d->rotationAngle = group.readEntry("RotationAngle", 0.0);
 	d->minSegmentLength = group.readEntry("MinSegmentLength", 30);
 	d->pointSeparation = group.readEntry("PointSeparation", 30);
-	d->axisPoints.type = (DatapickerImage::GraphType)group.readEntry("GraphType", static_cast<int>(DatapickerImage::GraphType::Cartesian));
+	d->axisPoints.type = static_cast<GraphType>(group.readEntry("GraphType", static_cast<int>(GraphType::Linear)));
 	d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
 
 	// edit image settings
@@ -218,6 +218,10 @@ void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type
 	Q_EMIT requestUpdate();
 }
 
+int DatapickerImage::currentSelectedReferencePoint() {
+	return m_currentRefPoint;
+}
+
 DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 	return d->plotImageType;
 }
@@ -256,7 +260,7 @@ void DatapickerImage::setRotationAngle(float angle) {
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetAxisPoints, DatapickerImage::ReferencePoints, axisPoints)
 void DatapickerImage::setAxisPoints(const DatapickerImage::ReferencePoints& points) {
-	if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0)
+	if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0) // valgrind: Conditional jump or move depends on uninitialised value(s)
 		exec(new DatapickerImageSetAxisPointsCmd(d, points, ki18n("%1: set Axis points")));
 }
 
@@ -322,6 +326,18 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 
 void DatapickerImage::setPointSeparation(const int value) {
 	d->pointSeparation = value;
+}
+
+void DatapickerImage::referencePointSelected(const DatapickerPoint* point) {
+	const auto points = children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	for (int i = 0; i < points.count(); i++) {
+		if (points.at(i) == point) {
+			m_currentRefPoint = i;
+			emit referencePointSelected(i);
+			return;
+		}
+	}
+	m_currentRefPoint = -1;
 }
 
 //##############################################################################
@@ -514,8 +530,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
 		} else if (!preview && reader->name() == QLatin1String("axisPoint")) {
 			attribs = reader->attributes();
-
-			READ_INT_VALUE("graphType", axisPoints.type, DatapickerImage::GraphType);
+			READ_INT_VALUE_DIRECT("graphType", d->axisPoints.type, GraphType);
 			READ_INT_VALUE("ternaryScale", axisPoints.ternaryScale, int);
 
 			str = attribs.value(QStringLiteral("axisPointLogicalX1")).toString();

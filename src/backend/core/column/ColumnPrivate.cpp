@@ -4,7 +4,7 @@
 	Description          : Private data class of Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -82,7 +82,7 @@ void ColumnPrivate::initDataContainer() {
 }
 
 void ColumnPrivate::initIOFilters() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (m_columnMode) {
 	case AbstractColumn::ColumnMode::Double:
 		m_inputFilter = new String2DoubleFilter();
@@ -163,8 +163,7 @@ AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
  * initial value) is not supported.
  */
 void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
-	//	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_column_mode)
-	//		<< " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode))
+	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_columnMode) << " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode))
 	if (mode == m_columnMode)
 		return;
 
@@ -178,7 +177,6 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	Q_EMIT m_owner->modeAboutToChange(m_owner);
 
 	// determine the conversion filter and allocate the new data vector
-	SET_NUMBER_LOCALE
 	switch (m_columnMode) { // old mode
 	case AbstractColumn::ColumnMode::Double: {
 		disconnect(static_cast<Double2StringFilter*>(m_outputFilter), &Double2StringFilter::formatChanged, m_owner, &Column::handleFormatChange);
@@ -267,12 +265,14 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			}
 			break;
 		case AbstractColumn::ColumnMode::DateTime:
+			DEBUG(Q_FUNC_INFO << ", int -> datetime")
 			filter = new Integer2DateTimeFilter();
 			filter_is_temporary = true;
 			if (m_data) {
 				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<int>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
+			DEBUG(Q_FUNC_INFO << ", int -> datetime done")
 			break;
 		case AbstractColumn::ColumnMode::Month:
 			filter = new Integer2MonthFilter();
@@ -299,7 +299,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		switch (mode) {
 		case AbstractColumn::ColumnMode::BigInt:
 			break;
-		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::Integer: // TODO: timeUnit
 			filter = new BigInt2IntegerFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -307,7 +307,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				m_data = new QVector<int>();
 			}
 			break;
-		case AbstractColumn::ColumnMode::Double:
+		case AbstractColumn::ColumnMode::Double: // TODO: timeUnit
 			filter = new BigInt2DoubleFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -323,7 +323,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				m_data = new QVector<QString>();
 			}
 			break;
-		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::DateTime: // TODO: timeUnit
 			filter = new BigInt2DateTimeFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -357,7 +357,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			break;
 		case AbstractColumn::ColumnMode::Double:
 			filter = new String2DoubleFilter();
-			filter->setNumberLocale(numberLocale);
+			filter->setNumberLocale(QLocale());
 			filter_is_temporary = true;
 			if (m_data) {
 				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
@@ -366,7 +366,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			break;
 		case AbstractColumn::ColumnMode::Integer:
 			filter = new String2IntegerFilter();
-			filter->setNumberLocale(numberLocale);
+			filter->setNumberLocale(QLocale());
 			filter_is_temporary = true;
 			if (m_data) {
 				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
@@ -375,7 +375,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			break;
 		case AbstractColumn::ColumnMode::BigInt:
 			filter = new String2BigIntFilter();
-			filter->setNumberLocale(numberLocale);
+			filter->setNumberLocale(QLocale());
 			filter_is_temporary = true;
 			if (m_data) {
 				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
@@ -432,7 +432,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				filter = new Month2DoubleFilter();
 			else if (m_columnMode == AbstractColumn::ColumnMode::Day)
 				filter = new DayOfWeek2DoubleFilter();
-			else
+			else // TODO: timeUnit
 				filter = new DateTime2DoubleFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -445,7 +445,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				filter = new Month2IntegerFilter();
 			else if (m_columnMode == AbstractColumn::ColumnMode::Day)
 				filter = new DayOfWeek2IntegerFilter();
-			else
+			else // TODO: timeUnit
 				filter = new DateTime2IntegerFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -458,7 +458,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				filter = new Month2BigIntFilter();
 			else if (m_columnMode == AbstractColumn::ColumnMode::Day)
 				filter = new DayOfWeek2BigIntFilter();
-			else
+			else // TODO: timeUnit
 				filter = new DateTime2BigIntFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -472,27 +472,29 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	}
 	}
 
+	DEBUG(Q_FUNC_INFO << ", here")
+
 	// determine the new input and output filters
 	switch (mode) { // new mode
 	case AbstractColumn::ColumnMode::Double:
 		new_in_filter = new String2DoubleFilter();
-		new_in_filter->setNumberLocale(numberLocale);
+		new_in_filter->setNumberLocale(QLocale());
 		new_out_filter = new Double2StringFilter();
-		new_out_filter->setNumberLocale(numberLocale);
+		new_out_filter->setNumberLocale(QLocale());
 		connect(static_cast<Double2StringFilter*>(new_out_filter), &Double2StringFilter::formatChanged, m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::Integer:
 		new_in_filter = new String2IntegerFilter();
-		new_in_filter->setNumberLocale(numberLocale);
+		new_in_filter->setNumberLocale(QLocale());
 		new_out_filter = new Integer2StringFilter();
-		new_out_filter->setNumberLocale(numberLocale);
+		new_out_filter->setNumberLocale(QLocale());
 		connect(static_cast<Integer2StringFilter*>(new_out_filter), &Integer2StringFilter::formatChanged, m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
 		new_in_filter = new String2BigIntFilter();
-		new_in_filter->setNumberLocale(numberLocale);
+		new_in_filter->setNumberLocale(QLocale());
 		new_out_filter = new BigInt2StringFilter();
-		new_out_filter->setNumberLocale(numberLocale);
+		new_out_filter->setNumberLocale(QLocale());
 		connect(static_cast<BigInt2StringFilter*>(new_out_filter), &BigInt2StringFilter::formatChanged, m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -519,6 +521,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		break;
 	} // switch(mode)
 
+	DEBUG(Q_FUNC_INFO << ", here 2")
 	m_columnMode = mode;
 
 	m_inputFilter = new_in_filter;
@@ -528,15 +531,18 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	m_inputFilter->setHidden(true);
 	m_outputFilter->setHidden(true);
 
+	DEBUG(Q_FUNC_INFO << ", here 3")
 	if (temp_col) { // if temp_col == 0, only the input/output filters need to be changed
 		// copy the filtered, i.e. converted, column (mode is orig mode)
-		//		DEBUG("	temp_col column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, temp_col->columnMode()));
+		DEBUG("	temp_col column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, temp_col->columnMode()));
 		filter->input(0, temp_col);
-		//		DEBUG("	filter->output size = " << filter->output(0)->rowCount());
+		DEBUG("	filter->output size = " << filter->output(0)->rowCount());
 		copy(filter->output(0));
+		DEBUG(" DONE")
 		delete temp_col;
 	}
 
+	DEBUG(Q_FUNC_INFO << ", here 4")
 	if (filter_is_temporary)
 		delete filter;
 
@@ -621,6 +627,7 @@ void ColumnPrivate::replaceData(void* data) {
  * Use a filter to convert a column to another type.
  */
 bool ColumnPrivate::copy(const AbstractColumn* other) {
+	DEBUG(Q_FUNC_INFO)
 	if (other->columnMode() != columnMode())
 		return false;
 	// 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
@@ -672,6 +679,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
 
+	DEBUG(Q_FUNC_INFO << ", done")
 	return true;
 }
 
@@ -1121,25 +1129,24 @@ void ColumnPrivate::removeValueLabel(const QString& key) {
 	if (!hasValueLabels())
 		return;
 
-	SET_NUMBER_LOCALE
 	bool ok;
 	switch (m_columnMode) {
 	case AbstractColumn::ColumnMode::Double: {
-		double value = numberLocale.toDouble(key, &ok);
+		double value = QLocale().toDouble(key, &ok);
 		if (!ok)
 			return;
 		static_cast<QMap<double, QString>*>(m_labels)->remove(value);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer: {
-		int value = numberLocale.toInt(key, &ok);
+		int value = QLocale().toInt(key, &ok);
 		if (!ok)
 			return;
 		static_cast<QMap<int, QString>*>(m_labels)->remove(value);
 		break;
 	}
 	case AbstractColumn::ColumnMode::BigInt: {
-		qint64 value = numberLocale.toLongLong(key, &ok);
+		qint64 value = QLocale().toLongLong(key, &ok);
 		if (!ok)
 			return;
 		static_cast<QMap<qint64, QString>*>(m_labels)->remove(value);
@@ -1378,9 +1385,8 @@ void ColumnPrivate::updateFormula() {
 													  {QStringLiteral("kurt"), column->statistics().kurtosis},
 													  {QStringLiteral("entropy"), column->statistics().entropy}};
 
-		SET_NUMBER_LOCALE
 		for (auto m : methodList)
-			formula.replace(m.first + QStringLiteral("(%1)").arg(varName), numberLocale.toString(m.second));
+			formula.replace(m.first + QStringLiteral("(%1)").arg(varName), QLocale().toString(m.second));
 
 		// B) methods with options like method(p, x): get option p and calculate value to replace method
 		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // quantile(p, x)
@@ -1393,7 +1399,7 @@ void ColumnPrivate::updateFormula() {
 			int pos = 0;
 			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
 				QDEBUG("method call:" << rx.cap(0))
-				double p = numberLocale.toDouble(rx.cap(1)); // option
+				double p = QLocale().toDouble(rx.cap(1)); // option
 				DEBUG("p = " << p)
 
 				// scale (quantile: p=0..1, percentile: p=0..100)
@@ -1434,7 +1440,7 @@ void ColumnPrivate::updateFormula() {
 					break;
 				}
 
-				formula.replace(rx.cap(0), numberLocale.toString(value));
+				formula.replace(rx.cap(0), QLocale().toString(value));
 			}
 		}
 
@@ -1453,10 +1459,10 @@ void ColumnPrivate::updateFormula() {
 			int pos = 0;
 			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
 				QDEBUG("method call:" << rx.cap(0))
-				const int N = numberLocale.toInt(rx.cap(1));
+				const int N = QLocale().toInt(rx.cap(1));
 				DEBUG("N = " << N)
 
-				formula.replace(rx.cap(0), m.second.arg(numberLocale.toString(N)).arg(varName));
+				formula.replace(rx.cap(0), m.second.arg(QLocale().toString(N)).arg(varName));
 			}
 		}
 
@@ -1652,7 +1658,7 @@ void ColumnPrivate::replaceValues(int first, const QVector<QString>& new_values)
  */
 QString ColumnPrivate::textAt(int row) const {
 	if (!m_data || m_columnMode != AbstractColumn::ColumnMode::Text)
-		return QString();
+		return {};
 	return static_cast<QVector<QString>*>(m_data)->value(row);
 }
 
@@ -1693,6 +1699,13 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 			&& m_columnMode != AbstractColumn::ColumnMode::Day))
 		return QDateTime();
 	return static_cast<QVector<QDateTime>*>(m_data)->value(row);
+}
+
+double ColumnPrivate::doubleAt(int index) const {
+	if (!m_data)
+		return NAN;
+
+	return static_cast<QVector<double>*>(m_data)->value(index, NAN);
 }
 
 /**
@@ -2166,6 +2179,7 @@ void ColumnPrivate::updateProperties() {
 	// DEBUG(Q_FUNC_INFO);
 
 	// TODO: for double Properties::Constant will never be used. Use an epsilon (difference smaller than epsilon is zero)
+	int rows = rowCount();
 	if (rowCount() == 0) {
 		properties = AbstractColumn::Properties::No;
 		available.properties = true;
@@ -2199,7 +2213,7 @@ void ColumnPrivate::updateProperties() {
 	int valueInt;
 	qint64 valueBigInt;
 	qint64 valueDateTime;
-	for (int row = 1; row < rowCount(); row++) {
+	for (int row = 1; row < rows; row++) {
 		if (!m_owner->isValid(row) || m_owner->isMasked(row)) {
 			// if there is one invalid or masked value, the property is No, because
 			// otherwise it's difficult to find the correct index in indexForValue().
@@ -2362,8 +2376,10 @@ void ColumnPrivate::calculateStatistics() {
 		return;
 	}
 
-	if (!m_owner->isNumeric())
+	if (!m_owner->isNumeric()) {
+		calculateDateTimeStatistics();
 		return;
+	}
 
 	//######  location measures  #######
 	int rowValuesSize = rowCount();
@@ -2371,8 +2387,8 @@ void ColumnPrivate::calculateStatistics() {
 	double columnProduct = 1.0;
 	double columnSumNeg = 0.0;
 	double columnSumSquare = 0.0;
-	statistics.minimum = qInf();
-	statistics.maximum = -qInf();
+	statistics.minimum = INFINITY;
+	statistics.maximum = -INFINITY;
 	std::unordered_map<double, int> frequencyOfValues;
 	QVector<double> rowData;
 	rowData.reserve(rowValuesSize);
@@ -2414,7 +2430,7 @@ void ColumnPrivate::calculateStatistics() {
 
 	// geometric mean
 	if (statistics.minimum <= -100.) // invalid
-		statistics.geometricMean = qQNaN();
+		statistics.geometricMean = NAN;
 	else if (statistics.minimum < 0) { // interpret as percentage (/100) and add 1
 		columnProduct = 1.; // recalculate
 		for (auto val : rowData)
@@ -2537,5 +2553,31 @@ void ColumnPrivate::calculateTextStatistics() {
 
 	statistics.size = valid;
 	statistics.unique = m_dictionary.count();
+	available.statistics = true;
+}
+
+void ColumnPrivate::calculateDateTimeStatistics() {
+	statistics.minimum = INFINITY;
+	statistics.maximum = -INFINITY;
+
+	int valid = 0;
+	for (int row = 0; row < rowCount(); ++row) {
+		if (m_owner->isMasked(row))
+			continue;
+
+		const auto& value = dateTimeAt(row);
+		if (!value.isValid())
+			continue;
+
+		quint64 val = value.toMSecsSinceEpoch();
+		if (val < statistics.minimum)
+			statistics.minimum = val;
+		if (val > statistics.maximum)
+			statistics.maximum = val;
+
+		++valid;
+	}
+
+	statistics.size = valid;
 	available.statistics = true;
 }

@@ -52,6 +52,10 @@ public:
 	void setStrongFocus(bool);
 	double value();
 	void setClearButtonEnabled(bool);
+	double minimum() const;
+	void setMinimum(double min);
+	double maximum() const;
+	void setMaximum(double max);
 
 Q_SIGNALS:
 	void valueChanged(double);
@@ -91,6 +95,8 @@ private:
 	// The value stored in QAbstractSpinBox is rounded to
 	// decimals and this is not desired
 	double m_value{0};
+	double m_maximum{std::numeric_limits<double>::max()};
+	double m_minimum{std::numeric_limits<double>::lowest()};
 
 	friend class WidgetsTest;
 };

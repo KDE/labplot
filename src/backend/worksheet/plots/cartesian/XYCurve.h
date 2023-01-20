@@ -11,10 +11,9 @@
 #ifndef XYCURVE_H
 #define XYCURVE_H
 
-#include "Curve.h"
+#include "Plot.h"
 #include "backend/lib/Range.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 #include <QFont>
@@ -28,9 +27,9 @@ class XYCurvePrivate;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT XYCurve : public WorksheetElement, public Curve {
+class LABPLOT_EXPORT XYCurve : public Plot {
 #else
-class XYCurve : public WorksheetElement, public Curve {
+class XYCurve : public Plot {
 #endif
 	Q_OBJECT
 
@@ -84,7 +83,7 @@ public:
 				bool includeErrorBars) const;
 	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 
-	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 
 	const AbstractColumn* column(CartesianCoordinateSystem::Dimension dim) const;
@@ -175,13 +174,13 @@ private:
 	Q_DECLARE_PRIVATE(XYCurve)
 	void init();
 	void initActions();
-	void connectxColumn(const AbstractColumn*);
-	void connectyColumn(const AbstractColumn*);
-	void connectxErrorPlusColumn(const AbstractColumn*);
-	void connectxErrorMinusColumn(const AbstractColumn*);
-	void connectyErrorPlusColumn(const AbstractColumn*);
-	void connectyErrorMinusColumn(const AbstractColumn*);
-	void connectvaluesColumn(const AbstractColumn*);
+	void connectXColumn(const AbstractColumn*);
+	void connectYColumn(const AbstractColumn*);
+	void connectXErrorPlusColumn(const AbstractColumn*);
+	void connectXErrorMinusColumn(const AbstractColumn*);
+	void connectYErrorPlusColumn(const AbstractColumn*);
+	void connectYErrorMinusColumn(const AbstractColumn*);
+	void connectValuesColumn(const AbstractColumn*);
 
 	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};
@@ -191,7 +190,6 @@ Q_SIGNALS:
 	void linesUpdated(const XYCurve*, const QVector<QLineF>&);
 
 	// General-Tab
-	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void xDataChanged();
 	void yDataChanged();
 	void xErrorPlusDataChanged();

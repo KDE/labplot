@@ -45,18 +45,6 @@ WorksheetElement::WorksheetElement(const QString& name, WorksheetElementPrivate*
 
 void WorksheetElement::init() {
 	d_ptr->setData(0, static_cast<quint64>(type()));
-	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
-	m_drawingOrderMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
-	m_moveBehindMenu = new QMenu(i18n("Move &behind"));
-	m_moveBehindMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-down")));
-	m_moveInFrontOfMenu = new QMenu(i18n("Move in &front of"));
-	m_moveInFrontOfMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-up")));
-	m_drawingOrderMenu->addMenu(m_moveBehindMenu);
-	m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
-
-	connect(m_drawingOrderMenu, &QMenu::aboutToShow, this, &WorksheetElement::prepareDrawingOrderMenu);
-	connect(m_moveBehindMenu, &QMenu::triggered, this, &WorksheetElement::execMoveBehind);
-	connect(m_moveInFrontOfMenu, &QMenu::triggered, this, &WorksheetElement::execMoveInFrontOf);
 }
 
 WorksheetElement::~WorksheetElement() {
@@ -195,6 +183,23 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath& path, const QPe
 }
 
 QMenu* WorksheetElement::createContextMenu() {
+	if (!m_drawingOrderMenu) {
+		m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
+		m_drawingOrderMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
+
+		m_moveBehindMenu = new QMenu(i18n("Move &behind"));
+		m_moveBehindMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-down")));
+		m_drawingOrderMenu->addMenu(m_moveBehindMenu);
+
+		m_moveInFrontOfMenu = new QMenu(i18n("Move in &front of"));
+		m_moveInFrontOfMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-up")));
+		m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
+
+		connect(m_drawingOrderMenu, &QMenu::aboutToShow, this, &WorksheetElement::prepareDrawingOrderMenu);
+		connect(m_moveBehindMenu, &QMenu::triggered, this, &WorksheetElement::execMoveBehind);
+		connect(m_moveInFrontOfMenu, &QMenu::triggered, this, &WorksheetElement::execMoveInFrontOf);
+	}
+
 	QMenu* menu = AbstractAspect::createContextMenu();
 
 	// add the sub-menu for the drawing order
@@ -655,18 +660,20 @@ void WorksheetElementPrivate::updatePosition() {
 	QPointF p;
 	if (coordinateBindingEnabled && q->cSystem) {
 		// the position in logical coordinates was changed, calculate the position in scene coordinates
-		bool visible;
-		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		// InsidePlot will get false if the point lies outside of the datarect
+		p = q->cSystem->mapLogicalToScene(positionLogical, insidePlot, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
 		QPointF inParentCoords = mapPlotAreaToParent(p);
 		p = inParentCoords;
 		position.point = q->parentPosToRelativePos(p, position);
 		p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
 		Q_EMIT q->positionChanged(position);
 	} else {
+		// Not important if within the datarect or not
+		insidePlot = true;
 		p = q->relativePosToParentPos(position);
 
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
-		if (q->cSystem) {
+		if (q->cSystem && q->cSystem->isValid()) {
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(p), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 		}
@@ -684,6 +691,8 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 
 		WorksheetElement::PositionWrapper tempPosition = position;
 		if (coordinateBindingEnabled && q->cSystem) {
+			if (!q->cSystem->isValid())
+				return;
 			// the position in logical coordinates was changed, calculate the position in scene coordinates
 			bool visible;
 			QPointF p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
@@ -759,6 +768,8 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		// don't use setPosition here, because then all small changes are on the undo stack
 		// setPosition is used then in mouseReleaseEvent
 		if (coordinateBindingEnabled) {
+			if (!q->cSystem->isValid())
+				return QGraphicsItem::itemChange(change, value);
 			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);

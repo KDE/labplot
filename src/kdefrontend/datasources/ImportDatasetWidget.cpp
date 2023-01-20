@@ -180,7 +180,7 @@ void ImportDatasetWidget::collectionChanged(int index) {
 	if (!m_allCollections)
 		m_collection = ui.cbCollections->itemData(index).toString();
 	else
-		m_collection = QStringLiteral("");
+		m_collection = QString();
 
 	// update the info field
 	QString info;
@@ -320,8 +320,8 @@ void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 	} else {
 		if (!item->parent()) {
 			// top-level item "All" was selected -> show datasets for all categories and their sub-categories
-			m_category = QStringLiteral("");
-			m_subcategory = QStringLiteral("");
+			m_category = QString();
+			m_subcategory = QString();
 
 			for (const auto& category : m_model->categories(m_collection)) {
 				for (const auto& subcategory : m_model->subcategories(m_collection, category))
@@ -330,7 +330,7 @@ void ImportDatasetWidget::updateDatasets(QTreeWidgetItem* item) {
 		} else {
 			// a category was selected -> show all its datasets
 			m_category = item->text(0);
-			m_subcategory = QStringLiteral("");
+			m_subcategory = QString();
 
 			for (const auto& subcategory : m_model->subcategories(m_collection, m_category))
 				addDatasetItems(m_collection, m_category, subcategory, filter);

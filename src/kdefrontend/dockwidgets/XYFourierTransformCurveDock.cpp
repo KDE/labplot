@@ -29,7 +29,7 @@
 */
 
 XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget* parent)
-	: XYCurveDock(parent) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -109,7 +109,7 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	cbXDataColumn->setColumn(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.leMin->setText(numberLocale.toString(m_transformData.xRange.first()));
 	uiGeneralTab.leMax->setText(numberLocale.toString(m_transformData.xRange.last()));
 	this->autoRangeChanged();
@@ -191,8 +191,7 @@ void XYFourierTransformCurveDock::updatePlotRanges() {
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
 void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -201,7 +200,7 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
@@ -212,8 +211,7 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -235,7 +233,7 @@ void XYFourierTransformCurveDock::autoRangeChanged() {
 		uiGeneralTab.leMax->setEnabled(false);
 		m_transformCurve = static_cast<XYFourierTransformCurve*>(m_curve);
 		if (m_transformCurve->xDataColumn()) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(m_transformCurve->xDataColumn()->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(m_transformCurve->xDataColumn()->maximum()));
 		}
@@ -302,13 +300,12 @@ void XYFourierTransformCurveDock::recalculateClicked() {
 		static_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	Q_EMIT info(i18n("Fourier transformation status: %1", m_transformCurve->transformResult().status));
+	Q_EMIT info(i18n("Fourier transformation status: %1", m_transformCurve->result().status));
 	QApplication::restoreOverrideCursor();
 }
 
 void XYFourierTransformCurveDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// no transforming possible without the x- and y-data
 	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
@@ -330,28 +327,7 @@ void XYFourierTransformCurveDock::enableRecalculate() const {
  * show the result and details of the transform
  */
 void XYFourierTransformCurveDock::showTransformResult() {
-	const XYFourierTransformCurve::TransformResult& transformResult = m_transformCurve->transformResult();
-	if (!transformResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
-
-	QString str = i18n("status: %1", transformResult.status) + QStringLiteral("<br>");
-
-	if (!transformResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	SET_NUMBER_LOCALE
-	if (transformResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(transformResult.elapsedTime)) + QStringLiteral("<br>");
-
-	str += QStringLiteral("<br><br>");
-
-	uiGeneralTab.teResult->setText(str);
+	showResult(m_transformCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
 }
 
 //*************************************************************
@@ -359,25 +335,22 @@ void XYFourierTransformCurveDock::showTransformResult() {
 //*************************************************************
 // General-Tab
 void XYFourierTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYFourierTransformCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_transformCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTransformCurve::TransformData& transformData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_transformData = transformData;
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
 	this->typeChanged();
 
 	this->showTransformResult();
-	m_initializing = false;
 }
 
 void XYFourierTransformCurveDock::dataChanged() {
@@ -385,7 +358,6 @@ void XYFourierTransformCurveDock::dataChanged() {
 }
 
 void XYFourierTransformCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

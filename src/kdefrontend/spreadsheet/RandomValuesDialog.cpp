@@ -23,6 +23,8 @@
 #include <KLocalizedString>
 #include <KWindowConfig>
 
+#include <cmath>
+
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 #include <gsl/gsl_randist.h>
@@ -105,7 +107,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 		ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(dist));
 		if (ui.cbDistribution->currentIndex() == 0) // if index=0 no signal is emitted above, call this slot directly
 			this->distributionChanged();
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		// read parameter or set values for default dist
 		ui.leParameter1->setText(numberLocale.toString(conf.readEntry("Parameter1", 0.0)));
 		ui.leParameter2->setText(numberLocale.toString(conf.readEntry("Parameter2", 1.0)));
@@ -126,7 +128,7 @@ RandomValuesDialog::~RandomValuesDialog() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
 	// saving enum value to be consistent
 	conf.writeEntry("Distribution", ui.cbDistribution->itemData(ui.cbDistribution->currentIndex()).toInt());
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	conf.writeEntry("Parameter1", numberLocale.toDouble(ui.leParameter1->text()));
 	conf.writeEntry("Parameter2", numberLocale.toDouble(ui.leParameter2->text()));
 	conf.writeEntry("Parameter3", numberLocale.toDouble(ui.leParameter3->text()));
@@ -153,7 +155,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	ui.leParameter3->hide();
 	ui.lFunc->setText(QStringLiteral("p(x) ="));
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (dist) {
 	case nsl_sf_stats_gaussian:
 		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
@@ -448,11 +450,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (mode == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_gaussian(r, sigma) + mu);
+					data_int[i] = std::round(gsl_ran_gaussian(r, sigma) + mu);
 				col->replaceInteger(0, data_int);
 			} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_gaussian(r, sigma) + mu);
+					data_bigint[i] = std::round(gsl_ran_gaussian(r, sigma) + mu);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -470,11 +472,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_gaussian_tail(r, a, sigma) + mu);
+					data_int[i] = std::round(gsl_ran_gaussian_tail(r, a, sigma) + mu);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_gaussian_tail(r, a, sigma) + mu);
+					data_bigint[i] = std::round(gsl_ran_gaussian_tail(r, a, sigma) + mu);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -492,11 +494,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_exponential(r, 1. / l) + mu);
+					data_int[i] = std::round(gsl_ran_exponential(r, 1. / l) + mu);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_exponential(r, 1. / l) + mu);
+					data_bigint[i] = std::round(gsl_ran_exponential(r, 1. / l) + mu);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -513,11 +515,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_laplace(r, s) + mu);
+					data_int[i] = std::round(gsl_ran_laplace(r, s) + mu);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_laplace(r, s) + mu);
+					data_bigint[i] = std::round(gsl_ran_laplace(r, s) + mu);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -535,11 +537,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_exppow(r, a, b) + mu);
+					data_int[i] = std::round(gsl_ran_exppow(r, a, b) + mu);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_exppow(r, a, b) + mu);
+					data_bigint[i] = std::round(gsl_ran_exppow(r, a, b) + mu);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -556,11 +558,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_cauchy(r, gamma) + mu);
+					data_int[i] = std::round(gsl_ran_cauchy(r, gamma) + mu);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_cauchy(r, gamma) + mu);
+					data_bigint[i] = std::round(gsl_ran_cauchy(r, gamma) + mu);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -576,11 +578,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_rayleigh(r, s));
+					data_int[i] = std::round(gsl_ran_rayleigh(r, s));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_rayleigh(r, s));
+					data_bigint[i] = std::round(gsl_ran_rayleigh(r, s));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -597,11 +599,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_rayleigh_tail(r, mu, sigma));
+					data_int[i] = std::round(gsl_ran_rayleigh_tail(r, mu, sigma));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_rayleigh_tail(r, mu, sigma));
+					data_bigint[i] = std::round(gsl_ran_rayleigh_tail(r, mu, sigma));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -615,11 +617,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_landau(r));
+					data_int[i] = std::round(gsl_ran_landau(r));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_landau(r));
+					data_bigint[i] = std::round(gsl_ran_landau(r));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -635,11 +637,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_levy(r, c, alpha));
+					data_int[i] = std::round(gsl_ran_levy(r, c, alpha));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_levy(r, c, alpha));
+					data_bigint[i] = std::round(gsl_ran_levy(r, c, alpha));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -657,11 +659,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_levy_skew(r, c, alpha, beta));
+					data_int[i] = std::round(gsl_ran_levy_skew(r, c, alpha, beta));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_levy_skew(r, c, alpha, beta));
+					data_bigint[i] = std::round(gsl_ran_levy_skew(r, c, alpha, beta));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -678,11 +680,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_flat(r, a, b));
+					data_int[i] = std::round(gsl_ran_flat(r, a, b));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_flat(r, a, b));
+					data_bigint[i] = std::round(gsl_ran_flat(r, a, b));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -699,11 +701,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_gamma(r, a, b));
+					data_int[i] = std::round(gsl_ran_gamma(r, a, b));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_gamma(r, a, b));
+					data_bigint[i] = std::round(gsl_ran_gamma(r, a, b));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -720,11 +722,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_lognormal(r, mu, s));
+					data_int[i] = std::round(gsl_ran_lognormal(r, mu, s));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_lognormal(r, mu, s));
+					data_bigint[i] = std::round(gsl_ran_lognormal(r, mu, s));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -740,11 +742,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_chisq(r, n));
+					data_int[i] = std::round(gsl_ran_chisq(r, n));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_chisq(r, n));
+					data_bigint[i] = std::round(gsl_ran_chisq(r, n));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -761,11 +763,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_fdist(r, nu1, nu2));
+					data_int[i] = std::round(gsl_ran_fdist(r, nu1, nu2));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_fdist(r, nu1, nu2));
+					data_bigint[i] = std::round(gsl_ran_fdist(r, nu1, nu2));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -781,11 +783,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_tdist(r, nu));
+					data_int[i] = std::round(gsl_ran_tdist(r, nu));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_tdist(r, nu));
+					data_bigint[i] = std::round(gsl_ran_tdist(r, nu));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -802,11 +804,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_beta(r, a, b));
+					data_int[i] = std::round(gsl_ran_beta(r, a, b));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_beta(r, a, b));
+					data_bigint[i] = std::round(gsl_ran_beta(r, a, b));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -823,11 +825,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_logistic(r, s) + mu);
+					data_int[i] = std::round(gsl_ran_logistic(r, s) + mu);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_logistic(r, s) + mu);
+					data_bigint[i] = std::round(gsl_ran_logistic(r, s) + mu);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -844,11 +846,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_pareto(r, a, b));
+					data_int[i] = std::round(gsl_ran_pareto(r, a, b));
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_pareto(r, a, b));
+					data_bigint[i] = std::round(gsl_ran_pareto(r, a, b));
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -866,11 +868,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_weibull(r, l, k) + mu);
+					data_int[i] = std::round(gsl_ran_weibull(r, l, k) + mu);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_weibull(r, l, k) + mu);
+					data_bigint[i] = std::round(gsl_ran_weibull(r, l, k) + mu);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -888,11 +890,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_gumbel1(r, 1. / s, b) + mu);
+					data_int[i] = std::round(gsl_ran_gumbel1(r, 1. / s, b) + mu);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_gumbel1(r, 1. / s, b) + mu);
+					data_bigint[i] = std::round(gsl_ran_gumbel1(r, 1. / s, b) + mu);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -910,11 +912,11 @@ void RandomValuesDialog::generate() {
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_gumbel2(r, a, b) + mu);
+					data_int[i] = std::round(gsl_ran_gumbel2(r, a, b) + mu);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_gumbel2(r, a, b) + mu);
+					data_bigint[i] = std::round(gsl_ran_gumbel2(r, a, b) + mu);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -926,15 +928,15 @@ void RandomValuesDialog::generate() {
 		for (auto* col : m_columns) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
-					data[i] = gsl_ran_poisson(r, l);
+					data[i] = (double)gsl_ran_poisson(r, l);
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_poisson(r, l));
+					data_int[i] = gsl_ran_poisson(r, l);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_poisson(r, l));
+					data_bigint[i] = (qint64)gsl_ran_poisson(r, l);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -946,15 +948,15 @@ void RandomValuesDialog::generate() {
 		for (auto* col : m_columns) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
-					data[i] = gsl_ran_bernoulli(r, p);
+					data[i] = (double)gsl_ran_bernoulli(r, p);
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_bernoulli(r, p));
+					data_int[i] = gsl_ran_bernoulli(r, p);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_bernoulli(r, p));
+					data_bigint[i] = (qint64)gsl_ran_bernoulli(r, p);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -967,15 +969,15 @@ void RandomValuesDialog::generate() {
 		for (auto* col : m_columns) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
-					data[i] = gsl_ran_binomial(r, p, n);
+					data[i] = (double)gsl_ran_binomial(r, p, n);
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_binomial(r, p, n));
+					data_int[i] = gsl_ran_binomial(r, p, n);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_binomial(r, p, n));
+					data_bigint[i] = (qint64)gsl_ran_binomial(r, p, n);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -988,15 +990,15 @@ void RandomValuesDialog::generate() {
 		for (auto* col : m_columns) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
-					data[i] = gsl_ran_negative_binomial(r, p, n);
+					data[i] = (double)gsl_ran_negative_binomial(r, p, n);
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_negative_binomial(r, p, n));
+					data_int[i] = gsl_ran_negative_binomial(r, p, n);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_negative_binomial(r, p, n));
+					data_bigint[i] = (qint64)gsl_ran_negative_binomial(r, p, n);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -1009,15 +1011,15 @@ void RandomValuesDialog::generate() {
 		for (auto* col : m_columns) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
-					data[i] = gsl_ran_pascal(r, p, n);
+					data[i] = (double)gsl_ran_pascal(r, p, n);
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_pascal(r, p, n));
+					data_int[i] = gsl_ran_pascal(r, p, n);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_pascal(r, p, n));
+					data_bigint[i] = (qint64)gsl_ran_pascal(r, p, n);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -1029,15 +1031,15 @@ void RandomValuesDialog::generate() {
 		for (auto* col : m_columns) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
-					data[i] = gsl_ran_geometric(r, p);
+					data[i] = (double)gsl_ran_geometric(r, p);
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_geometric(r, p));
+					data_int[i] = gsl_ran_geometric(r, p);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_geometric(r, p));
+					data_bigint[i] = (qint64)gsl_ran_geometric(r, p);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -1051,15 +1053,15 @@ void RandomValuesDialog::generate() {
 		for (auto* col : m_columns) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
-					data[i] = gsl_ran_hypergeometric(r, n1, n2, t);
+					data[i] = (double)gsl_ran_hypergeometric(r, n1, n2, t);
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_hypergeometric(r, n1, n2, t));
+					data_int[i] = gsl_ran_hypergeometric(r, n1, n2, t);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_hypergeometric(r, n1, n2, t));
+					data_bigint[i] = (qint64)gsl_ran_hypergeometric(r, n1, n2, t);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}
@@ -1071,15 +1073,15 @@ void RandomValuesDialog::generate() {
 		for (auto* col : m_columns) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
-					data[i] = gsl_ran_logarithmic(r, p);
+					data[i] = (double)gsl_ran_logarithmic(r, p);
 				col->replaceValues(0, data);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 				for (int i = 0; i < rows; ++i)
-					data_int[i] = (int)round(gsl_ran_logarithmic(r, p));
+					data_int[i] = gsl_ran_logarithmic(r, p);
 				col->replaceInteger(0, data_int);
 			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i)
-					data_bigint[i] = (qint64)round(gsl_ran_logarithmic(r, p));
+					data_bigint[i] = (qint64)gsl_ran_logarithmic(r, p);
 				col->replaceBigInt(0, data_bigint);
 			}
 		}

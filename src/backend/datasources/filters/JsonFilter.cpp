@@ -17,14 +17,16 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <KFilterDev>
+#include <KLocalizedString>
+
 #include <QDataStream>
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 
-#include <KFilterDev>
-#include <KLocalizedString>
+#include <cmath>
 
 /*!
 \class JsonFilter
@@ -139,10 +141,7 @@ QLocale::Language JsonFilter::numberFormat() const {
 }
 
 void JsonFilter::setNaNValueToZero(bool b) {
-	if (b)
-		d->nanValue = 0;
-	else
-		d->nanValue = NAN;
+	d->nanValue = (b ? 0 : NAN);
 }
 bool JsonFilter::NaNValueToZeroEnabled() const {
 	if (d->nanValue == 0)
@@ -670,14 +669,14 @@ generates the preview for document \c m_preparedDoc.
 QVector<QStringList> JsonFilterPrivate::preview(int lines) {
 	QVector<QStringList> dataStrings;
 	const int rowOffset = startRow - 1;
-	DEBUG("	Generating preview for " << qMin(lines, m_actualRows) << " lines");
+	DEBUG("	Generating preview for " << std::min(lines, m_actualRows) << " lines");
 
 	const auto& array = m_preparedDoc.array();
 	const auto& arrayIterator = array.begin();
 	const auto& object = m_preparedDoc.object();
 	const auto& objectIterator = object.begin();
 
-	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
+	for (int i = 0; i < std::min(lines, m_actualRows); ++i) {
 		QString rowName;
 		QJsonValue row;
 		switch (containerType) {

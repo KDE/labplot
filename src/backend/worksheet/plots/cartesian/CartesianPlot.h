@@ -96,6 +96,8 @@ public:
 	void setType(Type type);
 	Type type() const;
 
+	static int cSystemIndex(WorksheetElement* e);
+
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QMenu* analysisMenu();
@@ -128,6 +130,7 @@ public:
 	void finalizeLoad();
 	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
+	void wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void mouseMoveZoomSelectionMode(QPointF logicPos, int cSystemIndex);
@@ -215,7 +218,6 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
-	void shift(int index, const Dimension, bool leftOrDown);
 	void zoom(int index, const Dimension, bool in);
 	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, Axis::Orientation);
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
@@ -283,6 +285,7 @@ private:
 
 	friend CartesianPlotDock;
 	friend class CartesianPlotTest;
+	friend class MultiRangeTest;
 
 public Q_SLOTS:
 	void addHorizontalAxis();
@@ -327,6 +330,7 @@ public Q_SLOTS:
 	void shiftRightX(int index = -1);
 	void shiftUpY(int index = -1);
 	void shiftDownY(int index = -1);
+	void shift(int index, const Dimension, bool leftOrDown);
 
 	void cursor();
 
@@ -360,10 +364,8 @@ Q_SIGNALS:
 	void autoScaleChanged(const Dimension, int xRangeIndex, bool);
 	void rangeChanged(const Dimension, int, Range<double>);
 	void yRangeChanged(int yRangeIndex, Range<double>);
-	void xMinChanged(int xRangeIndex, double);
-	void xMaxChanged(int xRangeIndex, double);
-	void yMinChanged(int yRangeIndex, double);
-	void yMaxChanged(int yRangeIndex, double);
+	void minChanged(const Dimension, int rangeIndex, double);
+	void maxChanged(const Dimension, int rangeIndex, double);
 	void scaleChanged(const Dimension, int rangeIndex, RangeT::Scale);
 	void defaultCoordinateSystemIndexChanged(int);
 	void xRangeBreakingEnabledChanged(bool);
@@ -371,6 +373,7 @@ Q_SIGNALS:
 	void yRangeBreakingEnabledChanged(bool);
 	void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void themeChanged(const QString&);
+	void axisShiftSignal(int delta, Dimension dim, int index);
 	void mousePressZoomSelectionModeSignal(QPointF logicPos);
 	void mousePressCursorModeSignal(int cursorNumber, QPointF logicPos);
 	void mouseMoveSelectionModeSignal(QPointF logicalStart, QPointF logicalEnd);
@@ -380,6 +383,7 @@ Q_SIGNALS:
 	void mouseReleaseZoomSelectionModeSignal();
 	void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
 	void mouseHoverOutsideDataRectSignal();
+	void wheelEventSignal(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void curveNameChanged(const AbstractAspect* curve);
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);

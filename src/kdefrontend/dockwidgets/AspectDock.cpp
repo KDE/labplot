@@ -33,7 +33,7 @@ AspectDock::AspectDock(QWidget* parent)
 void AspectDock::setAspects(QList<AbstractAspect*> list) {
 	BaseDock::setAspects(list);
 
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
 		ui.teComment->setEnabled(true);
@@ -59,10 +59,9 @@ void AspectDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 	if (this->aspect() != aspect)
 		return;
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
 	else if (aspect->comment() != ui.teComment->text())
 		ui.teComment->setText(aspect->comment());
-	m_initializing = false;
 }

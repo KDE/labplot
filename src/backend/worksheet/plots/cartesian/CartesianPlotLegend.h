@@ -16,6 +16,7 @@
 
 class Background;
 class CartesianPlotLegendPrivate;
+class Line;
 class TextLabel;
 
 #ifdef SDK
@@ -49,9 +50,8 @@ public:
 
 	Background* background() const;
 
-	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
+	Line* borderLine() const;
 	BASIC_D_ACCESSOR_DECL(float, borderCornerRadius, BorderCornerRadius)
-	BASIC_D_ACCESSOR_DECL(float, borderOpacity, BorderOpacity)
 
 	BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
 	BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
@@ -85,9 +85,7 @@ Q_SIGNALS:
 	void labelColorChanged(QColor&);
 	void labelColumnMajorChanged(bool);
 	void lineSymbolWidthChanged(float);
-	void borderPenChanged(QPen&);
 	void borderCornerRadiusChanged(float);
-	void borderOpacityChanged(float);
 	void layoutTopMarginChanged(float);
 	void layoutBottomMarginChanged(float);
 	void layoutLeftMarginChanged(float);

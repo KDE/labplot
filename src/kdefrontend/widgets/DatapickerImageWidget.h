@@ -87,7 +87,7 @@ private Q_SLOTS:
 
 	void minSegmentLengthChanged(int);
 	void pointSeparationChanged(int);
-	void graphTypeChanged();
+	void graphTypeChanged(int);
 	void ternaryScaleChanged(double);
 	void logicalPositionChanged();
 
@@ -103,6 +103,9 @@ private Q_SLOTS:
 	void updateSymbolWidgets();
 	void handleWidgetActions();
 	void symbolVisibleChanged(bool);
+	void imageReferencePointSelected(int);
+
+	friend class DatapickerTest;
 };
 
 #endif // DATAPICKERIMAGEWIDGET_H

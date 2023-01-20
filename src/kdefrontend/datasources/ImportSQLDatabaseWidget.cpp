@@ -14,12 +14,6 @@
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
 
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QStandardItem>
-#include <QTimer>
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -30,6 +24,14 @@
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
+
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QStandardItem>
+#include <QTimer>
+
+#include <cmath>
 
 ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 	: QWidget(parent) {
@@ -212,8 +214,7 @@ void ImportSQLDatabaseWidget::readConnections() {
 }
 
 void ImportSQLDatabaseWidget::connectionChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	QDEBUG(QStringLiteral("ImportSQLDatabaseWidget: connecting to ") + ui.cbConnection->currentText());
 

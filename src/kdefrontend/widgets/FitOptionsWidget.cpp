@@ -4,7 +4,7 @@
 	Description          : widget for editing advanced fit options
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2020 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,6 +12,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 
 /*!
 	\class FitOptionsWidget
@@ -37,7 +38,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.leEps->setValidator(new QDoubleValidator(ui.leEps));
 	ui.leEvaluatedPoints->setValidator(new QIntValidator(ui.leEvaluatedPoints));
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.leMaxIterations->setText(numberLocale.toString(m_fitData->maxIterations));
 	ui.leEps->setText(numberLocale.toString(m_fitData->eps));
 	ui.leEvaluatedPoints->setText(numberLocale.toString(static_cast<qulonglong>(m_fitData->evaluatedPoints)));
@@ -58,6 +59,9 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 		ui.dateTimeEditEvalMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.start()));
 		ui.dateTimeEditEvalMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.end()));
 	}
+	// changing data range not supported by ML
+	if (fitData->algorithm == nsl_fit_algorithm_ml)
+		ui.cbAutoRange->setEnabled(false);
 
 	ui.leMin->setVisible(!m_dateTimeRange);
 	ui.leMax->setVisible(!m_dateTimeRange);
@@ -130,7 +134,7 @@ void FitOptionsWidget::autoRangeChanged() {
 			const double xMax = xDataColumn->maximum();
 			m_fitData->fitRange.setRange(xMin, xMax);
 
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (!m_dateTimeRange) {
 				ui.leMin->setText(numberLocale.toString(xMin));
 				ui.leMax->setText(numberLocale.toString(xMax));
@@ -155,11 +159,17 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 
 	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
+		switch (m_fitCurve->dataSourceType()) {
+		case XYAnalysisCurve::DataSourceType::Spreadsheet:
 			xDataColumn = m_fitCurve->xDataColumn();
-		else {
+			break;
+		case XYAnalysisCurve::DataSourceType::Curve:
 			if (m_fitCurve->dataSourceCurve())
 				xDataColumn = m_fitCurve->dataSourceCurve()->xColumn();
+			break;
+		case XYAnalysisCurve::DataSourceType::Histogram:
+			if (m_fitCurve->dataSourceHistogram())
+				xDataColumn = m_fitCurve->dataSourceHistogram()->bins();
 		}
 
 		if (xDataColumn) {
@@ -167,7 +177,7 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 			const double xMax = xDataColumn->maximum();
 			m_fitData->evalRange.setRange(xMin, xMax);
 
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (!m_dateTimeRange) {
 				ui.leEvalMin->setText(numberLocale.toString(xMin));
 				ui.leEvalMax->setText(numberLocale.toString(xMax));

@@ -250,7 +250,7 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 			if (item->size() != 0)
 				return QString::number(item->size());
 			else
-				return QString();
+				return {};
 		}
 	} else if (Qt::EditRole == role) {
 		if (index.column() == 1)

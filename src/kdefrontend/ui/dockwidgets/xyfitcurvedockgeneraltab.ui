@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>446</width>
-    <height>1230</height>
+    <height>1300</height>
    </rect>
   </property>
   <property name="autoFillBackground">
@@ -107,7 +107,7 @@
       <string>Weight for x data</string>
      </property>
      <property name="text">
-      <string>x-Weight:</string>
+      <string>X-Weight:</string>
      </property>
     </widget>
    </item>
@@ -129,7 +129,7 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="text">
-      <string>Advanced</string>
+      <string>Options</string>
      </property>
      <property name="icon">
       <iconset theme="configure">
@@ -175,7 +175,7 @@
       <string>Source of y data</string>
      </property>
      <property name="text">
-      <string>y-Data:</string>
+      <string>Y-Data:</string>
      </property>
     </widget>
    </item>
@@ -240,7 +240,7 @@
       <string>Source of x data</string>
      </property>
      <property name="text">
-      <string>x-Data:</string>
+      <string>X-Data:</string>
      </property>
     </widget>
    </item>
@@ -594,7 +594,7 @@
       <string>Weight for y data</string>
      </property>
      <property name="text">
-      <string>y-Weight:</string>
+      <string>Y-Weight:</string>
      </property>
     </widget>
    </item>
@@ -1101,36 +1101,39 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="toolTip">
       <string>Run fit</string>
      </property>
      <property name="text">
-      <string>Fit</string>
+      <string>Run</string>
      </property>
     </widget>
-   </item>
-   <item row="24" column="4">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>97</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="29" column="0" colspan="2">
     <widget class="QLabel" name="lPlotRange">
      <property name="text">
-      <string>Plot ranges:</string>
+      <string>Plot Range:</string>
      </property>
     </widget>
    </item>
    <item row="29" column="4" colspan="2">
     <widget class="QComboBox" name="cbPlotRanges"/>
+   </item>
+   <item row="24" column="0" colspan="2">
+    <widget class="QLabel" name="lAlgorithm">
+     <property name="text">
+      <string>Algorithm:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="24" column="3" colspan="3">
+    <widget class="KComboBox" name="cbAlgorithm"/>
    </item>
   </layout>
  </widget>

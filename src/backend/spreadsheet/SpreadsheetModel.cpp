@@ -229,13 +229,12 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	int row = index.row();
 	auto* column = m_spreadsheet->column(index.column());
 
-	SET_NUMBER_LOCALE
 	// DEBUG("SpreadsheetModel::setData() value = " << STDSTRING(value.toString()))
 
 	// don't do anything if no new value was provided
 	if (column->columnMode() == AbstractColumn::ColumnMode::Double) {
 		bool ok;
-		double new_value = numberLocale.toDouble(value.toString(), &ok);
+		double new_value = QLocale().toDouble(value.toString(), &ok);
 		if (ok) {
 			if (column->valueAt(row) == new_value)
 				return false;

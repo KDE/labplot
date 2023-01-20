@@ -54,7 +54,7 @@
        <item row="14" column="0">
         <widget class="QLabel" name="lPlotRange">
          <property name="text">
-          <string>Plot range:</string>
+          <string>Plot Range:</string>
          </property>
         </widget>
        </item>
@@ -246,7 +246,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>13</width>
+           <width>10</width>
            <height>20</height>
           </size>
          </property>

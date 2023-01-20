@@ -108,6 +108,7 @@ public:
 	void addValueLabel(const QDateTime&, const QString&);
 	const QMap<QDateTime, QString>& dateTimeValueLabels();
 
+	double doubleAt(int row) const;
 	double valueAt(int row) const;
 	void setValueAt(int row, double new_value);
 	void replaceValues(int first, const QVector<double>&);
@@ -183,6 +184,7 @@ private:
 	void initLabels();
 	void initDictionary();
 	void calculateTextStatistics();
+	void calculateDateTimeStatistics();
 	void connectFormulaColumn(const AbstractColumn*);
 
 private Q_SLOTS:

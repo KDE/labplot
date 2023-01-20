@@ -275,7 +275,7 @@ QMenu* Column::createContextMenu() {
 }
 
 void Column::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	d->inputFilter()->setNumberLocale(numberLocale);
 	d->outputFilter()->setNumberLocale(numberLocale);
 }
@@ -292,7 +292,7 @@ void Column::copyData() {
 	int rows = rowCount();
 
 	// TODO: use locale of filter?
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (columnMode() == ColumnMode::Double) {
 		const Double2StringFilter* filter = static_cast<Double2StringFilter*>(outputFilter());
 		char format = filter->numericFormat();
@@ -366,10 +366,10 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 /**
  * \brief Set the column mode
  *
- * This sets the column mode and, if
- * necessary, converts it to another datatype.
+ * This sets the column mode and, if necessary, converts it to another datatype.
  */
 void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
+	DEBUG(Q_FUNC_INFO)
 	if (mode == columnMode())
 		return;
 
@@ -380,11 +380,13 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
 	exec(new ColumnSetModeCmd(d, mode));
 
 	if (d->inputFilter() != old_input_filter) {
+		DEBUG(Q_FUNC_INFO << ", INPUT")
 		removeChild(old_input_filter);
 		addChild(d->inputFilter());
 		d->inputFilter()->input(0, m_string_io);
 	}
 	if (d->outputFilter() != old_output_filter) {
+		DEBUG(Q_FUNC_INFO << ", OUTPUT")
 		removeChild(old_output_filter);
 		addChild(d->outputFilter());
 		d->outputFilter()->input(0, this);
@@ -937,6 +939,10 @@ QTime Column::timeAt(int row) const {
  */
 QDateTime Column::dateTimeAt(int row) const {
 	return d->dateTimeAt(row);
+}
+
+double Column::doubleAt(int row) const {
+	return d->doubleAt(row);
 }
 
 /**
@@ -1703,9 +1709,9 @@ double Column::minimum(int count) const {
 		int startIndex = 0, endIndex = rowCount() - 1;
 
 		if (count > 0)
-			endIndex = qMin(rowCount() - 1, count - 1);
+			endIndex = std::min(rowCount() - 1, count - 1);
 		else if (count < 0)
-			startIndex = qMax(rowCount() - count, 0);
+			startIndex = std::max(rowCount() - count, 0);
 
 		return minimum(startIndex, endIndex);
 	}
@@ -1722,7 +1728,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 #ifdef PERFTRACE_AUTOSCALE
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 #endif
-	double min = qInf();
+	double min = INFINITY;
 
 	if (rowCount() == 0)
 		return min;
@@ -1730,11 +1736,11 @@ double Column::minimum(int startIndex, int endIndex) const {
 	if (startIndex > endIndex && startIndex >= 0 && endIndex >= 0)
 		std::swap(startIndex, endIndex);
 
-	startIndex = qMax(startIndex, 0);
-	endIndex = qMax(endIndex, 0);
+	startIndex = std::max(startIndex, 0);
+	endIndex = std::max(endIndex, 0);
 
-	startIndex = qMin(startIndex, rowCount() - 1);
-	endIndex = qMin(endIndex, rowCount() - 1);
+	startIndex = std::min(startIndex, rowCount() - 1);
+	endIndex = std::min(endIndex, rowCount() - 1);
 
 	if (startIndex == 0 && endIndex == rowCount() - 1 && d->available.min)
 		return d->statistics.minimum;
@@ -1811,7 +1817,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 			foundIndex = startIndex;
 		else if (property == Properties::MonotonicDecreasing) {
 			foundIndex = endIndex;
-			foundIndex = qMax(0, foundIndex);
+			foundIndex = std::max(0, foundIndex);
 		}
 
 		switch (mode) {
@@ -1854,9 +1860,9 @@ double Column::maximum(int count) const {
 		int startIndex = 0, endIndex = rowCount() - 1;
 
 		if (count > 0)
-			endIndex = qMin(rowCount() - 1, count - 1);
+			endIndex = std::min(rowCount() - 1, count - 1);
 		else if (count < 0)
-			startIndex = qMax(rowCount() - count, 0);
+			startIndex = std::max(rowCount() - count, 0);
 
 		return maximum(startIndex, endIndex);
 	}
@@ -1870,18 +1876,18 @@ double Column::maximum(int count) const {
  * \p endIndex
  */
 double Column::maximum(int startIndex, int endIndex) const {
-	double max = -qInf();
+	double max = -INFINITY;
 	if (rowCount() == 0)
 		return max;
 
 	if (startIndex > endIndex && startIndex >= 0 && endIndex >= 0)
 		std::swap(startIndex, endIndex);
 
-	startIndex = qMax(startIndex, 0);
-	endIndex = qMax(endIndex, 0);
+	startIndex = std::max(startIndex, 0);
+	endIndex = std::max(endIndex, 0);
 
-	startIndex = qMin(startIndex, rowCount() - 1);
-	endIndex = qMin(endIndex, rowCount() - 1);
+	startIndex = std::min(startIndex, rowCount() - 1);
+	endIndex = std::min(endIndex, rowCount() - 1);
 
 	if (startIndex == 0 && endIndex == rowCount() - 1 && d->available.max)
 		return d->statistics.maximum;
@@ -1952,7 +1958,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 			foundIndex = startIndex;
 		else if (property == Properties::MonotonicIncreasing) {
 			foundIndex = endIndex;
-			foundIndex = qMax(0, foundIndex);
+			foundIndex = std::max(0, foundIndex);
 		}
 
 		switch (mode) {
@@ -2034,7 +2040,7 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 			double value = column.at(index);
 
 			if (higherIndex - lowerIndex < 2) {
-				if (qAbs(column.at(lowerIndex) - x) < qAbs(column.at(higherIndex) - x))
+				if (std::abs(column.at(lowerIndex) - x) < std::abs(column.at(higherIndex) - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -2059,7 +2065,7 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 		double prevValue = column.at(0);
 		for (int row = 0; row < rowCount; row++) {
 			double value = column.at(row);
-			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
 				prevValue = value;
 				index = row;
 			}
@@ -2097,7 +2103,7 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
 			double value = points.at(index).x();
 
 			if (higherIndex - lowerIndex < 2) {
-				if (qAbs(points.at(lowerIndex).x() - x) < qAbs(points.at(higherIndex).x() - x))
+				if (std::abs(points.at(lowerIndex).x() - x) < std::abs(points.at(higherIndex).x() - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -2124,7 +2130,7 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
 		int index = 0;
 		for (int row = 0; row < rowCount; row++) {
 			double value = points.at(row).x();
-			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
 				prevValue = value;
 				index = row;
 			}
@@ -2162,7 +2168,7 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 			double value = lines.at(index).p1().x();
 
 			if (higherIndex - lowerIndex < 2) {
-				if (qAbs(lines.at(lowerIndex).p1().x() - x) < qAbs(lines.at(higherIndex).p1().x() - x))
+				if (std::abs(lines.at(lowerIndex).p1().x() - x) < std::abs(lines.at(higherIndex).p1().x() - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -2189,7 +2195,7 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 		double prevValue = lines.at(0).p1().x();
 		for (int row = 0; row < rowCount; row++) {
 			double value = lines.at(row).p1().x();
-			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
 				prevValue = value;
 				index = row;
 			}
@@ -2222,7 +2228,7 @@ int Column::indexForValue(double x) const {
 				double value = valueAt(index);
 
 				if (higherIndex - lowerIndex < 2) {
-					if (qAbs(valueAt(lowerIndex) - x) < qAbs(valueAt(higherIndex) - x))
+					if (std::abs(valueAt(lowerIndex) - x) < std::abs(valueAt(higherIndex) - x))
 						index = lowerIndex;
 					else
 						index = higherIndex;
@@ -2251,7 +2257,7 @@ int Column::indexForValue(double x) const {
 				qint64 value = dateTimeAt(index).toMSecsSinceEpoch();
 
 				if (higherIndex - lowerIndex < 2) {
-					if (qAbs(dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < qAbs(dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
+					if (std::abs(dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < std::abs(dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
 						index = lowerIndex;
 					else
 						index = higherIndex;
@@ -2290,7 +2296,7 @@ int Column::indexForValue(double x) const {
 					prevValue = valueAt(row);
 
 				double value = valueAt(row);
-				if (qAbs(value - x) <= qAbs(prevValue - x)) { // <= prevents also that row - 1 become < 0
+				if (std::abs(value - x) <= std::abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
 					prevValue = value;
 					index = row;
 				}
@@ -2310,7 +2316,7 @@ int Column::indexForValue(double x) const {
 					prevValueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
 
 				qint64 value = dateTimeAt(row).toMSecsSinceEpoch();
-				if (qAbs(value - xInt64) <= qAbs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
+				if (std::abs(value - xInt64) <= std::abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
 					prevValueDateTime = value;
 					index = row;
 				}

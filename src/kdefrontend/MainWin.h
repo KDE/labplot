@@ -110,6 +110,7 @@ public:
 	AspectTreeModel* model() const;
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
+	static void updateLocale();
 
 	enum class LoadOnStart { Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen };
 	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };

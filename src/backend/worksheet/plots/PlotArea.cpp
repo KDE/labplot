@@ -423,8 +423,7 @@ void PlotArea::loadThemeConfig(const KConfig& config) {
 
 	// border
 	Q_D(PlotArea);
-	QColor themeColor = group.readEntry("BorderColor", QColor(Qt::black));
-	d->borderLine->loadThemeConfig(group, themeColor);
+	d->borderLine->loadThemeConfig(group);
 	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));
 }
 

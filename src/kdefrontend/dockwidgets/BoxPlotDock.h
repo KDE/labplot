@@ -21,6 +21,7 @@ class BackgroundWidget;
 class LineWidget;
 class SymbolWidget;
 class TreeViewComboBox;
+class QPushButton;
 class KConfig;
 
 class BoxPlotDock : public BaseDock {
@@ -38,6 +39,7 @@ private:
 	LineWidget* borderLineWidget{nullptr};
 	LineWidget* medianLineWidget{nullptr};
 	LineWidget* whiskersLineWidget{nullptr};
+	LineWidget* whiskersCapLineWidget{nullptr};
 
 	QList<BoxPlot*> m_boxPlots;
 	BoxPlot* m_boxPlot{nullptr};
@@ -60,31 +62,28 @@ private Q_SLOTS:
 	//"General"-tab
 	void addDataColumn();
 	void removeDataColumn();
-	void dataColumnChanged(const QModelIndex&) const;
-	void orderingChanged(int) const;
-	void orientationChanged(int) const;
-	void variableWidthChanged(bool) const;
-	void notchesEnabledChanged(bool) const;
-	void visibilityChanged(bool) const;
+	void dataColumnChanged(const QModelIndex&);
+	void orderingChanged(int);
+	void orientationChanged(int);
+	void variableWidthChanged(bool);
+	void notchesEnabledChanged(bool);
+	void visibilityChanged(bool);
 
 	//"Box"-tab
-	void widthFactorChanged(int) const;
+	void currentBoxChanged(int);
+	void widthFactorChanged(int);
 
 	// symbols
 	void symbolCategoryChanged();
-	void jitteringEnabledChanged(bool) const;
+	void jitteringEnabledChanged(bool);
 
 	// whiskers
-	void whiskersTypeChanged(int) const;
-	void whiskersRangeParameterChanged(const QString&) const;
+	void whiskersTypeChanged(int);
+	void whiskersRangeParameterChanged(const QString&);
 	void whiskersCapSizeChanged(double) const;
-	void whiskersCapStyleChanged(int) const;
-	void whiskersCapColorChanged(const QColor&);
-	void whiskersCapWidthChanged(double) const;
-	void whiskersCapOpacityChanged(int) const;
 
 	//"Margin Plots"-Tab
-	void rugEnabledChanged(bool) const;
+	void rugEnabledChanged(bool);
 	void rugLengthChanged(double) const;
 	void rugWidthChanged(double) const;
 	void rugOffsetChanged(double) const;
@@ -107,8 +106,6 @@ private Q_SLOTS:
 	void plotWhiskersTypeChanged(BoxPlot::WhiskersType);
 	void plotWhiskersRangeParameterChanged(double);
 	void plotWhiskersCapSizeChanged(double);
-	void plotWhiskersCapPenChanged(QPen&);
-	void plotWhiskersCapOpacityChanged(float);
 
 	//"Margin Plots"-Tab
 	void plotRugEnabledChanged(bool);

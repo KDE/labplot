@@ -261,6 +261,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 
 	const auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
 	if (plot) {
+		connect(plot, &CartesianPlot::axisShiftSignal, this, &Worksheet::cartesianPlotAxisShift);
+		connect(plot, &CartesianPlot::wheelEventSignal, this, &Worksheet::cartesianPlotWheelEvent);
 		connect(plot, &CartesianPlot::mouseMoveCursorModeSignal, this, &Worksheet::cartesianPlotMouseMoveCursorMode);
 		connect(plot, &CartesianPlot::mouseMoveSelectionModeSignal, this, &Worksheet::cartesianPlotMouseMoveSelectionMode);
 		connect(plot, &CartesianPlot::mouseMoveZoomSelectionModeSignal, this, &Worksheet::cartesianPlotMouseMoveZoomSelectionMode);
@@ -760,18 +762,6 @@ void Worksheet::setTheme(const QString& theme) {
 	endMacro();
 }
 
-int Worksheet::cSystemIndex(WorksheetElement* e) {
-	if (!e) // TODO: really needed?
-		return -1;
-
-	auto type = e->type();
-	if (type == AspectType::CartesianPlot)
-		return -1;
-	else if (e->inherits(AspectType::XYCurve) || e->inherits(AspectType::XYAnalysisCurve) || type == AspectType::ReferenceLine || type == AspectType::Axis)
-		return e->coordinateSystemIndex();
-	return -1;
-}
-
 void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
 	auto senderPlot = static_cast<CartesianPlot*>(QObject::sender());
 	auto mouseMode = senderPlot->mouseMode();
@@ -793,7 +783,7 @@ void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
 			plot->mousePressZoomSelectionMode(logicPos, -1);
 		}
 	} else {
-		int index = cSystemIndex(m_view->selectedElement());
+		int index = CartesianPlot::cSystemIndex(m_view->selectedElement());
 		senderPlot->mousePressZoomSelectionMode(logicPos, index);
 	}
 }
@@ -811,7 +801,7 @@ void Worksheet::cartesianPlotMouseReleaseZoomSelectionMode() {
 			plot->setMouseMode(mouseMode);
 		}
 	} else {
-		int index = cSystemIndex(m_view->selectedElement());
+		int index = CartesianPlot::cSystemIndex(m_view->selectedElement());
 		auto* plot = static_cast<CartesianPlot*>(QObject::sender());
 		plot->mouseReleaseZoomSelectionMode(index);
 	}
@@ -841,7 +831,7 @@ void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
 		for (auto* plot : plots)
 			plot->mouseMoveZoomSelectionMode(logicPos, -1);
 	} else
-		senderPlot->mouseMoveZoomSelectionMode(logicPos, cSystemIndex(m_view->selectedElement()));
+		senderPlot->mouseMoveZoomSelectionMode(logicPos, CartesianPlot::cSystemIndex(m_view->selectedElement()));
 }
 
 void Worksheet::cartesianPlotMouseMoveSelectionMode(QPointF logicStart, QPointF logicEnd) {
@@ -883,7 +873,7 @@ void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 			plot->mouseHoverZoomSelectionMode(logicPos, -1);
 	} else {
 		if (m_view->selectedElement()->parent(AspectType::CartesianPlot) == senderPlot)
-			senderPlot->mouseHoverZoomSelectionMode(logicPos, cSystemIndex(m_view->selectedElement()));
+			senderPlot->mouseHoverZoomSelectionMode(logicPos, CartesianPlot::cSystemIndex(m_view->selectedElement()));
 		else
 			senderPlot->mouseHoverZoomSelectionMode(logicPos, -1);
 	}
@@ -901,6 +891,111 @@ void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {
 			plot->mouseHoverOutsideDataRect();
 	} else
 		senderPlot->mouseHoverOutsideDataRect();
+}
+
+void Worksheet::cartesianPlotAxisShift(int delta, Dimension dim, int index) {
+	const auto& plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
+	const auto cursorMode = cartesianPlotActionMode();
+	bool leftOrDown = false;
+	if (delta < 0)
+		leftOrDown = true;
+
+	switch (cursorMode) {
+	case CartesianPlotActionMode::ApplyActionToAll: {
+		for (auto* plot : plots)
+			plot->shift(-1, dim, leftOrDown);
+		break;
+	}
+	case CartesianPlotActionMode::ApplyActionToAllX: {
+		switch (dim) {
+		case Dimension::X: {
+			for (auto* plot : plots)
+				plot->shift(-1, dim, leftOrDown);
+			break;
+		}
+		case Dimension::Y: {
+			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
+			plot->shift(index, dim, leftOrDown);
+			break;
+		}
+		}
+		break;
+	}
+	case CartesianPlotActionMode::ApplyActionToAllY: {
+		switch (dim) {
+		case Dimension::X: {
+			for (auto* plot : plots)
+				plot->shift(index, dim, leftOrDown);
+			break;
+		}
+		case Dimension::Y: {
+			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
+			plot->shift(-1, dim, leftOrDown);
+			break;
+		}
+		}
+		break;
+	}
+	case CartesianPlotActionMode::ApplyActionToSelection: {
+		auto* plot = static_cast<CartesianPlot*>(QObject::sender());
+		plot->shift(index, dim, leftOrDown);
+		break;
+	}
+	}
+}
+
+void Worksheet::cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+	const auto& plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
+	const auto cursorMode = cartesianPlotActionMode();
+	if (considerDimension) {
+		if ((dim == Dimension::X && (cursorMode == CartesianPlotActionMode::ApplyActionToAllX || cursorMode == CartesianPlotActionMode::ApplyActionToAll))
+			|| (dim == Dimension::Y && (cursorMode == CartesianPlotActionMode::ApplyActionToAllY || cursorMode == CartesianPlotActionMode::ApplyActionToAll))) {
+			for (auto* plot : plots)
+				plot->wheelEvent(delta, -1, -1, considerDimension, dim);
+		} else {
+			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
+			plot->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+		}
+
+	} else {
+		switch (cursorMode) {
+		case CartesianPlotActionMode::ApplyActionToAll: {
+			for (auto* plot : plots)
+				plot->wheelEvent(delta, -1, -1, considerDimension, dim);
+			break;
+		}
+		case CartesianPlotActionMode::ApplyActionToAllX: {
+			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
+			plot->wheelEvent(delta, -1, yIndex, considerDimension, dim);
+			for (auto* p : plots) {
+				if (p != plot) {
+					// The yIndex must not be available in the other plots
+					// yIndex does not matter, because considerDimension is true
+					p->wheelEvent(delta, -1, -1, true, Dimension::X);
+				}
+			}
+			break;
+		}
+		case CartesianPlotActionMode::ApplyActionToAllY: {
+			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
+			// wheelEvent on all y in that plot
+			plot->wheelEvent(delta, xIndex, -1, considerDimension, dim);
+			for (auto* p : plots) {
+				if (p != plot) {
+					// The xIndex must not be available in the other plots
+					// xIndex does not matter, because considerDimension is true
+					p->wheelEvent(delta, -1, -1, true, Dimension::Y);
+				}
+			}
+			break;
+		}
+		case CartesianPlotActionMode::ApplyActionToSelection: {
+			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
+			plot->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+			break;
+		}
+		}
+	}
 }
 
 void Worksheet::cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos) {
@@ -1001,7 +1096,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 			QVariant data;
 			valueCursor[i] = sender->cursorPos(i);
 			if (isDatetime) {
-				datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i]);
+				datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i], Qt::UTC);
 				data = datetime[i].toString(sender->rangeDateTimeFormat(Dimension::X));
 			} else
 				data = QVariant(valueCursor[i]);

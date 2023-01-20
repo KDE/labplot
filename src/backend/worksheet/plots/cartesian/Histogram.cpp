@@ -22,6 +22,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
@@ -46,17 +47,23 @@ extern "C" {
 #include <gsl/gsl_spline.h>
 }
 
+CURVE_COLUMN_CONNECT(Histogram, Data, data, recalcHistogram)
+CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)
+CURVE_COLUMN_CONNECT(Histogram, ErrorMinus, errorMinus, updateErrorBars)
+
 Histogram::Histogram(const QString& name)
-	: WorksheetElement(name, new HistogramPrivate(this), AspectType::Histogram)
-	, Curve() {
+	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
 	init();
 }
 
 Histogram::Histogram(const QString& name, HistogramPrivate* dd)
-	: WorksheetElement(name, dd, AspectType::Histogram)
-	, Curve() {
+	: Plot(name, dd, AspectType::Histogram) {
 	init();
 }
+
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
+Histogram::~Histogram() = default;
 
 void Histogram::init() {
 	Q_D(Histogram);
@@ -64,14 +71,12 @@ void Histogram::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Histogram");
 
-	d->dataColumn = nullptr;
-
-	d->type = (Histogram::HistogramType)group.readEntry("Type", (int)Histogram::Ordinary);
-	d->orientation = (Histogram::HistogramOrientation)group.readEntry("Orientation", (int)Histogram::Vertical);
-	d->normalization = (Histogram::HistogramNormalization)group.readEntry("Normalization", (int)Histogram::Count);
+	d->type = (Histogram::Type)group.readEntry("Type", (int)Histogram::Ordinary);
+	d->orientation = (Histogram::Orientation)group.readEntry("Orientation", (int)Histogram::Vertical);
+	d->normalization = (Histogram::Normalization)group.readEntry("Normalization", (int)Histogram::Count);
 	d->binningMethod = (Histogram::BinningMethod)group.readEntry("BinningMethod", (int)Histogram::SquareRoot);
 	d->binCount = group.readEntry("BinCount", 10);
-	d->binWidth = group.readEntry("BinWidth", 1.0f);
+	d->binWidth = group.readEntry("BinWidth", 1.0);
 	d->autoBinRanges = group.readEntry("AutoBinRanges", true);
 	d->binRangesMin = 0.0;
 	d->binRangesMax = 1.0;
@@ -212,7 +217,7 @@ QMenu* Histogram::createContextMenu() {
 	});
 
 	auto* fitExponentialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Exponential Distribution"));
-	analysisMenu->addAction(fitGaussianAction);
+	analysisMenu->addAction(fitExponentialAction);
 	connect(fitExponentialAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_exponential);
 	});
@@ -265,9 +270,9 @@ QGraphicsItem* Histogram::graphicsItem() const {
 	return d_ptr;
 }
 
-bool Histogram::activateCurve(QPointF mouseScenePos, double maxDist) {
+bool Histogram::activatePlot(QPointF mouseScenePos, double maxDist) {
 	Q_D(Histogram);
-	return d->activateCurve(mouseScenePos, maxDist);
+	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 void Histogram::setHover(bool on) {
@@ -279,21 +284,17 @@ void Histogram::setHover(bool on) {
 //##########################  getter methods  ##################################
 //##############################################################################
 // general
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramType, type, type)
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, orientation, orientation)
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramNormalization, normalization, normalization)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Type, type, type)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Orientation, orientation, orientation)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Normalization, normalization, normalization)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::BinningMethod, binningMethod, binningMethod)
 BASIC_SHARED_D_READER_IMPL(Histogram, int, binCount, binCount)
-BASIC_SHARED_D_READER_IMPL(Histogram, float, binWidth, binWidth)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, binWidth, binWidth)
 BASIC_SHARED_D_READER_IMPL(Histogram, bool, autoBinRanges, autoBinRanges)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMin, binRangesMin)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMax, binRangesMax)
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, dataColumn, dataColumn)
-
-QString& Histogram::dataColumnPath() const {
-	D(Histogram);
-	return d->dataColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, dataColumnPath, dataColumnPath)
 
 // line
 Line* Histogram::line() const {
@@ -379,42 +380,37 @@ const AbstractColumn* Histogram::binPDValues() const {
 //##############################################################################
 
 // General
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetDataColumn, const AbstractColumn*, dataColumn, recalcHistogram)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, Data, data, recalcHistogram)
 void Histogram::setDataColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
-	if (column != d->dataColumn) {
+	if (column != d->dataColumn)
 		exec(new HistogramSetDataColumnCmd(d, column, ki18n("%1: set data column")));
-
-		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::dataChanged);
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::recalcHistogram);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Histogram::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-		}
-	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, type, updateType)
-void Histogram::setType(Histogram::HistogramType type) {
+void Histogram::setDataColumnPath(const QString& path) {
+	Q_D(Histogram);
+	d->dataColumnPath = path;
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetType, Histogram::Type, type, updateType)
+void Histogram::setType(Histogram::Type type) {
 	Q_D(Histogram);
 	if (type != d->type)
-		exec(new HistogramSetHistogramTypeCmd(d, type, ki18n("%1: set histogram type")));
+		exec(new HistogramSetTypeCmd(d, type, ki18n("%1: set histogram type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, orientation, updateOrientation)
-void Histogram::setOrientation(Histogram::HistogramOrientation orientation) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetOrientation, Histogram::Orientation, orientation, updateOrientation)
+void Histogram::setOrientation(Histogram::Orientation orientation) {
 	Q_D(Histogram);
 	if (orientation != d->orientation)
-		exec(new HistogramSetHistogramOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
+		exec(new HistogramSetOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramNormalization, Histogram::HistogramNormalization, normalization, updateOrientation)
-void Histogram::setNormalization(Histogram::HistogramNormalization normalization) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetNormalization, Histogram::Normalization, normalization, updateOrientation)
+void Histogram::setNormalization(Histogram::Normalization normalization) {
 	Q_D(Histogram);
 	if (normalization != d->normalization)
-		exec(new HistogramSetHistogramNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
+		exec(new HistogramSetNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, recalcHistogram)
@@ -431,8 +427,8 @@ void Histogram::setBinCount(int count) {
 		exec(new HistogramSetBinCountCmd(d, count, ki18n("%1: set bin count")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, float, binWidth, recalcHistogram)
-void Histogram::setBinWidth(float width) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, double, binWidth, recalcHistogram)
+void Histogram::setBinWidth(double width) {
 	Q_D(Histogram);
 	if (width != d->binWidth)
 		exec(new HistogramSetBinWidthCmd(d, width, ki18n("%1: set bin width")));
@@ -509,14 +505,11 @@ void Histogram::setErrorType(ErrorType type) {
 		exec(new HistogramSetErrorTypeCmd(d, type, ki18n("%1: x-error type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorPlusColumn, const AbstractColumn*, errorPlusColumn, updateErrorBars)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, ErrorPlus, errorPlus, updateErrorBars)
 void Histogram::setErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
-	if (column != d->errorPlusColumn) {
+	if (column != d->errorPlusColumn)
 		exec(new HistogramSetErrorPlusColumnCmd(d, column, ki18n("%1: set error column")));
-		if (column)
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateErrorBars);
-	}
 }
 
 void Histogram::setErrorPlusColumnPath(const QString& path) {
@@ -524,14 +517,11 @@ void Histogram::setErrorPlusColumnPath(const QString& path) {
 	d->errorPlusColumnPath = path;
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorMinusColumn, const AbstractColumn*, errorMinusColumn, updateErrorBars)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, ErrorMinus, errorMinus, updateErrorBars)
 void Histogram::setErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
-	if (column != d->errorMinusColumn) {
+	if (column != d->errorMinusColumn)
 		exec(new HistogramSetErrorMinusColumnCmd(d, column, ki18n("%1: set error column")));
-		if (column)
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateErrorBars);
-	}
 }
 
 void Histogram::setErrorMinusColumnPath(const QString& path) {
@@ -605,6 +595,11 @@ void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
+void Histogram::dataColumnNameChanged() {
+	Q_D(Histogram);
+	setDataColumnPath(d->dataColumn->path());
+}
+
 void Histogram::updateErrorBars() {
 	Q_D(Histogram);
 	d->updateErrorBars();
@@ -618,6 +613,11 @@ void Histogram::errorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
+void Histogram::errorPlusColumnNameChanged() {
+	Q_D(Histogram);
+	setErrorPlusColumnPath(d->errorPlusColumn->path());
+}
+
 void Histogram::errorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Histogram);
 	if (aspect == d->errorMinusColumn) {
@@ -626,11 +626,16 @@ void Histogram::errorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
+void Histogram::errorMinusColumnNameChanged() {
+	Q_D(Histogram);
+	setErrorMinusColumnPath(d->errorMinusColumn->path());
+}
+
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
 HistogramPrivate::HistogramPrivate(Histogram* owner)
-	: WorksheetElementPrivate(owner)
+	: PlotPrivate(owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
@@ -647,7 +652,7 @@ QRectF HistogramPrivate::boundingRect() const {
 
 double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 	if (m_histogram) {
-		double yMaxRange = -qInf();
+		double yMaxRange = -INFINITY;
 		switch (type) {
 		case Histogram::Ordinary: {
 			size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
@@ -693,7 +698,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 		return yMaxRange;
 	}
 
-	return -qInf();
+	return -INFINITY;
 }
 
 double HistogramPrivate::xMinimum() const {
@@ -703,7 +708,7 @@ double HistogramPrivate::xMinimum() const {
 	case Histogram::Horizontal:
 		return 0;
 	}
-	return qInf();
+	return INFINITY;
 }
 
 double HistogramPrivate::xMaximum() const {
@@ -713,7 +718,7 @@ double HistogramPrivate::xMaximum() const {
 	case Histogram::Horizontal:
 		return getMaximumOccuranceofHistogram();
 	}
-	return -qInf();
+	return -INFINITY;
 }
 
 double HistogramPrivate::yMinimum() const {
@@ -723,7 +728,7 @@ double HistogramPrivate::yMinimum() const {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 	}
-	return qInf();
+	return INFINITY;
 }
 
 double HistogramPrivate::yMaximum() const {
@@ -733,7 +738,7 @@ double HistogramPrivate::yMaximum() const {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 	}
-	return qInf();
+	return -INFINITY;
 }
 
 const AbstractColumn* HistogramPrivate::bins() {
@@ -851,6 +856,13 @@ void HistogramPrivate::recalcHistogram() {
 
 	if (!dataColumn)
 		return;
+
+	// in case wrong bin range was specified, call retransform() to reset
+	// all internal containers and paths and exit this function
+	if (binRangesMax <= binRangesMin) {
+		retransform();
+		return;
+	}
 
 	// calculate the number of valid data points
 	int count = 0;
@@ -1022,20 +1034,18 @@ void HistogramPrivate::updateLines() {
 
 void HistogramPrivate::histogramValue(double& value, int bin) const {
 	switch (normalization) {
-	case Histogram::Count: {
+	case Histogram::Count:
 		if (type == Histogram::Ordinary)
 			value = gsl_histogram_get(m_histogram, bin);
 		else
 			value += gsl_histogram_get(m_histogram, bin);
 		break;
-	}
-	case Histogram::Probability: {
+	case Histogram::Probability:
 		if (type == Histogram::Ordinary)
 			value = gsl_histogram_get(m_histogram, bin) / totalCount;
 		else
 			value += gsl_histogram_get(m_histogram, bin) / totalCount;
 		break;
-	}
 	case Histogram::CountDensity: {
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		if (type == Histogram::Ordinary)
@@ -1247,7 +1257,7 @@ void HistogramPrivate::updateValues() {
 			return;
 		}
 
-		const int endRow = qMin(pointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(pointsLogical.size(), valuesColumn->rowCount());
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints.at(i))
@@ -1821,7 +1831,7 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-bool HistogramPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
+bool HistogramPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
 	if (!isVisible())
 		return false;
 
@@ -1839,7 +1849,7 @@ void HistogramPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		return QGraphicsItem::mousePressEvent(event);
 	}
 
-	if (q->activateCurve(event->pos())) {
+	if (q->activatePlot(event->pos())) {
 		setSelected(true);
 		return;
 	}
@@ -1939,9 +1949,9 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_COLUMN(dataColumn);
-			READ_INT_VALUE("type", type, Histogram::HistogramType);
-			READ_INT_VALUE("orientation", orientation, Histogram::HistogramOrientation);
-			READ_INT_VALUE("normalization", normalization, Histogram::HistogramNormalization);
+			READ_INT_VALUE("type", type, Histogram::Type);
+			READ_INT_VALUE("orientation", orientation, Histogram::Orientation);
+			READ_INT_VALUE("normalization", normalization, Histogram::Normalization);
 			READ_INT_VALUE("binningMethod", binningMethod, Histogram::BinningMethod);
 			READ_INT_VALUE("binCount", binCount, int);
 			READ_DOUBLE_VALUE("binWidth", binWidth);
@@ -2005,8 +2015,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	d->line->loadThemeConfig(group, themeColor);
 	d->symbol->loadThemeConfig(group, themeColor);
 	d->value->loadThemeConfig(group, themeColor);
-	d->background->loadThemeConfig(group);
-	d->background->setFirstColor(themeColor);
+	d->background->loadThemeConfig(group, themeColor);
 	d->errorBarsLine->loadThemeConfig(group, themeColor);
 
 	if (plot->theme() == QLatin1String("Tufte")) {

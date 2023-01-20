@@ -325,7 +325,7 @@ void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& pa
 
 	// don't make the combobox red for initially created curves
 	if (!column && path.isEmpty()) {
-		setText(QStringLiteral(""));
+		setText(QString());
 		setInvalid(false);
 		return;
 	}

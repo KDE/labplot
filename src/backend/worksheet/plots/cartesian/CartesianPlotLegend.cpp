@@ -103,11 +103,20 @@ void CartesianPlotLegend::init() {
 	});
 
 	// Border
-	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-						(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->borderLine = new Line(QString());
+	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine->setCreateXmlElement(false);
+	d->borderLine->setHidden(true);
+	addChild(d->borderLine);
+	d->borderLine->init(group);
+	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->borderLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
-	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 
 	// Layout
 	d->layoutTopMargin = group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
@@ -188,9 +197,12 @@ Background* CartesianPlotLegend::background() const {
 }
 
 // Border
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QPen, borderPen, borderPen)
+Line* CartesianPlotLegend::borderLine() const {
+	Q_D(const CartesianPlotLegend);
+	return d->borderLine;
+}
+
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, borderCornerRadius, borderCornerRadius)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, borderOpacity, borderOpacity)
 
 // Layout
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutTopMargin, layoutTopMargin)
@@ -233,25 +245,11 @@ void CartesianPlotLegend::setLineSymbolWidth(float width) {
 }
 
 // Border
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderPen, QPen, borderPen, update)
-void CartesianPlotLegend::setBorderPen(const QPen& pen) {
-	Q_D(CartesianPlotLegend);
-	if (pen != d->borderPen)
-		exec(new CartesianPlotLegendSetBorderPenCmd(d, pen, ki18n("%1: set border style")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderCornerRadius, qreal, borderCornerRadius, update)
 void CartesianPlotLegend::setBorderCornerRadius(float radius) {
 	Q_D(CartesianPlotLegend);
 	if (radius != d->borderCornerRadius)
 		exec(new CartesianPlotLegendSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set border corner radius")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderOpacity, qreal, borderOpacity, update)
-void CartesianPlotLegend::setBorderOpacity(float opacity) {
-	Q_D(CartesianPlotLegend);
-	if (opacity != d->borderOpacity)
-		exec(new CartesianPlotLegendSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
 }
 
 // Layout
@@ -392,10 +390,18 @@ void CartesianPlotLegendPrivate::retransform() {
 			continue;
 		}
 
-		if ((child->type() == AspectType::Histogram || child->type() == AspectType::BoxPlot) && child->isVisible()) {
+		if (child->type() == AspectType::Histogram && child->isVisible()) {
 			m_curves << child;
 			m_names << child->name();
 			continue;
+		}
+
+		auto* boxPlot = dynamic_cast<BoxPlot*>(child);
+		if (boxPlot && boxPlot->isVisible()) {
+			m_curves << boxPlot;
+			const auto& columns = boxPlot->dataColumns();
+			for (auto* column : columns)
+				m_names << column->name();
 		}
 
 		auto* barPlot = dynamic_cast<BarPlot*>(child);
@@ -591,10 +597,10 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	// draw the border
-	if (borderPen.style() != Qt::NoPen) {
-		painter->setPen(borderPen);
+	if (borderLine->style() != Qt::NoPen) {
+		painter->setPen(borderLine->pen());
 		painter->setBrush(Qt::NoBrush);
-		painter->setOpacity(borderOpacity);
+		painter->setOpacity(borderLine->opacity());
 		if (qFuzzyIsNull(borderCornerRadius))
 			painter->drawRect(rect);
 		else
@@ -740,20 +746,48 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 			if (!translatePainter(painter, row, col, h))
 				break;
-		} else if (boxPlot) { // draw the legend item for box plot (name only at the moment)
-			// curve's name
-			painter->setPen(QPen(labelColor));
-			painter->setOpacity(1.0);
-			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), boxPlot->name());
+		} else if (boxPlot) { // draw a legend item for every dataset in the box plot
+			const auto& columns = boxPlot->dataColumns();
+			int index = 0;
+			for (auto* column : columns) {
+				// draw the whiskers
+				painter->setOpacity(boxPlot->whiskersLine()->opacity());
+				painter->setPen(boxPlot->whiskersLine()->pen());
+				painter->drawLine(lineSymbolWidth / 2, 0, lineSymbolWidth / 2, 0.3 * h);
+				painter->drawLine(lineSymbolWidth / 2, 0.7 * h, lineSymbolWidth / 2, h);
 
-			if (!translatePainter(painter, row, col, h))
-				break;
-		} else if (barPlot) { // draw the legend item for every dataset bar in the bar plot
+				// draw the box
+				auto* background = boxPlot->backgroundAt(index);
+				painter->setOpacity(background->opacity());
+				painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
+				painter->setPen(Qt::NoPen);
+				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
+				painter->drawRect(QRectF(-h * 0.25, -0.2 * h, 0.5 * h, 0.4 * h));
+				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
+
+				auto* borderLine = boxPlot->borderLineAt(index);
+				painter->setOpacity(borderLine->opacity());
+				// painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
+				painter->setPen(borderLine->pen());
+				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
+				painter->drawRect(QRectF(-h * 0.25, -0.2 * h, 0.5 * h, 0.4 * h));
+				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
+
+				// draw the name text
+				painter->setPen(QPen(labelColor));
+				painter->setOpacity(1.0);
+				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
+				++index;
+				if (!translatePainter(painter, row, col, h))
+					break;
+			}
+		} else if (barPlot) { // draw a legend item for every dataset bar in the bar plot
 			const auto& columns = barPlot->dataColumns();
 			int index = 0;
 			for (auto* column : columns) {
 				// draw the bar
 				auto* background = barPlot->backgroundAt(index);
+				painter->setOpacity(background->opacity());
 				painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
 				painter->drawRect(QRectF(-h * 0.25, -h / 2, h * 0.5, h));
@@ -768,6 +802,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 
 				// draw the name text
+				painter->setPen(QPen(labelColor));
+				painter->setOpacity(1.0);
 				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
 				++index;
 				if (!translatePainter(painter, row, col, h))
@@ -879,8 +915,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 	// border
 	writer->writeStartElement(QStringLiteral("border"));
-	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute(QStringLiteral("borderOpacity"), QString::number(d->borderOpacity));
+	d->borderLine->save(writer);
 	writer->writeAttribute(QStringLiteral("borderCornerRadius"), QString::number(d->borderCornerRadius));
 	writer->writeEndElement();
 
@@ -979,9 +1014,8 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			d->background->load(reader, preview);
 		else if (!preview && reader->name() == QLatin1String("border")) {
 			attribs = reader->attributes();
-			READ_QPEN(d->borderPen);
+			d->borderLine->load(reader, preview);
 			READ_DOUBLE_VALUE("borderCornerRadius", borderCornerRadius);
-			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
 		} else if (!preview && reader->name() == QLatin1String("layout")) {
 			attribs = reader->attributes();
 			READ_DOUBLE_VALUE("topMargin", layoutTopMargin);
@@ -1016,13 +1050,8 @@ void CartesianPlotLegend::loadThemeConfig(const KConfig& config) {
 	background()->loadThemeConfig(group);
 
 	// border
-	QPen pen;
-	pen.setColor(group.readEntry("BorderColor", QColor(Qt::black)));
-	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int)Qt::SolidLine)));
-	pen.setWidthF(group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	this->setBorderPen(pen);
+	borderLine()->loadThemeConfig(group);
 	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));
-	this->setBorderOpacity(group.readEntry("BorderOpacity", 1.0));
 
 	title()->loadThemeConfig(config);
 }

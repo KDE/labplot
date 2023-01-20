@@ -36,6 +36,11 @@ void Background::setPrefix(const QString& prefix) {
 	d->prefix = prefix;
 }
 
+const QString& Background::prefix() const {
+	Q_D(const Background);
+	return d->prefix;
+}
+
 void Background::init(const KConfigGroup& group) {
 	Q_D(Background);
 
@@ -280,11 +285,17 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 void Background::loadThemeConfig(const KConfigGroup& group) {
 	Q_D(const Background);
+	const QColor themeColor = group.readEntry(d->prefix + QStringLiteral("FirstColor"), QColor(Qt::white));
+	loadThemeConfig(group, themeColor);
+}
+
+void Background::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
+	Q_D(const Background);
 	setType((Type)group.readEntry(d->prefix + QStringLiteral("Type"), static_cast<int>(Type::Color)));
 	setColorStyle((ColorStyle)group.readEntry(d->prefix + QStringLiteral("ColorStyle"), static_cast<int>(ColorStyle::SingleColor)));
 	setImageStyle((ImageStyle)group.readEntry(d->prefix + QStringLiteral("ImageStyle"), static_cast<int>(ImageStyle::Scaled)));
 	setBrushStyle((Qt::BrushStyle)group.readEntry(d->prefix + QStringLiteral("BrushStyle"), static_cast<int>(Qt::SolidPattern)));
-	setFirstColor(group.readEntry(d->prefix + QStringLiteral("FirstColor"), QColor(Qt::white)));
+	setFirstColor(themeColor);
 	setSecondColor(group.readEntry(d->prefix + QStringLiteral("SecondColor"), QColor(Qt::black)));
 
 	double defaultOpacity = 1.0;

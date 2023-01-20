@@ -29,9 +29,9 @@ public:
 public:
 	QString textAt(int row) const override {
 		if (!m_inputs.value(0))
-			return QString();
+			return {};
 		if (m_inputs.value(0)->rowCount() <= row)
-			return QString();
+			return {};
 
 		int inputValue = m_inputs.value(0)->integerAt(row);
 

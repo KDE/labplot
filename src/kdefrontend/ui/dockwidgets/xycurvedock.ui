@@ -11,9 +11,6 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>0</number>
-   </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
@@ -140,25 +137,9 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lLineSkipGaps">
          <property name="text">
-          <string>Ignore gaps:</string>
+          <string>Ignore Gaps:</string>
          </property>
         </widget>
-       </item>
-       <item row="1" column="1">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="lValuesGeneral_2">
@@ -199,6 +180,22 @@
           <size>
            <width>20</width>
            <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>23</height>
           </size>
          </property>
         </spacer>
@@ -545,7 +542,7 @@
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -573,7 +570,7 @@
      </widget>
      <widget class="QWidget" name="tabErrorBars">
       <attribute name="title">
-       <string>Error bars</string>
+       <string>Error Bars</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="9" column="0">
@@ -595,7 +592,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="lXErrorType">
          <property name="text">
-          <string>Error type:</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -618,7 +615,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="lYErrorType">
          <property name="text">
-          <string>Error type:</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -677,7 +674,7 @@
           </font>
          </property>
          <property name="text">
-          <string>y-error</string>
+          <string>Y Error</string>
          </property>
         </widget>
        </item>
@@ -707,7 +704,7 @@
           </font>
          </property>
          <property name="text">
-          <string>x-error</string>
+          <string>X Error</string>
          </property>
         </widget>
        </item>
@@ -859,7 +856,7 @@
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -875,7 +872,7 @@
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -888,7 +885,7 @@
           <string>Spinbox for numbers.</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>

@@ -16,7 +16,7 @@
 #include "nsl_common.h"
 #include "nsl_sf_poly.h"
 
-const char* nsl_diff_deriv_order_name[] = {i18n("first"), i18n("second"), i18n("third"), i18n("fourth"), i18n("fifth"), i18n("sixth")};
+const char* nsl_diff_deriv_order_name[] = {i18n("First"), i18n("Second"), i18n("Third"), i18n("Fourth"), i18n("Fifth"), i18n("Sixth")};
 
 double nsl_diff_first_central(double xm, double fm, double xp, double fp) {
 	return (fp - fm) / (xp - xm);

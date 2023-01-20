@@ -43,6 +43,7 @@ public:
 	Lines mapLogicalToScene(const Lines&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	Points mapSceneToLogical(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const override;
+	virtual bool isValid() const override;
 
 	int direction(const Dimension) const;
 	bool setScales(const Dimension, const QVector<CartesianScale*>&);

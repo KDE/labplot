@@ -123,7 +123,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 	// disable "whole file" option
 	const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+	auto* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	if (ui.cbReadingType->currentIndex() == static_cast<int>(LiveDataSource::ReadingType::WholeFile))
 		ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
@@ -240,8 +240,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
 
 	ui.leName->setText(source->name());
-	ui.leName->setStyleSheet(QStringLiteral(""));
-	ui.leName->setToolTip(QStringLiteral(""));
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 	const LiveDataSource::SourceType sourceType = source->sourceType();
 	const LiveDataSource::ReadingType readingType = source->readingType();
 	const LiveDataSource::UpdateType updateType = source->updateType();
@@ -289,7 +289,7 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 
 	// disable "whole file" when having no file (i.e. socket or port)
 	auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+	auto* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		// for file types other than ASCII and binary we support re-reading the whole file only
@@ -376,8 +376,8 @@ void LiveDataDock::nameChanged(const QString& name) {
 		}
 	}
 #endif
-	ui.leName->setStyleSheet(QStringLiteral(""));
-	ui.leName->setToolTip(QStringLiteral(""));
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 }
 
 /*!

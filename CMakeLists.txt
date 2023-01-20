@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
-set(QT_MINIMUM_VERSION 5.7.0)
+set(QT_MINIMUM_VERSION 5.10.0)
 set(KF5_MIN_VERSION "5.16.0")
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
@@ -94,8 +94,14 @@ ENDIF ()
 find_package(BISON REQUIRED)
 
 ### compiler flags ######################################
+option (ENABLE_COMPILER_OPTIMIZATION "Optimization: -OX" true)
+if (${ENABLE_COMPILER_OPTIMIZATION})
+    set(COMPILER_OPTIMIZATION_FLAG "-O2")
+else()
+    set(COMPILER_OPTIMIZATION_FLAG "-O0")
+endif()
 set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector")
-set (GENERIC_GNU_FLAGS "-O2 -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
+set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
 set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++11")

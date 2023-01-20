@@ -153,7 +153,7 @@ void BatchEditValueLabelsDialog::save() const {
 		column->clearValueLabels();
 
 	// add new labels
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	QString label;
 	QString valueStr;
 	bool ok;

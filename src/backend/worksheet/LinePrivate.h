@@ -11,6 +11,8 @@
 #ifndef LINEPRIVATE_H
 #define LINEPRIVATE_H
 
+#include "backend/worksheet/Worksheet.h"
+
 #include <QPen>
 
 class LinePrivate {
@@ -36,6 +38,9 @@ public:
 	XYCurve::DropLineType dropLineType{XYCurve::DropLineType::NoDropLine};
 
 	// common parameters
+	Qt::PenStyle style{Qt::SolidLine};
+	double width{Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)};
+	QColor color{Qt::black};
 	QPen pen;
 	double opacity{1.0};
 

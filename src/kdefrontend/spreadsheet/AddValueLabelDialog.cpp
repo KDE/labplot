@@ -48,8 +48,7 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, const Column* column)
 		layout->addWidget(leValue, 0, 1);
 
 		if (mode == AbstractColumn::ColumnMode::Double) {
-			SET_NUMBER_LOCALE
-			leValue->setLocale(numberLocale);
+			leValue->setLocale(QLocale());
 			leValue->setValidator(new QDoubleValidator(leValue));
 		} else if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
 			leValue->setValidator(new QIntValidator(leValue));
@@ -113,25 +112,22 @@ void AddValueLabelDialog::setDateTimeFormat(const QString& format) {
 }
 
 double AddValueLabelDialog::value() const {
-	SET_NUMBER_LOCALE
 	bool ok;
-	double value = numberLocale.toDouble(leValue->text(), &ok);
+	double value = QLocale().toDouble(leValue->text(), &ok);
 
 	return ok ? value : 0.0;
 }
 
 int AddValueLabelDialog::valueInt() const {
-	SET_NUMBER_LOCALE
 	bool ok;
-	int value = numberLocale.toInt(leValue->text(), &ok);
+	int value = QLocale().toInt(leValue->text(), &ok);
 
 	return ok ? value : 0;
 }
 
 qint64 AddValueLabelDialog::valueBigInt() const {
-	SET_NUMBER_LOCALE
 	bool ok;
-	qint64 value = numberLocale.toLongLong(leValue->text(), &ok);
+	qint64 value = QLocale().toLongLong(leValue->text(), &ok);
 
 	return ok ? value : 0;
 }

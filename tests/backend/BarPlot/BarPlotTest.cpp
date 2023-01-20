@@ -41,7 +41,7 @@ void BarPlotTest::testRange01() {
 
 	// check the min and max range values
 	QCOMPARE(barPlot->minimum(Dimension::X), 0.0);
-	QCOMPARE(barPlot->maximum(Dimension::X), 5.0);
+	QCOMPARE(barPlot->maximum(Dimension::X), 4.0);
 	QCOMPARE(barPlot->minimum(Dimension::Y), 0.);
 	QCOMPARE(barPlot->maximum(Dimension::Y), 12.);
 }
@@ -73,7 +73,7 @@ void BarPlotTest::testRange02() {
 
 	// check the min and max range values
 	QCOMPARE(barPlot->minimum(Dimension::X), 0.0);
-	QCOMPARE(barPlot->maximum(Dimension::X), 5.0);
+	QCOMPARE(barPlot->maximum(Dimension::X), 4.0);
 	QCOMPARE(barPlot->minimum(Dimension::Y), -6.);
 	QCOMPARE(barPlot->maximum(Dimension::Y), 12.);
 }
@@ -114,7 +114,7 @@ void BarPlotTest::testRange03() {
 
 	// check the min and max range values
 	QCOMPARE(barPlot->minimum(Dimension::X), 0.);
-	QCOMPARE(barPlot->maximum(Dimension::X), 5.);
+	QCOMPARE(barPlot->maximum(Dimension::X), 4.);
 	QCOMPARE(barPlot->minimum(Dimension::Y), 0.);
 	QCOMPARE(barPlot->maximum(Dimension::Y), 23.);
 }
@@ -155,7 +155,7 @@ void BarPlotTest::testRange04() {
 
 	// check the min and max range values
 	QCOMPARE(barPlot->minimum(Dimension::X), 0.0);
-	QCOMPARE(barPlot->maximum(Dimension::X), 5.0);
+	QCOMPARE(barPlot->maximum(Dimension::X), 4.0);
 	QCOMPARE(barPlot->minimum(Dimension::Y), -11.);
 	QCOMPARE(barPlot->maximum(Dimension::Y), 17.);
 }
@@ -196,7 +196,7 @@ void BarPlotTest::testRange05() {
 
 	// check the min and max range values
 	QCOMPARE(barPlot->minimum(Dimension::X), 0.);
-	QCOMPARE(barPlot->maximum(Dimension::X), 5.);
+	QCOMPARE(barPlot->maximum(Dimension::X), 4.);
 	QCOMPARE(barPlot->minimum(Dimension::Y), 0.);
 	QCOMPARE(barPlot->maximum(Dimension::Y), 100.);
 }

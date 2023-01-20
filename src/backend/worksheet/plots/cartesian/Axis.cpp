@@ -160,22 +160,37 @@ void Axis::init(Orientation orientation) {
 	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
 	d->majorTicksSpacing =
 		group.readEntry("MajorTicksIncrement", 0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
-
-	d->majorTicksPen.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine));
-	d->majorTicksPen.setColor(group.readEntry("MajorTicksColor", QColor(Qt::black)));
-	d->majorTicksPen.setWidthF(group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
-	d->majorTicksOpacity = group.readEntry("MajorTicksOpacity", 1.0);
+
+	d->majorTicksLine = new Line(QString());
+	d->majorTicksLine->setHidden(true);
+	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
+	d->majorTicksLine->setCreateXmlElement(false);
+	addChild(d->majorTicksLine);
+	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->majorTicksLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
 	d->minorTicksDirection = (TicksDirection)group.readEntry("MinorTicksDirection", (int)Axis::ticksOut);
 	d->minorTicksType = (TicksType)group.readEntry("MinorTicksType", static_cast<int>(TicksType::TotalNumber));
 	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
 	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.0); // see MajorTicksIncrement
-	d->minorTicksPen.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine));
-	d->minorTicksPen.setColor(group.readEntry("MinorTicksColor", QColor(Qt::black)));
-	d->minorTicksPen.setWidthF(group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->minorTicksLength = group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point));
-	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
+
+	d->minorTicksLine = new Line(QString());
+	d->minorTicksLine->setHidden(true);
+	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
+	d->minorTicksLine->setCreateXmlElement(false);
+	addChild(d->minorTicksLine);
+	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->minorTicksLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
 	// Labels
 	d->labelsFormat = (LabelsFormat)group.readEntry("LabelsFormat", static_cast<int>(LabelsFormat::Decimal));
@@ -373,13 +388,12 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 
 	double ratio = 0;
 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
-		ratio = qMax(horizontalRatio, verticalRatio);
+		ratio = std::max(horizontalRatio, verticalRatio);
 	else
-		ratio = qMin(horizontalRatio, verticalRatio);
+		ratio = std::min(horizontalRatio, verticalRatio);
 
-	QPen pen = d->line->pen();
-	pen.setWidthF(pen.widthF() * ratio);
-	d->line->setPen(pen);
+	double width = d->line->width() * ratio;
+	d->line->setWidth(width);
 
 	d->majorTicksLength *= ratio; // ticks are perpendicular to axis line -> verticalRatio relevant
 	d->minorTicksLength *= ratio;
@@ -429,8 +443,11 @@ QString& Axis::majorTicksColumnPath() const {
 	return d->majorTicksColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
-BASIC_SHARED_D_READER_IMPL(Axis, QPen, majorTicksPen, majorTicksPen)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksOpacity, majorTicksOpacity)
+
+Line* Axis::majorTicksLine() const {
+	Q_D(const Axis);
+	return d->majorTicksLine;
+}
 
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, minorTicksDirection, minorTicksDirection)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, minorTicksType, minorTicksType)
@@ -443,8 +460,11 @@ QString& Axis::minorTicksColumnPath() const {
 	return d->minorTicksColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
-BASIC_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksOpacity, minorTicksOpacity)
+
+Line* Axis::minorTicksLine() const {
+	Q_D(const Axis);
+	return d->minorTicksLine;
+}
 
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsFormat, labelsFormat, labelsFormat)
 BASIC_SHARED_D_READER_IMPL(Axis, bool, labelsFormatAuto, labelsFormatAuto)
@@ -574,7 +594,7 @@ void Axis::setStart(double min) {
 		range.setStart(min);
 		setRange(range);
 	}
-	emit startChanged(range.start()); // feedback
+	emit startChanged(range.start()); // Feedback
 }
 void Axis::setEnd(double max) {
 	Q_D(Axis);
@@ -585,7 +605,7 @@ void Axis::setEnd(double max) {
 		range.setEnd(max);
 		setRange(range);
 	}
-	emit endChanged(range.end()); // feedback
+	emit endChanged(range.end()); // Feedback
 }
 void Axis::setRange(double min, double max) {
 	Q_D(Axis);
@@ -607,17 +627,14 @@ void Axis::setMajorTickStartOffset(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->majorTickStartOffset)
 		exec(new AxisSetMajorTickStartOffsetCmd(d, offset, ki18n("%1: set major tick start offset")));
-	else
-		emit majorTickStartOffsetChanged(d->majorTickStartOffset); // feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTickStartValue, qreal, majorTickStartValue, retransform)
-void Axis::setMajorTickStartValue(qreal offset) {
+void Axis::setMajorTickStartValue(qreal value) {
 	Q_D(Axis);
-	if (offset != d->majorTickStartValue)
-		exec(new AxisSetMajorTickStartValueCmd(d, offset, ki18n("%1: set major tick start value")));
-	else
-		emit majorTickStartValueChanged(d->majorTickStartValue); // feedback
+	// TODO: check if value is invalid
+	if (value != d->majorTickStartValue)
+		exec(new AxisSetMajorTickStartValueCmd(d, value, ki18n("%1: set major tick start value")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform)
@@ -635,6 +652,8 @@ void Axis::setScalingFactor(qreal scalingFactor) {
 STD_SETTER_CMD_IMPL_F_S(Axis, SetZeroOffset, qreal, zeroOffset, retransform)
 void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
+
+	// TODO: check for negative values and log scales?
 	if (zeroOffset != d->zeroOffset)
 		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, ki18n("%1: set axis zero offset")));
 }
@@ -731,6 +750,20 @@ void Axis::setMajorTicksNumber(int number, bool automatic) {
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksSpacing, qreal, majorTicksSpacing, retransformTicks)
 void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
+	double range = this->range().length();
+	DEBUG(Q_FUNC_INFO << ", major spacing = " << majorTicksSpacing << ", range = " << range)
+	// fix spacing if incorrect (not set or > 100 ticks)
+	if (majorTicksSpacing == 0. || range / majorTicksSpacing > 100.) {
+		if (majorTicksSpacing == 0.)
+			majorTicksSpacing = range / (majorTicksNumber() - 1);
+
+		if (range / majorTicksSpacing > 100.)
+			majorTicksSpacing = range / 100.;
+
+		emit majorTicksSpacingChanged(majorTicksSpacing);
+		return;
+	}
+
 	Q_D(Axis);
 	if (majorTicksSpacing != d->majorTicksSpacing)
 		exec(new AxisSetMajorTicksSpacingCmd(d, majorTicksSpacing, ki18n("%1: set the spacing of the major ticks")));
@@ -750,25 +783,11 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksPen, QPen, majorTicksPen, retransformTicks /* need to retransform because of "no line" handling */)
-void Axis::setMajorTicksPen(const QPen& pen) {
-	Q_D(Axis);
-	if (pen != d->majorTicksPen)
-		exec(new AxisSetMajorTicksPenCmd(d, pen, ki18n("%1: set major ticks style")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksLength, qreal, majorTicksLength, retransformTicks)
 void Axis::setMajorTicksLength(qreal majorTicksLength) {
 	Q_D(Axis);
 	if (majorTicksLength != d->majorTicksLength)
 		exec(new AxisSetMajorTicksLengthCmd(d, majorTicksLength, ki18n("%1: set major ticks length")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksOpacity, qreal, majorTicksOpacity, update)
-void Axis::setMajorTicksOpacity(qreal opacity) {
-	Q_D(Axis);
-	if (opacity != d->majorTicksOpacity)
-		exec(new AxisSetMajorTicksOpacityCmd(d, opacity, ki18n("%1: set major ticks opacity")));
 }
 
 // Minor ticks
@@ -814,6 +833,27 @@ void Axis::setMinorTicksNumber(int minorTicksNumber) {
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksSpacing, qreal, minorTicksIncrement, retransformTicks)
 void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
 	Q_D(Axis);
+	double range = this->range().length();
+	int numberTicks = 0;
+
+	int majorTicks = majorTicksNumber();
+	if (minorTicksSpacing > 0.)
+		numberTicks = range / (majorTicks - 1) / minorTicksSpacing - 1; // recalc
+
+	// set if unset or > 100.
+	if (minorTicksSpacing == 0. || numberTicks > 100) {
+		if (minorTicksSpacing == 0.)
+			minorTicksSpacing = range / (majorTicks - 1) / (minorTicksNumber() + 1);
+
+		numberTicks = range / (majorTicks - 1) / minorTicksSpacing - 1; // recalculate number of ticks
+
+		if (numberTicks > 100) // maximum 100 minor ticks
+			minorTicksSpacing = range / (majorTicks - 1) / (100 + 1);
+
+		emit minorTicksIncrementChanged(minorTicksSpacing);
+		return;
+	}
+
 	if (minorTicksSpacing != d->minorTicksIncrement)
 		exec(new AxisSetMinorTicksSpacingCmd(d, minorTicksSpacing, ki18n("%1: set the spacing of the minor ticks")));
 }
@@ -832,25 +872,11 @@ void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksPen, QPen, minorTicksPen, retransformTicks /* need to retransform because of "no line" handling */)
-void Axis::setMinorTicksPen(const QPen& pen) {
-	Q_D(Axis);
-	if (pen != d->minorTicksPen)
-		exec(new AxisSetMinorTicksPenCmd(d, pen, ki18n("%1: set minor ticks style")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksLength, qreal, minorTicksLength, retransformTicks)
 void Axis::setMinorTicksLength(qreal minorTicksLength) {
 	Q_D(Axis);
 	if (minorTicksLength != d->minorTicksLength)
 		exec(new AxisSetMinorTicksLengthCmd(d, minorTicksLength, ki18n("%1: set minor ticks length")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksOpacity, qreal, minorTicksOpacity, update)
-void Axis::setMinorTicksOpacity(qreal opacity) {
-	Q_D(Axis);
-	if (opacity != d->minorTicksOpacity)
-		exec(new AxisSetMinorTicksOpacityCmd(d, opacity, ki18n("%1: set minor ticks opacity")));
 }
 
 // Labels
@@ -1022,16 +1048,12 @@ void Axis::orientationChangedSlot(QAction* action) {
 
 void Axis::lineStyleChanged(QAction* action) {
 	Q_D(const Axis);
-	QPen pen = d->line->pen();
-	pen.setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
-	d->line->setPen(pen);
+	d->line->setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
 }
 
 void Axis::lineColorChanged(QAction* action) {
 	Q_D(const Axis);
-	QPen pen = d->line->pen();
-	pen.setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-	d->line->setPen(pen);
+	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
 }
 
 void Axis::visibilityChangedSlot() {
@@ -1167,10 +1189,10 @@ void AxisPrivate::retransformLine() {
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 
 			if (sceneRange.size() > 0) {
-				// qMax/qMin: stay inside rect()
+				// std::max/std::min: stay inside rect()
 				QRectF rect = q->m_plot->dataRect();
-				startPoint = QPointF(qMax(sceneRange.at(0).x1(), rect.x()), pos.y());
-				endPoint = QPointF(qMin(sceneRange.at(0).x2(), rect.x() + rect.width()), pos.y());
+				startPoint = QPointF(std::max(sceneRange.at(0).x1(), rect.x()), pos.y());
+				endPoint = QPointF(std::min(sceneRange.at(0).x2(), rect.x() + rect.width()), pos.y());
 
 				lines.append(QLineF(startPoint, endPoint));
 				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
@@ -1200,10 +1222,10 @@ void AxisPrivate::retransformLine() {
 			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 			if (sceneRange.size() > 0) {
-				// qMax/qMin: stay inside rect()
+				// std::max/std::min: stay inside rect()
 				QRectF rect = q->m_plot->dataRect();
-				startPoint = QPointF(pos.x(), qMin(sceneRange.at(0).y1(), rect.y() + rect.height()));
-				endPoint = QPointF(pos.x(), qMax(sceneRange.at(0).y2(), rect.y()));
+				startPoint = QPointF(pos.x(), std::min(sceneRange.at(0).y1(), rect.y() + rect.height()));
+				endPoint = QPointF(pos.x(), std::max(sceneRange.at(0).y2(), rect.y()));
 
 				lines.append(QLineF(startPoint, endPoint));
 				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
@@ -1413,7 +1435,7 @@ void AxisPrivate::retransformTicks() {
 			break;
 		case RangeT::Scale::Sqrt:
 			if (start >= 0. && end >= 0.)
-				majorTicksIncrement = qSqrt(end) - qSqrt(start);
+				majorTicksIncrement = std::sqrt(end) - std::sqrt(start);
 			break;
 		case RangeT::Scale::Square:
 			majorTicksIncrement = end * end - start * start;
@@ -1433,30 +1455,30 @@ void AxisPrivate::retransformTicks() {
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end - start);
 		switch (scale) {
 		case RangeT::Scale::Linear:
-			tmpMajorTicksNumber = qRound(range.size() / majorTicksIncrement + 1);
+			tmpMajorTicksNumber = std::round(range.size() / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Log10:
 			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = qRound(log10(end / start) / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round(log10(end / start) / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Log2:
 			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = qRound(log2(end / start) / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round(log2(end / start) / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Ln:
 			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = qRound(qLn(end / start) / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round(std::log(end / start) / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Sqrt:
 			if (start >= 0. && end >= 0.)
-				tmpMajorTicksNumber = qRound((qSqrt(end) - qSqrt(start)) / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round((std::sqrt(end) - std::sqrt(start)) / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Square:
-			tmpMajorTicksNumber = qRound((end * end - start * start) / majorTicksIncrement + 1);
+			tmpMajorTicksNumber = std::round((end * end - start * start) / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Inverse:
 			if (start != 0. && end != 0.)
-				tmpMajorTicksNumber = qRound((1. / start - 1. / end) / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round((1. / start - 1. / end) / majorTicksIncrement + 1);
 			break;
 		}
 		break;
@@ -1524,29 +1546,29 @@ void AxisPrivate::retransformTicks() {
 			case RangeT::Scale::Linear:
 				//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 				majorTickPos = start + majorTicksIncrement * iMajor;
-				if (qAbs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
+				if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
 					majorTickPos = 0;
 				nextMajorTickPos = majorTickPos + majorTicksIncrement;
 				break;
 			case RangeT::Scale::Log10:
-				majorTickPos = start * qPow(10, majorTicksIncrement * iMajor);
-				nextMajorTickPos = majorTickPos * qPow(10, majorTicksIncrement);
+				majorTickPos = start * std::pow(10, majorTicksIncrement * iMajor);
+				nextMajorTickPos = majorTickPos * std::pow(10, majorTicksIncrement);
 				break;
 			case RangeT::Scale::Log2:
-				majorTickPos = start * exp2(majorTicksIncrement * iMajor);
+				majorTickPos = start * std::exp2(majorTicksIncrement * iMajor);
 				nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
 				break;
 			case RangeT::Scale::Ln:
-				majorTickPos = start * qExp(majorTicksIncrement * iMajor);
+				majorTickPos = start * std::exp(majorTicksIncrement * iMajor);
 				nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
 				break;
 			case RangeT::Scale::Sqrt:
-				majorTickPos = qPow(qSqrt(start) + majorTicksIncrement * iMajor, 2);
-				nextMajorTickPos = qPow(qSqrt(start) + majorTicksIncrement * (iMajor + 1), 2);
+				majorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * iMajor, 2);
+				nextMajorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * (iMajor + 1), 2);
 				break;
 			case RangeT::Scale::Square:
-				majorTickPos = qSqrt(start * start + majorTicksIncrement * iMajor);
-				nextMajorTickPos = qSqrt(start * start + majorTicksIncrement * (iMajor + 1));
+				majorTickPos = std::sqrt(start * start + majorTicksIncrement * iMajor);
+				nextMajorTickPos = std::sqrt(start * start + majorTicksIncrement * (iMajor + 1));
 				break;
 			case RangeT::Scale::Inverse:
 				majorTickPos = 1. / (1. / start + majorTicksIncrement * iMajor);
@@ -1618,7 +1640,7 @@ void AxisPrivate::retransformTicks() {
 
 			// add major tick's line to the painter path
 			if (valid) {
-				if (majorTicksPen.style() != Qt::NoPen) {
+				if (majorTicksLine->pen().style() != Qt::NoPen) {
 					majorTicksPath.moveTo(startPoint);
 					majorTicksPath.lineTo(endPoint);
 				}
@@ -1710,7 +1732,7 @@ void AxisPrivate::retransformTicks() {
 
 				// add minor tick's line to the painter path
 				if (valid) {
-					if (minorTicksPen.style() != Qt::NoPen) {
+					if (minorTicksLine->pen().style() != Qt::NoPen) {
 						minorTicksPath.moveTo(startPoint);
 						minorTicksPath.lineTo(endPoint);
 					}
@@ -1746,7 +1768,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		bool largeValue = false;
 		for (auto value : tickLabelValues) {
 			// switch to Scientific for large and small values if at least one is
-			if (qAbs(value) > 1.e4 || (qAbs(value) > 1.e-16 && qAbs(value) < 1e-4)) {
+			if (std::abs(value) > 1.e4 || (std::abs(value) > 1.e-16 && std::abs(value) < 1e-4)) {
 				largeValue = true;
 				break;
 			}
@@ -1807,7 +1829,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	tickLabelStrings.clear();
 	QString str;
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (numeric) {
 		switch (labelsFormat) {
 		case Axis::LabelsFormat::Decimal: {
@@ -1815,7 +1837,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			for (const auto value : qAsConst(tickLabelValues)) {
 				// toString() does not round: use NSL function
 				if (RangeT::isLogScale(scale)) // don't use same precision for all label on log scales
-					str = numberLocale.toString(value, 'f', qMax(labelsPrecision, nsl_math_decimal_places(value) + 1));
+					str = numberLocale.toString(value, 'f', std::max(labelsPrecision, nsl_math_decimal_places(value) + 1));
 				else
 					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				if (str == QLatin1String("-") + nullStr)
@@ -1848,7 +1870,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
-					str = QStringLiteral("10<sup>") + numberLocale.toString(nsl_math_round_places(log10(qAbs(value)), labelsPrecision), 'f', labelsPrecision)
+					str = QStringLiteral("10<sup>")
+						+ numberLocale.toString(nsl_math_round_places(log10(std::abs(value)), labelsPrecision), 'f', labelsPrecision)
 						+ QStringLiteral("</sup>");
 					if (value < 0)
 						str.prepend(QLatin1Char('-'));
@@ -1864,7 +1887,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 					str = numberLocale.toString(value, 'f', 0);
 				else {
 					str = QStringLiteral("2<span style=\"vertical-align:super\">")
-						+ numberLocale.toString(nsl_math_round_places(log2(qAbs(value)), labelsPrecision), 'f', labelsPrecision)
+						+ numberLocale.toString(nsl_math_round_places(log2(std::abs(value)), labelsPrecision), 'f', labelsPrecision)
 						+ QStringLiteral("</spanlabelsPrecision)>");
 					if (value < 0)
 						str.prepend(QLatin1Char('-'));
@@ -1880,7 +1903,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 					str = numberLocale.toString(value, 'f', 0);
 				else {
 					str = QStringLiteral("e<span style=\"vertical-align:super\">")
-						+ numberLocale.toString(nsl_math_round_places(log(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + QStringLiteral("</span>");
+						+ numberLocale.toString(nsl_math_round_places(log(std::abs(value)), labelsPrecision), 'f', labelsPrecision) + QStringLiteral("</span>");
 					if (value < 0)
 						str.prepend(QLatin1Char('-'));
 				}
@@ -1911,8 +1934,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 				else {
 					int e;
 					const double frac = nsl_math_frexp10(value, &e);
-					if (qAbs(value) < 100. && qAbs(value) > .01) // use normal notation for values near 1, precision reduced by exponent but >= 0
-						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'f', qMax(labelsPrecision - e, 0));
+					if (std::abs(value) < 100. && std::abs(value) > .01) // use normal notation for values near 1, precision reduced by exponent but >= 0
+						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'f', std::max(labelsPrecision - e, 0));
 					else {
 						// DEBUG(Q_FUNC_INFO << ", nsl rounded = " << nsl_math_round_places(frac, labelsPrecision))
 						//  only round fraction
@@ -1994,8 +2017,8 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log10(DBL_MIN));
 			else {
-				// DEBUG(Q_FUNC_INFO << ", rounded value = " << nsl_math_round_places(log10(qAbs(value)), precision))
-				tempValues.append(nsl_math_round_places(log10(qAbs(value)), precision));
+				// DEBUG(Q_FUNC_INFO << ", rounded value = " << nsl_math_round_places(log10(std::abs(value)), precision))
+				tempValues.append(nsl_math_round_places(log10(std::abs(value)), precision));
 			}
 		}
 		break;
@@ -2004,7 +2027,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log2(DBL_MIN));
 			else
-				tempValues.append(nsl_math_round_places(log2(qAbs(value)), precision));
+				tempValues.append(nsl_math_round_places(log2(std::abs(value)), precision));
 		}
 		break;
 	case Axis::LabelsFormat::PowersE:
@@ -2012,12 +2035,12 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log(DBL_MIN));
 			else
-				tempValues.append(nsl_math_round_places(log(qAbs(value)), precision));
+				tempValues.append(nsl_math_round_places(log(std::abs(value)), precision));
 		}
 	}
 	// QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
 
-	const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
+	const double scale = std::abs(tickLabelValues.last() - tickLabelValues.first());
 	DEBUG(Q_FUNC_INFO << ", scale = " << scale)
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// check if rounded value differs too much
@@ -2027,19 +2050,19 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 		case Axis::LabelsFormat::Decimal:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
-			relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::MultipliesPi:
-			relDiff = qAbs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers10:
-			relDiff = qAbs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers2:
-			relDiff = qAbs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::PowersE:
-			relDiff = qAbs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 		}
 		// DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -2100,7 +2123,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log10(DBL_MIN));
 			else
-				tempValues.append(nsl_math_round_places(log10(qAbs(value)), precision));
+				tempValues.append(nsl_math_round_places(log10(std::abs(value)), precision));
 		}
 		break;
 	case Axis::LabelsFormat::Powers2:
@@ -2108,7 +2131,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log2(DBL_MIN));
 			else
-				tempValues.append(nsl_math_round_places(log2(qAbs(value)), precision));
+				tempValues.append(nsl_math_round_places(log2(std::abs(value)), precision));
 		}
 		break;
 	case Axis::LabelsFormat::PowersE:
@@ -2116,14 +2139,14 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log(DBL_MIN));
 			else
-				tempValues.append(nsl_math_round_places(log(qAbs(value)), precision));
+				tempValues.append(nsl_math_round_places(log(std::abs(value)), precision));
 		}
 	}
 	// QDEBUG(Q_FUNC_INFO << ", rounded values = " << tempValues)
 
 	// check whether we have duplicates with reduced precision
 	//-> current precision cannot be reduced, return the previous value
-	const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
+	const double scale = std::abs(tickLabelValues.last() - tickLabelValues.first());
 	// DEBUG(Q_FUNC_INFO << ", scale = " << scale)
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// return if rounded value differs too much
@@ -2132,19 +2155,19 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		case Axis::LabelsFormat::Decimal:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
-			relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::MultipliesPi:
-			relDiff = qAbs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers10:
-			relDiff = qAbs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers2:
-			relDiff = qAbs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::PowersE:
-			relDiff = qAbs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 		}
 		// DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 
@@ -2195,10 +2218,10 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
-	const double cosine = qCos(qDegreesToRadians(labelsRotationAngle)); // calculate only once
-	const double sine = qSin(qDegreesToRadians(labelsRotationAngle)); // calculate only once
+	const double cosine = std::cos(qDegreesToRadians(labelsRotationAngle)); // calculate only once
+	const double sine = std::sin(qDegreesToRadians(labelsRotationAngle)); // calculate only once
 
-	int size = qMin(majorTickPoints.size(), tickLabelStrings.size());
+	int size = std::min(majorTickPoints.size(), tickLabelStrings.size());
 	auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
 	auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 	for (int i = 0; i < size; i++) {
@@ -2237,7 +2260,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 			}
 
 			// for rotated labels (angle is not zero), align label's corner at the position of the tick
-			if (qAbs(qAbs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
+			if (std::abs(std::abs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() + width / 2);
 					pos.setY(endPoint.y() + labelsOffset);
@@ -2279,7 +2302,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? -xDirection * majorTicksLength : 0, 0);
 			}
 
-			if (qAbs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
+			if (std::abs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() + width / 2);
@@ -2287,7 +2310,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() + width / 2);
 				}
-			} else if (qAbs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
+			} else if (std::abs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset - height);
 					pos.setY(endPoint.y() - width / 2);
@@ -2295,7 +2318,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() - width / 2);
 				}
-			} else if (qAbs(qAbs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
+			} else if (std::abs(std::abs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() - height / 2);
@@ -2303,7 +2326,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset + width);
 					pos.setY(startPoint.y() - height / 2);
 				}
-			} else if (qAbs(labelsRotationAngle) >= 0.01 && qAbs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
+			} else if (std::abs(labelsRotationAngle) >= 0.01 && std::abs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
 					pos.setX(endPoint.x() - labelsOffset - diffx + sine * height / 2);
@@ -2312,7 +2335,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset + sine * height / 2);
 					pos.setY(startPoint.y() + cosine * height / 2);
 				}
-			} else if (qAbs(labelsRotationAngle) >= 90.01 && qAbs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
+			} else if (std::abs(labelsRotationAngle) >= 90.01 && std::abs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
 					pos.setX(endPoint.x() - labelsOffset + sine * height / 2);
@@ -2491,8 +2514,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	const auto& linePen = line->pen();
 	axisShape = WorksheetElement::shapeFromPath(linePath, linePen);
 	axisShape.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
-	axisShape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
-	axisShape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
+	axisShape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
+	axisShape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
 
 	QPainterPath tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
@@ -2568,26 +2591,27 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 	if (line->pen().style() != Qt::NoPen) {
 		painter->setOpacity(line->opacity());
 		painter->setPen(line->pen());
-		painter->setBrush(Qt::SolidPattern);
 		painter->drawPath(linePath);
 
 		// draw the arrow
-		if (arrowType != Axis::ArrowType::NoArrow)
+		if (arrowType != Axis::ArrowType::NoArrow) {
+			painter->setBrush(QBrush(line->color(), Qt::SolidPattern));
 			painter->drawPath(arrowPath);
+		}
 	}
 
 	// draw the major ticks
 	if (majorTicksDirection != Axis::noTicks) {
-		painter->setOpacity(majorTicksOpacity);
-		painter->setPen(majorTicksPen);
+		painter->setOpacity(majorTicksLine->opacity());
+		painter->setPen(majorTicksLine->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(majorTicksPath);
 	}
 
 	// draw the minor ticks
 	if (minorTicksDirection != Axis::noTicks) {
-		painter->setOpacity(minorTicksOpacity);
-		painter->setPen(minorTicksPen);
+		painter->setOpacity(minorTicksLine->opacity());
+		painter->setPen(minorTicksLine->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(minorTicksPath);
 	}
@@ -2651,7 +2675,7 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		// scale + offset label
 		if (showScaleOffset && tickLabelPoints.size() > 0) {
 			QString text;
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (scalingFactor != 1)
 				text += UTF8_QSTRING("×") + numberLocale.toString(1. / scalingFactor);
 			if (zeroOffset != 0) {
@@ -2735,30 +2759,24 @@ void AxisPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (m_panningStarted) {
+		Dimension dim = Dimension::X;
+		int delta = 0;
 		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 		if (orientation == WorksheetElement::Orientation::Horizontal) {
 			setCursor(Qt::SizeHorCursor);
-			const int deltaXScene = (m_panningStart.x() - event->pos().x());
-			if (std::abs(deltaXScene) < 5.)
+			delta = (m_panningStart.x() - event->pos().x());
+			if (std::abs(delta) < 5.)
 				return;
-
-			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
-			if (deltaXScene > 0)
-				plot->shiftRightX(cs->index(Dimension::X));
-			else
-				plot->shiftLeftX(cs->index(Dimension::X));
+			dim = Dimension::X;
 		} else {
 			setCursor(Qt::SizeVerCursor);
-			const int deltaYScene = (m_panningStart.y() - event->pos().y());
-			if (std::abs(deltaYScene) < 5.)
+			delta = (m_panningStart.y() - event->pos().y());
+			if (std::abs(delta) < 5.)
 				return;
-
-			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
-			if (deltaYScene > 0)
-				plot->shiftUpY(cs->index(Dimension::Y));
-			else
-				plot->shiftDownY(cs->index(Dimension::Y));
+			dim = Dimension::Y;
 		}
+
+		emit q->shiftSignal(delta, dim, cs->index(dim));
 
 		m_panningStart = event->pos();
 	}
@@ -2831,8 +2849,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("increment"), QString::number(d->majorTicksSpacing));
 	WRITE_COLUMN(d->majorTicksColumn, majorTicksColumn);
 	writer->writeAttribute(QStringLiteral("length"), QString::number(d->majorTicksLength));
-	WRITE_QPEN(d->majorTicksPen);
-	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->majorTicksOpacity));
+	d->majorTicksLine->save(writer);
 	writer->writeEndElement();
 
 	// minor ticks
@@ -2844,8 +2861,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("increment"), QString::number(d->minorTicksIncrement));
 	WRITE_COLUMN(d->minorTicksColumn, minorTicksColumn);
 	writer->writeAttribute(QStringLiteral("length"), QString::number(d->minorTicksLength));
-	WRITE_QPEN(d->minorTicksPen);
-	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->minorTicksOpacity));
+	d->minorTicksLine->save(writer);
 	writer->writeEndElement();
 
 	// extra ticks
@@ -2965,8 +2981,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("increment", majorTicksSpacing);
 			READ_COLUMN(majorTicksColumn);
 			READ_DOUBLE_VALUE("length", majorTicksLength);
-			READ_QPEN(d->majorTicksPen);
-			READ_DOUBLE_VALUE("opacity", majorTicksOpacity);
+			d->majorTicksLine->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("minorTicks")) {
 			attribs = reader->attributes();
 
@@ -2977,8 +2992,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("increment", minorTicksIncrement);
 			READ_COLUMN(minorTicksColumn);
 			READ_DOUBLE_VALUE("length", minorTicksLength);
-			READ_QPEN(d->minorTicksPen);
-			READ_DOUBLE_VALUE("opacity", minorTicksOpacity);
+			d->minorTicksLine->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("labels")) {
 			attribs = reader->attributes();
 
@@ -3048,8 +3062,6 @@ void Axis::loadThemeConfig(const KConfig& config) {
 		}
 	}
 
-	QPen p;
-
 	// Tick label
 	this->setLabelsColor(group.readEntry("LabelsFontColor", QColor(Qt::black)));
 	this->setLabelsOpacity(group.readEntry("LabelsOpacity", 1.0));
@@ -3059,64 +3071,52 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setLabelsBackgroundColor(groupPlot.readEntry("BackgroundFirstColor", QColor(Qt::white)));
 
 	// Line
+	d->line->setColor(group.readEntry("LineColor", QColor(Qt::black)));
+	d->line->setWidth(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->line->setOpacity(group.readEntry("LineOpacity", 1.0));
-
-	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
-	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	if (firstAxis && plot->theme() == QLatin1String("Tufte")) {
 		setRangeType(RangeType::AutoData);
-		p.setStyle(Qt::SolidLine);
+		d->line->setStyle(Qt::SolidLine);
 	} else {
 		// switch back to "Auto" range type when "AutoData" was selected (either because of Tufte or manually selected),
 		// don't do anything if "Custom" is selected
 		if (rangeType() == RangeType::AutoData)
 			setRangeType(RangeType::Auto);
 
-		p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+		d->line->setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
 	}
 
-	d->line->setPen(p);
-
 	// Major grid
-	if (firstAxis) {
-		p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::SolidLine));
-		p.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)));
-		p.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	} else
-		p.setStyle(Qt::NoPen);
-	d->majorGridLine->setPen(p);
+	if (firstAxis)
+		d->majorGridLine->setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::SolidLine));
+	else
+		d->majorGridLine->setStyle(Qt::NoPen);
+
+	d->majorGridLine->setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)));
+	d->majorGridLine->setWidth(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->majorGridLine->setOpacity(group.readEntry("MajorGridOpacity", 1.0));
 
 	// Major ticks
-	p.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine));
-	p.setColor(group.readEntry("MajorTicksColor", QColor(Qt::black)));
-	p.setWidthF(group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	this->setMajorTicksPen(p);
-	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity", 1.0));
-
 	this->setMajorTicksDirection((Axis::TicksDirection)group.readEntry("MajorTicksDirection", (int)Axis::ticksIn));
 	this->setMajorTicksLength(group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point)));
+	d->majorTicksLine->loadThemeConfig(group);
 
 	// Minor grid
-	if (firstAxis) {
-		p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle", (int)Qt::DotLine));
-		p.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
-		p.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	} else
-		p.setStyle(Qt::NoPen);
+	if (firstAxis)
+		d->minorGridLine->setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle", (int)Qt::DotLine));
+	else
+		d->minorGridLine->setStyle(Qt::NoPen);
+
+	d->minorGridLine->setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
+	d->minorGridLine->setWidth(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->minorGridLine->setOpacity(group.readEntry("MinorGridOpacity", 1.0));
-	d->minorGridLine->setPen(p);
 
 	// Minor ticks
-	p.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine));
-	p.setColor(group.readEntry("MinorTicksColor", QColor(Qt::black)));
-	p.setWidthF(group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	this->setMinorTicksPen(p);
-	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity", 1.0));
 	this->setMinorTicksDirection((Axis::TicksDirection)group.readEntry("MinorTicksDirection", (int)Axis::ticksIn));
 	this->setMinorTicksLength(group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point)));
+	d->minorTicksLine->loadThemeConfig(group);
 
 	// load the theme for the title label
 	d->title->loadThemeConfig(config);
@@ -3135,18 +3135,14 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	d->line->saveThemeConfig(group);
 
 	// Major ticks
-	group.writeEntry("MajorTicksColor", this->majorTicksPen().color());
-	group.writeEntry("MajorTicksLineStyle", (int)this->majorTicksPen().style());
-	group.writeEntry("MajorTicksWidth", this->majorTicksPen().widthF());
-	group.writeEntry("MajorTicksOpacity", this->majorTicksOpacity());
 	group.writeEntry("MajorTicksType", (int)this->majorTicksType());
+	group.writeEntry("MajorTicksLength", d->majorTicksLength);
+	d->majorTicksLine->saveThemeConfig(group);
 
 	// Minor ticks
-	group.writeEntry("MinorTicksColor", this->minorTicksPen().color());
-	group.writeEntry("MinorTicksLineStyle", (int)this->minorTicksPen().style());
-	group.writeEntry("MinorTicksWidth", this->minorTicksPen().widthF());
-	group.writeEntry("MinorTicksOpacity", this->minorTicksOpacity());
 	group.writeEntry("MinorTicksType", (int)this->minorTicksType());
+	group.writeEntry("MinorTicksLength", d->majorTicksLength);
+	d->minorTicksLine->saveThemeConfig(group);
 
 	// grid
 	d->majorGridLine->saveThemeConfig(group);

@@ -47,14 +47,13 @@ const QString getSystemInfo() {
 	const QString numberSystemInfo{QStringLiteral("(") + i18n("Decimal point ") + QLatin1Char('\'') + QString(locale.decimalPoint()) + QLatin1String("\', ")
 								   + i18n("Group separator ") + QLatin1Char('\'') + QString(locale.groupSeparator()) + QLatin1Char('\'')};
 
-	SET_NUMBER_LOCALE
-	const QString numberLocaleInfo{QStringLiteral(" ") + i18n("Decimal point ") + QLatin1Char('\'') + QString(numberLocale.decimalPoint())
-								   + QLatin1String("\', ") + i18n("Group separator ") + QLatin1Char('\'') + QString(numberLocale.groupSeparator())
-								   + QLatin1String("\', ") + i18n("Exponential ") + QLatin1Char('\'') + QString(numberLocale.exponential())
-								   + QLatin1String("\', ") + i18n("Zero digit ") + QLatin1Char('\'') + QString(numberLocale.zeroDigit()) + QLatin1String("\', ")
-								   + i18n("Percent ") + QLatin1Char('\'') + QString(numberLocale.percent()) + QLatin1String("\', ")
-								   + i18n("Positive/Negative sign ") + QLatin1Char('\'') + QString(numberLocale.positiveSign()) + QLatin1Char('\'')
-								   + QLatin1Char('/') + QLatin1Char('\'') + QString(numberLocale.negativeSign()) + QLatin1Char('\'')};
+	const QString numberLocaleInfo{QStringLiteral(" ") + i18n("Decimal point ") + QLatin1Char('\'') + QString(QLocale().decimalPoint()) + QLatin1String("\', ")
+								   + i18n("Group separator ") + QLatin1Char('\'') + QString(QLocale().groupSeparator()) + QLatin1String("\', ")
+								   + i18n("Exponential ") + QLatin1Char('\'') + QString(QLocale().exponential()) + QLatin1String("\', ") + i18n("Zero digit ")
+								   + QLatin1Char('\'') + QString(QLocale().zeroDigit()) + QLatin1String("\', ") + i18n("Percent ") + QLatin1Char('\'')
+								   + QString(QLocale().percent()) + QLatin1String("\', ") + i18n("Positive/Negative sign ") + QLatin1Char('\'')
+								   + QString(QLocale().positiveSign()) + QLatin1Char('\'') + QLatin1Char('/') + QLatin1Char('\'')
+								   + QString(QLocale().negativeSign()) + QLatin1Char('\'')};
 
 	// get language set in 'switch language'
 	const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
@@ -83,6 +82,8 @@ int main(int argc, char* argv[]) {
 	KLocalizedString::setApplicationDomain("labplot2");
 	KCrash::initialize();
 
+	MainWin::updateLocale();
+
 	QString systemInfo{getSystemInfo()};
 
 	KAboutData aboutData(QStringLiteral("labplot2"),
@@ -90,7 +91,7 @@ int main(int argc, char* argv[]) {
 						 QLatin1String(LVERSION),
 						 i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
 						 KAboutLicense::GPL,
-						 i18n("(c) 2007-2022"),
+						 i18n("(c) 2007-2023"),
 						 systemInfo,
 						 QStringLiteral("https://labplot.kde.org"));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());

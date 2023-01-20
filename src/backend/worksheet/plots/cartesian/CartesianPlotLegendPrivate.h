@@ -13,10 +13,10 @@
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QFont>
-#include <QPen>
 
 class Background;
 class CartesianPlotLegend;
+class Line;
 class XYCurve;
 
 class QBrush;
@@ -55,9 +55,8 @@ public:
 	Background* background{nullptr};
 
 	// Border
-	QPen borderPen;
+	Line* borderLine{nullptr};
 	qreal borderCornerRadius;
-	qreal borderOpacity;
 
 	// Layout
 	float layoutTopMargin;

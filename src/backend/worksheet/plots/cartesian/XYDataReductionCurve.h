@@ -35,13 +35,9 @@ public:
 		// TODO: use Range
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
-	struct DataReductionResult {
+	struct DataReductionResult : public XYAnalysisCurve::Result {
 		DataReductionResult(){};
 
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
 		size_t npoints{0};
 		double posError{0};
 		double areaError{0};
@@ -51,7 +47,7 @@ public:
 	~XYDataReductionCurve() override;
 
 	void recalculate() override;
-	bool resultAvailable() const override;
+	const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

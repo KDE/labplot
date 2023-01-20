@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Background
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 202 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -36,11 +36,13 @@ public:
 	~Background() override;
 
 	void setPrefix(const QString&);
+	const QString& prefix() const;
 	void init(const KConfigGroup&);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfigGroup&);
+	void loadThemeConfig(const KConfigGroup&, const QColor&);
 	void saveThemeConfig(KConfigGroup&) const;
 
 	BASIC_D_ACCESSOR_DECL(bool, enabledAvailable, EnabledAvailable)

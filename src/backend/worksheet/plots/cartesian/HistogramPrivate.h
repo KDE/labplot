@@ -11,9 +11,7 @@
 #ifndef HISTOGRAMPRIVATE_H
 #define HISTOGRAMPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
-
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <vector>
 
 class Column;
@@ -25,7 +23,7 @@ extern "C" {
 #include <gsl/gsl_histogram.h>
 }
 
-class HistogramPrivate : public WorksheetElementPrivate {
+class HistogramPrivate : public PlotPrivate {
 public:
 	explicit HistogramPrivate(Histogram* owner);
 	~HistogramPrivate() override;
@@ -48,8 +46,8 @@ public:
 	void updatePixmap();
 	void recalcShapeAndBoundingRect() override;
 
+	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
 
 	double xMinimum() const;
 	double xMaximum() const;
@@ -67,13 +65,13 @@ public:
 	// General
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
-	Histogram::HistogramType type{Histogram::Ordinary};
-	Histogram::HistogramOrientation orientation{Histogram::Vertical};
-	Histogram::HistogramNormalization normalization{Histogram::Count};
+	Histogram::Type type{Histogram::Ordinary};
+	Histogram::Orientation orientation{Histogram::Vertical};
+	Histogram::Normalization normalization{Histogram::Count};
 	Histogram::BinningMethod binningMethod{Histogram::SquareRoot};
 	int totalCount{0};
 	int binCount{10};
-	float binWidth{1.0f};
+	double binWidth{1.0};
 	bool autoBinRanges{true};
 	double binRangesMin{0.0};
 	double binRangesMax{1.0};
@@ -120,8 +118,6 @@ public:
 private:
 	gsl_histogram* m_histogram{nullptr};
 	size_t m_bins{0};
-
-	//	bool m_printing{false};
 	bool m_hovered{false};
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;

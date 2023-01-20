@@ -4,7 +4,7 @@
 	Description          : general settings page
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -32,6 +32,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.cbTabPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbUnits, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbDecimalSeparator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
+	connect(ui.chkGUMTerms, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkOmitGroupSeparator, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkOmitLeadingZeroInExponent, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkIncludeTrailingZeroesAfterDot, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
@@ -107,6 +108,7 @@ void SettingsGeneralPage::applySettings() {
 		numberOptions |= QLocale::OmitLeadingZeroInExponent;
 	if (ui.chkIncludeTrailingZeroesAfterDot->isChecked())
 		numberOptions |= QLocale::IncludeTrailingZeroesAfterDot;
+	group.writeEntry(QLatin1String("GUMTerms"), ui.chkGUMTerms->isChecked());
 	group.writeEntry(QLatin1String("NumberOptions"), static_cast<int>(numberOptions));
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
@@ -121,6 +123,7 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.cbMdiVisibility->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
 	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
+	ui.chkGUMTerms->setChecked(false);
 	ui.chkOmitGroupSeparator->setChecked(true);
 	ui.chkOmitLeadingZeroInExponent->setChecked(true);
 	ui.chkIncludeTrailingZeroesAfterDot->setChecked(false);
@@ -143,6 +146,7 @@ void SettingsGeneralPage::loadSettings() {
 		ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
 	else
 		ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(decimalSeparator(locale)));
+	ui.chkGUMTerms->setChecked(group.readEntry<bool>(QLatin1String("GUMTerms"), false));
 	QLocale::NumberOptions numberOptions{
 		static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)))};
 	if (numberOptions & QLocale::OmitGroupSeparator)

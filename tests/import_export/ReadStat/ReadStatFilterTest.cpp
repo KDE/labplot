@@ -205,13 +205,13 @@ void ReadStatFilterTest::testPORImport() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 9.3901248e9);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 1.190376e10);
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 6.8256e6);
-	QCOMPARE(spreadsheet.column(2)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(2)->valueAt(4), NAN);
 
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.374498061e10);
 	QCOMPARE(spreadsheet.column(3)->valueAt(1), 9.39016141e9);
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), 1.190376e10);
 	QCOMPARE(spreadsheet.column(3)->valueAt(3), 6.8256e6);
-	QCOMPARE(spreadsheet.column(3)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(3)->valueAt(4), NAN);
 
 	QCOMPARE(spreadsheet.column(4)->valueAt(0), 1);
 	QCOMPARE(spreadsheet.column(4)->valueAt(1), 2);
@@ -229,7 +229,7 @@ void ReadStatFilterTest::testPORImport() {
 	QCOMPARE(spreadsheet.column(6)->valueAt(1), 83410);
 	QCOMPARE(spreadsheet.column(6)->valueAt(2), 0);
 	QCOMPARE(spreadsheet.column(6)->valueAt(3), 58210);
-	QCOMPARE(spreadsheet.column(6)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(6)->valueAt(4), NAN);
 
 	// check value label
 	QCOMPARE(spreadsheet.column(4)->valueLabels().value(1), QLatin1String("Male"));
@@ -289,13 +289,13 @@ void ReadStatFilterTest::testXPTImport() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), -29093);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0);
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), -137696);
-	QCOMPARE(spreadsheet.column(2)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(2)->valueAt(4), NAN);
 
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.84122061e9);
 	QCOMPARE(spreadsheet.column(3)->valueAt(1), -2.51359859e9);
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), 0);
 	QCOMPARE(spreadsheet.column(3)->valueAt(3), -1.18969344e10);
-	QCOMPARE(spreadsheet.column(3)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(3)->valueAt(4), NAN);
 
 	QCOMPARE(spreadsheet.column(4)->valueAt(0), 1);
 	QCOMPARE(spreadsheet.column(4)->valueAt(1), 2);
@@ -313,7 +313,7 @@ void ReadStatFilterTest::testXPTImport() {
 	QCOMPARE(spreadsheet.column(6)->valueAt(1), 83410);
 	QCOMPARE(spreadsheet.column(6)->valueAt(2), 0);
 	QCOMPARE(spreadsheet.column(6)->valueAt(3), 58210);
-	QCOMPARE(spreadsheet.column(6)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(6)->valueAt(4), NAN);
 
 	// no value label
 }

@@ -119,7 +119,7 @@ double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, doub
 			return d[(i - 1) * stride] + ((n + 1) * p - i) * (d[i * stride] - d[(i - 1) * stride]);
 		}
 	case nsl_stats_quantile_type7: // = gsl_stats_quantile_from_sorted_data(d, stride, n, p);
-		if (p == 1.0)
+		if (p == 1.0 || n == 1)
 			return d[(n - 1) * stride];
 		else {
 			int i = (int)floor((n - 1) * p + 1);
@@ -181,8 +181,11 @@ double nsl_stats_tdist_p(double t, double dof) {
 		p = 0;
 	return p;
 }
+double nsl_stats_tdist_z(double alpha, double dof) {
+	return gsl_cdf_tdist_Pinv(1. - alpha / 2., dof);
+}
 double nsl_stats_tdist_margin(double alpha, double dof, double error) {
-	return gsl_cdf_tdist_Pinv(1. - alpha / 2., dof) * error;
+	return nsl_stats_tdist_z(alpha, dof) * error;
 }
 
 /* chi^2 distribution */
@@ -191,6 +194,12 @@ double nsl_stats_chisq_p(double t, double dof) {
 	if (p < 1.e-9)
 		p = 0;
 	return p;
+}
+double nsl_stats_chisq_low(double alpha, double n) {
+	return 0.5 * gsl_cdf_chisq_Pinv(alpha / 2., 2 * n);
+}
+double nsl_stats_chisq_high(double alpha, double n) {
+	return 0.5 * gsl_cdf_chisq_Pinv(1. - alpha / 2., 2 * n + 2);
 }
 
 /* F distribution */

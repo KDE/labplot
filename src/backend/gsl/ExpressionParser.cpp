@@ -201,6 +201,7 @@ void ExpressionParser::initFunctions() {
 	index++;
 	for (int i = 0; i < 7; i++)
 		m_functionsGroupIndex << index;
+	index++; // separator
 
 	// Airy Functions and Derivatives
 	m_functionsNames << i18n("Airy function of the first kind");
@@ -621,7 +622,6 @@ void ExpressionParser::initFunctions() {
 	index++;
 	for (int i = 0; i < 7; i++)
 		m_functionsGroupIndex << index;
-
 	index++; // separator
 
 	// GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html
@@ -646,7 +646,6 @@ void ExpressionParser::initFunctions() {
 	index++;
 	for (int i = 0; i < 16; i++)
 		m_functionsGroupIndex << index;
-
 	index++; // separator
 
 	// GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html
@@ -1362,8 +1361,8 @@ int ExpressionParser::functionArgumentCount(const QString& functionName) {
 	while (functionName != QLatin1String(_functions[index].name) && _functions[index].name != nullptr)
 		index++;
 
-	DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
-	DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
+	// DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
+	// DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
 	return _functions[index].argc;
 }
 
@@ -1479,7 +1478,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	if (expr.contains(QLatin1String("cell")))
 		assign_symbol("i", 0);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	DEBUG(Q_FUNC_INFO << ", number locale: " << STDSTRING(numberLocale.name()))
 	parse(qPrintable(expr), qPrintable(numberLocale.name()));
 
@@ -1548,7 +1547,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 	for (int i = 0; i < paramNames.size(); ++i)
 		assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	gsl_set_error_handler_off();
 	for (int i = 0; i < count; i++) {
 		const double x{range.start() + step * i};
@@ -1599,7 +1598,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
 		const double x{range.start() + step * i};
 		assign_symbol("x", x);
@@ -1626,7 +1625,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	DEBUG(Q_FUNC_INFO << ", v3")
 	gsl_set_error_handler_off();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	for (int i = 0; i < xVector->count(); i++) {
 		assign_symbol("x", xVector->at(i));
 		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
@@ -1645,7 +1644,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr,
-										 QVector<double>* xVector,
+										 const QVector<double>* xVector,
 										 QVector<double>* yVector,
 										 const QStringList& paramNames,
 										 const QVector<double>& paramValues) {
@@ -1655,7 +1654,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 	for (int i = 0; i < paramNames.size(); ++i)
 		assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	for (int i = 0; i < xVector->count(); i++) {
 		assign_symbol("x", xVector->at(i));
 
@@ -1694,7 +1693,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		minSize = yVector->size();
 
 	// calculate values
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	for (int i = 0; i < minSize; i++) {
 		QString tmpExpr = expr;
 
@@ -1725,7 +1724,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 					tmpExpr.replace(rxcell.cap(0), replace);
 					pos++; // avoid endless loop
 				} else
-					tmpExpr.replace(rxcell.cap(0), numberLocale.toString(qQNaN()));
+					tmpExpr.replace(rxcell.cap(0), numberLocale.toString(NAN));
 			}
 
 			// if expr contains smmin(N, x)
@@ -1741,8 +1740,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				if (N < 1)
 					continue;
 				// calculate min of last n points
-				double min = qInf();
-				for (int index = qMax(0, i - N + 1); index <= i; index++) {
+				double min = INFINITY;
+				for (int index = std::max(0, i - N + 1); index <= i; index++) {
 					const double v = xVectors.at(n)->at(index);
 					if (v < min)
 						min = v;
@@ -1763,8 +1762,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				if (N < 1)
 					continue;
 				// calculate max of last n points
-				double max = -qInf();
-				for (int index = qMax(0, i - N + 1); index <= i; index++) {
+				double max = -INFINITY;
+				for (int index = std::max(0, i - N + 1); index <= i; index++) {
 					const double v = xVectors.at(n)->at(index);
 					if (v > max)
 						max = v;
@@ -1786,7 +1785,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 					continue;
 				// calculate avg of last n points
 				double sum = 0.;
-				for (int index = qMax(0, i - N + 1); index <= i; index++)
+				for (int index = std::max(0, i - N + 1); index <= i; index++)
 					sum += xVectors.at(n)->at(index);
 
 				tmpExpr.replace(rxsma.cap(0), numberLocale.toString(sum / N));
@@ -1819,7 +1818,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 
 	// if the y-vector is longer than the x-vector(s), set all exceeding elements to NaN
 	for (int i = minSize; i < yVector->size(); ++i)
-		(*yVector)[i] = qQNaN();
+		(*yVector)[i] = NAN;
 
 	return true;
 }
@@ -1835,7 +1834,7 @@ bool ExpressionParser::evaluatePolar(const QString& expr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
 		const double phi = range.start() + step * i;
 		assign_symbol("phi", phi);
@@ -1868,7 +1867,7 @@ bool ExpressionParser::evaluateParametric(const QString& xexpr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
 		assign_symbol("t", range.start() + step * i);
 

@@ -87,8 +87,7 @@ int WorkbookView::currentIndex() const {
   or of a \c Matrix object to \c Workbook.
 */
 void WorkbookView::tabChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (index == -1)
 		return;
@@ -133,7 +132,7 @@ void WorkbookView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
-	auto* addNewMenu = new QMenu(i18n("Add New"));
+	auto* addNewMenu = new QMenu(i18n("Add New"), const_cast<WorkbookView*>(this));
 	addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	addNewMenu->addAction(action_add_spreadsheet);
 	addNewMenu->addAction(action_add_matrix);

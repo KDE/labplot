@@ -339,8 +339,7 @@ void ExportWorksheetDialog::exportToChanged(int index) {
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	if (name.simplified().isEmpty()) {
 		m_okButton->setEnabled(false);

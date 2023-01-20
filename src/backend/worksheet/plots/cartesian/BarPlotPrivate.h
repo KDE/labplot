@@ -11,7 +11,7 @@
 #ifndef BARPLOTPRIVATE_H
 #define BARPLOTPRIVATE_H
 
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <QPen>
 
 class Background;
@@ -21,7 +21,7 @@ class Value;
 
 typedef QVector<QPointF> Points;
 
-class BarPlotPrivate : public WorksheetElementPrivate {
+class BarPlotPrivate : public PlotPrivate {
 public:
 	explicit BarPlotPrivate(BarPlot*);
 
@@ -41,7 +41,7 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
+	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
 
 	BarPlot* const q;

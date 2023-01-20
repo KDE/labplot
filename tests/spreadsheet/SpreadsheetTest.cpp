@@ -598,7 +598,7 @@ void SpreadsheetTest::testSortSingleText1() {
 	const QVector<QString> xData{QStringLiteral("ben"),
 								 QStringLiteral("amy"),
 								 QStringLiteral("eddy"),
-								 QStringLiteral(""),
+								 QString(),
 								 QStringLiteral("carl"),
 								 QStringLiteral("dan")};
 
@@ -627,7 +627,7 @@ void SpreadsheetTest::testSortSingleText1() {
  */
 void SpreadsheetTest::testSortSingleText2() {
 	const QVector<QString> xData =
-		{QStringLiteral("ben"), QStringLiteral("amy"), QStringLiteral("eddy"), QStringLiteral(""), QStringLiteral("carl"), QStringLiteral("dan")};
+		{QStringLiteral("ben"), QStringLiteral("amy"), QStringLiteral("eddy"), QString(), QStringLiteral("carl"), QStringLiteral("dan")};
 
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
@@ -944,12 +944,7 @@ void SpreadsheetTest::testSortText1() {
 	sheet.setColumnCount(2);
 	sheet.setRowCount(8);
 
-	QVector<QString> xData{QStringLiteral("ben"),
-						   QStringLiteral("amy"),
-						   QStringLiteral("eddy"),
-						   QStringLiteral(""),
-						   QStringLiteral("carl"),
-						   QStringLiteral("dan")};
+	QVector<QString> xData{QStringLiteral("ben"), QStringLiteral("amy"), QStringLiteral("eddy"), QString(), QStringLiteral("carl"), QStringLiteral("dan")};
 	QVector<int> yData{1, 2, 3, 4, 5, 6, 7};
 
 	auto* col0{sheet.column(0)};
@@ -987,12 +982,7 @@ void SpreadsheetTest::testSortText2() {
 	sheet.setColumnCount(2);
 	sheet.setRowCount(8);
 
-	QVector<QString> xData{QStringLiteral("ben"),
-						   QStringLiteral("amy"),
-						   QStringLiteral("eddy"),
-						   QStringLiteral(""),
-						   QStringLiteral("carl"),
-						   QStringLiteral("dan")};
+	QVector<QString> xData{QStringLiteral("ben"), QStringLiteral("amy"), QStringLiteral("eddy"), QString(), QStringLiteral("carl"), QStringLiteral("dan")};
 	QVector<int> yData{1, 2, 3, 4, 5, 6, 7};
 
 	auto* col0{sheet.column(0)};

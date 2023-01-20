@@ -5,7 +5,7 @@
 						   show their values
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,7 +17,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/InfoElementPrivate.h"
-#include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -79,8 +79,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		TextLabel::TextWrapper text;
 		text.allowPlaceholder = true;
 
-		QString textString;
-		textString = QString::number(markerpoints[0].customPoint->positionLogical().x()) + QStringLiteral(", ");
+		QString textString = QString::number(markerpoints[0].customPoint->positionLogical().x()) + QStringLiteral(", ");
 		textString.append(QString(QString(markerpoints[0].curve->name() + QStringLiteral(":"))));
 		textString.append(QString::number(markerpoints[0].customPoint->positionLogical().y()));
 		text.text = textString;
@@ -140,6 +139,30 @@ void InfoElement::init() {
 	m_title->setUndoAware(true);
 	m_setTextLabelText = false;
 	addChild(m_title);
+
+	// lines
+	Q_D(InfoElement);
+	d->verticalLine = new Line(QString());
+	d->verticalLine->setHidden(true);
+	d->verticalLine->setPrefix(QStringLiteral("VerticalLine"));
+	addChild(d->verticalLine);
+	connect(d->verticalLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->verticalLine, &Line::updateRequested, [=] {
+		d->updateVerticalLine();
+	});
+
+	d->connectionLine = new Line(QString());
+	d->connectionLine->setHidden(true);
+	d->connectionLine->setPrefix(QStringLiteral("ConnectionLine"));
+	addChild(d->connectionLine);
+	connect(d->connectionLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->connectionLine, &Line::updateRequested, [=] {
+		d->updateConnectionLine();
+	});
 
 	// use the color for the axis line from the theme also for info element's lines
 	KConfig config;
@@ -408,7 +431,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		xValueStr = QString::number(d->positionLogical);
 	else if (columnMode == AbstractColumn::ColumnMode::Day || columnMode == AbstractColumn::ColumnMode::Month
 			 || columnMode == AbstractColumn::ColumnMode::DateTime) {
-		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical);
+		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical, Qt::UTC);
 		xValueStr = dateTime.toString(m_plot->rangeDateTimeFormat(Dimension::X));
 	}
 
@@ -431,11 +454,6 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 
 	wrapper.text = text;
 	return wrapper;
-}
-
-bool InfoElement::isVisible() const {
-	Q_D(const InfoElement);
-	return d->visible;
 }
 
 TextLabel* InfoElement::title() {
@@ -740,10 +758,16 @@ void InfoElement::handleResize(double /*horizontalRatio*/, double /*verticalRati
 BASIC_SHARED_D_READER_IMPL(InfoElement, double, positionLogical, positionLogical)
 BASIC_SHARED_D_READER_IMPL(InfoElement, int, gluePointIndex, gluePointIndex)
 BASIC_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName)
-BASIC_SHARED_D_READER_IMPL(InfoElement, QPen, verticalLinePen, verticalLinePen)
-BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, verticalLineOpacity, verticalLineOpacity)
-BASIC_SHARED_D_READER_IMPL(InfoElement, QPen, connectionLinePen, connectionLinePen)
-BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, connectionLineOpacity, connectionLineOpacity)
+
+Line* InfoElement::verticalLine() const {
+	Q_D(const InfoElement);
+	return d->verticalLine;
+}
+
+Line* InfoElement::connectionLine() const {
+	Q_D(const InfoElement);
+	return d->connectionLine;
+}
 
 /* ============================ setter methods ================= */
 STD_SETTER_CMD_IMPL(InfoElement, SetPositionLogical, double, positionLogical)
@@ -765,9 +789,6 @@ void InfoElement::setPositionLogical(double pos) {
 		m_setTextLabelText = false;
 		retransform();
 		positionLogicalChanged(d->positionLogical);
-	} else if (pos != d->positionLogical) {
-		// Value was not valid, give feedback to the dock
-		positionLogicalChanged(d->positionLogical);
 	}
 }
 
@@ -785,41 +806,11 @@ void InfoElement::setConnectionLineCurveName(const QString& name) {
 		exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVisible, bool, visible, changeVisibility)
-void InfoElement::setVisible(bool visible) {
+STD_SWAP_METHOD_SETTER_CMD_IMPL(InfoElement, SetVisible, bool, changeVisibility)
+void InfoElement::setVisible(bool on) {
 	Q_D(InfoElement);
-	if (visible != d->visible)
-		exec(new InfoElementSetVisibleCmd(d, visible, ki18n("%1: set visible")));
-}
-
-// vertical line
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVerticalLinePen, QPen, verticalLinePen, updateVerticalLine)
-void InfoElement::setVerticalLinePen(const QPen& pen) {
-	Q_D(InfoElement);
-	if (pen != d->verticalLinePen)
-		exec(new InfoElementSetVerticalLinePenCmd(d, pen, ki18n("%1: set vertical line style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVerticalLineOpacity, qreal, verticalLineOpacity, update)
-void InfoElement::setVerticalLineOpacity(qreal opacity) {
-	Q_D(InfoElement);
-	if (opacity != d->verticalLineOpacity)
-		exec(new InfoElementSetVerticalLineOpacityCmd(d, opacity, ki18n("%1: set vertical line opacity")));
-}
-
-// connection line
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLinePen, QPen, connectionLinePen, updateConnectionLine)
-void InfoElement::setConnectionLinePen(const QPen& pen) {
-	Q_D(InfoElement);
-	if (pen != d->connectionLinePen)
-		exec(new InfoElementSetConnectionLinePenCmd(d, pen, ki18n("%1: set connection line style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineOpacity, qreal, connectionLineOpacity, update)
-void InfoElement::setConnectionLineOpacity(qreal opacity) {
-	Q_D(InfoElement);
-	if (opacity != d->connectionLineOpacity)
-		exec(new InfoElementSetConnectionLineOpacityCmd(d, opacity, ki18n("%1: set connection line opacity")));
+	if (on != isVisible())
+		exec(new InfoElementSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
 //##############################################################################
@@ -880,13 +871,15 @@ void InfoElementPrivate::retransform() {
 	for (int i = 0; i < q->markerPointsCount(); ++i) {
 		const auto* curve = q->markerpoints.at(i).curve;
 		if (curve && curve->name() == connectionLineCurveName) {
-			bool visible;
 			const auto& point = q->markerpoints.at(i).customPoint;
 			const auto* cSystem = q->plot()->coordinateSystem(point->coordinateSystemIndex());
-			pointPos = cSystem->mapLogicalToScene(point->positionLogical(), visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			pointPos = cSystem->mapLogicalToScene(point->positionLogical(), insidePlot, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
 			break;
 		}
 	}
+
+	if (!insidePlot)
+		return;
 
 	// use limit function like in the cursor! So the line will be drawn only till the border of the cartesian Plot
 	QPointF m_titlePos;
@@ -899,10 +892,10 @@ void InfoElementPrivate::retransform() {
 	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
 	const QPointF pointPosItemCoords = mapFromParent(mapPlotAreaToParent(pointPos)); // calculate item coords from scene coords
 	if (boundingRectangle.contains(m_titlePosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
-		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
+		m_connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
 	else
-		connectionLine = QLineF();
-	QDEBUG(Q_FUNC_INFO << ", connection line = " << connectionLine)
+		m_connectionLine = QLineF();
+	QDEBUG(Q_FUNC_INFO << ", connection line = " << m_connectionLine)
 
 	// vertical line
 	const QRectF& dataRect = mapFromParent(q->m_plot->dataRect()).boundingRect();
@@ -932,15 +925,18 @@ void InfoElementPrivate::updateConnectionLine() {
 	update(boundingRect());
 }
 
-void InfoElementPrivate::changeVisibility() {
+bool InfoElementPrivate::changeVisibility(bool on) {
+	bool oldValue = isVisible();
+	setVisible(on);
 	for (auto& markerpoint : q->markerpoints)
-		markerpoint.customPoint->setVisible(visible);
+		markerpoint.customPoint->setVisible(on);
 	if (q->m_title) {
 		q->m_title->setUndoAware(false);
-		q->m_title->setVisible(visible);
+		q->m_title->setVisible(on);
 		q->m_title->setUndoAware(true);
 	}
 	update(boundingRect());
+	return oldValue;
 }
 
 // reimplemented from QGraphicsItem
@@ -949,29 +945,31 @@ QRectF InfoElementPrivate::boundingRect() const {
 }
 
 void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
-	if (!visible)
+	if (!insidePlot)
 		return;
 
 	if (q->markerpoints.isEmpty())
 		return;
 
 	// do not draw connection line when the label is not visible
-	if (connectionLinePen.style() != Qt::NoPen && q->m_title->isVisible()) {
-		painter->setPen(connectionLinePen);
-		painter->drawLine(connectionLine);
+	if (connectionLine->style() != Qt::NoPen && q->m_title->isVisible()) {
+		painter->setOpacity(connectionLine->opacity());
+		painter->setPen(connectionLine->pen());
+		painter->drawLine(m_connectionLine);
 	}
 
 	// draw vertical line, which connects all points together
-	if (verticalLinePen.style() != Qt::NoPen) {
-		painter->setPen(verticalLinePen);
+	if (verticalLine->style() != Qt::NoPen) {
+		painter->setOpacity(verticalLine->opacity());
+		painter->setPen(verticalLine->pen());
 		painter->drawLine(xposLine);
 	}
 }
 
 void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (event->button() == Qt::MouseButton::LeftButton) {
-		if (verticalLinePen.style() != Qt::NoPen) {
-			const double width = verticalLinePen.widthF();
+		if (verticalLine->style() != Qt::NoPen) {
+			const double width = verticalLine->pen().widthF();
 			if (abs(xposLine.x1() - event->pos().x()) < ((width < 3) ? 3 : width)) {
 				if (!isSelected())
 					setSelected(true);
@@ -989,20 +987,20 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		 }*/
 
 		// https://stackoverflow.com/questions/11604680/point-laying-near-line
-		double dx12 = connectionLine.x2() - connectionLine.x1();
-		double dy12 = connectionLine.y2() - connectionLine.y1();
+		double dx12 = m_connectionLine.x2() - m_connectionLine.x1();
+		double dy12 = m_connectionLine.y2() - m_connectionLine.y1();
 		double vecLenght = sqrt(pow(dx12, 2) + pow(dy12, 2));
 		QPointF unitvec(dx12 / vecLenght, dy12 / vecLenght);
 
-		double dx1m = event->pos().x() - connectionLine.x1();
-		double dy1m = event->pos().y() - connectionLine.y1();
+		double dx1m = event->pos().x() - m_connectionLine.x1();
+		double dy1m = event->pos().y() - m_connectionLine.y1();
 
 		double dist_segm = abs(dx1m * unitvec.y() - dy1m * unitvec.x());
 		double scalar_product = dx1m * unitvec.x() + dy1m * unitvec.y();
 		// DEBUG("DIST_SEGMENT   " << dist_segm << "SCALAR_PRODUCT: " << scalar_product << "VEC_LENGTH: " << vecLenght);
 
 		if (scalar_product > 0) {
-			const double width = connectionLinePen.widthF();
+			const double width = connectionLine->width();
 			if (scalar_product < vecLenght && dist_segm < ((width < 3) ? 3 : width)) {
 				event->accept();
 				if (!isSelected())
@@ -1030,6 +1028,8 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (delta == QPointF(0, 0))
 		return;
 
+	if (!q->cSystem->isValid())
+		return;
 	QPointF eventLogicPos = q->cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	QPointF delta_logic = eventLogicPos - q->cSystem->mapSceneToLogical(oldMousePos);
 
@@ -1123,19 +1123,12 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("gluePointIndex"), QString::number(d->gluePointIndex));
 	writer->writeAttribute(QStringLiteral("markerIndex"), QString::number(d->m_index));
 	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
-	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->visible));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
 	// lines
-	writer->writeStartElement(QStringLiteral("verticalLine"));
-	WRITE_QPEN(d->verticalLinePen);
-	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->verticalLineOpacity));
-	writer->writeEndElement();
-
-	writer->writeStartElement(QStringLiteral("connectionLine"));
-	WRITE_QPEN(d->connectionLinePen);
-	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->connectionLineOpacity));
-	writer->writeEndElement();
+	d->verticalLine->save(writer);
+	d->connectionLine->save(writer);
 
 	// text label
 	m_title->save(writer);
@@ -1149,7 +1142,7 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 			custompoint.customPoint->save(writer);
 			writer->writeEndElement(); // close "point"
 		}
-		writer->writeEndElement(); // clost "points"
+		writer->writeEndElement(); // close "points"
 	}
 
 	writer->writeEndElement(); // close "infoElement"
@@ -1193,13 +1186,9 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("markerIndex", m_index, int);
 			READ_STRING_VALUE("curve", connectionLineCurveName);
 		} else if (reader->name() == QLatin1String("verticalLine")) {
-			attribs = reader->attributes();
-			READ_QPEN(d->verticalLinePen);
-			READ_DOUBLE_VALUE("opacity", verticalLineOpacity);
+			d->verticalLine->load(reader, preview);
 		} else if (reader->name() == QLatin1String("connectionLine")) {
-			attribs = reader->attributes();
-			READ_QPEN(d->connectionLinePen);
-			READ_DOUBLE_VALUE("opacity", connectionLineOpacity);
+			d->connectionLine->load(reader, preview);
 		} else if (reader->name() == QLatin1String("textLabel")) {
 			if (!m_title) {
 				m_title = new TextLabel(i18n("Label"), m_plot);
@@ -1237,16 +1226,10 @@ void InfoElement::loadThemeConfig(const KConfig& config) {
 	// use the color for the axis line from the theme also for info element's lines
 	const KConfigGroup& group = config.group("Axis");
 
-	QPen p;
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
-
-	this->setVerticalLinePen(p);
-	this->setVerticalLineOpacity(group.readEntry("LineOpacity", 1.0));
-
-	this->setConnectionLinePen(p);
-	this->setConnectionLineOpacity(group.readEntry("LineOpacity", 1.0));
+	const QColor& themeColor = group.readEntry("LineColor", QColor(Qt::black));
+	Q_D(InfoElement);
+	d->verticalLine->loadThemeConfig(group, themeColor);
+	d->connectionLine->loadThemeConfig(group, themeColor);
 
 	// load the theme for all the children
 	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);

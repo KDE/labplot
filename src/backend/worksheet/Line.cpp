@@ -18,7 +18,6 @@
 #include "LinePrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/worksheet/Worksheet.h"
 
 #include <KLocalizedString>
 
@@ -34,6 +33,11 @@ Line::~Line() {
 void Line::setPrefix(const QString& prefix) {
 	Q_D(Line);
 	d->prefix = prefix;
+}
+
+const QString& Line::prefix() const {
+	Q_D(const Line);
+	return d->prefix;
 }
 
 /*!
@@ -60,9 +64,12 @@ void Line::init(const KConfigGroup& group) {
 	if (d->prefix == QLatin1String("DropLine"))
 		d->dropLineType = (XYCurve::DropLineType)group.readEntry(d->prefix + QStringLiteral("Type"), (int)XYCurve::DropLineType::NoDropLine);
 
-	d->pen = QPen(group.readEntry(d->prefix + QStringLiteral("Color"), QColor(Qt::black)),
-				  group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-				  (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->style = static_cast<Qt::PenStyle>(group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->width = group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
+	d->color = group.readEntry(d->prefix + QStringLiteral("Color"), QColor(Qt::black));
+	d->pen.setStyle(d->style);
+	d->pen.setColor(d->color);
+	d->pen.setWidthF(d->width);
 	d->opacity = group.readEntry(d->prefix + QStringLiteral("Opacity"), 1.0);
 }
 
@@ -79,6 +86,9 @@ BASIC_SHARED_D_READER_IMPL(Line, double, errorBarsCapSize, errorBarsCapSize)
 BASIC_SHARED_D_READER_IMPL(Line, XYCurve::DropLineType, dropLineType, dropLineType)
 
 BASIC_SHARED_D_READER_IMPL(Line, QPen, pen, pen)
+BASIC_SHARED_D_READER_IMPL(Line, Qt::PenStyle, style, style)
+BASIC_SHARED_D_READER_IMPL(Line, QColor, color, color)
+BASIC_SHARED_D_READER_IMPL(Line, double, width, width)
 BASIC_SHARED_D_READER_IMPL(Line, double, opacity, opacity)
 
 //##############################################################################
@@ -122,11 +132,25 @@ void Line::setDropLineType(XYCurve::DropLineType type) {
 		exec(new LineSetDropLineTypeCmd(d, type, ki18n("%1: drop line type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Line, SetPen, QPen, pen, update)
-void Line::setPen(const QPen& pen) {
+STD_SETTER_CMD_IMPL_F_S(Line, SetStyle, Qt::PenStyle, style, update)
+void Line::setStyle(Qt::PenStyle style) {
 	Q_D(Line);
-	if (pen != d->pen)
-		exec(new LineSetPenCmd(d, pen, ki18n("%1: set line pen")));
+	if (style != d->style)
+		exec(new LineSetStyleCmd(d, style, ki18n("%1: set line style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Line, SetWidth, double, width, update)
+void Line::setWidth(double width) {
+	Q_D(Line);
+	if (width != d->width)
+		exec(new LineSetWidthCmd(d, width, ki18n("%1: set line width")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Line, SetColor, QColor, color, update)
+void Line::setColor(const QColor& color) {
+	Q_D(Line);
+	if (color != d->color)
+		exec(new LineSetColorCmd(d, color, ki18n("%1: set line pen")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Line, SetOpacity, double, opacity, updatePixmap)
@@ -148,6 +172,9 @@ QString LinePrivate::name() const {
 }
 
 void LinePrivate::update() {
+	pen.setStyle(style);
+	pen.setColor(color);
+	pen.setWidthF(width);
 	Q_EMIT q->updateRequested();
 }
 
@@ -211,6 +238,10 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 		READ_INT_VALUE("type", dropLineType, XYCurve::DropLineType);
 
 	READ_QPEN(d->pen);
+	d->style = d->pen.style();
+	d->color = d->pen.color();
+	d->width = d->pen.widthF();
+
 	READ_DOUBLE_VALUE("opacity", opacity);
 
 	return true;
@@ -219,14 +250,17 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
+void Line::loadThemeConfig(const KConfigGroup& group) {
+	Q_D(const Line);
+	const auto& themeColor = group.readEntry(d->prefix + QStringLiteral("Color"), QColor(Qt::black));
+	loadThemeConfig(group, themeColor);
+}
+
 void Line::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
 	Q_D(const Line);
-
-	QPen p;
-	p.setStyle((Qt::PenStyle)group.readEntry(d->prefix + QStringLiteral("Style"), (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setColor(themeColor);
-	setPen(p);
+	setStyle((Qt::PenStyle)group.readEntry(d->prefix + QStringLiteral("Style"), (int)Qt::SolidLine));
+	setWidth(group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	setColor(themeColor);
 	setOpacity(group.readEntry(d->prefix + QStringLiteral("Opacity"), 1.0));
 }
 

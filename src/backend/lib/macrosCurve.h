@@ -1,18 +1,18 @@
 /*
 	File                 : macros.h
 	Project              : LabPlot
-	Description          : Various preprocessor macros for the curve class
+	Description          : Various preprocessor macros for curve classes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef MACROSXYCURVE_H
-#define MACROSXYCURVE_H
+#ifndef MACROSCURVE_H
+#define MACROSCURVE_H
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include <QObject>
 
 /*!
@@ -22,31 +22,31 @@
 	- <column_prefix>DataChanged
   This means these slots must be available when using this function.
   \param column pointer to a AbstractColumn
-  \param column_prefix columnnames should have always the same style. For example xColumn -> column_prefix = x, xErrorPlusColumn -> column_prefix = xErrorPlus
+  \param prefix columnnames should have always the same style. For example xColumn -> prefix = x, xErrorPlusColumn -> prefix = xErrorPlus
   */
-#define XYCURVE_COLUMN_CONNECT(column_prefix)                                                                                                                  \
-	void XYCurve::connect##column_prefix##Column(const AbstractColumn* column) {                                                                               \
-		connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &XYCurve::column_prefix##ColumnAboutToBeRemoved);                       \
+#define CURVE_COLUMN_CONNECT(class_name, Prefix, prefix, recalc_func)                                                                                          \
+	void class_name::connect##Prefix##Column(const AbstractColumn* column) {                                                                                   \
+		connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &class_name::prefix##ColumnAboutToBeRemoved);                           \
 		/* When the column is reused with different name, the curve should be informed to disconnect */                                                        \
-		connect(column, &AbstractColumn::reset, this, &XYCurve::column_prefix##ColumnAboutToBeRemoved);                                                        \
-		connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::column_prefix##ColumnNameChanged);                                          \
+		connect(column, &AbstractColumn::reset, this, &class_name::prefix##ColumnAboutToBeRemoved);                                                            \
+		connect(column, &AbstractAspect::aspectDescriptionChanged, this, &class_name::prefix##ColumnNameChanged);                                              \
 		/* after the curve was updated, emit the signal to update the plot ranges */                                                                           \
-		connect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalcLogicalPoints); /* must be before DataChanged*/                                    \
-		connect(column, &AbstractColumn::dataChanged, this, &XYCurve::column_prefix##DataChanged);                                                             \
+		connect(column, &AbstractColumn::dataChanged, this, &class_name::recalc_func); /* must be before DataChanged*/                                         \
+		connect(column, &AbstractColumn::dataChanged, this, &class_name::prefix##DataChanged);                                                                 \
 	}
 
-#define XYCURVE_COLUMN_CONNECT_CALL(curve, column, column_prefix) curve->connect##column_prefix##Column(column);
+#define CURVE_COLUMN_CONNECT_CALL(curve, column, Prefix) curve->connect##Prefix##Column(column);
 
 /*!
  * This macro is used to connect and disconnect the column from the curve
  * The new column is connected to the curve and the old column is diconnected
  * The columnPath is updated
  */
-#define XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(cmd_name, prefix, finalize_method)                                                                                  \
-	class XYCurve##Set##cmd_name##ColumnCmd : public StandardSetterCmd<XYCurve::Private, const AbstractColumn*> {                                              \
+#define CURVE_COLUMN_SETTER_CMD_IMPL_F_S(class_name, Prefix, prefix, finalize_method)                                                                          \
+	class class_name##Set##Prefix##ColumnCmd : public StandardSetterCmd<class_name::Private, const AbstractColumn*> {                                          \
 	public:                                                                                                                                                    \
-		XYCurve##Set##cmd_name##ColumnCmd(XYCurve::Private* target, const AbstractColumn* newValue, const KLocalizedString& description)                       \
-			: StandardSetterCmd<XYCurve::Private, const AbstractColumn*>(target, &XYCurve::Private::prefix##Column, newValue, description)                     \
+		class_name##Set##Prefix##ColumnCmd(class_name::Private* target, const AbstractColumn* newValue, const KLocalizedString& description)                   \
+			: StandardSetterCmd<class_name::Private, const AbstractColumn*>(target, &class_name::Private::prefix##Column, newValue, description)               \
 			, m_private(target)                                                                                                                                \
 			, m_column(newValue) {                                                                                                                             \
 		}                                                                                                                                                      \
@@ -63,10 +63,10 @@
 			}                                                                                                                                                  \
 			m_private->prefix##Column = m_column;                                                                                                              \
 			if (m_column) {                                                                                                                                    \
-				m_private->q->set##cmd_name##ColumnPath(m_column->path());                                                                                     \
-				XYCURVE_COLUMN_CONNECT_CALL(m_private->q, m_column, prefix)                                                                                    \
+				m_private->q->set##Prefix##ColumnPath(m_column->path());                                                                                       \
+				CURVE_COLUMN_CONNECT_CALL(m_private->q, m_column, Prefix)                                                                                      \
 			} else                                                                                                                                             \
-				m_private->q->set##cmd_name##ColumnPath(QStringLiteral(""));                                                                                   \
+				m_private->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                     \
 			finalize();                                                                                                                                        \
 			emit m_private->q->prefix##ColumnChanged(m_column);                                                                                                \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \
@@ -77,10 +77,10 @@
 				QObject::disconnect(m_private->prefix##Column, nullptr, m_private->q, nullptr);                                                                \
 			m_private->prefix##Column = m_columnOld;                                                                                                           \
 			if (m_columnOld) {                                                                                                                                 \
-				m_private->q->set##cmd_name##ColumnPath(m_columnOld->path());                                                                                  \
-				XYCURVE_COLUMN_CONNECT_CALL(m_private->q, m_column, prefix)                                                                                    \
+				m_private->q->set##Prefix##ColumnPath(m_columnOld->path());                                                                                    \
+				CURVE_COLUMN_CONNECT_CALL(m_private->q, m_column, Prefix)                                                                                      \
 			} else                                                                                                                                             \
-				m_private->q->set##cmd_name##ColumnPath(QStringLiteral(""));                                                                                   \
+				m_private->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                     \
 			finalize();                                                                                                                                        \
 			emit m_private->q->prefix##ColumnChanged(m_columnOld);                                                                                             \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \
@@ -88,7 +88,7 @@
 		}                                                                                                                                                      \
                                                                                                                                                                \
 	private:                                                                                                                                                   \
-		XYCurvePrivate* m_private;                                                                                                                             \
+		class_name::Private* m_private;                                                                                                                        \
 		const AbstractColumn* m_column{nullptr};                                                                                                               \
 		const AbstractColumn* m_columnOld{nullptr};                                                                                                            \
 	};

@@ -4,7 +4,7 @@
 	Description          : Dock widget for InfoElemnt
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,6 +14,7 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
 class InfoElement;
+class LineWidget;
 class LabelWidget;
 
 namespace Ui {
@@ -38,14 +39,6 @@ private Q_SLOTS:
 	void positionDateTimeChanged(const QDateTime&);
 	void curveSelectionChanged(bool);
 	void visibilityChanged(bool);
-	void verticalLineStyleChanged(int);
-	void verticalLineWidthChanged(double);
-	void verticalLineColorChanged(const QColor&);
-	void verticalLineOpacityChanged(int);
-	void connectionLineStyleChanged(int);
-	void connectionLineWidthChanged(double);
-	void connectionLineColorChanged(const QColor&);
-	void connectionLineOpacityChanged(int);
 
 	// slots triggered in the InfoElement
 	void elementPositionChanged(double pos);
@@ -53,10 +46,6 @@ private Q_SLOTS:
 	void elementConnectionLineCurveChanged(const QString&);
 	void elementLabelBorderShapeChanged();
 	void elementVisibilityChanged(const bool);
-	void elementVerticalLinePenChanged(const QPen&);
-	void elementVerticalLineOpacityChanged(qreal);
-	void elementConnectionLinePenChanged(const QPen&);
-	void elementConnectionLineOpacityChanged(qreal);
 	void updatePlotRanges() override;
 
 private:
@@ -65,6 +54,8 @@ private:
 	QList<InfoElement*> m_elements;
 	bool m_sameParent{false};
 	LabelWidget* m_labelWidget{nullptr};
+	LineWidget* m_verticalLineWidget{nullptr};
+	LineWidget* m_connectionLineWidget{nullptr};
 };
 
 #endif // INFOELEMENTDOCK_H

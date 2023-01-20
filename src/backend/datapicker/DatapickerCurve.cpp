@@ -90,6 +90,7 @@ Column* DatapickerCurve::appendColumn(const QString& name) {
 	auto* col = new Column(name);
 	col->insertRows(0, m_datasheet->rowCount());
 	col->setFixed(true);
+	col->setUndoAware(false);
 	m_datasheet->addChild(col);
 
 	return col;
@@ -158,7 +159,7 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	QString yLabel;
 
 	switch (type) {
-	case DatapickerImage::GraphType::Cartesian: {
+	case DatapickerImage::GraphType::Linear: {
 		xLabel = QLatin1Char('x');
 		yLabel = QLatin1Char('y');
 		break;
@@ -173,12 +174,32 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 		yLabel = QLatin1String("y(rad)");
 		break;
 	}
-	case DatapickerImage::GraphType::LogarithmicX: {
+	case DatapickerImage::GraphType::LnXY: {
+		xLabel = QLatin1String("ln(x)");
+		yLabel = QLatin1String("ln(y)");
+		break;
+	}
+	case DatapickerImage::GraphType::LnX: {
+		xLabel = QLatin1String("ln(x)");
+		yLabel = QLatin1String("y");
+		break;
+	}
+	case DatapickerImage::GraphType::LnY: {
+		xLabel = QLatin1String("x");
+		yLabel = QLatin1String("ln(y)");
+		break;
+	}
+	case DatapickerImage::GraphType::Log10XY: {
+		xLabel = QLatin1String("log(x)");
+		yLabel = QLatin1String("log(y)");
+		break;
+	}
+	case DatapickerImage::GraphType::Log10X: {
 		xLabel = QLatin1String("log(x)");
 		yLabel = QLatin1String("y");
 		break;
 	}
-	case DatapickerImage::GraphType::LogarithmicY: {
+	case DatapickerImage::GraphType::Log10Y: {
 		xLabel = QLatin1String("x");
 		yLabel = QLatin1String("log(y)");
 		break;
@@ -207,11 +228,13 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	d->posXColumn->setName(xLabel);
 	d->posXColumn->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 	d->posXColumn->setFixed(true);
+	d->posXColumn->setUndoAware(false);
 
 	d->posYColumn = m_datasheet->column(1);
 	d->posYColumn->setName(yLabel);
-	d->posXColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+	d->posYColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 	d->posYColumn->setFixed(true);
+	d->posYColumn->setUndoAware(false);
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetCurveErrorTypes, DatapickerCurve::Errors, curveErrorTypes)
@@ -388,22 +411,22 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 
 	if (d->plusDeltaXColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(point->plusDeltaXPos().x(), 0));
-		d->plusDeltaXColumn->setValueAt(row, qAbs(data.x()));
+		d->plusDeltaXColumn->setValueAt(row, std::abs(data.x()));
 	}
 
 	if (d->minusDeltaXColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(point->minusDeltaXPos().x(), 0));
-		d->minusDeltaXColumn->setValueAt(row, qAbs(data.x()));
+		d->minusDeltaXColumn->setValueAt(row, std::abs(data.x()));
 	}
 
 	if (d->plusDeltaYColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(0, point->plusDeltaYPos().y()));
-		d->plusDeltaYColumn->setValueAt(row, qAbs(data.y()));
+		d->plusDeltaYColumn->setValueAt(row, std::abs(data.y()));
 	}
 
 	if (d->minusDeltaYColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(0, point->minusDeltaYPos().y()));
-		d->minusDeltaYColumn->setValueAt(row, qAbs(data.y()));
+		d->minusDeltaYColumn->setValueAt(row, std::abs(data.y()));
 	}
 }
 

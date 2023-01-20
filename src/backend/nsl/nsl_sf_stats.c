@@ -19,32 +19,32 @@ const char* nsl_sf_stats_distribution_name[] = {i18n("Gaussian (Normal)"),
 												i18n("Rayleigh"),
 												i18n("Rayleigh Tail"),
 												i18n("Landau"),
-												i18n("Levy alpha-stable"),
-												i18n("Levy skew alpha-stable"),
+												i18n("Levy Alpha-stable"),
+												i18n("Levy Skew Alpha-stable"),
 												i18n("Gamma"),
-												i18n("Flat (uniform)"),
-												i18n("Log-normal (Galton)"),
-												i18n("Chi-squared"),
+												i18n("Flat (Uniform)"),
+												i18n("Log-Normal (Galton)"),
+												i18n("Chi-Squared"),
 												i18n("F (Fisher-Snedecor)"),
 												i18n("Student's t"),
 												i18n("Beta"),
-												i18n("Logistic (sech-squared)"),
+												i18n("Logistic (Sech-Squared)"),
 												i18n("Pareto"),
 												i18n("Weibull"),
-												i18n("Gumbel Type-1 (maximum value; log-Weibull)"),
+												i18n("Gumbel Type-1 (Maximum Value; log-Weibull)"),
 												i18n("Gumbel Type-2"),
 												i18n("Poisson"),
 												i18n("Bernoulli"),
 												i18n("Binomial"),
-												i18n("Negative binomial"),
+												i18n("Negative Binomial"),
 												i18n("Pascal"),
 												i18n("Geometric"),
 												i18n("Hypergeometric"),
 												i18n("Logarithmic"),
 												i18n("Maxwell-Boltzmann"),
-												i18n("Hyperbolic secant (sech)"),
+												i18n("Hyperbolic Secant (sech)"),
 												i18n("Levy"),
-												i18n("Frechet (inverse Weibull)")};
+												i18n("Frechet (Inverse Weibull)")};
 const char* nsl_sf_stats_distribution_pic_name[] = {"gaussian",
 													"gaussian_tail",
 													"exponential",
@@ -115,3 +115,11 @@ const char* nsl_sf_stats_distribution_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-m
 													"a/2/s * sech(pi/2*(x-mu)/s)",
 													"a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))",
 													"a * g/s*((x-mu)/s)^(-g-1) * exp(-((x-mu)/s)^(-g))"};
+
+bool nsl_sf_stats_distribution_supports_ML(nsl_sf_stats_distribution d) {
+	if (d == nsl_sf_stats_gaussian || d == nsl_sf_stats_exponential || d == nsl_sf_stats_laplace || d == nsl_sf_stats_cauchy_lorentz
+		|| d == nsl_sf_stats_lognormal || d == nsl_sf_stats_poisson || d == nsl_sf_stats_binomial)
+		return true;
+
+	return false;
+}

@@ -741,7 +741,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		}
 		case Origin::Text:
 			col->setColumnMode(AbstractColumn::ColumnMode::Text);
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setTextAt(i, QLatin1String(column.data[i].as_string()));
 			break;
 		case Origin::Time: {
@@ -781,7 +781,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				break;
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
@@ -842,7 +842,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				format = QStringLiteral("dd.MM.yyyy");
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
@@ -863,7 +863,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				break;
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::Month);
 
@@ -884,7 +884,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				break;
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::Day);
 
@@ -1071,9 +1071,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			// border
 			if (layer.borderType == Origin::BorderType::None)
-				plot->plotArea()->borderLine()->setPen(QPen(Qt::NoPen));
+				plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
 			else
-				plot->plotArea()->borderLine()->setPen(QPen(Qt::SolidLine));
+				plot->plotArea()->borderLine()->setStyle(Qt::SolidLine);
 
 			// ranges
 			const Origin::GraphAxis& originXAxis = layer.xAxis;
@@ -1247,9 +1247,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				// border line
 				if (originLegend.borderType == Origin::BorderType::None)
-					legend->setBorderPen(QPen(Qt::NoPen));
+					legend->borderLine()->setStyle(Qt::NoPen);
 				else
-					legend->setBorderPen(QPen(Qt::SolidLine));
+					legend->borderLine()->setStyle(Qt::SolidLine);
 
 				// background color, determine it with the help of the border type
 				if (originLegend.borderType == Origin::BorderType::DarkMarble)
@@ -1484,7 +1484,6 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// major grid
 	const Origin::GraphGrid& majorGrid = originAxis.majorGrid;
-	QPen gridPen = axis->majorGridLine()->pen();
 	Qt::PenStyle penStyle(Qt::NoPen);
 	if (!majorGrid.hidden) {
 		switch (majorGrid.style) {
@@ -1508,18 +1507,16 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 			break;
 		}
 	}
-	gridPen.setStyle(penStyle);
+	axis->majorGridLine()->setStyle(penStyle);
 
 	Origin::Color gridColor;
 	gridColor.type = Origin::Color::ColorType::Regular;
 	gridColor.regular = majorGrid.color;
-	gridPen.setColor(OriginProjectParser::color(gridColor));
-	gridPen.setWidthF(Worksheet::convertToSceneUnits(majorGrid.width, Worksheet::Unit::Point));
-	axis->majorGridLine()->setPen(gridPen);
+	axis->majorGridLine()->setColor(OriginProjectParser::color(gridColor));
+	axis->majorGridLine()->setWidth(Worksheet::convertToSceneUnits(majorGrid.width, Worksheet::Unit::Point));
 
 	// minor grid
 	const Origin::GraphGrid& minorGrid = originAxis.minorGrid;
-	gridPen = axis->minorGridLine()->pen();
 	penStyle = Qt::NoPen;
 	if (!minorGrid.hidden) {
 		switch (minorGrid.style) {
@@ -1543,30 +1540,31 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 			break;
 		}
 	}
-	gridPen.setStyle(penStyle);
+	axis->minorGridLine()->setStyle(penStyle);
 
 	gridColor.regular = minorGrid.color;
-	gridPen.setColor(OriginProjectParser::color(gridColor));
-	gridPen.setWidthF(Worksheet::convertToSceneUnits(minorGrid.width, Worksheet::Unit::Point));
-	axis->minorGridLine()->setPen(gridPen);
+	axis->minorGridLine()->setColor(OriginProjectParser::color(gridColor));
+	axis->minorGridLine()->setWidth(Worksheet::convertToSceneUnits(minorGrid.width, Worksheet::Unit::Point));
 
 	// process Origin::GraphAxisFormat
 	const Origin::GraphAxisFormat& axisFormat = originAxis.formatAxis[index];
 
-	QPen pen;
 	Origin::Color color;
 	color.type = Origin::Color::ColorType::Regular;
 	color.regular = axisFormat.color;
-	pen.setColor(OriginProjectParser::color(color));
-	pen.setWidthF(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Unit::Point));
-	axis->line()->setPen(pen);
+	axis->line()->setColor(OriginProjectParser::color(color));
+	axis->line()->setWidth(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Unit::Point));
 
 	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Unit::Point));
 	axis->setMajorTicksDirection((Axis::TicksFlags)axisFormat.majorTicksType);
-	axis->setMajorTicksPen(pen);
+	axis->majorTicksLine()->setStyle(axis->line()->style());
+	axis->majorTicksLine()->setColor(axis->line()->color());
+	axis->majorTicksLine()->setWidth(axis->line()->width());
 	axis->setMinorTicksLength(axis->majorTicksLength() / 2); // minorTicksLength is half of majorTicksLength
 	axis->setMinorTicksDirection((Axis::TicksFlags)axisFormat.minorTicksType);
-	axis->setMinorTicksPen(pen);
+	axis->minorTicksLine()->setStyle(axis->line()->style());
+	axis->minorTicksLine()->setColor(axis->line()->color());
+	axis->minorTicksLine()->setWidth(axis->line()->width());
 
 	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
 	DEBUG("	axis title text = " << STDSTRING(titleText));
@@ -1620,7 +1618,6 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCurve* curve) const {
 	DEBUG(Q_FUNC_INFO)
 	// line properties
-	QPen pen = curve->line()->pen();
 	Qt::PenStyle penStyle(Qt::NoPen);
 	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		switch (originCurve.lineConnect) {
@@ -1676,15 +1673,14 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			break;
 		}
 
-		pen.setStyle(penStyle);
-		pen.setWidthF(Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Unit::Point));
-		pen.setColor(color(originCurve.lineColor));
+		curve->line()->setStyle(penStyle);
+		curve->line()->setWidth(Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Unit::Point));
+		curve->line()->setColor(color(originCurve.lineColor));
 		curve->line()->setOpacity(1 - originCurve.lineTransparency / 255);
 
 		// TODO: handle unsigned char boxWidth of Origin::GraphCurve
-	}
-	pen.setStyle(penStyle);
-	curve->line()->setPen(pen);
+	} else
+		curve->line()->setStyle(penStyle);
 
 	// symbol properties
 	auto* symbol = curve->symbol();

@@ -46,7 +46,7 @@ void SmoothTest::testPercentile() {
 
 	// perform the smooth
 	smoothCurve.recalculate();
-	const XYSmoothCurve::SmoothResult& smoothResult = smoothCurve.smoothResult();
+	const auto& smoothResult = smoothCurve.result();
 
 	// check the results
 	QCOMPARE(smoothResult.available, true);

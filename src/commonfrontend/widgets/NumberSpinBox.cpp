@@ -19,8 +19,8 @@
 #include <QLocale>
 #include <QString>
 #include <QStringRef>
-#include <QtMath>
 
+#include <cmath>
 #include <limits>
 
 NumberSpinBox::NumberSpinBox(QWidget* parent)
@@ -43,8 +43,6 @@ void NumberSpinBox::init(double initValue, bool feedback) {
 	setValue(initValue);
 	m_feedback = feedback; // must be after setValue()!
 	setInvalid(Errors::NoError);
-	setMinimum(std::numeric_limits<double>::lowest());
-	setMaximum(std::numeric_limits<double>::max());
 	setDecimals(2);
 }
 
@@ -304,7 +302,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 			initial = exponentialIndex;
 		else
 			initial = end;
-		increase = steps * qPow(10, initial - cursorPos);
+		increase = steps * std::pow(10, initial - cursorPos);
 
 		// from 0.1 with step -1 the desired result shall be -1.1 not -0.9
 		if ((integerFraction > 0 && integerFraction + increase > 0) || (integerFraction < 0 && integerFraction + increase < 0))
@@ -315,12 +313,12 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 		}
 	} else if (comma >= 0 && (exponentialIndex == -1 || before_exponent)) {
 		// fraction
-		increase = steps * qPow(10, -(cursorPos - 1 - comma));
+		increase = steps * std::pow(10, -(cursorPos - 1 - comma));
 		integerFraction += increase;
 	} else {
 		// exponent
 		increase = end - cursorPos;
-		const auto calc = steps * qPow(10, increase);
+		const auto calc = steps * std::pow(10, increase);
 		exponent += calc;
 
 		// double max value 1.7976931348623157E+308
@@ -336,7 +334,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	else if (integerFraction < std::numeric_limits<int>::min())
 		integerFraction = std::numeric_limits<int>::min();
 
-	double v = integerFraction * qPow(10, exponent);
+	double v = integerFraction * std::pow(10, exponent);
 
 	if (v > maximum())
 		return Errors::Max;
@@ -410,9 +408,28 @@ bool NumberSpinBox::setValue(double v) {
 		return true;
 	}
 
-	setText(locale().toString(v, 'f', decimals()));
+	if (decimals() == 0 || abs(v) < 1 / (pow(10, decimals())))
+		setText(locale().toString(v, 'g'));
+	else
+		setText(locale().toString(v, 'f', decimals()));
 	m_value = v;
 	return true;
+}
+
+double NumberSpinBox::minimum() const {
+	return m_minimum;
+}
+
+void NumberSpinBox::setMinimum(double min) {
+	m_minimum = min;
+}
+
+double NumberSpinBox::maximum() const {
+	return m_maximum;
+}
+
+void NumberSpinBox::setMaximum(double max) {
+	m_maximum = max;
 }
 
 void NumberSpinBox::setFeedback(bool enable) {
@@ -448,6 +465,7 @@ void NumberSpinBox::valueChanged() {
 		m_waitFeedback = true;
 	qDebug() << "Value: " << value();
 	emit valueChanged(value());
+	m_waitFeedback = false;
 }
 
 void NumberSpinBox::setInvalid(const QString& str) {

@@ -146,7 +146,7 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
 		ui.leFileName->setPalette(palette);
-		ui.leFileName->setToolTip(QStringLiteral(""));
+		ui.leFileName->setToolTip(QString());
 	}
 
 	// check whether there already is a file named like this or not.
@@ -166,7 +166,7 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 			palette.setColor(QPalette::Base, m_baseColor);
 			palette.setColor(QPalette::Text, m_textColor);
 			ui.leFileName->setPalette(palette);
-			ui.leFileName->setToolTip(QStringLiteral(""));
+			ui.leFileName->setToolTip(QString());
 		}
 	}
 
@@ -194,7 +194,7 @@ bool DatasetMetadataManagerWidget::urlExists() {
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
 		ui.leDownloadURL->setPalette(palette);
-		ui.leDownloadURL->setToolTip(QStringLiteral(""));
+		ui.leDownloadURL->setToolTip(QString());
 	}
 	return urlExists;
 }
@@ -215,7 +215,7 @@ bool DatasetMetadataManagerWidget::checkDatasetName() {
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
 		ui.leDatasetName->setPalette(palette);
-		ui.leDatasetName->setToolTip(QStringLiteral(""));
+		ui.leDatasetName->setToolTip(QString());
 	}
 
 	return longNameOk;
@@ -237,7 +237,7 @@ bool DatasetMetadataManagerWidget::checkDescription() {
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
 		ui.teDescription->setPalette(palette);
-		ui.teDescription->setToolTip(QStringLiteral(""));
+		ui.teDescription->setToolTip(QString());
 	}
 
 	return descriptionOk;
@@ -265,7 +265,7 @@ bool DatasetMetadataManagerWidget::checkCategories(QComboBox* comboBox) {
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
 		comboBox->setPalette(palette);
-		comboBox->setToolTip(QStringLiteral(""));
+		comboBox->setToolTip(QString());
 	}
 
 	return hasMatch;
@@ -529,7 +529,7 @@ void DatasetMetadataManagerWidget::addColumnDescription() {
 		m_columnDescriptions[layoutIndex - 1] = text;
 	});
 
-	m_columnDescriptions.append(QStringLiteral(""));
+	m_columnDescriptions.append(QString());
 }
 
 /**

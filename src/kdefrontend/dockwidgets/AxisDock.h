@@ -42,11 +42,13 @@ private:
 	QList<Axis*> m_axesList;
 	Axis* m_axis{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	LabelWidget* labelWidget;
+	LabelWidget* labelWidget; // Title
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
 	TreeViewComboBox* cbLabelsTextColumn;
 	LineWidget* lineWidget{nullptr};
+	LineWidget* majorTicksLineWidget{nullptr};
+	LineWidget* minorTicksLineWidget{nullptr};
 	LineWidget* majorGridLineWidget{nullptr};
 	LineWidget* minorGridLineWidget{nullptr};
 	bool m_dataChanged{false};
@@ -59,6 +61,9 @@ private:
 
 	void load();
 	void loadConfig(KConfig&);
+	void updatePositionText(Axis::Orientation);
+	void updateLabelsPosition(Axis::LabelsPosition);
+	void updateAxisColor();
 
 	void setOffset(double);
 
@@ -76,6 +81,7 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in AxisDock
 	//"General"-tab
 	void visibilityChanged(bool);
+	void colorChanged(const QColor&);
 	void orientationChanged(int);
 	void positionChanged(int);
 	void positionChanged(double value);
@@ -94,8 +100,10 @@ private Q_SLOTS:
 	void setRightOffset();
 	void setUnityScale();
 	void setUnityRange();
+	void setAxisColor();
 
 	// Line-Tab
+	void updateArrowLineColor(const QColor&);
 	void arrowPositionChanged(int);
 	void arrowTypeChanged(int);
 	void arrowSizeChanged(int);
@@ -103,7 +111,7 @@ private Q_SLOTS:
 	//"Major ticks"-tab
 	void majorTicksDirectionChanged(int);
 	void majorTicksTypeChanged(int);
-	void majorTicksAutoNumberChanged(int);
+	void majorTicksAutoNumberChanged(int state);
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
@@ -114,24 +122,16 @@ private Q_SLOTS:
 	void setTickOffsetAuto() {
 		setTickOffsetData(true);
 	}
-	void majorTicksLineStyleChanged(int);
-	void majorTicksColorChanged(const QColor&);
-	void majorTicksWidthChanged(double);
 	void majorTicksLengthChanged(double);
-	void majorTicksOpacityChanged(int);
 
 	//"Minor ticks"-tab
 	void minorTicksDirectionChanged(int);
 	void minorTicksTypeChanged(int);
-	void minorTicksAutoNumberChanged(int);
+	void minorTicksAutoNumberChanged(int state);
 	void minorTicksNumberChanged(int);
 	void minorTicksSpacingChanged();
 	void minorTicksColumnChanged(const QModelIndex&);
-	void minorTicksLineStyleChanged(int);
-	void minorTicksColorChanged(const QColor&);
-	void minorTicksWidthChanged(double);
 	void minorTicksLengthChanged(double);
-	void minorTicksOpacityChanged(int);
 
 	//"Extra ticks"-tab
 
@@ -183,9 +183,7 @@ private Q_SLOTS:
 	void axisMajorTicksStartOffsetChanged(qreal);
 	void axisMajorTicksStartValueChanged(qreal);
 	void axisMajorTicksColumnChanged(const AbstractColumn*);
-	void axisMajorTicksPenChanged(const QPen&);
 	void axisMajorTicksLengthChanged(qreal);
-	void axisMajorTicksOpacityChanged(qreal);
 
 	void axisMinorTicksDirectionChanged(Axis::TicksDirection);
 	void axisMinorTicksTypeChanged(Axis::TicksType);
@@ -193,9 +191,7 @@ private Q_SLOTS:
 	void axisMinorTicksNumberChanged(int);
 	void axisMinorTicksSpacingChanged(qreal);
 	void axisMinorTicksColumnChanged(const AbstractColumn*);
-	void axisMinorTicksPenChanged(const QPen&);
 	void axisMinorTicksLengthChanged(qreal);
-	void axisMinorTicksOpacityChanged(qreal);
 
 	// labels
 	void axisLabelsFormatChanged(Axis::LabelsFormat);

@@ -104,19 +104,19 @@ private Q_SLOTS:
 	void valuesColorChanged(const QColor&);
 
 	//"Error bars"-Tab
-	void xErrorTypeChanged(int) const;
-	void yErrorTypeChanged(int) const;
-	void xErrorPlusColumnChanged(const QModelIndex&) const;
-	void xErrorMinusColumnChanged(const QModelIndex&) const;
-	void yErrorPlusColumnChanged(const QModelIndex&) const;
-	void yErrorMinusColumnChanged(const QModelIndex&) const;
+	void xErrorTypeChanged(int);
+	void yErrorTypeChanged(int);
+	void xErrorPlusColumnChanged(const QModelIndex&);
+	void xErrorMinusColumnChanged(const QModelIndex&);
+	void yErrorPlusColumnChanged(const QModelIndex&);
+	void yErrorMinusColumnChanged(const QModelIndex&);
 
 	//"Margin Plots"-Tab
-	void rugEnabledChanged(bool) const;
-	void rugOrientationChanged(int) const;
-	void rugLengthChanged(double) const;
-	void rugWidthChanged(double) const;
-	void rugOffsetChanged(double) const;
+	void rugEnabledChanged(bool);
+	void rugOrientationChanged(int);
+	void rugLengthChanged(double);
+	void rugWidthChanged(double);
+	void rugOffsetChanged(double);
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
@@ -168,6 +168,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void info(const QString&);
+
+	friend class MultiRangeTest;
 };
 
 #endif

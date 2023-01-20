@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>306</width>
-    <height>721</height>
+    <width>290</width>
+    <height>503</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -93,7 +93,6 @@
         <widget class="QLabel" name="label">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -125,7 +124,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>13</width>
+           <width>10</width>
            <height>20</height>
           </size>
          </property>
@@ -189,7 +188,7 @@
      </widget>
      <widget class="QWidget" name="tabErrorBars_2">
       <attribute name="title">
-       <string>Error bars</string>
+       <string>Error Bars</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="1" column="3">
@@ -266,8 +265,8 @@
          <property name="suffix">
           <string> pt</string>
          </property>
-         <property name="feedback">
-          <bool>false</bool>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

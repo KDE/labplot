@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>754</width>
-    <height>1047</height>
+    <width>507</width>
+    <height>953</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -44,7 +44,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>13</width>
+       <width>10</width>
        <height>23</height>
       </size>
      </property>
@@ -112,21 +112,21 @@
    <item row="6" column="0">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
-      <string>x-Data:</string>
+      <string>X-Data:</string>
      </property>
     </widget>
    </item>
    <item row="7" column="0">
     <widget class="QLabel" name="lYColumn">
      <property name="text">
-      <string>y-Data:</string>
+      <string>Y-Data:</string>
      </property>
     </widget>
    </item>
    <item row="8" column="0">
     <widget class="QLabel" name="lXRange">
      <property name="text">
-      <string>x-Range:</string>
+      <string>X-Range:</string>
      </property>
     </widget>
    </item>
@@ -324,7 +324,7 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
       </widget>
@@ -347,7 +347,7 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
       </widget>
@@ -370,7 +370,7 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
       </widget>
@@ -541,7 +541,7 @@
    <item row="21" column="0">
     <widget class="QLabel" name="lPlotRange">
      <property name="text">
-      <string>Plot ranges:</string>
+      <string>Plot Range:</string>
      </property>
     </widget>
    </item>

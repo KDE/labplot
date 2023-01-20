@@ -36,20 +36,15 @@ public:
 		// TODO: use Range
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
-	struct FilterResult {
+	struct FilterResult : XYAnalysisCurve::Result {
 		FilterResult(){};
-
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
 	};
 
 	explicit XYFourierFilterCurve(const QString& name);
 	~XYFourierFilterCurve() override;
 
 	void recalculate() override;
-	bool resultAvailable() const override;
+	virtual const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -67,6 +62,8 @@ private:
 
 Q_SIGNALS:
 	void filterDataChanged(const XYFourierFilterCurve::FilterData&);
+
+	friend class FourierTest;
 };
 
 #endif

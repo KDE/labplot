@@ -13,6 +13,7 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 class LinePrivate;
 class KConfigGroup;
@@ -25,11 +26,13 @@ public:
 	~Line() override;
 
 	void setPrefix(const QString&);
+	const QString& prefix() const;
 	void setCreateXmlElement(bool);
 	void init(const KConfigGroup&);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfigGroup&);
 	void loadThemeConfig(const KConfigGroup&, const QColor&);
 	void saveThemeConfig(KConfigGroup&) const;
 
@@ -46,7 +49,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(XYCurve::DropLineType, dropLineType, DropLineType)
 
 	// common parameters
-	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
+	QPen pen() const;
+	BASIC_D_ACCESSOR_DECL(Qt::PenStyle, style, Style)
+	CLASS_D_ACCESSOR_DECL(QColor, color, Color)
+	BASIC_D_ACCESSOR_DECL(double, width, Width)
 	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
 
 	typedef LinePrivate Private;
@@ -62,7 +68,10 @@ Q_SIGNALS:
 	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
 	void errorBarsCapSizeChanged(double);
 	void dropLineTypeChanged(XYCurve::DropLineType);
-	void penChanged(QPen&);
+
+	void styleChanged(Qt::PenStyle);
+	void widthChanged(double);
+	void colorChanged(const QColor&);
 	void opacityChanged(float);
 
 	void updateRequested();

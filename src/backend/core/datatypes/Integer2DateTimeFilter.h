@@ -6,6 +6,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,19 +16,16 @@
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
 
-//! Conversion filter double -> QDateTime, interpreting the input numbers as (fractional) Julian days.
+//! Conversion filter int -> QDateTime, interpreting the input as seconds since epoch
 class Integer2DateTimeFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	QDate dateAt(int row) const override {
-		if (!m_inputs.value(0))
-			return QDate();
-		int inputValue = m_inputs.value(0)->integerAt(row);
-		return QDate(1900, 1, 1 + inputValue);
-	}
 	QDateTime dateTimeAt(int row) const override {
-		return QDateTime(dateAt(row), QTime());
+		DEBUG(Q_FUNC_INFO)
+		QDateTime dt = QDateTime::fromSecsSinceEpoch(0, Qt::UTC);
+		int inputValue = m_inputs.value(0)->integerAt(row);
+		return dt.addMSecs(inputValue); // TODO: select unit (ms, s, min, hour, days)
 	}
 
 	//! Return the data type of the column

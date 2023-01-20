@@ -37,12 +37,12 @@
  */
 
 BarPlot::BarPlot(const QString& name)
-	: WorksheetElement(name, new BarPlotPrivate(this), AspectType::BarPlot) {
+	: Plot(name, new BarPlotPrivate(this), AspectType::BarPlot) {
 	init();
 }
 
 BarPlot::BarPlot(const QString& name, BarPlotPrivate* dd)
-	: WorksheetElement(name, dd, AspectType::BarPlot) {
+	: Plot(name, dd, AspectType::BarPlot) {
 	init();
 }
 
@@ -143,9 +143,9 @@ void BarPlot::recalc() {
 void BarPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
-bool BarPlot::activateCurve(QPointF mouseScenePos, double maxDist) {
+bool BarPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	Q_D(BarPlot);
-	return d->activateCurve(mouseScenePos, maxDist);
+	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 void BarPlot::setHover(bool on) {
@@ -197,7 +197,7 @@ double BarPlot::minimum(const Dimension dim) const {
 	case Dimension::Y:
 		return d->yMin;
 	}
-	return qQNaN();
+	return NAN;
 }
 
 double BarPlot::maximum(const Dimension dim) const {
@@ -208,7 +208,7 @@ double BarPlot::maximum(const Dimension dim) const {
 	case Dimension::Y:
 		return d->yMax;
 	}
-	return qQNaN();
+	return NAN;
 }
 
 // values
@@ -312,13 +312,13 @@ void BarPlot::visibilityChangedSlot() {
 //####################### Private implementation ###############################
 //##############################################################################
 BarPlotPrivate::BarPlotPrivate(BarPlot* owner)
-	: WorksheetElementPrivate(owner)
+	: PlotPrivate(owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
 }
 
-bool BarPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
+bool BarPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
 	if (!isVisible())
 		return false;
 
@@ -369,6 +369,7 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 
 	q->connect(line, &Line::updateRequested, [=] {
 		recalcShapeAndBoundingRect();
+		Q_EMIT q->updateLegendRequested();
 	});
 
 	borderLines << line;
@@ -463,9 +464,7 @@ void BarPlotPrivate::recalc() {
 			if (plot) {
 				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
 				background->setFirstColor(themeColor);
-				QPen p = line->pen();
-				p.setColor(themeColor);
-				line->setPen(p);
+				line->setColor(themeColor);
 			}
 		}
 	} else if (diff < 0) {
@@ -536,7 +535,8 @@ void BarPlotPrivate::recalc() {
 		}
 	}
 
-	// determine min and max values for x- and y-ranges
+	// determine min and max values for x- and y-ranges.
+	// the first group is placed between 0 and 1, the second one between 1 and 2, etc.
 	if (orientation == BarPlot::Orientation::Vertical) {
 		// min/max for x
 		if (xColumn) {
@@ -544,7 +544,7 @@ void BarPlotPrivate::recalc() {
 			xMax = xColumn->maximum() + 0.5;
 		} else {
 			xMin = 0.0;
-			xMax = barGroupsCount + 1.0;
+			xMax = barGroupsCount;
 		}
 
 		// min/max for y
@@ -611,11 +611,11 @@ void BarPlotPrivate::recalc() {
 
 		// min/max for y
 		if (xColumn) {
-			yMin = xColumn->minimum() - 1.0;
-			yMax = xColumn->maximum() + 1.0;
+			yMin = xColumn->minimum() - 0.5;
+			yMax = xColumn->maximum() + 0.5;
 		} else {
 			yMin = 0.0;
-			yMax = barGroupsCount + 1.0;
+			yMax = barGroupsCount;
 		}
 	}
 
@@ -624,7 +624,7 @@ void BarPlotPrivate::recalc() {
 	if (xColumn && newSize != 0)
 		m_groupWidth = (xColumn->maximum() - xColumn->minimum()) / newSize;
 
-	m_groupGap = m_groupWidth * 0.15 * widthFactor; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
+	m_groupGap = m_groupWidth * 0.1; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
 
 	// the size of the bar plots changed because of the actual
 	// data changes or because of new bar plot settings.
@@ -642,7 +642,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 
 	switch (type) {
 	case BarPlot::Type::Grouped: {
-		const double barGap = m_groupWidth * 0.1 * widthFactor; // gap between two bars within a group
+		const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
 		const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 
@@ -657,9 +657,10 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = valueIndex + m_groupWidth;
+				x = m_groupGap + m_groupWidth * (1 - widthFactor) / 2
+					+ valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
 
-			x += -m_groupWidth * 0.5 * widthFactor + m_groupGap + (width + barGap) * columnIndex;
+			x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
 			lines.clear();
 			lines << QLineF(x, value, x + width, value);
@@ -677,7 +678,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked: {
-		const double width = 1 * widthFactor - 2 * m_groupGap; // bar width
+		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -691,13 +692,10 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 				offset = m_stackedBarNegativeOffsets.at(valueIndex);
 
 			double x;
-
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = valueIndex + m_groupWidth;
-
-			x += -0.5 * widthFactor + m_groupGap;
+				x = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(x, value + offset, x + width, value + offset);
@@ -718,7 +716,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked_100_Percent: {
-		const double width = 1 * widthFactor - 2 * m_groupGap; // bar width
+		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
 		int valueIndex = 0;
 
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -736,9 +734,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = valueIndex + m_groupWidth;
-
-			x += -0.5 * widthFactor + m_groupGap;
+				x = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(x, value + offset, x + width, value + offset);
@@ -768,7 +764,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 
 	switch (type) {
 	case BarPlot::Type::Grouped: {
-		const double barGap = m_groupWidth * 0.1 * widthFactor; // gap between two bars within a group
+		const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
 		const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 
@@ -779,13 +775,12 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 
 			const double value = column->valueAt(i);
 			double y;
-
 			if (xColumn)
 				y = xColumn->valueAt(i);
 			else
-				y = valueIndex + m_groupWidth;
+				y = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
 
-			y += -m_groupWidth * 0.5 * widthFactor + m_groupGap + (width + barGap) * columnIndex;
+			y += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
 			lines.clear();
 			lines << QLineF(value, y, value, y + width);
@@ -803,7 +798,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked: {
-		const double width = 1 * widthFactor - 2 * m_groupGap; // bar width
+		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -817,13 +812,10 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 				offset = m_stackedBarNegativeOffsets.at(valueIndex);
 
 			double y;
-
 			if (xColumn)
 				y = xColumn->valueAt(i);
 			else
-				y = valueIndex + m_groupWidth;
-
-			y += -0.5 * widthFactor + m_groupGap;
+				y = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(value + offset, y, value + offset, y + width);
@@ -844,7 +836,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked_100_Percent: {
-		const double width = 1 * widthFactor - 2 * m_groupGap; // bar width
+		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -858,13 +850,10 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			double offset = m_stackedBarPositiveOffsets.at(valueIndex);
 
 			double y;
-
 			if (xColumn)
 				y = xColumn->valueAt(i);
 			else
-				y = valueIndex + m_groupWidth;
-
-			y += -0.5 * widthFactor + m_groupGap;
+				y = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(value + offset, y, value + offset, y + width);
@@ -972,7 +961,7 @@ void BarPlotPrivate::updateValues() {
 			return;
 		}
 
-		const int endRow = qMin(m_valuesPointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))
@@ -1464,16 +1453,13 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	QPen p;
-
 	Q_D(BarPlot);
-	d->m_suppressRecalc = false;
+	d->m_suppressRecalc = true;
 
 	// box filling
 	for (int i = 0; i < d->backgrounds.count(); ++i) {
 		auto* background = d->backgrounds.at(i);
-		background->loadThemeConfig(group);
-		background->setFirstColor(plot->themeColorPalette(i));
+		background->loadThemeConfig(group, plot->themeColorPalette(i));
 	}
 
 	// box border lines

@@ -12,12 +12,12 @@
 #define XYINTEGRATIONCURVEDOCK_H
 
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyintegrationcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYIntegrationCurveDock : public XYCurveDock {
+class XYIntegrationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
@@ -30,6 +30,8 @@ private:
 	void updateSettings(const AbstractColumn*);
 	void updatePlotRanges() override;
 	void showIntegrationResult();
+
+	virtual QString customText() const override;
 
 	Ui::XYIntegrationCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve{nullptr};

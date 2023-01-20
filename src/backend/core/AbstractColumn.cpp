@@ -4,7 +4,7 @@
 	Description          : Interface definition for data with column logic
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,9 +14,13 @@
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/XmlStreamReader.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
+#include <KSharedConfig>
 #include <QDateTime>
 #include <QIcon>
+
+#include <cmath>
 
 /**
  * \class AbstractColumn
@@ -120,12 +124,34 @@ QStringList AbstractColumn::dateTimeFormats() {
 }
 
 /**
+ * \brief Convenience method for getting time unit string
+ * translated since used in UI
+ */
+QString AbstractColumn::timeUnitString(TimeUnit unit) {
+	switch (unit) {
+	case TimeUnit::Milliseconds:
+		return i18n("Milliseconds");
+	case TimeUnit::Seconds:
+		return i18n("Seconds");
+	case TimeUnit::Minutes:
+		return i18n("Minutes");
+	case TimeUnit::Hours:
+		return i18n("Hours");
+	case TimeUnit::Days:
+		return i18n("Days");
+	}
+
+	return {};
+}
+
+/**
  * \brief Convenience method for getting plot designation string
  * translated since used in UI
  */
 QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBrackets) {
 	QString s;
 
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
 	switch (d) {
 	case PlotDesignation::NoDesignation:
 		s = i18n("None");
@@ -140,22 +166,40 @@ QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBracke
 		s = QStringLiteral("Z");
 		break;
 	case PlotDesignation::XError:
-		s = i18n("X-error");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("X-Uncertainty");
+		else
+			s = i18n("X-Error");
 		break;
 	case PlotDesignation::XErrorPlus:
-		s = i18n("X-error +");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("X-Uncertainty +");
+		else
+			s = i18n("X-Error +");
 		break;
 	case PlotDesignation::XErrorMinus:
-		s = i18n("X-error -");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("X-Uncertainty -");
+		else
+			s = i18n("X-Error -");
 		break;
 	case PlotDesignation::YError:
-		s = i18n("Y-error");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("Y-Uncertainty");
+		else
+			s = i18n("Y-Error");
 		break;
 	case PlotDesignation::YErrorPlus:
-		s = i18n("Y-error +");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("Y-Uncertainty +");
+		else
+			s = i18n("Y-Error +");
 		break;
 	case PlotDesignation::YErrorMinus:
-		s = i18n("Y-error -");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("Y-Uncertainty -");
+		else
+			s = i18n("Y-Error -");
 		break;
 	default:
 		return {};
@@ -346,7 +390,7 @@ bool AbstractColumn::isNumeric() const {
 
 bool AbstractColumn::isPlottable() const {
 	const auto mode = columnMode();
-	return (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::DateTime);
+	return (isNumeric() || mode == ColumnMode::DateTime);
 }
 
 /**
@@ -360,8 +404,10 @@ void AbstractColumn::clear() {
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-	case ColumnMode::Double:
-		return !(std::isnan(valueAt(row)) || std::isinf(valueAt(row)));
+	case ColumnMode::Double: {
+		double value = valueAt(row);
+		return std::isfinite(value);
+	}
 	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
 		return true;
@@ -603,6 +649,15 @@ void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) 
  *
  * Use this only when columnMode() is Numeric
  */
+double AbstractColumn::doubleAt(int /*row*/) const {
+	return NAN;
+}
+
+/**
+ * \brief Return the double value in row 'row' independent of the column mode.
+ *
+ * Integer and big integer values are converted to double, NAN is returned for other modes.
+ */
 double AbstractColumn::valueAt(int /*row*/) const {
 	return NAN;
 }
@@ -683,19 +738,19 @@ AbstractColumn::Properties AbstractColumn::properties() const {
 
 /**********************************************************************/
 double AbstractColumn::minimum(int /*count*/) const {
-	return -INFINITY;
+	return INFINITY;
 }
 
 double AbstractColumn::minimum(int /*startIndex*/, int /*endIndex*/) const {
-	return -INFINITY;
+	return INFINITY;
 }
 
 double AbstractColumn::maximum(int /*count*/) const {
-	return INFINITY;
+	return -INFINITY;
 }
 
 double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
-	return INFINITY;
+	return -INFINITY;
 }
 
 bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/, int& /*end*/) const {

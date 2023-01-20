@@ -35,6 +35,8 @@ extern "C" {
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_multifit.h>
+#include <gsl/gsl_sf_erf.h>
+#include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
@@ -64,14 +66,17 @@ void XYFitCurve::recalculate() {
 
 void XYFitCurve::evaluate(bool preview) {
 	Q_D(XYFitCurve);
-	d->evaluate(preview);
+	if (d->evaluate(preview)) {
+		// redraw the curve
+		recalcLogicalPoints();
+		Q_EMIT dataChanged();
+	}
 }
 
-bool XYFitCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYFitCurve::result() const {
 	Q_D(const XYFitCurve);
-	return d->fitResult.available;
+	return d->fitResult;
 }
-
 void XYFitCurve::initStartValues(const XYCurve* curve) {
 	Q_D(XYFitCurve);
 	XYFitCurve::FitData& fitData = d->fitData;
@@ -135,13 +140,13 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 					xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
 			}
 
-			const int rowCount = qMin(xColumn->rowCount(), yColumn->rowCount());
+			const int rowCount = std::min(xColumn->rowCount(), yColumn->rowCount());
 			for (int row = 0; row < rowCount; ++row) {
 				// omit invalid data
 				if (!xColumn->isValid(row) || xColumn->isMasked(row) || !yColumn->isValid(row) || yColumn->isMasked(row))
 					continue;
 
-				double x = qQNaN();
+				double x = NAN;
 				switch (xColumn->columnMode()) {
 				case AbstractColumn::ColumnMode::Double:
 				case AbstractColumn::ColumnMode::Integer:
@@ -156,7 +161,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 					x = xColumn->dateTimeAt(row).toMSecsSinceEpoch();
 				}
 
-				double y = qQNaN();
+				double y = NAN;
 				switch (yColumn->columnMode()) {
 				case AbstractColumn::ColumnMode::Double:
 				case AbstractColumn::ColumnMode::Integer:
@@ -215,19 +220,19 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 						gsl_vector_set(w, i, 1.);
 						break;
 					case nsl_fit_weight_instrumental: // yerror are sigmas
-						gsl_vector_set(w, i, 1. / gsl_pow_2(qMax(yerror[i], qMax(sqrt(minError), std::abs(yi) * 1.e-15))));
+						gsl_vector_set(w, i, 1. / gsl_pow_2(std::max(yerror[i], std::max(sqrt(minError), std::abs(yi) * 1.e-15))));
 						break;
 					case nsl_fit_weight_direct: // yerror are weights
 						gsl_vector_set(w, i, yerror[i]);
 						break;
 					case nsl_fit_weight_inverse: // yerror are inverse weights
-						gsl_vector_set(w, i, 1. / qMax(yerror[i], qMax(minError, std::abs(yi) * 1.e-15)));
+						gsl_vector_set(w, i, 1. / std::max(yerror[i], std::max(minError, std::abs(yi) * 1.e-15)));
 						break;
 					case nsl_fit_weight_statistical:
-						gsl_vector_set(w, i, 1. / qMax(yi, minError));
+						gsl_vector_set(w, i, 1. / std::max(yi, minError));
 						break;
 					case nsl_fit_weight_relative:
-						gsl_vector_set(w, i, 1. / qMax(gsl_pow_2(yi), minError));
+						gsl_vector_set(w, i, 1. / std::max(gsl_pow_2(yi), minError));
 						break;
 					}
 				} else
@@ -267,7 +272,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			d->fitResult.errorValues.resize(np);
 			d->fitResult.tdist_tValues.resize(np);
 			d->fitResult.tdist_pValues.resize(np);
-			d->fitResult.tdist_marginValues.resize(np);
+			d->fitResult.marginValues.resize(np);
 
 			const double cerr = sqrt(d->fitResult.rms);
 			// CI = 100 * (1 - alpha)
@@ -279,7 +284,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 				d->fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(cov, i, i));
 				d->fitResult.tdist_tValues[i] = nsl_stats_tdist_t(d->fitResult.paramValues.at(i), d->fitResult.errorValues.at(i));
 				d->fitResult.tdist_pValues[i] = nsl_stats_tdist_p(d->fitResult.tdist_tValues.at(i), d->fitResult.dof);
-				d->fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(alpha, d->fitResult.dof, d->fitResult.errorValues.at(i));
+				d->fitResult.marginValues[i] = nsl_stats_tdist_margin(alpha, d->fitResult.dof, d->fitResult.errorValues.at(i));
 			}
 
 			// residuals
@@ -552,7 +557,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
 			default:
-				model = QStringLiteral("1./sqrt(2*pi) * (");
+				model = QStringLiteral("1/sqrt(2*pi) * (");
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
@@ -572,7 +577,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 				paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
 				break;
 			default:
-				model = QStringLiteral("1./pi * (");
+				model = QStringLiteral("1/pi * (");
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
@@ -913,7 +918,7 @@ void XYFitCurve::setDataSourceHistogram(const Histogram* histogram) {
 		handleSourceDataChanged();
 
 		connect(histogram, &Histogram::dataChanged, this, &XYFitCurve::handleSourceDataChanged);
-		// 		//TODO: add disconnect in the undo-function
+		// TODO: add disconnect in the undo-function
 	}
 }
 
@@ -927,7 +932,7 @@ void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 			connect(column, &AbstractColumn::dataChanged, this, [=]() {
 				handleSourceDataChanged();
 			});
-			// TODO disconnect on undo
+			// TODO: disconnect on undo
 		}
 	}
 }
@@ -942,7 +947,7 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 			connect(column, &AbstractColumn::dataChanged, this, [=]() {
 				handleSourceDataChanged();
 			});
-			// TODO disconnect on undo
+			// TODO: disconnect on undo
 		}
 	}
 }
@@ -1009,7 +1014,6 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 						   << ' ' << QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
 	}
 
-	SET_NUMBER_LOCALE
 	QString func{*(((struct data*)params)->func)};
 	for (size_t i = 0; i < n; i++) {
 		if (std::isnan(x[i]) || std::isnan(y[i]))
@@ -1024,7 +1028,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 
 		assign_symbol("x", x[i]);
 		// DEBUG("evaluate function \"" << STDSTRING(func) << "\" @ x = " << x[i] << ":");
-		double Yi = parse(qPrintable(func), qPrintable(numberLocale.name()));
+		double Yi = parse(qPrintable(func), qPrintable(QLocale().name()));
 		if (parse_errors() > 0) // fallback to default locale
 			Yi = parse(qPrintable(func), "en_US");
 		// DEBUG("	f(x["<< i <<"]) = " << Yi);
@@ -1709,7 +1713,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		const unsigned int np = paramNames->size();
 		QString func{*(((struct data*)params)->func)};
 
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
 			assign_symbol("x", x);
@@ -1764,14 +1768,16 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 void XYFitCurvePrivate::prepareResultColumns() {
 	// DEBUG(Q_FUNC_INFO)
 	// create fit result columns if not available yet, clear them otherwise
+
+	// Done also in XYAnalysisCurve, but this function will be also called directly() from evaluate()
+	// and not over recalculate(). So this is also needed here!
 	if (!xColumn) { // all columns are treated together
 		DEBUG("	Creating columns")
 		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		residualsColumn = new Column(QStringLiteral("residuals"), AbstractColumn::ColumnMode::Double);
+
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
-		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
@@ -1779,54 +1785,353 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		yColumn->setHidden(true);
 		q->addChild(yColumn);
 
-		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
-		q->addChild(residualsColumn);
-
 		q->setUndoAware(false);
 		q->setXColumn(xColumn);
 		q->setYColumn(yColumn);
 		q->setUndoAware(true);
 	} else {
 		DEBUG(Q_FUNC_INFO << ", Clear columns")
+		xColumn->invalidateProperties();
+		yColumn->invalidateProperties();
 		xVector->clear();
 		yVector->clear();
 		// TODO: residualsVector->clear();
 	}
+
+	if (!residualsColumn) {
+		residualsColumn = new Column(QStringLiteral("residuals"), AbstractColumn::ColumnMode::Double);
+		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
+		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+		q->addChild(residualsColumn);
+	}
 }
 
-void XYFitCurvePrivate::recalculate() {
+void XYFitCurvePrivate::resetResults() {
+	fitResult = XYFitCurve::FitResult();
+}
+
+void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+	// prepare source data columns
+	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
+	switch (dataSourceType) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
+		break;
+	case XYAnalysisCurve::DataSourceType::Curve:
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
+		switch (fitData.algorithm) {
+		case nsl_fit_algorithm_lm:
+			*tmpXDataColumn = dataSourceHistogram->bins(); // bins
+			switch (dataSourceHistogram->normalization()) { // TODO: not exactly
+			case Histogram::Normalization::Count:
+			case Histogram::Normalization::CountDensity:
+				*tmpYDataColumn = dataSourceHistogram->binValues(); // values
+				break;
+			case Histogram::Normalization::Probability:
+			case Histogram::Normalization::ProbabilityDensity:
+				*tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
+			}
+			break;
+		case nsl_fit_algorithm_ml:
+			*tmpXDataColumn = dataSourceHistogram->dataColumn(); // data
+			*tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
+		}
+		// debug
+		/*for (int i = 0; i < dataSourceHistogram->bins()->rowCount(); i++)
+			DEBUG("BINS @ " << i << ": " << dataSourceHistogram->bins()->valueAt(i))
+		for (int i = 0; i < dataSourceHistogram->binValues()->rowCount(); i++)
+			DEBUG("BINValues @ " << i << ": " << dataSourceHistogram->binValues()->valueAt(i))
+		for (int i = 0; i < dataSourceHistogram->binPDValues()->rowCount(); i++)
+			DEBUG("BINPDValues @ " << i << ": " << dataSourceHistogram->binPDValues()->valueAt(i))
+		*/
+	}
+}
+
+bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
 
-	// prepare source data columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		DEBUG(Q_FUNC_INFO << ", SPREADSHEET columns as data source");
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
-	} else if (dataSourceType == XYAnalysisCurve::DataSourceType::Curve) {
-		DEBUG(Q_FUNC_INFO << ", CURVE columns as data source");
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
-	} else {
-		DEBUG(Q_FUNC_INFO << ", HISTOGRAM columns as data source");
-		tmpXDataColumn = dataSourceHistogram->bins();
-		tmpYDataColumn = dataSourceHistogram->binPDValues();
+	// determine range of data
+	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
+	if (fitData.autoRange) { // auto x range of data to fit
+		fitData.fitRange = xRange;
+	} else { // custom x range of data to fit
+		if (!fitData.fitRange.isZero()) // avoid problems with user specified zero range
+			xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
 	}
-
-	// clear the previous result
-	fitResult = XYFitCurve::FitResult();
-
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data columns failed!");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
+	DEBUG(Q_FUNC_INFO << ", fit data range = " << xRange.start() << " .. " << xRange.end());
 
 	prepareResultColumns();
+	const size_t rowCount = tmpXDataColumn->rowCount();
 
+	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
+	residualsVector->resize(rowCount);
+	// DEBUG("	Residual vector size: " << residualsVector->size())
+
+	DEBUG("#######################################\nALGORITHM: " << nsl_fit_algorithm_name[fitData.algorithm])
+	switch (fitData.algorithm) {
+	case nsl_fit_algorithm_lm:
+		runLevenbergMarquardt(tmpXDataColumn, tmpYDataColumn, xRange);
+		break;
+	case nsl_fit_algorithm_ml: {
+		double width = xRange.size() / tmpYDataColumn->rowCount();
+		double norm = 1.;
+		if (dataSourceHistogram) {
+			switch (dataSourceHistogram->normalization()) {
+			case Histogram::Normalization::Count:
+				norm = rowCount * width;
+				break;
+			case Histogram::Normalization::Probability:
+				norm = width;
+				break;
+			case Histogram::Normalization::CountDensity:
+				norm = rowCount;
+				break;
+			case Histogram::Normalization::ProbabilityDensity:
+				break;
+			}
+		} else { // spreadsheet or curve
+			norm = ((Column*)tmpYDataColumn)->statistics().arithmeticMean * xRange.size(); // integral
+		}
+		runMaximumLikelihood(tmpXDataColumn, norm);
+	}
+	}
+
+	const bool update = evaluate(); // calculate the fit function (vectors)
+
+	// ML uses dataSourceHistogram->bins() as x for residuals
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram && fitData.algorithm == nsl_fit_algorithm_ml)
+		tmpXDataColumn = dataSourceHistogram->bins();
+
+	if (fitData.autoRange || fitData.algorithm == nsl_fit_algorithm_ml) { // evaluate residuals
+		QVector<double> v;
+		v.resize(rowCount);
+		for (size_t i = 0; i < rowCount; i++)
+			if (tmpXDataColumn->isNumeric())
+				v[i] = tmpXDataColumn->valueAt(i);
+			else if (tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::DateTime)
+				v[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
+
+		auto* parser = ExpressionParser::getInstance();
+		// fill residualsVector with model values
+		// QDEBUG("xVector: " << v)
+		bool rc = parser->evaluateCartesian(fitData.model, &v, residualsVector, fitData.paramNames, fitResult.paramValues);
+		// QDEBUG("residualsVector: " << *residualsVector)
+		if (rc) {
+			switch (fitData.algorithm) {
+			case nsl_fit_algorithm_lm:
+				for (size_t i = 0; i < rowCount; i++)
+					(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector).at(i);
+				break;
+			case nsl_fit_algorithm_ml:
+				for (size_t i = 0; i < rowCount; i++) {
+					// DEBUG("y data / column @" << i << ":" << tmpXDataColumn->valueAt(i))
+					if (xRange.contains(tmpXDataColumn->valueAt(i)))
+						(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector).at(i);
+					else
+						(*residualsVector)[i] = 0.;
+				}
+			}
+		} else {
+			WARN("	ERROR: Failed parsing residuals")
+			residualsVector->clear();
+		}
+	} // else: see LM method
+
+	residualsColumn->setChanged();
+
+	fitResult.elapsedTime = timer.elapsed();
+
+	return update;
+}
+
+void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn, const double norm) {
+	const size_t n = tmpXDataColumn->rowCount();
+
+	fitResult.available = true;
+	fitResult.valid = true;
+	fitResult.status = i18n("Success"); // can it fail in any way?
+
+	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
+	fitResult.dof = n - np;
+	fitResult.paramValues.resize(np);
+	fitResult.errorValues.resize(np);
+	fitResult.tdist_tValues.resize(np);
+	fitResult.tdist_pValues.resize(np);
+	fitResult.marginValues.resize(np);
+	fitResult.correlationMatrix.resize(np * (np + 1) / 2);
+
+	DEBUG("DISTRIBUTION: " << fitData.modelType)
+	fitResult.paramValues[0] = norm; // A - normalization
+	// TODO: parameter values (error, etc.)
+	// TODO: currently all values are used (data range not changeable)
+	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
+	const auto statistics = ((Column*)tmpXDataColumn)->statistics();
+	const double mean = statistics.arithmeticMean;
+	const double var = statistics.variance;
+	const double median = statistics.median;
+	const double madmed = statistics.meanDeviationAroundMedian;
+	const double iqr = statistics.iqr;
+	switch (fitData.modelType) { // only these are supported
+	case nsl_sf_stats_gaussian: {
+		const double sigma = std::sqrt(var);
+		const double mu = mean;
+		fitResult.paramValues[1] = sigma;
+		fitResult.paramValues[2] = mu;
+		DEBUG("mu = " << mu << ", sigma = " << sigma)
+
+		fitResult.errorValues[2] = sigma / std::sqrt(n);
+		double margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(2));
+		// DEBUG("z = " << nsl_stats_tdist_z(alpha, fitResult.dof))
+		fitResult.marginValues[2] = margin;
+
+		fitResult.errorValues[1] = sigma * sigma / std::sqrt(2 * n);
+		margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(1));
+		// WARN("sigma CONFIDENCE INTERVAL: " << fitResult.paramValues[1] - margin << " .. " << fitResult.paramValues[1] + margin)
+		fitResult.marginValues[1] = margin;
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /=
+				(gsl_sf_erf((tmpXDataColumn->maximum() - mu) / sigma) - gsl_sf_erf((tmpXDataColumn->minimum() - mu) / sigma)) / (2. * std::sqrt(2.));
+		break;
+	}
+	case nsl_sf_stats_exponential: {
+		const double mu = tmpXDataColumn->minimum();
+		const double lambda = 1. / (mean - mu); // 1/(<x>-\mu)
+		fitResult.paramValues[1] = lambda * (1 - 1. / (n - 1)); // unbiased
+		fitResult.paramValues[2] = mu;
+
+		fitResult.errorValues[1] = lambda / std::sqrt(n);
+		// exact method
+		double margin = lambda * (1. - gsl_cdf_chisq_Pinv(alpha / 2., 2 * n) / (2. * n));
+		fitResult.marginValues[1] = margin;
+		margin = lambda * (gsl_cdf_chisq_Pinv(1. - alpha / 2., 2 * n) / (2. * n) - 1.);
+		fitResult.margin2Values.resize(2);
+		fitResult.margin2Values[1] = margin;
+
+		DEBUG("error = " << fitResult.errorValues.at(1))
+		DEBUG("CI: " << gsl_cdf_chisq_Pinv(alpha / 2., 2 * n) / (2. * n) * lambda << " .. " << gsl_cdf_chisq_Pinv(1. - alpha / 2., 2 * n) / (2. * n) * lambda)
+		DEBUG("normal approx.: " << lambda * (1. - 1.96 / std::sqrt(n)) << " .. " << lambda * (1. + 1.96 / std::sqrt(n)))
+		DEBUG("1/l = " << 1. / fitResult.paramValues.at(1))
+		DEBUG("1/l CI: " << 2. * n / gsl_cdf_chisq_Pinv(1. - alpha / 2., 2 * n) / lambda << " .. " << 2. * n / gsl_cdf_chisq_Pinv(alpha / 2., 2 * n) / lambda)
+		DEBUG("1/l normal approx.: " << 1. / lambda / (1. + 1.96 / std::sqrt(n)) << " .. " << 1. / lambda / (1. - 1.96 / std::sqrt(n)))
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /= std::exp(-lambda * (tmpXDataColumn->minimum() - mu)) - std::exp(-lambda * (tmpXDataColumn->maximum() - mu));
+		break;
+	}
+	case nsl_sf_stats_laplace: {
+		double sigma = madmed;
+		if (n > 2) // bias correction
+			sigma *= n / (n - 2.);
+		const double mu = median;
+		fitResult.paramValues[1] = sigma;
+		fitResult.paramValues[2] = mu;
+
+		// TODO: error + CI
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram) {
+			double Fmin, Fmax;
+			const double xmin = tmpXDataColumn->minimum(), xmax = tmpXDataColumn->maximum();
+			if (xmin < mu)
+				Fmin = .5 * std::exp((xmin - mu) / sigma);
+			else
+				Fmin = 1. - .5 * std::exp(-(xmin - mu) / sigma);
+			if (xmax < mu)
+				Fmax = .5 * std::exp((xmax - mu) / sigma);
+			else
+				Fmax = 1. - .5 * std::exp(-(xmax - mu) / sigma);
+
+			fitResult.paramValues[0] /= Fmax - Fmin;
+		}
+		break;
+	}
+	case nsl_sf_stats_cauchy_lorentz: {
+		const double gamma = iqr / 2.;
+		const double mu = median; // better truncated mean of middle 24%
+		fitResult.paramValues[1] = gamma;
+		fitResult.paramValues[2] = mu;
+
+		// TODO: error + CI
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /= 1. / M_PI * (atan((tmpXDataColumn->maximum() - mu) / gamma) - atan((tmpXDataColumn->minimum() - mu) / gamma));
+		break;
+	}
+	case nsl_sf_stats_lognormal: {
+		// calculate mu and sigma
+		double mu = 0.;
+		for (size_t i = 0; i < n; i++)
+			mu += std::log(tmpXDataColumn->valueAt(i));
+		mu /= n;
+		double var = 0.;
+		for (size_t i = 0; i < n; i++)
+			var += gsl_pow_2(std::log(tmpXDataColumn->valueAt(i)) - mu);
+		var /= (n - 1);
+		const double sigma = std::sqrt(var);
+		fitResult.paramValues[1] = sigma;
+		fitResult.paramValues[2] = mu;
+
+		// TODO: error + CI
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /= gsl_sf_erf((std::log(tmpXDataColumn->maximum()) - mu) / sigma)
+				- gsl_sf_erf((std::log(tmpXDataColumn->minimum()) - mu) / sigma) / (2. * std::sqrt(2.));
+		break;
+	}
+	case nsl_sf_stats_poisson: {
+		const double lambda = mean;
+		fitResult.paramValues[1] = lambda;
+		fitResult.errorValues[1] = std::sqrt(lambda / n);
+
+		// double margin = 1.96 * fitResult.errorValues[1];	// normal approx.
+		// DEBUG("low / high = " << nsl_stats_chisq_low(alpha, n * lambda) << ", " << nsl_stats_chisq_high(alpha, n * lambda)) // exact formula
+		fitResult.marginValues[1] = lambda - nsl_stats_chisq_low(alpha, n * lambda) / n;
+		fitResult.margin2Values.resize(2);
+		fitResult.margin2Values[1] = nsl_stats_chisq_high(alpha, n * lambda) / n - lambda;
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /=
+				gsl_sf_gamma_inc_Q(floor(tmpXDataColumn->maximum() + 1), lambda) - gsl_sf_gamma_inc_Q(floor(tmpXDataColumn->minimum() + 1), lambda);
+		break;
+	}
+	case nsl_sf_stats_binomial: {
+		const double p = mean / n;
+		fitResult.paramValues[1] = p;
+		fitResult.paramValues[2] = n;
+		fitResult.errorValues[1] = std::sqrt(p * (1 - p) / n);
+
+		// Clopper-Pearson exact method
+		const double k = p * n;
+		fitResult.marginValues[1] = (p - gsl_cdf_beta_Pinv(alpha / 2., k, n - k + 1)) / std::sqrt(n);
+		fitResult.margin2Values.resize(2);
+		fitResult.margin2Values[1] = (gsl_cdf_beta_Pinv(1. - alpha / 2., k + 1, n - k) - p) / std::sqrt(n);
+
+		// normalization for spreadsheet or curve
+		const double kmin = tmpXDataColumn->minimum(), kmax = tmpXDataColumn->maximum();
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /= gsl_sf_beta_inc(n - kmax, kmax + 1, 1 - p) - gsl_sf_beta_inc(n - kmin, kmin + 1, 1 - p);
+	}
+	}
+
+	fitResult.calculateResult(n, np);
+
+	if (fitData.useResults) // set start values
+		for (unsigned int i = 0; i < np; i++)
+			fitData.paramStartValues.data()[i] = fitResult.paramValues.at(i);
+}
+
+void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn, const Range<double> xRange) {
 	// fit settings
 	const unsigned int maxIters = fitData.maxIterations; // maximal number of iterations
 	const double delta = fitData.eps; // fit tolerance
@@ -1836,8 +2141,6 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -1845,8 +2148,6 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Not sufficient weight data points provided.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -1855,25 +2156,16 @@ void XYFitCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	QVector<double> xerrorVector;
 	QVector<double> yerrorVector;
-	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
-	if (fitData.autoRange) { // auto x range of data to fit
-		fitData.fitRange = xRange;
-	} else { // custom x range of data to fit
-		if (!fitData.fitRange.isZero()) // avoid problems with user specified zero range
-			xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
-	}
-	DEBUG(Q_FUNC_INFO << ", fit range = " << xRange.start() << " .. " << xRange.end());
-	DEBUG(Q_FUNC_INFO << ", fitData range = " << fitData.fitRange.start() << " .. " << fitData.fitRange.end());
 
 	// logic from XYAnalysisCurve::copyData(), extended by the handling of error columns.
 	// TODO: decide how to deal with non-numerical error columns
-	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
+	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
 		// omit invalid data
 		if (!tmpXDataColumn->isValid(row) || tmpXDataColumn->isMasked(row) || !tmpYDataColumn->isValid(row) || tmpYDataColumn->isMasked(row))
 			continue;
 
-		double x = qQNaN();
+		double x = NAN;
 		switch (tmpXDataColumn->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 		case AbstractColumn::ColumnMode::Integer:
@@ -1888,7 +2180,7 @@ void XYFitCurvePrivate::recalculate() {
 			x = tmpXDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 
-		double y = qQNaN();
+		double y = NAN;
 		switch (tmpYDataColumn->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 		case AbstractColumn::ColumnMode::Integer:
@@ -1933,8 +2225,6 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("No data points available.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -1942,8 +2232,6 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -1951,8 +2239,6 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Fit model not specified.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -1977,7 +2263,7 @@ void XYFitCurvePrivate::recalculate() {
 	case nsl_fit_weight_instrumental: // yerror are sigmas
 		for (int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
-				weight[i] = 1. / gsl_pow_2(qMax(yerror[i], qMax(sqrt(minError), std::abs(ydata[i]) * 1.e-15)));
+				weight[i] = 1. / gsl_pow_2(std::max(yerror[i], std::max(sqrt(minError), std::abs(ydata[i]) * 1.e-15)));
 		break;
 	case nsl_fit_weight_direct: // yerror are weights
 		for (int i = 0; i < (int)n; i++)
@@ -1987,15 +2273,15 @@ void XYFitCurvePrivate::recalculate() {
 	case nsl_fit_weight_inverse: // yerror are inverse weights
 		for (int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
-				weight[i] = 1. / qMax(yerror[i], qMax(minError, std::abs(ydata[i]) * 1.e-15));
+				weight[i] = 1. / std::max(yerror[i], std::max(minError, std::abs(ydata[i]) * 1.e-15));
 		break;
 	case nsl_fit_weight_statistical:
 		for (int i = 0; i < (int)n; i++)
-			weight[i] = 1. / qMax(ydata[i], minError);
+			weight[i] = 1. / std::max(ydata[i], minError);
 		break;
 	case nsl_fit_weight_relative:
 		for (int i = 0; i < (int)n; i++)
-			weight[i] = 1. / qMax(gsl_pow_2(ydata[i]), minError);
+			weight[i] = 1. / std::max(gsl_pow_2(ydata[i]), minError);
 		break;
 	}
 
@@ -2123,7 +2409,7 @@ void XYFitCurvePrivate::recalculate() {
 				case nsl_fit_weight_no:
 					break;
 				case nsl_fit_weight_direct: // xerror = w_x
-					sigmasq = df * df / qMax(xerror[i], minError);
+					sigmasq = df * df / std::max(xerror[i], minError);
 					break;
 				case nsl_fit_weight_instrumental: // xerror = s_x
 					sigmasq = df * df * xerror[i] * xerror[i];
@@ -2147,7 +2433,7 @@ void XYFitCurvePrivate::recalculate() {
 					case nsl_fit_weight_no:
 						break;
 					case nsl_fit_weight_direct: // yerror = w_y
-						sigmasq += 1. / qMax(yerror[i], minError);
+						sigmasq += 1. / std::max(yerror[i], minError);
 						break;
 					case nsl_fit_weight_instrumental: // yerror = s_y
 						sigmasq += yerror[i] * yerror[i];
@@ -2168,7 +2454,7 @@ void XYFitCurvePrivate::recalculate() {
 				}
 
 				// printf ("sigma[%d] = %g\n", i, sqrt(sigmasq));
-				weight[i] = 1. / qMax(sigmasq, minError);
+				weight[i] = 1. / std::max(sigmasq, minError);
 			}
 
 			// update weights
@@ -2247,7 +2533,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.errorValues.resize(np);
 	fitResult.tdist_tValues.resize(np);
 	fitResult.tdist_pValues.resize(np);
-	fitResult.tdist_marginValues.resize(np);
+	fitResult.marginValues.resize(np);
 	// GSL: cerr = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
 	// NIST: cerr = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
 	const double cerr = sqrt(fitResult.rms);
@@ -2258,84 +2544,55 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
 		// use results as start values if desired
 		if (fitData.useResults) {
-			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
+			fitData.paramStartValues.data()[i] = fitResult.paramValues.at(i);
 			DEBUG("	saving parameter " << i << ": " << fitResult.paramValues[i] << ' ' << fitData.paramStartValues.data()[i]);
 		}
 		fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(covar, i, i));
 		fitResult.tdist_tValues[i] = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
 		fitResult.tdist_pValues[i] = nsl_stats_tdist_p(fitResult.tdist_tValues.at(i), fitResult.dof);
-		fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
+		fitResult.marginValues[i] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
 		for (unsigned int j = 0; j <= i; j++)
 			fitResult.correlationMatrix << gsl_matrix_get(covar, i, j) / sqrt(gsl_matrix_get(covar, i, i)) / sqrt(gsl_matrix_get(covar, j, j));
 	}
 
-	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
-	residualsVector->resize(tmpXDataColumn->rowCount());
-	DEBUG("	Residual vector size: " << residualsVector->size())
-	if (fitData.autoRange) { // evaluate full range of residuals
-		xVector->resize(tmpXDataColumn->rowCount());
-		auto mode = tmpXDataColumn->columnMode();
-		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
-			if (mode == AbstractColumn::ColumnMode::Double || mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
-				(*xVector)[i] = tmpXDataColumn->valueAt(i);
-			else if (mode == AbstractColumn::ColumnMode::DateTime)
-				(*xVector)[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
-
-		auto* parser = ExpressionParser::getInstance();
-		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector, fitData.paramNames, fitResult.paramValues);
-		if (rc) {
-			for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
-				(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector)[i];
-		} else {
-			DEBUG("	ERROR: Failed parsing residuals")
-			residualsVector->clear();
-		}
-	} else { // only selected range
+	// residuals for selected range
+	if (!fitData.autoRange) {
 		size_t j = 0;
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++) {
-			if (tmpXDataColumn->valueAt(i) >= xRange.start() && tmpXDataColumn->valueAt(i) <= xRange.end())
+			if (xRange.contains(tmpXDataColumn->valueAt(i)))
 				residualsVector->data()[i] = -gsl_vector_get(s->f, j++);
 			else // outside range
 				residualsVector->data()[i] = 0;
 		}
 	}
-	residualsColumn->setChanged();
 
-	// free resources
 	gsl_multifit_fdfsolver_free(s);
 	gsl_matrix_free(covar);
-
-	// calculate the fit function (vectors)
-	evaluate();
-	fitResult.elapsedTime = timer.elapsed();
-
-	sourceDataChangedSinceLastRecalc = false;
 }
 
 /* evaluate fit function (preview == true: use start values, default: false) */
-void XYFitCurvePrivate::evaluate(bool preview) {
+bool XYFitCurvePrivate::evaluate(bool preview) {
 	DEBUG(Q_FUNC_INFO << ", preview = " << preview);
 
 	// prepare source data columns
+	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
 	const AbstractColumn* tmpXDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		DEBUG(Q_FUNC_INFO << ", spreadsheet columns as data source");
+	switch (dataSourceType) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
 		tmpXDataColumn = xDataColumn;
-	} else if (dataSourceType == XYAnalysisCurve::DataSourceType::Curve) {
-		DEBUG(Q_FUNC_INFO << ", curve columns as data source");
+		break;
+	case XYAnalysisCurve::DataSourceType::Curve:
 		if (dataSourceCurve)
 			tmpXDataColumn = dataSourceCurve->xColumn();
-	} else {
-		DEBUG(Q_FUNC_INFO << ", histogram as data source");
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
 		if (dataSourceHistogram)
 			tmpXDataColumn = dataSourceHistogram->bins();
 	}
 
 	if (!tmpXDataColumn) {
-		DEBUG("	ERROR: Preparing source data column failed!");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		return;
+		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data column failed!");
+		return true;
 	}
 
 	// only needed for preview (else we have all columns)
@@ -2345,25 +2602,22 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	if (!xVector || !yVector) {
 		DEBUG(Q_FUNC_INFO << ", xVector or yVector not defined!");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		return;
+		return true;
 	}
 
 	if (fitData.model.simplified().isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no fit-model specified.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		return;
+		return true;
 	}
 
 	auto* parser = ExpressionParser::getInstance();
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()}; // full data range
-	if (!fitData.autoEvalRange) { // use given range for evaluation
+	if (!fitData.autoEvalRange) { // use custom range for evaluation
 		if (!fitData.evalRange.isZero()) // avoid zero range
 			xRange = fitData.evalRange;
 	}
 	DEBUG(Q_FUNC_INFO << ", eval range = " << xRange.toStdString());
+
 	xVector->resize((int)fitData.evaluatedPoints);
 	yVector->resize((int)fitData.evaluatedPoints);
 	DEBUG(Q_FUNC_INFO << ", vector size = " << xVector->size());
@@ -2380,8 +2634,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		residualsVector->clear();
 	}
 
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
+	return true;
 }
 
 /*!
@@ -2438,6 +2691,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("degree"), QString::number(d->fitData.degree));
 	if (d->fitData.modelCategory == nsl_fit_model_custom)
 		writer->writeAttribute(QStringLiteral("model"), d->fitData.model);
+	writer->writeAttribute(QStringLiteral("algorithm"), QString::number(d->fitData.algorithm));
 	writer->writeAttribute(QStringLiteral("maxIterations"), QString::number(d->fitData.maxIterations));
 	writer->writeAttribute(QStringLiteral("eps"), QString::number(d->fitData.eps, 'g', 15));
 	writer->writeAttribute(QStringLiteral("evaluatedPoints"), QString::number(d->fitData.evaluatedPoints));
@@ -2525,8 +2779,12 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("tdist_marginValues"));
-	foreach (const double& value, d->fitResult.tdist_marginValues)
+	foreach (const double& value, d->fitResult.marginValues)
 		writer->writeTextElement(QStringLiteral("tdist_margin"), QString::number(value, 'g', 15));
+	writer->writeEndElement();
+	writer->writeStartElement(QStringLiteral("tdist_margin2Values"));
+	foreach (const double& value, d->fitResult.margin2Values)
+		writer->writeTextElement(QStringLiteral("tdist_margin2"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("correlationMatrix"));
@@ -2585,6 +2843,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("model", fitData.model);
 			model = d->fitData.model;
 			DEBUG("got model = " << STDSTRING(model));
+			READ_INT_VALUE("algorithm", fitData.algorithm, nsl_fit_algorithm);
 
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
@@ -2633,7 +2892,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("tdist_p")) {
 			d->fitResult.tdist_pValues << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == QLatin1String("tdist_margin")) {
-			d->fitResult.tdist_marginValues << reader->readElementText().toDouble();
+			d->fitResult.marginValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("tdist_margin2")) {
+			d->fitResult.margin2Values << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == QLatin1String("correlation")) {
 			d->fitResult.correlationMatrix << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == QLatin1String("fitResult")) {
@@ -2692,7 +2953,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->fitResult.errorValues.resize(2);
 		d->fitResult.tdist_tValues.resize(2);
 		d->fitResult.tdist_pValues.resize(2);
-		d->fitResult.tdist_marginValues.resize(2);
+		d->fitResult.marginValues.resize(2);
+		d->fitResult.margin2Values.resize(2);
 	}
 
 	// older projects also save the param names for non-custom models: remove them
@@ -2716,8 +2978,10 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->fitResult.tdist_tValues.resize(np);
 	if (d->fitResult.tdist_pValues.size() == 0)
 		d->fitResult.tdist_pValues.resize(np);
-	if (d->fitResult.tdist_marginValues.size() == 0)
-		d->fitResult.tdist_marginValues.resize(np);
+	if (d->fitResult.marginValues.size() == 0)
+		d->fitResult.marginValues.resize(np);
+	if (d->fitResult.margin2Values.size() == 0)
+		d->fitResult.margin2Values.resize(np);
 	if (d->fitResult.correlationMatrix.size() == 0)
 		d->fitResult.correlationMatrix.resize(np * (np + 1) / 2);
 
