@@ -17,6 +17,9 @@ class NSLPeakTest : public NSLTest {
 
 private Q_SLOTS:
 	void testPeakSimple();
+	void testPeakHeight();
+	void testPeakDistance();
+	void testPeakHeightDistance();
 	// performance
 	// void testPerformance();
 };

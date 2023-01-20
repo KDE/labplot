@@ -25,12 +25,69 @@ void NSLPeakTest::testPeakSimple() {
 
 	size_t np;
 	size_t* indices = nsl_peak_detect(data, N, np);
+	if (indices == nullptr) {
+		WARN("Error getting peaks")
+		return;
+	}
+
+	QCOMPARE(np, 4);
+
+	for (size_t i = 0; i < np; i++)
+		QCOMPARE(indices[i], result[i]);
+	free(indices);
+}
+
+void NSLPeakTest::testPeakHeight() {
+	double data[] = {4., 2., 5., 2., 3., 1., 0, 1};
+	const size_t N = 8;
+	const size_t result[] = {0, 2};
+
+	size_t np;
+	size_t* indices = nsl_peak_detect(data, N, np, 4.);
 	if (!indices) {
 		WARN("Error getting peaks")
 		return;
 	}
 
-	QCOMPARE(np, 4ul);
+	QCOMPARE(np, 2);
+
+	for (size_t i = 0; i < np; i++)
+		QCOMPARE(indices[i], result[i]);
+	free(indices);
+}
+
+void NSLPeakTest::testPeakDistance() {
+	double data[] = {4., 2., 5., 2., 3., 1., 0, 1};
+	const size_t N = 8;
+	const size_t result[] = {0, 4, 7};
+
+	size_t np;
+	size_t* indices = nsl_peak_detect(data, N, np, 0., 3);
+	if (!indices) {
+		WARN("Error getting peaks")
+		return;
+	}
+
+	QCOMPARE(np, 3);
+
+	for (size_t i = 0; i < np; i++)
+		QCOMPARE(indices[i], result[i]);
+	free(indices);
+}
+
+void NSLPeakTest::testPeakHeightDistance() {
+	double data[] = {4., 2., 5., 2., 3., 1., 0, 1};
+	const size_t N = 8;
+	const size_t result[] = {0, 4};
+
+	size_t np;
+	size_t* indices = nsl_peak_detect(data, N, np, 3., 3);
+	if (!indices) {
+		WARN("Error getting peaks")
+		return;
+	}
+
+	QCOMPARE(np, 2);
 
 	for (size_t i = 0; i < np; i++)
 		QCOMPARE(indices[i], result[i]);
