@@ -1,0 +1,2 @@
+set(DBC_TOOLS OFF)
+set(DBC_TEST OFF)

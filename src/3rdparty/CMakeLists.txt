@@ -73,23 +73,24 @@ if (ENABLE_VECTOR_BLF)
   set(OPTION_RUN_DOXYGEN OFF CACHE BOOL "" FORCE) # disable running doxygen
   if (${LOCAL_DBC_PARSER})
       FetchContent_Declare(
-        dbc_parser_cpp
-        GIT_REPOSITORY https://github.com/Murmele/dbc_parser_cpp.git
-        GIT_TAG parsingMessage
-        #GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
-        #GIT_TAG        master
+        dbcLib
+        #GIT_REPOSITORY https://github.com/ihedvall/dbclib.git
+        #GIT_TAG master
+        GIT_REPOSITORY https://github.com/Murmele/dbclib.git
+        GIT_TAG        fixBuild2
+
       )
-      # dbc is the root project name
+      # dbcLib is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
-      set(CMAKE_PROJECT_dbc_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbc_database_parser_disableTests.cmake")
-      FetchContent_MakeAvailable(dbc_parser_cpp)
+      set(CMAKE_PROJECT_dbcLib_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbclib_disableTests.cmake")
+      FetchContent_MakeAvailable(dbcLib)
       # headerfiles of the projects are referring to <libdbc/someheader.h> and therefore
       # the path must be added
       target_include_directories(labplot2lib PUBLIC ${dbc_parser_cpp_SOURCE_DIR}/include)
       target_link_libraries(labplot2lib dbc)
   else ()
-    pkg_check_modules(dbc REQUIRED IMPORTED_TARGET dbc)
-    target_link_libraries(labplot2lib PkgConfig::dbc)
+    find_package(dbc REQUIRED)
+    target_link_libraries(labplot2lib Dbc::dbc)
   endif()
   target_compile_definitions(labplot2lib PRIVATE HAVE_DBC_PARSER)
   
