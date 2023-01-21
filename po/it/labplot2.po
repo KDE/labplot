@@ -1,6 +1,6 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the labplot package.
-# Paolo Zamponi <zapaolo@email.it>, 2017, 2018, 2019, 2020, 2021, 2022.
+# Paolo Zamponi <zapaolo@email.it>, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2020, 2022.
 #
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-20 00:53+0000\n"
-"PO-Revision-Date: 2022-12-28 17:31+0100\n"
+"PO-Revision-Date: 2023-01-16 08:24+0100\n"
 "Last-Translator: Paolo Zamponi <zapaolo@email.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -9289,10 +9289,9 @@ msgstr "&Cerca"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Column Statistics..."
-msgstr "Statistiche sulle colonne"
+msgstr "Statistiche sulle colonne..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
 #, kde-format
@@ -9723,10 +9722,9 @@ msgid "%1: column statistics"
 msgstr "%1: statistiche sulle colonne"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3125
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Selection in %1"
-msgstr "Selezione"
+msgstr "Selezione in %1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3168
 #, kde-format
@@ -11870,16 +11868,14 @@ msgid "Transparent"
 msgstr "Trasparente"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:597
-#, fuzzy, kde-format
-#| msgid "%1: set values color"
+#, kde-format
 msgid "%1: set axis color"
-msgstr "%1: imposta il colore dei valori"
+msgstr "%1: imposta il colore dell'asse"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:599
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1 axes: set color"
-msgstr "%1: imposta il colore del carattere"
+msgstr "Asse %1: imposta il colore"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1967
 #, kde-format
@@ -13670,10 +13666,9 @@ msgstr ""
 "visualizzazione e per l'analisi dei dati accessibile da chiunque."
 
 #: src/kdefrontend/LabPlot.cpp:94
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2022"
+#, kde-format
 msgid "(c) 2007-2023"
-msgstr "(c) 2007-2022"
+msgstr "(c) 2007-2023"
 
 #: src/kdefrontend/LabPlot.cpp:97
 #, kde-format
@@ -14783,10 +14778,9 @@ msgid "Subtract Value"
 msgstr "Sottrai valore"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Subtract"
+#, kde-format
 msgid "Subtract:"
-msgstr "Sottrai"
+msgstr "Sottrai:"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
 #, kde-format
@@ -14816,10 +14810,9 @@ msgid "&Divide"
 msgstr "&Dividi"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "Custom Query"
+#, kde-format
 msgid "Custom Value"
-msgstr "Interrogazione personalizzata"
+msgstr "Valore personalizzato"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:155
 #, kde-format
@@ -14834,22 +14827,19 @@ msgid "Mean"
 msgstr "Media"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:433
-#, fuzzy, kde-format
-#| msgid "On new data"
+#, kde-format
 msgid "raw data"
-msgstr "Sui dati nuovi"
+msgstr "dati grezzi"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:440
-#, fuzzy, kde-format
-#| msgid "Dash line"
+#, kde-format
 msgid "baseline"
-msgstr "Linea tratteggiata"
+msgstr "linea di base"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:451
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "result"
-msgstr "Risultati:"
+msgstr "risultato"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:506
 #, kde-format
