@@ -19,7 +19,10 @@ class WorksheetElementTest : public CommonTest {
 private Q_SLOTS:
 	void customPointSetPositionLogical();
 	void customPointMouseMove();
-	void customPointKeyPressMove();
+	void customPointKeyPressMoveRight();
+	void customPointKeyPressMoveLeft();
+	void customPointKeyPressMoveUp();
+	void customPointKeyPressMoveDown();
 	void customPointEnableDisableCoordBinding();
 };
 
