@@ -701,7 +701,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			} else if (event->key() == Qt::Key_Right) {
 				p.setX(p.x() + delta);
 			} else if (event->key() == Qt::Key_Up) {
-				p.setY(p.y() - delta); // Don't understand why I need a negative here and below a positive delta
+				p.setY(p.y() - delta); // y-axis is reversed, change the sigh here
 			} else if (event->key() == Qt::Key_Down) {
 				p.setY(p.y() + delta);
 			}
@@ -772,7 +772,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 				return QGraphicsItem::itemChange(change, value);
 			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
-			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 		} else {
 			// convert item's center point in parent's coordinates

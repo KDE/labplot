@@ -302,8 +302,6 @@ void ReferenceRangePrivate::retransform() {
 	}
 	updatePosition(); // To update position.point
 
-	prevPositionLogical = positionLogical;
-
 	// TODO: taken from BoxPlotPrivate::updateFillingRect(), maybe a more simpler version is possible here
 	Lines lines;
 	lines << QLineF(rect.topLeft(), rect.topRight());
@@ -379,17 +377,17 @@ void ReferenceRangePrivate::updateOrientation() {
 void ReferenceRange::updateStartEndPositions(QPointF newPosition) {
 	Q_D(ReferenceRange);
 	if (d->orientation == WorksheetElement::Orientation::Horizontal) {
-		double delta = newPosition.y() - d->prevPositionLogical.y();
-		d->positionLogicalStart.setY(d->positionLogicalStart.y() + delta);
-		d->positionLogicalEnd.setY(d->positionLogicalEnd.y() + delta);
+		const double width = (d->positionLogicalEnd.y() - d->positionLogicalStart.y()) / 2;
+		d->positionLogicalStart.setY(newPosition.y() + width); // y-axis is reversed, change the sigh here
+		d->positionLogicalEnd.setY(newPosition.y() - width);
 	} else {
-		double delta = newPosition.x() - d->prevPositionLogical.x();
-		d->positionLogicalStart.setX(d->positionLogicalStart.x() + delta);
-		d->positionLogicalEnd.setX(d->positionLogicalEnd.x() + delta);
+		const double width = (d->positionLogicalEnd.x() - d->positionLogicalStart.x()) / 2;
+		d->positionLogicalStart.setX(newPosition.x() - width);
+		d->positionLogicalEnd.setX(newPosition.x() + width);
 	}
 	Q_EMIT positionLogicalStartChanged(d->positionLogicalStart);
 	Q_EMIT positionLogicalEndChanged(d->positionLogicalEnd);
-	d->retransform();
+	// d->retransform();
 }
 
 /*!
