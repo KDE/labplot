@@ -115,7 +115,7 @@ void WorksheetElementTest::customPointMouseMove() {
 	QCOMPARE(point->position().point.y(), -40);
 }
 
-void WorksheetElementTest::customPointKeyPressMove() {
+void WorksheetElementTest::customPointKeyPressMoveRight() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -159,6 +159,144 @@ void WorksheetElementTest::customPointKeyPressMove() {
 	VALUES_EQUAL(point->position().point.y(), 0);
 	VALUES_EQUAL(point->positionLogical().x(), 0.55);
 	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+}
+
+void WorksheetElementTest::customPointKeyPressMoveLeft() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	p->setHorizontalPadding(0);
+	p->setVerticalPadding(0);
+	p->setRightPadding(0);
+	p->setBottomPadding(0);
+	p->setRect(QRectF(0, 0, 100, 100));
+
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
+	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
+
+	QCOMPARE(p->dataRect().x(), -50);
+	QCOMPARE(p->dataRect().y(), -50);
+	QCOMPARE(p->dataRect().width(), 100);
+	QCOMPARE(p->dataRect().height(), 100);
+
+	auto* point = new CustomPoint(p, QStringLiteral("point"));
+	p->addChild(point);
+	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = point->position();
+	pp.point = QPointF(0, 0);
+	point->setPosition(pp);
+	point->setCoordinateBindingEnabled(true);
+
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Left, Qt::KeyboardModifier::NoModifier);
+	point->d_ptr->keyPressEvent(&event);
+
+	VALUES_EQUAL(point->position().point.x(), -5);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.45);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+}
+
+void WorksheetElementTest::customPointKeyPressMoveUp() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	p->setHorizontalPadding(0);
+	p->setVerticalPadding(0);
+	p->setRightPadding(0);
+	p->setBottomPadding(0);
+	p->setRect(QRectF(0, 0, 100, 100));
+
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
+	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
+
+	QCOMPARE(p->dataRect().x(), -50);
+	QCOMPARE(p->dataRect().y(), -50);
+	QCOMPARE(p->dataRect().width(), 100);
+	QCOMPARE(p->dataRect().height(), 100);
+
+	auto* point = new CustomPoint(p, QStringLiteral("point"));
+	p->addChild(point);
+	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = point->position();
+	pp.point = QPointF(0, 0);
+	point->setPosition(pp);
+	point->setCoordinateBindingEnabled(true);
+
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	point->d_ptr->keyPressEvent(&event);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 5);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.55);
+}
+
+void WorksheetElementTest::customPointKeyPressMoveDown() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	p->setHorizontalPadding(0);
+	p->setVerticalPadding(0);
+	p->setRightPadding(0);
+	p->setBottomPadding(0);
+	p->setRect(QRectF(0, 0, 100, 100));
+
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
+	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
+
+	QCOMPARE(p->dataRect().x(), -50);
+	QCOMPARE(p->dataRect().y(), -50);
+	QCOMPARE(p->dataRect().width(), 100);
+	QCOMPARE(p->dataRect().height(), 100);
+
+	auto* point = new CustomPoint(p, QStringLiteral("point"));
+	p->addChild(point);
+	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = point->position();
+	pp.point = QPointF(0, 0);
+	point->setPosition(pp);
+	point->setCoordinateBindingEnabled(true);
+
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+	point->d_ptr->keyPressEvent(&event);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), -5);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.45);
 }
 
 // Switching between setCoordinateBindingEnabled true and false should not move the point
