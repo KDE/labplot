@@ -545,6 +545,9 @@ endif()
 IF (Discount_FOUND)
 	target_link_libraries( labplot2lib Discount::Lib )
 ENDIF ()
+IF (Orcus_FOUND)
+	target_link_libraries( labplot2lib ${Orcus_LIBRARIES} )
+ENDIF ()
 #TODO: KF5::NewStuff
 
 IF (RECENT_CANTOR)

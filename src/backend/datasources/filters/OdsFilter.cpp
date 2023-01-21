@@ -19,6 +19,20 @@
 #include <QTreeWidgetItem>
 #include <QVector>
 
+#ifdef HAVE_ORCUS
+#include <orcus/orcus_ods.hpp>
+#include <orcus/spreadsheet/document.hpp>
+#include <orcus/spreadsheet/factory.hpp>
+
+//#include <ixion/address.hpp>
+//#include <ixion/model_context.hpp>
+
+//#include <iostream>
+//#include <cstdlib>
+
+using namespace orcus;
+#endif
+
 #include <utility>
 
 OdsFilter::OdsFilter()
@@ -31,7 +45,14 @@ OdsFilter::~OdsFilter() {
 
 QString OdsFilter::fileInfoString(const QString& fileName) {
 #ifdef HAVE_ORCUS
-	OdsFilter filter;
+	// OdsFilter filter;
+
+	spreadsheet::range_size_t ss{1048576, 16384};
+	spreadsheet::document doc{ss};
+	spreadsheet::import_factory factory{doc};
+	orcus_ods loader(&factory);
+
+	loader.read_file(fileName.toStdString());
 
 	QString info(i18n("Sheet count: %1", QString::number(0)));
 	info += QLatin1String("<br>");
