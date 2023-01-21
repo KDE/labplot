@@ -282,26 +282,25 @@ void ReferenceRangePrivate::retransform() {
 	if (suppressRetransform || !q->cSystem || q->isLoading())
 		return;
 
-	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
+	updatePosition(); // To update position.point
 
-	// calculate the position in the scene coordinates
+	// calculate rect in logical coordinates
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	if (orientation == ReferenceRange::Orientation::Vertical) {
-		positionLogical = QPointF(positionLogical.x(), yRange.center());
+		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
 		rect.setX(positionLogicalStart.x());
 		rect.setY(yRange.start());
 		rect.setWidth(positionLogicalEnd.x() - positionLogicalStart.x());
 		rect.setHeight(yRange.length());
 	} else {
-		positionLogical = QPointF(xRange.center(), positionLogical.y());
+		const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
 		rect.setX(xRange.start());
 		rect.setY(positionLogicalStart.y());
 		rect.setWidth(xRange.length());
 		rect.setHeight(positionLogicalEnd.y() - positionLogicalStart.y());
 	}
-	updatePosition(); // To update position.point
 
+	// calculate rect in scene coordinates
 	// TODO: taken from BoxPlotPrivate::updateFillingRect(), maybe a more simpler version is possible here
 	Lines lines;
 	lines << QLineF(rect.topLeft(), rect.topRight());
@@ -370,15 +369,16 @@ void ReferenceRangePrivate::updateOrientation() {
 }
 
 /*!
- * called when the user moves the graphics item with the mouse and the logical position of the item is changed.
- * Here we update the logical coordinates for the start and end points and notify the dock widget.
+ * called when the user moves the graphics item with the mouse and the scene position of the item is changed.
+ * Here we update the logical coordinates for the start and end points based on the new valud for the logical
+ * position \c newPosition of the item's center and notify the dock widget.
  */
 // TODO: make this undo/redo-able
 void ReferenceRange::updateStartEndPositions(QPointF newPosition) {
 	Q_D(ReferenceRange);
 	if (d->orientation == WorksheetElement::Orientation::Horizontal) {
 		const double width = (d->positionLogicalEnd.y() - d->positionLogicalStart.y()) / 2;
-		d->positionLogicalStart.setY(newPosition.y() + width); // y-axis is reversed, change the sigh here
+		d->positionLogicalStart.setY(newPosition.y() + width); // y-axis is reversed, change the sign here
 		d->positionLogicalEnd.setY(newPosition.y() - width);
 	} else {
 		const double width = (d->positionLogicalEnd.x() - d->positionLogicalStart.x()) / 2;
@@ -387,7 +387,6 @@ void ReferenceRange::updateStartEndPositions(QPointF newPosition) {
 	}
 	Q_EMIT positionLogicalStartChanged(d->positionLogicalStart);
 	Q_EMIT positionLogicalEndChanged(d->positionLogicalEnd);
-	// d->retransform();
 }
 
 /*!
