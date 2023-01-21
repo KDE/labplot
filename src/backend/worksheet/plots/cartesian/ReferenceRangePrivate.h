@@ -32,7 +32,6 @@ public:
 	ReferenceRange::Orientation orientation{ReferenceRange::Orientation::Horizontal};
 	QPointF positionLogicalStart;
 	QPointF positionLogicalEnd;
-	QPointF prevPositionLogical;
 	QRectF rect;
 
 	Line* line{nullptr};
