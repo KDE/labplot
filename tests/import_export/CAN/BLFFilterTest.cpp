@@ -544,4 +544,114 @@ void BLFFilterTest::testUndefinedMessageNAN() {
 	}
 }
 
+// Value5 is a value larger than one byte, but not exactly a multiple
+// And is not aligned with a complete byte
+void BLFFilterTest::testBigNumberNotByteAligned() {
+	QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
+	QVERIFY(blfFileName.open());
+	QVector<Vector::BLF::CanMessage2*> messages{
+		createCANMessage(337, 5, {0, 4, 252, 19, 0, 0, 0, 0}),
+		createCANMessage(337, 10, {47, 4, 60, 29, 0, 0, 0, 0}),
+		createCANMessage(337, 15, {57, 4, 250, 29, 0, 0, 0, 0}),
+	}; // time is in nanoseconds
+	createBLFFile(blfFileName.fileName(), messages);
+
+	QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
+	QVERIFY(dbcFile.open());
+	const auto dbcContent = R"(BO_ 337 STATUS: 8 Vector__XXX
+ SG_ Value6 : 27|3@1+ (1,0) [0|7] ""  Vector__XXX
+ SG_ Value5 : 16|11@1+ (0.1,-102) [-102|102] "%"  Vector__XXX
+ SG_ Value2 : 8|2@1+ (1,0) [0|2] ""  Vector__XXX
+ SG_ Value3 : 10|1@1+ (1,0) [0|1] ""  Vector__XXX
+ SG_ Value7 : 30|2@1+ (1,0) [0|3] ""  Vector__XXX
+ SG_ Value4 : 11|4@1+ (1,0) [0|3] ""  Vector__XXX
+ SG_ Value1 : 0|8@1+ (1,0) [0|204] "Km/h"  Vector__XXX
+)";
+	createDBCFile(dbcFile.fileName(), dbcContent);
+
+	// Start Test
+
+	VectorBLFFilter filter;
+	filter.setConvertTimeToSeconds(true);
+	filter.setTimeHandlingMode(CANFilter::TimeHandling::ConcatNAN);
+	QCOMPARE(filter.isValid(blfFileName.fileName()), true);
+
+	// Valid blf and valid dbc
+	filter.setDBCFile(dbcFile.fileName());
+	QCOMPARE(filter.d->readDataFromFile(blfFileName.fileName(), 4), 3);
+	const auto dc = filter.dataContainer();
+	QCOMPARE(dc.size(), 8); // Time + 7 signals
+	{
+		// Time
+		const auto* v = static_cast<QVector<double>*>(dc.at(0));
+		QCOMPARE(v->length(), 3);
+		QCOMPARE(v->at(0), 5e-9);
+		QCOMPARE(v->at(1), 10e-9);
+		QCOMPARE(v->at(2), 15e-9);
+	}
+
+	{
+		// Value1
+		const auto* v = static_cast<QVector<double>*>(dc.at(1));
+		QCOMPARE(v->length(), 3);
+		QCOMPARE(v->at(0), 0);
+		QCOMPARE(v->at(1), 47);
+		QCOMPARE(v->at(2), 57);
+	}
+
+	{
+		// Value2
+		const auto* v = static_cast<QVector<double>*>(dc.at(2));
+		QCOMPARE(v->length(), 3);
+		QCOMPARE(v->at(0), 0);
+		QCOMPARE(v->at(1), 0);
+		QCOMPARE(v->at(2), 0);
+	}
+
+	{
+		// Value3
+		const auto* v = static_cast<QVector<double>*>(dc.at(3));
+		QCOMPARE(v->length(), 3);
+		QCOMPARE(v->at(0), 1);
+		QCOMPARE(v->at(1), 1);
+		QCOMPARE(v->at(2), 1);
+	}
+
+	{
+		// Value4
+		const auto* v = static_cast<QVector<double>*>(dc.at(4));
+		QCOMPARE(v->length(), 3);
+		QCOMPARE(v->at(0), 0);
+		QCOMPARE(v->at(1), 0);
+		QCOMPARE(v->at(2), 0);
+	}
+
+	{
+		// Value5
+		const auto* v = static_cast<QVector<double>*>(dc.at(5));
+		QCOMPARE(v->length(), 3);
+		QCOMPARE(v->at(0), 0);
+		QCOMPARE(v->at(1), 32);
+		QCOMPARE(v->at(2), 51);
+	}
+
+	{
+		// Value6
+		const auto* v = static_cast<QVector<double>*>(dc.at(6));
+		QCOMPARE(v->length(), 3);
+		QCOMPARE(v->at(0), 2);
+		QCOMPARE(v->at(1), 3);
+		QCOMPARE(v->at(2), 3);
+	}
+
+	{
+		// Value7
+		const auto* v = static_cast<QVector<double>*>(dc.at(7));
+		QCOMPARE(v->length(), 3);
+		QCOMPARE(v->at(0), 0);
+		QCOMPARE(v->at(1), 0);
+		QCOMPARE(v->at(2), 0);
+	}
+}
+
 QTEST_MAIN(BLFFilterTest)

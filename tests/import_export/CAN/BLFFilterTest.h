@@ -32,6 +32,7 @@ private Q_SLOTS:
 	void testTimeNative();
 	void testUndefinedMessagePreviousValue();
 	void testUndefinedMessageNAN();
+	void testBigNumberNotByteAligned();
 
 private:
 	// Helper functions
