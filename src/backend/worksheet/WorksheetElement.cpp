@@ -660,16 +660,12 @@ void WorksheetElementPrivate::updatePosition() {
 	QPointF p;
 	if (coordinateBindingEnabled && q->cSystem) {
 		// the position in logical coordinates was changed, calculate the position in scene coordinates
-		// InsidePlot will get false if the point lies outside of the datarect
+		// insidePlot will get false if the point lies outside of the datarect
 		p = q->cSystem->mapLogicalToScene(positionLogical, insidePlot, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
-		QPointF inParentCoords = mapPlotAreaToParent(p);
-		p = inParentCoords;
-		position.point = q->parentPosToRelativePos(p, position);
-		p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
+		position.point = q->parentPosToRelativePos(mapPlotAreaToParent(p), position);
 		Q_EMIT q->positionChanged(position);
 	} else {
-		// Not important if within the datarect or not
-		insidePlot = true;
+		insidePlot = true; // not important if within the datarect or not
 		p = q->relativePosToParentPos(position);
 
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
@@ -677,8 +673,9 @@ void WorksheetElementPrivate::updatePosition() {
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(p), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 		}
-		p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
 	}
+
+	p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
 
 	suppressItemChangeEvent = true;
 	setPos(p);
@@ -701,7 +698,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			} else if (event->key() == Qt::Key_Right) {
 				p.setX(p.x() + delta);
 			} else if (event->key() == Qt::Key_Up) {
-				p.setY(p.y() - delta); // y-axis is reversed, change the sigh here
+				p.setY(p.y() - delta); // y-axis is reversed, change the sign here
 			} else if (event->key() == Qt::Key_Down) {
 				p.setY(p.y() + delta);
 			}
@@ -724,9 +721,8 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			q->setPosition(tempPosition);
 		}
 		event->accept();
-	} else {
+	} else
 		QGraphicsItem::keyPressEvent(event);
-	}
 }
 
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
