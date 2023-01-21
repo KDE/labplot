@@ -19,6 +19,7 @@
 #include "backend/datasources/filters/JsonFilter.h"
 #include "backend/datasources/filters/MatioFilter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
+#include "backend/datasources/filters/OdsFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/ReadStatFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"

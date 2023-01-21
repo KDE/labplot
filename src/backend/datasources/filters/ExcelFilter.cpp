@@ -15,12 +15,12 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#include <utility>
-
 #include <KI18n/KLocalizedString>
 #include <QStringList>
 #include <QTreeWidgetItem>
 #include <QVector>
+
+#include <utility>
 
 ExcelFilter::ExcelFilter()
 	: AbstractFileFilter(FileType::Excel)
@@ -37,9 +37,8 @@ QString ExcelFilter::fileInfoString(const QString& fileName) {
 	ExcelFilter filter;
 
 	QVector<int> rangesPerSheet;
-	for (const auto& sheet : doc.sheetNames()) {
+	for (const auto& sheet : doc.sheetNames())
 		rangesPerSheet.push_back(filter.dataRegions(fileName, sheet).size());
-	}
 
 	const QStringList& sheetNames = doc.sheetNames();
 	QString info(i18n("Sheet count: %1", QString::number(sheetNames.size())));

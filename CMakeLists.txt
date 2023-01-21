@@ -549,7 +549,7 @@ IF (ENABLE_ORCUS)
 		MESSAGE (STATUS "Orcus library NOT FOUND.")
 	ENDIF ()
 ELSE ()
-	MESSAGE (STATUS "Orcus DISABLED")
+	MESSAGE (STATUS "Orcus (ODS) DISABLED")
 ENDIF ()
 
 ### Touch bar on macOS (optional) #############################

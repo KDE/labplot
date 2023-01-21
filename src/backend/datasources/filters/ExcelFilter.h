@@ -11,9 +11,10 @@
 #ifndef EXCELFILTER_H
 #define EXCELFILTER_H
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include <memory>
 
 #include <QObject>
+
+#include <memory>
 
 #ifdef HAVE_EXCEL
 #include "3rdparty/QXlsx/header/xlsxcellrange.h"

@@ -95,6 +95,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_EXCEL
 		ui.cbFileType->addItem(i18n("Excel 2007+ (XSLX)"), static_cast<int>(AbstractFileFilter::FileType::Excel));
 #endif
+#ifdef HAVE_ORCUS
+		ui.cbFileType->addItem(i18n("OpenDocument Spreadsheet (ODS)"), static_cast<int>(AbstractFileFilter::FileType::Ods));
+#endif
 #ifdef HAVE_HDF5
 		ui.cbFileType->addItem(i18n("Hierarchical Data Format 5 (HDF5)"), static_cast<int>(AbstractFileFilter::FileType::HDF5));
 #endif
@@ -702,6 +705,11 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
+	case AbstractFileFilter::FileType::Ods: {
+		DEBUG(Q_FUNC_INFO << ", ODS");
+		// TODO
+		break;
+	}
 	case AbstractFileFilter::FileType::Image: {
 		DEBUG(Q_FUNC_INFO << ", Image");
 		if (!m_currentFilter)
@@ -1023,6 +1031,7 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	case AbstractFileFilter::FileType::FITS:
 	case AbstractFileFilter::FileType::MATIO:
 	case AbstractFileFilter::FileType::Excel:
+	case AbstractFileFilter::FileType::Ods:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
@@ -1137,6 +1146,9 @@ void ImportFileWidget::initOptionsWidget() {
 					&ImportFileWidget::enableDataPortionSelection);
 		}
 		ui.swOptions->setCurrentWidget(m_excelOptionsWidget->parentWidget());
+		break;
+	case AbstractFileFilter::FileType::Ods:
+		// TODO
 		break;
 	case AbstractFileFilter::FileType::HDF5:
 		if (!m_hdf5OptionsWidget) {
@@ -1313,6 +1325,9 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 			break;
 		case AbstractFileFilter::FileType::Excel:
 			infoStrings << ExcelFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::Ods:
+			infoStrings << OdsFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::FileType::Image:
 			infoStrings << ImageFilter::fileInfoString(fileName);
@@ -1523,13 +1538,14 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
 
-	case AbstractFileFilter::FileType::Excel: {
+	case AbstractFileFilter::FileType::Excel:
 		ui.tePreview->clear();
 		importedStrings = m_excelOptionsWidget->previewString();
 		tmpTableWidget = m_excelOptionsWidget->previewWidget();
-
 		break;
-	}
+	case AbstractFileFilter::FileType::Ods:
+		// TODO
+		break;
 	case AbstractFileFilter::FileType::Image: {
 		ui.tePreview->clear();
 
@@ -1744,6 +1760,9 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 #ifdef HAVE_EXCEL
 			m_excelOptionsWidget->updateContent(reinterpret_cast<ExcelFilter*>(filter), fileName);
 #endif
+			break;
+		case AbstractFileFilter::FileType::Ods:
+			// TODO
 			break;
 		case AbstractFileFilter::FileType::Ascii:
 		case AbstractFileFilter::FileType::Binary:

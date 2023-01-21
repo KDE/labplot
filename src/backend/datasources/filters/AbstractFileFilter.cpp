@@ -148,6 +148,10 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	else if (fileInfo.contains(QLatin1String("Microsoft Excel")) || fileName.endsWith(QLatin1String("xlsx"), Qt::CaseInsensitive))
 		fileType = FileType::Excel;
 #endif
+#ifdef HAVE_ORCUS // before ASCII, because ODS is XML and XML is ASCII
+	else if (fileInfo.contains(QLatin1String("OpenDocument Spreadsheet")) || fileName.endsWith(QLatin1String("ods"), Qt::CaseInsensitive))
+		fileType = FileType::Ods;
+#endif
 	else if (fileInfo.contains(QLatin1String("ASCII")) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
 			 || fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
 			 || fileInfo.contains(QLatin1String("compressed data")) /* for gzipped ascii data */) {
