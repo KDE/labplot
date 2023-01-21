@@ -24,6 +24,8 @@ private Q_SLOTS:
 	void customPointKeyPressMoveUp();
 	void customPointKeyPressMoveDown();
 	void customPointEnableDisableCoordBinding();
+
+    void referenceRangeXMouseMove();
 };
 
 #endif // WORKSHEETELEMENTTEST_H
