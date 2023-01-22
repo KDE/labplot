@@ -459,6 +459,92 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 	VALUES_EQUAL(referenceRange->d_func()->rect.height(), 100);
 }
 
+void WorksheetElementTest::referenceRangeYMouseMove() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	p->setHorizontalPadding(0);
+	p->setVerticalPadding(0);
+	p->setRightPadding(0);
+	p->setBottomPadding(0);
+	p->setRect(QRectF(0, 0, 100, 100));
+
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
+	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
+
+	QCOMPARE(p->dataRect().x(), -50);
+	QCOMPARE(p->dataRect().y(), -50);
+	QCOMPARE(p->dataRect().width(), 100);
+	QCOMPARE(p->dataRect().height(), 100);
+
+	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
+	referenceRange->setOrientation(ReferenceRange::Orientation::Horizontal);
+	p->addChild(referenceRange);
+	referenceRange->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = referenceRange->position();
+	pp.point = QPointF(0, 0);
+	referenceRange->setPosition(pp);
+	referenceRange->setCoordinateBindingEnabled(true);
+
+	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
+	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
+	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
+	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
+	VALUES_EQUAL(referenceRange->d_func()->rect.x(), -50); // - width / 2 (logical 0.55 - 0.45) -> scene (-5 - (+5)) = 10
+	VALUES_EQUAL(referenceRange->d_func()->rect.y(), -5);
+	VALUES_EQUAL(referenceRange->d_func()->rect.width(), 100);
+	VALUES_EQUAL(referenceRange->d_func()->rect.height(), 10);
+
+	// Simulate mouse move
+	referenceRange->d_ptr->setPos(QPointF(-10, -25)); // item change will be called (negative value is up)
+	QCOMPARE(referenceRange->positionLogical().y(), 0.75); // 25/50 * 0.5 + 0.5
+	QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only vertical considered
+	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.8);
+	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.7);
+	// Rect did not change
+	VALUES_EQUAL(referenceRange->d_func()->rect.x(), -50);
+	VALUES_EQUAL(referenceRange->d_func()->rect.y(), -5);
+	VALUES_EQUAL(referenceRange->d_func()->rect.width(), 100);
+	VALUES_EQUAL(referenceRange->d_func()->rect.height(), 10);
+
+	// Set Logical Start
+	referenceRange->setPositionLogicalStart(QPointF(0.5, 0.1));
+	QCOMPARE(referenceRange->positionLogical().y(), 0.4);
+	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
+	QCOMPARE(referenceRange->position().point.y(), -10);
+	QCOMPARE(referenceRange->position().point.x(), 0);
+	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.1);
+	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.7);
+	VALUES_EQUAL(referenceRange->d_func()->rect.x(), -50);
+	VALUES_EQUAL(referenceRange->d_func()->rect.y(), -30); // (0.7 - 0.1) * 100 / 2
+	VALUES_EQUAL(referenceRange->d_func()->rect.width(), 100);
+	VALUES_EQUAL(referenceRange->d_func()->rect.height(), 60);
+
+	// Set Logical End
+	referenceRange->setPositionLogicalEnd(QPointF(0.5, 0.3));
+	QCOMPARE(referenceRange->positionLogical().y(), 0.2);
+	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
+	QCOMPARE(referenceRange->position().point.y(), -30);
+	QCOMPARE(referenceRange->position().point.x(), 0);
+	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.1);
+	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.3);
+	VALUES_EQUAL(referenceRange->d_func()->rect.x(), -50);
+	VALUES_EQUAL(referenceRange->d_func()->rect.y(), -10);
+	VALUES_EQUAL(referenceRange->d_func()->rect.width(), 100);
+	VALUES_EQUAL(referenceRange->d_func()->rect.height(), 20);
+}
+
 // TODO: create test with reference range with nonlinear ranges!
 // Zoom in cartesianplot leads to move the CustomPoint
 // Testing without setCoordinateBindingEnabled
