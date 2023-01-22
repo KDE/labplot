@@ -221,6 +221,160 @@ void WorksheetElementTest::customPointEnableDisableCoordBinding() {
 	VALUES_EQUAL(point->positionLogical().y(), 0.7);
 }
 
+void WorksheetElementTest::customPointShiftXPlotCoordBinding() {
+	SETUP_PROJECT
+
+	auto* point = new CustomPoint(p, QStringLiteral("point"));
+	p->addChild(point);
+	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = point->position();
+	pp.point = QPointF(0, 0);
+	point->setPosition(pp);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+
+	point->setCoordinateBindingEnabled(true);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+
+	// Set position to another than the origin
+	point->setPositionLogical(QPointF(0.85, 0.7));
+
+	VALUES_EQUAL(point->position().point.x(), 35);
+	VALUES_EQUAL(point->position().point.y(), 20);
+	VALUES_EQUAL(point->positionLogical().x(), 0.85);
+	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+
+	p->shiftLeftX();
+
+	VALUES_EQUAL(point->position().point.x(), 25); // shift factor is 0.1 -> 1(current range)*0.1 = 0.1 = -10 in scene coords
+	VALUES_EQUAL(point->position().point.y(), 20);
+	VALUES_EQUAL(point->positionLogical().x(), 0.85);
+	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+}
+
+void WorksheetElementTest::customPointShiftYPlotCoordBinding() {
+	SETUP_PROJECT
+
+	auto* point = new CustomPoint(p, QStringLiteral("point"));
+	p->addChild(point);
+	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = point->position();
+	pp.point = QPointF(0, 0);
+	point->setPosition(pp);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+
+	point->setCoordinateBindingEnabled(true);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+
+	// Set position to another than the origin
+	point->setPositionLogical(QPointF(0.85, 0.7));
+
+	VALUES_EQUAL(point->position().point.x(), 35);
+	VALUES_EQUAL(point->position().point.y(), 20);
+	VALUES_EQUAL(point->positionLogical().x(), 0.85);
+	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+
+	p->shiftUpY();
+
+	VALUES_EQUAL(point->position().point.x(), 35);
+	VALUES_EQUAL(point->position().point.y(), 30); // shift factor is 0.1 -> 1(current range)*0.1 = 0.1 = +10 in scene coords (for UP)
+	VALUES_EQUAL(point->positionLogical().x(), 0.85);
+	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+}
+
+void WorksheetElementTest::customPointShiftXPlotNoCoordBinding() {
+	SETUP_PROJECT
+
+	auto* point = new CustomPoint(p, QStringLiteral("point"));
+	p->addChild(point);
+	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = point->position();
+	pp.point = QPointF(0, 0);
+	point->setPosition(pp);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+
+	point->setCoordinateBindingEnabled(true);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+
+	// Set position to another than the origin
+	point->setPositionLogical(QPointF(0.85, 0.7));
+	point->setCoordinateBindingEnabled(false);
+
+	VALUES_EQUAL(point->position().point.x(), 35);
+	VALUES_EQUAL(point->position().point.y(), 20);
+	VALUES_EQUAL(point->positionLogical().x(), 0.85);
+	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+
+	p->shiftLeftX();
+
+	VALUES_EQUAL(point->position().point.x(), 35);
+	VALUES_EQUAL(point->position().point.y(), 20);
+	VALUES_EQUAL(point->positionLogical().x(), 0.95); // shift factor is 0.1 -> 1(current range)*0.1 = 0.1
+	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+}
+
+void WorksheetElementTest::customPointShiftYPlotNoCoordBinding() {
+	SETUP_PROJECT
+
+	auto* point = new CustomPoint(p, QStringLiteral("point"));
+	p->addChild(point);
+	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = point->position();
+	pp.point = QPointF(0, 0);
+	point->setPosition(pp);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+
+	point->setCoordinateBindingEnabled(true);
+
+	VALUES_EQUAL(point->position().point.x(), 0);
+	VALUES_EQUAL(point->position().point.y(), 0);
+	VALUES_EQUAL(point->positionLogical().x(), 0.5);
+	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+
+	// Set position to another than the origin
+	point->setPositionLogical(QPointF(0.85, 0.7));
+	point->setCoordinateBindingEnabled(false);
+
+	VALUES_EQUAL(point->position().point.x(), 35);
+	VALUES_EQUAL(point->position().point.y(), 20);
+	VALUES_EQUAL(point->positionLogical().x(), 0.85);
+	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+
+	p->shiftUpY();
+
+	VALUES_EQUAL(point->position().point.x(), 35);
+	VALUES_EQUAL(point->position().point.y(), 20);
+	VALUES_EQUAL(point->positionLogical().x(), 0.85);
+	VALUES_EQUAL(point->positionLogical().y(), 0.6); // shift factor is 0.1 -> 1(current range)*0.1 = 0.1
+}
+
 void WorksheetElementTest::referenceRangeXMouseMove() {
 	SETUP_PROJECT
 

@@ -24,6 +24,10 @@ private Q_SLOTS:
 	void customPointKeyPressMoveUp();
 	void customPointKeyPressMoveDown();
 	void customPointEnableDisableCoordBinding();
+	void customPointShiftXPlotCoordBinding();
+	void customPointShiftYPlotCoordBinding();
+	void customPointShiftXPlotNoCoordBinding();
+	void customPointShiftYPlotNoCoordBinding();
 
 	void referenceRangeXMouseMove();
 	void referenceRangeYMouseMove();
