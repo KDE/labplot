@@ -12,22 +12,23 @@
 #define WORKSHEETELEMENTTEST_H
 
 #include "../../CommonTest.h"
+#include "helperMacros.h"
 
 class WorksheetElementTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void customPointSetPositionLogical();
-	void customPointMouseMove();
-	void customPointKeyPressMoveRight();
-	void customPointKeyPressMoveLeft();
-	void customPointKeyPressMoveUp();
-	void customPointKeyPressMoveDown();
-	void customPointEnableDisableCoordBinding();
-	void customPointShiftXPlotCoordBinding();
-	void customPointShiftYPlotCoordBinding();
-	void customPointShiftXPlotNoCoordBinding();
-	void customPointShiftYPlotNoCoordBinding();
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_SETPOSITIONLOGICAL);
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_MOUSE_MOVE);
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_KEYPRESS_RIGHT);
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_KEY_PRESSLEFT);
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_KEYPRESS_UP);
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_KEYPRESS_DOWN);
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING);
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_SHIFTX_COORDBINDING);
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_SHIFTY_COORDBINDING);
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING);
+    WORKSHEETELEMENT_TEST_DEFINITION(CustomPoint, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING);
 
 	void referenceRangeXMouseMove();
 	void referenceRangeYMouseMove();
