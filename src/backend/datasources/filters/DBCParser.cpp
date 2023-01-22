@@ -11,12 +11,8 @@ bool DbcParser::isValid() {
 bool DbcParser::parseFile(const QString& filename) {
 	m_valid = false;
 #ifdef HAVE_DBC_PARSER
-	try {
-		m_parser.parse_file(filename.toStdString());
-		m_valid = true;
-	} catch (libdbc::validity_error e) {
-		// e.what(); // TODO: turn on
-	}
+    m_parser.Filename(filename.toStdString());
+    m_valid = m_parser.ParseFile();
 #endif
 	return m_valid;
 }
@@ -25,7 +21,8 @@ bool DbcParser::parseMessage(const uint32_t id, const std::vector<uint8_t>& data
 	if (!m_valid)
 		return false;
 #ifdef HAVE_DBC_PARSER
-	m_parser.parseMessage(id, data, out);
+    dbc::DbcMessage msg(0, id, data);
+    m_parser.ParseMessage(msg);
 #endif
 
 	return true;
@@ -36,7 +33,8 @@ bool DbcParser::parseMessage(const uint32_t id, const std::array<uint8_t, 8>& da
 		return false;
 
 #ifdef HAVE_DBC_PARSER
-	m_parser.parseMessage(id, data, out);
+    dbc::DbcMessage msg(0, id, data);
+    m_parser.ParseMessage(msg);
 #endif
 
 	return true;

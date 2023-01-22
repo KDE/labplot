@@ -3,7 +3,7 @@
 
 #include <QVector>
 #ifdef HAVE_DBC_PARSER
-#include <libdbc/dbc.hpp>
+#include <dbc/dbcfile.h>
 #endif
 
 class QString;
@@ -28,7 +28,7 @@ private:
 	bool m_valid{false};
 	// QMap<uint32_t, libdbc::Message> m_messages;
 #ifdef HAVE_DBC_PARSER
-	libdbc::DbcParser m_parser{libdbc::DbcParser(true)};
+    dbc::DbcFile m_parser;
 #endif
 };
 
