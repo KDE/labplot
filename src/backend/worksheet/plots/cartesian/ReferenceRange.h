@@ -85,6 +85,8 @@ Q_SIGNALS:
 	void positionLogicalStartChanged(QPointF);
 	void positionLogicalEndChanged(QPointF);
 	void orientationChanged(Orientation);
+
+	friend class WorksheetElementTest;
 };
 
 #endif
