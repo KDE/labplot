@@ -23,6 +23,7 @@
 #include <orcus/orcus_ods.hpp>
 #include <orcus/spreadsheet/document.hpp>
 #include <orcus/spreadsheet/factory.hpp>
+#include <orcus/spreadsheet/sheet.hpp>
 
 //#include <ixion/address.hpp>
 //#include <ixion/model_context.hpp>
@@ -54,12 +55,31 @@ QString OdsFilter::fileInfoString(const QString& fileName) {
 
 	loader.read_file(fileName.toStdString());
 
-	QString info(i18n("Sheet count: %1", QString::number(0)));
-	info += QLatin1String("<br>");
-	info += i18n("Sheets: ");
-	info += QLatin1String("<br>");
+	const size_t nrSheets = doc.get_sheet_count();
+	// const auto sheetSize = doc.get_sheet_size();
+	auto dt = doc.get_origin_date();
 
-	info += QLatin1String("<br>");
+	QString info(i18n("Sheet count: %1", QString::number(nrSheets)));
+	info += QStringLiteral("<br>");
+	// info += i18n("Sheet: %1 %2", sheetSize.rows, sheetSize.columns);
+	//  document_config:
+	// info += i18n("Precision: %1", docConfig.output_precision);
+	//  const styles& doc.get_styles()
+	//  const pivot_collection& doc.get_pivot_collection()
+	//  const shared_strings& doc.get_shared_strings()
+
+	for (size_t i = 0; i < nrSheets; ++i) {
+		auto name = doc.get_sheet_name(i);
+		info += QString::fromStdString(std::string(name));
+		const auto* s = doc.get_sheet(i);
+		auto r = s->get_data_range();
+
+		info += QStringLiteral(" (") + QString::number(r.last.row - r.first.row + 1) + QStringLiteral(" x ")
+			+ QString::number(r.last.column - r.first.column + 1) + QStringLiteral(")");
+		if (i < nrSheets - 1)
+			info += QStringLiteral(", ");
+	}
+	info += QStringLiteral("<br>");
 
 	return info;
 #else

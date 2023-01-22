@@ -41,12 +41,13 @@ QString ExcelFilter::fileInfoString(const QString& fileName) {
 		rangesPerSheet.push_back(filter.dataRegions(fileName, sheet).size());
 
 	const QStringList& sheetNames = doc.sheetNames();
-	QString info(i18n("Sheet count: %1", QString::number(sheetNames.size())));
+	const int nrSheets = sheetNames.size();
+	QString info(i18n("Sheet count: %1", QString::number(nrSheets)));
 	info += QLatin1String("<br>");
 	info += i18n("Sheets: ");
 	info += QLatin1String("<br>");
 
-	for (int i = 0; i < sheetNames.size(); ++i) {
+	for (int i = 0; i < nrSheets; ++i) {
 		info += sheetNames.at(i);
 		info += QLatin1String(", ranges count:  ");
 		info += QString::number(rangesPerSheet.at(i));

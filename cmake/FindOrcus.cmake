@@ -22,12 +22,17 @@ else ()
         HINTS ${PC_ORCUS_LIBRARY_DIRS}
         PATH_SUFFIXES orcus
     )
+    find_library (Orcus_parser_LIBRARY
+        NAMES orcus-parser orcus-parser-0.17
+        HINTS ${PC_ORCUS_LIBRARY_DIRS}
+        PATH_SUFFIXES orcus
+    )
     find_library (Orcus_spreadsheet_LIBRARY
         NAMES orcus-spreadsheet-model orcus-spreadsheet-model-0.17
         HINTS ${PC_ORCUS_LIBRARY_DIRS}
         PATH_SUFFIXES orcus
     )
-    set(Orcus_LIBRARIES ${Orcus_LIBRARY} ${Orcus_spreadsheet_LIBRARY})
+    set(Orcus_LIBRARIES ${Orcus_LIBRARY} ${Orcus_parser_LIBRARY} ${Orcus_spreadsheet_LIBRARY})
 
     find_path (Orcus_INCLUDE_DIR
         NAMES orcus/orcus_ods.hpp
@@ -44,7 +49,7 @@ else ()
     find_package_handle_standard_args (Orcus DEFAULT_MSG Orcus_LIBRARIES Orcus_INCLUDE_DIR Ixion_INCLUDE_DIR)
 endif ()
 
-mark_as_advanced(Orcus_INCLUDE_DIR Orcus_LIBRARY Orcus_spreadsheet_LIBRARY Orcus_LIBRARIES Ixion_INCLUDE_DIR)
+mark_as_advanced(Orcus_INCLUDE_DIR Orcus_LIBRARY Orcus_parser_LIBRARY Orcus_spreadsheet_LIBRARY Orcus_LIBRARIES Ixion_INCLUDE_DIR)
 
 if (Orcus_FOUND)
    add_library(Orcus UNKNOWN IMPORTED)
