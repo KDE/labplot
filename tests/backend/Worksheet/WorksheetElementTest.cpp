@@ -13,6 +13,7 @@
 
 #include "backend/core/Project.h"
 #include "backend/lib/trace.h"
+#include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TextLabelPrivate.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -48,6 +49,7 @@
 
 ALL_WORKSHEETELEMENT_TESTS(CustomPoint)
 ALL_WORKSHEETELEMENT_TESTS2(TextLabel)
+ALL_WORKSHEETELEMENT_TESTS2(Image)
 
 void WorksheetElementTest::referenceRangeXMouseMove() {
 	SETUP_PROJECT
