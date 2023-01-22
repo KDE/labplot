@@ -48,132 +48,190 @@
 	QCOMPARE(p->dataRect().width(), 100);                                                                                                                      \
 	QCOMPARE(p->dataRect().height(), 100);
 
+#define WORKSHEETELEMENT_SETPOSITIONLOGICAL(element)                                                                                                           \
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
+	auto pp = element->position();                                                                                                                             \
+	pp.point = QPointF(0, 0);                                                                                                                                  \
+	element->setPosition(pp);                                                                                                                                  \
+	element->setCoordinateBindingEnabled(true);                                                                                                                \
+                                                                                                                                                               \
+	QCOMPARE(element->positionLogical().x(), 0.5);                                                                                                             \
+	QCOMPARE(element->positionLogical().y(), 0.5);                                                                                                             \
+                                                                                                                                                               \
+	element->setPositionLogical(QPointF(1, 1));                                                                                                                \
+	QCOMPARE(element->positionLogical().x(), 1);                                                                                                               \
+	QCOMPARE(element->positionLogical().y(), 1);                                                                                                               \
+	QCOMPARE(element->position().point.x(), 50);                                                                                                               \
+	QCOMPARE(element->position().point.y(), 50);
+
 void WorksheetElementTest::customPointSetPositionLogical() {
 	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
-	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
-	auto pp = point->position();
-	pp.point = QPointF(0, 0);
-	point->setPosition(pp);
-	point->setCoordinateBindingEnabled(true);
-
-	QCOMPARE(point->positionLogical().x(), 0.5);
-	QCOMPARE(point->positionLogical().y(), 0.5);
-
-	point->setPositionLogical(QPointF(1, 1));
-	QCOMPARE(point->positionLogical().x(), 1);
-	QCOMPARE(point->positionLogical().y(), 1);
-	QCOMPARE(point->position().point.x(), 50);
-	QCOMPARE(point->position().point.y(), 50);
+	WORKSHEETELEMENT_SETPOSITIONLOGICAL(point);
 }
+
+#define WORKSHEETELEMENT_MOUSE_MOVE(element)                                                                                                                   \
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
+	auto pp = element->position();                                                                                                                             \
+	pp.point = QPointF(0, 0);                                                                                                                                  \
+	element->setPosition(pp);                                                                                                                                  \
+	element->setCoordinateBindingEnabled(true);                                                                                                                \
+                                                                                                                                                               \
+	QCOMPARE(element->positionLogical().x(), 0.5);                                                                                                             \
+	QCOMPARE(element->positionLogical().y(), 0.5);                                                                                                             \
+                                                                                                                                                               \
+	/* Simulate mouse move */                                                                                                                                  \
+	element->d_ptr->setPos(QPointF(25, -10)); /* item change will be called (negative value is up) */                                                          \
+	QCOMPARE(element->positionLogical().x(), 0.75); /* 25/50 * 0.5 + 0.5 */                                                                                    \
+	QCOMPARE(element->positionLogical().y(), 0.6);                                                                                                             \
+                                                                                                                                                               \
+	element->setPositionLogical(QPointF(0.3, 0.1));                                                                                                            \
+	QCOMPARE(element->positionLogical().x(), 0.3);                                                                                                             \
+	QCOMPARE(element->positionLogical().y(), 0.1);                                                                                                             \
+	QCOMPARE(element->position().point.x(), -20);                                                                                                              \
+	QCOMPARE(element->position().point.y(), -40);
 
 void WorksheetElementTest::customPointMouseMove() {
 	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
-	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
-	auto pp = point->position();
-	pp.point = QPointF(0, 0);
-	point->setPosition(pp);
-	point->setCoordinateBindingEnabled(true);
-
-	QCOMPARE(point->positionLogical().x(), 0.5);
-	QCOMPARE(point->positionLogical().y(), 0.5);
-
-	// Simulate mouse move
-	point->d_ptr->setPos(QPointF(25, -10)); // item change will be called (negative value is up)
-	QCOMPARE(point->positionLogical().x(), 0.75); // 25/50 * 0.5 + 0.5
-	QCOMPARE(point->positionLogical().y(), 0.6);
-
-	point->setPositionLogical(QPointF(0.3, 0.1));
-	QCOMPARE(point->positionLogical().x(), 0.3);
-	QCOMPARE(point->positionLogical().y(), 0.1);
-	QCOMPARE(point->position().point.x(), -20);
-	QCOMPARE(point->position().point.y(), -40);
+	WORKSHEETELEMENT_MOUSE_MOVE(point);
 }
+
+#define WORKSHEETELEMENT_KEYPRESS_RIGHT(element)                                                                                                               \
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
+	auto pp = element->position();                                                                                                                             \
+	pp.point = QPointF(0, 0);                                                                                                                                  \
+	element->setPosition(pp);                                                                                                                                  \
+	element->setCoordinateBindingEnabled(true);                                                                                                                \
+                                                                                                                                                               \
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Right, Qt::KeyboardModifier::NoModifier);                                                               \
+	element->d_ptr->keyPressEvent(&event);                                                                                                                     \
+                                                                                                                                                               \
+	VALUES_EQUAL(element->position().point.x(), 5);                                                                                                            \
+	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->positionLogical().x(), 0.55);                                                                                                        \
+	VALUES_EQUAL(element->positionLogical().y(), 0.5);
 
 void WorksheetElementTest::customPointKeyPressMoveRight() {
 	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
-	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
-	auto pp = point->position();
-	pp.point = QPointF(0, 0);
-	point->setPosition(pp);
-	point->setCoordinateBindingEnabled(true);
-
-	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Right, Qt::KeyboardModifier::NoModifier);
-	point->d_ptr->keyPressEvent(&event);
-
-	VALUES_EQUAL(point->position().point.x(), 5);
-	VALUES_EQUAL(point->position().point.y(), 0);
-	VALUES_EQUAL(point->positionLogical().x(), 0.55);
-	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+	WORKSHEETELEMENT_KEYPRESS_RIGHT(point);
 }
+
+#define WORKSHEETELEMENT_KEY_PRESSLEFT(element)                                                                                                                \
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
+	auto pp = element->position();                                                                                                                             \
+	pp.point = QPointF(0, 0);                                                                                                                                  \
+	element->setPosition(pp);                                                                                                                                  \
+	element->setCoordinateBindingEnabled(true);                                                                                                                \
+                                                                                                                                                               \
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Left, Qt::KeyboardModifier::NoModifier);                                                                \
+	element->d_ptr->keyPressEvent(&event);                                                                                                                     \
+                                                                                                                                                               \
+	VALUES_EQUAL(element->position().point.x(), -5);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->positionLogical().x(), 0.45);                                                                                                        \
+	VALUES_EQUAL(element->positionLogical().y(), 0.5);
 
 void WorksheetElementTest::customPointKeyPressMoveLeft() {
 	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
-	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
-	auto pp = point->position();
-	pp.point = QPointF(0, 0);
-	point->setPosition(pp);
-	point->setCoordinateBindingEnabled(true);
-
-	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Left, Qt::KeyboardModifier::NoModifier);
-	point->d_ptr->keyPressEvent(&event);
-
-	VALUES_EQUAL(point->position().point.x(), -5);
-	VALUES_EQUAL(point->position().point.y(), 0);
-	VALUES_EQUAL(point->positionLogical().x(), 0.45);
-	VALUES_EQUAL(point->positionLogical().y(), 0.5);
+	WORKSHEETELEMENT_KEY_PRESSLEFT(point);
 }
+
+#define WORKSHEETELEMENT_KEYPRESS_UP(element)                                                                                                                  \
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
+	auto pp = element->position();                                                                                                                             \
+	pp.point = QPointF(0, 0);                                                                                                                                  \
+	element->setPosition(pp);                                                                                                                                  \
+	element->setCoordinateBindingEnabled(true);                                                                                                                \
+                                                                                                                                                               \
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);                                                                  \
+	element->d_ptr->keyPressEvent(&event);                                                                                                                     \
+                                                                                                                                                               \
+	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.y(), 5);                                                                                                            \
+	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
+	VALUES_EQUAL(element->positionLogical().y(), 0.55);
 
 void WorksheetElementTest::customPointKeyPressMoveUp() {
 	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
-	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
-	auto pp = point->position();
-	pp.point = QPointF(0, 0);
-	point->setPosition(pp);
-	point->setCoordinateBindingEnabled(true);
-
-	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
-	point->d_ptr->keyPressEvent(&event);
-
-	VALUES_EQUAL(point->position().point.x(), 0);
-	VALUES_EQUAL(point->position().point.y(), 5);
-	VALUES_EQUAL(point->positionLogical().x(), 0.5);
-	VALUES_EQUAL(point->positionLogical().y(), 0.55);
+	WORKSHEETELEMENT_KEYPRESS_UP(point);
 }
+
+#define WORKSHEETELEMENT_KEYPRESS_DOWN(element)                                                                                                                \
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
+	auto pp = element->position();                                                                                                                             \
+	pp.point = QPointF(0, 0);                                                                                                                                  \
+	element->setPosition(pp);                                                                                                                                  \
+	element->setCoordinateBindingEnabled(true);                                                                                                                \
+                                                                                                                                                               \
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);                                                                \
+	element->d_ptr->keyPressEvent(&event);                                                                                                                     \
+                                                                                                                                                               \
+	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.y(), -5);                                                                                                           \
+	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
+	VALUES_EQUAL(element->positionLogical().y(), 0.45);
 
 void WorksheetElementTest::customPointKeyPressMoveDown() {
 	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
-	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
-	auto pp = point->position();
-	pp.point = QPointF(0, 0);
-	point->setPosition(pp);
-	point->setCoordinateBindingEnabled(true);
-
-	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
-	point->d_ptr->keyPressEvent(&event);
-
-	VALUES_EQUAL(point->position().point.x(), 0);
-	VALUES_EQUAL(point->position().point.y(), -5);
-	VALUES_EQUAL(point->positionLogical().x(), 0.5);
-	VALUES_EQUAL(point->positionLogical().y(), 0.45);
+	WORKSHEETELEMENT_KEYPRESS_DOWN(point);
 }
+
+#define WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING(element)                                                                                                  \
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
+	auto pp = element->position();                                                                                                                             \
+	pp.point = QPointF(0, 0);                                                                                                                                  \
+	element->setPosition(pp);                                                                                                                                  \
+                                                                                                                                                               \
+	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
+	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
+                                                                                                                                                               \
+	element->setCoordinateBindingEnabled(true);                                                                                                                \
+                                                                                                                                                               \
+	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
+	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
+                                                                                                                                                               \
+	/* Set position to another than the origin */                                                                                                              \
+	element->setPositionLogical(QPointF(0.85, 0.7));                                                                                                           \
+                                                                                                                                                               \
+	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
+	VALUES_EQUAL(element->positionLogical().y(), 0.7);                                                                                                         \
+                                                                                                                                                               \
+	element->setCoordinateBindingEnabled(false);                                                                                                               \
+                                                                                                                                                               \
+	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
+	VALUES_EQUAL(element->positionLogical().y(), 0.7);                                                                                                         \
+                                                                                                                                                               \
+	element->setCoordinateBindingEnabled(true);                                                                                                                \
+                                                                                                                                                               \
+	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
+	VALUES_EQUAL(element->positionLogical().y(), 0.7);
 
 // Switching between setCoordinateBindingEnabled true and false should not move the point
 void WorksheetElementTest::customPointEnableDisableCoordBinding() {
@@ -181,44 +239,7 @@ void WorksheetElementTest::customPointEnableDisableCoordBinding() {
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
-	point->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
-	auto pp = point->position();
-	pp.point = QPointF(0, 0);
-	point->setPosition(pp);
-
-	VALUES_EQUAL(point->position().point.x(), 0);
-	VALUES_EQUAL(point->position().point.y(), 0);
-	VALUES_EQUAL(point->positionLogical().x(), 0.5);
-	VALUES_EQUAL(point->positionLogical().y(), 0.5);
-
-	point->setCoordinateBindingEnabled(true);
-
-	VALUES_EQUAL(point->position().point.x(), 0);
-	VALUES_EQUAL(point->position().point.y(), 0);
-	VALUES_EQUAL(point->positionLogical().x(), 0.5);
-	VALUES_EQUAL(point->positionLogical().y(), 0.5);
-
-	// Set position to another than the origin
-	point->setPositionLogical(QPointF(0.85, 0.7));
-
-	VALUES_EQUAL(point->position().point.x(), 35);
-	VALUES_EQUAL(point->position().point.y(), 20);
-	VALUES_EQUAL(point->positionLogical().x(), 0.85);
-	VALUES_EQUAL(point->positionLogical().y(), 0.7);
-
-	point->setCoordinateBindingEnabled(false);
-
-	VALUES_EQUAL(point->position().point.x(), 35);
-	VALUES_EQUAL(point->position().point.y(), 20);
-	VALUES_EQUAL(point->positionLogical().x(), 0.85);
-	VALUES_EQUAL(point->positionLogical().y(), 0.7);
-
-	point->setCoordinateBindingEnabled(true);
-
-	VALUES_EQUAL(point->position().point.x(), 35);
-	VALUES_EQUAL(point->position().point.y(), 20);
-	VALUES_EQUAL(point->positionLogical().x(), 0.85);
-	VALUES_EQUAL(point->positionLogical().y(), 0.7);
+	WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING(point);
 }
 
 #define WORKSHEETELEMENT_SHIFTX_COORDBINDING(element)                                                                                                          \
