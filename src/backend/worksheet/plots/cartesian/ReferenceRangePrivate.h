@@ -22,7 +22,6 @@ public:
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
 	void updateOrientation();
-    void updatePositionTemp();
 
 	bool m_hovered{false};
 	bool m_visible{true}; // point inside the plot (visible) or not
