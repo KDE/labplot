@@ -288,10 +288,23 @@ void ReferenceRangePrivate::retransform() {
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	if (orientation == ReferenceRange::Orientation::Vertical) {
 		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
-		rect.setX(positionLogicalStart.x());
-		rect.setY(yRange.start());
-		rect.setWidth(positionLogicalEnd.x() - positionLogicalStart.x());
-		rect.setHeight(yRange.length());
+		// rect.setX(positionLogicalStart.x());
+		// rect.setY(yRange.start());
+		// rect.setWidth(positionLogicalEnd.x() - positionLogicalStart.x());
+		// rect.setHeight(yRange.length());
+
+		const auto p1 = QPointF(positionLogicalStart.x(), yRange.start());
+		const auto p2 = QPointF(positionLogicalEnd.x(), yRange.end());
+		const auto pointsScene = cs->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		const auto newPos = QPointF((pointsScene.at(0).x() + pointsScene.at(1).x())/2, (pointsScene.at(0).y() + pointsScene.at(1).y())/2);
+		const auto diffX = qAbs(pointsScene.at(0).x() - pointsScene.at(1).x());
+		const auto diffY = qAbs(pointsScene.at(0).y() - pointsScene.at(1).y());
+		rect.setX(-diffX/2);
+		rect.setY(-diffY/2);
+		rect.setWidth(diffX);
+		rect.setHeight(diffY);
+		recalcShapeAndBoundingRect();
+		setPos(newPos); // Set new position
 	} else {
 		const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
 		rect.setX(xRange.start());
@@ -307,7 +320,8 @@ void ReferenceRangePrivate::retransform() {
 	lines << QLineF(rect.topRight(), rect.bottomRight());
 	lines << QLineF(rect.bottomRight(), rect.bottomLeft());
 	lines << QLineF(rect.bottomLeft(), rect.topLeft());
-	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	// const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	const auto& unclippedLines = lines;
 
 	QPolygonF polygon;
 	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
