@@ -51,7 +51,10 @@ private:
 	QPushButton* m_okButton{nullptr};
 	Operation m_operation;
 	bool m_numeric{false};
-	bool m_previewDirty{false};
+
+	// preview related members
+	bool m_previewDirty{true};
+	bool m_baselineCurveInvalid{true};
 	Project* m_project{nullptr};
 	XYCurve* m_curveOrigin{nullptr};
 	XYCurve* m_curveBaseline{nullptr};
@@ -59,12 +62,12 @@ private:
 	Column* m_xColumnBaseline{nullptr};
 	Column* m_yColumnBaseline{nullptr};
 	Column* m_yColumnResult{nullptr};
-	bool m_baselineCurveInvalid{false};
 
 private Q_SLOTS:
 	void generate();
 	void typeChanged(int);
 	void previewChanged(bool);
+	void initPreview();
 	void updatePreview();
 };
 

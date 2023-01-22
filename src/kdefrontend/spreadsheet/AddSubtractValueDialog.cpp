@@ -35,6 +35,7 @@ extern "C" {
 
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QTimer>
 #include <QWindow>
 
 #include <cmath>
@@ -68,25 +69,22 @@ AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget*
 
 	ui.setupUi(this);
 
-	const auto mode = m_matrix->mode();
-	const auto numberLocale = QLocale();
-
-	switch (mode) {
+	switch (m_matrix->mode()) {
 	case AbstractColumn::ColumnMode::Integer:
 		m_numeric = true;
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(m_matrix->cell<int>(0, 0)));
+		ui.leValue->setText(QLocale().toString(m_matrix->cell<int>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
 		m_numeric = true;
 		// TODO: QLongLongValidator
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(m_matrix->cell<qint64>(0, 0)));
+		ui.leValue->setText(QLocale().toString(m_matrix->cell<qint64>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::Double:
 		m_numeric = true;
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(m_matrix->cell<double>(0, 0)));
+		ui.leValue->setText(QLocale().toString(m_matrix->cell<double>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Day:
@@ -193,19 +191,21 @@ void AddSubtractValueDialog::init() {
 		ui.leBaselineParameter2->setText(numberLocale.toString(conf.readEntry(QStringLiteral("BaselineParameter2"), 1000)));
 		ui.sbBaselineIntParameter1->setValue(conf.readEntry(QStringLiteral("BaselineIntParameter1"), 10));
 
-		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-		resize(windowHandle()->size()); // workaround for QTBUG-40584
-
-		if (m_operation == Add || m_operation == Subtract) {
-			ui.chbPreview->setChecked(conf.readEntry("Preview", false));
-			previewChanged(ui.chbPreview->isChecked());
-		}
-
 		int typeIndex = ui.cbType->findData(conf.readEntry("Type", 0));
 		if (typeIndex != -1)
 			ui.cbType->setCurrentIndex(typeIndex);
 		else
 			ui.cbType->setCurrentIndex(0);
+
+		if (m_operation == Add || m_operation == Subtract) {
+			ui.chbPreview->setChecked(conf.readEntry("Preview", false));
+			ui.framePreview->setVisible(ui.chbPreview->isChecked());
+		} else
+			ui.framePreview->hide();
+
+
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
 
@@ -217,24 +217,30 @@ void AddSubtractValueDialog::init() {
 	connect(ui.leValue, &QLineEdit::textChanged, this, [=]() {
 		m_okButton->setEnabled(!ui.leValue->text().isEmpty());
 		m_baselineCurveInvalid = true;
+		m_previewDirty = true;
 		updatePreview();
 	});
 	connect(ui.leValueStart, &QLineEdit::textChanged, this, [=]() {
 		m_okButton->setEnabled(!ui.leValue->text().isEmpty());
 		m_baselineCurveInvalid = true;
+		m_previewDirty = true;
 		updatePreview();
 	});
 	connect(ui.leValueEnd, &QLineEdit::textChanged, this, [=]() {
 		m_okButton->setEnabled(!ui.leValue->text().isEmpty());
 		m_baselineCurveInvalid = true;
+		m_previewDirty = true;
 		updatePreview();
 	});
 	connect(ui.leBaselineParameter1, &QLineEdit::textChanged, this, &AddSubtractValueDialog::updatePreview);
 	connect(ui.leBaselineParameter2, &QLineEdit::textChanged, this, &AddSubtractValueDialog::updatePreview);
 	connect(ui.sbBaselineIntParameter1, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::updatePreview);
 
-	// call typeChanged() to update the status of widgets and of the preview, if enabled
-	typeChanged(ui.cbType->currentIndex());
+	// call typeChanged() to update the status of widgets and of the preview, if enabled,
+	// after the dilog was completely shown
+	QTimer::singleShot(0, this, [=]() {
+		typeChanged(ui.cbType->currentIndex());
+	});
 }
 
 AddSubtractValueDialog::~AddSubtractValueDialog() {
@@ -257,12 +263,11 @@ void AddSubtractValueDialog::processColumns() {
 	// depending on the current column mode, activate/deactivate the corresponding widgets
 	// and show the first valid value in the first selected column as the value to add/subtract
 	const auto* column = m_columns.first();
-	const auto numberLocale = QLocale();
 
 	switch (column->columnMode()) {
 	case AbstractColumn::ColumnMode::Integer: {
 		m_numeric = true;
-		const auto str = numberLocale.toString(column->integerAt(0));
+		const auto str = QLocale().toString(column->integerAt(0));
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(str);
 		ui.leValueStart->setValidator(new QIntValidator(ui.leValueStart));
@@ -273,7 +278,7 @@ void AddSubtractValueDialog::processColumns() {
 	}
 	case AbstractColumn::ColumnMode::BigInt: {
 		m_numeric = true;
-		const auto str = numberLocale.toString(column->bigIntAt(0));
+		const auto str = QLocale().toString(column->bigIntAt(0));
 		// TODO: QLongLongValidator
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(str);
@@ -292,7 +297,7 @@ void AddSubtractValueDialog::processColumns() {
 		for (int row = 0; row < column->rowCount(); ++row) {
 			const double value = column->valueAt(row);
 			if (std::isfinite(value)) {
-				const auto str = numberLocale.toString(column->valueAt(row), 'g', 16);
+				const auto str = QLocale().toString(column->valueAt(row), 'g', 16);
 				ui.leValue->setText(str);
 				ui.leValueStart->setText(str);
 				ui.leValueEnd->setText(str);
@@ -326,7 +331,6 @@ void AddSubtractValueDialog::processColumns() {
 }
 
 void AddSubtractValueDialog::typeChanged(int index) {
-	m_baselineCurveInvalid = true;
 	auto type = static_cast<ValueType>(ui.cbType->itemData(index).toInt());
 	bool diff = (type == ValueType::Difference);
 	bool baseline = false;
@@ -382,9 +386,11 @@ void AddSubtractValueDialog::typeChanged(int index) {
 	ui.lBaselineIntParameter1->setVisible(baseline);
 	ui.sbBaselineIntParameter1->setVisible(baseline);
 
-	if (m_spreadsheet && (m_operation == Add || m_operation == Subtract))
+	if (m_spreadsheet && (m_operation == Add || m_operation == Subtract)) {
+		m_baselineCurveInvalid = true;
+		m_previewDirty = true;
 		updatePreview();
-	else {
+	} else {
 		ui.lPreview->hide();
 		ui.chbPreview->hide();
 		ui.framePreview->hide();
@@ -393,110 +399,107 @@ void AddSubtractValueDialog::typeChanged(int index) {
 
 void AddSubtractValueDialog::previewChanged(bool state) {
 	bool visible = state && (m_operation == Add || m_operation == Subtract);
-	if (visible) {
-		// initialize the worksheet and the plot if not done yet
-		if (!m_project) {
-			// create project and worksheet
-			m_project = new Project();
-			m_project->setUndoAware(false);
-			auto* ws = new Worksheet(QString());
-			ws->setUseViewSize(true);
-			ws->setLayoutTopMargin(0.);
-			ws->setLayoutBottomMargin(0.);
-			ws->setLayoutLeftMargin(0.);
-			ws->setLayoutRightMargin(0.);
-			m_project->addChild(ws);
-
-			// add plot
-			auto* plot = new CartesianPlot(QString());
-			plot->setSuppressRetransform(true);
-			plot->setSymmetricPadding(false);
-			const double padding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
-			plot->setRightPadding(padding);
-			plot->setVerticalPadding(padding);
-			plot->setBottomPadding(padding);
-			plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
-
-			// y-axis
-			auto* axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
-			axis->setDefault(true);
-			axis->setSuppressRetransform(true);
-			plot->addChild(axis);
-			axis->setPosition(Axis::Position::Left);
-			axis->setMajorTicksDirection(Axis::ticksIn);
-			axis->majorGridLine()->setStyle(Qt::NoPen);
-			axis->setMinorTicksDirection(Axis::noTicks);
-			axis->title()->setText(QString());
-			auto font = axis->labelsFont();
-			font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
-			axis->setLabelsFont(font);
-			axis->setSuppressRetransform(false);
-
-			ws->addChild(plot);
-			plot->setSuppressRetransform(false);
-
-			// add the curve for the original data
-			auto* xColumn = new Column(QLatin1String("x"), AbstractColumn::ColumnMode::Integer);
-			const auto* yColumn = m_columns.constFirst();
-			QVector<int> xData;
-			xData.resize(yColumn->rowCount());
-			for (int i = 0; i < yColumn->rowCount(); ++i)
-				xData[i] = i;
-			xColumn->setIntegers(xData);
-
-			m_curveOrigin = new XYCurve(i18n("raw data"));
-			m_curveOrigin->setXColumn(xColumn);
-			m_curveOrigin->setYColumn(yColumn);
-			plot->addChild(m_curveOrigin);
-			m_curveOrigin->line()->setWidth(0.);
-
-			// add the curve for the data to be subtracted
-			m_curveBaseline = new XYCurve(i18n("baseline"));
-			m_xColumnBaseline = new Column(QLatin1String("xBaseline"), AbstractColumn::ColumnMode::Integer);
-			m_yColumnBaseline = new Column(QLatin1String("yBaseline"));
-			m_curveBaseline->setXColumn(m_xColumnBaseline);
-			m_curveBaseline->setYColumn(m_yColumnBaseline);
-			plot->addChild(m_curveBaseline);
-			m_curveBaseline->line()->setWidth(0.);
-
-			// add the curve for the result data
-			m_curveResult = new XYCurve(i18n("result"));
-			m_curveResult->setXColumn(xColumn);
-			m_yColumnResult = new Column(QLatin1String("yResult"), yColumn->columnMode());
-			m_curveResult->setYColumn(m_yColumnResult);
-			plot->addChild(m_curveResult);
-			m_curveResult->line()->setWidth(0.);
-
-			plot->addLegend();
-			// ws->setTheme(QLatin1String("Tufte"));
-
-			m_previewDirty = true;
-			m_baselineCurveInvalid = true;
-
-			auto* layout = new QVBoxLayout(ui.framePreview);
-			layout->setSpacing(0);
-			layout->addWidget(ws->view());
-			ws->setInteractive(false);
-			ui.framePreview->setLayout(layout);
-		}
-	}
-
 	ui.framePreview->setVisible(visible);
-
-	if (m_previewDirty)
-		updatePreview();
 
 	// resize the dialog
 	layout()->activate();
 	resize(QSize(this->width(), 0).expandedTo(minimumSize()));
+
+	if (visible && m_previewDirty)
+		updatePreview();
+}
+
+void AddSubtractValueDialog::initPreview() {
+	// create project and worksheet
+	m_project = new Project();
+	m_project->setUndoAware(false);
+	auto* ws = new Worksheet(QString());
+	ws->setUseViewSize(true);
+	ws->setLayoutTopMargin(0.);
+	ws->setLayoutBottomMargin(0.);
+	ws->setLayoutLeftMargin(0.);
+	ws->setLayoutRightMargin(0.);
+	m_project->addChild(ws);
+
+	// add plot
+	auto* plot = new CartesianPlot(QString());
+	plot->setSuppressRetransform(true);
+	plot->setSymmetricPadding(false);
+	const double padding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+	plot->setRightPadding(padding);
+	plot->setVerticalPadding(padding);
+	plot->setBottomPadding(padding);
+	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
+
+	// y-axis
+	auto* axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
+	axis->setDefault(true);
+	axis->setSuppressRetransform(true);
+	plot->addChild(axis);
+	axis->setPosition(Axis::Position::Left);
+	axis->setMajorTicksDirection(Axis::ticksIn);
+	axis->majorGridLine()->setStyle(Qt::NoPen);
+	axis->setMinorTicksDirection(Axis::noTicks);
+	axis->title()->setText(QString());
+	auto font = axis->labelsFont();
+	font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	axis->setLabelsFont(font);
+	axis->setSuppressRetransform(false);
+
+	ws->addChild(plot);
+	plot->setSuppressRetransform(false);
+
+	// add the curve for the original data
+	auto* xColumn = new Column(QLatin1String("x"), AbstractColumn::ColumnMode::Integer);
+	const auto* yColumn = m_columns.constFirst();
+	QVector<int> xData;
+	xData.resize(yColumn->rowCount());
+	for (int i = 0; i < yColumn->rowCount(); ++i)
+		xData[i] = i;
+	xColumn->setIntegers(xData);
+
+	m_curveOrigin = new XYCurve(i18n("raw data"));
+	m_curveOrigin->setXColumn(xColumn);
+	m_curveOrigin->setYColumn(yColumn);
+	plot->addChild(m_curveOrigin);
+	m_curveOrigin->line()->setWidth(0.);
+
+	// add the curve for the data to be subtracted
+	m_curveBaseline = new XYCurve(i18n("baseline"));
+	m_xColumnBaseline = new Column(QLatin1String("xBaseline"), AbstractColumn::ColumnMode::Integer);
+	m_yColumnBaseline = new Column(QLatin1String("yBaseline"));
+	m_curveBaseline->setXColumn(m_xColumnBaseline);
+	m_curveBaseline->setYColumn(m_yColumnBaseline);
+	plot->addChild(m_curveBaseline);
+	m_curveBaseline->line()->setWidth(0.);
+
+	// add the curve for the result data
+	m_curveResult = new XYCurve(i18n("result"));
+	m_curveResult->setXColumn(xColumn);
+	m_yColumnResult = new Column(QLatin1String("yResult"), yColumn->columnMode());
+	m_curveResult->setYColumn(m_yColumnResult);
+	plot->addChild(m_curveResult);
+	m_curveResult->line()->setWidth(0.);
+
+	plot->addLegend();
+	// ws->setTheme(QLatin1String("Tufte"));
+
+	auto* layout = new QVBoxLayout(ui.framePreview);
+	layout->setSpacing(0);
+	layout->addWidget(ws->view());
+	ws->setInteractive(false);
+	ui.framePreview->setLayout(layout);
 }
 
 void AddSubtractValueDialog::updatePreview() {
-	if (!ui.framePreview->isVisible()/* || !m_previewDirty*/)
+	if (!ui.framePreview->isVisible() || !m_previewDirty)
 		return;
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
+
+	if (!m_project)
+		initPreview();
 
 	// y for the result curve
 	m_yColumnResult->copy(m_columns.constFirst());
@@ -557,7 +560,7 @@ void AddSubtractValueDialog::updatePreview() {
 		m_baselineCurveInvalid = false;
 	}
 
-	// m_previewDirty = false;
+	m_previewDirty = false;
 	RESET_CURSOR;
 }
 
