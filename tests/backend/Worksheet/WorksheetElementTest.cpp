@@ -20,17 +20,20 @@
 #include "backend/worksheet/plots/cartesian/ReferenceRangePrivate.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_SETPOSITIONLOGICAL);
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_MOUSE_MOVE);
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_KEYPRESS_RIGHT);
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_KEY_PRESSLEFT);
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_KEYPRESS_UP);
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_KEYPRESS_DOWN);
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING);
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_SHIFTX_COORDBINDING);
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_SHIFTY_COORDBINDING);
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING);
-WORKSHEETELEMENT_TEST(CustomPoint, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING);
+#define ALL_WORKSHEETELEMENT_TESTS(WorksheetElementType)                                                                                                       \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL);                                                                          \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_MOUSE_MOVE);                                                                                  \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT);                                                                              \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEY_PRESSLEFT);                                                                               \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP);                                                                                 \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN);                                                                               \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING);                                                                 \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_COORDBINDING);                                                                         \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_COORDBINDING);                                                                         \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING);                                                                      \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING);
+
+ALL_WORKSHEETELEMENT_TESTS(CustomPoint)
 
 void WorksheetElementTest::referenceRangeXMouseMove() {
 	SETUP_PROJECT
