@@ -282,17 +282,12 @@ void ReferenceRangePrivate::retransform() {
 	if (suppressRetransform || !q->cSystem || q->isLoading())
 		return;
 
-	updatePosition(); // To update position.point
+    //updatePosition(); // To update position.point
 
 	// calculate rect in logical coordinates
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	if (orientation == ReferenceRange::Orientation::Vertical) {
 		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
-		// rect.setX(positionLogicalStart.x());
-		// rect.setY(yRange.start());
-		// rect.setWidth(positionLogicalEnd.x() - positionLogicalStart.x());
-		// rect.setHeight(yRange.length());
-
 		const auto p1 = QPointF(positionLogicalStart.x(), yRange.start());
 		const auto p2 = QPointF(positionLogicalEnd.x(), yRange.end());
 		const auto pointsScene = cs->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
@@ -304,7 +299,8 @@ void ReferenceRangePrivate::retransform() {
 		rect.setWidth(diffX);
 		rect.setHeight(diffY);
 		recalcShapeAndBoundingRect();
-		setPos(newPos); // Set new position
+        positionLogical = cs->mapSceneToLogical(newPos);
+        updatePosition();
 	} else {
 		const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
 		rect.setX(xRange.start());
