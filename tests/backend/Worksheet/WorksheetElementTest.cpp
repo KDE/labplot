@@ -18,34 +18,38 @@
 #include "backend/worksheet/plots/cartesian/ReferenceRangePrivate.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 
-void WorksheetElementTest::customPointSetPositionLogical() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	QVERIFY(ws != nullptr);
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-	QVERIFY(p != nullptr);
-	ws->addChild(p);
-
-	p->setHorizontalPadding(0);
-	p->setVerticalPadding(0);
-	p->setRightPadding(0);
-	p->setBottomPadding(0);
-	p->setRect(QRectF(0, 0, 100, 100));
-
-	QCOMPARE(p->rangeCount(Dimension::X), 1);
-	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
-	QCOMPARE(p->rangeCount(Dimension::Y), 1);
-	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
-
-	QCOMPARE(p->dataRect().x(), -50);
-	QCOMPARE(p->dataRect().y(), -50);
-	QCOMPARE(p->dataRect().width(), 100);
+#define SETUP_PROJECT                                                                                                                                          \
+	Project project;                                                                                                                                           \
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));                                                                                                     \
+	QVERIFY(ws != nullptr);                                                                                                                                    \
+	project.addChild(ws);                                                                                                                                      \
+                                                                                                                                                               \
+	auto* p = new CartesianPlot(QStringLiteral("plot"));                                                                                                       \
+	p->setType(CartesianPlot::Type::TwoAxes); /* Otherwise no axis are created */                                                                              \
+	QVERIFY(p != nullptr);                                                                                                                                     \
+	ws->addChild(p);                                                                                                                                           \
+                                                                                                                                                               \
+	p->setHorizontalPadding(0);                                                                                                                                \
+	p->setVerticalPadding(0);                                                                                                                                  \
+	p->setRightPadding(0);                                                                                                                                     \
+	p->setBottomPadding(0);                                                                                                                                    \
+	p->setRect(QRectF(0, 0, 100, 100));                                                                                                                        \
+                                                                                                                                                               \
+	QCOMPARE(p->rangeCount(Dimension::X), 1);                                                                                                                  \
+	QCOMPARE(p->range(Dimension::X, 0).start(), 0);                                                                                                            \
+	QCOMPARE(p->range(Dimension::X, 0).end(), 1);                                                                                                              \
+	QCOMPARE(p->rangeCount(Dimension::Y), 1);                                                                                                                  \
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);                                                                                                            \
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);                                                                                                              \
+                                                                                                                                                               \
+	/* For simplicity use even numbers */                                                                                                                      \
+	QCOMPARE(p->dataRect().x(), -50);                                                                                                                          \
+	QCOMPARE(p->dataRect().y(), -50);                                                                                                                          \
+	QCOMPARE(p->dataRect().width(), 100);                                                                                                                      \
 	QCOMPARE(p->dataRect().height(), 100);
+
+void WorksheetElementTest::customPointSetPositionLogical() {
+	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
@@ -66,33 +70,7 @@ void WorksheetElementTest::customPointSetPositionLogical() {
 }
 
 void WorksheetElementTest::customPointMouseMove() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	QVERIFY(ws != nullptr);
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-	QVERIFY(p != nullptr);
-	ws->addChild(p);
-
-	p->setHorizontalPadding(0);
-	p->setVerticalPadding(0);
-	p->setRightPadding(0);
-	p->setBottomPadding(0);
-	p->setRect(QRectF(0, 0, 100, 100));
-
-	QCOMPARE(p->rangeCount(Dimension::X), 1);
-	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
-	QCOMPARE(p->rangeCount(Dimension::Y), 1);
-	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
-
-	QCOMPARE(p->dataRect().x(), -50);
-	QCOMPARE(p->dataRect().y(), -50);
-	QCOMPARE(p->dataRect().width(), 100);
-	QCOMPARE(p->dataRect().height(), 100);
+	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
@@ -118,33 +96,7 @@ void WorksheetElementTest::customPointMouseMove() {
 }
 
 void WorksheetElementTest::customPointKeyPressMoveRight() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	QVERIFY(ws != nullptr);
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-	QVERIFY(p != nullptr);
-	ws->addChild(p);
-
-	p->setHorizontalPadding(0);
-	p->setVerticalPadding(0);
-	p->setRightPadding(0);
-	p->setBottomPadding(0);
-	p->setRect(QRectF(0, 0, 100, 100));
-
-	QCOMPARE(p->rangeCount(Dimension::X), 1);
-	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
-	QCOMPARE(p->rangeCount(Dimension::Y), 1);
-	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
-
-	QCOMPARE(p->dataRect().x(), -50);
-	QCOMPARE(p->dataRect().y(), -50);
-	QCOMPARE(p->dataRect().width(), 100);
-	QCOMPARE(p->dataRect().height(), 100);
+	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
@@ -164,33 +116,7 @@ void WorksheetElementTest::customPointKeyPressMoveRight() {
 }
 
 void WorksheetElementTest::customPointKeyPressMoveLeft() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	QVERIFY(ws != nullptr);
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-	QVERIFY(p != nullptr);
-	ws->addChild(p);
-
-	p->setHorizontalPadding(0);
-	p->setVerticalPadding(0);
-	p->setRightPadding(0);
-	p->setBottomPadding(0);
-	p->setRect(QRectF(0, 0, 100, 100));
-
-	QCOMPARE(p->rangeCount(Dimension::X), 1);
-	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
-	QCOMPARE(p->rangeCount(Dimension::Y), 1);
-	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
-
-	QCOMPARE(p->dataRect().x(), -50);
-	QCOMPARE(p->dataRect().y(), -50);
-	QCOMPARE(p->dataRect().width(), 100);
-	QCOMPARE(p->dataRect().height(), 100);
+	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
@@ -210,33 +136,7 @@ void WorksheetElementTest::customPointKeyPressMoveLeft() {
 }
 
 void WorksheetElementTest::customPointKeyPressMoveUp() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	QVERIFY(ws != nullptr);
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-	QVERIFY(p != nullptr);
-	ws->addChild(p);
-
-	p->setHorizontalPadding(0);
-	p->setVerticalPadding(0);
-	p->setRightPadding(0);
-	p->setBottomPadding(0);
-	p->setRect(QRectF(0, 0, 100, 100));
-
-	QCOMPARE(p->rangeCount(Dimension::X), 1);
-	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
-	QCOMPARE(p->rangeCount(Dimension::Y), 1);
-	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
-
-	QCOMPARE(p->dataRect().x(), -50);
-	QCOMPARE(p->dataRect().y(), -50);
-	QCOMPARE(p->dataRect().width(), 100);
-	QCOMPARE(p->dataRect().height(), 100);
+	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
@@ -256,33 +156,7 @@ void WorksheetElementTest::customPointKeyPressMoveUp() {
 }
 
 void WorksheetElementTest::customPointKeyPressMoveDown() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	QVERIFY(ws != nullptr);
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-	QVERIFY(p != nullptr);
-	ws->addChild(p);
-
-	p->setHorizontalPadding(0);
-	p->setVerticalPadding(0);
-	p->setRightPadding(0);
-	p->setBottomPadding(0);
-	p->setRect(QRectF(0, 0, 100, 100));
-
-	QCOMPARE(p->rangeCount(Dimension::X), 1);
-	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
-	QCOMPARE(p->rangeCount(Dimension::Y), 1);
-	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
-
-	QCOMPARE(p->dataRect().x(), -50);
-	QCOMPARE(p->dataRect().y(), -50);
-	QCOMPARE(p->dataRect().width(), 100);
-	QCOMPARE(p->dataRect().height(), 100);
+	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
@@ -303,33 +177,7 @@ void WorksheetElementTest::customPointKeyPressMoveDown() {
 
 // Switching between setCoordinateBindingEnabled true and false should not move the point
 void WorksheetElementTest::customPointEnableDisableCoordBinding() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	QVERIFY(ws != nullptr);
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-	QVERIFY(p != nullptr);
-	ws->addChild(p);
-
-	p->setHorizontalPadding(0);
-	p->setVerticalPadding(0);
-	p->setRightPadding(0);
-	p->setBottomPadding(0);
-	p->setRect(QRectF(0, 0, 100, 100));
-
-	QCOMPARE(p->rangeCount(Dimension::X), 1);
-	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
-	QCOMPARE(p->rangeCount(Dimension::Y), 1);
-	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
-
-	QCOMPARE(p->dataRect().x(), -50);
-	QCOMPARE(p->dataRect().y(), -50);
-	QCOMPARE(p->dataRect().width(), 100);
-	QCOMPARE(p->dataRect().height(), 100);
+	SETUP_PROJECT
 
 	auto* point = new CustomPoint(p, QStringLiteral("point"));
 	p->addChild(point);
@@ -374,33 +222,7 @@ void WorksheetElementTest::customPointEnableDisableCoordBinding() {
 }
 
 void WorksheetElementTest::referenceRangeXMouseMove() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	QVERIFY(ws != nullptr);
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-	QVERIFY(p != nullptr);
-	ws->addChild(p);
-
-	p->setHorizontalPadding(0);
-	p->setVerticalPadding(0);
-	p->setRightPadding(0);
-	p->setBottomPadding(0);
-	p->setRect(QRectF(0, 0, 100, 100));
-
-	QCOMPARE(p->rangeCount(Dimension::X), 1);
-	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
-	QCOMPARE(p->rangeCount(Dimension::Y), 1);
-	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
-
-	QCOMPARE(p->dataRect().x(), -50);
-	QCOMPARE(p->dataRect().y(), -50);
-	QCOMPARE(p->dataRect().width(), 100);
-	QCOMPARE(p->dataRect().height(), 100);
+	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
 	referenceRange->setOrientation(ReferenceRange::Orientation::Vertical);
@@ -460,33 +282,7 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 }
 
 void WorksheetElementTest::referenceRangeYMouseMove() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	QVERIFY(ws != nullptr);
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-	QVERIFY(p != nullptr);
-	ws->addChild(p);
-
-	p->setHorizontalPadding(0);
-	p->setVerticalPadding(0);
-	p->setRightPadding(0);
-	p->setBottomPadding(0);
-	p->setRect(QRectF(0, 0, 100, 100));
-
-	QCOMPARE(p->rangeCount(Dimension::X), 1);
-	QCOMPARE(p->range(Dimension::X, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::X, 0).end(), 1);
-	QCOMPARE(p->rangeCount(Dimension::Y), 1);
-	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);
-	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);
-
-	QCOMPARE(p->dataRect().x(), -50);
-	QCOMPARE(p->dataRect().y(), -50);
-	QCOMPARE(p->dataRect().width(), 100);
-	QCOMPARE(p->dataRect().height(), 100);
+	SETUP_PROJECT
 
 	auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
 	referenceRange->setOrientation(ReferenceRange::Orientation::Horizontal);
