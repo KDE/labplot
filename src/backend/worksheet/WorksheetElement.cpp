@@ -595,10 +595,17 @@ void WorksheetElement::setVerticalAlignment(const WorksheetElement::VerticalAlig
 }
 
 STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled, retransform)
-void WorksheetElement::setCoordinateBindingEnabled(bool on) {
+bool WorksheetElement::setCoordinateBindingEnabled(bool on) {
 	Q_D(WorksheetElement);
-	if (on != d->coordinateBindingEnabled)
+	if (on && !cSystem)
+		return false;
+	if (on != d->coordinateBindingEnabled) {
+		// Must not be in the Undo Command!
+		d->updatePosition();
 		exec(new WorksheetElementSetCoordinateBindingEnabledCmd(d, on, on ? ki18n("%1: use logical coordinates") : ki18n("%1: set invisible")));
+		return true;
+	}
+	return true;
 }
 
 STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPositionLogical, QPointF, positionLogical, retransform)

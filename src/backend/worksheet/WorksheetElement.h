@@ -62,7 +62,7 @@ public:
 	typedef WorksheetElementPrivate Private;
 
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
-	void setCoordinateBindingEnabled(bool);
+	bool setCoordinateBindingEnabled(bool);
 	bool coordinateBindingEnabled() const;
 	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
 	void setPosition(QPointF);
