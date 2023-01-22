@@ -282,41 +282,43 @@ void ReferenceRangePrivate::retransform() {
 	if (suppressRetransform || !q->cSystem || q->isLoading())
 		return;
 
-    //updatePosition(); // To update position.point
-
 	// calculate rect in logical coordinates
+	QPointF p1, p2;
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	if (orientation == ReferenceRange::Orientation::Vertical) {
+	switch (orientation) {
+	case ReferenceRange::Orientation::Vertical: {
 		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
-		const auto p1 = QPointF(positionLogicalStart.x(), yRange.start());
-		const auto p2 = QPointF(positionLogicalEnd.x(), yRange.end());
-		const auto pointsScene = cs->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		const auto newPos = QPointF((pointsScene.at(0).x() + pointsScene.at(1).x())/2, (pointsScene.at(0).y() + pointsScene.at(1).y())/2);
-		const auto diffX = qAbs(pointsScene.at(0).x() - pointsScene.at(1).x());
-		const auto diffY = qAbs(pointsScene.at(0).y() - pointsScene.at(1).y());
-		rect.setX(-diffX/2);
-		rect.setY(-diffY/2);
-		rect.setWidth(diffX);
-		rect.setHeight(diffY);
-		recalcShapeAndBoundingRect();
-        positionLogical = cs->mapSceneToLogical(newPos);
-        updatePosition();
-	} else {
-		const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
-		rect.setX(xRange.start());
-		rect.setY(positionLogicalStart.y());
-		rect.setWidth(xRange.length());
-		rect.setHeight(positionLogicalEnd.y() - positionLogicalStart.y());
+		p1 = QPointF(positionLogicalStart.x(), yRange.start());
+		p2 = QPointF(positionLogicalEnd.x(), yRange.end());
+		break;
 	}
+	case ReferenceRange::Orientation::Horizontal: {
+		const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
+		p1 = QPointF(xRange.start(), positionLogicalStart.y());
+		p2 = QPointF(xRange.end(), positionLogicalEnd.y());
+		break;
+	}
+	case ReferenceRange::Orientation::Both: {
+		p1 = QPointF(positionLogicalStart.x(), positionLogicalStart.y());
+		p2 = QPointF(positionLogicalEnd.x(), positionLogicalEnd.y());
+		break;
+	}
+	}
+	const auto pointsScene = cs->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	const auto newPos = QPointF((pointsScene.at(0).x() + pointsScene.at(1).x()) / 2, (pointsScene.at(0).y() + pointsScene.at(1).y()) / 2);
+	const auto diffX = qAbs(pointsScene.at(0).x() - pointsScene.at(1).x());
+	const auto diffY = qAbs(pointsScene.at(0).y() - pointsScene.at(1).y());
+	rect.setX(-diffX / 2);
+	rect.setY(-diffY / 2);
+	rect.setWidth(diffX);
+	rect.setHeight(diffY);
 
-	// calculate rect in scene coordinates
 	// TODO: taken from BoxPlotPrivate::updateFillingRect(), maybe a more simpler version is possible here
 	Lines lines;
 	lines << QLineF(rect.topLeft(), rect.topRight());
 	lines << QLineF(rect.topRight(), rect.bottomRight());
 	lines << QLineF(rect.bottomRight(), rect.bottomLeft());
 	lines << QLineF(rect.bottomLeft(), rect.topLeft());
-	// const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	const auto& unclippedLines = lines;
 
 	QPolygonF polygon;
@@ -361,6 +363,8 @@ void ReferenceRangePrivate::retransform() {
 	rect = polygon.boundingRect();
 
 	recalcShapeAndBoundingRect();
+	positionLogical = cs->mapSceneToLogical(newPos);
+	updatePosition();
 }
 
 void ReferenceRangePrivate::updateOrientation() {
