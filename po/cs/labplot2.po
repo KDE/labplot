@@ -11629,16 +11629,14 @@ msgid "Transparent"
 msgstr "Průhledný"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:597
-#, fuzzy, kde-format
-#| msgid "%1: set background color"
+#, kde-format
 msgid "%1: set axis color"
-msgstr "%1: nastavit barvu pozadí"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:599
-#, fuzzy, kde-format
-#| msgid "%1: set author"
+#, kde-format
 msgid "%1 axes: set color"
-msgstr "%1: zadat autora"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1967
 #, kde-format
