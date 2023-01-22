@@ -33,7 +33,21 @@
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING);                                                                      \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING);
 
+#define ALL_WORKSHEETELEMENT_TESTS2(WorksheetElementType)                                                                                                      \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL);                                                                         \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_MOUSE_MOVE);                                                                                 \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT);                                                                             \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEY_PRESSLEFT);                                                                              \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP);                                                                                \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN);                                                                              \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING);                                                                \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_COORDBINDING);                                                                        \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_COORDBINDING);                                                                        \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING);                                                                     \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING);
+
 ALL_WORKSHEETELEMENT_TESTS(CustomPoint)
+ALL_WORKSHEETELEMENT_TESTS2(TextLabel)
 
 void WorksheetElementTest::referenceRangeXMouseMove() {
 	SETUP_PROJECT
