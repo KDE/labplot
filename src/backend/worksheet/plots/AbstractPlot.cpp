@@ -132,5 +132,6 @@ void AbstractPlot::setSymmetricPadding(bool symmetric) {
 //################### Private implementation #####################
 //################################################################
 AbstractPlotPrivate::AbstractPlotPrivate(AbstractPlot* owner)
-	: WorksheetElementContainerPrivate(owner) {
+	: WorksheetElementContainerPrivate(owner)
+	, q(owner) {
 }

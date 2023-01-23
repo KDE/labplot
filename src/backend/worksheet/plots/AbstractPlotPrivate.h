@@ -12,6 +12,8 @@
 
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 
+class AbstractPlot;
+
 class AbstractPlotPrivate : public WorksheetElementContainerPrivate {
 public:
 	explicit AbstractPlotPrivate(AbstractPlot* owner);
@@ -24,6 +26,8 @@ public:
 	double rightPadding;
 	double bottomPadding;
 	bool symmetricPadding;
+
+	AbstractPlot* q{nullptr};
 };
 
 #endif
