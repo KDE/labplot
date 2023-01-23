@@ -9,7 +9,13 @@
 */
 
 #include "WidgetsTest.h"
+#include "backend/core/Project.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/widgets/NumberSpinBox.h"
+#include "src/kdefrontend/dockwidgets/CartesianPlotDock.h"
+#include "src/kdefrontend/dockwidgets/WorksheetDock.h"
 
 #include <QLineEdit>
 
@@ -885,6 +891,49 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 	QCOMPARE(sb.value(), 5.31);
 	QCOMPARE(sb.toolTip(), QStringLiteral(""));
+}
+
+void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("1");
+	data.max = QStringLiteral("2");
+	data.count = 1000;
+	data.expression1 = QStringLiteral("x");
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	CHECK_RANGE(p, curve, Dimension::X, 1.0, 2.0);
+	CHECK_RANGE(p, curve, Dimension::Y, 1.0, 2.0);
+
+	CartesianPlotDock d(nullptr);
+	WorksheetDock dw(nullptr);
+
+	d.setPlots({p});
+	dw.setWorksheets({ws});
+	d.setPlots({p}); // Important to do it a second time to see that the connections are cleared bevore connecting again
+
+	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.50 cm"));
+	d.ui.sbPaddingHorizontal->lineEdit()->setCursorPosition(3);
+
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	d.ui.sbPaddingHorizontal->keyPressEvent(&event);
+
+	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.60 cm"));
+	d.ui.sbPaddingHorizontal->lineEdit()->setCursorPosition(3);
 }
 
 void WidgetsTest::numberSpinBoxDecimals() {

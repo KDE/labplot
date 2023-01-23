@@ -29,6 +29,7 @@ private Q_SLOTS:
 	void numberSpinBoxFeedback();
 	void numberSpinBoxFeedback2();
 	void numberSpinBoxFeedbackCursorPosition();
+	void numberSpinBoxFeedbackCursorPosition2();
 	void numberSpinBoxDecimals();
 	void numberSpinBoxDecimals2();
 	void numberSpinBoxScrollingNegToPos();
