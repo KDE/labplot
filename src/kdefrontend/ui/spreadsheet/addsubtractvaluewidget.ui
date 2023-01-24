@@ -202,7 +202,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Labmda</string>
+      <string>Weighting:</string>
      </property>
     </widget>
    </item>
@@ -218,7 +218,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Ratio:</string>
+      <string>Smoothness:</string>
      </property>
     </widget>
    </item>

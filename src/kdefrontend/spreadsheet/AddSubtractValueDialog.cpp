@@ -144,6 +144,21 @@ void AddSubtractValueDialog::init() {
 		if (m_operation == Subtract && m_numeric) {
 			ui.cbType->insertSeparator(6);
 			ui.cbType->insertItem(7, i18n("Baseline"), static_cast<int>(ValueType::Baseline));
+
+			// add tooltip texts for the baseline subtraction algorithms.
+			// at the moment only arPLS (s.a. https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract)
+			// is supported and we show the description of its parameters only.
+			QString info = i18n("Weighting ratio - value between 0 and 1, smaller values allow less negative values.");
+			ui.lBaselineParameter1->setToolTip(info);
+			ui.leBaselineParameter1->setToolTip(info);
+
+			info = i18n("Smoothness parameter - the larger the value the smoother the resulting background.");
+			ui.lBaselineParameter2->setToolTip(info);
+			ui.leBaselineParameter2->setToolTip(info);
+
+			info = i18n("Number of iterations to perform.");
+			ui.lBaselineIntParameter1->setToolTip(info);
+			ui.sbBaselineIntParameter1->setToolTip(info);
 		}
 
 		for (int i = 0; i < ENUM_COUNT(AbstractColumn, TimeUnit); i++)
@@ -433,8 +448,24 @@ void AddSubtractValueDialog::initPreview() {
 	plot->setBottomPadding(padding);
 	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
 
+	// x-axis
+	auto* axis = new Axis(QLatin1String("y"), Axis::Orientation::Horizontal);
+	axis->setDefault(true);
+	axis->setSuppressRetransform(true);
+	plot->addChild(axis);
+	axis->setPosition(Axis::Position::Bottom);
+	axis->setMajorTicksDirection(Axis::ticksIn);
+	axis->majorGridLine()->setStyle(Qt::NoPen);
+	axis->setMinorTicksDirection(Axis::noTicks);
+	axis->title()->setText(QString());
+	auto font = axis->labelsFont();
+	font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	axis->setLabelsFont(font);
+	axis->setLabelsOffset(0);
+	axis->setSuppressRetransform(false);
+
 	// y-axis
-	auto* axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
+	axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
 	axis->setDefault(true);
 	axis->setSuppressRetransform(true);
 	plot->addChild(axis);
@@ -443,9 +474,10 @@ void AddSubtractValueDialog::initPreview() {
 	axis->majorGridLine()->setStyle(Qt::NoPen);
 	axis->setMinorTicksDirection(Axis::noTicks);
 	axis->title()->setText(QString());
-	auto font = axis->labelsFont();
+	font = axis->labelsFont();
 	font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	axis->setLabelsFont(font);
+	axis->setLabelsOffset(0);
 	axis->setSuppressRetransform(false);
 
 	ws->addChild(plot);
