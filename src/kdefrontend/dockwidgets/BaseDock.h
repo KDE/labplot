@@ -55,7 +55,7 @@ public:
 	}
 
 	void disconnectAspect(const AbstractAspect* a) {
-		disconnect(a);
+		disconnect(a, nullptr, this, nullptr);
 		m_aspect = nullptr;
 	}
 
