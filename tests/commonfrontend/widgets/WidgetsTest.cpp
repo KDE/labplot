@@ -15,7 +15,6 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/widgets/NumberSpinBox.h"
 #include "src/kdefrontend/dockwidgets/CartesianPlotDock.h"
-#include "src/kdefrontend/dockwidgets/WorksheetDock.h"
 
 #include <QLineEdit>
 
@@ -920,10 +919,8 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
 	CHECK_RANGE(p, curve, Dimension::Y, 1.0, 2.0);
 
 	CartesianPlotDock d(nullptr);
-	WorksheetDock dw(nullptr);
 
 	d.setPlots({p});
-	dw.setWorksheets({ws});
 	d.setPlots({p}); // Important to do it a second time to see that the connections are cleared bevore connecting again
 
 	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.50 cm"));
@@ -933,7 +930,7 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
 	d.ui.sbPaddingHorizontal->keyPressEvent(&event);
 
 	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.60 cm"));
-	d.ui.sbPaddingHorizontal->lineEdit()->setCursorPosition(3);
+	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->cursorPosition(), 3);
 }
 
 void WidgetsTest::numberSpinBoxDecimals() {
