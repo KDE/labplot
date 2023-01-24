@@ -216,28 +216,28 @@ void AddSubtractValueDialog::init() {
 	connect(ui.chbPreview, &QCheckBox::clicked, this, &AddSubtractValueDialog::previewChanged);
 	connect(ui.leValue, &QLineEdit::textChanged, this, [=]() {
 		m_okButton->setEnabled(!ui.leValue->text().isEmpty());
-		m_baselineCurveInvalid = true;
-		m_previewDirty = true;
-		updatePreview();
+		invalidatePreview();
 	});
 	connect(ui.leValueStart, &QLineEdit::textChanged, this, [=]() {
-		m_okButton->setEnabled(!ui.leValue->text().isEmpty());
-		m_baselineCurveInvalid = true;
-		m_previewDirty = true;
-		updatePreview();
+		m_okButton->setEnabled(!ui.leValueStart->text().isEmpty());
+		invalidatePreview();
 	});
 	connect(ui.leValueEnd, &QLineEdit::textChanged, this, [=]() {
-		m_okButton->setEnabled(!ui.leValue->text().isEmpty());
-		m_baselineCurveInvalid = true;
-		m_previewDirty = true;
-		updatePreview();
+		m_okButton->setEnabled(!ui.leValueEnd->text().isEmpty());
+		invalidatePreview();
 	});
-	connect(ui.leBaselineParameter1, &QLineEdit::textChanged, this, &AddSubtractValueDialog::updatePreview);
-	connect(ui.leBaselineParameter2, &QLineEdit::textChanged, this, &AddSubtractValueDialog::updatePreview);
-	connect(ui.sbBaselineIntParameter1, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::updatePreview);
+	connect(ui.leBaselineParameter1, &QLineEdit::textChanged, this, [=]() {
+		m_okButton->setEnabled(!ui.leBaselineParameter1->text().isEmpty());
+		invalidatePreview();
+	});
+	connect(ui.leBaselineParameter2, &QLineEdit::textChanged, this, [=]() {
+		m_okButton->setEnabled(!ui.leBaselineParameter2->text().isEmpty());
+		invalidatePreview();
+	});
+	connect(ui.sbBaselineIntParameter1, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
 
-	// call typeChanged() to update the status of widgets and of the preview, if enabled,
-	// after the dilog was completely shown
+	// call typeChanged() to update the status of the widgets and of the preview
+	// after the dialog was completely shown
 	QTimer::singleShot(0, this, [=]() {
 		typeChanged(ui.cbType->currentIndex());
 	});
@@ -330,6 +330,9 @@ void AddSubtractValueDialog::processColumns() {
 	}
 }
 
+//##############################################################################
+//############################  Slots  #########################################
+//##############################################################################
 void AddSubtractValueDialog::typeChanged(int index) {
 	auto type = static_cast<ValueType>(ui.cbType->itemData(index).toInt());
 	bool diff = (type == ValueType::Difference);
@@ -387,28 +390,27 @@ void AddSubtractValueDialog::typeChanged(int index) {
 	ui.sbBaselineIntParameter1->setVisible(baseline);
 
 	if (m_spreadsheet && (m_operation == Add || m_operation == Subtract)) {
-		m_baselineCurveInvalid = true;
-		m_previewDirty = true;
-		updatePreview();
-	} else {
-		ui.lPreview->hide();
-		ui.chbPreview->hide();
-		ui.framePreview->hide();
+		// we changed maybe from "Minimum" to "Baseline", etc. and need
+		// to recalculate the x-column for the baseline curve
+		m_xColumnBaselineDirty = true;
+
+		invalidatePreview();
 	}
 }
 
 void AddSubtractValueDialog::previewChanged(bool state) {
 	bool visible = state && (m_operation == Add || m_operation == Subtract);
 	ui.framePreview->setVisible(visible);
+	updatePreview();
 
 	// resize the dialog
 	layout()->activate();
 	resize(QSize(this->width(), 0).expandedTo(minimumSize()));
-
-	if (visible && m_previewDirty)
-		updatePreview();
 }
 
+//##############################################################################
+//#####################  Preview related functions  ############################
+//##############################################################################
 void AddSubtractValueDialog::initPreview() {
 	// create project and worksheet
 	m_project = new Project();
@@ -491,6 +493,11 @@ void AddSubtractValueDialog::initPreview() {
 	ui.framePreview->setLayout(layout);
 }
 
+void AddSubtractValueDialog::invalidatePreview() {
+	m_previewDirty = true;
+	updatePreview();
+}
+
 void AddSubtractValueDialog::updatePreview() {
 	if (!ui.framePreview->isVisible() || !m_previewDirty)
 		return;
@@ -501,94 +508,78 @@ void AddSubtractValueDialog::updatePreview() {
 	if (!m_project)
 		initPreview();
 
-	// y for the result curve
+	// y for the result curve - copy the original data into the result column and process it
+	m_yColumnResult->setColumnMode(m_columns.constFirst()->columnMode()); // set the mode to its original value, it was potentially changed in generateForColumn
 	m_yColumnResult->copy(m_columns.constFirst());
 	generateForColumn(m_yColumnResult, 0);
 
-	if (m_baselineCurveInvalid) {
-		auto valueType = static_cast<ValueType>(ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
-		if (valueType == ValueType::Baseline) {
+	auto valueType = static_cast<ValueType>(ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
+	if (valueType == ValueType::Baseline) {
+		// x
+		int rows = m_spreadsheet->rowCount();
+		if (m_xColumnBaselineDirty) {
 			QVector<int> xData;
-			xData.resize(m_spreadsheet->rowCount());
-			for (int i = 0; i < m_spreadsheet->rowCount(); ++i)
+			xData.resize(rows);
+			for (int i = 0; i < rows; ++i)
 				xData[i] = i;
 			m_xColumnBaseline->setIntegers(xData);
+			m_xColumnBaselineDirty = false;
+		}
 
-			const auto* col = m_columns.constFirst();
-			int rows = col->rowCount();
-			QVector<double> baselineData(rows);
-			const auto* newData = static_cast<QVector<double>*>(m_yColumnResult->data());
-			switch (col->columnMode()) {
-			case AbstractColumn::ColumnMode::Integer: {
-				auto* data = static_cast<QVector<int>*>(col->data());
-				for (int i = 0; i < rows; ++i)
-					baselineData[i] = data->at(i) - newData->at(i);
-				break;
-			}
-			case AbstractColumn::ColumnMode::BigInt: {
-				auto* data = static_cast<QVector<qint64>*>(col->data());
-				for (int i = 0; i < rows; ++i)
-					baselineData[i] = data->at(i) - newData->at(i);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Double: {
-				auto* data = static_cast<QVector<double>*>(col->data());
-				for (int i = 0; i < rows; ++i)
-					baselineData[i] = data->at(i) - newData->at(i);
-				break;
-			}
-			case AbstractColumn::ColumnMode::DateTime:
-			case AbstractColumn::ColumnMode::Day:
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::Text:
-				break;
-			}
-			m_yColumnBaseline->setValues(baselineData);
-		} else {
+		// y
+		const auto* col = m_columns.constFirst();
+		QVector<double> baselineData(rows);
+		const auto* newData = static_cast<QVector<double>*>(m_yColumnResult->data());
+		switch (col->columnMode()) {
+		case AbstractColumn::ColumnMode::Integer: {
+			auto* data = static_cast<QVector<int>*>(col->data());
+			for (int i = 0; i < rows; ++i)
+				baselineData[i] = data->at(i) - newData->at(i);
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			auto* data = static_cast<QVector<qint64>*>(col->data());
+			for (int i = 0; i < rows; ++i)
+				baselineData[i] = data->at(i) - newData->at(i);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Double: {
+			auto* data = static_cast<QVector<double>*>(col->data());
+			for (int i = 0; i < rows; ++i)
+				baselineData[i] = data->at(i) - newData->at(i);
+			break;
+		}
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Text:
+			break;
+		}
+		m_yColumnBaseline->setValues(baselineData);
+	} else {
+		// x
+		if (m_xColumnBaselineDirty) {
 			m_xColumnBaseline->resizeTo(2);
 			m_xColumnBaseline->setIntegerAt(0, 0);
 			m_xColumnBaseline->setIntegerAt(1, m_spreadsheet->rowCount() - 1);
+			m_xColumnBaselineDirty = false;
+			}
 
-			// y for the baseline curve
-			double value = 0.;
-			setDoubleValue(value);
-			m_yColumnBaseline->resizeTo(2);
-			m_yColumnBaseline->setValueAt(0, value);
-			m_yColumnBaseline->setValueAt(1, value);;
-		}
-
-		m_baselineCurveInvalid = false;
+		// y
+		double value = 0.;
+		setDoubleValue(value);
+		m_yColumnBaseline->resizeTo(2);
+		m_yColumnBaseline->setValueAt(0, value);
+		m_yColumnBaseline->setValueAt(1, value);;
 	}
 
 	m_previewDirty = false;
 	RESET_CURSOR;
 }
 
-/*!
- * generates new values in the selected columns by adding/subtracting the value provided in this dialog
- * from every column element.
- */
-
-QString AddSubtractValueDialog::getMessage(const QString& name) {
-	QString msg;
-	QString value = ui.leValue->text();
-	switch (m_operation) {
-	case Add:
-		msg = i18n("%1: add %2 to column values", name, value);
-		break;
-	case Subtract:
-		msg = i18n("%1: subtract %2 from column values", name, value);
-		break;
-	case Multiply:
-		msg = i18n("%1: multiply column values by %2", name, value);
-		break;
-	case Divide:
-		msg = i18n("%1: divide column values by %2", name, value);
-		break;
-	}
-	return msg;
-}
-
+//##############################################################################
+//############################  "generate"  ####################################
+//##############################################################################
 void AddSubtractValueDialog::generate() {
 	if (m_spreadsheet)
 		generateForColumns();
@@ -650,7 +641,7 @@ void AddSubtractValueDialog::generateForColumns() {
 }
 
 void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
-	const auto mode = m_columns.constFirst()->columnMode();
+	const auto mode = col->columnMode();
 	const int rows = m_spreadsheet->rowCount();
 	auto valueType = static_cast<ValueType>(ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
 
@@ -807,9 +798,9 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 void AddSubtractValueDialog::subtractBaseline(QVector<double>& newData) {
 	const auto numberLocale = QLocale();
 	bool ok;
-	double p = numberLocale.toDouble(ui.leBaselineParameter1->text(), &ok);
-	double lambda = numberLocale.toDouble(ui.leBaselineParameter2->text(), &ok);;
-	int niter = ui.sbBaselineIntParameter1->value();
+	const double p = numberLocale.toDouble(ui.leBaselineParameter1->text(), &ok);
+	const double lambda = numberLocale.toDouble(ui.leBaselineParameter2->text(), &ok);;
+	const int niter = ui.sbBaselineIntParameter1->value();
 	int size = newData.size();
 	nsl_baseline_remove_arpls(newData.data(), static_cast<size_t>(size), p, lambda, niter);
 }
@@ -1131,4 +1122,29 @@ bool AddSubtractValueDialog::setDateTimeValue(qint64& value, int columnIndex) co
 	}
 
 	return true;
+}
+
+/*!
+ * generates new values in the selected columns by adding/subtracting the value provided in this dialog
+ * from every column element.
+ */
+
+QString AddSubtractValueDialog::getMessage(const QString& name) {
+	QString msg;
+	QString value = ui.leValue->text();
+	switch (m_operation) {
+	case Add:
+		msg = i18n("%1: add %2 to column values", name, value);
+		break;
+	case Subtract:
+		msg = i18n("%1: subtract %2 from column values", name, value);
+		break;
+	case Multiply:
+		msg = i18n("%1: multiply column values by %2", name, value);
+		break;
+	case Divide:
+		msg = i18n("%1: divide column values by %2", name, value);
+		break;
+	}
+	return msg;
 }

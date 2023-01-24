@@ -54,7 +54,7 @@ private:
 
 	// preview related members
 	bool m_previewDirty{true};
-	bool m_baselineCurveInvalid{true};
+	bool m_xColumnBaselineDirty{true};
 	Project* m_project{nullptr};
 	XYCurve* m_curveOrigin{nullptr};
 	XYCurve* m_curveBaseline{nullptr};
@@ -68,6 +68,7 @@ private Q_SLOTS:
 	void typeChanged(int);
 	void previewChanged(bool);
 	void initPreview();
+	void invalidatePreview();
 	void updatePreview();
 };
 
