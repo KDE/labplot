@@ -290,6 +290,15 @@ void ImportFileWidget::loadSettings() {
 	} else
 		m_cbFileName->setUrl(QUrl(m_fileName));
 
+	if (m_dbcFileName.isEmpty()) {
+		m_cbDBCFileName->setUrl(QUrl(conf.readEntry("LastImportedDBCFile", "")));
+		QStringList urls = m_cbDBCFileName->urls();
+		urls.append(conf.readXdgListEntry("LastImportedDBCFiles"));
+		m_cbDBCFileName->setUrls(urls);
+		filterChanged(ui.cbFilter->currentIndex()); // needed if filter is not changed
+	} else
+		m_cbDBCFileName->setUrl(QUrl(m_dbcFileName));
+
 	ui.sbPreviewLines->setValue(conf.readEntry("PreviewLines", 100));
 	ui.chbExcelFirstRowAsColName->setCheckState((Qt::CheckState)conf.readEntry("ExcelFirstLineAsColNames", (int)Qt::CheckState::Unchecked));
 
