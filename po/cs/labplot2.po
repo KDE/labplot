@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2022-01-11 19:17+0100\n"
-"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
+"PO-Revision-Date: 2023-01-24 17:00+0100\n"
+"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -330,7 +330,7 @@ msgstr ""
 #: src/backend/core/AbstractColumn.cpp:171
 #, kde-format
 msgid "UNDEFINED"
-msgstr ""
+msgstr "NEDEFINOVANÝ"
 
 #: src/backend/core/AbstractColumn.cpp:255
 #: src/backend/spreadsheet/Spreadsheet.cpp:183
@@ -556,7 +556,7 @@ msgstr "Osy"
 #: src/backend/core/column/Column.cpp:241
 #, kde-format
 msgid "Calculations"
-msgstr ""
+msgstr "Výpočty"
 
 #: src/backend/core/column/Column.cpp:376
 #: src/backend/core/column/columncommands.cpp:84
@@ -1060,7 +1060,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:127
 #, kde-format
 msgid "Spice"
-msgstr ""
+msgstr "Spice"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:216
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:109
@@ -1396,7 +1396,7 @@ msgstr ""
 #: src/backend/datasources/filters/HDF5Filter.cpp:342
 #, kde-format
 msgid "h5dump not found."
-msgstr ""
+msgstr "h5dump nenalezen."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:350
 #: src/backend/datasources/filters/NetCDFFilter.cpp:277
@@ -1640,7 +1640,7 @@ msgstr "Jeden"
 #: src/backend/datasources/filters/MatioFilter.cpp:421
 #, kde-format
 msgid "Int8"
-msgstr ""
+msgstr "Int8"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:395
 #: src/backend/datasources/filters/MatioFilter.cpp:423
@@ -1652,7 +1652,7 @@ msgstr ""
 #: src/backend/datasources/filters/MatioFilter.cpp:425
 #, kde-format
 msgid "Int16"
-msgstr ""
+msgstr "Int16"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:399
 #: src/backend/datasources/filters/MatioFilter.cpp:427
@@ -1664,7 +1664,7 @@ msgstr ""
 #: src/backend/datasources/filters/MatioFilter.cpp:429
 #, kde-format
 msgid "Int32"
-msgstr ""
+msgstr "Int32"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:403
 #: src/backend/datasources/filters/MatioFilter.cpp:431
@@ -1676,7 +1676,7 @@ msgstr ""
 #: src/backend/datasources/filters/MatioFilter.cpp:437
 #, kde-format
 msgid "Int64"
-msgstr ""
+msgstr "Int64"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:407
 #: src/backend/datasources/filters/MatioFilter.cpp:439
@@ -1722,17 +1722,17 @@ msgstr "Komprimovaný"
 #: src/backend/datasources/filters/MatioFilter.cpp:445
 #, kde-format
 msgid "UTF8"
-msgstr ""
+msgstr "UTF8"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:447
 #, kde-format
 msgid "UTF16"
-msgstr ""
+msgstr "UTF16"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:449
 #, kde-format
 msgid "UTF32"
-msgstr ""
+msgstr "UTF32"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:451
 #, kde-format
@@ -1815,7 +1815,7 @@ msgstr ""
 #: src/backend/datasources/filters/NetCDFFilter.cpp:269
 #, kde-format
 msgid "ncdump not found."
-msgstr ""
+msgstr "ncdump nenalezen."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:431
 #, kde-format
@@ -2235,7 +2235,7 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:41
 #, kde-format
 msgid "Standard Mathematical functions"
-msgstr ""
+msgstr "Standardní matematické funkce"
 
 #: src/backend/gsl/ExpressionParser.cpp:43
 #, kde-format
@@ -4748,12 +4748,12 @@ msgstr "Lineární"
 #: src/backend/lib/Range.cpp:14
 #, kde-format
 msgid "Log10"
-msgstr ""
+msgstr "Log10"
 
 #: src/backend/lib/Range.cpp:14
 #, kde-format
 msgid "Log2"
-msgstr ""
+msgstr "Log2"
 
 #: src/backend/lib/Range.cpp:14
 #, kde-format
@@ -4763,7 +4763,7 @@ msgstr "Ln"
 #: src/backend/lib/Range.cpp:14
 #, kde-format
 msgid "Sqrt"
-msgstr ""
+msgstr "Odm"
 
 #: src/backend/lib/Range.cpp:14
 #, kde-format
@@ -5241,7 +5241,7 @@ msgstr "Zlomek"
 #: src/backend/nsl/nsl_fit.c:20
 #, kde-format
 msgid "Basic functions"
-msgstr ""
+msgstr "Základní funkce"
 
 #: src/backend/nsl/nsl_fit.c:20
 #, kde-format
@@ -6217,7 +6217,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:555
 #, kde-format
 msgid "%1: show scale and offset"
-msgstr ""
+msgstr "%1: zobrazit měřítko a posun"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:562
 #, kde-format
@@ -7263,7 +7263,7 @@ msgstr ""
 #: src/backend/worksheet/Worksheet.cpp:659
 #, kde-format
 msgid "%1: set opacity"
-msgstr ""
+msgstr "%1: nastavit krytí"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:301
 #, kde-format
@@ -7773,27 +7773,27 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:324
 #, kde-format
 msgid "flower"
-msgstr ""
+msgstr "květ"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:326
 #, kde-format
 msgid "flower2"
-msgstr ""
+msgstr "květ2"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:328
 #, kde-format
 msgid "flower3"
-msgstr ""
+msgstr "květ3"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:330
 #, kde-format
 msgid "flower5"
-msgstr ""
+msgstr "květ5"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:332
 #, kde-format
 msgid "flower6"
-msgstr ""
+msgstr "květ6"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:334
 #, kde-format
@@ -7803,32 +7803,32 @@ msgstr "hvězda"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:336
 #, kde-format
 msgid "star3"
-msgstr ""
+msgstr "hvězda3"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:338
 #, kde-format
 msgid "star6"
-msgstr ""
+msgstr "hvězda6"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:340
 #, kde-format
 msgid "pentagon"
-msgstr ""
+msgstr "pětiúhelník"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:342
 #, kde-format
 msgid "hexagon"
-msgstr ""
+msgstr "šestiúhelník"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:344
 #, kde-format
 msgid "latin"
-msgstr ""
+msgstr "latin"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:346
 #, kde-format
 msgid "david"
-msgstr ""
+msgstr "david"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:348
 #, kde-format
@@ -8270,7 +8270,7 @@ msgstr ""
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:36
 #, kde-format
 msgid "Failed to initialize %1."
-msgstr ""
+msgstr "Selhala inicializace %1."
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:57
 #, kde-format
@@ -8358,7 +8358,7 @@ msgstr "Řešit rovnice"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:179
 #, kde-format
 msgid "Linear Algebra"
-msgstr ""
+msgstr "Lineární algebra"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:191
 #, kde-format
@@ -8611,7 +8611,7 @@ msgstr "Vymazat matici"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:259
 #, kde-format
 msgid "&Go to Cell..."
-msgstr ""
+msgstr "Přejít na b&uňku..."
 
 #: src/commonfrontend/matrix/MatrixView.cpp:143
 #, kde-format
@@ -8700,7 +8700,7 @@ msgstr ""
 #: src/commonfrontend/matrix/MatrixView.cpp:185
 #, kde-format
 msgid "&Insert Empty Rows"
-msgstr ""
+msgstr "Vlož&it prázdné řady"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:186
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:408
@@ -8748,7 +8748,7 @@ msgstr "Formát hlavičky"
 #: src/commonfrontend/matrix/MatrixView.cpp:570
 #, kde-format
 msgid "Go to Cell"
-msgstr ""
+msgstr "Přejít na buňku"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:567
 #, kde-format
@@ -8979,7 +8979,7 @@ msgstr "&Hledat"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:262
 #, kde-format
 msgid "Statisti&cs..."
-msgstr ""
+msgstr "Statisti&ka..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:265
 #, kde-format
@@ -11578,7 +11578,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:64
 #, kde-format
 msgid "File Browser"
-msgstr ""
+msgstr "Prohlížeč souborů"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:131
 #, kde-format
@@ -11644,7 +11644,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:831
 #, kde-format
 msgid "Plot Range:"
-msgstr ""
+msgstr "Rozsah zákresu:"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:905
 #, kde-format
@@ -12865,7 +12865,7 @@ msgstr "Projekt"
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
-msgstr ""
+msgstr "%1 Poznámkový blok"
 
 #: src/kdefrontend/GuiObserver.cpp:389
 #, kde-format
@@ -13276,7 +13276,7 @@ msgstr ""
 #: src/kdefrontend/LabPlot.cpp:101
 #, kde-format
 msgid "(c) 2007-2022"
-msgstr ""
+msgstr "(c) 2007-2022"
 
 #: src/kdefrontend/LabPlot.cpp:102
 #, kde-format
@@ -14723,7 +14723,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:426
 #, kde-format
 msgid "Plot - %1"
-msgstr ""
+msgstr "Vykreslit - %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:395
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:421
@@ -14891,7 +14891,7 @@ msgstr "Režim"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:113
 #, kde-format
 msgid "First Quartile"
-msgstr ""
+msgstr "První čtvrť"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
@@ -14905,7 +14905,7 @@ msgstr "Medián"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:125
 #, kde-format
 msgid "Third Quartile"
-msgstr ""
+msgstr "Třetí čtvrť"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:131
 #, kde-format
@@ -17610,7 +17610,7 @@ msgstr ""
 #: src/kdefrontend/ui/labelwidget.ui:531
 #, kde-format
 msgid "Logical coordinates"
-msgstr ""
+msgstr "Logické souřadnice"
 
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -18908,7 +18908,7 @@ msgstr "Percentil:"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:177
 #, kde-format
 msgid "Polynom order:"
-msgstr ""
+msgstr "Polynomická řada:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:184
@@ -19014,7 +19014,7 @@ msgstr ""
 #: src/kdefrontend/ui/fitoptionswidget.ui:115
 #, kde-format
 msgid "Max. iterations:"
-msgstr ""
+msgstr "Max. iterací:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoRange)
 #: src/kdefrontend/ui/fitoptionswidget.ui:141
