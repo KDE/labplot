@@ -36,7 +36,7 @@
 */
 
 XYDataReductionCurveDock::XYDataReductionCurveDock(QWidget* parent, QStatusBar* sb)
-	: XYCurveDock(parent)
+	: XYAnalysisCurveDock(parent)
 	, statusBar(sb) {
 }
 
@@ -628,32 +628,19 @@ void XYDataReductionCurveDock::enableRecalculate() const {
  * show the result and details of the dataReduction
  */
 void XYDataReductionCurveDock::showDataReductionResult() {
-	const XYDataReductionCurve::DataReductionResult& dataReductionResult = m_dataReductionCurve->dataReductionResult();
-	if (!dataReductionResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
+	showResult(m_dataReductionCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+}
 
-	QString str = i18n("status: %1", dataReductionResult.status) + QStringLiteral("<br>");
-
-	if (!dataReductionResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
+QString XYDataReductionCurveDock::customText() const {
+	const auto& result = m_dataReductionCurve->dataReductionResult();
 	const auto numberLocale = QLocale();
-	if (dataReductionResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(dataReductionResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(dataReductionResult.elapsedTime)) + QStringLiteral("<br>");
+	QString str = QStringLiteral("<br>");
 
-	str += QStringLiteral("<br>");
+	str += i18n("number of points: %1", numberLocale.toString(static_cast<qulonglong>(result.npoints))) + QStringLiteral("<br>");
+	str += i18n("positional squared error: %1", numberLocale.toString(result.posError)) + QStringLiteral("<br>");
+	str += i18n("area error: %1", numberLocale.toString(result.areaError)) + QStringLiteral("<br>");
 
-	str += i18n("number of points: %1", numberLocale.toString(static_cast<qulonglong>(dataReductionResult.npoints))) + QStringLiteral("<br>");
-	str += i18n("positional squared error: %1", numberLocale.toString(dataReductionResult.posError)) + QStringLiteral("<br>");
-	str += i18n("area error: %1", numberLocale.toString(dataReductionResult.areaError)) + QStringLiteral("<br>");
-
-	uiGeneralTab.teResult->setText(str);
+	return str;
 }
 
 //*************************************************************

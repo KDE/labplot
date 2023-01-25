@@ -34,7 +34,6 @@ extern "C" {
 }
 
 #include <QDebug> // qWarning()
-#include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
 
@@ -55,9 +54,9 @@ void XYFourierFilterCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYFourierFilterCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYFourierFilterCurve::result() const {
 	Q_D(const XYFourierFilterCurve);
-	return d->filterResult.available;
+	return d->filterResult;
 }
 
 /*!
@@ -98,53 +97,13 @@ XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* o
 // when the parent aspect is removed
 XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() = default;
 
-void XYFourierFilterCurvePrivate::recalculate() {
+void XYFourierFilterCurvePrivate::resetResults() {
+	filterResult = XYFourierFilterCurve::FilterResult();
+}
+
+bool XYFourierFilterCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create filter result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	filterResult = XYFourierFilterCurve::FilterResult();
-
-	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
-	} else {
-		// curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
 
 	// copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
@@ -214,10 +173,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		filterResult.available = true;
 		filterResult.valid = false;
 		filterResult.status = i18n("No data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	// double* xdata = xdataVector.data();
@@ -266,7 +222,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	const double bandwidth = (cutindex2 - cutindex);
 	if ((type == nsl_filter_type_band_pass || type == nsl_filter_type_band_reject) && bandwidth <= 0) {
 		qWarning() << "band width must be > 0. Giving up.";
-		return;
+		return false;
 	}
 
 	DEBUG("cut off @" << cutindex << cutindex2);
@@ -286,11 +242,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	filterResult.valid = (status == GSL_SUCCESS);
 	filterResult.status = gslErrorToString(status);
 	filterResult.elapsedTime = timer.elapsed();
-
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
 //##############################################################################

@@ -47,9 +47,9 @@ void XYCorrelationCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYCorrelationCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYCorrelationCurve::result() const {
 	Q_D(const XYCorrelationCurve);
-	return d->correlationResult.available;
+	return d->correlationResult;
 }
 
 /*!
@@ -91,56 +91,32 @@ XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner)
 // when the parent aspect is removed
 XYCorrelationCurvePrivate::~XYCorrelationCurvePrivate() = default;
 
-void XYCorrelationCurvePrivate::recalculate() {
+void XYCorrelationCurvePrivate::resetResults() {
+	correlationResult = XYCorrelationCurve::CorrelationResult();
+}
+
+bool XYCorrelationCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	Q_UNUSED(tmpXDataColumn);
+	return tmpYDataColumn != nullptr;
+}
+
+bool XYCorrelationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	DEBUG(Q_FUNC_INFO);
 	QElapsedTimer timer;
 	timer.start();
 
-	// create correlation result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	correlationResult = XYCorrelationCurve::CorrelationResult();
-
 	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
 	const AbstractColumn* tmpY2DataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
 		tmpY2DataColumn = y2DataColumn;
 	} else {
 		// curve columns as data source (autocorrelation)
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
 		tmpY2DataColumn = dataSourceCurve->yColumn();
 	}
 
-	if (tmpYDataColumn == nullptr || tmpY2DataColumn == nullptr) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+	if (tmpY2DataColumn == nullptr) {
+		return true;
 	}
 
 	// copy all valid data point for the correlation to temporary vectors
@@ -185,10 +161,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 		correlationResult.available = true;
 		correlationResult.valid = false;
 		correlationResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -242,10 +215,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 	correlationResult.status = QString::number(status);
 	correlationResult.elapsedTime = timer.elapsed();
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
 //##############################################################################

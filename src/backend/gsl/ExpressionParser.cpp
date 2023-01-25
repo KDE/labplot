@@ -1644,7 +1644,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr,
-										 QVector<double>* xVector,
+										 const QVector<double>* xVector,
 										 QVector<double>* yVector,
 										 const QStringList& paramNames,
 										 const QVector<double>& paramValues) {

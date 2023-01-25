@@ -21,7 +21,9 @@ public:
 	explicit XYConvolutionCurvePrivate(XYConvolutionCurve*);
 	~XYConvolutionCurvePrivate() override;
 
-	void recalculate();
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
+	virtual void resetResults() override;
+	virtual bool preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
 
 	XYConvolutionCurve::ConvolutionData convolutionData;
 	XYConvolutionCurve::ConvolutionResult convolutionResult;

@@ -12,12 +12,12 @@
 #define XYCORRELATIONCURVEDOCK_H
 
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xycorrelationcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYCorrelationCurveDock : public XYCurveDock {
+class XYCorrelationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:

@@ -40,7 +40,7 @@ extern "C" {
 */
 
 XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget* parent)
-	: XYCurveDock(parent) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -632,7 +632,7 @@ void XYInterpolationCurveDock::recalculateClicked() {
 		static_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	Q_EMIT info(i18n("Interpolation status: %1", m_interpolationCurve->interpolationResult().status));
+	Q_EMIT info(i18n("Interpolation status: %1", m_interpolationCurve->result().status));
 	QApplication::restoreOverrideCursor();
 }
 
@@ -664,31 +664,7 @@ void XYInterpolationCurveDock::enableRecalculate() const {
  * show the result and details of the interpolation
  */
 void XYInterpolationCurveDock::showInterpolationResult() {
-	const auto& interpolationResult = m_interpolationCurve->interpolationResult();
-	if (!interpolationResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
-
-	QString str = i18n("status: %1", interpolationResult.status) + QStringLiteral("<br>");
-
-	if (!interpolationResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	const auto numberLocale = QLocale();
-	if (interpolationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(interpolationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(interpolationResult.elapsedTime)) + QStringLiteral("<br>");
-
-	str += QStringLiteral("<br><br>");
-
-	uiGeneralTab.teResult->setText(str);
-
-	// enable the "recalculate"-button if the source data was changed since the last interpolation
-	uiGeneralTab.pbRecalculate->setEnabled(m_interpolationCurve->isSourceDataChangedSinceLastRecalc());
+	showResult(m_interpolationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
 }
 
 //*************************************************************

@@ -66,14 +66,17 @@ void XYFitCurve::recalculate() {
 
 void XYFitCurve::evaluate(bool preview) {
 	Q_D(XYFitCurve);
-	d->evaluate(preview);
+	if (d->evaluate(preview)) {
+		// redraw the curve
+		recalcLogicalPoints();
+		Q_EMIT dataChanged();
+	}
 }
 
-bool XYFitCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYFitCurve::result() const {
 	Q_D(const XYFitCurve);
-	return d->fitResult.available;
+	return d->fitResult;
 }
-
 void XYFitCurve::initStartValues(const XYCurve* curve) {
 	Q_D(XYFitCurve);
 	XYFitCurve::FitData& fitData = d->fitData;
@@ -1765,14 +1768,16 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 void XYFitCurvePrivate::prepareResultColumns() {
 	// DEBUG(Q_FUNC_INFO)
 	// create fit result columns if not available yet, clear them otherwise
+
+	// Done also in XYAnalysisCurve, but this function will be also called directly() from evaluate()
+	// and not over recalculate(). So this is also needed here!
 	if (!xColumn) { // all columns are treated together
 		DEBUG("	Creating columns")
 		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		residualsColumn = new Column(QStringLiteral("residuals"), AbstractColumn::ColumnMode::Double);
+
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
-		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
@@ -1780,58 +1785,60 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		yColumn->setHidden(true);
 		q->addChild(yColumn);
 
-		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
-		q->addChild(residualsColumn);
-
 		q->setUndoAware(false);
 		q->setXColumn(xColumn);
 		q->setYColumn(yColumn);
 		q->setUndoAware(true);
 	} else {
 		DEBUG(Q_FUNC_INFO << ", Clear columns")
+		xColumn->invalidateProperties();
+		yColumn->invalidateProperties();
 		xVector->clear();
 		yVector->clear();
 		// TODO: residualsVector->clear();
 	}
+
+	if (!residualsColumn) {
+		residualsColumn = new Column(QStringLiteral("residuals"), AbstractColumn::ColumnMode::Double);
+		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
+		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+		q->addChild(residualsColumn);
+	}
 }
 
-void XYFitCurvePrivate::recalculate() {
-	QElapsedTimer timer;
-	timer.start();
-
-	// clear the previous result
+void XYFitCurvePrivate::resetResults() {
 	fitResult = XYFitCurve::FitResult();
+}
 
+void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
 	// prepare source data columns
 	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
 	switch (dataSourceType) {
 	case XYAnalysisCurve::DataSourceType::Spreadsheet:
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
+		*tmpXDataColumn = xDataColumn;
+		*tmpYDataColumn = yDataColumn;
 		break;
 	case XYAnalysisCurve::DataSourceType::Curve:
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
+		*tmpXDataColumn = dataSourceCurve->xColumn();
+		*tmpYDataColumn = dataSourceCurve->yColumn();
 		break;
 	case XYAnalysisCurve::DataSourceType::Histogram:
 		switch (fitData.algorithm) {
 		case nsl_fit_algorithm_lm:
-			tmpXDataColumn = dataSourceHistogram->bins(); // bins
+			*tmpXDataColumn = dataSourceHistogram->bins(); // bins
 			switch (dataSourceHistogram->normalization()) { // TODO: not exactly
 			case Histogram::Normalization::Count:
 			case Histogram::Normalization::CountDensity:
-				tmpYDataColumn = dataSourceHistogram->binValues(); // values
+				*tmpYDataColumn = dataSourceHistogram->binValues(); // values
 				break;
 			case Histogram::Normalization::Probability:
 			case Histogram::Normalization::ProbabilityDensity:
-				tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
+				*tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
 			}
 			break;
 		case nsl_fit_algorithm_ml:
-			tmpXDataColumn = dataSourceHistogram->dataColumn(); // data
-			tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
+			*tmpXDataColumn = dataSourceHistogram->dataColumn(); // data
+			*tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
 		}
 		// debug
 		/*for (int i = 0; i < dataSourceHistogram->bins()->rowCount(); i++)
@@ -1842,13 +1849,11 @@ void XYFitCurvePrivate::recalculate() {
 			DEBUG("BINPDValues @ " << i << ": " << dataSourceHistogram->binPDValues()->valueAt(i))
 		*/
 	}
+}
 
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data columns failed!");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
+bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	QElapsedTimer timer;
+	timer.start();
 
 	// determine range of data
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
@@ -1896,24 +1901,25 @@ void XYFitCurvePrivate::recalculate() {
 	}
 	}
 
-	evaluate(); // calculate the fit function (vectors)
+	const bool update = evaluate(); // calculate the fit function (vectors)
 
 	// ML uses dataSourceHistogram->bins() as x for residuals
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram && fitData.algorithm == nsl_fit_algorithm_ml)
 		tmpXDataColumn = dataSourceHistogram->bins();
 
 	if (fitData.autoRange || fitData.algorithm == nsl_fit_algorithm_ml) { // evaluate residuals
-		xVector->resize(rowCount);
+		QVector<double> v;
+		v.resize(rowCount);
 		for (size_t i = 0; i < rowCount; i++)
 			if (tmpXDataColumn->isNumeric())
-				(*xVector)[i] = tmpXDataColumn->valueAt(i);
+				v[i] = tmpXDataColumn->valueAt(i);
 			else if (tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::DateTime)
-				(*xVector)[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
+				v[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
 
 		auto* parser = ExpressionParser::getInstance();
 		// fill residualsVector with model values
-		// QDEBUG("xVector: " << *xVector)
-		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector, fitData.paramNames, fitResult.paramValues);
+		// QDEBUG("xVector: " << v)
+		bool rc = parser->evaluateCartesian(fitData.model, &v, residualsVector, fitData.paramNames, fitResult.paramValues);
 		// QDEBUG("residualsVector: " << *residualsVector)
 		if (rc) {
 			switch (fitData.algorithm) {
@@ -1940,7 +1946,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	fitResult.elapsedTime = timer.elapsed();
 
-	sourceDataChangedSinceLastRecalc = false;
+	return update;
 }
 
 void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn, const double norm) {
@@ -2135,8 +2141,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -2144,8 +2148,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Not sufficient weight data points provided.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -2223,8 +2225,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("No data points available.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -2232,8 +2232,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -2241,8 +2239,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Fit model not specified.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
@@ -2575,7 +2571,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 }
 
 /* evaluate fit function (preview == true: use start values, default: false) */
-void XYFitCurvePrivate::evaluate(bool preview) {
+bool XYFitCurvePrivate::evaluate(bool preview) {
 	DEBUG(Q_FUNC_INFO << ", preview = " << preview);
 
 	// prepare source data columns
@@ -2596,9 +2592,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	if (!tmpXDataColumn) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data column failed!");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		return;
+		return true;
 	}
 
 	// only needed for preview (else we have all columns)
@@ -2608,16 +2602,12 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	if (!xVector || !yVector) {
 		DEBUG(Q_FUNC_INFO << ", xVector or yVector not defined!");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		return;
+		return true;
 	}
 
 	if (fitData.model.simplified().isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no fit-model specified.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		return;
+		return true;
 	}
 
 	auto* parser = ExpressionParser::getInstance();
@@ -2644,8 +2634,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		residualsVector->clear();
 	}
 
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
+	return true;
 }
 
 /*!

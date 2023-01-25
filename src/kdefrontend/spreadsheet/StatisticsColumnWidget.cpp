@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Widget showing statistics for column values
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -12,6 +12,7 @@
 #include "StatisticsColumnWidget.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
@@ -53,46 +54,53 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	setLayout(layout);
 
 	const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
+	// clang-format off
 	if (column->isNumeric()) {
-		m_htmlOverview = QStringLiteral("<table border=0 width=100%>") + QStringLiteral("<tr>") + QStringLiteral("<td colspan=2 align=center bgcolor=")
-			+ htmlColor + QStringLiteral("><b><big>") + i18n("Location Measures") + QStringLiteral("</big><b></td>") + QStringLiteral("</tr>")
-			+ QStringLiteral("<tr>") + QStringLiteral("<td width=60%><b>") + i18n("Count") + QStringLiteral("<b></td>") + QStringLiteral("<td>%1</td>")
-			+ QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Minimum") + QStringLiteral("<b></td>")
-			+ QStringLiteral("<td>%2</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Maximum")
-			+ QStringLiteral("<b></td>") + QStringLiteral("<td>%3</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>")
-			+ i18n("Arithmetic mean") + QStringLiteral("<b></td>") + QStringLiteral("<td>%4</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>")
-			+ QStringLiteral("<td><b>") + i18n("Geometric mean") + QStringLiteral("<b></td>") + QStringLiteral("<td>%5</td>") + QStringLiteral("</tr>")
-			+ QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Harmonic mean") + QStringLiteral("<b></td>") + QStringLiteral("<td>%6</td>")
-			+ QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Contraharmonic mean") + QStringLiteral("<b></td>")
-			+ QStringLiteral("<td>%7</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Mode")
-			+ QStringLiteral("<b></td>") + QStringLiteral("<td>%8</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>")
-			+ i18n("First Quartile") + QStringLiteral("<b></td>") + QStringLiteral("<td>%9</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>")
-			+ QStringLiteral("<td><b>") + i18n("Median") + QStringLiteral("<b></td>") + QStringLiteral("<td>%10</td>") + QStringLiteral("</tr>")
-			+ QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Third Quartile") + QStringLiteral("<b></td>") + QStringLiteral("<td>%11</td>")
-			+ QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Trimean") + QStringLiteral("<b></td>")
-			+ QStringLiteral("<td>%12</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr></tr>") + QStringLiteral("<tr>")
-			+ QStringLiteral("<td colspan=2 align=center bgcolor=") + htmlColor + QStringLiteral("><b><big>") + i18n("Dispersion Measures")
-			+ QStringLiteral("</big></b></td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Variance")
-			+ QStringLiteral("<b></td>") + QStringLiteral("<td>%13</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>")
-			+ i18n("Standard deviation") + QStringLiteral("<b></td>") + QStringLiteral("<td>%14</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>")
-			+ QStringLiteral("<td><b>") + i18n("Mean absolute deviation around mean") + QStringLiteral("<b></td>") + QStringLiteral("<td>%15</td>")
-			+ QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Mean absolute deviation around median")
-			+ QStringLiteral("<b></td>") + QStringLiteral("<td>%16</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>")
-			+ i18n("Median absolute deviation") + QStringLiteral("<b></td>") + QStringLiteral("<td>%17</td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>")
-			+ QStringLiteral("<td><b>") + i18n("Interquartile Range") + QStringLiteral("<b></td>") + QStringLiteral("<td>%18</td>") + QStringLiteral("</tr>")
-			+ QStringLiteral("<tr></tr>") + QStringLiteral("<tr>") + QStringLiteral("<td colspan=2 align=center bgcolor=") + htmlColor
-			+ QStringLiteral("><b><big>") + i18n("Shape Measures") + QStringLiteral("</big></b></td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>")
-			+ QStringLiteral("<td><b>") + i18n("Skewness") + QStringLiteral("<b></td>") + QStringLiteral("<td>%19</td>") + QStringLiteral("</tr>")
-			+ QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Kurtosis") + QStringLiteral("<b></td>") + QStringLiteral("<td>%20</td>")
-			+ QStringLiteral("</tr>") + QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Entropy") + QStringLiteral("<b></td>")
-			+ QStringLiteral("<td>%21</td>") + QStringLiteral("</tr>") + QStringLiteral("</table>");
-	} else {
-		m_htmlOverview = QStringLiteral("<table border=0 width=100%>") + QStringLiteral("<tr>") + QStringLiteral("<td colspan=2 align=center bgcolor=")
-			+ htmlColor + QStringLiteral("><b><big>") + i18n("General") + QStringLiteral("</big><b></td>") + QStringLiteral("</tr>") + QStringLiteral("<tr>")
-			+ QStringLiteral("<td width=60%><b>") + i18n("Count") + QStringLiteral("<b></td>") + QStringLiteral("<td>%1</td>") + QStringLiteral("</tr>")
-			+ QStringLiteral("<tr>") + QStringLiteral("<td><b>") + i18n("Unique Values") + QStringLiteral("<b></td>") + QStringLiteral("<td>%2</td>")
-			+ QStringLiteral("</tr>") + QStringLiteral("</table>");
+		m_htmlOverview = QStringLiteral("<table border=0 width=100%><tr><td colspan=2 align=center bgcolor=") + htmlColor
+			+ QStringLiteral("><b><big>") + i18n("Location Measures") + QStringLiteral("</big><b></td></tr>")
+			+ QStringLiteral("<tr><td width=60%><b>") + i18n("Count") + QStringLiteral("<b></td><td>%1</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Minimum") + QStringLiteral("<b></td><td>%2</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Maximum") + QStringLiteral("<b></td><td>%3</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Arithmetic mean") + QStringLiteral("<b></td><td>%4</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Geometric mean") + QStringLiteral("<b></td><td>%5</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Harmonic mean") + QStringLiteral("<b></td><td>%6</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Contraharmonic mean") + QStringLiteral("<b></td><td>%7</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Mode") + QStringLiteral("<b></td><td>%8</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("First Quartile") + QStringLiteral("<b></td><td>%9</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Median") + QStringLiteral("<b></td><td>%10</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Third Quartile") + QStringLiteral("<b></td><td>%11</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Trimean") + QStringLiteral("<b></td><td>%12</td></tr>")
+			+ QStringLiteral("<tr></tr>")
+			+ QStringLiteral("<tr><td colspan=2 align=center bgcolor=") + htmlColor + QStringLiteral("><b><big>")
+			+ i18n("Dispersion Measures") + QStringLiteral("</big></b></td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Variance") + QStringLiteral("<b></td><td>%13</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Standard deviation") + QStringLiteral("<b></td><td>%14</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Mean absolute deviation around mean") + QStringLiteral("<b></td><td>%15</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Mean absolute deviation around median") + QStringLiteral("<b></td><td>%16</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Median absolute deviation") + QStringLiteral("<b></td><td>%17</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Interquartile Range") + QStringLiteral("<b></td><td>%18</td></tr>")
+			+ QStringLiteral("<tr></tr>")
+			+ QStringLiteral("<tr><td colspan=2 align=center bgcolor=") + htmlColor + QStringLiteral("><b><big>")
+			+ i18n("Shape Measures") + QStringLiteral("</big></b></td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Skewness") + QStringLiteral("<b></td><td>%19</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Kurtosis") + QStringLiteral("<b></td><td>%20</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Entropy") + QStringLiteral("<b></td><td>%21</td></tr>")
+			+ QStringLiteral("</table>");
+	} else if (column->columnMode() == AbstractColumn::ColumnMode::Text) {
+		m_htmlOverview = QStringLiteral("<table border=0 width=100%><tr><td colspan=2 align=center bgcolor=")
+			+ htmlColor + QStringLiteral("><b><big>") + i18n("General") + QStringLiteral("</big><b></td></tr><tr>")
+			+ QStringLiteral("<td width=60%><b>") + i18n("Count") + QStringLiteral("<b></td><td>%1</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Unique Values") + QStringLiteral("<b></td><td>%2</td></tr>")
+			+ QStringLiteral("</table>");
+	} else { // datetime
+		m_htmlOverview = QStringLiteral("<table border=0 width=100%><tr><td colspan=2 align=center bgcolor=")
+			+ htmlColor + QStringLiteral("><b><big>") + i18n("General") + QStringLiteral("</big><b></td></tr>")
+			+ QStringLiteral("<tr><td width=60%><b>") + i18n("Count") + QStringLiteral("<b></td><td>%1</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Minimum") + QStringLiteral("<b></td><td>%2</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Maximum") + QStringLiteral("<b></td><td>%3</td></tr>")
+			+ QStringLiteral("</table>");
 	}
+	// clang-format on
 
 	// create tab widgets for every column and show the initial text with the placeholders
 	m_teOverview = new QTextEdit(this);
@@ -124,10 +132,12 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 		m_tabWidget->addTab(&m_kdePlotWidget, i18n("KDE Plot"));
 		m_tabWidget->addTab(&m_qqPlotWidget, i18n("Normal Q-Q Plot"));
 		m_tabWidget->addTab(&m_boxPlotWidget, i18n("Box Plot"));
-	} else {
+	} else if (column->columnMode() == AbstractColumn::ColumnMode::Text) {
 		m_teOverview->setHtml(m_htmlOverview.arg(QLatin1String("-"), QLatin1String("-")));
 		m_tabWidget->addTab(&m_barPlotWidget, i18n("Bar Plot"));
 		m_tabWidget->addTab(&m_paretoPlotWidget, i18n("Pareto Plot"));
+	} else { // datetime
+		m_teOverview->setHtml(m_htmlOverview.arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
 	}
 
 	connect(m_tabWidget, &QTabWidget::currentChanged, this, &StatisticsColumnWidget::currentTabChanged);
@@ -195,7 +205,7 @@ void StatisticsColumnWidget::showOverview() {
 									   isNanValue(statistics.medianDeviation),
 									   isNanValue(statistics.iqr))
 								  .arg(isNanValue(statistics.skewness), isNanValue(statistics.kurtosis), isNanValue(statistics.entropy)));
-	} else {
+	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::Text) {
 		// add the frequencies table
 		const auto& frequencies = m_column->frequencies();
 		const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QStringLiteral("#5f5f5f") : QStringLiteral("#D1D1D1");
@@ -216,6 +226,11 @@ void StatisticsColumnWidget::showOverview() {
 
 		m_htmlOverview += QStringLiteral("</table>");
 		m_teOverview->setHtml(m_htmlOverview.arg(QString::number(statistics.size), QString::number(statistics.unique)));
+	} else { // datetime
+		auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
+		m_teOverview->setHtml(m_htmlOverview.arg(QString::number(statistics.size),
+												 QDateTime::fromMSecsSinceEpoch(statistics.minimum, Qt::UTC).toString(filter->format()),
+												 QDateTime::fromMSecsSinceEpoch(statistics.maximum, Qt::UTC).toString(filter->format())));
 	}
 
 	m_overviewInitialized = true;

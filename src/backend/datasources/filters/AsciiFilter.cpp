@@ -222,10 +222,10 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 	if (maxLines == std::numeric_limits<std::size_t>::max()) { // only when reading all lines
 		// on Linux and BSD use wc, if available, which is much faster than counting lines in the file
 		DEBUG(Q_FUNC_INFO << ", using wc to count lines")
-		const QString wcFullPath = QStandardPaths::findExecutable(QLatin1String("wc"));
+		const QString wcFullPath = QStandardPaths::findExecutable(QStringLiteral("wc"));
 		if (device.compressionType() == KCompressionDevice::None && !wcFullPath.isEmpty()) {
 			QProcess wc;
-			wc.start(wcFullPath, QStringList() << QLatin1String("-l") << fileName);
+			wc.start(wcFullPath, QStringList() << QStringLiteral("-l") << fileName);
 			size_t lineCount = 0;
 			while (wc.waitForReadyRead()) {
 				QString line = QLatin1String(wc.readLine());
@@ -564,7 +564,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", device position after first line and comments = " << device.pos());
+	// valgrind: Conditional jump or move depends on uninitialised value(s)
 	firstLine.remove(QRegularExpression(QStringLiteral("[\\n\\r]"))); // remove any newline
+
 	if (removeQuotesEnabled)
 		firstLine = firstLine.remove(QLatin1Char('"'));
 	DEBUG(Q_FUNC_INFO << ", First line: \'" << STDSTRING(firstLine) << '\'');

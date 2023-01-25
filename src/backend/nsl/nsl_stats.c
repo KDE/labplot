@@ -119,7 +119,7 @@ double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, doub
 			return d[(i - 1) * stride] + ((n + 1) * p - i) * (d[i * stride] - d[(i - 1) * stride]);
 		}
 	case nsl_stats_quantile_type7: // = gsl_stats_quantile_from_sorted_data(d, stride, n, p);
-		if (p == 1.0)
+		if (p == 1.0 || n == 1)
 			return d[(n - 1) * stride];
 		else {
 			int i = (int)floor((n - 1) * p + 1);

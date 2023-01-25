@@ -277,7 +277,6 @@ void BoxPlotDock::loadDataColumns() {
 		addDataColumn();
 
 	int count = m_boxPlot->dataColumns().count();
-	const int currentBoxIndex = ui.cbNumber->currentIndex();
 	ui.cbNumber->clear();
 
 	if (count != 0) {
@@ -314,10 +313,8 @@ void BoxPlotDock::loadDataColumns() {
 	for (auto* b : m_removeButtons)
 		b->setVisible(enabled);
 
-	if (currentBoxIndex != -1)
-		ui.cbNumber->setCurrentIndex(currentBoxIndex);
-	else
-		ui.cbNumber->setCurrentIndex(0);
+	// select the first column after all of them were added to the combobox
+	ui.cbNumber->setCurrentIndex(0);
 }
 
 void BoxPlotDock::setDataColumns() const {
@@ -639,8 +636,7 @@ void BoxPlotDock::plotVisibilityChanged(bool on) {
 // box
 void BoxPlotDock::plotWidthFactorChanged(double factor) {
 	CONDITIONAL_LOCK_RETURN;
-	// 	float v = (float)value*100.;
-	ui.sbWidthFactor->setValue(factor * 100);
+	ui.sbWidthFactor->setValue(round(factor * 100));
 }
 
 // symbols

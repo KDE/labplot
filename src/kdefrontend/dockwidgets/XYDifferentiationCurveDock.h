@@ -13,12 +13,12 @@
 #define XYDIFFERENTIATIONCURVEDOCK_H
 
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xydifferentiationcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYDifferentiationCurveDock : public XYCurveDock {
+class XYDifferentiationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:

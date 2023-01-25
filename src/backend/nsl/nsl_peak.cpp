@@ -26,22 +26,24 @@ size_t* nsl_peak_detect(T* data, size_t n, size_t& np, T height, size_t distance
 	// find peaks
 	np = 0;
 	for (size_t i = 0; i < n; i++) {
-		if (i == 0 && n > 1 && data[0] > data[1]) { // start
-			peaks[np++] = i;
-			continue;
-		}
-		if (i == n - 1 && n > 1 && data[n - 1] > data[n - 2]) { // end
-			peaks[np++] = i;
-			continue;
-		}
+		bool found = false;
+		if (i == 0 && n > 1 && data[0] > data[1]) // start
+			found = true;
+		else if (i == n - 1 && n > 1 && data[n - 1] > data[n - 2]) // end
+			found = true;
+		else if (data[i - 1] < data[i] && data[i] > data[i + 1])
+			found = true;
 
-		if (data[i - 1] < data[i] && data[i] > data[i + 1])
+		// check minimum height and distance
+		if (found && data[i] >= height && (np == 0 || i - peaks[np - 1] >= distance))
 			peaks[np++] = i;
 	}
-	if (np == 0) // nothing found
+	if (np == 0) { // nothing found
+		printf("nothing found\n");
 		return nullptr;
+	}
 
-	if (!(peaks = (size_t*)realloc(peaks, np * sizeof(size_t)))) { // should never happen since *np <= n
+	if (!(peaks = (size_t*)realloc(peaks, np * sizeof(size_t)))) { // should never happen since np <= n
 		WARN("ERROR reallocating memory for peak detection")
 		free(peaks);
 		return nullptr;

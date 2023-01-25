@@ -49,5 +49,7 @@ private Q_SLOTS:
 	void rangeFormatNonDefaultRange();
 
 	void invalidcSystem();
+
+	void autoScaleFitCurveCalculation();
 };
 #endif

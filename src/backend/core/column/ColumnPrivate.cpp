@@ -2376,8 +2376,10 @@ void ColumnPrivate::calculateStatistics() {
 		return;
 	}
 
-	if (!m_owner->isNumeric())
+	if (!m_owner->isNumeric()) {
+		calculateDateTimeStatistics();
 		return;
+	}
 
 	//######  location measures  #######
 	int rowValuesSize = rowCount();
@@ -2551,5 +2553,31 @@ void ColumnPrivate::calculateTextStatistics() {
 
 	statistics.size = valid;
 	statistics.unique = m_dictionary.count();
+	available.statistics = true;
+}
+
+void ColumnPrivate::calculateDateTimeStatistics() {
+	statistics.minimum = INFINITY;
+	statistics.maximum = -INFINITY;
+
+	int valid = 0;
+	for (int row = 0; row < rowCount(); ++row) {
+		if (m_owner->isMasked(row))
+			continue;
+
+		const auto& value = dateTimeAt(row);
+		if (!value.isValid())
+			continue;
+
+		quint64 val = value.toMSecsSinceEpoch();
+		if (val < statistics.minimum)
+			statistics.minimum = val;
+		if (val > statistics.maximum)
+			statistics.maximum = val;
+
+		++valid;
+	}
+
+	statistics.size = valid;
 	available.statistics = true;
 }

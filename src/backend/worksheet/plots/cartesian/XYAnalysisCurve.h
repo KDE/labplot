@@ -41,7 +41,15 @@ public:
 		FourierFilter
 	};
 
-	XYAnalysisCurve(const QString&, AspectType);
+	struct Result {
+		Result(){};
+
+		bool available{false};
+		bool valid{false};
+		QString status;
+		qint64 elapsedTime{0};
+	};
+
 	~XYAnalysisCurve() override;
 
 	static void copyData(QVector<double>& xData,
@@ -53,7 +61,8 @@ public:
 						 bool avgUniqueX = false);
 
 	virtual void recalculate() = 0;
-	virtual bool resultAvailable() const = 0;
+	bool resultAvailable() const;
+	virtual const Result& result() const = 0;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

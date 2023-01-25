@@ -50,9 +50,9 @@ void XYHilbertTransformCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYHilbertTransformCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYHilbertTransformCurve::result() const {
 	Q_D(const XYHilbertTransformCurve);
-	return d->transformResult.available;
+	return d->transformResult;
 }
 
 /*!
@@ -66,11 +66,6 @@ QIcon XYHilbertTransformCurve::icon() const {
 //##########################  getter methods  ##################################
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYHilbertTransformCurve, XYHilbertTransformCurve::TransformData, transformData, transformData)
-
-const XYHilbertTransformCurve::TransformResult& XYHilbertTransformCurve::transformResult() const {
-	Q_D(const XYHilbertTransformCurve);
-	return d->transformResult;
-}
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -93,67 +88,40 @@ XYHilbertTransformCurvePrivate::XYHilbertTransformCurvePrivate(XYHilbertTransfor
 // when the parent aspect is removed
 XYHilbertTransformCurvePrivate::~XYHilbertTransformCurvePrivate() = default;
 
-void XYHilbertTransformCurvePrivate::recalculate() {
+void XYHilbertTransformCurvePrivate::resetResults() {
+	transformResult = XYHilbertTransformCurve::TransformResult();
+}
+
+bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	DEBUG(Q_FUNC_INFO)
 	QElapsedTimer timer;
 	timer.start();
-
-	// create transform result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	transformResult = XYHilbertTransformCurve::TransformResult();
-
-	if (!xDataColumn || !yDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		DEBUG(Q_FUNC_INFO << "no data columns!")
-		return;
-	}
 
 	// copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	double xmin, xmax;
-	if (xDataColumn && transformData.autoRange) {
-		xmin = xDataColumn->minimum();
-		xmax = xDataColumn->maximum();
+	if (tmpXDataColumn && transformData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
 	} else {
 		xmin = transformData.xRange.first();
 		xmax = transformData.xRange.last();
 	}
 
-	int rowCount = std::min(xDataColumn->rowCount(), yDataColumn->rowCount());
+	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	DEBUG(Q_FUNC_INFO << ", row count = " << rowCount)
 	DEBUG(Q_FUNC_INFO << ", xmin/xmax = " << xmin << '/' << xmax)
 	for (int row = 0; row < rowCount; ++row) {
 		// only copy those data where _all_ values (for x and y, if given) are valid
-		if (std::isnan(xDataColumn->valueAt(row)) || std::isnan(yDataColumn->valueAt(row)) || xDataColumn->isMasked(row) || yDataColumn->isMasked(row))
+		if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row)) || tmpXDataColumn->isMasked(row)
+			|| tmpYDataColumn->isMasked(row))
 			continue;
 
 		// only when inside given range
-		if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+		if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+			xdataVector.append(tmpXDataColumn->valueAt(row));
+			ydataVector.append(tmpYDataColumn->valueAt(row));
 		}
 	}
 
@@ -163,11 +131,8 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		DEBUG(Q_FUNC_INFO << "no data (n = 0)!")
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -207,11 +172,7 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 	transformResult.valid = (status == GSL_SUCCESS);
 	transformResult.status = gslErrorToString(status);
 	transformResult.elapsedTime = timer.elapsed();
-
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
 //##############################################################################
