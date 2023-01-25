@@ -11,8 +11,8 @@
 #ifndef TEXTLABELPRIVATE_H
 #define TEXTLABELPRIVATE_H
 
+#include "src/backend/worksheet/TextLabel.h"
 #include "src/backend/worksheet/WorksheetElementPrivate.h"
-#include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "tools/TeXRenderer.h"
 #include <QDesktopWidget>
 #include <QFutureWatcher>
@@ -84,6 +84,7 @@ public:
 
 	// used in the InfoElement (Marker) to attach the line to the label
 	QVector<TextLabel::GluePoint> m_gluePoints;
+	QVector<TextLabel::GluePoint> m_gluePointsTransformed;
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
