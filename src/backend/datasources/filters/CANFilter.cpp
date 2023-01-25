@@ -272,17 +272,18 @@ int CANFilterPrivate::readDataFromFile(const QString& fileName, int lines) {
 	reads the content of the file \c fileName to the data source \c dataSource.
 	Uses the settings defined in the data source.
 */
-void CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+int CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 	if (!isValid(fileName))
-		return;
+        return 0;
 
 	int rows = readDataFromFile(fileName, lines);
 	if (rows == 0)
-		return;
+        return 0;
 
 	auto dc = m_DataContainer.dataContainer();
 	const int columnOffset = dataSource->prepareImport(dc, mode, rows, vectorNames.length(), vectorNames, columnModes(), false);
 	dataSource->finalizeImport(columnOffset);
+    return rows;
 }
 
 /*!

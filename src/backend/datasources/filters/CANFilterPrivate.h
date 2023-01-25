@@ -27,7 +27,7 @@ public:
 	virtual ~CANFilterPrivate() {
 	}
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	void readDataFromFile(const QString& fileName,
+    int readDataFromFile(const QString& fileName,
 						  AbstractDataSource* = nullptr,
 						  AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
 						  int lines = -1);

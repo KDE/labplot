@@ -186,20 +186,21 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		for (const auto ohb : v) {
 			int id;
 			std::vector<double> values;
+            DbcParser::ParseStatus status;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
 				const auto message = reinterpret_cast<const Vector::BLF::CanMessage*>(ohb);
 				id = message->id;
-				m_dbcParser.parseMessage(message->id, message->data, values);
+                status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
 				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
 				id = message->id;
-				m_dbcParser.parseMessage(message->id, message->data, values);
+                status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else
 				return 0;
 
-			if (values.size() == 0) {
+            if (status != DbcParser::ParseStatus::Success) {
 				// id is not available in the dbc file, so it is not possible to decode
-				DEBUG("Unable to decode message: " << id);
+                DEBUG("Unable to decode message: " << id << ": " << (int)status);
 				continue;
 			}
 
