@@ -218,7 +218,6 @@ void AddSubtractValueDialog::init() {
 		} else
 			ui.framePreview->hide();
 
-
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
@@ -602,7 +601,7 @@ void AddSubtractValueDialog::updatePreview() {
 		setDoubleValue(value);
 		m_yColumnBaseline->resizeTo(2);
 		m_yColumnBaseline->setValueAt(0, value);
-		m_yColumnBaseline->setValueAt(1, value);;
+		m_yColumnBaseline->setValueAt(1, value);
 	}
 
 	m_previewDirty = false;
@@ -699,7 +698,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 				break;
 			} else
 				value *= -1.;
-				// fall through
+			// fall through
 		}
 		case Add: {
 			for (int i = 0; i < rows; ++i)
@@ -743,7 +742,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 				break;
 			} else
 				value *= -1.;
-				// fall through
+			// fall through
 		}
 		case Add: {
 			for (int i = 0; i < rows; ++i)
@@ -781,7 +780,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 				break;
 			} else {
 				value *= -1.;
-				// fall through
+			// fall through
 			}
 		}
 		case Add: {
@@ -831,7 +830,7 @@ void AddSubtractValueDialog::subtractBaseline(QVector<double>& newData) {
 	const auto numberLocale = QLocale();
 	bool ok;
 	const double p = numberLocale.toDouble(ui.leBaselineParameter1->text(), &ok);
-	const double lambda = numberLocale.toDouble(ui.leBaselineParameter2->text(), &ok);;
+	const double lambda = numberLocale.toDouble(ui.leBaselineParameter2->text(), &ok);
 	const int niter = ui.sbBaselineIntParameter1->value();
 	int size = newData.size();
 	nsl_baseline_remove_arpls(newData.data(), static_cast<size_t>(size), p, lambda, niter);
