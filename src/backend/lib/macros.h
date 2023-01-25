@@ -366,6 +366,39 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 	};
 
+// setter class for QGraphicsitem settings because
+// there field_name() and setter_method() is used to get and set values
+// with finalize() function and signal emitting.
+#define GRAPHICSITEM_SETTER_CMD_IMPL_F_S(class_name, cmd_name, value_type, field_name, setter_method, finalize_method)                                         \
+	class class_name##cmd_name##Cmd : public QUndoCommand {                                                                                                    \
+	public:                                                                                                                                                    \
+		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
+			: QUndoCommand(parent)                                                                                                                             \
+			, m_target(target)                                                                                                                                 \
+			, m_otherValue(newValue) {                                                                                                                         \
+			setText(description.subs(m_target->name()).toString());                                                                                            \
+		}                                                                                                                                                      \
+		void redo() override {                                                                                                                                 \
+			value_type tmp = m_target->field_name();                                                                                                           \
+			m_target->setter_method(m_otherValue);                                                                                                             \
+			m_otherValue = tmp;                                                                                                                                \
+			QUndoCommand::redo(); /* redo all childs */                                                                                                        \
+			finalize();                                                                                                                                        \
+		}                                                                                                                                                      \
+                                                                                                                                                               \
+		void undo() override {                                                                                                                                 \
+			redo();                                                                                                                                            \
+		}                                                                                                                                                      \
+		void finalize() {                                                                                                                                      \
+			m_target->finalize_method();                                                                                                                       \
+			emit m_target->q->field_name##Changed(m_target->field_name());                                                                                     \
+		}                                                                                                                                                      \
+                                                                                                                                                               \
+	private:                                                                                                                                                   \
+		class_name::Private* m_target;                                                                                                                         \
+		value_type m_otherValue;                                                                                                                               \
+	};
+
 //////////////////////// XML - serialization/deserialization /////
 // TODO: do we really need all these tabs?
 // TODO: why "do {...} while(0)"?

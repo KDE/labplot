@@ -1512,8 +1512,12 @@ void WorksheetView::addNew(QAction* action) {
 			// and therefore aligning will not work
 			auto position = aspect->position();
 			position.point = aspect->parentPosToRelativePos(m_cursorPos, position);
-			position.point =
-				aspect->align(position.point, aspect->graphicsItem()->boundingRect(), aspect->horizontalAlignment(), aspect->verticalAlignment(), false);
+			position.point = aspect->align(position.point,
+										   aspect->graphicsItem()->boundingRect(),
+										   aspect->horizontalAlignment(),
+										   aspect->verticalAlignment(),
+										   aspect->scale(),
+										   false);
 			aspect->setPosition(position);
 			m_calledFromContextMenu = false;
 		} else

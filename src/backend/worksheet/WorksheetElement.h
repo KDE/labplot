@@ -70,6 +70,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
 	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
+	BASIC_D_ACCESSOR_DECL(qreal, scale, Scale)
 
 	void finalizeAdd() override;
 
@@ -87,7 +88,7 @@ public:
 	QPointF parentPosToRelativePos(QPointF parentPos, PositionWrapper) const;
 	QPointF relativePosToParentPos(PositionWrapper) const;
 
-	QPointF align(QPointF, QRectF, HorizontalAlignment, VerticalAlignment, bool positive) const;
+	QPointF align(QPointF, QRectF, HorizontalAlignment, VerticalAlignment, qreal scale, bool positive) const;
 
 	QMenu* createContextMenu() override;
 
@@ -154,6 +155,7 @@ Q_SIGNALS:
 	void coordinateBindingEnabledChanged(bool) const;
 	void positionLogicalChanged(QPointF) const;
 	void rotationAngleChanged(qreal) const;
+	void scaleChanged(qreal) const;
 	void visibleChanged(bool) const;
 	void coordinateSystemIndexChanged(int) const;
 	void changed();

@@ -306,15 +306,15 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	Q_EMIT moveEnd();
 }
 
-QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const {
+QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, qreal scale, bool positive) const {
 	// positive is right
 	double xAlign;
 	switch (horAlign) {
 	case WorksheetElement::HorizontalAlignment::Left:
-		xAlign = rect.width() / 2;
+		xAlign = (rect.width() * scale) / 2;
 		break;
 	case WorksheetElement::HorizontalAlignment::Right:
-		xAlign = -rect.width() / 2;
+		xAlign = -(rect.width() * scale) / 2;
 		break;
 	case WorksheetElement::HorizontalAlignment::Center:
 		// Fall through
@@ -327,10 +327,10 @@ QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment ho
 	double yAlign;
 	switch (vertAlign) {
 	case WorksheetElement::VerticalAlignment::Bottom:
-		yAlign = -rect.height() / 2;
+		yAlign = -(rect.height() * scale) / 2;
 		break;
 	case WorksheetElement::VerticalAlignment::Top:
-		yAlign = rect.height() / 2;
+		yAlign = (rect.height() * scale) / 2;
 		break;
 	case WorksheetElement::VerticalAlignment::Center:
 		// Fall through
@@ -570,6 +570,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::VerticalAlignment
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, QPointF, positionLogical, positionLogical)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, scale, scale())
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition, objectPositionChanged)
@@ -658,6 +659,13 @@ void WorksheetElement::setRotationAngle(qreal angle) {
 		exec(new WorksheetElementSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
 }
 
+GRAPHICSITEM_SETTER_CMD_IMPL_F_S(WorksheetElement, SetScale, qreal, scale, setScale, recalcShapeAndBoundingRect)
+void WorksheetElement::setScale(qreal scale) {
+	Q_D(WorksheetElement);
+	if (scale != d->scale())
+		exec(new WorksheetElementSetRotationAngleCmd(d, scale, ki18n("%1: set scale")));
+}
+
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
@@ -695,7 +703,7 @@ void WorksheetElementPrivate::updatePosition() {
 		}
 	}
 
-	p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
+	p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, scale(), true);
 
 	suppressItemChangeEvent = true;
 	setPos(p);
@@ -729,7 +737,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			q->setPositionLogical(pLogic); // So it is undoable
 		} else {
 			QPointF point = q->parentPosToRelativePos(pos(), position);
-			point = q->align(point, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			point = q->align(point, boundingRectangle, horizontalAlignment, verticalAlignment, scale(), false);
 
 			if (event->key() == Qt::Key_Left) {
 				point.setX(point.x() - delta);
@@ -751,7 +759,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	// convert position of the item in parent coordinates to label's position
 	QPointF point = q->parentPosToRelativePos(pos(), position);
-	point = q->align(point, boundingRect(), horizontalAlignment, verticalAlignment, false);
+	point = q->align(point, boundingRect(), horizontalAlignment, verticalAlignment, scale(), false);
 	if (point != position.point) {
 		// position was changed -> set the position related member variables
 		suppressRetransform = true;
@@ -789,7 +797,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		if (coordinateBindingEnabled) {
 			if (!q->cSystem->isValid())
 				return QGraphicsItem::itemChange(change, value);
-			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, scale(), false);
 
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
@@ -798,7 +806,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 			// convert item's center point in parent's coordinates
 			WorksheetElement::PositionWrapper tempPosition = position;
 			tempPosition.point = q->parentPosToRelativePos(newPos, position);
-			tempPosition.point = q->align(tempPosition.point, boundingRect(), horizontalAlignment, verticalAlignment, false);
+			tempPosition.point = q->align(tempPosition.point, boundingRect(), horizontalAlignment, verticalAlignment, scale(), false);
 
 			// Q_EMIT the signals in order to notify the UI.
 			Q_EMIT q->positionChanged(tempPosition);
