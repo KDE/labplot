@@ -37,6 +37,10 @@
 	{ }
 #endif
 
+#define DEBUG_TEXTLABEL_BOUNDING_RECT 0
+#define DEBUG_TEXTLABEL_GLUEPOINTS 0
+#define DEBUG_BOUNDING_RECT 0
+
 struct Lock {
 	inline explicit Lock(bool& variable)
 		: variable(variable = true) {
@@ -627,6 +631,15 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 			reader->raiseWarning(attributeWarning.subs(QStringLiteral(name)).toString());                                                                      \
 		else                                                                                                                                                   \
 			d->var = str.toDouble();                                                                                                                           \
+	}
+
+#define QGRAPHICSITEM_READ_DOUBLE_VALUE(name, Var)                                                                                                             \
+	{                                                                                                                                                          \
+		str = attribs.value(QStringLiteral(name)).toString();                                                                                                  \
+		if (str.isEmpty())                                                                                                                                     \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral(name)).toString());                                                                      \
+		else                                                                                                                                                   \
+			d->set##Var(str.toDouble());                                                                                                                       \
 	}
 
 #define READ_STRING_VALUE(name, var)                                                                                                                           \

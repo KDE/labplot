@@ -2726,6 +2726,11 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(axisShape);
 	}
+
+#if DEBUG_BOUNDING_RECT
+	painter->setPen(QColor(Qt::GlobalColor::blue));
+	painter->drawRect(boundingRect());
+#endif
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {

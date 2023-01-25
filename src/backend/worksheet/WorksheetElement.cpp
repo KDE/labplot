@@ -444,7 +444,8 @@ void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("verticalPosition"), QString::number(static_cast<int>(d->position.verticalPosition)));
 	writer->writeAttribute(QStringLiteral("horizontalAlignment"), QString::number(static_cast<int>(d->horizontalAlignment)));
 	writer->writeAttribute(QStringLiteral("verticalAlignment"), QString::number(static_cast<int>(d->verticalAlignment)));
-	writer->writeAttribute(QStringLiteral("rotationAngle"), QString::number(d->rotationAngle));
+	writer->writeAttribute(QStringLiteral("rotationAngle"), QString::number(d->rotation()));
+	writer->writeAttribute(QStringLiteral("scale"), QString::number(d->scale()));
 	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("coordinateBinding"), QString::number(d->coordinateBindingEnabled));
@@ -505,7 +506,8 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 		READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
 		READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
 	}
-	READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
+	QGRAPHICSITEM_READ_DOUBLE_VALUE("rotationAngle", Rotation);
+	QGRAPHICSITEM_READ_DOUBLE_VALUE("scale", Scale);
 	READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 	str = attribs.value(QStringLiteral("visible")).toString();
@@ -568,7 +570,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::PositionWrapper, 
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, QPointF, positionLogical, positionLogical)
-BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, rotationAngle, rotationAngle)
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, rotationAngle, rotation())
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, scale, scale())
 
@@ -652,10 +654,10 @@ void WorksheetElement::setPositionInvalid(bool invalid) {
 		d->positionInvalid = invalid;
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetRotationAngle, qreal, rotationAngle, recalcShapeAndBoundingRect)
+GRAPHICSITEM_SETTER_CMD_IMPL_F_S(WorksheetElement, SetRotationAngle, qreal, rotation, setRotation, recalcShapeAndBoundingRect)
 void WorksheetElement::setRotationAngle(qreal angle) {
 	Q_D(WorksheetElement);
-	if (angle != d->rotationAngle)
+	if (angle != d->rotation())
 		exec(new WorksheetElementSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
 }
 
@@ -663,7 +665,7 @@ GRAPHICSITEM_SETTER_CMD_IMPL_F_S(WorksheetElement, SetScale, qreal, scale, setSc
 void WorksheetElement::setScale(qreal scale) {
 	Q_D(WorksheetElement);
 	if (scale != d->scale())
-		exec(new WorksheetElementSetRotationAngleCmd(d, scale, ki18n("%1: set scale")));
+		exec(new WorksheetElementSetScaleCmd(d, scale, ki18n("%1: set scale")));
 }
 
 //##############################################################################

@@ -81,7 +81,7 @@ void CartesianPlotLegend::init() {
 	d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
 	d->position.point = QPointF(0, 0);
 
-	d->rotationAngle = group.readEntry("Rotation", 0.0);
+	d->setRotation(group.readEntry("Rotation", 0.0));
 
 	// Title
 	d->title = new TextLabel(this->name(), TextLabel::Type::PlotLegendTitle);
@@ -328,12 +328,7 @@ CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend* owne
 }
 
 QRectF CartesianPlotLegendPrivate::boundingRect() const {
-	if (rotationAngle != 0) {
-		QMatrix matrix;
-		matrix.rotate(-rotationAngle);
-		return matrix.mapRect(rect);
-	} else
-		return rect;
+	return rect;
 }
 
 void CartesianPlotLegendPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -349,12 +344,6 @@ QPainterPath CartesianPlotLegendPrivate::shape() const {
 		path.addRect(rect);
 	else
 		path.addRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-
-	if (rotationAngle != 0) {
-		QTransform trafo;
-		trafo.rotate(-rotationAngle);
-		path = trafo.map(path);
-	}
 
 	return path;
 }
@@ -456,15 +445,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	// add title width if title is available
 	if (title->isVisible() && !title->text().text.isEmpty()) {
 		float titleWidth;
-		if (rotationAngle == 0.0)
-			titleWidth = title->graphicsItem()->boundingRect().width();
-		else {
-			QRectF rect = title->graphicsItem()->boundingRect();
-			QMatrix matrix;
-			matrix.rotate(-rotationAngle);
-			rect = matrix.mapRect(rect);
-			titleWidth = rect.width();
-		}
+		titleWidth = title->graphicsItem()->boundingRect().width();
 
 		if (titleWidth > legendWidth)
 			legendWidth = titleWidth;
@@ -475,15 +456,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	legendHeight += rowCount * h; // height of the rows
 	legendHeight += (rowCount - 1) * layoutVerticalSpacing; // spacing between the rows
 	if (title->isVisible() && !title->text().text.isEmpty()) {
-		if (rotationAngle == 0.0)
-			legendHeight += title->graphicsItem()->boundingRect().height(); // legend title
-		else {
-			QRectF rect = title->graphicsItem()->boundingRect();
-			QMatrix matrix;
-			matrix.rotate(-rotationAngle);
-			rect = matrix.mapRect(rect);
-			legendHeight += rect.height(); // legend title
-		}
+		legendHeight += title->graphicsItem()->boundingRect().height(); // legend title
 	}
 
 	rect.setX(-legendWidth / 2);
@@ -514,7 +487,6 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		return;
 
 	painter->save();
-	painter->rotate(-rotationAngle);
 
 	// draw the area
 	painter->setOpacity(background->opacity());
@@ -1002,7 +974,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 				else
 					d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
 
-				READ_DOUBLE_VALUE("rotation", rotationAngle);
+				QGRAPHICSITEM_READ_DOUBLE_VALUE("rotation", Rotation);
 			}
 		} else if (reader->name() == QLatin1String("textLabel")) {
 			if (!d->title->load(reader, preview)) {

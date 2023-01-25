@@ -156,6 +156,7 @@ Q_SIGNALS:
 	void positionLogicalChanged(QPointF) const;
 	void rotationAngleChanged(qreal) const;
 	void scaleChanged(qreal) const;
+	void rotationChanged(qreal) const;
 	void visibleChanged(bool) const;
 	void coordinateSystemIndexChanged(int) const;
 	void changed();

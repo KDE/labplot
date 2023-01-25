@@ -34,11 +34,6 @@ public:
 	explicit TextLabelPrivate(TextLabel*);
 
 	double zoomFactor{-1.0};
-	// scaling:
-	// we need to scale from the font size specified in points to scene units.
-	// furhermore, we create the tex-image in a higher resolution then usual desktop resolution
-	//  -> take this into account
-	double scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
 	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
 	double teXImageScaleFactor{Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 

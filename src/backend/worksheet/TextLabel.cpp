@@ -51,25 +51,21 @@ public:
 		: QGraphicsTextItem(parent) {
 	}
 
-	void setScaleFactor(double scaleFactor) {
-		m_scaleFactor = scaleFactor;
-	}
-
-	void setRotationAngle(double rotationAngle) {
-		m_rotationAngle = rotationAngle;
-	}
-
 protected:
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override {
-		painter->rotate(-m_rotationAngle);
-		painter->scale(m_scaleFactor, m_scaleFactor);
-		painter->translate(QPointF(-boundingRect().width() / 2, -boundingRect().height() / 2));
+#if DEBUG_TEXTLABEL_BOUNDING_RECT
+		painter->setPen(QColor(Qt::GlobalColor::green));
+		painter->drawRect(boundingRect());
+#endif
+
+#if DEBUG_TEXTLABEL_BOUNDING_RECT
+		painter->setPen(QColor(Qt::GlobalColor::black));
+		painter->drawRect(QRectF(-5, -5, 10, 10));
+#endif
 		QGraphicsTextItem::paint(painter, option, widget);
 	}
 
 private:
-	double m_scaleFactor = 1.;
-	double m_rotationAngle = 0.;
 };
 
 /**
@@ -152,7 +148,7 @@ void TextLabel::init() {
 		d->teXFont.setPointSize(group.readEntry("TeXFontSize", d->teXFont.pointSize()));
 		d->fontColor = group.readEntry("TeXFontColor", d->fontColor);
 		d->backgroundColor = group.readEntry("TeXBackgroundColor", d->backgroundColor);
-		d->rotationAngle = group.readEntry("Rotation", d->rotationAngle);
+		d->setRotation(group.readEntry("Rotation", d->rotation()));
 
 		// border
 		d->borderShape = (TextLabel::BorderShape)group.readEntry("BorderShape", (int)d->borderShape);
@@ -412,8 +408,13 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner)
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
 
+	// scaling:
+	// we need to scale from the font size specified in points to scene units.
+	// furhermore, we create the tex-image in a higher resolution then usual desktop resolution
+	//  -> take this into account
+	const double scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
+	this->setScale(scaleFactor);
 	m_textItem = new ScaledTextItem(this);
-	m_textItem->setScaleFactor(scaleFactor);
 	m_textItem->setTextInteractionFlags(Qt::NoTextInteraction);
 }
 
@@ -436,8 +437,8 @@ QRectF TextLabelPrivate::size() {
 		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
 			yScale = 0.95;
 		// see updateBoundingRect()
-		w = m_textItem->boundingRect().width() * scaleFactor - xShift;
-		h = m_textItem->boundingRect().height() * scaleFactor * yScale;
+		w = m_textItem->boundingRect().width();
+		h = m_textItem->boundingRect().height();
 	}
 	qreal x = position.point.x();
 	qreal y = position.point.y();
@@ -541,7 +542,7 @@ void TextLabelPrivate::updatePosition() {
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
 		if (q->cSystem) {
 			if (!coordinateBindingEnabled) {
-				QPointF pos = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+				QPointF pos = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, scale(), false);
 				positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			}
 			Q_EMIT q->positionLogicalChanged(positionLogical);
@@ -645,8 +646,9 @@ void TextLabelPrivate::updateBoundingRect() {
 		// better scaling for multiline Markdown
 		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
 			yScale = 0.95;
-		w = m_textItem->boundingRect().width() * scaleFactor - xShift;
-		h = m_textItem->boundingRect().height() * scaleFactor * yScale;
+		w = m_textItem->boundingRect().width(); // * scaleFactor; // - xShift;
+		h = m_textItem->boundingRect().height(); // * scaleFactor; // * yScale;
+		m_textItem->setPos(QPointF(-w / 2, -h / 2));
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
@@ -946,7 +948,6 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	QMatrix matrix;
-	matrix.rotate(-rotationAngle);
 	labelShape = QPainterPath();
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
@@ -963,8 +964,6 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	for (auto& gPoint : m_gluePoints)
 		m_gluePointsTransformed.append(TextLabel::GluePoint(matrix.map(gPoint.point), gPoint.name));
 
-	m_textItem->setRotationAngle(rotationAngle);
-
 	Q_EMIT q->changed();
 }
 
@@ -976,7 +975,6 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	painter->save();
 	switch (textWrapper.mode) {
 	case TextLabel::Mode::LaTeX: {
-		painter->rotate(-rotationAngle);
 		painter->setRenderHint(QPainter::SmoothPixmapTransform);
 		if (boundingRectangle.width() != 0.0 && boundingRectangle.height() != 0.0)
 			painter->drawImage(boundingRectangle, teXImage);
@@ -996,7 +994,6 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		painter->setPen(borderPen);
 		painter->setOpacity(borderOpacity);
 
-		painter->rotate(-rotationAngle);
 		painter->drawPath(borderShapePath);
 		painter->restore();
 	}
@@ -1021,7 +1018,11 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		painter->drawRect(rect);
 	}
 
-#define DEBUG_TEXTLABEL_GLUEPOINTS 0
+#if DEBUG_TEXTLABEL_BOUNDING_RECT
+	painter->setPen(QColor(Qt::GlobalColor::red));
+	painter->drawRect(boundingRect());
+#endif
+
 #if DEBUG_TEXTLABEL_GLUEPOINTS
 	// just for debugging
 	painter->setPen(QColor(Qt::GlobalColor::red));
