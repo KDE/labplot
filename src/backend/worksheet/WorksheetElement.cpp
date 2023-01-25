@@ -570,7 +570,10 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::PositionWrapper, 
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, QPointF, positionLogical, positionLogical)
-BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, rotationAngle, rotation())
+BASIC_SHARED_D_READER_IMPL(WorksheetElement,
+						   qreal,
+						   rotationAngle,
+						   rotation() * -1) // the rotation is in qgraphicsitem different to the convention used in labplot
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, scale, scale())
 
@@ -656,9 +659,10 @@ void WorksheetElement::setPositionInvalid(bool invalid) {
 
 GRAPHICSITEM_SETTER_CMD_IMPL_F_S(WorksheetElement, SetRotationAngle, qreal, rotation, setRotation, recalcShapeAndBoundingRect)
 void WorksheetElement::setRotationAngle(qreal angle) {
+	const qreal angle_graphicsItem = -angle;
 	Q_D(WorksheetElement);
-	if (angle != d->rotation())
-		exec(new WorksheetElementSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
+	if (angle_graphicsItem != d->rotation())
+		exec(new WorksheetElementSetRotationAngleCmd(d, angle_graphicsItem, ki18n("%1: set rotation angle")));
 }
 
 GRAPHICSITEM_SETTER_CMD_IMPL_F_S(WorksheetElement, SetScale, qreal, scale, setScale, recalcShapeAndBoundingRect)
