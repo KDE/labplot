@@ -23,16 +23,16 @@ class BLFFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-//    void testInvalidBLF();
-//    void testNotFoundBLF();
-//    void testInvalidDBC();
-//    void testValidBLFValidDBCSingleMessage();
-    //void testUsePreviousValue();
-//    void testUseNAN();
-//    void testTimeNative();
-//    void testUndefinedMessagePreviousValue();
-//    void testUndefinedMessageNAN();
-    void testBigNumberNotByteAligned();
+	void testInvalidBLF();
+	void testNotFoundBLF();
+	void testInvalidDBC();
+    void testValidBLFValidDBCSingleMessageBigEndian();
+	void testUsePreviousValue();
+	void testUseNAN();
+	void testTimeNative();
+	void testUndefinedMessagePreviousValue();
+	void testUndefinedMessageNAN();
+	void testBigNumberNotByteAligned();
 
 private:
 	// Helper functions
