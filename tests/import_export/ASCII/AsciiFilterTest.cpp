@@ -460,6 +460,33 @@ void AsciiFilterTest::testHeader10() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("x 1")); // the duplicated name was renamed
 }
 
+/*!
+ * test the handling of duplicated columns in the file to be imported.
+ */
+void AsciiFilterTest::testHeader11() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/column_names.txt"));
+
+	filter.setSeparatingCharacter(QStringLiteral(" "));
+	filter.setHeaderEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("A"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("B"));
+
+	// import the second file with reversed column names into the same spreadsheet
+	const QString& fileName2 = QFINDTESTDATA(QLatin1String("data/column_names_reversed.txt"));
+	filter.readDataFromFile(fileName2, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("B"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("A"));
+}
+
 //##############################################################################
 //#####################  handling of different read ranges #####################
 //##############################################################################

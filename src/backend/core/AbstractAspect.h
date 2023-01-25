@@ -391,7 +391,7 @@ private:
 	void connectChild(AbstractAspect*);
 
 public Q_SLOTS:
-	bool setName(const QString&, bool autoUnique = true);
+	bool setName(const QString&, bool autoUnique = true, bool skipAutoUnique = false);
 	void setComment(const QString&);
 	void remove();
 	void copy() const;

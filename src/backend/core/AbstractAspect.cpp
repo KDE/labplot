@@ -199,11 +199,12 @@ QString AbstractAspect::name() const {
 /*!
  * \brief AbstractAspect::setName
  * sets the name of the abstract aspect
- * \param value
- * \param autoUnique
+ * \param value - the new value for the name that needs to be checked and make unique if it's not the case yet
+ * \param autoUnique - if set to \true the new name is automatically made unique, the name is not change and \c false is returned otherwise. default is \true.
+ * \param skipAutoUnique - if set to \true, don't check for uniqueness, the caller has to guarantee the uniqueness. default is \false.
  * \return returns, if the new name is valid or not
  */
-bool AbstractAspect::setName(const QString& value, bool autoUnique) {
+bool AbstractAspect::setName(const QString& value, bool autoUnique, bool skipAutoUnique) {
 	if (value.isEmpty())
 		return setName(QLatin1String("1"), autoUnique);
 
@@ -211,7 +212,7 @@ bool AbstractAspect::setName(const QString& value, bool autoUnique) {
 		return true; // name not changed, but the name is valid
 
 	QString new_name;
-	if (d->m_parent) {
+	if (!skipAutoUnique && d->m_parent) {
 		new_name = d->m_parent->uniqueNameFor(value);
 
 		if (!autoUnique && new_name.compare(value) != 0) // value is not unique, so don't change name
