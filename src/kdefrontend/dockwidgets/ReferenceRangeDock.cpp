@@ -179,8 +179,7 @@ void ReferenceRangeDock::positionLogicalStartChanged(const QString& value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	bool ok;
-	const auto numberLocale = QLocale();
-	const double pos = numberLocale.toDouble(value, &ok);
+	const double pos = QLocale().toDouble(value, &ok);
 	if (ok) {
 		for (auto* range : m_rangeList) {
 			auto positionLogical = range->positionLogicalStart();
@@ -197,8 +196,7 @@ void ReferenceRangeDock::positionLogicalEndChanged(const QString& value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	bool ok;
-	const auto numberLocale = QLocale();
-	const double pos = numberLocale.toDouble(value, &ok);
+	const double pos = QLocale().toDouble(value, &ok);
 	if (ok) {
 		for (auto* range : m_rangeList) {
 			auto positionLogical = range->positionLogicalEnd();
@@ -214,7 +212,7 @@ void ReferenceRangeDock::positionLogicalEndChanged(const QString& value) {
 void ReferenceRangeDock::positionLogicalDateTimeStartChanged(const QDateTime& dateTime) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 pos = dateTime.toMSecsSinceEpoch();
+	const quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* range : m_rangeList) {
 		auto positionLogical = range->positionLogicalStart();
 		if (range->orientation() == ReferenceRange::Orientation::Horizontal)
@@ -228,7 +226,7 @@ void ReferenceRangeDock::positionLogicalDateTimeStartChanged(const QDateTime& da
 void ReferenceRangeDock::positionLogicalDateTimeEndChanged(const QDateTime& dateTime) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 pos = dateTime.toMSecsSinceEpoch();
+	const quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* range : m_rangeList) {
 		auto positionLogical = range->positionLogicalEnd();
 		if (range->orientation() == ReferenceRange::Orientation::Horizontal)
@@ -251,24 +249,22 @@ void ReferenceRangeDock::visibilityChanged(bool state) {
 //*************************************************************
 void ReferenceRangeDock::rangePositionLogicalStartChanged(const QPointF& positionLogical) {
 	CONDITIONAL_LOCK_RETURN;
-	const auto numberLocale = QLocale();
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
-		ui.lePositionStart->setText(numberLocale.toString(positionLogical.y()));
+		ui.lePositionStart->setText(QLocale().toString(positionLogical.y()));
 		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
 	} else {
-		ui.lePositionStart->setText(numberLocale.toString(positionLogical.x()));
+		ui.lePositionStart->setText(QLocale().toString(positionLogical.x()));
 		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
 	}
 }
 
 void ReferenceRangeDock::rangePositionLogicalEndChanged(const QPointF& positionLogical) {
 	CONDITIONAL_LOCK_RETURN;
-	const auto numberLocale = QLocale();
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
-		ui.lePositionEnd->setText(numberLocale.toString(positionLogical.y()));
+		ui.lePositionEnd->setText(QLocale().toString(positionLogical.y()));
 		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
 	} else {
-		ui.lePositionEnd->setText(numberLocale.toString(positionLogical.x()));
+		ui.lePositionEnd->setText(QLocale().toString(positionLogical.x()));
 		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
 	}
 }
