@@ -2557,12 +2557,12 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			QRectF rect = linePath.boundingRect();
 			qreal offsetX = titleOffsetX, offsetY = titleOffsetY; // the distances to the axis line
 			if (orientation == Axis::Orientation::Horizontal) {
-				offsetY -= titleRect.height() / 2.;
+				offsetY -= titleRect.width() * title->scale() / 2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
 				title->setPosition(QPointF((rect.topLeft().x() + rect.topRight().x()) / 2. + titleOffsetX, rect.bottomLeft().y() - offsetY));
 			} else {
-				offsetX -= titleRect.width() / 2.;
+				offsetX -= titleRect.height() * title->scale() / 2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
