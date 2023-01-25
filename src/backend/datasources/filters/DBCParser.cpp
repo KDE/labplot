@@ -22,7 +22,17 @@ bool DbcParser::parseMessage(const uint32_t id, const std::vector<uint8_t>& data
 		return false;
 #ifdef HAVE_DBC_PARSER
     dbc::DbcMessage msg(0, id, data);
-    m_parser.ParseMessage(msg);
+    if (!m_parser.ParseMessage(msg))
+        return false;
+
+    dbc::Message* message = m_parser.GetNetwork()->GetMessage(234);
+    if (message) {
+        for (const auto& signalPair: message->Signals()) {
+            double value;
+            signalPair.second.EngValue(value);
+            out.push_back(value);
+        }
+    }
 #endif
 
 	return true;
@@ -33,8 +43,9 @@ bool DbcParser::parseMessage(const uint32_t id, const std::array<uint8_t, 8>& da
 		return false;
 
 #ifdef HAVE_DBC_PARSER
-    dbc::DbcMessage msg(0, id, data);
-    m_parser.ParseMessage(msg);
+//    dbc::DbcMessage msg(0, id, data);
+//    m_parser.ParseMessage(msg);
+    return false; // currently not supported
 #endif
 
 	return true;
@@ -50,18 +61,16 @@ QStringList DbcParser::signals(const QVector<uint32_t> ids, QHash<uint32_t, int>
 	QStringList s;
 #ifdef HAVE_DBC_PARSER
 	for (const auto id : ids) {
-		const auto messages = m_parser.get_messages();
-		for (const auto& message : messages) {
-			if (message.id() == id) {
-				idIndex.insert(id, s.length());
-				// const auto message = m_messages.value(id);
-				for (const auto& signal_ : message.signals()) {
-					s.append(QString::fromStdString(signal_.name + "_" + signal_.unit));
-				}
-				break;
-			}
-		}
-	}
+        const auto* message = m_parser.GetNetwork()->GetMessageByCanId(id);
+        if (!message)
+            return QStringList();
+
+        idIndex.insert(id, s.length());
+        // const auto message = m_messages.value(id);
+        for (const auto& signal_ : message->Signals()) {
+            s.append(QString::fromStdString(signal_.second.Name() + "_" + signal_.second.Unit()));
+        }
+    }
 #endif
 	return s;
 }
