@@ -698,7 +698,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 				break;
 			} else
 				value *= -1.;
-			// fall through
+			[[fallthrough]];
 		}
 		case Add: {
 			for (int i = 0; i < rows; ++i)
@@ -742,7 +742,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 				break;
 			} else
 				value *= -1.;
-			// fall through
+			[[fallthrough]];
 		}
 		case Add: {
 			for (int i = 0; i < rows; ++i)
@@ -780,7 +780,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 				break;
 			} else {
 				value *= -1.;
-				// fall through
+				[[fallthrough]];
 			}
 		}
 		case Add: {
@@ -812,7 +812,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			// fall through
+			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = QDateTime::fromMSecsSinceEpoch(data->at(i).toMSecsSinceEpoch() + value, Qt::UTC);
@@ -863,7 +863,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			// fall through
+			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
 				for (int j = 0; j < cols; ++j) {
@@ -905,7 +905,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			// fall through
+			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
 				for (int j = 0; j < cols; ++j) {
@@ -947,7 +947,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1.;
-			// fall through
+			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
 				for (int j = 0; j < cols; ++j) {
@@ -989,7 +989,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			// fall through
+			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
 				for (int j = 0; j < cols; ++j) {
