@@ -594,7 +594,7 @@ void AddSubtractValueDialog::updatePreview() {
 			m_xColumnBaseline->setIntegerAt(0, 0);
 			m_xColumnBaseline->setIntegerAt(1, m_spreadsheet->rowCount() - 1);
 			m_xColumnBaselineDirty = false;
-			}
+		}
 
 		// y
 		double value = 0.;
@@ -780,7 +780,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 				break;
 			} else {
 				value *= -1.;
-			// fall through
+				// fall through
 			}
 		}
 		case Add: {
