@@ -199,8 +199,8 @@ QString AbstractAspect::name() const {
 /*!
  * \brief AbstractAspect::setName
  * sets the name of the abstract aspect
- * \param value - the new value for the name that needs to be checked and make unique if it's not the case yet
- * \param autoUnique - if set to \true the new name is automatically made unique, the name is not change and \c false is returned otherwise. default is \true.
+ * \param value - the new value for the name that needs to be checked and made unique if it's not the case yet
+ * \param autoUnique - if set to \true the new name is automatically made unique, the name is not changed and \c false is returned otherwise. default is \true.
  * \param skipAutoUnique - if set to \true, don't check for uniqueness, the caller has to guarantee the uniqueness. default is \false.
  * \return returns, if the new name is valid or not
  */

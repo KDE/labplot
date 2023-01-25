@@ -478,8 +478,11 @@ void AsciiFilterTest::testHeader11() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("B"));
 
 	// import the second file with reversed column names into the same spreadsheet
+	AsciiFilter filter2; // create a new filter so we go through the prepare logic from scratch for the 2nd file
 	const QString& fileName2 = QFINDTESTDATA(QLatin1String("data/column_names_reversed.txt"));
-	filter.readDataFromFile(fileName2, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	filter2.setSeparatingCharacter(QStringLiteral(" "));
+	filter2.setHeaderEnabled(true);
+	filter2.readDataFromFile(fileName2, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 1);
 	QCOMPARE(spreadsheet.columnCount(), 2);
