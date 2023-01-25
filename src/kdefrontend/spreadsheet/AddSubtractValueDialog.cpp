@@ -1168,9 +1168,14 @@ QString AddSubtractValueDialog::getMessage(const QString& name) {
 	case Add:
 		msg = i18n("%1: add %2 to column values", name, value);
 		break;
-	case Subtract:
-		msg = i18n("%1: subtract %2 from column values", name, value);
+	case Subtract: {
+		auto type = static_cast<ValueType>(ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
+		if (type != ValueType::Baseline)
+			msg = i18n("%1: subtract %2 from column values", name, value);
+		else
+			msg = i18n("%1: subtract baseline from column values", name, value);
 		break;
+	}
 	case Multiply:
 		msg = i18n("%1: multiply column values by %2", name, value);
 		break;
