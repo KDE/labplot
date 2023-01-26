@@ -455,9 +455,10 @@ void MainWin::createADS() {
 	// 	if (m_showWelcomeScreen)
 	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
+    // https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/issues/482
+    ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
+    ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
 	m_DockManager = new ads::CDockManager(this);
-	m_DockManager->setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
-    //m_DockManager->setConfigFlag(ads::CDockManager::FocusHighlighting, true);
 	connect(m_DockManager, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
 	// setCentralWidget(m_DockManager); // Automatically done by CDockManager
 
@@ -2081,6 +2082,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 
 		auto* dock = m_DockManager->findDockWidget(win->windowTitle());
 		if (m_DockManager && dock == nullptr) {
+            // Add new dock if not found
             m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win);
 			win->show();
 
