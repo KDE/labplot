@@ -4,6 +4,7 @@
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -81,15 +82,10 @@ private:
 	void initMenus();
 	void connectActions();
 	bool formulaModeActive() const;
-	void exportToFile(const QString&, const bool, const QString&, QLocale::Language) const;
-	void exportToLaTeX(const QString&,
-					   const bool exportHeaders,
-					   const bool gridLines,
-					   const bool captions,
-					   const bool latexHeaders,
-					   const bool skipEmptyRows,
-					   const bool exportEntire) const;
-	void exportToFits(const QString& path, const int exportTo, const bool commentsAsUnits) const;
+	void exportToFile(const QString&, bool, const QString&, QLocale::Language) const;
+	void exportToLaTeX(const QString&, bool exportHeaders, bool gridLines, bool captions, bool latexHeaders, bool skipEmptyRows, bool exportEntire) const;
+	void exportToFits(const QString& path, int exportTo, bool commentsAsUnits) const;
+	void exportToExcel(const QString& path, bool exportHeaders) const;
 	void exportToSQLite(const QString& path) const;
 	int maxRowToExport() const;
 

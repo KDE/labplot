@@ -4,6 +4,7 @@
 	Description          : export spreadsheet dialog
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -63,6 +64,9 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	ui->cbFormat->addItem(QStringLiteral("LaTeX"), static_cast<int>(Format::LaTeX));
 #ifdef HAVE_FITS
 	ui->cbFormat->addItem(QStringLiteral("FITS"), static_cast<int>(Format::FITS));
+#endif
+#ifdef HAVE_EXCEL
+	ui->cbFormat->addItem(QStringLiteral("Excel 2007+"), static_cast<int>(Format::Excel));
 #endif
 
 	const QStringList& drivers = QSqlDatabase::drivers();
@@ -357,6 +361,9 @@ void ExportSpreadsheetDialog::selectFile() {
 	case Format::FITS:
 		extensions = i18n("FITS files (*.fits *.fit *.fts)");
 		break;
+	case Format::Excel:
+		extensions = i18n("Excel 2007+ (*.xlsx)");
+		break;
 	case Format::SQLite:
 		extensions = i18n("SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *.sqlite3 *.sdb3)");
 		break;
@@ -384,6 +391,9 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 #ifdef HAVE_FITS
 	extensions << QStringLiteral(".fits");
 #endif
+#ifdef HAVE_EXCEL
+	extensions << QStringLiteral(".xlsx");
+#endif
 	extensions << QStringLiteral(".db");
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(QLatin1Char('.'));
@@ -394,9 +404,9 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 			path = path.left(i) + extensions.at(index);
 	}
 
-	const Format format = Format(ui->cbFormat->itemData(ui->cbFormat->currentIndex()).toInt());
+	const auto format = Format(ui->cbFormat->itemData(ui->cbFormat->currentIndex()).toInt());
 	switch (format) {
-	case Format::LaTeX: {
+	case Format::LaTeX:
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();
@@ -430,8 +440,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->chkColumnsAsUnits->hide();
 
 		break;
-	}
-	case Format::FITS: {
+	case Format::FITS:
 		ui->lCaptions->hide();
 		ui->lEmptyRows->hide();
 		ui->lExportArea->hide();
@@ -463,8 +472,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		}
 
 		break;
-	}
-	case Format::SQLite: {
+	case Format::SQLite:
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();
@@ -495,8 +503,34 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->chkColumnsAsUnits->hide();
 
 		break;
-	}
-	case Format::ASCII: {
+	case Format::Excel:
+		ui->cbSeparator->hide();
+		ui->lSeparator->hide();
+		ui->lDecimalSeparator->hide();
+		ui->cbDecimalSeparator->hide();
+
+		ui->chkCaptions->hide();
+		ui->chkEmptyRows->hide();
+		ui->chkGridLines->hide();
+		ui->lEmptyRows->hide();
+		ui->lExportArea->hide();
+		ui->lGridLines->hide();
+		ui->lCaptions->hide();
+		ui->cbLaTeXExport->hide();
+		ui->lMatrixHHeader->hide();
+		ui->lMatrixVHeader->hide();
+		ui->chkMatrixHHeader->hide();
+		ui->chkMatrixVHeader->hide();
+
+		ui->lHeader->hide();
+		ui->chkHeaders->hide();
+
+		ui->cbExportToFITS->hide();
+		ui->lExportToFITS->hide();
+		ui->lColumnAsUnits->hide();
+		ui->chkColumnsAsUnits->hide();
+		break;
+	case Format::ASCII:
 		ui->cbSeparator->show();
 		ui->lSeparator->show();
 		ui->lDecimalSeparator->show();
@@ -522,7 +556,6 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
-	}
 	}
 
 	if (!m_matrixMode && !(format == Format::FITS || format == Format::SQLite)) {

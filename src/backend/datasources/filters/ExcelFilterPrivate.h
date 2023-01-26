@@ -39,8 +39,8 @@ public:
 	const ExcelFilter* q;
 
 	bool exportDataSourceAsNewSheet{true};
-	bool columnNamesAsFirstRow{true};
-	bool firstRowAsColumnNames{false};
+	bool firstRowAsColumnNames{false}; // import first row as column names
+	bool columnNamesAsFirstRow{true}; // export column names a first row
 	bool overwriteExportData{true};
 
 	QString sheetToAppendSpreadsheetTo;

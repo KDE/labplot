@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,6 +17,7 @@
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/String2DoubleFilter.h"
+#include "backend/datasources/filters/ExcelFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
@@ -3568,6 +3569,9 @@ bool SpreadsheetView::exportView() {
 #endif
 			break;
 		}
+		case ExportSpreadsheetDialog::Format::Excel:
+			exportToExcel(path, exportHeader);
+			break;
 		case ExportSpreadsheetDialog::Format::SQLite:
 			exportToSQLite(path);
 			break;
@@ -4152,6 +4156,16 @@ void SpreadsheetView::exportToFits(const QString& fileName, const int exportTo, 
 
 	filter->setExportTo(exportTo);
 	filter->setCommentsAsUnits(commentsAsUnits);
+	filter->write(fileName, m_spreadsheet);
+
+	delete filter;
+}
+
+void SpreadsheetView::exportToExcel(const QString& fileName, const bool exportHeader) const {
+	auto* filter = new ExcelFilter;
+
+	DEBUG("EXPORT HEADER = " << exportHeader)
+	filter->setColumnNamesAsFirstRow(exportHeader);
 	filter->write(fileName, m_spreadsheet);
 
 	delete filter;

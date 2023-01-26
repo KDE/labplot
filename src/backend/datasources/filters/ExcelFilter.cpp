@@ -4,7 +4,7 @@
 	Description          : Excel I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Fabian Kristof (fkristofszabolcs@gmail.com)
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -113,20 +113,23 @@ QVector<QStringList> ExcelFilter::previewForCurrentDataRegion(int lines, bool* o
 #endif
 }
 
-void ExcelFilter::setExportAsNewSheet(const bool exportAsNewSheet) {
-	d->exportDataSourceAsNewSheet = exportAsNewSheet;
-}
-
 void ExcelFilter::setSheetToAppendTo(const QString& sheetName) {
 	d->sheetToAppendSpreadsheetTo = sheetName;
 }
 
-void ExcelFilter::setOverwriteData(const bool overwriteData) {
-	d->overwriteExportData = overwriteData;
+void ExcelFilter::setExportAsNewSheet(const bool b) {
+	d->exportDataSourceAsNewSheet = b;
 }
 
-void ExcelFilter::setFirstRowAsColumnNames(const bool firstRowAsColumnNames) {
-	d->firstRowAsColumnNames = firstRowAsColumnNames;
+void ExcelFilter::setOverwriteData(const bool b) {
+	d->overwriteExportData = b;
+}
+
+void ExcelFilter::setFirstRowAsColumnNames(const bool b) {
+	d->firstRowAsColumnNames = b;
+}
+void ExcelFilter::setColumnNamesAsFirstRow(const bool b) {
+	d->columnNamesAsFirstRow = b;
 }
 
 void ExcelFilter::setDataExportStartPos(const QString& dataStartPos) {
@@ -285,9 +288,9 @@ void ExcelFilterPrivate::write(const QString& fileName, AbstractDataSource* data
 	auto dataSourceName = dataSource->name();
 	if (exportDataSourceAsNewSheet) {
 		const auto& sheets = m_document->sheetNames();
-		if (sheets.contains(dataSourceName)) {
+		if (sheets.contains(dataSourceName))
 			dataSourceName += QLatin1String("_1");
-		}
+
 		m_document->addSheet(dataSourceName);
 	} else {
 		// there is (should be) a selected sheet in the widget
@@ -487,9 +490,8 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 			int stringidx = 0;
 			for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
 				if (columnNumericTypes.at(j)) {
-					if (numericixd < numericDataPointers.size()) {
+					if (numericixd < numericDataPointers.size())
 						static_cast<QVector<double>*>(numericDataPointers[numericixd++])->push_back(m_document->read(row, col).toDouble());
-					}
 				} else {
 					if (!stringDataPointers.isEmpty() && stringidx < stringDataPointers.size()) {
 						const auto val = m_document->read(row, col).toString();
@@ -511,9 +513,8 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 		int i = 0;
 		for (int row = region.firstRow(); row <= region.lastRow(); ++row) {
 			int j = 0;
-			for (int col = region.firstColumn(); col <= region.lastColumn(); ++col) {
+			for (int col = region.firstColumn(); col <= region.lastColumn(); ++col)
 				static_cast<QVector<double>*>(dataContainer[j++])->operator[](i) = m_document->read(row, col).toDouble();
-			}
 			++i;
 		}
 	}
