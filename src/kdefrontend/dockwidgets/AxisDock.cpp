@@ -1052,6 +1052,9 @@ void AxisDock::majorTicksAutoNumberChanged(int state) {
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksAutoNumber(automatic);
+
+	if (automatic)
+		ui.sbMajorTicksNumber->setValue(m_axis->majorTicksNumber()); // set new value
 }
 
 void AxisDock::majorTicksNumberChanged(int value) {
@@ -1233,6 +1236,9 @@ void AxisDock::minorTicksAutoNumberChanged(int state) {
 
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksAutoNumber(automatic);
+
+	if (automatic)
+		ui.sbMinorTicksNumber->setValue(m_axis->minorTicksNumber()); // set new value
 }
 
 void AxisDock::minorTicksNumberChanged(int value) {
