@@ -43,7 +43,7 @@ public:
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	void drawFilling(QPainter*) const;
-    QPointF recalculateRect();
+	QPointF recalculateRect();
 
 	ReferenceRange* const q;
 

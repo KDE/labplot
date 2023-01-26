@@ -31,19 +31,19 @@ class WorksheetElementTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-//	ALL_WORKSHEET_TESTS_DEFINITION(CustomPoint)
-//	ALL_WORKSHEET_TESTS_DEFINITION(TextLabel)
-//	ALL_WORKSHEET_TESTS_DEFINITION(Image)
+	ALL_WORKSHEET_TESTS_DEFINITION(CustomPoint)
+	ALL_WORKSHEET_TESTS_DEFINITION(TextLabel)
+	ALL_WORKSHEET_TESTS_DEFINITION(Image)
 
-//	void referenceRangeXMouseMove();
-//	void referenceRangeYMouseMove();
+	void referenceRangeXMouseMove();
+	void referenceRangeYMouseMove();
 
-//    void referenceRangeXClippingLeftMouse();
-    void referenceRangeXClippingLeftSetStart();
-    void referenceRangeXClippingRightSetEnd();
+	void referenceRangeXClippingLeftMouse();
+	void referenceRangeXClippingLeftSetStart();
+	void referenceRangeXClippingRightSetEnd();
 
-    void referenceRangeYClippingBottomSetEnd();
-    void referenceRangeYClippingTopSetEnd();
+	void referenceRangeYClippingBottomSetEnd();
+	void referenceRangeYClippingTopSetEnd();
 };
 
 #endif // WORKSHEETELEMENTTEST_H
