@@ -702,4 +702,86 @@ void AxisTest::setTickLabelColor() {
 	CHECK_LINE_COLOR(Qt::black);
 }
 
+void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+
+	AxisDock dock(nullptr);
+	dock.setAxes({xAxis, yAxis});
+	dock.ui.cbMajorTicksAutoNumber->setChecked(false);
+	dock.ui.sbMajorTicksNumber->setValue(10);
+
+	// Check majorticks numbers of the axes
+	QCOMPARE(xAxis->majorTicksNumber(), 10);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
+	QCOMPARE(yAxis->majorTicksNumber(), 10);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
+	QCOMPARE(dock.ui.cbMajorTicksAutoNumber->isChecked(), false);
+
+	dock.setAxes({xAxis, yAxis}); // Another time
+	dock.ui.cbMajorTicksAutoNumber->setChecked(true);
+
+	QCOMPARE(xAxis->majorTicksNumber(), 6);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+	QCOMPARE(yAxis->majorTicksNumber(), 6);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+	QCOMPARE(dock.ui.sbMajorTicksNumber->value(), 6);
+}
+
+void AxisTest::automaticTicNumberUpdateDockMinorTicks() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+
+	AxisDock dock(nullptr);
+	dock.setAxes({xAxis, yAxis});
+	dock.ui.cbMinorTicksAutoNumber->setChecked(false);
+	dock.ui.sbMinorTicksNumber->setValue(10);
+
+	// Check minorticks numbers of the axes
+	QCOMPARE(xAxis->minorTicksNumber(), 10);
+	QCOMPARE(xAxis->minorTicksAutoNumber(), false);
+	QCOMPARE(yAxis->minorTicksNumber(), 10);
+	QCOMPARE(xAxis->minorTicksAutoNumber(), false);
+	QCOMPARE(dock.ui.cbMinorTicksAutoNumber->isChecked(), false);
+
+	dock.setAxes({xAxis, yAxis}); // Another time
+	QCOMPARE(dock.ui.cbMinorTicksAutoNumber->isChecked(), false);
+	dock.ui.cbMinorTicksAutoNumber->setChecked(true);
+
+	// 1 is the default value for automatic
+	QCOMPARE(xAxis->minorTicksNumber(), 1);
+	QCOMPARE(xAxis->minorTicksAutoNumber(), true);
+	QCOMPARE(yAxis->minorTicksNumber(), 1);
+	QCOMPARE(xAxis->minorTicksAutoNumber(), true);
+	QCOMPARE(dock.ui.sbMinorTicksNumber->value(), 1);
+}
+
 QTEST_MAIN(AxisTest)
