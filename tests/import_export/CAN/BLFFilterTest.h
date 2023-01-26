@@ -36,6 +36,7 @@ private Q_SLOTS:
 	void testUndefinedMessageNANBigEndian();
 
 	void testUseNANLittleEndian();
+	void testUsePreviousValueLittleEndian();
 	void testBigNumberNotByteAlignedLittleEndian();
 
 private:
