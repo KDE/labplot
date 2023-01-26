@@ -33,6 +33,7 @@ New features:
 		* HDF5: support VLEN data import
 		* Live data: support multiple values via TCP
 	* [export]
+		* Export spreadsheet and matrix in Excel .xlsx format using QXlsx library
 		* Use the current working project directory, if available, as the default export path
 	* [analysis]
 		* Maximum Likelyhood estimation for several distributions
