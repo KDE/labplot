@@ -41,6 +41,9 @@ private Q_SLOTS:
 //    void referenceRangeXClippingLeftMouse();
     void referenceRangeXClippingLeftSetStart();
     void referenceRangeXClippingRightSetEnd();
+
+    void referenceRangeYClippingBottomSetEnd();
+    void referenceRangeYClippingTopSetEnd();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

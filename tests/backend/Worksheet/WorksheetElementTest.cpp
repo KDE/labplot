@@ -205,6 +205,23 @@
 //    VALUES_EQUAL(referenceRange->d_func()->rect.height(), 100);
 //}
 
+/*          Logical                         Scene
+ *     ^                                         ^ -100
+ * 1   |                                         |
+ *     |                                         |
+ *     |                                         |
+ *     |                                         |0               100
+ * 0.5 |                           --------------+---------------->
+ *     |                                         |
+ *     |                                         |
+ *     |                                         |
+ *     |                                         |+100
+ * 0   +---------------------->
+ *     0         0.5         1
+ */
+
+
+
 void WorksheetElementTest::referenceRangeXClippingLeftSetStart() {
     SETUP_PROJECT
 
@@ -232,13 +249,13 @@ void WorksheetElementTest::referenceRangeXClippingLeftSetStart() {
     QCOMPARE(referenceRange->positionLogical().y(), 0.5); // Only horizontal considered
     QCOMPARE(referenceRange->positionLogicalStart().x(), -5);
     QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.55);
-    QCOMPARE(referenceRange->position().point.x(), (-2.225 - 0.5) * 100);
+    QCOMPARE(referenceRange->position().point.x(), -2.225 * 100 - 50); // - 50 because 0 logical is -50 in scene
     QCOMPARE(referenceRange->position().point.y(), 0);
-    QCOMPARE(referenceRange->d_func().pos().x(), (-2.225 - 0.5) * 100);
-    QCOMPARE(referenceRange->d_func().pos().y(), 0);
+    QCOMPARE(referenceRange->d_func()->pos().x(), -2.225 * 100 - 50); // - 50 because 0 logical is -50 in scene
+    QCOMPARE(referenceRange->d_func()->pos().y(), 0);
 
     // Rect is clipped
-    VALUES_EQUAL(referenceRange->d_func()->rect.x(), 0); // clipped value
+    VALUES_EQUAL(referenceRange->d_func()->rect.x(), 222.5); // position.point.x() + 50, because -50 is the minimum in scene coords
     VALUES_EQUAL(referenceRange->d_func()->rect.y(), -50);
     VALUES_EQUAL(referenceRange->d_func()->rect.width(), 55);
     VALUES_EQUAL(referenceRange->d_func()->rect.height(), 100);
@@ -267,15 +284,98 @@ void WorksheetElementTest::referenceRangeXClippingRightSetEnd() {
 
     // Simulate mouse move
     referenceRange->setPositionLogicalEnd(QPointF(+5, 0.5));
-    QCOMPARE(referenceRange->positionLogical().x(), 2.75); // (-5+0.5)/2
+    QCOMPARE(referenceRange->positionLogical().x(), 2.725); // (5+0.45)/2
     QCOMPARE(referenceRange->positionLogical().y(), 0.5); // Only horizontal considered
     QCOMPARE(referenceRange->positionLogicalStart().x(), 0.45);
     QCOMPARE(referenceRange->positionLogicalEnd().x(), 5);
+    QCOMPARE(referenceRange->position().point.x(), 2.725 * 100 - 50); // 0 logical is at -50
+    QCOMPARE(referenceRange->position().point.y(), 0);
+    QCOMPARE(referenceRange->d_func()->pos().x(), (2.725) * 100 - 50);
+    QCOMPARE(referenceRange->d_func()->pos().y(), 0);
+
     // Rect is clipped
-    VALUES_EQUAL(referenceRange->d_func()->rect.x(), 0); // clipped value
+    VALUES_EQUAL(referenceRange->d_func()->rect.x(), -227.5); // clipped value
     VALUES_EQUAL(referenceRange->d_func()->rect.y(), -50);
     VALUES_EQUAL(referenceRange->d_func()->rect.width(), 55);
     VALUES_EQUAL(referenceRange->d_func()->rect.height(), 100);
+}
+
+void WorksheetElementTest::referenceRangeYClippingBottomSetEnd() {
+    SETUP_PROJECT
+
+    auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
+    referenceRange->setOrientation(ReferenceRange::Orientation::Horizontal);
+    p->addChild(referenceRange);
+    referenceRange->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+    auto pp = referenceRange->position();
+    pp.point = QPointF(0, 0);
+    referenceRange->setPosition(pp);
+    referenceRange->setCoordinateBindingEnabled(true);
+
+    QCOMPARE(referenceRange->positionLogical().x(), 0.5);
+    QCOMPARE(referenceRange->positionLogical().y(), 0.5);
+    QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
+    QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
+    VALUES_EQUAL(referenceRange->d_func()->rect.y(), -5); // - width / 2 (logical 0.55 - 0.45) -> scene (-5 - (+5)) = 10
+    VALUES_EQUAL(referenceRange->d_func()->rect.x(), -50);
+    VALUES_EQUAL(referenceRange->d_func()->rect.height(), 10);
+    VALUES_EQUAL(referenceRange->d_func()->rect.width(), 100);
+
+    // Simulate mouse move
+    referenceRange->setPositionLogicalStart(QPointF(0.5, -5));
+    QCOMPARE(referenceRange->positionLogical().y(), -2.225); // (-5+0.45)/2
+    QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only horizontal considered
+    QCOMPARE(referenceRange->positionLogicalStart().y(), -5);
+    QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
+    QCOMPARE(referenceRange->position().point.y(), -272.5);
+    QCOMPARE(referenceRange->position().point.x(), 0);
+    QCOMPARE(referenceRange->d_func()->pos().y(), (+2.725) * 100);
+    QCOMPARE(referenceRange->d_func()->pos().x(), 0);
+
+    // Rect is clipped
+    VALUES_EQUAL(referenceRange->d_func()->rect.y(), -277.5); // clipped value
+    VALUES_EQUAL(referenceRange->d_func()->rect.x(), -50);
+    VALUES_EQUAL(referenceRange->d_func()->rect.height(), 55);
+    VALUES_EQUAL(referenceRange->d_func()->rect.width(), 100);
+}
+
+void WorksheetElementTest::referenceRangeYClippingTopSetEnd() {
+    SETUP_PROJECT
+
+    auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
+    referenceRange->setOrientation(ReferenceRange::Orientation::Horizontal);
+    p->addChild(referenceRange);
+    referenceRange->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+    auto pp = referenceRange->position();
+    pp.point = QPointF(0, 0);
+    referenceRange->setPosition(pp);
+    referenceRange->setCoordinateBindingEnabled(true);
+
+    QCOMPARE(referenceRange->positionLogical().x(), 0.5);
+    QCOMPARE(referenceRange->positionLogical().y(), 0.5);
+    QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
+    QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
+    VALUES_EQUAL(referenceRange->d_func()->rect.y(), -5); // - width / 2 (logical 0.55 - 0.45) -> scene (-5 - (+5)) = 10
+    VALUES_EQUAL(referenceRange->d_func()->rect.x(), -50);
+    VALUES_EQUAL(referenceRange->d_func()->rect.height(), 10);
+    VALUES_EQUAL(referenceRange->d_func()->rect.width(), 100);
+
+    // Simulate mouse move
+    referenceRange->setPositionLogicalEnd(QPointF(0.5, 5));
+    QCOMPARE(referenceRange->positionLogical().y(), 2.725); // (5+0.45)/2
+    QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only horizontal considered
+    QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
+    QCOMPARE(referenceRange->positionLogicalEnd().y(), 5);
+    QCOMPARE(referenceRange->position().point.y(), (2.225) * 100);
+    QCOMPARE(referenceRange->position().point.x(), 0);
+    QCOMPARE(referenceRange->d_func()->pos().y(), (-2.225) * 100);
+    QCOMPARE(referenceRange->d_func()->pos().x(), 0);
+
+    // Rect is clipped
+    VALUES_EQUAL(referenceRange->d_func()->rect.y(), 172.5); // clipped value
+    VALUES_EQUAL(referenceRange->d_func()->rect.x(), -50);
+    VALUES_EQUAL(referenceRange->d_func()->rect.height(), 55);
+    VALUES_EQUAL(referenceRange->d_func()->rect.width(), 100);
 }
 
 // TODO: create test with reference range with nonlinear ranges!
