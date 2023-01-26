@@ -1895,8 +1895,8 @@ void AxisDock::load() {
 	// Minor ticks
 	ui.cbMinorTicksDirection->setCurrentIndex((int)m_axis->minorTicksDirection());
 	ui.cbMinorTicksType->setCurrentIndex((int)m_axis->minorTicksType());
-	ui.cbMinorTicksAutoNumber->setChecked(m_axis->majorTicksAutoNumber());
-	ui.sbMinorTicksNumber->setEnabled(!m_axis->majorTicksAutoNumber());
+	ui.cbMinorTicksAutoNumber->setChecked(m_axis->minorTicksAutoNumber());
+	ui.sbMinorTicksNumber->setEnabled(!m_axis->minorTicksAutoNumber());
 	ui.sbMinorTicksNumber->setValue(m_axis->minorTicksNumber());
 	ui.sbMinorTicksLength->setValue(Worksheet::convertFromSceneUnits(m_axis->minorTicksLength(), Worksheet::Unit::Point));
 
