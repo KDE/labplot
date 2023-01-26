@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-20 00:53+0000\n"
+"POT-Creation-Date: 2023-01-26 00:53+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2820,7 +2820,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:159
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:284
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:62
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:99
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
@@ -2830,7 +2830,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:160 src/backend/nsl/nsl_conv.c:23
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:285
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:100
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
@@ -2849,7 +2849,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/ExpressionParser.cpp:162
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:286
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:137
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:503
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
@@ -15069,53 +15069,7 @@ msgstr ""
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:57
-#, kde-format
-msgid "Add the specified value to column values"
-msgstr ""
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:60
-#, fuzzy, kde-format
-#| msgid "%1: insert 1 row"
-#| msgid_plural "%1: insert %2 rows"
-msgid "Subtract the specified value from column values"
-msgstr "%1: εισαγωγή 1 γραμμής"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:63
-#, kde-format
-msgid "Multiply column values by the specified value"
-msgstr ""
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:66
-#, kde-format
-msgid "Divide column values by the specified value"
-msgstr ""
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:83
-#, fuzzy, kde-format
-#| msgid "%1: insert 1 row"
-#| msgid_plural "%1: insert %2 rows"
-msgid "Add the specified value to matrix values"
-msgstr "%1: εισαγωγή 1 γραμμής"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:86
-#, fuzzy, kde-format
-#| msgid "%1: insert 1 row"
-#| msgid_plural "%1: insert %2 rows"
-msgid "Subtract the specified value from matrix values"
-msgstr "%1: εισαγωγή 1 γραμμής"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:89
-#, kde-format
-msgid "Multiply matrix values by the specified value"
-msgstr ""
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:92
-#, kde-format
-msgid "Divide matrix values by the specified value"
-msgstr ""
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:135
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:108
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
@@ -15123,126 +15077,160 @@ msgctxt "@title:window"
 msgid "Add Value"
 msgstr "%1 τιμή"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:136
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:109
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, kde-format
 msgid "&Add"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
 #, fuzzy, kde-format
 #| msgid "Function values"
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Τιμές συνάρτησης"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
 #, fuzzy, kde-format
 #| msgid "Function values"
 msgid "Subtract:"
 msgstr "Τιμές συνάρτησης"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:114
 #, kde-format
 msgid "&Subtract"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:144
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:117
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:145
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:118
 #, kde-format
 msgid "&Multiply"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:148
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr "μη έγκυρη τιμή γραμμής"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:149
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
 #, kde-format
 msgid "&Divide"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "Start column:"
-msgid "Custom Value"
-msgstr "Στήλη έναρξης:"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:155
-#, fuzzy, kde-format
-#| msgid "Differentiation:"
-msgid "Difference"
-msgstr "Διαφορισμός:"
-
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:287
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:493
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean"
 msgstr "Μέσος"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:433
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
+#, fuzzy, kde-format
+#| msgid "Start column:"
+msgid "Custom Value"
+msgstr "Στήλη έναρξης:"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:142
+#, fuzzy, kde-format
+#| msgid "Differentiation:"
+msgid "Difference"
+msgstr "Διαφορισμός:"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "%1 value"
+#| msgid_plural "%1 values"
+msgid "Baseline"
+msgstr "%1 τιμή"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:151
+#, kde-format
+msgid ""
+"Weighting ratio - value between 0 and 1, smaller values allow less negative "
+"values."
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:155
+#, kde-format
+msgid ""
+"Smoothness parameter - the larger the value the smoother the resulting "
+"background."
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:159
+#, fuzzy, kde-format
+#| msgid "Number of levels"
+msgid "Number of iterations to perform."
+msgstr "Πλήθος επιπέδων"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:494
 #, kde-format
 msgid "raw data"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:440
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:501
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "baseline"
 msgstr "%1 τιμή"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:451
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:510
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgid "result"
 msgstr "Αποτελέσματα:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:506
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:633
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:640
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:647
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:654
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:856
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:898
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:940
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:982
+#, fuzzy, kde-format
+#| msgid "invalid row value"
+msgid "Wrong numeric value provided."
+msgstr "μη έγκυρη τιμή γραμμής"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1168
 #, fuzzy, kde-format
 #| msgid "%1: clear column"
 msgid "%1: add %2 to column values"
 msgstr "%1: καθαρισμός στήλης"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:509
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1173
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
 msgid "%1: subtract %2 from column values"
 msgstr "%1: εισαγωγή 1 γραμμής"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:512
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1175
+#, fuzzy, kde-format
+#| msgid "%1: insert 1 row"
+#| msgid_plural "%1: insert %2 rows"
+msgid "%1: subtract baseline from column values"
+msgstr "%1: εισαγωγή 1 γραμμής"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1179
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:515
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1182
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr ""
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:540
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:547
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:554
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:561
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:717
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:759
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:801
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:843
-#, fuzzy, kde-format
-#| msgid "invalid row value"
-msgid "Wrong numeric value provided."
-msgstr "μη έγκυρη τιμή γραμμής"
 
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:36
 #, fuzzy, kde-format
@@ -15252,14 +15240,14 @@ msgctxt "@title:window"
 msgid "Add Value Label"
 msgstr "%1 τιμή"
 
-#. i18n: ectx: property (text), widget (QLabel, lTimeValue)
 #. i18n: ectx: property (text), widget (QLabel, lValue)
+#. i18n: ectx: property (text), widget (QLabel, lTimeValue)
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:42
 #: src/kdefrontend/ui/constantswidget.ui:57
 #: src/kdefrontend/ui/datapickerimagewidget.ui:731
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:130
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:185
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:46
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:94
 #, kde-format
 msgid "Value:"
 msgstr ""
@@ -20628,7 +20616,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:47
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:30
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:260
 #, fuzzy, kde-format
 #| msgid "Print Preview"
 msgid "Preview:"
@@ -20920,12 +20908,18 @@ msgstr ""
 msgid "Typesetting engine:"
 msgstr "Μηχανή στοιχειοθεσίας"
 
-#. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
+#. i18n: ectx: property (text), widget (QLabel, lType)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
+#, kde-format
+msgid "Add:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lValueStart)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:62
 #, fuzzy, kde-format
-#| msgid "Start"
-msgid "Start Time:"
-msgstr "Έναρξη"
+#| msgid "Function values"
+msgid "Start Value:"
+msgstr "Τιμές συνάρτησης"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueEnd)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
@@ -20935,25 +20929,40 @@ msgstr "Έναρξη"
 msgid "End Value:"
 msgstr "%1 τιμή"
 
-#. i18n: ectx: property (text), widget (QLabel, lType)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
-#, kde-format
-msgid "Add:"
-msgstr ""
+#. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:153
+#, fuzzy, kde-format
+#| msgid "Start"
+msgid "Start Time:"
+msgstr "Έναρξη"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:146
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:179
 #, fuzzy, kde-format
 #| msgid "End column:"
 msgid "End Time:"
 msgstr "Στήλη τέλους:"
 
-#. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:172
+#. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:205
 #, fuzzy, kde-format
-#| msgid "Function values"
-msgid "Start Value:"
-msgstr "Τιμές συνάρτησης"
+#| msgid "Weights"
+msgid "Weighting:"
+msgstr "Βάρη:"
+
+#. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:221
+#, fuzzy, kde-format
+#| msgid "Derivative"
+msgid "Smoothness:"
+msgstr "Παράγωγος"
+
+#. i18n: ectx: property (text), widget (QLabel, lBaselineIntParameter1)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:237
+#, fuzzy, kde-format
+#| msgid "Integration:"
+msgid "Iterations:"
+msgstr "Ολοκλήρωση:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
@@ -22139,6 +22148,24 @@ msgid "Unable to open file:"
 msgstr "Σύνδεση:"
 
 #, fuzzy
+#~| msgid "%1: insert 1 row"
+#~| msgid_plural "%1: insert %2 rows"
+#~ msgid "Subtract the specified value from column values"
+#~ msgstr "%1: εισαγωγή 1 γραμμής"
+
+#, fuzzy
+#~| msgid "%1: insert 1 row"
+#~| msgid_plural "%1: insert %2 rows"
+#~ msgid "Add the specified value to matrix values"
+#~ msgstr "%1: εισαγωγή 1 γραμμής"
+
+#, fuzzy
+#~| msgid "%1: insert 1 row"
+#~| msgid_plural "%1: insert %2 rows"
+#~ msgid "Subtract the specified value from matrix values"
+#~ msgstr "%1: εισαγωγή 1 γραμμής"
+
+#, fuzzy
 #~| msgid "Statistics"
 #~ msgid "Statisti&cs..."
 #~ msgstr "Στατιστική"
@@ -22738,11 +22765,6 @@ msgstr "Σύνδεση:"
 #~ msgstr "Παράμετροι"
 
 #, fuzzy
-#~| msgid "Integration:"
-#~ msgid "Iterations:"
-#~ msgstr "Ολοκλήρωση:"
-
-#, fuzzy
 #~| msgid "Format Type"
 #~ msgid "Format type:"
 #~ msgstr "Τύπος αποθήκευσης"
@@ -22886,11 +22908,6 @@ msgstr "Σύνδεση:"
 #~| msgid "Format Type"
 #~ msgid "Format Options"
 #~ msgstr "Τύπος αποθήκευσης"
-
-#, fuzzy
-#~| msgid "Number of levels"
-#~ msgid "Number of bins to preview:"
-#~ msgstr "Πλήθος επιπέδων"
 
 #, fuzzy
 #~| msgid "Area to export"
