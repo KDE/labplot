@@ -71,8 +71,6 @@ private:
 	DateTimeSpinBox* dtsbMajorTicksIncrement{nullptr};
 	DateTimeSpinBox* dtsbMinorTicksIncrement{nullptr};
 
-	QVector<QMetaObject::Connection> m_connections;
-
 	friend class AxisTest;
 
 private Q_SLOTS:
