@@ -275,6 +275,85 @@ ReferenceRangePrivate::ReferenceRangePrivate(ReferenceRange* owner)
 	setAcceptHoverEvents(true);
 }
 
+QPointF ReferenceRangePrivate::recalculateRect() {
+    // calculate rect in logical coordinates
+    QPointF p1, p2;
+    auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+    switch (orientation) {
+    case ReferenceRange::Orientation::Vertical: {
+        const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
+        p1 = QPointF(positionLogicalStart.x(), yRange.start());
+        p2 = QPointF(positionLogicalEnd.x(), yRange.end());
+        break;
+    }
+    case ReferenceRange::Orientation::Horizontal: {
+        const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
+        p1 = QPointF(xRange.start(), positionLogicalStart.y());
+        p2 = QPointF(xRange.end(), positionLogicalEnd.y());
+        break;
+    }
+    case ReferenceRange::Orientation::Both: {
+        p1 = QPointF(positionLogicalStart.x(), positionLogicalStart.y());
+        p2 = QPointF(positionLogicalEnd.x(), positionLogicalEnd.y());
+        break;
+    }
+    }
+    const auto pointsSceneUnclipped = cs->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+    // New position without considering clipping!
+    const auto newPosScene = QPointF((pointsSceneUnclipped.at(0).x() + pointsSceneUnclipped.at(1).x()) / 2, (pointsSceneUnclipped.at(0).y() + pointsSceneUnclipped.at(1).y()) / 2);
+
+    auto point1 = pointsSceneUnclipped.at(0);
+    auto point2 = pointsSceneUnclipped.at(1);
+
+    const auto diffXUnclipped = qAbs(point1.x() - point2.x());
+    const auto diffYUnclipped = qAbs(point1.y() - point2.y());
+
+    // Clipping
+    const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
+    if (point1.x() < point2.x()) {
+        point1.setX(qMax(point1.x(), dataRect.left()));
+        point2.setX(qMin(point2.x(), dataRect.right()));
+        const auto diffX = point2.x() - point1.x();
+        rect.setX(-diffXUnclipped/2 + point1.x() - pointsSceneUnclipped.at(0).x());
+        if (diffX >= 0)
+            rect.setWidth(diffX);
+        else
+            rect.setWidth(0);
+    } else {
+        point2.setX(qMax(point2.x(), dataRect.left()));
+        point1.setX(qMin(point1.x(), dataRect.right()));
+        const auto diffX = point1.x() - point2.x();
+        rect.setX(-diffXUnclipped/2 + point2.x() - pointsSceneUnclipped.at(1).x());
+        if (diffX >= 0)
+            rect.setWidth(diffX);
+        else
+            rect.setWidth(0);
+    }
+
+    if (point1.y() < point2.y()) {
+        point1.setY(qMax(point1.y(), dataRect.top()));
+        point2.setY(qMin(point2.y(), dataRect.bottom()));
+        const auto diff = point2.y() - point1.y();
+        rect.setY(-diffYUnclipped/2 + point1.y() - pointsSceneUnclipped.at(0).y());
+        if (diff >= 0)
+            rect.setHeight(diff);
+        else
+            rect.setHeight(0);
+    } else {
+        point2.setY(qMax(point2.y(), dataRect.top()));
+        point1.setY(qMin(point1.y(), dataRect.bottom()));
+        const auto diff = point1.y() - point2.y();
+        rect.setY(-diffYUnclipped/2 + point2.y() - pointsSceneUnclipped.at(1).y());
+        if (diff >= 0)
+            rect.setHeight(diff);
+        else
+            rect.setHeight(0);
+    }
+
+    recalcShapeAndBoundingRect();
+    return newPosScene;
+}
+
 /*!
 	calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
@@ -282,88 +361,11 @@ void ReferenceRangePrivate::retransform() {
 	if (suppressRetransform || !q->cSystem || q->isLoading())
 		return;
 
-	// calculate rect in logical coordinates
-	QPointF p1, p2;
-	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	switch (orientation) {
-	case ReferenceRange::Orientation::Vertical: {
-		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
-		p1 = QPointF(positionLogicalStart.x(), yRange.start());
-		p2 = QPointF(positionLogicalEnd.x(), yRange.end());
-		break;
-	}
-	case ReferenceRange::Orientation::Horizontal: {
-		const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
-		p1 = QPointF(xRange.start(), positionLogicalStart.y());
-		p2 = QPointF(xRange.end(), positionLogicalEnd.y());
-		break;
-	}
-	case ReferenceRange::Orientation::Both: {
-		p1 = QPointF(positionLogicalStart.x(), positionLogicalStart.y());
-		p2 = QPointF(positionLogicalEnd.x(), positionLogicalEnd.y());
-		break;
-	}
-	}
-	const auto pointsScene = cs->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	const auto newPos = QPointF((pointsScene.at(0).x() + pointsScene.at(1).x()) / 2, (pointsScene.at(0).y() + pointsScene.at(1).y()) / 2);
-	const auto diffX = qAbs(pointsScene.at(0).x() - pointsScene.at(1).x());
-	const auto diffY = qAbs(pointsScene.at(0).y() - pointsScene.at(1).y());
-	rect.setX(-diffX / 2);
-	rect.setY(-diffY / 2);
-	rect.setWidth(diffX);
-	rect.setHeight(diffY);
+    const QPointF newPosScene = recalculateRect();
 
-	// TODO: taken from BoxPlotPrivate::updateFillingRect(), maybe a more simpler version is possible here
-	Lines lines;
-	lines << QLineF(rect.topLeft(), rect.topRight());
-	lines << QLineF(rect.topRight(), rect.bottomRight());
-	lines << QLineF(rect.bottomRight(), rect.bottomLeft());
-	lines << QLineF(rect.bottomLeft(), rect.topLeft());
-	const auto& unclippedLines = lines;
+    auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 
-	QPolygonF polygon;
-	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
-	int i = 0;
-	for (const auto& line : unclippedLines) {
-		// clip the first point of the line
-		QPointF p1 = line.p1();
-		if (p1.x() < dataRect.left())
-			p1.setX(dataRect.left());
-		else if (p1.x() > dataRect.right())
-			p1.setX(dataRect.right());
-
-		if (p1.y() < dataRect.top())
-			p1.setY(dataRect.top());
-		else if (p1.y() > dataRect.bottom())
-			p1.setY(dataRect.bottom());
-
-		// clip the second point of the line
-		QPointF p2 = line.p2();
-		if (p2.x() < dataRect.left())
-			p2.setX(dataRect.left());
-		else if (p2.x() > dataRect.right())
-			p2.setX(dataRect.right());
-
-		if (p2.y() < dataRect.top())
-			p2.setY(dataRect.top());
-		else if (p2.y() > dataRect.bottom())
-			p2.setY(dataRect.bottom());
-
-		if (i != unclippedLines.size() - 1)
-			polygon << p1;
-		else {
-			// close the polygon for the last line
-			polygon << p1;
-			polygon << p2;
-		}
-
-		++i;
-	}
-
-	rect = polygon.boundingRect();
-
-	recalcShapeAndBoundingRect();
-	positionLogical = cs->mapSceneToLogical(newPos);
+    positionLogical = cs->mapSceneToLogical(newPosScene);
 	updatePosition();
 }
 
@@ -399,6 +401,10 @@ void ReferenceRange::updateStartEndPositions(QPointF newPosition) {
 		d->positionLogicalStart.setX(newPosition.x() - width);
 		d->positionLogicalEnd.setX(newPosition.x() + width);
 	}
+
+    // Update boundingrect
+    d->recalculateRect();
+
 	Q_EMIT positionLogicalStartChanged(d->positionLogicalStart);
 	Q_EMIT positionLogicalEndChanged(d->positionLogicalEnd);
 }
