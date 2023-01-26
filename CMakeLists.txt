@@ -75,8 +75,6 @@ OPTIONAL_COMPONENTS
 	SyntaxHighlighting
 )
 
-add_subdirectory(thirdParty/Qt-Advanced-Docking-System)
-
 # TODO: make NewStuff optional?
 IF (KF${KF_MAJOR_VERSION}NewStuff_FOUND)
 	add_definitions (-DHAVE_KF5_NEW_STUFF)

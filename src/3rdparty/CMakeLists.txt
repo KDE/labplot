@@ -64,6 +64,7 @@ ENDIF ()
 install(FILES preview.sty DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME}/latex)
 
 Include(FetchContent)
+<<<<<<< refs/remotes/origin/master
 
 ### Vector BLF ###############################
 FIND_PACKAGE(PkgConfig REQUIRED)
@@ -123,5 +124,15 @@ if (ENABLE_VECTOR_BLF)
         target_compile_definitions(labplot2lib PRIVATE HAVE_VECTOR_BLF)
     endif()
   endif()
+endif()
+
+option(LOCAL_QT_ADVANCED_DOCK "Use local build of qt advanced dock" ON)
+if (LOCAL_QT_ADVANCED_DOCK)
+    FetchContent_Declare(
+        qt_advanced_dock
+        GIT_REPOSITORY https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git
+        GIT_TAG 7b30322946fe77d9d680edcfac1df4035cc765f5
+      )
+      FetchContent_MakeAvailable(qt_advanced_dock)
 endif()
 
