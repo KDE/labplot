@@ -116,9 +116,9 @@ public:
 	~AbstractAspect() override;
 
 	enum class NameHandling {
-		NoUniqueRequirement, // Set name without making it unique
-		AutoUnique, // Set name but make it unique
-		UniqueRequired, // Set name only of the name is unique
+		AutoUnique, // Set the name and make it unique (enforce the uniqueness)
+		UniqueNotRequired, // Set the name without making it unique
+		UniqueRequired, // Set the name only if it's already unique
 	};
 
 	// type name for internal use (no translation)
