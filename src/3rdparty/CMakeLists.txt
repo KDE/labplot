@@ -134,5 +134,7 @@ if (LOCAL_QT_ADVANCED_DOCK)
         GIT_TAG 7b30322946fe77d9d680edcfac1df4035cc765f5
       )
       FetchContent_MakeAvailable(qt_advanced_dock)
+else()
+    find_package(qtadvanceddocking CONFIG REQUIRED)
 endif()
 
