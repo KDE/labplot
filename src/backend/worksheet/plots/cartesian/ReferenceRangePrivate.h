@@ -12,6 +12,7 @@
 #define REFERENCERANGEPRIVATE_H
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 
 class CartesianCoordinateSystem;
 
@@ -42,6 +43,7 @@ public:
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	void drawFilling(QPainter*) const;
+    QPointF recalculateRect();
 
 	ReferenceRange* const q;
 
