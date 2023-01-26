@@ -228,10 +228,15 @@ void WorksheetElementTest::referenceRangeXClippingLeftSetStart() {
 
 
     referenceRange->setPositionLogicalStart(QPointF(-5, 0.5));
-    QCOMPARE(referenceRange->positionLogical().x(), -2.75); // (-5+0.5)/2
+    QCOMPARE(referenceRange->positionLogical().x(), -2.225); // (-5+0.55)/2
     QCOMPARE(referenceRange->positionLogical().y(), 0.5); // Only horizontal considered
     QCOMPARE(referenceRange->positionLogicalStart().x(), -5);
     QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.55);
+    QCOMPARE(referenceRange->position().point.x(), (-2.225 - 0.5) * 100);
+    QCOMPARE(referenceRange->position().point.y(), 0);
+    QCOMPARE(referenceRange->d_func().pos().x(), (-2.225 - 0.5) * 100);
+    QCOMPARE(referenceRange->d_func().pos().y(), 0);
+
     // Rect is clipped
     VALUES_EQUAL(referenceRange->d_func()->rect.x(), 0); // clipped value
     VALUES_EQUAL(referenceRange->d_func()->rect.y(), -50);

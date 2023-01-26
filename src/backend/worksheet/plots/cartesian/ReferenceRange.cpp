@@ -365,7 +365,7 @@ void ReferenceRangePrivate::retransform() {
 
     auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 
-    positionLogical = cs->mapSceneToLogical(newPosScene);
+    positionLogical = cs->mapSceneToLogical(newPosScene, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 	updatePosition();
 }
 
