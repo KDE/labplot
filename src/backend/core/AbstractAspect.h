@@ -115,6 +115,12 @@ public:
 	AbstractAspect(const QString& name, AspectType type);
 	~AbstractAspect() override;
 
+	enum class NameHandling {
+		NoUniqueRequirement, // Set name without making it unique
+		AutoUnique, // Set name but make it unique
+		UniqueRequired, // Set name only of the name is unique
+	};
+
 	// type name for internal use (no translation)
 	static QString typeName(AspectType type) {
 		switch (type) {
@@ -391,7 +397,7 @@ private:
 	void connectChild(AbstractAspect*);
 
 public Q_SLOTS:
-	bool setName(const QString&, bool autoUnique = true, bool skipAutoUnique = false);
+	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique);
 	void setComment(const QString&);
 	void remove();
 	void copy() const;

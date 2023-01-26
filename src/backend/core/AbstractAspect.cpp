@@ -204,20 +204,21 @@ QString AbstractAspect::name() const {
  * \param skipAutoUnique - if set to \true, don't check for uniqueness, the caller has to guarantee the uniqueness. default is \false.
  * \return returns, if the new name is valid or not
  */
-bool AbstractAspect::setName(const QString& value, bool autoUnique, bool skipAutoUnique) {
+bool AbstractAspect::setName(const QString& value, NameHandling handling) {
 	if (value.isEmpty())
-		return setName(QLatin1String("1"), autoUnique);
+		return setName(QLatin1String("1"), handling);
 
 	if (value == d->m_name)
 		return true; // name not changed, but the name is valid
 
 	QString new_name;
-	if (!skipAutoUnique && d->m_parent) {
+	if ((handling == NameHandling::UniqueRequired || handling == NameHandling::AutoUnique) && d->m_parent) {
 		new_name = d->m_parent->uniqueNameFor(value);
 
-		if (!autoUnique && new_name.compare(value) != 0) // value is not unique, so don't change name
+		if (handling == NameHandling::UniqueRequired && new_name.compare(value) != 0) // value is not unique, so don't change name
 			return false; // this value is used in the dock to check if the name is valid
 
+		// NameHandling::Autounique
 		if (new_name != value)
 			info(i18n(R"(Intended name "%1" was changed to "%2" in order to avoid name collision.)", value, new_name));
 	} else

@@ -146,7 +146,7 @@ void BaseDock::nameChanged() {
 	if (m_initializing || !m_aspect)
 		return;
 
-	if (!m_aspect->setName(m_leName->text(), false)) {
+	if (!m_aspect->setName(m_leName->text(), AbstractAspect::NameHandling::UniqueRequired)) {
 		SET_WARNING_STYLE(m_leName)
 		m_leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 	} else {

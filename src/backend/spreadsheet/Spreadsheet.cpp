@@ -1090,7 +1090,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		for (int i = 0; i < childCount<Column>(); i++) {
 			child<Column>(i)->setSuppressDataChangedSignal(true);
 			Q_EMIT child<Column>(i)->reset(child<Column>(i));
-			child<Column>(i)->setName(uniqueNames.at(i), true, true /* no auto-uniqueness required */);
+			child<Column>(i)->setName(uniqueNames.at(i), AbstractAspect::NameHandling::NoUniqueRequirement);
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}
 	}
