@@ -186,21 +186,21 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		for (const auto ohb : v) {
 			int id;
 			std::vector<double> values;
-            DbcParser::ParseStatus status;
+			DbcParser::ParseStatus status;
 			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
 				const auto message = reinterpret_cast<const Vector::BLF::CanMessage*>(ohb);
 				id = message->id;
-                status = m_dbcParser.parseMessage(message->id, message->data, values);
+				status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
 				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
 				id = message->id;
-                status = m_dbcParser.parseMessage(message->id, message->data, values);
+				status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else
 				return 0;
 
-            if (status != DbcParser::ParseStatus::Success) {
+			if (status != DbcParser::ParseStatus::Success) {
 				// id is not available in the dbc file, so it is not possible to decode
-                DEBUG("Unable to decode message: " << id << ": " << (int)status);
+				DEBUG("Unable to decode message: " << id << ": " << (int)status);
 				continue;
 			}
 
@@ -219,13 +219,13 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 			const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
 			for (int i = 1; i < startIndex; i++) {
-				m_DataContainer.setData<double>(i, message_index, NAN);
+				m_DataContainer.setData<double>(i, message_index, std::nan("0"));
 			}
 			for (int i = startIndex; i < startIndex + values.size(); i++) {
 				m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
 			}
 			for (int i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
-				m_DataContainer.setData<double>(i, message_index, NAN);
+				m_DataContainer.setData<double>(i, message_index, std::nan("0"));
 			}
 			message_index++;
 		}

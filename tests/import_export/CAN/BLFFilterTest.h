@@ -27,15 +27,16 @@ private Q_SLOTS:
 	void testNotFoundBLF();
 	void testInvalidDBC();
 
-    void testTimeNative();
+	void testTimeNative();
 
-    void testValidBLFValidDBCSingleMessageBigEndian();
-    void testUsePreviousValueBigEndian();
-    void testUseNANBigEndian();
-    void testUndefinedMessagePreviousValueBigEndian();
-    void testUndefinedMessageNANBigEndian();
+	void testValidBLFValidDBCSingleMessageBigEndian();
+	void testUsePreviousValueBigEndian();
+	void testUseNANBigEndian();
+	void testUndefinedMessagePreviousValueBigEndian();
+	void testUndefinedMessageNANBigEndian();
 
-    void testBigNumberNotByteAlignedLittleEndian();
+	void testUseNANLittleEndian();
+	void testBigNumberNotByteAlignedLittleEndian();
 
 private:
 	// Helper functions

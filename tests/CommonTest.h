@@ -19,8 +19,9 @@ extern "C" {
 
 ///////////////////////// macros ///////////
 
+// Comparing two values. First a direct comparsion will be done, because for std::nan nsl_math_aproximately_equal does not work
 #define VALUES_EQUAL(v1, ref)                                                                                                                                  \
-	QVERIFY2(nsl_math_approximately_equal(v1, ref) == true,                                                                                                    \
+	QVERIFY2(v1 == ref ? true : (std::isnan(ref) ? std::isnan(v1) : nsl_math_approximately_equal(v1, ref) == true),                                            \
 			 qPrintable(QStringLiteral("v1:%1, ref:%2").arg((double)v1, 0, 'g', 15, QLatin1Char(' ')).arg((double)ref, 0, 'g', 15, QLatin1Char(' '))))
 
 #define RANGE_CORRECT(range, start_, end_)                                                                                                                     \

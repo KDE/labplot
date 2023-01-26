@@ -10,20 +10,20 @@ class QString;
 
 class DbcParser {
 public:
-    enum class ParseStatus {
-        Success = 0,
-        ErrorInvalidFile = -1,
-        ErrorBigEndian = -2,
-        ErrorMessageToLong = -3,
-        ErrorDBCParserUnsupported = -4,
-        ErrorUnknownID = -5,
-    };
+	enum class ParseStatus {
+		Success = 0,
+		ErrorInvalidFile = -1,
+		ErrorBigEndian = -2,
+		ErrorMessageToLong = -3,
+		ErrorDBCParserUnsupported = -4,
+		ErrorUnknownID = -5,
+	};
 
 	bool isValid();
 	bool parseFile(const QString& filename);
 
-    ParseStatus parseMessage(const uint32_t id, const std::vector<uint8_t>& data, std::vector<double>& out);
-    ParseStatus parseMessage(const uint32_t id, const std::array<uint8_t, 8>& data, std::vector<double>& out);
+	ParseStatus parseMessage(const uint32_t id, const std::vector<uint8_t>& data, std::vector<double>& out);
+	ParseStatus parseMessage(const uint32_t id, const std::array<uint8_t, 8>& data, std::vector<double>& out);
 
 	/*!
 	 * \brief numberSignals
@@ -37,7 +37,7 @@ private:
 	bool m_valid{false};
 	// QMap<uint32_t, libdbc::Message> m_messages;
 #ifdef HAVE_DBC_PARSER
-    libdbc::DbcParser m_parser;
+	libdbc::DbcParser m_parser;
 #endif
 };
 

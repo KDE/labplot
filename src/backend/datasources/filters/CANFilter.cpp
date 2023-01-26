@@ -274,16 +274,16 @@ int CANFilterPrivate::readDataFromFile(const QString& fileName, int lines) {
 */
 int CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 	if (!isValid(fileName))
-        return 0;
+		return 0;
 
 	int rows = readDataFromFile(fileName, lines);
 	if (rows == 0)
-        return 0;
+		return 0;
 
 	auto dc = m_DataContainer.dataContainer();
 	const int columnOffset = dataSource->prepareImport(dc, mode, rows, vectorNames.length(), vectorNames, columnModes(), false);
 	dataSource->finalizeImport(columnOffset);
-    return rows;
+	return rows;
 }
 
 /*!
