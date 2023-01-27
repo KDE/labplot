@@ -220,7 +220,7 @@ void MultiRangeTest::zoomXSelection_AllRanges() {
 
 	QVector<double> ref = {-250, -150.0, -50, 50, 150, 250};
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
-	ref = {-1, -0.5, 0.0, 0.5, 1.0};
+	ref = {-1., -0.5, 0.0, 0.5, 1.0};
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
 }
@@ -272,9 +272,9 @@ void MultiRangeTest::zoomYSelection_AllRanges() {
 
 	QVector<double> ref = {-150.0, -100, -50, 0, 50, 100};
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
-	ref = {-1, -0.5, 0, 0.5};
+	ref = {-1., -0.5, 0., 0.5};
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), ref);
-	ref = {-7, -4, -1, 2};
+	ref = {-7., -4., -1., 2.};
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref);
 }
 
@@ -325,9 +325,9 @@ void MultiRangeTest::zoomSelection_AllRanges() {
 
 	QVector<double> ref = {-150.0, -100, -50, 0, 50, 100};
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
-	ref = {-1, -0.5, 0, 0.5};
+	ref = {-1., -0.5, 0., 0.5};
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), ref);
-	ref = {-7, -4, -1, 2};
+	ref = {-7., -4., -1., 2.};
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref);
 }
 
@@ -894,7 +894,7 @@ void MultiRangeTest::autoScaleXAfterZoomInY() {
 	p1->mouseReleaseZoomSelectionMode(0);
 
 	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -150., 100.); // zoom
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
@@ -937,7 +937,7 @@ void MultiRangeTest::mouseWheelXAxisApplyToAllX() {
 	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
 
 	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.); // zoom
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
@@ -989,7 +989,7 @@ void MultiRangeTest::mouseWheelTanCurveApplyToAllX() {
 	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
 
 	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.); // zoom
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
@@ -1037,7 +1037,7 @@ void MultiRangeTest::mouseWheelXAxisApplyToSelected() {
 	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
 
 	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.); // zoom
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
@@ -1082,7 +1082,7 @@ void MultiRangeTest::axisMouseMoveApplyToAllX() {
 	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
 
 	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.);
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
@@ -1112,7 +1112,7 @@ void MultiRangeTest::axisMouseMoveApplyToSelection() {
 	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
 
 	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.);
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
