@@ -197,7 +197,7 @@ void ReferenceRangeDock::positionLogicalEndChanged(double pos) {
 }
 
 void ReferenceRangeDock::positionLogicalDateTimeStartChanged(const QDateTime& dateTime) {
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK; // Feedback needed
 
 	const quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* range : m_rangeList) {
@@ -211,7 +211,7 @@ void ReferenceRangeDock::positionLogicalDateTimeStartChanged(const QDateTime& da
 }
 
 void ReferenceRangeDock::positionLogicalDateTimeEndChanged(const QDateTime& dateTime) {
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK; // Feedback needed
 
 	const quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* range : m_rangeList) {
@@ -235,20 +235,20 @@ void ReferenceRangeDock::visibilityChanged(bool state) {
 //******* SLOTs for changes triggered in ReferenceRange ********
 //*************************************************************
 void ReferenceRangeDock::rangePositionLogicalStartChanged(const QPointF& positionLogical) {
-	CONDITIONAL_RETURN_NO_LOCK;
+	CONDITIONAL_LOCK_RETURN;
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
 		ui.sbPositionStart->setValue(positionLogical.y());
 		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
 	} else {
-		ui.sbPositionEnd->setValue(positionLogical.x());
+		ui.sbPositionStart->setValue(positionLogical.x());
 		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
 	}
 }
 
 void ReferenceRangeDock::rangePositionLogicalEndChanged(const QPointF& positionLogical) {
-	CONDITIONAL_RETURN_NO_LOCK;
+	CONDITIONAL_LOCK_RETURN;
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
-		ui.sbPositionStart->setValue(positionLogical.y());
+		ui.sbPositionEnd->setValue(positionLogical.y());
 		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
 	} else {
 		ui.sbPositionEnd->setValue(positionLogical.x());
