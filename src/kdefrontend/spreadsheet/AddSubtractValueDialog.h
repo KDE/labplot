@@ -17,6 +17,7 @@ class Column;
 class Spreadsheet;
 class Matrix;
 class Project;
+class TextLabel;
 class XYCurve;
 class QPushButton;
 
@@ -62,6 +63,8 @@ private:
 	Column* m_xColumnBaseline{nullptr};
 	Column* m_yColumnBaseline{nullptr};
 	Column* m_yColumnResult{nullptr};
+	TextLabel* m_previewPlotTitle{nullptr};
+	double m_arplsRatio{0.0};
 
 private Q_SLOTS:
 	void generate();

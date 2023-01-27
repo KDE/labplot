@@ -124,11 +124,11 @@ void AddSubtractValueDialog::init() {
 	}
 
 	ui.lBaselineParameter1->hide();
-	ui.leBaselineParameter1->hide();
+	ui.sbBaselineParameter1->hide();
 	ui.lBaselineParameter2->hide();
 	ui.leBaselineParameter2->hide();
-	ui.lBaselineIntParameter1->hide();
-	ui.sbBaselineIntParameter1->hide();
+	ui.lBaselineParameter3->hide();
+	ui.sbBaselineParameter3->hide();
 
 	if (m_operation == Add || m_operation == Subtract) {
 		if (m_operation == Subtract && m_numeric) {
@@ -143,22 +143,22 @@ void AddSubtractValueDialog::init() {
 
 		if (m_operation == Subtract && m_numeric) {
 			ui.cbType->insertSeparator(6);
-			ui.cbType->insertItem(7, i18n("Baseline"), static_cast<int>(ValueType::Baseline));
+			ui.cbType->insertItem(7, i18n("Baseline (arPLS Algorithm)"), static_cast<int>(ValueType::Baseline));
 
 			// add tooltip texts for the baseline subtraction algorithms.
 			// at the moment only arPLS (s.a. https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract)
 			// is supported and we show the description of its parameters only.
-			QString info = i18n("Weighting ratio - value between 0 and 1, smaller values allow less negative values.");
+			QString info = i18n("Smoothness parameter - the larger the value the smoother the resulting background.");
 			ui.lBaselineParameter1->setToolTip(info);
-			ui.leBaselineParameter1->setToolTip(info);
+			ui.sbBaselineParameter1->setToolTip(info);
 
-			info = i18n("Smoothness parameter - the larger the value the smoother the resulting background.");
+			info = i18n("Weighting termination ratio - value between 0 and 1, smaller values allow less negative values.");
 			ui.lBaselineParameter2->setToolTip(info);
 			ui.leBaselineParameter2->setToolTip(info);
 
 			info = i18n("Number of iterations to perform.");
-			ui.lBaselineIntParameter1->setToolTip(info);
-			ui.sbBaselineIntParameter1->setToolTip(info);
+			ui.lBaselineParameter3->setToolTip(info);
+			ui.sbBaselineParameter3->setToolTip(info);
 		}
 
 		for (int i = 0; i < ENUM_COUNT(AbstractColumn, TimeUnit); i++)
@@ -202,9 +202,9 @@ void AddSubtractValueDialog::init() {
 	if (conf.exists()) {
 		// baseline subtraction specific parameters
 		const auto numberLocale = QLocale();
-		ui.leBaselineParameter1->setText(numberLocale.toString(conf.readEntry(QStringLiteral("BaselineParameter1"), 0.1)));
-		ui.leBaselineParameter2->setText(numberLocale.toString(conf.readEntry(QStringLiteral("BaselineParameter2"), 1000)));
-		ui.sbBaselineIntParameter1->setValue(conf.readEntry(QStringLiteral("BaselineIntParameter1"), 10));
+		ui.sbBaselineParameter1->setValue(conf.readEntry(QStringLiteral("BaselineParameter1"), 6));
+		ui.leBaselineParameter2->setText(numberLocale.toString(conf.readEntry(QStringLiteral("BaselineParameter2"), 0.1)));
+		ui.sbBaselineParameter3->setValue(conf.readEntry(QStringLiteral("BaselineParameter3"), 10));
 
 		int typeIndex = ui.cbType->findData(conf.readEntry("Type", 0));
 		if (typeIndex != -1)
@@ -240,15 +240,12 @@ void AddSubtractValueDialog::init() {
 		m_okButton->setEnabled(!ui.leValueEnd->text().isEmpty());
 		invalidatePreview();
 	});
-	connect(ui.leBaselineParameter1, &QLineEdit::textChanged, this, [=]() {
-		m_okButton->setEnabled(!ui.leBaselineParameter1->text().isEmpty());
-		invalidatePreview();
-	});
+	connect(ui.sbBaselineParameter1, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
 	connect(ui.leBaselineParameter2, &QLineEdit::textChanged, this, [=]() {
 		m_okButton->setEnabled(!ui.leBaselineParameter2->text().isEmpty());
 		invalidatePreview();
 	});
-	connect(ui.sbBaselineIntParameter1, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
+	connect(ui.sbBaselineParameter3, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
 
 	// call typeChanged() to update the status of the widgets and of the preview
 	// after the dialog was completely shown
@@ -266,9 +263,9 @@ AddSubtractValueDialog::~AddSubtractValueDialog() {
 
 	// baseline subtraction specific parameters
 	const auto numberLocale = QLocale();
-	conf.writeEntry(QStringLiteral("BaselineParameter1"), numberLocale.toDouble(ui.leBaselineParameter1->text()));
+	conf.writeEntry(QStringLiteral("BaselineParameter1"), ui.sbBaselineParameter1->value());
 	conf.writeEntry(QStringLiteral("BaselineParameter2"), numberLocale.toDouble(ui.leBaselineParameter2->text()));
-	conf.writeEntry(QStringLiteral("BaselineIntParameter1"), ui.sbBaselineIntParameter1->value());
+	conf.writeEntry(QStringLiteral("BaselineParameter3"), ui.sbBaselineParameter3->value());
 
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
@@ -397,11 +394,11 @@ void AddSubtractValueDialog::typeChanged(int index) {
 	}
 
 	ui.lBaselineParameter1->setVisible(baseline);
-	ui.leBaselineParameter1->setVisible(baseline);
+	ui.sbBaselineParameter1->setVisible(baseline);
 	ui.lBaselineParameter2->setVisible(baseline);
 	ui.leBaselineParameter2->setVisible(baseline);
-	ui.lBaselineIntParameter1->setVisible(baseline);
-	ui.sbBaselineIntParameter1->setVisible(baseline);
+	ui.lBaselineParameter3->setVisible(baseline);
+	ui.sbBaselineParameter3->setVisible(baseline);
 
 	if (m_spreadsheet && (m_operation == Add || m_operation == Subtract)) {
 		// we changed maybe from "Minimum" to "Baseline", etc. and need
@@ -446,6 +443,7 @@ void AddSubtractValueDialog::initPreview() {
 	plot->setVerticalPadding(padding);
 	plot->setBottomPadding(padding);
 	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
+	m_previewPlotTitle = plot->title();
 
 	// x-axis
 	auto* axis = new Axis(QLatin1String("y"), Axis::Orientation::Horizontal);
@@ -587,6 +585,8 @@ void AddSubtractValueDialog::updatePreview() {
 			break;
 		}
 		m_yColumnBaseline->setValues(baselineData);
+
+		m_previewPlotTitle->setText(i18n("Ratio: %1", m_arplsRatio));
 	} else {
 		// x
 		if (m_xColumnBaselineDirty) {
@@ -829,11 +829,11 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 void AddSubtractValueDialog::subtractBaseline(QVector<double>& newData) {
 	const auto numberLocale = QLocale();
 	bool ok;
-	const double p = numberLocale.toDouble(ui.leBaselineParameter1->text(), &ok);
-	const double lambda = numberLocale.toDouble(ui.leBaselineParameter2->text(), &ok);
-	const int niter = ui.sbBaselineIntParameter1->value();
+	const double lambda = pow(ui.sbBaselineParameter1->value(), 10);
+	const double p = numberLocale.toDouble(ui.leBaselineParameter2->text(), &ok);
+	const int niter = ui.sbBaselineParameter3->value();
 	int size = newData.size();
-	nsl_baseline_remove_arpls(newData.data(), static_cast<size_t>(size), p, lambda, niter);
+	m_arplsRatio = nsl_baseline_remove_arpls(newData.data(), static_cast<size_t>(size), p, lambda, niter);
 }
 
 void AddSubtractValueDialog::generateForMatrices() {

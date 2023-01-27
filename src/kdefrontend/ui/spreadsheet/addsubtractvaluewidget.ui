@@ -202,12 +202,9 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Weighting:</string>
+      <string>Smoothness (Power of 10):</string>
      </property>
     </widget>
-   </item>
-   <item row="7" column="1">
-    <widget class="QLineEdit" name="leBaselineParameter1"/>
    </item>
    <item row="8" column="0">
     <widget class="QLabel" name="lBaselineParameter2">
@@ -218,7 +215,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Smoothness:</string>
+      <string>Termination Ratio:</string>
      </property>
     </widget>
    </item>
@@ -226,7 +223,7 @@
     <widget class="QLineEdit" name="leBaselineParameter2"/>
    </item>
    <item row="9" column="0">
-    <widget class="QLabel" name="lBaselineIntParameter1">
+    <widget class="QLabel" name="lBaselineParameter3">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -239,7 +236,7 @@
     </widget>
    </item>
    <item row="9" column="1">
-    <widget class="QSpinBox" name="sbBaselineIntParameter1">
+    <widget class="QSpinBox" name="sbBaselineParameter3">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -308,6 +305,9 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="7" column="1">
+    <widget class="QSpinBox" name="sbBaselineParameter1"/>
    </item>
   </layout>
  </widget>
