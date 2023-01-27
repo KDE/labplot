@@ -361,10 +361,10 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
 
-	CHECK_RANGE(plot, curve1, Dimension::X, 0, 10);
-	CHECK_RANGE(plot, curve1, Dimension::Y, 1000, 1011); // Nice extend applied
-	CHECK_RANGE(plot, curve2, Dimension::X, 0, 10);
-	CHECK_RANGE(plot, curve2, Dimension::Y, -10, 1);
+	CHECK_RANGE(plot, curve1, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 1000., 1011.); // Nice extend applied
+	CHECK_RANGE(plot, curve2, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, curve2, Dimension::Y, -10., 1.);
 
 	plot->enableAutoScale(Dimension::Y, 1, false); // disable autoscale for second y range
 
@@ -373,9 +373,9 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	r.setEnd(0.1);
 	plot->setRange(Dimension::Y, 1, r);
 
-	CHECK_RANGE(plot, curve1, Dimension::X, 0, 10);
-	CHECK_RANGE(plot, curve1, Dimension::Y, 1000, 1011);
-	CHECK_RANGE(plot, curve2, Dimension::X, 0, 10);
+	CHECK_RANGE(plot, curve1, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 1000., 1011.);
+	CHECK_RANGE(plot, curve2, Dimension::X, 0., 10.);
 	CHECK_RANGE(plot, curve2, Dimension::Y, -9.9, 0.1);
 
 	QAction a(nullptr);
