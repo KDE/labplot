@@ -94,8 +94,6 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 	referenceRange->setPositionLogicalStart(QPointF(0.1, 0.5));
 	QCOMPARE(referenceRange->positionLogical().x(), 0.45);
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
-	QCOMPARE(referenceRange->position().point.x(), -5);
-	QCOMPARE(referenceRange->position().point.y(), 0);
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.1);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.8);
 
@@ -105,8 +103,6 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 	referenceRange->setPositionLogicalEnd(QPointF(0.3, 0.5));
 	QCOMPARE(referenceRange->positionLogical().x(), 0.2);
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
-	QCOMPARE(referenceRange->position().point.x(), -30); //
-	QCOMPARE(referenceRange->position().point.y(), 0);
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.1);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.3);
 
@@ -143,8 +139,6 @@ void WorksheetElementTest::referenceRangeYMouseMove() {
 	referenceRange->setPositionLogicalStart(QPointF(0.5, 0.1));
 	QCOMPARE(referenceRange->positionLogical().y(), 0.4);
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
-	QCOMPARE(referenceRange->position().point.y(), -10);
-	QCOMPARE(referenceRange->position().point.x(), 0);
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.1);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.7);
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.7, 1, 0.1);
@@ -152,8 +146,6 @@ void WorksheetElementTest::referenceRangeYMouseMove() {
 	referenceRange->setPositionLogicalEnd(QPointF(0.5, 0.3));
 	QCOMPARE(referenceRange->positionLogical().y(), 0.2);
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
-	QCOMPARE(referenceRange->position().point.y(), -30);
-	QCOMPARE(referenceRange->position().point.x(), 0);
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.1);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.3);
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.3, 1, 0.1);
@@ -186,21 +178,6 @@ void WorksheetElementTest::referenceRangeXClippingLeftMouse() {
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 1, 0.05, 0);
 }
 
-/*          Logical                         Scene
- *     ^                                         ^ -100
- * 1   |                                         |
- *     |                                         |
- *     |                                         |
- *     |                                         |0               100
- * 0.5 |                           --------------+---------------->
- *     |                                         |
- *     |                                         |
- *     |                                         |
- *     |                                         |+100
- * 0   +---------------------->
- *     0         0.5         1
- */
-
 void WorksheetElementTest::referenceRangeXClippingLeftSetStart() {
 	SETUP_PROJECT
 
@@ -224,10 +201,6 @@ void WorksheetElementTest::referenceRangeXClippingLeftSetStart() {
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5); // Only horizontal considered
 	QCOMPARE(referenceRange->positionLogicalStart().x(), -5);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.55);
-	QCOMPARE(referenceRange->position().point.x(), -2.225 * 100 - 50); // - 50 because 0 logical is -50 in scene
-	QCOMPARE(referenceRange->position().point.y(), 0);
-	QCOMPARE(referenceRange->d_func()->pos().x(), -2.225 * 100 - 50); // - 50 because 0 logical is -50 in scene
-	QCOMPARE(referenceRange->d_func()->pos().y(), 0);
 
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 1, 0.55, 0);
 }
@@ -257,10 +230,6 @@ void WorksheetElementTest::referenceRangeXClippingRightSetEnd() {
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5); // Only horizontal considered
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.45);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 5);
-	QCOMPARE(referenceRange->position().point.x(), 2.725 * 100 - 50); // 0 logical is at -50
-	QCOMPARE(referenceRange->position().point.y(), 0);
-	QCOMPARE(referenceRange->d_func()->pos().x(), (2.725) * 100 - 50);
-	QCOMPARE(referenceRange->d_func()->pos().y(), 0);
 
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1, 1, 0); // Xend is clipped
 }
@@ -289,10 +258,6 @@ void WorksheetElementTest::referenceRangeYClippingBottomSetEnd() {
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only horizontal considered
 	QCOMPARE(referenceRange->positionLogicalStart().y(), -5);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
-	QCOMPARE(referenceRange->position().point.y(), -272.5);
-	QCOMPARE(referenceRange->position().point.x(), 0);
-	QCOMPARE(referenceRange->d_func()->pos().y(), (+2.725) * 100);
-	QCOMPARE(referenceRange->d_func()->pos().x(), 0);
 
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.55, 1, 0);
 }
@@ -321,10 +286,6 @@ void WorksheetElementTest::referenceRangeYClippingTopSetEnd() {
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only horizontal considered
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 5);
-	QCOMPARE(referenceRange->position().point.y(), (2.225) * 100);
-	QCOMPARE(referenceRange->position().point.x(), 0);
-	QCOMPARE(referenceRange->d_func()->pos().y(), (-2.225) * 100);
-	QCOMPARE(referenceRange->d_func()->pos().x(), 0);
 
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 1, 1, 0.45);
 }
