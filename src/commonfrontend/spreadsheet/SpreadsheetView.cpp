@@ -1297,7 +1297,6 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 
 		if (watched == m_tableView->verticalHeader()) {
 			bool numeric = true;
-			bool hasValues = false;
 			const auto& columns = m_spreadsheet->children<Column>();
 			for (const auto* col : columns) {
 				if (!col->isNumeric()) {
@@ -1306,26 +1305,27 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
+			int hasValues = 0;
 			if (numeric) {
 				const auto& rows = m_tableView->selectionModel()->selectedRows();
 				for (int i = 0; i < rows.count(); ++i) {
 					int row = rows.at(i).row();
 
 					for (int j = 0; j < m_spreadsheet->columnCount(); ++j) {
-						hasValues = !std::isnan(m_spreadsheet->column(j)->valueAt(row));
-						if (hasValues)
+						hasValues += !std::isnan(m_spreadsheet->column(j)->valueAt(row));
+						if (hasValues > 1)
 							break;
 					}
 
-					if (hasValues)
+					if (hasValues > 1)
 						break;
 				}
 			}
 
-			action_statistics_rows->setEnabled(numeric && hasValues);
+			action_statistics_rows->setEnabled(hasValues > 1);
 			m_rowMenu->exec(global_pos);
 		} else if ((watched == m_horizontalHeader) || (m_frozenTableView && watched == m_frozenTableView->horizontalHeader()) || !selectedColumns().isEmpty()) {
-			// if the horizondal header was clicked, select the column under the cursor if not selected yet
+			// if the horizontal header was clicked, select the column under the cursor if not selected yet
 			if (watched == m_horizontalHeader) {
 				const int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
 				if (!isColumnSelected(col, true)) {
@@ -1354,6 +1354,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool text = false;
 			bool hasValues = false;
 			bool hasFormat = false;
+			bool enoughValues = false; // enough for statistics (> 1)
 
 			for (const auto* col : columns) {
 				if (!col->isNumeric()) {
@@ -1379,6 +1380,12 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 					break;
 				}
 			}
+			for (const auto* col : columns) {
+				if (col->availableRowCount() > 1) {
+					enoughValues = true;
+					break;
+				}
+			}
 
 			for (const auto* col : columns) {
 				if (col->hasHeatmapFormat()) {
@@ -1390,7 +1397,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			m_plotDataMenu->setEnabled(plottable && hasValues);
 			m_analyzePlotMenu->setEnabled(numeric && hasValues);
 			m_columnSetAsMenu->setEnabled(numeric);
-			action_statistics_columns->setEnabled(hasValues);
+			action_statistics_columns->setEnabled(enoughValues);
 			action_clear_columns->setEnabled(hasValues);
 			m_formattingMenu->setEnabled(hasValues);
 			action_formatting_remove->setVisible(hasFormat);
