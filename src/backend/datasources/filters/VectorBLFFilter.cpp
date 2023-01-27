@@ -13,22 +13,17 @@
  */
 
 #include "backend/datasources/filters/VectorBLFFilter.h"
-#include "backend/core/column/Column.h"
-#include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/VectorBLFFilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 
+#include <klocalizedstring.h>
+
 #ifdef HAVE_VECTOR_BLF
 #include <Vector/BLF/Exceptions.h>
 #include <Vector/BLF/File.h>
 #endif
-
-#include <KLocalizedString>
-#include <QFile>
-#include <QProcess>
-#include <QTreeWidgetItem>
 
 //////////////////////////////////////////////////////////////////////
 
@@ -245,7 +240,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			} else
 				return 0;
 
-			if (values.size() == 0) {
+			if (values.empty()) {
 				// id is not available in the dbc file, so it is not possible to decode
 				DEBUG("Unable to decode message: " << id);
 				continue;
@@ -279,15 +274,12 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 				}
 			} else {
 				const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
-				for (std::vector<double>::size_type i = 1; i < startIndex; i++) {
+				for (std::vector<double>::size_type i = 1; i < startIndex; i++)
 					m_DataContainer.setData<double>(i, message_index, 0);
-				}
-				for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++) {
+				for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++)
 					m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
-				}
-				for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
+				for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++)
 					m_DataContainer.setData<double>(i, message_index, 0);
-				}
 				firstMessageValid = true;
 			}
 			message_index++;
@@ -296,11 +288,11 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 	// 5. add Time column to vector Names
 	if (convertTimeToSeconds)
-		vectorNames.prepend(QObject::tr("Time_s")); // Must be done after allocating memory
+		vectorNames.prepend(i18n("Time_s")); // Must be done after allocating memory
 	else if (timeInNS)
-		vectorNames.prepend(QObject::tr("Time_ns")); // Must be done after allocating memory
+		vectorNames.prepend(i18n("Time_ns")); // Must be done after allocating memory
 	else
-		vectorNames.prepend(QObject::tr("Time_10µs")); // Must be done after allocating memory
+		vectorNames.prepend(i18n("Time_10µs")); // Must be done after allocating memory
 
 	for (const auto& message : v)
 		delete message;

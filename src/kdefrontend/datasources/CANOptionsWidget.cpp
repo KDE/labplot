@@ -10,10 +10,10 @@ CANOptionsWidget::CANOptionsWidget(QWidget* parent)
 	, ui(new Ui::CANOptionsWidget) {
 	ui->setupUi(this);
 
-	ui->cbImportMode->addItem(tr("Use NAN"), (int)VectorBLFFilter::TimeHandling::ConcatNAN);
-	ui->cbImportMode->addItem(tr("Use previous value"), (int)VectorBLFFilter::TimeHandling::ConcatPrevious);
+	ui->cbImportMode->addItem(i18n("Use NAN"), (int)VectorBLFFilter::TimeHandling::ConcatNAN);
+	ui->cbImportMode->addItem(i18n("Use previous value"), (int)VectorBLFFilter::TimeHandling::ConcatPrevious);
 	// Not yet implemented
-	// ui->cbImportMode->addItem(tr("Separate time columns"), (int)VectorBLFFilter::TimeHandling::Separate);
+	// ui->cbImportMode->addItem(i18n("Separate time columns"), (int)VectorBLFFilter::TimeHandling::Separate);
 
 	loadSettings();
 }

@@ -11,8 +11,6 @@
 
 #include "backend/datasources/filters/CANFilter.h"
 
-class QStringList;
-class QTreeWidgetItem;
 class VectorBLFFilterPrivate;
 
 class VectorBLFFilter : public CANFilter {

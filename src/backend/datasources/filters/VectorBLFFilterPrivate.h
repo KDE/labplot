@@ -15,7 +15,6 @@
 
 class AbstractDataSource;
 class VectorBLFFilter;
-class QTreeWidgetItem;
 
 class VectorBLFFilterPrivate : public CANFilterPrivate {
 public:

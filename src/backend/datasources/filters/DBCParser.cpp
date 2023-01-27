@@ -75,9 +75,8 @@ QStringList DbcParser::signals(const QVector<uint32_t> ids, QHash<uint32_t, int>
 			if (message.id() == id) {
 				idIndex.insert(id, s.length());
 				// const auto message = m_messages.value(id);
-				for (const auto& signal_ : message.signals()) {
+				for (const auto& signal_ : message.signals())
 					s.append(QString::fromStdString(signal_.name + "_" + signal_.unit));
-				}
 				break;
 			}
 		}

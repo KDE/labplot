@@ -18,7 +18,6 @@
 #include <cmath>
 
 class AbstractDataSource;
-class QTreeWidgetItem;
 class CANFilter;
 
 class CANFilterPrivate {

@@ -13,11 +13,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
-#include <KLocalizedString>
-#include <QFile>
-#include <QProcess>
-#include <QTreeWidgetItem>
-
 //////////////////////////////////////////////////////////////////////
 CANFilter::CANFilter(FileType type, CANFilterPrivate* p)
 	: AbstractFileFilter(type)
