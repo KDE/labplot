@@ -44,8 +44,8 @@ private Q_SLOTS:
 
 	// Position
 	void orientationChanged(int);
-	void positionLogicalStartChanged(const QString&);
-	void positionLogicalEndChanged(const QString&);
+	void positionLogicalStartChanged(double);
+	void positionLogicalEndChanged(double);
 	void positionLogicalDateTimeStartChanged(const QDateTime&);
 	void positionLogicalDateTimeEndChanged(const QDateTime&);
 

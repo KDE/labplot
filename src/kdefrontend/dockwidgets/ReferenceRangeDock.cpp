@@ -8,11 +8,8 @@
 */
 
 #include "ReferenceRangeDock.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 
-#include "kdefrontend/GuiTools.h"
-#include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
 
@@ -30,9 +27,6 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
-	ui.lePositionStart->setValidator(new QDoubleValidator(ui.lePositionStart));
-	ui.lePositionEnd->setValidator(new QDoubleValidator(ui.lePositionEnd));
-
 	// background
 	auto* layout = static_cast<QGridLayout*>(ui.tabGeneral->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabGeneral);
@@ -48,8 +42,8 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	connect(ui.teComment, &QTextEdit::textChanged, this, &ReferenceRangeDock::commentChanged);
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceRangeDock::orientationChanged);
-	connect(ui.lePositionStart, &QLineEdit::textChanged, this, &ReferenceRangeDock::positionLogicalStartChanged);
-	connect(ui.lePositionEnd, &QLineEdit::textChanged, this, &ReferenceRangeDock::positionLogicalEndChanged);
+	connect(ui.sbPositionStart, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalStartChanged);
+	connect(ui.sbPositionEnd, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalEndChanged);
 	connect(ui.dtePositionStart, &QDateTimeEdit::dateTimeChanged, this, &ReferenceRangeDock::positionLogicalDateTimeStartChanged);
 	connect(ui.dtePositionEnd, &QDateTimeEdit::dateTimeChanged, this, &ReferenceRangeDock::positionLogicalDateTimeEndChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceRangeDock::plotRangeChanged);
@@ -112,22 +106,11 @@ void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
  * updates the locale in the widgets. called when the application settings are changed.
  */
 void ReferenceRangeDock::updateLocale() {
-	CONDITIONAL_LOCK_RETURN;
 	const auto numberLocale = QLocale();
-	const auto* plot = static_cast<const CartesianPlot*>(m_range->plot());
-	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
-		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric) {
-			ui.lePositionStart->setText(numberLocale.toString(m_range->positionLogicalStart().y()));
-			ui.lePositionStart->setText(numberLocale.toString(m_range->positionLogicalEnd().y()));
-		}
-		// TODO datetime
-	} else {
-		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric) {
-			ui.lePositionStart->setText(numberLocale.toString(m_range->positionLogicalStart().x()));
-			ui.lePositionEnd->setText(numberLocale.toString(m_range->positionLogicalEnd().x()));
-		}
-		// TODO datetime
-	}
+	ui.sbPositionStart->setLocale(numberLocale);
+	ui.sbPositionEnd->setLocale(numberLocale);
+
+	// TODO datetime
 }
 
 void ReferenceRangeDock::updatePlotRanges() {
@@ -157,9 +140,9 @@ void ReferenceRangeDock::orientationChanged(int index) {
 	}
 
 	ui.lPositionStart->setVisible(numeric);
-	ui.lePositionStart->setVisible(numeric);
+	ui.sbPositionStart->setVisible(numeric);
 	ui.lPositionEnd->setVisible(numeric);
-	ui.lePositionEnd->setVisible(numeric);
+	ui.sbPositionEnd->setVisible(numeric);
 	ui.lPositionDateTimeStart->setVisible(!numeric);
 	ui.dtePositionStart->setVisible(!numeric);
 	ui.lPositionDateTimeEnd->setVisible(!numeric);
@@ -170,42 +153,46 @@ void ReferenceRangeDock::orientationChanged(int index) {
 	for (auto* range : m_rangeList)
 		range->setOrientation(orientation);
 
-	// call these slots to show the start and end values depending on the new orientation
-	rangePositionLogicalStartChanged(m_range->positionLogicalStart());
-	rangePositionLogicalEndChanged(m_range->positionLogicalEnd());
-}
+	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
+		ui.sbPositionStart->setValue(m_range->positionLogicalStart().y());
+		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().y()));
+	} else {
+		ui.sbPositionStart->setValue(m_range->positionLogicalStart().x());
+		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().x()));
+	}
 
-void ReferenceRangeDock::positionLogicalStartChanged(const QString& value) {
-	CONDITIONAL_LOCK_RETURN;
-
-	bool ok;
-	const double pos = QLocale().toDouble(value, &ok);
-	if (ok) {
-		for (auto* range : m_rangeList) {
-			auto positionLogical = range->positionLogicalStart();
-			if (range->orientation() == ReferenceRange::Orientation::Horizontal)
-				positionLogical.setY(pos);
-			else
-				positionLogical.setX(pos);
-			range->setPositionLogicalStart(positionLogical);
-		}
+	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
+		ui.sbPositionEnd->setValue(m_range->positionLogicalEnd().y());
+		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalEnd().y()));
+	} else {
+		ui.sbPositionEnd->setValue(m_range->positionLogicalEnd().x());
+		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalEnd().x()));
 	}
 }
 
-void ReferenceRangeDock::positionLogicalEndChanged(const QString& value) {
+void ReferenceRangeDock::positionLogicalStartChanged(double pos) {
 	CONDITIONAL_LOCK_RETURN;
 
-	bool ok;
-	const double pos = QLocale().toDouble(value, &ok);
-	if (ok) {
-		for (auto* range : m_rangeList) {
-			auto positionLogical = range->positionLogicalEnd();
-			if (range->orientation() == ReferenceRange::Orientation::Horizontal)
-				positionLogical.setY(pos);
-			else
-				positionLogical.setX(pos);
-			range->setPositionLogicalEnd(positionLogical);
-		}
+	for (auto* range : m_rangeList) {
+		auto positionLogical = range->positionLogicalStart();
+		if (range->orientation() == ReferenceRange::Orientation::Horizontal)
+			positionLogical.setY(pos);
+		else
+			positionLogical.setX(pos);
+		range->setPositionLogicalStart(positionLogical);
+	}
+}
+
+void ReferenceRangeDock::positionLogicalEndChanged(double pos) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* range : m_rangeList) {
+		auto positionLogical = range->positionLogicalEnd();
+		if (range->orientation() == ReferenceRange::Orientation::Horizontal)
+			positionLogical.setY(pos);
+		else
+			positionLogical.setX(pos);
+		range->setPositionLogicalEnd(positionLogical);
 	}
 }
 
@@ -248,23 +235,23 @@ void ReferenceRangeDock::visibilityChanged(bool state) {
 //******* SLOTs for changes triggered in ReferenceRange ********
 //*************************************************************
 void ReferenceRangeDock::rangePositionLogicalStartChanged(const QPointF& positionLogical) {
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK;
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
-		ui.lePositionStart->setText(QLocale().toString(positionLogical.y()));
+		ui.sbPositionStart->setValue(positionLogical.y());
 		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
 	} else {
-		ui.lePositionStart->setText(QLocale().toString(positionLogical.x()));
+		ui.sbPositionEnd->setValue(positionLogical.x());
 		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
 	}
 }
 
 void ReferenceRangeDock::rangePositionLogicalEndChanged(const QPointF& positionLogical) {
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK;
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
-		ui.lePositionEnd->setText(QLocale().toString(positionLogical.y()));
+		ui.sbPositionStart->setValue(positionLogical.y());
 		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
 	} else {
-		ui.lePositionEnd->setText(QLocale().toString(positionLogical.x()));
+		ui.sbPositionEnd->setValue(positionLogical.x());
 		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
 	}
 }
@@ -295,8 +282,8 @@ void ReferenceRangeDock::load() {
 	const auto* plot = static_cast<const CartesianPlot*>(m_range->plot());
 	if (orientation == ReferenceRange::Orientation::Horizontal) {
 		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric) {
-			ui.lePositionStart->setText(numberLocale.toString(m_range->positionLogicalStart().y()));
-			ui.lePositionEnd->setText(numberLocale.toString(m_range->positionLogicalEnd().y()));
+			ui.sbPositionStart->setValue(m_range->positionLogicalStart().y());
+			ui.sbPositionEnd->setValue(m_range->positionLogicalEnd().y());
 		} else { // DateTime
 			ui.dtePositionStart->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
 			ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().y()));
@@ -305,8 +292,8 @@ void ReferenceRangeDock::load() {
 		}
 	} else {
 		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric) {
-			ui.lePositionStart->setText(numberLocale.toString(m_range->positionLogicalStart().x()));
-			ui.lePositionEnd->setText(numberLocale.toString(m_range->positionLogicalEnd().x()));
+			ui.sbPositionStart->setValue(m_range->positionLogicalStart().x());
+			ui.sbPositionEnd->setValue(m_range->positionLogicalEnd().x());
 		} else { // DateTime
 			ui.dtePositionStart->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
 			ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().x()));
