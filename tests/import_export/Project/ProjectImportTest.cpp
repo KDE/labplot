@@ -448,8 +448,8 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QVERIFY(curve != nullptr);
 	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
 
-	CHECK_RANGE(plot, curve, Dimension::X, 0, 9);
-	CHECK_RANGE(plot, curve, Dimension::Y, 0, 9);
+	CHECK_RANGE(plot, curve, Dimension::X, 0., 9.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 9.);
 
 	QCOMPARE(curve->xColumnPath(), QLatin1String("2folder-with-graphs/Folder1/Book1/A"));
 	QCOMPARE(curve->yColumnPath(), QLatin1String("2folder-with-graphs/Folder1/Book1/B"));
@@ -617,8 +617,8 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QVERIFY(curve != nullptr);
 	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
 
-	CHECK_RANGE(plot, curve, Dimension::X, 0, 9);
-	CHECK_RANGE(plot, curve, Dimension::Y, 0, 9);
+	CHECK_RANGE(plot, curve, Dimension::X, 0., 9.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 9.);
 
 	QCOMPARE(curve->xColumnPath(), QLatin1String("2graphs/Book1/A"));
 	QCOMPARE(curve->yColumnPath(), QLatin1String("2graphs/Book1/B"));
