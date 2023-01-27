@@ -49,7 +49,6 @@ void XYDifferentiationCurve::recalculate() {
 }
 
 const XYAnalysisCurve::Result& XYDifferentiationCurve::result() const {
-	Q_D(const XYDifferentiationCurve);
 	return differentiationResult();
 }
 

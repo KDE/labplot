@@ -868,8 +868,8 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 	sb.setFeedback(true);
 
 	int valueChangedCounter = 0;
-	double lastValue = NAN;
-	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter, &lastValue](double value) {
+	// double lastValue = NAN;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter](double value) {
 		valueChangedCounter++;
 		sb.setValue(value);
 	});
