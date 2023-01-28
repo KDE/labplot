@@ -610,8 +610,11 @@ bool WorksheetElement::setCoordinateBindingEnabled(bool on) {
 	if (on && !cSystem)
 		return false;
 	if (on != d->coordinateBindingEnabled) {
-		// Must not be in the Undo Command!
-		d->updatePosition(); // Why not?
+		// Must not be in the Undo Command,
+		// because if done once, logical and
+		// scene pos are synched and therefore
+		// when changing it does not have any visual effect
+		d->updatePosition();
 		exec(new WorksheetElementSetCoordinateBindingEnabledCmd(d, on, on ? ki18n("%1: use logical coordinates") : ki18n("%1: set invisible")));
 		return true;
 	}
