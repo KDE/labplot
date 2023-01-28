@@ -317,8 +317,17 @@ QPointF ReferenceRangePrivate::recalculateRect() {
 	// Clipping
 	const QRectF& dataRect = static_cast<const CartesianPlot*>(q->plot())->dataRect();
 	if (point0Clipped.x() < point1Clipped.x()) {
-		point0Clipped.setX(qMax(point0Clipped.x(), dataRect.left()));
-		point1Clipped.setX(qMin(point1Clipped.x(), dataRect.right()));
+		if (point0Clipped.x() < dataRect.left()) {
+			m_leftClipped = true;
+			point0Clipped.setX(dataRect.left());
+		} else
+			m_leftClipped = false;
+
+		if (point1Clipped.x() > dataRect.right()) {
+			m_rightClipped = true;
+			point1Clipped.setX(dataRect.right());
+		} else
+			m_rightClipped = false;
 		const auto diffX = point1Clipped.x() - point0Clipped.x();
 		rect.setX(-diffXUnclipped / 2 + point0Clipped.x()
 				  - pointsSceneUnclipped.at(0).x()); // -diffXUnclipped/2 is the value it would be shifted if no clipping happens
@@ -327,8 +336,17 @@ QPointF ReferenceRangePrivate::recalculateRect() {
 		else
 			rect.setWidth(0);
 	} else {
-		point1Clipped.setX(qMax(point1Clipped.x(), dataRect.left()));
-		point0Clipped.setX(qMin(point0Clipped.x(), dataRect.right()));
+		if (point1Clipped.x() < dataRect.left()) {
+			m_leftClipped = true;
+			point1Clipped.setX(dataRect.left());
+		} else
+			m_leftClipped = false;
+
+		if (point0Clipped.x() > dataRect.right()) {
+			m_rightClipped = true;
+			point0Clipped.setX(dataRect.right());
+		} else
+			m_rightClipped = false;
 		const auto diffX = point0Clipped.x() - point1Clipped.x();
 		rect.setX(-diffXUnclipped / 2 + point1Clipped.x() - pointsSceneUnclipped.at(1).x());
 		if (diffX >= 0)
@@ -338,8 +356,17 @@ QPointF ReferenceRangePrivate::recalculateRect() {
 	}
 
 	if (point0Clipped.y() < point1Clipped.y()) {
-		point0Clipped.setY(qMax(point0Clipped.y(), dataRect.top()));
-		point1Clipped.setY(qMin(point1Clipped.y(), dataRect.bottom()));
+		if (point0Clipped.y() < dataRect.top()) {
+			m_topClipped = true;
+			point0Clipped.setY(dataRect.top());
+		} else
+			m_topClipped = false;
+
+		if (point1Clipped.y() > dataRect.bottom()) {
+			m_bottomClipped = true;
+			point1Clipped.setY(dataRect.bottom());
+		} else
+			m_bottomClipped = false;
 		const auto diff = point1Clipped.y() - point0Clipped.y();
 		rect.setY(-diffYUnclipped / 2 + point0Clipped.y() - pointsSceneUnclipped.at(0).y());
 		if (diff >= 0)
@@ -347,8 +374,17 @@ QPointF ReferenceRangePrivate::recalculateRect() {
 		else
 			rect.setHeight(0);
 	} else {
-		point1Clipped.setY(qMax(point1Clipped.y(), dataRect.top()));
-		point0Clipped.setY(qMin(point0Clipped.y(), dataRect.bottom()));
+		if (point1Clipped.y() < dataRect.top()) {
+			m_topClipped = true;
+			point1Clipped.setY(dataRect.top());
+		} else
+			m_topClipped = false;
+
+		if (point0Clipped.y() > dataRect.bottom()) {
+			m_bottomClipped = true;
+			point0Clipped.setY(dataRect.bottom());
+		} else
+			m_bottomClipped = false;
 		const auto diff = point0Clipped.y() - point1Clipped.y();
 		rect.setY(-diffYUnclipped / 2 + point1Clipped.y() - pointsSceneUnclipped.at(1).y());
 		if (diff >= 0)
@@ -439,7 +475,31 @@ void ReferenceRangePrivate::recalcShapeAndBoundingRect() {
 	rangeShape = QPainterPath();
 	if (m_visible) {
 		QPainterPath path;
-		path.addRect(rect);
+
+		if (!m_topClipped && !m_rightClipped && !m_bottomClipped && !m_leftClipped) {
+			path.addRect(rect);
+		} else {
+			if (!m_topClipped) {
+				path.moveTo(rect.topLeft());
+				path.lineTo(rect.topRight());
+			}
+			if (!m_rightClipped) {
+				if (m_topClipped)
+					path.moveTo(rect.topRight());
+				path.lineTo(rect.bottomRight());
+			}
+			if (!m_bottomClipped) {
+				if (m_rightClipped)
+					path.moveTo(rect.bottomRight());
+				path.lineTo(rect.bottomLeft());
+			}
+			if (!m_leftClipped) {
+				if (m_bottomClipped)
+					path.moveTo(rect.bottomLeft());
+				path.lineTo(rect.topLeft());
+			}
+		}
+
 		rangeShape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
 		boundingRectangle = rangeShape.boundingRect();
 	}
@@ -468,7 +528,8 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(line->opacity());
 	}
-	painter->drawRect(rect);
+
+	painter->drawPath(rangeShape);
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));

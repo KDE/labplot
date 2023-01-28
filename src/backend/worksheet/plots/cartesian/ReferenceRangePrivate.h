@@ -51,6 +51,11 @@ private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+
+	bool m_bottomClipped{false};
+	bool m_topClipped{false};
+	bool m_leftClipped{false};
+	bool m_rightClipped{false};
 };
 
 #endif
