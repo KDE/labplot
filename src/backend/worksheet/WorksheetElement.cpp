@@ -690,7 +690,10 @@ void WorksheetElementPrivate::updatePosition() {
 }
 
 void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
-	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right || event->key() == Qt::Key_Up || event->key() == Qt::Key_Down) {
+	const bool keyVertical = event->key() == Qt::Key_Up || event->key() == Qt::Key_Down;
+	const bool keyHorizontal = event->key() == Qt::Key_Left || event->key() == Qt::Key_Right;
+	if ((keyHorizontal && position.positionLimit != WorksheetElement::PositionLimit::Y)
+		|| (keyVertical && position.positionLimit != WorksheetElement::PositionLimit::X)) {
 		const int delta = 5; // always in scene coordinates
 
 		WorksheetElement::PositionWrapper tempPosition = position;
