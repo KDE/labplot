@@ -97,7 +97,7 @@
 	QCOMPARE(element->position().point.x(), -20);                                                                                                              \
 	QCOMPARE(element->position().point.y(), -40);
 
-#define WORKSHEETELEMENT_KEYPRESS_RIGHT(element)                                                                                                               \
+#define WORKSHEETELEMENT_KEYPRESS(element, KeyType, xScene, yScene, xLogical, yLogical)                                                                        \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
 	auto pp = element->position();                                                                                                                             \
 	pp.point = QPointF(0, 0);                                                                                                                                  \
@@ -110,63 +110,26 @@
 	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
 	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());                                                                            \
                                                                                                                                                                \
-	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Right, Qt::KeyboardModifier::NoModifier);                                                               \
+	QKeyEvent event(QKeyEvent::Type::KeyPress, KeyType, Qt::KeyboardModifier::NoModifier);                                                                     \
 	element->d_ptr->keyPressEvent(&event);                                                                                                                     \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 5);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
-	VALUES_EQUAL(element->positionLogical().x(), 0.55);                                                                                                        \
-	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
+	VALUES_EQUAL(element->position().point.x(), xScene);                                                                                                       \
+	VALUES_EQUAL(element->position().point.y(), yScene);                                                                                                       \
+	VALUES_EQUAL(element->positionLogical().x(), xLogical);                                                                                                    \
+	VALUES_EQUAL(element->positionLogical().y(), yLogical);                                                                                                    \
                                                                                                                                                                \
 	QCOMPARE(dock->ui.sbPositionX->value(), Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter));                     \
 	QCOMPARE(dock->ui.sbPositionY->value(), Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter));                     \
 	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
 	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());
 
-#define WORKSHEETELEMENT_KEY_PRESSLEFT(element)                                                                                                                \
-	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
-	auto pp = element->position();                                                                                                                             \
-	pp.point = QPointF(0, 0);                                                                                                                                  \
-	element->setPosition(pp);                                                                                                                                  \
-	element->setCoordinateBindingEnabled(true);                                                                                                                \
-                                                                                                                                                               \
-	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Left, Qt::KeyboardModifier::NoModifier);                                                                \
-	element->d_ptr->keyPressEvent(&event);                                                                                                                     \
-                                                                                                                                                               \
-	VALUES_EQUAL(element->position().point.x(), -5);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
-	VALUES_EQUAL(element->positionLogical().x(), 0.45);                                                                                                        \
-	VALUES_EQUAL(element->positionLogical().y(), 0.5);
+#define WORKSHEETELEMENT_KEYPRESS_RIGHT(element) WORKSHEETELEMENT_KEYPRESS(element, Qt::Key_Right, 5, 0, 0.55, 0.5)
 
-#define WORKSHEETELEMENT_KEYPRESS_UP(element)                                                                                                                  \
-	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
-	auto pp = element->position();                                                                                                                             \
-	pp.point = QPointF(0, 0);                                                                                                                                  \
-	element->setPosition(pp);                                                                                                                                  \
-	element->setCoordinateBindingEnabled(true);                                                                                                                \
-                                                                                                                                                               \
-	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);                                                                  \
-	element->d_ptr->keyPressEvent(&event);                                                                                                                     \
-                                                                                                                                                               \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 5);                                                                                                            \
-	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
-	VALUES_EQUAL(element->positionLogical().y(), 0.55);
+#define WORKSHEETELEMENT_KEY_PRESSLEFT(element) WORKSHEETELEMENT_KEYPRESS(element, Qt::Key_Left, -5, 0, 0.45, 0.5)
 
-#define WORKSHEETELEMENT_KEYPRESS_DOWN(element)                                                                                                                \
-	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
-	auto pp = element->position();                                                                                                                             \
-	pp.point = QPointF(0, 0);                                                                                                                                  \
-	element->setPosition(pp);                                                                                                                                  \
-	element->setCoordinateBindingEnabled(true);                                                                                                                \
-                                                                                                                                                               \
-	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);                                                                \
-	element->d_ptr->keyPressEvent(&event);                                                                                                                     \
-                                                                                                                                                               \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), -5);                                                                                                           \
-	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
-	VALUES_EQUAL(element->positionLogical().y(), 0.45);
+#define WORKSHEETELEMENT_KEYPRESS_UP(element) WORKSHEETELEMENT_KEYPRESS(element, Qt::Key_Up, 0, 5, 0.5, 0.55)
+
+#define WORKSHEETELEMENT_KEYPRESS_DOWN(element) WORKSHEETELEMENT_KEYPRESS(element, Qt::Key_Down, 0, -5, 0.5, 0.45)
 
 // Switching between setCoordinateBindingEnabled true and false should not move the point
 #define WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING(element)                                                                                                  \
