@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Volkan Gezer <volkangezer@gmail.com>, 2021.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2022-11-24 17:37+0300\n"
+"PO-Revision-Date: 2023-01-27 18:43+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.1\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -4687,7 +4687,7 @@ msgstr "1 pintin hacmi"
 #: src/backend/gsl/ExpressionParser.cpp:1127
 #, kde-format
 msgid "Mass of 1 pound"
-msgstr "1 poundun kütlesi"
+msgstr "1 librenin kütlesi"
 
 #: src/backend/gsl/ExpressionParser.cpp:1130
 #, kde-format
@@ -4727,17 +4727,17 @@ msgstr "1 gram ağırlığın gücü"
 #: src/backend/gsl/ExpressionParser.cpp:1151
 #, kde-format
 msgid "Force of 1 pound weight"
-msgstr "1 pound ağırlığın gücü"
+msgstr "1 libre ağırlığın kuvveti"
 
 #: src/backend/gsl/ExpressionParser.cpp:1154
 #, kde-format
 msgid "Force of 1 kilopound weight"
-msgstr "1 kilopound ağırlığın gücü"
+msgstr "1 kilo libre ağırlığın kuvveti"
 
 #: src/backend/gsl/ExpressionParser.cpp:1157
 #, kde-format
 msgid "Force of 1 poundal"
-msgstr "1 poundalın gücü"
+msgstr "1 librenin kuvveti"
 
 #: src/backend/gsl/ExpressionParser.cpp:1165
 #, kde-format
@@ -4792,7 +4792,7 @@ msgstr "1 su inçinin basıncı"
 #: src/backend/gsl/ExpressionParser.cpp:1200
 #, kde-format
 msgid "Pressure of 1 pound per square inch"
-msgstr "1 inç kare başına düşen basınç"
+msgstr "İnç kare başına 1 librelik basınç"
 
 #: src/backend/gsl/ExpressionParser.cpp:1208
 #, kde-format
