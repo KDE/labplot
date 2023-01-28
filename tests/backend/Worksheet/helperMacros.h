@@ -106,6 +106,7 @@
 	element->setCoordinateBindingEnabled(false);                                                                                                               \
                                                                                                                                                                \
 	dock->dockSetElementsMethodName({element});                                                                                                                \
+	QCOMPARE(dock->ui.chbBindLogicalPos->isChecked(), false);                                                                                                  \
 	QCOMPARE(dock->ui.sbPositionX->value(), Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter));                     \
 	QCOMPARE(dock->ui.sbPositionY->value(), Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter));                     \
 	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
@@ -138,6 +139,7 @@
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
                                                                                                                                                                \
 	dock->dockSetElementsMethodName({element});                                                                                                                \
+	QCOMPARE(dock->ui.chbBindLogicalPos->isChecked(), true);                                                                                                   \
 	QCOMPARE(dock->ui.sbPositionX->value(), Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter));                     \
 	QCOMPARE(dock->ui.sbPositionY->value(), Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter));                     \
 	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
