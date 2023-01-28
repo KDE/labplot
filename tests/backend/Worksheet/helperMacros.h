@@ -33,20 +33,20 @@
 
 #define WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, MACRO_NAME) void WorksheetElementType##MACRO_NAME()
 
-#define WORKSHEETELEMENT_TEST(WorksheetElementType, MACRO_NAME)                                                                                                \
+#define WORKSHEETELEMENT_TEST(WorksheetElementType, MACRO_NAME, DockType, dockSetElementsMethodName)                                                           \
 	void WorksheetElementTest::WorksheetElementType##MACRO_NAME() {                                                                                            \
 		SETUP_PROJECT                                                                                                                                          \
                                                                                                                                                                \
 		auto* element = new WorksheetElementType(p, QStringLiteral("element"));                                                                                \
 		p->addChild(element);                                                                                                                                  \
-		auto* dock = new WorksheetElementType##Dock(nullptr);                                                                                                  \
-		MACRO_NAME(element);                                                                                                                                   \
+		auto* dock = new DockType(nullptr);                                                                                                                    \
+		MACRO_NAME(element, dockSetElementsMethodName);                                                                                                        \
 	}
 
 // Without Cartesian Plot as argument to the constructor
 // Because of that the logical positions are not available before calling at least
 // once updatePosition(). Because of this retransfor() will be done in this version
-#define WORKSHEETELEMENT_TEST2(WorksheetElementType, MACRO_NAME)                                                                                               \
+#define WORKSHEETELEMENT_TEST2(WorksheetElementType, MACRO_NAME, DockType, dockSetElementsMethodName)                                                          \
 	void WorksheetElementTest::WorksheetElementType##MACRO_NAME() {                                                                                            \
 		SETUP_PROJECT                                                                                                                                          \
                                                                                                                                                                \
@@ -55,12 +55,13 @@
 		VALUES_EQUAL(element->position().point.x(), 0);                                                                                                        \
 		VALUES_EQUAL(element->position().point.y(), 0);                                                                                                        \
 		element->retransform(); /* Needed because otherwise logical position is not set */                                                                     \
-		MACRO_NAME(element);                                                                                                                                   \
+		auto* dock = new DockType(nullptr);                                                                                                                    \
+		MACRO_NAME(element, dockSetElementsMethodName);                                                                                                        \
 	}
 
 // Test Macros
 // Testing if logical points are set correctly
-#define WORKSHEETELEMENT_SETPOSITIONLOGICAL(element)                                                                                                           \
+#define WORKSHEETELEMENT_SETPOSITIONLOGICAL(element, dockSetElementsMethodName)                                                                                \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
 	auto pp = element->position();                                                                                                                             \
 	pp.point = QPointF(0, 0);                                                                                                                                  \
@@ -76,7 +77,7 @@
 	QCOMPARE(element->position().point.x(), 50);                                                                                                               \
 	QCOMPARE(element->position().point.y(), 50);
 
-#define WORKSHEETELEMENT_MOUSE_MOVE(element)                                                                                                                   \
+#define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)                                                                                        \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
 	auto pp = element->position();                                                                                                                             \
 	pp.point = QPointF(0, 0);                                                                                                                                  \
@@ -97,14 +98,14 @@
 	QCOMPARE(element->position().point.x(), -20);                                                                                                              \
 	QCOMPARE(element->position().point.y(), -40);
 
-#define WORKSHEETELEMENT_KEYPRESS(element, KeyType, xScene, yScene, xLogical, yLogical)                                                                        \
+#define WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, KeyType, xScene, yScene, xLogical, yLogical)                                             \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
 	auto pp = element->position();                                                                                                                             \
 	pp.point = QPointF(0, 0);                                                                                                                                  \
 	element->setPosition(pp);                                                                                                                                  \
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
                                                                                                                                                                \
-	dock->setPoints({element});                                                                                                                                \
+	dock->dockSetElementsMethodName({element});                                                                                                                \
 	QCOMPARE(dock->ui.sbPositionX->value(), Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter));                     \
 	QCOMPARE(dock->ui.sbPositionY->value(), Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter));                     \
 	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
@@ -123,16 +124,20 @@
 	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
 	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());
 
-#define WORKSHEETELEMENT_KEYPRESS_RIGHT(element) WORKSHEETELEMENT_KEYPRESS(element, Qt::Key_Right, 5, 0, 0.55, 0.5)
+#define WORKSHEETELEMENT_KEYPRESS_RIGHT(element, dockSetElementsMethodName)                                                                                    \
+	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Right, 5, 0, 0.55, 0.5)
 
-#define WORKSHEETELEMENT_KEY_PRESSLEFT(element) WORKSHEETELEMENT_KEYPRESS(element, Qt::Key_Left, -5, 0, 0.45, 0.5)
+#define WORKSHEETELEMENT_KEY_PRESSLEFT(element, dockSetElementsMethodName)                                                                                     \
+	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Left, -5, 0, 0.45, 0.5)
 
-#define WORKSHEETELEMENT_KEYPRESS_UP(element) WORKSHEETELEMENT_KEYPRESS(element, Qt::Key_Up, 0, 5, 0.5, 0.55)
+#define WORKSHEETELEMENT_KEYPRESS_UP(element, dockSetElementsMethodName)                                                                                       \
+	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Up, 0, 5, 0.5, 0.55)
 
-#define WORKSHEETELEMENT_KEYPRESS_DOWN(element) WORKSHEETELEMENT_KEYPRESS(element, Qt::Key_Down, 0, -5, 0.5, 0.45)
+#define WORKSHEETELEMENT_KEYPRESS_DOWN(element, dockSetElementsMethodName)                                                                                     \
+	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Down, 0, -5, 0.5, 0.45)
 
 // Switching between setCoordinateBindingEnabled true and false should not move the point
-#define WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING(element)                                                                                                  \
+#define WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING(element, dockSetElementsMethodName)                                                                       \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
 	auto pp = element->position();                                                                                                                             \
 	pp.point = QPointF(0, 0);                                                                                                                                  \
@@ -172,7 +177,7 @@
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);
 
-#define WORKSHEETELEMENT_SHIFTX_COORDBINDING(element)                                                                                                          \
+#define WORKSHEETELEMENT_SHIFTX_COORDBINDING(element, dockSetElementsMethodName)                                                                               \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
 	auto pp = element->position();                                                                                                                             \
 	pp.point = QPointF(0, 0);                                                                                                                                  \
@@ -205,7 +210,7 @@
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);
 
-#define WORKSHEETELEMENT_SHIFTY_COORDBINDING(element)                                                                                                          \
+#define WORKSHEETELEMENT_SHIFTY_COORDBINDING(element, dockSetElementsMethodName)                                                                               \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
 	auto pp = element->position();                                                                                                                             \
 	pp.point = QPointF(0, 0);                                                                                                                                  \
@@ -238,7 +243,7 @@
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);
 
-#define WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING(element)                                                                                                       \
+#define WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING(element, dockSetElementsMethodName)                                                                            \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
 	auto pp = element->position();                                                                                                                             \
 	pp.point = QPointF(0, 0);                                                                                                                                  \
@@ -272,7 +277,7 @@
 	VALUES_EQUAL(element->positionLogical().x(), 0.95); /* shift factor is 0.1 -> 1(current range)*0.1 = 0.1 */                                                \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);
 
-#define WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING(element)                                                                                                       \
+#define WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING(element, dockSetElementsMethodName)                                                                            \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
 	auto pp = element->position();                                                                                                                             \
 	pp.point = QPointF(0, 0);                                                                                                                                  \

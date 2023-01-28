@@ -44,6 +44,8 @@ private Q_SLOTS:
 
 	void referenceRangeYClippingBottomSetEnd();
 	void referenceRangeYClippingTopSetEnd();
+
+	void referenceRangeYKeyPressUp();
 };
 
 #endif // WORKSHEETELEMENTTEST_H
