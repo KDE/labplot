@@ -158,6 +158,8 @@ Q_SIGNALS:
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
 
+	void objectPositionChanged(); // Position changed, independend of logical or scene, bot are triggering this
+
 	void hovered();
 	void unhovered();
 	// needed in the worksheet info element, because execMoveInFrontOf and execMoveBehind

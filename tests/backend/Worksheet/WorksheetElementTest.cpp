@@ -80,10 +80,7 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 	referenceRange->setOrientation(ReferenceRange::Orientation::Vertical);
 	p->addChild(referenceRange);
 	referenceRange->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
-	auto pp = referenceRange->position();
-	pp.point = QPointF(0, 0);
-	referenceRange->setPosition(pp);
-	referenceRange->setCoordinateBindingEnabled(true);
+	referenceRange->setPositionLogical(QPointF(0.5, 0.5));
 
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
@@ -141,20 +138,20 @@ void WorksheetElementTest::referenceRangeYMouseMove() {
 	referenceRange->d_ptr->setPos(QPointF(-10, -25)); // item change will be called (negative value is up)
 	QCOMPARE(referenceRange->positionLogical().y(), 0.75); // 25/50 * 0.5 + 0.5
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only vertical considered
-	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.8);
-	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.7);
+	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.7);
+	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.8);
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.8, 1, 0.7);
 
 	// Set Logical Start
 	referenceRange->setPositionLogicalStart(QPointF(0.5, 0.1));
-	QCOMPARE(referenceRange->positionLogical().y(), 0.4);
+	QCOMPARE(referenceRange->positionLogical().y(), 0.45); // (0.8 + 0.1)/2
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.1);
-	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.7);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.7, 1, 0.1);
+	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.8);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.8, 1, 0.1);
 	// Set Logical End
 	referenceRange->setPositionLogicalEnd(QPointF(0.5, 0.3));
-	QCOMPARE(referenceRange->positionLogical().y(), 0.2);
+	QCOMPARE(referenceRange->positionLogical().y(), 0.2); // (0.3 + 0.1)/2
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.1);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.3);

@@ -226,7 +226,7 @@ void ImagePrivate::retransform() {
 	boundingRectangle.setWidth(w);
 	boundingRectangle.setHeight(h);
 
-	updatePosition();
+	updatePosition(); // needed, because CartesianPlot calls retransform if some operations are done
 	updateBorder();
 
 	Q_EMIT q->changed();

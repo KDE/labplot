@@ -572,7 +572,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, rotationAngle, rotationAngle
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, retransform)
+STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition, objectPositionChanged)
 void WorksheetElement::setPosition(const PositionWrapper& pos) {
 	Q_D(WorksheetElement);
 	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition
@@ -580,35 +580,45 @@ void WorksheetElement::setPosition(const PositionWrapper& pos) {
 		exec(new WorksheetElementSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetHorizontalAlignment, WorksheetElement::HorizontalAlignment, horizontalAlignment, retransform)
+STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement,
+						   SetHorizontalAlignment,
+						   WorksheetElement::HorizontalAlignment,
+						   horizontalAlignment,
+						   updatePosition,
+						   objectPositionChanged)
 void WorksheetElement::setHorizontalAlignment(const WorksheetElement::HorizontalAlignment hAlign) {
 	Q_D(WorksheetElement);
 	if (hAlign != d->horizontalAlignment)
 		exec(new WorksheetElementSetHorizontalAlignmentCmd(d, hAlign, ki18n("%1: set horizontal alignment")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetVerticalAlignment, WorksheetElement::VerticalAlignment, verticalAlignment, retransform)
+STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement,
+						   SetVerticalAlignment,
+						   WorksheetElement::VerticalAlignment,
+						   verticalAlignment,
+						   updatePosition,
+						   objectPositionChanged)
 void WorksheetElement::setVerticalAlignment(const WorksheetElement::VerticalAlignment vAlign) {
 	Q_D(WorksheetElement);
 	if (vAlign != d->verticalAlignment)
 		exec(new WorksheetElementSetVerticalAlignmentCmd(d, vAlign, ki18n("%1: set vertical alignment")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled, retransform)
+STD_SETTER_CMD_IMPL_S(WorksheetElement, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled) // do I need a final method?
 bool WorksheetElement::setCoordinateBindingEnabled(bool on) {
 	Q_D(WorksheetElement);
 	if (on && !cSystem)
 		return false;
 	if (on != d->coordinateBindingEnabled) {
 		// Must not be in the Undo Command!
-		d->updatePosition();
+		d->updatePosition(); // Why not?
 		exec(new WorksheetElementSetCoordinateBindingEnabledCmd(d, on, on ? ki18n("%1: use logical coordinates") : ki18n("%1: set invisible")));
 		return true;
 	}
 	return true;
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPositionLogical, QPointF, positionLogical, retransform)
+STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement, SetPositionLogical, QPointF, positionLogical, updatePosition, objectPositionChanged)
 void WorksheetElement::setPositionLogical(QPointF pos) {
 	Q_D(WorksheetElement);
 	if (pos != d->positionLogical)
@@ -780,6 +790,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
+			Q_EMIT q->objectPositionChanged();
 		} else {
 			// convert item's center point in parent's coordinates
 			WorksheetElement::PositionWrapper tempPosition = position;
@@ -788,6 +799,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 
 			// Q_EMIT the signals in order to notify the UI.
 			Q_EMIT q->positionChanged(tempPosition);
+			Q_EMIT q->objectPositionChanged();
 		}
 		return QGraphicsItem::itemChange(change, newPos);
 	}

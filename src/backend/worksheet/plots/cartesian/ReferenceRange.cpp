@@ -52,7 +52,6 @@ void ReferenceRange::init() {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("ReferenceRange"));
 
-	d->coordinateBindingEnabled = true;
 	d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
 	switch (d->orientation) {
 	case WorksheetElement::Orientation::Horizontal:
@@ -66,15 +65,20 @@ void ReferenceRange::init() {
 		break;
 	}
 
-	// default position - 10% of the plot width/height positioned around the center
-	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-	const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-	const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-	const auto w = m_plot->range(Dimension::X, cs->index(Dimension::X)).length() * 0.1;
-	const auto h = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).length() * 0.1;
-	d->positionLogical = QPointF(x, y);
-	d->positionLogicalStart = QPointF(x - w / 2, y - h / 2);
-	d->positionLogicalEnd = QPointF(x + w / 2, y + h / 2);
+	if (plot()) {
+		setCoordinateSystemIndex(plot()->defaultCoordinateSystemIndex());
+		d->coordinateBindingEnabled = true;
+		// default position - 10% of the plot width/height positioned around the center
+		auto cs = plot()->coordinateSystem(coordinateSystemIndex());
+		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+		const auto w = m_plot->range(Dimension::X, cs->index(Dimension::X)).length() * 0.1;
+		const auto h = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).length() * 0.1;
+		d->positionLogical = QPointF(x, y);
+		d->positionLogicalStart = QPointF(x - w / 2, y - h / 2);
+		d->positionLogicalEnd = QPointF(x + w / 2, y + h / 2);
+	} else
+		d->position.point = QPointF(0, 0); // center of parent
 	d->updatePosition(); // to update also scene coordinates
 
 	// background
@@ -99,7 +103,8 @@ void ReferenceRange::init() {
 		d->recalcShapeAndBoundingRect();
 	});
 
-	connect(this, &WorksheetElement::positionLogicalChanged, this, &ReferenceRange::updateStartEndPositions);
+	connect(this, &WorksheetElement::objectPositionChanged, this, &ReferenceRange::updateStartEndPositions);
+	retransform();
 }
 
 /*!
@@ -310,7 +315,7 @@ QPointF ReferenceRangePrivate::recalculateRect() {
 	const auto diffYUnclipped = qAbs(point0Clipped.y() - point1Clipped.y());
 
 	// Clipping
-	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
+	const QRectF& dataRect = static_cast<const CartesianPlot*>(q->plot())->dataRect();
 	if (point0Clipped.x() < point1Clipped.x()) {
 		point0Clipped.setX(qMax(point0Clipped.x(), dataRect.left()));
 		point1Clipped.setX(qMin(point1Clipped.x(), dataRect.right()));
@@ -392,16 +397,16 @@ void ReferenceRangePrivate::updateOrientation() {
  * position \c newPosition of the item's center and notify the dock widget.
  */
 // TODO: make this undo/redo-able
-void ReferenceRange::updateStartEndPositions(QPointF newPosition) {
+void ReferenceRange::updateStartEndPositions() {
 	Q_D(ReferenceRange);
 	if (d->orientation == WorksheetElement::Orientation::Horizontal) {
 		const double width = (d->positionLogicalEnd.y() - d->positionLogicalStart.y()) / 2;
-		d->positionLogicalStart.setY(newPosition.y() + width); // y-axis is reversed, change the sign here
-		d->positionLogicalEnd.setY(newPosition.y() - width);
+		d->positionLogicalStart.setY(d->positionLogical.y() - width);
+		d->positionLogicalEnd.setY(d->positionLogical.y() + width);
 	} else {
 		const double width = (d->positionLogicalEnd.x() - d->positionLogicalStart.x()) / 2;
-		d->positionLogicalStart.setX(newPosition.x() - width);
-		d->positionLogicalEnd.setX(newPosition.x() + width);
+		d->positionLogicalStart.setX(d->positionLogical.x() - width);
+		d->positionLogicalEnd.setX(d->positionLogical.x() + width);
 	}
 
 	// Update boundingrect

@@ -78,7 +78,7 @@ private Q_SLOTS:
 	void lineColorChanged(QAction*);
 	void visibilityChangedSlot();
 
-	void updateStartEndPositions(QPointF);
+	void updateStartEndPositions();
 
 Q_SIGNALS:
 	friend class ReferenceRangeSetPositionCmd;

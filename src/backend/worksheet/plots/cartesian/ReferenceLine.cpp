@@ -54,7 +54,6 @@ void ReferenceLine::init() {
 	KConfig config;
 	KConfigGroup group = config.group("ReferenceLine");
 
-	d->coordinateBindingEnabled = true;
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
 	switch (d->orientation) {
 	case WorksheetElement::Orientation::Horizontal:
@@ -68,12 +67,16 @@ void ReferenceLine::init() {
 		break;
 	}
 
-	// default position
-	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-	const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-	const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-	d->positionLogical = QPointF(x, y);
+	if (plot()) {
+		d->coordinateBindingEnabled = true;
+		// default position
+		auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
+		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+		DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
+		d->positionLogical = QPointF(x, y);
+	} else
+		d->position.point = QPointF(0, 0);
 	d->updatePosition(); // To update also scene coordinates
 
 	// line

@@ -506,7 +506,7 @@ void TextLabelPrivate::retransform() {
 	if (suppress)
 		return;
 
-	updatePosition();
+	updatePosition(); // needed, because CartesianPlot calls retransform if some operations are done
 	updateBorder();
 
 	Q_EMIT q->changed();
