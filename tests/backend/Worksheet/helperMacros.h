@@ -39,7 +39,7 @@
                                                                                                                                                                \
 		auto* element = new WorksheetElementType(p, QStringLiteral("element"));                                                                                \
 		p->addChild(element);                                                                                                                                  \
-		auto* dock = new CustomPointDock(nullptr);                                                                                                             \
+		auto* dock = new WorksheetElementType##Dock(nullptr);                                                                                                  \
 		MACRO_NAME(element);                                                                                                                                   \
 	}
 
