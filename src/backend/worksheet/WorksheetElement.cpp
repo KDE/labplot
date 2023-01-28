@@ -713,7 +713,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 				p.setY(p.y() + delta);
 			}
 			auto pLogic = q->cSystem->mapSceneToLogical(p, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			q->setPositionLogical(pLogic);
+			q->setPositionLogical(pLogic); // So it is undoable
 		} else {
 			QPointF point = q->parentPosToRelativePos(pos(), position);
 			point = q->align(point, boundingRectangle, horizontalAlignment, verticalAlignment, false);
@@ -728,7 +728,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 				point.setY(point.y() - delta);
 			}
 			tempPosition.point = point;
-			q->setPosition(tempPosition);
+			q->setPosition(tempPosition); // So it is undoable
 		}
 		event->accept();
 	} else

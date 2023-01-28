@@ -1,6 +1,8 @@
 #ifndef HELPERMACROS_H
 #define HELPERMACROS_H
 
+#include <QUndoStack>
+
 #define SETUP_PROJECT                                                                                                                                          \
 	Project project;                                                                                                                                           \
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));                                                                                                     \
@@ -169,6 +171,20 @@
 
 #define WORKSHEETELEMENT_KEYPRESS_DOWN(element, dockSetElementsMethodName)                                                                                     \
 	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Down, 0, -5, 0.5, 0.45)
+
+#define WORKSHEETELEMENT_KEYPRESS_UNDO(element, dockSetElementsMethodName, KeyType, xScene, yScene, xLogical, yLogical)                                        \
+	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, KeyType, xScene, yScene, xLogical, yLogical)                                                 \
+	element->undoStack()->undo();                                                                                                                              \
+	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
+	VALUES_EQUAL(element->positionLogical().y(), 0.5);
+
+#define WORKSHEETELEMENT_KEYPRESS_RIGHT_UNDO(element, dockSetElementsMethodName)                                                                               \
+	WORKSHEETELEMENT_KEYPRESS_UNDO(element, dockSetElementsMethodName, Qt::Key_Right, 5, 0, 0.55, 0.5)
+
+#define WORKSHEETELEMENT_KEYPRESS_UP_UNDO(element, dockSetElementsMethodName)                                                                                  \
+	WORKSHEETELEMENT_KEYPRESS_UNDO(element, dockSetElementsMethodName, Qt::Key_Up, 0, 5, 0.5, 0.55)
 
 // Switching between setCoordinateBindingEnabled true and false should not move the point
 #define WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING(element, dockSetElementsMethodName)                                                                       \
