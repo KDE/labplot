@@ -455,9 +455,15 @@ void MainWin::createADS() {
 	// 	if (m_showWelcomeScreen)
 	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
-    // https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/issues/482
-    ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
-    ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
+	// As per documentation the configuration Flags must be set prior a DockManager will be created!
+	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/blob/master/doc/user-guide.md#configuration-flags
+	ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::MiddleMouseButtonClosesTab, true);
+	// must be after the config flags!
+	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
+	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);
+
 	m_DockManager = new ads::CDockManager(this);
 	connect(m_DockManager, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
 	// setCentralWidget(m_DockManager); // Automatically done by CDockManager
@@ -472,8 +478,6 @@ void MainWin::createADS() {
 			m_DockManager->removeDockWidget(m.value(e));
 		}
 	});
-	// connect(m_nextWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activateNextSubWindow);
-	// connect(m_prevWindowAction, &QAction::triggered, m_mdiArea, &QMdiArea::activatePreviousSubWindow);
 }
 
 void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
@@ -483,7 +487,9 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 		return;
 	}
 
-	auto* view = static_cast<ContentDockWidget*>(now);
+	auto* view = dynamic_cast<ContentDockWidget*>(now);
+	if (!view)
+		return;
 	if (view == m_currentDock) {
 		// do nothing, if the current sub-window gets selected again.
 		// This event happens, when labplot loses the focus (modal window is opened or the user switches to another application)
@@ -1295,9 +1301,8 @@ bool MainWin::newProject() {
 	if (!m_projectExplorer) {
 		group = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
 
-		m_projectExplorerDock = new QDockWidget(this);
+		m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
 		m_projectExplorerDock->setObjectName(QLatin1String("projectexplorer"));
-		m_projectExplorerDock->setWindowTitle(i18nc("@title:window", "Project Explorer"));
 		m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace(QLatin1String("&"), QString()));
 		m_projectExplorerDock->toggleViewAction()->setText(QLatin1String(""));
 
@@ -1306,12 +1311,11 @@ bool MainWin::newProject() {
 
 		connect(m_projectExplorer, &ProjectExplorer::currentAspectChanged, this, &MainWin::handleCurrentAspectChanged);
 		connect(m_projectExplorer, &ProjectExplorer::activateView, this, &MainWin::activateSubWindowForAspect);
-		connect(m_projectExplorerDock, &QDockWidget::visibilityChanged, this, &MainWin::projectExplorerDockVisibilityChanged);
+		connect(m_projectExplorerDock, &ads::CDockWidget::viewToggled, this, &MainWin::projectExplorerDockVisibilityChanged);
 
 		// Properties dock
-		m_propertiesDock = new QDockWidget(this);
+		m_propertiesDock = new ads::CDockWidget(i18nc("@title:window", "Properties"));
 		m_propertiesDock->setObjectName(QLatin1String("aspect_properties_dock"));
-		m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
 		m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace(QLatin1String("&"), QString()));
 
 		// restore the position of the dock widgets:
@@ -1319,8 +1323,8 @@ bool MainWin::newProject() {
 		// user opened the application and closed it without creating a new project
 		// and with this the dock widgets - this creates a "WindowState" section in the settings without dock widgets positions.
 		// So, we set our default positions first and then read from the saved "WindowState" section
-		addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
-		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
+		m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
+		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock);
 		if (group.keyList().indexOf(QLatin1String("WindowState")) != -1)
 			restoreState(group.readEntry("WindowState", QByteArray()));
 
@@ -1331,7 +1335,7 @@ bool MainWin::newProject() {
 		scrollArea->setWidget(stackedWidget); // stacked widget inside scroll area
 		m_propertiesDock->setWidget(scrollArea); // scroll area inside dock
 
-		connect(m_propertiesDock, &QDockWidget::visibilityChanged, this, &MainWin::propertiesDockVisibilityChanged);
+		connect(m_propertiesDock, &ads::CDockWidget::viewToggled, this, &MainWin::propertiesDockVisibilityChanged);
 	}
 
 	m_projectExplorer->setModel(m_aspectTreeModel);
@@ -2082,8 +2086,15 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 
 		auto* dock = m_DockManager->findDockWidget(win->windowTitle());
 		if (m_DockManager && dock == nullptr) {
-            // Add new dock if not found
-            m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win);
+			// Add new dock if not found
+			if (true /*m_DockManager->dockWidgetsMap().count() == 2*/) {
+				// If only project explorer and properties dock exist place it right to the project explorer
+				m_DockManager->addDockWidget(ads::RightDockWidgetArea,
+											 win,
+											 m_projectExplorerDock->dockAreaWidget()); // Right of the project explorer by default
+			} /* else {
+				 m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win, m_DockManager->focusedDockWidget()->dockAreaWidget());
+			 }*/
 			win->show();
 
 			// Qt provides its own "system menu" for every sub-window. The shortcut for the close-action
@@ -2091,9 +2102,9 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 			// remove the shortcuts in the system menu to avoid this collision.
 			for (QAction* action : win->titleBarActions())
 				action->setShortcut(QKeySequence());
-		} else if (m_DockManager && dock->isClosed()) {
+		} else if (m_DockManager)
 			dock->toggleView(true);
-		}
+
 		if (m_DockManager)
 			m_DockManager->setDockWidgetFocused(win);
 	} else {

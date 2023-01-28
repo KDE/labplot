@@ -93,14 +93,14 @@ public:
 #endif
 
 private:
-    ads::CDockManager* m_DockManager{nullptr};
+	ads::CDockManager* m_DockManager{nullptr};
 	KColorSchemeManager* m_schemeManager{nullptr};
 	ContentDockWidget* m_currentDock{nullptr}; // Currently selected dock
 	Project* m_project{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	ProjectExplorer* m_projectExplorer{nullptr};
-	QDockWidget* m_projectExplorerDock{nullptr};
-	QDockWidget* m_propertiesDock{nullptr};
+	ads::CDockWidget* m_projectExplorerDock{nullptr};
+	ads::CDockWidget* m_propertiesDock{nullptr};
 	AbstractAspect* m_currentAspect{nullptr};
 	Folder* m_currentFolder{nullptr};
 	QString m_undoViewEmptyLabel;

@@ -83,8 +83,8 @@
 #include "kdefrontend/widgets/DatapickerImageWidget.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 
+#include <DockWidget.h>
 #include <KI18n/KLocalizedString>
-#include <QDockWidget>
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QToolBar>
@@ -217,7 +217,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 	switch (type) {
 	case AspectType::Spreadsheet:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Spreadsheet"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Spreadsheet"));
 		raiseDockConnect(m_spreadsheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_spreadsheetDock->setSpreadsheets(castList<Spreadsheet>(selectedAspects));
 		break;
@@ -232,51 +232,51 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		} else
 #endif
 		{
-			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Column"));
+			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Column"));
 			raiseDockConnect(m_columnDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 			m_columnDock->setColumns(castList<Column>(selectedAspects));
 		}
 		break;
 	}
 	case AspectType::Matrix:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Matrix"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Matrix"));
 		raiseDockConnect(m_matrixDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_matrixDock->setMatrices(castList<Matrix>(selectedAspects));
 		break;
 	case AspectType::Worksheet: {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Worksheet"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Worksheet"));
 		raiseDockConnect(m_worksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_worksheetDock->setWorksheets(castList<Worksheet>(selectedAspects));
 		break;
 	}
 	case AspectType::CartesianPlot: {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Plot Area"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Plot Area"));
 		raiseDockConnect(m_cartesianPlotDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_cartesianPlotDock->setPlots(castList<CartesianPlot>(selectedAspects));
 		break;
 	}
 	case AspectType::CartesianPlotLegend:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Legend"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Legend"));
 		raiseDockConnect(m_cartesianPlotLegendDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_cartesianPlotLegendDock->setLegends(castList<CartesianPlotLegend>(selectedAspects));
 		break;
 	case AspectType::Axis:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Axis"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Axis"));
 		raiseDockConnect(m_axisDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_axisDock->setAxes(castList<Axis>(selectedAspects));
 		break;
 	case AspectType::XYCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "XY-Curve"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: XY-Curve"));
 		raiseDockSetupConnect(m_xyCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYEquationCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "XY-Equation"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: XY-Equation"));
 		raiseDockSetupConnect(m_xyEquationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyEquationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYDataReductionCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Data Reduction"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Data Reduction"));
 		if (!m_xyDataReductionCurveDock) {
 			m_xyDataReductionCurveDock = new XYDataReductionCurveDock(m_mainWindow->stackedWidget, m_mainWindow->statusBar());
 			m_xyDataReductionCurveDock->setupGeneral();
@@ -292,87 +292,87 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->stackedWidget->setCurrentWidget(m_xyDataReductionCurveDock);
 		break;
 	case AspectType::XYDifferentiationCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Differentiation"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Differentiation"));
 		raiseDockSetupConnect(m_xyDifferentiationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyDifferentiationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYIntegrationCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Integration"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Integration"));
 		raiseDockSetupConnect(m_xyIntegrationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyIntegrationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYInterpolationCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Interpolation"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Interpolation"));
 		raiseDockSetupConnect(m_xyInterpolationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyInterpolationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYSmoothCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Smoothing"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Smoothing"));
 		raiseDockSetupConnect(m_xySmoothCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xySmoothCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYFitCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fit"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Fit"));
 		raiseDockSetupConnect(m_xyFitCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyFitCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYFourierTransformCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fourier Transform"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Fourier Transform"));
 		raiseDockSetupConnect(m_xyFourierTransformCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyFourierTransformCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYHilbertTransformCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Hilbert Transform"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Hilbert Transform"));
 		raiseDockSetupConnect(m_xyHilbertTransformCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyHilbertTransformCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYFourierFilterCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fourier Filter"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Fourier Filter"));
 		raiseDockSetupConnect(m_xyFourierFilterCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyFourierFilterCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYConvolutionCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Convolution/Deconvolution"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Convolution/Deconvolution"));
 		raiseDockSetupConnect(m_xyConvolutionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyConvolutionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYCorrelationCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Auto-/Cross-Correlation"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Auto-/Cross-Correlation"));
 		raiseDockSetupConnect(m_xyCorrelationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyCorrelationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::Histogram:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Histogram"));
 		raiseDockConnect(m_histogramDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_histogramDock->setCurves(castList<Histogram>(selectedAspects));
 		break;
 	case AspectType::BarPlot:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Bar Plot"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Bar Plot"));
 		raiseDock(m_barPlotDock, m_mainWindow->stackedWidget);
 		m_barPlotDock->setBarPlots(castList<BarPlot>(selectedAspects));
 		break;
 	case AspectType::BoxPlot:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Box Plot"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Box Plot"));
 		raiseDock(m_boxPlotDock, m_mainWindow->stackedWidget);
 		m_boxPlotDock->setBoxPlots(castList<BoxPlot>(selectedAspects));
 		break;
 	case AspectType::TextLabel:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Text Label"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Text Label"));
 		raiseDock(m_textLabelDock, m_mainWindow->stackedWidget);
 		m_textLabelDock->setLabels(castList<TextLabel>(selectedAspects));
 		break;
 	case AspectType::Image:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Image"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Image"));
 		raiseDock(m_imageDock, m_mainWindow->stackedWidget);
 		m_imageDock->setImages(castList<Image>(selectedAspects));
 		break;
 	case AspectType::CustomPoint:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Custom Point"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Custom Point"));
 		raiseDock(m_customPointDock, m_mainWindow->stackedWidget);
 		m_customPointDock->setPoints(castList<CustomPoint>(selectedAspects));
 		break;
 	case AspectType::ReferenceLine:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Reference Line"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Reference Line"));
 		raiseDock(m_referenceLineDock, m_mainWindow->stackedWidget);
 		m_referenceLineDock->setReferenceLines(castList<ReferenceLine>(selectedAspects));
 		break;
@@ -382,12 +382,12 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_referenceRangeDock->setReferenceRanges(castList<ReferenceRange>(selectedAspects));
 		break;
 	case AspectType::DatapickerCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Datapicker Curve"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Datapicker Curve"));
 		raiseDock(m_datapickerCurveDock, m_mainWindow->stackedWidget);
 		m_datapickerCurveDock->setCurves(castList<DatapickerCurve>(selectedAspects));
 		break;
 	case AspectType::Datapicker:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Data Extractor"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Data Extractor"));
 		raiseDock(m_datapickerImageDock, m_mainWindow->stackedWidget);
 		{
 			QList<DatapickerImage*> list;
@@ -397,7 +397,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 		break;
 	case AspectType::Project:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Project"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Project"));
 		raiseDock(m_projectDock, m_mainWindow->stackedWidget);
 		m_projectDock->setProject(m_mainWindow->m_project);
 		break;
@@ -409,45 +409,45 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			if (list.size() == 1)
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Notebook", list.first()->backendName()));
 			else
-				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Notebook"));
+				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Notebook"));
 			m_cantorWorksheetDock->setCantorWorksheets(list);
 		}
 #endif
 		break;
 	case AspectType::Note:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Notes"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Notes"));
 		raiseDock(m_notesDock, m_mainWindow->stackedWidget);
 		m_notesDock->setNotesList(castList<Note>(selectedAspects));
 		break;
 	case AspectType::InfoElement: {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Info Element"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Info Element"));
 		raiseDock(m_infoElementDock, m_mainWindow->stackedWidget);
 		m_infoElementDock->setInfoElements(castList<InfoElement>(selectedAspects));
 		break;
 	}
 	case AspectType::MQTTClient:
 #ifdef HAVE_MQTT
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: MQTT Data Source"));
 		raiseDock(m_liveDataDock, m_mainWindow->stackedWidget);
 		m_liveDataDock->setMQTTClient(static_cast<MQTTClient*>(selectedAspects.first()));
 #endif
 		break;
 	case AspectType::MQTTSubscription:
 #ifdef HAVE_MQTT
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: MQTT Data Source"));
 		raiseDock(m_liveDataDock, m_mainWindow->stackedWidget);
 		m_liveDataDock->setMQTTClient(static_cast<MQTTSubscription*>(selectedAspects.first())->mqttClient());
 #endif
 		break;
 	case AspectType::MQTTTopic:
 #ifdef HAVE_MQTT
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: MQTT Data Source"));
 		raiseDock(m_liveDataDock, m_mainWindow->stackedWidget);
 		m_liveDataDock->setMQTTClient(static_cast<MQTTTopic*>(selectedAspects.first())->mqttClient());
 #endif
 		break;
 	case AspectType::LiveDataSource:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Live Data Source"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Live Data Source"));
 		raiseDock(m_liveDataDock, m_mainWindow->stackedWidget);
 		m_liveDataDock->setLiveDataSource(static_cast<LiveDataSource*>(selectedAspects.first()));
 		break;
@@ -461,14 +461,14 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	case AspectType::DatapickerImage:
 	case AspectType::DatapickerPoint:
 	case AspectType::Folder:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Folder"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Folder"));
 		raiseDock(m_aspectDock, m_mainWindow->stackedWidget);
 		m_aspectDock->setAspects(selectedAspects);
 		break;
 	case AspectType::PlotArea:
 	case AspectType::SimpleFilterColumn:
 	case AspectType::Workbook:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Workbook"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Workbook"));
 		raiseDock(m_aspectDock, m_mainWindow->stackedWidget);
 		m_aspectDock->setAspects(selectedAspects);
 		break;
