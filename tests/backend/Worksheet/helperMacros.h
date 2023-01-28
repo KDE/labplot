@@ -39,6 +39,7 @@
                                                                                                                                                                \
 		auto* element = new WorksheetElementType(p, QStringLiteral("element"));                                                                                \
 		p->addChild(element);                                                                                                                                  \
+		auto* dock = new CustomPointDock(nullptr);                                                                                                             \
 		MACRO_NAME(element);                                                                                                                                   \
 	}
 
@@ -103,13 +104,24 @@
 	element->setPosition(pp);                                                                                                                                  \
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
                                                                                                                                                                \
+	dock->setPoints({element});                                                                                                                                \
+	QCOMPARE(dock->ui.sbPositionX->value(), Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter));                     \
+	QCOMPARE(dock->ui.sbPositionY->value(), Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter));                     \
+	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
+	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());                                                                            \
+                                                                                                                                                               \
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Right, Qt::KeyboardModifier::NoModifier);                                                               \
 	element->d_ptr->keyPressEvent(&event);                                                                                                                     \
                                                                                                                                                                \
 	VALUES_EQUAL(element->position().point.x(), 5);                                                                                                            \
 	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
 	VALUES_EQUAL(element->positionLogical().x(), 0.55);                                                                                                        \
-	VALUES_EQUAL(element->positionLogical().y(), 0.5);
+	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
+                                                                                                                                                               \
+	QCOMPARE(dock->ui.sbPositionX->value(), Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter));                     \
+	QCOMPARE(dock->ui.sbPositionY->value(), Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter));                     \
+	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
+	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());
 
 #define WORKSHEETELEMENT_KEY_PRESSLEFT(element)                                                                                                                \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
