@@ -2727,7 +2727,7 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		painter->drawPath(axisShape);
 	}
 
-#if DEBUG_BOUNDING_RECT
+#if DEBUG_AXIS_BOUNDING_RECT
 	painter->setPen(QColor(Qt::GlobalColor::blue));
 	painter->drawRect(boundingRect());
 #endif

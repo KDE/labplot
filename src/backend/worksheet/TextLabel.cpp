@@ -412,9 +412,10 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner)
 	// we need to scale from the font size specified in points to scene units.
 	// furhermore, we create the tex-image in a higher resolution then usual desktop resolution
 	//  -> take this into account
-	const double scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
-	this->setScale(scaleFactor);
+	// m_textItem is only used for the normal text not for latex. So the scale is only needed for the
+	// normal text, for latex the generated image will be shown directly
 	m_textItem = new ScaledTextItem(this);
+	m_textItem->setScale(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
 	m_textItem->setTextInteractionFlags(Qt::NoTextInteraction);
 }
 
@@ -437,8 +438,8 @@ QRectF TextLabelPrivate::size() {
 		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
 			yScale = 0.95;
 		// see updateBoundingRect()
-		w = m_textItem->boundingRect().width();
-		h = m_textItem->boundingRect().height();
+		w = m_textItem->boundingRect().width() * m_textItem->scale();
+		h = m_textItem->boundingRect().height() * m_textItem->scale();
 	}
 	qreal x = position.point.x();
 	qreal y = position.point.y();
@@ -646,8 +647,8 @@ void TextLabelPrivate::updateBoundingRect() {
 		// better scaling for multiline Markdown
 		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
 			yScale = 0.95;
-		w = m_textItem->boundingRect().width(); // * scaleFactor; // - xShift;
-		h = m_textItem->boundingRect().height(); // * scaleFactor; // * yScale;
+		w = m_textItem->boundingRect().width() * m_textItem->scale(); // - xShift;
+		h = m_textItem->boundingRect().height() * m_textItem->scale(); // * yScale;
 		m_textItem->setPos(QPointF(-w / 2, -h / 2));
 	}
 
