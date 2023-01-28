@@ -17,6 +17,8 @@
 #define ALL_WORKSHEET_TESTS_DEFINITION(WorksheetElementType)                                                                                                   \
 	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL);                                                               \
 	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_MOUSE_MOVE);                                                                       \
+	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT_NO_COORD_BINDING);                                                  \
+	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN_NO_COORD_BINDING);                                                   \
 	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT);                                                                   \
 	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_KEY_PRESSLEFT);                                                                    \
 	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP);                                                                      \

@@ -26,6 +26,8 @@
 #define ALL_WORKSHEETELEMENT_TESTS(WorksheetElementType, DockType, dockSetElementsMethodName)                                                                  \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL, DockType, dockSetElementsMethodName);                                     \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_MOUSE_MOVE, DockType, dockSetElementsMethodName);                                             \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT_NO_COORD_BINDING, DockType, dockSetElementsMethodName)                         \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN_NO_COORD_BINDING, DockType, dockSetElementsMethodName)                          \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT, DockType, dockSetElementsMethodName);                                         \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEY_PRESSLEFT, DockType, dockSetElementsMethodName);                                          \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP, DockType, dockSetElementsMethodName);                                            \
@@ -39,6 +41,8 @@
 #define ALL_WORKSHEETELEMENT_TESTS2(WorksheetElementType, DockType, dockSetElementsMethodName)                                                                 \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL, DockType, dockSetElementsMethodName);                                    \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_MOUSE_MOVE, DockType, dockSetElementsMethodName);                                            \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT_NO_COORD_BINDING, DockType, dockSetElementsMethodName)                        \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN_NO_COORD_BINDING, DockType, dockSetElementsMethodName)                         \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT, DockType, dockSetElementsMethodName);                                        \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEY_PRESSLEFT, DockType, dockSetElementsMethodName);                                         \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP, DockType, dockSetElementsMethodName);                                           \
