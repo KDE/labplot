@@ -580,6 +580,7 @@ void ImageDock::load() {
 			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_image->positionLogical().x()));
 		}
 
+		ui.chbBindLogicalPos->setChecked(m_image->coordinateBindingEnabled());
 		bindingChanged(m_image->coordinateBindingEnabled());
 	} else {
 		ui.lPositionXLogical->hide();
