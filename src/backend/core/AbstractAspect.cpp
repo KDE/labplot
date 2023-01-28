@@ -1146,8 +1146,10 @@ AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QStrin
 }
 
 AbstractAspectPrivate::~AbstractAspectPrivate() {
-	for (auto* child : qAsConst(m_children))
+	for (auto* child : qAsConst(m_children)) {
+		q->disconnect(child, nullptr, nullptr, nullptr); // Disconnect all
 		delete child;
+	}
 }
 
 void AbstractAspectPrivate::insertChild(int index, AbstractAspect* child) {

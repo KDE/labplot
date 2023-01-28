@@ -11,7 +11,9 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
+#include "backend/core/AbstractAspect.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 #include <KXmlGuiWindow>
 #include <QTimer>
@@ -218,42 +220,11 @@ private:
 
 	// Docks
 	QStackedWidget* stackedWidget{nullptr};
-	AspectDock* aspectDock{nullptr};
-	AxisDock* axisDock{nullptr};
+
+	QHash<AspectType, BaseDock*> dock;
+
 	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};
-	NoteDock* notesDock{nullptr};
-	InfoElementDock* infoElementDock{nullptr};
-	CartesianPlotDock* cartesianPlotDock{nullptr};
-	CartesianPlotLegendDock* cartesianPlotLegendDock{nullptr};
-	ColumnDock* columnDock{nullptr};
-	LiveDataDock* m_liveDataDock{nullptr};
-	MatrixDock* matrixDock{nullptr};
-	SpreadsheetDock* spreadsheetDock{nullptr};
-	ProjectDock* projectDock{nullptr};
-	XYCurveDock* xyCurveDock{nullptr};
-	XYEquationCurveDock* xyEquationCurveDock{nullptr};
-	XYDataReductionCurveDock* xyDataReductionCurveDock{nullptr};
-	XYDifferentiationCurveDock* xyDifferentiationCurveDock{nullptr};
-	XYIntegrationCurveDock* xyIntegrationCurveDock{nullptr};
-	XYInterpolationCurveDock* xyInterpolationCurveDock{nullptr};
-	XYSmoothCurveDock* xySmoothCurveDock{nullptr};
-	XYFitCurveDock* xyFitCurveDock{nullptr};
-	XYFourierFilterCurveDock* xyFourierFilterCurveDock{nullptr};
-	XYFourierTransformCurveDock* xyFourierTransformCurveDock{nullptr};
-	XYHilbertTransformCurveDock* xyHilbertTransformCurveDock{nullptr};
-	XYConvolutionCurveDock* xyConvolutionCurveDock{nullptr};
-	XYCorrelationCurveDock* xyCorrelationCurveDock{nullptr};
-	HistogramDock* histogramDock{nullptr};
-	BarPlotDock* barPlotDock{nullptr};
-	BoxPlotDock* boxPlotDock{nullptr};
-	WorksheetDock* worksheetDock{nullptr};
-	LabelWidget* textLabelDock{nullptr};
-	ImageDock* imageDock{nullptr};
-	CustomPointDock* customPointDock{nullptr};
-	ReferenceLineDock* referenceLineDock{nullptr};
-	DatapickerImageWidget* datapickerImageDock{nullptr};
-	DatapickerCurveWidget* datapickerCurveDock{nullptr};
 
 	void initActions();
 	void initMenus();
@@ -354,6 +325,8 @@ private Q_SLOTS:
 	void propertiesExplorerRequested();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
+
+	friend class GuiObserver;
 };
 
 #endif

@@ -1305,10 +1305,11 @@ bool MainWin::newProject() {
 		m_propertiesDock->setWidget(scrollArea); // scroll area inside dock
 
 		connect(m_propertiesDock, &QDockWidget::visibilityChanged, this, &MainWin::propertiesDockVisibilityChanged);
-
-		// GUI-observer;
-		m_guiObserver = new GuiObserver(this);
 	}
+
+	// GUI-observer;
+	if (!m_guiObserver)
+		m_guiObserver = new GuiObserver(this);
 
 	m_projectExplorer->setModel(m_aspectTreeModel);
 	m_projectExplorer->setProject(m_project);

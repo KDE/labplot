@@ -100,10 +100,11 @@
 namespace GuiObserverHelper {
 
 template<class T>
-bool raiseDock(T*& dock, QStackedWidget* parent) {
+bool raiseDock(MainWin* w, AspectType t, QStackedWidget* parent) {
 	Q_ASSERT(parent);
 	DEBUG(Q_FUNC_INFO << ", number of stacked widgets = " << parent->count())
 
+	auto dock = w->dock.value(t);
 	const bool generated = !dock;
 	if (generated) {
 		dock = new T(parent);
@@ -126,9 +127,9 @@ bool raiseDock(T*& dock, QStackedWidget* parent) {
 }
 
 template<class T>
-void raiseDockConnect(T*& dock, QStatusBar* statusBar, QStackedWidget* parent) {
-	if (raiseDock(dock, parent))
-		QObject::connect(dock, &T::info, [=](const QString& text) {
+void raiseDockConnect(MainWin* w, AspectType t, QStatusBar* statusBar, QStackedWidget* parent) {
+	if (raiseDock(w, t, parent))
+		QObject::connect(w->dock.value(t), &T::info, [=](const QString& text) {
 			statusBar->showMessage(text);
 		});
 }
@@ -209,8 +210,9 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	switch (type) {
 	case AspectType::Spreadsheet:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Spreadsheet"));
-		raiseDockConnect(m_mainWindow->spreadsheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
-		m_mainWindow->spreadsheetDock->setSpreadsheets(castList<Spreadsheet>(selectedAspects));
+		raiseDockConnect<Spreadsheet>(m_mainWindow, type, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		auto* dock = static_cast<SpreadsheetDock*>(m_mainWindow->dock.value(type));
+		dock->setSpreadsheets(castList<Spreadsheet>(selectedAspects));
 		break;
 	case AspectType::Column: {
 #ifdef HAVE_CANTOR_LIBS

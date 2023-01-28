@@ -206,6 +206,7 @@ Project::~Project() {
 	for (auto* w : children<Worksheet>(ChildIndexFlag::Recursive))
 		w->setIsClosing();
 
+	disconnect(this, nullptr, nullptr, nullptr); // Disconnect all
 	d->undo_stack.clear();
 	delete d;
 }
