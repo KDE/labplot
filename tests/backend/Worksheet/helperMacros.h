@@ -128,10 +128,10 @@
 	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());
 
 #define WORKSHEETELEMENT_KEYPRESS_RIGHT_NO_COORD_BINDING(element, dockSetElementsMethodName)                                                                   \
-	WORKSHEETELEMENT_KEYPRESS_NO_COORD_BINDING(element, dockSetElementsMethodName, Qt::Key_Right, 5, 0, 0.55, 0.5)
+	WORKSHEETELEMENT_KEYPRESS_NO_COORD_BINDING(element, dockSetElementsMethodName, Qt::Key_Right, 5., 0., 0.55, 0.5)
 
 #define WORKSHEETELEMENT_KEYPRESS_DOWN_NO_COORD_BINDING(element, dockSetElementsMethodName)                                                                    \
-	WORKSHEETELEMENT_KEYPRESS_NO_COORD_BINDING(element, dockSetElementsMethodName, Qt::Key_Down, 0, -5, 0.5, 0.45)
+	WORKSHEETELEMENT_KEYPRESS_NO_COORD_BINDING(element, dockSetElementsMethodName, Qt::Key_Down, 0., -5., 0.5, 0.45)
 
 #define WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, KeyType, xScene, yScene, xLogical, yLogical)                                             \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
@@ -161,16 +161,16 @@
 	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());
 
 #define WORKSHEETELEMENT_KEYPRESS_RIGHT(element, dockSetElementsMethodName)                                                                                    \
-	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Right, 5, 0, 0.55, 0.5)
+	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Right, 5., 0., 0.55, 0.5)
 
 #define WORKSHEETELEMENT_KEY_PRESSLEFT(element, dockSetElementsMethodName)                                                                                     \
-	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Left, -5, 0, 0.45, 0.5)
+	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Left, -5., 0., 0.45, 0.5)
 
 #define WORKSHEETELEMENT_KEYPRESS_UP(element, dockSetElementsMethodName)                                                                                       \
-	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Up, 0, 5, 0.5, 0.55)
+	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Up, 0., 5., 0.5, 0.55)
 
 #define WORKSHEETELEMENT_KEYPRESS_DOWN(element, dockSetElementsMethodName)                                                                                     \
-	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Down, 0, -5, 0.5, 0.45)
+	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, Qt::Key_Down, 0., -5., 0.5, 0.45)
 
 #define WORKSHEETELEMENT_KEYPRESS_UNDO(element, dockSetElementsMethodName, KeyType, xScene, yScene, xLogical, yLogical)                                        \
 	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, KeyType, xScene, yScene, xLogical, yLogical)                                                 \
@@ -181,10 +181,10 @@
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);
 
 #define WORKSHEETELEMENT_KEYPRESS_RIGHT_UNDO(element, dockSetElementsMethodName)                                                                               \
-	WORKSHEETELEMENT_KEYPRESS_UNDO(element, dockSetElementsMethodName, Qt::Key_Right, 5, 0, 0.55, 0.5)
+	WORKSHEETELEMENT_KEYPRESS_UNDO(element, dockSetElementsMethodName, Qt::Key_Right, 5., 0., 0.55, 0.5)
 
 #define WORKSHEETELEMENT_KEYPRESS_UP_UNDO(element, dockSetElementsMethodName)                                                                                  \
-	WORKSHEETELEMENT_KEYPRESS_UNDO(element, dockSetElementsMethodName, Qt::Key_Up, 0, 5, 0.5, 0.55)
+	WORKSHEETELEMENT_KEYPRESS_UNDO(element, dockSetElementsMethodName, Qt::Key_Up, 0., 5., 0.5, 0.55)
 
 // Switching between setCoordinateBindingEnabled true and false should not move the point
 #define WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING(element, dockSetElementsMethodName)                                                                       \
