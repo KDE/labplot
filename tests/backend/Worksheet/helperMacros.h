@@ -21,17 +21,17 @@
 	p->setRect(QRectF(0, 0, 100, 100));                                                                                                                        \
                                                                                                                                                                \
 	QCOMPARE(p->rangeCount(Dimension::X), 1);                                                                                                                  \
-	QCOMPARE(p->range(Dimension::X, 0).start(), 0);                                                                                                            \
-	QCOMPARE(p->range(Dimension::X, 0).end(), 1);                                                                                                              \
+	QCOMPARE(p->range(Dimension::X, 0).start(), 0.);                                                                                                           \
+	QCOMPARE(p->range(Dimension::X, 0).end(), 1.);                                                                                                             \
 	QCOMPARE(p->rangeCount(Dimension::Y), 1);                                                                                                                  \
-	QCOMPARE(p->range(Dimension::Y, 0).start(), 0);                                                                                                            \
-	QCOMPARE(p->range(Dimension::Y, 0).end(), 1);                                                                                                              \
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 0.);                                                                                                           \
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 1.);                                                                                                             \
                                                                                                                                                                \
 	/* For simplicity use even numbers */                                                                                                                      \
-	QCOMPARE(p->dataRect().x(), -50);                                                                                                                          \
-	QCOMPARE(p->dataRect().y(), -50);                                                                                                                          \
-	QCOMPARE(p->dataRect().width(), 100);                                                                                                                      \
-	QCOMPARE(p->dataRect().height(), 100);
+	QCOMPARE(p->dataRect().x(), -50.);                                                                                                                         \
+	QCOMPARE(p->dataRect().y(), -50.);                                                                                                                         \
+	QCOMPARE(p->dataRect().width(), 100.);                                                                                                                     \
+	QCOMPARE(p->dataRect().height(), 100.);
 
 #define WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, MACRO_NAME) void WorksheetElementType##MACRO_NAME()
 
@@ -74,10 +74,10 @@
 	QCOMPARE(element->positionLogical().y(), 0.5);                                                                                                             \
                                                                                                                                                                \
 	element->setPositionLogical(QPointF(1, 1));                                                                                                                \
-	QCOMPARE(element->positionLogical().x(), 1);                                                                                                               \
-	QCOMPARE(element->positionLogical().y(), 1);                                                                                                               \
-	QCOMPARE(element->position().point.x(), 50);                                                                                                               \
-	QCOMPARE(element->position().point.y(), 50);
+	QCOMPARE(element->positionLogical().x(), 1.);                                                                                                              \
+	QCOMPARE(element->positionLogical().y(), 1.);                                                                                                              \
+	QCOMPARE(element->position().point.x(), 50.);                                                                                                              \
+	QCOMPARE(element->position().point.y(), 50.);
 
 #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)                                                                                        \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
@@ -97,8 +97,8 @@
 	element->setPositionLogical(QPointF(0.3, 0.1));                                                                                                            \
 	QCOMPARE(element->positionLogical().x(), 0.3);                                                                                                             \
 	QCOMPARE(element->positionLogical().y(), 0.1);                                                                                                             \
-	QCOMPARE(element->position().point.x(), -20);                                                                                                              \
-	QCOMPARE(element->position().point.y(), -40);
+	QCOMPARE(element->position().point.x(), -20.);                                                                                                             \
+	QCOMPARE(element->position().point.y(), -40.);
 
 #define WORKSHEETELEMENT_KEYPRESS_NO_COORD_BINDING(element, dockSetElementsMethodName, KeyType, xScene, yScene, xLogical, yLogical)                            \
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      \
@@ -175,8 +175,8 @@
 #define WORKSHEETELEMENT_KEYPRESS_UNDO(element, dockSetElementsMethodName, KeyType, xScene, yScene, xLogical, yLogical)                                        \
 	WORKSHEETELEMENT_KEYPRESS(element, dockSetElementsMethodName, KeyType, xScene, yScene, xLogical, yLogical)                                                 \
 	element->undoStack()->undo();                                                                                                                              \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);
 
@@ -193,37 +193,37 @@
 	pp.point = QPointF(0, 0);                                                                                                                                  \
 	element->setPosition(pp);                                                                                                                                  \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
                                                                                                                                                                \
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
                                                                                                                                                                \
 	/* Set position to another than the origin */                                                                                                              \
 	element->setPositionLogical(QPointF(0.85, 0.7));                                                                                                           \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->position().point.x(), 35.);                                                                                                          \
+	VALUES_EQUAL(element->position().point.y(), 20.);                                                                                                          \
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);                                                                                                         \
                                                                                                                                                                \
 	element->setCoordinateBindingEnabled(false);                                                                                                               \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->position().point.x(), 35.);                                                                                                          \
+	VALUES_EQUAL(element->position().point.y(), 20.);                                                                                                          \
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);                                                                                                         \
                                                                                                                                                                \
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->position().point.x(), 35.);                                                                                                          \
+	VALUES_EQUAL(element->position().point.y(), 20.);                                                                                                          \
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);
 
@@ -233,30 +233,30 @@
 	pp.point = QPointF(0, 0);                                                                                                                                  \
 	element->setPosition(pp);                                                                                                                                  \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
                                                                                                                                                                \
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
                                                                                                                                                                \
 	/* Set position to another than the origin */                                                                                                              \
 	element->setPositionLogical(QPointF(0.85, 0.7));                                                                                                           \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->position().point.x(), 35.);                                                                                                          \
+	VALUES_EQUAL(element->position().point.y(), 20.);                                                                                                          \
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);                                                                                                         \
                                                                                                                                                                \
 	p->shiftLeftX();                                                                                                                                           \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 25); /* shift factor is 0.1 -> 1(current range)*0.1 = 0.1 = -10 in scene coords */                             \
-	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->position().point.x(), 25.); /* shift factor is 0.1 -> 1(current range)*0.1 = 0.1 = -10 in scene coords */                            \
+	VALUES_EQUAL(element->position().point.y(), 20.);                                                                                                          \
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);
 
@@ -266,30 +266,30 @@
 	pp.point = QPointF(0, 0);                                                                                                                                  \
 	element->setPosition(pp);                                                                                                                                  \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
                                                                                                                                                                \
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
                                                                                                                                                                \
 	/* Set position to another than the origin */                                                                                                              \
 	element->setPositionLogical(QPointF(0.85, 0.7));                                                                                                           \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->position().point.x(), 35.);                                                                                                          \
+	VALUES_EQUAL(element->position().point.y(), 20.);                                                                                                          \
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);                                                                                                         \
                                                                                                                                                                \
 	p->shiftUpY();                                                                                                                                             \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 30); /* shift factor is 0.1 -> 1(current range)*0.1 = 0.1 = +10 in scene coords (for UP) */                    \
+	VALUES_EQUAL(element->position().point.x(), 35.);                                                                                                          \
+	VALUES_EQUAL(element->position().point.y(), 30.); /* shift factor is 0.1 -> 1(current range)*0.1 = 0.1 = +10 in scene coords (for UP) */                   \
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);
 
@@ -299,15 +299,15 @@
 	pp.point = QPointF(0, 0);                                                                                                                                  \
 	element->setPosition(pp);                                                                                                                                  \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
                                                                                                                                                                \
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
                                                                                                                                                                \
@@ -315,15 +315,15 @@
 	element->setPositionLogical(QPointF(0.85, 0.7));                                                                                                           \
 	element->setCoordinateBindingEnabled(false);                                                                                                               \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->position().point.x(), 35.);                                                                                                          \
+	VALUES_EQUAL(element->position().point.y(), 20.);                                                                                                          \
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);                                                                                                         \
                                                                                                                                                                \
 	p->shiftLeftX();                                                                                                                                           \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->position().point.x(), 35.);                                                                                                          \
+	VALUES_EQUAL(element->position().point.y(), 20.);                                                                                                          \
 	VALUES_EQUAL(element->positionLogical().x(), 0.95); /* shift factor is 0.1 -> 1(current range)*0.1 = 0.1 */                                                \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);
 
@@ -333,15 +333,15 @@
 	pp.point = QPointF(0, 0);                                                                                                                                  \
 	element->setPosition(pp);                                                                                                                                  \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
                                                                                                                                                                \
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 0);                                                                                                            \
-	VALUES_EQUAL(element->position().point.y(), 0);                                                                                                            \
+	VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                           \
+	VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                           \
 	VALUES_EQUAL(element->positionLogical().x(), 0.5);                                                                                                         \
 	VALUES_EQUAL(element->positionLogical().y(), 0.5);                                                                                                         \
                                                                                                                                                                \
@@ -349,15 +349,15 @@
 	element->setPositionLogical(QPointF(0.85, 0.7));                                                                                                           \
 	element->setCoordinateBindingEnabled(false);                                                                                                               \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->position().point.x(), 35.);                                                                                                          \
+	VALUES_EQUAL(element->position().point.y(), 20.);                                                                                                          \
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.7);                                                                                                         \
                                                                                                                                                                \
 	p->shiftUpY();                                                                                                                                             \
                                                                                                                                                                \
-	VALUES_EQUAL(element->position().point.x(), 35);                                                                                                           \
-	VALUES_EQUAL(element->position().point.y(), 20);                                                                                                           \
+	VALUES_EQUAL(element->position().point.x(), 35.);                                                                                                          \
+	VALUES_EQUAL(element->position().point.y(), 20.);                                                                                                          \
 	VALUES_EQUAL(element->positionLogical().x(), 0.85);                                                                                                        \
 	VALUES_EQUAL(element->positionLogical().y(), 0.6); /* shift factor is 0.1 -> 1(current range)*0.1 = 0.1 */
 
