@@ -864,25 +864,31 @@ void ProjectExplorer::changeSelectedVisible() {
 	const auto& items = m_treeView->selectionModel()->selectedIndexes();
 
 	// determine all selected aspects
-	QVector<WorksheetElement*> worksheets;
+	QVector<WorksheetElement*> elements;
 	const auto columnCount = m_treeView->model()->columnCount();
 	for (int i = 0; i < items.size() / columnCount; ++i) {
 		const QModelIndex& index = items.at(i * columnCount);
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		auto* worksheet = dynamic_cast<WorksheetElement*>(aspect);
-		if (worksheet)
-			worksheets << worksheet;
+		auto* element = dynamic_cast<WorksheetElement*>(aspect);
+		if (element)
+			elements << element;
 	}
 
-	if (worksheets.isEmpty())
+	const int numberElements = elements.size();
+	if (numberElements == 0)
 		return;
 
 	// Use first element as reference
-	const bool newVisible = !worksheets.at(0)->isVisible();
+	auto* firstElement = elements.at(0);
+	const bool newVisible = !firstElement->isVisible();
 
-	for (auto* ws : worksheets) {
-		ws->setVisible(newVisible);
-	}
+	if (numberElements > 1) {
+		firstElement->beginMacro(i18n("%1 elements: set visible: %2").arg(numberElements, newVisible));
+		for (auto* e : elements)
+			e->setVisible(newVisible);
+		firstElement->endMacro();
+	} else
+		firstElement->setVisible(newVisible);
 }
 
 void ProjectExplorer::deleteSelected() {
