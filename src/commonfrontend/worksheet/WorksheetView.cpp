@@ -170,6 +170,9 @@ void WorksheetView::initActions() {
 	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18n("Fit to Selection"), fitActionGroup);
 	zoomFitSelectionAction->setCheckable(true);
 	zoomFitSelectionAction->setData((int)ZoomFit::FitToSelection);
+	zoomFitWholeAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-whole")), i18n("Fit to Match"), fitActionGroup);
+	zoomFitWholeAction->setCheckable(true);
+	zoomFitWholeAction->setData((int)ZoomFit::FitToWhole);
 
 	// Mouse mode actions
 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), mouseModeActionGroup);
@@ -502,6 +505,7 @@ void WorksheetView::initMenus() {
 	m_zoomMenu->addAction(zoomFitPageHeightAction);
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 	m_zoomMenu->addAction(zoomFitSelectionAction);
+	m_zoomMenu->addAction(zoomFitWholeAction);
 
 	m_magnificationMenu = new QMenu(i18n("Magnification"), this);
 	m_magnificationMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
@@ -1412,17 +1416,26 @@ void WorksheetView::updateFit() {
 	case ZoomFit::None:
 		break;
 	case ZoomFit::FitToWidth: {
-		float scaleFactor = viewport()->width() / scene()->sceneRect().width();
+		const float scaleFactor = viewport()->width() / scene()->sceneRect().width();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 		break;
 	}
 	case ZoomFit::FitToHeight: {
-		float scaleFactor = viewport()->height() / scene()->sceneRect().height();
+		const float scaleFactor = viewport()->height() / scene()->sceneRect().height();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 		break;
 	}
 	case ZoomFit::FitToSelection: {
 		fitInView(scene()->selectionArea().boundingRect(), Qt::KeepAspectRatio);
+		break;
+	}
+	case ZoomFit::FitToWhole: {
+		const float scaleFactorVertical = viewport()->height() / scene()->sceneRect().height();
+		const float scaleFactorHorizontal = viewport()->width() / scene()->sceneRect().width();
+		if (scaleFactorVertical * scene()->sceneRect().width() < viewport()->width())
+			setTransform(QTransform::fromScale(scaleFactorVertical, scaleFactorVertical));
+		else
+			setTransform(QTransform::fromScale(scaleFactorHorizontal, scaleFactorHorizontal));
 		break;
 	}
 	}
