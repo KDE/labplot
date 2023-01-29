@@ -47,15 +47,15 @@
 
 // Without Cartesian Plot as argument to the constructor
 // Because of that the logical positions are not available before calling at least
-// once updatePosition(). Because of this retransfor() will be done in this version
+// once updatePosition(). Because of this retransform() will be done in this version
 #define WORKSHEETELEMENT_TEST2(WorksheetElementType, MACRO_NAME, DockType, dockSetElementsMethodName)                                                          \
 	void WorksheetElementTest::WorksheetElementType##MACRO_NAME() {                                                                                            \
 		SETUP_PROJECT                                                                                                                                          \
                                                                                                                                                                \
 		auto* element = new WorksheetElementType(QStringLiteral("element"));                                                                                   \
 		p->addChild(element);                                                                                                                                  \
-		VALUES_EQUAL(element->position().point.x(), 0);                                                                                                        \
-		VALUES_EQUAL(element->position().point.y(), 0);                                                                                                        \
+		VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                        \
+		VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                        \
 		element->retransform(); /* Needed because otherwise logical position is not set */                                                                     \
 		auto* dock = new DockType(nullptr);                                                                                                                    \
 		MACRO_NAME(element, dockSetElementsMethodName);                                                                                                        \
