@@ -49,6 +49,9 @@ public:
 		double opacity;
 	};
 
+	enum class ZoomFit { None, FitToHeight, FitToWidth, FitToSelection };
+	Q_ENUM(ZoomFit);
+
 	enum class MouseMode { Selection, Navigation, ZoomSelection };
 
 	void setScene(QGraphicsScene*);
@@ -125,6 +128,7 @@ private:
 	bool m_menusInitialized{false};
 	int m_numScheduledScalings{0};
 	bool m_suppressMouseModeChange{false};
+	ZoomFit m_zoomFit{ZoomFit::None};
 
 	// Menus
 	QMenu* m_addNewMenu{nullptr};
@@ -158,6 +162,7 @@ private:
 	QAction* zoomInViewAction{nullptr};
 	QAction* zoomOutViewAction{nullptr};
 	QAction* zoomOriginAction{nullptr};
+	QAction* zoomFitNoneAction{nullptr};
 	QAction* zoomFitPageHeightAction{nullptr};
 	QAction* zoomFitPageWidthAction{nullptr};
 	QAction* zoomFitSelectionAction{nullptr};
@@ -286,6 +291,8 @@ private Q_SLOTS:
 	void mouseModeChanged(QAction*);
 	void useViewSizeChanged(bool);
 	void changeZoom(QAction*);
+	void fitChanged(QAction*);
+	void updateFit();
 	void magnificationChanged(QAction*);
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);

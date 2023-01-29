@@ -155,9 +155,21 @@ void WorksheetView::initActions() {
 	zoomActionGroup->addAction(zoomOutViewAction);
 	zoomActionGroup->addAction(zoomOriginAction);
 
-	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18n("Fit to Height"), zoomActionGroup);
-	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18n("Fit to Width"), zoomActionGroup);
-	zoomFitSelectionAction = new QAction(i18n("Fit to Selection"), zoomActionGroup);
+	auto* fitActionGroup = new QActionGroup(zoomActionGroup);
+	fitActionGroup->setExclusive(true);
+	zoomFitNoneAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18n("No fit"), fitActionGroup);
+	zoomFitNoneAction->setCheckable(true);
+	zoomFitNoneAction->setChecked(true);
+	zoomFitNoneAction->setData((int)ZoomFit::None);
+	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18n("Fit to Height"), fitActionGroup);
+	zoomFitPageHeightAction->setCheckable(true);
+	zoomFitPageHeightAction->setData((int)ZoomFit::FitToHeight);
+	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18n("Fit to Width"), fitActionGroup);
+	zoomFitPageWidthAction->setCheckable(true);
+	zoomFitPageWidthAction->setData((int)ZoomFit::FitToWidth);
+	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18n("Fit to Selection"), fitActionGroup);
+	zoomFitSelectionAction->setCheckable(true);
+	zoomFitSelectionAction->setData((int)ZoomFit::FitToSelection);
 
 	// Mouse mode actions
 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), mouseModeActionGroup);
@@ -250,6 +262,7 @@ void WorksheetView::initActions() {
 
 	connect(addNewActionGroup, &QActionGroup::triggered, this, &WorksheetView::addNew);
 	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::mouseModeChanged);
+	connect(fitActionGroup, &QActionGroup::triggered, this, &WorksheetView::fitChanged);
 	connect(zoomActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoom);
 	connect(magnificationActionGroup, &QActionGroup::triggered, this, &WorksheetView::magnificationChanged);
 	connect(layoutActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeLayout);
@@ -485,6 +498,7 @@ void WorksheetView::initMenus() {
 	m_zoomMenu->addAction(zoomInViewAction);
 	m_zoomMenu->addAction(zoomOutViewAction);
 	m_zoomMenu->addAction(zoomOriginAction);
+	m_zoomMenu->addAction(zoomFitNoneAction);
 	m_zoomMenu->addAction(zoomFitPageHeightAction);
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 	m_zoomMenu->addAction(zoomFitSelectionAction);
@@ -1052,6 +1066,8 @@ void WorksheetView::resizeEvent(QResizeEvent* event) {
 
 	if (m_worksheet->useViewSize())
 		this->processResize();
+	else
+		updateFit();
 
 	QGraphicsView::resizeEvent(event);
 }
@@ -1370,6 +1386,7 @@ void WorksheetView::processResize() {
 }
 
 void WorksheetView::changeZoom(QAction* action) {
+	zoomFitNoneAction->triggered(true);
 	if (action == zoomInViewAction)
 		zoom(1);
 	else if (action == zoomOutViewAction)
@@ -1378,20 +1395,40 @@ void WorksheetView::changeZoom(QAction* action) {
 		static const float hscale = QApplication::desktop()->physicalDpiX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		static const float vscale = QApplication::desktop()->physicalDpiY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
-	} else if (action == zoomFitPageWidthAction) {
-		float scaleFactor = viewport()->width() / scene()->sceneRect().width();
-		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-	} else if (action == zoomFitPageHeightAction) {
-		float scaleFactor = viewport()->height() / scene()->sceneRect().height();
-		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-	} else if (action == zoomFitSelectionAction)
-		fitInView(scene()->selectionArea().boundingRect(), Qt::KeepAspectRatio);
+		zoomFitNoneAction->setChecked(true);
+	}
 
 	currentZoomAction = action;
 	if (tbZoom)
 		tbZoom->setDefaultAction(action);
 
 	updateLabelsZoom();
+}
+
+void WorksheetView::updateFit() {
+	switch (m_zoomFit) {
+	case ZoomFit::None:
+		break;
+	case ZoomFit::FitToWidth: {
+		float scaleFactor = viewport()->width() / scene()->sceneRect().width();
+		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+		break;
+	}
+	case ZoomFit::FitToHeight: {
+		float scaleFactor = viewport()->height() / scene()->sceneRect().height();
+		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+		break;
+	}
+	case ZoomFit::FitToSelection: {
+		fitInView(scene()->selectionArea().boundingRect(), Qt::KeepAspectRatio);
+		break;
+	}
+	}
+}
+
+void WorksheetView::fitChanged(QAction* action) {
+	m_zoomFit = static_cast<ZoomFit>(action->data().toInt());
+	updateFit();
 }
 
 double WorksheetView::zoomFactor() const {
