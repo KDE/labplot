@@ -65,7 +65,7 @@ public:
 	QLocale locale{QLocale::C};
 	bool autoModeEnabled{true};
 	bool headerEnabled{true}; // read header from file
-	int headerLine{0}; // 0: no header line
+	int headerLine{0}; // line to read header from. 0: no header line
 	bool skipEmptyParts{false};
 	bool simplifyWhitespacesEnabled{false};
 	double nanValue{qQNaN()};

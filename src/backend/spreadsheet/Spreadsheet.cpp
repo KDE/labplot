@@ -965,7 +965,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		Column* column = this->child<Column>(columnOffset + n);
-		DEBUG(" column " << n << " columnMode = " << static_cast<int>(columnMode[n]));
+		DEBUG(" column " << n << " columnMode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode[n]));
 		column->setColumnModeFast(columnMode[n]);
 
 		// in most cases the first imported column is meant to be used as x-data.

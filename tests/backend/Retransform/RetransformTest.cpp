@@ -873,6 +873,7 @@ void RetransformTest::TestImportCSV() {
 	file.close();
 
 	AsciiFilter filter;
+	filter.setHeaderLine(1);
 	filter.readDataFromFile(file.fileName(), spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet->rowCount(), 3);
