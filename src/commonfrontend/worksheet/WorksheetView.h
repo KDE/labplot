@@ -50,7 +50,6 @@ public:
 	};
 
 	enum class ZoomFit { None, FitToHeight, FitToWidth, FitToSelection };
-	Q_ENUM(ZoomFit);
 
 	enum class MouseMode { Selection, Navigation, ZoomSelection };
 

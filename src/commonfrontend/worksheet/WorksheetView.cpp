@@ -1074,6 +1074,8 @@ void WorksheetView::resizeEvent(QResizeEvent* event) {
 
 void WorksheetView::wheelEvent(QWheelEvent* event) {
 	if (isInteractive() && (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier))) {
+		zoomFitNoneAction->setChecked(true);
+		m_zoomFit = ZoomFit::None;
 		// https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 		QPoint numDegrees = event->angleDelta() / 8;
 		int numSteps = numDegrees.y() / 15; // see QWheelEvent documentation
@@ -1386,7 +1388,8 @@ void WorksheetView::processResize() {
 }
 
 void WorksheetView::changeZoom(QAction* action) {
-	zoomFitNoneAction->triggered(true);
+	zoomFitNoneAction->setChecked(true);
+	m_zoomFit = ZoomFit::None;
 	if (action == zoomInViewAction)
 		zoom(1);
 	else if (action == zoomOutViewAction)
@@ -1395,7 +1398,6 @@ void WorksheetView::changeZoom(QAction* action) {
 		static const float hscale = QApplication::desktop()->physicalDpiX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		static const float vscale = QApplication::desktop()->physicalDpiY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
-		zoomFitNoneAction->setChecked(true);
 	}
 
 	currentZoomAction = action;
