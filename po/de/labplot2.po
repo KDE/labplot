@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2023-01-04 10:27+0100\n"
+"PO-Revision-Date: 2023-01-26 21:54+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-doc@kde.org>\n"
 "Language: de\n"
@@ -522,7 +522,7 @@ msgstr "Typ: %1"
 #: src/backend/core/AspectTreeModel.cpp:223
 #, kde-format
 msgid "Plot Designation: %1"
-msgstr "Diagrammzuordnung: %1"
+msgstr "Plotzuordnung: %1"
 
 #: src/backend/core/AspectTreeModel.cpp:368
 #, kde-format
@@ -596,7 +596,7 @@ msgstr "%1: Zellenwerte ändern"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2554
 #, kde-format
 msgid "%1: set plot designation"
-msgstr "%1: Diagrammzuordnung festlegen"
+msgstr "%1: Plotzuordnung festlegen"
 
 #: src/backend/core/column/columncommands.cpp:541
 #, kde-format
@@ -788,7 +788,7 @@ msgstr "Unbekanntes Arbeitsbuch-Element „%1“"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:71
 #, kde-format
 msgid "Plot"
-msgstr "Diagramm"
+msgstr "Plot"
 
 #: src/backend/datapicker/Datapicker.cpp:136
 #, kde-format
@@ -2066,7 +2066,7 @@ msgstr "Der folgende Fehler ist aufgetreten: %1."
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1053
 #, kde-format
 msgid "Plot%1"
-msgstr "Diagramm %1"
+msgstr "Plot %1"
 
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1199
 #, kde-format
@@ -6672,7 +6672,7 @@ msgstr "Histogramm"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:218
 #, kde-format
 msgid "Box Plot"
-msgstr "Box-Diagramm"
+msgstr "Box-Plot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:342
 #, kde-format
@@ -7237,7 +7237,7 @@ msgstr "x=%1"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5701
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
-msgstr "Unbekanntes Element  „%1“ für ein kartesisches Diagramm"
+msgstr "Unbekanntes Element  „%1“ für ein kartesischen Plot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:215
 #, kde-format
@@ -8191,7 +8191,7 @@ msgstr "%1: Zuschnitt umschalten"
 #: src/backend/worksheet/plots/PlotArea.cpp:202
 #, kde-format
 msgid "%1: set plot area opacity"
-msgstr "%1: Deckkraft des Diagrammbereichs festlegen"
+msgstr "%1: Deckkraft des Plotbereichs festlegen"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:210
 #, kde-format
@@ -8201,17 +8201,17 @@ msgstr "%1: Randtyp geändert"
 #: src/backend/worksheet/plots/PlotArea.cpp:217
 #, kde-format
 msgid "%1: set plot area border"
-msgstr "%1: Rahmen des Diagrammbereichs festlegen"
+msgstr "%1: Rahmen des Plotbereichs festlegen"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:224
 #, kde-format
 msgid "%1: set plot area corner radius"
-msgstr "%1: Eckenradius des Diagrammbereichs festlegen"
+msgstr "%1: Eckenradius des Plotbereichs festlegen"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:231
 #, kde-format
 msgid "%1: set plot area border opacity"
-msgstr "%1: Deckkraft des Rahmens im Diagrammbereichs festlegen"
+msgstr "%1: Deckkraft des Rahmens im Plotbereichs festlegen"
 
 #: src/backend/worksheet/TextLabel.cpp:294
 #: src/backend/worksheet/TextLabel.cpp:296
@@ -9600,7 +9600,7 @@ msgstr "Präsentationsmodus"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:253
 #, kde-format
 msgid "Non-interactive Plots"
-msgstr "nicht interaktive Diagramme"
+msgstr "nicht interaktive Plots"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:254
 #, kde-format
@@ -9608,29 +9608,29 @@ msgid ""
 "If activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
-"Wenn aktiv, reagieren Diagramme im Arbeitsblatt nicht auf Mausradereignisse."
+"Wenn aktiv, reagieren Plots im Arbeitsblatt nicht auf Mausradereignisse."
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:262
 #: src/commonfrontend/worksheet/WorksheetView.cpp:276
 #, kde-format
 msgid "Selected Plots"
-msgstr "Ausgewählte Diagramme"
+msgstr "Ausgewählte Plots"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:264
 #: src/commonfrontend/worksheet/WorksheetView.cpp:278
 #, kde-format
 msgid "All Plots"
-msgstr "Alle Diagramme"
+msgstr "Alle Plots"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:266
 #, kde-format
 msgid "All Plots X"
-msgstr "Alle X-Diagramme"
+msgstr "Alle X-Plots"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:268
 #, kde-format
 msgid "All Plots Y"
-msgstr "Alle Y-Diagramme"
+msgstr "Alle Y-Plots"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:290
 #, kde-format
@@ -9690,7 +9690,7 @@ msgstr "Hilbert Transformation"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1419
 #, kde-format
 msgid "xy-plot"
-msgstr "XY-Diagramm"
+msgstr "XY-Plot"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:449
 #, kde-format
@@ -9718,7 +9718,7 @@ msgstr "Gitter"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:489
 #, kde-format
 msgid "Cartesian Plot"
-msgstr "Kartesisches Diagramm"
+msgstr "Kartesischer Plot"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:561
 #, kde-format
@@ -9757,7 +9757,7 @@ msgstr "%1: Ausgewählte Arbeitsblattelemente entfernen"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2518
 #, kde-format
 msgid "%1: Add curve to %2 plots"
-msgstr "%1: Kurve zu %2 Diagrammen hinzufügen"
+msgstr "%1: Kurve zu %2 Plots hinzufügen"
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -11921,7 +11921,7 @@ msgstr "Oben:"
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:2503
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
-msgstr "%1 kartesische Diagramme: Die Vorlage \"%2\" wurde geladen"
+msgstr "%1 kartesischer Plot: Die Vorlage \"%2\" wurde geladen"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:336
 #, kde-format
@@ -11954,8 +11954,7 @@ msgstr "Zentriert"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:1099
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
-msgstr ""
-"%1 Legenden für kartesische Diagramme: Die Vorlage \"%2\" wurde geladen"
+msgstr "%1 Legenden für kartesische Plots: Die Vorlage \"%2\" wurde geladen"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:40
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:67
@@ -12904,7 +12903,7 @@ msgstr "Arbeitsblatt"
 #, kde-format
 msgctxt "@title:window"
 msgid "Cartesian Plot"
-msgstr "Kartesisches Diagramm"
+msgstr "Kartesischer Plot"
 
 #: src/kdefrontend/GuiObserver.cpp:247
 #, kde-format
@@ -13006,7 +13005,7 @@ msgstr "Histogramm-Eigenschaften"
 #, kde-format
 msgctxt "@title:window"
 msgid "Box Plot"
-msgstr "Box-Diagramm"
+msgstr "Box-Plot"
 
 #: src/kdefrontend/GuiObserver.cpp:342
 #, kde-format
@@ -13614,7 +13613,7 @@ msgstr "Notebook"
 #: src/kdefrontend/labplot2ui.rc:36
 #, kde-format
 msgid "CartesianPlot"
-msgstr "Kartesisches Diagramm"
+msgstr "Kartesischer Plot"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:40
@@ -13734,8 +13733,7 @@ msgstr "Arbeitsbuch"
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
-"Erzeugt ein neues Arbeitsbuch zum Sammeln von Tabellen, Matrizen und "
-"Diagrammen"
+"Erzeugt ein neues Arbeitsbuch zum Sammeln von Tabellen, Matrizen und Plots"
 
 #: src/kdefrontend/MainWin.cpp:525
 #, kde-format
@@ -14871,7 +14869,7 @@ msgstr "Ausgewählte Daten grafisch darstellen"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:74
 #, kde-format
 msgid "&Plot"
-msgstr "&Diagramm"
+msgstr "&Plot"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:268
 #, kde-format
@@ -14886,7 +14884,7 @@ msgstr "Kurve hinzufügen zu"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:319
 #, kde-format
 msgid "Box Plot Data"
-msgstr "Box-Diagrammdaten"
+msgstr "Box-Plotdaten"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:340
 #, kde-format
@@ -14896,7 +14894,7 @@ msgstr "Histogramm hinzufügen zu"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:342
 #, kde-format
 msgid "Add Box Plot to"
-msgstr "Box-Diagramm hinzufügen zu"
+msgstr "Box-Plot hinzufügen zu"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:347
 #, kde-format
@@ -14906,12 +14904,12 @@ msgstr "Histogramm Plazierung"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:348
 #, kde-format
 msgid "All histograms in one plot"
-msgstr "Alle Histogramme in einem Diagramm"
+msgstr "Alle Histogramme in einen Plot"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:349
 #, kde-format
 msgid "One plot per histogram"
-msgstr "Ein Diagramm pro Histogramm"
+msgstr "Ein Plot pro Histogramm"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:350
 #, kde-format
@@ -14921,29 +14919,29 @@ msgstr "Histogramm hinzufügen zu"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:352
 #, kde-format
 msgid "Box Plot Placement"
-msgstr "Box-Diagrammplatzierung"
+msgstr "Box-Plotplatzierung"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:353
 #, kde-format
 msgid "All box plots in one plot"
-msgstr "Alle Box-Diagramme in einem Diagramm"
+msgstr "Alle Box-Plots in einen Plot"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:354
 #, kde-format
 msgid "One plot per box plot"
-msgstr "Ein Diagramm pro Box-Diagramm"
+msgstr "Ein Plot pro Box-Plot"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:355
 #, kde-format
 msgid "Add Box Plots to"
-msgstr "Box-Diagramm hinzufügen zu"
+msgstr "Box-Plot hinzufügen zu"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:388
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:399
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:426
 #, kde-format
 msgid "Plot - %1"
-msgstr "Diagramm - %1"
+msgstr "Plot - %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:395
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:421
@@ -14961,7 +14959,7 @@ msgstr "Daten grafisch darstellen von %1"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:570
 #, kde-format
 msgid "Plot %1"
-msgstr "Diagramm %1"
+msgstr "Plot %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:644
 #, kde-format
@@ -14971,22 +14969,22 @@ msgstr "Fourier-Filter von '%1'"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:855
 #, kde-format
 msgid "new plot in an existing worksheet"
-msgstr "Neues Diagramm in existierenden Arbeitsblatt"
+msgstr "Neuer Plot in existierenden Arbeitsblatt"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:856
 #, kde-format
 msgid "new plot in a new worksheet"
-msgstr "Neues Diagramm in neuem Arbeitsblatt"
+msgstr "Neuer Plot in neuem Arbeitsblatt"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:861
 #, kde-format
 msgid "new plots in an existing worksheet"
-msgstr "Neue Diagramme in existierendem Arbeitsblatt"
+msgstr "Neue Plots in existierendem Arbeitsblatt"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:862
 #, kde-format
 msgid "new plots in a new worksheet"
-msgstr "Neue Diagramme in neuem Arbeitsblatt"
+msgstr "Neue Plots in neuem Arbeitsblatt"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:886
 #, kde-format
@@ -14996,7 +14994,7 @@ msgstr "Kein Datensatz zum darstellen ausgewählt."
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:891
 #, kde-format
 msgid "An already existing plot has to be selected."
-msgstr "Ein existierendes Diagramm muss ausgewählt sein."
+msgstr "Ein existierender Plot muss ausgewählt sein."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:896
 #, kde-format
@@ -15006,7 +15004,7 @@ msgstr "Ein existierendes Arbeitsblatt muss ausgewählt sein."
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:902
 #, kde-format
 msgid "Close the dialog and plot the data."
-msgstr "Schließt den Dialog und zeigt die Daten im Diagramm an."
+msgstr "Schließt den Dialog und zeigt die Daten im Plot an."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:40
 #, kde-format
@@ -15206,12 +15204,12 @@ msgstr "Überblick"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:216
 #, kde-format
 msgid "KDE Plot"
-msgstr "KDE-Diagramm"
+msgstr "KDE-Plot"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:217
 #, kde-format
 msgid "Normal Q-Q Plot"
-msgstr "Normale Q-Q-Diagramm"
+msgstr "Normale Q-Q-Plot"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:319
@@ -17801,7 +17799,7 @@ msgstr "X-Bereich:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:970
 #, kde-format
 msgid "Plot Area"
-msgstr "Diagrammbereich"
+msgstr "Plotbereich"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontalRight)
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
@@ -17972,7 +17970,7 @@ msgstr "Datum und Zeit:"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:136
 #, kde-format
 msgid "Plot designation:"
-msgstr "Diagrammzuordnung:"
+msgstr "Plotzuordnung:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabels)
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:162
@@ -18601,7 +18599,7 @@ msgstr "Y-Fehler"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1248
 #, kde-format
 msgid "Rug Plot"
-msgstr "Rug-Diagramm"
+msgstr "Rug-Plot"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
@@ -19801,7 +19799,7 @@ msgstr "Spaltentyp anzeigen"
 #: src/kdefrontend/ui/settingsspreadsheetpage.ui:37
 #, kde-format
 msgid "Show plot designation"
-msgstr "Diagrammzuordnung zeigen"
+msgstr "Plotzuordnung zeigen"
 
 #. i18n: ectx: property (text), widget (QPushButton, bResetLayout)
 #: src/kdefrontend/ui/settingswelcomepage.ui:17
@@ -19989,7 +19987,7 @@ msgstr "Kurvenplatzierung"
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
 #, kde-format
 msgid "&All curves in one plot"
-msgstr "Alle Kurven in einem Diagramm"
+msgstr "Alle Kurven in einen Plot"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
@@ -20007,19 +20005,19 @@ msgstr "Kurven hinzufügen zu"
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
 #, kde-format
 msgid "E&xisting plot"
-msgstr "E&xistierendes Diagramm"
+msgstr "E&xistierender Plot"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:196
 #, kde-format
 msgid "&New plot in an existing worksheet"
-msgstr "&Neues Diagramm in existierendem Arbeitsblatt"
+msgstr "&Neuer Plot in existierendem Arbeitsblatt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement3)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:203
 #, kde-format
 msgid "New plot in a new wor&ksheet"
-msgstr "Neues Diagramm in neuem Arbeitsblatt"
+msgstr "Neuer Plot in neuem Arbeitsblatt"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateDataCurve)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:226
@@ -20440,8 +20438,7 @@ msgstr "Schlüsselwort entfernen"
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
 "plot"
-msgstr ""
-"Logische anstatt absolute Koordinaten für die Position im Diagramm angeben"
+msgstr "Logische anstatt absolute Koordinaten für die Position im Plot angeben"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:80
 #, kde-format
