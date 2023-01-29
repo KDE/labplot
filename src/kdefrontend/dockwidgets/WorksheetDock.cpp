@@ -219,7 +219,7 @@ void WorksheetDock::updateUnits() {
 */
 void WorksheetDock::updatePaperSize() {
 	if (m_worksheet->useViewSize()) {
-		ui.cbSizeType->setCurrentIndex(0);
+		ui.cbSizeType->setCurrentIndex(ui.cbSizeType->findData((int)SizeType::ViewSize));
 		return;
 	}
 
@@ -258,7 +258,9 @@ void WorksheetDock::updatePaperSize() {
 	}
 
 	if (!found)
-		ui.cbSizeType->setCurrentIndex(2); // select "Custom"
+		ui.cbSizeType->setCurrentIndex(ui.cbSizeType->findData((int)SizeType::Custom));
+	else
+		ui.cbSizeType->setCurrentIndex(ui.cbSizeType->findData((int)SizeType::StandardPage));
 }
 
 //*************************************************************
@@ -288,9 +290,9 @@ void WorksheetDock::retranslateUi() {
 	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
 
 	ui.cbSizeType->clear();
-	ui.cbSizeType->addItem(i18n("View Size"));
-	ui.cbSizeType->addItem(i18n("Standard Page"));
-	ui.cbSizeType->addItem(i18n("Custom"));
+	ui.cbSizeType->addItem(i18n("View Size"), (int)SizeType::ViewSize);
+	ui.cbSizeType->addItem(i18n("Standard Page"), (int)SizeType::StandardPage);
+	ui.cbSizeType->addItem(i18n("Custom"), (int)SizeType::Custom);
 
 	const QVector<QPageSize::PageSizeId> pageSizeIds = {
 		QPageSize::A0,	  QPageSize::A1,	 QPageSize::A2,	   QPageSize::A3,	  QPageSize::A4,	  QPageSize::A5,	 QPageSize::A6,	 QPageSize::A7,
@@ -311,27 +313,33 @@ void WorksheetDock::scaleContentChanged(bool scaled) {
 }
 
 void WorksheetDock::sizeTypeChanged(int index) {
-	if (index == 0) { // view size
+	const auto sizeType = static_cast<SizeType>(ui.cbSizeType->itemData(index).toInt());
+
+	switch (sizeType) {
+	case SizeType::ViewSize:
 		ui.lPage->hide();
 		ui.cbPage->hide();
 		ui.lOrientation->hide();
 		ui.cbOrientation->hide();
 		ui.sbWidth->setEnabled(false);
 		ui.sbHeight->setEnabled(false);
-	} else if (index == 1) { // standard page
+		break;
+	case SizeType::StandardPage:
 		ui.lPage->show();
 		ui.cbPage->show();
 		ui.lOrientation->show();
 		ui.cbOrientation->show();
 		ui.sbWidth->setEnabled(false);
 		ui.sbHeight->setEnabled(false);
-	} else { // custom size
+		break;
+	case SizeType::Custom:
 		ui.lPage->hide();
 		ui.cbPage->hide();
 		ui.lOrientation->hide();
 		ui.cbOrientation->hide();
 		ui.sbWidth->setEnabled(true);
 		ui.sbHeight->setEnabled(true);
+		break;
 	}
 
 	if (m_initializing) // don't lock here since we potentially need to call setters in pageChanged() below
