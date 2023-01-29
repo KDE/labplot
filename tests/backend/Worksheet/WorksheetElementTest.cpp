@@ -86,7 +86,7 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.45);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.55);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1, 0.55, 0);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1., 0.55, 0.);
 
 	// Simulate mouse move
 	referenceRange->d_ptr->setPos(QPointF(25, -10)); // item change will be called (negative value is up)
@@ -95,7 +95,7 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.7);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.8);
 
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0.7, 1, 0.8, 0);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0.7, 1., 0.8, 0.);
 
 	// Set Logical Start
 	referenceRange->setPositionLogicalStart(QPointF(0.1, 0.5));
@@ -104,7 +104,7 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.1);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.8);
 
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0.1, 1, 0.8, 0);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0.1, 1., 0.8, 0.);
 
 	// Set Logical End
 	referenceRange->setPositionLogicalEnd(QPointF(0.3, 0.5));
@@ -113,7 +113,7 @@ void WorksheetElementTest::referenceRangeXMouseMove() {
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.1);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.3);
 
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0.1, 1, 0.3, 0);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0.1, 1., 0.3, 0.);
 }
 
 void WorksheetElementTest::referenceRangeYMouseMove() {
@@ -132,7 +132,7 @@ void WorksheetElementTest::referenceRangeYMouseMove() {
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.55, 1, 0.45);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
 
 	// Simulate mouse move
 	referenceRange->d_ptr->setPos(QPointF(-10, -25)); // item change will be called (negative value is up)
@@ -140,7 +140,7 @@ void WorksheetElementTest::referenceRangeYMouseMove() {
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only vertical considered
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.7);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.8);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.8, 1, 0.7);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.8, 1., 0.7);
 
 	// Set Logical Start
 	referenceRange->setPositionLogicalStart(QPointF(0.5, 0.1));
@@ -148,14 +148,14 @@ void WorksheetElementTest::referenceRangeYMouseMove() {
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.1);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.8);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.8, 1, 0.1);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.8, 1., 0.1);
 	// Set Logical End
 	referenceRange->setPositionLogicalEnd(QPointF(0.5, 0.3));
 	QCOMPARE(referenceRange->positionLogical().y(), 0.2); // (0.3 + 0.1)/2
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.1);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.3);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.3, 1, 0.1);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.3, 1., 0.1);
 }
 
 void WorksheetElementTest::referenceRangeXClippingLeftMouse() {
@@ -174,7 +174,7 @@ void WorksheetElementTest::referenceRangeXClippingLeftMouse() {
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.45);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.55);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1, 0.55, 0);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1., 0.55, 0.);
 
 	// Simulate mouse move
 	referenceRange->d_ptr->setPos(QPointF(-50, -10)); // item change will be called (negative value is up)
@@ -182,7 +182,7 @@ void WorksheetElementTest::referenceRangeXClippingLeftMouse() {
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5); // Only horizontal considered
 	QCOMPARE(referenceRange->positionLogicalStart().x(), -0.05);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.05);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 1, 0.05, 0);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 1., 0.05, 0.);
 }
 
 void WorksheetElementTest::referenceRangeXClippingLeftSetStart() {
@@ -201,15 +201,15 @@ void WorksheetElementTest::referenceRangeXClippingLeftSetStart() {
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.45);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.55);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1, 0.55, 0);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1., 0.55, 0.);
 
 	referenceRange->setPositionLogicalStart(QPointF(-5, 0.5));
 	QCOMPARE(referenceRange->positionLogical().x(), -2.225); // (-5+0.55)/2
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5); // Only horizontal considered
-	QCOMPARE(referenceRange->positionLogicalStart().x(), -5);
+	QCOMPARE(referenceRange->positionLogicalStart().x(), -5.);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.55);
 
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 1, 0.55, 0);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 1., 0.55, 0.);
 }
 
 void WorksheetElementTest::referenceRangeXClippingRightSetEnd() {
@@ -229,16 +229,16 @@ void WorksheetElementTest::referenceRangeXClippingRightSetEnd() {
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.45);
 	QCOMPARE(referenceRange->positionLogicalEnd().x(), 0.55);
 
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1, 0.55, 0);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1., 0.55, 0.);
 
 	// Simulate mouse move
 	referenceRange->setPositionLogicalEnd(QPointF(+5, 0.5));
 	QCOMPARE(referenceRange->positionLogical().x(), 2.725); // (5+0.45)/2
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5); // Only horizontal considered
 	QCOMPARE(referenceRange->positionLogicalStart().x(), 0.45);
-	QCOMPARE(referenceRange->positionLogicalEnd().x(), 5);
+	QCOMPARE(referenceRange->positionLogicalEnd().x(), 5.);
 
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1, 1, 0); // Xend is clipped
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0.45, 1., 1., 0.); // Xend is clipped
 }
 
 void WorksheetElementTest::referenceRangeYClippingBottomSetEnd() {
@@ -257,16 +257,16 @@ void WorksheetElementTest::referenceRangeYClippingBottomSetEnd() {
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.55, 1, 0.45);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
 
 	// Simulate mouse move
-	referenceRange->setPositionLogicalStart(QPointF(0.5, -5));
+	referenceRange->setPositionLogicalStart(QPointF(0.5, -5.));
 	QCOMPARE(referenceRange->positionLogical().y(), -2.225); // (-5+0.45)/2
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only horizontal considered
-	QCOMPARE(referenceRange->positionLogicalStart().y(), -5);
+	QCOMPARE(referenceRange->positionLogicalStart().y(), -5.);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
 
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.55, 1, 0);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.);
 }
 
 void WorksheetElementTest::referenceRangeYClippingTopSetEnd() {
@@ -285,16 +285,16 @@ void WorksheetElementTest::referenceRangeYClippingTopSetEnd() {
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.55, 1, 0.45);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
 
 	// Simulate mouse move
-	referenceRange->setPositionLogicalEnd(QPointF(0.5, 5));
+	referenceRange->setPositionLogicalEnd(QPointF(0.5, 5.));
 	QCOMPARE(referenceRange->positionLogical().y(), 2.725); // (5+0.45)/2
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only horizontal considered
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
-	QCOMPARE(referenceRange->positionLogicalEnd().y(), 5);
+	QCOMPARE(referenceRange->positionLogicalEnd().y(), 5.);
 
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 1, 1, 0.45);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 1., 1., 0.45);
 }
 
 void WorksheetElementTest::referenceRangeYKeyPressUp() {
@@ -313,7 +313,7 @@ void WorksheetElementTest::referenceRangeYKeyPressUp() {
 	QCOMPARE(referenceRange->positionLogical().y(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.55, 1, 0.45);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
 
 	// Simulate mouse move
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
@@ -322,14 +322,14 @@ void WorksheetElementTest::referenceRangeYKeyPressUp() {
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only vertical considered
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.5);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.6);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.6, 1, 0.5);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.6, 1., 0.5);
 
 	referenceRange->d_ptr->keyPressEvent(&event); // go up 5 in scene coordinates
 	QCOMPARE(referenceRange->positionLogical().y(), 0.6); // 5/50 * 0.5 + 0.5
 	QCOMPARE(referenceRange->positionLogical().x(), 0.5); // Only vertical considered
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.55);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.65);
-	CHECK_REFERENCERANGE_RECT(referenceRange, 0, 0.65, 1, 0.55);
+	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.65, 1., 0.55);
 }
 
 // TODO: create test with reference range with nonlinear ranges!

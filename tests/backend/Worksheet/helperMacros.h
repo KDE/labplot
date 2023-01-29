@@ -54,8 +54,8 @@
                                                                                                                                                                \
 		auto* element = new WorksheetElementType(QStringLiteral("element"));                                                                                   \
 		p->addChild(element);                                                                                                                                  \
-		VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                        \
-		VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                        \
+		VALUES_EQUAL(element->position().point.x(), 0.);                                                                                                       \
+		VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                       \
 		element->retransform(); /* Needed because otherwise logical position is not set */                                                                     \
 		auto* dock = new DockType(nullptr);                                                                                                                    \
 		MACRO_NAME(element, dockSetElementsMethodName);                                                                                                        \
