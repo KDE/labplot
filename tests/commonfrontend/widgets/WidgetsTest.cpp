@@ -862,7 +862,7 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", 5));
 }
-/*
+
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 	NumberSpinBox sb(5.11);
 	sb.setFeedback(true);
@@ -962,7 +962,7 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos() {
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.01"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 2); // cursor should not be at position of the minus but behind the 1
 }
-
+/*
 void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
