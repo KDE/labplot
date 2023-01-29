@@ -379,8 +379,9 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				QVector<quintptr> vec;
 				QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
 				// there are four model indices in each row -> divide by 4 to obtain the number of selected rows (=aspects)
-				for (int i = 0; i < items.size() / 4; ++i) {
-					const QModelIndex& index = items.at(i * 4);
+				const int columnCount = m_treeView->model()->columnCount();
+				for (int i = 0; i < items.size() / columnCount; ++i) {
+					const QModelIndex& index = items.at(i * columnCount);
 					auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 					vec << (quintptr)aspect;
 				}
@@ -518,9 +519,7 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 		}
 	} else if (event->key() == 32) {
 		// space key - hide/show the current object
-		auto* we = dynamic_cast<WorksheetElement*>(aspect);
-		if (we)
-			we->setVisible(!we->isVisible());
+		changeSelectedVisible();
 	}
 }
 
@@ -861,6 +860,31 @@ void ProjectExplorer::collapseSelected() {
 		m_treeView->setExpanded(index, false);
 }
 
+void ProjectExplorer::changeSelectedVisible() {
+	const auto& items = m_treeView->selectionModel()->selectedIndexes();
+
+	// determine all selected aspects
+	QVector<WorksheetElement*> worksheets;
+	const auto columnCount = m_treeView->model()->columnCount();
+	for (int i = 0; i < items.size() / columnCount; ++i) {
+		const QModelIndex& index = items.at(i * columnCount);
+		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		auto* worksheet = dynamic_cast<WorksheetElement*>(aspect);
+		if (worksheet)
+			worksheets << worksheet;
+	}
+
+	if (worksheets.isEmpty())
+		return;
+
+	// Use first element as reference
+	const bool newVisible = !worksheets.at(0)->isVisible();
+
+	for (auto* ws : worksheets) {
+		ws->setVisible(newVisible);
+	}
+}
+
 void ProjectExplorer::deleteSelected() {
 	const auto& items = m_treeView->selectionModel()->selectedIndexes();
 	if (!items.size())
@@ -868,8 +892,9 @@ void ProjectExplorer::deleteSelected() {
 
 	// determine all selected aspects
 	QVector<AbstractAspect*> aspects;
-	for (int i = 0; i < items.size() / 4; ++i) {
-		const QModelIndex& index = items.at(i * 4);
+	const auto columnCount = m_treeView->model()->columnCount();
+	for (int i = 0; i < items.size() / columnCount; ++i) {
+		const QModelIndex& index = items.at(i * columnCount);
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspects << aspect;
 	}
