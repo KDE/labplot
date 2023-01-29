@@ -572,7 +572,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, rotationAngle, rotationAngle
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, retransform)
+STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition, objectPositionChanged)
 void WorksheetElement::setPosition(const PositionWrapper& pos) {
 	Q_D(WorksheetElement);
 	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition
@@ -580,28 +580,48 @@ void WorksheetElement::setPosition(const PositionWrapper& pos) {
 		exec(new WorksheetElementSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetHorizontalAlignment, WorksheetElement::HorizontalAlignment, horizontalAlignment, retransform)
+STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement,
+						   SetHorizontalAlignment,
+						   WorksheetElement::HorizontalAlignment,
+						   horizontalAlignment,
+						   updatePosition,
+						   objectPositionChanged)
 void WorksheetElement::setHorizontalAlignment(const WorksheetElement::HorizontalAlignment hAlign) {
 	Q_D(WorksheetElement);
 	if (hAlign != d->horizontalAlignment)
 		exec(new WorksheetElementSetHorizontalAlignmentCmd(d, hAlign, ki18n("%1: set horizontal alignment")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetVerticalAlignment, WorksheetElement::VerticalAlignment, verticalAlignment, retransform)
+STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement,
+						   SetVerticalAlignment,
+						   WorksheetElement::VerticalAlignment,
+						   verticalAlignment,
+						   updatePosition,
+						   objectPositionChanged)
 void WorksheetElement::setVerticalAlignment(const WorksheetElement::VerticalAlignment vAlign) {
 	Q_D(WorksheetElement);
 	if (vAlign != d->verticalAlignment)
 		exec(new WorksheetElementSetVerticalAlignmentCmd(d, vAlign, ki18n("%1: set vertical alignment")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled, retransform)
-void WorksheetElement::setCoordinateBindingEnabled(bool on) {
+STD_SETTER_CMD_IMPL_S(WorksheetElement, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled) // do I need a final method?
+bool WorksheetElement::setCoordinateBindingEnabled(bool on) {
 	Q_D(WorksheetElement);
-	if (on != d->coordinateBindingEnabled)
+	if (on && !cSystem)
+		return false;
+	if (on != d->coordinateBindingEnabled) {
+		// Must not be in the Undo Command,
+		// because if done once, logical and
+		// scene pos are synched and therefore
+		// when changing it does not have any visual effect
+		d->updatePosition();
 		exec(new WorksheetElementSetCoordinateBindingEnabledCmd(d, on, on ? ki18n("%1: use logical coordinates") : ki18n("%1: set invisible")));
+		return true;
+	}
+	return true;
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPositionLogical, QPointF, positionLogical, retransform)
+STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement, SetPositionLogical, QPointF, positionLogical, updatePosition, objectPositionChanged)
 void WorksheetElement::setPositionLogical(QPointF pos) {
 	Q_D(WorksheetElement);
 	if (pos != d->positionLogical)
@@ -660,16 +680,12 @@ void WorksheetElementPrivate::updatePosition() {
 	QPointF p;
 	if (coordinateBindingEnabled && q->cSystem) {
 		// the position in logical coordinates was changed, calculate the position in scene coordinates
-		// InsidePlot will get false if the point lies outside of the datarect
+		// insidePlot will get false if the point lies outside of the datarect
 		p = q->cSystem->mapLogicalToScene(positionLogical, insidePlot, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
-		QPointF inParentCoords = mapPlotAreaToParent(p);
-		p = inParentCoords;
-		position.point = q->parentPosToRelativePos(p, position);
-		p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
+		position.point = q->parentPosToRelativePos(mapPlotAreaToParent(p), position);
 		Q_EMIT q->positionChanged(position);
 	} else {
-		// Not important if within the datarect or not
-		insidePlot = true;
+		insidePlot = true; // not important if within the datarect or not
 		p = q->relativePosToParentPos(position);
 
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
@@ -677,8 +693,9 @@ void WorksheetElementPrivate::updatePosition() {
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(p), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 		}
-		p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
 	}
+
+	p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
 
 	suppressItemChangeEvent = true;
 	setPos(p);
@@ -686,7 +703,10 @@ void WorksheetElementPrivate::updatePosition() {
 }
 
 void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
-	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right || event->key() == Qt::Key_Up || event->key() == Qt::Key_Down) {
+	const bool keyVertical = event->key() == Qt::Key_Up || event->key() == Qt::Key_Down;
+	const bool keyHorizontal = event->key() == Qt::Key_Left || event->key() == Qt::Key_Right;
+	if ((keyHorizontal && position.positionLimit != WorksheetElement::PositionLimit::Y)
+		|| (keyVertical && position.positionLimit != WorksheetElement::PositionLimit::X)) {
 		const int delta = 5; // always in scene coordinates
 
 		WorksheetElement::PositionWrapper tempPosition = position;
@@ -701,12 +721,12 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			} else if (event->key() == Qt::Key_Right) {
 				p.setX(p.x() + delta);
 			} else if (event->key() == Qt::Key_Up) {
-				p.setY(p.y() - delta); // Don't understand why I need a negative here and below a positive delta
+				p.setY(p.y() - delta); // y-axis is reversed, change the sign here
 			} else if (event->key() == Qt::Key_Down) {
 				p.setY(p.y() + delta);
 			}
 			auto pLogic = q->cSystem->mapSceneToLogical(p, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			q->setPositionLogical(pLogic);
+			q->setPositionLogical(pLogic); // So it is undoable
 		} else {
 			QPointF point = q->parentPosToRelativePos(pos(), position);
 			point = q->align(point, boundingRectangle, horizontalAlignment, verticalAlignment, false);
@@ -721,12 +741,11 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 				point.setY(point.y() - delta);
 			}
 			tempPosition.point = point;
-			q->setPosition(tempPosition);
+			q->setPosition(tempPosition); // So it is undoable
 		}
 		event->accept();
-	} else {
+	} else
 		QGraphicsItem::keyPressEvent(event);
-	}
 }
 
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
@@ -772,8 +791,9 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 				return QGraphicsItem::itemChange(change, value);
 			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
-			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
+			Q_EMIT q->objectPositionChanged();
 		} else {
 			// convert item's center point in parent's coordinates
 			WorksheetElement::PositionWrapper tempPosition = position;
@@ -782,6 +802,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 
 			// Q_EMIT the signals in order to notify the UI.
 			Q_EMIT q->positionChanged(tempPosition);
+			Q_EMIT q->objectPositionChanged();
 		}
 		return QGraphicsItem::itemChange(change, newPos);
 	}

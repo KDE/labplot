@@ -62,7 +62,7 @@ public:
 	typedef WorksheetElementPrivate Private;
 
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
-	void setCoordinateBindingEnabled(bool);
+	bool setCoordinateBindingEnabled(bool);
 	bool coordinateBindingEnabled() const;
 	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
 	void setPosition(QPointF);
@@ -158,6 +158,8 @@ Q_SIGNALS:
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
 
+	void objectPositionChanged(); // Position changed, independend of logical or scene, bot are triggering this
+
 	void hovered();
 	void unhovered();
 	// needed in the worksheet info element, because execMoveInFrontOf and execMoveBehind
@@ -166,6 +168,8 @@ Q_SIGNALS:
 	void moveEnd(); // called, at the end of execMoveInFrontOf or execMoveBehind is called
 
 	void plotRangeListChanged();
+
+	friend class WorksheetElementTest;
 };
 
 #endif

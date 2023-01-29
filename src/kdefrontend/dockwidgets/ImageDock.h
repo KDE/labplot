@@ -52,10 +52,14 @@ private Q_SLOTS:
 	void positionYChanged(int);
 	void customPositionXChanged(double);
 	void customPositionYChanged(double);
+	void positionXLogicalChanged(double);
+	void positionXLogicalDateTimeChanged(const QDateTime&);
+	void positionYLogicalChanged(double);
 	void horizontalAlignmentChanged(int);
 	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
 
+	void bindingChanged(bool checked);
 	void visibilityChanged(bool);
 
 	// SLOTs for changes triggered in Image
@@ -67,6 +71,8 @@ private Q_SLOTS:
 	void imageKeepRatioChanged(bool);
 
 	void imagePositionChanged(const WorksheetElement::PositionWrapper&);
+	void imagePositionLogicalChanged(QPointF);
+	void imageCoordinateBindingEnabledChanged(bool);
 	void imageHorizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
 	void imageVerticalAlignmentChanged(WorksheetElement::VerticalAlignment);
 	void imageRotationAngleChanged(qreal);
@@ -75,6 +81,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void info(const QString&);
+
+	friend class WorksheetElementTest;
 };
 
 #endif // WORKSHEETDOCK_H

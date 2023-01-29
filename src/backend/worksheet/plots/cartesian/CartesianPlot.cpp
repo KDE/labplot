@@ -44,6 +44,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
@@ -368,6 +369,7 @@ void CartesianPlot::initActions() {
 	addInfoElementAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Info Element"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-cross")), i18n("Custom Point"), this);
 	addReferenceLineAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-line")), i18n("Reference Line"), this);
+	addReferenceRangeAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-rectangle")), i18n("Reference Range"), this);
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
 	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
@@ -394,6 +396,7 @@ void CartesianPlot::initActions() {
 	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::addInfoElement);
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
+	connect(addReferenceRangeAction, &QAction::triggered, this, &CartesianPlot::addReferenceRange);
 
 	// Analysis menu actions
 	// 	addDataOperationAction = new QAction(i18n("Data Operation"), this);
@@ -515,6 +518,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 	addNewMenu->addAction(addReferenceLineAction);
+	addNewMenu->addAction(addReferenceRangeAction);
 
 	// Data manipulation menu
 	// 	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
@@ -1954,7 +1958,7 @@ void CartesianPlot::addCustomPoint() {
 		d->calledFromContextMenu = false;
 	} else {
 		auto p = point->position();
-		p.point = QPointF(0, 0);
+		p.point = QPointF(0, 0); // Exactly in the middle of the plot in scene coordinates
 		point->setPosition(p);
 		point->setCoordinateBindingEnabled(true);
 	}
@@ -1975,6 +1979,20 @@ void CartesianPlot::addReferenceLine() {
 
 	this->addChild(line);
 	line->retransform();
+}
+
+void CartesianPlot::addReferenceRange() {
+	Q_D(CartesianPlot);
+	auto* range = new ReferenceRange(this, i18n("Reference Range"));
+	range->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+
+	// 	if (d->calledFromContextMenu) {
+	// 		range->setPositionLogical(d->logicalPos);
+	// 		d->calledFromContextMenu = false;
+	// 	}
+
+	this->addChild(range);
+	range->retransform();
 }
 
 int CartesianPlot::curveCount() {
@@ -5117,6 +5135,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(line);
 			else {
 				delete line;
+				return false;
+			}
+		} else if (!preview && reader->name() == QLatin1String("referenceRange")) {
+			auto* range = new ReferenceRange(this, QString());
+			range->setIsLoading(true);
+			if (range->load(reader, preview))
+				addChildFast(range);
+			else {
+				delete range;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("boxPlot")) {

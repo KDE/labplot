@@ -667,7 +667,7 @@ void WidgetsTest::numberSpinBoxLimit() {
 }
 
 void WidgetsTest::numberSpinBoxPrefixSuffix() {
-	NumberSpinBox sb(5);
+	NumberSpinBox sb(5.01);
 	sb.setMaximum(7);
 	sb.setMinimum(3);
 
@@ -681,15 +681,15 @@ void WidgetsTest::numberSpinBoxPrefixSuffix() {
 	sb.setPrefix(QStringLiteral("Prefix "));
 	sb.setSuffix(QStringLiteral(" Suffix"));
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.00 Suffix"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.01 Suffix"));
 
 	sb.lineEdit()->setCursorPosition(14); // In suffix text
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
 	QCOMPARE(valueChangedCounter, 1);
-	QCOMPARE(sb.value(), 5.01);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.01 Suffix"));
+	QCOMPARE(sb.value(), 5.02);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.02 Suffix"));
 }
 
 void WidgetsTest::numberSpinBoxEnterNumber() {
@@ -923,51 +923,14 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
 	d.setPlots({p});
 	d.setPlots({p}); // Important to do it a second time to see that the connections are cleared bevore connecting again
 
-	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.50 cm"));
+	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.5 cm"));
 	d.ui.sbPaddingHorizontal->lineEdit()->setCursorPosition(3);
 
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 	d.ui.sbPaddingHorizontal->keyPressEvent(&event);
 
-	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.60 cm"));
+	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.6 cm"));
 	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->cursorPosition(), 3);
-}
-
-void WidgetsTest::numberSpinBoxDecimals() {
-	{
-		NumberSpinBox sb(5);
-		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("5.00"));
-		sb.setDecimals(3);
-		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("5.00")); // does not change
-
-		sb.setValue(6);
-		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("6.000"));
-	}
-
-	{
-		NumberSpinBox sb(5);
-		sb.setFeedback(true);
-
-		int valueChangedCounter = 0;
-		double lastValue = NAN;
-		connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter, &lastValue](double value) {
-			valueChangedCounter++;
-			lastValue = value; // value is 6
-			QVERIFY(5 != value);
-			sb.setValue(5); // Important other value
-		});
-
-		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("5.00"));
-		sb.setDecimals(3);
-
-		sb.lineEdit()->setCursorPosition(1);
-		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
-		sb.keyPressEvent(&event);
-
-		QCOMPARE(valueChangedCounter, 1);
-		QCOMPARE(sb.toolTip(), QStringLiteral("Invalid value entered. Valid value: 5"));
-		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("6.00")); // not 3 decimals!
-	}
 }
 
 /*!
@@ -985,20 +948,20 @@ void WidgetsTest::numberSpinBoxDecimals2() {
 void WidgetsTest::numberSpinBoxScrollingNegToPos() {
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
-	sb.setValue(-1);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.00"));
+	sb.setValue(-1.01);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.01"));
 
 	sb.lineEdit()->setCursorPosition(2);
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
-	QCOMPARE(sb.lineEdit()->cursorPosition(), 1); // cursor should not be at position of the comma but behind the 0
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-0.01"));
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 2); // cursor should not be at position of the comma but behind the 0
 
 	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.01"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 2); // cursor should not be at position of the minus but behind the 1
 }
 
@@ -1030,20 +993,20 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
 void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
 	NumberSpinBox sb;
 	sb.setMinimum(-20);
-	sb.setValue(-9.80);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-9.80"));
+	sb.setValue(-9.81);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-9.81"));
 
 	sb.lineEdit()->setCursorPosition(2);
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-10.80"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-10.81"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 
 	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-11.80"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-11.81"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 }
 
@@ -1052,7 +1015,7 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	// instead of raising an error
 	NumberSpinBox sb;
 	sb.setMinimum(0);
-	sb.setValue(1);
+	sb.setValue(1.01);
 	sb.setFeedback(true);
 
 	int valueChangedCounter = 0;
@@ -1062,21 +1025,34 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 		lastValue = value;
 	});
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("1.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("1.01"));
 
 	sb.lineEdit()->setCursorPosition(1);
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.01"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.toolTip(), QString());
 
 	sb.keyPressEvent(&event);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.01"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
 	QCOMPARE(valueChangedCounter, 1);
+	QCOMPARE(sb.toolTip(), QString());
+
+	sb.lineEdit()->setCursorPosition(4);
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 4);
+	QCOMPARE(valueChangedCounter, 2);
+	QCOMPARE(sb.toolTip(), QString());
+
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 4);
+	QCOMPARE(valueChangedCounter, 2);
 	QCOMPARE(sb.toolTip(), QString());
 }
 

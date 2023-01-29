@@ -1415,6 +1415,7 @@ void LabelWidget::load() {
 			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_label->positionLogical().x()));
 		}
 
+		ui.chbBindLogicalPos->setChecked(m_label->coordinateBindingEnabled());
 		bindingChanged(m_label->coordinateBindingEnabled());
 	} else {
 		ui.lPositionXLogical->hide();

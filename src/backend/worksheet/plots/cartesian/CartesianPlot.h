@@ -256,6 +256,7 @@ private:
 	QAction* addInfoElementAction;
 	QAction* addCustomPointAction;
 	QAction* addReferenceLineAction;
+	QAction* addReferenceRangeAction;
 
 	// analysis menu actions
 	QAction* addDataOperationAction;
@@ -313,6 +314,7 @@ public Q_SLOTS:
 	void addImage();
 	void addCustomPoint();
 	void addReferenceLine();
+	void addReferenceRange();
 	void addInfoElement();
 
 	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true, bool suppressRetransformScale = false);

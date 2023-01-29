@@ -49,6 +49,7 @@ enum class AspectType : quint64 {
 	TextLabel = 0x0210020,
 	Image = 0x0210030,
 	ReferenceLine = 0x0210040,
+	ReferenceRange = 0x0210060,
 	InfoElement = 0x0210080,
 	BoxPlot = 0x0210100,
 	BarPlot = 0x0210200,
@@ -150,6 +151,8 @@ public:
 			return QStringLiteral("Image");
 		case AspectType::ReferenceLine:
 			return QStringLiteral("ReferenceLine");
+		case AspectType::ReferenceRange:
+			return QStringLiteral("ReferenceRange");
 		case AspectType::InfoElement:
 			return QStringLiteral("InfoElement");
 		case AspectType::WorksheetElementContainer:
