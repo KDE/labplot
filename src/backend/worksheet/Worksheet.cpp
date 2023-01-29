@@ -592,6 +592,7 @@ void Worksheet::unregisterShortcuts() {
 /* =============================== getter methods for general options ==================================== */
 BASIC_D_READER_IMPL(Worksheet, bool, scaleContent, scaleContent)
 BASIC_D_READER_IMPL(Worksheet, bool, useViewSize, useViewSize)
+BASIC_D_READER_IMPL(Worksheet, Worksheet::ZoomFit, zoomFit, zoomFit)
 
 // background
 Background* Worksheet::background() const {
@@ -616,6 +617,13 @@ STD_SETTER_CMD_IMPL_S(Worksheet, SetUseViewSize, bool, useViewSize)
 void Worksheet::setUseViewSize(bool useViewSize) {
 	if (useViewSize != d->useViewSize)
 		exec(new WorksheetSetUseViewSizeCmd(d, useViewSize, ki18n("%1: change size type")));
+}
+
+STD_SETTER_CMD_IMPL(Worksheet, SetZoomFit, Worksheet::ZoomFit, zoomFit)
+void Worksheet::setZoomFit(ZoomFit zoomFit) {
+	d->zoomFit = zoomFit;
+	// if (zoomFit != d->zoomFit)
+	//     exec(new WorksheetSetZoomFitCmd(d, zoomFit, ki18n("%1: change zoom fit")));
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
@@ -1639,6 +1647,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("width"), QString::number(rect.width()));
 	writer->writeAttribute(QStringLiteral("height"), QString::number(rect.height()));
 	writer->writeAttribute(QStringLiteral("useViewSize"), QString::number(d->useViewSize));
+	writer->writeAttribute(QStringLiteral("zoomFit"), QString::number((int)d->zoomFit));
 	writer->writeEndElement();
 
 	// layout
@@ -1725,6 +1734,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				d->pageRect.setHeight(str.toDouble());
 
 			READ_INT_VALUE("useViewSize", useViewSize, int);
+			READ_INT_VALUE("zoomFit", zoomFit, ZoomFit);
 		} else if (!preview && reader->name() == QLatin1String("layout")) {
 			attribs = reader->attributes();
 

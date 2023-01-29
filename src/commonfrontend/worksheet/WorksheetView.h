@@ -49,8 +49,6 @@ public:
 		double opacity;
 	};
 
-	enum class ZoomFit { None, Fit, FitToHeight, FitToWidth, FitToSelection };
-
 	enum class MouseMode { Selection, Navigation, ZoomSelection };
 
 	void setScene(QGraphicsScene*);
@@ -127,7 +125,6 @@ private:
 	bool m_menusInitialized{false};
 	int m_numScheduledScalings{0};
 	bool m_suppressMouseModeChange{false};
-	ZoomFit m_zoomFit{ZoomFit::None};
 
 	// Menus
 	QMenu* m_addNewMenu{nullptr};

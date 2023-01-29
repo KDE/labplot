@@ -30,6 +30,7 @@ public:
 	Worksheet* const q;
 	QRectF pageRect;
 	QGraphicsScene* m_scene;
+	Worksheet::ZoomFit zoomFit{Worksheet::ZoomFit::None};
 	bool useViewSize{false};
 	bool scaleContent{false};
 

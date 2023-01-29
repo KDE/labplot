@@ -41,6 +41,7 @@ public:
 	enum class Unit { Millimeter, Centimeter, Inch, Point };
 	enum class Layout { NoLayout, VerticalLayout, HorizontalLayout, GridLayout };
 	enum class CartesianPlotActionMode { ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY };
+	enum class ZoomFit { None, Fit, FitToHeight, FitToWidth, FitToSelection };
 
 	static double convertToSceneUnits(const double value, const Worksheet::Unit unit);
 	static double convertFromSceneUnits(const double value, const Worksheet::Unit unit);
@@ -91,6 +92,7 @@ public:
 	Background* background() const;
 	BASIC_D_ACCESSOR_DECL(bool, scaleContent, ScaleContent)
 	BASIC_D_ACCESSOR_DECL(bool, useViewSize, UseViewSize)
+	BASIC_D_ACCESSOR_DECL(ZoomFit, zoomFit, ZoomFit)
 	BASIC_D_ACCESSOR_DECL(Worksheet::Layout, layout, Layout)
 	BASIC_D_ACCESSOR_DECL(double, layoutTopMargin, LayoutTopMargin)
 	BASIC_D_ACCESSOR_DECL(double, layoutBottomMargin, LayoutBottomMargin)

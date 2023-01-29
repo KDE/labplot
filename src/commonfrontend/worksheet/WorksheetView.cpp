@@ -160,19 +160,19 @@ void WorksheetView::initActions() {
 	zoomFitNoneAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18n("No fit"), fitActionGroup);
 	zoomFitNoneAction->setCheckable(true);
 	zoomFitNoneAction->setChecked(true);
-	zoomFitNoneAction->setData((int)ZoomFit::None);
+	zoomFitNoneAction->setData((int)Worksheet::ZoomFit::None);
 	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18n("Fit to Height"), fitActionGroup);
 	zoomFitPageHeightAction->setCheckable(true);
-	zoomFitPageHeightAction->setData((int)ZoomFit::FitToHeight);
+	zoomFitPageHeightAction->setData((int)Worksheet::ZoomFit::FitToHeight);
 	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18n("Fit to Width"), fitActionGroup);
 	zoomFitPageWidthAction->setCheckable(true);
-	zoomFitPageWidthAction->setData((int)ZoomFit::FitToWidth);
+	zoomFitPageWidthAction->setData((int)Worksheet::ZoomFit::FitToWidth);
 	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18n("Fit to Selection"), fitActionGroup);
 	zoomFitSelectionAction->setCheckable(true);
-	zoomFitSelectionAction->setData((int)ZoomFit::FitToSelection);
+	zoomFitSelectionAction->setData((int)Worksheet::ZoomFit::FitToSelection);
 	zoomFitAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18n("Fit"), fitActionGroup);
 	zoomFitAction->setCheckable(true);
-	zoomFitAction->setData((int)ZoomFit::Fit);
+	zoomFitAction->setData((int)Worksheet::ZoomFit::Fit);
 
 	// Mouse mode actions
 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), mouseModeActionGroup);
@@ -1079,7 +1079,7 @@ void WorksheetView::resizeEvent(QResizeEvent* event) {
 void WorksheetView::wheelEvent(QWheelEvent* event) {
 	if (isInteractive() && (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier))) {
 		zoomFitNoneAction->setChecked(true);
-		m_zoomFit = ZoomFit::None;
+		m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
 		// https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 		QPoint numDegrees = event->angleDelta() / 8;
 		int numSteps = numDegrees.y() / 15; // see QWheelEvent documentation
@@ -1393,7 +1393,7 @@ void WorksheetView::processResize() {
 
 void WorksheetView::changeZoom(QAction* action) {
 	zoomFitNoneAction->setChecked(true);
-	m_zoomFit = ZoomFit::None;
+	m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
 	if (action == zoomInViewAction)
 		zoom(1);
 	else if (action == zoomOutViewAction)
@@ -1412,24 +1412,24 @@ void WorksheetView::changeZoom(QAction* action) {
 }
 
 void WorksheetView::updateFit() {
-	switch (m_zoomFit) {
-	case ZoomFit::None:
+	switch (m_worksheet->zoomFit()) {
+	case Worksheet::ZoomFit::None:
 		break;
-	case ZoomFit::FitToWidth: {
+	case Worksheet::ZoomFit::FitToWidth: {
 		const float scaleFactor = viewport()->width() / scene()->sceneRect().width();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 		break;
 	}
-	case ZoomFit::FitToHeight: {
+	case Worksheet::ZoomFit::FitToHeight: {
 		const float scaleFactor = viewport()->height() / scene()->sceneRect().height();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 		break;
 	}
-	case ZoomFit::FitToSelection: {
+	case Worksheet::ZoomFit::FitToSelection: {
 		fitInView(scene()->selectionArea().boundingRect(), Qt::KeepAspectRatio);
 		break;
 	}
-	case ZoomFit::Fit: {
+	case Worksheet::ZoomFit::Fit: {
 		const float scaleFactorVertical = viewport()->height() / scene()->sceneRect().height();
 		const float scaleFactorHorizontal = viewport()->width() / scene()->sceneRect().width();
 		if (scaleFactorVertical * scene()->sceneRect().width() < viewport()->width())
@@ -1442,7 +1442,7 @@ void WorksheetView::updateFit() {
 }
 
 void WorksheetView::fitChanged(QAction* action) {
-	m_zoomFit = static_cast<ZoomFit>(action->data().toInt());
+	m_worksheet->setZoomFit(static_cast<Worksheet::ZoomFit>(action->data().toInt()));
 	updateFit();
 }
 
