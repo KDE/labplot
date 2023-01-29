@@ -879,7 +879,7 @@ void ProjectExplorer::changeSelectedVisible() {
 		return;
 
 	// Use first element as reference
-	auto* firstElement = elements.at(0);
+	auto* firstElement = elements.constFirst();
 	const bool newVisible = !firstElement->isVisible();
 
 	if (numberElements > 1) {
