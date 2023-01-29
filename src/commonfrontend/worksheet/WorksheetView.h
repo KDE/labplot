@@ -49,7 +49,7 @@ public:
 		double opacity;
 	};
 
-	enum class ZoomFit { None, FitToWhole, FitToHeight, FitToWidth, FitToSelection };
+	enum class ZoomFit { None, Fit, FitToHeight, FitToWidth, FitToSelection };
 
 	enum class MouseMode { Selection, Navigation, ZoomSelection };
 
@@ -165,7 +165,7 @@ private:
 	QAction* zoomFitPageHeightAction{nullptr};
 	QAction* zoomFitPageWidthAction{nullptr};
 	QAction* zoomFitSelectionAction{nullptr};
-	QAction* zoomFitWholeAction{nullptr};
+	QAction* zoomFitAction{nullptr};
 
 	QAction* navigationModeAction{nullptr};
 	QAction* zoomSelectionModeAction{nullptr};

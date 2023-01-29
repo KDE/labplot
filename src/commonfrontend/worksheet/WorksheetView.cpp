@@ -170,9 +170,9 @@ void WorksheetView::initActions() {
 	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18n("Fit to Selection"), fitActionGroup);
 	zoomFitSelectionAction->setCheckable(true);
 	zoomFitSelectionAction->setData((int)ZoomFit::FitToSelection);
-	zoomFitWholeAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-whole")), i18n("Fit to Match"), fitActionGroup);
-	zoomFitWholeAction->setCheckable(true);
-	zoomFitWholeAction->setData((int)ZoomFit::FitToWhole);
+	zoomFitAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18n("Fit"), fitActionGroup);
+	zoomFitAction->setCheckable(true);
+	zoomFitAction->setData((int)ZoomFit::Fit);
 
 	// Mouse mode actions
 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), mouseModeActionGroup);
@@ -502,10 +502,10 @@ void WorksheetView::initMenus() {
 	m_zoomMenu->addAction(zoomOutViewAction);
 	m_zoomMenu->addAction(zoomOriginAction);
 	m_zoomMenu->addAction(zoomFitNoneAction);
+	m_zoomMenu->addAction(zoomFitAction);
 	m_zoomMenu->addAction(zoomFitPageHeightAction);
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 	m_zoomMenu->addAction(zoomFitSelectionAction);
-	m_zoomMenu->addAction(zoomFitWholeAction);
 
 	m_magnificationMenu = new QMenu(i18n("Magnification"), this);
 	m_magnificationMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
@@ -1429,7 +1429,7 @@ void WorksheetView::updateFit() {
 		fitInView(scene()->selectionArea().boundingRect(), Qt::KeepAspectRatio);
 		break;
 	}
-	case ZoomFit::FitToWhole: {
+	case ZoomFit::Fit: {
 		const float scaleFactorVertical = viewport()->height() / scene()->sceneRect().height();
 		const float scaleFactorHorizontal = viewport()->width() / scene()->sceneRect().width();
 		if (scaleFactorVertical * scene()->sceneRect().width() < viewport()->width())
