@@ -57,7 +57,7 @@
                                                                                                                                                                \
 	auto* view = dynamic_cast<WorksheetView*>(w->view());                                                                                                      \
 	QVERIFY(view != nullptr);                                                                                                                                  \
-	Q_EMIT w->useViewSizeRequested(); /* To init the worksheet view actions */                                                                                 \
+	view->initActions(); /* needed by SET_CARTESIAN_MOUSE_MODE() */                                                                                            \
                                                                                                                                                                \
 	/* axis selected */                                                                                                                                        \
 	auto sinCurve = dynamic_cast<XYCurve*>(p1->child<XYCurve>(0));                                                                                             \

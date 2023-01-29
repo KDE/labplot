@@ -767,7 +767,7 @@ void CartesianPlotTest::invalidcSystem() {
 	project.addChild(worksheet);
 	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
 	QVERIFY(view != nullptr);
-	Q_EMIT worksheet->useViewSizeRequested(); /* To init the worksheet view actions */
+	view->initActions(); // needed by SET_CARTESIAN_MOUSE_MODE()
 
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet->addChild(plot);
@@ -906,7 +906,7 @@ void CartesianPlotTest::autoScaleFitCurveCalculation() {
 	project.addChild(worksheet);
 	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
 	QVERIFY(view != nullptr);
-	Q_EMIT worksheet->useViewSizeRequested(); /* To init the worksheet view actions */
+	view->initActions(); // needed by SET_CARTESIAN_MOUSE_MODE()
 
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet->addChild(plot);
