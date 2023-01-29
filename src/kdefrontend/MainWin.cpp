@@ -4,7 +4,7 @@
 	Description          : Main window of the application
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -1599,6 +1599,8 @@ bool MainWin::closeProject() {
 	m_aspectTreeModel = nullptr;
 	delete m_project;
 	m_project = nullptr;
+	delete m_guiObserver;
+	m_guiObserver = nullptr;
 	m_projectClosing = false;
 
 	// update the UI if we're just closing a project
@@ -1726,8 +1728,8 @@ bool MainWin::save(const QString& fileName) {
 
 			// if the project dock is visible, refresh the shown content
 			//(version and modification time might have been changed)
-			if (stackedWidget->currentWidget() == projectDock)
-				projectDock->setProject(m_project);
+			if (stackedWidget->currentWidget() == m_guiObserver->m_projectDock)
+				m_guiObserver->m_projectDock->setProject(m_project);
 
 			// we have a file name now
 			//  -> auto save can be activated now if not happened yet

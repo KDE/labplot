@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -28,49 +28,13 @@ class Datapicker;
 class Spreadsheet;
 class Matrix;
 class GuiObserver;
-class AspectDock;
-class AxisDock;
 class CursorDock;
-class InfoElementDock;
-class NoteDock;
-class CartesianPlotDock;
-class HistogramDock;
-class BarPlotDock;
-class BoxPlotDock;
-class CartesianPlotLegendDock;
-class CustomPointDock;
-class ReferenceLineDock;
-class ReferenceRangeDock;
-class ColumnDock;
-class LiveDataDock;
-class MatrixDock;
-class ProjectDock;
-class SpreadsheetDock;
-class XYCurveDock;
-class XYEquationCurveDock;
-class XYDataReductionCurveDock;
-class XYDifferentiationCurveDock;
-class XYIntegrationCurveDock;
-class XYInterpolationCurveDock;
-class XYSmoothCurveDock;
-class XYFitCurveDock;
-class XYFourierFilterCurveDock;
-class XYFourierTransformCurveDock;
-class XYHilbertTransformCurveDock;
-class XYConvolutionCurveDock;
-class XYCorrelationCurveDock;
-class WorksheetDock;
-class ImageDock;
-class LabelWidget;
-class DatapickerImageWidget;
-class DatapickerCurveWidget;
 class MemoryWidget;
 class CartesianPlot;
 class InfoElementDialog;
 
 #ifdef HAVE_CANTOR_LIBS
 class CantorWorksheet;
-class CantorWorksheetDock;
 #endif
 
 class ImportDatasetWidget;
@@ -219,43 +183,8 @@ private:
 
 	// Docks
 	QStackedWidget* stackedWidget{nullptr};
-	AspectDock* aspectDock{nullptr};
-	AxisDock* axisDock{nullptr};
 	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};
-	NoteDock* notesDock{nullptr};
-	InfoElementDock* infoElementDock{nullptr};
-	CartesianPlotDock* cartesianPlotDock{nullptr};
-	CartesianPlotLegendDock* cartesianPlotLegendDock{nullptr};
-	ColumnDock* columnDock{nullptr};
-	LiveDataDock* m_liveDataDock{nullptr};
-	MatrixDock* matrixDock{nullptr};
-	SpreadsheetDock* spreadsheetDock{nullptr};
-	ProjectDock* projectDock{nullptr};
-	XYCurveDock* xyCurveDock{nullptr};
-	XYEquationCurveDock* xyEquationCurveDock{nullptr};
-	XYDataReductionCurveDock* xyDataReductionCurveDock{nullptr};
-	XYDifferentiationCurveDock* xyDifferentiationCurveDock{nullptr};
-	XYIntegrationCurveDock* xyIntegrationCurveDock{nullptr};
-	XYInterpolationCurveDock* xyInterpolationCurveDock{nullptr};
-	XYSmoothCurveDock* xySmoothCurveDock{nullptr};
-	XYFitCurveDock* xyFitCurveDock{nullptr};
-	XYFourierFilterCurveDock* xyFourierFilterCurveDock{nullptr};
-	XYFourierTransformCurveDock* xyFourierTransformCurveDock{nullptr};
-	XYHilbertTransformCurveDock* xyHilbertTransformCurveDock{nullptr};
-	XYConvolutionCurveDock* xyConvolutionCurveDock{nullptr};
-	XYCorrelationCurveDock* xyCorrelationCurveDock{nullptr};
-	HistogramDock* histogramDock{nullptr};
-	BarPlotDock* barPlotDock{nullptr};
-	BoxPlotDock* boxPlotDock{nullptr};
-	WorksheetDock* worksheetDock{nullptr};
-	LabelWidget* textLabelDock{nullptr};
-	ImageDock* imageDock{nullptr};
-	CustomPointDock* customPointDock{nullptr};
-	ReferenceLineDock* referenceLineDock{nullptr};
-	ReferenceRangeDock* referenceRangeDock{nullptr};
-	DatapickerImageWidget* datapickerImageDock{nullptr};
-	DatapickerCurveWidget* datapickerCurveDock{nullptr};
 
 	void initActions();
 	void initMenus();
@@ -266,11 +195,6 @@ private:
 	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 
 	Spreadsheet* activeSpreadsheet() const;
-
-	// Cantor
-#ifdef HAVE_CANTOR_LIBS
-	CantorWorksheetDock* cantorWorksheetDock{nullptr};
-#endif
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver{nullptr};
