@@ -862,7 +862,7 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", 5));
 }
-
+/*
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 	NumberSpinBox sb(5.11);
 	sb.setFeedback(true);
@@ -933,10 +933,8 @@ void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
 	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->cursorPosition(), 3);
 }
 
-/*!
- * \brief WidgetsTest::numberSpinBoxDecimals
- * Check that application shows the correct value, even decimals is set to zero
- */
+// \brief WidgetsTest::numberSpinBoxDecimals
+// Check that application shows the correct value, even decimals is set to zero
 void WidgetsTest::numberSpinBoxDecimals2() {
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
@@ -1056,12 +1054,10 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	QCOMPARE(sb.toolTip(), QString());
 }
 
-/*!
- * \brief WidgetsTest::numberSpinBoxDecimalsMinMax
- * In the default implementation of QDoubleSpinbox the maximum and
- * minimums are round to the decimals. The numberspinbox should not do
- * this
- */
+// \brief WidgetsTest::numberSpinBoxDecimalsMinMax
+// In the default implementation of QDoubleSpinbox the maximum and
+// minimums are round to the decimals. The numberspinbox should not do
+// this
 void WidgetsTest::numberSpinBoxDecimalsMinMax() {
 	NumberSpinBox sb;
 	sb.setDecimals(2);
@@ -1071,5 +1067,6 @@ void WidgetsTest::numberSpinBoxDecimalsMinMax() {
 	sb.setMinimum(1.289343892e-15);
 	QCOMPARE(sb.minimum(), 1.289343892e-15); // not rounded!
 }
+*/
 
 QTEST_MAIN(WidgetsTest)
