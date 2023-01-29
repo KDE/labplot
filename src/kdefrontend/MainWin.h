@@ -114,6 +114,23 @@ public:
 	void addAspectToProject(AbstractAspect*);
 	static void updateLocale();
 
+    template<class T>
+    bool generateDock(AspectType t, QWidget* parent) {
+        auto* d = m_dock.value(t);
+        if (d)
+            return false;
+
+        m_dock.insert(t, new T(parent));
+        return true;
+    }
+
+    template<class T>
+    T* dock(AspectType t) {
+        return m_dock.value(t);
+    }
+
+
+
 	enum class LoadOnStart { Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen };
 	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };
 
@@ -221,7 +238,7 @@ private:
 	// Docks
 	QStackedWidget* stackedWidget{nullptr};
 
-	QHash<AspectType, BaseDock*> dock;
+    QHash<AspectType, BaseDock*> m_dock;
 
 	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};
@@ -325,8 +342,6 @@ private Q_SLOTS:
 	void propertiesExplorerRequested();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
-
-	friend class GuiObserver;
 };
 
 #endif
