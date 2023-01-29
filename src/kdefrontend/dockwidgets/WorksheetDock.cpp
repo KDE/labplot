@@ -334,10 +334,10 @@ void WorksheetDock::sizeTypeChanged(int index) {
 		ui.sbHeight->setEnabled(true);
 	}
 
-	CONDITIONAL_LOCK_RETURN;
+	if (m_initializing) // don't lock here since we potentially need to call setters in pageChanged() below
+		return;
 
 	if (index == 0) { // viewSize
-		CONDITIONAL_LOCK_RETURN;
 		for (auto* worksheet : m_worksheetList)
 			worksheet->setUseViewSize(true);
 	} else if (index == 1) { // standard page
@@ -352,8 +352,6 @@ void WorksheetDock::sizeTypeChanged(int index) {
 }
 
 void WorksheetDock::pageChanged(int i) {
-	CONDITIONAL_LOCK_RETURN;
-
 	// determine the width and the height of the to be used predefined layout
 	const auto index = ui.cbPage->itemData(i).value<QPageSize::PageSizeId>();
 	QSizeF s = QPageSize::size(index, QPageSize::Millimeter);
@@ -368,6 +366,8 @@ void WorksheetDock::pageChanged(int i) {
 		ui.sbWidth->setValue(s.width() / 25.4);
 		ui.sbHeight->setValue(s.height() / 25.4);
 	}
+
+	CONDITIONAL_LOCK_RETURN;
 
 	double w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Unit::Millimeter);
 	double h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Unit::Millimeter);
@@ -394,7 +394,7 @@ void WorksheetDock::orientationChanged(int /*index*/) {
 
 //"Layout"-tab
 void WorksheetDock::layoutChanged(int index) {
-	auto layout = (Worksheet::Layout)index;
+	auto layout = static_cast<Worksheet::Layout>(index);
 
 	bool b = (layout != Worksheet::Layout::NoLayout);
 	ui.sbLayoutTopMargin->setEnabled(b);

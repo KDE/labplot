@@ -155,7 +155,6 @@ Q_SIGNALS:
 	void itemSelected(QGraphicsItem*);
 	void itemDeselected(QGraphicsItem*);
 	void requestUpdate();
-	void useViewSizeRequested();
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
 	void propertiesExplorerRequested();

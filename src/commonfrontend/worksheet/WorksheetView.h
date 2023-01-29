@@ -284,7 +284,7 @@ private Q_SLOTS:
 	void deleteElement();
 
 	void mouseModeChanged(QAction*);
-	void useViewSizeRequested();
+	void useViewSizeChanged(bool);
 	void changeZoom(QAction*);
 	void magnificationChanged(QAction*);
 	void changeLayout(QAction*);
