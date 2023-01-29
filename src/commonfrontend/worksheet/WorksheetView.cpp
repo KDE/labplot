@@ -95,7 +95,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	connect(m_worksheet, &Worksheet::itemDeselected, this, &WorksheetView::deselectItem);
 	connect(m_worksheet, &Worksheet::requestUpdate, this, &WorksheetView::updateBackground);
 	connect(m_worksheet, &Worksheet::aspectAboutToBeRemoved, this, &WorksheetView::aspectAboutToBeRemoved);
-	connect(m_worksheet, &Worksheet::useViewSizeRequested, this, &WorksheetView::useViewSizeRequested);
+	connect(m_worksheet, &Worksheet::useViewSizeChanged, this, &WorksheetView::useViewSizeChanged);
 	connect(m_worksheet, &Worksheet::layoutChanged, this, &WorksheetView::layoutChanged);
 	connect(scene(), &QGraphicsScene::selectionChanged, this, &WorksheetView::selectionChanged);
 
@@ -1336,11 +1336,11 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 //##############################################################################
 //####################################  SLOTs   ################################
 //##############################################################################
-void WorksheetView::useViewSizeRequested() {
+void WorksheetView::useViewSizeChanged(bool useViewSize) {
 	if (!m_actionsInitialized)
 		initActions();
 
-	if (m_worksheet->useViewSize()) {
+	if (useViewSize) {
 		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		zoomFitPageHeightAction->setVisible(false);

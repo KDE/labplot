@@ -614,10 +614,8 @@ BASIC_D_READER_IMPL(Worksheet, QString, theme, theme)
 /* ============================ setter methods and undo commands for general options  ===================== */
 STD_SETTER_CMD_IMPL_S(Worksheet, SetUseViewSize, bool, useViewSize)
 void Worksheet::setUseViewSize(bool useViewSize) {
-	if (useViewSize != d->useViewSize) {
+	if (useViewSize != d->useViewSize)
 		exec(new WorksheetSetUseViewSizeCmd(d, useViewSize, ki18n("%1: change size type")));
-		Q_EMIT useViewSizeRequested();
-	}
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
