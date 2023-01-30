@@ -428,7 +428,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	case AspectType::MQTTClient:
 #ifdef HAVE_MQTT
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
-		raiseDock(m_m_liveDataDock, m_mainWindow->stackedWidget);
+		raiseDock(m_liveDataDock, m_mainWindow->stackedWidget);
 		m_liveDataDock->setMQTTClient(static_cast<MQTTClient*>(selectedAspects.first()));
 #endif
 		break;
