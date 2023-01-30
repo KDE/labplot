@@ -81,6 +81,9 @@ private Q_SLOTS:
 	void testDateTime00();
 	void testDateTimeHex();
 
+	// matrix import
+	void testMatrixHeader();
+
 	// benchmarks
 
 	void benchDoubleImport_data();

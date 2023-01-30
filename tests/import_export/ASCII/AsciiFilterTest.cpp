@@ -12,6 +12,7 @@
 #include "AsciiFilterTest.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {
@@ -247,7 +248,7 @@ void AsciiFilterTest::testHeader03() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(";"));
-	//filter.setHeaderEnabled(false);
+	// filter.setHeaderEnabled(false);
 	filter.setVectorNames(QStringLiteral("x"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -457,7 +458,7 @@ void AsciiFilterTest::testHeader10() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header_duplicated_names.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(";"));
-	//filter.setHeaderEnabled(true);
+	// filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -476,7 +477,7 @@ void AsciiFilterTest::testHeader11() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/column_names.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(" "));
-	//filter.setHeaderEnabled(true);
+	// filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -489,7 +490,7 @@ void AsciiFilterTest::testHeader11() {
 	AsciiFilter filter2; // create a new filter so we go through the prepare logic from scratch for the 2nd file
 	const QString& fileName2 = QFINDTESTDATA(QLatin1String("data/column_names_reversed.txt"));
 	filter2.setSeparatingCharacter(QStringLiteral(" "));
-	//filter2.setHeaderEnabled(true);
+	// filter2.setHeaderEnabled(true);
 	filter2.setHeaderLine(1);
 	filter2.readDataFromFile(fileName2, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -664,7 +665,7 @@ void AsciiFilterTest::testRowRange00() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral("auto"));
-	//filter.setHeaderEnabled(false);
+	// filter.setHeaderEnabled(false);
 	filter.setStartRow(3);
 	filter.setEndRow(5);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -858,7 +859,7 @@ void AsciiFilterTest::testQuotedStrings02() {
 	QCOMPARE(QFile::exists(fileName), true);
 
 	filter.setSeparatingCharacter(QStringLiteral(","));
-	//filter.setHeaderEnabled(false);
+	// filter.setHeaderEnabled(false);
 	filter.setRemoveQuotesEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -1149,6 +1150,37 @@ void AsciiFilterTest::testDateTimeHex() {
 	QCOMPARE(spreadsheet.column(14)->valueAt(0), 94.09);
 	QCOMPARE(spreadsheet.column(15)->integerAt(0), 9680);
 	QCOMPARE(spreadsheet.column(16)->textAt(0), QLatin1String("5AD17"));
+}
+
+void AsciiFilterTest::testMatrixHeader() {
+	Matrix matrix(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
+
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
+	filter.readDataFromFile(fileName, &matrix, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(matrix.rowCount(), 5);
+	QCOMPARE(matrix.columnCount(), 3);
+
+	QCOMPARE(matrix.mode(), AbstractColumn::ColumnMode::Double);
+
+	// check all values
+	QCOMPARE(matrix.cell<double>(0, 0), 1.716299);
+	QCOMPARE(matrix.cell<double>(0, 1), -0.485527);
+	QCOMPARE(matrix.cell<double>(0, 2), -0.288690);
+	QCOMPARE(matrix.cell<double>(1, 0), 1.716299);
+	QCOMPARE(matrix.cell<double>(1, 1), -0.476371);
+	QCOMPARE(matrix.cell<double>(1, 2), -0.274957);
+	QCOMPARE(matrix.cell<double>(2, 0), 1.711721);
+	QCOMPARE(matrix.cell<double>(2, 1), -0.485527);
+	QCOMPARE(matrix.cell<double>(2, 2), -0.293267);
+	QCOMPARE(matrix.cell<double>(3, 0), 1.711721);
+	QCOMPARE(matrix.cell<double>(3, 1), -0.480949);
+	QCOMPARE(matrix.cell<double>(3, 2), -0.293267);
+	QCOMPARE(matrix.cell<double>(4, 0), 1.716299);
+	QCOMPARE(matrix.cell<double>(4, 1), -0.494682);
+	QCOMPARE(matrix.cell<double>(4, 2), -0.284112);
 }
 
 // BENCHMARKS

@@ -1332,7 +1332,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			line.remove(QLatin1Char('\n'));
 			line.remove(QLatin1Char('\r'));
 
-			//DEBUG("1 Line bytes: " << line.size() << " line: " << STDSTRING(line));
+			// DEBUG("1 Line bytes: " << line.size() << " line: " << STDSTRING(line));
 
 			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 				continue;
@@ -1394,7 +1394,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				continue;
 
 			auto lineStringList = split(line, false);
-			//DEBUG("2 Line bytes: " << line.size() << " line: " << STDSTRING(line));
+			// DEBUG("2 Line bytes: " << line.size() << " line: " << STDSTRING(line));
 
 			if (removeQuotesEnabled) {
 				for (int i = 0; i < lineStringList.size(); ++i)
