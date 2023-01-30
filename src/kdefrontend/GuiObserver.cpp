@@ -159,7 +159,8 @@ QList<T*> castList(QList<AbstractAspect*>& selectedAspects) {
 
 using namespace GuiObserverHelper;
 
-GuiObserver::GuiObserver(MainWin* mainWin) : m_mainWindow(mainWin) {
+GuiObserver::GuiObserver(MainWin* mainWin)
+	: m_mainWindow(mainWin) {
 	connect(mainWin->m_projectExplorer, &ProjectExplorer::selectedAspectsChanged, this, &GuiObserver::selectedAspectsChanged);
 	connect(mainWin->m_projectExplorer, &ProjectExplorer::hiddenAspectSelected, this, &GuiObserver::hiddenAspectSelected);
 }
@@ -428,7 +429,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 #ifdef HAVE_MQTT
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
 		raiseDock(m_m_liveDataDock, m_mainWindow->stackedWidget);
-		>m_liveDataDock->setMQTTClient(static_cast<MQTTClient*>(selectedAspects.first()));
+		m_liveDataDock->setMQTTClient(static_cast<MQTTClient*>(selectedAspects.first()));
 #endif
 		break;
 	case AspectType::MQTTSubscription:
