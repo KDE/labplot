@@ -1650,7 +1650,7 @@ bool MainWin::closeProject() {
 			m_autoSaveTimer.stop();
 	}
 
-	removeDockWidget(cursorDock);
+	m_DockManager->removeDockWidget(cursorDock);
 	delete cursorDock;
 	cursorDock = nullptr;
 	cursorWidget = nullptr; // is deleted, because it's the child of cursorDock
@@ -2349,22 +2349,25 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 			cursorDock->hide();
 	} else {
 		if (!cursorDock) {
-			cursorDock = new QDockWidget(i18n("Cursor"), this);
+			cursorDock = new ads::CDockWidget(i18n("Cursor"), this);
 			cursorWidget = new CursorDock(cursorDock);
 			cursorDock->setWidget(cursorWidget);
-			connect(cursorDock, &QDockWidget::visibilityChanged, this, &MainWin::cursorDockVisibilityChanged);
-			// 		cursorDock->setFloating(true);
-
-			// does not work. Don't understand why
-			//		if (m_propertiesDock)
-			//			tabifyDockWidget(cursorDock, m_propertiesDock);
-			//		else
-			addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, cursorDock);
-		}
+			connect(cursorDock, &ads::CDockWidget::viewToggled, this, &MainWin::cursorDockVisibilityChanged);
+			m_DockManager->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
+		} else
+			focusCursorDock();
 
 		auto* worksheet = static_cast<Worksheet*>(QObject::sender());
+		connect(cursorWidget, &CursorDock::cursorUsed, this, &MainWin::focusCursorDock);
 		cursorWidget->setWorksheet(worksheet);
 		cursorDock->show();
+	}
+}
+
+void MainWin::focusCursorDock() {
+	if (cursorDock) {
+		cursorDock->toggleView(true);
+		m_DockManager->setDockWidgetFocused(cursorDock);
 	}
 }
 

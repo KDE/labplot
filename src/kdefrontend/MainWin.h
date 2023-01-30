@@ -186,8 +186,9 @@ private:
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
 	// Docks
+	ads::CDockWidget* cursorDock{nullptr};
+
 	QStackedWidget* stackedWidget{nullptr};
-	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};
 
 	void initActions();
@@ -284,6 +285,8 @@ private Q_SLOTS:
 	void propertiesDockVisibilityChanged(bool);
 	void cursorDockVisibilityChanged(bool);
 	void propertiesExplorerRequested();
+
+	void focusCursorDock();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 };
