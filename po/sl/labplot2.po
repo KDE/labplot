@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-29 00:54+0000\n"
-"PO-Revision-Date: 2023-01-27 07:20+0100\n"
+"POT-Creation-Date: 2023-01-30 00:53+0000\n"
+"PO-Revision-Date: 2023-01-29 09:03+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -52,7 +52,7 @@ msgid "Couldn't find panel plugins. Please check your installation."
 msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
-#: src/backend/core/column/Column.cpp:1261
+#: src/backend/core/column/Column.cpp:1265
 #: src/backend/datapicker/DatapickerCurve.cpp:501
 #: src/backend/datapicker/DatapickerImage.cpp:511
 #: src/backend/datapicker/DatapickerPoint.cpp:498
@@ -60,7 +60,7 @@ msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 #: src/backend/datasources/filters/BinaryFilter.cpp:562
 #: src/backend/datasources/filters/JsonFilter.cpp:776
 #: src/backend/datasources/filters/ROOTFilter.cpp:119
-#: src/backend/datasources/LiveDataSource.cpp:829
+#: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:223
@@ -94,21 +94,21 @@ msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:271
 #: src/backend/worksheet/plots/PlotArea.cpp:376
 #: src/backend/worksheet/TextLabel.cpp:1121
-#: src/backend/worksheet/Worksheet.cpp:1684
+#: src/backend/worksheet/Worksheet.cpp:1682
 #: src/backend/worksheet/WorksheetElement.cpp:460
-#: src/commonfrontend/ProjectExplorer.cpp:1005
+#: src/commonfrontend/ProjectExplorer.cpp:1036
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "Atribut »%1« manjka ali je prazen, uporabljena je privzeta vrednost"
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1391 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1395 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:746
 #: src/backend/datapicker/DatapickerCurve.cpp:659
 #: src/backend/datapicker/DatapickerImage.cpp:753
 #: src/backend/datapicker/DatapickerPoint.cpp:575
-#: src/backend/datasources/LiveDataSource.cpp:966
+#: src/backend/datasources/LiveDataSource.cpp:968
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
@@ -122,7 +122,7 @@ msgstr "Atribut »%1« manjka ali je prazen, uporabljena je privzeta vrednost"
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:725
 #: src/backend/worksheet/plots/PlotArea.cpp:405
 #: src/backend/worksheet/TextLabel.cpp:1171
-#: src/backend/worksheet/Worksheet.cpp:1776
+#: src/backend/worksheet/Worksheet.cpp:1774
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "neznan element »%1«"
@@ -577,7 +577,7 @@ msgid "%1   (no values)"
 msgstr "%1   (brez vrednosti)"
 
 #: src/backend/core/AspectTreeModel.cpp:223
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1299
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
 #, kde-format
 msgid "Size: %1"
 msgstr "Velikost: %1"
@@ -674,14 +674,14 @@ msgstr "%1: spremeni vrsto stolpca"
 msgid "%1: clear column"
 msgstr "%1: počisti stolpec"
 
-#: src/backend/core/column/Column.cpp:1535
+#: src/backend/core/column/Column.cpp:1539
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "neveljaven ali manjkajoči indeks vrstice"
 
-#: src/backend/core/column/Column.cpp:1544
-#: src/backend/core/column/Column.cpp:1553
-#: src/backend/core/column/Column.cpp:1562
+#: src/backend/core/column/Column.cpp:1548
+#: src/backend/core/column/Column.cpp:1557
+#: src/backend/core/column/Column.cpp:1566
 #, kde-format
 msgid "invalid row value"
 msgstr "neveljavna vrednost vrstice"
@@ -1106,7 +1106,7 @@ msgstr "Datoteka metapodatkov za izbrani nabor podatkov ni veljavna."
 msgid "There is no download URL present in the metadata file!"
 msgstr "V datoteki metapodatkov ni URL-ja za prenos!"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:204
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:209
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:368
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1927
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:104
@@ -1114,67 +1114,67 @@ msgstr "V datoteki metapodatkov ni URL-ja za prenos!"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:201
 #: src/commonfrontend/worksheet/WorksheetView.cpp:362
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1494
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:94
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:95
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:131
 #, kde-format
 msgid "Image"
 msgstr "Slika"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:204
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:99
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:209
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:100
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr "Hierarhična oblika podatkov 5 (HDF5)"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:204
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:126
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:209
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:130
 #, kde-format
 msgid "ASCII Data"
 msgstr "Podatki ASCII"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:204
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:127
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:209
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:131
 #, kde-format
 msgid "Binary Data"
 msgstr "Dvojiški podatki"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:204
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:209
 #, kde-format
 msgid "Excel"
 msgstr "Excel"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:205
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:102
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:210
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:103
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr "Oblika navadnih podatkov omrežja (NetCDF)"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:205
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:105
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:210
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:109
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr "Prilagodljiva oblika podatkov sistema za prenos slik (FITS)"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:205
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:107
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:210
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:111
 #, kde-format
 msgid "JSON Data"
 msgstr "Podatki JSON"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:206
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:111
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:131
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:211
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:115
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:135
 #, kde-format
 msgid "Spice"
 msgstr "Spice"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:206
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:113
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:211
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:117
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr "SAS, Stata ali SPSS"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:206
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:211
 #, kde-format
 msgid "ROOT (CERN) Histograms"
 msgstr "Histogrami KOREN (CERN)"
@@ -1526,7 +1526,7 @@ msgstr "h5dump ni mogoče najti."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:370
 #: src/backend/datasources/filters/NetCDFFilter.cpp:280
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1274
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1384
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Branje iz datoteke %1 ni uspelo."
@@ -2119,61 +2119,78 @@ msgstr "Raven stiskanja in algoritem: %1"
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Velikost zapisa TStreamerInfo: %1 bajtov"
 
-#: src/backend/datasources/LiveDataSource.cpp:433
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:291
+#, fuzzy, kde-format
+#| msgid "Time"
+msgid "Time_s"
+msgstr "Čas"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:293
+#, fuzzy, kde-format
+#| msgid "Time"
+msgid "Time_ns"
+msgstr "Čas"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:295
+#, kde-format
+msgid "Time_10µs"
+msgstr ""
+
+#: src/backend/datasources/LiveDataSource.cpp:434
 #: src/backend/datasources/MQTTTopic.cpp:142
 #, kde-format
 msgid "Plot data"
 msgstr "Izriši podatke"
 
-#: src/backend/datasources/LiveDataSource.cpp:709
-#: src/backend/datasources/LiveDataSource.cpp:712
-#: src/backend/datasources/LiveDataSource.cpp:715
-#: src/backend/datasources/LiveDataSource.cpp:718
-#: src/backend/datasources/LiveDataSource.cpp:721
-#: src/backend/datasources/LiveDataSource.cpp:724
-#: src/backend/datasources/LiveDataSource.cpp:727
-#: src/backend/datasources/LiveDataSource.cpp:738
+#: src/backend/datasources/LiveDataSource.cpp:711
+#: src/backend/datasources/LiveDataSource.cpp:714
+#: src/backend/datasources/LiveDataSource.cpp:717
+#: src/backend/datasources/LiveDataSource.cpp:720
+#: src/backend/datasources/LiveDataSource.cpp:723
+#: src/backend/datasources/LiveDataSource.cpp:726
+#: src/backend/datasources/LiveDataSource.cpp:729
+#: src/backend/datasources/LiveDataSource.cpp:740
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Napaka zaporednih vrat"
 
-#: src/backend/datasources/LiveDataSource.cpp:709
+#: src/backend/datasources/LiveDataSource.cpp:711
 #, kde-format
 msgid "Failed to open the device."
 msgstr "Odpiranje naprave ni uspelo."
 
-#: src/backend/datasources/LiveDataSource.cpp:712
+#: src/backend/datasources/LiveDataSource.cpp:714
 #, kde-format
 msgid ""
 "Failed to open the device. Please check your permissions on this device."
 msgstr "Odpiranje naprave ni uspelo. Preverite dovoljenja za to napravo."
 
-#: src/backend/datasources/LiveDataSource.cpp:715
+#: src/backend/datasources/LiveDataSource.cpp:717
 #, kde-format
 msgid "Device already opened."
 msgstr "Naprava je že odprta."
 
-#: src/backend/datasources/LiveDataSource.cpp:718
+#: src/backend/datasources/LiveDataSource.cpp:720
 #, kde-format
 msgid "The device is not opened."
 msgstr "Naprava ni odprta."
 
-#: src/backend/datasources/LiveDataSource.cpp:721
+#: src/backend/datasources/LiveDataSource.cpp:723
 #, kde-format
 msgid "Failed to read data."
 msgstr "Branja podatkov ni uspelo."
 
-#: src/backend/datasources/LiveDataSource.cpp:724
+#: src/backend/datasources/LiveDataSource.cpp:726
 #, kde-format
 msgid "Failed to read data. The device is removed."
 msgstr "Branja podatkov ni uspelo. Naprava je odstranjena."
 
-#: src/backend/datasources/LiveDataSource.cpp:727
+#: src/backend/datasources/LiveDataSource.cpp:729
 #, kde-format
 msgid "The device timed out."
 msgstr "Čas za napravo je potekel."
 
-#: src/backend/datasources/LiveDataSource.cpp:738
+#: src/backend/datasources/LiveDataSource.cpp:740
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Prišlo je do naslednje napake: %1."
@@ -5703,10 +5720,10 @@ msgstr "Statistika (porazdelitve)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:510
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:143
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1069
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:147
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1167
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:245
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:293
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:295
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:793
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:86
 #, kde-format
@@ -6291,7 +6308,7 @@ msgstr "%1: premaknite stolpec %2 iz položaja %3 na %4."
 msgid "%1: sort columns"
 msgstr "%1: razvrščanje stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1133
+#: src/backend/spreadsheet/Spreadsheet.cpp:1139
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -6300,7 +6317,7 @@ msgstr[1] "dvojni številski podatki, %1 elementa"
 msgstr[2] "dvojni številski podatki, %1 elementi"
 msgstr[3] "dvojni številski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1136
+#: src/backend/spreadsheet/Spreadsheet.cpp:1142
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -6309,7 +6326,7 @@ msgstr[1] "celoštevilska podatka, %1 elementa"
 msgstr[2] "celoštevilski podatki, %1 elementi"
 msgstr[3] "celoštevilski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1139
+#: src/backend/spreadsheet/Spreadsheet.cpp:1145
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -6318,7 +6335,7 @@ msgstr[1] "dolga celoštevilska podatka, %1 elementa"
 msgstr[2] "dolgi celoštevilski podatki, %1 elementi"
 msgstr[3] "dolgi celoštevilski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1142
+#: src/backend/spreadsheet/Spreadsheet.cpp:1148
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -6327,7 +6344,7 @@ msgstr[1] "tekstovna podatka, %1 elementa"
 msgstr[2] "tekstovni podatki, %1 elementi"
 msgstr[3] "tekstovni podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1145
+#: src/backend/spreadsheet/Spreadsheet.cpp:1151
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -6336,7 +6353,7 @@ msgstr[1] "podatka o mesecu, %1 elementa"
 msgstr[2] "podatki o mesecu, %1 elementi"
 msgstr[3] "podatki o mesecu, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1148
+#: src/backend/spreadsheet/Spreadsheet.cpp:1154
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -6345,7 +6362,7 @@ msgstr[1] "podatka o dnevu, %1 elementa"
 msgstr[2] "podatki o dnevu, %1 elementi"
 msgstr[3] "podatki o dnevu, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1151
+#: src/backend/spreadsheet/Spreadsheet.cpp:1157
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -7265,10 +7282,9 @@ msgstr "Referenčna črta"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:372
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1986
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgid "Reference Range"
-msgstr "Referenčna črta"
+msgstr "Referenčni interval"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:404
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:459
@@ -7424,20 +7440,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: omogočite Kazalec1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1558
-#: src/backend/worksheet/Worksheet.cpp:756
+#: src/backend/worksheet/Worksheet.cpp:754
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: naložite temo %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1560
-#: src/backend/worksheet/Worksheet.cpp:758
+#: src/backend/worksheet/Worksheet.cpp:756
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: naložite privzeto temo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1562
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5231
-#: src/backend/worksheet/Worksheet.cpp:760
+#: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: določite temo"
@@ -7631,50 +7647,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: nastavite polmer kota obrobe"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:260
-#: src/backend/worksheet/Worksheet.cpp:642
-#: src/backend/worksheet/Worksheet.cpp:643
+#: src/backend/worksheet/Worksheet.cpp:640
+#: src/backend/worksheet/Worksheet.cpp:641
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: nastavite zgornji rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:267
-#: src/backend/worksheet/Worksheet.cpp:651
-#: src/backend/worksheet/Worksheet.cpp:652
+#: src/backend/worksheet/Worksheet.cpp:649
+#: src/backend/worksheet/Worksheet.cpp:650
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: nastavite spodnji rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:274
-#: src/backend/worksheet/Worksheet.cpp:660
-#: src/backend/worksheet/Worksheet.cpp:661
+#: src/backend/worksheet/Worksheet.cpp:658
+#: src/backend/worksheet/Worksheet.cpp:659
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: nastavi levi rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:281
-#: src/backend/worksheet/Worksheet.cpp:669
-#: src/backend/worksheet/Worksheet.cpp:670
+#: src/backend/worksheet/Worksheet.cpp:667
+#: src/backend/worksheet/Worksheet.cpp:668
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: nastavite desni rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:288
-#: src/backend/worksheet/Worksheet.cpp:678
-#: src/backend/worksheet/Worksheet.cpp:679
+#: src/backend/worksheet/Worksheet.cpp:676
+#: src/backend/worksheet/Worksheet.cpp:677
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: nastavite navpični razmik postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:295
-#: src/backend/worksheet/Worksheet.cpp:687
-#: src/backend/worksheet/Worksheet.cpp:688
+#: src/backend/worksheet/Worksheet.cpp:685
+#: src/backend/worksheet/Worksheet.cpp:686
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: nastavite vodoravni razmik postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:302
-#: src/backend/worksheet/Worksheet.cpp:705
-#: src/backend/worksheet/Worksheet.cpp:706
+#: src/backend/worksheet/Worksheet.cpp:703
+#: src/backend/worksheet/Worksheet.cpp:704
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: nastavite število stolpcev postavitve"
@@ -7796,22 +7812,19 @@ msgstr ""
 "vrednosti."
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
-#, fuzzy, kde-format
-#| msgid "Border"
+#, kde-format
 msgid "Border Line"
-msgstr "Obroba"
+msgstr "Mejna črta"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: set logical position"
+#, kde-format
 msgid "%1: set start logical position"
-msgstr "%1: določi logični položaj"
+msgstr "%1: nastavi začetni logični položaj"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:242
-#, fuzzy, kde-format
-#| msgid "%1: set logical position"
+#, kde-format
 msgid "%1: set end logical position"
-msgstr "%1: določi logični položaj"
+msgstr "%1: nastavi končni logični položaj"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:151
 #, kde-format
@@ -8512,30 +8525,30 @@ msgstr "%1: določite obrobo"
 msgid "%1: change size type"
 msgstr "%1: spremeni vrsto velikosti"
 
-#: src/backend/worksheet/Worksheet.cpp:626
+#: src/backend/worksheet/Worksheet.cpp:624
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: spremenite lastnost »spremeni velikost vsebine«"
 
-#: src/backend/worksheet/Worksheet.cpp:633
-#: src/backend/worksheet/Worksheet.cpp:634
+#: src/backend/worksheet/Worksheet.cpp:631
+#: src/backend/worksheet/Worksheet.cpp:632
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: nastavite postavitev"
 
-#: src/backend/worksheet/Worksheet.cpp:696
-#: src/backend/worksheet/Worksheet.cpp:697
+#: src/backend/worksheet/Worksheet.cpp:694
+#: src/backend/worksheet/Worksheet.cpp:695
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: nastavite število vrstic postavitve"
 
-#: src/backend/worksheet/Worksheet.cpp:735
-#: src/backend/worksheet/Worksheet.cpp:736
+#: src/backend/worksheet/Worksheet.cpp:733
+#: src/backend/worksheet/Worksheet.cpp:734
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: nastavite velikost strani"
 
-#: src/backend/worksheet/Worksheet.cpp:1477
+#: src/backend/worksheet/Worksheet.cpp:1475
 #, kde-format
 msgid "Curves"
 msgstr "Krivulje"
@@ -9203,12 +9216,12 @@ msgstr "Stolpci"
 msgid "Show All"
 msgstr "Pokaži vse"
 
-#: src/commonfrontend/ProjectExplorer.cpp:494
+#: src/commonfrontend/ProjectExplorer.cpp:495
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr "'%1' ni mogoče prilepiti v %2."
 
-#: src/commonfrontend/ProjectExplorer.cpp:508
+#: src/commonfrontend/ProjectExplorer.cpp:509
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
@@ -9217,32 +9230,38 @@ msgstr ""
 "Podatkov ni mogoče neposredno prilepiti v %1. Za to izberite stolpec "
 "preglednice."
 
-#: src/commonfrontend/ProjectExplorer.cpp:652
+#: src/commonfrontend/ProjectExplorer.cpp:651
 #, kde-format
 msgid "Case Sensitive"
 msgstr "Razlikuj velike in male črke"
 
-#: src/commonfrontend/ProjectExplorer.cpp:660
+#: src/commonfrontend/ProjectExplorer.cpp:659
 #, kde-format
 msgid "Match Complete Word"
 msgstr "Ujemanje celih besed"
 
-#: src/commonfrontend/ProjectExplorer.cpp:669
+#: src/commonfrontend/ProjectExplorer.cpp:668
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr "Približno ujemanje"
 
-#: src/commonfrontend/ProjectExplorer.cpp:879
+#: src/commonfrontend/ProjectExplorer.cpp:886
+#, fuzzy, kde-format
+#| msgid "%1: set visible"
+msgid "%1 elements: set visible: %2"
+msgstr "%1: nastavite vidno"
+
+#: src/commonfrontend/ProjectExplorer.cpp:910
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "Ali res želite izbrisati %1 izbranih objektov?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:881
+#: src/commonfrontend/ProjectExplorer.cpp:912
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "Ali res želite izbrisati %1?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:883
+#: src/commonfrontend/ProjectExplorer.cpp:914
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1585
 #, kde-format
 msgid "Delete selected object"
@@ -9252,7 +9271,7 @@ msgstr[1] "Izbriši izbrana predmeta"
 msgstr[2] "Izbriši izbrane predmete"
 msgstr[3] "Izbriši izbrane predmete"
 
-#: src/commonfrontend/ProjectExplorer.cpp:888
+#: src/commonfrontend/ProjectExplorer.cpp:919
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -10457,6 +10476,16 @@ msgstr ""
 "procesorjih velikih sistemov Mainframe (IBM) in SPARC/PowerPC/Motorola "
 "(angl. big endian).</td></tr></table>"
 
+#: src/kdefrontend/datasources/CANOptionsWidget.cpp:13
+#, kde-format
+msgid "Use NAN"
+msgstr ""
+
+#: src/kdefrontend/datasources/CANOptionsWidget.cpp:14
+#, kde-format
+msgid "Use previous value"
+msgstr ""
+
 #: src/kdefrontend/datasources/DatabaseManagerDialog.cpp:30
 #, kde-format
 msgctxt "@title:window"
@@ -10611,7 +10640,7 @@ msgstr "Nabor podatkov se je uvozil v %1 s."
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:163
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:231
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:759
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:780
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:208
 #, kde-format
 msgid "All"
@@ -10736,7 +10765,7 @@ msgid "Add New Live Data Source"
 msgstr "Dodaj nov vir podatkov v živo"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:107
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:329
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:332
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:127
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:333
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:110
@@ -10746,7 +10775,7 @@ msgid "Hide Options"
 msgstr "Skrij možnosti"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:107
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:329
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:332
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:127
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:333
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:110
@@ -10770,48 +10799,48 @@ msgstr "Ni podatkov za uvoz."
 msgid "No Data"
 msgstr "Ni podatkov"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:320
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:323
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Datoteka %1, uvožena v %2 s."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:348
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:384
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:411
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:435
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:460
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:493
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:516
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:351
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:387
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:414
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:438
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:463
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:496
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:519
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:157
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr "Zaprite pogovorno okno in uvozite podatke."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:350
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:353
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:151
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr "Uvoz v matriko ni mogoče, ker podatki vsebujejo neštevilske podatke."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:362
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:365
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:135
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "Izberite vsebnik podatkov, v katerega je potrebno uvoziti podatke."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:387
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:390
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "Podana datoteka ne obstaja."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:415
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:418
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 "Povezave z zagotovljeno krajevno vtičnico ni bilo mogoče vzpostaviti. "
 "Napaka: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:421
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:424
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
@@ -10819,33 +10848,33 @@ msgstr ""
 "Povezave z zagotovljeno krajevno vtičnico ni bilo mogoče vzpostaviti. "
 "Vtičnica ne obstaja."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:440
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:443
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Povezave z vtičnico TCP ni bilo mogoče vzpostaviti. Napaka: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:446
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:472
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:449
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:475
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Ime gostitelja ali številka vrat manjka."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:466
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:469
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Povezave z vtičnico UDP ni bilo mogoče vzpostaviti. Napaka: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:497
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:500
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr "Povezave z navedenimi serijskimi vrati ni bilo mogoče vzpostaviti."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:503
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:506
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Številka serijskih vrat manjka."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:519
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:522
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -10853,33 +10882,38 @@ msgid ""
 msgstr ""
 "Povezave ni, naročnine niso bile narejene ali pa filter datoteke ni ASCII."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:92
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:93
 #, kde-format
 msgid "ASCII data"
 msgstr "Podatki ASCII"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:93
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:94
 #, kde-format
 msgid "Binary data"
 msgstr "Dvojiški podatki"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:96
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:97
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:109
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:129
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:106
+#, kde-format
+msgid "Vector Binary Logfile (BLF)"
+msgstr ""
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:113
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:133
 #, kde-format
 msgid "ROOT (CERN)"
 msgstr "KOREN (CERN)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:116
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:120
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr "Datoteka MATLAB MAT"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:139
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:143
 #, kde-format
 msgid ""
 "If this option is checked, only the link to the file is stored in the "
@@ -10888,7 +10922,7 @@ msgstr ""
 "Če je ta možnost izbrana, je v datoteko projekta shranjena samo povezava do "
 "datoteke, ne pa tudi njena vsebina."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:140
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:144
 #, kde-format
 msgid ""
 "If this option is checked, the relative path of the file (relative to "
@@ -10897,19 +10931,19 @@ msgstr ""
 "Če je ta možnost izbrana, bo shranjena relativna pot datoteke (glede na mapo "
 "projekta)."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:143
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1068
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:147
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1166
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
 #, kde-format
 msgid "Automatic"
 msgstr "Samodejno"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:151
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:155
 #, kde-format
 msgid "Whole File"
 msgstr "Celotna datoteka"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:181
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:192
 #, kde-format
 msgid ""
 "Specify how the data source has to be processed on every read:"
@@ -10928,7 +10962,7 @@ msgstr ""
 "prebere in obdela v celoti. Na voljo samo za vire podatkov »Datoteka ali "
 "imenovana cev«.</li></ul>"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:192
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:203
 #, kde-format
 msgid ""
 "Number of samples (lines) to be processed on every read.\n"
@@ -10938,7 +10972,7 @@ msgstr ""
 "Število vzorcev (vrstic), ki jih je treba obdelati pri vsakem branju.\n"
 "Določiti je treba le način branja »Neprekinjeno fiksno« in »Od konca«."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:198
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:209
 #, kde-format
 msgid ""
 "Specify when and how frequently the data source needs to be read:"
@@ -10951,12 +10985,12 @@ msgstr ""
 "časovnih intervalih.</li><li>Ob novih podatkih - vir podatkov se prebere, ko "
 "prispejo novi podatki.</li></ul>"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:206
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:217
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
 msgstr "Določite, kako pogosto je treba brati vir podatkov."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:211
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:222
 #, kde-format
 msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
@@ -10965,7 +10999,7 @@ msgstr ""
 "Določite, koliko vzorcev je treba hraniti v pomnilniku po branju.\n"
 "Če je treba hraniti vse podatke, uporabite »Vse«."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:216
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:227
 #, kde-format
 msgid ""
 "Enable to use the first row of the selected data region for the column names "
@@ -10974,12 +11008,12 @@ msgstr ""
 "Izberite vrednosti v prvi vrstici izbranega področja podatkov kot imena "
 "stolpcev preglednice."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:231
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:242
 #, kde-format
 msgid "Manage MQTT connections"
 msgstr "Upravljanje povezav MQTT"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:233
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:244
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:65
 #, kde-format
 msgid ""
@@ -10989,38 +11023,45 @@ msgstr ""
 "Navedite sporočilo »Poslednja volja in oporoka« (LWT). Na vsaj eno temo se "
 "je treba naročiti."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:840
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:879
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Izberite vir podatkov datoteke"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:962
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:909
+#, fuzzy, kde-format
+#| msgid " Select the image file"
+msgctxt "@title:window"
+msgid "Select the DBC file"
+msgstr " Izberite slikovno datoteko"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1032
 #, kde-format
 msgid "Save Filter Settings as"
 msgstr "Shrani nastavitve filtra kot"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:962
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1032
 #, kde-format
 msgid "Filter name:"
 msgstr "Ime filtra:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:962
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1032
 #, kde-format
 msgid "new filter"
 msgstr "nov filter"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:995
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:414
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1080
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:428
 #, kde-format
 msgid "Data Format"
 msgstr "Oblika podatkov"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:996
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:468
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1081
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:482
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
 msgid "Preview"
@@ -11028,98 +11069,98 @@ msgstr "Predogled"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:998
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:540
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1083
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:561
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Del podatkov za branje"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1029
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1114
 #, kde-format
 msgid "Data format && preview"
 msgstr "Oblika podatkov in predogled"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1266
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1376
 #, kde-format
 msgid "file command not found"
 msgstr "ukaz datoteke ni bil najden"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1277
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1387
 #, kde-format
 msgid "cannot open"
 msgstr "ni mogoče odpreti"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1282
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1392
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Vrsta datoteke:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1287
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1397
 #, kde-format
 msgid "General:"
 msgstr "Splošno:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1289
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1290
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1291
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1399
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1400
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1401
 #, kde-format
 msgid "yes"
 msgstr "da"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1289
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1290
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1291
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1399
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1400
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1401
 #, kde-format
 msgid "no"
 msgstr "ne"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1289
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1399
 #, kde-format
 msgid "Readable: %1"
 msgstr "Berljivo: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1290
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1400
 #, kde-format
 msgid "Writable: %1"
 msgstr "Zapisljivo: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1291
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1401
 #, kde-format
 msgid "Executable: %1"
 msgstr "Izvršljivo: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1293
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1403
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Čas rojstva: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1294
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1404
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Zadnja sprememba metapodatkov: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1295
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Nazadnje spremenjeno: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1296
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
 #, kde-format
 msgid "Last read: %1"
 msgstr "Zadnje branje: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1297
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
 #, kde-format
 msgid "Owner: %1"
 msgstr "Lastnik: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1298
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1408
 #, kde-format
 msgid "Group: %1"
 msgstr "Skupina: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1299
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -11128,79 +11169,79 @@ msgstr[1] "%1 cbyta"
 msgstr[2] "%1 cbyti"
 msgstr[3] "%1 cbytov"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1302
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1412
 #, kde-format
 msgid "Summary:"
 msgstr "Povzetek:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1322
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1327
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1432
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1437
 #, kde-format
 msgid "Content:"
 msgstr "Vsebina:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1352
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1465
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Datoteke %1 ni mogoče odpreti za branje."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1508
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1623
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Za izbrano temo podatki še niso prispeli"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1721
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1845
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Ni datoteka HDF5: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2149
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2276
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Ni se možno naročiti na vse teme, ki so na voljo."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2179
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2306
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Povezava z »%1« je prekinjena."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2248
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2375
 #, kde-format
 msgid "Available (%1)"
 msgstr "Na voljo (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2360
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2487
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Napačno uporabniško ime ali geslo"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2363
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2490
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "ID odjemalca ni bil sprejet"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2367
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2494
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Posrednika %1 ni mogoče doseči."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2370
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2497
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "Odjemalec ni pooblaščen za povezavo."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2373
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2500
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Prišlo je do neznane napake."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2379
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2382
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2506
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2509
 #, kde-format
 msgid "An error occurred."
 msgstr "Prišlo je do napake."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2396
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2523
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Povezava z »%1:%2« je potekla."
@@ -11933,7 +11974,7 @@ msgstr "%1 osi: naložena predloga »%2«"
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:294
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:266
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:612
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:620
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1304
 #, kde-format
 msgid "%1: template \"%2\" loaded"
@@ -12608,27 +12649,27 @@ msgstr ""
 "Če je potrjeno, spremenite velikost vsebine delovnega lista o spremembah "
 "velikosti. Drugače spremenite samo velikost platna."
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:272
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:274
 #, kde-format
 msgid "Portrait"
 msgstr "Pokončno"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:273
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:275
 #, kde-format
 msgid "Landscape"
 msgstr "Ležeče"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:291
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:293
 #, kde-format
 msgid "View Size"
 msgstr "Velikost pogleda"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:292
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:294
 #, kde-format
 msgid "Standard Page"
 msgstr "Standardna stran"
 
-#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:610
+#: src/kdefrontend/dockwidgets/WorksheetDock.cpp:618
 #, kde-format
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "%1 delovnih listov: naložena predloga »%2«"
@@ -13263,11 +13304,10 @@ msgid "Reference Line"
 msgstr "Referenčna črta"
 
 #: src/kdefrontend/GuiObserver.cpp:377
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
-msgstr "Referenčna črta"
+msgstr "Referenčni interval"
 
 #: src/kdefrontend/GuiObserver.cpp:382
 #, kde-format
@@ -14821,10 +14861,9 @@ msgid "Difference"
 msgstr "Diferenca"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Baseline (arPLS Algorithm)"
-msgstr "Naravni logaritem (z osnovo 10)"
+msgstr "Osnova (algoritem arPLS)"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:151
 #, kde-format
@@ -14834,16 +14873,13 @@ msgid ""
 msgstr "Parameter glajenja - višja vrednost povzroča bolj gladko ozadje."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:155
-#, fuzzy, kde-format
-#| msgid ""
-#| "Weighting ratio - value between 0 and 1, smaller values allow less "
-#| "negative values."
+#, kde-format
 msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
 "less negative values."
 msgstr ""
-"Količnik uteži - vrednost med 0 in 1, manjše vrednosti dovoljujejo manj "
-"negative vrednosti."
+"Uteženi končni količnik - vrednost med 0 in 1, manjše vrednosti dovoljujejo "
+"manj negative vrednosti."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:159
 #, kde-format
@@ -14866,10 +14902,9 @@ msgid "result"
 msgstr "rezultat"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:589
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Ratio: %1"
-msgstr "Sukanje:"
+msgstr "Kvocient: %1"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:633
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:640
@@ -15895,7 +15930,7 @@ msgstr "Komentar:"
 #: src/kdefrontend/ui/datapickercurvewidget.ui:88
 #: src/kdefrontend/ui/datapickerimagewidget.ui:182
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:56
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:326
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:259
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:116
 #: src/kdefrontend/ui/dockwidgets/aspectdock.ui:17
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:323
@@ -16375,7 +16410,7 @@ msgstr "y="
 #. i18n: ectx: property (text), widget (QLabel, lFileType)
 #. i18n: ectx: property (text), widget (QLabel, lPlotType)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:551
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:231
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:165
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:536
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:646
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:917
@@ -16625,6 +16660,40 @@ msgstr "Vrstni red bajtov:"
 msgid "Create index column"
 msgstr "Ustvari stolpec indeksa"
 
+#. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
+#. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, ValueWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, LineWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, ExcelOptionsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, CANOptionsWidget)
+#: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:14
+#: src/kdefrontend/ui/datasources/exceloptionswidget.ui:14
+#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:14
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:14
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:14
+#: src/kdefrontend/ui/settingsnotebookpage.ui:14
+#: src/kdefrontend/ui/spreadsheet/flattencolumnswidget.ui:14
+#: src/kdefrontend/ui/spreadsheet/samplevalueswidget.ui:14
+#, kde-format
+msgid "Form"
+msgstr "Oblika"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:25
+#, fuzzy, kde-format
+#| msgid "Import to"
+msgid "Import mode:"
+msgstr "Uvozi v"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
+#: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:32
+#, fuzzy, kde-format
+#| msgid "Convert NaN to 0"
+msgid "Convert time to seconds"
+msgstr "Pretvori naN v 0"
+
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:33
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:29
@@ -16652,7 +16721,7 @@ msgstr "Gonilnik:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHost)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:76
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:60
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:219
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:58
 #, kde-format
 msgid "Host:"
@@ -16661,8 +16730,8 @@ msgstr "Gostitelj:"
 #. i18n: ectx: property (text), widget (QLabel, lPort)
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:90
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:182
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:343
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:198
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:337
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:72
 #, kde-format
 msgid "Port:"
@@ -16796,24 +16865,6 @@ msgstr "Polno ime"
 msgid "Collection"
 msgstr "Zbirka"
 
-#. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
-#. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, ValueWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, LineWidget)
-#. i18n: ectx: property (windowTitle), widget (QWidget, ExcelOptionsWidget)
-#: src/kdefrontend/ui/datasources/exceloptionswidget.ui:14
-#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:14
-#: src/kdefrontend/ui/dockwidgets/linewidget.ui:14
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:14
-#: src/kdefrontend/ui/settingsnotebookpage.ui:14
-#: src/kdefrontend/ui/spreadsheet/flattencolumnswidget.ui:14
-#: src/kdefrontend/ui/spreadsheet/samplevalueswidget.ui:14
-#, kde-format
-msgid "Form"
-msgstr "Oblika"
-
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPreviewRows)
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
@@ -16821,7 +16872,7 @@ msgstr "Oblika"
 #: src/kdefrontend/ui/datasources/exceloptionswidget.ui:40
 #: src/kdefrontend/ui/datasources/fitsoptionswidget.ui:19
 #: src/kdefrontend/ui/datasources/hdf5optionswidget.ui:41
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:480
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:507
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:179
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:80
 #: src/kdefrontend/ui/datasources/netcdfoptionswidget.ui:53
@@ -16834,7 +16885,7 @@ msgstr "Število vrstic za predogled:"
 #: src/kdefrontend/ui/datasources/exceloptionswidget.ui:70
 #: src/kdefrontend/ui/datasources/fitsoptionswidget.ui:49
 #: src/kdefrontend/ui/datasources/hdf5optionswidget.ui:21
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:513
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:514
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:199
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:115
 #: src/kdefrontend/ui/datasources/netcdfoptionswidget.ui:88
@@ -16879,22 +16930,120 @@ msgstr "Kategorije"
 msgid "Data Source"
 msgstr "Vir podatkov"
 
+#. i18n: ectx: property (text), widget (QLabel, lField)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:50
+#, kde-format
+msgid "Field:"
+msgstr "Polje:"
+
+#. i18n: ectx: property (text), widget (QLabel, lLWT)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:63
+#: src/kdefrontend/ui/dockwidgets/livedatadock.ui:364
+#, kde-format
+msgid "LWT:"
+msgstr "LWT:"
+
+#. i18n: ectx: property (text), widget (QLabel, lTopics)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:77
+#, kde-format
+msgid "Topics:"
+msgstr "Teme:"
+
+#. i18n: ectx: property (text), widget (QLabel, lExcelFirstRowAsColNames)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:87
+#, kde-format
+msgid "First row as column names:"
+msgstr "Prva vrsta kot imena stolpcev:"
+
+#. i18n: ectx: property (text), widget (QLabel, lFilter)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:94
+#, kde-format
+msgid "Filter:"
+msgstr "Filter:"
+
 #. i18n: ectx: property (toolTip), widget (QPushButton, bSaveFilter)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:53
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:104
 #, kde-format
 msgid "Save the current filter settings"
 msgstr "Shrani trenutne nastavitve filtra"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:118
+#, kde-format
+msgid "File or Named Pipe"
+msgstr "Datoteka ali imenovana cev"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:123
+#, kde-format
+msgid "Network TCP Socket"
+msgstr "Omrežna vtičnica TCP"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:128
+#, kde-format
+msgid "Network UDP Socket"
+msgstr "Omrežna vtičnica UDP"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:133
+#, kde-format
+msgid "Local Socket"
+msgstr "Krajevna vtičnica"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:138
+#, kde-format
+msgid "Serial Port"
+msgstr "Zaporedna vrata"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bManageFilters)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:155
+#, kde-format
+msgid "Manage filters"
+msgstr "Upravljaj filtre"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:188
+#: src/kdefrontend/ui/datasources/importprojectwidget.ui:36
+#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:115
+#: src/kdefrontend/ui/fitsheadereditwidget.ui:53
+#: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:52
+#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:29
+#, kde-format
+msgid " Select the file to import"
+msgstr " Izberite datoteko za uvoz"
+
+#. i18n: ectx: property (text), widget (QLabel, lRelativePath)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:252
+#, kde-format
+msgid "Relative Path:"
+msgstr "Relativna pot:"
+
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:105
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:304
 #, kde-format
 msgid "Show file info"
 msgstr "Pokaži podatke o datoteki"
 
+#. i18n: ectx: property (text), widget (QLabel, lBaudRate)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:330
+#, kde-format
+msgid "Baud rate:"
+msgstr "Hitrost v Baudih:"
+
+#. i18n: ectx: property (text), widget (QLabel, lConnection)
+#. i18n: ectx: property (text), widget (QLabel, lConnections)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:344
+#: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:35
+#, kde-format
+msgid "Connection:"
+msgstr "Povezava:"
+
 #. i18n: ectx: property (text), widget (QLabel, lSourceInfo)
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceType)
 #. i18n: ectx: property (text), widget (QLabel, lSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:128
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:351
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:59
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:322
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:113
@@ -16909,244 +17058,160 @@ msgstr "Pokaži podatke o datoteki"
 msgid "Source:"
 msgstr "Vir:"
 
-#. i18n: ectx: property (text), widget (QLabel, lBaudRate)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:135
-#, kde-format
-msgid "Baud rate:"
-msgstr "Hitrost v Baudih:"
+#. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:371
+#, fuzzy, kde-format
+#| msgid "Database"
+msgid "DBC Database"
+msgstr "Zbirka podatkov"
 
-#. i18n: ectx: property (text), widget (QLabel, lLWT)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:158
-#: src/kdefrontend/ui/dockwidgets/livedatadock.ui:364
+#. i18n: ectx: property (text), widget (QLabel, lWarningLimitedMessages)
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:547
 #, kde-format
-msgid "LWT:"
-msgstr "LWT:"
-
-#. i18n: ectx: property (text), widget (QLabel, lConnection)
-#. i18n: ectx: property (text), widget (QLabel, lConnections)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:165
-#: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:35
-#, kde-format
-msgid "Connection:"
-msgstr "Povezava:"
-
-#. i18n: ectx: property (text), widget (QLabel, lFilter)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:172
-#, kde-format
-msgid "Filter:"
-msgstr "Filter:"
-
-#. i18n: ectx: property (text), widget (QLabel, lField)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:189
-#, kde-format
-msgid "Field:"
-msgstr "Polje:"
-
-#. i18n: ectx: property (text), widget (QLabel, lRelativePath)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:202
-#, kde-format
-msgid "Relative Path:"
-msgstr "Relativna pot:"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, bManageFilters)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:221
-#, kde-format
-msgid "Manage filters"
-msgstr "Upravljaj filtre"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:266
-#, kde-format
-msgid "File or Named Pipe"
-msgstr "Datoteka ali imenovana cev"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:271
-#, kde-format
-msgid "Network TCP Socket"
-msgstr "Omrežna vtičnica TCP"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:276
-#, kde-format
-msgid "Network UDP Socket"
-msgstr "Omrežna vtičnica UDP"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:281
-#, kde-format
-msgid "Local Socket"
-msgstr "Krajevna vtičnica"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:286
-#, kde-format
-msgid "Serial Port"
-msgstr "Zaporedna vrata"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:300
-#: src/kdefrontend/ui/datasources/importprojectwidget.ui:36
-#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:115
-#: src/kdefrontend/ui/fitsheadereditwidget.ui:53
-#: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:52
-#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:29
-#, kde-format
-msgid " Select the file to import"
-msgstr " Izberite datoteko za uvoz"
-
-#. i18n: ectx: property (text), widget (QLabel, lTopics)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:333
-#, kde-format
-msgid "Topics:"
-msgstr "Teme:"
-
-#. i18n: ectx: property (text), widget (QLabel, lExcelFirstRowAsColNames)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:364
-#, kde-format
-msgid "First row as column names:"
-msgstr "Prva vrsta kot imena stolpcev:"
+msgid ""
+"Not all variables might be visible, because of limited number of messages"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lStartRow)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:546
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:567
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:245
 #, kde-format
 msgid "Start row:"
 msgstr "Začetna vrstica:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbEndRow)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:553
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:574
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:291
 #, kde-format
 msgid "Specify the end row to import; -1 stands for the last row"
 msgstr "Določite končno vrstico za uvoz; -1 pomeni zadnjo vrstico"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartColumn)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:569
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:590
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:320
 #, kde-format
 msgid "Start column:"
 msgstr "Začetni stolpec:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbStartColumn)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:576
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:597
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:327
 #, kde-format
 msgid "Specify the start column for import"
 msgstr "Določanje začetni stolpec za uvoz"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbStartRow)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:605
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:626
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:252
 #, kde-format
 msgid "Specify the start row for import"
 msgstr "Določite začetno vrstico za uvoz"
 
 #. i18n: ectx: property (text), widget (QLabel, lEndColumn)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:650
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:671
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:356
 #, kde-format
 msgid "End column:"
 msgstr "Končni stolpec:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbEndColumn)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:657
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:678
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:363
 #, kde-format
 msgid "Specify the end column to import; -1 stands for the last column"
 msgstr "Določite končni stolpec za uvoz; -1 pomeni zadnji stolpec"
 
 #. i18n: ectx: property (text), widget (QLabel, lEndRow)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:686
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:707
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:284
 #, kde-format
 msgid "End row:"
 msgstr "Končna vrstica:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbUpdateOptions)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:713
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:734
 #, kde-format
 msgid "Update Options"
 msgstr "Možnosti posodabljanja"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:720
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:741
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:334
 #, kde-format
 msgid "Continuously Fixed"
 msgstr "Neprekinjeno fiksno"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:725
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:746
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:339
 #, kde-format
 msgid "From End"
 msgstr "Od konca"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:730
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:751
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:344
 #, kde-format
 msgid "Till the End"
 msgstr "Do konca"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:738
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:759
 #, kde-format
 msgid "Update:"
 msgstr "Posodobi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lReadingType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:745
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:766
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:141
 #, kde-format
 msgid "Read:"
 msgstr "Branje:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:752
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:773
 #, kde-format
 msgid "Update interval:"
 msgstr "Interval osveževanja:"
 
 #. i18n: ectx: property (text), widget (QLabel, lKeepNvalues)
 #. i18n: ectx: property (text), widget (QLabel, lKeepLastValues)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:769
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:790
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:307
 #, kde-format
 msgid "Keep last values:"
 msgstr "Ohrani zadnje vrednosti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:776
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:797
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:85
 #, kde-format
 msgid "Sample size:"
 msgstr "Velikost vzorca:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbUpdateType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:803
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:824
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:232
 #, kde-format
 msgid "Periodically"
 msgstr "Periodično"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbUpdateType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:808
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:829
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:237
 #, kde-format
 msgid "On New Data"
 msgstr "Ob novih podatkih"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbUpdateInterval)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:822
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:843
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:125
 #, kde-format
 msgid " ms"
 msgstr " ms"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLinkFile)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:841
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:862
 #, kde-format
 msgid "Link the file"
 msgstr "Poveži z datoteko"
@@ -18803,19 +18868,17 @@ msgstr "Obseg izrisa:"
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:63
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:112
-#, fuzzy, kde-format
-#| msgid "Start:"
+#, kde-format
 msgid "Start x:"
-msgstr "Začetek:"
+msgstr "Začetek x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeEnd)
 #. i18n: ectx: property (text), widget (QLabel, lPositionEnd)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:226
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:288
-#, fuzzy, kde-format
-#| msgid "End row:"
+#, kde-format
 msgid "End x:"
-msgstr "Končna vrstica:"
+msgstr "Konec x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:161
@@ -20347,17 +20410,15 @@ msgstr "Končni čas:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:205
-#, fuzzy, kde-format
-#| msgid "Smoothness:"
+#, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Glajenje:"
+msgstr "Glajenje (Potenca 10):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:218
-#, fuzzy, kde-format
-#| msgid "Orientation:"
+#, kde-format
 msgid "Termination Ratio:"
-msgstr "Usmerjenost:"
+msgstr "Končni količnik:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:234
@@ -21540,9 +21601,6 @@ msgstr "Ni mogoče odpreti datoteke:"
 
 #~ msgid "Advanced"
 #~ msgstr "Napredno"
-
-#~ msgid "Time"
-#~ msgstr "Čas"
 
 #~ msgid "X-data:"
 #~ msgstr "X-podatki:"
