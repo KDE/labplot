@@ -1982,10 +1982,10 @@ void CartesianPlot::addReferenceLine() {
 }
 
 void CartesianPlot::addReferenceRange() {
-	Q_D(CartesianPlot);
 	auto* range = new ReferenceRange(this, i18n("Reference Range"));
 	range->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 
+	// Q_D(CartesianPlot);
 	// 	if (d->calledFromContextMenu) {
 	// 		range->setPositionLogical(d->logicalPos);
 	// 		d->calledFromContextMenu = false;

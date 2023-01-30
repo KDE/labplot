@@ -42,6 +42,7 @@
 		auto* element = new WorksheetElementType(p, QStringLiteral("element"));                                                                                \
 		p->addChild(element);                                                                                                                                  \
 		auto* dock = new DockType(nullptr);                                                                                                                    \
+		Q_UNUSED(dock);                                                                                                                                        \
 		MACRO_NAME(element, dockSetElementsMethodName);                                                                                                        \
 	}
 
@@ -58,6 +59,7 @@
 		VALUES_EQUAL(element->position().point.y(), 0.);                                                                                                       \
 		element->retransform(); /* Needed because otherwise logical position is not set */                                                                     \
 		auto* dock = new DockType(nullptr);                                                                                                                    \
+		Q_UNUSED(dock);                                                                                                                                        \
 		MACRO_NAME(element, dockSetElementsMethodName);                                                                                                        \
 	}
 

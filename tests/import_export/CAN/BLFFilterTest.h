@@ -15,7 +15,7 @@
 
 namespace Vector {
 namespace BLF {
-class CanMessage2;
+struct CanMessage2;
 } // namespace BLF
 } // namespace Vector
 
