@@ -177,12 +177,12 @@ MainWin::~MainWin() {
 		// 		if (dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
 		// 			m_mdiArea->closeAllSubWindows();
 
+		delete m_guiObserver;
+		delete m_aspectTreeModel;
 		disconnect(m_project, nullptr, this, nullptr);
 		delete m_project;
 	}
 
-	delete m_aspectTreeModel;
-	delete m_guiObserver;
 	//	delete m_welcomeScreenHelper;
 }
 
@@ -1239,12 +1239,8 @@ bool MainWin::newProject() {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	delete m_project;
-	m_project = nullptr;
-	delete m_aspectTreeModel;
-	m_aspectTreeModel = nullptr;
-
 	m_project = new Project();
+	m_guiObserver = new GuiObserver(this);
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
 
@@ -1305,9 +1301,6 @@ bool MainWin::newProject() {
 		m_propertiesDock->setWidget(scrollArea); // scroll area inside dock
 
 		connect(m_propertiesDock, &QDockWidget::visibilityChanged, this, &MainWin::propertiesDockVisibilityChanged);
-
-		// GUI-observer;
-		m_guiObserver = new GuiObserver(this);
 	}
 
 	m_projectExplorer->setModel(m_aspectTreeModel);
@@ -1595,12 +1588,12 @@ bool MainWin::closeProject() {
 
 	m_projectClosing = true;
 	statusBar()->clearMessage();
+	delete m_guiObserver;
+	m_guiObserver = nullptr;
 	delete m_aspectTreeModel;
 	m_aspectTreeModel = nullptr;
 	delete m_project;
 	m_project = nullptr;
-	delete m_guiObserver;
-	m_guiObserver = nullptr;
 	m_projectClosing = false;
 
 	// update the UI if we're just closing a project

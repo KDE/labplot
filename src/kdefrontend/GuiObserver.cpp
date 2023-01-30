@@ -165,8 +165,8 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_mainWindow(mainWin) {
 }
 
 GuiObserver::~GuiObserver() {
-	for (auto* dock : initializedDocks)
-		delete dock;
+	while (!initializedDocks.isEmpty())
+		delete initializedDocks.takeLast();
 }
 
 /*!
