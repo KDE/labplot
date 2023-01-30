@@ -962,7 +962,7 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos() {
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.01"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 2); // cursor should not be at position of the minus but behind the 1
 }
-/*
+
 void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
@@ -1007,7 +1007,7 @@ void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-11.81"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 }
-
+/*
 void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	// Limit to min/max when stepping in the spinbox
 	// instead of raising an error
