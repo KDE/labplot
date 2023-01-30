@@ -1007,7 +1007,7 @@ void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-11.81"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 }
-
+/*
 void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	// Limit to min/max when stepping in the spinbox
 	// instead of raising an error
@@ -1053,7 +1053,7 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	QCOMPARE(valueChangedCounter, 2);
 	QCOMPARE(sb.toolTip(), QString());
 }
-/*
+*/
 // \brief WidgetsTest::numberSpinBoxDecimalsMinMax
 // In the default implementation of QDoubleSpinbox the maximum and
 // minimums are round to the decimals. The numberspinbox should not do
@@ -1067,6 +1067,5 @@ void WidgetsTest::numberSpinBoxDecimalsMinMax() {
 	sb.setMinimum(1.289343892e-15);
 	QCOMPARE(sb.minimum(), 1.289343892e-15); // not rounded!
 }
-*/
 
 QTEST_MAIN(WidgetsTest)

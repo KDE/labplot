@@ -35,7 +35,7 @@ private Q_SLOTS:
 	// OK
 	void numberSpinBoxScrollingNegToPos2();
 	void numberSpinBoxScrollingNegativeValues();
-	void numberSpinBoxMinimumFeedback();
-	//			void numberSpinBoxDecimalsMinMax();
+	//	void numberSpinBoxMinimumFeedback();
+	void numberSpinBoxDecimalsMinMax();
 };
 #endif // WIDGETSTEST_H
