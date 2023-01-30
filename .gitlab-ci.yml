@@ -15,9 +15,6 @@ include:
 windows_qt515:
   stage: build
   image: kdeorg/windows-msvc2019-qt515:latest
-  only:
-    - merge_requests
-    - master
   tags:
     - Windows
   variables:
@@ -110,9 +107,6 @@ fedora_36_full:
 clang_format:
   stage: build
   image: debian:testing
-  only:
-    - merge_requests
-    - master
   before_script:
     - apt-get update
     - apt-get install --yes --no-install-recommends git clang-format-13
