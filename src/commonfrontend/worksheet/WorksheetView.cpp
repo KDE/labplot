@@ -1078,6 +1078,8 @@ void WorksheetView::resizeEvent(QResizeEvent* event) {
 
 void WorksheetView::wheelEvent(QWheelEvent* event) {
 	if (isInteractive() && (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier))) {
+        if (!zoomFitNoneAction)
+            initActions();
 		zoomFitNoneAction->setChecked(true);
 		m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
 		// https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
