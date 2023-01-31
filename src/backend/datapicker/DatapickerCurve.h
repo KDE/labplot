@@ -44,6 +44,8 @@ public:
 	void updatePoints();
 	void updatePoint(const DatapickerPoint*);
 
+	void suppressUpdatePoint(bool);
+
 	Symbol* symbol() const;
 	BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)
 	BASIC_D_ACCESSOR_DECL(qreal, pointErrorBarSize, PointErrorBarSize)
@@ -82,6 +84,7 @@ private:
 	Column* appendColumn(const QString&);
 
 	Spreadsheet* m_datasheet{nullptr};
+	bool m_supressResizeDatasheet{false};
 
 	void childAdded(const AbstractAspect* child);
 	void childRemoved(const AbstractAspect* child);

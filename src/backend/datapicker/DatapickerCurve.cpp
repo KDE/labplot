@@ -83,6 +83,8 @@ void DatapickerCurve::init() {
 }
 
 void DatapickerCurve::childAdded(const AbstractAspect* child) {
+	if (m_supressResizeDatasheet)
+		return;
 	const auto* p = dynamic_cast<const DatapickerPoint*>(child);
 	if (!p)
 		return;
@@ -393,6 +395,17 @@ void DatapickerCurve::setSelectedInView(bool b) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
+void DatapickerCurve::suppressUpdatePoint(bool suppress) {
+	m_supressResizeDatasheet = suppress;
+
+	if (!suppress) {
+		// update points
+		auto points = children<DatapickerPoint>();
+		m_datasheet->setRowCount(points.count());
+		updatePoints();
+	}
+}
+
 void DatapickerCurve::updatePoints() {
 	for (auto* point : children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 		updatePoint(point);
@@ -406,6 +419,9 @@ void DatapickerCurve::updatePoints() {
 */
 void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 	Q_D(DatapickerCurve);
+
+	if (m_supressResizeDatasheet)
+		return;
 
 	// TODO: this check shouldn't be required.
 	// redesign the retransform()-call in load() to avoid it.

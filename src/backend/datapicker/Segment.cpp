@@ -165,10 +165,13 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 			}
 
 			if (!posList.isEmpty()) {
-				datapicker->activeCurve()->beginMacro(i18n("%1: draw points over segment", datapicker->activeCurve()->name()));
+				auto* curve = datapicker->activeCurve();
+				curve->beginMacro(i18n("%1: draw points over segment", datapicker->activeCurve()->name()));
+				curve->suppressUpdatePoint(true);
 				for (const QPointF& pos : posList)
-					datapicker->addNewPoint(pos, datapicker->activeCurve());
-				datapicker->activeCurve()->endMacro();
+					datapicker->addNewPoint(pos, curve);
+				curve->suppressUpdatePoint(false);
+				curve->endMacro();
 			}
 		}
 
