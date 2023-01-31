@@ -50,6 +50,7 @@ public:
 	void setImages(QList<DatapickerImage*>);
 	void load();
 	void updateLocale() override;
+	void updateXPositionWidgets(bool datetime);
 
 private:
 	Ui::DatapickerImageWidget ui;
@@ -90,6 +91,7 @@ private Q_SLOTS:
 	void graphTypeChanged(int);
 	void ternaryScaleChanged(double);
 	void logicalPositionChanged();
+	void dateTimeUsageChanged(bool checked);
 
 	// symbol properties
 	void pointsVisibilityChanged(bool);

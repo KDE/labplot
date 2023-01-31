@@ -256,6 +256,11 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	connect(ui.sbPositionZ2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
 	connect(ui.sbPositionZ3, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
 
+	connect(ui.cbDatetime, &QCheckBox::clicked, this, &DatapickerImageWidget::dateTimeUsageChanged);
+	connect(ui.dtePositionX1, &QDateTimeEdit::dateTimeChanged, this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.dtePositionX2, &QDateTimeEdit::dateTimeChanged, this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.dtePositionX3, &QDateTimeEdit::dateTimeChanged, this, &DatapickerImageWidget::logicalPositionChanged);
+
 	connect(ui.chbSymbolVisible, &QCheckBox::clicked, this, &DatapickerImageWidget::pointsVisibilityChanged);
 }
 
@@ -316,6 +321,9 @@ void DatapickerImageWidget::handleWidgetActions() {
 	ui.sbPositionY1->setEnabled(b);
 	ui.sbPositionY2->setEnabled(b);
 	ui.sbPositionY3->setEnabled(b);
+	ui.dtePositionX1->setEnabled(b);
+	ui.dtePositionX2->setEnabled(b);
+	ui.dtePositionX3->setEnabled(b);
 	ui.sbMinSegmentLength->setEnabled(b);
 	ui.sbPointSeparation->setEnabled(b);
 
@@ -327,6 +335,15 @@ void DatapickerImageWidget::handleWidgetActions() {
 		gvSaturation->bins = m_image->saturationBins;
 		gvValue->bins = m_image->valueBins;
 	}
+}
+
+void DatapickerImageWidget::updateXPositionWidgets(bool datetime) {
+	ui.sbPositionX1->setVisible(!datetime);
+	ui.sbPositionX2->setVisible(!datetime);
+	ui.sbPositionX3->setVisible(!datetime);
+	ui.dtePositionX1->setVisible(datetime);
+	ui.dtePositionX2->setVisible(datetime);
+	ui.dtePositionX3->setVisible(datetime);
 }
 
 void DatapickerImageWidget::updateLocale() {
@@ -414,16 +431,35 @@ void DatapickerImageWidget::ternaryScaleChanged(double value) {
 		image->setAxisPoints(points);
 }
 
+void DatapickerImageWidget::dateTimeUsageChanged(bool datetime) {
+	updateXPositionWidgets(datetime);
+
+	CONDITIONAL_LOCK_RETURN;
+
+	auto points = m_image->axisPoints();
+	points.datetime = datetime;
+	for (auto* image : m_imagesList)
+		image->setAxisPoints(points);
+}
+
 void DatapickerImageWidget::logicalPositionChanged() {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	auto points = m_image->axisPoints();
-	points.logicalPos[0].setX(ui.sbPositionX1->value());
+	if (points.datetime) {
+		points.logicalPos[0].setX(ui.dtePositionX1->dateTime().toMSecsSinceEpoch());
+		points.logicalPos[1].setX(ui.dtePositionX2->dateTime().toMSecsSinceEpoch());
+		points.logicalPos[2].setX(ui.dtePositionX3->dateTime().toMSecsSinceEpoch());
+	} else {
+		points.logicalPos[0].setX(ui.sbPositionX1->value());
+		points.logicalPos[1].setX(ui.sbPositionX2->value());
+		points.logicalPos[2].setX(ui.sbPositionX3->value());
+	}
+
 	points.logicalPos[0].setY(ui.sbPositionY1->value());
-	points.logicalPos[1].setX(ui.sbPositionX2->value());
 	points.logicalPos[1].setY(ui.sbPositionY2->value());
-	points.logicalPos[2].setX(ui.sbPositionX3->value());
 	points.logicalPos[2].setY(ui.sbPositionY3->value());
+
 	points.logicalPos[0].setZ(ui.sbPositionZ1->value());
 	points.logicalPos[1].setZ(ui.sbPositionZ2->value());
 	points.logicalPos[2].setZ(ui.sbPositionZ3->value());
@@ -603,11 +639,23 @@ void DatapickerImageWidget::load() {
 
 	ui.cbGraphType->setCurrentIndex((int)m_image->axisPoints().type);
 	ui.sbTernaryScale->setValue(m_image->axisPoints().ternaryScale);
-	ui.sbPositionX1->setValue(m_image->axisPoints().logicalPos[0].x());
+	const bool datetime = m_image->axisPoints().datetime;
+	ui.cbDatetime->setChecked(datetime);
+	updateXPositionWidgets(datetime);
+
+	const double x1 = m_image->axisPoints().logicalPos[0].x();
+	const double x2 = m_image->axisPoints().logicalPos[1].x();
+	const double x3 = m_image->axisPoints().logicalPos[2].x();
+
+	ui.dtePositionX1->setDateTime(QDateTime::fromMSecsSinceEpoch(x1));
+	ui.dtePositionX2->setDateTime(QDateTime::fromMSecsSinceEpoch(x2));
+	ui.dtePositionX3->setDateTime(QDateTime::fromMSecsSinceEpoch(x3));
+
+	ui.sbPositionX1->setValue(x1);
 	ui.sbPositionY1->setValue(m_image->axisPoints().logicalPos[0].y());
-	ui.sbPositionX2->setValue(m_image->axisPoints().logicalPos[1].x());
+	ui.sbPositionX2->setValue(x2);
 	ui.sbPositionY2->setValue(m_image->axisPoints().logicalPos[1].y());
-	ui.sbPositionX3->setValue(m_image->axisPoints().logicalPos[2].x());
+	ui.sbPositionX3->setValue(x3);
 	ui.sbPositionY3->setValue(m_image->axisPoints().logicalPos[2].y());
 	ui.sbPositionZ1->setValue(m_image->axisPoints().logicalPos[0].z());
 	ui.sbPositionZ2->setValue(m_image->axisPoints().logicalPos[1].z());
