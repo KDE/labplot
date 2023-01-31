@@ -1240,7 +1240,6 @@ bool MainWin::newProject() {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	m_project = new Project();
-	m_guiObserver = new GuiObserver(this);
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
 
@@ -1311,6 +1310,8 @@ bool MainWin::newProject() {
 	m_propertiesDock->show();
 	updateGUIOnProjectChanges();
 	m_newProjectAction->setEnabled(false);
+
+	m_guiObserver = new GuiObserver(this); // initialize after all docks were createad
 
 	connect(m_project, &Project::aspectAdded, this, &MainWin::handleAspectAdded);
 	connect(m_project, &Project::aspectRemoved, this, &MainWin::handleAspectRemoved);
