@@ -543,7 +543,7 @@ void TextLabelPrivate::updatePosition() {
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
 		if (q->cSystem) {
 			if (!coordinateBindingEnabled) {
-				QPointF pos = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, scale(), false);
+				QPointF pos = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, false);
 				positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			}
 			Q_EMIT q->positionLogicalChanged(positionLogical);

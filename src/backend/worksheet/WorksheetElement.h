@@ -88,7 +88,7 @@ public:
 	QPointF parentPosToRelativePos(QPointF parentPos, PositionWrapper) const;
 	QPointF relativePosToParentPos(PositionWrapper) const;
 
-	QPointF align(QPointF, QRectF, HorizontalAlignment, VerticalAlignment, qreal scale, bool positive) const;
+	QPointF align(QPointF, QRectF, HorizontalAlignment, VerticalAlignment, bool positive) const;
 
 	QMenu* createContextMenu() override;
 
@@ -155,7 +155,6 @@ Q_SIGNALS:
 	void coordinateBindingEnabledChanged(bool) const;
 	void positionLogicalChanged(QPointF) const;
 	void rotationAngleChanged(qreal) const;
-	void scaleChanged(qreal) const;
 	void rotationChanged(qreal) const;
 	void visibleChanged(bool) const;
 	void coordinateSystemIndexChanged(int) const;

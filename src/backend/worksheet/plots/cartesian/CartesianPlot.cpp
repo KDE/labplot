@@ -1913,12 +1913,7 @@ void CartesianPlot::addTextLabel() {
 	if (d->calledFromContextMenu) {
 		auto position = label->position();
 		position.point = label->parentPosToRelativePos(d->scenePos, position);
-		position.point = label->align(position.point,
-									  label->graphicsItem()->boundingRect(),
-									  label->horizontalAlignment(),
-									  label->verticalAlignment(),
-									  label->scale(),
-									  false);
+		position.point = label->align(position.point, label->graphicsItem()->boundingRect(), label->horizontalAlignment(), label->verticalAlignment(), false);
 		label->setPosition(position);
 		d->calledFromContextMenu = false;
 	}
@@ -1935,12 +1930,7 @@ void CartesianPlot::addImage() {
 	if (d->calledFromContextMenu) {
 		auto position = image->position();
 		position.point = image->parentPosToRelativePos(d->scenePos, position);
-		position.point = image->align(position.point,
-									  image->graphicsItem()->boundingRect(),
-									  image->horizontalAlignment(),
-									  image->verticalAlignment(),
-									  image->scale(),
-									  false);
+		position.point = image->align(position.point, image->graphicsItem()->boundingRect(), image->horizontalAlignment(), image->verticalAlignment(), false);
 		image->setPosition(position);
 		d->calledFromContextMenu = false;
 	}
