@@ -87,6 +87,7 @@ private:
 	void handleReferenceLineSelected();
 	bool eventFilter(QObject* watched, QEvent*) override;
 	void updateLabelsZoom() const;
+	void updateScrollBarPolicy();
 
 	// events
 	void resizeEvent(QResizeEvent*) override;

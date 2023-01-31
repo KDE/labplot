@@ -77,10 +77,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	setMinimumSize(16, 16);
 	setFocusPolicy(Qt::StrongFocus);
 
-	if (m_worksheet->useViewSize()) {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	}
+	updateScrollBarPolicy();
 
 	viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
 	viewport()->setAttribute(Qt::WA_NoSystemBackground);
@@ -1078,8 +1075,8 @@ void WorksheetView::resizeEvent(QResizeEvent* event) {
 
 void WorksheetView::wheelEvent(QWheelEvent* event) {
 	if (isInteractive() && (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier))) {
-        if (!zoomFitNoneAction)
-            initActions();
+		if (!zoomFitNoneAction)
+			initActions();
 		zoomFitNoneAction->setChecked(true);
 		m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
 		// https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
@@ -1364,9 +1361,9 @@ void WorksheetView::useViewSizeChanged(bool useViewSize) {
 	if (!m_actionsInitialized)
 		initActions();
 
+	updateScrollBarPolicy();
+
 	if (useViewSize) {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		zoomFitPageHeightAction->setVisible(false);
 		zoomFitPageWidthAction->setVisible(false);
 		currentZoomAction = zoomInViewAction;
@@ -1376,8 +1373,6 @@ void WorksheetView::useViewSizeChanged(bool useViewSize) {
 		// determine and set the current view size
 		this->processResize();
 	} else {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		zoomFitPageHeightAction->setVisible(true);
 		zoomFitPageWidthAction->setVisible(true);
 	}
@@ -1443,8 +1438,19 @@ void WorksheetView::updateFit() {
 	}
 }
 
+void WorksheetView::updateScrollBarPolicy() {
+	if (m_worksheet->useViewSize() || m_worksheet->zoomFit() != Worksheet::ZoomFit::None) {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	} else {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	}
+}
+
 void WorksheetView::fitChanged(QAction* action) {
 	m_worksheet->setZoomFit(static_cast<Worksheet::ZoomFit>(action->data().toInt()));
+	updateScrollBarPolicy();
 	updateFit();
 }
 
