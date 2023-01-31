@@ -619,11 +619,8 @@ void Worksheet::setUseViewSize(bool useViewSize) {
 		exec(new WorksheetSetUseViewSizeCmd(d, useViewSize, ki18n("%1: change size type")));
 }
 
-STD_SETTER_CMD_IMPL(Worksheet, SetZoomFit, Worksheet::ZoomFit, zoomFit)
 void Worksheet::setZoomFit(ZoomFit zoomFit) {
-	d->zoomFit = zoomFit;
-	// if (zoomFit != d->zoomFit)
-	//     exec(new WorksheetSetZoomFitCmd(d, zoomFit, ki18n("%1: change zoom fit")));
+	d->zoomFit = zoomFit; // No need to undo
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
