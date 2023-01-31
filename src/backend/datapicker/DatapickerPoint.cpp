@@ -140,6 +140,8 @@ void DatapickerPoint::init() {
 }
 
 void DatapickerPoint::initErrorBar(DatapickerCurve::Errors errors) {
+	if (m_errorBarItemList.isEmpty() && errors.x == DatapickerCurve::ErrorType::NoError && errors.y == DatapickerCurve::ErrorType::NoError)
+		return; // no need to update
 	m_errorBarItemList.clear();
 	if (errors.x != DatapickerCurve::ErrorType::NoError) {
 		auto* plusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::ErrorBarType::PlusDeltaX);

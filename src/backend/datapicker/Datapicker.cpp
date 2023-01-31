@@ -211,8 +211,12 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 
 	beginMacro(i18n("%1: add %2", parentAspect->name(), newPoint->name()));
 	parentAspect->addChild(newPoint);
+	const QPointF oldPos = newPoint->position();
 	newPoint->setPosition(pos);
-	newPoint->retransform();
+	if (oldPos == pos) {
+		// Just if pos == oldPos, setPosition will not trigger retransform() then
+		newPoint->retransform();
+	}
 
 	auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
 	if (m_image == parentAspect) {
@@ -224,7 +228,7 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 		connect(newPoint, &DatapickerPoint::pointSelected, m_image, QOverload<const DatapickerPoint*>::of(&DatapickerImage::referencePointSelected));
 	} else if (datapickerCurve) {
 		newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
-		datapickerCurve->updatePoint(newPoint);
+		// datapickerCurve->updatePoint(newPoint);
 	}
 
 	endMacro();
