@@ -1079,6 +1079,8 @@ void WorksheetView::wheelEvent(QWheelEvent* event) {
 			initActions();
 		zoomFitNoneAction->setChecked(true);
 		m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
+		updateScrollBarPolicy();
+
 		// https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 		QPoint numDegrees = event->angleDelta() / 8;
 		int numSteps = numDegrees.y() / 15; // see QWheelEvent documentation
