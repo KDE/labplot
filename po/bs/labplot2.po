@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-30 00:53+0000\n"
+"POT-Creation-Date: 2023-01-31 00:55+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -1967,7 +1967,7 @@ msgstr "nepoznato"
 #: src/backend/datasources/filters/MatioFilter.cpp:448
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:536 src/kdefrontend/MainWin.cpp:1872
+#: src/kdefrontend/MainWin.cpp:536 src/kdefrontend/MainWin.cpp:1867
 #, kde-format
 msgid "Matrix"
 msgstr "Matrica"
@@ -7722,7 +7722,7 @@ msgid "Reference Line"
 msgstr "Tačke podešavanja"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:372
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1986
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1985
 #, fuzzy, kde-format
 #| msgid "Fitted Points"
 msgid "Reference Range"
@@ -10633,7 +10633,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:61
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:530
-#: src/kdefrontend/MainWin.cpp:1854 src/kdefrontend/SettingsDialog.cpp:65
+#: src/kdefrontend/MainWin.cpp:1849 src/kdefrontend/SettingsDialog.cpp:65
 #, kde-format
 msgid "Spreadsheet"
 msgstr "Tablica"
@@ -10825,7 +10825,7 @@ msgstr "Označi x-područje i uvećaj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:318
-#: src/kdefrontend/MainWin.cpp:2333
+#: src/kdefrontend/MainWin.cpp:2328
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1378
 #, kde-format
 msgid "Cursor"
@@ -12048,7 +12048,7 @@ msgid "Open LabPlot Project"
 msgstr "Otvori projekat"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:373
-#: src/kdefrontend/MainWin.cpp:1341
+#: src/kdefrontend/MainWin.cpp:1334
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -12062,7 +12062,7 @@ msgid "Open Origin Project"
 msgstr "Otvori projekat"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:379
-#: src/kdefrontend/MainWin.cpp:1346
+#: src/kdefrontend/MainWin.cpp:1339
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
@@ -12309,7 +12309,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2655
+#: src/kdefrontend/MainWin.cpp:2650
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -13915,287 +13915,287 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:176 src/kdefrontend/MainWin.cpp:1287
+#: src/kdefrontend/GuiObserver.cpp:184 src/kdefrontend/MainWin.cpp:1283
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties"
 msgstr "Podešavanja"
 
-#: src/kdefrontend/GuiObserver.cpp:212
+#: src/kdefrontend/GuiObserver.cpp:220
 #, fuzzy, kde-format
 #| msgid "Spreadsheet"
 msgctxt "@title:window"
 msgid "Spreadsheet"
 msgstr "Tablica"
 
-#: src/kdefrontend/GuiObserver.cpp:222
+#: src/kdefrontend/GuiObserver.cpp:230
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
 msgstr "Radni list"
 
-#: src/kdefrontend/GuiObserver.cpp:227
+#: src/kdefrontend/GuiObserver.cpp:235
 #, fuzzy, kde-format
 #| msgid "Column"
 msgctxt "@title:window"
 msgid "Column"
 msgstr "Kolona"
 
-#: src/kdefrontend/GuiObserver.cpp:234
+#: src/kdefrontend/GuiObserver.cpp:242
 #, fuzzy, kde-format
 #| msgid "Matrix"
 msgctxt "@title:window"
 msgid "Matrix"
 msgstr "Matrica"
 
-#: src/kdefrontend/GuiObserver.cpp:239
+#: src/kdefrontend/GuiObserver.cpp:247
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgctxt "@title:window"
 msgid "Worksheet"
 msgstr "Radni list"
 
-#: src/kdefrontend/GuiObserver.cpp:250
+#: src/kdefrontend/GuiObserver.cpp:253
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgctxt "@title:window"
 msgid "Plot Area"
 msgstr "Prostor za Crtanje"
 
-#: src/kdefrontend/GuiObserver.cpp:256
+#: src/kdefrontend/GuiObserver.cpp:259
 #, fuzzy, kde-format
 #| msgid "legend"
 msgctxt "@title:window"
 msgid "Legend"
 msgstr "legenda"
 
-#: src/kdefrontend/GuiObserver.cpp:261
+#: src/kdefrontend/GuiObserver.cpp:264
 #, fuzzy, kde-format
 #| msgid "x-Axis"
 msgctxt "@title:window"
 msgid "Axis"
 msgstr "x-Osa"
 
-#: src/kdefrontend/GuiObserver.cpp:266
+#: src/kdefrontend/GuiObserver.cpp:269
 #, fuzzy, kde-format
 #| msgid "xy-curve"
 msgctxt "@title:window"
 msgid "XY-Curve"
 msgstr "xy-kriva"
 
-#: src/kdefrontend/GuiObserver.cpp:271
+#: src/kdefrontend/GuiObserver.cpp:274
 #, fuzzy, kde-format
 #| msgid "Equation type"
 msgctxt "@title:window"
 msgid "XY-Equation"
 msgstr "Tip jednačine"
 
-#: src/kdefrontend/GuiObserver.cpp:276
+#: src/kdefrontend/GuiObserver.cpp:279
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgctxt "@title:window"
 msgid "Data Reduction"
 msgstr "Smjer"
 
-#: src/kdefrontend/GuiObserver.cpp:292
+#: src/kdefrontend/GuiObserver.cpp:295
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "@title:window"
 msgid "Differentiation"
 msgstr "Orijentacija"
 
-#: src/kdefrontend/GuiObserver.cpp:297
+#: src/kdefrontend/GuiObserver.cpp:300
 #, fuzzy, kde-format
 #| msgid "iterations"
 msgctxt "@title:window"
 msgid "Integration"
 msgstr "iteracije"
 
-#: src/kdefrontend/GuiObserver.cpp:302
+#: src/kdefrontend/GuiObserver.cpp:305
 #, fuzzy, kde-format
 #| msgid "iterations"
 msgctxt "@title:window"
 msgid "Interpolation"
 msgstr "iteracije"
 
-#: src/kdefrontend/GuiObserver.cpp:307
+#: src/kdefrontend/GuiObserver.cpp:310
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgctxt "@title:window"
 msgid "Smoothing"
 msgstr "Ne radi ništa"
 
-#: src/kdefrontend/GuiObserver.cpp:312
+#: src/kdefrontend/GuiObserver.cpp:315
 #, fuzzy, kde-format
 #| msgid "Fit:"
 msgctxt "@title:window"
 msgid "Fit"
 msgstr "Podesiti:"
 
-#: src/kdefrontend/GuiObserver.cpp:317
+#: src/kdefrontend/GuiObserver.cpp:320
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgctxt "@title:window"
 msgid "Fourier Transform"
 msgstr "novi filter"
 
-#: src/kdefrontend/GuiObserver.cpp:322
+#: src/kdefrontend/GuiObserver.cpp:325
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgctxt "@title:window"
 msgid "Hilbert Transform"
 msgstr "novi filter"
 
-#: src/kdefrontend/GuiObserver.cpp:327
+#: src/kdefrontend/GuiObserver.cpp:330
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgctxt "@title:window"
 msgid "Fourier Filter"
 msgstr "novi filter"
 
-#: src/kdefrontend/GuiObserver.cpp:332
+#: src/kdefrontend/GuiObserver.cpp:335
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgctxt "@title:window"
 msgid "Convolution/Deconvolution"
 msgstr "Veza:"
 
-#: src/kdefrontend/GuiObserver.cpp:337
+#: src/kdefrontend/GuiObserver.cpp:340
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgctxt "@title:window"
 msgid "Auto-/Cross-Correlation"
 msgstr "Veza:"
 
-#: src/kdefrontend/GuiObserver.cpp:342
+#: src/kdefrontend/GuiObserver.cpp:345
 #, fuzzy, kde-format
 #| msgid "Data:"
 msgctxt "@title:window"
 msgid "Histogram"
 msgstr "Podaci:"
 
-#: src/kdefrontend/GuiObserver.cpp:347
+#: src/kdefrontend/GuiObserver.cpp:350
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgctxt "@title:window"
 msgid "Bar Plot"
 msgstr "LabPlot2"
 
-#: src/kdefrontend/GuiObserver.cpp:352
+#: src/kdefrontend/GuiObserver.cpp:355
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgctxt "@title:window"
 msgid "Box Plot"
 msgstr "LabPlot2"
 
-#: src/kdefrontend/GuiObserver.cpp:357
+#: src/kdefrontend/GuiObserver.cpp:360
 #, fuzzy, kde-format
 #| msgid "text label"
 msgctxt "@title:window"
 msgid "Text Label"
 msgstr "tekstualna oznaka"
 
-#: src/kdefrontend/GuiObserver.cpp:362
+#: src/kdefrontend/GuiObserver.cpp:365
 #, fuzzy, kde-format
 #| msgid "Images"
 msgctxt "@title:window"
 msgid "Image"
 msgstr "Slike"
 
-#: src/kdefrontend/GuiObserver.cpp:367
+#: src/kdefrontend/GuiObserver.cpp:370
 #, fuzzy, kde-format
 #| msgid "custom column"
 msgctxt "@title:window"
 msgid "Custom Point"
 msgstr "prilagodi vrijednosti"
 
-#: src/kdefrontend/GuiObserver.cpp:372
+#: src/kdefrontend/GuiObserver.cpp:375
 #, fuzzy, kde-format
 #| msgid "Fitted Points"
 msgctxt "@title:window"
 msgid "Reference Line"
 msgstr "Tačke podešavanja"
 
-#: src/kdefrontend/GuiObserver.cpp:377
+#: src/kdefrontend/GuiObserver.cpp:380
 #, fuzzy, kde-format
 #| msgid "Fitted Points"
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "Tačke podešavanja"
 
-#: src/kdefrontend/GuiObserver.cpp:382
+#: src/kdefrontend/GuiObserver.cpp:385
 #, fuzzy, kde-format
 #| msgid "Data:"
 msgctxt "@title:window"
 msgid "Datapicker Curve"
 msgstr "Podaci:"
 
-#: src/kdefrontend/GuiObserver.cpp:387
+#: src/kdefrontend/GuiObserver.cpp:390
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgctxt "@title:window"
 msgid "Data Extractor"
 msgstr "Format podataka"
 
-#: src/kdefrontend/GuiObserver.cpp:397
+#: src/kdefrontend/GuiObserver.cpp:400
 #, fuzzy, kde-format
 #| msgid "Project"
 msgctxt "@title:window"
 msgid "Project"
 msgstr "Projekat"
 
-#: src/kdefrontend/GuiObserver.cpp:407
+#: src/kdefrontend/GuiObserver.cpp:410
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:409
+#: src/kdefrontend/GuiObserver.cpp:412
 #, fuzzy, kde-format
 #| msgid "Notes"
 msgctxt "@title:window"
 msgid "Notebook"
 msgstr "Bilješke"
 
-#: src/kdefrontend/GuiObserver.cpp:415
+#: src/kdefrontend/GuiObserver.cpp:418
 #, fuzzy, kde-format
 #| msgid "Notes"
 msgctxt "@title:window"
 msgid "Notes"
 msgstr "Bilješke"
 
-#: src/kdefrontend/GuiObserver.cpp:420
+#: src/kdefrontend/GuiObserver.cpp:423
 #, fuzzy, kde-format
 #| msgid "Increment"
 msgctxt "@title:window"
 msgid "Info Element"
 msgstr "Prirast"
 
-#: src/kdefrontend/GuiObserver.cpp:427 src/kdefrontend/GuiObserver.cpp:434
-#: src/kdefrontend/GuiObserver.cpp:441
+#: src/kdefrontend/GuiObserver.cpp:430 src/kdefrontend/GuiObserver.cpp:437
+#: src/kdefrontend/GuiObserver.cpp:444
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgctxt "@title:window"
 msgid "MQTT Data Source"
 msgstr "Datoteka podatak izvor"
 
-#: src/kdefrontend/GuiObserver.cpp:447
+#: src/kdefrontend/GuiObserver.cpp:450
 #, fuzzy, kde-format
 #| msgid "File Data Source"
 msgctxt "@title:window"
 msgid "Live Data Source"
 msgstr "Datoteka Podatak Izvor"
 
-#: src/kdefrontend/GuiObserver.cpp:461
+#: src/kdefrontend/GuiObserver.cpp:464
 #, fuzzy, kde-format
 #| msgid "Folder"
 msgctxt "@title:window"
 msgid "Folder"
 msgstr "Direktorij"
 
-#: src/kdefrontend/GuiObserver.cpp:468
+#: src/kdefrontend/GuiObserver.cpp:471
 #, kde-format
 msgctxt "@title:window"
 msgid "Workbook"
@@ -14751,14 +14751,14 @@ msgstr "Otvaranje neuspješno"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:542
-#: src/kdefrontend/MainWin.cpp:1890 src/kdefrontend/SettingsDialog.cpp:60
+#: src/kdefrontend/MainWin.cpp:1885 src/kdefrontend/SettingsDialog.cpp:60
 #, kde-format
 msgid "Worksheet"
 msgstr "Radni list"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:525
-#: src/kdefrontend/MainWin.cpp:1846
+#: src/kdefrontend/MainWin.cpp:1841
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
@@ -14889,7 +14889,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "novi filter"
 
-#: src/kdefrontend/MainWin.cpp:520 src/kdefrontend/MainWin.cpp:1838
+#: src/kdefrontend/MainWin.cpp:520 src/kdefrontend/MainWin.cpp:1833
 #, kde-format
 msgid "Workbook"
 msgstr ""
@@ -14919,7 +14919,7 @@ msgstr ""
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:548 src/kdefrontend/MainWin.cpp:1898
+#: src/kdefrontend/MainWin.cpp:548 src/kdefrontend/MainWin.cpp:1893
 #, fuzzy, kde-format
 #| msgid "Notes"
 msgid "Note"
@@ -14933,7 +14933,7 @@ msgstr ""
 #. i18n("Note/Script"),this);
 #. actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
 #. connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
-#: src/kdefrontend/MainWin.cpp:557 src/kdefrontend/MainWin.cpp:1830
+#: src/kdefrontend/MainWin.cpp:557 src/kdefrontend/MainWin.cpp:1825
 #, kde-format
 msgid "Folder"
 msgstr "Direktorij"
@@ -15156,102 +15156,102 @@ msgstr "Trenutni projekat %1 je modificiran. Da li želite da ga spasite?"
 msgid "Save Project"
 msgstr "Spasi projekat"
 
-#: src/kdefrontend/MainWin.cpp:1273
+#: src/kdefrontend/MainWin.cpp:1269
 #, fuzzy, kde-format
 #| msgid "Project Explorer"
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Pretraživač Projekata"
 
-#: src/kdefrontend/MainWin.cpp:1332
+#: src/kdefrontend/MainWin.cpp:1325
 #, fuzzy, kde-format
 #| msgid "%1: clear"
 msgid "%1: created"
 msgstr "%1: obriši"
 
-#: src/kdefrontend/MainWin.cpp:1352
+#: src/kdefrontend/MainWin.cpp:1345
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Zatvori projekat"
 
-#: src/kdefrontend/MainWin.cpp:1353
+#: src/kdefrontend/MainWin.cpp:1346
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1360
+#: src/kdefrontend/MainWin.cpp:1353
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1364
+#: src/kdefrontend/MainWin.cpp:1357
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Otvori projekat"
 
-#: src/kdefrontend/MainWin.cpp:1381
+#: src/kdefrontend/MainWin.cpp:1374
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektna datoteka %1 je već otvorena."
 
-#: src/kdefrontend/MainWin.cpp:1381
+#: src/kdefrontend/MainWin.cpp:1374
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Open Project"
 msgstr "Otvori projekat"
 
-#: src/kdefrontend/MainWin.cpp:1394
+#: src/kdefrontend/MainWin.cpp:1387
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1444 src/kdefrontend/MainWin.cpp:1448
-#: src/kdefrontend/MainWin.cpp:1453 src/kdefrontend/MainWin.cpp:1458
-#: src/kdefrontend/MainWin.cpp:1462 src/kdefrontend/MainWin.cpp:1509
-#: src/kdefrontend/MainWin.cpp:1514 src/kdefrontend/MainWin.cpp:1519
-#: src/kdefrontend/MainWin.cpp:1525
+#: src/kdefrontend/MainWin.cpp:1437 src/kdefrontend/MainWin.cpp:1441
+#: src/kdefrontend/MainWin.cpp:1446 src/kdefrontend/MainWin.cpp:1451
+#: src/kdefrontend/MainWin.cpp:1455 src/kdefrontend/MainWin.cpp:1502
+#: src/kdefrontend/MainWin.cpp:1507 src/kdefrontend/MainWin.cpp:1512
+#: src/kdefrontend/MainWin.cpp:1518
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open project"
 msgstr "Otvaranje neuspješno"
 
-#: src/kdefrontend/MainWin.cpp:1444 src/kdefrontend/MainWin.cpp:1453
-#: src/kdefrontend/MainWin.cpp:1458 src/kdefrontend/MainWin.cpp:1509
-#: src/kdefrontend/MainWin.cpp:1514 src/kdefrontend/MainWin.cpp:1519
+#: src/kdefrontend/MainWin.cpp:1437 src/kdefrontend/MainWin.cpp:1446
+#: src/kdefrontend/MainWin.cpp:1451 src/kdefrontend/MainWin.cpp:1502
+#: src/kdefrontend/MainWin.cpp:1507 src/kdefrontend/MainWin.cpp:1512
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to process the content of the file '%1'."
 msgstr "Otvaranje neuspješno"
 
-#: src/kdefrontend/MainWin.cpp:1448 src/kdefrontend/MainWin.cpp:1462
-#: src/kdefrontend/MainWin.cpp:1525
+#: src/kdefrontend/MainWin.cpp:1441 src/kdefrontend/MainWin.cpp:1455
+#: src/kdefrontend/MainWin.cpp:1518
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file '%1'."
 msgstr "Otvaranje neuspješno"
 
-#: src/kdefrontend/MainWin.cpp:1539
+#: src/kdefrontend/MainWin.cpp:1532
 #, fuzzy, kde-format
 #| msgid "Project %1 opened"
 msgid "%1: opened"
 msgstr "Projekat %1 otvoren"
 
-#: src/kdefrontend/MainWin.cpp:1548
+#: src/kdefrontend/MainWin.cpp:1541
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekat uspješno otvoren (u %1 sekundi)."
 
-#: src/kdefrontend/MainWin.cpp:1642
+#: src/kdefrontend/MainWin.cpp:1637
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Spasi projekat"
 
-#: src/kdefrontend/MainWin.cpp:1644
+#: src/kdefrontend/MainWin.cpp:1639
 #, fuzzy, kde-format
 #| msgid "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 msgid ""
@@ -15259,78 +15259,78 @@ msgid ""
 "*.LML.XZ)"
 msgstr "LabPlot Projekti (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 
-#: src/kdefrontend/MainWin.cpp:1670
+#: src/kdefrontend/MainWin.cpp:1665
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid "Couldn't open the temporary file for writing."
 msgstr "Žao nam je. Datoteka ne može biti otvorena za pisanje."
 
-#: src/kdefrontend/MainWin.cpp:1722
+#: src/kdefrontend/MainWin.cpp:1717
 #, kde-format
 msgid "Project saved"
 msgstr "Projekat spašen"
 
-#: src/kdefrontend/MainWin.cpp:1738
+#: src/kdefrontend/MainWin.cpp:1733
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1743
+#: src/kdefrontend/MainWin.cpp:1738
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Ne može se otvoriti fajl %1 za čitanje."
 
-#: src/kdefrontend/MainWin.cpp:1788
+#: src/kdefrontend/MainWin.cpp:1783
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "Changed"
 msgstr "%1 [Promijenjen]"
 
-#: src/kdefrontend/MainWin.cpp:1804 src/kdefrontend/MainWin.cpp:1817
+#: src/kdefrontend/MainWin.cpp:1799 src/kdefrontend/MainWin.cpp:1812
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1806 src/kdefrontend/MainWin.cpp:1819
+#: src/kdefrontend/MainWin.cpp:1801 src/kdefrontend/MainWin.cpp:1814
 #, kde-format
 msgid "%1 printed"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2587
+#: src/kdefrontend/MainWin.cpp:2582
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, fuzzy, kde-format
 #| msgid "Dataset"
 msgid "Dataset%1"
 msgstr "Skup podataka"
 
-#: src/kdefrontend/MainWin.cpp:2618
+#: src/kdefrontend/MainWin.cpp:2613
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2625
+#: src/kdefrontend/MainWin.cpp:2620
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2637
+#: src/kdefrontend/MainWin.cpp:2632
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2655
+#: src/kdefrontend/MainWin.cpp:2650
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2659
+#: src/kdefrontend/MainWin.cpp:2654
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
 msgstr "Datoteka podatak izvor"
 
-#: src/kdefrontend/MainWin.cpp:2703
+#: src/kdefrontend/MainWin.cpp:2698
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
