@@ -77,6 +77,26 @@ void DatapickerCurve::init() {
 		d->retransform();
 	});
 	d->symbol->init(group);
+
+	connect(this, &AbstractAspect::aspectAdded, this, &DatapickerCurve::childAdded);
+	connect(this, &AbstractAspect::aspectRemoved, this, &DatapickerCurve::childRemoved);
+}
+
+void DatapickerCurve::childAdded(const AbstractAspect* child) {
+	const auto* p = dynamic_cast<const DatapickerPoint*>(child);
+	if (!p)
+		return;
+	m_datasheet->setRowCount(m_datasheet->rowCount() + 1);
+}
+
+void DatapickerCurve::childRemoved(const AbstractAspect* child) {
+	Q_UNUSED(child);
+	const auto* point = dynamic_cast<const DatapickerPoint*>(child);
+	if (!point)
+		return;
+
+	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
+	// TODO: implement, not supported yet
 }
 
 /*!
@@ -153,6 +173,7 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 
 	m_datasheet = new Spreadsheet(i18n("Data"));
 	m_datasheet->setFixed(true);
+	m_datasheet->setRowCount(0);
 	addChild(m_datasheet);
 
 	QString xLabel;
@@ -393,10 +414,6 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 
 	auto* datapicker = static_cast<Datapicker*>(parentAspect());
 	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
-
-	// resize the spreadsheet if needed (row starts with 0, add 1 when comparing with rowCount())
-	if (m_datasheet->rowCount() < row + 1)
-		m_datasheet->setRowCount(row + 1);
 
 	QVector3D data = datapicker->mapSceneToLogical(point->position());
 

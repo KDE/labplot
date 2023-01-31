@@ -83,6 +83,9 @@ private:
 
 	Spreadsheet* m_datasheet{nullptr};
 
+	void childAdded(const AbstractAspect* child);
+	void childRemoved(const AbstractAspect* child);
+
 Q_SIGNALS:
 	void curveErrorTypesChanged(const DatapickerCurve::Errors&);
 	void posXColumnChanged(const AbstractColumn*);
