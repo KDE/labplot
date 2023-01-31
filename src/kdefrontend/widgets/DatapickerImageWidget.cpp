@@ -347,14 +347,17 @@ void DatapickerImageWidget::updateXPositionWidgets(bool datetime) {
 }
 
 void DatapickerImageWidget::updateLocale() {
-	const auto numberLocale = QLocale();
-	ui.sbRotation->setLocale(numberLocale);
-	ui.sbPositionX1->setLocale(numberLocale);
-	ui.sbPositionX2->setLocale(numberLocale);
-	ui.sbPositionX3->setLocale(numberLocale);
-	ui.sbPositionY1->setLocale(numberLocale);
-	ui.sbPositionY2->setLocale(numberLocale);
-	ui.sbPositionY3->setLocale(numberLocale);
+	const auto locale = QLocale();
+	ui.sbRotation->setLocale(locale);
+	ui.sbPositionX1->setLocale(locale);
+	ui.sbPositionX2->setLocale(locale);
+	ui.sbPositionX3->setLocale(locale);
+	ui.sbPositionY1->setLocale(locale);
+	ui.sbPositionY2->setLocale(locale);
+	ui.sbPositionY3->setLocale(locale);
+	ui.dtePositionX1->setLocale(locale);
+	ui.dtePositionX2->setLocale(locale);
+	ui.dtePositionX3->setLocale(locale);
 }
 
 //**********************************************************
