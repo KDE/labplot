@@ -96,8 +96,10 @@ if (ENABLE_VECTOR_BLF)
   if (${LOCAL_VECTOR_BLF})
     FetchContent_Declare(
         vector_blf
-        GIT_REPOSITORY https://github.com/Technica-Engineering/vector_blf.git
-        GIT_TAG 02f0a2fe1f7915da1e24025869b98f6d15de937b
+        #GIT_REPOSITORY https://github.com/Technica-Engineering/vector_blf.git
+        #GIT_TAG 02f0a2fe1f7915da1e24025869b98f6d15de937b
+        GIT_REPOSITORY https://github.com/Murmele/vector_blf.git
+        GIT_TAG 8e6cf6460c8c8959d5a89c4c7fe02145698c4e91
       )
       FetchContent_MakeAvailable(vector_blf)
       # headerfiles of the projects are referring to <Vector/BLF/someheader.h> and therefore

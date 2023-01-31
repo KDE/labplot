@@ -644,7 +644,7 @@ add_executable( labplot2 ${LABPLOT_SOURCE} ${qml_QRC} )
 target_link_libraries( labplot2 labplot2lib )
 
 ############## installation ################################
-install( TARGETS labplot2 DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
+install( TARGETS labplot2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/${PROJECT_NAME} )
 install( FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot2.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME} )
 install( FILES org.kde.labplot2.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
