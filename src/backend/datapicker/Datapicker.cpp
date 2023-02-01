@@ -203,6 +203,11 @@ void Datapicker::setSelectedInView(const bool b) {
 		Q_EMIT childAspectDeselectedInView(this);
 }
 
+/*!
+ * \brief Datapicker::addNewPoint
+ * \param pos position in scene coordinates
+ * \param parentAspect
+ */
 void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 	auto points = parentAspect->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 

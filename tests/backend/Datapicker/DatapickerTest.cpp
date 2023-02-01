@@ -978,4 +978,116 @@ void DatapickerTest::imageAxisPointsChanged() {
 	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::Log10Y);
 }
 
+void DatapickerTest::datapickerDateTime() {
+	DatapickerImageWidget w(nullptr);
+	Datapicker datapicker(QStringLiteral("Test"));
+	auto* image = datapicker.image();
+
+	// add reference points
+	datapicker.addNewPoint(QPointF(0, 1), image); // scene coordinates
+	datapicker.addNewPoint(QPointF(0, 0), image); // scene coordinates
+	datapicker.addNewPoint(QPointF(1, 0), image); // scene coordinates
+
+	w.setImages({image});
+
+	w.ui.sbPositionX1->setValue(0);
+	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionZ1->setValue(0);
+	w.ui.sbPositionX2->setValue(0);
+	w.ui.sbPositionY2->setValue(0);
+	w.ui.sbPositionZ2->setValue(0);
+	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionY3->setValue(0);
+	w.ui.sbPositionZ3->setValue(0);
+	w.logicalPositionChanged();
+
+	auto* curve = new DatapickerCurve(i18n("Curve"));
+	curve->addDatasheet(image->axisPoints().type);
+	datapicker.addChild(curve);
+
+	// add new curve point and check its logical coordinates
+	datapicker.addNewPoint(QPointF(0.5, 0.6), curve); // scene coordinates
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.); // logical coordinates
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.); // logical coordinates
+
+	QCOMPARE(w.ui.cbDatetime->isChecked(), false);
+	QCOMPARE(w.ui.dtePositionX1->isVisible(), false);
+	QCOMPARE(w.ui.dtePositionX2->isVisible(), false);
+	QCOMPARE(w.ui.dtePositionX3->isVisible(), false);
+	// QCOMPARE(w.ui.sbPositionX1->isVisible(), true);
+	// QCOMPARE(w.ui.sbPositionX2->isVisible(), true);
+	// QCOMPARE(w.ui.sbPositionX3->isVisible(), true);
+
+	QCOMPARE(curve->posXColumn()->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	w.ui.cbDatetime->click();
+
+	QCOMPARE(w.ui.cbDatetime->isChecked(), true);
+	// QCOMPARE(w.ui.dtePositionX1->isVisible(), true);
+	// QCOMPARE(w.ui.dtePositionX2->isVisible(), true);
+	// QCOMPARE(w.ui.dtePositionX3->isVisible(), true);
+	QCOMPARE(w.ui.sbPositionX1->isVisible(), false);
+	QCOMPARE(w.ui.sbPositionX2->isVisible(), false);
+	QCOMPARE(w.ui.sbPositionX3->isVisible(), false);
+
+	QDateTime dt1 = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt"));
+	QDateTime dt2 = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt"));
+	QDateTime dt3 = QDateTime::fromString(QLatin1String("2000-12-01 06:00:00:000Z"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt"));
+	w.ui.dtePositionX1->setDateTime(dt1);
+	w.ui.dtePositionX2->setDateTime(dt2);
+	w.ui.dtePositionX3->setDateTime(dt3);
+
+	QCOMPARE(curve->posXColumn()->rowCount(), 1);
+	QCOMPARE(curve->posXColumn()->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(curve->posXColumn()->dateTimeAt(0),
+			 QDateTime::fromString(QLatin1String("2000-12-01 03:00:00:000Z"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt"))); // logical coordinates
+	QCOMPARE(curve->posYColumn()->rowCount(), 1);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.); // logical coordinates
+}
+
+void DatapickerTest::datapickerDeleteCurvePoint() {
+	DatapickerImageWidget w(nullptr);
+	Datapicker datapicker(QStringLiteral("Test"));
+	auto* image = datapicker.image();
+
+	// add reference points
+	datapicker.addNewPoint(QPointF(0, 1), image); // scene coordinates
+	datapicker.addNewPoint(QPointF(0, 0), image); // scene coordinates
+	datapicker.addNewPoint(QPointF(1, 0), image); // scene coordinates
+
+	w.setImages({image});
+
+	w.ui.sbPositionX1->setValue(0);
+	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionZ1->setValue(0);
+	w.ui.sbPositionX2->setValue(0);
+	w.ui.sbPositionY2->setValue(0);
+	w.ui.sbPositionZ2->setValue(0);
+	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionY3->setValue(0);
+	w.ui.sbPositionZ3->setValue(0);
+	w.logicalPositionChanged();
+
+	auto* curve = new DatapickerCurve(i18n("Curve"));
+	curve->addDatasheet(image->axisPoints().type);
+	datapicker.addChild(curve);
+
+	// add new curve point and check its logical coordinates
+	datapicker.addNewPoint(QPointF(0.5, 0.6), curve); // scene coordinates
+	QCOMPARE(curve->posXColumn()->rowCount(), 1);
+	QCOMPARE(curve->posYColumn()->rowCount(), 1);
+
+	datapicker.addNewPoint(QPointF(0.5, 0.7), curve); // scene coordinates
+	QCOMPARE(curve->posXColumn()->rowCount(), 2);
+	QCOMPARE(curve->posYColumn()->rowCount(), 2);
+
+	auto points = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(points.count(), 2);
+
+	points.at(0)->remove();
+
+	QCOMPARE(curve->posXColumn()->rowCount(), 1);
+	QCOMPARE(curve->posYColumn()->rowCount(), 1);
+}
+
 QTEST_MAIN(DatapickerTest)

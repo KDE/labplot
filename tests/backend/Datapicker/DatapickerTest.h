@@ -51,6 +51,10 @@ private Q_SLOTS:
 	void selectReferencePoint();
 
 	void imageAxisPointsChanged();
+
+	void datapickerDateTime();
+
+	void datapickerDeleteCurvePoint();
 };
 
 #endif // DATAPICKERTEST_H
