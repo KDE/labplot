@@ -229,6 +229,18 @@ DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 	return d->plotImageType;
 }
 
+bool DatapickerImage::setOriginalImage(const QString& fileName) {
+	originalPlotImage.load(fileName);
+	setEmbedded(true);
+	return d->uploadImage(QStringLiteral(""));
+}
+
+bool DatapickerImage::setOriginalImage(const QImage& image) {
+	originalPlotImage = image;
+	setEmbedded(true);
+	return d->uploadImage(QStringLiteral(""));
+}
+
 /* =============================== getter methods for background options ================================= */
 BASIC_D_READER_IMPL(DatapickerImage, QString, fileName, fileName)
 BASIC_D_READER_IMPL(DatapickerImage, bool, relativeFilePath, relativeFilePath)

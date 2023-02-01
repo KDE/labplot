@@ -228,7 +228,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.cbFileRelativePath, &QCheckBox::clicked, this, &DatapickerImageWidget::fileNameChanged);
-	connect(ui.cbFileEmbedd, &QCheckBox::clicked, this, &DatapickerImageWidget::embeddedChanged);
+	connect(ui.cbFileEmbedd, &QCheckBox::stateChanged, this, &DatapickerImageWidget::embeddedChanged);
 
 	// edit image
 	connect(ui.cbPlotImageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::plotImageTypeChanged);
@@ -299,6 +299,7 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 
 	connect(m_image->parentAspect(), &AbstractAspect::aspectDescriptionChanged, this, &DatapickerImageWidget::aspectDescriptionChanged);
 	connect(m_image, &DatapickerImage::fileNameChanged, this, &DatapickerImageWidget::imageFileNameChanged);
+	connect(m_image, &DatapickerImage::embeddedChanged, this, &DatapickerImageWidget::imageEmbeddedChanged);
 	connect(m_image, &DatapickerImage::rotationAngleChanged, this, &DatapickerImageWidget::imageRotationAngleChanged);
 	connect(m_image, &AbstractAspect::aspectRemoved, this, &DatapickerImageWidget::updateSymbolWidgets);
 	connect(m_image, &AbstractAspect::aspectAdded, this, &DatapickerImageWidget::updateSymbolWidgets);
@@ -386,7 +387,8 @@ void DatapickerImageWidget::selectFile() {
 	ui.leFileName->setText(path);
 }
 
-void DatapickerImageWidget::embeddedChanged(bool embedded) {
+void DatapickerImageWidget::embeddedChanged(int state) {
+	bool embedded = state == Qt::Checked;
 	ui.leFileName->setEnabled(!embedded);
 	ui.cbFileRelativePath->setEnabled(!embedded);
 
@@ -652,6 +654,11 @@ void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
 	ui.sbMinSegmentLength->setValue(value);
 }
 
+void DatapickerImageWidget::imageEmbeddedChanged(bool embedded) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbFileEmbedd->setChecked(embedded);
+}
+
 void DatapickerImageWidget::updateSymbolWidgets() {
 	int pointCount = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	if (pointCount)
@@ -680,7 +687,7 @@ void DatapickerImageWidget::load() {
 
 	// No lock, because it is done already in the caller function
 	ui.cbFileEmbedd->setChecked(m_image->embedded());
-	embeddedChanged(m_image->embedded());
+	embeddedChanged(m_image->embedded() ? Qt::Checked : Qt::Unchecked);
 	ui.cbFileRelativePath->setChecked(m_image->relativeFilePath());
 	updateFileRelativePathCheckBoxEnable();
 	ui.leFileName->setText(m_image->fileName());

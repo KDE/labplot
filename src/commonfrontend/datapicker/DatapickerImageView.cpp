@@ -19,10 +19,13 @@
 
 #include <limits>
 
+#include <QClipboard>
 #include <QDesktopWidget>
+#include <QFileInfo>
 #include <QImage>
 #include <QMenu>
 #include <QMessageBox>
+#include <QMimeData>
 #include <QPrinter>
 #include <QSvgGenerator>
 #include <QTimeLine>
@@ -345,6 +348,25 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 //##############################################################################
 //####################################  Events   ###############################
 //##############################################################################
+void DatapickerImageView::keyPressEvent(QKeyEvent* event) {
+	if (event->matches(QKeySequence::Paste)) {
+		const QClipboard* clipboard = QApplication::clipboard();
+		const QMimeData* mimeData = clipboard->mimeData();
+		if (mimeData->hasImage()) {
+			m_image->setOriginalImage(qvariant_cast<QImage>(mimeData->imageData()));
+			event->accept();
+		} else if (mimeData->hasText()) {
+			// Check if it is a filepath
+			QFileInfo fi(mimeData->text());
+			if (fi.exists()) {
+				m_image->setOriginalImage(fi.absoluteFilePath());
+				event->accept();
+			}
+		}
+	}
+	QGraphicsView::keyPressEvent(event);
+}
+
 void DatapickerImageView::wheelEvent(QWheelEvent* event) {
 	// https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 	if (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
