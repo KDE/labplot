@@ -100,6 +100,7 @@ public:
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
 	BASIC_D_ACCESSOR_DECL(bool, relativeFilePath, RelativeFilePath)
+	BASIC_D_ACCESSOR_DECL(bool, embedded, Embedded)
 	CLASS_D_ACCESSOR_DECL(DatapickerImage::ReferencePoints, axisPoints, AxisPoints)
 	CLASS_D_ACCESSOR_DECL(DatapickerImage::EditorSettings, settings, Settings)
 	BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
@@ -130,6 +131,7 @@ Q_SIGNALS:
 	void requestUpdateActions();
 
 	void fileNameChanged(const QString&);
+	void embeddedChanged(bool);
 	void rotationAngleChanged(float);
 	void axisPointsChanged(const DatapickerImage::ReferencePoints&);
 	void settingsChanged(const DatapickerImage::EditorSettings&);

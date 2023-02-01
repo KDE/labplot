@@ -34,6 +34,7 @@ public:
 	float rotationAngle{0.0};
 	QString fileName;
 	bool relativeFilePath{false};
+	bool embedded{false};
 	int pointSeparation{30};
 	int minSegmentLength{30};
 

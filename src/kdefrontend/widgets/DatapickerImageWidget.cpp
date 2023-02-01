@@ -228,6 +228,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.cbFileRelativePath, &QCheckBox::clicked, this, &DatapickerImageWidget::fileNameChanged);
+	connect(ui.cbFileEmbedd, &QCheckBox::clicked, this, &DatapickerImageWidget::embeddedChanged);
 
 	// edit image
 	connect(ui.cbPlotImageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::plotImageTypeChanged);
@@ -383,6 +384,23 @@ void DatapickerImageWidget::selectFile() {
 		return;
 
 	ui.leFileName->setText(path);
+}
+
+void DatapickerImageWidget::embeddedChanged(bool embedded) {
+	ui.leFileName->setEnabled(!embedded);
+	ui.cbFileRelativePath->setEnabled(!embedded);
+
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* image : m_imagesList)
+		image->setEmbedded(embedded);
+
+	// embedded property was set, update the file name LineEdit after this
+	if (embedded) {
+		QFileInfo fi(m_image->fileName());
+		ui.leFileName->setText(fi.fileName());
+	} else
+		ui.leFileName->setText(m_image->fileName());
 }
 
 void DatapickerImageWidget::fileNameChanged() {
@@ -661,6 +679,8 @@ void DatapickerImageWidget::load() {
 		return;
 
 	// No lock, because it is done already in the caller function
+	ui.cbFileEmbedd->setChecked(m_image->embedded());
+	embeddedChanged(m_image->embedded());
 	ui.cbFileRelativePath->setChecked(m_image->relativeFilePath());
 	updateFileRelativePathCheckBoxEnable();
 	ui.leFileName->setText(m_image->fileName());

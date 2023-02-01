@@ -23,6 +23,7 @@
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 
+#include <QBuffer>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QFileInfo>
@@ -231,6 +232,7 @@ DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 /* =============================== getter methods for background options ================================= */
 BASIC_D_READER_IMPL(DatapickerImage, QString, fileName, fileName)
 BASIC_D_READER_IMPL(DatapickerImage, bool, relativeFilePath, relativeFilePath)
+BASIC_D_READER_IMPL(DatapickerImage, bool, embedded, embedded)
 BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::ReferencePoints, axisPoints, axisPoints)
 BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::EditorSettings, settings, settings)
 BASIC_D_READER_IMPL(DatapickerImage, float, rotationAngle, rotationAngle)
@@ -258,6 +260,12 @@ void DatapickerImage::setFileName(const QString& fileName) {
 void DatapickerImage::setRelativeFilePath(bool relative) {
 	d->relativeFilePath = relative;
 	d->updateFileName();
+}
+
+STD_SETTER_CMD_IMPL_S(DatapickerImage, SetEmbedded, bool, embedded)
+void DatapickerImage::setEmbedded(bool embedded) {
+	if (embedded != d->embedded)
+		exec(new DatapickerImageSetEmbeddedCmd(d, embedded, ki18n("%1: embed image")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetRotationAngle, float, rotationAngle)
@@ -462,11 +470,23 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 
 	// general properties
 	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("embedded"), QString::number(d->embedded));
 	writer->writeAttribute(QStringLiteral("relativePath"), QString::number(d->relativeFilePath));
 	writer->writeAttribute(QStringLiteral("fileName"), d->fileName);
 	writer->writeAttribute(QStringLiteral("plotPointsType"), QString::number(static_cast<int>(d->plotPointsType)));
 	writer->writeAttribute(QStringLiteral("pointVisibility"), QString::number(d->pointVisibility));
 	writer->writeEndElement();
+
+	// image data
+	if (d->embedded && !originalPlotImage.isNull()) {
+		writer->writeStartElement(QStringLiteral("data"));
+		QByteArray data;
+		QBuffer buffer(&data);
+		buffer.open(QIODevice::WriteOnly);
+		originalPlotImage.save(&buffer, "PNG");
+		writer->writeCharacters(QLatin1String(data.toBase64()));
+		writer->writeEndElement();
+	}
 
 	writer->writeStartElement(QStringLiteral("axisPoint"));
 	writer->writeAttribute(QStringLiteral("graphType"), QString::number(static_cast<int>(d->axisPoints.type)));
@@ -536,12 +556,17 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 		if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE("embedded", embedded, bool);
+			READ_INT_VALUE("relativePath", relativeFilePath, bool);
 			str = attribs.value(QStringLiteral("fileName")).toString();
 			d->fileName = str;
-			READ_INT_VALUE("relativePath", relativeFilePath, bool);
 
 			READ_INT_VALUE("plotPointsType", plotPointsType, DatapickerImage::PointsType);
 			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
+		} else if (reader->name() == QLatin1String("data")) {
+			QByteArray ba = QByteArray::fromBase64(reader->readElementText().toLatin1());
+			if (!originalPlotImage.loadFromData(ba))
+				reader->raiseWarning(i18n("Failed to read image data"));
 		} else if (!preview && reader->name() == QLatin1String("axisPoint")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE_DIRECT("graphType", d->axisPoints.type, GraphType);
