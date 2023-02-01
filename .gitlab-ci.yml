@@ -35,9 +35,8 @@ windows_qt515:
   artifacts:
     expire_in: 2 weeks
     when: on_success
-    paths:
-      - _install
-      - _staging
+    #paths:
+    #  - _install
     reports:
       junit: JUnitTestResults.xml
 
