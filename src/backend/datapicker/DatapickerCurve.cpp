@@ -98,7 +98,7 @@ void DatapickerCurve::childRemoved(const AbstractAspect* child) {
 		return;
 
 	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
-	// TODO: implement, not supported yet
+	m_datasheet->removeRows(row, 1);
 }
 
 /*!
@@ -431,10 +431,18 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 	auto* datapicker = static_cast<Datapicker*>(parentAspect());
 	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
 
+	const auto xDateTime = datapicker->xDateTime();
+	if ((m_datetime && !xDateTime) || (!m_datetime && xDateTime))
+		updateColumns(xDateTime);
+
 	QVector3D data = datapicker->mapSceneToLogical(point->position());
 
-	if (d->posXColumn)
-		d->posXColumn->setValueAt(row, data.x());
+	if (d->posXColumn) {
+		if (datapicker->xDateTime())
+			d->posXColumn->setDateTimeAt(row, QDateTime::fromMSecsSinceEpoch(data.x()));
+		else
+			d->posXColumn->setValueAt(row, data.x());
+	}
 
 	if (d->posYColumn)
 		d->posYColumn->setValueAt(row, data.y());
@@ -461,6 +469,15 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(0, point->minusDeltaYPos().y()));
 		d->minusDeltaYColumn->setValueAt(row, std::abs(data.y()));
 	}
+}
+
+void DatapickerCurve::updateColumns(bool datetime) {
+	m_datetime = datetime;
+	Q_D(DatapickerCurve);
+	if (datetime)
+		d->posXColumn->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	else
+		d->posXColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
 }
 
 //##############################################################################

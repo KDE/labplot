@@ -235,6 +235,10 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 	Q_EMIT requestUpdateActions();
 }
 
+bool Datapicker::xDateTime() const {
+	return m_image->axisPoints().datetime;
+}
+
 QVector3D Datapicker::mapSceneToLogical(QPointF point) const {
 	return m_transform->mapSceneToLogical(point, m_image->axisPoints());
 }

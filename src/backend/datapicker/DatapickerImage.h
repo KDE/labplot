@@ -44,7 +44,7 @@ public:
 		QPointF scenePos[3];
 		QVector3D logicalPos[3];
 		double ternaryScale{1.0};
-		bool datetime{false};
+		bool datetime{false}; // Datetime for the x axis
 	};
 
 	struct EditorSettings {

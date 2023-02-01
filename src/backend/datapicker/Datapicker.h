@@ -48,6 +48,8 @@ public:
 	void setSelectedInView(const bool);
 	void addNewPoint(QPointF, AbstractAspect*);
 
+	bool xDateTime() const;
+
 	QVector3D mapSceneToLogical(QPointF) const;
 	QVector3D mapSceneLengthToLogical(QPointF) const;
 
