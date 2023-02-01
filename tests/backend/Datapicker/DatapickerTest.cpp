@@ -1014,7 +1014,7 @@ void DatapickerTest::datapickerDateTime() {
 	QCOMPARE(w.ui.dtePositionX1->isVisible(), false);
 	QCOMPARE(w.ui.dtePositionX2->isVisible(), false);
 	QCOMPARE(w.ui.dtePositionX3->isVisible(), false);
-	// QCOMPARE(w.ui.sbPositionX1->isVisible(), true);
+	// QCOMPARE(w.ui.sbPositionX1->isVisible(), true); // Not possible if no MainWin?
 	// QCOMPARE(w.ui.sbPositionX2->isVisible(), true);
 	// QCOMPARE(w.ui.sbPositionX3->isVisible(), true);
 
