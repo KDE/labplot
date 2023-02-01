@@ -99,6 +99,7 @@ public:
 	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
+	BASIC_D_ACCESSOR_DECL(bool, relativeFilePath, RelativeFilePath)
 	CLASS_D_ACCESSOR_DECL(DatapickerImage::ReferencePoints, axisPoints, AxisPoints)
 	CLASS_D_ACCESSOR_DECL(DatapickerImage::EditorSettings, settings, Settings)
 	BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)

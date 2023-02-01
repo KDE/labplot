@@ -11,6 +11,10 @@
 #ifndef DATAPICKERIMAGEPRIVATE_H
 #define DATAPICKERIMAGEPRIVATE_H
 
+#include "backend/datapicker/DatapickerImage.h"
+
+#include <QString>
+
 class Symbol;
 class QGraphicsScene;
 
@@ -29,6 +33,7 @@ public:
 	QGraphicsScene* m_scene;
 	float rotationAngle{0.0};
 	QString fileName;
+	bool relativeFilePath{false};
 	int pointSeparation{30};
 	int minSegmentLength{30};
 

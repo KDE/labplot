@@ -24,6 +24,8 @@
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 
 #include <QDesktopWidget>
+#include <QDir>
+#include <QFileInfo>
 #include <QGraphicsScene>
 #include <QMenu>
 #include <QPrintDialog>
@@ -228,6 +230,7 @@ DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 
 /* =============================== getter methods for background options ================================= */
 BASIC_D_READER_IMPL(DatapickerImage, QString, fileName, fileName)
+BASIC_D_READER_IMPL(DatapickerImage, bool, relativeFilePath, relativeFilePath)
 BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::ReferencePoints, axisPoints, axisPoints)
 BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::EditorSettings, settings, settings)
 BASIC_D_READER_IMPL(DatapickerImage, float, rotationAngle, rotationAngle)
@@ -250,6 +253,11 @@ void DatapickerImage::setFileName(const QString& fileName) {
 		exec(new DatapickerImageSetFileNameCmd(d, fileName, ki18n("%1: upload image")));
 		endMacro();
 	}
+}
+
+void DatapickerImage::setRelativeFilePath(bool relative) {
+	d->relativeFilePath = relative;
+	d->updateFileName();
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetRotationAngle, float, rotationAngle)
@@ -418,9 +426,13 @@ DatapickerImagePrivate::~DatapickerImagePrivate() {
 void DatapickerImagePrivate::updateFileName() {
 	WAIT_CURSOR;
 	q->isLoaded = false;
-	const QString& address = fileName.trimmed();
+	QString address = fileName.trimmed();
 
 	if (!address.isEmpty()) {
+		if (relativeFilePath) {
+			QFileInfo fi(q->project()->fileName());
+			address = fi.absoluteDir().absoluteFilePath(address);
+		}
 		if (uploadImage(address))
 			fileName = address;
 	} else {
@@ -450,6 +462,7 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 
 	// general properties
 	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("relativePath"), QString::number(d->relativeFilePath));
 	writer->writeAttribute(QStringLiteral("fileName"), d->fileName);
 	writer->writeAttribute(QStringLiteral("plotPointsType"), QString::number(static_cast<int>(d->plotPointsType)));
 	writer->writeAttribute(QStringLiteral("pointVisibility"), QString::number(d->pointVisibility));
@@ -525,6 +538,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("fileName")).toString();
 			d->fileName = str;
+			READ_INT_VALUE("relativePath", relativeFilePath, bool);
 
 			READ_INT_VALUE("plotPointsType", plotPointsType, DatapickerImage::PointsType);
 			READ_INT_VALUE("pointVisibility", pointVisibility, bool);

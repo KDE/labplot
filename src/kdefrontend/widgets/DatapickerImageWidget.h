@@ -107,6 +107,8 @@ private Q_SLOTS:
 	void symbolVisibleChanged(bool);
 	void imageReferencePointSelected(int);
 
+	void updateFileRelativePathCheckBoxEnable();
+
 	friend class DatapickerTest;
 };
 

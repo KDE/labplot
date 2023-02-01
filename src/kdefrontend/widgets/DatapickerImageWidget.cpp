@@ -10,6 +10,7 @@
 */
 
 #include "DatapickerImageWidget.h"
+#include "backend/core/Project.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/ImageEditor.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
@@ -226,6 +227,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	connect(ui.bOpen, &QPushButton::clicked, this, &DatapickerImageWidget::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
+	connect(ui.cbFileRelativePath, &QCheckBox::clicked, this, &DatapickerImageWidget::fileNameChanged);
 
 	// edit image
 	connect(ui.cbPlotImageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::plotImageTypeChanged);
@@ -360,6 +362,17 @@ void DatapickerImageWidget::updateLocale() {
 	ui.dtePositionX3->setLocale(locale);
 }
 
+void DatapickerImageWidget::updateFileRelativePathCheckBoxEnable() {
+	const auto* project = m_image->project();
+	if (!project || project->fileName().isEmpty()) {
+		ui.cbFileRelativePath->setEnabled(false);
+		ui.cbFileRelativePath->setToolTip(i18n("Save project before using this option"));
+	} else {
+		ui.cbFileRelativePath->setEnabled(true);
+		ui.cbFileRelativePath->setToolTip(QStringLiteral(""));
+	}
+}
+
 //**********************************************************
 //****** SLOTs for changes triggered in DatapickerImageWidget ********
 //**********************************************************
@@ -377,12 +390,29 @@ void DatapickerImageWidget::fileNameChanged() {
 
 	handleWidgetActions();
 
-	const QString& fileName = ui.leFileName->text();
+	QString fileName = ui.leFileName->text();
+	const bool relative = ui.cbFileRelativePath->isChecked();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);
 
-	for (auto* image : m_imagesList)
+	if (relative) {
+		const auto* project = m_image->project();
+		if (project) {
+			if (project->fileName().isEmpty()) {
+				// If the project is not saved, it makes no sense to calculate a relative path
+				ui.cbFileRelativePath->setChecked(false);
+			} else {
+				QFileInfo fi(project->fileName());
+				fileName = fi.absoluteDir().relativeFilePath(fileName);
+				ui.leFileName->setText(fileName);
+			}
+		}
+	}
+
+	for (auto* image : m_imagesList) {
+		image->setRelativeFilePath(relative);
 		image->setFileName(fileName);
+	}
 }
 
 void DatapickerImageWidget::graphTypeChanged(int index) {
@@ -631,6 +661,8 @@ void DatapickerImageWidget::load() {
 		return;
 
 	// No lock, because it is done already in the caller function
+	ui.cbFileRelativePath->setChecked(m_image->relativeFilePath());
+	updateFileRelativePathCheckBoxEnable();
 	ui.leFileName->setText(m_image->fileName());
 
 	// highlight the text field for the background image red if an image is used and cannot be found
