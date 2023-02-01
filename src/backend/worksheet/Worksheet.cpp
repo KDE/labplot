@@ -264,7 +264,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(addedElement, &WorksheetElement::visibleChanged, this, [=]() {
 			if (layout() != Worksheet::Layout::NoLayout)
 				updateLayout();
-	});
+		});
 
 	const auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
 	if (plot) {
