@@ -245,7 +245,7 @@ bool Worksheet::printPreview() const {
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	DEBUG(Q_FUNC_INFO)
-	const auto* addedElement = qobject_cast<const WorksheetElement*>(aspect);
+	const auto* addedElement = dynamic_cast<const WorksheetElement*>(aspect);
 	if (!addedElement)
 		return;
 
@@ -258,6 +258,13 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	d->m_scene->addItem(item);
 
 	connect(aspect, &AbstractAspect::contextMenuRequested, this, &Worksheet::childContextMenuRequested);
+
+	// for containers, connect to visilibity changes and update the layout accordingly
+	if (dynamic_cast<const WorksheetElementContainer*>(addedElement))
+		connect(addedElement, &WorksheetElement::visibleChanged, this, [=]() {
+			if (layout() != Worksheet::Layout::NoLayout)
+				updateLayout();
+	});
 
 	const auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
 	if (plot) {
@@ -1532,7 +1539,11 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		return;
 
 	const auto& list = q->children<WorksheetElementContainer>();
-	int count = list.count();
+	int count = 0;
+	for (auto* elem : list)
+		if (elem->isVisible())
+			++count;
+
 	if (count == 0)
 		return;
 
@@ -1567,6 +1578,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		w = m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
 		h = (m_scene->sceneRect().height() - layoutTopMargin - layoutBottomMargin - (count - 1) * layoutVerticalSpacing) / count;
 		for (auto* elem : list) {
+			if (!elem->isVisible())
+				continue;
 			setContainerRect(elem, x, y, h, w, undoable);
 			y += h + layoutVerticalSpacing;
 		}
@@ -1574,6 +1587,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		w = (m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin - (count - 1) * layoutHorizontalSpacing) / count;
 		h = m_scene->sceneRect().height() - layoutTopMargin - layoutBottomMargin;
 		for (auto* elem : list) {
+			if (!elem->isVisible())
+				continue;
 			setContainerRect(elem, x, y, h, w, undoable);
 			x += w + layoutHorizontalSpacing;
 		}
@@ -1588,6 +1603,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		h = (m_scene->sceneRect().height() - layoutTopMargin - layoutBottomMargin - (layoutRowCount - 1) * layoutVerticalSpacing) / layoutRowCount;
 		int columnIndex = 0; // counts the columns in a row
 		for (auto* elem : list) {
+			if (!elem->isVisible())
+				continue;
 			setContainerRect(elem, x, y, h, w, undoable);
 			x += w + layoutHorizontalSpacing;
 			columnIndex++;
