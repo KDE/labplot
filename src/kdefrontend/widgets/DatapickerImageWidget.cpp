@@ -687,7 +687,7 @@ void DatapickerImageWidget::load() {
 
 	// highlight the text field for the background image red if an image is used and cannot be found
 	const QString& fileName = m_image->fileName();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	bool invalid = (!m_image->embedded() && !fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);
 
 	imageReferencePointSelected(m_image->currentSelectedReferencePoint());

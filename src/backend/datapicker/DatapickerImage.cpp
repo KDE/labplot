@@ -378,7 +378,12 @@ void DatapickerImagePrivate::retransform() {
 }
 
 bool DatapickerImagePrivate::uploadImage(const QString& address) {
-	bool rc = q->originalPlotImage.load(address);
+	bool rc;
+	if (embedded)
+		rc = !q->originalPlotImage.isNull(); // already stored in originalPlotImage
+	else
+		rc = q->originalPlotImage.load(address);
+
 	if (rc) {
 		// convert the image to 32bit-format if this is not the case yet
 		QImage::Format format = q->originalPlotImage.format();
