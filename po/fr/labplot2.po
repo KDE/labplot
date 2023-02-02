@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-01 00:53+0000\n"
-"PO-Revision-Date: 2023-01-29 20:25+0100\n"
+"POT-Creation-Date: 2023-02-02 00:53+0000\n"
+"PO-Revision-Date: 2023-01-31 19:23+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -105,7 +105,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:271
 #: src/backend/worksheet/plots/PlotArea.cpp:376
 #: src/backend/worksheet/TextLabel.cpp:1125
-#: src/backend/worksheet/Worksheet.cpp:1688
+#: src/backend/worksheet/Worksheet.cpp:1705
 #: src/backend/worksheet/WorksheetElement.cpp:460
 #: src/commonfrontend/ProjectExplorer.cpp:1036
 #, kde-format
@@ -134,7 +134,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:725
 #: src/backend/worksheet/plots/PlotArea.cpp:405
 #: src/backend/worksheet/TextLabel.cpp:1175
-#: src/backend/worksheet/Worksheet.cpp:1781
+#: src/backend/worksheet/Worksheet.cpp:1798
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "élément « %1 » inconnu"
@@ -2143,21 +2143,19 @@ msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Taille de l'enregistrement « TStreamerInfo » : %1 octets"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:291
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgid "Time_s"
-msgstr "Heure"
+msgstr "Durée_s"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:293
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgid "Time_ns"
-msgstr "Heure"
+msgstr "Durée_ns"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:295
 #, kde-format
 msgid "Time_10µs"
-msgstr ""
+msgstr "Durée_10_µs"
 
 #: src/backend/datasources/LiveDataSource.cpp:434
 #: src/backend/datasources/MQTTTopic.cpp:142
@@ -7452,20 +7450,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1 : activer le curseur 1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1558
-#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:766
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1 : charger le thème %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1560
-#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:768
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1 : charger le thème par défaut"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1562
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5231
-#: src/backend/worksheet/Worksheet.cpp:763
+#: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1 : définir le thème"
@@ -7660,50 +7658,50 @@ msgid "%1: set border corner radius"
 msgstr "%1 : définir le rayon du coin de bordure"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:260
-#: src/backend/worksheet/Worksheet.cpp:645
-#: src/backend/worksheet/Worksheet.cpp:646
+#: src/backend/worksheet/Worksheet.cpp:652
+#: src/backend/worksheet/Worksheet.cpp:653
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1 : définir la marge haute pour la mise en page"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:267
-#: src/backend/worksheet/Worksheet.cpp:654
-#: src/backend/worksheet/Worksheet.cpp:655
+#: src/backend/worksheet/Worksheet.cpp:661
+#: src/backend/worksheet/Worksheet.cpp:662
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1 : définir la marge basse pour la mise en page"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:274
-#: src/backend/worksheet/Worksheet.cpp:663
-#: src/backend/worksheet/Worksheet.cpp:664
+#: src/backend/worksheet/Worksheet.cpp:670
+#: src/backend/worksheet/Worksheet.cpp:671
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1 : définir la marge gauche pour la mise en page"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:281
-#: src/backend/worksheet/Worksheet.cpp:672
-#: src/backend/worksheet/Worksheet.cpp:673
+#: src/backend/worksheet/Worksheet.cpp:679
+#: src/backend/worksheet/Worksheet.cpp:680
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1 : définir la marge droite pour la mise en page"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:288
-#: src/backend/worksheet/Worksheet.cpp:681
-#: src/backend/worksheet/Worksheet.cpp:682
+#: src/backend/worksheet/Worksheet.cpp:688
+#: src/backend/worksheet/Worksheet.cpp:689
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1 : définir l'espacement vertical pour la mise en page"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:295
-#: src/backend/worksheet/Worksheet.cpp:690
-#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:697
+#: src/backend/worksheet/Worksheet.cpp:698
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1 : définir l'espacement horizontal pour la mise en page"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:302
-#: src/backend/worksheet/Worksheet.cpp:708
-#: src/backend/worksheet/Worksheet.cpp:709
+#: src/backend/worksheet/Worksheet.cpp:715
+#: src/backend/worksheet/Worksheet.cpp:716
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1 : définir le nombre de colonnes pour la mise en page"
@@ -8537,35 +8535,35 @@ msgstr "%1 : définir le style de bordure"
 msgid "%1: set border"
 msgstr "%1 : définir la bordure"
 
-#: src/backend/worksheet/Worksheet.cpp:619
+#: src/backend/worksheet/Worksheet.cpp:626
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1 : modifier le type de taille"
 
-#: src/backend/worksheet/Worksheet.cpp:629
+#: src/backend/worksheet/Worksheet.cpp:636
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: changer la propriété « modifier l'échelle du contenu »"
 
-#: src/backend/worksheet/Worksheet.cpp:636
-#: src/backend/worksheet/Worksheet.cpp:637
+#: src/backend/worksheet/Worksheet.cpp:643
+#: src/backend/worksheet/Worksheet.cpp:644
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1 : définir la mise en page"
 
-#: src/backend/worksheet/Worksheet.cpp:699
-#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:706
+#: src/backend/worksheet/Worksheet.cpp:707
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1 : définir le nombre de lignes pour la mise en page"
 
-#: src/backend/worksheet/Worksheet.cpp:738
-#: src/backend/worksheet/Worksheet.cpp:739
+#: src/backend/worksheet/Worksheet.cpp:745
+#: src/backend/worksheet/Worksheet.cpp:746
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1 : définir la taille de page"
 
-#: src/backend/worksheet/Worksheet.cpp:1480
+#: src/backend/worksheet/Worksheet.cpp:1487
 #, kde-format
 msgid "Curves"
 msgstr "Courbes"
@@ -9266,10 +9264,9 @@ msgid "Fuzzy Matching"
 msgstr "Correspondance approximative"
 
 #: src/commonfrontend/ProjectExplorer.cpp:886
-#, fuzzy, kde-format
-#| msgid "%1: set visible"
+#, kde-format
 msgid "%1 elements: set visible: %2"
-msgstr "%1 : définir comme visible"
+msgstr "%1 éléments : définir comme visible : %2"
 
 #: src/commonfrontend/ProjectExplorer.cpp:910
 #, kde-format
@@ -10502,12 +10499,12 @@ msgstr ""
 #: src/kdefrontend/datasources/CANOptionsWidget.cpp:13
 #, kde-format
 msgid "Use NAN"
-msgstr ""
+msgstr "Utiliser « NAN »"
 
 #: src/kdefrontend/datasources/CANOptionsWidget.cpp:14
 #, kde-format
 msgid "Use previous value"
-msgstr ""
+msgstr "Utiliser une valeur précédente"
 
 #: src/kdefrontend/datasources/DatabaseManagerDialog.cpp:30
 #, kde-format
@@ -10924,10 +10921,9 @@ msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:106
-#, fuzzy, kde-format
-#| msgid "Binary files (*.*)"
+#, kde-format
 msgid "Vector Binary Logfile (BLF)"
-msgstr "Fichiers binaires (*.*)"
+msgstr "Fichier vectoriel binaire de journal (BLF)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:113
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:133
@@ -11063,11 +11059,10 @@ msgid "Select the File Data Source"
 msgstr "Sélectionner la source de données du fichier"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:909
-#, fuzzy, kde-format
-#| msgid "Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
-msgstr "Sélectionner le fichier image"
+msgstr "Sélectionner le fichier « DBC »"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1032
 #, kde-format
@@ -16750,17 +16745,15 @@ msgstr "Formulaire"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:25
-#, fuzzy, kde-format
-#| msgid "Import to"
+#, kde-format
 msgid "Import mode:"
-msgstr "Importer vers"
+msgstr "Mode d'importation :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:32
-#, fuzzy, kde-format
-#| msgid "Convert NaN to 0"
+#, kde-format
 msgid "Convert time to seconds"
-msgstr "Convertir « Nan » à 0"
+msgstr "Convertir une durée en secondes"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:33
@@ -17128,10 +17121,9 @@ msgstr "Source :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:371
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "DBC Database"
-msgstr "Base de données"
+msgstr "Base de données « DBC »"
 
 #. i18n: ectx: property (text), widget (QLabel, lWarningLimitedMessages)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:547
@@ -17139,6 +17131,8 @@ msgstr "Base de données"
 msgid ""
 "Not all variables might be visible, because of limited number of messages"
 msgstr ""
+"Toutes les variables peuvent ne pas être visibles en raison d'un nombre "
+"limité de messages"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartRow)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:567
