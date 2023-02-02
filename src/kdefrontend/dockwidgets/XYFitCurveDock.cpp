@@ -117,13 +117,6 @@ void XYFitCurveDock::setupGeneral() {
 	l->addWidget(fitParametersWidget);
 	uiGeneralTab.frameParameters->setLayout(l);
 
-	// use white background in the preview label
-	QPalette p;
-	// dark or light mode
-	(palette().color(QPalette::Base).lightness() < 128) ? p.setColor(QPalette::Window, Qt::black) : p.setColor(QPalette::Window, Qt::white);
-	uiGeneralTab.lFuncPic->setAutoFillBackground(true);
-	uiGeneralTab.lFuncPic->setPalette(p);
-
 	uiGeneralTab.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
@@ -1011,13 +1004,26 @@ void XYFitCurveDock::updateModelEquation() {
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
 		QImage image = GuiTools::importPDFFile(file);
 		// invert image if in dark mode
-		if (palette().color(QPalette::Base).lightness() < 128)
+		if (palette().color(QPalette::Base).lightness() < 128) {
 			image.invertPixels();
+
+			// use system palette for background
+			for (int i = 0; i < image.size().width(); i++)
+				for (int j = 0; j < image.size().height(); j++)
+					if (qGray(image.pixel(i, j)) == 0)
+						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+		}
 
 		if (image.isNull()) {
 			uiGeneralTab.lEquation->hide();
 			uiGeneralTab.lFuncPic->hide();
 		} else {
+			// use light/dark background in the preview label
+			QPalette p;
+			p.setColor(QPalette::Window, palette().color(QPalette::Base));
+			uiGeneralTab.lFuncPic->setAutoFillBackground(true);
+			uiGeneralTab.lFuncPic->setPalette(p);
+
 			uiGeneralTab.lFuncPic->setPixmap(QPixmap::fromImage(image));
 			uiGeneralTab.lFuncPic->show();
 		}
