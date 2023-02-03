@@ -261,7 +261,6 @@ void AddSubtractValueDialog::init() {
 	});
 	connect(ui.sbBaselineParameter3, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
 
-
 	// call typeChanged() to update the status of the widgets and of the preview
 	// after the dialog was completely shown
 	QTimer::singleShot(0, this, [=]() {
