@@ -53,9 +53,12 @@ public:
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 
 	struct RichRange {
-		RichRange(const Range<double>& r = Range<double>(), const bool d = false)
-			: range(r)
-			, dirty(d) {
+		RichRange(const Range<double>& r = Range<double>())
+			: range(r) {
+			if (!range.autoScale())
+				dirty = true;
+			else
+				dataRange = range;
 		}
 		Range<double> range; // current range
 		Range<double> prev{Range<double>(NAN, NAN)};

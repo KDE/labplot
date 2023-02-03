@@ -2145,7 +2145,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	}
 
 	auto rangeChanged = false;
-	if (checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
+	if (!isLoading() && checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
 		auto xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
 		auto yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 		setRangeDirty(Dimension::X, xIndex, true);
