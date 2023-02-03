@@ -1427,9 +1427,10 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		auto* key_event = static_cast<QKeyEvent*>(event);
 		if (key_event->matches(QKeySequence::Copy))
 			copySelection();
-		else if (key_event->matches(QKeySequence::Paste))
-			pasteIntoSelection();
-		else if (key_event->key() == Qt::Key_Backspace || key_event->matches(QKeySequence::Delete))
+		else if (key_event->matches(QKeySequence::Paste)) {
+			if (!m_readOnly)
+				pasteIntoSelection();
+		} else if (key_event->key() == Qt::Key_Backspace || key_event->matches(QKeySequence::Delete))
 			clearSelectedCells();
 		else if (key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter) {
 			// only advance for return pressed events in the table,
