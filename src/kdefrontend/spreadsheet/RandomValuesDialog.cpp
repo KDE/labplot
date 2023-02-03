@@ -69,13 +69,6 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 		ui.cbDistribution->addItem(d.first, d.second);
 	const int defaultDist = (int)nsl_sf_stats_gaussian; // default dist
 
-	// use white background in the preview label
-	QPalette p;
-	p.setColor(QPalette::Window, Qt::white);
-	ui.lFuncPic->setAutoFillBackground(true);
-	ui.lFuncPic->setPalette(p);
-	ui.lFuncPic->setScaledContents(false);
-
 	ui.leParameter1->setClearButtonEnabled(true);
 	ui.leParameter2->setClearButtonEnabled(true);
 	ui.leParameter3->setClearButtonEnabled(true);
@@ -372,10 +365,33 @@ void RandomValuesDialog::distributionChanged(int index) {
 							   QStringLiteral("pics/gsl_distributions/") + QLatin1String(nsl_sf_stats_distribution_pic_name[dist]) + QStringLiteral(".pdf"));
 	QImage image = GuiTools::importPDFFile(file);
 
+	// use system palette for background
+	if (DARKMODE) {
+		// invert image if in dark mode
+		image.invertPixels();
+
+		for (int i = 0; i < image.size().width(); i++)
+			for (int j = 0; j < image.size().height(); j++)
+				if (qGray(image.pixel(i, j)) < 64) // 0-255: 0-64 covers all dark pixel
+					image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+	} else {
+		for (int i = 0; i < image.size().width(); i++)
+			for (int j = 0; j < image.size().height(); j++)
+				if (qGray(image.pixel(i, j)) > 192) // 0-255: 224-255 covers all light pixel
+					image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+	}
+
 	if (image.isNull()) {
 		ui.lFunc->hide();
 		ui.lFuncPic->hide();
 	} else {
+		// use light/dark background in the preview label
+		QPalette p;
+		p.setColor(QPalette::Window, palette().color(QPalette::Base));
+		ui.lFuncPic->setAutoFillBackground(true);
+		ui.lFuncPic->setPalette(p);
+		ui.lFuncPic->setScaledContents(false);
+
 		ui.lFuncPic->setPixmap(QPixmap::fromImage(image));
 		ui.lFuncPic->show();
 	}
