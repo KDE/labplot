@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-02 00:53+0000\n"
-"PO-Revision-Date: 2023-01-30 09:53+0100\n"
+"POT-Creation-Date: 2023-02-03 00:55+0000\n"
+"PO-Revision-Date: 2023-02-02 08:57+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1207,7 +1207,7 @@ msgstr "ინდექსი"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2306
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2324
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2341
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:161
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:154
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:187
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:62
@@ -2194,7 +2194,7 @@ msgstr "%1: %2 -დან შემოტანა"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1200
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1206
 #, kde-format
 msgid "Success"
 msgstr "წარმატება"
@@ -5654,7 +5654,7 @@ msgstr "სტატისტიკა (გადანაწილებებ�
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1167
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:245
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:295
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:793
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:786
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:86
 #, kde-format
 msgid "Custom"
@@ -8871,7 +8871,7 @@ msgstr "შემცველობის გასუფთავება"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:292
 #, kde-format
 msgid "&Go to Cell..."
-msgstr ""
+msgstr "&უჯრედზე გადასვლა..."
 
 #: src/commonfrontend/matrix/MatrixView.cpp:141
 #, kde-format
@@ -8901,12 +8901,12 @@ msgstr "მნიშვნელობის გამოკლება"
 #: src/commonfrontend/matrix/MatrixView.cpp:149
 #, kde-format
 msgid "Multiply Value"
-msgstr ""
+msgstr "მნიშვნელობის გამრავლება"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:151
 #, kde-format
 msgid "Divide Value"
-msgstr ""
+msgstr "მნიშვნელობის გაყოფა"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:159
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:38
@@ -9282,13 +9282,13 @@ msgstr ""
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
 #, kde-format
 msgid "Remove Columns"
-msgstr ""
+msgstr "სვეტების წაშლა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:304
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1575
 #, kde-format
 msgid "Freeze Column"
-msgstr ""
+msgstr "სვეტების გაყინვა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:338
 #, kde-format
@@ -9403,7 +9403,7 @@ msgstr ""
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:425
 #, kde-format
 msgid "&Selected Columns"
-msgstr ""
+msgstr "&მონიშნული სვეტები"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:426
 #, kde-format
@@ -10512,7 +10512,7 @@ msgstr "ახალი ელცხრილი"
 #: src/kdefrontend/datasources/ImportDialog.cpp:51
 #, kde-format
 msgid "New Matrix"
-msgstr ""
+msgstr "ახალი მატრიცა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbImportTo)
 #: src/kdefrontend/datasources/ImportDialog.cpp:72
@@ -12113,17 +12113,17 @@ msgid "Expand all curves"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1331
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1337
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1343
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1349
 #, kde-format
 msgid "Copy Selection"
 msgstr "მონიშნულის კოპირება"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1332
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1338
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1344
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1350
 #, kde-format
 msgid "Copy All"
 msgstr "ყველას კოპირება"
@@ -12673,38 +12673,38 @@ msgstr "t, მინ"
 msgid "t, max"
 msgstr "t, მაქს"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:161
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:154
 #, kde-format
 msgid "Uncertainty"
 msgstr "გაურკვევლობა"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:161
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:154
 #, kde-format
 msgid "Uncertainty, %"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:161
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:154
 #, kde-format
 msgid "t statistic"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:162
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:155
 #, kde-format
 msgid "Lower"
 msgstr "დაწევა"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:162
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:155
 #, kde-format
 msgid "Upper"
 msgstr "ზედა რეგისტრში"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:193
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:186
 #, kde-format
 msgid "test"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:440
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:433
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:113
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:228
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:108
@@ -12718,34 +12718,34 @@ msgstr ""
 msgid "Curve:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:460
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:453
 #, kde-format
 msgid "Histogram:"
 msgstr "ჰისტოგრამა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:841
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:834
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:620
 #, kde-format
 msgid "Degree:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:898
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:891
 #, kde-format
 msgid "Number of peaks:"
 msgstr "პიკების რაოდენობა:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1201
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1207
 #, kde-format
 msgid "Fit status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1378
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1384
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1379
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1385
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -16252,7 +16252,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:226
 #, kde-format
 msgid "Decimal Separator:"
-msgstr ""
+msgstr "ათობითის გამყოფი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:233
@@ -20119,31 +20119,31 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:81
 #, kde-format
 msgid "Export header:"
-msgstr ""
+msgstr "თავსართის გატანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixVHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:104
 #, kde-format
 msgid "Export vertical header:"
-msgstr ""
+msgstr "ვერტიკალური თავსართის გატანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixHHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:121
 #, kde-format
 msgid "Export horizontal header:"
-msgstr ""
+msgstr "ჰორიზონტალური თავსართის გატანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lGridLines)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:162
 #, kde-format
 msgid "Grid lines:"
-msgstr ""
+msgstr "ბადის ხაზები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCaptions)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:179
 #, kde-format
 msgid "Table captions:"
-msgstr ""
+msgstr "ცხრილის წარწერები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:196
@@ -20161,19 +20161,19 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:227
 #, kde-format
 msgid "Area to export:"
-msgstr ""
+msgstr "გასატანი ადგილი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:237
 #, kde-format
 msgid "Export to:"
-msgstr ""
+msgstr "გატანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnAsUnits)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:254
 #, kde-format
 msgid "Comments as column units:"
-msgstr ""
+msgstr "სვეტის კომენტარები:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/flattencolumnswidget.ui:26
@@ -20191,7 +20191,7 @@ msgstr "ფერები"
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:115
 #, kde-format
 msgid "Color Map:"
-msgstr ""
+msgstr "ფერების რუკა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHightlight)
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:172
@@ -20215,7 +20215,7 @@ msgstr "f(x) = "
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
 #, kde-format
 msgid "auto update"
-msgstr ""
+msgstr "ავტომატური განახლება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
@@ -20345,19 +20345,19 @@ msgstr "სვეტების დალაგება:"
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:66
 #, kde-format
 msgid "Separately"
-msgstr ""
+msgstr "ცალ-ცალკე"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSorting)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:71
 #, kde-format
 msgid "Together"
-msgstr ""
+msgstr "ერთად"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:79
 #, kde-format
 msgid "Leading column:"
-msgstr ""
+msgstr "წამყვანი სვეტი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportTo)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:73
