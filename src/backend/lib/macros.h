@@ -100,6 +100,8 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	(class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(index)))
 #define ENUM_COUNT(class, enum) (class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
 
+#define DARKMODE (palette().color(QPalette::Base).lightness() < 128)
+
 //////////////////////// LineEdit Access ///////////////////////////////
 #define SET_INT_FROM_LE(var, le)                                                                                                                               \
 	{                                                                                                                                                          \

@@ -53,7 +53,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	layout->addWidget(m_tabWidget);
 	setLayout(layout);
 
-	const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
+	const QString htmlColor = DARKMODE ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
 	// clang-format off
 	if (column->isNumeric()) {
 		m_htmlOverview = QStringLiteral("<table border=0 width=100%><tr><td colspan=2 align=center bgcolor=") + htmlColor
@@ -208,7 +208,7 @@ void StatisticsColumnWidget::showOverview() {
 	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::Text) {
 		// add the frequencies table
 		const auto& frequencies = m_column->frequencies();
-		const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QStringLiteral("#5f5f5f") : QStringLiteral("#D1D1D1");
+		const QString htmlColor = DARKMODE ? QStringLiteral("#5f5f5f") : QStringLiteral("#D1D1D1");
 		m_htmlOverview += QStringLiteral("<br><table border=0 width=100%>") + QStringLiteral("<tr>") + QStringLiteral("<td colspan=3 align=center bgcolor=")
 			+ htmlColor + QStringLiteral("><b><big>") + i18n("Frequency Table") + QStringLiteral("</big><b></td>") + QStringLiteral("</tr>")
 			+ QStringLiteral("<tr>") + QStringLiteral("<td width=60%></td>") + QStringLiteral("<td>") + i18n("Frequency") + QStringLiteral("</td>")

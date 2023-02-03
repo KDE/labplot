@@ -1003,14 +1003,20 @@ void XYFitCurveDock::updateModelEquation() {
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
 		QImage image = GuiTools::importPDFFile(file);
-		// invert image if in dark mode
-		if (palette().color(QPalette::Base).lightness() < 128) {
+
+		// use system palette for background
+		if (DARKMODE) {
+			// invert image if in dark mode
 			image.invertPixels();
 
-			// use system palette for background
 			for (int i = 0; i < image.size().width(); i++)
 				for (int j = 0; j < image.size().height(); j++)
-					if (qGray(image.pixel(i, j)) == 0)
+					if (qGray(image.pixel(i, j)) < 64) // 0-255: 0-64 covers all dark pixel
+						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+		} else {
+			for (int i = 0; i < image.size().width(); i++)
+				for (int j = 0; j < image.size().height(); j++)
+					if (qGray(image.pixel(i, j)) > 192) // 0-255: 224-255 covers all light pixel
 						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
 		}
 

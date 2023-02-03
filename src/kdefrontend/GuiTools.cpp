@@ -157,7 +157,7 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 										   i18n("Backward Diag. Lines"),
 										   i18n("Forward Diag. Lines"),
 										   i18n("Crossing Diag. Lines")};
-	const QColor& borderColor = (qApp->palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	const QColor& borderColor = DARKMODE ? Qt::white : Qt::black;
 	for (int i = 0; i < 15; i++) {
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
@@ -237,7 +237,7 @@ void GuiTools::highlight(QLineEdit* le, bool invalid) {
 void GuiTools::addSymbolStyles(QComboBox* cb) {
 	QPainter pa;
 	QPen pen(Qt::SolidPattern, 0);
-	const QColor& color = (QApplication::palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	const QColor& color = DARKMODE ? Qt::white : Qt::black;
 	pen.setColor(color);
 	pa.setPen(pen);
 
