@@ -59,6 +59,8 @@ bool VectorBLFFilter::isValid(const QString& filename) {
 	} catch (Vector::BLF::Exception e) {
 		return false; // Signature was invalid or something else
 	}
+#else
+	Q_UNUSED(filename)
 #endif
 	return false;
 }
@@ -308,7 +310,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 #endif // HAVE_VECTOR_BLF
 }
 
-int VectorBLFFilterPrivate::readDataFromFileSeparateTime(const QString& fileName, int lines) {
+int VectorBLFFilterPrivate::readDataFromFileSeparateTime(const QString& /*fileName*/, int /*lines*/) {
 	return 0; // Not implemented yet
 }
 

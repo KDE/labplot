@@ -18,6 +18,8 @@ bool DbcParser::parseFile(const QString& filename) {
 	} catch (libdbc::validity_error e) {
 		// e.what(); // TODO: turn on
 	}
+#else
+	Q_UNUSED(filename)
 #endif
 	return m_valid;
 }
@@ -36,7 +38,10 @@ DbcParser::ParseStatus DbcParser::parseMessage(const uint32_t id, const std::vec
 	case libdbc::Message::ParseSignalsStatus::ErrorUnknownID:
 		return ParseStatus::ErrorUnknownID;
 	}
-
+#else
+	Q_UNUSED(id)
+	Q_UNUSED(data)
+	Q_UNUSED(out)
 #endif
 	return ParseStatus::ErrorDBCParserUnsupported;
 }
@@ -56,6 +61,10 @@ DbcParser::ParseStatus DbcParser::parseMessage(const uint32_t id, const std::arr
 	case libdbc::Message::ParseSignalsStatus::ErrorUnknownID:
 		return ParseStatus::ErrorUnknownID;
 	}
+#else
+	Q_UNUSED(id)
+	Q_UNUSED(data)
+	Q_UNUSED(out)
 #endif
 	return ParseStatus::ErrorDBCParserUnsupported;
 }
@@ -81,6 +90,9 @@ QStringList DbcParser::signals(const QVector<uint32_t> ids, QHash<uint32_t, int>
 			}
 		}
 	}
+#else
+	Q_UNUSED(ids)
+	Q_UNUSED(idIndex)
 #endif
 	return s;
 }

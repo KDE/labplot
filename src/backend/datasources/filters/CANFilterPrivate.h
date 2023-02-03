@@ -72,7 +72,7 @@ protected:
 		void appendVector(QVector<T>* data, AbstractColumn::ColumnMode cm) {
 			m_dataContainer.push_back(data);
 			m_columnModes.append(cm);
-		};
+		}
 
 		template<class T>
 		void setData(int indexDataContainer, int indexData, T value) {

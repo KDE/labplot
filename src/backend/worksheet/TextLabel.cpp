@@ -433,10 +433,11 @@ QRectF TextLabelPrivate::size() {
 		// size is in points, convert to scene units
 		//  TODO: the shift and scaling is just a workaround to avoid the big bounding box
 		//  s.a. TextLabelPrivate::updateBoundingRect()
-		double xShift = 23., yScale = 0.8;
+
+		// double xShift = 23., yScale = 0.8;
 		// better scaling for multiline Markdown
-		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
-			yScale = 0.95;
+		// if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
+		//	yScale = 0.95;
 		// see updateBoundingRect()
 		w = m_textItem->boundingRect().width() * m_textItem->scale();
 		h = m_textItem->boundingRect().height() * m_textItem->scale();
@@ -643,10 +644,11 @@ void TextLabelPrivate::updateBoundingRect() {
 		// QDEBUG(" BOUNDING RECT = " << m_textItem->boundingRect())
 		//  TODO: the shift and scaling is just a workaround to avoid the big bounding box
 		//  s.a. TextLabelPrivate::size()
-		double xShift = 23., yScale = 0.8;
-		// better scaling for multiline Markdown
-		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
-			yScale = 0.95;
+
+		// double xShift = 23., yScale = 0.8;
+		//  better scaling for multiline Markdown
+		// if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
+		//	yScale = 0.95;
 		w = m_textItem->boundingRect().width() * m_textItem->scale(); // - xShift;
 		h = m_textItem->boundingRect().height() * m_textItem->scale(); // * yScale;
 		m_textItem->setPos(QPointF(-w / 2, -h / 2));

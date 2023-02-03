@@ -107,7 +107,12 @@ void CANFilterPrivate::DataContainer::clear() {
 		case AbstractColumn::ColumnMode::Double:
 			delete static_cast<QVector<double>*>(m_dataContainer[i]);
 			break;
-			// TODO: implement missing cases
+		// TODO: implement missing cases
+		case AbstractColumn::ColumnMode::Text:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime:
+			break;
 		}
 	}
 	m_columnModes.clear();
@@ -150,11 +155,15 @@ bool CANFilterPrivate::DataContainer::resize(uint32_t s) const {
 		case AbstractColumn::ColumnMode::Integer:
 			static_cast<QVector<qint32>*>(m_dataContainer[i])->resize(s);
 			break;
-		case AbstractColumn::ColumnMode::Double: {
+		case AbstractColumn::ColumnMode::Double:
 			static_cast<QVector<double>*>(m_dataContainer[i])->resize(s);
 			break;
-		}
-			// TODO: implement missing cases
+		// TODO: implement missing cases
+		case AbstractColumn::ColumnMode::Text:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime:
+			break;
 		}
 	}
 
@@ -173,7 +182,12 @@ bool CANFilterPrivate::DataContainer::resize(uint32_t s) const {
 	case AbstractColumn::ColumnMode::Double:
 		size = static_cast<QVector<double>*>(m_dataContainer[0])->size();
 		break;
-		// TODO: implement missing cases
+	// TODO: implement missing cases
+	case AbstractColumn::ColumnMode::Text:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::DateTime:
+		break;
 	}
 
 	if (size == -1)
@@ -191,7 +205,12 @@ bool CANFilterPrivate::DataContainer::resize(uint32_t s) const {
 		case AbstractColumn::ColumnMode::Double:
 			s = static_cast<QVector<double>*>(m_dataContainer[i])->size();
 			break;
-			// TODO: implement missing cases
+		// TODO: implement missing cases
+		case AbstractColumn::ColumnMode::Text:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime:
+			break;
 		}
 		if (s != size)
 			return false;
@@ -240,6 +259,12 @@ QVector<QStringList> CANFilterPrivate::preview(const QString& fileName, int line
 				l.append(QString::number(v.at(i)));
 				break;
 			}
+			// TODO: other cases
+			case AbstractColumn::ColumnMode::Text:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+				break;
 			}
 		}
 		strings.append(l);

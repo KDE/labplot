@@ -1877,6 +1877,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::Image:
 		case AbstractFileFilter::FileType::Spice:
 		case AbstractFileFilter::FileType::READSTAT:
+		case AbstractFileFilter::FileType::VECTOR_BLF:
 			break;
 		}
 	}
