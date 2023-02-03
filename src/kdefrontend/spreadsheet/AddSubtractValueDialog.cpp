@@ -109,6 +109,7 @@ void AddSubtractValueDialog::init() {
 		m_okButton->setText(i18n("&Add"));
 		break;
 	case Subtract:
+	case SubtractBaseline:
 		setWindowTitle(i18nc("@title:window", "Subtract Value"));
 		ui.lType->setText(i18n("Subtract:")); // only relevant for Add and for Subtract, Add is set in the ui file
 		m_okButton->setText(i18n("&Subtract"));
@@ -141,26 +142,6 @@ void AddSubtractValueDialog::init() {
 		ui.cbType->addItem(i18n("Custom Value"), static_cast<int>(ValueType::CustomValue));
 		ui.cbType->addItem(i18n("Difference"), static_cast<int>(ValueType::Difference));
 
-		if (m_operation == Subtract && m_numeric) {
-			ui.cbType->insertSeparator(6);
-			ui.cbType->insertItem(7, i18n("Baseline (arPLS Algorithm)"), static_cast<int>(ValueType::Baseline));
-
-			// add tooltip texts for the baseline subtraction algorithms.
-			// at the moment only arPLS (s.a. https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract)
-			// is supported and we show the description of its parameters only.
-			QString info = i18n("Smoothness parameter - the larger the value the smoother the resulting background.");
-			ui.lBaselineParameter1->setToolTip(info);
-			ui.sbBaselineParameter1->setToolTip(info);
-
-			info = i18n("Weighting termination ratio - value between 0 and 1, smaller values allow less negative values.");
-			ui.lBaselineParameter2->setToolTip(info);
-			ui.leBaselineParameter2->setToolTip(info);
-
-			info = i18n("Number of iterations to perform.");
-			ui.lBaselineParameter3->setToolTip(info);
-			ui.sbBaselineParameter3->setToolTip(info);
-		}
-
 		for (int i = 0; i < ENUM_COUNT(AbstractColumn, TimeUnit); i++)
 			ui.cbTimeUnits->addItem(AbstractColumn::timeUnitString((AbstractColumn::TimeUnit)i));
 
@@ -173,6 +154,34 @@ void AddSubtractValueDialog::init() {
 		ui.dteTimeValueStart->setVisible(!m_numeric);
 		ui.lTimeValueEnd->setVisible(!m_numeric);
 		ui.dteTimeValueEnd->setVisible(!m_numeric);
+	} else if (m_operation == SubtractBaseline && m_numeric) {
+		ui.cbType->insertSeparator(6);
+		ui.cbType->insertItem(7, i18n("Baseline (arPLS Algorithm)"), static_cast<int>(ValueType::Baseline));
+
+		// add tooltip texts for the baseline subtraction algorithms.
+		// at the moment only arPLS (s.a. https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract)
+		// is supported and we show the description of its parameters only.
+		QString info = i18n("Smoothness parameter - the larger the value the smoother the resulting background.");
+		ui.lBaselineParameter1->setToolTip(info);
+		ui.sbBaselineParameter1->setToolTip(info);
+
+		info = i18n("Weighting termination ratio - value between 0 and 1, smaller values allow less negative values.");
+		ui.lBaselineParameter2->setToolTip(info);
+		ui.leBaselineParameter2->setToolTip(info);
+
+		info = i18n("Number of iterations to perform.");
+		ui.lBaselineParameter3->setToolTip(info);
+		ui.sbBaselineParameter3->setToolTip(info);
+
+		ui.lValueStart->hide();
+		ui.leValueStart->hide();
+		ui.lValueEnd->hide();
+		ui.leValueEnd->hide();
+		ui.cbTimeUnits->hide();
+		ui.lTimeValueStart->hide();
+		ui.dteTimeValueStart->hide();
+		ui.lTimeValueEnd->hide();
+		ui.dteTimeValueEnd->hide();
 	} else {
 		ui.lType->hide();
 		ui.cbType->hide();
@@ -212,7 +221,7 @@ void AddSubtractValueDialog::init() {
 		else
 			ui.cbType->setCurrentIndex(0);
 
-		if (m_operation == Add || m_operation == Subtract) {
+		if (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline) {
 			ui.chbPreview->setChecked(conf.readEntry("Preview", false));
 			ui.framePreview->setVisible(ui.chbPreview->isChecked());
 		} else
@@ -222,6 +231,11 @@ void AddSubtractValueDialog::init() {
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
+
+	if (m_operation == SubtractBaseline) {
+		ui.cbType->setCurrentIndex(ui.cbType->findData(static_cast<int>(ValueType::Baseline)));
+		ui.cbType->setEnabled(false);
+	}
 
 	connect(m_okButton, &QPushButton::clicked, this, &AddSubtractValueDialog::generate);
 	connect(btnBox, &QDialogButtonBox::accepted, this, &AddSubtractValueDialog::accept);
@@ -246,6 +260,7 @@ void AddSubtractValueDialog::init() {
 		invalidatePreview();
 	});
 	connect(ui.sbBaselineParameter3, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
+
 
 	// call typeChanged() to update the status of the widgets and of the preview
 	// after the dialog was completely shown
@@ -400,7 +415,7 @@ void AddSubtractValueDialog::typeChanged(int index) {
 	ui.lBaselineParameter3->setVisible(baseline);
 	ui.sbBaselineParameter3->setVisible(baseline);
 
-	if (m_spreadsheet && (m_operation == Add || m_operation == Subtract)) {
+	if (m_spreadsheet && (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline)) {
 		// we changed maybe from "Minimum" to "Baseline", etc. and need
 		// to recalculate the x-column for the baseline curve
 		m_xColumnBaselineDirty = true;
@@ -410,7 +425,7 @@ void AddSubtractValueDialog::typeChanged(int index) {
 }
 
 void AddSubtractValueDialog::previewChanged(bool state) {
-	bool visible = state && (m_operation == Add || m_operation == Subtract);
+	bool visible = state && (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline);
 	ui.framePreview->setVisible(visible);
 	updatePreview();
 
@@ -674,7 +689,6 @@ void AddSubtractValueDialog::generateForColumns() {
 void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 	const auto mode = col->columnMode();
 	const int rows = m_spreadsheet->rowCount();
-	auto valueType = static_cast<ValueType>(ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
 
 	if (mode == AbstractColumn::ColumnMode::Integer) {
 		int value;
@@ -683,23 +697,22 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 		QVector<int> new_data(rows);
 
 		switch (m_operation) {
-		case Subtract: {
-			if (valueType == ValueType::Baseline) {
-				// copy the int data to doubles
-				QVector<double> new_data(rows);
-				for (int i = 0; i < rows; ++i)
-					new_data[i] = data->at(i);
+		case SubtractBaseline: {
+			// copy the int data to doubles
+			QVector<double> new_data(rows);
+			for (int i = 0; i < rows; ++i)
+				new_data[i] = data->at(i);
 
-				subtractBaseline(new_data);
+			subtractBaseline(new_data);
 
-				// convert the column mode from int to double and subtract the baseline
-				col->setColumnMode(AbstractColumn::ColumnMode::Double);
-				col->setValues(new_data);
-				break;
-			} else
-				value *= -1.;
-			[[fallthrough]];
+			// convert the column mode from int to double and subtract the baseline
+			col->setColumnMode(AbstractColumn::ColumnMode::Double);
+			col->setValues(new_data);
+			break;
 		}
+		case Subtract:
+			value *= -1.;
+			[[fallthrough]];
 		case Add: {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) + value;
@@ -727,23 +740,22 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 		QVector<qint64> new_data(rows);
 
 		switch (m_operation) {
-		case Subtract: {
-			if (valueType == ValueType::Baseline) {
-				// copy the big int data to doubles
-				QVector<double> new_data(rows);
-				for (int i = 0; i < rows; ++i)
-					new_data[i] = data->at(i);
+		case SubtractBaseline: {
+			// copy the big int data to doubles
+			QVector<double> new_data(rows);
+			for (int i = 0; i < rows; ++i)
+				new_data[i] = data->at(i);
 
-				subtractBaseline(new_data);
+			subtractBaseline(new_data);
 
-				// convert the column mode from int to double and set the new data
-				col->setColumnMode(AbstractColumn::ColumnMode::Double);
-				col->setValues(new_data);
-				break;
-			} else
-				value *= -1.;
-			[[fallthrough]];
+			// convert the column mode from int to double and set the new data
+			col->setColumnMode(AbstractColumn::ColumnMode::Double);
+			col->setValues(new_data);
+			break;
 		}
+		case Subtract:
+			value *= -1.;
+			[[fallthrough]];
 		case Add: {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) + value;
@@ -771,18 +783,16 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 		QVector<double> new_data(rows);
 
 		switch (m_operation) {
-		case Subtract: {
-			if (valueType == ValueType::Baseline) {
-				// copy the data
-				QVector<double> new_data(*data);
-				subtractBaseline(new_data);
-				col->setValues(new_data);
-				break;
-			} else {
-				value *= -1.;
-				[[fallthrough]];
-			}
+		case SubtractBaseline: {
+			// copy the data
+			QVector<double> new_data(*data);
+			subtractBaseline(new_data);
+			col->setValues(new_data);
+			break;
 		}
+		case Subtract:
+			value *= -1.;
+			[[fallthrough]];
 		case Add: {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) + value;
@@ -821,6 +831,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			break;
 		case Multiply:
 		case Divide:
+		case SubtractBaseline:
 			break;
 		}
 	}
@@ -888,6 +899,8 @@ void AddSubtractValueDialog::generateForMatrices() {
 					m_matrix->setCell(i, j, new_data);
 				}
 			break;
+		case SubtractBaseline:
+			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 		qint64 value;
@@ -929,6 +942,8 @@ void AddSubtractValueDialog::generateForMatrices() {
 					new_data /= value;
 					m_matrix->setCell(i, j, new_data);
 				}
+			break;
+		case SubtractBaseline:
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::Double) {
@@ -972,6 +987,8 @@ void AddSubtractValueDialog::generateForMatrices() {
 					m_matrix->setCell(i, j, new_data);
 				}
 			break;
+		case SubtractBaseline:
+			break;
 		}
 	} else { // datetime
 		qint64 value;
@@ -1000,6 +1017,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Multiply:
 		case Divide:
+		case SubtractBaseline:
 			break;
 		}
 	}
@@ -1167,14 +1185,12 @@ QString AddSubtractValueDialog::getMessage(const QString& name) {
 	case Add:
 		msg = i18n("%1: add %2 to column values", name, value);
 		break;
-	case Subtract: {
-		auto type = static_cast<ValueType>(ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
-		if (type != ValueType::Baseline)
-			msg = i18n("%1: subtract %2 from column values", name, value);
-		else
-			msg = i18n("%1: subtract baseline from column values", name, value);
+	case Subtract:
+		msg = i18n("%1: subtract %2 from column values", name, value);
 		break;
-	}
+	case SubtractBaseline:
+		msg = i18n("%1: subtract baseline from column values", name, value);
+		break;
 	case Multiply:
 		msg = i18n("%1: multiply column values by %2", name, value);
 		break;

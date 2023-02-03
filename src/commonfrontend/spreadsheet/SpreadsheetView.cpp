@@ -348,6 +348,10 @@ void SpreadsheetView::initActions() {
 	action_reverse_columns = new QAction(QIcon::fromTheme(QStringLiteral("reverse")), i18n("Reverse"), this);
 	// 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
 
+	// algorithms - baseline subtraction, outliar removal, etc.
+	action_subtract_baseline = new QAction(i18n("Subtract Baseline"), this);
+	action_subtract_baseline->setData(AddSubtractValueDialog::SubtractBaseline);
+
 	// normalization
 	normalizeColumnActionGroup = new QActionGroup(this);
 	QAction* normalizeAction = new QAction(i18n("Divide by Sum"), normalizeColumnActionGroup);
@@ -635,6 +639,8 @@ void SpreadsheetView::initMenus() {
 		m_columnManipulateDataMenu->addAction(action_multiply_value);
 		m_columnManipulateDataMenu->addAction(action_divide_value);
 		m_columnManipulateDataMenu->addSeparator();
+		m_columnManipulateDataMenu->addAction(action_subtract_baseline);
+		m_columnManipulateDataMenu->addSeparator();
 		m_columnManipulateDataMenu->addAction(action_reverse_columns);
 		m_columnManipulateDataMenu->addSeparator();
 		m_columnManipulateDataMenu->addAction(action_drop_values);
@@ -834,6 +840,9 @@ void SpreadsheetView::connectActions() {
 	connect(action_mask_values, &QAction::triggered, this, &SpreadsheetView::maskColumnValues);
 	connect(action_sample_values, &QAction::triggered, this, &SpreadsheetView::sampleColumnValues);
 	connect(action_flatten_columns, &QAction::triggered, this, &SpreadsheetView::flattenColumns);
+
+	// algorithms
+	connect(action_subtract_baseline, &QAction::triggered, this, &SpreadsheetView::modifyValues);
 
 	// 	connect(action_join_columns, &QAction::triggered, this, &SpreadsheetView::joinColumns);
 	connect(normalizeColumnActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::normalizeSelectedColumns);
@@ -1557,6 +1566,7 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, b
 	m_columnManipulateDataMenu->setEnabled((numeric || datetime || text) && hasValues);
 	action_add_value->setEnabled(numeric || datetime);
 	action_subtract_value->setEnabled(numeric || datetime);
+	action_subtract_baseline->setEnabled(numeric);
 	action_multiply_value->setEnabled(numeric);
 	action_divide_value->setEnabled(numeric);
 	action_reverse_columns->setEnabled(numeric);
@@ -2616,13 +2626,13 @@ void SpreadsheetView::toggleFreezeColumn() {
 }
 
 void SpreadsheetView::setSelectionAs() {
-	QVector<Column*> columns = selectedColumns();
+	const auto& columns = selectedColumns();
 	if (!columns.size())
 		return;
 
 	m_spreadsheet->beginMacro(i18n("%1: set plot designation", m_spreadsheet->name()));
 
-	QAction* action = dynamic_cast<QAction*>(QObject::sender());
+	auto* action = dynamic_cast<QAction*>(QObject::sender());
 	if (!action)
 		return;
 

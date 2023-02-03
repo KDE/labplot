@@ -25,7 +25,7 @@ class AddSubtractValueDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum Operation { Add, Subtract, Multiply, Divide };
+	enum Operation { Add, Subtract, Multiply, Divide, SubtractBaseline };
 
 	explicit AddSubtractValueDialog(Spreadsheet*, const QVector<Column*>&, Operation, QWidget* parent = nullptr);
 	explicit AddSubtractValueDialog(Matrix*, Operation, QWidget* parent = nullptr);

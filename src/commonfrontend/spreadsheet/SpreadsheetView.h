@@ -161,6 +161,7 @@ private:
 	QAction* action_reverse_columns;
 	QAction* action_add_value;
 	QAction* action_subtract_value;
+	QAction* action_subtract_baseline;
 	QAction* action_multiply_value;
 	QAction* action_divide_value;
 	QAction* action_drop_values;
