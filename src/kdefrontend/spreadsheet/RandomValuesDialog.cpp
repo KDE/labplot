@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for generating non-uniformly distributed random numbers
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,7 @@
 
 #include <QDialogButtonBox>
 #include <QDir>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QStandardPaths>
 #include <QWindow>
@@ -420,6 +421,21 @@ void RandomValuesDialog::checkValues() {
 void RandomValuesDialog::generate() {
 	Q_ASSERT(m_spreadsheet);
 
+	WAIT_CURSOR;
+	const int rows = m_spreadsheet->rowCount();
+	QVector<double> data;;
+	QVector<int> data_int;
+	QVector<qint64> data_bigint;
+	try {
+		data.resize(rows);
+		data_int.resize(rows);
+		data_bigint.resize(rows);
+	} catch (std::bad_alloc&) {
+		RESET_CURSOR;
+		QMessageBox::critical(this, i18n("Failed to allocate memory"), i18n("Not enough memory to perform this operation."));
+		return;
+	}
+
 	// create a generator chosen by the environment variable GSL_RNG_TYPE
 	gsl_rng_env_setup();
 	const gsl_rng_type* T = gsl_rng_default;
@@ -436,7 +452,6 @@ void RandomValuesDialog::generate() {
 
 	gsl_rng_set(r, seed);
 
-	WAIT_CURSOR;
 	for (auto* col : m_columns)
 		col->setSuppressDataChangedSignal(true);
 
@@ -446,11 +461,6 @@ void RandomValuesDialog::generate() {
 	const int index = ui.cbDistribution->currentIndex();
 	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
 	DEBUG(Q_FUNC_INFO << ", random number distribution: " << nsl_sf_stats_distribution_name[dist]);
-
-	const int rows = m_spreadsheet->rowCount();
-	QVector<double> data(rows);
-	QVector<int> data_int(rows);
-	QVector<qint64> data_bigint(rows);
 
 	switch (dist) {
 	case nsl_sf_stats_gaussian: {
