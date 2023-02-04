@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2020-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -203,12 +203,8 @@ void SpreadsheetView::init() {
 	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeRemoved, this, &SpreadsheetView::handleAspectAboutToBeRemoved);
 	connect(m_spreadsheet, &Spreadsheet::requestProjectContextMenu, this, &SpreadsheetView::createContextMenu);
 
-	// selection relevant connections
-	QItemSelectionModel* sel_model = m_tableView->selectionModel();
-	connect(sel_model, &QItemSelectionModel::currentColumnChanged, this, &SpreadsheetView::currentColumnChanged);
-	connect(sel_model, &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
-	connect(sel_model, &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
-
+	// selection related connections
+	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnSelected, this, &SpreadsheetView::selectColumn);
 	connect(m_spreadsheet, &Spreadsheet::columnDeselected, this, &SpreadsheetView::deselectColumn);
 }
@@ -1105,12 +1101,6 @@ void SpreadsheetView::toggleComments() {
 //! Shows (\c on=true) or hides (\c on=false) the column comments in the horizontal header
 void SpreadsheetView::showComments(bool on) {
 	m_horizontalHeader->showComments(on);
-}
-
-void SpreadsheetView::currentColumnChanged(const QModelIndex& current, const QModelIndex& /*previous*/) {
-	int col = current.column();
-	if (col < 0 || col >= m_spreadsheet->columnCount())
-		return;
 }
 
 void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int first, int last) {
@@ -3539,7 +3529,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 
 	auto* selModel = m_tableView->selectionModel();
 	for (int i = 0; i < m_spreadsheet->columnCount(); i++)
-		m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i, QModelIndex()));
+		m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i));
 }
 
 bool SpreadsheetView::exportView() {
