@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2023-01-24 17:00+0100\n"
+"PO-Revision-Date: 2023-02-01 10:35+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -20067,12 +20067,12 @@ msgstr ""
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:51
 #, kde-format
 msgid "Specify the name"
-msgstr ""
+msgstr "Zadejte název"
 
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:52
 #, kde-format
 msgid "Specify the value"
-msgstr ""
+msgstr "Zadejte hodnotu"
 
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:53
 #, kde-format
