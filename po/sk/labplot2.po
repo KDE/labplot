@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-03 00:55+0000\n"
+"POT-Creation-Date: 2023-02-04 00:53+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -61,7 +61,7 @@ msgstr ""
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2911
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4606
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
@@ -85,7 +85,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:429
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:271
 #: src/backend/worksheet/plots/PlotArea.cpp:376
-#: src/backend/worksheet/TextLabel.cpp:1125
+#: src/backend/worksheet/TextLabel.cpp:1127
 #: src/backend/worksheet/Worksheet.cpp:1705
 #: src/backend/worksheet/WorksheetElement.cpp:460
 #: src/commonfrontend/ProjectExplorer.cpp:1036
@@ -108,12 +108,12 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3040
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2003
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:725
 #: src/backend/worksheet/plots/PlotArea.cpp:405
-#: src/backend/worksheet/TextLabel.cpp:1175
+#: src/backend/worksheet/TextLabel.cpp:1177
 #: src/backend/worksheet/Worksheet.cpp:1798
 #, kde-format
 msgid "unknown element '%1'"
@@ -464,14 +464,14 @@ msgid "%1: unmask cells"
 msgstr ""
 
 #: src/backend/core/abstractcolumncommands.cpp:239
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2389
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2400
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set heatmap format"
 msgstr "%1: nastaviť rozloženie"
 
 #: src/backend/core/abstractcolumncommands.cpp:266
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2406
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2417
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: remove heatmap format"
@@ -725,7 +725,7 @@ msgid "%1: change cell values"
 msgstr "%1: zmeniť komentár"
 
 #: src/backend/core/column/columncommands.cpp:514
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2623
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2634
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
@@ -1279,10 +1279,10 @@ msgstr "Index"
 #: src/backend/datasources/filters/AsciiFilter.cpp:2074
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:614
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2285
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2306
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2324
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2341
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2296
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2317
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2335
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2352
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:154
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:187
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -1741,7 +1741,7 @@ msgid "Valid JSON document"
 msgstr ""
 
 #: src/backend/datasources/filters/JsonFilter.cpp:274
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:318
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:317
 #, fuzzy, kde-format
 #| msgid "Index"
 msgid "index"
@@ -2250,19 +2250,19 @@ msgstr ""
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:291
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:293
 #, fuzzy, kde-format
 #| msgid "Time"
 msgid "Time_s"
 msgstr "Čas"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:293
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:295
 #, fuzzy, kde-format
 #| msgid "Time"
 msgid "Time_ns"
 msgstr "Čas"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:295
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:297
 #, kde-format
 msgid "Time_10µs"
 msgstr ""
@@ -2348,7 +2348,7 @@ msgstr "importovať z "
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1206
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1212
 #, kde-format
 msgid "Success"
 msgstr "Úspech"
@@ -2944,7 +2944,7 @@ msgstr "Veľkosť:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:159
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:135
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:62
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:99
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
@@ -2954,7 +2954,7 @@ msgstr "Minimum"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:160 src/backend/nsl/nsl_conv.c:23
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:136
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:137
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:100
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
@@ -2973,7 +2973,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/ExpressionParser.cpp:162
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:137
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:503
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
@@ -4939,7 +4939,7 @@ msgstr "Stefan-Boltzmannova konštanta"
 
 #: src/backend/gsl/ExpressionParser.cpp:987
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:431
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:490
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:494
 #, fuzzy, kde-format
 #| msgid "Gaussian"
 msgid "Gauss"
@@ -5393,7 +5393,7 @@ msgstr ""
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:470
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:474
 #, fuzzy, kde-format
 #| msgid "linear"
 msgid "Linear"
@@ -5457,14 +5457,14 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3550
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "FITS image"
 msgstr "obrázok"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3550
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -5813,7 +5813,7 @@ msgstr "Binárne dáta: %1"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:474
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
 msgid "Power"
 msgstr "Sila"
@@ -5982,7 +5982,7 @@ msgstr "Smer"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:510
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:514
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1167
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:245
@@ -5994,7 +5994,7 @@ msgid "Custom"
 msgstr "Vlastné"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:486
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:490
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Inverse Exponential"
@@ -6024,7 +6024,7 @@ msgstr "Gaussovské"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:435
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:494
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:498
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr ""
@@ -6058,7 +6058,7 @@ msgstr "Inverzný tangens"
 
 #: src/backend/nsl/nsl_fit.c:45
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:443
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:502
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:506
 #, fuzzy, kde-format
 #| msgid "Hyperbolic tangent"
 msgid "Hyperbolic Tangent"
@@ -6737,7 +6737,7 @@ msgstr "%1: nastaviť obrázok pozadia"
 #: src/backend/worksheet/InfoElement.cpp:173
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:248
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:218
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:217
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:473
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:134
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:89
@@ -6919,7 +6919,7 @@ msgstr "%1: nastaviť nepriehľadnosť"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:257
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:226
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:111
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:127
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:261
@@ -6937,7 +6937,7 @@ msgstr "Horizontálne"
 #. Orientation
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:260
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:230
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:229
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:114
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:130
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:262
@@ -6955,7 +6955,7 @@ msgstr "Vertikálne"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:280
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:238
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:237
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:147
 #, kde-format
@@ -7264,7 +7264,7 @@ msgid "%1: set x column"
 msgstr "Vložiť stĺpec"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:244
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:459
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:458
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set data columns"
@@ -7277,7 +7277,7 @@ msgid "%1: set type"
 msgstr "%1: nastaviť rozloženie"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:486
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:485
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:205
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, fuzzy, kde-format
@@ -7286,13 +7286,13 @@ msgid "%1: set orientation"
 msgstr "%1: nastaviť písmo"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:499
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "%1: width factor changed"
 msgstr "%1    [zmenené]"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:313
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:312
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:183
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:331
 #, fuzzy, kde-format
@@ -7300,95 +7300,95 @@ msgstr "%1    [zmenené]"
 msgid "%1 - Data"
 msgstr "Žiadne dáta"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:319
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:318
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "1st quartile"
 msgstr "Orientácia"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:320
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:319
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "3rd quartile"
 msgstr "Orientácia"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:321
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:320
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "median"
 msgstr "Medián"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:322
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:321
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "whiskers min"
 msgstr "Dátový typ:"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:322
 #, kde-format
 msgid "whiskers max"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:324
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
 #, kde-format
 msgid "data points count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:325
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:324
 #, fuzzy, kde-format
 #| msgid "Constants"
 msgid "outliers count"
 msgstr "Konštanty"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:326
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:325
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "far out points count"
 msgstr "Počet bodov"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:479
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:478
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set ordering"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:492
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: variable width changed"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:506
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: changed notches"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:515
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:514
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "%1: set whiskers type"
 msgstr "Dátový typ:"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:522
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:521
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "%1: set whiskers range parameter"
 msgstr "Dátový typ:"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:528
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "%1: set whiskers cap size"
 msgstr "Dátový typ:"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:536
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: jitterring changed"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:545
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:544
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:537
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:634
 #, fuzzy, kde-format
@@ -7396,7 +7396,7 @@ msgstr "%1: nastaviť obrázok pozadia"
 msgid "%1: change rug enabled"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:552
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:551
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:544
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:648
 #, fuzzy, kde-format
@@ -7404,7 +7404,7 @@ msgstr "%1: zmeniť komentár"
 msgid "%1: change rug width"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:559
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:558
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:551
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:655
 #, fuzzy, kde-format
@@ -7412,7 +7412,7 @@ msgstr "%1: zmeniť komentár"
 msgid "%1: change rug length"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:566
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:565
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:558
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:662
 #, fuzzy, kde-format
@@ -7444,7 +7444,7 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:344
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1624
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:448
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:452
 #: src/commonfrontend/worksheet/WorksheetView.cpp:339
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:82
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:131
@@ -7454,7 +7454,7 @@ msgstr "Histogram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:345
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1665
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:452
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:456
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:531
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:137
 #, fuzzy, kde-format
@@ -7464,7 +7464,7 @@ msgstr "Kresliť"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:346
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1669
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:454
 #: src/commonfrontend/worksheet/WorksheetView.cpp:340
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:529
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:134
@@ -7522,7 +7522,7 @@ msgstr "Integrácia"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:353
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:407
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1765
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:467
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:471
 #: src/commonfrontend/worksheet/WorksheetView.cpp:365
 #: src/commonfrontend/worksheet/WorksheetView.cpp:404
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:142
@@ -7538,7 +7538,7 @@ msgstr "Plynulý"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:530
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1785
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:571
 #: src/commonfrontend/worksheet/WorksheetView.cpp:170
 #: src/commonfrontend/worksheet/WorksheetView.cpp:366
 #: src/commonfrontend/worksheet/WorksheetView.cpp:405
@@ -7549,7 +7549,7 @@ msgstr "Prispôsobiť"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:355
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1827
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:514
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:518
 #: src/commonfrontend/worksheet/WorksheetView.cpp:368
 #: src/commonfrontend/worksheet/WorksheetView.cpp:407
 #, fuzzy, kde-format
@@ -7651,19 +7651,19 @@ msgid "Reference Range"
 msgstr "Nastavenia"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:404
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:463
 #, kde-format
 msgid "Differentiate"
 msgstr "Diferencovať"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:405
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:462
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:466
 #, kde-format
 msgid "Integrate"
 msgstr "Integrovať"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:465
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:469
 #, kde-format
 msgid "Interpolate"
 msgstr "Interpolovať"
@@ -7675,14 +7675,14 @@ msgid "Convolute/Deconvolute"
 msgstr "Pripojenie"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:478
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:482
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential (degree 1)"
 msgstr "Exponenciála"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:482
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:486
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential (degree 2)"
@@ -7695,14 +7695,14 @@ msgid "Inverse exponential"
 msgstr "Exponenciála"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:498
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:502
 #, fuzzy, kde-format
 #| msgid "magenta"
 msgid "Arc Tangent"
 msgstr "Arkus tangens"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:510
 #, fuzzy, kde-format
 #| msgid "Functions"
 msgid "Error Function"
@@ -9394,8 +9394,8 @@ msgid "Curve"
 msgstr "Krivka"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3833
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3844
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2389
 #, fuzzy, kde-format
 #| msgid "Failed to Open"
@@ -9403,8 +9403,8 @@ msgid "Failed to export"
 msgstr "Nepodarilo sa otvoriť"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3833
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3844
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2389
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9562,7 +9562,7 @@ msgid "&Insert Empty Rows"
 msgstr ""
 
 #: src/commonfrontend/matrix/MatrixView.cpp:184
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:441
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
 #, kde-format
 msgid "Remo&ve Rows"
 msgstr "Odstrániť riadky"
@@ -9573,20 +9573,20 @@ msgid "Clea&r Rows"
 msgstr ""
 
 #: src/commonfrontend/matrix/MatrixView.cpp:243
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:528
 #, kde-format
 msgid "Selection"
 msgstr "Výber"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:265
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:617
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:621
 #, fuzzy, kde-format
 #| msgid "&Generate"
 msgid "Generate Data"
 msgstr "Generovať"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:270
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:632
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:636
 #, fuzzy, kde-format
 #| msgid "&Generate"
 msgid "Manipulate Data"
@@ -9636,7 +9636,7 @@ msgid "%1: cut selected cell(s)"
 msgstr ""
 
 #: src/commonfrontend/matrix/MatrixView.cpp:684
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1706
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1717
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: vložiť zo schránky"
@@ -9806,7 +9806,7 @@ msgid "&Unmask"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:271
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
 #, fuzzy, kde-format
 #| msgid "Content"
 msgid "Clea&r Content"
@@ -9852,7 +9852,7 @@ msgid "Flatten Columns"
 msgstr "Vybrané stĺpce"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:288
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1093
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1102
 #, kde-format
 msgid "Show Comments"
 msgstr "Zobraziť komentáre"
@@ -9882,7 +9882,7 @@ msgid "&Search"
 msgstr "Hľadať/Filter:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:295
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:428
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:432
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Column Statistics..."
@@ -9917,7 +9917,7 @@ msgid "Remove Columns"
 msgstr "Odstrániť stĺpce"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:304
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1575
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1586
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Freeze Column"
@@ -9959,226 +9959,234 @@ msgstr "Maska"
 msgid "Reverse"
 msgstr "Otočiť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:353
+#. i18n("Join"), this);
+#. algorithms - baseline subtraction, outliar removal, etc.
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:352
+#, fuzzy, kde-format
+#| msgid "Start value"
+msgid "Subtract Baseline"
+msgstr "Počiatočná hodnota"
+
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:357
 #, fuzzy, kde-format
 msgid "Divide by Sum"
 msgstr "Deliť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:356
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:360
 #, fuzzy, kde-format
 msgid "Divide by Min"
 msgstr "Deliť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:363
 #, fuzzy, kde-format
 #| msgid "Add Value"
 msgid "Divide by Max"
 msgstr "Pridať hodnotu"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:362
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:366
 #, fuzzy, kde-format
 msgid "Divide by Count"
 msgstr "Deliť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:365
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:369
 #, fuzzy, kde-format
 #| msgid "Add Value"
 msgid "Divide by Mean"
 msgstr "Pridať hodnotu"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:368
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:372
 #, fuzzy, kde-format
 #| msgid "Add Value"
 msgid "Divide by Median"
 msgstr "Pridať hodnotu"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:371
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:375
 #, fuzzy, kde-format
 #| msgid "Add Value"
 msgid "Divide by Mode"
 msgstr "Pridať hodnotu"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:374
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:378
 #, fuzzy, kde-format
 #| msgid "Add Value"
 msgid "Divide by Range"
 msgstr "Pridať hodnotu"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:377
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:381
 #, fuzzy, kde-format
 msgid "Divide by SD"
 msgstr "Deliť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:380
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:384
 #, fuzzy, kde-format
 msgid "Divide by MAD"
 msgstr "Deliť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:383
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:387
 #, fuzzy, kde-format
 msgid "Divide by IQR"
 msgstr "Deliť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:386
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:390
 #, kde-format
 msgid "(x-Mean)/SD"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:389
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:393
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "(x-Median)/MAD"
 msgstr "Medián"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:392
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:396
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "(x-Median)/IQR"
 msgstr "Medián"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:395
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:399
 #, fuzzy, kde-format
 #| msgid "Interval:"
 msgid "Rescale to [a, b]"
 msgstr "Interval:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:425
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:429
 #, kde-format
 msgid "&Selected Columns"
 msgstr "Vybrané stĺpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:426
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:430
 #, kde-format
 msgid "&Ascending"
 msgstr "Vz&ostupne"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:431
 #, kde-format
 msgid "&Descending"
 msgstr "Zos&tupne"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:431
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:435
 #, kde-format
 msgid "Heatmap"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:432
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:436
 #, fuzzy, kde-format
 #| msgid "&Remove"
 msgid "Remove"
 msgstr "O&dstrániť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:435
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:439
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Vložiť riadok nad"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:436
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:440
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Vložiť riadok pod"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:439
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
 #, fuzzy, kde-format
 #| msgid "Insert Row Above"
 msgid "Insert Multiple Rows Above"
 msgstr "Vložiť riadok nad"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:444
 #, fuzzy, kde-format
 #| msgid "Insert Row Below"
 msgid "Insert Multiple Rows Below"
 msgstr "Vložiť riadok pod"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:447
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Row Statisti&cs"
 msgstr "Štatistika"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
 #: src/commonfrontend/worksheet/WorksheetView.cpp:338
 #, fuzzy, kde-format
 #| msgid "Curve"
 msgid "xy-Curve"
 msgstr "Krivka"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:456
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
 msgid "Reduce Data"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:551
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:555
 #, kde-format
 msgid "Plot Data"
 msgstr "Kresliť údaje"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:557
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:561
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Conditional Formatting"
 msgstr "Pripojenie:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:585
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:589
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:599
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:603
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Set Column As"
 msgstr "Vybrané stĺpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:666
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:672
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Normalize"
 msgstr "Normalizovať"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:689
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:695
 #, kde-format
 msgid "Ladder of Powers"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:704
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:710
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
 #, kde-format
 msgid "Sort"
 msgstr "Triediť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1100
 #, kde-format
 msgid "Hide Comments"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1579
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1590
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Unfreeze Column"
 msgstr "Vybrané stĺpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1636
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1949
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1960
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1991
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2002
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2049
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2060
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2114
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2125
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
@@ -10186,39 +10194,39 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2156
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2167
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2276
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2287
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2284
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2306
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2324
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2341
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2295
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2317
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2335
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2352
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2426
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2460
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2437
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2471
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "Insert empty columns"
 msgstr "Vložiť stĺpec"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2427
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2461
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2438
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2472
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Enter the number of columns to insert"
 msgstr "Názov filtra:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2479
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2490
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: insert empty column"
@@ -10227,19 +10235,19 @@ msgstr[0] "Vložiť stĺpec"
 msgstr[1] "Vložiť stĺpec"
 msgstr[2] "Vložiť stĺpec"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2551
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "%1: remove selected columns"
 msgstr "Vybrané stĺpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2551
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2562
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "%1: clear selected columns"
 msgstr "Vybrané stĺpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2667
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
 msgid "%1: reverse column"
@@ -10248,141 +10256,141 @@ msgstr[0] "Odstrániť stĺpec"
 msgstr[1] "Odstrániť stĺpce"
 msgstr[2] "Odstrániť stĺpce"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2729
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2740
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2767
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2778
 #, kde-format
 msgid "%1: normalize columns"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2787
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2798
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2798
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2809
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2809
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2820
 #, fuzzy, kde-format
 msgid "Max = 0"
 msgstr "X"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2820
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2831
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Count = 0"
 msgstr "stred"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2831
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2842
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean = 0"
 msgstr "Priemer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2842
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2853
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "Median = 0"
 msgstr "Medián"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2854
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2865
 #, fuzzy, kde-format
 #| msgid "Model:"
 msgid "Mode = 0"
 msgstr "Model:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2856
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2867
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2867
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2878
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "Range = 0"
 msgstr "X rozsah:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2878
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2912
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2889
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2923
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2889
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2924
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2900
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2935
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2900
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2936
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2911
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2947
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2948
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2959
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2967
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2978
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2979
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2990
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: power transform columns"
 msgstr "%1: nastaviť písmo"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3101
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3112
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: column statistics"
 msgstr "Štatistika"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3144
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Selection in %1"
 msgstr "Výber"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3176
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: row statistics"
 msgstr "Štatistika"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3186
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3197
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3211
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3250
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3222
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3261
 #, fuzzy, kde-format
 #| msgid "%1: set opacity"
 msgid "Insert multiple rows"
 msgstr "%1: nastaviť nepriehľadnosť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3223
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3262
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Enter the number of rows to insert"
 msgstr "Názov filtra:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3231
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3270
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3242
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3281
 #, fuzzy, kde-format
 #| msgid "%1: set opacity"
 msgid "%1: insert empty row"
@@ -10391,22 +10399,22 @@ msgstr[0] "%1: nastaviť nepriehľadnosť"
 msgstr[1] "%1: nastaviť nepriehľadnosť"
 msgstr[2] "%1: nastaviť nepriehľadnosť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3286
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3297
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3299
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3310
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3350
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3361
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3409
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -10414,31 +10422,31 @@ msgstr ""
 msgid "Search..."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3419
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, fuzzy, kde-format
 #| msgid "Search/Filter:"
 msgid "End Search"
 msgstr "Hľadať/Filter:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3596
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3607
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Zošit"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4201
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4212
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4233
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4244
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4286
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4297
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -11075,7 +11083,7 @@ msgstr "Vybrať všetko"
 
 #. i18n: ectx: property (text), widget (QLabel, lDatabase)
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:158
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:195
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:194
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:110
 #, kde-format
 msgid "Database:"
@@ -11087,27 +11095,27 @@ msgstr "Databáza:"
 msgid "Data Source Name:"
 msgstr "Dátová sada"
 
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:212
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:211
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgctxt "@title:window"
 msgid "Select the Database File"
 msgstr "Vybrať všetko"
 
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:350
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:349
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:414
 #, kde-format
 msgid "Do you really want to delete the connection '%1'?"
 msgstr "Naozaj chcete odstrániť pripojenie '%1'?"
 
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:351
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:350
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:415
 #, kde-format
 msgid "Delete Connection"
 msgstr "Odstrániť spojenie"
 
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:490
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:527
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:489
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:526
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:248
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:661
@@ -11117,25 +11125,25 @@ msgstr "Odstrániť spojenie"
 msgid "Connection Failed"
 msgstr "Pripojenie zlyhalo"
 
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:490
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:525
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:489
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:524
 #, kde-format
 msgid "Failed to connect to the database '%1'."
 msgstr ""
 
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:521
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:520
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:647
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Connection Successful"
 msgstr "Pripojenie:"
 
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:521
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:520
 #, kde-format
 msgid "Connection to the database '%1' was successful."
 msgstr ""
 
-#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:548
+#: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:547
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:577
 #, fuzzy, kde-format
 #| msgid "Connection:"
@@ -11753,56 +11761,56 @@ msgstr "Vyčistiť výber"
 msgid "Not a HDF5 file: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2276
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2277
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2306
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2307
 #, fuzzy, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Odpojený"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2375
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2376
 #, fuzzy, kde-format
 #| msgid "variable"
 msgid "Available (%1)"
 msgstr "Dostupný"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2487
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2488
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Zlý používateľ alebo heslo"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2490
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2491
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2495
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2498
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgid "The client is not authorized to connect."
 msgstr "Vybrať všetko"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2500
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2501
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Nastala neznáma chyba."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2506
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2509
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2507
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2510
 #, fuzzy, kde-format
 #| msgid "An unknown error occurred."
 msgid "An error occurred."
 msgstr "Nastala neznáma chyba."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2523
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2524
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Connecting to '%1:%2' timed out."
@@ -12939,18 +12947,18 @@ msgid "Expand all curves"
 msgstr "Rozbaliť všetko"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1337
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1343
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1349
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1355
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Copy Selection"
 msgstr "Kopírovať označené"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1338
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1344
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1350
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1356
 #, kde-format
 msgid "Copy All"
 msgstr "Kopírovať všetko"
@@ -13607,18 +13615,18 @@ msgstr "&Stupeň"
 msgid "Number of peaks:"
 msgstr "Počet bodov"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1207
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1213
 #, fuzzy, kde-format
 #| msgid "status"
 msgid "Fit status: %1"
 msgstr "Stav"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1384
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1390
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1385
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1391
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -15485,150 +15493,150 @@ msgstr "Pridať hodnotu"
 msgid "&Add"
 msgstr "&Pridať"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Počiatočná hodnota"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:114
 #, fuzzy, kde-format
 msgid "Subtract:"
 msgstr "Rozdiel"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:114
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:115
 #, fuzzy, kde-format
 msgid "&Subtract"
 msgstr "Rozdiel"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:117
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:118
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:119
 #, fuzzy, kde-format
 msgid "&Multiply"
 msgstr "Násobenie"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
 #, kde-format
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:123
 #, fuzzy, kde-format
 msgid "&Divide"
 msgstr "Deliť"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:493
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean"
 msgstr "Priemer"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:142
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Custom Value"
 msgstr "Vlastný dotaz..."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:142
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:143
 #, fuzzy, kde-format
 #| msgid "Differentiate"
 msgid "Difference"
 msgstr "Diferencovať"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:146
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:159
 #, fuzzy, kde-format
 msgid "Baseline (arPLS Algorithm)"
 msgstr "Logaritmus so základom 10"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:151
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:164
 #, kde-format
 msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
 "background."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:155
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:168
 #, kde-format
 msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
 "less negative values."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:159
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:172
 #, fuzzy, kde-format
 #| msgid "Number of rows:"
 msgid "Number of iterations to perform."
 msgstr "Počet riadkov:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:492
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:506
 #, fuzzy, kde-format
 msgid "raw data"
 msgstr "Binárne dáta"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:499
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:513
 #, fuzzy, kde-format
 #| msgid "Dash line"
 msgid "baseline"
 msgstr "Čiarkovaná čiara"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:508
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:522
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgid "result"
 msgstr "Výsledky:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:589
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:603
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Ratio: %1"
 msgstr "Otočenie: "
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:633
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:640
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:647
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:654
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:856
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:898
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:940
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:982
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:661
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:668
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:866
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:910
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:954
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:998
 #, fuzzy, kde-format
 #| msgid "Add Value"
 msgid "Wrong numeric value provided."
 msgstr "Pridať hodnotu"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1168
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1185
 #, fuzzy, kde-format
 #| msgid "%1: add %2"
 msgid "%1: add %2 to column values"
 msgstr "Pridať stĺpec"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1173
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1188
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: subtract %2 from column values"
 msgstr "Vložiť stĺpec"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1175
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1191
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: subtract baseline from column values"
 msgstr "Vložiť stĺpec"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1179
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1194
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1182
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1197
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr ""
@@ -16240,7 +16248,7 @@ msgstr "Hodnoty"
 msgid "Generate random values according to the selected distribution"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:90
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:83
 #, kde-format
 msgid ""
 "Seed number to initialize the random number generator.\n"
@@ -16250,7 +16258,7 @@ msgid ""
 "generator."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:428
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:444
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
