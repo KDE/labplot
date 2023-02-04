@@ -1304,7 +1304,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	DEBUG("lines = " << lines << ", m_actualRows = " << m_actualRows)
 
 	// skip data lines, if required
-	DEBUG("	Skipping " << m_actualStartRow << " lines");
+	DEBUG("	Skipping " << m_actualStartRow - 1 << " line(s)");
 	for (int i = 0; i < m_actualStartRow - 1; ++i)
 		device.readLine();
 
@@ -1595,6 +1595,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device) {
  * generates the preview for the file \c fileName reading the provided number of \c lines.
  */
 QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines) {
+	DEBUG(Q_FUNC_INFO)
 	QVector<QStringList> dataStrings;
 
 	KFilterDev device(fileName);
@@ -1623,8 +1624,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	QDEBUG("	column names = " << columnNames);
 
 	// skip data lines, if required
-	DEBUG("	Skipping " << m_actualStartRow << " line(s)");
-	for (int i = 0; i < m_actualStartRow; ++i)
+	DEBUG("	Skipping " << m_actualStartRow - 1 << " line(s)");
+	for (int i = 0; i < m_actualStartRow - 1; ++i)
 		device.readLine();
 
 	DEBUG("	Generating preview for " << std::min(lines, m_actualRows) << " lines");
