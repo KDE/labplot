@@ -1876,7 +1876,7 @@ void SpreadsheetView::pasteIntoSelection() {
 					if (c < cellTexts.at(r).count())
 						new_data[r] = numberLocale.toDouble(cellTexts.at(r).at(c));
 				}
-				col->replaceValues(0, new_data);
+				col->setValues(new_data);
 			} else {
 				for (int r = 0; r < rows && r < input_row_count; r++) {
 					if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count())) {
@@ -1894,7 +1894,7 @@ void SpreadsheetView::pasteIntoSelection() {
 					if (c < cellTexts.at(r).count())
 						new_data[r] = numberLocale.toInt(cellTexts.at(r).at(c));
 				}
-				col->replaceInteger(0, new_data);
+				col->setIntegers(new_data);
 			} else {
 				for (int r = 0; r < rows && r < input_row_count; r++) {
 					if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count())) {
@@ -1910,7 +1910,7 @@ void SpreadsheetView::pasteIntoSelection() {
 				QVector<qint64> new_data(rows);
 				for (int r = 0; r < rows; ++r)
 					new_data[r] = numberLocale.toLongLong(cellTexts.at(r).at(c));
-				col->replaceBigInt(0, new_data);
+				col->setBigInts(new_data);
 			} else {
 				for (int r = 0; r < rows && r < input_row_count; r++) {
 					if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count())) {
@@ -2671,17 +2671,17 @@ void SpreadsheetView::reverseColumns() {
 			++itEnd;
 
 			std::reverse(new_data.begin(), itEnd);
-			col->replaceValues(0, new_data);
+			col->setValues(new_data);
 		} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 			auto* data = static_cast<QVector<int>*>(col->data());
 			QVector<int> new_data(*data);
 			std::reverse(new_data.begin(), new_data.end());
-			col->replaceInteger(0, new_data);
+			col->setIntegers(new_data);
 		} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 			auto* data = static_cast<QVector<qint64>*>(col->data());
 			QVector<qint64> new_data(*data);
 			std::reverse(new_data.begin(), new_data.end());
-			col->replaceBigInt(0, new_data);
+			col->setBigInts(new_data);
 		}
 	}
 	m_spreadsheet->endMacro();
@@ -2953,7 +2953,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 		}
 		}
 
-		col->replaceValues(0, new_data);
+		col->setValues(new_data);
 	}
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -3057,7 +3057,7 @@ void SpreadsheetView::powerTransformSelectedColumns(QAction* action) {
 		}
 		}
 
-		col->replaceValues(0, new_data);
+		col->setValues(new_data);
 	}
 
 	m_spreadsheet->endMacro();

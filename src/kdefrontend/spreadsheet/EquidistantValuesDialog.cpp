@@ -184,7 +184,7 @@ void EquidistantValuesDialog::generate() {
 		newData.push_back(start + dist * i);
 
 	for (auto* col : m_columns)
-		col->replaceValues(0, newData);
+		col->setValues(newData);
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;

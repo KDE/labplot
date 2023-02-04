@@ -554,7 +554,7 @@ public:
 			}
 
 			if (changed)
-				m_column->replaceValues(0, new_data);
+				m_column->setValues(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::Integer) {
 			auto* data = static_cast<QVector<int>*>(m_column->data());
 			QVector<int> new_data(*data);
@@ -626,7 +626,7 @@ public:
 			}
 
 			if (changed)
-				m_column->replaceInteger(0, new_data);
+				m_column->setIntegers(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 			auto* data = static_cast<QVector<qint64>*>(m_column->data());
 			QVector<qint64> new_data(*data);
@@ -698,7 +698,7 @@ public:
 			}
 
 			if (changed)
-				m_column->replaceBigInt(0, new_data);
+				m_column->setBigInts(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 			auto* data = static_cast<QVector<QDateTime>*>(m_column->data());
 			QVector<QDateTime> new_data(*data);
@@ -770,7 +770,7 @@ public:
 			}
 
 			if (changed)
-				m_column->replaceDateTimes(0, new_data);
+				m_column->setDateTimes(new_data);
 		}
 	}
 

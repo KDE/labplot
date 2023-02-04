@@ -186,25 +186,25 @@ void CantorWorksheet::parseData(int row) {
 			switch (parser.dataType()) {
 			case AbstractColumn::ColumnMode::Integer:
 				col->setColumnMode(AbstractColumn::ColumnMode::Integer);
-				col->replaceInteger(0, parser.integers());
+				col->setIntegers(parser.integers());
 				break;
 			case AbstractColumn::ColumnMode::BigInt:
 				col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
-				col->replaceBigInt(0, parser.bigInt());
+				col->setBigInts(parser.bigInt());
 				break;
 			case AbstractColumn::ColumnMode::Double:
 				col->setColumnMode(AbstractColumn::ColumnMode::Double);
-				col->replaceValues(0, parser.doublePrecision());
+				col->setValues(parser.doublePrecision());
 				break;
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
 			case AbstractColumn::ColumnMode::DateTime:
 				col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
-				col->replaceDateTimes(0, parser.dateTime());
+				col->setDateTimes(parser.dateTime());
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				col->setColumnMode(AbstractColumn::ColumnMode::Text);
-				col->replaceTexts(0, parser.text());
+				col->setText(parser.text());
 				break;
 			}
 		} else {

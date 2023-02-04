@@ -716,20 +716,20 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) + value;
 
-			col->replaceInteger(0, new_data);
+			col->setIntegers(new_data);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) * value;
 
-			col->replaceInteger(0, new_data);
+			col->setIntegers(new_data);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) / value;
 
-			col->replaceInteger(0, new_data);
+			col->setIntegers(new_data);
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
@@ -759,20 +759,20 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) + value;
 
-			col->replaceBigInt(0, new_data);
+			col->setBigInts(new_data);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) * value;
 
-			col->replaceBigInt(0, new_data);
+			col->setBigInts(new_data);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) / value;
 
-			col->replaceBigInt(0, new_data);
+			col->setBigInts(new_data);
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::Double) {
@@ -796,20 +796,20 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) + value;
 
-			col->replaceValues(0, new_data);
+			col->setValues(new_data);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) * value;
 
-			col->replaceValues(0, new_data);
+			col->setValues(new_data);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = data->at(i) / value;
 
-			col->replaceValues(0, new_data);
+			col->setValues(new_data);
 			break;
 		}
 	} else { // datetime

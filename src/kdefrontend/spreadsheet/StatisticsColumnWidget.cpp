@@ -305,10 +305,10 @@ void StatisticsColumnWidget::showKDEPlot() {
 	}
 
 	auto* xColumn = new Column(QStringLiteral("x"));
-	xColumn->replaceValues(0, xData);
+	xColumn->setValues(xData);
 
 	auto* yColumn = new Column(QStringLiteral("y"));
-	yColumn->replaceValues(0, yData);
+	yColumn->setValues(yData);
 
 	// add KDE curve
 	auto* curve = new XYCurve(QString());
@@ -355,7 +355,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	for (int i = 1; i < 100; ++i)
 		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, double(i) / 100.);
 
-	yColumn->replaceValues(0, yData);
+	yColumn->setValues(yData);
 
 	// calculate x-values - the percentiles for the standard normal distribution
 	Column* xColumn = new Column(QStringLiteral("x"));
@@ -364,7 +364,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	for (int i = 1; i < 100; ++i)
 		xData << gsl_cdf_gaussian_Pinv(double(i) / 100., 1.0);
 
-	xColumn->replaceValues(0, xData);
+	xColumn->setValues(xData);
 
 	// add curve with the quantiles
 	auto* curve = new XYCurve(QString());
@@ -599,8 +599,8 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	dataColumn->replaceInteger(0, data);
 	labelsColumn->replaceTexts(0, labels);
-	xColumn->replaceValues(0, xData);
-	yColumn->replaceValues(0, yData);
+	xColumn->setValues(xData);
+	yColumn->setValues(yData);
 
 	QVector<const AbstractColumn*> columns;
 	columns << dataColumn;
