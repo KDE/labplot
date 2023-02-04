@@ -457,7 +457,7 @@ bool Column::copy(const AbstractColumn* source, int source_start, int dest_start
 }
 
 void Column::invalidateProperties() {
-	d->available.setUnavailable();
+	d->invalidate();
 }
 
 /**
@@ -466,7 +466,6 @@ void Column::invalidateProperties() {
 void Column::handleRowInsertion(int before, int count) {
 	AbstractColumn::handleRowInsertion(before, count);
 	exec(new ColumnInsertRowsCmd(d, before, count));
-	invalidateProperties();
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
 }
@@ -477,7 +476,6 @@ void Column::handleRowInsertion(int before, int count) {
 void Column::handleRowRemoval(int first, int count) {
 	AbstractColumn::handleRowRemoval(first, count);
 	exec(new ColumnRemoveRowsCmd(d, first, count));
-	invalidateProperties();
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
 }
@@ -608,7 +606,6 @@ void Column::clearFormulas() {
  */
 void Column::setTextAt(int row, const QString& new_value) {
 	exec(new ColumnSetCmd<QString>(d, row, textAt(row), new_value));
-	invalidateProperties();
 }
 
 void Column::setText(const QVector<QString>& texts) {
@@ -625,7 +622,6 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 		d->replaceTexts(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<QString>(d, first, new_values));
-	invalidateProperties();
 }
 
 int Column::dictionaryIndex(int row) const {
@@ -647,7 +643,6 @@ void Column::addValueLabel(const QString& value, const QString& label) {
  */
 void Column::setDateAt(int row, QDate new_value) {
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
-	invalidateProperties();
 }
 
 /**
@@ -657,7 +652,6 @@ void Column::setDateAt(int row, QDate new_value) {
  */
 void Column::setTimeAt(int row, QTime new_value) {
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
-	invalidateProperties();
 }
 
 /**
@@ -670,7 +664,6 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
 		d->setValueAt(row, new_value);
 	else
 		exec(new ColumnSetCmd<QDateTime>(d, row, dateTimeAt(row), new_value));
-	invalidateProperties();
 }
 
 void Column::setDateTimes(const QVector<QDateTime>& dateTimes) {
@@ -687,7 +680,6 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 		d->replaceDateTimes(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<QDateTime>(d, first, new_values));
-	invalidateProperties();
 }
 
 void Column::addValueLabel(const QDateTime& value, const QString& label) {
@@ -709,7 +701,6 @@ void Column::setValueAt(int row, const double new_value) {
 		d->setValueAt(row, new_value);
 	else
 		exec(new ColumnSetCmd<double>(d, row, valueAt(row), new_value));
-	invalidateProperties();
 }
 
 /**
@@ -722,7 +713,6 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
 		d->replaceValues(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<double>(d, first, new_values));
-	invalidateProperties();
 }
 
 void Column::addValueLabel(double value, const QString& label) {
@@ -745,7 +735,6 @@ void Column::setIntegerAt(int row, const int new_value) {
 		d->setValueAt(row, new_value);
 	else
 		exec(new ColumnSetCmd<int>(d, row, integerAt(row), new_value));
-	invalidateProperties();
 }
 
 /**
@@ -758,7 +747,6 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
 		d->replaceInteger(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<int>(d, first, new_values));
-	invalidateProperties();
 }
 
 void Column::addValueLabel(int value, const QString& label) {
@@ -780,7 +768,6 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
 		d->setValueAt(row, new_value);
 	else
 		exec(new ColumnSetCmd<qint64>(d, row, bigIntAt(row), new_value));
-	invalidateProperties();
 }
 
 /**
@@ -793,7 +780,6 @@ void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
 		d->replaceBigInt(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<qint64>(d, first, new_values));
-	invalidateProperties();
 }
 
 void Column::addValueLabel(qint64 value, const QString& label) {

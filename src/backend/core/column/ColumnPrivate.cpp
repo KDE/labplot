@@ -981,6 +981,8 @@ void ColumnPrivate::resizeTo(int new_size) {
 		break;
 	}
 	}
+
+	invalidate();
 }
 
 /**
@@ -1020,6 +1022,8 @@ void ColumnPrivate::insertRows(int before, int count) {
 			break;
 		}
 	}
+
+	invalidate();
 }
 
 /**
@@ -1063,6 +1067,8 @@ void ColumnPrivate::removeRows(int first, int count) {
 			break;
 		}
 	}
+
+	invalidate();
 }
 
 //! Return the column name
@@ -1106,8 +1112,8 @@ void ColumnPrivate::setWidth(int value) {
  */
 void ColumnPrivate::setData(void* data) {
 	deleteData();
-
 	m_data = data;
+	invalidate();
 }
 
 /**
@@ -1619,50 +1625,34 @@ void ColumnPrivate::clearFormulas() {
 //@{
 ////////////////////////////////////////////////////////////////////////////////
 void ColumnPrivate::setValueAt(int row, int new_value) {
-	if (!m_data)
-		initDataContainer();
 	setIntegerAt(row, new_value);
 }
 
 void ColumnPrivate::setValueAt(int row, qint64 new_value) {
-	if (!m_data)
-		initDataContainer();
 	setBigIntAt(row, new_value);
 }
 
 void ColumnPrivate::setValueAt(int row, QDateTime new_value) {
-	if (!m_data)
-		initDataContainer();
 	setDateTimeAt(row, new_value);
 }
 
 void ColumnPrivate::setValueAt(int row, QString new_value) {
-	if (!m_data)
-		initDataContainer();
 	setTextAt(row, new_value);
 }
 
 void ColumnPrivate::replaceValues(int first, const QVector<int>& new_values) {
-	if (!m_data)
-		initDataContainer();
 	replaceInteger(first, new_values);
 }
 
 void ColumnPrivate::replaceValues(int first, const QVector<qint64>& new_values) {
-	if (!m_data)
-		initDataContainer();
 	replaceBigInt(first, new_values);
 }
 
 void ColumnPrivate::replaceValues(int first, const QVector<QDateTime>& new_values) {
-	if (!m_data)
-		initDataContainer();
 	replaceDateTimes(first, new_values);
 }
 
 void ColumnPrivate::replaceValues(int first, const QVector<QString>& new_values) {
-	if (!m_data)
-		initDataContainer();
 	replaceTexts(first, new_values);
 }
 
