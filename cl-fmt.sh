@@ -10,7 +10,7 @@ FOLDERS=("src/backend" "src/commonfrontend" "src/kdefrontend" "src/tools" "tests
 # that's present, otherwise we check clang-format 
 for clangfmt in clang-format{-13,}; do
     if which "$clangfmt" &>/dev/null; then
-        echo "$clangfmt --version"
+        echo "$($clangfmt --version)"
         FMT="$clangfmt"
         break
     fi
