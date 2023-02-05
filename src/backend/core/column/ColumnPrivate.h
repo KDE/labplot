@@ -29,7 +29,7 @@ public:
 	~ColumnPrivate() override;
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode, void*);
 
-	void initDataContainer();
+	bool initDataContainer(bool resize = true);
 	void initIOFilters();
 
 	AbstractColumn::ColumnMode columnMode() const;

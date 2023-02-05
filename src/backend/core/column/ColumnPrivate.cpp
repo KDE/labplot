@@ -43,15 +43,20 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, voi
 	initIOFilters();
 }
 
-void ColumnPrivate::initDataContainer() {
+/*!
+ * initializes the interal vector for data. This is where the actual allocation on the heap is happening.
+ * If \c resize is set to \false, the vector is not resized after its creation. This should be used
+ * if there is already a vector created somewhere and the content of the column is going to be replaced
+ * with the existing content where the memory was already allocated.
+ */
+bool ColumnPrivate::initDataContainer(bool resize) {
 	switch (m_columnMode) {
 	case AbstractColumn::ColumnMode::Double: {
 		auto* vec = new QVector<double>();
 		try {
-			vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) {
-			return;
-		}
+			if (resize)
+				vec->resize(m_rowCount);
+		} catch (std::bad_alloc&) { return false; }
 		vec->fill(std::numeric_limits<double>::quiet_NaN());
 		m_data = vec;
 		break;
@@ -59,30 +64,27 @@ void ColumnPrivate::initDataContainer() {
 	case AbstractColumn::ColumnMode::Integer: {
 		auto* vec = new QVector<int>();
 		try {
-			vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) {
-			return;
-		}
+			if (resize)
+				vec->resize(m_rowCount);
+		} catch (std::bad_alloc&) { return false; }
 		m_data = vec;
 		break;
 	}
 	case AbstractColumn::ColumnMode::BigInt: {
 		auto* vec = new QVector<qint64>();
 		try {
-			vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) {
-			return;
-		}
+			if (resize)
+				vec->resize(m_rowCount);
+		} catch (std::bad_alloc&) { return false; }
 		m_data = vec;
 		break;
 	}
 	case AbstractColumn::ColumnMode::Text: {
 		auto* vec = new QVector<QString>();
 		try {
-			vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) {
-			return;
-		}
+			if (resize)
+				vec->resize(m_rowCount);
+		} catch (std::bad_alloc&) { return false; }
 		m_data = vec;
 		break;
 	}
@@ -91,14 +93,15 @@ void ColumnPrivate::initDataContainer() {
 	case AbstractColumn::ColumnMode::Day: {
 		auto* vec = new QVector<QDateTime>();
 		try {
-			vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) {
-			return;
-		}
+			if (resize)
+				vec->resize(m_rowCount);
+		} catch (std::bad_alloc&) { return false; }
 		m_data = vec;
 		break;
 	}
 	}
+
+	return true;
 }
 
 void ColumnPrivate::initIOFilters() {
@@ -662,11 +665,10 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	resizeTo(num_rows);
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return false;
+    if (!m_data) {
+		if (!initDataContainer())
+			return false; // failed to allocate memory
+	}
 
 	// copy the data
 	switch (m_columnMode) {
@@ -704,6 +706,8 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	}
 	}
 
+	invalidate();
+
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
 
@@ -731,11 +735,10 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 	if (dest_start + num_rows > rowCount())
 		resizeTo(dest_start + num_rows);
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return false;
+    if (!m_data) {
+		if (!initDataContainer())
+			return false; // failed to allocate memory
+	}
 
 	// copy the data
 	switch (m_columnMode) {
@@ -769,8 +772,11 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 		break;
 	}
 
+	invalidate();
+
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
+
 	return true;
 }
 
@@ -789,11 +795,10 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	resizeTo(num_rows);
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return false;
+    if (!m_data) {
+		if (!initDataContainer())
+			return false; // failed to allocate memory
+	}
 
 	// copy the data
 	switch (m_columnMode) {
@@ -827,6 +832,8 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 		break;
 	}
 
+	invalidate();
+
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
 
@@ -853,11 +860,10 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 	if (dest_start + num_rows > rowCount())
 		resizeTo(dest_start + num_rows);
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return false;
+    if (!m_data) {
+		if (!initDataContainer())
+			return false; // failed to allocate memory
+	}
 
 	// copy the data
 	switch (m_columnMode) {
@@ -2003,11 +2009,10 @@ void ColumnPrivate::setValueAt(int row, double new_value) {
 	if (m_columnMode != AbstractColumn::ColumnMode::Double)
 		return;
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return;
+    if (!m_data) {
+		if (!initDataContainer())
+			return; // failed to allocate memory
+	}
 
 	invalidate();
 
@@ -2030,11 +2035,11 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 	if (m_columnMode != AbstractColumn::ColumnMode::Double)
 		return;
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return;
+	if (!m_data) {
+		const bool resize = (first >= 0);
+		if (!initDataContainer(resize))
+			return; // failed to allocate memory
+	}
 
 	invalidate();
 
@@ -2129,11 +2134,10 @@ void ColumnPrivate::setIntegerAt(int row, int new_value) {
 	if (m_columnMode != AbstractColumn::ColumnMode::Integer)
 		return;
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return;
+	if (!m_data) {
+		if (!initDataContainer())
+			return; // failed to allocate memory
+	}
 
 	invalidate();
 
@@ -2156,11 +2160,11 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 	if (m_columnMode != AbstractColumn::ColumnMode::Integer)
 		return;
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return;
+	if (!m_data) {
+		const bool resize = (first >= 0);
+		if (!initDataContainer(resize))
+			return; // failed to allocate memory
+	}
 
 	invalidate();
 
@@ -2191,11 +2195,10 @@ void ColumnPrivate::setBigIntAt(int row, qint64 new_value) {
 	if (m_columnMode != AbstractColumn::ColumnMode::BigInt)
 		return;
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return;
+    if (!m_data) {
+		if (!initDataContainer())
+			return; // failed to allocate memory
+	}
 
 	invalidate();
 
@@ -2218,11 +2221,11 @@ void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) 
 	if (m_columnMode != AbstractColumn::ColumnMode::BigInt)
 		return;
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return;
+	if (!m_data) {
+		const bool resize = (first >= 0);
+		if (!initDataContainer(resize))
+			return; // failed to allocate memory
+	}
 
 	invalidate();
 
