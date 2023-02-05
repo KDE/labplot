@@ -129,6 +129,7 @@ void Axis::init(Orientation orientation) {
 	d->line->setHidden(true);
 	d->line->setCreateXmlElement(false); // line properties are written out together with arrow properties in Axis::save()
 	addChild(d->line);
+	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -167,6 +168,7 @@ void Axis::init(Orientation orientation) {
 	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
 	d->majorTicksLine->setCreateXmlElement(false);
 	addChild(d->majorTicksLine);
+	d->majorTicksLine->init(group);
 	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -185,6 +187,7 @@ void Axis::init(Orientation orientation) {
 	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
 	d->minorTicksLine->setCreateXmlElement(false);
 	addChild(d->minorTicksLine);
+	d->minorTicksLine->init(group);
 	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -215,6 +218,7 @@ void Axis::init(Orientation orientation) {
 	d->majorGridLine->setPrefix(QLatin1String("MajorGrid"));
 	d->majorGridLine->setHidden(true);
 	addChild(d->majorGridLine);
+	d->majorGridLine->init(group);
 	connect(d->majorGridLine, &Line::updatePixmapRequested, [=] {
 		d->updateGrid();
 	});
@@ -227,6 +231,7 @@ void Axis::init(Orientation orientation) {
 	d->minorGridLine->setPrefix(QLatin1String("MinorGrid"));
 	d->minorGridLine->setHidden(true);
 	addChild(d->minorGridLine);
+	d->minorGridLine->init(group);
 	connect(d->minorGridLine, &Line::updatePixmapRequested, [=] {
 		d->updateGrid();
 	});
