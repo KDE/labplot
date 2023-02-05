@@ -665,7 +665,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	resizeTo(num_rows);
 
-    if (!m_data) {
+	if (!m_data) {
 		if (!initDataContainer())
 			return false; // failed to allocate memory
 	}
@@ -735,7 +735,7 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 	if (dest_start + num_rows > rowCount())
 		resizeTo(dest_start + num_rows);
 
-    if (!m_data) {
+	if (!m_data) {
 		if (!initDataContainer())
 			return false; // failed to allocate memory
 	}
@@ -795,7 +795,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	resizeTo(num_rows);
 
-    if (!m_data) {
+	if (!m_data) {
 		if (!initDataContainer())
 			return false; // failed to allocate memory
 	}
@@ -860,7 +860,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 	if (dest_start + num_rows > rowCount())
 		resizeTo(dest_start + num_rows);
 
-    if (!m_data) {
+	if (!m_data) {
 		if (!initDataContainer())
 			return false; // failed to allocate memory
 	}
@@ -2009,7 +2009,7 @@ void ColumnPrivate::setValueAt(int row, double new_value) {
 	if (m_columnMode != AbstractColumn::ColumnMode::Double)
 		return;
 
-    if (!m_data) {
+	if (!m_data) {
 		if (!initDataContainer())
 			return; // failed to allocate memory
 	}
@@ -2195,7 +2195,7 @@ void ColumnPrivate::setBigIntAt(int row, qint64 new_value) {
 	if (m_columnMode != AbstractColumn::ColumnMode::BigInt)
 		return;
 
-    if (!m_data) {
+	if (!m_data) {
 		if (!initDataContainer())
 			return; // failed to allocate memory
 	}

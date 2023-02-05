@@ -423,7 +423,7 @@ void RandomValuesDialog::generate() {
 
 	WAIT_CURSOR;
 	const int rows = m_spreadsheet->rowCount();
-	QVector<double> data;;
+	QVector<double> data;
 	QVector<int> data_int;
 	QVector<qint64> data_bigint;
 	try {
