@@ -227,11 +227,11 @@ QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
 // 	p.fillRect(rect, Qt::red);
 // 	comboBox->setItemData(0, QPixmap::fromImage(img), Qt::DecorationRole);
 
-void GuiTools::highlight(QLineEdit* le, bool invalid) {
+void GuiTools::highlight(QWidget* widget, bool invalid) {
 	if (invalid)
-		SET_WARNING_STYLE(le)
+		SET_WARNING_STYLE(widget)
 	else
-		le->setStyleSheet(QString());
+		widget->setStyleSheet(QString());
 }
 
 void GuiTools::addSymbolStyles(QComboBox* cb) {
