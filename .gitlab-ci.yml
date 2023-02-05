@@ -49,7 +49,7 @@ ubuntu_22.04_min:
   before_script:
     - apt update
     - apt install --yes eatmydata
-    - eatmydata apt install --yes --no-install-recommends locales-all ninja-build git cmake make g++ extra-cmake-modules libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev pkg-config ca-certificates
+    - eatmydata apt install --yes --no-install-recommends locales-all ninja-build git cmake make g++ extra-cmake-modules libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev pkg-config ca-certificates zlib1g-dev
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
