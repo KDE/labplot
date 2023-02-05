@@ -15,6 +15,7 @@
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "kdefrontend/GuiTools.h"
 
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
@@ -158,6 +159,8 @@ void AddSubtractValueDialog::init() {
 		ui.cbType->insertSeparator(6);
 		ui.cbType->insertItem(7, i18n("Baseline (arPLS Algorithm)"), static_cast<int>(ValueType::Baseline));
 
+		ui.leBaselineParameter2->setValidator(new QDoubleValidator(ui.leBaselineParameter2));
+
 		// add tooltip texts for the baseline subtraction algorithms.
 		// at the moment only arPLS (s.a. https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract)
 		// is supported and we show the description of its parameters only.
@@ -256,8 +259,13 @@ void AddSubtractValueDialog::init() {
 	});
 	connect(ui.sbBaselineParameter1, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
 	connect(ui.leBaselineParameter2, &QLineEdit::textChanged, this, [=]() {
-		m_okButton->setEnabled(!ui.leBaselineParameter2->text().isEmpty());
-		invalidatePreview();
+		bool valid = false;
+		QLocale().toDouble(ui.leBaselineParameter2->text(), &valid);
+		valid = valid && !ui.leBaselineParameter2->text().isEmpty();
+		GuiTools::highlight(ui.leBaselineParameter2, !valid);
+		m_okButton->setEnabled(valid);
+		if (valid)
+			invalidatePreview();
 	});
 	connect(ui.sbBaselineParameter3, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
 
