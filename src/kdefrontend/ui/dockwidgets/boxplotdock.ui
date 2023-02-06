@@ -62,7 +62,6 @@
         <widget class="QLabel" name="lData">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -307,7 +306,6 @@
         <widget class="QLabel" name="lMedianLine">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -350,7 +348,6 @@
         <widget class="QLabel" name="lFilling">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -408,7 +405,6 @@
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -460,7 +456,6 @@
         <widget class="QLabel" name="lSymbolCategory">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -617,7 +612,6 @@
         <widget class="QLabel" name="lWhiskersCap">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -646,7 +640,6 @@
         <widget class="QLabel" name="lWhiskersFormat">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -746,7 +739,6 @@
         <widget class="QLabel" name="lRug">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -827,6 +819,12 @@
        </item>
        <item row="4" column="2">
         <widget class="NumberSpinBox" name="sbRugOffset">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -843,6 +841,12 @@
        </item>
        <item row="3" column="2">
         <widget class="NumberSpinBox" name="sbRugWidth">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -862,6 +866,12 @@
        </item>
        <item row="2" column="2">
         <widget class="NumberSpinBox" name="sbRugLength">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>

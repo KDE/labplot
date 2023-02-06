@@ -71,7 +71,6 @@
         <widget class="QLabel" name="lBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -143,7 +142,6 @@
         <widget class="QLabel" name="lPosition">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -156,7 +154,6 @@
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -291,26 +288,38 @@
        </item>
        <item row="5" column="2">
         <widget class="NumberSpinBox" name="sbPositionStart">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
          <property name="whatsThis">
           <string>Spinbox for numbers.</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
        </item>
        <item row="6" column="2">
         <widget class="NumberSpinBox" name="sbPositionEnd">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
          <property name="whatsThis">
           <string>Spinbox for numbers.</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>

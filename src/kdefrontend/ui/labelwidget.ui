@@ -86,6 +86,12 @@
      </item>
      <item>
       <widget class="NumberSpinBox" name="sbPositionX">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string/>
        </property>
@@ -103,7 +109,6 @@
     <widget class="QLabel" name="lText">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -232,6 +237,12 @@
      </item>
      <item>
       <widget class="NumberSpinBox" name="sbPositionY">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="toolTip">
         <string/>
        </property>
@@ -320,7 +331,7 @@
     </widget>
    </item>
    <item row="5" column="3">
-    <widget class="KFontRequester" name="kfontRequester"/>
+    <widget class="KFontRequester" name="kfontRequester" native="true"/>
    </item>
    <item row="6" column="0" colspan="2">
     <widget class="QLabel" name="lFontTeX">
@@ -598,7 +609,7 @@
     </spacer>
    </item>
    <item row="6" column="3">
-    <widget class="KFontRequester" name="kfontRequesterTeX"/>
+    <widget class="KFontRequester" name="kfontRequesterTeX" native="true"/>
    </item>
    <item row="9" column="3">
     <widget class="KColorButton" name="kcbBackgroundColor">
@@ -620,7 +631,6 @@
     <widget class="QLabel" name="lGeometry">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -675,7 +685,6 @@
     <widget class="QLabel" name="lBorder">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
