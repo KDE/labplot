@@ -930,17 +930,28 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_importFileAction->setEnabled(hasProject);
 	m_importFileAction_2->setEnabled(hasProject);
 	m_importSqlAction->setEnabled(hasProject);
+	m_importLabPlotAction->setEnabled(hasProject);
 #ifdef HAVE_LIBORIGIN
 	m_importOpjAction->setEnabled(hasProject);
 #endif
+	m_importDatasetAction->setEnabled(hasProject);
+	m_newFolderAction->setEnabled(hasProject);
 	m_newWorkbookAction->setEnabled(hasProject);
 	m_newSpreadsheetAction->setEnabled(hasProject);
 	m_newMatrixAction->setEnabled(hasProject);
 	m_newWorksheetAction->setEnabled(hasProject);
 	m_newDatapickerAction->setEnabled(hasProject);
+	m_newNotesAction->setEnabled(hasProject);
+	m_newLiveDataSourceAction->setEnabled(hasProject);
 	m_closeAction->setEnabled(hasProject);
 	m_toggleProjectExplorerDockAction->setEnabled(hasProject);
 	m_togglePropertiesDockAction->setEnabled(hasProject);
+	m_closeWindowAction->setEnabled(hasProject);
+	m_closeAllWindowsAction->setEnabled(hasProject);
+	m_tileWindowsAction->setEnabled(hasProject);
+	m_cascadeWindowsAction->setEnabled(hasProject);
+	m_nextWindowAction->setEnabled(hasProject);
+	m_prevWindowAction->setEnabled(hasProject);
 
 	// disable print and export actions if there is no project
 	// and don't activate them if a new project was created.
