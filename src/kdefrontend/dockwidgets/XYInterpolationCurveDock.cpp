@@ -4,7 +4,7 @@
 	Description      : widget for editing properties of interpolation curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,6 +15,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <QMenu>
 #include <QStandardItemModel>
@@ -615,12 +616,8 @@ void XYInterpolationCurveDock::numberOfPointsChanged() {
 		m_interpolationData.npoints *= dataPoints;
 
 	// warn if points is smaller than data points
-	QPalette palette = uiGeneralTab.sbPoints->palette();
-	if (m_interpolationData.npoints < dataPoints)
-		palette.setColor(QPalette::Text, Qt::red);
-	else
-		palette.setColor(QPalette::Text, Qt::black);
-	uiGeneralTab.sbPoints->setPalette(palette);
+	const bool invalid = (m_interpolationData.npoints < dataPoints);
+	GuiTools::highlight(uiGeneralTab.sbPoints, invalid);
 
 	enableRecalculate();
 }
@@ -642,8 +639,8 @@ void XYInterpolationCurveDock::enableRecalculate() const {
 	// no interpolation possible without the x- and y-data
 	bool hasSourceData = false;
 	if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX && aspectY);
 		if (aspectX) {
 			cbXDataColumn->useCurrentIndexText(true);
@@ -653,9 +650,8 @@ void XYInterpolationCurveDock::enableRecalculate() const {
 			cbYDataColumn->useCurrentIndexText(true);
 			cbYDataColumn->setInvalid(false);
 		}
-	} else {
+	} else
 		hasSourceData = (m_interpolationCurve->dataSourceCurve() != nullptr);
-	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 }
