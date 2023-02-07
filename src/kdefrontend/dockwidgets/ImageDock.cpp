@@ -110,6 +110,10 @@ ImageDock::ImageDock(QWidget* parent)
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::verticalAlignmentChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::rotationChanged);
 
+	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ImageDock::positionXLogicalDateTimeChanged);
+	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ImageDock::positionXLogicalDateTimeChanged);
+	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::positionYLogicalChanged);
+
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &ImageDock::bindingChanged);
 	connect(ui.chbVisible, &QCheckBox::clicked, this, &ImageDock::visibilityChanged);
 }
