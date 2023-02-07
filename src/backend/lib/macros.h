@@ -41,6 +41,17 @@
 #define DEBUG_TEXTLABEL_GLUEPOINTS 0
 #define DEBUG_AXIS_BOUNDING_RECT 0
 
+#define DATETIME_TO_MSECSSINCEEPOCH_UTC(dateTime) \
+    quint64 dt_ms; \
+    do { \
+        auto dt = dateTime; \
+        dt.setTimeSpec(Qt::UTC); \
+        quint64 pos = dt.toMSecsSinceEpoch(); \
+    } while(false);
+
+#define MSECSSCINCE_EPOCH_TO_DATETIME_UTC(dt_ms)\
+    QDateTime::fromMSecsSinceEpoch(dt_ms, Qt::UTC)
+
 struct Lock {
 	inline explicit Lock(bool& variable)
 		: variable(variable = true) {

@@ -174,7 +174,9 @@ void ReferenceLineDock::positionLogicalChanged(double pos) {
 void ReferenceLineDock::positionLogicalDateTimeChanged(const QDateTime& dateTime) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 pos = dateTime.toMSecsSinceEpoch();
+    auto dt = dateTime;
+    dt.setTimeSpec(Qt::UTC);
+    quint64 pos = dt.toMSecsSinceEpoch();
 	for (auto* line : m_linesList) {
 		auto positionLogical = line->positionLogical();
 		if (line->orientation() == ReferenceLine::Orientation::Horizontal)
@@ -199,10 +201,10 @@ void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogica
 	CONDITIONAL_LOCK_RETURN;
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
 		ui.sbPosition->setValue(positionLogical.y());
-		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
+        ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y(), Qt::UTC));
 	} else {
 		ui.sbPosition->setValue(positionLogical.x());
-		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
+        ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x(), Qt::UTC));
 	}
 }
 
@@ -236,14 +238,14 @@ void ReferenceLineDock::load() {
 			ui.sbPosition->setValue(m_line->positionLogical().y());
 		else { // DateTime
 			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
-			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().y()));
+            ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().y(), Qt::UTC));
 		}
 	} else {
 		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric)
 			ui.sbPosition->setValue(m_line->positionLogical().x());
 		else { // DateTime
 			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().x()));
+            ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().x(), Qt::UTC));
 		}
 	}
 

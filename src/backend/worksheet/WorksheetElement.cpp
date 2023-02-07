@@ -785,7 +785,6 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 			newPos.setX(currPos.x());
 			break;
 		case WorksheetElement::PositionLimit::None:
-		default:
 			break;
 		}
 

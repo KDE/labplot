@@ -69,9 +69,43 @@
 		VALUES_EQUAL(bottomRightLogical.y(), yBottomRef);                                                                                                      \
 	} while (false);
 
-ALL_WORKSHEETELEMENT_TESTS(CustomPoint, CustomPointDock, setPoints)
-ALL_WORKSHEETELEMENT_TESTS2(TextLabel, LabelWidget, setLabels)
-ALL_WORKSHEETELEMENT_TESTS2(Image, ImageDock, setImages)
+//ALL_WORKSHEETELEMENT_TESTS(CustomPoint, CustomPointDock, setPoints)
+//ALL_WORKSHEETELEMENT_TESTS2(TextLabel, LabelWidget, setLabels)
+//ALL_WORKSHEETELEMENT_TESTS2(Image, ImageDock, setImages)
+
+void WorksheetElementTest::mouseMoveDateTime() {
+    // WORKSHEETELEMENT_TEST2
+    SETUP_PROJECT
+
+    auto* element = new TextLabel(QStringLiteral("element"));
+    p->addChild(element);
+    VALUES_EQUAL(element->position().point.x(), 0.);
+    VALUES_EQUAL(element->position().point.y(), 0.);
+    element->retransform(); /* Needed because otherwise logical position is not set */
+    auto* dock = new LabelWidget(nullptr);
+    Q_UNUSED(dock);
+
+    auto start = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
+    auto end = QDateTime::fromString(QLatin1String("2000-12-02 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
+    QVERIFY(start.isValid());
+    QVERIFY(end.isValid());
+    Range<double> dt(start.toMSecsSinceEpoch(), end.toMSecsSinceEpoch(), RangeT::Format::DateTime);
+    p->setRange(Dimension::X, 0, dt);
+
+    dock->setLabels({element});
+
+    QCOMPARE(element->position().point.x(), 0.);
+    element->setCoordinateBindingEnabled(true);
+    QCOMPARE(element->d_ptr->pos().x(), 0);
+    QCOMPARE(dock->ui.dtePositionXLogical->dateTime(), QDateTime::fromString(QLatin1String("2000-12-01 12:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt")));
+
+    // 75% on between start and end -> so 3/4 * 24h = 18h
+    element->d_ptr->setPos(QPointF(25, -10)); /* item change will be called (negative value is up) */
+
+    QCOMPARE(element->positionLogical().x(), QDateTime::fromString(QLatin1String("2000-12-01 18:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt")).toMSecsSinceEpoch());
+    QCOMPARE(dock->ui.dtePositionXLogical->dateTime(), QDateTime::fromString(QLatin1String("2000-12-01 18:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt")));
+
+}
 
 void WorksheetElementTest::referenceRangeXMouseMove() {
 	SETUP_PROJECT

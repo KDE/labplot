@@ -994,7 +994,7 @@ void LabelWidget::positionXLogicalChanged(double value) {
 void LabelWidget::positionXLogicalDateTimeChanged(const QDateTime& dateTime) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 x = dateTime.toMSecsSinceEpoch();
+    quint64 x = dateTime.toMSecsSinceEpoch();
 	QPointF pos = m_label->positionLogical();
 	pos.setX(x);
 	for (auto* label : m_labelsList)
@@ -1248,7 +1248,7 @@ void LabelWidget::labelCoordinateBindingEnabledChanged(bool enabled) {
 void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionXLogical->setValue(pos.x());
-	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
+    ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x(), Qt::UTC));
 	ui.sbPositionYLogical->setValue(pos.y());
 }
 
@@ -1412,11 +1412,10 @@ void LabelWidget::load() {
 			ui.dtePositionXLogical->show();
 
 			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_label->positionLogical().x()));
+            ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_label->positionLogical().x(), Qt::UTC));
 		}
 
 		ui.chbBindLogicalPos->setChecked(m_label->coordinateBindingEnabled());
-		bindingChanged(m_label->coordinateBindingEnabled());
 	} else {
 		ui.lPositionXLogical->hide();
 		ui.sbPositionXLogical->hide();
@@ -1425,6 +1424,7 @@ void LabelWidget::load() {
 		ui.lPositionXLogicalDateTime->hide();
 		ui.dtePositionXLogical->hide();
 	}
+    bindingChanged(m_label->coordinateBindingEnabled());
 
 	// offsets, available for axis label only
 	if (!m_axesList.isEmpty()) {

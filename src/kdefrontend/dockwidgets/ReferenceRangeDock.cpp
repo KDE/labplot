@@ -155,7 +155,7 @@ void ReferenceRangeDock::orientationChanged(int index) {
 
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
 		ui.sbPositionStart->setValue(m_range->positionLogicalStart().y());
-		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().y()));
+        ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().y(), Qt::UTC));
 	} else {
 		ui.sbPositionStart->setValue(m_range->positionLogicalStart().x());
 		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().x()));

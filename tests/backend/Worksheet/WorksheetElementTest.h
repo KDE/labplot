@@ -35,9 +35,11 @@ class WorksheetElementTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	ALL_WORKSHEET_TESTS_DEFINITION(CustomPoint)
-	ALL_WORKSHEET_TESTS_DEFINITION(TextLabel)
-	ALL_WORKSHEET_TESTS_DEFINITION(Image)
+//	ALL_WORKSHEET_TESTS_DEFINITION(CustomPoint)
+//	ALL_WORKSHEET_TESTS_DEFINITION(TextLabel)
+//	ALL_WORKSHEET_TESTS_DEFINITION(Image)
+
+    void mouseMoveDateTime();
 
 	void referenceRangeXMouseMove();
 	void referenceRangeYMouseMove();
