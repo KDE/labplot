@@ -14,11 +14,10 @@ Q_SIGNALS:
 
 private:
 	// so it is not visible from outside
-	void dateTimeChanged(const QDateTime&);
-	void setDateTime(const QDateTime&);
-
+	void setDateTime(const QDateTime&) {
+	}
 private Q_SLOTS:
-	void dateTimeChanged(QDateTime);
+	void dateTimeChanged(const QDateTime&);
 };
 
 #endif // UTCDATETIMEEDIT_H
