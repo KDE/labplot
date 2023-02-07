@@ -27,9 +27,7 @@ private:
 	virtual int readDataFromFileCommonTime(const QString& fileName, int lines = -1) override;
 	virtual int readDataFromFileSeparateTime(const QString& fileName, int lines = -1) override;
 
-#ifdef HAVE_VECTOR_BLF
 	const VectorBLFFilter* q;
-#endif
 };
 
 #endif // VECTORBLFFILTERPRIVATE_H
