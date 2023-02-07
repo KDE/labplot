@@ -324,8 +324,7 @@ bool AsciiFilter::isHeaderEnabled() const {
 void AsciiFilter::setHeaderLine(int line) {
 	d->headerLine = line;
 	DEBUG(Q_FUNC_INFO << ", line = " << line << ", startRow = " << d->startRow)
-	if (line >= d->startRow) // adapt start row to start after header
-		d->startRow = line + 1;
+	d->startRow = line + 1;
 	DEBUG(Q_FUNC_INFO << ", new startRow = " << d->startRow)
 }
 
@@ -1607,32 +1606,40 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	}
 
 	// number formatting
-	DEBUG("locale = " << STDSTRING(QLocale::languageToString(numberFormat)));
+	DEBUG(Q_FUNC_INFO << ", locale = " << STDSTRING(QLocale::languageToString(numberFormat)));
 
 	// Read the data
 	if (lines == -1)
 		lines = m_actualRows;
 
 	// set column names for preview
-	if (!headerEnabled) {
+	if (!headerEnabled || headerLine < 1) {
 		int start = 0;
 		if (createIndexEnabled)
 			start = 1;
 		for (int i = start; i < m_actualCols; i++)
 			columnNames << QStringLiteral("Column ") + QString::number(i + 1);
 	}
-	QDEBUG("	column names = " << columnNames);
+	QDEBUG(Q_FUNC_INFO << ", column names = " << columnNames);
 
 	// skip data lines, if required
-	DEBUG("	Skipping " << m_actualStartRow - 1 << " line(s)");
-	for (int i = 0; i < m_actualStartRow - 1; ++i)
+	DEBUG("m_actualStartRow = " << m_actualStartRow)
+	DEBUG("m_actualRows = " << m_actualRows)
+	int skipLines = m_actualStartRow - 1;
+	if (headerEnabled && headerLine > 0) {
+		skipLines++;
+		m_actualRows--;
+	}
+	DEBUG(Q_FUNC_INFO << ", skipping " << skipLines << " line(s)");
+	for (int i = 0; i < skipLines; ++i)
 		device.readLine();
 
-	DEBUG("	Generating preview for " << std::min(lines, m_actualRows) << " lines");
+	const int rows = std::min(lines, m_actualRows);
+	DEBUG(Q_FUNC_INFO << ", preview " << rows << " line(s)");
 	QString line;
 
 	// loop over the preview lines in the file and parse the available columns
-	for (int i = 0; i < std::min(lines, m_actualRows); ++i) {
+	for (int i = 0; i < rows; ++i) {
 		line = QLatin1String(device.readLine());
 
 		// remove any newline
