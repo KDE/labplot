@@ -46,8 +46,8 @@ private Q_SLOTS:
 	void orientationChanged(int);
 	void positionLogicalStartChanged(double);
 	void positionLogicalEndChanged(double);
-	void positionLogicalDateTimeStartChanged(const QDateTime&);
-	void positionLogicalDateTimeEndChanged(const QDateTime&);
+	void positionLogicalDateTimeStartChanged(qint64);
+	void positionLogicalDateTimeEndChanged(qint64);
 
 	// SLOTs for changes triggered in ReferenceRange
 	void updatePlotRanges() override;

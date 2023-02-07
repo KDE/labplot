@@ -205,7 +205,7 @@
        </widget>
       </item>
       <item row="1" column="3">
-       <widget class="QDateTimeEdit" name="dteValue1">
+       <widget class="UTCDateTimeEdit" name="dteValue1">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -243,7 +243,7 @@
        </widget>
       </item>
       <item row="1" column="6">
-       <widget class="QDateTimeEdit" name="dteValue2">
+       <widget class="UTCDateTimeEdit" name="dteValue2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -270,6 +270,13 @@
    </item>
   </layout>
  </widget>
+  <customwidgets>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

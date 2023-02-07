@@ -44,8 +44,8 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceRangeDock::orientationChanged);
 	connect(ui.sbPositionStart, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalStartChanged);
 	connect(ui.sbPositionEnd, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalEndChanged);
-	connect(ui.dtePositionStart, &QDateTimeEdit::dateTimeChanged, this, &ReferenceRangeDock::positionLogicalDateTimeStartChanged);
-	connect(ui.dtePositionEnd, &QDateTimeEdit::dateTimeChanged, this, &ReferenceRangeDock::positionLogicalDateTimeEndChanged);
+	connect(ui.dtePositionStart, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceRangeDock::positionLogicalDateTimeStartChanged);
+	connect(ui.dtePositionEnd, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceRangeDock::positionLogicalDateTimeEndChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceRangeDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceRangeDock::visibilityChanged);
 }
@@ -155,18 +155,18 @@ void ReferenceRangeDock::orientationChanged(int index) {
 
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
 		ui.sbPositionStart->setValue(m_range->positionLogicalStart().y());
-		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().y()));
+		ui.dtePositionStart->setMSecsSinceEpochUTC(m_range->positionLogicalStart().y());
 	} else {
 		ui.sbPositionStart->setValue(m_range->positionLogicalStart().x());
-		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().x()));
+		ui.dtePositionStart->setMSecsSinceEpochUTC(m_range->positionLogicalStart().x());
 	}
 
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
 		ui.sbPositionEnd->setValue(m_range->positionLogicalEnd().y());
-		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalEnd().y()));
+		ui.dtePositionEnd->setMSecsSinceEpochUTC(m_range->positionLogicalEnd().y());
 	} else {
 		ui.sbPositionEnd->setValue(m_range->positionLogicalEnd().x());
-		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalEnd().x()));
+		ui.dtePositionEnd->setMSecsSinceEpochUTC(m_range->positionLogicalEnd().x());
 	}
 }
 
@@ -196,10 +196,9 @@ void ReferenceRangeDock::positionLogicalEndChanged(double pos) {
 	}
 }
 
-void ReferenceRangeDock::positionLogicalDateTimeStartChanged(const QDateTime& dateTime) {
+void ReferenceRangeDock::positionLogicalDateTimeStartChanged(qint64 pos) {
 	CONDITIONAL_RETURN_NO_LOCK; // Feedback needed
 
-	const quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* range : m_rangeList) {
 		auto positionLogical = range->positionLogicalStart();
 		if (range->orientation() == ReferenceRange::Orientation::Horizontal)
@@ -210,10 +209,9 @@ void ReferenceRangeDock::positionLogicalDateTimeStartChanged(const QDateTime& da
 	}
 }
 
-void ReferenceRangeDock::positionLogicalDateTimeEndChanged(const QDateTime& dateTime) {
+void ReferenceRangeDock::positionLogicalDateTimeEndChanged(qint64 pos) {
 	CONDITIONAL_RETURN_NO_LOCK; // Feedback needed
 
-	const quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* range : m_rangeList) {
 		auto positionLogical = range->positionLogicalEnd();
 		if (range->orientation() == ReferenceRange::Orientation::Horizontal)
@@ -238,10 +236,10 @@ void ReferenceRangeDock::rangePositionLogicalStartChanged(const QPointF& positio
 	CONDITIONAL_LOCK_RETURN;
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
 		ui.sbPositionStart->setValue(positionLogical.y());
-		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
+		ui.dtePositionStart->setMSecsSinceEpochUTC(positionLogical.y());
 	} else {
 		ui.sbPositionStart->setValue(positionLogical.x());
-		ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
+		ui.dtePositionStart->setMSecsSinceEpochUTC(positionLogical.x());
 	}
 }
 
@@ -249,10 +247,10 @@ void ReferenceRangeDock::rangePositionLogicalEndChanged(const QPointF& positionL
 	CONDITIONAL_LOCK_RETURN;
 	if (m_range->orientation() == ReferenceRange::Orientation::Horizontal) {
 		ui.sbPositionEnd->setValue(positionLogical.y());
-		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
+		ui.dtePositionEnd->setMSecsSinceEpochUTC(positionLogical.y());
 	} else {
 		ui.sbPositionEnd->setValue(positionLogical.x());
-		ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
+		ui.dtePositionEnd->setMSecsSinceEpochUTC(positionLogical.x());
 	}
 }
 
@@ -286,9 +284,9 @@ void ReferenceRangeDock::load() {
 			ui.sbPositionEnd->setValue(m_range->positionLogicalEnd().y());
 		} else { // DateTime
 			ui.dtePositionStart->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
-			ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().y()));
+			ui.dtePositionStart->setMSecsSinceEpochUTC(m_range->positionLogicalStart().y());
 			ui.dtePositionEnd->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
-			ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalEnd().y()));
+			ui.dtePositionEnd->setMSecsSinceEpochUTC(m_range->positionLogicalEnd().y());
 		}
 	} else {
 		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric) {
@@ -296,9 +294,9 @@ void ReferenceRangeDock::load() {
 			ui.sbPositionEnd->setValue(m_range->positionLogicalEnd().x());
 		} else { // DateTime
 			ui.dtePositionStart->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePositionStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalStart().x()));
+			ui.dtePositionStart->setMSecsSinceEpochUTC(m_range->positionLogicalStart().x());
 			ui.dtePositionEnd->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePositionEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_range->positionLogicalEnd().x()));
+			ui.dtePositionEnd->setMSecsSinceEpochUTC(m_range->positionLogicalEnd().x());
 		}
 	}
 }

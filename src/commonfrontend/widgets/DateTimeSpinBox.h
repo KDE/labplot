@@ -15,6 +15,9 @@
 class QRegularExpressionValidator;
 
 // Assumption: Month has always 30 days
+/*!
+ * Intended to be used for differences in datetimes
+ */
 class DateTimeSpinBox : public QAbstractSpinBox {
 	Q_OBJECT
 private:

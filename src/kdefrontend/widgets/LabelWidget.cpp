@@ -256,7 +256,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
 
 	connect(ui.sbPositionXLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionXLogicalChanged);
-	connect(ui.dtePositionXLogical, &QDateTimeEdit::dateTimeChanged, this, &LabelWidget::positionXLogicalDateTimeChanged);
+	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &LabelWidget::positionXLogicalDateTimeChanged);
 	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionYLogicalChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
 	connect(ui.sbOffsetX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
@@ -991,12 +991,11 @@ void LabelWidget::positionXLogicalChanged(double value) {
 		label->setPositionLogical(pos);
 }
 
-void LabelWidget::positionXLogicalDateTimeChanged(const QDateTime& dateTime) {
+void LabelWidget::positionXLogicalDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 x = dateTime.toMSecsSinceEpoch();
 	QPointF pos = m_label->positionLogical();
-	pos.setX(x);
+	pos.setX(value);
 	for (auto* label : m_labelsList)
 		label->setPositionLogical(pos);
 }
@@ -1248,7 +1247,7 @@ void LabelWidget::labelCoordinateBindingEnabledChanged(bool enabled) {
 void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionXLogical->setValue(pos.x());
-	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
+	ui.dtePositionXLogical->setMSecsSinceEpochUTC(pos.x());
 	ui.sbPositionYLogical->setValue(pos.y());
 }
 
@@ -1412,7 +1411,7 @@ void LabelWidget::load() {
 			ui.dtePositionXLogical->show();
 
 			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_label->positionLogical().x()));
+			ui.dtePositionXLogical->setMSecsSinceEpochUTC(m_label->positionLogical().x());
 		}
 
 		ui.chbBindLogicalPos->setChecked(m_label->coordinateBindingEnabled());

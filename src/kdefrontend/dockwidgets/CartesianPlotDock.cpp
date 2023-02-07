@@ -495,9 +495,9 @@ void CartesianPlotDock::updateLocale() {
 				sb->setLocale(numberLocale);
 
 			} else {
-				CELLWIDGET(Dimension::X, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC)));
-				CELLWIDGET(Dimension::X, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.end(), Qt::UTC)));
-				auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
+				CELLWIDGET(Dimension::X, row, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(xRange.start()));
+				CELLWIDGET(Dimension::X, row, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(xRange.end()));
+				auto* dte = qobject_cast<UTCDateTimeEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
 				if (dte)
 					isDateTime = true;
 			}
@@ -521,9 +521,9 @@ void CartesianPlotDock::updateLocale() {
 				sb = qobject_cast<NumberSpinBox*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Max));
 				sb->setLocale(numberLocale);
 			} else {
-				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.start(), Qt::UTC)));
-				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.end(), Qt::UTC)));
-				auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
+				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(yRange.start()));
+				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(yRange.end()));
+				auto* dte = qobject_cast<UTCDateTimeEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
 				if (dte)
 					isDateTime = true;
 			}
@@ -670,24 +670,22 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 				this->maxChanged(dim, sb->property("row").toInt(), value);
 			});
 		} else {
-			auto* dte = new QDateTimeEdit(tw);
+			auto* dte = new UTCDateTimeEdit(tw);
 			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dim, i));
-			dte->setTimeSpec(Qt::UTC);
-			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(r.start(), Qt::UTC));
+			dte->setMSecsSinceEpochUTC(r.start());
 			dte->setWrapping(true);
 			tw->setCellWidget(i, TwRangesColumn::Min, dte);
 			dte->setProperty("row", i);
-			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dim, dte](const QDateTime& dateTime) {
+			connect(dte, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, [this, dim, dte](qint64 dateTime) {
 				this->minDateTimeChanged(dte, dim, dateTime);
 			});
-			dte = new QDateTimeEdit(tw);
+			dte = new UTCDateTimeEdit(tw);
 			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dim, i));
-			dte->setTimeSpec(Qt::UTC);
-			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(r.end(), Qt::UTC));
+			dte->setMSecsSinceEpochUTC(r.end());
 			dte->setWrapping(true);
 			tw->setCellWidget(i, TwRangesColumn::Max, dte);
 			dte->setProperty("row", i);
-			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dim, dte](const QDateTime& dateTime) {
+			connect(dte, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, [this, dim, dte](qint64 dateTime) {
 				this->maxDateTimeChanged(dte, dim, dateTime);
 			});
 		}
@@ -994,10 +992,9 @@ void CartesianPlotDock::maxChanged(const Dimension dim, const int index, double 
 	}
 }
 
-void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Dimension dim, const QDateTime& dateTime) {
+void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Dimension dim, qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 value = dateTime.toMSecsSinceEpoch();
 	// selected x range
 	const int index{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
@@ -1006,10 +1003,9 @@ void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Dimensio
 	updatePlotRangeList();
 }
 
-void CartesianPlotDock::maxDateTimeChanged(const QObject* sender, const Dimension dim, const QDateTime& dateTime) {
+void CartesianPlotDock::maxDateTimeChanged(const QObject* sender, const Dimension dim, qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 value = dateTime.toMSecsSinceEpoch();
 	// selected x range
 	const int index{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
@@ -1642,7 +1638,7 @@ void CartesianPlotDock::plotMinChanged(const Dimension dim, int xRangeIndex, dou
 	CONDITIONAL_LOCK_RETURN;
 
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
-	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
+	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
 }
 
 void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, double value) {
@@ -1650,7 +1646,7 @@ void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, dou
 	CONDITIONAL_LOCK_RETURN;
 
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
-	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
+	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
 }
 
 void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<double> range) {
@@ -1658,9 +1654,9 @@ void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<d
 	CONDITIONAL_LOCK_RETURN;
 
 	CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
-	CELLWIDGET(dim, index, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.start(), Qt::UTC)));
+	CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
 	CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
-	CELLWIDGET(dim, index, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.end(), Qt::UTC)));
+	CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
 }
 
 void CartesianPlotDock::plotScaleChanged(const Dimension dim, int rangeIndex, RangeT::Scale scale) {

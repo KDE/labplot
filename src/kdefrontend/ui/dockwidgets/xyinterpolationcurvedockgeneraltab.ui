@@ -235,14 +235,14 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QDateTimeEdit" name="dateTimeEditMin">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditMin">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QDateTimeEdit" name="dateTimeEditMax">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditMax">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
@@ -562,6 +562,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

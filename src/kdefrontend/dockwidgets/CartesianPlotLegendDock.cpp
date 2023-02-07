@@ -541,7 +541,7 @@ void CartesianPlotLegendDock::legendVerticalAlignmentChanged(TextLabel::Vertical
 void CartesianPlotLegendDock::legendPositionLogicalChanged(QPointF pos) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionXLogical->setValue(pos.x());
-	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
+	ui.dtePositionXLogical->setMSecsSinceEpochUTC(pos.x());
 	ui.sbPositionYLogical->setValue(pos.y());
 }
 
@@ -661,7 +661,7 @@ void CartesianPlotLegendDock::load() {
 			ui.dtePositionXLogical->show();
 
 			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_legend->positionLogical().x()));
+			ui.dtePositionXLogical->setMSecsSinceEpochUTC(m_legend->positionLogical().x());
 		}
 
 		ui.chbBindLogicalPos->setChecked(m_legend->coordinateBindingEnabled());

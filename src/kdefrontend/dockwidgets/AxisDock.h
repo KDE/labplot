@@ -88,8 +88,8 @@ private Q_SLOTS:
 	void rangeTypeChanged(int);
 	void startChanged(double);
 	void endChanged(double);
-	void startDateTimeChanged(const QDateTime&);
-	void endDateTimeChanged(const QDateTime&);
+	void startDateTimeChanged(qint64);
+	void endDateTimeChanged(qint64);
 	void zeroOffsetChanged(double);
 	void scalingFactorChanged(double);
 	void showScaleOffsetChanged(bool);

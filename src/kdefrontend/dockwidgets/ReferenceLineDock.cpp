@@ -37,7 +37,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::positionLogicalChanged);
-	connect(ui.dtePosition, &QDateTimeEdit::dateTimeChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
+	connect(ui.dtePosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
 
@@ -171,10 +171,9 @@ void ReferenceLineDock::positionLogicalChanged(double pos) {
 	}
 }
 
-void ReferenceLineDock::positionLogicalDateTimeChanged(const QDateTime& dateTime) {
+void ReferenceLineDock::positionLogicalDateTimeChanged(qint64 pos) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* line : m_linesList) {
 		auto positionLogical = line->positionLogical();
 		if (line->orientation() == ReferenceLine::Orientation::Horizontal)
@@ -199,10 +198,10 @@ void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogica
 	CONDITIONAL_LOCK_RETURN;
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
 		ui.sbPosition->setValue(positionLogical.y());
-		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
+		ui.dtePosition->setMSecsSinceEpochUTC(positionLogical.y());
 	} else {
 		ui.sbPosition->setValue(positionLogical.x());
-		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
+		ui.dtePosition->setMSecsSinceEpochUTC(positionLogical.x());
 	}
 }
 
@@ -236,14 +235,14 @@ void ReferenceLineDock::load() {
 			ui.sbPosition->setValue(m_line->positionLogical().y());
 		else { // DateTime
 			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
-			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().y()));
+			ui.dtePosition->setMSecsSinceEpochUTC(m_line->positionLogical().y());
 		}
 	} else {
 		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric)
 			ui.sbPosition->setValue(m_line->positionLogical().x());
 		else { // DateTime
 			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().x()));
+			ui.dtePosition->setMSecsSinceEpochUTC(m_line->positionLogical().x());
 		}
 	}
 

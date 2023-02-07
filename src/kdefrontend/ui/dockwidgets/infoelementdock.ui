@@ -183,7 +183,7 @@
         </widget>
        </item>
        <item row="4" column="3">
-        <widget class="QDateTimeEdit" name="dateTimeEditPosition">
+        <widget class="UTCDateTimeEdit" name="dateTimeEditPosition">
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
@@ -371,6 +371,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
