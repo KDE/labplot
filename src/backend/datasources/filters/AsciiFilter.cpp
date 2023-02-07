@@ -669,7 +669,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 	DEBUG(Q_FUNC_INFO << ", m_actualRows: " << m_actualRows << ", startRow: " << startRow << ", endRow: " << endRow)
 
 	DEBUG(Q_FUNC_INFO << ", headerEnabled = " << headerEnabled << ", headerLine = " << headerLine << ", m_actualStartRow = " << m_actualStartRow)
-	if ((!headerEnabled || headerLine < 1) && startRow == 1 && m_actualStartRow > 1) // take header line
+	if ((!headerEnabled || headerLine < 1) && startRow <= 2 && m_actualStartRow > 1) // take header line
 		m_actualStartRow--;
 
 	const int actualEndRow = (endRow == -1 || endRow > m_actualRows) ? m_actualRows : endRow;
@@ -1311,7 +1311,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 	// skip data lines, if required
 	int skipLines = m_actualStartRow - 1;
-	if ((!headerEnabled || headerLine < 1) && startRow == 1) { // read header as normal line
+	if ((!headerEnabled || headerLine < 1) && skipLines <= 1) { // read header as normal line
 		skipLines--;
 		m_actualRows++;
 	}
@@ -1646,12 +1646,12 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	for (int i = 0; i < skipLines; ++i)
 		device.readLine();
 
-	const int rows = std::min(lines, m_actualRows);
-	DEBUG(Q_FUNC_INFO << ", preview " << rows << " line(s)");
+	lines = std::min(lines, m_actualRows);
+	DEBUG(Q_FUNC_INFO << ", preview " << lines << " line(s)");
 	QString line;
 
 	// loop over the preview lines in the file and parse the available columns
-	for (int i = 0; i < rows; ++i) {
+	for (int i = 0; i < lines; ++i) {
 		line = QLatin1String(device.readLine());
 
 		// remove any newline
