@@ -366,10 +366,11 @@
 /*
  * Check that when moving the element, the datetime is changed correctly and aligned with the datetime of the range
  * No Timezone problems
+ * Using a datetime before 1970 because then toMSecsSinceEpoch() will be negative. To test if it works also there
  */
 #define MOUSE_MOVE_DATETIME(element, dockSetElementsMethodName)                                                                                                \
-	auto start = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));                                 \
-	auto end = QDateTime::fromString(QLatin1String("2000-12-02 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));                                   \
+	auto start = QDateTime::fromString(QLatin1String("1800-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));                                 \
+	auto end = QDateTime::fromString(QLatin1String("1800-12-02 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));                                   \
 	QVERIFY(start.isValid());                                                                                                                                  \
 	QVERIFY(end.isValid());                                                                                                                                    \
 	Range<double> dt(start.toMSecsSinceEpoch(), end.toMSecsSinceEpoch(), RangeT::Format::DateTime);                                                            \
@@ -381,18 +382,18 @@
 	QCOMPARE(element->position().point.x(), 0.);                                                                                                               \
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
 	QCOMPARE(element->d_ptr->pos().x(), 0);                                                                                                                    \
-	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("2000-12-01 12:00:00:000"));           \
+	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("1800-12-01 12:00:00:000"));           \
                                                                                                                                                                \
 	/* 75% on between start and end -> so 3/4 * 24h = 18h */                                                                                                   \
 	element->d_ptr->setPos(QPointF(25, -10)); /* item change will be called (negative value is up) */                                                          \
                                                                                                                                                                \
 	QCOMPARE(element->positionLogical().x(),                                                                                                                   \
-			 QDateTime::fromString(QLatin1String("2000-12-01 18:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt")).toMSecsSinceEpoch());                \
-	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("2000-12-01 18:00:00:000"));
+			 QDateTime::fromString(QLatin1String("1800-12-01 18:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt")).toMSecsSinceEpoch());                \
+	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("1800-12-01 18:00:00:000"));
 
 #define DOCK_CHANGE_DATETIME(element, dockSetElementsMethodName)                                                                                               \
-	auto start = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));                                 \
-	auto end = QDateTime::fromString(QLatin1String("2000-12-02 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));                                   \
+	auto start = QDateTime::fromString(QLatin1String("1800-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));                                 \
+	auto end = QDateTime::fromString(QLatin1String("1800-12-02 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));                                   \
 	QVERIFY(start.isValid());                                                                                                                                  \
 	QVERIFY(end.isValid());                                                                                                                                    \
 	Range<double> dt(start.toMSecsSinceEpoch(), end.toMSecsSinceEpoch(), RangeT::Format::DateTime);                                                            \
@@ -404,7 +405,7 @@
 	QCOMPARE(element->position().point.x(), 0.);                                                                                                               \
 	element->setCoordinateBindingEnabled(true);                                                                                                                \
 	QCOMPARE(element->d_ptr->pos().x(), 0);                                                                                                                    \
-	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("2000-12-01 12:00:00:000"));           \
+	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("1800-12-01 12:00:00:000"));           \
                                                                                                                                                                \
 	/* Change hour by 1 */                                                                                                                                     \
 	dock->ui.dtePositionXLogical->lineEdit()->setCursorPosition(13); /* behind the second hour digit */                                                        \
@@ -412,7 +413,7 @@
 	dock->ui.dtePositionXLogical->keyPressEvent(&event);                                                                                                       \
                                                                                                                                                                \
 	QCOMPARE(element->positionLogical().x(),                                                                                                                   \
-			 QDateTime::fromString(QLatin1String("2000-12-01 13:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt")).toMSecsSinceEpoch());                \
-	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("2000-12-01 13:00:00:000"));
+			 QDateTime::fromString(QLatin1String("1800-12-01 13:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt")).toMSecsSinceEpoch());                \
+	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("1800-12-01 13:00:00:000"));
 
 #endif // HELPERMACROS_H
