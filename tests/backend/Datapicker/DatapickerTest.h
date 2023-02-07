@@ -45,7 +45,8 @@ private Q_SLOTS:
 	void logarithmic10YMapping();
 	void logarithmic10XYMapping();
 
-	// void referenceMove();
+	void referenceMove();
+	void referenceMoveKeyPress();
 	void curvePointMove();
 	void curvePointMoveUndoRedo();
 	void selectReferencePoint();

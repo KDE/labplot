@@ -17,9 +17,12 @@
 #include "backend/datapicker/DatapickerCurvePrivate.h"
 #include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/DatapickerPoint.h"
+#include "backend/datapicker/DatapickerPointPrivate.h"
 #include "backend/datapicker/Transform.h"
+#include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "kdefrontend/widgets/DatapickerImageWidget.h"
 
+#include <QAction>
 #include <QUndoStack>
 
 #define VECTOR3D_EQUAL(vec, ref)                                                                                                                               \
@@ -722,21 +725,21 @@ void DatapickerTest::logarithmic10XYMapping() {
 
 /*!
  * check the correctness of the data points after one of the reference points was moved on the scene.
+ * In real this is not possible, because it is not implemented, but neverthless it shall be shown
+ * that when moving reference points, the curves will be updated
  */
-// TODO: this is not implemented yet, moving of axis points is not possible once a curve was added.
-/*
 void DatapickerTest::referenceMove() {
 	Datapicker datapicker(QStringLiteral("Test"));
-	datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
+	datapicker.addNewPoint(QPointF(0, 1), datapicker.image());
+	datapicker.addNewPoint(QPointF(0, 0), datapicker.image());
+	datapicker.addNewPoint(QPointF(1, 0), datapicker.image());
 
-	auto ap = datapicker.m_image->axisPoints();
+	auto ap = datapicker.image()->axisPoints();
 	ap.type = DatapickerImage::GraphType::Linear;
-	datapicker.m_image->setAxisPoints(ap);
+	datapicker.image()->setAxisPoints(ap);
 
 	DatapickerImageWidget w(nullptr);
-	w.setImages({datapicker.m_image});
+	w.setImages({datapicker.image()});
 	w.ui.sbPositionX1->setValue(0);
 	w.ui.sbPositionY1->setValue(10);
 	w.ui.sbPositionZ1->setValue(0);
@@ -749,7 +752,7 @@ void DatapickerTest::referenceMove() {
 	w.logicalPositionChanged();
 
 	auto* curve = new DatapickerCurve(i18n("Curve"));
-	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	curve->addDatasheet(datapicker.image()->axisPoints().type);
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(0.5, 0.6), curve); // updates the curve data
@@ -757,17 +760,67 @@ void DatapickerTest::referenceMove() {
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.);
 
 	// Points are stored in the image
-	auto points = datapicker.m_image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	auto points = datapicker.image()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	QCOMPARE(points.count(), 3);
 
-	points[0]->setPosition(QPointF(0., 1));
-	points[1]->setPosition(QPointF(0.1, 0));
-	points[2]->setPosition(QPointF(1.1, 0));
+	// set position after mouse was released
+	points[0]->setPosition(QPointF(0., 4));
+	// points[1]->setPosition(QPointF(0.1, 0.));
+	points[2]->setPosition(QPointF(2., 0.));
 
-	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5/1.1);
+	// Currently not supported
+	//    VALUES_EQUAL(curve->posXColumn()->valueAt(0), 0.5 / 2 * 10);
+	//    VALUES_EQUAL(curve->posYColumn()->valueAt(0), 0.6 / 4  * 10);
+}
+
+void DatapickerTest::referenceMoveKeyPress() {
+	Datapicker datapicker(QStringLiteral("Test"));
+	datapicker.addNewPoint(QPointF(0, 1), datapicker.image());
+	datapicker.addNewPoint(QPointF(0, 0), datapicker.image());
+	datapicker.addNewPoint(QPointF(1, 0), datapicker.image());
+
+	auto ap = datapicker.image()->axisPoints();
+	ap.type = DatapickerImage::GraphType::Linear;
+	datapicker.image()->setAxisPoints(ap);
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({datapicker.image()});
+	w.ui.sbPositionX1->setValue(0);
+	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionZ1->setValue(0);
+	w.ui.sbPositionX2->setValue(0);
+	w.ui.sbPositionY2->setValue(0);
+	w.ui.sbPositionZ2->setValue(0);
+	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionY3->setValue(0);
+	w.ui.sbPositionZ3->setValue(0);
+	w.logicalPositionChanged();
+
+	auto* curve = new DatapickerCurve(i18n("Curve"));
+	curve->addDatasheet(datapicker.image()->axisPoints().type);
+	datapicker.addChild(curve);
+
+	datapicker.addNewPoint(QPointF(0.5, 0.6), curve); // (scene coordinates) updates the curve data
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.);
+
+	// Points are stored in the image
+	auto points = datapicker.image()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(points.count(), 3);
+
+	points[0]->d_ptr->setSelected(false);
+	points[1]->d_ptr->setSelected(false);
+	points[2]->d_ptr->setSelected(true);
+	auto view = static_cast<DatapickerImageView*>(datapicker.image()->view());
+	view->shiftLeftAction->triggered(true);
+
+	VALUES_EQUAL(points[0]->position().x(), 0);
+	VALUES_EQUAL(points[1]->position().x(), 0);
+	VALUES_EQUAL(points[2]->position().x(), 2);
+
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 0.5 / 2 * 10);
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.);
 }
-*/
 
 /*!
  * check the correctness of the data point after the point was moved on the scene.
@@ -1030,9 +1083,9 @@ void DatapickerTest::datapickerDateTime() {
 	QCOMPARE(w.ui.sbPositionX2->isVisible(), false);
 	QCOMPARE(w.ui.sbPositionX3->isVisible(), false);
 
-	QDateTime dt1 = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt"));
-	QDateTime dt2 = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt"));
-	QDateTime dt3 = QDateTime::fromString(QLatin1String("2000-12-01 06:00:00:000Z"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt"));
+	QDateTime dt1 = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
+	QDateTime dt2 = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
+	QDateTime dt3 = QDateTime::fromString(QLatin1String("2000-12-01 06:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
 	w.ui.dtePositionX1->setDateTime(dt1);
 	w.ui.dtePositionX2->setDateTime(dt2);
 	w.ui.dtePositionX3->setDateTime(dt3);
@@ -1040,7 +1093,7 @@ void DatapickerTest::datapickerDateTime() {
 	QCOMPARE(curve->posXColumn()->rowCount(), 1);
 	QCOMPARE(curve->posXColumn()->columnMode(), AbstractColumn::ColumnMode::DateTime);
 	QCOMPARE(curve->posXColumn()->dateTimeAt(0),
-			 QDateTime::fromString(QLatin1String("2000-12-01 03:00:00:000Z"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt"))); // logical coordinates
+			 QDateTime::fromString(QLatin1String("2000-12-01 03:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"))); // logical coordinates
 	QCOMPARE(curve->posYColumn()->rowCount(), 1);
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.); // logical coordinates
 }

@@ -425,6 +425,8 @@ void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 QVariant DatapickerPointPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) {
 	if (change == QGraphicsItem::GraphicsItemChange::ItemSelectedHasChanged && value.toBool())
 		emit q->pointSelected(q);
+	else if (change == QGraphicsItem::GraphicsItemChange::ItemPositionChange)
+		emit q->positionChanged(value.toPointF());
 	return QGraphicsItem::itemChange(change, value);
 }
 

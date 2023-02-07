@@ -64,6 +64,8 @@ private:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) override;
+
+	friend class DatapickerTest;
 };
 
 #endif

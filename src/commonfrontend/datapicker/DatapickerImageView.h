@@ -127,6 +127,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void statusInfo(const QString&);
+
+	friend class DatapickerTest;
 };
 
 #endif
