@@ -39,7 +39,8 @@
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_COORDBINDING, DockType, dockSetElementsMethodName);                                    \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING, DockType, dockSetElementsMethodName);                                 \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING, DockType, dockSetElementsMethodName);                                 \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, MOUSE_MOVE_DATETIME, DockType, dockSetElementsMethodName);
+	WORKSHEETELEMENT_TEST(WorksheetElementType, MOUSE_MOVE_DATETIME, DockType, dockSetElementsMethodName);                                                     \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, DOCK_CHANGE_DATETIME, DockType, dockSetElementsMethodName);
 
 #define ALL_WORKSHEETELEMENT_TESTS2(WorksheetElementType, DockType, dockSetElementsMethodName)                                                                 \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL, DockType, dockSetElementsMethodName);                                    \
@@ -57,7 +58,8 @@
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_COORDBINDING, DockType, dockSetElementsMethodName);                                   \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING, DockType, dockSetElementsMethodName);                                \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING, DockType, dockSetElementsMethodName);                                \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, MOUSE_MOVE_DATETIME, DockType, dockSetElementsMethodName);
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, MOUSE_MOVE_DATETIME, DockType, dockSetElementsMethodName);                                                    \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, DOCK_CHANGE_DATETIME, DockType, dockSetElementsMethodName);
 
 #define CHECK_REFERENCERANGE_RECT(referenceRange, xLeftRef, yTopRef, xRightRef, yBottomRef)                                                                    \
 	do {                                                                                                                                                       \

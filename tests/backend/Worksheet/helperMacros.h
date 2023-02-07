@@ -390,4 +390,29 @@
 			 QDateTime::fromString(QLatin1String("2000-12-01 18:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt")).toMSecsSinceEpoch());                \
 	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("2000-12-01 18:00:00:000"));
 
+#define DOCK_CHANGE_DATETIME(element, dockSetElementsMethodName)                                                                                               \
+	auto start = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));                                 \
+	auto end = QDateTime::fromString(QLatin1String("2000-12-02 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));                                   \
+	QVERIFY(start.isValid());                                                                                                                                  \
+	QVERIFY(end.isValid());                                                                                                                                    \
+	Range<double> dt(start.toMSecsSinceEpoch(), end.toMSecsSinceEpoch(), RangeT::Format::DateTime);                                                            \
+	element->setCoordinateBindingEnabled(false); /* Disable binding to be sure that the point is still in the center of the plot when changing the range */    \
+	p->setRange(Dimension::X, 0, dt);                                                                                                                          \
+                                                                                                                                                               \
+	dock->dockSetElementsMethodName({element});                                                                                                                \
+                                                                                                                                                               \
+	QCOMPARE(element->position().point.x(), 0.);                                                                                                               \
+	element->setCoordinateBindingEnabled(true);                                                                                                                \
+	QCOMPARE(element->d_ptr->pos().x(), 0);                                                                                                                    \
+	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("2000-12-01 12:00:00:000"));           \
+                                                                                                                                                               \
+	/* Change hour by 1 */                                                                                                                                     \
+	dock->ui.dtePositionXLogical->lineEdit()->setCursorPosition(13); /* behind the second hour digit */                                                        \
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);                                                                  \
+	dock->ui.dtePositionXLogical->keyPressEvent(&event);                                                                                                       \
+                                                                                                                                                               \
+	QCOMPARE(element->positionLogical().x(),                                                                                                                   \
+			 QDateTime::fromString(QLatin1String("2000-12-01 13:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt")).toMSecsSinceEpoch());                \
+	QCOMPARE(dock->ui.dtePositionXLogical->dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm:ss:zzz")), QLatin1String("2000-12-01 13:00:00:000"));
+
 #endif // HELPERMACROS_H

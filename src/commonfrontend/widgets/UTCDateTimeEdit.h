@@ -16,8 +16,14 @@ private:
 	// so it is not visible from outside
 	void setDateTime(const QDateTime&) {
 	}
+	// For testing purpose only
+	QLineEdit* lineEdit() const {
+		return QDateTimeEdit::lineEdit();
+	}
 private Q_SLOTS:
 	void dateTimeChanged(const QDateTime&);
+
+	friend class WorksheetElementTest;
 };
 
 #endif // UTCDATETIMEEDIT_H
