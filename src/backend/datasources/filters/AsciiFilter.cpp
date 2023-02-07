@@ -392,6 +392,7 @@ QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() {
 }
 
 void AsciiFilter::setStartRow(const int r) {
+	DEBUG(Q_FUNC_INFO << " row:" << r)
 	d->startRow = r;
 }
 int AsciiFilter::startRow() const {
@@ -459,14 +460,14 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 	// startRow==1: first row after header, etc.
 
 	/////////////////////////////////////////////////////////////////
-	DEBUG(Q_FUNC_INFO << ", headerEnabled = " << headerEnabled << ", header line at " << headerLine)
+	DEBUG(Q_FUNC_INFO << ", headerEnabled = " << headerEnabled << ", header line: " << headerLine << ", start row: " << startRow)
 
 	QString firstLine;
 	if (headerEnabled && headerLine) {
 		// go to header line (counting comment lines)
 		for (int l = 0; l < headerLine; l++) {
 			firstLine = getLine(device);
-			DEBUG(Q_FUNC_INFO << ", skip line before header = \"" << STDSTRING(firstLine) << "\"");
+			DEBUG(Q_FUNC_INFO << ", first line (header) = \"" << STDSTRING(firstLine) << "\"");
 		}
 	} else { // read first data line (skipping comments)
 		if (!commentCharacter.isEmpty()) {
@@ -480,7 +481,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 	firstLine.remove(QRegularExpression(QStringLiteral("[\\n\\r]"))); // remove any newline
 	if (removeQuotesEnabled)
 		firstLine.remove(QLatin1Char('"'));
-	QDEBUG(Q_FUNC_INFO << ", FIRST LINE = " << firstLine);
+	QDEBUG(Q_FUNC_INFO << ", first line = " << firstLine);
 
 	// determine separator and split first line
 	QStringList firstLineStringList;
@@ -665,6 +666,11 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 
 	// ATTENTION: This resets the position in the device to 0
 	m_actualRows = (int)q->lineNumber(device, maxLines);
+	DEBUG(Q_FUNC_INFO << ", m_actualRows: " << m_actualRows << ", startRow: " << startRow << ", endRow: " << endRow)
+
+	DEBUG(Q_FUNC_INFO << ", headerEnabled = " << headerEnabled << ", headerLine = " << headerLine << ", m_actualStartRow = " << m_actualStartRow)
+	if ((!headerEnabled || headerLine < 1) && startRow == 1 && m_actualStartRow > 1) // take header line
+		m_actualStartRow--;
 
 	const int actualEndRow = (endRow == -1 || endRow > m_actualRows) ? m_actualRows : endRow;
 	if (actualEndRow >= m_actualStartRow)
@@ -1270,10 +1276,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 */
 void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	DEBUG(Q_FUNC_INFO << ", dataSource = " << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
+	DEBUG(Q_FUNC_INFO << ", start row: " << startRow)
 
 	if (!m_prepared) {
 		const int deviceError = prepareDeviceToRead(device);
-		if (deviceError != 0) {
+		if (deviceError) {
 			DEBUG(Q_FUNC_INFO << ", DEVICE ERROR = " << deviceError);
 			return;
 		}
@@ -1294,29 +1301,34 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		m_prepared = true;
 	}
 
-	DEBUG("locale = " << STDSTRING(QLocale::languageToString(numberFormat)));
+	DEBUG(Q_FUNC_INFO << ", locale = " << STDSTRING(QLocale::languageToString(numberFormat)));
 
 	// Read the data
 	int currentRow = 0; // indexes the position in the vector(column)
 	if (lines == -1)
 		lines = m_actualRows;
-	DEBUG("lines = " << lines << ", m_actualRows = " << m_actualRows)
+	DEBUG(Q_FUNC_INFO << ", lines = " << lines << ", m_actualRows = " << m_actualRows)
 
 	// skip data lines, if required
-	DEBUG("	Skipping " << m_actualStartRow - 1 << " line(s)");
-	for (int i = 0; i < m_actualStartRow - 1; ++i)
+	int skipLines = m_actualStartRow - 1;
+	if ((!headerEnabled || headerLine < 1) && startRow == 1) { // read header as normal line
+		skipLines--;
+		m_actualRows++;
+	}
+	DEBUG(Q_FUNC_INFO << ", skipping " << skipLines << " line(s)");
+	for (int i = 0; i < skipLines; ++i)
 		device.readLine();
 
-	DEBUG("	Reading " << std::min(lines, m_actualRows) << " lines, " << m_actualCols << " columns");
+	lines = std::min(lines, m_actualRows);
+	DEBUG(Q_FUNC_INFO << ", reading " << lines << " lines, " << m_actualCols << " columns");
 
-	if (std::min(lines, m_actualRows) == 0 || m_actualCols == 0)
+	if (lines == 0 || m_actualCols == 0)
 		return;
 
 	QString line;
 	// Don't put the definition QStringList lineStringList outside of the for-loop,
 	// the compiler doesn't seem to optimize the destructor of QList well enough in this case.
 
-	lines = std::min(lines, m_actualRows);
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; // update on every 1% only
 
@@ -1626,9 +1638,9 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	DEBUG("m_actualStartRow = " << m_actualStartRow)
 	DEBUG("m_actualRows = " << m_actualRows)
 	int skipLines = m_actualStartRow - 1;
-	if (headerEnabled && headerLine > 0) {
-		skipLines++;
-		m_actualRows--;
+	if (!headerEnabled || headerLine < 1) { // read header as normal line
+		skipLines--;
+		m_actualRows++;
 	}
 	DEBUG(Q_FUNC_INFO << ", skipping " << skipLines << " line(s)");
 	for (int i = 0; i < skipLines; ++i)
