@@ -173,23 +173,24 @@ void BLFFilterTest::testUsePreviousValueBigEndian() {
 	QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
 	QVERIFY(blfFileName.open());
 	QVector<Vector::BLF::CanMessage2*> messages{
-		createCANMessage(234, 5, {0x01, 0x02}),
-		createCANMessage(123, 6, {0xFF, 0xA2}),
-		createCANMessage(123, 8, {0x23, 0xE2}),
-		createCANMessage(234, 10, {0xD3, 0xB2}),
-		createCANMessage(234, 12, {0xE1, 0xC7}),
-		createCANMessage(234, 14, {0xD1, 0xC7}),
+		createCANMessage(532, 5, {2, 62, 1, 161, 39, 6, 0, 214}),
+		createCANMessage(565, 6, {0, 0, 0, 0, 0, 0, 0, 245}),
+		createCANMessage(565, 8, {0, 0, 0, 0, 0, 0, 0, 148}),
+		createCANMessage(532, 10, {2, 62, 1, 161, 39, 6, 0, 205}),
+		createCANMessage(532, 12, {2, 62, 1, 161, 39, 6, 0, 206}),
+		createCANMessage(532, 14, {2, 62, 1, 161, 39, 6, 0, 207}),
 	}; // time is in nanoseconds
 	createBLFFile(blfFileName.fileName(), messages);
 
 	QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
 	QVERIFY(dbcFile.open());
-	const auto dbcContent = R"(BO_ 234 MSG1: 8 Vector__XXX
- SG_ Msg1Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
- SG_ MsgSig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
-BO_ 123 MSG2: 8 Vector__XXX
- SG_ Msg2Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
- SG_ Msg2Sig1 : 8|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
+	const auto dbcContent = R"(BO_ 532 MSG1: 8 BMS1
+ SG_ MSG1Sig1 : 39|16@0+ (0.01,0) [0|0] "%" Vector__XXX
+ SG_ MSG1Sig2 : 23|16@0+ (0.1,0) [0|6553.5] "V" Vector__XXX
+ SG_ MSG1Sig3 : 55|16@0- (0.1,0) [0|0] "" Vector__XXX
+ SG_ MSG1Sig4 : 7|16@0+ (0.1,0) [0|6553.5] "V" Vector__XXX
+BO_ 565 MSG2: 8 Vector__XXX
+ SG_ MSG2Sig1 : 55|16@0- (0.1,0) [0|0] "" Vector__XXX
 )";
 	createDBCFile(dbcFile.fileName(), dbcContent);
 
@@ -203,68 +204,79 @@ BO_ 123 MSG2: 8 Vector__XXX
 	filter.setDBCFile(dbcFile.fileName());
 	Spreadsheet s(QStringLiteral("TestSpreadsheet"), false);
 	filter.readDataFromFile(blfFileName.fileName(), &s);
-	// Big endian not yet supported
-	//	QCOMPARE(s.columnCount(), 5); // time + Msg1Sig1 + Msg1Sig2 + Msg2Sig1 + Msg2Sig2
+	QCOMPARE(s.columnCount(), 6); // time + Msg1Sig1 + Msg1Sig2 + Msg1Sig3 + Msg1Sig4 + Msg2Sig1
 
-	//	{
-	//		// Time
-	//		const auto* c = s.column(0);
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		const auto* c = s.column(0);
+		QCOMPARE(c->name(), QStringLiteral("Time_s"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<double> refData{5e-9, 6e-9, 8e-9, 10e-9, 12e-9, 14e-9};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{5e-9, 6e-9, 8e-9, 10e-9, 12e-9, 14e-9};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 
-	//	{
-	//		// Msg1Sig1
-	//		const auto* c = s.column(1);
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		const auto* c = s.column(1);
+		QCOMPARE(c->name(), QStringLiteral("MSG1Sig1_%"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<uint8_t> refData{0x01, 0x01, 0x01, 0xD3, 0xE1, 0xD1};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{99.90, 99.90, 99.90, 99.90, 99.90, 99.90};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 
-	//	{
-	//		// Msg1Sig2
-	//		const auto* c = s.column(2);
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		const auto* c = s.column(2);
+		QCOMPARE(c->name(), QStringLiteral("MSG1Sig2_V"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<uint8_t> refData{0x02, 0x02, 0x02, 0xB2, 0xC7, 0xC7};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{41.7, 41.7, 41.7, 41.7, 41.7, 41.7};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 
-	//	{
-	//		// Msg2Sig1
-	//		const auto* c = s.column(3);
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		const auto* c = s.column(3);
+		QCOMPARE(c->name(), QStringLiteral("MSG1Sig3_"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<uint8_t> refData{0x00, 0xFF, 0x23, 0x23, 0x23, 0x23};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{21.4, 21.4, 21.4, 20.5, 20.6, 20.7};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 
-	//	{
-	//		// Msg2Sig2
-	//		const auto* c = s.column(4);
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		const auto* c = s.column(4);
+		QCOMPARE(c->name(), QStringLiteral("MSG1Sig4_V"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<uint8_t> refData{0x00, 0xA2, 0xE2, 0xE2, 0xE2, 0xE2};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{57.4, 57.4, 57.4, 57.4, 57.4, 57.4};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
+
+	{
+		const auto* c = s.column(5);
+		QCOMPARE(c->name(), QStringLiteral("MSG2Sig1_"));
+		QCOMPARE(c->rowCount(), 6);
+
+		QVector<double> refData{0, 24.5, 14.8, 14.8, 14.8, 14.8};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 }
 
 // Use NAN if the current message does not contain no value for the signal
@@ -425,130 +437,6 @@ BO_ 123 MSG2: 8 Vector__XXX
 	//	}
 }
 
-// DBC BLF file contains messages which are not defined in the DBC file
-// Those messages are skipped, because it is not possible to decode
-void BLFFilterTest::testUndefinedMessagePreviousValueBigEndian() {
-	/* open file for writing */
-	QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
-	QVERIFY(blfFileName.open());
-	QVector<Vector::BLF::CanMessage2*> messages{
-		createCANMessage(234, 5, {0x01, 0x02}),
-		createCANMessage(123, 6, {0xFF, 0xA2}), // message not defined in dbc file
-		createCANMessage(123, 8, {0x23, 0xE2}), // message not defined in dbc file
-		createCANMessage(234, 10, {0xD3, 0xB2}),
-		createCANMessage(234, 12, {0xE1, 0xC7}),
-		createCANMessage(234, 14, {0xD1, 0xC7}),
-	}; // time is in nanoseconds
-	createBLFFile(blfFileName.fileName(), messages);
-
-	QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
-	QVERIFY(dbcFile.open());
-	const auto dbcContent = R"(BO_ 234 MSG1: 8 Vector__XXX
- SG_ Msg1Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
- SG_ Msg1Sig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "km/h" Vector__XXX
-)";
-	createDBCFile(dbcFile.fileName(), dbcContent);
-
-	// Start Test
-
-	VectorBLFFilter filter;
-	filter.setConvertTimeToSeconds(true);
-	filter.setTimeHandlingMode(CANFilter::TimeHandling::ConcatPrevious);
-	QCOMPARE(filter.isValid(blfFileName.fileName()), true);
-
-	// Valid blf and valid dbc
-	filter.setDBCFile(dbcFile.fileName());
-	// Big endian not yet supported
-	//	QCOMPARE(filter.d->readDataFromFile(blfFileName.fileName(), 4), 2);
-	//	const auto dc = filter.dataContainer();
-	//	QCOMPARE(dc.size(), 3); // Time + First message with 2 signals
-
-	//	{
-	//		// Time
-	//		const auto* v = static_cast<QVector<double>*>(dc.at(0));
-	//		QCOMPARE(v->length(), 2);
-	//		QCOMPARE(v->at(0), 5e-9);
-	//		QCOMPARE(v->at(1), 10e-9);
-	//	}
-
-	//	{
-	//		// Msg1Sig1
-	//		const auto* v = static_cast<QVector<double>*>(dc.at(1));
-	//		QCOMPARE(v->length(), 2);
-	//		QCOMPARE(v->at(0), 0x01);
-	//		QCOMPARE(v->at(1), 0xD3);
-	//	}
-
-	//	{
-	//		// Msg1Sig2
-	//		const auto* v = static_cast<QVector<double>*>(dc.at(2));
-	//		QCOMPARE(v->length(), 2);
-	//		QCOMPARE(v->at(0), 0x02);
-	//		QCOMPARE(v->at(1), 0xB2);
-	//	}
-}
-
-void BLFFilterTest::testUndefinedMessageNANBigEndian() {
-	/* open file for writing */
-	QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
-	QVERIFY(blfFileName.open());
-	QVector<Vector::BLF::CanMessage2*> messages{
-		createCANMessage(234, 5, {0x01, 0x02}),
-		createCANMessage(123, 6, {0xFF, 0xA2}), // message not defined in dbc file
-		createCANMessage(123, 8, {0x23, 0xE2}), // message not defined in dbc file
-		createCANMessage(234, 10, {0xD3, 0xB2}),
-		createCANMessage(234, 12, {0xE1, 0xC7}),
-		createCANMessage(234, 14, {0xD1, 0xC7}),
-	}; // time is in nanoseconds
-	createBLFFile(blfFileName.fileName(), messages);
-
-	QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
-	QVERIFY(dbcFile.open());
-	const auto dbcContent = R"(BO_ 234 MSG1: 8 Vector__XXX
- SG_ Msg1Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
- SG_ Msg1Sig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "km/h" Vector__XXX
-)";
-	createDBCFile(dbcFile.fileName(), dbcContent);
-
-	// Start Test
-
-	VectorBLFFilter filter;
-	filter.setConvertTimeToSeconds(true);
-	filter.setTimeHandlingMode(CANFilter::TimeHandling::ConcatNAN);
-	QCOMPARE(filter.isValid(blfFileName.fileName()), true);
-
-	// Valid blf and valid dbc
-	filter.setDBCFile(dbcFile.fileName());
-	// Big endian not yet supported
-	//	QCOMPARE(filter.d->readDataFromFile(blfFileName.fileName(), 4), 2);
-	//	const auto dc = filter.dataContainer();
-	//	QCOMPARE(dc.size(), 3); // Time + First message with 2 signals
-
-	//	{
-	//		// Time
-	//		const auto* v = static_cast<QVector<double>*>(dc.at(0));
-	//		QCOMPARE(v->length(), 2);
-	//		QCOMPARE(v->at(0), 5e-9);
-	//		QCOMPARE(v->at(1), 10e-9);
-	//	}
-
-	//	{
-	//		// Msg1Sig1
-	//		const auto* v = static_cast<QVector<double>*>(dc.at(1));
-	//		QCOMPARE(v->length(), 2);
-	//		QCOMPARE(v->at(0), 0x01);
-	//		QCOMPARE(v->at(1), 0xD3);
-	//	}
-
-	//	{
-	//		// Msg1Sig2
-	//		const auto* v = static_cast<QVector<double>*>(dc.at(2));
-	//		QCOMPARE(v->length(), 2);
-	//		QCOMPARE(v->at(0), 0x02);
-	//		QCOMPARE(v->at(1), 0xB2);
-	//	}
-}
-
 // Value5 is a value larger than one byte, but not exactly a multiple
 // And is not aligned with a complete byte
 void BLFFilterTest::testBigNumberNotByteAlignedLittleEndian() {
@@ -596,17 +484,26 @@ void BLFFilterTest::testBigNumberNotByteAlignedLittleEndian() {
 	}
 
 	{
-		// Value1
+		// Value6
 		const auto* v = static_cast<QVector<double>*>(dc.at(1));
 		QCOMPARE(v->length(), 3);
+		QCOMPARE(v->at(0), 2.);
+		QCOMPARE(v->at(1), 3.);
+		QCOMPARE(v->at(2), 3.);
+	}
+
+	{
+		// Value5
+		const auto* v = static_cast<QVector<double>*>(dc.at(2));
+		QCOMPARE(v->length(), 3);
 		QCOMPARE(v->at(0), 0.);
-		QCOMPARE(v->at(1), 47.);
-		QCOMPARE(v->at(2), 57.);
+		QCOMPARE(v->at(1), 32.);
+		QCOMPARE(v->at(2), 51.);
 	}
 
 	{
 		// Value2
-		const auto* v = static_cast<QVector<double>*>(dc.at(2));
+		const auto* v = static_cast<QVector<double>*>(dc.at(3));
 		QCOMPARE(v->length(), 3);
 		QCOMPARE(v->at(0), 0.);
 		QCOMPARE(v->at(1), 0.);
@@ -615,7 +512,7 @@ void BLFFilterTest::testBigNumberNotByteAlignedLittleEndian() {
 
 	{
 		// Value3
-		const auto* v = static_cast<QVector<double>*>(dc.at(3));
+		const auto* v = static_cast<QVector<double>*>(dc.at(4));
 		QCOMPARE(v->length(), 3);
 		QCOMPARE(v->at(0), 1.);
 		QCOMPARE(v->at(1), 1.);
@@ -623,39 +520,30 @@ void BLFFilterTest::testBigNumberNotByteAlignedLittleEndian() {
 	}
 
 	{
-		// Value4
-		const auto* v = static_cast<QVector<double>*>(dc.at(4));
-		QCOMPARE(v->length(), 3);
-		QCOMPARE(v->at(0), 0.);
-		QCOMPARE(v->at(1), 0.);
-		QCOMPARE(v->at(2), 0.);
-	}
-
-	{
-		// Value5
+		// Value7
 		const auto* v = static_cast<QVector<double>*>(dc.at(5));
 		QCOMPARE(v->length(), 3);
 		QCOMPARE(v->at(0), 0.);
-		QCOMPARE(v->at(1), 32.);
-		QCOMPARE(v->at(2), 51.);
+		QCOMPARE(v->at(1), 0.);
+		QCOMPARE(v->at(2), 0.);
 	}
 
 	{
-		// Value6
+		// Value4
 		const auto* v = static_cast<QVector<double>*>(dc.at(6));
-		QCOMPARE(v->length(), 3);
-		QCOMPARE(v->at(0), 2.);
-		QCOMPARE(v->at(1), 3.);
-		QCOMPARE(v->at(2), 3.);
-	}
-
-	{
-		// Value7
-		const auto* v = static_cast<QVector<double>*>(dc.at(7));
 		QCOMPARE(v->length(), 3);
 		QCOMPARE(v->at(0), 0.);
 		QCOMPARE(v->at(1), 0.);
 		QCOMPARE(v->at(2), 0.);
+	}
+
+	{
+		// Value1
+		const auto* v = static_cast<QVector<double>*>(dc.at(7));
+		QCOMPARE(v->length(), 3);
+		QCOMPARE(v->at(0), 0.);
+		QCOMPARE(v->at(1), 47.);
+		QCOMPARE(v->at(2), 57.);
 	}
 }
 
@@ -717,12 +605,25 @@ BO_ 541 MSG2: 8 Vector__XXX
 	}
 
 	{
-		// Msg1Sig1
+		// Msg1Sig6
 		const auto* c = s.column(1);
-		QCOMPARE(c->name(), QStringLiteral("Value1_Km/h"));
+		QCOMPARE(c->name(), QStringLiteral("Value6_"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{0., std::nan("0"), 47., 57., std::nan("0")};
+		QVector<double> refData{2., std::nan("0"), 3., 3., std::nan("0")};
+		QCOMPARE(refData.size(), 5);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
+
+	{
+		// Msg1Sig5
+		const auto* c = s.column(2);
+		QCOMPARE(c->name(), QStringLiteral("Value5_%"));
+		QCOMPARE(c->rowCount(), 5);
+
+		QVector<double> refData{0., std::nan("0"), 32., 51., std::nan("0")};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			QCOMPARE(c->valueAt(i), refData.at(i));
@@ -731,7 +632,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 
 	{
 		// Msg1Sig2
-		const auto* c = s.column(2);
+		const auto* c = s.column(3);
 		QCOMPARE(c->name(), QStringLiteral("Value2_"));
 		QCOMPARE(c->rowCount(), 5);
 
@@ -744,7 +645,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 
 	{
 		// Msg1Sig3
-		const auto* c = s.column(3);
+		const auto* c = s.column(4);
 		QCOMPARE(c->name(), QStringLiteral("Value3_"));
 		QCOMPARE(c->rowCount(), 5);
 
@@ -756,47 +657,8 @@ BO_ 541 MSG2: 8 Vector__XXX
 	}
 
 	{
-		// Msg12Sig4
-		const auto* c = s.column(4);
-		QCOMPARE(c->name(), QStringLiteral("Value4_"));
-		QCOMPARE(c->rowCount(), 5);
-
-		QVector<double> refData{0., std::nan("0"), 0., 0., std::nan("0")};
-		QCOMPARE(refData.size(), 5);
-		for (int i = 0; i < c->rowCount(); i++) {
-			QCOMPARE(c->valueAt(i), refData.at(i));
-		}
-	}
-
-	{
-		// Msg1Sig5
-		const auto* c = s.column(5);
-		QCOMPARE(c->name(), QStringLiteral("Value5_%"));
-		QCOMPARE(c->rowCount(), 5);
-
-		QVector<double> refData{0., std::nan("0"), 32., 51., std::nan("0")};
-		QCOMPARE(refData.size(), 5);
-		for (int i = 0; i < c->rowCount(); i++) {
-			QCOMPARE(c->valueAt(i), refData.at(i));
-		}
-	}
-
-	{
-		// Msg1Sig6
-		const auto* c = s.column(6);
-		QCOMPARE(c->name(), QStringLiteral("Value6_"));
-		QCOMPARE(c->rowCount(), 5);
-
-		QVector<double> refData{2., std::nan("0"), 3., 3., std::nan("0")};
-		QCOMPARE(refData.size(), 5);
-		for (int i = 0; i < c->rowCount(); i++) {
-			QCOMPARE(c->valueAt(i), refData.at(i));
-		}
-	}
-
-	{
 		// Msg1Sig7
-		const auto* c = s.column(7);
+		const auto* c = s.column(5);
 		QCOMPARE(c->name(), QStringLiteral("Value7_"));
 		QCOMPARE(c->rowCount(), 5);
 
@@ -808,12 +670,38 @@ BO_ 541 MSG2: 8 Vector__XXX
 	}
 
 	{
-		// Msg2Sig1
-		const auto* c = s.column(8);
-		QCOMPARE(c->name(), QStringLiteral("MSG2Value1_%"));
+		// Msg12Sig4
+		const auto* c = s.column(6);
+		QCOMPARE(c->name(), QStringLiteral("Value4_"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{std::nan("0"), 99.91, std::nan("0"), std::nan("0"), 99.91};
+		QVector<double> refData{0., std::nan("0"), 0., 0., std::nan("0")};
+		QCOMPARE(refData.size(), 5);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
+
+	{
+		// Msg1Sig1
+		const auto* c = s.column(7);
+		QCOMPARE(c->name(), QStringLiteral("Value1_Km/h"));
+		QCOMPARE(c->rowCount(), 5);
+
+		QVector<double> refData{0., std::nan("0"), 47., 57., std::nan("0")};
+		QCOMPARE(refData.size(), 5);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
+
+	{
+		// Msg2Sig4
+		const auto* c = s.column(8);
+		QCOMPARE(c->name(), QStringLiteral("MSG2Value4_C"));
+		QCOMPARE(c->rowCount(), 5);
+
+		QVector<double> refData{std::nan("0"), 22.2, std::nan("0"), std::nan("0"), 22.2};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			VALUES_EQUAL(c->valueAt(i), refData.at(i));
@@ -821,12 +709,12 @@ BO_ 541 MSG2: 8 Vector__XXX
 	}
 
 	{
-		// Msg2Sig2
+		// Msg2Sig1
 		const auto* c = s.column(9);
-		QCOMPARE(c->name(), QStringLiteral("MSG2Value2_%"));
+		QCOMPARE(c->name(), QStringLiteral("MSG2Value1_%"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{std::nan("0"), 85.66, std::nan("0"), std::nan("0"), 85.66};
+		QVector<double> refData{std::nan("0"), 99.91, std::nan("0"), std::nan("0"), 99.91};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			VALUES_EQUAL(c->valueAt(i), refData.at(i));
@@ -847,12 +735,12 @@ BO_ 541 MSG2: 8 Vector__XXX
 	}
 
 	{
-		// Msg2Sig4
+		// Msg2Sig2
 		const auto* c = s.column(11);
-		QCOMPARE(c->name(), QStringLiteral("MSG2Value4_C"));
+		QCOMPARE(c->name(), QStringLiteral("MSG2Value2_%"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{std::nan("0"), 22.2, std::nan("0"), std::nan("0"), 22.2};
+		QVector<double> refData{std::nan("0"), 85.66, std::nan("0"), std::nan("0"), 85.66};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			VALUES_EQUAL(c->valueAt(i), refData.at(i));
@@ -918,12 +806,25 @@ BO_ 541 MSG2: 8 Vector__XXX
 	}
 
 	{
-		// Msg1Sig1
+		// Msg1Sig6
 		const auto* c = s.column(1);
-		QCOMPARE(c->name(), QStringLiteral("Value1_Km/h"));
+		QCOMPARE(c->name(), QStringLiteral("Value6_"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{0., 0., 47., 57., 57.};
+		QVector<double> refData{2., 2., 3., 3., 3.};
+		QCOMPARE(refData.size(), 5);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
+
+	{
+		// Msg1Sig5
+		const auto* c = s.column(2);
+		QCOMPARE(c->name(), QStringLiteral("Value5_%"));
+		QCOMPARE(c->rowCount(), 5);
+
+		QVector<double> refData{0., 0., 32., 51., 51.};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			QCOMPARE(c->valueAt(i), refData.at(i));
@@ -932,7 +833,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 
 	{
 		// Msg1Sig2
-		const auto* c = s.column(2);
+		const auto* c = s.column(3);
 		QCOMPARE(c->name(), QStringLiteral("Value2_"));
 		QCOMPARE(c->rowCount(), 5);
 
@@ -945,7 +846,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 
 	{
 		// Msg1Sig3
-		const auto* c = s.column(3);
+		const auto* c = s.column(4);
 		QCOMPARE(c->name(), QStringLiteral("Value3_"));
 		QCOMPARE(c->rowCount(), 5);
 
@@ -957,47 +858,8 @@ BO_ 541 MSG2: 8 Vector__XXX
 	}
 
 	{
-		// Msg12Sig4
-		const auto* c = s.column(4);
-		QCOMPARE(c->name(), QStringLiteral("Value4_"));
-		QCOMPARE(c->rowCount(), 5);
-
-		QVector<double> refData{0., 0., 0., 0., 0.};
-		QCOMPARE(refData.size(), 5);
-		for (int i = 0; i < c->rowCount(); i++) {
-			QCOMPARE(c->valueAt(i), refData.at(i));
-		}
-	}
-
-	{
-		// Msg1Sig5
-		const auto* c = s.column(5);
-		QCOMPARE(c->name(), QStringLiteral("Value5_%"));
-		QCOMPARE(c->rowCount(), 5);
-
-		QVector<double> refData{0., 0., 32., 51., 51.};
-		QCOMPARE(refData.size(), 5);
-		for (int i = 0; i < c->rowCount(); i++) {
-			QCOMPARE(c->valueAt(i), refData.at(i));
-		}
-	}
-
-	{
-		// Msg1Sig6
-		const auto* c = s.column(6);
-		QCOMPARE(c->name(), QStringLiteral("Value6_"));
-		QCOMPARE(c->rowCount(), 5);
-
-		QVector<double> refData{2., 2., 3., 3., 3.};
-		QCOMPARE(refData.size(), 5);
-		for (int i = 0; i < c->rowCount(); i++) {
-			QCOMPARE(c->valueAt(i), refData.at(i));
-		}
-	}
-
-	{
 		// Msg1Sig7
-		const auto* c = s.column(7);
+		const auto* c = s.column(5);
 		QCOMPARE(c->name(), QStringLiteral("Value7_"));
 		QCOMPARE(c->rowCount(), 5);
 
@@ -1009,12 +871,38 @@ BO_ 541 MSG2: 8 Vector__XXX
 	}
 
 	{
-		// Msg2Sig1
-		const auto* c = s.column(8);
-		QCOMPARE(c->name(), QStringLiteral("MSG2Value1_%"));
+		// Msg12Sig4
+		const auto* c = s.column(6);
+		QCOMPARE(c->name(), QStringLiteral("Value4_"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{0., 99.91, 99.91, 99.91, 99.91};
+		QVector<double> refData{0., 0., 0., 0., 0.};
+		QCOMPARE(refData.size(), 5);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
+
+	{
+		// Msg1Sig1
+		const auto* c = s.column(7);
+		QCOMPARE(c->name(), QStringLiteral("Value1_Km/h"));
+		QCOMPARE(c->rowCount(), 5);
+
+		QVector<double> refData{0., 0., 47., 57., 57.};
+		QCOMPARE(refData.size(), 5);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
+
+	{
+		// Msg2Sig4
+		const auto* c = s.column(8);
+		QCOMPARE(c->name(), QStringLiteral("MSG2Value4_C"));
+		QCOMPARE(c->rowCount(), 5);
+
+		QVector<double> refData{0., 22.2, 22.2, 22.2, 22.2};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			VALUES_EQUAL(c->valueAt(i), refData.at(i));
@@ -1022,12 +910,12 @@ BO_ 541 MSG2: 8 Vector__XXX
 	}
 
 	{
-		// Msg2Sig2
+		// Msg2Sig1
 		const auto* c = s.column(9);
-		QCOMPARE(c->name(), QStringLiteral("MSG2Value2_%"));
+		QCOMPARE(c->name(), QStringLiteral("MSG2Value1_%"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{0., 85.66, 85.66, 85.66, 85.66};
+		QVector<double> refData{0., 99.91, 99.91, 99.91, 99.91};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			VALUES_EQUAL(c->valueAt(i), refData.at(i));
@@ -1048,12 +936,12 @@ BO_ 541 MSG2: 8 Vector__XXX
 	}
 
 	{
-		// Msg2Sig4
+		// Msg2Sig2
 		const auto* c = s.column(11);
-		QCOMPARE(c->name(), QStringLiteral("MSG2Value4_C"));
+		QCOMPARE(c->name(), QStringLiteral("MSG2Value2_%"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{0., 22.2, 22.2, 22.2, 22.2};
+		QVector<double> refData{0., 85.66, 85.66, 85.66, 85.66};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			VALUES_EQUAL(c->valueAt(i), refData.at(i));

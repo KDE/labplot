@@ -17,13 +17,13 @@ public:
 		ErrorMessageToLong = -3,
 		ErrorDBCParserUnsupported = -4,
 		ErrorUnknownID = -5,
+		ErrorInvalidConversion,
 	};
 
 	bool isValid();
 	bool parseFile(const QString& filename);
 
 	ParseStatus parseMessage(const uint32_t id, const std::vector<uint8_t>& data, std::vector<double>& out);
-	ParseStatus parseMessage(const uint32_t id, const std::array<uint8_t, 8>& data, std::vector<double>& out);
 
 	/*!
 	 * \brief numberSignals

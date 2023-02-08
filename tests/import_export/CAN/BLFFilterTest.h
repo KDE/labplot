@@ -32,8 +32,6 @@ private Q_SLOTS:
 	void testValidBLFValidDBCSingleMessageBigEndian();
 	void testUsePreviousValueBigEndian();
 	void testUseNANBigEndian();
-	void testUndefinedMessagePreviousValueBigEndian();
-	void testUndefinedMessageNANBigEndian();
 
 	void testUseNANLittleEndian();
 	void testUsePreviousValueLittleEndian();
