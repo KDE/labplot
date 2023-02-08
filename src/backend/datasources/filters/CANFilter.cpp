@@ -50,6 +50,10 @@ void CANFilter::saveFilterSettings(const QString& /*filterName*/) const {
 
 ///////////////////////////////////////////////////////////////////////
 
+QStringList CANFilter::lastErrors() {
+	return d->lastErrors();
+}
+
 QStringList CANFilter::vectorNames() const {
 	return d->vectorNames;
 }

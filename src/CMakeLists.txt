@@ -48,6 +48,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportErrorDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportProjectDialog.cpp
@@ -177,6 +178,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/ImportErrorDialog.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importprojectwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/matiooptionswidget.ui

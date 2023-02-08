@@ -41,6 +41,8 @@ public:
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
+	virtual QStringList lastErrors() override;
+
 	QStringList vectorNames() const;
 	const QVector<AbstractColumn::ColumnMode> columnModes() const;
 

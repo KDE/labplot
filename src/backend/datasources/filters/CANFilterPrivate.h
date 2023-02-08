@@ -43,6 +43,7 @@ public:
 	bool setDBCFile(const QString& filename);
 
 	virtual bool isValid(const QString&) const = 0;
+	virtual QStringList lastErrors() const = 0;
 
 	const QVector<AbstractColumn::ColumnMode> columnModes();
 

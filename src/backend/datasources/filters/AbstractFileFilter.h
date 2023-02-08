@@ -46,6 +46,8 @@ public:
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) = 0;
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
+	virtual QStringList lastErrors();
+
 	virtual void loadFilterSettings(const QString& filterName) = 0;
 	virtual void saveFilterSettings(const QString& filterName) const = 0;
 
