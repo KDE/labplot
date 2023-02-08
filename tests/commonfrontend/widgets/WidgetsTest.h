@@ -28,14 +28,13 @@ private Q_SLOTS:
 	void numberSpinBoxEnterNumber();
 	void numberSpinBoxFeedback();
 	void numberSpinBoxFeedback2();
-	/*	void numberSpinBoxFeedbackCursorPosition();
-		void numberSpinBoxFeedbackCursorPosition2();
-		void numberSpinBoxDecimals2();
-		void numberSpinBoxScrollingNegToPos();
-		void numberSpinBoxScrollingNegToPos2();
-		void numberSpinBoxScrollingNegativeValues();
-		void numberSpinBoxMinimumFeedback();
-		void numberSpinBoxDecimalsMinMax();
-	*/
+    void numberSpinBoxFeedbackCursorPosition();
+    void numberSpinBoxFeedbackCursorPosition2();
+    void numberSpinBoxDecimals2();
+    void numberSpinBoxScrollingNegToPos();
+    void numberSpinBoxScrollingNegToPos2();
+    void numberSpinBoxScrollingNegativeValues();
+    void numberSpinBoxMinimumFeedback();
+    void numberSpinBoxDecimalsMinMax();
 };
 #endif // WIDGETSTEST_H

@@ -11,6 +11,9 @@
 
 #include <QDoubleSpinBox>
 
+class EquationHighlighter;
+class QCompleter;
+
 class NumberSpinBox : public QDoubleSpinBox {
 	Q_OBJECT
 
@@ -32,7 +35,8 @@ public:
 	};
 
 	enum class Errors {
-		NoError,
+        NoErrorNumeric,
+        NoErrorExpression,
 		NoNumber,
 		Invalid,
 		Min, // value smaller than min
@@ -75,13 +79,18 @@ private:
 	virtual QString textFromValue(double value) const override;
 	virtual double valueFromText(const QString&) const override;
 	QAbstractSpinBox::StepEnabled stepEnabled() const override;
-	virtual QValidator::State validate(QString& input, int& pos) const override;
-	Errors validate(QString& input, double& value, QString& valueStr) const;
+    virtual QValidator::State validate(QString& input, int& pos) const override;
+    Errors validate(QString& input, double& value, QString& valueStr) const;
 	void setText(const QString&);
+
+    bool error(Errors e) const;
 
 	void increaseValue();
 	void decreaseValue();
 	void valueChanged();
+
+    bool validateExpression(const QString &text, bool force) const;
+    void insertCompletion(const QString& completion);
 
 private:
 	QString m_valueStr;
@@ -89,6 +98,7 @@ private:
 	// for explanation of the feature
 	bool m_feedback{true}; // defines if the spinbox expects a feedback
 	bool m_waitFeedback{false};
+	bool m_expression{false}; // If the text is an expression or a pure number
 
 	bool m_strongFocus{true};
 
@@ -97,6 +107,11 @@ private:
 	double m_value{0};
 	double m_maximum{std::numeric_limits<double>::max()};
 	double m_minimum{std::numeric_limits<double>::lowest()};
+
+    // Everything related to expression handling
+    EquationHighlighter* m_highlighter{nullptr};
+    QCompleter* m_completer{nullptr};
+    QString m_currentExpression;
 
 	friend class WidgetsTest;
 };

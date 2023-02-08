@@ -9,6 +9,8 @@
 #include "NumberSpinBox.h"
 
 #include "backend/lib/macrosWarningStyle.h"
+#include "backend/gsl/ExpressionParser.h"
+#include "tools/EquationHighlighter.h"
 
 #include "klocalizedstring.h"
 
@@ -19,6 +21,7 @@
 #include <QLocale>
 #include <QString>
 #include <QStringRef>
+#include <QCompleter>
 
 #include <cmath>
 #include <limits>
@@ -42,8 +45,54 @@ void NumberSpinBox::init(double initValue, bool feedback) {
 	setFocusPolicy(Qt::StrongFocus);
 	setValue(initValue);
 	m_feedback = feedback; // must be after setValue()!
-	setInvalid(Errors::NoError);
+    setInvalid(Errors::NoErrorNumeric);
 	setDecimals(2);
+
+    //m_highlighter = new EquationHighlighter(this);
+
+    QStringList list = ExpressionParser::getInstance()->functions();
+    // append description
+    for (auto& s : list)
+        s.append(ExpressionParser::functionArgumentString(s, XYEquationCurve::EquationType::Cartesian) + QStringLiteral(" - ")
+                 + ExpressionParser::getInstance()->functionDescription(s));
+    QStringList constants = ExpressionParser::getInstance()->constants();
+    for (auto& s : constants) {
+        if (s != QLatin1String("..."))
+            s.append(QStringLiteral(" - ") + ExpressionParser::getInstance()->constantDescription(s));
+    }
+    list.append(constants);
+
+    //setTabChangesFocus(true);
+
+    m_completer = new QCompleter(list, this);
+    m_completer->setWidget(this);
+    m_completer->setCompletionMode(QCompleter::PopupCompletion);
+
+    connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &NumberSpinBox::insertCompletion);
+//    connect(this, &ExpressionTextEdit::textChanged, this, [=]() {
+//        validateExpression();
+//    });
+    connect(this->lineEdit(), &QLineEdit::cursorPositionChanged, m_highlighter, &EquationHighlighter::rehighlight);
+}
+
+void NumberSpinBox::insertCompletion(const QString& completion) {
+//    QTextCursor tc{lineEdit()->cursorPosition()};
+
+//    // remove description
+    int nameLength = completion.indexOf(QLatin1String(" - "));
+    QString name = completion;
+    name.truncate(nameLength);
+
+    int extra = name.length() - m_completer->completionPrefix().length();
+//    tc.movePosition(QTextCursor::Left);
+//    tc.movePosition(QTextCursor::EndOfWord);
+//    tc.insertText(name.right(extra));
+//    setTextCursor(tc);
+    const int cp = lineEdit()->cursorPosition();
+    if (cp > 0)
+        lineEdit()->setCursorPosition(cp - 1);
+    lineEdit()->cursorWordForward(false);
+    lineEdit()->insert(name.right(extra));
 }
 
 QString NumberSpinBox::errorToString(Errors e) {
@@ -56,38 +105,45 @@ QString NumberSpinBox::errorToString(Errors e) {
 		return i18n("The value does not represent a valid number");
 	case Errors::NoNumber:
 		return i18n("No number entered");
-	case Errors::NoError:
+    case Errors::NoErrorNumeric:
+        // Fall through
+    case Errors::NoErrorExpression:
 		return {};
 	}
 	return i18n("Unhandled error");
 }
 
 void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
-	switch (event->key()) {
-	case Qt::Key_Down:
-		decreaseValue();
-		return;
-	case Qt::Key_Up:
-		increaseValue();
-		return;
-	default:
+	if (!m_expression) {
+		switch (event->key()) {
+		case Qt::Key_Down:
+			decreaseValue();
+			return;
+		case Qt::Key_Up:
+			increaseValue();
+			return;
+		default:
+			QDoubleSpinBox::keyPressEvent(event);
+			break;
+		}
+	} else
 		QDoubleSpinBox::keyPressEvent(event);
-		break;
-	}
 	QString text = lineEdit()->text();
 	double v;
 	QString valueStr;
 	Errors e = validate(text, v, valueStr);
 	setInvalid(e);
-	if (e == Errors::NoError && v != m_value && m_valueStr != valueStr) {
+    if (!error(e) && v != m_value && m_valueStr != valueStr) {
 		m_valueStr = valueStr;
 		m_value = v;
+        m_expression = e == Errors::NoErrorExpression;
+        //convertToUnifiedLocale(valueStr);
 		valueChanged();
 	}
 }
 
 void NumberSpinBox::wheelEvent(QWheelEvent* event) {
-	if (m_strongFocus && !hasFocus())
+	if ((m_strongFocus && !hasFocus()) || m_expression)
 		event->ignore();
 	else
 		QDoubleSpinBox::wheelEvent(event);
@@ -97,8 +153,8 @@ void NumberSpinBox::stepBy(int steps) {
 	// used when scrolling
 	Errors e = step(steps);
 	if (e == Errors::Min || e == Errors::Max)
-		setInvalid(Errors::NoError);
-	else if (e == Errors::NoError) {
+        setInvalid(Errors::NoErrorNumeric);
+    else if (!error(e)) {
 		setInvalid(e);
 		valueChanged();
 	} else
@@ -259,7 +315,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 		cursorPos = end;
 
 	if (cursorPos == 0)
-		return Errors::NoError;
+        return Errors::NoErrorNumeric;
 
 	QString v_str = strip(lineEdit()->text());
 
@@ -280,7 +336,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	// cursor behind the exponent sign
 	if ((cursorPos == 1 && !p.integerSign.isNull()) || (comma >= 0 && cursorPos - 1 == comma)
 		|| (exponentialIndex > 0 && (cursorPos - 1 == exponentialIndex || (cursorPos - 1 == exponentialIndex + 1 && !p.exponentSign.isNull()))))
-		return Errors::NoError;
+        return Errors::NoErrorNumeric;
 
 	bool before_comma = comma >= 0 && cursorPos - 1 < comma;
 	bool before_exponent = exponentialIndex >= 0 && cursorPos - 1 < exponentialIndex;
@@ -355,7 +411,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	lineEdit()->setCursorPosition(newPos + prefix().size());
 
 	m_value = v;
-	return Errors::NoError;
+    return Errors::NoErrorNumeric;
 }
 
 NumberSpinBox::Errors NumberSpinBox::validate(QString& input, double& value, QString& valueStr) const {
@@ -365,17 +421,44 @@ NumberSpinBox::Errors NumberSpinBox::validate(QString& input, double& value, QSt
 	NumberProperties p;
 	bool ok;
 	value = locale().toDouble(valueStr, &ok);
-	if (!ok)
-		return Errors::Invalid;
-	if (!properties(valueStr, p))
-		return Errors::Invalid;
+    bool expressionValid = false;
+    if (!ok) {
+        // might be an expression
+        ExpressionParser* parser = ExpressionParser::getInstance();
+        if (!parser->evaluateCartesian(valueStr, value))
+            return Errors::Invalid;
+        expressionValid = true;
+    } else {
+        if (!properties(valueStr, p))
+            return Errors::Invalid;
+    }
 
 	if (value > maximum())
 		return Errors::Max;
 
 	if (value < minimum())
 		return Errors::Min;
-	return Errors::NoError;
+
+    if (expressionValid)
+        return Errors::NoErrorExpression;
+    return Errors::NoErrorNumeric;
+}
+
+/*!
+ * \brief Validates the current expression if the text was changed and highlights the text field if the expression is invalid.
+ * \param force forces the validation and highlighting when no text changes were made, used when new parameters/variables were provided
+ */
+bool NumberSpinBox::validateExpression(const QString& text, bool force)  const {
+    // check whether the expression was changed or only the formatting
+    bool textChanged{(text != m_currentExpression) ? true : false};
+    bool valid = false;
+    if (textChanged || force) {
+        valid = ExpressionParser::getInstance()->isValid(text, {});
+        //m_currentExpression = text;
+    }
+//    if (textChanged)
+//        Q_EMIT expressionChanged();
+    return valid;
 }
 
 /*!
@@ -389,8 +472,9 @@ QValidator::State NumberSpinBox::validate(QString& input, int& pos) const {
 	Q_UNUSED(pos);
 	double value;
 	QString valueStr;
-	const auto e = validate(input, value, valueStr);
-	return e == Errors::NoError ? QValidator::State::Acceptable : QValidator::State::Intermediate;
+    const auto e = validate(input, value, valueStr);
+    // Needed because when loosing focus the lineEdit() would reset to the previous value
+    return !error(e) ? QValidator::State::Acceptable : QValidator::State::Intermediate;
 }
 
 void NumberSpinBox::setText(const QString& text) {
@@ -475,4 +559,10 @@ void NumberSpinBox::setInvalid(const QString& str) {
 
 void NumberSpinBox::setInvalid(Errors e) {
 	setInvalid(errorToString(e));
+}
+
+bool NumberSpinBox::error(Errors e) const {
+    if (e != Errors::NoErrorExpression && e != Errors::NoErrorNumeric)
+        return true;
+    return false;
 }

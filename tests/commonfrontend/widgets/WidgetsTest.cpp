@@ -725,7 +725,7 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, QString());
 	sb.keyPressEvent(&event);
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 2);
-	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+    QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoErrorNumeric));
 	QCOMPARE(sb.value(), 51);
 	QCOMPARE(valueChangedCounter, 1);
 
@@ -733,7 +733,7 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, QString());
 	sb.keyPressEvent(&event);
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
-	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+    QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoErrorNumeric));
 	QCOMPARE(sb.value(), 5);
 	QCOMPARE(valueChangedCounter, 2);
 
@@ -761,7 +761,7 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 	sb.keyPressEvent(&event);
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 2);
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-5"));
-	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+    QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoErrorNumeric));
 	QCOMPARE(sb.value(), -5);
 	QCOMPARE(valueChangedCounter, 3);
 
@@ -788,7 +788,7 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 	sb.keyPressEvent(&event);
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 5);
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-5e-3"));
-	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+    QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoErrorNumeric));
 	QCOMPARE(sb.value(), -5e-3);
 	QCOMPARE(valueChangedCounter, 4);
 }
@@ -824,7 +824,7 @@ void WidgetsTest::numberSpinBoxFeedback() {
 	sb.keyPressEvent(&event);
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(lastValue, 6);
-	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+    QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoErrorNumeric));
 	QCOMPARE(sb.m_waitFeedback, false);
 
 	sb.keyPressEvent(&event);
@@ -836,7 +836,7 @@ void WidgetsTest::numberSpinBoxFeedback() {
 	sb.keyPressEvent(&event);
 	QCOMPARE(valueChangedCounter, 3);
 	QCOMPARE(lastValue, 8);
-	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+    QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoErrorNumeric));
 	QCOMPARE(sb.m_waitFeedback, false);
 }
 
@@ -862,7 +862,7 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", 5));
 }
-/*
+
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 	NumberSpinBox sb(5.11);
 	sb.setFeedback(true);
@@ -1067,6 +1067,6 @@ void WidgetsTest::numberSpinBoxDecimalsMinMax() {
 	sb.setMinimum(1.289343892e-15);
 	QCOMPARE(sb.minimum(), 1.289343892e-15); // not rounded!
 }
-*/
+
 
 QTEST_MAIN(WidgetsTest)
