@@ -613,6 +613,13 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		break;
 	}
 
+	tw->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeMode::ResizeToContents); // Autoscale
+	tw->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::ResizeToContents); // Format
+	tw->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeMode::Stretch); // Start
+	tw->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeMode::Stretch); // End
+	tw->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeMode::ResizeToContents); // Scale
+	tw->horizontalHeader()->setStretchLastSection(false);
+
 	const int rangeCount = m_plot->rangeCount(dim);
 	DEBUG(Q_FUNC_INFO << ", " << dir_str.toStdString() << " range count = " << rangeCount)
 
@@ -641,6 +648,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 
 		// format
 		auto* cb = new ComboBoxIgnoreWheel(tw);
+		cb->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 		cb->setFrame(false);
 		cb->addItem(i18n("Numeric"));
 		cb->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::DateTime));
@@ -654,6 +662,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		// start/end (values set in updateLocale())
 		if (format == RangeT::Format::Numeric) {
 			auto* sb = new NumberSpinBox(tw);
+			sb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 			sb->setProperty("row", i);
 			sb->setFeedback(true);
 			sb->setValue(r.start());
@@ -662,6 +671,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 				this->minChanged(dim, sb->property("row").toInt(), value);
 			});
 			sb = new NumberSpinBox(tw);
+			sb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 			sb->setProperty("row", i);
 			sb->setFeedback(true);
 			sb->setValue(r.end());
@@ -671,6 +681,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 			});
 		} else {
 			auto* dte = new QDateTimeEdit(tw);
+			dte->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dim, i));
 			dte->setTimeSpec(Qt::UTC);
 			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(r.start(), Qt::UTC));
@@ -681,6 +692,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 				this->minDateTimeChanged(dte, dim, dateTime);
 			});
 			dte = new QDateTimeEdit(tw);
+			dte->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dim, i));
 			dte->setTimeSpec(Qt::UTC);
 			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(r.end(), Qt::UTC));
@@ -694,6 +706,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 
 		// scale
 		cb = new ComboBoxIgnoreWheel(tw);
+		cb->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 		cb->setFrame(false);
 		// TODO: -> updateLocale()
 		for (const auto& name : RangeT::scaleNames())
@@ -745,6 +758,10 @@ void CartesianPlotDock::updatePlotRangeList() {
 	else
 		ui.lPlotRanges->setText(i18n("Plot Range:"));
 	ui.twPlotRanges->setRowCount(cSystemCount);
+	ui.twPlotRanges->horizontalHeader()->setSectionResizeMode(TwPlotRangesColumn::XRange, QHeaderView::ResizeMode::Stretch);
+	ui.twPlotRanges->horizontalHeader()->setSectionResizeMode(TwPlotRangesColumn::YRange, QHeaderView::ResizeMode::Stretch);
+	ui.twPlotRanges->horizontalHeader()->setSectionResizeMode(TwPlotRangesColumn::Default, QHeaderView::ResizeMode::ResizeToContents);
+	ui.twPlotRanges->horizontalHeader()->setStretchLastSection(false);
 	for (int i = 0; i < cSystemCount; i++) {
 		const auto* cSystem{m_plot->coordinateSystem(i)};
 		const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
@@ -755,6 +772,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", auto scale = " << yRange.autoScale())
 
 		auto* cb = new ComboBoxIgnoreWheel(ui.twPlotRanges);
+		cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 		cb->setEditable(true); // to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
@@ -771,6 +789,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::XRange, cb);
 
 		cb = new ComboBoxIgnoreWheel(ui.twPlotRanges);
+		cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 		cb->setEditable(true); // to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
@@ -805,6 +824,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 	}
 	for (int i = 0; i < cSystemCount; i++) {
 		auto* rb = new QRadioButton();
+		rb->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 		if (i == m_plot->defaultCoordinateSystemIndex())
 			rb->setChecked(true);
 		m_bgDefaultPlotRange->addButton(rb);
