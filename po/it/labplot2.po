@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 00:54+0000\n"
-"PO-Revision-Date: 2023-01-16 08:24+0100\n"
+"PO-Revision-Date: 2023-02-04 07:52+0100\n"
 "Last-Translator: Paolo Zamponi <zapaolo@email.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -7274,10 +7274,9 @@ msgstr "Linea di riferimento"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:372
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1985
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgid "Reference Range"
-msgstr "Linea di riferimento"
+msgstr "Intervallo di riferimento"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:404
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:459
@@ -7805,22 +7804,19 @@ msgstr ""
 "più grande del valore minimo."
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
-#, fuzzy, kde-format
-#| msgid "Border"
+#, kde-format
 msgid "Border Line"
-msgstr "Bordo"
+msgstr "Linea del bordo"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: set logical position"
+#, kde-format
 msgid "%1: set start logical position"
-msgstr "%1: imposta la posizione logica"
+msgstr "%1: imposta la posizione logica iniziale"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:242
-#, fuzzy, kde-format
-#| msgid "%1: set logical position"
+#, kde-format
 msgid "%1: set end logical position"
-msgstr "%1: imposta la posizione logica"
+msgstr "%1: imposta la posizione logica finale"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:151
 #, kde-format
@@ -9244,10 +9240,9 @@ msgid "Fuzzy Matching"
 msgstr "Corrispondenza approssimata"
 
 #: src/commonfrontend/ProjectExplorer.cpp:886
-#, fuzzy, kde-format
-#| msgid "%1: set visible"
+#, kde-format
 msgid "%1 elements: set visible: %2"
-msgstr "%1: imposta visibile"
+msgstr "%1 elementi: imposta visibile: %2"
 
 #: src/commonfrontend/ProjectExplorer.cpp:910
 #, kde-format
@@ -9948,10 +9943,9 @@ msgid "Spreadsheet"
 msgstr "Foglio elettronico"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:157
-#, fuzzy, kde-format
-#| msgid "Auto fit:"
+#, kde-format
 msgid "No fit"
-msgstr "Adattamento automatico:"
+msgstr "Nessun adattamento"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:167
 #, kde-format
@@ -10490,12 +10484,12 @@ msgstr ""
 #: src/kdefrontend/datasources/CANOptionsWidget.cpp:13
 #, kde-format
 msgid "Use NAN"
-msgstr ""
+msgstr "Usa NAN"
 
 #: src/kdefrontend/datasources/CANOptionsWidget.cpp:14
 #, kde-format
 msgid "Use previous value"
-msgstr ""
+msgstr "Usa il valore precedente"
 
 #: src/kdefrontend/datasources/DatabaseManagerDialog.cpp:30
 #, kde-format
@@ -11046,11 +11040,10 @@ msgid "Select the File Data Source"
 msgstr "Seleziona la fonte dati file"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:909
-#, fuzzy, kde-format
-#| msgid "Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
-msgstr "Seleziona il file dell'immagine"
+msgstr "Seleziona il file DBC"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1032
 #, kde-format
@@ -13330,11 +13323,10 @@ msgid "Reference Line"
 msgstr "Linea di riferimento"
 
 #: src/kdefrontend/GuiObserver.cpp:380
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
-msgstr "Linea di riferimento"
+msgstr "Intervallo di riferimento"
 
 #: src/kdefrontend/GuiObserver.cpp:385
 #, kde-format
@@ -14915,10 +14907,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:175
-#, fuzzy, kde-format
-#| msgid "Number of bins to preview:"
+#, kde-format
 msgid "Number of iterations to perform."
-msgstr "Numero di contenitori da visualizzare:"
+msgstr "Numero di iterazioni da eseguire."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:514
 #, kde-format
@@ -14936,10 +14927,9 @@ msgid "result"
 msgstr "risultato"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:611
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Ratio: %1"
-msgstr "Rotazione:"
+msgstr "Rapporto: %1"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:655
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:662
@@ -15219,10 +15209,9 @@ msgid "FITS files (*.fits *.fit *.fts)"
 msgstr "File FITS (*.fits *.fit *.fts)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:365
-#, fuzzy, kde-format
-#| msgid "Excel 2007+ (XSLX)"
+#, kde-format
 msgid "Excel 2007+ (*.xlsx)"
-msgstr "Excel 2007+ (XSLX)"
+msgstr "Excel 2007+ (*.xlsx)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:368
 #, kde-format
@@ -16722,17 +16711,15 @@ msgstr "Forma"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:25
-#, fuzzy, kde-format
-#| msgid "Import to"
+#, kde-format
 msgid "Import mode:"
-msgstr "Importa in"
+msgstr "Modalità d'importazione:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:32
-#, fuzzy, kde-format
-#| msgid "Convert NaN to 0"
+#, kde-format
 msgid "Convert time to seconds"
-msgstr "Converti NaN in 0"
+msgstr "Converti il tempo in secondi"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:33
@@ -17100,10 +17087,9 @@ msgstr "Fonte:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:371
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "DBC Database"
-msgstr "Banca dati"
+msgstr "Banca dati DBC"
 
 #. i18n: ectx: property (text), widget (QLabel, lWarningLimitedMessages)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:547
@@ -17111,6 +17097,8 @@ msgstr "Banca dati"
 msgid ""
 "Not all variables might be visible, because of limited number of messages"
 msgstr ""
+"A causa del numero limitato di messaggi, alcune variabili potrebbero non "
+"essere visibili"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartRow)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:567

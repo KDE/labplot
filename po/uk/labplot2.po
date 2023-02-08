@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 00:54+0000\n"
-"PO-Revision-Date: 2023-02-04 08:24+0200\n"
+"PO-Revision-Date: 2023-02-07 15:01+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -15175,7 +15175,7 @@ msgstr "Крок"
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:435
 #, kde-format
 msgid "Not enough memory to perform this operation."
-msgstr ""
+msgstr "Недостатньо пам'яті для виконання цієї дії."
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:183
 #, kde-format

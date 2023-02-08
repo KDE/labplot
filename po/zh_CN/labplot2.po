@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 00:54+0000\n"
-"PO-Revision-Date: 2023-01-12 10:31\n"
+"PO-Revision-Date: 2023-02-07 11:02\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -7174,11 +7174,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:372
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1985
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgid "Reference Range"
-msgstr "首选项"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:404
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:459
@@ -7704,10 +7702,9 @@ msgid ""
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
-#, fuzzy, kde-format
-#| msgid "Border"
+#, kde-format
 msgid "Border Line"
-msgstr "边框"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:235
 #, kde-format
@@ -9308,10 +9305,9 @@ msgstr "反向"
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
-#, fuzzy, kde-format
-#| msgid "line"
+#, kde-format
 msgid "Subtract Baseline"
-msgstr "直线"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:353
 #, kde-format
@@ -11665,17 +11661,14 @@ msgid "Transparent"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:591
-#, fuzzy, kde-format
-#| msgid "%1: insert 1 column"
-#| msgid_plural "%1: insert %2 columns"
+#, kde-format
 msgid "%1: set axis color"
-msgstr "%1：插入 %2 列"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:593
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1 axes: set color"
-msgstr "%1：设定布局"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1967
 #, kde-format
@@ -12996,12 +12989,10 @@ msgid "Reference Line"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:380
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
-msgstr "首选项"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:385
 #, kde-format
@@ -14529,10 +14520,9 @@ msgid "Difference"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Baseline (arPLS Algorithm)"
-msgstr "常用对数(以 10 为底)"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:167
 #, kde-format
@@ -14569,10 +14559,9 @@ msgid "result"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:611
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Ratio: %1"
-msgstr "旋转："
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:655
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:662
@@ -16328,10 +16317,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:25
-#, fuzzy, kde-format
-#| msgid "Export to:"
+#, kde-format
 msgid "Import mode:"
-msgstr "导出到:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:32
@@ -16705,10 +16693,9 @@ msgstr "来源："
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:371
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "DBC Database"
-msgstr "数据库"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lWarningLimitedMessages)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:547
@@ -18498,19 +18485,17 @@ msgstr "创建时间："
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:46
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "Plot range:"
-msgstr "绘制区域"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:63
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:112
-#, fuzzy, kde-format
-#| msgid "Start:"
+#, kde-format
 msgid "Start x:"
-msgstr "开始："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeEnd)
 #. i18n: ectx: property (text), widget (QLabel, lPositionEnd)
@@ -20038,24 +20023,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:205
-#, fuzzy, kde-format
-#| msgid "Smooth"
+#, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "平滑"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:218
-#, fuzzy, kde-format
-#| msgid "Orientation:"
+#, kde-format
 msgid "Termination Ratio:"
-msgstr "方向："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:234
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Iterations:"
-msgstr "迭代"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
@@ -21165,8 +21147,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Weight:"
-#~ msgid "Weighting:"
-#~ msgstr "重量："

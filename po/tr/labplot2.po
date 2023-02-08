@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-07 00:54+0000\n"
-"PO-Revision-Date: 2023-02-04 10:51+0300\n"
+"PO-Revision-Date: 2023-02-07 20:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -15054,7 +15054,7 @@ msgstr "Artır"
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:435
 #, kde-format
 msgid "Not enough memory to perform this operation."
-msgstr ""
+msgstr "Bu işlemi gerçekleştirmek için yeterli bellek yok."
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:183
 #, kde-format
