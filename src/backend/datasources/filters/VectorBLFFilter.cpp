@@ -71,7 +71,10 @@ bool VectorBLFFilter::isValid(const QString& filename) {
 
 VectorBLFFilterPrivate::VectorBLFFilterPrivate(VectorBLFFilter* owner)
 	: CANFilterPrivate(owner)
-	, q(owner) {
+#ifdef HAVE_VECTOR_BLF
+	, q(owner)
+#endif
+{
 }
 
 bool VectorBLFFilterPrivate::isValid(const QString& filename) const {
