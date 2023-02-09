@@ -294,11 +294,11 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			} else {
 				const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
 				for (std::vector<double>::size_type i = 1; i < startIndex; i++)
-					m_DataContainer.setData<double>(i, message_index, 0);
+					m_DataContainer.setData<double>(i, message_index, std::nan("0"));
 				for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++)
 					m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
 				for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++)
-					m_DataContainer.setData<double>(i, message_index, 0);
+					m_DataContainer.setData<double>(i, message_index, std::nan("0"));
 				firstMessageValid = true;
 			}
 			message_index++;

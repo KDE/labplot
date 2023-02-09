@@ -271,7 +271,7 @@ BO_ 565 MSG2: 8 Vector__XXX
 		QCOMPARE(c->name(), QStringLiteral("MSG2Sig1_"));
 		QCOMPARE(c->rowCount(), 6);
 
-		QVector<double> refData{0, 24.5, 14.8, 14.8, 14.8, 14.8};
+		QVector<double> refData{std::nan(""), 24.5, 14.8, 14.8, 14.8, 14.8};
 		QCOMPARE(refData.size(), 6);
 		for (int i = 0; i < c->rowCount(); i++) {
 			QCOMPARE(c->valueAt(i), refData.at(i));
@@ -902,7 +902,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 		QCOMPARE(c->name(), QStringLiteral("MSG2Value4_C"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{0., 22.2, 22.2, 22.2, 22.2};
+		QVector<double> refData{std::nan(""), 22.2, 22.2, 22.2, 22.2};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			VALUES_EQUAL(c->valueAt(i), refData.at(i));
@@ -915,7 +915,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 		QCOMPARE(c->name(), QStringLiteral("MSG2Value1_%"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{0., 99.91, 99.91, 99.91, 99.91};
+		QVector<double> refData{std::nan(""), 99.91, 99.91, 99.91, 99.91};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			VALUES_EQUAL(c->valueAt(i), refData.at(i));
@@ -928,7 +928,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 		QCOMPARE(c->name(), QStringLiteral("MSG2Value3_%"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{0., 79.3, 79.3, 79.3, 79.3};
+		QVector<double> refData{std::nan(""), 79.3, 79.3, 79.3, 79.3};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			VALUES_EQUAL(c->valueAt(i), refData.at(i));
@@ -941,7 +941,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 		QCOMPARE(c->name(), QStringLiteral("MSG2Value2_%"));
 		QCOMPARE(c->rowCount(), 5);
 
-		QVector<double> refData{0., 85.66, 85.66, 85.66, 85.66};
+		QVector<double> refData{std::nan(""), 85.66, 85.66, 85.66, 85.66};
 		QCOMPARE(refData.size(), 5);
 		for (int i = 0; i < c->rowCount(); i++) {
 			VALUES_EQUAL(c->valueAt(i), refData.at(i));
