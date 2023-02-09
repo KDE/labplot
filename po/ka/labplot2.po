@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2023-01-06 12:53+0100\n"
+"PO-Revision-Date: 2023-02-08 11:33+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -482,7 +482,7 @@ msgstr "შექმნილია"
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:63
 #, kde-format
 msgid "Comment"
-msgstr "კომე_ნტარი"
+msgstr "კომენტარი"
 
 #: src/backend/core/AspectTreeModel.cpp:181
 #, kde-format
@@ -4989,7 +4989,7 @@ msgstr "FFT"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:238
 #, kde-format
 msgid "none"
-msgstr ""
+msgstr "არა"
 
 #: src/backend/nsl/nsl_conv.c:23
 #, kde-format
@@ -5963,7 +5963,7 @@ msgstr ""
 #: src/kdefrontend/ui/labelwidget.ui:584
 #, kde-format
 msgid "Visible"
-msgstr "_ხილული"
+msgstr "ხილული"
 
 #: src/backend/worksheet/Image.cpp:148
 #, kde-format
@@ -6795,7 +6795,7 @@ msgstr "არკტანგენსი"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:467
 #, kde-format
 msgid "Hyperbolic Tangent"
-msgstr ""
+msgstr "ჰიპერბოლური ტანგენსი"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:471
@@ -8205,7 +8205,7 @@ msgstr "მრუდები"
 #: src/backend/worksheet/WorksheetElement.cpp:51
 #, kde-format
 msgid "Drawing &order"
-msgstr ""
+msgstr "ხატვის მიმდევრობა"
 
 #: src/backend/worksheet/WorksheetElement.cpp:53
 #: src/backend/worksheet/WorksheetElement.cpp:216
@@ -8265,7 +8265,7 @@ msgstr "ძებნა"
 #: src/kdefrontend/datasources/ImportDialog.cpp:110
 #, kde-format
 msgid "Replace"
-msgstr "_გამოცვლა"
+msgstr "ჩანაცვლება"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:65
@@ -8402,27 +8402,27 @@ msgstr "ნავიგაცია"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:163
 #, kde-format
 msgid "Select and Zoom"
-msgstr ""
+msgstr "მონიშნეთ და გაადიდეთ"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:137
 #, kde-format
 msgid "Set Axis Points"
-msgstr ""
+msgstr "აირჩეთ ღერძის წერტილები"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:141
 #, kde-format
 msgid "Set Curve Points"
-msgstr ""
+msgstr "მრუდის წერტილების დაყენება"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:145
 #, kde-format
 msgid "Select Curve Segments"
-msgstr ""
+msgstr "აირჩიეთ მრუდის სეგმენტები"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:149
 #, kde-format
 msgid "New Curve"
-msgstr ""
+msgstr "ახალი მრუდი"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:151
 #, kde-format
@@ -8521,7 +8521,7 @@ msgstr ""
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:700
 #, kde-format
 msgid "%1: add new curve."
-msgstr ""
+msgstr "%1: ახალი მრუდის დამატება."
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:701
 #, kde-format
@@ -8595,7 +8595,7 @@ msgstr "მატრიცის გასუფთავება"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:259
 #, kde-format
 msgid "&Go to Cell..."
-msgstr ""
+msgstr "&უჯრედზე გადასვლა..."
 
 #: src/commonfrontend/matrix/MatrixView.cpp:143
 #, kde-format
@@ -8625,12 +8625,12 @@ msgstr "მნიშვნელობის გამოკლება"
 #: src/commonfrontend/matrix/MatrixView.cpp:151
 #, kde-format
 msgid "Multiply Value"
-msgstr ""
+msgstr "მნიშვნელობის გამრავლება"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:153
 #, kde-format
 msgid "Divide Value"
-msgstr ""
+msgstr "მნიშვნელობის გაყოფა"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:161
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:37
@@ -8882,8 +8882,8 @@ msgstr ""
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "მონიშნული ობიექტის წაშლა"
+msgstr[1] "მონიშნული ობიექტების წაშლა"
 
 #: src/commonfrontend/ProjectExplorer.cpp:875
 #, kde-format
@@ -8986,7 +8986,7 @@ msgstr ""
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:269
 #, kde-format
 msgid "Remove Columns"
-msgstr ""
+msgstr "სვეტების წაშლა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:270
 #, kde-format
@@ -8997,12 +8997,12 @@ msgstr "შემცველობის გასუფთავება"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1487
 #, kde-format
 msgid "Freeze Column"
-msgstr ""
+msgstr "სვეტების გაყინვა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:305
 #, kde-format
 msgid "Add"
-msgstr "_დამატება"
+msgstr "დამატება"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:307
 #, kde-format
@@ -9087,7 +9087,7 @@ msgstr "IQR-ზე გაყოფა"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:392
 #, kde-format
 msgid "&Selected Columns"
-msgstr ""
+msgstr "&მონიშნული სვეტები"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:393
 #, kde-format
@@ -9641,7 +9641,7 @@ msgstr "ბადე"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:489
 #, kde-format
 msgid "Cartesian Plot"
-msgstr ""
+msgstr "გრაფიკი დეკარტის კოორდნატებში"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:561
 #, kde-format
@@ -9807,12 +9807,12 @@ msgstr ""
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:28
 #, kde-format
 msgid "Little endian"
-msgstr ""
+msgstr "წვრილბოლოიანი"
 
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
 msgid "Big endian"
-msgstr ""
+msgstr "მსხვილბოლოიანი"
 
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:31
 #, kde-format
@@ -10023,7 +10023,7 @@ msgstr "ახალი ელცხრილი"
 #: src/kdefrontend/datasources/ImportDialog.cpp:52
 #, kde-format
 msgid "New Matrix"
-msgstr ""
+msgstr "ახალი მატრიცა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbImportTo)
 #: src/kdefrontend/datasources/ImportDialog.cpp:73
@@ -10759,12 +10759,12 @@ msgstr "MQTT შეერთებები  [შეცვლილია]"
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:41
 #, kde-format
 msgid "Add new MQTT connection"
-msgstr ""
+msgstr "ახალი MQTT მიერთების დამატება"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:42
 #, kde-format
 msgid "Remove selected MQTT connection"
-msgstr ""
+msgstr "მონიშნული MQTT შეერთების წაშლა"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:62
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:355
@@ -10833,12 +10833,12 @@ msgstr ""
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:40
 #, kde-format
 msgid "Subscribe selected topics"
-msgstr ""
+msgstr "არჩეული თემების გამოწერა"
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:42
 #, kde-format
 msgid "Unsubscribe selected topics"
-msgstr ""
+msgstr "არჩეული თემების გამოწერის გაუქმება"
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:48
 #, kde-format
@@ -10898,7 +10898,7 @@ msgstr "ხეები და კორტეჟები"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:317
 #, kde-format
 msgid "Histogram Data"
-msgstr ""
+msgstr "ჰისტოგრამის მონაცემები"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:92
 #, kde-format
@@ -11163,7 +11163,7 @@ msgstr "ჭდის გარეშე"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:436
 #, kde-format
 msgid "Position values"
-msgstr ""
+msgstr "მდებარეობის მნიშვნელობები"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:440
 #, kde-format
@@ -11193,12 +11193,12 @@ msgstr "2-ის ხარისხი"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:445
 #, kde-format
 msgid "Powers of e"
-msgstr ""
+msgstr "E-ის ხარისხი"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:446
 #, kde-format
 msgid "Multiples of π"
-msgstr ""
+msgstr "გამრავლებული π-ზე"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:450
 #, kde-format
@@ -11849,7 +11849,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:199
 #, kde-format
 msgid "By Number"
-msgstr ""
+msgstr "რიცხვით"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
 #, kde-format
@@ -11917,7 +11917,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:433
 #, kde-format
 msgid "Bars"
-msgstr ""
+msgstr "მართკუთხედები"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:226
 #, kde-format
@@ -12166,7 +12166,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:462
 #, kde-format
 msgid "Convolution"
-msgstr ""
+msgstr "კონვოლუცია"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:458
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:461
@@ -12177,12 +12177,12 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:498
 #, kde-format
 msgid "Convolution status: %1"
-msgstr ""
+msgstr "კონვოლუციის სტატუსი: %1"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:500
 #, kde-format
 msgid "Deconvolution status: %1"
-msgstr ""
+msgstr "დეკონვოლუციის სტატუსი: %1"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:535
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:433
@@ -12234,32 +12234,32 @@ msgstr "კორელაციის სტატუსი: %1"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:237
 #, kde-format
 msgid "Horiz. Start"
-msgstr ""
+msgstr "ჰორიზ. დასაწყისი"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:238
 #, kde-format
 msgid "Vert. Start"
-msgstr ""
+msgstr "ვერტ. დასაწყისი"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:239
 #, kde-format
 msgid "Horiz. Midpoint"
-msgstr ""
+msgstr "ჰორიზ. შუაწერტილი"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:240
 #, kde-format
 msgid "Vert. Midpoint"
-msgstr ""
+msgstr "ვერტ. შუაწერტილი"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:241
 #, kde-format
 msgid "2-segments"
-msgstr ""
+msgstr "2-სეგმენტი"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:242
 #, kde-format
 msgid "3-segments"
-msgstr ""
+msgstr "3-სეგმენტი"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:243
 #, kde-format
@@ -12508,7 +12508,7 @@ msgstr "დაწევა"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:151
 #, kde-format
 msgid "Upper"
-msgstr ""
+msgstr "ზედა რეგისტრში"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:185
 #, kde-format
@@ -12689,7 +12689,7 @@ msgstr "სამუშაო ფურცელი"
 #, kde-format
 msgctxt "@title:window"
 msgid "Cartesian Plot"
-msgstr ""
+msgstr "გრაფიკი დეკარტის კოორდნატებში"
 
 #: src/kdefrontend/GuiObserver.cpp:247
 #, kde-format
@@ -12864,7 +12864,7 @@ msgstr "საინფორმაციო ელემენტი"
 #, kde-format
 msgctxt "@title:window"
 msgid "MQTT Data Source"
-msgstr ""
+msgstr "MQTT მონაცემების წყარო"
 
 #: src/kdefrontend/GuiObserver.cpp:427
 #, kde-format
@@ -12922,22 +12922,22 @@ msgstr "ერთგვაროვანი"
 #: src/kdefrontend/GuiTools.cpp:146
 #, kde-format
 msgid "Extremely Dense"
-msgstr ""
+msgstr "უკიდურესად მკვრივი"
 
 #: src/kdefrontend/GuiTools.cpp:147
 #, kde-format
 msgid "Very Dense"
-msgstr ""
+msgstr "ძალიან მკვრივი"
 
 #: src/kdefrontend/GuiTools.cpp:147
 #, kde-format
 msgid "Somewhat Dense"
-msgstr ""
+msgstr "გარკვეულწილად მკვრივი"
 
 #: src/kdefrontend/GuiTools.cpp:147
 #, kde-format
 msgid "Half Dense"
-msgstr ""
+msgstr "ნახევრად მკვრივი"
 
 #: src/kdefrontend/GuiTools.cpp:148
 #, kde-format
@@ -13188,7 +13188,7 @@ msgstr "ექსპოტენციალური "
 #: src/kdefrontend/LabPlot.cpp:61
 #, kde-format
 msgid "Zero digit "
-msgstr ""
+msgstr "ნულოვანი ციფრი "
 
 #: src/kdefrontend/LabPlot.cpp:63
 #, kde-format
@@ -13729,7 +13729,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:784
 #, kde-format
 msgid "Window Visibility"
-msgstr ""
+msgstr "ფანჯრის ხილვადობა"
 
 #: src/kdefrontend/MainWin.cpp:808
 #, kde-format
@@ -13739,7 +13739,7 @@ msgstr "ფერების სქემა"
 #: src/kdefrontend/MainWin.cpp:855
 #, kde-format
 msgid "Configure CAS..."
-msgstr ""
+msgstr "CAS-ის მორგება..."
 
 #: src/kdefrontend/MainWin.cpp:890
 #, kde-format
@@ -13765,7 +13765,7 @@ msgstr "%1 შეიქმნა"
 #: src/kdefrontend/MainWin.cpp:1342
 #, kde-format
 msgid "Cantor Projects (*.cws)"
-msgstr ""
+msgstr "Cantor -ის პროექტები (*.cws)"
 
 #: src/kdefrontend/MainWin.cpp:1343
 #, kde-format
@@ -13805,7 +13805,7 @@ msgstr "%1-ის ჩატვირთვა..."
 #: src/kdefrontend/MainWin.cpp:1515
 #, kde-format
 msgid "Failed to open project"
-msgstr ""
+msgstr "პროექტის გახსნის შეცდომა"
 
 #: src/kdefrontend/MainWin.cpp:1434 src/kdefrontend/MainWin.cpp:1443
 #: src/kdefrontend/MainWin.cpp:1448 src/kdefrontend/MainWin.cpp:1499
@@ -13818,7 +13818,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:1515
 #, kde-format
 msgid "Failed to open the file '%1'."
-msgstr ""
+msgstr "ფაილის (\"%1\") გახსნის შეცდომა."
 
 #: src/kdefrontend/MainWin.cpp:1529
 #, kde-format
@@ -13858,7 +13858,7 @@ msgstr "პროექტი შენახულია"
 #: src/kdefrontend/MainWin.cpp:1726
 #, kde-format
 msgid "Couldn't save the file '%1'."
-msgstr ""
+msgstr "ფაილის (\"%1\") შენახვის შეცდომა."
 
 #: src/kdefrontend/MainWin.cpp:1731
 #, kde-format
@@ -14452,7 +14452,7 @@ msgstr[1] ""
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:73
 #, kde-format
 msgid "Export Spreadsheet"
-msgstr ""
+msgstr "ელცხრილის გატანა"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:74
 #, kde-format
@@ -14468,18 +14468,18 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Spreadsheet"
-msgstr ""
+msgstr "ელცხრილის გატანა"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Matrix"
-msgstr ""
+msgstr "მატრიცის გატანა"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:189
 #, kde-format
 msgid "Export matrix"
-msgstr ""
+msgstr "მატრიცის გატანა"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:277
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:179
@@ -15003,17 +15003,17 @@ msgstr "შენახვა"
 #: src/kdefrontend/TemplateHandler.cpp:135
 #, kde-format
 msgid "Save current properties as a template"
-msgstr ""
+msgstr "მიმდინარე თვისებების ნიმუშად შენახვა"
 
 #: src/kdefrontend/TemplateHandler.cpp:136
 #, kde-format
 msgid "Save Default"
-msgstr ""
+msgstr "ნაგულისხმების შენახვა"
 
 #: src/kdefrontend/TemplateHandler.cpp:137
 #, kde-format
 msgid "Save current properties as default"
-msgstr ""
+msgstr "მიმდინარე თვსებების ნაგულისხმებად შენახვა"
 
 #: src/kdefrontend/TemplateHandler.cpp:150
 #, kde-format
@@ -15023,7 +15023,7 @@ msgstr "ხელსაწყოების ზოლის მორგებ�
 #: src/kdefrontend/TemplateHandler.cpp:156
 #, kde-format
 msgid "Text position"
-msgstr ""
+msgstr "ტექსტის მდებარეობა"
 
 #: src/kdefrontend/TemplateHandler.cpp:158
 #, kde-format
@@ -15048,7 +15048,7 @@ msgstr "წარწერები ქვემოთ"
 #: src/kdefrontend/TemplateHandler.cpp:220
 #, kde-format
 msgid "Load From Template"
-msgstr ""
+msgstr "ნიმუშიდან ჩატვირთვა"
 
 #: src/kdefrontend/TemplateHandler.cpp:240
 #, kde-format
@@ -15058,7 +15058,7 @@ msgstr ""
 #: src/kdefrontend/TemplateHandler.cpp:245
 #, kde-format
 msgid "Save As Template"
-msgstr ""
+msgstr "ნიმუშად შენახვა"
 
 #: src/kdefrontend/TemplateHandler.cpp:263
 #, kde-format
@@ -15743,7 +15743,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:226
 #, kde-format
 msgid "Decimal Separator:"
-msgstr ""
+msgstr "ათობითის გამყოფი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:233
@@ -15775,7 +15775,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:76
 #, kde-format
 msgid "Data type:"
-msgstr ""
+msgstr "მონაცემების ტიპი:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbSkipStartBytes)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:60
@@ -16571,7 +16571,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:306
 #, kde-format
 msgid "Plot range:"
-msgstr ""
+msgstr "ხაზვის დიაპაზონი:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbOffsetLeft)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:119
@@ -16597,7 +16597,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:30
 #, kde-format
 msgid "Range:"
-msgstr ""
+msgstr "დიაპაზონი:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkShowScaleOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:170
@@ -16925,7 +16925,7 @@ msgstr "ისარი"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:616
 #, kde-format
 msgid "Ticks"
-msgstr ""
+msgstr "გაყოფები"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicks)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:687
@@ -16963,7 +16963,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:838
 #, kde-format
 msgid "Label Column:"
-msgstr ""
+msgstr "ჭდეების სვეტი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
@@ -17170,7 +17170,7 @@ msgstr "დალაგება:"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:110
 #, kde-format
 msgid "Whiskers:"
-msgstr ""
+msgstr "ულვაშები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNotches)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:153
@@ -17571,14 +17571,14 @@ msgstr "შევსება"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1275
 #, kde-format
 msgid "Symmetric:"
-msgstr ""
+msgstr "სიმეტრიული:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1302
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:656
 #, kde-format
 msgid "Corner radius:"
-msgstr ""
+msgstr "კუთხის რადიუსი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:56
@@ -17586,7 +17586,7 @@ msgstr ""
 #: src/kdefrontend/ui/labelwidget.ui:531
 #, kde-format
 msgid "Logical coordinates"
-msgstr ""
+msgstr "ლოგიკური კოორდინატები"
 
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -17595,7 +17595,7 @@ msgstr ""
 #: src/kdefrontend/ui/labelwidget.ui:699
 #, kde-format
 msgid "Hor. align.:"
-msgstr ""
+msgstr "ჰორ. სწორება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX)
 #. i18n: ectx: property (text), widget (QLabel, lPositionXLogical)
@@ -17642,7 +17642,7 @@ msgstr "y:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:276
 #, kde-format
 msgid "Ver. align.:"
-msgstr ""
+msgstr "ვერ. სწორება.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSymbolWidth)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:404
@@ -17699,7 +17699,7 @@ msgstr "ზღვარი"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:649
 #, kde-format
 msgid "Numeric:"
-msgstr ""
+msgstr "რიცხვობრივი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
@@ -17791,19 +17791,19 @@ msgstr "მინიმუმი:"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:100
 #, kde-format
 msgid "Binning"
-msgstr ""
+msgstr "დაჯგუფება"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinCount)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:107
 #, kde-format
 msgid "Bin Count:"
-msgstr ""
+msgstr "ინტერვალების რაოდენობა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinRanges)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:213
 #, kde-format
 msgid "Bin Ranges"
-msgstr ""
+msgstr "ინტერვალების დიაპაზონები"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaximum)
 #. i18n: ectx: property (text), widget (QLabel, lMax)
@@ -17836,7 +17836,7 @@ msgstr "მაქსიმუმი:"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:283
 #, kde-format
 msgid "Bin Width:"
-msgstr ""
+msgstr "ინტერვალის სიგანე:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:313
@@ -17856,7 +17856,7 @@ msgstr "მეთოდი:"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:330
 #, kde-format
 msgid "Normalization:"
-msgstr ""
+msgstr "ნორმალიზაცია:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:573
@@ -17883,7 +17883,7 @@ msgstr ""
 #: src/kdefrontend/ui/labelwidget.ui:48
 #, kde-format
 msgid "Vert. align.:"
-msgstr ""
+msgstr "ვერტ. სწორება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:150
@@ -17921,25 +17921,25 @@ msgstr "მდებარეობის X:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:508
 #, kde-format
 msgid "Embedded:"
-msgstr ""
+msgstr "ჩადგმული:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:524
 #, kde-format
 msgid "Specify the name of the image file"
-msgstr ""
+msgstr "მიუთითეთ გამოსახულების სახელი"
 
 #. i18n: ectx: property (text), widget (QLabel, lCurves)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:36
 #, kde-format
 msgid "Curves:"
-msgstr ""
+msgstr "მრუდები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectToCurve)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:66
 #, kde-format
 msgid "Connect To:"
-msgstr ""
+msgstr "მიერთება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectToAnchor)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:73
@@ -17964,7 +17964,7 @@ msgstr "ვერტიკალური ხაზი"
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:408
 #, kde-format
 msgid "Connection Line"
-msgstr ""
+msgstr "მიერთებს ხაზი"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
@@ -18330,7 +18330,7 @@ msgstr "მონაცემები, +:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:990
 #, kde-format
 msgid "Data, -:"
-msgstr ""
+msgstr "მონაცემები, -:"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:966
@@ -18450,7 +18450,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:58
 #, kde-format
 msgid "Fit results"
-msgstr ""
+msgstr "შედეგების ჩატევა"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:97
@@ -18693,7 +18693,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:738
 #, kde-format
 msgid "Fit:"
-msgstr ""
+msgstr "ჩატევა:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:764
@@ -19068,7 +19068,7 @@ msgstr "ფაილის დახურვა"
 #: src/kdefrontend/ui/labelwidget.ui:65
 #, kde-format
 msgid "Main font:"
-msgstr ""
+msgstr "მთავარი ფონტი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/kdefrontend/ui/labelwidget.ui:192
@@ -19174,19 +19174,19 @@ msgstr "2"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:224
 #, kde-format
 msgid "Own message:"
-msgstr ""
+msgstr "საკუთარი შეტყობინება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillMessageType)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:231
 #, kde-format
 msgid "Message type:"
-msgstr ""
+msgstr "შეტყობინების ტიპი:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillUpdate)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:239
 #, kde-format
 msgid "Time Interval"
-msgstr ""
+msgstr "დროის ინტერვალი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillUpdate)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:244
@@ -19210,7 +19210,7 @@ msgstr "10000"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:276
 #, kde-format
 msgid "Own Message"
-msgstr ""
+msgstr "საკუთარი შეტყობინება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillMessageType)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:281
@@ -19222,13 +19222,13 @@ msgstr "სტატისტიკა"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:286
 #, kde-format
 msgid "Last Message Received"
-msgstr ""
+msgstr "მიღებული ბოლო შეტყობინება"
 
 #. i18n: ectx: property (text), widget (QLabel, lUseRetainMessage)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:301
 #, kde-format
 msgid "Retain:"
-msgstr ""
+msgstr "შენარჩუნება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillStatistics)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:308
@@ -19544,7 +19544,7 @@ msgstr ""
 #: src/kdefrontend/ui/settingswelcomepage.ui:17
 #, kde-format
 msgid "Reset Layout"
-msgstr ""
+msgstr "განლაგების საწყის მდგომარეობაში დაბრუნება"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/kdefrontend/ui/settingsworksheetpage.ui:30
@@ -19611,31 +19611,31 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:81
 #, kde-format
 msgid "Export header:"
-msgstr ""
+msgstr "თავსართის გატანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixVHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:104
 #, kde-format
 msgid "Export vertical header:"
-msgstr ""
+msgstr "ვერტიკალური თავსართის გატანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixHHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:121
 #, kde-format
 msgid "Export horizontal header:"
-msgstr ""
+msgstr "ჰორიზონტალური თავსართის გატანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lGridLines)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:162
 #, kde-format
 msgid "Grid lines:"
-msgstr ""
+msgstr "ბადის ხაზები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCaptions)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:179
 #, kde-format
 msgid "Table captions:"
-msgstr ""
+msgstr "ცხრილის წარწერები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:196
@@ -19654,7 +19654,7 @@ msgstr ""
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:99
 #, kde-format
 msgid "Area to export:"
-msgstr ""
+msgstr "გასატანი ადგილი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:237
@@ -19666,7 +19666,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:247
 #, kde-format
 msgid "Comments as column units:"
-msgstr ""
+msgstr "სვეტის კომენტარები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColors)
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:108
@@ -19678,7 +19678,7 @@ msgstr "ფერები"
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:115
 #, kde-format
 msgid "Color Map:"
-msgstr ""
+msgstr "ფერების რუკა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHightlight)
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:172
@@ -19702,7 +19702,7 @@ msgstr "f(x) = "
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
 #, kde-format
 msgid "auto update"
-msgstr ""
+msgstr "ავტომატური განახლება"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:74
@@ -19838,19 +19838,19 @@ msgstr "სვეტების დალაგება:"
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:66
 #, kde-format
 msgid "Separately"
-msgstr ""
+msgstr "ცალ-ცალკე"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSorting)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:71
 #, kde-format
 msgid "Together"
-msgstr ""
+msgstr "ერთად"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:79
 #, kde-format
 msgid "Leading column:"
-msgstr ""
+msgstr "წამყვანი სვეტი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportTo)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:73
