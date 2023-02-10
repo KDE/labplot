@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-09 00:56+0000\n"
-"PO-Revision-Date: 2023-02-07 04:58+0100\n"
+"PO-Revision-Date: 2023-02-09 03:24+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -2050,7 +2050,7 @@ msgstr "Compresión: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:177
 #, kde-format
 msgid "Endianess: %1"
-msgstr "Orden de bytes: %1"
+msgstr "«Endianness»: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:179
 #, kde-format
@@ -2120,18 +2120,17 @@ msgstr "Tamaño de registro de TStreamerInfo: %1 butes"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:89
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
-msgstr ""
+msgstr "Big endian no permitido. Id CAN: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:92
 #, kde-format
 msgid "Message too long. CAN id: %1"
-msgstr ""
+msgstr "Mensaje demasiado grande. Id CAN: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown id: %1"
-msgstr "Desconocido"
+msgstr "Id. desconocido: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:310
 #, kde-format
@@ -10431,12 +10430,12 @@ msgstr ""
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
 msgid "Little endian"
-msgstr "Pequeño indio"
+msgstr "Little endian"
 
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:30
 #, kde-format
 msgid "Big endian"
-msgstr "Gran indio"
+msgstr "Big endian"
 
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:32
 #, kde-format
@@ -10463,8 +10462,8 @@ msgid ""
 "Intel x86 processors.</td></tr><tr><td>big endian</td><td>typical byte order "
 "on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr></table>"
 msgstr ""
-"<table><tr><td>pequeño indio</td><td>orden de octetos típicos (indianidad) "
-"en procesadores Intel x86.</td></tr><tr><td>gran indio</td><td>orden de "
+"<table><tr><td>little endian</td><td>orden de octetos típicos («endianness») "
+"en procesadores Intel x86.</td></tr><tr><td>big endian</td><td>orden de "
 "octetos típico en grandes sistemas (IBM) y procesadores SPARC/PowerPC/"
 "Motorola.</td></tr></table>"
 
@@ -16943,16 +16942,15 @@ msgstr "Categorías"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportErrorDialog)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:14
-#, fuzzy, kde-format
-#| msgid "No Errors"
+#, kde-format
 msgid "Parse Errors"
-msgstr "sin errores"
+msgstr "Errores de análisis"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38
 #, kde-format
 msgid "OK"
-msgstr ""
+msgstr "Aceptar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbDataSource)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:44

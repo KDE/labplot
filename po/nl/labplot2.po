@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-09 00:56+0000\n"
-"PO-Revision-Date: 2023-02-07 12:44+0100\n"
+"PO-Revision-Date: 2023-02-09 13:31+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -2112,18 +2112,17 @@ msgstr "Grootte record TStreamerinfo: %1 bytes"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:89
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
-msgstr ""
+msgstr "Big-endian niet ondersteund. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:92
 #, kde-format
 msgid "Message too long. CAN id: %1"
-msgstr ""
+msgstr "Melding te lang. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown id: %1"
-msgstr "Onbekend"
+msgstr "Onbekende-id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:310
 #, kde-format
@@ -16899,10 +16898,9 @@ msgstr "Categorieën"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportErrorDialog)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Database Error"
+#, kde-format
 msgid "Parse Errors"
-msgstr "Database fout"
+msgstr "Fouten ontleden"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38
