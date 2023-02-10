@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2023-01-26 11:50+0100\n"
+"PO-Revision-Date: 2023-02-09 03:24+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1933,7 +1933,7 @@ msgstr "Compresión: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:174
 #, kde-format
 msgid "Endianess: %1"
-msgstr "Orden de bytes: %1"
+msgstr "«Endianness»: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:176
 #, kde-format
@@ -9931,12 +9931,12 @@ msgstr ""
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:28
 #, kde-format
 msgid "Little endian"
-msgstr "Pequeño indio"
+msgstr "Little endian"
 
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
 msgid "Big endian"
-msgstr "Gran indio"
+msgstr "Big endian"
 
 #: src/kdefrontend/datasources/BinaryOptionsWidget.cpp:31
 #, kde-format
@@ -9963,8 +9963,8 @@ msgid ""
 "Intel x86 processors.</td></tr><tr><td>big endian</td><td>typical byte order "
 "on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr></table>"
 msgstr ""
-"<table><tr><td>pequeño indio</td><td>orden de octetos típicos (indianidad) "
-"en procesadores Intel x86.</td></tr><tr><td>gran indio</td><td>orden de "
+"<table><tr><td>little endian</td><td>orden de octetos típicos («endianness») "
+"en procesadores Intel x86.</td></tr><tr><td>big endian</td><td>orden de "
 "octetos típico en grandes sistemas (IBM) y procesadores SPARC/PowerPC/"
 "Motorola.</td></tr></table>"
 
