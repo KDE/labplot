@@ -246,6 +246,55 @@ private:
 	void calculateDateTimeStatistics();
 	void connectFormulaColumn(const AbstractColumn*);
 
+	// Never call this function directly, because it does no
+	// mode checking.
+	template<typename T>
+	void setValueAtPrivate(int row, const T& new_value) {
+		if (!m_data) {
+			if (!initDataContainer())
+				return; // failed to allocate memory
+		}
+
+		invalidate();
+
+		Q_EMIT m_owner->dataAboutToChange(m_owner);
+		if (row >= rowCount())
+			resizeTo(row + 1);
+
+		static_cast<QVector<T>*>(m_data)->replace(row, new_value);
+		if (!m_owner->m_suppressDataChangedSignal)
+			Q_EMIT m_owner->dataChanged(m_owner);
+	}
+
+	// Never call this function directly, because it does no
+	// mode checking.
+	template<typename T>
+	void replaceValuePrivate(int first, const QVector<T>& new_values) {
+		if (!m_data) {
+			const bool resize = (first >= 0);
+			if (!initDataContainer(resize))
+				return; // failed to allocate memory
+		}
+
+		invalidate();
+
+		Q_EMIT m_owner->dataAboutToChange(m_owner);
+
+		if (first < 0)
+			*static_cast<QVector<T>*>(m_data) = new_values;
+		else {
+			const int num_rows = new_values.size();
+			resizeTo(first + num_rows);
+
+			T* ptr = static_cast<QVector<T>*>(m_data)->data();
+			for (int i = 0; i < num_rows; ++i)
+				ptr[first + i] = new_values.at(i);
+		}
+
+		if (!m_owner->m_suppressDataChangedSignal)
+			Q_EMIT m_owner->dataChanged(m_owner);
+	}
+
 private Q_SLOTS:
 	void formulaVariableColumnRemoved(const AbstractAspect*);
 	void formulaVariableColumnAdded(const AbstractAspect*);

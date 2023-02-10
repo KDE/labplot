@@ -2148,21 +2148,7 @@ void ColumnPrivate::setTextAt(int row, const QString& new_value) {
 	if (m_columnMode != AbstractColumn::ColumnMode::Text)
 		return;
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return;
-
-	invalidate();
-
-	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	if (row >= rowCount())
-		resizeTo(row + 1);
-
-	static_cast<QVector<QString>*>(m_data)->replace(row, new_value);
-	if (!m_owner->m_suppressDataChangedSignal)
-		Q_EMIT m_owner->dataChanged(m_owner);
+	setValueAtPrivate<QString>(row, new_value);
 }
 
 /**
@@ -2174,28 +2160,7 @@ void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) 
 	if (m_columnMode != AbstractColumn::ColumnMode::Text)
 		return;
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return;
-
-	invalidate();
-
-	Q_EMIT m_owner->dataAboutToChange(m_owner);
-
-	if (first < 0)
-		*static_cast<QVector<QString>*>(m_data) = new_values;
-	else {
-		const int num_rows = new_values.size();
-		resizeTo(first + num_rows);
-
-		for (int i = 0; i < num_rows; ++i)
-			static_cast<QVector<QString>*>(m_data)->replace(first + i, new_values.at(i));
-	}
-
-	if (!m_owner->m_suppressDataChangedSignal)
-		Q_EMIT m_owner->dataChanged(m_owner);
+	replaceValuePrivate<QString>(first, new_values);
 }
 
 int ColumnPrivate::dictionaryIndex(int row) const {
@@ -2293,21 +2258,7 @@ void ColumnPrivate::setDateTimeAt(int row, const QDateTime& new_value) {
 		&& m_columnMode != AbstractColumn::ColumnMode::Day)
 		return;
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return;
-
-	invalidate();
-
-	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	if (row >= rowCount())
-		resizeTo(row + 1);
-
-	static_cast<QVector<QDateTime>*>(m_data)->replace(row, new_value);
-	if (!m_owner->m_suppressDataChangedSignal)
-		Q_EMIT m_owner->dataChanged(m_owner);
+	setValueAtPrivate<QDateTime>(row, new_value);
 }
 
 /**
@@ -2322,28 +2273,7 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
 		&& m_columnMode != AbstractColumn::ColumnMode::Day)
 		return;
 
-	if (!m_data)
-		initDataContainer();
-
-	if (!m_data) // failed to allocate memory
-		return;
-
-	invalidate();
-
-	Q_EMIT m_owner->dataAboutToChange(m_owner);
-
-	if (first < 0)
-		*static_cast<QVector<QDateTime>*>(m_data) = new_values;
-	else {
-		const int num_rows = new_values.size();
-		resizeTo(first + num_rows);
-
-		for (int i = 0; i < num_rows; ++i)
-			static_cast<QVector<QDateTime>*>(m_data)->replace(first + i, new_values.at(i));
-	}
-
-	if (!m_owner->m_suppressDataChangedSignal)
-		Q_EMIT m_owner->dataChanged(m_owner);
+	replaceValuePrivate<QDateTime>(first, new_values);
 }
 
 /**
@@ -2356,20 +2286,7 @@ void ColumnPrivate::setValueAt(int row, double new_value) {
 	if (m_columnMode != AbstractColumn::ColumnMode::Double)
 		return;
 
-	if (!m_data) {
-		if (!initDataContainer())
-			return; // failed to allocate memory
-	}
-
-	invalidate();
-
-	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	if (row >= rowCount())
-		resizeTo(row + 1);
-
-	static_cast<QVector<double>*>(m_data)->replace(row, new_value);
-	if (!m_owner->m_suppressDataChangedSignal)
-		Q_EMIT m_owner->dataChanged(m_owner);
+	setValueAtPrivate<double>(row, new_value);
 }
 
 /**
@@ -2436,20 +2353,7 @@ void ColumnPrivate::setIntegerAt(int row, int new_value) {
 	if (m_columnMode != AbstractColumn::ColumnMode::Integer)
 		return;
 
-	if (!m_data) {
-		if (!initDataContainer())
-			return; // failed to allocate memory
-	}
-
-	invalidate();
-
-	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	if (row >= rowCount())
-		resizeTo(row + 1);
-
-	static_cast<QVector<int>*>(m_data)->replace(row, new_value);
-	if (!m_owner->m_suppressDataChangedSignal)
-		Q_EMIT m_owner->dataChanged(m_owner);
+	setValueAtPrivate<int>(row, new_value);
 }
 
 /**
@@ -2462,29 +2366,7 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 	if (m_columnMode != AbstractColumn::ColumnMode::Integer)
 		return;
 
-	if (!m_data) {
-		const bool resize = (first >= 0);
-		if (!initDataContainer(resize))
-			return; // failed to allocate memory
-	}
-
-	invalidate();
-
-	Q_EMIT m_owner->dataAboutToChange(m_owner);
-
-	if (first < 0)
-		*static_cast<QVector<int>*>(m_data) = new_values;
-	else {
-		const int num_rows = new_values.size();
-		resizeTo(first + num_rows);
-
-		int* ptr = static_cast<QVector<int>*>(m_data)->data();
-		for (int i = 0; i < num_rows; ++i)
-			ptr[first + i] = new_values.at(i);
-	}
-
-	if (!m_owner->m_suppressDataChangedSignal)
-		Q_EMIT m_owner->dataChanged(m_owner);
+	replaceValuePrivate<int>(first, new_values);
 }
 
 /**
@@ -2497,20 +2379,7 @@ void ColumnPrivate::setBigIntAt(int row, qint64 new_value) {
 	if (m_columnMode != AbstractColumn::ColumnMode::BigInt)
 		return;
 
-	if (!m_data) {
-		if (!initDataContainer())
-			return; // failed to allocate memory
-	}
-
-	invalidate();
-
-	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	if (row >= rowCount())
-		resizeTo(row + 1);
-
-	static_cast<QVector<qint64>*>(m_data)->replace(row, new_value);
-	if (!m_owner->m_suppressDataChangedSignal)
-		Q_EMIT m_owner->dataChanged(m_owner);
+	setValueAtPrivate<qint64>(row, new_value);
 }
 
 /**
@@ -2523,29 +2392,7 @@ void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) 
 	if (m_columnMode != AbstractColumn::ColumnMode::BigInt)
 		return;
 
-	if (!m_data) {
-		const bool resize = (first >= 0);
-		if (!initDataContainer(resize))
-			return; // failed to allocate memory
-	}
-
-	invalidate();
-
-	Q_EMIT m_owner->dataAboutToChange(m_owner);
-
-	if (first < 0)
-		*static_cast<QVector<qint64>*>(m_data) = new_values;
-	else {
-		const int num_rows = new_values.size();
-		resizeTo(first + num_rows);
-
-		qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
-		for (int i = 0; i < num_rows; ++i)
-			ptr[first + i] = new_values.at(i);
-	}
-
-	if (!m_owner->m_suppressDataChangedSignal)
-		Q_EMIT m_owner->dataChanged(m_owner);
+	replaceValuePrivate<qint64>(first, new_values);
 }
 
 /*!
