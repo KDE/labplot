@@ -150,9 +150,10 @@ void ReadStatFilterTest::testSAVImport() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(149), 3);
 
 	// check value label
-	QCOMPARE(spreadsheet.column(4)->valueLabels().value(1), QLatin1String("setosa"));
-	QCOMPARE(spreadsheet.column(4)->valueLabels().value(2), QLatin1String("versicolor"));
-	QCOMPARE(spreadsheet.column(4)->valueLabels().value(3), QLatin1String("virginica"));
+	QVERIFY(spreadsheet.column(4)->valueLabels() != nullptr);
+	QCOMPARE(spreadsheet.column(4)->valueLabels()->value(1), QLatin1String("setosa"));
+	QCOMPARE(spreadsheet.column(4)->valueLabels()->value(2), QLatin1String("versicolor"));
+	QCOMPARE(spreadsheet.column(4)->valueLabels()->value(3), QLatin1String("virginica"));
 }
 
 void ReadStatFilterTest::testPORImport() {
@@ -232,11 +233,12 @@ void ReadStatFilterTest::testPORImport() {
 	QCOMPARE(spreadsheet.column(6)->valueAt(4), NAN);
 
 	// check value label
-	QCOMPARE(spreadsheet.column(4)->valueLabels().value(1), QLatin1String("Male"));
-	QCOMPARE(spreadsheet.column(4)->valueLabels().value(2), QLatin1String("Female"));
-	QCOMPARE(spreadsheet.column(5)->valueLabels().value(1), QLatin1String("low"));
-	QCOMPARE(spreadsheet.column(5)->valueLabels().value(2), QLatin1String("medium"));
-	QCOMPARE(spreadsheet.column(5)->valueLabels().value(3), QLatin1String("high"));
+	QVERIFY(spreadsheet.column(4)->valueLabels() != nullptr);
+	QCOMPARE(spreadsheet.column(4)->valueLabels()->value(1), QLatin1String("Male"));
+	QCOMPARE(spreadsheet.column(4)->valueLabels()->value(2), QLatin1String("Female"));
+	QCOMPARE(spreadsheet.column(5)->valueLabels()->value(1), QLatin1String("low"));
+	QCOMPARE(spreadsheet.column(5)->valueLabels()->value(2), QLatin1String("medium"));
+	QCOMPARE(spreadsheet.column(5)->valueLabels()->value(3), QLatin1String("high"));
 }
 
 void ReadStatFilterTest::testXPTImport() {

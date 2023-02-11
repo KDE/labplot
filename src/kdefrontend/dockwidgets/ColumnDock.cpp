@@ -219,15 +219,17 @@ void ColumnDock::showValueLabels() {
 		ui.twLabels->removeRow(0);
 
 	if (m_column->hasValueLabels()) {
-		auto mode = m_column->columnMode();
+		auto mode = m_column->labelsMode();
 		int i = 0;
 
 		switch (mode) {
 		case AbstractColumn::ColumnMode::Double: {
-			auto labels = m_column->valueLabels();
-			ui.twLabels->setRowCount(labels.size());
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
+			const auto* labels = m_column->valueLabels();
+			if (!labels)
+				return;
+			ui.twLabels->setRowCount(labels->size());
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
 				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
 				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
 				++it;
@@ -236,10 +238,12 @@ void ColumnDock::showValueLabels() {
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			auto labels = m_column->intValueLabels();
-			ui.twLabels->setRowCount(labels.size());
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
+			const auto* labels = m_column->intValueLabels();
+			if (!labels)
+				return;
+			ui.twLabels->setRowCount(labels->size());
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
 				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
 				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
 				++it;
@@ -248,10 +252,12 @@ void ColumnDock::showValueLabels() {
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			auto labels = m_column->bigIntValueLabels();
-			ui.twLabels->setRowCount(labels.size());
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
+			const auto* labels = m_column->bigIntValueLabels();
+			if (!labels)
+				return;
+			ui.twLabels->setRowCount(labels->size());
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
 				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
 				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
 				++it;
@@ -260,10 +266,12 @@ void ColumnDock::showValueLabels() {
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
-			auto labels = m_column->textValueLabels();
-			ui.twLabels->setRowCount(labels.size());
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
+			const auto* labels = m_column->textValueLabels();
+			if (!labels)
+				return;
+			ui.twLabels->setRowCount(labels->size());
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
 				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it.key()));
 				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
 				++it;
@@ -274,11 +282,13 @@ void ColumnDock::showValueLabels() {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			auto labels = m_column->dateTimeValueLabels();
-			ui.twLabels->setRowCount(labels.size());
-			auto it = labels.constBegin();
+			const auto* labels = m_column->dateTimeValueLabels();
+			if (!labels)
+				return;
+			ui.twLabels->setRowCount(labels->size());
+			auto it = labels->constBegin();
 			const QString& format = ui.cbDateTimeFormat->currentText();
-			while (it != labels.constEnd()) {
+			while (it != labels->constEnd()) {
 				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it.key().toString(format)));
 				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
 				++it;
@@ -438,7 +448,7 @@ void ColumnDock::plotDesignationChanged(int index) {
 
 // value labels
 void ColumnDock::addLabel() {
-	auto mode = m_column->columnMode();
+	const auto mode = m_column->labelsMode();
 	auto* dlg = new AddValueLabelDialog(this, m_column);
 
 	if (mode == AbstractColumn::ColumnMode::Month || mode == AbstractColumn::ColumnMode::Day || mode == AbstractColumn::ColumnMode::DateTime)

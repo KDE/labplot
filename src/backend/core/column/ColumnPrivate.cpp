@@ -27,6 +27,179 @@ extern "C" {
 #include <gsl/gsl_statistics.h>
 }
 
+void ColumnPrivate::Labels::initLabels(AbstractColumn::ColumnMode mode) {
+	if (!m_labels) {
+		m_mode = mode;
+		switch (m_mode) {
+		case AbstractColumn::ColumnMode::Double:
+			m_labels = new QMap<double, QString>();
+			break;
+		case AbstractColumn::ColumnMode::Integer:
+			m_labels = new QMap<int, QString>();
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			m_labels = new QMap<qint64, QString>();
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			m_labels = new QMap<QString, QString>();
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+			m_labels = new QMap<QDateTime, QString>();
+			break;
+		}
+	}
+}
+
+void ColumnPrivate::Labels::clearLabels() {
+	if (m_labels) {
+		switch (m_mode) {
+		case AbstractColumn::ColumnMode::Double:
+			delete static_cast<QMap<double, QString>*>(m_labels);
+			break;
+		case AbstractColumn::ColumnMode::Integer:
+			delete static_cast<QMap<int, QString>*>(m_labels);
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			delete static_cast<QMap<qint64, QString>*>(m_labels);
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			delete static_cast<QMap<QString, QString>*>(m_labels);
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+			delete static_cast<QMap<QDateTime, QString>*>(m_labels);
+			break;
+		}
+
+		m_labels = nullptr;
+	}
+}
+
+void ColumnPrivate::Labels::addValueLabel(const QString& value, const QString& label) {
+	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::Text)
+		return;
+
+	initLabels(AbstractColumn::ColumnMode::Text);
+	static_cast<QMap<QString, QString>*>(m_labels)->operator[](value) = label;
+}
+
+void ColumnPrivate::Labels::addValueLabel(const QDateTime& value, const QString& label) {
+	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::DateTime && m_mode != AbstractColumn::ColumnMode::Day
+		&& m_mode != AbstractColumn::ColumnMode::Month)
+		return;
+
+	initLabels(AbstractColumn::ColumnMode::Month);
+	static_cast<QMap<QDateTime, QString>*>(m_labels)->operator[](value) = label;
+}
+
+void ColumnPrivate::Labels::addValueLabel(double value, const QString& label) {
+	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::Double)
+		return;
+
+	initLabels(AbstractColumn::ColumnMode::Double);
+	static_cast<QMap<double, QString>*>(m_labels)->operator[](value) = label;
+}
+
+void ColumnPrivate::Labels::addValueLabel(int value, const QString& label) {
+	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::Integer)
+		return;
+
+	initLabels(AbstractColumn::ColumnMode::Integer);
+	static_cast<QMap<int, QString>*>(m_labels)->operator[](value) = label;
+}
+
+void ColumnPrivate::Labels::addValueLabel(qint64 value, const QString& label) {
+	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::BigInt)
+		return;
+
+	initLabels(AbstractColumn::ColumnMode::BigInt);
+	static_cast<QMap<qint64, QString>*>(m_labels)->operator[](value) = label;
+}
+
+void ColumnPrivate::Labels::removeValueLabel(const QString& key) {
+	if (!hasValueLabels())
+		return;
+
+	bool ok;
+	switch (m_mode) {
+	case AbstractColumn::ColumnMode::Double: {
+		double value = QLocale().toDouble(key, &ok);
+		if (!ok)
+			return;
+		static_cast<QMap<double, QString>*>(m_labels)->remove(value);
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: {
+		int value = QLocale().toInt(key, &ok);
+		if (!ok)
+			return;
+		static_cast<QMap<int, QString>*>(m_labels)->remove(value);
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		qint64 value = QLocale().toLongLong(key, &ok);
+		if (!ok)
+			return;
+		static_cast<QMap<qint64, QString>*>(m_labels)->remove(value);
+		break;
+	}
+	case AbstractColumn::ColumnMode::Text: {
+		static_cast<QMap<QString, QString>*>(m_labels)->remove(key);
+		break;
+	}
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::DateTime: {
+		DateTime2StringFilter f;
+		if (m_mode == AbstractColumn::ColumnMode::Month) {
+			f.setFormat(QStringLiteral("MMMM"));
+		} else {
+			f.setFormat(QStringLiteral("dddd"));
+		}
+		static_cast<QMap<QDateTime, QString>*>(m_labels)->remove(QDateTime::fromString(key, f.format()));
+		break;
+	}
+	}
+}
+
+const QMap<QString, QString>* ColumnPrivate::Labels::textValueLabels() {
+	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::Text)
+		return nullptr;
+	return static_cast<QMap<QString, QString>*>(m_labels);
+}
+
+const QMap<QDateTime, QString>* ColumnPrivate::Labels::dateTimeValueLabels() {
+	if (!hasValueLabels()
+		|| (m_mode != AbstractColumn::ColumnMode::DateTime && m_mode != AbstractColumn::ColumnMode::Day && m_mode != AbstractColumn::ColumnMode::Month))
+		return nullptr;
+	return static_cast<QMap<QDateTime, QString>*>(m_labels);
+}
+
+const QMap<double, QString>* ColumnPrivate::Labels::valueLabels() {
+	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::Double)
+		return nullptr;
+	return static_cast<QMap<double, QString>*>(m_labels);
+}
+
+const QMap<int, QString>* ColumnPrivate::Labels::intValueLabels() {
+	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::Integer)
+		return nullptr;
+	return static_cast<QMap<int, QString>*>(m_labels);
+}
+
+const QMap<qint64, QString>* ColumnPrivate::Labels::bigIntValueLabels() {
+	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::BigInt)
+		return nullptr;
+	return static_cast<QMap<qint64, QString>*>(m_labels);
+}
+
+// ######################################################################################################
+// ######################################################################################################
+// ######################################################################################################
+
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 	: m_columnMode(mode)
 	, m_owner(owner) {
@@ -1176,103 +1349,35 @@ AbstractSimpleFilter* ColumnPrivate::outputFilter() const {
 //! \name Labels related functions
 //@{
 bool ColumnPrivate::hasValueLabels() const {
-	return (m_labels != nullptr);
+	return m_labels.hasValueLabels();
 }
 
 void ColumnPrivate::removeValueLabel(const QString& key) {
-	if (!hasValueLabels())
-		return;
-
-	bool ok;
-	switch (m_columnMode) {
-	case AbstractColumn::ColumnMode::Double: {
-		double value = QLocale().toDouble(key, &ok);
-		if (!ok)
-			return;
-		static_cast<QMap<double, QString>*>(m_labels)->remove(value);
-		break;
-	}
-	case AbstractColumn::ColumnMode::Integer: {
-		int value = QLocale().toInt(key, &ok);
-		if (!ok)
-			return;
-		static_cast<QMap<int, QString>*>(m_labels)->remove(value);
-		break;
-	}
-	case AbstractColumn::ColumnMode::BigInt: {
-		qint64 value = QLocale().toLongLong(key, &ok);
-		if (!ok)
-			return;
-		static_cast<QMap<qint64, QString>*>(m_labels)->remove(value);
-		break;
-	}
-	case AbstractColumn::ColumnMode::Text: {
-		static_cast<QMap<QString, QString>*>(m_labels)->remove(key);
-		break;
-	}
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::DateTime: {
-		auto* filter = static_cast<DateTime2StringFilter*>(m_outputFilter);
-		static_cast<QMap<QDateTime, QString>*>(m_labels)->remove(QDateTime::fromString(key, filter->format()));
-		break;
-	}
-	}
+	m_labels.removeValueLabel(key);
 }
 
 void ColumnPrivate::clearValueLabels() {
-	if (!hasValueLabels())
-		return;
-
-	switch (m_columnMode) {
-	case AbstractColumn::ColumnMode::Double: {
-		static_cast<QMap<double, QString>*>(m_labels)->clear();
-		break;
-	}
-	case AbstractColumn::ColumnMode::Integer: {
-		static_cast<QMap<int, QString>*>(m_labels)->clear();
-		break;
-	}
-	case AbstractColumn::ColumnMode::BigInt: {
-		static_cast<QMap<qint64, QString>*>(m_labels)->clear();
-		break;
-	}
-	case AbstractColumn::ColumnMode::Text: {
-		static_cast<QMap<QString, QString>*>(m_labels)->clear();
-		break;
-	}
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::DateTime: {
-		static_cast<QMap<QDateTime, QString>*>(m_labels)->clear();
-		break;
-	}
-	}
+	m_labels.clearLabels();
 }
 
-const QMap<QString, QString>& ColumnPrivate::textValueLabels() {
-	initLabels();
-	return *(static_cast<QMap<QString, QString>*>(m_labels));
+const QMap<QString, QString>* ColumnPrivate::textValueLabels() {
+	return m_labels.textValueLabels();
 }
 
-const QMap<QDateTime, QString>& ColumnPrivate::dateTimeValueLabels() {
-	initLabels();
-	return *(static_cast<QMap<QDateTime, QString>*>(m_labels));
+const QMap<QDateTime, QString>* ColumnPrivate::dateTimeValueLabels() {
+	return m_labels.dateTimeValueLabels();
 }
 
-const QMap<double, QString>& ColumnPrivate::valueLabels() {
-	initLabels();
-	return *(static_cast<QMap<double, QString>*>(m_labels));
+const QMap<double, QString>* ColumnPrivate::valueLabels() {
+	return m_labels.valueLabels();
 }
 
-const QMap<int, QString>& ColumnPrivate::intValueLabels() {
-	initLabels();
-	return *(static_cast<QMap<int, QString>*>(m_labels));
+const QMap<int, QString>* ColumnPrivate::intValueLabels() {
+	return m_labels.intValueLabels();
 }
 
-const QMap<qint64, QString>& ColumnPrivate::bigIntValueLabels() {
-	initLabels();
-	return *(static_cast<QMap<qint64, QString>*>(m_labels));
+const QMap<qint64, QString>* ColumnPrivate::bigIntValueLabels() {
+	return m_labels.bigIntValueLabels();
 }
 //@}
 
@@ -2054,69 +2159,24 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
-void ColumnPrivate::initLabels() {
-	if (!m_labels) {
-		switch (m_columnMode) {
-		case AbstractColumn::ColumnMode::Double:
-			m_labels = new QMap<double, QString>();
-			break;
-		case AbstractColumn::ColumnMode::Integer:
-			m_labels = new QMap<int, QString>();
-			break;
-		case AbstractColumn::ColumnMode::BigInt:
-			m_labels = new QMap<qint64, QString>();
-			break;
-		case AbstractColumn::ColumnMode::Text:
-			m_labels = new QMap<QString, QString>();
-			break;
-		case AbstractColumn::ColumnMode::DateTime:
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day:
-			m_labels = new QMap<QDateTime, QString>();
-			break;
-		}
-	}
-}
-
 void ColumnPrivate::addValueLabel(const QString& value, const QString& label) {
-	if (m_columnMode != AbstractColumn::ColumnMode::Text)
-		return;
-
-	initLabels();
-	static_cast<QMap<QString, QString>*>(m_labels)->operator[](value) = label;
+	m_labels.addValueLabel(value, label);
 }
 
 void ColumnPrivate::addValueLabel(const QDateTime& value, const QString& label) {
-	if (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Day
-		&& m_columnMode != AbstractColumn::ColumnMode::Month)
-		return;
-
-	initLabels();
-	static_cast<QMap<QDateTime, QString>*>(m_labels)->operator[](value) = label;
+	m_labels.addValueLabel(value, label);
 }
 
 void ColumnPrivate::addValueLabel(double value, const QString& label) {
-	if (m_columnMode != AbstractColumn::ColumnMode::Double)
-		return;
-
-	initLabels();
-	static_cast<QMap<double, QString>*>(m_labels)->operator[](value) = label;
+	m_labels.addValueLabel(value, label);
 }
 
 void ColumnPrivate::addValueLabel(int value, const QString& label) {
-	if (m_columnMode != AbstractColumn::ColumnMode::Integer)
-		return;
-
-	initLabels();
-	static_cast<QMap<int, QString>*>(m_labels)->operator[](value) = label;
+	m_labels.addValueLabel(value, label);
 }
 
 void ColumnPrivate::addValueLabel(qint64 value, const QString& label) {
-	if (m_columnMode != AbstractColumn::ColumnMode::BigInt)
-		return;
-
-	initLabels();
-	static_cast<QMap<qint64, QString>*>(m_labels)->operator[](value) = label;
+	m_labels.addValueLabel(value, label);
 }
 
 /**

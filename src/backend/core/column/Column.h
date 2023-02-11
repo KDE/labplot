@@ -150,7 +150,7 @@ public:
 	int dictionaryIndex(int row) const override;
 	const QMap<QString, int>& frequencies() const;
 	void addValueLabel(const QString&, const QString&);
-	const QMap<QString, QString>& textValueLabels();
+	const QMap<QString, QString>* textValueLabels();
 
 	QDate dateAt(int) const override;
 	void setDateAt(int, QDate) override;
@@ -161,7 +161,9 @@ public:
 	void setDateTimeAt(int, const QDateTime&) override;
 	void replaceDateTimes(int, const QVector<QDateTime>&) override;
 	void addValueLabel(const QDateTime&, const QString&);
-	const QMap<QDateTime, QString>& dateTimeValueLabels();
+	const QMap<QDateTime, QString>* dateTimeValueLabels();
+
+	AbstractColumn::ColumnMode labelsMode() const;
 
 	double doubleAt(int) const override;
 	double valueAt(int) const override;
@@ -169,21 +171,21 @@ public:
 	void setValueAt(int, double) override;
 	void replaceValues(int, const QVector<double>&) override;
 	void addValueLabel(double, const QString&);
-	const QMap<double, QString>& valueLabels();
+	const QMap<double, QString>* valueLabels();
 
 	int integerAt(int) const override;
 	void setIntegers(const QVector<int>&);
 	void setIntegerAt(int, int) override;
 	void replaceInteger(int, const QVector<int>&) override;
 	void addValueLabel(int, const QString&);
-	const QMap<int, QString>& intValueLabels();
+	const QMap<int, QString>* intValueLabels();
 
 	qint64 bigIntAt(int) const override;
 	void setBigIntAt(int, qint64) override;
 	void setBigInts(const QVector<qint64>&);
 	void replaceBigInt(int, const QVector<qint64>&) override;
 	void addValueLabel(qint64, const QString&);
-	const QMap<qint64, QString>& bigIntValueLabels();
+	const QMap<qint64, QString>* bigIntValueLabels();
 
 	double maximum(int count = 0) const override;
 	double maximum(int startIndex, int endIndex) const override;

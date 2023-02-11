@@ -982,23 +982,23 @@ void Column::clearValueLabels() {
 	project()->setChanged(true);
 }
 
-const QMap<QString, QString>& Column::textValueLabels() {
+const QMap<QString, QString>* Column::textValueLabels() {
 	return d->textValueLabels();
 }
 
-const QMap<QDateTime, QString>& Column::dateTimeValueLabels() {
+const QMap<QDateTime, QString>* Column::dateTimeValueLabels() {
 	return d->dateTimeValueLabels();
 }
 
-const QMap<double, QString>& Column::valueLabels() {
+const QMap<double, QString>* Column::valueLabels() {
 	return d->valueLabels();
 }
 
-const QMap<int, QString>& Column::intValueLabels() {
+const QMap<int, QString>* Column::intValueLabels() {
 	return d->intValueLabels();
 }
 
-const QMap<qint64, QString>& Column::bigIntValueLabels() {
+const QMap<qint64, QString>* Column::bigIntValueLabels() {
 	return d->bigIntValueLabels();
 }
 
@@ -1084,66 +1084,76 @@ void Column::save(QXmlStreamWriter* writer) const {
 	// value labels
 	if (hasValueLabels()) {
 		writer->writeStartElement(QStringLiteral("valueLabels"));
-		switch (columnMode()) {
+		switch (d->m_labels.mode()) {
 		case AbstractColumn::ColumnMode::Double: {
-			const auto& labels = const_cast<Column*>(this)->valueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				writer->writeStartElement(QStringLiteral("valueLabel"));
-				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
-				writer->writeAttribute(QStringLiteral("label"), it.value());
-				writer->writeEndElement();
-				++it;
+			const auto* labels = const_cast<Column*>(this)->valueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
+					writer->writeAttribute(QStringLiteral("label"), it.value());
+					writer->writeEndElement();
+					++it;
+				}
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			const auto& labels = const_cast<Column*>(this)->intValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				writer->writeStartElement(QStringLiteral("valueLabel"));
-				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
-				writer->writeAttribute(QStringLiteral("label"), it.value());
-				writer->writeEndElement();
-				++it;
+			const auto* labels = const_cast<Column*>(this)->intValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
+					writer->writeAttribute(QStringLiteral("label"), it.value());
+					writer->writeEndElement();
+					++it;
+				}
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			const auto& labels = const_cast<Column*>(this)->bigIntValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				writer->writeStartElement(QStringLiteral("valueLabel"));
-				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
-				writer->writeAttribute(QStringLiteral("label"), it.value());
-				writer->writeEndElement();
-				++it;
+			const auto* labels = const_cast<Column*>(this)->bigIntValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
+					writer->writeAttribute(QStringLiteral("label"), it.value());
+					writer->writeEndElement();
+					++it;
+				}
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
-			const auto& labels = const_cast<Column*>(this)->textValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				writer->writeStartElement(QStringLiteral("valueLabel"));
-				writer->writeAttribute(QStringLiteral("value"), it.key());
-				writer->writeAttribute(QStringLiteral("label"), it.value());
-				writer->writeEndElement();
-				++it;
+			const auto* labels = const_cast<Column*>(this)->textValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), it.key());
+					writer->writeAttribute(QStringLiteral("label"), it.value());
+					writer->writeEndElement();
+					++it;
+				}
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			const auto& labels = const_cast<Column*>(this)->dateTimeValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				writer->writeStartElement(QStringLiteral("valueLabel"));
-				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key().toMSecsSinceEpoch()));
-				writer->writeAttribute(QStringLiteral("label"), it.value());
-				writer->writeEndElement();
-				++it;
+			const auto* labels = const_cast<Column*>(this)->dateTimeValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it.key().toMSecsSinceEpoch()));
+					writer->writeAttribute(QStringLiteral("label"), it.value());
+					writer->writeEndElement();
+					++it;
+				}
 			}
 			break;
 		}
@@ -2425,4 +2435,8 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	// DEBUG("non-monotonic start/end = " << start << "/" << end)
 
 	return true;
+}
+
+AbstractColumn::ColumnMode Column::labelsMode() const {
+	return d->m_labels.mode();
 }
