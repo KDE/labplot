@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-09 00:56+0000\n"
-"PO-Revision-Date: 2023-02-05 06:49+0100\n"
+"PO-Revision-Date: 2023-02-10 08:58+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2114,10 +2114,9 @@ msgid "Message too long. CAN id: %1"
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown id: %1"
-msgstr "უცნობია"
+msgstr "უცნობი id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:310
 #, kde-format
@@ -16617,10 +16616,9 @@ msgstr "კატეგორიები"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportErrorDialog)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:14
-#, fuzzy, kde-format
-#| msgid "No Errors"
+#, kde-format
 msgid "Parse Errors"
-msgstr "შეცდომების შესახებ"
+msgstr "დამუშავების შეცდომები"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-09 00:56+0000\n"
-"PO-Revision-Date: 2023-02-08 12:36+0100\n"
+"PO-Revision-Date: 2023-02-10 11:00+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -2107,17 +2107,17 @@ msgstr ""
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:89
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
-msgstr ""
+msgstr "Big Endian není podporován. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:92
 #, kde-format
 msgid "Message too long. CAN id: %1"
-msgstr ""
+msgstr "Zpráva je příliš dlouhá. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
 #, kde-format
 msgid "Unknown id: %1"
-msgstr ""
+msgstr "Neznámé ID: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:310
 #, kde-format
@@ -16642,7 +16642,7 @@ msgstr "Kategorie"
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:14
 #, kde-format
 msgid "Parse Errors"
-msgstr ""
+msgstr "Chyby analýzy"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38
