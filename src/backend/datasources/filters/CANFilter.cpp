@@ -8,6 +8,7 @@
 */
 
 #include "backend/datasources/filters/CANFilter.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/datasources/filters/CANFilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -55,7 +56,7 @@ QStringList CANFilter::lastErrors() {
 }
 
 QStringList CANFilter::vectorNames() const {
-	return d->vectorNames;
+	return d->m_signals.signal_names;
 }
 
 void CANFilter::setConvertTimeToSeconds(bool convert) {
@@ -305,8 +306,26 @@ int CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSour
 		return 0;
 
 	auto dc = m_DataContainer.dataContainer();
-	const int columnOffset = dataSource->prepareImport(dc, mode, rows, vectorNames.length(), vectorNames, columnModes(), false);
+	const int columnOffset = dataSource->prepareImport(dc, mode, rows, m_signals.signal_names.length(), m_signals.signal_names, columnModes(), false);
 	dataSource->finalizeImport(columnOffset);
+
+	// Assign value labels to the column
+	auto columns = dataSource->children<Column>();
+	if (columns.size() == m_signals.value_descriptions.size()) {
+		int counter = 0;
+		auto signal_descriptions = m_signals.value_descriptions.begin();
+		while (signal_descriptions != m_signals.value_descriptions.end()) {
+			if (signal_descriptions->size() > 0) {
+				auto it = signal_descriptions->begin();
+				while (it != signal_descriptions->end()) {
+					columns[counter]->addValueLabel((qint64)it->value, it->description);
+					it++;
+				}
+			}
+			counter++;
+			signal_descriptions++;
+		}
+	}
 	return rows;
 }
 

@@ -53,7 +53,9 @@ DbcParser::ParseStatus DbcParser::parseMessage(const uint32_t id, const std::vec
  * \param ids Vector with all id's found in a log file
  * \return
  */
-QStringList DbcParser::signals(const QVector<uint32_t> ids, QHash<uint32_t, int>& idIndex) {
+void DbcParser::signals(const QVector<uint32_t> ids, QHash<uint32_t, int>& idIndex, Signals& out) {
+	out.signal_names.clear();
+	out.value_descriptions.clear();
 	QStringList s;
 #ifdef HAVE_DBC_PARSER
 	for (const auto id : ids) {
@@ -62,8 +64,18 @@ QStringList DbcParser::signals(const QVector<uint32_t> ids, QHash<uint32_t, int>
 			if (message.id() == id) {
 				idIndex.insert(id, s.length());
 				// const auto message = m_messages.value(id);
-				for (const auto& signal_ : message.getSignals())
-					s.append(QString::fromStdString(signal_.name + "_" + signal_.unit));
+				for (const auto& signal_ : message.getSignals()) {
+					if (signal_.unit.size() == 0)
+						out.signal_names.append(QString::fromStdString(signal_.name));
+					else
+						out.signal_names.append(QString::fromStdString(signal_.name + "_" + signal_.unit));
+					std::vector<ValueDescriptions> vd;
+					vd.reserve(signal_.svDescriptions.size());
+					for (const auto& svdescription : signal_.svDescriptions) {
+						vd.push_back({svdescription.value, QString::fromStdString(svdescription.description)});
+					}
+					out.value_descriptions.push_back({vd});
+				}
 				break;
 			}
 		}
@@ -71,6 +83,6 @@ QStringList DbcParser::signals(const QVector<uint32_t> ids, QHash<uint32_t, int>
 #else
 	Q_UNUSED(ids)
 	Q_UNUSED(idIndex)
+	Q_UNUSED(out)
 #endif
-	return s;
 }

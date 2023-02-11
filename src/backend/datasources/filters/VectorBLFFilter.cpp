@@ -222,7 +222,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 	// 2. Create vector names
 	QHash<uint32_t, int> idIndexTable;
-	vectorNames = m_dbcParser.signals(ids, idIndexTable);
+	m_dbcParser.signals(ids, idIndexTable, m_signals);
 
 	// 3. allocate memory
 	if (convertTimeToSeconds) {
@@ -234,7 +234,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		vector->resize(message_counter);
 		m_DataContainer.appendVector<qint64>(vector, AbstractColumn::ColumnMode::BigInt); // BigInt is qint64 and not quint64!
 	}
-	for (int i = 0; i < vectorNames.length(); i++) {
+	for (int i = 0; i < m_signals.signal_names.length(); i++) {
 		auto* vector = new QVector<double>();
 		vector->resize(message_counter);
 		m_DataContainer.appendVector(vector, AbstractColumn::ColumnMode::Double);
@@ -347,11 +347,12 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 	// 5. add Time column to vector Names
 	if (convertTimeToSeconds)
-		vectorNames.prepend(i18n("Time_s")); // Must be done after allocating memory
+		m_signals.signal_names.prepend(i18n("Time_s")); // Must be done after allocating memory
 	else if (timeInNS)
-		vectorNames.prepend(i18n("Time_ns")); // Must be done after allocating memory
+		m_signals.signal_names.prepend(i18n("Time_ns")); // Must be done after allocating memory
 	else
-		vectorNames.prepend(i18n("Time_10µs")); // Must be done after allocating memory
+		m_signals.signal_names.prepend(i18n("Time_10µs")); // Must be done after allocating memory
+	m_signals.value_descriptions.insert(m_signals.value_descriptions.begin(), std::vector<DbcParser::ValueDescriptions>()); // Time does not have any labels
 
 	for (const auto& message : v)
 		delete message;

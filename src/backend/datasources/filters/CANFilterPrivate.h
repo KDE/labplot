@@ -51,12 +51,13 @@ public:
 
 	const CANFilter* q;
 
+	DbcParser::Signals m_signals;
+
 	QString currentDataSetName;
 	int startRow{1};
 	int endRow{-1};
 	int startColumn{1};
 	int endColumn{-1};
-	QStringList vectorNames;
 	CANFilter::TimeHandling timeHandlingMode{CANFilter::TimeHandling::ConcatPrevious};
 	bool convertTimeToSeconds{true};
 
