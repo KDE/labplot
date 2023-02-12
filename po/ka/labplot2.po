@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2023-02-08 11:33+0100\n"
+"PO-Revision-Date: 2023-02-11 07:09+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -13639,7 +13639,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:647
 #, kde-format
 msgid "&Close"
-msgstr "დაკე&ტვა"
+msgstr "&დახურვა"
 
 #: src/kdefrontend/MainWin.cpp:649
 #, kde-format
@@ -20079,7 +20079,7 @@ msgstr ""
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:56
 #, kde-format
 msgid "Close file"
-msgstr "ფაილის დაკეტვა"
+msgstr "ფაილის დახურვა"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:172
 #, kde-format
