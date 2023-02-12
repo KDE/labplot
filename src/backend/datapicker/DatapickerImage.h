@@ -47,16 +47,16 @@ public:
 	};
 
 	struct EditorSettings {
-		int intensityThresholdLow{20};
-		int intensityThresholdHigh{100};
-		int foregroundThresholdLow{30};
-		int foregroundThresholdHigh{90};
 		int hueThresholdLow{0};
 		int hueThresholdHigh{360};
-		int saturationThresholdLow{30};
+		int saturationThresholdLow{0};
 		int saturationThresholdHigh{100};
-		int valueThresholdLow{30};
-		int valueThresholdHigh{90};
+		int valueThresholdLow{0};
+		int valueThresholdHigh{100};
+		int intensityThresholdLow{0};
+		int intensityThresholdHigh{100};
+		int foregroundThresholdLow{20};
+		int foregroundThresholdHigh{100};
 	};
 
 	QIcon icon() const override;

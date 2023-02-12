@@ -9,6 +9,7 @@
 */
 
 #include "ImportFileDialog.h"
+#include "ImportErrorDialog.h"
 #include "ImportFileWidget.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Workbook.h"
@@ -321,6 +322,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		}
 	}
 	statusBar->showMessage(i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed() / 1000));
+
+	const auto errors = filter->lastErrors();
+	if (!errors.isEmpty()) {
+		ImportErrorDialog* d = new ImportErrorDialog(errors);
+		d->setAttribute(Qt::WA_DeleteOnClose);
+		d->show();
+	}
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);

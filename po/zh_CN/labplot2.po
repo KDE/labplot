@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-07 00:54+0000\n"
+"POT-Creation-Date: 2023-02-09 00:56+0000\n"
 "PO-Revision-Date: 2023-02-07 11:02\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -49,7 +49,7 @@ msgstr ""
 #: src/backend/datapicker/DatapickerCurve.cpp:501
 #: src/backend/datapicker/DatapickerImage.cpp:511
 #: src/backend/datapicker/DatapickerPoint.cpp:498
-#: src/backend/datasources/filters/AsciiFilter.cpp:1981
+#: src/backend/datasources/filters/AsciiFilter.cpp:2003
 #: src/backend/datasources/filters/BinaryFilter.cpp:562
 #: src/backend/datasources/filters/JsonFilter.cpp:776
 #: src/backend/datasources/filters/ROOTFilter.cpp:119
@@ -563,7 +563,7 @@ msgid "%1   (no values)"
 msgstr ""
 
 #: src/backend/core/AspectTreeModel.cpp:223
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1415
 #, kde-format
 msgid "Size: %1"
 msgstr "大小：%1"
@@ -1085,7 +1085,7 @@ msgstr ""
 msgid "There is no download URL present in the metadata file!"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:209
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:368
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1927
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:104
@@ -1099,61 +1099,61 @@ msgstr ""
 msgid "Image"
 msgstr "图像"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:209
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:100
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:209
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:130
 #, kde-format
 msgid "ASCII Data"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:209
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:131
 #, kde-format
 msgid "Binary Data"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:209
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #, kde-format
 msgid "Excel"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:210
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:103
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:210
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:109
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:210
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:111
 #, kde-format
 msgid "JSON Data"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:211
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:220
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:115
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:135
 #, kde-format
 msgid "Spice"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:211
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:220
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:117
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr ""
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:211
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:220
 #, kde-format
 msgid "ROOT (CERN) Histograms"
 msgstr ""
@@ -1168,20 +1168,20 @@ msgstr "列数：%1"
 msgid "Number of lines: %1"
 msgstr "行数：%1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:548
-#: src/backend/datasources/filters/AsciiFilter.cpp:746
-#: src/backend/datasources/filters/AsciiFilter.cpp:953
-#: src/backend/datasources/filters/AsciiFilter.cpp:1511
-#: src/backend/datasources/filters/AsciiFilter.cpp:2061
+#: src/backend/datasources/filters/AsciiFilter.cpp:549
+#: src/backend/datasources/filters/AsciiFilter.cpp:751
+#: src/backend/datasources/filters/AsciiFilter.cpp:958
+#: src/backend/datasources/filters/AsciiFilter.cpp:1523
+#: src/backend/datasources/filters/AsciiFilter.cpp:2083
 #, kde-format
 msgid "Timestamp"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:552
-#: src/backend/datasources/filters/AsciiFilter.cpp:740
-#: src/backend/datasources/filters/AsciiFilter.cpp:951
-#: src/backend/datasources/filters/AsciiFilter.cpp:1506
-#: src/backend/datasources/filters/AsciiFilter.cpp:2055
+#: src/backend/datasources/filters/AsciiFilter.cpp:553
+#: src/backend/datasources/filters/AsciiFilter.cpp:745
+#: src/backend/datasources/filters/AsciiFilter.cpp:956
+#: src/backend/datasources/filters/AsciiFilter.cpp:1518
+#: src/backend/datasources/filters/AsciiFilter.cpp:2077
 #: src/backend/datasources/filters/BinaryFilter.cpp:303
 #: src/backend/datasources/filters/BinaryFilter.cpp:447
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1190,10 +1190,10 @@ msgid "Index"
 msgstr "索引"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/AsciiFilter.cpp:752
-#: src/backend/datasources/filters/AsciiFilter.cpp:958
-#: src/backend/datasources/filters/AsciiFilter.cpp:1530
-#: src/backend/datasources/filters/AsciiFilter.cpp:2074
+#: src/backend/datasources/filters/AsciiFilter.cpp:757
+#: src/backend/datasources/filters/AsciiFilter.cpp:963
+#: src/backend/datasources/filters/AsciiFilter.cpp:1542
+#: src/backend/datasources/filters/AsciiFilter.cpp:2096
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:614
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2286
@@ -1208,9 +1208,9 @@ msgstr "索引"
 msgid "Value"
 msgstr "值"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:960
-#: src/backend/datasources/filters/AsciiFilter.cpp:1532
-#: src/backend/datasources/filters/AsciiFilter.cpp:2076
+#: src/backend/datasources/filters/AsciiFilter.cpp:965
+#: src/backend/datasources/filters/AsciiFilter.cpp:1544
+#: src/backend/datasources/filters/AsciiFilter.cpp:2098
 #, kde-format
 msgid "Value %1"
 msgstr ""
@@ -1505,7 +1505,7 @@ msgstr ""
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:370
 #: src/backend/datasources/filters/NetCDFFilter.cpp:280
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1384
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1390
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr ""
@@ -2095,17 +2095,32 @@ msgstr ""
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:293
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:89
+#, kde-format
+msgid "Big Endian not supported. CAN id: %1"
+msgstr ""
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:92
+#, kde-format
+msgid "Message too long. CAN id: %1"
+msgstr ""
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:95
+#, kde-format
+msgid "Unknown id: %1"
+msgstr ""
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:310
 #, kde-format
 msgid "Time_s"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:295
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:312
 #, kde-format
 msgid "Time_ns"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:297
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:314
 #, kde-format
 msgid "Time_10µs"
 msgstr ""
@@ -5341,7 +5356,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
 #: src/backend/nsl/nsl_conv.c:21 src/kdefrontend/dockwidgets/AxisDock.cpp:243
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:151
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:317
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:316
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:682
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:946
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1111
@@ -5639,7 +5654,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:510
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1167
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1173
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:245
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:295
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:786
@@ -6479,13 +6494,13 @@ msgstr ""
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1282
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1278
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr ""
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1308
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1304
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr ""
@@ -6526,8 +6541,8 @@ msgstr "水平"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:262
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:58
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:847
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:851
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:184
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:27
 #: src/kdefrontend/dockwidgets/ReferenceRangeDock.cpp:28
@@ -10562,21 +10577,21 @@ msgstr "添加 %1"
 msgid "%1 name:"
 msgstr "%1 名称："
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:72
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:74
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Live Data Source"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:107
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:332
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:108
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:340
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:127
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:333
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:110
@@ -10585,8 +10600,8 @@ msgstr ""
 msgid "Hide Options"
 msgstr "隐藏选项"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:107
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:332
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:108
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:340
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:127
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:333
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:110
@@ -10595,93 +10610,93 @@ msgstr "隐藏选项"
 msgid "Show Options"
 msgstr "显示选项"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:147
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:148
 #, kde-format
 msgid "Live data source created in %1 seconds."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:179
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:180
 #, kde-format
 msgid "No data to import."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:179
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:180
 #, kde-format
 msgid "No Data"
 msgstr "无数据"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:323
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:324
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:351
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:387
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:414
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:438
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:463
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:496
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:519
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:359
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:395
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:422
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:446
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:471
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:504
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:527
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:157
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:353
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:361
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:151
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:365
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:373
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:135
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:390
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:398
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:418
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:426
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:424
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:432
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:443
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:451
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:449
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:475
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:457
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:483
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:469
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:477
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:500
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:508
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:506
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
 #, kde-format
 msgid "Serial port number is missing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:522
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:530
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -10734,7 +10749,7 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1166
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1172
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
 #, kde-format
 msgid "Automatic"
@@ -10806,35 +10821,35 @@ msgid ""
 "to be subscribed."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:879
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:885
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:909
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:915
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1032
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1038
 #, kde-format
 msgid "Save Filter Settings as"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1032
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1038
 #, kde-format
 msgid "Filter name:"
 msgstr "过滤名称："
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1032
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1038
 #, kde-format
 msgid "new filter"
 msgstr "新过滤器"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1080
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1086
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:428
 #, kde-format
 msgid "Data Format"
@@ -10842,7 +10857,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1081
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1087
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:482
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -10851,176 +10866,176 @@ msgstr "预览"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1083
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1089
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:561
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1114
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1120
 #, kde-format
 msgid "Data format && preview"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1376
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1382
 #, kde-format
 msgid "file command not found"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1387
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1393
 #, kde-format
 msgid "cannot open"
 msgstr "无法打开"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1392
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1398
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1397
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1403
 #, kde-format
 msgid "General:"
 msgstr "常规："
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1399
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1400
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1401
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
 #, kde-format
 msgid "yes"
 msgstr "是"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1399
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1400
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1401
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
 #, kde-format
 msgid "no"
 msgstr "否"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1399
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
 #, kde-format
 msgid "Readable: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1400
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
 #, kde-format
 msgid "Writable: %1"
 msgstr "可写：%1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1401
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
 #, kde-format
 msgid "Executable: %1"
 msgstr "可执行：%1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1403
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
 #, kde-format
 msgid "Birth time: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1404
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1410
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1411
 #, kde-format
 msgid "Last modified: %1"
 msgstr "最后修改于：%1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1412
 #, kde-format
 msgid "Last read: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1413
 #, kde-format
 msgid "Owner: %1"
 msgstr "所有者：%1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1408
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1414
 #, kde-format
 msgid "Group: %1"
 msgstr "组：%1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1415
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1412
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1418
 #, kde-format
 msgid "Summary:"
 msgstr "概览："
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1432
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1437
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1438
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1443
 #, kde-format
 msgid "Content:"
 msgstr "内容："
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1465
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1471
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "无法以读模式打开文件 %1。"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1623
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1629
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1845
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1851
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2277
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2283
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2307
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2313
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2376
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2382
 #, kde-format
 msgid "Available (%1)"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2488
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2494
 #, kde-format
 msgid "Wrong username or password"
 msgstr "错误的用户名或密码"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2497
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2495
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2501
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2498
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2504
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2501
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2507
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "发生了未知错误。"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2507
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2510
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2513
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2516
 #, kde-format
 msgid "An error occurred."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2524
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2530
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr ""
@@ -11670,20 +11685,20 @@ msgstr ""
 msgid "%1 axes: set color"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1967
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1965
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1969
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1967
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:528
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:733
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1773
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1769
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:722
-#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:417
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:761
+#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:415
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:759
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:294
-#: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:266
+#: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:265
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:620
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1304
@@ -11752,7 +11767,7 @@ msgstr "列:"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:526
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:731
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:759
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:757
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1302
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
@@ -11851,13 +11866,13 @@ msgstr ""
 msgid "Numeric"
 msgstr "数值"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:744
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:742
 #, kde-format
 msgid "Plot Ranges:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:746
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:744
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:247
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:57
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:252
@@ -11881,22 +11896,22 @@ msgstr ""
 msgid "Plot Range:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:827
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:825
 #, kde-format
 msgid "Free"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:828
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:826
 #, kde-format
 msgid "Last Points"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:829
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:827
 #, kde-format
 msgid "First Points"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:832
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:830
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -11904,42 +11919,42 @@ msgid ""
 "number of first points is plotted</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:841
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:839
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
 #, kde-format
 msgid "Simple"
 msgstr "简单"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:852
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
 #, kde-format
 msgid "Sloped"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1110
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1115
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1163
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1111
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1159
 #, kde-format
 msgid "Really remove it?"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1163
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1159
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1254
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1250
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:706
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -11949,7 +11964,7 @@ msgstr "水平："
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1255
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1251
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:820
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:667
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -11959,7 +11974,7 @@ msgstr "垂直："
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1257
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1253
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:767
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:660
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -11969,7 +11984,7 @@ msgstr "剩余："
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1258
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1254
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:774
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:621
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -11977,18 +11992,18 @@ msgstr "剩余："
 msgid "Top:"
 msgstr "上："
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1589
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1585
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1591
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1587
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1771
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1767
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr ""
@@ -12105,12 +12120,12 @@ msgstr ""
 msgid "Copy All"
 msgstr "全部复制"
 
-#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:257
+#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:255
 #, kde-format
 msgid "%1 CustomPoints: visibility changed"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:415
+#: src/kdefrontend/dockwidgets/CustomPointDock.cpp:413
 #, kde-format
 msgid "%1 custom points: template \"%2\" loaded"
 msgstr ""
@@ -12231,7 +12246,7 @@ msgstr ""
 msgid "Custom Error Values, asymmetric"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:554
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:552
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:952
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1007
 #, kde-format
@@ -12241,7 +12256,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:561
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:559
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:959
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1014
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:407
@@ -12251,12 +12266,12 @@ msgstr ""
 msgid "Data, +:"
 msgstr "数据, +:"
 
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:249
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:248
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:251
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:250
 #, kde-format
 msgid "%1: curve \"%2\" removed"
 msgstr ""
@@ -12324,7 +12339,7 @@ msgid ""
 "longer project load times."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:264
+#: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:263
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr ""
@@ -16555,6 +16570,19 @@ msgstr "数据集:"
 #: src/kdefrontend/ui/datasources/importdatasetwidget.ui:103
 #, kde-format
 msgid "Categories"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, ImportErrorDialog)
+#: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:14
+#, fuzzy, kde-format
+#| msgid "No Error"
+msgid "Parse Errors"
+msgstr "无错误"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbOk)
+#: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38
+#, kde-format
+msgid "OK"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbDataSource)

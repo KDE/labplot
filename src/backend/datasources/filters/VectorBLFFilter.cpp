@@ -71,11 +71,36 @@ bool VectorBLFFilter::isValid(const QString& filename) {
 
 VectorBLFFilterPrivate::VectorBLFFilterPrivate(VectorBLFFilter* owner)
 	: CANFilterPrivate(owner)
-	, q(owner) {
+#ifdef HAVE_VECTOR_BLF
+	, q(owner)
+#endif
+{
 }
 
 bool VectorBLFFilterPrivate::isValid(const QString& filename) const {
 	return VectorBLFFilter::isValid(filename);
+}
+
+QStringList VectorBLFFilterPrivate::lastErrors() const {
+	QStringList r;
+	for (const auto& e : errors) {
+		switch (e.e) {
+		case DbcParser::ParseStatus::ErrorBigEndian:
+			r.append(i18n("Big Endian not supported. CAN id: %1", QStringLiteral("0x%1").arg(e.CANId, 0, 16)));
+			break;
+		case DbcParser::ParseStatus::ErrorMessageToLong:
+			r.append(i18n("Message too long. CAN id: %1", QStringLiteral("0x%1").arg(e.CANId, 0, 16)));
+			break;
+		case DbcParser::ParseStatus::ErrorUnknownID:
+			r.append(i18n("Unknown id: %1", QStringLiteral("0x%1").arg(e.CANId, 0, 16)));
+			break;
+		case DbcParser::ParseStatus::ErrorDBCParserUnsupported:
+		case DbcParser::ParseStatus::ErrorInvalidFile:
+		case DbcParser::ParseStatus::Success:
+			break;
+		}
+	}
+	return r;
 }
 
 #ifdef HAVE_VECTOR_BLF
@@ -116,6 +141,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		return m_parseState.readLines;
 
 	m_DataContainer.clear();
+	errors.clear();
 
 #ifdef HAVE_VECTOR_BLF
 
@@ -136,14 +162,11 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (ohb == nullptr)
 				break;
 
-			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2 && ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE)
+			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
 				continue;
 
 			int id;
-			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
-				const auto message = reinterpret_cast<Vector::BLF::CanMessage*>(ohb);
-				id = message->id;
-			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
+			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
 				const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(ohb);
 				id = message->id;
 			} else
@@ -181,14 +204,10 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	bool timeInNS = true;
 	if (timeHandlingMode == CANFilter::TimeHandling::ConcatNAN) {
 		for (const auto ohb : v) {
-			int id;
+			uint32_t id;
 			std::vector<double> values;
 			DbcParser::ParseStatus status;
-			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
-				const auto message = reinterpret_cast<const Vector::BLF::CanMessage*>(ohb);
-				id = message->id;
-				status = m_dbcParser.parseMessage(message->id, message->data, values);
-			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
+			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
 				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
 				id = message->id;
 				status = m_dbcParser.parseMessage(message->id, message->data, values);
@@ -198,6 +217,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (status != DbcParser::ParseStatus::Success) {
 				// id is not available in the dbc file, so it is not possible to decode
 				DEBUG("Unable to decode message: " << id << ": " << (int)status);
+				errors.append({status, id});
 				continue;
 			}
 
@@ -229,22 +249,19 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	} else {
 		bool firstMessageValid = false;
 		for (const auto ohb : v) {
-			int id;
+			uint32_t id;
 			std::vector<double> values;
-			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE) {
-				const auto message = reinterpret_cast<const Vector::BLF::CanMessage*>(ohb);
-				id = message->id;
-				m_dbcParser.parseMessage(message->id, message->data, values);
-			} else if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
+			DbcParser::ParseStatus status;
+			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
 				const auto message = reinterpret_cast<const Vector::BLF::CanMessage2*>(ohb);
 				id = message->id;
-				m_dbcParser.parseMessage(message->id, message->data, values);
+				status = m_dbcParser.parseMessage(message->id, message->data, values);
 			} else
 				return 0;
 
-			if (values.empty()) {
+			if (status != DbcParser::ParseStatus::Success) {
 				// id is not available in the dbc file, so it is not possible to decode
-				DEBUG("Unable to decode message: " << id);
+				errors.append({status, id});
 				continue;
 			}
 
@@ -277,11 +294,11 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			} else {
 				const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
 				for (std::vector<double>::size_type i = 1; i < startIndex; i++)
-					m_DataContainer.setData<double>(i, message_index, 0);
+					m_DataContainer.setData<double>(i, message_index, std::nan("0"));
 				for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++)
 					m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
 				for (std::vector<double>::size_type i = startIndex + values.size(); i < m_DataContainer.size(); i++)
-					m_DataContainer.setData<double>(i, message_index, 0);
+					m_DataContainer.setData<double>(i, message_index, std::nan("0"));
 				firstMessageValid = true;
 			}
 			message_index++;

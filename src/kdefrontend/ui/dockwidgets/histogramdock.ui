@@ -43,7 +43,7 @@
         </widget>
        </item>
        <item row="24" column="2">
-        <widget class="QDateTimeEdit" name="dteBinRangesMax">
+        <widget class="UTCDateTimeEdit" name="dteBinRangesMax">
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
@@ -82,7 +82,7 @@
         <widget class="QComboBox" name="cbPlotRanges"/>
        </item>
        <item row="23" column="2">
-        <widget class="QDateTimeEdit" name="dteBinRangesMin">
+        <widget class="UTCDateTimeEdit" name="dteBinRangesMin">
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
@@ -684,6 +684,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -47,9 +47,9 @@ private Q_SLOTS:
 	void bindingChanged(bool checked);
 
 	void positionXLogicalChanged(double);
-	void positionXLogicalDateTimeChanged(const QDateTime&);
+	void positionXLogicalDateTimeChanged(qint64);
 	void positionYLogicalChanged(double);
-	void positionYLogicalDateTimeChanged(const QDateTime&);
+	void positionYLogicalDateTimeChanged(qint64);
 
 	// SLOTs for changes triggered in CustomPoint
 	// General-Tab

@@ -59,8 +59,8 @@ private Q_SLOTS:
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
-	void xRangeMinDateTimeChanged(const QDateTime&);
-	void xRangeMaxDateTimeChanged(const QDateTime&);
+	void xRangeMinDateTimeChanged(qint64);
+	void xRangeMaxDateTimeChanged(qint64);
 	void typeChanged(int);
 	void autoToleranceChanged();
 	void toleranceChanged(double);

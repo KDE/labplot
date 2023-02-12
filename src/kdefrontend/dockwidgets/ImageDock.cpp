@@ -110,6 +110,10 @@ ImageDock::ImageDock(QWidget* parent)
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::verticalAlignmentChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::rotationChanged);
 
+	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ImageDock::positionXLogicalDateTimeChanged);
+	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ImageDock::positionXLogicalDateTimeChanged);
+	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::positionYLogicalChanged);
+
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &ImageDock::bindingChanged);
 	connect(ui.chbVisible, &QCheckBox::clicked, this, &ImageDock::visibilityChanged);
 }
@@ -404,12 +408,11 @@ void ImageDock::positionXLogicalChanged(double value) {
 		label->setPositionLogical(pos);
 }
 
-void ImageDock::positionXLogicalDateTimeChanged(const QDateTime& dateTime) {
+void ImageDock::positionXLogicalDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 x = dateTime.toMSecsSinceEpoch();
 	QPointF pos = m_image->positionLogical();
-	pos.setX(x);
+	pos.setX(value);
 	for (auto* label : m_imageList)
 		label->setPositionLogical(pos);
 }
@@ -512,7 +515,7 @@ void ImageDock::imageCoordinateBindingEnabledChanged(bool enabled) {
 void ImageDock::imagePositionLogicalChanged(QPointF pos) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionXLogical->setValue(pos.x());
-	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
+	ui.dtePositionXLogical->setMSecsSinceEpochUTC(pos.x());
 	ui.sbPositionYLogical->setValue(pos.y());
 }
 
@@ -577,7 +580,7 @@ void ImageDock::load() {
 			ui.dtePositionXLogical->show();
 
 			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_image->positionLogical().x()));
+			ui.dtePositionXLogical->setMSecsSinceEpochUTC(m_image->positionLogical().x());
 		}
 
 		ui.chbBindLogicalPos->setChecked(m_image->coordinateBindingEnabled());

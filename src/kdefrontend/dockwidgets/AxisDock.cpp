@@ -135,8 +135,8 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::rangeTypeChanged);
 	connect(ui.sbStart, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::startChanged);
 	connect(ui.sbEnd, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::endChanged);
-	connect(ui.dateTimeEditStart, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::startDateTimeChanged);
-	connect(ui.dateTimeEditEnd, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::endDateTimeChanged);
+	connect(ui.dateTimeEditStart, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &AxisDock::startDateTimeChanged);
+	connect(ui.dateTimeEditEnd, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &AxisDock::endDateTimeChanged);
 	connect(ui.sbZeroOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::zeroOffsetChanged);
 	connect(ui.tbOffsetLeft, &QToolButton::clicked, this, &AxisDock::setLeftOffset);
 	connect(ui.tbOffsetCenter, &QToolButton::clicked, this, &AxisDock::setCenterOffset);
@@ -747,18 +747,16 @@ void AxisDock::endChanged(double value) {
 		axis->setEnd(value);
 }
 
-void AxisDock::startDateTimeChanged(const QDateTime& dateTime) {
+void AxisDock::startDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* axis : m_axesList)
 		axis->setStart(value);
 }
 
-void AxisDock::endDateTimeChanged(const QDateTime& dateTime) {
+void AxisDock::endDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* axis : m_axesList)
 		axis->setEnd(value);
 }
@@ -1546,7 +1544,7 @@ void AxisDock::axisStartChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	ui.sbStart->setValue(value);
-	ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
+	ui.dateTimeEditStart->setMSecsSinceEpochUTC(value);
 
 	// determine stepsize and number of decimals
 	const double range{m_axis->range().length()};
@@ -1561,7 +1559,7 @@ void AxisDock::axisEndChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	ui.sbEnd->setValue(value);
-	ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
+	ui.dateTimeEditEnd->setMSecsSinceEpochUTC(value);
 
 	// determine stepsize and number of decimals
 	const double range{m_axis->range().length()};
@@ -1859,8 +1857,8 @@ void AxisDock::load() {
 			ui.dateTimeEditStart->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
 			ui.dateTimeEditEnd->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
 		}
-		ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().start()));
-		ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().end()));
+		ui.dateTimeEditStart->setMSecsSinceEpochUTC(m_axis->range().start());
+		ui.dateTimeEditEnd->setMSecsSinceEpochUTC(m_axis->range().end());
 	}
 
 	ui.sbZeroOffset->setValue(m_axis->zeroOffset());

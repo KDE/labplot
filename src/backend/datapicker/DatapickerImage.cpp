@@ -90,16 +90,16 @@ void DatapickerImage::init() {
 
 	// edit image settings
 	d->plotImageType = DatapickerImage::PlotImageType::OriginalImage;
-	d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 90);
-	d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 30);
-	d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", 360);
-	d->settings.hueThresholdLow = group.readEntry("HueThresholdLow", 0);
-	d->settings.intensityThresholdHigh = group.readEntry("IntensityThresholdHigh", 100);
-	d->settings.intensityThresholdLow = group.readEntry("IntensityThresholdLow", 20);
-	d->settings.saturationThresholdHigh = group.readEntry("SaturationThresholdHigh", 100);
-	d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", 30);
-	d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 90);
-	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 30);
+	d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", d->settings.foregroundThresholdHigh);
+	d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", d->settings.foregroundThresholdLow);
+	d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", d->settings.hueThresholdHigh);
+	d->settings.hueThresholdLow = group.readEntry("HueThresholdLow", d->settings.hueThresholdLow);
+	d->settings.intensityThresholdHigh = group.readEntry("IntensityThresholdHigh", d->settings.intensityThresholdHigh);
+	d->settings.intensityThresholdLow = group.readEntry("IntensityThresholdLow", d->settings.intensityThresholdLow);
+	d->settings.saturationThresholdHigh = group.readEntry("SaturationThresholdHigh", d->settings.saturationThresholdHigh);
+	d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", d->settings.saturationThresholdLow);
+	d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", d->settings.valueThresholdHigh);
+	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", d->settings.valueThresholdLow);
 
 	// reference point symbol properties
 	d->symbol = new Symbol(QString());

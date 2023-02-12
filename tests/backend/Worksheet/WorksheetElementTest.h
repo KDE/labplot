@@ -29,7 +29,9 @@
 	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_COORDBINDING);                                                              \
 	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_COORDBINDING);                                                              \
 	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING);                                                           \
-	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING);
+	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING);                                                           \
+	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, MOUSE_MOVE_DATETIME);                                                                               \
+	WORKSHEETELEMENT_TEST_DEFINITION(WorksheetElementType, DOCK_CHANGE_DATETIME);
 
 class WorksheetElementTest : public CommonTest {
 	Q_OBJECT

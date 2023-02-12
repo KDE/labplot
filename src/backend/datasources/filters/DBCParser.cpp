@@ -13,7 +13,6 @@ bool DbcParser::parseFile(const QString& filename) {
 #ifdef HAVE_DBC_PARSER
 	try {
 		m_parser.parse_file(filename.toStdString());
-		m_parser.sortSignals();
 		m_valid = true;
 	} catch (libdbc::validity_error e) {
 		// e.what(); // TODO: turn on
@@ -37,29 +36,8 @@ DbcParser::ParseStatus DbcParser::parseMessage(const uint32_t id, const std::vec
 		return ParseStatus::ErrorBigEndian;
 	case libdbc::Message::ParseSignalsStatus::ErrorUnknownID:
 		return ParseStatus::ErrorUnknownID;
-	}
-#else
-	Q_UNUSED(id)
-	Q_UNUSED(data)
-	Q_UNUSED(out)
-#endif
-	return ParseStatus::ErrorDBCParserUnsupported;
-}
-
-DbcParser::ParseStatus DbcParser::parseMessage(const uint32_t id, const std::array<uint8_t, 8>& data, std::vector<double>& out) {
-	if (!m_valid)
-		return ParseStatus::ErrorInvalidFile;
-
-#ifdef HAVE_DBC_PARSER
-	switch (m_parser.parseMessage(id, data, out)) {
-	case libdbc::Message::ParseSignalsStatus::Success:
-		return ParseStatus::Success;
-	case libdbc::Message::ParseSignalsStatus::ErrorMessageToLong:
-		return ParseStatus::ErrorMessageToLong;
-	case libdbc::Message::ParseSignalsStatus::ErrorBigEndian:
-		return ParseStatus::ErrorBigEndian;
-	case libdbc::Message::ParseSignalsStatus::ErrorUnknownID:
-		return ParseStatus::ErrorUnknownID;
+	case libdbc::Message::ParseSignalsStatus::ErrorInvalidConversion:
+		return ParseStatus::ErrorInvalidConversion;
 	}
 #else
 	Q_UNUSED(id)

@@ -115,6 +115,15 @@ QStringList AbstractFileFilter::numberFormats() {
 	return formats;
 }
 
+/*!
+ * \brief AbstractFileFilter::lastErrors
+ * Errors occured during last parse
+ * \return
+ */
+QStringList AbstractFileFilter::lastErrors() {
+	return QStringList();
+}
+
 AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO)
 	QString fileInfo;

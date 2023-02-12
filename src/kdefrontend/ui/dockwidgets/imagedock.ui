@@ -103,7 +103,7 @@
         </widget>
        </item>
        <item row="16" column="2">
-        <widget class="QDateTimeEdit" name="dtePositionXLogical"/>
+        <widget class="UTCDateTimeEdit" name="dtePositionXLogical"/>
        </item>
        <item row="19" column="2">
         <widget class="QComboBox" name="cbVerticalAlignment"/>
@@ -577,6 +577,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

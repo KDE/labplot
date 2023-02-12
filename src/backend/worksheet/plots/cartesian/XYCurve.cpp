@@ -1833,7 +1833,7 @@ void XYCurvePrivate::updateValues() {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				value = numberLocale.toString(point.x(), valuesNumericFormat, precision);
 			else
-				value = QDateTime::fromMSecsSinceEpoch(point.x()).toString(valuesDateTimeFormat);
+				value = QDateTime::fromMSecsSinceEpoch(point.x(), Qt::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
@@ -1850,7 +1850,7 @@ void XYCurvePrivate::updateValues() {
 			if (rangeFormat == RangeT::Format::Numeric)
 				value = numberLocale.toString(point.y(), valuesNumericFormat, precision);
 			else
-				value = QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);
+				value = QDateTime::fromMSecsSinceEpoch(point.y(), Qt::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
@@ -1877,12 +1877,12 @@ void XYCurvePrivate::updateValues() {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				value += numberLocale.toString(point.x(), valuesNumericFormat, xPrecision);
 			else
-				value += QDateTime::fromMSecsSinceEpoch(point.x()).toString(valuesDateTimeFormat);
+				value += QDateTime::fromMSecsSinceEpoch(point.x(), Qt::UTC).toString(valuesDateTimeFormat);
 
 			if (yRangeFormat == RangeT::Format::Numeric)
 				value += QLatin1Char(',') + numberLocale.toString(point.y(), valuesNumericFormat, yPrecision);
 			else
-				value += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);
+				value += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y(), Qt::UTC).toString(valuesDateTimeFormat);
 
 			if (valuesType == XYCurve::ValuesType::XYBracketed)
 				value += QLatin1Char(')');
@@ -1928,8 +1928,8 @@ void XYCurvePrivate::updateValues() {
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start())
-					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end()))
+				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC)
+					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end(), Qt::UTC))
 					continue;
 				break;
 			case AbstractColumn::ColumnMode::Text:

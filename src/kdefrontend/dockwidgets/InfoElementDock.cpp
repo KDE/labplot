@@ -51,7 +51,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
 	connect(ui->teComment, &QTextEdit::textChanged, this, &InfoElementDock::commentChanged);
 	connect(ui->sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &InfoElementDock::positionChanged);
-	connect(ui->dateTimeEditPosition, &QDateTimeEdit::dateTimeChanged, this, &InfoElementDock::positionDateTimeChanged);
+	connect(ui->dateTimeEditPosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &InfoElementDock::positionDateTimeChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
 	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
 	connect(ui->cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::plotRangeChanged);
@@ -161,7 +161,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->dateTimeEditPosition->hide();
 	} else {
 		ui->dateTimeEditPosition->setDisplayFormat(m_element->plot()->rangeDateTimeFormat(Dimension::X));
-		ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_element->positionLogical(), Qt::UTC));
+		ui->dateTimeEditPosition->setMSecsSinceEpochUTC(m_element->positionLogical());
 		ui->lPosition->hide();
 		ui->sbPosition->hide();
 		ui->lPositionDateTime->show();
@@ -202,10 +202,9 @@ void InfoElementDock::positionChanged(double pos) {
 		element->setPositionLogical(pos);
 }
 
-void InfoElementDock::positionDateTimeChanged(const QDateTime& dateTime) {
+void InfoElementDock::positionDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* element : m_elements)
 		element->setPositionLogical(value);
 }
@@ -322,7 +321,7 @@ void InfoElementDock::elementLabelBorderShapeChanged() {
 void InfoElementDock::elementPositionChanged(double pos) {
 	CONDITIONAL_LOCK_RETURN;
 	ui->sbPosition->setValue(pos);
-	ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(pos, Qt::UTC));
+	ui->dateTimeEditPosition->setMSecsSinceEpochUTC(pos);
 }
 
 void InfoElementDock::elementCurveRemoved(const QString& name) {

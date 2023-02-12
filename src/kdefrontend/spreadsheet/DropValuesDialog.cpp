@@ -96,8 +96,8 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 	ui.cbOperatorText->setCurrentIndex(conf.readEntry("OperatorText", 0));
 
 	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	ui.dteValue1->setDateTime(QDateTime::fromMSecsSinceEpoch(conf.readEntry("Value1DateTime", now)));
-	ui.dteValue2->setDateTime(QDateTime::fromMSecsSinceEpoch(conf.readEntry("Value2DateTime", now)));
+	ui.dteValue1->setMSecsSinceEpochUTC(conf.readEntry("Value1DateTime", now));
+	ui.dteValue2->setMSecsSinceEpochUTC(conf.readEntry("Value2DateTime", now));
 	ui.cbOperatorDateTime->setCurrentIndex(conf.readEntry("OperatorDateTime", 0));
 	operatorDateTimeChanged(ui.cbOperatorDateTime->currentIndex());
 

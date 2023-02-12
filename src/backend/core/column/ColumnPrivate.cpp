@@ -500,8 +500,6 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	}
 	}
 
-	DEBUG(Q_FUNC_INFO << ", here")
-
 	// determine the new input and output filters
 	switch (mode) { // new mode
 	case AbstractColumn::ColumnMode::Double:
@@ -549,7 +547,6 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		break;
 	} // switch(mode)
 
-	DEBUG(Q_FUNC_INFO << ", here 2")
 	m_columnMode = mode;
 
 	m_inputFilter = new_in_filter;
@@ -559,7 +556,6 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	m_inputFilter->setHidden(true);
 	m_outputFilter->setHidden(true);
 
-	DEBUG(Q_FUNC_INFO << ", here 3")
 	if (temp_col) { // if temp_col == 0, only the input/output filters need to be changed
 		// copy the filtered, i.e. converted, column (mode is orig mode)
 		DEBUG("	temp_col column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, temp_col->columnMode()));
@@ -570,7 +566,6 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		delete temp_col;
 	}
 
-	DEBUG(Q_FUNC_INFO << ", here 4")
 	if (filter_is_temporary)
 		delete filter;
 
