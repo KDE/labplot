@@ -23,13 +23,13 @@
 // C++ style warning (works on Windows)
 #include <iomanip>
 #include <iostream>
-#define WARN(x) std::cout << std::dec << std::boolalpha << std::setprecision(15) << x << std::endl;
+#define WARN(x) std::cout << std::dec << std::setprecision(15) << std::boolalpha << x << std::endl;
 
 #ifndef NDEBUG
 #include <QDebug>
 #define QDEBUG(x) qDebug() << x;
 // C++ style debugging (works on Windows)
-#define DEBUG(x) std::cout << std::dec << std::boolalpha << std::setprecision(15) << x << std::endl;
+#define DEBUG(x) std::cout << std::dec << std::setprecision(15) << std::boolalpha << x << std::endl;
 #else
 #define QDEBUG(x)                                                                                                                                              \
 	{ }
