@@ -25,9 +25,21 @@ public:
 
 	virtual QStringList lastErrors() const override;
 
-public:
+private:
+	enum class ParseStatus {
+		Success,
+		ErrorUnknown,
+		ErrorInvalidFile,
+		DBCInvalidFile,
+		DBCMessageToLong,
+		DBCBigEndian,
+		DBCParserUnsupported,
+		DBCUnknownID,
+		DBCInvalidConversion
+	};
+	static ParseStatus DBCParserParseStatusToVectorBLFStatus(DbcParser::ParseStatus);
 	struct Errors {
-		DbcParser::ParseStatus e;
+		ParseStatus e;
 		uint32_t CANId;
 	};
 	QList<Errors> errors;

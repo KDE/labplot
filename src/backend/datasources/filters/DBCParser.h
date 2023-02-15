@@ -11,12 +11,12 @@ class QString;
 class DbcParser {
 public:
 	enum class ParseStatus {
-		Success = 0,
-		ErrorInvalidFile = -1,
-		ErrorBigEndian = -2,
-		ErrorMessageToLong = -3,
-		ErrorDBCParserUnsupported = -4,
-		ErrorUnknownID = -5,
+		Success,
+		ErrorInvalidFile,
+		ErrorBigEndian,
+		ErrorMessageToLong,
+		ErrorDBCParserUnsupported,
+		ErrorUnknownID,
 		ErrorInvalidConversion,
 	};
 
