@@ -785,8 +785,11 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	}
 	case AbstractFileFilter::FileType::VECTOR_BLF: {
 		DEBUG(Q_FUNC_INFO << ", VECTOR_BLF");
-		if (!m_currentFilter)
-			m_currentFilter.reset(new VectorBLFFilter);
+		if (!m_currentFilter) {
+			auto filter = new VectorBLFFilter;
+			filter->setDBCFile(dbcFileName());
+			m_currentFilter.reset(filter);
+		}
 		auto filter = static_cast<VectorBLFFilter*>(m_currentFilter.get());
 		if (m_canOptionsWidget)
 			m_canOptionsWidget->applyFilterSettings(filter);
