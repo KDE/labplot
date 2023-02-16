@@ -128,8 +128,8 @@ void BLFFilterTest::testValidBLFValidDBCSingleMessageBigEndian() {
 	QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
 	QVERIFY(dbcFile.open());
 	const auto dbcContent = R"(BO_ 234 MSG1: 8 Vector__XXX
-SG_ Sig1 : 0|8@0- (0.1,0) [-3276.8|-3276.7] "C" Vector__XXX
-SG_ Sig2 : 8|8@0- (0.1,0) [-3276.8|-3276.7] "C" Vector__XXX
+ SG_ Sig1 : 7|8@0- (0.1,0) [-3276.8|-3276.7] "C" Vector__XXX
+ SG_ Sig2 : 15|8@0- (0.1,0) [-3276.8|-3276.7] "C" Vector__XXX
 )";
 	createDBCFile(dbcFile.fileName(), dbcContent);
 
@@ -142,29 +142,28 @@ SG_ Sig2 : 8|8@0- (0.1,0) [-3276.8|-3276.7] "C" Vector__XXX
 	filter.setDBCFile(dbcFile.fileName());
 	Spreadsheet s(QStringLiteral("TestSpreadsheet"), false);
 	filter.readDataFromFile(blfFileName.fileName(), &s);
-	// Big endian not yet supported
-	// QCOMPARE(s.columnCount(), 3); // time + Sig1 + Sig2
+	QCOMPARE(s.columnCount(), 3); // time + Sig1 + Sig2
 
-	// {
-	//     // Time
-	//     const auto* c = s.column(0);
-	//     QCOMPARE(c->rowCount(), 1);
-	//     QCOMPARE(c->valueAt(0), 5e-9); // nanoseconds
-	// }
+	{
+		// Time
+		const auto* c = s.column(0);
+		QCOMPARE(c->rowCount(), 1);
+		QCOMPARE(c->valueAt(0), 5e-9); // nanoseconds
+	}
 
-	// {
-	//     // Sig1
-	//     const auto* c = s.column(1);
-	//     QCOMPARE(c->rowCount(), 1);
-	//     QCOMPARE(c->valueAt(0), 0x01 * 0.1);
-	// }
+	{
+		// Sig1
+		const auto* c = s.column(1);
+		QCOMPARE(c->rowCount(), 1);
+		QCOMPARE(c->valueAt(0), 0x01 * 0.1);
+	}
 
-	// {
-	//     // Sig2
-	//     const auto* c = s.column(2);
-	//     QCOMPARE(c->rowCount(), 1);
-	//     QCOMPARE(c->valueAt(0), 0x02 * 0.1);
-	// }
+	{
+		// Sig2
+		const auto* c = s.column(2);
+		QCOMPARE(c->rowCount(), 1);
+		QCOMPARE(c->valueAt(0), 0x02 * 0.1);
+	}
 }
 
 // Use the previous value if there is no value at the current timestamp
@@ -297,11 +296,11 @@ void BLFFilterTest::testUseNANBigEndian() {
 	QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
 	QVERIFY(dbcFile.open());
 	const auto dbcContent = R"(BO_ 234 MSG1: 8 Vector__XXX
-SG_ Msg1Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
-SG_ Msg1Sig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "km/h" Vector__XXX
- BO_ 123 MSG2: 8 Vector__XXX
-SG_ Msg2Sig1 : 0|8@0+ (1,0) [-3276.8|-3276.7] "mm" Vector__XXX
-SG_ Msg2Sig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "m" Vector__XXX
+ SG_ Msg1Sig1 : 7|8@0+ (1,0) [-3276.8|-3276.7] "C" Vector__XXX
+ SG_ Msg1Sig2 : 15|8@0+ (1,0) [-3276.8|-3276.7] "km/h" Vector__XXX
+BO_ 123 MSG2: 8 Vector__XXX
+ SG_ Msg2Sig1 : 7|8@0+ (1,0) [-3276.8|-3276.7] "mm" Vector__XXX
+ SG_ Msg2Sig2 : 15|8@0+ (1,0) [-3276.8|-3276.7] "m" Vector__XXX
 )";
 	createDBCFile(dbcFile.fileName(), dbcContent);
 
@@ -316,73 +315,72 @@ SG_ Msg2Sig2 : 8|8@0+ (1,0) [-3276.8|-3276.7] "m" Vector__XXX
 	filter.setDBCFile(dbcFile.fileName());
 	Spreadsheet s(QStringLiteral("TestSpreadsheet"), false);
 	filter.readDataFromFile(blfFileName.fileName(), &s);
-	// Big endian not yet supported
-	//	QCOMPARE(s.columnCount(), 5); // time + Msg1Sig1 + Msg1Sig2 + Msg2Sig1 + Msg2Sig2
+	QCOMPARE(s.columnCount(), 5); // time + Msg1Sig1 + Msg1Sig2 + Msg2Sig1 + Msg2Sig2
 
-	//	{
-	//		// Time
-	//		const auto* c = s.column(0);
-	//		QCOMPARE(c->name(), QStringLiteral("Time_s"));
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		// Time
+		const auto* c = s.column(0);
+		QCOMPARE(c->name(), QStringLiteral("Time_s"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<double> refData{5e-9, 6e-9, 8e-9, 10e-9, 12e-9, 14e-9};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{5e-9, 6e-9, 8e-9, 10e-9, 12e-9, 14e-9};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 
-	//	{
-	//		// Msg1Sig1
-	//		const auto* c = s.column(1);
-	//		QCOMPARE(c->name(), QStringLiteral("Msg1Sig1_C"));
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		// Msg1Sig1
+		const auto* c = s.column(1);
+		QCOMPARE(c->name(), QStringLiteral("Msg1Sig1_C"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<double> refData{0x01, NAN, NAN, 0xD3, 0xE1, 0xD1};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{0x01, NAN, NAN, 0xD3, 0xE1, 0xD1};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 
-	//	{
-	//		// Msg1Sig2
-	//		const auto* c = s.column(2);
-	//		QCOMPARE(c->name(), QStringLiteral("Msg1Sig2_km/h"));
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		// Msg1Sig2
+		const auto* c = s.column(2);
+		QCOMPARE(c->name(), QStringLiteral("Msg1Sig2_km/h"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<double> refData{0x02, NAN, NAN, 0xB2, 0xC7, 0xC7};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{0x02, NAN, NAN, 0xB2, 0xC7, 0xC7};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 
-	//	{
-	//		// Msg2Sig1
-	//		const auto* c = s.column(3);
-	//		QCOMPARE(c->name(), QStringLiteral("Msg2Sig1_mm"));
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		// Msg2Sig1
+		const auto* c = s.column(3);
+		QCOMPARE(c->name(), QStringLiteral("Msg2Sig1_mm"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<double> refData{NAN, 0xFF, 0x23, NAN, NAN, NAN};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{NAN, 0xFF, 0x23, NAN, NAN, NAN};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 
-	//	{
-	//		// Msg2Sig2
-	//		const auto* c = s.column(4);
-	//		QCOMPARE(c->name(), QStringLiteral("Msg2Sig2_m"));
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		// Msg2Sig2
+		const auto* c = s.column(4);
+		QCOMPARE(c->name(), QStringLiteral("Msg2Sig2_m"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<double> refData{NAN, 0xA2, 0xE2, NAN, NAN, NAN};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{NAN, 0xA2, 0xE2, NAN, NAN, NAN};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 }
 
 void BLFFilterTest::testTimeNative() {
@@ -421,20 +419,20 @@ BO_ 123 MSG2: 8 Vector__XXX
 	filter.setDBCFile(dbcFile.fileName());
 	Spreadsheet s(QStringLiteral("TestSpreadsheet"), false);
 	filter.readDataFromFile(blfFileName.fileName(), &s);
-	// QCOMPARE(s.columnCount(), 5); // time + Msg1Sig1 + Msg1Sig2 + Msg2Sig1 + Msg2Sig2 // Big Endian not supported
+	QCOMPARE(s.columnCount(), 5); // time + Msg1Sig1 + Msg1Sig2 + Msg2Sig1 + Msg2Sig2
 
-	//	{
-	//		// Time
-	//		const auto* c = s.column(0);
-	//		QCOMPARE(c->name(), QStringLiteral("Time_ns"));
-	//		QCOMPARE(c->rowCount(), 6);
+	{
+		// Time
+		const auto* c = s.column(0);
+		QCOMPARE(c->name(), QStringLiteral("Time_ns"));
+		QCOMPARE(c->rowCount(), 6);
 
-	//		QVector<double> refData{5, 6, 8, 10, 12, 14};
-	//		QCOMPARE(refData.size(), 6);
-	//		for (int i = 0; i < c->rowCount(); i++) {
-	//			QCOMPARE(c->valueAt(i), refData.at(i));
-	//		}
-	//	}
+		QVector<double> refData{5, 6, 8, 10, 12, 14};
+		QCOMPARE(refData.size(), 6);
+		for (int i = 0; i < c->rowCount(); i++) {
+			QCOMPARE(c->valueAt(i), refData.at(i));
+		}
+	}
 }
 
 // Value5 is a value larger than one byte, but not exactly a multiple
