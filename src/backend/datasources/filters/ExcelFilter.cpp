@@ -58,8 +58,8 @@ QString ExcelFilter::fileInfoString(const QString& fileName) {
 	return info;
 #else
 	Q_UNUSED(fileName)
-#endif
 	return {};
+#endif
 }
 
 QStringList ExcelFilter::sheets() const {

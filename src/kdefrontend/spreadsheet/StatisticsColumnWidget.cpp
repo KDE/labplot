@@ -593,7 +593,8 @@ void StatisticsColumnWidget::showParetoPlot() {
 	row = 0;
 	for (auto value : data) {
 		sum += value;
-		yData[row] = (double)sum / totalSumOfFrequencies * 100;
+		if (totalSumOfFrequencies != 0)
+			yData[row] = (double)sum / totalSumOfFrequencies * 100;
 		++row;
 	}
 

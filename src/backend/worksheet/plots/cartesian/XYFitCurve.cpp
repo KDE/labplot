@@ -1904,7 +1904,7 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 	const bool update = evaluate(); // calculate the fit function (vectors)
 
 	// ML uses dataSourceHistogram->bins() as x for residuals
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram && fitData.algorithm == nsl_fit_algorithm_ml)
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram && dataSourceHistogram && fitData.algorithm == nsl_fit_algorithm_ml)
 		tmpXDataColumn = dataSourceHistogram->bins();
 
 	if (fitData.autoRange || fitData.algorithm == nsl_fit_algorithm_ml) { // evaluate residuals

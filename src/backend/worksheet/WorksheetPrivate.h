@@ -40,7 +40,7 @@ public:
 	void setContainerRect(WorksheetElementContainer*, double x, double y, double h, double w, bool undoable);
 	void updatePageRect();
 
-	Background* background;
+	Background* background{nullptr};
 	Worksheet::Layout layout{Worksheet::Layout::VerticalLayout};
 	bool suppressLayoutUpdate{false};
 	bool suppressCursorPosChanged{false};

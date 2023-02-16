@@ -93,13 +93,13 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 }
 
 PlotTemplateDialog::~PlotTemplateDialog() {
-	delete ui;
-	delete m_project;
-
 	// save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 	conf.writeEntry(QLatin1String("Location"), ui->cbLocation->currentIndex());
+
+	delete ui;
+	delete m_project;
 }
 
 void PlotTemplateDialog::customTemplatePathChanged(const QString& path) {

@@ -94,6 +94,9 @@ void XYHilbertTransformCurvePrivate::resetResults() {
 
 bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	DEBUG(Q_FUNC_INFO)
+	if (!tmpXDataColumn || !tmpYDataColumn)
+		return false;
+
 	QElapsedTimer timer;
 	timer.start();
 
@@ -101,7 +104,7 @@ bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	double xmin, xmax;
-	if (tmpXDataColumn && transformData.autoRange) {
+	if (transformData.autoRange) {
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
 	} else {
