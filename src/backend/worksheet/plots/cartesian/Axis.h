@@ -192,7 +192,7 @@ public:
 
 protected:
 	Axis(const QString&, Orientation, AxisPrivate*);
-	TextLabel* m_title;
+	TextLabel* m_title{nullptr};
 
 private:
 	Q_DECLARE_PRIVATE(Axis)

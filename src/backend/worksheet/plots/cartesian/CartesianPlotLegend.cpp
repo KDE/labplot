@@ -119,12 +119,12 @@ void CartesianPlotLegend::init() {
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
 
 	// Layout
-	d->layoutTopMargin = group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
-	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
-	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
-	d->layoutRightMargin = group.readEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
-	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Unit::Centimeter));
-	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Unit::Centimeter));
+	d->layoutTopMargin = group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutRightMargin = group.readEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter));
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 1);
 
 	this->initActions();
@@ -182,7 +182,7 @@ void CartesianPlotLegend::handleResize(double /*horizontalRatio*/, double /*vert
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, lineSymbolWidth, lineSymbolWidth)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, lineSymbolWidth, lineSymbolWidth)
 
 // Title
 TextLabel* CartesianPlotLegend::title() {
@@ -202,15 +202,15 @@ Line* CartesianPlotLegend::borderLine() const {
 	return d->borderLine;
 }
 
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, borderCornerRadius, borderCornerRadius)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, borderCornerRadius, borderCornerRadius)
 
 // Layout
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutTopMargin, layoutTopMargin)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutBottomMargin, layoutBottomMargin)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutLeftMargin, layoutLeftMargin)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutRightMargin, layoutRightMargin)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutHorizontalSpacing, layoutHorizontalSpacing)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutVerticalSpacing, layoutVerticalSpacing)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutTopMargin, layoutTopMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutBottomMargin, layoutBottomMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutLeftMargin, layoutLeftMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutRightMargin, layoutRightMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutHorizontalSpacing, layoutHorizontalSpacing)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutVerticalSpacing, layoutVerticalSpacing)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, int, layoutColumnCount, layoutColumnCount)
 
 //##############################################################################
@@ -237,8 +237,8 @@ void CartesianPlotLegend::setLabelColumnMajor(bool columnMajor) {
 		exec(new CartesianPlotLegendSetLabelColumnMajorCmd(d, columnMajor, ki18n("%1: change column order")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLineSymbolWidth, float, lineSymbolWidth, retransform)
-void CartesianPlotLegend::setLineSymbolWidth(float width) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLineSymbolWidth, double, lineSymbolWidth, retransform)
+void CartesianPlotLegend::setLineSymbolWidth(double width) {
 	Q_D(CartesianPlotLegend);
 	if (width != d->lineSymbolWidth)
 		exec(new CartesianPlotLegendSetLineSymbolWidthCmd(d, width, ki18n("%1: change line+symbol width")));
@@ -246,50 +246,50 @@ void CartesianPlotLegend::setLineSymbolWidth(float width) {
 
 // Border
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderCornerRadius, qreal, borderCornerRadius, update)
-void CartesianPlotLegend::setBorderCornerRadius(float radius) {
+void CartesianPlotLegend::setBorderCornerRadius(qreal radius) {
 	Q_D(CartesianPlotLegend);
 	if (radius != d->borderCornerRadius)
 		exec(new CartesianPlotLegendSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set border corner radius")));
 }
 
 // Layout
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutTopMargin, float, layoutTopMargin, retransform)
-void CartesianPlotLegend::setLayoutTopMargin(float margin) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutTopMargin, double, layoutTopMargin, retransform)
+void CartesianPlotLegend::setLayoutTopMargin(double margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutTopMargin)
 		exec(new CartesianPlotLegendSetLayoutTopMarginCmd(d, margin, ki18n("%1: set layout top margin")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutBottomMargin, float, layoutBottomMargin, retransform)
-void CartesianPlotLegend::setLayoutBottomMargin(float margin) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutBottomMargin, double, layoutBottomMargin, retransform)
+void CartesianPlotLegend::setLayoutBottomMargin(double margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutBottomMargin)
 		exec(new CartesianPlotLegendSetLayoutBottomMarginCmd(d, margin, ki18n("%1: set layout bottom margin")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutLeftMargin, float, layoutLeftMargin, retransform)
-void CartesianPlotLegend::setLayoutLeftMargin(float margin) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutLeftMargin, double, layoutLeftMargin, retransform)
+void CartesianPlotLegend::setLayoutLeftMargin(double margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutLeftMargin)
 		exec(new CartesianPlotLegendSetLayoutLeftMarginCmd(d, margin, ki18n("%1: set layout left margin")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutRightMargin, float, layoutRightMargin, retransform)
-void CartesianPlotLegend::setLayoutRightMargin(float margin) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutRightMargin, double, layoutRightMargin, retransform)
+void CartesianPlotLegend::setLayoutRightMargin(double margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutRightMargin)
 		exec(new CartesianPlotLegendSetLayoutRightMarginCmd(d, margin, ki18n("%1: set layout right margin")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, retransform)
-void CartesianPlotLegend::setLayoutVerticalSpacing(float spacing) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutVerticalSpacing, double, layoutVerticalSpacing, retransform)
+void CartesianPlotLegend::setLayoutVerticalSpacing(double spacing) {
 	Q_D(CartesianPlotLegend);
 	if (spacing != d->layoutVerticalSpacing)
 		exec(new CartesianPlotLegendSetLayoutVerticalSpacingCmd(d, spacing, ki18n("%1: set layout vertical spacing")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, retransform)
-void CartesianPlotLegend::setLayoutHorizontalSpacing(float spacing) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutHorizontalSpacing, double, layoutHorizontalSpacing, retransform)
+void CartesianPlotLegend::setLayoutHorizontalSpacing(double spacing) {
 	Q_D(CartesianPlotLegend);
 	if (spacing != d->layoutHorizontalSpacing)
 		exec(new CartesianPlotLegendSetLayoutHorizontalSpacingCmd(d, spacing, ki18n("%1: set layout horizontal spacing")));

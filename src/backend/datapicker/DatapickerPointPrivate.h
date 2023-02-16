@@ -30,7 +30,7 @@ public:
 	bool m_printing{false};
 	bool isReferencePoint{false};
 
-	qreal rotationAngle;
+	qreal rotationAngle{0.0};
 	QPointF position;
 	QRectF boundingRectangle;
 	QRectF transformedBoundingRectangle;

@@ -27,7 +27,7 @@ public:
 	bool positionAvailable{false};
 
 	bool enabled{false};
-	Background::Position position;
+	Background::Position position{Background::Position::No};
 	Background::Type type{Background::Type::Color};
 	Background::ColorStyle colorStyle{Background::ColorStyle::SingleColor};
 	Background::ImageStyle imageStyle{Background::ImageStyle::Scaled};

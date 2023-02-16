@@ -11,6 +11,8 @@
 #ifndef VALUEPRIVATE_H
 #define VALUEPRIVATE_H
 
+#include "backend/worksheet/Worksheet.h"
+
 #include <QColor>
 #include <QFont>
 
@@ -26,9 +28,9 @@ public:
 	const AbstractColumn* column{nullptr};
 	QString columnPath;
 	Value::Position position{Value::Above};
-	qreal distance;
-	qreal rotationAngle;
-	qreal opacity;
+	qreal distance{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
+	qreal rotationAngle{0.0};
+	qreal opacity{1.0};
 	char numericFormat{'f'}; // 'f', 'g', 'e', 'E', etc. for numeric values
 	int precision{2}; // number of digits for numeric values
 	QString dateTimeFormat;

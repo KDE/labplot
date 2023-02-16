@@ -79,16 +79,16 @@ public:
 
 	// whiskers
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
-	double whiskersRangeParameter; // Tukey's parameter k controlling the range of the whiskers, usually k=1.5
+	double whiskersRangeParameter{1.5}; // Tukey's parameter k controlling the range of the whiskers, usually k=1.5
 	Line* whiskersLine{nullptr};
-	double whiskersCapSize;
+	double whiskersCapSize{Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point)};
 	Line* whiskersCapLine{nullptr};
 
 	// rug
 	bool rugEnabled{false};
-	double rugOffset;
-	double rugLength;
-	double rugWidth;
+	double rugOffset{0.0};
+	double rugLength{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
+	double rugWidth{0.0};
 	QPainterPath rugPath;
 
 private:

@@ -91,9 +91,9 @@ public:
 
 	// rug
 	bool rugEnabled{false};
-	double rugOffset;
-	double rugLength;
-	double rugWidth;
+	double rugOffset{0.0};
+	double rugLength{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
+	double rugWidth{0.0};
 	QPainterPath rugPath;
 
 	QPainterPath linePath;
