@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-13 00:52+0000\n"
+"POT-Creation-Date: 2023-02-16 00:54+0000\n"
 "PO-Revision-Date: 2023-02-09 08:48+0200\n"
 "Last-Translator: Fracture dept <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -582,7 +582,7 @@ msgid "%1   (no values)"
 msgstr "%1   (без значень)"
 
 #: src/backend/core/AspectTreeModel.cpp:223
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1415
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1418
 #, kde-format
 msgid "Size: %1"
 msgstr "Розмір: %1"
@@ -1537,7 +1537,7 @@ msgstr "Не знайдено h5dump."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:370
 #: src/backend/datasources/filters/NetCDFFilter.cpp:280
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1390
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1393
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Не вдалося прочитати дані з файла %1."
@@ -2146,17 +2146,46 @@ msgstr "Надто довге повідомлення. Ідентифікато
 msgid "Unknown id: %1"
 msgstr "Невідомий ідентифікатор: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:310
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:98
+#, fuzzy, kde-format
+#| msgid "Invalid metadata file"
+msgid "Invalid blf file"
+msgstr "Некоректний файл метаданих"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#, fuzzy, kde-format
+#| msgid "File format version: %1"
+msgid "Unable to calculate conversion: %1"
+msgstr "Версія формату файла: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#, kde-format
+msgid "No dbc parser installed"
+msgstr ""
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:106
+#, fuzzy, kde-format
+#| msgid "Invalid metadata file"
+msgid "Invalid dbc file"
+msgstr "Некоректний файл метаданих"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:108
+#, fuzzy, kde-format
+#| msgid "Unknown MQTT error"
+msgid "Unknown error"
+msgstr "Невідома помилка MQTT"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:349
 #, kde-format
 msgid "Time_s"
 msgstr "Час_с"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:312
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
 #, kde-format
 msgid "Time_ns"
 msgstr "Час_нс"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:314
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
 #, kde-format
 msgid "Time_10µs"
 msgstr "Час_10мкс"
@@ -5768,7 +5797,7 @@ msgstr "Статистика (розподіли)"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:510
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1173
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1176
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:245
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:295
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:786
@@ -10997,7 +11026,7 @@ msgstr ""
 "до файла."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1172
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1175
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
 #, kde-format
 msgid "Automatic"
@@ -11088,35 +11117,35 @@ msgstr ""
 "Визначає повідомлення «Останньої волі та заповіту («Last Will and Testament» "
 "або LWT). Має існувати підписка принаймні на одну тему."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:885
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:888
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Виберіть файлове джерело даних"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:915
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:918
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Виберіть файл DBC"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1038
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgid "Save Filter Settings as"
 msgstr "Збереження параметрів фільтрування"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1038
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgid "Filter name:"
 msgstr "Назва фільтра:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1038
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgid "new filter"
 msgstr "новий фільтр"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1086
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1089
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:428
 #, kde-format
 msgid "Data Format"
@@ -11124,7 +11153,7 @@ msgstr "Формат даних"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1087
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1090
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:482
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11133,98 +11162,98 @@ msgstr "Перегляд"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1089
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1092
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:561
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Частина даних для читання"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1120
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1123
 #, kde-format
 msgid "Data format && preview"
 msgstr "Формат і перегляд даних"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1382
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1385
 #, kde-format
 msgid "file command not found"
 msgstr "Не знайдено програми file"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1393
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1396
 #, kde-format
 msgid "cannot open"
 msgstr "не вдалося відкрити"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1398
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1401
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Тип файла:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1403
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
 #, kde-format
 msgid "General:"
 msgstr "Загальне:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1408
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1410
 #, kde-format
 msgid "yes"
 msgstr "так"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1408
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1410
 #, kde-format
 msgid "no"
 msgstr "ні"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1408
 #, kde-format
 msgid "Readable: %1"
 msgstr "Придатність до читання: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
 #, kde-format
 msgid "Writable: %1"
 msgstr "Доступність для запису: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1410
 #, kde-format
 msgid "Executable: %1"
 msgstr "Виконуваний: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1412
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Час народження: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1410
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1413
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Востаннє змінено метадані: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1411
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1414
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Востаннє змінено: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1412
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1415
 #, kde-format
 msgid "Last read: %1"
 msgstr "Востаннє прочитано: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1413
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1416
 #, kde-format
 msgid "Owner: %1"
 msgstr "Власник: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1414
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1417
 #, kde-format
 msgid "Group: %1"
 msgstr "Група: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1415
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1418
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -11233,79 +11262,79 @@ msgstr[1] "%1 байти C"
 msgstr[2] "%1 байтів C"
 msgstr[3] "%1 байт C"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1418
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1421
 #, kde-format
 msgid "Summary:"
 msgstr "Резюме:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1438
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1443
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1441
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1446
 #, kde-format
 msgid "Content:"
 msgstr "Вміст:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1471
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1474
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Не вдалося відкрити файл %1 для читання."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1629
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1632
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Для вибраної теми даних ще не отримано"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1851
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1854
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Не є файлом HDF5: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2283
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2286
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Не вдалося підписатися на усі доступні теми."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2313
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2316
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Від'єднано від «%1»."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2382
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2385
 #, kde-format
 msgid "Available (%1)"
 msgstr "Доступний (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2497
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Помилкове ім'я користувача або пароль"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2500
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "Ідентифікатор клієнта виявився неприйнятним"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2501
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2504
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Не вдалося зв'язатися із вузлом %1."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2504
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2507
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "Клієнт не уповноважено на з'єднання."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2507
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2510
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Сталася невідома помилка."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2513
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2516
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2519
 #, kde-format
 msgid "An error occurred."
 msgstr "Сталася помилка."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2530
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2533
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Перевищено час очікування на встановлення з'єднання із «%1:%2»."
@@ -22570,9 +22599,6 @@ msgstr "Не вдалося відкрити файл:"
 
 #~ msgid "Not authorized"
 #~ msgstr "Не уповноважено"
-
-#~ msgid "Unknown MQTT error"
-#~ msgstr "Невідома помилка MQTT"
 
 #~ msgid "(Disconnected)"
 #~ msgstr "(Від'єднано)"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-13 00:52+0000\n"
+"POT-Creation-Date: 2023-02-16 00:54+0000\n"
 "PO-Revision-Date: 2023-02-09 13:31+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -568,7 +568,7 @@ msgid "%1   (no values)"
 msgstr "%1 (geen waarden)"
 
 #: src/backend/core/AspectTreeModel.cpp:223
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1415
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1418
 #, kde-format
 msgid "Size: %1"
 msgstr "Grootte: %1"
@@ -1518,7 +1518,7 @@ msgstr "h5dump niet gevonden."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:370
 #: src/backend/datasources/filters/NetCDFFilter.cpp:280
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1390
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1393
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Lezen uit bestand %1 is mislukt."
@@ -2124,17 +2124,46 @@ msgstr "Melding te lang. CAN id: %1"
 msgid "Unknown id: %1"
 msgstr "Onbekende-id: %1"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:310
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:98
+#, fuzzy, kde-format
+#| msgid "Invalid metadata file"
+msgid "Invalid blf file"
+msgstr "ongeldig metadata-bestand"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:101
+#, fuzzy, kde-format
+#| msgid "File format version: %1"
+msgid "Unable to calculate conversion: %1"
+msgstr "Bestandsformat versie: %1"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:104
+#, kde-format
+msgid "No dbc parser installed"
+msgstr ""
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:106
+#, fuzzy, kde-format
+#| msgid "Invalid metadata file"
+msgid "Invalid dbc file"
+msgstr "ongeldig metadata-bestand"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:108
+#, fuzzy, kde-format
+#| msgid "Unknown MQTT error"
+msgid "Unknown error"
+msgstr "Onbekende MQTT-fout"
+
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:349
 #, kde-format
 msgid "Time_s"
 msgstr "Time_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:312
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
 #, kde-format
 msgid "Time_ns"
 msgstr "Time_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:314
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
 #, kde-format
 msgid "Time_10µs"
 msgstr "Time_10µs"
@@ -5715,7 +5744,7 @@ msgstr "Statistieken (verdelingen)"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:510
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1173
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1176
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:245
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:295
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:786
@@ -10906,7 +10935,7 @@ msgstr ""
 "opgeslagen (ten opzichte van de map van het project)."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1172
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1175
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
 #, kde-format
 msgid "Automatic"
@@ -10999,35 +11028,35 @@ msgstr ""
 "Geef het LWT-bericht (\"Last Will and Testament\") op. Hierin moet op "
 "tenminste een onderwerp worden ingeschreven."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:885
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:888
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Selecteer het gegevensbronbestand"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:915
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:918
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Het DBC-bestand selecteren"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1038
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgid "Save Filter Settings as"
 msgstr "Filterinstellingen opslaan als"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1038
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgid "Filter name:"
 msgstr "Filternaam:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1038
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgid "new filter"
 msgstr "nieuw filter"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1086
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1089
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:428
 #, kde-format
 msgid "Data Format"
@@ -11035,7 +11064,7 @@ msgstr "Gegevensopmaak"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1087
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1090
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:482
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11044,177 +11073,177 @@ msgstr "Voorbeeld"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1089
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1092
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:561
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Te lezen gegevensgedeelte"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1120
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1123
 #, kde-format
 msgid "Data format && preview"
 msgstr "Gegevensopmaak && voorbeeld"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1382
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1385
 #, kde-format
 msgid "file command not found"
 msgstr "bestandsopdracht niet gevonden"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1393
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1396
 #, kde-format
 msgid "cannot open"
 msgstr "kan niet openen"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1398
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1401
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Bestandstype:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1403
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
 #, kde-format
 msgid "General:"
 msgstr "Algemeen:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1408
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1410
 #, kde-format
 msgid "yes"
 msgstr "ja"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1408
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1410
 #, kde-format
 msgid "no"
 msgstr "nee"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1405
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1408
 #, kde-format
 msgid "Readable: %1"
 msgstr "Leesbaar: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1406
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
 #, kde-format
 msgid "Writable: %1"
 msgstr "Beschrijfbaar: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1407
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1410
 #, kde-format
 msgid "Executable: %1"
 msgstr "Uitvoerbaar: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1409
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1412
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Tijd geboorte: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1410
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1413
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Laatste metadata gewijzigd: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1411
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1414
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Laatst gewijzigd: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1412
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1415
 #, kde-format
 msgid "Last read: %1"
 msgstr "Laatst gelezen: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1413
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1416
 #, kde-format
 msgid "Owner: %1"
 msgstr "Eigenaar: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1414
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1417
 #, kde-format
 msgid "Group: %1"
 msgstr "Groep: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1415
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1418
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cBytes"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1418
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1421
 #, kde-format
 msgid "Summary:"
 msgstr "Samenvatting:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1438
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1443
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1441
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1446
 #, kde-format
 msgid "Content:"
 msgstr "Inhoud:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1471
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1474
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Kon bestand %1 niet openen om te lezen."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1629
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1632
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Nog geen gegevens aangekomen over geselecteerd onderwerp"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1851
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1854
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Geen HDF5-bestand: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2283
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2286
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Kon niet inschrijven op alle beschikbare onderwerpen."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2313
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2316
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Verbinding met '%1' verbroken."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2382
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2385
 #, kde-format
 msgid "Available (%1)"
 msgstr "Beschikbaar (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2497
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Gebruikersnaam of wachtwoord is fout"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2500
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "Client-ID niet geaccepteerd"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2501
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2504
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "De broker %1 is onbereikbaar."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2504
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2507
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "De client heeft geen permissie te verbinden."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2507
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2510
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Er is een onbekende fout."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2513
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2516
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2519
 #, kde-format
 msgid "An error occurred."
 msgstr "Er is een fout."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2530
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2533
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Verbinden met '%1:%2' kon niet binnen de tijdslimiet."
@@ -22451,9 +22480,6 @@ msgstr "Kon bestand niet openen:"
 
 #~ msgid "Not authorized"
 #~ msgstr "Niet bevoegd"
-
-#~ msgid "Unknown MQTT error"
-#~ msgstr "Onbekende MQTT-fout"
 
 #~ msgid "(Disconnected)"
 #~ msgstr "(Verbinding verbroken)"
