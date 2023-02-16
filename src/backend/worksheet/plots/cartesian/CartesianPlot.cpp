@@ -2563,7 +2563,7 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 			for (const auto* c : m_coordinateSystems) {
 				// All x ranges with this xIndex must be dirty
 				const auto* cs = dynamic_cast<const CartesianCoordinateSystem*>(c);
-				if (cs->index(dim) == index) {
+				if (cs && cs->index(dim) == index) {
 					switch (dim) {
 					case Dimension::X:
 						setRangeDirty(Dimension::Y, cs->index(Dimension::Y), true);

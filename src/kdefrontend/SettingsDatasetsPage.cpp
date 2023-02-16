@@ -49,7 +49,7 @@ void SettingsDatasetsPage::loadSettings() {
 
 			// calculate the size
 			int size = 0;
-			for (auto file : dir.entryList()) {
+			for (auto& file : dir.entryList()) {
 				if (file == QLatin1Char('.') || file == QLatin1String(".."))
 					continue;
 
@@ -74,7 +74,7 @@ void SettingsDatasetsPage::loadSettings() {
 void SettingsDatasetsPage::clearCache() {
 	QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
 	if (dir.exists()) {
-		for (auto fileName : dir.entryList()) {
+		for (auto& fileName : dir.entryList()) {
 			if (fileName == QLatin1Char('.') || fileName == QLatin1String(".."))
 				continue;
 

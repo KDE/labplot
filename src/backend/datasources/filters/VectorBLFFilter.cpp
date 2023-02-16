@@ -102,10 +102,13 @@ QStringList VectorBLFFilterPrivate::lastErrors() const {
 			break;
 		case ParseStatus::DBCParserUnsupported:
 			r.append(i18n("No dbc parser installed"));
+			break;
 		case ParseStatus::DBCInvalidFile:
 			r.append(i18n("Invalid dbc file"));
+			break;
 		case ParseStatus::ErrorUnknown:
 			r.append(i18n("Unknown error"));
+			break;
 		case ParseStatus::Success:
 			break;
 		}

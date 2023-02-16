@@ -73,7 +73,7 @@ void CursorDock::setWorksheet(Worksheet* worksheet) {
 	ui->tvCursorData->expandAll();
 
 	// connect all plots as a workaround to not be able to know which plot is selected
-	for (auto connection : selectedPlotsConnection)
+	for (auto& connection : selectedPlotsConnection)
 		disconnect(connection);
 	for (const auto* plot : m_plotList) {
 		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor0EnableChanged, this, &CursorDock::plotCursor0EnableChanged);
@@ -155,7 +155,7 @@ void CursorDock::resultCopy() {
 	auto* model = ui->tvCursorData->model();
 	auto* selection = ui->tvCursorData->selectionModel();
 	const auto& indices = selection->selectedRows();
-	for (auto index : indices) {
+	for (auto& index : indices) {
 		int row = index.row();
 		auto parent = index.parent();
 		for (int col = 0; col < model->columnCount(); ++col) {

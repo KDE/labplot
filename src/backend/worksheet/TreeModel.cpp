@@ -126,7 +126,7 @@ bool TreeItem::setBackgroundColor(int column, const QVariant& value) {
 TreeModel::TreeModel(const QStringList& headers, QObject* parent)
 	: QAbstractItemModel(parent) {
 	QVector<QVariant> rootData;
-	for (auto header : headers)
+	for (auto& header : headers)
 		rootData << header;
 
 	rootItem = new TreeItem(rootData);

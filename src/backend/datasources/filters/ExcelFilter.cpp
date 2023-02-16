@@ -75,8 +75,8 @@ QStringList ExcelFilter::sheets(const QString& fileName, bool* ok) {
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(ok)
-#endif
 	return {};
+#endif
 }
 
 bool ExcelFilter::isValidCellReference(const QString& cellRefString) {

@@ -115,7 +115,7 @@ void BaseDock::plotRangeChanged(int index) {
 			e->setSuppressRetransform(true);
 			e->setCoordinateSystemIndex(index);
 			e->setSuppressRetransform(false);
-			if (dynamic_cast<Axis*>(e))
+			if (dynamic_cast<Axis*>(e) && dynamic_cast<AxisDock*>(this))
 				dynamic_cast<AxisDock*>(this)->updateAutoScale();
 			updateLocale(); // update line edits
 		}

@@ -1965,7 +1965,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			tickLabelStrings << str;
 		}
 	} else if (text) {
-		for (auto t : tickLabelValuesString) {
+		for (auto& t : tickLabelValuesString) {
 			str = labelsPrefix + t + labelsSuffix;
 			tickLabelStrings << str;
 		}

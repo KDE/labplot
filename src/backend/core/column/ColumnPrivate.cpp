@@ -1301,7 +1301,7 @@ void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::For
 	m_formulaData = formulaData; // TODO: disconnecting everything?
 	m_formulaAutoUpdate = autoUpdate;
 
-	for (auto connection : m_connectionsUpdateFormula)
+	for (auto& connection : m_connectionsUpdateFormula)
 		if (static_cast<bool>(connection))
 			disconnect(connection);
 
@@ -1439,14 +1439,14 @@ void ColumnPrivate::updateFormula() {
 													  {QStringLiteral("kurt"), column->statistics().kurtosis},
 													  {QStringLiteral("entropy"), column->statistics().entropy}};
 
-		for (auto m : methodList)
+		for (auto& m : methodList)
 			formula.replace(m.first + QStringLiteral("(%1)").arg(varName), QLocale().toString(m.second));
 
 		// B) methods with options like method(p, x): get option p and calculate value to replace method
 		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // quantile(p, x)
 										QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)")}; // percentile(p, x)
 
-		for (auto m : optionMethodList) {
+		for (auto& m : optionMethodList) {
 			QRegExp rx(m.arg(varName));
 			rx.setMinimal(true); // only match one method call at a time
 
@@ -1501,12 +1501,12 @@ void ColumnPrivate::updateFormula() {
 		// C) simple replacements
 		QVector<QPair<QString, QString>> replaceList = {{QStringLiteral("mr"), QStringLiteral("fabs(cell(i, %1) - cell(i-1, %1))")},
 														{QStringLiteral("ma"), QStringLiteral("(cell(i-1, %1) + cell(i, %1))/2.")}};
-		for (auto m : replaceList)
+		for (auto& m : replaceList)
 			formula.replace(m.first + QLatin1String("(%1)").arg(varName), m.second.arg(varName));
 
 		// D) advanced replacements
 		QVector<QPair<QString, QString>> advancedReplaceList = {{QStringLiteral("smr\\((.*),.*%1\\)"), QStringLiteral("smmax(%1, %2) - smmin(%1, %2)")}};
-		for (auto m : advancedReplaceList) {
+		for (auto& m : advancedReplaceList) {
 			QRegExp rx(m.first.arg(varName));
 			rx.setMinimal(true); // only match one method call at a time
 
