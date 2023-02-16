@@ -480,7 +480,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		if (aspect) {
 			folder->addChildFast(aspect);
 			DEBUG("	creation time as reported by liborigin: " << spread.creationDate);
-			aspect->setCreationTime(QDateTime::fromTime_t(spread.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(spread.creationDate));
 		}
 	}
 	// loop over all workbooks to find loose ones
@@ -509,7 +509,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		if (aspect) {
 			folder->addChildFast(aspect);
 			DEBUG("	creation time as reported by liborigin: " << excel.creationDate);
-			aspect->setCreationTime(QDateTime::fromTime_t(excel.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(excel.creationDate));
 		}
 	}
 	// loop over all matrices to find loose ones
@@ -541,7 +541,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			aspect->setCreationTime(QDateTime::fromTime_t(originMatrix.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(originMatrix.creationDate));
 		}
 	}
 	// handle loose graphs (is this even possible?)
@@ -566,7 +566,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			aspect->setCreationTime(QDateTime::fromTime_t(graph.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(graph.creationDate));
 		}
 	}
 	// handle loose notes (is this even possible?)
@@ -591,7 +591,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			aspect->setCreationTime(QDateTime::fromTime_t(originNote.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(originNote.creationDate));
 		}
 	}
 }

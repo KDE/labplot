@@ -142,9 +142,9 @@ QString ReadStatFilter::fileInfoString(const QString& fileName) {
 		info += QLatin1String("<br>");
 		info += i18n("Number of variables: %1", QString::number((int64_t)metadata.var_count));
 		info += QLatin1String("<br>");
-		info += i18n("Creation time: %1", QDateTime::fromTime_t(metadata.creation_time).toString());
+		info += i18n("Creation time: %1", QDateTime::fromSecsSinceEpoch(metadata.creation_time).toString());
 		info += QLatin1String("<br>");
-		info += i18n("Modification time: %1", QDateTime::fromTime_t(metadata.modified_time).toString());
+		info += i18n("Modification time: %1", QDateTime::fromSecsSinceEpoch(metadata.modified_time).toString());
 		info += QLatin1String("<br>");
 		info += i18n("Format version: %1", QString::number((int64_t)metadata.file_format_version));
 		info += QLatin1String("<br>");
