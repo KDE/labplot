@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-16 00:54+0000\n"
-"PO-Revision-Date: 2023-02-04 07:52+0100\n"
+"POT-Creation-Date: 2023-02-17 00:54+0000\n"
+"PO-Revision-Date: 2023-02-11 08:29+0100\n"
 "Last-Translator: Paolo Zamponi <zapaolo@email.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -74,7 +74,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:414
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:677
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:237
-#: src/backend/worksheet/plots/cartesian/Value.cpp:256
+#: src/backend/worksheet/plots/cartesian/Value.cpp:255
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:284
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:266
@@ -85,7 +85,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2810
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:295
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:258
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:219
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:222
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:216
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:429
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:271
@@ -2128,18 +2128,17 @@ msgstr "Dimensione del record TStreamerInfo: %1 byte"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:89
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
-msgstr ""
+msgstr "Big Endian non è supportato. Id CAN: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:92
 #, kde-format
 msgid "Message too long. CAN id: %1"
-msgstr ""
+msgstr "Messaggio troppo lungo. Id CAN: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown id: %1"
-msgstr "Sconosciuta"
+msgstr "Id sconosciuto: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:98
 #, fuzzy, kde-format
@@ -2158,31 +2157,31 @@ msgstr "Versione del formato del file: %1"
 msgid "No dbc parser installed"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:106
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, fuzzy, kde-format
 #| msgid "Invalid metadata file"
 msgid "Invalid dbc file"
 msgstr "File di metadati non valido"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:108
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
 #, fuzzy, kde-format
 #| msgid "Unknown MQTT error"
 msgid "Unknown error"
 msgstr "Errore MQTT sconosciuto"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:349
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, fuzzy, kde-format
 #| msgid "Time"
 msgid "Time_s"
 msgstr "Tempo"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, fuzzy, kde-format
 #| msgid "Time"
 msgid "Time_ns"
 msgstr "Tempo"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:356
 #, kde-format
 msgid "Time_10µs"
 msgstr ""
@@ -5655,7 +5654,7 @@ msgstr "Grezza"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:214
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:249
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:507
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:641
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:642
 #: src/kdefrontend/widgets/ValueWidget.cpp:32
 #, kde-format
 msgid "Frequency"
@@ -8198,79 +8197,79 @@ msgstr "vanga"
 msgid "club"
 msgstr "club"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:107
+#: src/backend/worksheet/plots/cartesian/Value.cpp:106
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:443
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: imposta il tipo dei valori"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:114
+#: src/backend/worksheet/plots/cartesian/Value.cpp:113
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:450
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: imposta i valori della colonna"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:126
+#: src/backend/worksheet/plots/cartesian/Value.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:469
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: imposta la posizione dei valori"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:133
+#: src/backend/worksheet/plots/cartesian/Value.cpp:132
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:476
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: imposta la distanza dei valori"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:140
+#: src/backend/worksheet/plots/cartesian/Value.cpp:139
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:483
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: ruota i valori"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:147
+#: src/backend/worksheet/plots/cartesian/Value.cpp:146
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:490
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: imposta i valori di opacità"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:154
+#: src/backend/worksheet/plots/cartesian/Value.cpp:153
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:497
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: imposta il formato numerico dei valori"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:161
+#: src/backend/worksheet/plots/cartesian/Value.cpp:160
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:504
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: imposta la precisione dei valori"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:168
+#: src/backend/worksheet/plots/cartesian/Value.cpp:167
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:511
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: imposta il formato di data e ora dei valori"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:175
+#: src/backend/worksheet/plots/cartesian/Value.cpp:174
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:518
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: imposta il prefisso dei valori"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:182
+#: src/backend/worksheet/plots/cartesian/Value.cpp:181
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:525
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: imposta il suffisso dei valori"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:189
+#: src/backend/worksheet/plots/cartesian/Value.cpp:188
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:532
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: imposta il carattere dei valori"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:196
+#: src/backend/worksheet/plots/cartesian/Value.cpp:195
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:539
 #, kde-format
 msgid "%1: set values color"
@@ -8449,7 +8448,7 @@ msgstr "Non sono stati forniti abbastanza punti peso."
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2227
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:133
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:136
 #, kde-format
 msgid "No data points available."
 msgstr "Nessun dato disponibile."
@@ -9465,10 +9464,9 @@ msgstr "Inverti"
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
-#, fuzzy, kde-format
-#| msgid "Subtract Value"
+#, kde-format
 msgid "Subtract Baseline"
-msgstr "Sottrai valore"
+msgstr "Sottrai linea di base"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:353
 #, kde-format
@@ -14932,10 +14930,9 @@ msgid "Difference"
 msgstr "Differenza"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Baseline (arPLS Algorithm)"
-msgstr "Logaritmo in base 10"
+msgstr "Linea di base (logaritmo arPLS)"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:167
 #, kde-format
@@ -14999,10 +14996,9 @@ msgid "%1: subtract %2 from column values"
 msgstr "%1: sottrai %2 dai valori della colonna"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1199
-#, fuzzy, kde-format
-#| msgid "%1: subtract %2 from column values"
+#, kde-format
 msgid "%1: subtract baseline from column values"
-msgstr "%1: sottrai %2 dai valori della colonna"
+msgstr "%1: sottrai linea di base dai valori della colonna"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1202
 #, kde-format
@@ -15187,10 +15183,9 @@ msgstr "Incremento"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:178
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:435
-#, fuzzy, kde-format
-#| msgid "Not enough memory for data"
+#, kde-format
 msgid "Not enough memory to perform this operation."
-msgstr "Non c'è abbastanza memoria per i dati"
+msgstr "Non c'è abbastanza memoria per eseguire questa operazione."
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:183
 #, kde-format
@@ -15781,7 +15776,7 @@ msgstr "Quantili teorici"
 msgid "Sample Quantiles"
 msgstr "Quantili di campionamento"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:646
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:647
 #, kde-format
 msgid "Cumulative Percentage"
 msgstr "Percentuale cumulativa"
@@ -16998,16 +16993,15 @@ msgstr "Categorie"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportErrorDialog)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Database Error"
+#, kde-format
 msgid "Parse Errors"
-msgstr "Dati della banca dati"
+msgstr "Elabora errori"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38
 #, kde-format
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbDataSource)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:44
@@ -18957,19 +18951,17 @@ msgstr "intervallo del grafico:"
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:63
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:111
-#, fuzzy, kde-format
-#| msgid "Start:"
+#, kde-format
 msgid "Start x:"
-msgstr "Inizio:"
+msgstr "X iniziale:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeEnd)
 #. i18n: ectx: property (text), widget (QLabel, lPositionEnd)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:223
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:285
-#, fuzzy, kde-format
-#| msgid "End row:"
+#, kde-format
 msgid "End x:"
-msgstr "Riga finale:"
+msgstr "X finale:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:161

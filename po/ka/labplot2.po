@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-16 00:54+0000\n"
-"PO-Revision-Date: 2023-02-10 08:58+0100\n"
+"POT-Creation-Date: 2023-02-17 00:54+0000\n"
+"PO-Revision-Date: 2023-02-16 05:53+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -74,7 +74,7 @@ msgstr "პანელის დამატებები ვერ ვიპ
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:414
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:677
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:237
-#: src/backend/worksheet/plots/cartesian/Value.cpp:256
+#: src/backend/worksheet/plots/cartesian/Value.cpp:255
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:284
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:266
@@ -85,7 +85,7 @@ msgstr "პანელის დამატებები ვერ ვიპ
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2810
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:295
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:258
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:219
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:222
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:216
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:429
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:271
@@ -2119,45 +2119,41 @@ msgid "Unknown id: %1"
 msgstr "უცნობი id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:98
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid blf file"
-msgstr "არასწორი მეტამონაცემების ფაილი"
+msgstr "არასწორი blf ფაილი"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "File format version: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1"
-msgstr "ფაილის ფორმატის ვერსია: %1"
+msgstr "გადაყვანის გამოთვლა შეუძლებელია: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
 #, kde-format
 msgid "No dbc parser installed"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:106
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#, kde-format
 msgid "Invalid dbc file"
-msgstr "არასწორი მეტამონაცემების ფაილი"
+msgstr "არასწორი dbc ფაილი"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:108
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#, kde-format
 msgid "Unknown error"
-msgstr "უცნობია"
+msgstr "უცნობი შეცდომა"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:349
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, kde-format
 msgid "Time_s"
 msgstr "დრო_წმ"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, kde-format
 msgid "Time_ns"
 msgstr "დრო_ნწმ"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:356
 #, kde-format
 msgid "Time_10µs"
 msgstr ""
@@ -5577,7 +5573,7 @@ msgstr "დაუმუშავებელი"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:214
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:249
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:507
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:641
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:642
 #: src/kdefrontend/widgets/ValueWidget.cpp:32
 #, kde-format
 msgid "Frequency"
@@ -8118,79 +8114,79 @@ msgstr "პიკები"
 msgid "club"
 msgstr "კლუბი"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:107
+#: src/backend/worksheet/plots/cartesian/Value.cpp:106
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:443
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: მნიშვნელობების ტიპის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:114
+#: src/backend/worksheet/plots/cartesian/Value.cpp:113
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:450
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: მნიშვნელობების სვეტის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:126
+#: src/backend/worksheet/plots/cartesian/Value.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:469
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: მნიშვნელობების მდებარეობის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:133
+#: src/backend/worksheet/plots/cartesian/Value.cpp:132
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:476
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: მნიშვნელობების დაშორების დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:140
+#: src/backend/worksheet/plots/cartesian/Value.cpp:139
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:483
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: მნიშვნელობების მოტრიალება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:147
+#: src/backend/worksheet/plots/cartesian/Value.cpp:146
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:490
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: მნიშვნელობების გაუმჭვირვალობის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:154
+#: src/backend/worksheet/plots/cartesian/Value.cpp:153
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:497
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:161
+#: src/backend/worksheet/plots/cartesian/Value.cpp:160
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:504
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: მნიშვნელობების სიზუსტის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:168
+#: src/backend/worksheet/plots/cartesian/Value.cpp:167
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:511
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: მნიშვნელობის თარიღისა და დროის ფორმატის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:175
+#: src/backend/worksheet/plots/cartesian/Value.cpp:174
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:518
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: მნიშვნელობების პრეფიქსის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:182
+#: src/backend/worksheet/plots/cartesian/Value.cpp:181
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:525
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: მნიშვნელობების სუფიქსის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:189
+#: src/backend/worksheet/plots/cartesian/Value.cpp:188
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:532
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: მნიშვნელობების ფონტის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:196
+#: src/backend/worksheet/plots/cartesian/Value.cpp:195
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:539
 #, kde-format
 msgid "%1: set values color"
@@ -8367,7 +8363,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2227
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:133
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:136
 #, kde-format
 msgid "No data points available."
 msgstr ""
@@ -15430,7 +15426,7 @@ msgstr ""
 msgid "Sample Quantiles"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:646
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:647
 #, kde-format
 msgid "Cumulative Percentage"
 msgstr ""
@@ -18416,7 +18412,7 @@ msgstr "მიერთება:"
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:69
 #, kde-format
 msgid "Anchor:"
-msgstr ""
+msgstr "მიმაგრება:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLines)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:229
@@ -19075,7 +19071,7 @@ msgstr "იტერაციები"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:517
 #, kde-format
 msgid "Tolerance"
-msgstr ""
+msgstr "დაშვება"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:527

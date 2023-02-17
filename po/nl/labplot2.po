@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-16 00:54+0000\n"
-"PO-Revision-Date: 2023-02-09 13:31+0100\n"
+"POT-Creation-Date: 2023-02-17 00:54+0000\n"
+"PO-Revision-Date: 2023-02-16 10:25+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -73,7 +73,7 @@ msgstr "Kon paneelplugins niet vinden. Controleer uw installatie."
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:414
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:677
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:237
-#: src/backend/worksheet/plots/cartesian/Value.cpp:256
+#: src/backend/worksheet/plots/cartesian/Value.cpp:255
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:284
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:266
@@ -84,7 +84,7 @@ msgstr "Kon paneelplugins niet vinden. Controleer uw installatie."
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2810
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:295
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:258
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:219
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:222
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:216
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:429
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:271
@@ -2125,45 +2125,41 @@ msgid "Unknown id: %1"
 msgstr "Onbekende-id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:98
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid blf file"
-msgstr "ongeldig metadata-bestand"
+msgstr "Ongeldig blf-bestand"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "File format version: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1"
-msgstr "Bestandsformat versie: %1"
+msgstr "Conversie berekenen kan niet: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
 #, kde-format
 msgid "No dbc parser installed"
-msgstr ""
+msgstr "Geen dbc-parser geïnstalleerd"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:106
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
+#, kde-format
 msgid "Invalid dbc file"
-msgstr "ongeldig metadata-bestand"
+msgstr "Ongeldig dbc-bestand"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:108
-#, fuzzy, kde-format
-#| msgid "Unknown MQTT error"
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
+#, kde-format
 msgid "Unknown error"
-msgstr "Onbekende MQTT-fout"
+msgstr "Onbekende fout"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:349
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, kde-format
 msgid "Time_s"
 msgstr "Time_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, kde-format
 msgid "Time_ns"
 msgstr "Time_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:356
 #, kde-format
 msgid "Time_10µs"
 msgstr "Time_10µs"
@@ -5624,7 +5620,7 @@ msgstr "Raw"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:214
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:249
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:507
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:641
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:642
 #: src/kdefrontend/widgets/ValueWidget.cpp:32
 #, kde-format
 msgid "Frequency"
@@ -8167,79 +8163,79 @@ msgstr "schoppen"
 msgid "club"
 msgstr "klaver"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:107
+#: src/backend/worksheet/plots/cartesian/Value.cpp:106
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:443
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: waardentype instellen"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:114
+#: src/backend/worksheet/plots/cartesian/Value.cpp:113
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:450
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: waardenkolom instellen"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:126
+#: src/backend/worksheet/plots/cartesian/Value.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:469
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: waardenpositie instellen"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:133
+#: src/backend/worksheet/plots/cartesian/Value.cpp:132
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:476
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: afstand waarden instellen"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:140
+#: src/backend/worksheet/plots/cartesian/Value.cpp:139
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:483
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: waarden roteren"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:147
+#: src/backend/worksheet/plots/cartesian/Value.cpp:146
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:490
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: doorzichtigheid waarden instellen"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:154
+#: src/backend/worksheet/plots/cartesian/Value.cpp:153
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:497
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: weergave instellen van numerieke waarden"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:161
+#: src/backend/worksheet/plots/cartesian/Value.cpp:160
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:504
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: %1: nauwkeurigheid instellen van getallen"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:168
+#: src/backend/worksheet/plots/cartesian/Value.cpp:167
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:511
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: weergave instellen van waarden datetime"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:175
+#: src/backend/worksheet/plots/cartesian/Value.cpp:174
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:518
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: voorvoegsel waarden instellen"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:182
+#: src/backend/worksheet/plots/cartesian/Value.cpp:181
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:525
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: achtervoegsel waarden instellen"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:189
+#: src/backend/worksheet/plots/cartesian/Value.cpp:188
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:532
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: lettertype waarden instellen"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:196
+#: src/backend/worksheet/plots/cartesian/Value.cpp:195
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:539
 #, kde-format
 msgid "%1: set values color"
@@ -8416,7 +8412,7 @@ msgstr "Niet genoeg gewogen waarden beschikbaar."
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2227
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:133
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:136
 #, kde-format
 msgid "No data points available."
 msgstr "Geen gegeven punten beschikbaar."
@@ -15710,7 +15706,7 @@ msgstr "Theoretische kwantielen"
 msgid "Sample Quantiles"
 msgstr "Bemonsteringskwantielen"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:646
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:647
 #, kde-format
 msgid "Cumulative Percentage"
 msgstr "Cumulatief percentage"

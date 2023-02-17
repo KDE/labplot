@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-16 00:54+0000\n"
+"POT-Creation-Date: 2023-02-17 00:54+0000\n"
 "PO-Revision-Date: 2022-07-27 16:51+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -71,7 +71,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:414
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:677
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:237
-#: src/backend/worksheet/plots/cartesian/Value.cpp:256
+#: src/backend/worksheet/plots/cartesian/Value.cpp:255
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:284
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:266
@@ -82,7 +82,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2810
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:295
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:258
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:219
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:222
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:216
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:429
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:271
@@ -2306,31 +2306,31 @@ msgstr "Näytä asetukset"
 msgid "No dbc parser installed"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:106
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, fuzzy, kde-format
 #| msgid "Invalid pointer"
 msgid "Invalid dbc file"
 msgstr "Virheellinen osoitin"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:108
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:110
 #, fuzzy, kde-format
 #| msgid "unknown"
 msgid "Unknown error"
 msgstr "tuntematon"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:349
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, fuzzy, kde-format
 #| msgid "Timestamp"
 msgid "Time_s"
 msgstr "Aikaleima"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, fuzzy, kde-format
 #| msgid "Timestamp"
 msgid "Time_ns"
 msgstr "Aikaleima"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:356
 #, kde-format
 msgid "Time_10µs"
 msgstr ""
@@ -5905,7 +5905,7 @@ msgstr "raaka"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:214
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:249
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:507
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:641
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:642
 #: src/kdefrontend/widgets/ValueWidget.cpp:32
 #, kde-format
 msgid "Frequency"
@@ -8655,82 +8655,82 @@ msgstr "pata"
 msgid "club"
 msgstr "risti"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:107
+#: src/backend/worksheet/plots/cartesian/Value.cpp:106
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:443
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: aseta arvojen tyyppi"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:114
+#: src/backend/worksheet/plots/cartesian/Value.cpp:113
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:450
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: aseta arvojen sarake"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:126
+#: src/backend/worksheet/plots/cartesian/Value.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:469
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: aseta arvojen sijainti"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:133
+#: src/backend/worksheet/plots/cartesian/Value.cpp:132
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:476
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: aseta arvojen etäisyys"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:140
+#: src/backend/worksheet/plots/cartesian/Value.cpp:139
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:483
 #, kde-format
 msgid "%1: rotate values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:147
+#: src/backend/worksheet/plots/cartesian/Value.cpp:146
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:490
 #, kde-format
 msgid "%1: set values opacity"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:154
+#: src/backend/worksheet/plots/cartesian/Value.cpp:153
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:497
 #, fuzzy, kde-format
 #| msgid "%1: set numeric format to '%2'"
 msgid "%1: set values numeric format"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:161
+#: src/backend/worksheet/plots/cartesian/Value.cpp:160
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:504
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set values precision"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:168
+#: src/backend/worksheet/plots/cartesian/Value.cpp:167
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:511
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: set values datetime format"
 msgstr "%1: aseta päiväyksen ja ajan muodoksi %2"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:175
+#: src/backend/worksheet/plots/cartesian/Value.cpp:174
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:518
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: aseta arvojen etuliite"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:182
+#: src/backend/worksheet/plots/cartesian/Value.cpp:181
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:525
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: aseta arvojen jälkiliite"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:189
+#: src/backend/worksheet/plots/cartesian/Value.cpp:188
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:532
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: aseta arvojen fontti"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:196
+#: src/backend/worksheet/plots/cartesian/Value.cpp:195
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:539
 #, kde-format
 msgid "%1: set values color"
@@ -8920,7 +8920,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2227
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:133
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:136
 #, kde-format
 msgid "No data points available."
 msgstr ""
@@ -16504,7 +16504,7 @@ msgstr "Piirto&järjestys"
 msgid "Sample Quantiles"
 msgstr "Näytekoko:"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:646
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:647
 #, fuzzy, kde-format
 #| msgid "Cumulative Histogram"
 msgid "Cumulative Percentage"
