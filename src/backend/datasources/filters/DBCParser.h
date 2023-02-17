@@ -36,13 +36,24 @@ public:
 		std::vector<std::vector<ValueDescriptions>> value_descriptions;
 	};
 
+	enum class PrefixType {
+		None,
+		Message, // Use the message name as prefix for the signal_names
+	};
+
+	enum class SuffixType {
+		None,
+		UnitIfAvailable, // _<Unit> only if Unit is not empty, otherwise empty
+		Unit // always _<Unit> even if Unit is empty
+	};
+
 	/*!
 	 * \brief numberSignals
 	 * Determines the number of signals
 	 * \param ids Vector with all id's found in a log file
 	 * \return
 	 */
-	void signals(const QVector<uint32_t> ids, QHash<uint32_t, int>& idIndex, Signals& out);
+	void getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType s, QHash<uint32_t, int>& idIndex, Signals& out);
 
 private:
 	bool m_valid{false};

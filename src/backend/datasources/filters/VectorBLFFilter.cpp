@@ -222,7 +222,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 
 	// 2. Create vector names
 	QHash<uint32_t, int> idIndexTable;
-	m_dbcParser.signals(ids, idIndexTable, m_signals);
+	m_dbcParser.getSignals(ids, DbcParser::PrefixType::None, DbcParser::SuffixType::Unit, idIndexTable, m_signals);
 
 	// 3. allocate memory
 	if (convertTimeToSeconds) {

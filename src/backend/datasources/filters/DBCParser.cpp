@@ -53,22 +53,40 @@ DbcParser::ParseStatus DbcParser::parseMessage(const uint32_t id, const std::vec
  * \param ids Vector with all id's found in a log file
  * \return
  */
-void DbcParser::signals(const QVector<uint32_t> ids, QHash<uint32_t, int>& idIndex, Signals& out) {
+void DbcParser::getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType s, QHash<uint32_t, int>& idIndex, Signals& out) {
 	out.signal_names.clear();
 	out.value_descriptions.clear();
-	QStringList s;
 #ifdef HAVE_DBC_PARSER
 	for (const auto id : ids) {
 		const auto messages = m_parser.get_messages();
 		for (const auto& message : messages) {
 			if (message.id() == id) {
-				idIndex.insert(id, s.length());
+				idIndex.insert(id, out.value_descriptions.size());
 				// const auto message = m_messages.value(id);
 				for (const auto& signal_ : message.getSignals()) {
-					if (signal_.unit.size() == 0)
-						out.signal_names.append(QString::fromStdString(signal_.name));
-					else
-						out.signal_names.append(QString::fromStdString(signal_.name + "_" + signal_.unit));
+					std::string signal_name;
+					switch (p) {
+					case PrefixType::Message:
+						signal_name += message.name() + "_";
+						break;
+					case PrefixType::None:
+						break;
+					}
+
+					signal_name += signal_.name;
+
+					switch (s) {
+					case SuffixType::None:
+						break;
+					case SuffixType::Unit:
+						signal_name += "_" + signal_.unit;
+						break;
+					case SuffixType::UnitIfAvailable:
+						if (signal_.unit.size() != 0)
+							signal_name += "_" + signal_.unit;
+						break;
+					}
+					out.signal_names.append(QString::fromStdString(signal_name));
 					std::vector<ValueDescriptions> vd;
 					vd.reserve(signal_.svDescriptions.size());
 					for (const auto& svdescription : signal_.svDescriptions) {
