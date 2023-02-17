@@ -53,7 +53,7 @@ public:
 	 * \param ids Vector with all id's found in a log file
 	 * \return
 	 */
-	void getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType s, QHash<uint32_t, int>& idIndex, Signals& out);
+	void getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType s, QHash<uint32_t, int>& idIndex, Signals& out) const;
 
 private:
 	bool m_valid{false};
