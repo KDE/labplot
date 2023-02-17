@@ -1419,7 +1419,37 @@ void CartesianPlot::setRangeScale(const Dimension dim, const int index, const Ra
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-	exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
+
+	switch (scale) {
+	case RangeT::Scale::Log10:
+	case RangeT::Scale::Log2:
+	case RangeT::Scale::Ln:
+		if (range(dim, index).start() <= 0) {
+			beginMacro(i18n("%1: change x-range %2 scale", d->name(), index + 1));
+			setMin(dim, index, 0.1);
+			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
+			endMacro();
+		} else
+			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
+		break;
+	case RangeT::Scale::Sqrt:
+		// Fall through
+	case RangeT::Scale::Inverse:
+		if (range(dim, index).start() < 0) {
+			beginMacro(i18n("%1: change x-range %2 scale", d->name(), index + 1));
+			setMin(dim, index, 0.1);
+			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
+			endMacro();
+		} else
+			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
+		break;
+	case RangeT::Scale::Linear:
+		// Fall through
+	case RangeT::Scale::Square:
+		exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
+		break;
+	}
+
 	if (project())
 		project()->setChanged(true);
 }
