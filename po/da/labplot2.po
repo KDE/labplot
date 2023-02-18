@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-17 00:54+0000\n"
+"POT-Creation-Date: 2023-02-18 00:54+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -11545,7 +11545,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1175
-#: src/kdefrontend/SettingsGeneralPage.cpp:198
+#: src/kdefrontend/SettingsGeneralPage.cpp:200
 #, kde-format
 msgid "Automatic"
 msgstr ""
@@ -12282,7 +12282,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:60
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:68
-#: src/kdefrontend/SettingsGeneralPage.cpp:187
+#: src/kdefrontend/SettingsGeneralPage.cpp:189
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
 #: src/kdefrontend/widgets/LabelWidget.cpp:156
 #, kde-format
@@ -12298,7 +12298,7 @@ msgstr "Øverst"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:62
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:70
-#: src/kdefrontend/SettingsGeneralPage.cpp:188
+#: src/kdefrontend/SettingsGeneralPage.cpp:190
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
 #: src/kdefrontend/widgets/LabelWidget.cpp:158
 #, kde-format
@@ -12382,7 +12382,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:56
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
-#: src/kdefrontend/SettingsGeneralPage.cpp:189
+#: src/kdefrontend/SettingsGeneralPage.cpp:191
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:126
 #: src/kdefrontend/widgets/LabelWidget.cpp:135
 #: src/kdefrontend/widgets/LabelWidget.cpp:152
@@ -12401,7 +12401,7 @@ msgstr "Venstre"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:58
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:66
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
-#: src/kdefrontend/SettingsGeneralPage.cpp:190
+#: src/kdefrontend/SettingsGeneralPage.cpp:192
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:127
 #: src/kdefrontend/widgets/LabelWidget.cpp:137
 #: src/kdefrontend/widgets/LabelWidget.cpp:154
@@ -15354,102 +15354,102 @@ msgstr "Indstillinger"
 msgid "min."
 msgstr "min."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:165
+#: src/kdefrontend/SettingsGeneralPage.cpp:167
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Do Nothing"
 msgstr "Gør intet"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:166
+#: src/kdefrontend/SettingsGeneralPage.cpp:168
 #, kde-format
 msgid "Create New Empty Project"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:167
+#: src/kdefrontend/SettingsGeneralPage.cpp:169
 #, kde-format
 msgid "Create New Project with Worksheet"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:168
+#: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgid "Create New Project with Spreadsheet"
 msgstr "&Regneark"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:169
+#: src/kdefrontend/SettingsGeneralPage.cpp:171
 #, kde-format
 msgid "Load Last Used Project"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:173
+#: src/kdefrontend/SettingsGeneralPage.cpp:175
 #, fuzzy, kde-format
 #| msgid "Show"
 msgid "Show File Path"
 msgstr "Vis"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:174
+#: src/kdefrontend/SettingsGeneralPage.cpp:176
 #, fuzzy, kde-format
 #| msgid "File name"
 msgid "Show File Name"
 msgstr "Filnavn"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:175
+#: src/kdefrontend/SettingsGeneralPage.cpp:177
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Show Project Name"
 msgstr "Projekt gemt"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:178
+#: src/kdefrontend/SettingsGeneralPage.cpp:180
 #, fuzzy, kde-format
 #| msgid "Window visibility policy"
 msgid "Sub-window View"
 msgstr "Politik for vinduers synlighed"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:179
+#: src/kdefrontend/SettingsGeneralPage.cpp:181
 #, kde-format
 msgid "Tabbed View"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:182
+#: src/kdefrontend/SettingsGeneralPage.cpp:184
 #, fuzzy, kde-format
 #| msgid "Current &Folder Only"
 msgid "Show Windows of the Current Folder Only"
 msgstr "Kun aktuel &mappe"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:183
+#: src/kdefrontend/SettingsGeneralPage.cpp:185
 #, fuzzy, kde-format
 #| msgid "Current Folder and &Subfolders"
 msgid "Show Windows of the Current Folder and its Subfolders Only"
 msgstr "Aktuel mappe og &undermapper"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:184
+#: src/kdefrontend/SettingsGeneralPage.cpp:186
 #, fuzzy, kde-format
 #| msgid "Close all the windows"
 msgid "Show all Windows"
 msgstr "Luk alle vinduerne"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:192
+#: src/kdefrontend/SettingsGeneralPage.cpp:194
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Metric"
 msgstr "Retning"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:193
+#: src/kdefrontend/SettingsGeneralPage.cpp:195
 #, kde-format
 msgid "Imperial"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:195
+#: src/kdefrontend/SettingsGeneralPage.cpp:197
 #, kde-format
 msgid "Dot (.)"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:196
+#: src/kdefrontend/SettingsGeneralPage.cpp:198
 #, kde-format
 msgid "Comma (,)"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:197
+#: src/kdefrontend/SettingsGeneralPage.cpp:199
 #, kde-format
 msgid "Arabic (٫)"
 msgstr ""

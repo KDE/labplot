@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-17 00:54+0000\n"
+"POT-Creation-Date: 2023-02-18 00:54+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -11151,7 +11151,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1175
-#: src/kdefrontend/SettingsGeneralPage.cpp:198
+#: src/kdefrontend/SettingsGeneralPage.cpp:200
 #, kde-format
 msgid "Automatic"
 msgstr "自動"
@@ -11863,7 +11863,7 @@ msgstr "初始大小"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:60
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:68
-#: src/kdefrontend/SettingsGeneralPage.cpp:187
+#: src/kdefrontend/SettingsGeneralPage.cpp:189
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
 #: src/kdefrontend/widgets/LabelWidget.cpp:156
 #, fuzzy, kde-format
@@ -11879,7 +11879,7 @@ msgstr "頂端"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:62
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:70
-#: src/kdefrontend/SettingsGeneralPage.cpp:188
+#: src/kdefrontend/SettingsGeneralPage.cpp:190
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
 #: src/kdefrontend/widgets/LabelWidget.cpp:158
 #, fuzzy, kde-format
@@ -11962,7 +11962,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:56
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
-#: src/kdefrontend/SettingsGeneralPage.cpp:189
+#: src/kdefrontend/SettingsGeneralPage.cpp:191
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:126
 #: src/kdefrontend/widgets/LabelWidget.cpp:135
 #: src/kdefrontend/widgets/LabelWidget.cpp:152
@@ -11981,7 +11981,7 @@ msgstr "左"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:58
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:66
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
-#: src/kdefrontend/SettingsGeneralPage.cpp:190
+#: src/kdefrontend/SettingsGeneralPage.cpp:192
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:127
 #: src/kdefrontend/widgets/LabelWidget.cpp:137
 #: src/kdefrontend/widgets/LabelWidget.cpp:154
@@ -14841,94 +14841,94 @@ msgstr "（已改變）"
 msgid "min."
 msgstr "分"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:165
+#: src/kdefrontend/SettingsGeneralPage.cpp:167
 #, fuzzy, kde-format
 msgid "Do Nothing"
 msgstr "不做任何事"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:166
+#: src/kdefrontend/SettingsGeneralPage.cpp:168
 #, kde-format
 msgid "Create New Empty Project"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:167
+#: src/kdefrontend/SettingsGeneralPage.cpp:169
 #, kde-format
 msgid "Create New Project with Worksheet"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:168
+#: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, fuzzy, kde-format
 msgid "Create New Project with Spreadsheet"
 msgstr "工作表"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:169
+#: src/kdefrontend/SettingsGeneralPage.cpp:171
 #, kde-format
 msgid "Load Last Used Project"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:173
+#: src/kdefrontend/SettingsGeneralPage.cpp:175
 #, fuzzy, kde-format
 msgid "Show File Path"
 msgstr "顯示控制面板(&C)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:174
+#: src/kdefrontend/SettingsGeneralPage.cpp:176
 #, fuzzy, kde-format
 msgid "Show File Name"
 msgstr "檔案名稱"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:175
+#: src/kdefrontend/SettingsGeneralPage.cpp:177
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgid "Show Project Name"
 msgstr "儲存專案"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:178
+#: src/kdefrontend/SettingsGeneralPage.cpp:180
 #, kde-format
 msgid "Sub-window View"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:179
+#: src/kdefrontend/SettingsGeneralPage.cpp:181
 #, kde-format
 msgid "Tabbed View"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:182
+#: src/kdefrontend/SettingsGeneralPage.cpp:184
 #, kde-format
 msgid "Show Windows of the Current Folder Only"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:183
+#: src/kdefrontend/SettingsGeneralPage.cpp:185
 #, kde-format
 msgid "Show Windows of the Current Folder and its Subfolders Only"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:184
+#: src/kdefrontend/SettingsGeneralPage.cpp:186
 #, fuzzy, kde-format
 msgid "Show all Windows"
 msgstr "全部選取"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:192
+#: src/kdefrontend/SettingsGeneralPage.cpp:194
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Metric"
 msgstr "方向"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:193
+#: src/kdefrontend/SettingsGeneralPage.cpp:195
 #, kde-format
 msgid "Imperial"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:195
+#: src/kdefrontend/SettingsGeneralPage.cpp:197
 #, kde-format
 msgid "Dot (.)"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:196
+#: src/kdefrontend/SettingsGeneralPage.cpp:198
 #, kde-format
 msgid "Comma (,)"
 msgstr ""
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:197
+#: src/kdefrontend/SettingsGeneralPage.cpp:199
 #, kde-format
 msgid "Arabic (٫)"
 msgstr ""
