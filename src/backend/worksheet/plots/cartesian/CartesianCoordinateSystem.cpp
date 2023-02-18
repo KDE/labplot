@@ -200,9 +200,6 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 	for (auto& col : scenePointsUsed)
 		col.resize(numberOfPixelY + 1);
 
-	const double minLogicalDiffX = pageRect.width() / numberOfPixelX;
-	const double minLogicalDiffY = pageRect.height() / numberOfPixelY;
-
 	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	for (const auto* xScale : d->xScales) {
@@ -235,8 +232,8 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 				// DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
 					// TODO: check
-					const int indexX = std::round((x - xPage) / minLogicalDiffX);
-					const int indexY = std::round((y - yPage) / minLogicalDiffY);
+					const int indexX = std::round(x - xPage);
+					const int indexY = std::round(y - yPage);
 					if (scenePointsUsed.at(indexX).at(indexY))
 						continue;
 
