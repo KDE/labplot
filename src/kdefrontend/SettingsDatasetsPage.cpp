@@ -60,7 +60,7 @@ void SettingsDatasetsPage::loadSettings() {
 			QString sizeStr;
 			if (size > 1024 * 1024)
 				sizeStr = numberLocale.toString(size / 1024 / 1024) + QLatin1String("MB");
-			if (size > 1024)
+			else if (size > 1024)
 				sizeStr = numberLocale.toString(size / 1024) + QLatin1String("kB");
 			else
 				sizeStr = numberLocale.toString(size) + QLatin1String("B");

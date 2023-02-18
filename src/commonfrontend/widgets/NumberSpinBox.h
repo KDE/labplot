@@ -42,9 +42,9 @@ public:
 	Q_PROPERTY(bool feedback READ feedback WRITE setFeedback NOTIFY feedbackChanged)
 
 public:
-	NumberSpinBox(QWidget* parent = nullptr);
-	NumberSpinBox(double initValue, QWidget* parent = nullptr);
-	NumberSpinBox(double initValue, bool feedback, QWidget* parent = nullptr);
+	explicit NumberSpinBox(QWidget* parent = nullptr);
+	explicit NumberSpinBox(double initValue, QWidget* parent = nullptr);
+	explicit NumberSpinBox(double initValue, bool feedback, QWidget* parent = nullptr);
 	QString errorToString(Errors);
 	bool setValue(double);
 	void setFeedback(bool enable);

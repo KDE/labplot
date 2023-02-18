@@ -33,7 +33,7 @@ public:
 
 	enum class PlotMode { Transient, FFT, AC, DC, Noise, Unknown };
 
-	SpiceFileReader(const QString& filename)
+	explicit SpiceFileReader(const QString& filename)
 		: mFilename(filename) {
 		mFile.setFileName(mFilename);
 	}
@@ -98,7 +98,7 @@ private:
 	QString mPlotName;
 	int mFlags{0};
 	int mNumberPoints{0};
-	double mOffset; // LtSpice specific
+	double mOffset{0.}; // LtSpice specific
 	QHash<QString, QString> mLtSpiceOptions; // LtSpice specific
 	QVector<Variable> mVariables;
 	PlotMode mMode{PlotMode::Unknown};

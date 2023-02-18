@@ -56,7 +56,7 @@ bool VectorBLFFilter::isValid(const QString& filename) {
 			return false; // No file
 		f.close();
 		return true;
-	} catch (Vector::BLF::Exception e) {
+	} catch (Vector::BLF::Exception& e) {
 		return false; // Signature was invalid or something else
 	}
 #else

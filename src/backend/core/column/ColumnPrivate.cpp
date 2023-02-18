@@ -1305,8 +1305,8 @@ void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::For
 		if (static_cast<bool>(connection))
 			disconnect(connection);
 
-	for (const auto& formulaData : m_formulaData) {
-		const auto* column = formulaData.column();
+	for (const auto& data : m_formulaData) {
+		const auto* column = data.column();
 		assert(column);
 		if (autoUpdate)
 			connectFormulaColumn(column);

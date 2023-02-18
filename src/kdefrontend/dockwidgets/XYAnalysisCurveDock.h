@@ -6,7 +6,7 @@
 
 class XYAnalysisCurveDock : public XYCurveDock {
 public:
-	XYAnalysisCurveDock(QWidget*);
+	explicit XYAnalysisCurveDock(QWidget*);
 
 protected:
 	void showResult(const XYAnalysisCurve* curve, QTextEdit* teResult, QPushButton* pbRecalculate);

@@ -271,7 +271,6 @@ void ReferenceRangeDock::load() {
 	if (!m_range)
 		return;
 
-	const auto numberLocale = QLocale();
 	auto orientation = m_range->orientation();
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
 	orientationChanged(ui.cbOrientation->currentIndex()); // call this to update the position widgets that depend on the orientation

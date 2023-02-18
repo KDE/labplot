@@ -680,17 +680,15 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 #endif
 	}
 
-	if (checked) {
-		QMenu menu;
+	QMenu menu;
 #if HAS_FUZZY_MATCHER
-		menu.addAction(fuzzyMatchingAction);
-		menu.addSeparator();
+	menu.addAction(fuzzyMatchingAction);
+	menu.addSeparator();
 #endif
-		menu.addAction(caseSensitiveAction);
-		menu.addAction(matchCompleteWordAction);
-		connect(&menu, &QMenu::aboutToHide, bFilterOptions, &QPushButton::toggle);
-		menu.exec(bFilterOptions->mapToGlobal(QPoint(0, bFilterOptions->height())));
-	}
+	menu.addAction(caseSensitiveAction);
+	menu.addAction(matchCompleteWordAction);
+	connect(&menu, &QMenu::aboutToHide, bFilterOptions, &QPushButton::toggle);
+	menu.exec(bFilterOptions->mapToGlobal(QPoint(0, bFilterOptions->height())));
 }
 
 void ProjectExplorer::resizeHeader() {

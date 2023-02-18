@@ -149,11 +149,9 @@ bool XYCorrelationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 				ydataVector.append(tmpYDataColumn->valueAt(row));
 	}
 
-	if (tmpY2DataColumn != nullptr) {
-		for (int row = 0; row < tmpY2DataColumn->rowCount(); ++row)
-			if (tmpY2DataColumn->isValid(row) && !tmpY2DataColumn->isMasked(row))
-				y2dataVector.append(tmpY2DataColumn->valueAt(row));
-	}
+	for (int row = 0; row < tmpY2DataColumn->rowCount(); ++row)
+		if (tmpY2DataColumn->isValid(row) && !tmpY2DataColumn->isMasked(row))
+			y2dataVector.append(tmpY2DataColumn->valueAt(row));
 
 	const size_t n = (size_t)ydataVector.size(); // number of points for signal
 	const size_t m = (size_t)y2dataVector.size(); // number of points for response

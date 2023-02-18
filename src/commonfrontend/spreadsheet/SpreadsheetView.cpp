@@ -3119,14 +3119,13 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 		// if no columns are fully selected, copy the selected cells into new Columns which will be processes in the statistics dialog
 		if (columns.isEmpty()) {
 			const auto& children = m_spreadsheet->children<Column>();
-			Column* sourceColumn{nullptr};
 			Column* targetColumn{nullptr};
 			QMap<int, int> columnMappings; // key = child column index in the spreadsheet, value = column index in the vector of new colums
 			QMap<int, int> rowMappings; // key = child column index in the spreadsheet, value = last row index
 			for (const auto& index : indexes) {
 				int col = index.column();
 				int row = index.row();
-				sourceColumn = children.at(col);
+				const auto* sourceColumn = children.at(col);
 
 				if (columnMappings.contains(col))
 					targetColumn = columns.at(columnMappings[col]);

@@ -784,10 +784,10 @@ private:
 // implementation of tasks for text columns
 class MaskTextValuesTask : public QRunnable {
 public:
-	MaskTextValuesTask(Column* col, OperatorText op, const QString& value) {
-		m_column = col;
-		m_operator = op;
-		m_value = value;
+	MaskTextValuesTask(Column* col, OperatorText op, const QString& value)
+		: m_operator(op)
+		, m_value(value)
+		, m_column(col) {
 	}
 
 	void run() override {
@@ -861,10 +861,10 @@ private:
 
 class DropTextValuesTask : public QRunnable {
 public:
-	DropTextValuesTask(Column* col, OperatorText op, const QString& value) {
-		m_column = col;
-		m_operator = op;
-		m_value = value;
+	DropTextValuesTask(Column* col, OperatorText op, const QString& value)
+		: m_operator(op)
+		, m_value(value)
+		, m_column(col) {
 	}
 
 	void run() override {

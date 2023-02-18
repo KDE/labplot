@@ -163,7 +163,6 @@ bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const 
 	}
 
 	if (p.exponentPos > 0) {
-		bool ok;
 		if (v_str.at(p.exponentPos + 1) == QLatin1Char('+') || v_str.at(p.exponentPos + 1) == QLatin1Char('-'))
 			p.exponentSign = v_str.at(p.exponentPos + 1);
 		const QString& e = v_str.mid(p.exponentPos + 1 + !p.exponentSign.isNull(), number_length - (p.exponentPos + 1 + !p.exponentSign.isNull()));
