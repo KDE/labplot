@@ -473,7 +473,6 @@ void MainWin::createADS() {
 	});
 	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
 		QMap<QString, ads::CDockWidget*> m(m_DockManager->dockWidgetsMap());
-		QList<ads::CDockWidget*> l;
 		for (auto e : m.keys()) {
 			m_DockManager->removeDockWidget(m.value(e));
 		}
@@ -973,8 +972,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_togglePropertiesDockAction->setEnabled(hasProject);
 	m_closeWindowAction->setEnabled(hasProject);
 	m_closeAllWindowsAction->setEnabled(hasProject);
-	m_tileWindowsAction->setEnabled(hasProject);
-	m_cascadeWindowsAction->setEnabled(hasProject);
 	m_nextWindowAction->setEnabled(hasProject);
 	m_prevWindowAction->setEnabled(hasProject);
 

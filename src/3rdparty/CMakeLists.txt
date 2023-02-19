@@ -64,7 +64,6 @@ ENDIF ()
 install(FILES preview.sty DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME}/latex)
 
 Include(FetchContent)
-<<<<<<< refs/remotes/origin/master
 
 ### Vector BLF ###############################
 FIND_PACKAGE(PkgConfig REQUIRED)
