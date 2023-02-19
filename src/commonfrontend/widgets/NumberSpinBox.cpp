@@ -315,7 +315,7 @@ QString NumberSpinBox::strip(const QString& t) const {
 
 QString NumberSpinBox::textFromValue(double value) const {
 	Q_UNUSED(value);
-	return QStringLiteral("");
+	return m_value.toString();
 }
 
 /*!
