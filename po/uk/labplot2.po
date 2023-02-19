@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-18 00:54+0000\n"
+"POT-Creation-Date: 2023-02-19 00:54+0000\n"
 "PO-Revision-Date: 2023-02-16 08:26+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -54,7 +54,7 @@ msgstr ""
 "встановлено програму."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
-#: src/backend/core/column/Column.cpp:1251
+#: src/backend/core/column/Column.cpp:1250
 #: src/backend/datapicker/DatapickerCurve.cpp:501
 #: src/backend/datapicker/DatapickerImage.cpp:511
 #: src/backend/datapicker/DatapickerPoint.cpp:498
@@ -82,7 +82,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Value.cpp:255
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:284
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:266
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:264
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3237
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:269
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:226
@@ -98,7 +98,7 @@ msgstr ""
 #: src/backend/worksheet/TextLabel.cpp:1127
 #: src/backend/worksheet/Worksheet.cpp:1705
 #: src/backend/worksheet/WorksheetElement.cpp:460
-#: src/commonfrontend/ProjectExplorer.cpp:1036
+#: src/commonfrontend/ProjectExplorer.cpp:1034
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr ""
@@ -107,7 +107,7 @@ msgstr ""
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1381 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1380 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:746
 #: src/backend/datapicker/DatapickerCurve.cpp:659
 #: src/backend/datapicker/DatapickerImage.cpp:753
@@ -679,14 +679,14 @@ msgstr "%1: змінити тип стовпчика"
 msgid "%1: clear column"
 msgstr "%1: спорожнити стовпчик"
 
-#: src/backend/core/column/Column.cpp:1525
+#: src/backend/core/column/Column.cpp:1524
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "номер рядка є некоректним або номер рядка пропущено"
 
-#: src/backend/core/column/Column.cpp:1534
-#: src/backend/core/column/Column.cpp:1543
-#: src/backend/core/column/Column.cpp:1552
+#: src/backend/core/column/Column.cpp:1533
+#: src/backend/core/column/Column.cpp:1542
+#: src/backend/core/column/Column.cpp:1551
 #, kde-format
 msgid "invalid row value"
 msgstr "некоректне значення рядка"
@@ -5296,13 +5296,13 @@ msgid "unexpected end of document"
 msgstr "неочікуване завершення документа"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
 #, kde-format
 msgid "FITS image"
 msgstr "Зображення FITS"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
 #, kde-format
 msgid "FITS table"
 msgstr "Таблиця FITS"
@@ -8343,7 +8343,7 @@ msgid "%1: set options and perform the convolution"
 msgstr "%1: встановити параметри і виконати згортку"
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:168
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:163
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:161
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:123
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:124
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:123
@@ -8971,16 +8971,16 @@ msgid "Curve"
 msgstr "Крива"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3780
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3834
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3833
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2389
 #, kde-format
 msgid "Failed to export"
 msgstr "Не вдалося експортувати"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3780
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3834
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3833
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2389
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9316,22 +9316,22 @@ msgstr "шукати ціле слово"
 msgid "Fuzzy Matching"
 msgstr "Нечітка відповідність"
 
-#: src/commonfrontend/ProjectExplorer.cpp:886
+#: src/commonfrontend/ProjectExplorer.cpp:884
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr "Елементи %1: встановлення видимості: %2"
 
-#: src/commonfrontend/ProjectExplorer.cpp:910
+#: src/commonfrontend/ProjectExplorer.cpp:908
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "Ви справді хочете вилучити позначені %1 об'єктів?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:912
+#: src/commonfrontend/ProjectExplorer.cpp:910
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "Ви справді хочете вилучити %1?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:914
+#: src/commonfrontend/ProjectExplorer.cpp:912
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1647
 #, kde-format
 msgid "Delete selected object"
@@ -9341,7 +9341,7 @@ msgstr[1] "Вилучити позначені об'єктиВилучення �
 msgstr[2] "Вилучити позначені об'єкти"
 msgstr[3] "Вилучити позначений об'єкт"
 
-#: src/commonfrontend/ProjectExplorer.cpp:919
+#: src/commonfrontend/ProjectExplorer.cpp:917
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -9871,35 +9871,35 @@ msgstr "%1: стовпчики перетворення степенів"
 msgid "%1: column statistics"
 msgstr "%1: статистика щодо стовпчиків"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Selection in %1"
 msgstr "Позначене у %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3176
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: статистика щодо рядків"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3186
 #, kde-format
 msgid "Row %1"
 msgstr "Рядок %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3211
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3250
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Вставлення декількох рядків"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3213
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3252
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Вкажіть кількість рядків, які слід вставити"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3232
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3271
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3231
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3270
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
@@ -9908,22 +9908,22 @@ msgstr[1] "%1: вставити порожні рядки"
 msgstr[2] "%1: вставити порожні рядки"
 msgstr[3] "%1: вставити порожній рядок"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3287
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3286
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: вилучити позначені рядки"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3300
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3299
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr "%1: спорожнити позначені рядки"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3351
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3350
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: спорожнити позначені комірки"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3410
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3409
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -9931,28 +9931,28 @@ msgstr "%1: спорожнити позначені комірки"
 msgid "Search..."
 msgstr "Шукати…"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3419
 #, kde-format
 msgid "End Search"
 msgstr "Кінець пошуку"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3597
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3596
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Друк електронної таблиці"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4202
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4201
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Не вдалося створити базу даних SQLite %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4234
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4233
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Не вдалося створити таблицю у базі даних SQLite %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4287
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4286
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Не вдалося вставити значення до таблиці."
@@ -9987,7 +9987,7 @@ msgstr "Не введено числа"
 msgid "Unhandled error"
 msgstr "Непридатна до обробки помилка"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:405
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:404
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Введено некоректне значення. Коректне значення: %1"

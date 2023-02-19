@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-18 00:54+0000\n"
+"POT-Creation-Date: 2023-02-19 00:54+0000\n"
 "PO-Revision-Date: 2023-02-17 07:26+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
-"%100<=4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -52,7 +52,7 @@ msgid "Couldn't find panel plugins. Please check your installation."
 msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
-#: src/backend/core/column/Column.cpp:1251
+#: src/backend/core/column/Column.cpp:1250
 #: src/backend/datapicker/DatapickerCurve.cpp:501
 #: src/backend/datapicker/DatapickerImage.cpp:511
 #: src/backend/datapicker/DatapickerPoint.cpp:498
@@ -80,7 +80,7 @@ msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 #: src/backend/worksheet/plots/cartesian/Value.cpp:255
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:284
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:266
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:264
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3237
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:269
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:226
@@ -96,14 +96,14 @@ msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 #: src/backend/worksheet/TextLabel.cpp:1127
 #: src/backend/worksheet/Worksheet.cpp:1705
 #: src/backend/worksheet/WorksheetElement.cpp:460
-#: src/commonfrontend/ProjectExplorer.cpp:1036
+#: src/commonfrontend/ProjectExplorer.cpp:1034
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "Atribut »%1« manjka ali je prazen, uporabljena je privzeta vrednost"
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1381 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1380 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:746
 #: src/backend/datapicker/DatapickerCurve.cpp:659
 #: src/backend/datapicker/DatapickerImage.cpp:753
@@ -674,14 +674,14 @@ msgstr "%1: spremeni vrsto stolpca"
 msgid "%1: clear column"
 msgstr "%1: počisti stolpec"
 
-#: src/backend/core/column/Column.cpp:1525
+#: src/backend/core/column/Column.cpp:1524
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "neveljaven ali manjkajoči indeks vrstice"
 
-#: src/backend/core/column/Column.cpp:1534
-#: src/backend/core/column/Column.cpp:1543
-#: src/backend/core/column/Column.cpp:1552
+#: src/backend/core/column/Column.cpp:1533
+#: src/backend/core/column/Column.cpp:1542
+#: src/backend/core/column/Column.cpp:1551
 #, kde-format
 msgid "invalid row value"
 msgstr "neveljavna vrednost vrstice"
@@ -5264,13 +5264,13 @@ msgid "unexpected end of document"
 msgstr "nepričakovan konec dokumenta"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
 #, kde-format
 msgid "FITS image"
 msgstr "Slika FITS"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3539
 #, kde-format
 msgid "FITS table"
 msgstr "Tabela FITS"
@@ -8311,7 +8311,7 @@ msgid "%1: set options and perform the convolution"
 msgstr "%1: določite možnosti in izvedite konvolucijo"
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:168
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:163
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:161
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:123
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:124
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:123
@@ -8941,16 +8941,16 @@ msgid "Curve"
 msgstr "Krivulja"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3780
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3834
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3833
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2389
 #, kde-format
 msgid "Failed to export"
 msgstr "Izvoz ni uspel"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3780
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3834
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3833
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2389
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9286,22 +9286,22 @@ msgstr "Ujemanje celih besed"
 msgid "Fuzzy Matching"
 msgstr "Približno ujemanje"
 
-#: src/commonfrontend/ProjectExplorer.cpp:886
+#: src/commonfrontend/ProjectExplorer.cpp:884
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr "%1: elementi: nastavi vidno: %2"
 
-#: src/commonfrontend/ProjectExplorer.cpp:910
+#: src/commonfrontend/ProjectExplorer.cpp:908
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "Ali res želite izbrisati %1 izbranih objektov?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:912
+#: src/commonfrontend/ProjectExplorer.cpp:910
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "Ali res želite izbrisati %1?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:914
+#: src/commonfrontend/ProjectExplorer.cpp:912
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1647
 #, kde-format
 msgid "Delete selected object"
@@ -9311,7 +9311,7 @@ msgstr[1] "Izbriši izbrana predmeta"
 msgstr[2] "Izbriši izbrane predmete"
 msgstr[3] "Izbriši izbrane predmete"
 
-#: src/commonfrontend/ProjectExplorer.cpp:919
+#: src/commonfrontend/ProjectExplorer.cpp:917
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -9841,35 +9841,35 @@ msgstr "%1: stolpci tranformacije moči"
 msgid "%1: column statistics"
 msgstr "%1: statistike stolpca"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Selection in %1"
 msgstr "Izbor v %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3176
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: statistike vrstice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3186
 #, kde-format
 msgid "Row %1"
 msgstr "Vrstica %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3211
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3250
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Vstavi več vrstic"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3213
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3252
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Vnesite število vrstic, ki jih želite vstaviti"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3232
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3271
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3231
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3270
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
@@ -9878,22 +9878,22 @@ msgstr[1] "%1: vstavi prazni vrstici"
 msgstr[2] "%1: vstavi prazne vrstice"
 msgstr[3] "%1: vstavi prazne vrstice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3287
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3286
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: odstrani izbrane vrstice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3300
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3299
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr "%1: počisti izbrane vrstice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3351
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3350
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: počisti izbrane celice"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3410
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3409
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -9901,28 +9901,28 @@ msgstr "%1: počisti izbrane celice"
 msgid "Search..."
 msgstr "Poišči ..."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3419
 #, kde-format
 msgid "End Search"
 msgstr "Končaj iskanje"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3597
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3596
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Natisni preglednico"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4202
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4201
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Zbirke podatkov SQLite %1 ni bilo mogoče ustvariti."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4234
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4233
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Ustvarjanje tabele v zbirki podatkov SQLite %1 ni uspelo."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4287
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4286
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "V tabelo ni bilo mogoče vstaviti vrednosti."
@@ -9957,7 +9957,7 @@ msgstr "Ni vnesenega števila"
 msgid "Unhandled error"
 msgstr "Neobdelana napaka"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:405
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:404
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Vnesena neveljavna vrednost. Veljavna vrednost: %1"
