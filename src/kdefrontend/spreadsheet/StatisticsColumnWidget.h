@@ -29,6 +29,7 @@ public:
 
 private:
 	void showOverview();
+	void showOverviewPlot();
 	void showHistogram();
 	void showKDEPlot();
 	void showQQPlot();
@@ -46,6 +47,8 @@ private:
 	Project* m_project;
 	QTabWidget* m_tabWidget;
 	QTextEdit* m_teOverview;
+	QWidget m_overviewWidget;
+	QWidget m_overviewPlotWidget;
 	QWidget m_histogramWidget;
 	QWidget m_kdePlotWidget;
 	QWidget m_qqPlotWidget;

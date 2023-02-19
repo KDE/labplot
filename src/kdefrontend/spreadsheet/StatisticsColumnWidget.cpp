@@ -103,9 +103,17 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	// clang-format on
 
 	// create tab widgets for every column and show the initial text with the placeholders
+	auto* vBoxLayout = new QVBoxLayout(&m_overviewWidget);
+	vBoxLayout->setSpacing(0);
+	m_overviewWidget.setLayout(vBoxLayout);
+	m_overviewPlotWidget.setMaximumHeight(150);
+	vBoxLayout->addWidget(&m_overviewPlotWidget);
+
 	m_teOverview = new QTextEdit(this);
 	m_teOverview->setReadOnly(true);
-	m_tabWidget->addTab(m_teOverview, i18n("Overview"));
+	vBoxLayout->addWidget(m_teOverview);
+
+	m_tabWidget->addTab(&m_overviewWidget, i18n("Overview"));
 
 	if (column->isNumeric()) {
 		m_teOverview->setHtml(m_htmlOverview
@@ -233,7 +241,67 @@ void StatisticsColumnWidget::showOverview() {
 												 QDateTime::fromMSecsSinceEpoch(statistics.maximum, Qt::UTC).toString(filter->format())));
 	}
 
+	showOverviewPlot();
 	m_overviewInitialized = true;
+}
+
+void StatisticsColumnWidget::showOverviewPlot() {
+	// add plot
+	auto* plot = addPlot(&m_overviewPlotWidget);
+	plot->setSymmetricPadding(false);
+	const double padding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+	plot->setHorizontalPadding(2 * padding);
+	plot->setRightPadding(2 * padding);
+	plot->setVerticalPadding(padding);
+	plot->setBottomPadding(padding);
+	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
+
+	// set the axes labels
+	auto axes = plot->children<Axis>();
+	for (auto* axis : qAsConst(axes)) {
+		axis->setSuppressRetransform(true);
+		if (axis->orientation() == Axis::Orientation::Vertical)
+			axis->title()->setText(QString());
+		else {
+			// TODO: set the font and the offset smaller and show the "Index" title after this
+			// axis->title()->setText(i18n("Index"));
+			axis->title()->setText(QString());
+		}
+
+		auto font = axis->labelsFont();
+		font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+		axis->setLabelsFont(font);
+		axis->setLabelsOffset(2);
+		axis->setMajorTicksDirection(Axis::ticksIn);
+		axis->majorGridLine()->setStyle(Qt::NoPen);
+		axis->setMinorTicksDirection(Axis::noTicks);
+		axis->setArrowType(Axis::ArrowType::NoArrow);
+		axis->setSuppressRetransform(false);
+	}
+
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+
+	// x
+	auto* xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
+	int rows = m_column->rowCount();
+	QVector<int> xData;
+	xData.resize(rows);
+	for (int i = 0; i < rows; ++i)
+		xData[i] = i;
+	xColumn->setIntegers(xData);
+
+	// add curve
+	auto* curve = new XYCurve(QString());
+	curve->setSuppressRetransform(false);
+	plot->addChild(curve);
+	curve->line()->setStyle(Qt::SolidLine);
+	curve->symbol()->setStyle(Symbol::Style::NoSymbols);
+	curve->background()->setPosition(Background::Position::No);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(m_column);
+
+	curve->setSuppressRetransform(false);
+	plot->retransform();
 }
 
 void StatisticsColumnWidget::showHistogram() {
@@ -264,7 +332,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	// add plot
 	auto* plot = addPlot(&m_kdePlotWidget);
 
-	// set the axes lables
+	// set the axes labels
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal)
