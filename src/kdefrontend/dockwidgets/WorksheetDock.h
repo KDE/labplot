@@ -61,12 +61,12 @@ private Q_SLOTS:
 
 	//"Layout"-tab
 	void layoutChanged(int);
-	void layoutTopMarginChanged(double);
-	void layoutBottomMarginChanged(double);
-	void layoutRightMarginChanged(double);
-	void layoutLeftMarginChanged(double);
-	void layoutHorizontalSpacingChanged(double);
-	void layoutVerticalSpacingChanged(double);
+	void layoutTopMarginChanged(Common::ExpressionValue);
+	void layoutBottomMarginChanged(Common::ExpressionValue);
+	void layoutRightMarginChanged(Common::ExpressionValue);
+	void layoutLeftMarginChanged(Common::ExpressionValue);
+	void layoutHorizontalSpacingChanged(Common::ExpressionValue);
+	void layoutVerticalSpacingChanged(Common::ExpressionValue);
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 

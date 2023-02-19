@@ -89,9 +89,15 @@ void XYDataReductionCurveDock::setupGeneral() {
 	connect(uiGeneralTab.dateTimeEditMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYDataReductionCurveDock::xRangeMinDateTimeChanged);
 	connect(uiGeneralTab.dateTimeEditMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYDataReductionCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.chkAuto, &QCheckBox::clicked, this, &XYDataReductionCurveDock::autoToleranceChanged);
-	connect(uiGeneralTab.sbTolerance, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYDataReductionCurveDock::toleranceChanged);
+	connect(uiGeneralTab.sbTolerance,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&XYDataReductionCurveDock::toleranceChanged);
 	connect(uiGeneralTab.chkAuto2, &QCheckBox::clicked, this, &XYDataReductionCurveDock::autoTolerance2Changed);
-	connect(uiGeneralTab.sbTolerance2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYDataReductionCurveDock::tolerance2Changed);
+	connect(uiGeneralTab.sbTolerance2,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&XYDataReductionCurveDock::tolerance2Changed);
 	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDataReductionCurveDock::plotRangeChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYDataReductionCurveDock::recalculateClicked);
 
@@ -377,11 +383,11 @@ void XYDataReductionCurveDock::updateTolerance2() {
 	const auto type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
 
 	if (type == nsl_geom_linesim_type_perpdist)
-		uiGeneralTab.sbTolerance2->setValue(10);
+		uiGeneralTab.sbTolerance2->setValue(Common::ExpressionValue(10.));
 	else if (type == nsl_geom_linesim_type_opheim)
-		uiGeneralTab.sbTolerance2->setValue(5 * uiGeneralTab.sbTolerance->value());
+		uiGeneralTab.sbTolerance2->setValue(Common::ExpressionValue(5 * uiGeneralTab.sbTolerance->value().value<double>()));
 	else if (type == nsl_geom_linesim_type_lang)
-		uiGeneralTab.sbTolerance2->setValue(10);
+		uiGeneralTab.sbTolerance2->setValue(Common::ExpressionValue(10.));
 }
 
 void XYDataReductionCurveDock::autoRangeChanged() {
@@ -473,10 +479,9 @@ void XYDataReductionCurveDock::typeChanged(int index) {
 		break;
 	case nsl_geom_linesim_type_nthpoint:
 		uiGeneralTab.lOption->setText(i18n("Step size:"));
-		uiGeneralTab.sbTolerance->setValue(10);
+		uiGeneralTab.sbTolerance->setValue(Common::ExpressionValue(10.));
 		uiGeneralTab.sbTolerance->setDecimals(0);
 		uiGeneralTab.sbTolerance->setMinimum(1);
-		uiGeneralTab.sbTolerance->setSingleStep(1);
 		uiGeneralTab.lOption2->hide();
 		uiGeneralTab.chkAuto2->hide();
 		uiGeneralTab.sbTolerance2->hide();
@@ -485,7 +490,6 @@ void XYDataReductionCurveDock::typeChanged(int index) {
 		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
-		uiGeneralTab.sbTolerance->setSingleStep(0.01);
 		uiGeneralTab.sbTolerance2->show();
 		uiGeneralTab.lOption2->show();
 		uiGeneralTab.chkAuto2->show();
@@ -559,8 +563,8 @@ void XYDataReductionCurveDock::autoToleranceChanged() {
 		uiGeneralTab.sbTolerance->setEnabled(true);
 }
 
-void XYDataReductionCurveDock::toleranceChanged(double value) {
-	m_dataReductionData.tolerance = value;
+void XYDataReductionCurveDock::toleranceChanged(Common::ExpressionValue value) {
+	m_dataReductionData.tolerance = value.value<double>();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
@@ -575,8 +579,8 @@ void XYDataReductionCurveDock::autoTolerance2Changed() {
 		uiGeneralTab.sbTolerance2->setEnabled(true);
 }
 
-void XYDataReductionCurveDock::tolerance2Changed(double value) {
-	m_dataReductionData.tolerance2 = value;
+void XYDataReductionCurveDock::tolerance2Changed(Common::ExpressionValue value) {
+	m_dataReductionData.tolerance2 = value.value<double>();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

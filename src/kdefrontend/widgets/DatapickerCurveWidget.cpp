@@ -64,7 +64,7 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent)
 	// error bar
 	connect(ui.cbErrorBarFillingStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::errorBarFillingStyleChanged);
 	connect(ui.kcbErrorBarFillingColor, &KColorButton::changed, this, &DatapickerCurveWidget::errorBarFillingColorChanged);
-	connect(ui.sbErrorBarSize, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerCurveWidget::errorBarSizeChanged);
+	connect(ui.sbErrorBarSize, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerCurveWidget::errorBarSizeChanged);
 
 	hideErrorBarWidgets(true);
 }
@@ -166,11 +166,11 @@ void DatapickerCurveWidget::yErrorTypeChanged(int index) {
 		curve->setCurveErrorTypes(errors);
 }
 
-void DatapickerCurveWidget::errorBarSizeChanged(double value) {
+void DatapickerCurveWidget::errorBarSizeChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* curve : m_curveList)
-		curve->setPointErrorBarSize(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
+		curve->setPointErrorBarSize(Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point));
 }
 
 void DatapickerCurveWidget::errorBarFillingStyleChanged(int index) {

@@ -57,7 +57,7 @@ private Q_SLOTS:
 	void typeChanged(int);
 	void pointsChanged(int);
 	void weightChanged(int);
-	void percentileChanged(double);
+	void percentileChanged(Common::ExpressionValue);
 	void orderChanged(int);
 	void modeChanged(int);
 	void valueChanged();

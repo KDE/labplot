@@ -103,23 +103,23 @@ private Q_SLOTS:
 
 	void positionXChanged(int);
 	void positionYChanged(int);
-	void customPositionXChanged(double);
-	void customPositionYChanged(double);
+	void customPositionXChanged(Common::ExpressionValue);
+	void customPositionYChanged(Common::ExpressionValue);
 	void horizontalAlignmentChanged(int);
 	void verticalAlignmentChanged(int);
 
-	void positionXLogicalChanged(double);
+	void positionXLogicalChanged(Common::ExpressionValue);
 	void positionXLogicalDateTimeChanged(qint64);
-	void positionYLogicalChanged(double);
+	void positionYLogicalChanged(Common::ExpressionValue);
 
 	void rotationChanged(int);
-	void offsetXChanged(double);
-	void offsetYChanged(double);
+	void offsetXChanged(Common::ExpressionValue);
+	void offsetYChanged(Common::ExpressionValue);
 
 	void borderShapeChanged(int);
 	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
+	void borderWidthChanged(Common::ExpressionValue);
 	void borderOpacityChanged(int);
 
 	void visibilityChanged(bool);

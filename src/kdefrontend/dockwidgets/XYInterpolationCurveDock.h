@@ -59,9 +59,9 @@ private Q_SLOTS:
 	void xRangeMaxDateTimeChanged(qint64);
 	void typeChanged(int);
 	void variantChanged(int);
-	void tensionChanged(double);
-	void continuityChanged(double);
-	void biasChanged(double);
+	void tensionChanged(Common::ExpressionValue);
+	void continuityChanged(Common::ExpressionValue);
+	void biasChanged(Common::ExpressionValue);
 	void evaluateChanged(int);
 	void numberOfPointsChanged();
 	void pointsModeChanged(int);

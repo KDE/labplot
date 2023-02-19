@@ -138,7 +138,7 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	connect(ui.cbValuesType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesTypeChanged);
 	connect(cbValuesColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::valuesColumnChanged);
 	connect(ui.cbValuesPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesPositionChanged);
-	connect(ui.sbValuesDistance, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::valuesDistanceChanged);
+	connect(ui.sbValuesDistance, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::valuesDistanceChanged);
 	connect(ui.sbValuesRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::valuesRotationChanged);
 	connect(ui.sbValuesOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::valuesOpacityChanged);
 	connect(ui.cbValuesNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesNumericFormatChanged);
@@ -160,9 +160,9 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &XYCurveDock::rugEnabledChanged);
 	connect(ui.cbRugOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::rugOrientationChanged);
-	connect(ui.sbRugLength, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::rugLengthChanged);
-	connect(ui.sbRugWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::rugWidthChanged);
-	connect(ui.sbRugOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::rugOffsetChanged);
+	connect(ui.sbRugLength, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::rugLengthChanged);
+	connect(ui.sbRugWidth, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::rugWidthChanged);
+	connect(ui.sbRugOffset, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::rugOffsetChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -859,11 +859,11 @@ void XYCurveDock::valuesPositionChanged(int index) {
 		curve->setValuesPosition(XYCurve::ValuesPosition(index));
 }
 
-void XYCurveDock::valuesDistanceChanged(double value) {
+void XYCurveDock::valuesDistanceChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* curve : m_curvesList)
-		curve->setValuesDistance(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
+		curve->setValuesDistance(Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point));
 }
 
 void XYCurveDock::valuesRotationChanged(int value) {
@@ -1062,26 +1062,26 @@ void XYCurveDock::rugOrientationChanged(int index) {
 		curve->setRugOrientation(orientation);
 }
 
-void XYCurveDock::rugLengthChanged(double value) {
+void XYCurveDock::rugLengthChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double length = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_curvesList))
 		curve->setRugLength(length);
 }
 
-void XYCurveDock::rugWidthChanged(double value) {
+void XYCurveDock::rugWidthChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double width = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_curvesList))
 		curve->setRugWidth(width);
 }
 
-void XYCurveDock::rugOffsetChanged(double value) {
+void XYCurveDock::rugOffsetChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double offset = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_curvesList))
 		curve->setRugOffset(offset);
 }
@@ -1376,7 +1376,7 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	// Values
 	group.writeEntry("ValuesType", ui.cbValuesType->currentIndex());
 	group.writeEntry("ValuesPosition", ui.cbValuesPosition->currentIndex());
-	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(), Worksheet::Unit::Point));
+	// group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(), Worksheet::Unit::Point));
 	group.writeEntry("ValuesRotation", ui.sbValuesRotation->value());
 	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value() / 100.0);
 	group.writeEntry("valuesNumericFormat", ui.cbValuesNumericFormat->currentText());

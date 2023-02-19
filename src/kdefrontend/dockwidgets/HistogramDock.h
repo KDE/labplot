@@ -84,9 +84,9 @@ private Q_SLOTS:
 
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool);
-	void rugLengthChanged(double) const;
-	void rugWidthChanged(double) const;
-	void rugOffsetChanged(double) const;
+	void rugLengthChanged(Common::ExpressionValue) const;
+	void rugWidthChanged(Common::ExpressionValue) const;
+	void rugOffsetChanged(Common::ExpressionValue) const;
 
 	// SLOTs for changes triggered in Histogram
 	// General-Tab

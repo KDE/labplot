@@ -94,7 +94,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	connect(ui.cbUseDataErrors, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.cbPreview, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
-	connect(ui.sbConfidenceInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &FitOptionsWidget::changed);
+	connect(ui.sbConfidenceInterval, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &FitOptionsWidget::changed);
 	connect(ui.pbApply, &QPushButton::clicked, this, &FitOptionsWidget::applyClicked);
 	connect(ui.pbCancel, &QPushButton::clicked, this, &FitOptionsWidget::finished);
 	connect(ui.cbAutoRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoRangeChanged);
@@ -235,7 +235,7 @@ void FitOptionsWidget::applyClicked() {
 	m_fitData->useDataErrors = ui.cbUseDataErrors->isChecked();
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 	m_fitData->previewEnabled = ui.cbPreview->isChecked();
-	m_fitData->confidenceInterval = ui.sbConfidenceInterval->value();
+	m_fitData->confidenceInterval = ui.sbConfidenceInterval->value().value<double>();
 
 	if (m_changed)
 		Q_EMIT optionsChanged();

@@ -42,11 +42,11 @@ private:
 private Q_SLOTS:
 	// SLOTs for changes triggered in LineWidget
 	void typeChanged(int);
-	void capSizeChanged(double);
+	void capSizeChanged(Common::ExpressionValue);
 
 	void styleChanged(int);
 	void colorChangedSlot(const QColor&);
-	void widthChanged(double);
+	void widthChanged(Common::ExpressionValue);
 	void opacityChanged(int);
 
 	// SLOTs for changes triggered in Line

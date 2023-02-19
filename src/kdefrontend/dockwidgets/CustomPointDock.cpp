@@ -63,11 +63,17 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CustomPointDock::bindingChanged);
 	connect(ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionYChanged);
-	connect(ui.sbPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::customPositionXChanged);
-	connect(ui.sbPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::customPositionYChanged);
-	connect(ui.sbPositionXLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::positionXLogicalChanged);
+	connect(ui.sbPositionX, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::customPositionYChanged);
+	connect(ui.sbPositionXLogical,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CustomPointDock::positionXLogicalChanged);
 	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &CustomPointDock::positionXLogicalDateTimeChanged);
-	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::positionYLogicalChanged);
+	connect(ui.sbPositionYLogical,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CustomPointDock::positionYLogicalChanged);
 	connect(ui.dtePositionYLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &CustomPointDock::positionYLogicalDateTimeChanged);
 
 	// Template handler
@@ -190,10 +196,10 @@ void CustomPointDock::positionYChanged(int index) {
 	}
 }
 
-void CustomPointDock::customPositionXChanged(double value) {
+void CustomPointDock::customPositionXChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double x = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	const double x = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* point : m_points) {
 		auto position = point->position();
 		position.point.setX(x);
@@ -201,10 +207,10 @@ void CustomPointDock::customPositionXChanged(double value) {
 	}
 }
 
-void CustomPointDock::customPositionYChanged(double value) {
+void CustomPointDock::customPositionYChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double y = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	const double y = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* point : m_points) {
 		auto position = point->position();
 		position.point.setY(y);
@@ -213,11 +219,11 @@ void CustomPointDock::customPositionYChanged(double value) {
 }
 
 // positioning using logical plot coordinates
-void CustomPointDock::positionXLogicalChanged(double value) {
+void CustomPointDock::positionXLogicalChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPointF pos = m_point->positionLogical();
-	pos.setX(value);
+	pos.setX(value.value<double>());
 	for (auto* point : m_points)
 		point->setPositionLogical(pos);
 }
@@ -231,11 +237,11 @@ void CustomPointDock::positionXLogicalDateTimeChanged(qint64 value) {
 		point->setPositionLogical(pos);
 }
 
-void CustomPointDock::positionYLogicalChanged(double value) {
+void CustomPointDock::positionYLogicalChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPointF pos = m_point->positionLogical();
-	pos.setY(value);
+	pos.setY(value.value<double>());
 	for (auto* point : m_points)
 		point->setPositionLogical(pos);
 }

@@ -93,11 +93,14 @@ void XYSmoothCurveDock::setupGeneral() {
 	// TODO: line edits?
 	connect(uiGeneralTab.sbPoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYSmoothCurveDock::pointsChanged);
 	connect(uiGeneralTab.cbWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::weightChanged);
-	connect(uiGeneralTab.sbPercentile, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::percentileChanged);
+	connect(uiGeneralTab.sbPercentile,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&XYSmoothCurveDock::percentileChanged);
 	connect(uiGeneralTab.sbOrder, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYSmoothCurveDock::orderChanged);
 	connect(uiGeneralTab.cbMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::modeChanged);
-	connect(uiGeneralTab.sbLeftValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
-	connect(uiGeneralTab.sbRightValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
+	connect(uiGeneralTab.sbLeftValue, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
+	connect(uiGeneralTab.sbRightValue, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYSmoothCurveDock::recalculateClicked);
 	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::plotRangeChanged);
 
@@ -477,8 +480,8 @@ void XYSmoothCurveDock::weightChanged(int index) {
 	enableRecalculate();
 }
 
-void XYSmoothCurveDock::percentileChanged(double value) {
-	m_smoothData.percentile = value;
+void XYSmoothCurveDock::percentileChanged(Common::ExpressionValue value) {
+	m_smoothData.percentile = value.value<double>();
 	enableRecalculate();
 }
 
@@ -511,8 +514,8 @@ void XYSmoothCurveDock::modeChanged(int index) {
 }
 
 void XYSmoothCurveDock::valueChanged() {
-	m_smoothData.lvalue = uiGeneralTab.sbLeftValue->value();
-	m_smoothData.rvalue = uiGeneralTab.sbRightValue->value();
+	m_smoothData.lvalue = uiGeneralTab.sbLeftValue->value().value<double>();
+	m_smoothData.rvalue = uiGeneralTab.sbRightValue->value().value<double>();
 
 	enableRecalculate();
 }

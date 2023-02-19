@@ -91,7 +91,10 @@ void XYCorrelationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYCorrelationCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYCorrelationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::dataSourceTypeChanged);
-	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCorrelationCurveDock::samplingIntervalChanged);
+	connect(uiGeneralTab.sbSamplingInterval,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&XYCorrelationCurveDock::samplingIntervalChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYCorrelationCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::xRangeMaxChanged);
@@ -329,7 +332,7 @@ void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 }
 
 void XYCorrelationCurveDock::samplingIntervalChanged() {
-	double samplingInterval = uiGeneralTab.sbSamplingInterval->value();
+	double samplingInterval = uiGeneralTab.sbSamplingInterval->value().value<double>();
 	m_correlationData.samplingInterval = samplingInterval;
 
 	enableRecalculate();

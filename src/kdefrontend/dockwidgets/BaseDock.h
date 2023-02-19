@@ -34,7 +34,7 @@ public:
 	virtual void updateLocale(){};
 	virtual void updateUnits(){};
 	virtual void updatePlotRanges(){}; // used in worksheet element docks
-	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
+	// static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
 	template<typename T>
 	void setAspects(QList<T*> aspects) {
 		if (m_aspect)

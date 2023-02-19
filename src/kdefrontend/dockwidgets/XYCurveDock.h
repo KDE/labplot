@@ -92,7 +92,7 @@ private Q_SLOTS:
 	void valuesTypeChanged(int);
 	void valuesColumnChanged(const QModelIndex&);
 	void valuesPositionChanged(int);
-	void valuesDistanceChanged(double);
+	void valuesDistanceChanged(Common::ExpressionValue);
 	void valuesRotationChanged(int);
 	void valuesOpacityChanged(int);
 	void valuesNumericFormatChanged(int);
@@ -114,9 +114,9 @@ private Q_SLOTS:
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool);
 	void rugOrientationChanged(int);
-	void rugLengthChanged(double);
-	void rugWidthChanged(double);
-	void rugOffsetChanged(double);
+	void rugLengthChanged(Common::ExpressionValue);
+	void rugWidthChanged(Common::ExpressionValue);
+	void rugOffsetChanged(Common::ExpressionValue);
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

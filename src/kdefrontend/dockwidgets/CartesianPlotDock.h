@@ -91,10 +91,10 @@ private Q_SLOTS:
 	void geometryChanged();
 	void layoutChanged(Worksheet::Layout);
 	void symmetricPaddingChanged(bool);
-	void horizontalPaddingChanged(double);
-	void rightPaddingChanged(double);
-	void verticalPaddingChanged(double);
-	void bottomPaddingChanged(double);
+	void horizontalPaddingChanged(Common::ExpressionValue);
+	void rightPaddingChanged(Common::ExpressionValue);
+	void verticalPaddingChanged(Common::ExpressionValue);
+	void bottomPaddingChanged(Common::ExpressionValue);
 
 	//"Range Breaks"-tab
 	void toggleXBreak(bool);
@@ -117,7 +117,7 @@ private Q_SLOTS:
 
 	//"Plot area"-tab
 	void borderTypeChanged();
-	void borderCornerRadiusChanged(double);
+	void borderCornerRadiusChanged(Common::ExpressionValue);
 
 	void exportPlotTemplate();
 

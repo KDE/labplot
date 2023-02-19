@@ -49,7 +49,7 @@ public:
 						   QVector<double>* yVector,
 						   const QStringList& paramNames,
 						   const QVector<double>& paramValues);
-    bool evaluateCartesian(const QString& expr, double& y);
+	bool evaluateCartesian(const QString& expr, double& y);
 	bool evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector);
 	bool evaluatePolar(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
 	bool evaluateParametric(const QString& expr1,

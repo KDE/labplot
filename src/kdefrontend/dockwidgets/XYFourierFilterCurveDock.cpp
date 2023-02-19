@@ -94,8 +94,14 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::typeChanged);
 	connect(uiGeneralTab.cbForm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::formChanged);
 	connect(uiGeneralTab.sbOrder, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYFourierFilterCurveDock::orderChanged);
-	connect(uiGeneralTab.sbCutoff, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYFourierFilterCurveDock::enableRecalculate);
-	connect(uiGeneralTab.sbCutoff2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYFourierFilterCurveDock::enableRecalculate);
+	connect(uiGeneralTab.sbCutoff,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&XYFourierFilterCurveDock::enableRecalculate);
+	connect(uiGeneralTab.sbCutoff2,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&XYFourierFilterCurveDock::enableRecalculate);
 	connect(uiGeneralTab.cbUnit, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::unitChanged);
 	connect(uiGeneralTab.cbUnit2, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::unit2Changed);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFourierFilterCurveDock::recalculateClicked);
@@ -470,7 +476,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 	auto unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit->currentIndex();
 	m_filterData.unit = unit;
 
-	updateCutoffSpinBoxes(uiGeneralTab.sbCutoff, unit, m_filterData.unit, uiGeneralTab.sbCutoff->value());
+	updateCutoffSpinBoxes(uiGeneralTab.sbCutoff, unit, m_filterData.unit, uiGeneralTab.sbCutoff->value().value<double>());
 	enableRecalculate();
 }
 
@@ -478,13 +484,13 @@ void XYFourierFilterCurveDock::unit2Changed() {
 	auto unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit2->currentIndex();
 	m_filterData.unit2 = unit;
 
-	updateCutoffSpinBoxes(uiGeneralTab.sbCutoff2, unit, m_filterData.unit2, uiGeneralTab.sbCutoff2->value());
+	updateCutoffSpinBoxes(uiGeneralTab.sbCutoff2, unit, m_filterData.unit2, uiGeneralTab.sbCutoff2->value().value<double>());
 	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::recalculateClicked() {
-	m_filterData.cutoff = uiGeneralTab.sbCutoff->value();
-	m_filterData.cutoff2 = uiGeneralTab.sbCutoff2->value();
+	m_filterData.cutoff = uiGeneralTab.sbCutoff->value().value<double>();
+	m_filterData.cutoff2 = uiGeneralTab.sbCutoff2->value().value<double>();
 
 	if ((m_filterData.type == nsl_filter_type_band_pass || m_filterData.type == nsl_filter_type_band_reject) && m_filterData.cutoff2 <= m_filterData.cutoff) {
 		KMessageBox::sorry(this,

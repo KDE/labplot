@@ -36,7 +36,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	connect(ui.teComment, &QTextEdit::textChanged, this, &ReferenceLineDock::commentChanged);
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
-	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::positionLogicalChanged);
+	connect(ui.sbPosition, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::positionLogicalChanged);
 	connect(ui.dtePosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
@@ -158,15 +158,15 @@ void ReferenceLineDock::orientationChanged(int index) {
 	linePositionLogicalChanged(m_line->positionLogical());
 }
 
-void ReferenceLineDock::positionLogicalChanged(double pos) {
+void ReferenceLineDock::positionLogicalChanged(Common::ExpressionValue pos) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* line : m_linesList) {
 		auto positionLogical = line->positionLogical();
 		if (line->orientation() == ReferenceLine::Orientation::Horizontal)
-			positionLogical.setY(pos);
+			positionLogical.setY(pos.value<double>());
 		else
-			positionLogical.setX(pos);
+			positionLogical.setX(pos.value<double>());
 		line->setPositionLogical(positionLogical);
 	}
 }

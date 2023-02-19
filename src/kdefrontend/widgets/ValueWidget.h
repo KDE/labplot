@@ -46,7 +46,7 @@ private Q_SLOTS:
 	void typeChanged(int);
 	void columnChanged(const QModelIndex&);
 	void positionChanged(int);
-	void distanceChanged(double);
+	void distanceChanged(Common::ExpressionValue);
 	void rotationChanged(int);
 	void opacityChanged(int);
 	void numericFormatChanged(int);

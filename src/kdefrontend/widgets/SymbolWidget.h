@@ -39,14 +39,14 @@ Q_SIGNALS:
 private Q_SLOTS:
 	// SLOTs for changes triggered in SymbolWidget
 	void styleChanged(int);
-	void sizeChanged(double);
+	void sizeChanged(Common::ExpressionValue);
 	void rotationChanged(int);
 	void opacityChanged(int);
 	void fillingStyleChanged(int);
 	void fillingColorChanged(const QColor&);
 	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
+	void borderWidthChanged(Common::ExpressionValue);
 
 	// SLOTs for changes triggered in Symbol
 	void symbolStyleChanged(Symbol::Style);

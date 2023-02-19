@@ -28,11 +28,11 @@ LineWidget::LineWidget(QWidget* parent)
 	ui.sbWidth->setMinimum(0);
 
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LineWidget::typeChanged);
-	connect(ui.sbErrorBarsCapSize, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LineWidget::capSizeChanged);
+	connect(ui.sbErrorBarsCapSize, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &LineWidget::capSizeChanged);
 
 	connect(ui.cbStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LineWidget::styleChanged);
 	connect(ui.kcbColor, &KColorButton::changed, this, &LineWidget::colorChangedSlot);
-	connect(ui.sbWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LineWidget::widthChanged);
+	connect(ui.sbWidth, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &LineWidget::widthChanged);
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &LineWidget::opacityChanged);
 }
 
@@ -209,10 +209,10 @@ void LineWidget::typeChanged(int index) {
 	// backgroundWidget->setEnabled(fillingEnabled);
 }
 
-void LineWidget::capSizeChanged(double value) {
+void LineWidget::capSizeChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double size = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* line : m_lines)
 		line->setErrorBarsCapSize(size);
 }
@@ -232,10 +232,10 @@ void LineWidget::colorChangedSlot(const QColor& color) {
 	GuiTools::updatePenStyles(ui.cbStyle, color);
 }
 
-void LineWidget::widthChanged(double value) {
+void LineWidget::widthChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double width = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* line : m_lines)
 		line->setWidth(width);
 }
@@ -337,12 +337,13 @@ void LineWidget::saveConfig(KConfigGroup& group) const {
 		group.writeEntry(m_prefix + QStringLiteral("Type"), ui.cbType->currentIndex());
 	else if (m_line->errorBarsTypeAvailable()) {
 		group.writeEntry(m_prefix + QStringLiteral("Type"), ui.cbType->currentIndex());
-		group.writeEntry(m_prefix + QStringLiteral("CapSize"), Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value(), Worksheet::Unit::Point));
+		group.writeEntry(m_prefix + QStringLiteral("CapSize"),
+						 Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value().value<double>(), Worksheet::Unit::Point));
 	}
 
 	group.writeEntry(m_prefix + QStringLiteral("Style"), ui.cbStyle->currentIndex());
 	group.writeEntry(m_prefix + QStringLiteral("Color"), ui.kcbColor->color());
-	group.writeEntry(m_prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Unit::Point));
+	group.writeEntry(m_prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(ui.sbWidth->value().value<double>(), Worksheet::Unit::Point));
 	group.writeEntry(m_prefix + QStringLiteral("Opacity"), ui.sbOpacity->value() / 100.0);
 }
 

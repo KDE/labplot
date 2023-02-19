@@ -137,9 +137,9 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &HistogramDock::rugEnabledChanged);
-	connect(ui.sbRugLength, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::rugLengthChanged);
-	connect(ui.sbRugWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::rugWidthChanged);
-	connect(ui.sbRugOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::rugOffsetChanged);
+	connect(ui.sbRugLength, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::rugLengthChanged);
+	connect(ui.sbRugWidth, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::rugWidthChanged);
+	connect(ui.sbRugOffset, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::rugOffsetChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -599,26 +599,26 @@ void HistogramDock::rugEnabledChanged(bool state) {
 		curve->setRugEnabled(state);
 }
 
-void HistogramDock::rugLengthChanged(double value) const {
+void HistogramDock::rugLengthChanged(Common::ExpressionValue value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double length = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_curvesList))
 		curve->setRugLength(length);
 }
 
-void HistogramDock::rugWidthChanged(double value) const {
+void HistogramDock::rugWidthChanged(Common::ExpressionValue value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double width = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_curvesList))
 		curve->setRugWidth(width);
 }
 
-void HistogramDock::rugOffsetChanged(double value) const {
+void HistogramDock::rugOffsetChanged(Common::ExpressionValue value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double offset = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_curvesList))
 		curve->setRugOffset(offset);
 }

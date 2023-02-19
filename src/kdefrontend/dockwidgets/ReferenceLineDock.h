@@ -43,7 +43,7 @@ private Q_SLOTS:
 
 	// Position
 	void orientationChanged(int);
-	void positionLogicalChanged(double);
+	void positionLogicalChanged(Common::ExpressionValue);
 	void positionLogicalDateTimeChanged(qint64);
 
 	// SLOTs for changes triggered in ReferenceLine

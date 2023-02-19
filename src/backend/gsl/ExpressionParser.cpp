@@ -1644,20 +1644,20 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, double& y) {
-    DEBUG(Q_FUNC_INFO << ", v4")
-    gsl_set_error_handler_off();
+	DEBUG(Q_FUNC_INFO << ", v4")
+	gsl_set_error_handler_off();
 
-    const auto numberLocale = QLocale();
-    y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
-    if (parse_errors() > 0) // try default locale if failing
-        y = parse(qPrintable(expr), "en_US");
-    if (parse_errors() > 0)
-        return false;
+	const auto numberLocale = QLocale();
+	y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+	if (parse_errors() > 0) // try default locale if failing
+		y = parse(qPrintable(expr), "en_US");
+	if (parse_errors() > 0)
+		return false;
 
-    if (std::isnan(y))
-        WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " is NAN");
+	if (std::isnan(y))
+		WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " is NAN");
 
-    return true;
+	return true;
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr,

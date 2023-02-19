@@ -46,7 +46,7 @@ private Q_SLOTS:
 	void visibilityChanged(bool);
 	void errorBarFillingStyleChanged(int);
 	void errorBarFillingColorChanged(const QColor&);
-	void errorBarSizeChanged(double);
+	void errorBarSizeChanged(Common::ExpressionValue);
 
 	// SLOTs for changes triggered in DatapickerCurve
 	void curveErrorsChanged(DatapickerCurve::Errors);

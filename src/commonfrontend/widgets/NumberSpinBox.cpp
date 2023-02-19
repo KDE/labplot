@@ -8,91 +8,98 @@
 */
 #include "NumberSpinBox.h"
 
-#include "backend/lib/macrosWarningStyle.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/lib/Common.h"
+#include "backend/lib/macrosWarningStyle.h"
 #include "tools/EquationHighlighter.h"
 
 #include "klocalizedstring.h"
 
 #include <QApplication>
+#include <QCompleter>
 #include <QDebug>
 #include <QKeyEvent>
 #include <QLineEdit>
 #include <QLocale>
 #include <QString>
 #include <QStringRef>
-#include <QCompleter>
 
 #include <cmath>
 #include <limits>
 
+namespace {
+const QChar tempSymbol = 26;
+} // anonymous namespace
+
 NumberSpinBox::NumberSpinBox(QWidget* parent)
 	: QDoubleSpinBox(parent) {
-	init(0, false);
+	init(QLatin1String("0"), false);
 }
 
 NumberSpinBox::NumberSpinBox(double initValue, QWidget* parent)
 	: QDoubleSpinBox(parent) {
-	init(initValue, false);
+	init(QString::number(initValue), false);
 }
 
-NumberSpinBox::NumberSpinBox(double initValue, bool feedback, QWidget* parent)
+NumberSpinBox::NumberSpinBox(const QString& initExpression, QWidget* parent)
 	: QDoubleSpinBox(parent) {
-	init(initValue, feedback);
+	init(initExpression, false);
 }
 
-void NumberSpinBox::init(double initValue, bool feedback) {
+NumberSpinBox::NumberSpinBox(const QString& initExpression, bool feedback, QWidget* parent)
+	: QDoubleSpinBox(parent) {
+	init(initExpression, feedback);
+}
+
+void NumberSpinBox::init(const QString& initExpression, bool feedback) {
 	setFocusPolicy(Qt::StrongFocus);
-	setValue(initValue);
-	m_feedback = feedback; // must be after setValue()!
-    setInvalid(Errors::NoErrorNumeric);
+	setValue(Common::ExpressionValue(initExpression, 0, Worksheet::Unit::None));
+	m_feedback = feedback; // must be after setExpression()!
+	setInvalid(Errors::NoErrorNumeric);
 	setDecimals(2);
 
-    //m_highlighter = new EquationHighlighter(this);
+	// m_highlighter = new EquationHighlighter(this);
 
-    QStringList list = ExpressionParser::getInstance()->functions();
-    // append description
-    for (auto& s : list)
-        s.append(ExpressionParser::functionArgumentString(s, XYEquationCurve::EquationType::Cartesian) + QStringLiteral(" - ")
-                 + ExpressionParser::getInstance()->functionDescription(s));
-    QStringList constants = ExpressionParser::getInstance()->constants();
-    for (auto& s : constants) {
-        if (s != QLatin1String("..."))
-            s.append(QStringLiteral(" - ") + ExpressionParser::getInstance()->constantDescription(s));
-    }
-    list.append(constants);
+	QStringList list = ExpressionParser::getInstance()->functions();
+	// append description
+	for (auto& s : list)
+		s.append(ExpressionParser::functionArgumentString(s, XYEquationCurve::EquationType::Cartesian) + QStringLiteral(" - ")
+				 + ExpressionParser::getInstance()->functionDescription(s));
+	QStringList constants = ExpressionParser::getInstance()->constants();
+	for (auto& s : constants) {
+		if (s != QLatin1String("..."))
+			s.append(QStringLiteral(" - ") + ExpressionParser::getInstance()->constantDescription(s));
+	}
+	list.append(constants);
 
-    //setTabChangesFocus(true);
+	// setTabChangesFocus(true);
 
-    m_completer = new QCompleter(list, this);
-    m_completer->setWidget(this);
-    m_completer->setCompletionMode(QCompleter::PopupCompletion);
+	m_completer = new QCompleter(list, this);
+	m_completer->setWidget(this);
+	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 
-    connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &NumberSpinBox::insertCompletion);
-//    connect(this, &ExpressionTextEdit::textChanged, this, [=]() {
-//        validateExpression();
-//    });
-    connect(this->lineEdit(), &QLineEdit::cursorPositionChanged, m_highlighter, &EquationHighlighter::rehighlight);
+	connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &NumberSpinBox::insertCompletion);
+	connect(this->lineEdit(), &QLineEdit::cursorPositionChanged, m_highlighter, &EquationHighlighter::rehighlight);
 }
 
 void NumberSpinBox::insertCompletion(const QString& completion) {
-//    QTextCursor tc{lineEdit()->cursorPosition()};
+	// QTextCursor tc{lineEdit()->cursorPosition()};
 
-//    // remove description
-    int nameLength = completion.indexOf(QLatin1String(" - "));
-    QString name = completion;
-    name.truncate(nameLength);
+	// // remove description
+	int nameLength = completion.indexOf(QLatin1String(" - "));
+	QString name = completion;
+	name.truncate(nameLength);
 
-    int extra = name.length() - m_completer->completionPrefix().length();
-//    tc.movePosition(QTextCursor::Left);
-//    tc.movePosition(QTextCursor::EndOfWord);
-//    tc.insertText(name.right(extra));
-//    setTextCursor(tc);
-    const int cp = lineEdit()->cursorPosition();
-    if (cp > 0)
-        lineEdit()->setCursorPosition(cp - 1);
-    lineEdit()->cursorWordForward(false);
-    lineEdit()->insert(name.right(extra));
+	int extra = name.length() - m_completer->completionPrefix().length();
+	// tc.movePosition(QTextCursor::Left);
+	// tc.movePosition(QTextCursor::EndOfWord);
+	// tc.insertText(name.right(extra));
+	// setTextCursor(tc);
+	const int cp = lineEdit()->cursorPosition();
+	if (cp > 0)
+		lineEdit()->setCursorPosition(cp - 1);
+	lineEdit()->cursorWordForward(false);
+	lineEdit()->insert(name.right(extra));
 }
 
 QString NumberSpinBox::errorToString(Errors e) {
@@ -102,12 +109,12 @@ QString NumberSpinBox::errorToString(Errors e) {
 	case Errors::Max:
 		return i18n("Maximum allowed value: %1").arg(QString::number(maximum()));
 	case Errors::Invalid:
-		return i18n("The value does not represent a valid number");
+		return i18n("The value does not represent a valid number or expression");
 	case Errors::NoNumber:
 		return i18n("No number entered");
-    case Errors::NoErrorNumeric:
-        // Fall through
-    case Errors::NoErrorExpression:
+	case Errors::NoErrorNumeric:
+		// Fall through
+	case Errors::NoErrorExpression:
 		return {};
 	}
 	return i18n("Unhandled error");
@@ -129,17 +136,34 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	} else
 		QDoubleSpinBox::keyPressEvent(event);
 	QString text = lineEdit()->text();
-	double v;
-	QString valueStr;
-	Errors e = validate(text, v, valueStr);
+	Common::ExpressionValue v;
+	Errors e = validate(text, v);
 	setInvalid(e);
-    if (!error(e) && v != m_value && m_valueStr != valueStr) {
-		m_valueStr = valueStr;
+	if (!error(e) && m_value.expression() != v.expression()) {
 		m_value = v;
-        m_expression = e == Errors::NoErrorExpression;
-        //convertToUnifiedLocale(valueStr);
+		m_expression = e == Errors::NoErrorExpression;
 		valueChanged();
 	}
+}
+
+QString NumberSpinBox::convertToInternalRep(const QString& expression) const {
+	const auto l = QLocale();
+	QString e = expression;
+	if (l.decimalPoint() != QLatin1Char('.')) {
+		// 2.000,5 -> 2,000.5
+		e.replace(QLatin1Char('.'), tempSymbol).replace(l.decimalPoint(), QLatin1Char('.')).replace(tempSymbol, QLatin1Char(','));
+	}
+	return e;
+}
+
+QString NumberSpinBox::convertFromInternalRep(const QString& expression) const {
+	const auto l = QLocale();
+	QString e = expression;
+	if (l.decimalPoint() != QLatin1Char('.')) {
+		// 2,000.5 -> 2.000,5
+		e.replace(QLatin1Char(','), tempSymbol).replace(QLatin1Char('.'), l.decimalPoint()).replace(tempSymbol, QLatin1Char(','));
+	}
+	return e;
 }
 
 void NumberSpinBox::wheelEvent(QWheelEvent* event) {
@@ -153,8 +177,8 @@ void NumberSpinBox::stepBy(int steps) {
 	// used when scrolling
 	Errors e = step(steps);
 	if (e == Errors::Min || e == Errors::Max)
-        setInvalid(Errors::NoErrorNumeric);
-    else if (!error(e)) {
+		setInvalid(Errors::NoErrorNumeric);
+	else if (!error(e)) {
 		setInvalid(e);
 		valueChanged();
 	} else
@@ -291,7 +315,7 @@ QString NumberSpinBox::strip(const QString& t) const {
 
 QString NumberSpinBox::textFromValue(double value) const {
 	Q_UNUSED(value);
-	return m_valueStr;
+	return QStringLiteral("");
 }
 
 /*!
@@ -315,7 +339,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 		cursorPos = end;
 
 	if (cursorPos == 0)
-        return Errors::NoErrorNumeric;
+		return Errors::NoErrorNumeric;
 
 	QString v_str = strip(lineEdit()->text());
 
@@ -336,7 +360,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	// cursor behind the exponent sign
 	if ((cursorPos == 1 && !p.integerSign.isNull()) || (comma >= 0 && cursorPos - 1 == comma)
 		|| (exponentialIndex > 0 && (cursorPos - 1 == exponentialIndex || (cursorPos - 1 == exponentialIndex + 1 && !p.exponentSign.isNull()))))
-        return Errors::NoErrorNumeric;
+		return Errors::NoErrorNumeric;
 
 	bool before_comma = comma >= 0 && cursorPos - 1 < comma;
 	bool before_exponent = exponentialIndex >= 0 && cursorPos - 1 < exponentialIndex;
@@ -411,27 +435,35 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	lineEdit()->setCursorPosition(newPos + prefix().size());
 
 	m_value = v;
-    return Errors::NoErrorNumeric;
+	return Errors::NoErrorNumeric;
 }
 
-NumberSpinBox::Errors NumberSpinBox::validate(QString& input, double& value, QString& valueStr) const {
-	valueStr = strip(input);
-	if (valueStr.isEmpty())
+/*!
+ * \brief NumberSpinBox::validate
+ * \param input input string including suffix and prefix
+ * \param value output value
+ * \param valueStr final expression
+ * \return
+ */
+NumberSpinBox::Errors NumberSpinBox::validate(QString& input, Common::ExpressionValue& v) const {
+	double value;
+	const QString expression = convertToInternalRep(strip(input));
+	if (expression.isEmpty())
 		return Errors::NoNumber;
 	NumberProperties p;
 	bool ok;
-	value = locale().toDouble(valueStr, &ok);
-    bool expressionValid = false;
-    if (!ok) {
-        // might be an expression
-        ExpressionParser* parser = ExpressionParser::getInstance();
-        if (!parser->evaluateCartesian(valueStr, value))
-            return Errors::Invalid;
-        expressionValid = true;
-    } else {
-        if (!properties(valueStr, p))
-            return Errors::Invalid;
-    }
+	value = locale().toDouble(expression, &ok);
+	bool expressionValid = false;
+	if (!ok) {
+		// might be an expression
+		ExpressionParser* parser = ExpressionParser::getInstance();
+		if (!parser->evaluateCartesian(expression, value))
+			return Errors::Invalid;
+		expressionValid = true;
+	} else {
+		if (!properties(expression, p))
+			return Errors::Invalid;
+	}
 
 	if (value > maximum())
 		return Errors::Max;
@@ -439,26 +471,28 @@ NumberSpinBox::Errors NumberSpinBox::validate(QString& input, double& value, QSt
 	if (value < minimum())
 		return Errors::Min;
 
-    if (expressionValid)
-        return Errors::NoErrorExpression;
-    return Errors::NoErrorNumeric;
+	v = Common::ExpressionValue(expression, value, Worksheet::Unit::None);
+
+	if (expressionValid)
+		return Errors::NoErrorExpression;
+	return Errors::NoErrorNumeric;
 }
 
 /*!
  * \brief Validates the current expression if the text was changed and highlights the text field if the expression is invalid.
  * \param force forces the validation and highlighting when no text changes were made, used when new parameters/variables were provided
  */
-bool NumberSpinBox::validateExpression(const QString& text, bool force)  const {
-    // check whether the expression was changed or only the formatting
-    bool textChanged{(text != m_currentExpression) ? true : false};
-    bool valid = false;
-    if (textChanged || force) {
-        valid = ExpressionParser::getInstance()->isValid(text, {});
-        //m_currentExpression = text;
-    }
-//    if (textChanged)
-//        Q_EMIT expressionChanged();
-    return valid;
+bool NumberSpinBox::validateExpression(const QString& text, bool force) const {
+	// check whether the expression was changed or only the formatting
+	bool textChanged{(text != m_value.expression()) ? true : false};
+	bool valid = false;
+	if (textChanged || force) {
+		valid = ExpressionParser::getInstance()->isValid(text, {});
+		// m_currentExpression = text;
+	}
+	// if (textChanged)
+	//     Q_EMIT expressionChanged();
+	return valid;
 }
 
 /*!
@@ -470,31 +504,85 @@ bool NumberSpinBox::validateExpression(const QString& text, bool force)  const {
  */
 QValidator::State NumberSpinBox::validate(QString& input, int& pos) const {
 	Q_UNUSED(pos);
-	double value;
-	QString valueStr;
-    const auto e = validate(input, value, valueStr);
-    // Needed because when loosing focus the lineEdit() would reset to the previous value
-    return !error(e) ? QValidator::State::Acceptable : QValidator::State::Intermediate;
+	Common::ExpressionValue ve;
+	const auto e = validate(input, ve);
+	// Needed because when loosing focus the lineEdit() would reset to the previous value
+	return !error(e) ? QValidator::State::Acceptable : QValidator::State::Intermediate;
 }
 
 void NumberSpinBox::setText(const QString& text) {
-	m_valueStr = text;
 	lineEdit()->setText(prefix() + text + suffix());
 }
 
-bool NumberSpinBox::setValue(double v) {
+void NumberSpinBox::setScaling(double scale) {
+	if (m_value.expressionEmpty())
+		m_value.setValue(m_value.value<double>() * scale);
+	else
+		m_value = Common::ExpressionValue(m_value.expression() + QStringLiteral(" * %1").arg(QString::number(scale)), 0, Worksheet::Unit::None);
+}
+
+bool NumberSpinBox::setValue(double value) {
+	return setValue(Common::ExpressionValue(value));
+}
+
+bool NumberSpinBox::setValue(const Common::ExpressionValue& ev) {
 	if (m_feedback && m_waitFeedback) {
 		m_waitFeedback = false;
-		if (!qFuzzyCompare(v, value())) {
-			setInvalid(i18n("Invalid value entered. Valid value: %1", v));
-			return false;
+
+		if (ev.expressionEmpty()) {
+			if (m_value.isDouble() != ev.isDouble()) {
+				setInvalid(i18n("Internal error")); // Should never happen!
+				return false;
+			}
+			if (m_value.isDouble()) {
+				if (m_value.value<double>() != ev.value<double>()) {
+					setInvalid(i18n("Invalid value entered. Valid value: %1", ev.toString()));
+					return false;
+				}
+			} else if (m_value.value<qint64>() != ev.value<qint64>()) {
+				setInvalid(i18n("Invalid value entered. Valid value: %1", ev.toString()));
+				return false;
+			}
+		} else {
+			const bool valid = validateExpression(ev.expression(), false);
+			if (!valid || m_value.expression().compare(ev.expression()) != 0) {
+				setInvalid(i18n("Invalid expression. Valid expression: ", m_value.expression()));
+				return false;
+			}
 		}
 		return true;
 	}
 
-	setText(locale().toString(v, 'g'));
-	m_value = v;
+	m_value = ev;
+	setText(ev.toString());
 	return true;
+}
+
+// bool NumberSpinBox::setExpression(const QString& expression, bool skipValidation) {
+//	if (!validateExpression(expression, false))
+//		return false;
+
+//	const QString expr = convertFromInternalRep(expression);
+
+//	if (m_feedback && m_waitFeedback) {
+//		m_waitFeedback = false;
+//		if (m_Value.expression.compare(expression) != 0) {
+//			setInvalid(i18n("Invalid value entered. Valid value: %1", expr));
+//			return false;
+//		}
+//		return true;
+//	}
+
+//	setText(expr);
+//	return true;
+//}
+
+const Common::ExpressionValue& NumberSpinBox::value() const {
+	return m_value;
+}
+
+QString NumberSpinBox::expression() {
+	return strip(text());
 }
 
 double NumberSpinBox::minimum() const {
@@ -529,10 +617,6 @@ void NumberSpinBox::setStrongFocus(bool enable) {
 		setFocusPolicy(Qt::WheelFocus);
 }
 
-double NumberSpinBox::value() {
-	return m_value;
-}
-
 void NumberSpinBox::setClearButtonEnabled(bool enable) {
 	lineEdit()->setClearButtonEnabled(enable);
 }
@@ -544,8 +628,8 @@ QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
 void NumberSpinBox::valueChanged() {
 	if (m_feedback)
 		m_waitFeedback = true;
-	qDebug() << "Value: " << value();
-	emit valueChanged(value());
+	qDebug() << "Value: " << m_value.value<double>();
+	emit valueChanged(m_value);
 	m_waitFeedback = false;
 }
 
@@ -562,7 +646,7 @@ void NumberSpinBox::setInvalid(Errors e) {
 }
 
 bool NumberSpinBox::error(Errors e) const {
-    if (e != Errors::NoErrorExpression && e != Errors::NoErrorNumeric)
-        return true;
-    return false;
+	if (e != Errors::NoErrorExpression && e != Errors::NoErrorNumeric)
+		return true;
+	return false;
 }

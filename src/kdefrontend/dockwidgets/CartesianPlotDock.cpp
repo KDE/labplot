@@ -166,14 +166,20 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.leRangePoints, &QLineEdit::textChanged, this, &CartesianPlotDock::rangePointsChanged);
 
 	// Layout
-	connect(ui.sbLeft, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
-	connect(ui.sbTop, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
-	connect(ui.sbWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
-	connect(ui.sbHeight, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
-	connect(ui.sbPaddingHorizontal, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::horizontalPaddingChanged);
-	connect(ui.sbPaddingVertical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::verticalPaddingChanged);
-	connect(ui.sbPaddingRight, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::rightPaddingChanged);
-	connect(ui.sbPaddingBottom, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::bottomPaddingChanged);
+	connect(ui.sbLeft, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
+	connect(ui.sbTop, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
+	connect(ui.sbWidth, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
+	connect(ui.sbHeight, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
+	connect(ui.sbPaddingHorizontal,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotDock::horizontalPaddingChanged);
+	connect(ui.sbPaddingVertical,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotDock::verticalPaddingChanged);
+	connect(ui.sbPaddingRight, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::rightPaddingChanged);
+	connect(ui.sbPaddingBottom, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::bottomPaddingChanged);
 	connect(ui.cbPaddingSymmetric, &QCheckBox::toggled, this, &CartesianPlotDock::symmetricPaddingChanged);
 
 	// Range breaks
@@ -200,7 +206,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.tbBorderTypeTop, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.tbBorderTypeRight, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.tbBorderTypeBottom, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
-	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::borderCornerRadiusChanged);
+	connect(ui.sbBorderCornerRadius,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotDock::borderCornerRadiusChanged);
 
 	// theme and template handlers
 	auto* frame = new QFrame(this);
@@ -554,28 +563,28 @@ void CartesianPlotDock::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QStringLiteral(" cm");
-		ui.sbLeft->setValue(ui.sbLeft->value() * 2.54);
-		ui.sbTop->setValue(ui.sbTop->value() * 2.54);
-		ui.sbWidth->setValue(ui.sbWidth->value() * 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() * 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * 2.54);
-		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value() * 2.54);
-		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value() * 2.54);
-		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value() * 2.54);
-		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value() * 2.54);
+		ui.sbLeft->setScaling(2.54);
+		ui.sbTop->setScaling(2.54);
+		ui.sbWidth->setScaling(2.54);
+		ui.sbHeight->setScaling(2.54);
+		ui.sbBorderCornerRadius->setScaling(2.54);
+		ui.sbPaddingHorizontal->setScaling(2.54);
+		ui.sbPaddingVertical->setScaling(2.54);
+		ui.sbPaddingRight->setScaling(2.54);
+		ui.sbPaddingBottom->setScaling(2.54);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QStringLiteral(" in");
-		ui.sbLeft->setValue(ui.sbLeft->value() / 2.54);
-		ui.sbTop->setValue(ui.sbTop->value() / 2.54);
-		ui.sbWidth->setValue(ui.sbWidth->value() / 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() / 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / 2.54);
-		ui.sbPaddingHorizontal->setValue(ui.sbPaddingHorizontal->value() / 2.54);
-		ui.sbPaddingVertical->setValue(ui.sbPaddingVertical->value() / 2.54);
-		ui.sbPaddingRight->setValue(ui.sbPaddingRight->value() / 2.54);
-		ui.sbPaddingBottom->setValue(ui.sbPaddingBottom->value() / 2.54);
+		ui.sbLeft->setScaling(1 / 2.54);
+		ui.sbTop->setScaling(1 / 2.54);
+		ui.sbWidth->setScaling(1 / 2.54);
+		ui.sbHeight->setScaling(1 / 2.54);
+		ui.sbBorderCornerRadius->setScaling(1 / 2.54);
+		ui.sbPaddingHorizontal->setScaling(1 / 2.54);
+		ui.sbPaddingVertical->setScaling(1 / 2.54);
+		ui.sbPaddingRight->setScaling(1 / 2.54);
+		ui.sbPaddingBottom->setScaling(1 / 2.54);
 	}
 
 	ui.sbLeft->setSuffix(suffix);
@@ -658,16 +667,16 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 			sb->setFeedback(true);
 			sb->setValue(r.start());
 			tw->setCellWidget(i, TwRangesColumn::Min, sb);
-			connect(sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [this, dim, sb](double value) {
-				this->minChanged(dim, sb->property("row").toInt(), value);
+			connect(sb, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), [this, dim, sb](Common::ExpressionValue value) {
+				this->minChanged(dim, sb->property("row").toInt(), value.value<double>());
 			});
 			sb = new NumberSpinBox(tw);
 			sb->setProperty("row", i);
 			sb->setFeedback(true);
 			sb->setValue(r.end());
 			tw->setCellWidget(i, TwRangesColumn::Max, sb);
-			connect(sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [this, dim, sb](double value) {
-				this->maxChanged(dim, sb->property("row").toInt(), value);
+			connect(sb, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), [this, dim, sb](Common::ExpressionValue value) {
+				this->maxChanged(dim, sb->property("row").toInt(), value.value<double>());
 			});
 		} else {
 			auto* dte = new UTCDateTimeEdit(tw);
@@ -1218,10 +1227,10 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 void CartesianPlotDock::geometryChanged() {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	double x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), m_worksheetUnit);
-	double y = Worksheet::convertToSceneUnits(ui.sbTop->value(), m_worksheetUnit);
-	double w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
-	double h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
+	double x = Worksheet::convertToSceneUnits(ui.sbLeft->value().value<double>(), m_worksheetUnit);
+	double y = Worksheet::convertToSceneUnits(ui.sbTop->value().value<double>(), m_worksheetUnit);
+	double w = Worksheet::convertToSceneUnits(ui.sbWidth->value().value<double>(), m_worksheetUnit);
+	double h = Worksheet::convertToSceneUnits(ui.sbHeight->value().value<double>(), m_worksheetUnit);
 
 	QRectF rect(x, y, w, h);
 	m_plot->setRect(rect);
@@ -1265,10 +1274,10 @@ void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
 	}
 }
 
-void CartesianPlotDock::horizontalPaddingChanged(double value) {
+void CartesianPlotDock::horizontalPaddingChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	double padding = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* plot : m_plotList) {
 		// if symmetric padding is active we also adjust the right padding.
 		// start a macro in this case to only have one single entry on the undo stack.
@@ -1286,18 +1295,18 @@ void CartesianPlotDock::horizontalPaddingChanged(double value) {
 	}
 }
 
-void CartesianPlotDock::rightPaddingChanged(double value) {
+void CartesianPlotDock::rightPaddingChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	double padding = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* plot : m_plotList)
 		plot->setRightPadding(padding);
 }
 
-void CartesianPlotDock::verticalPaddingChanged(double value) {
+void CartesianPlotDock::verticalPaddingChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	const double padding = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* plot : m_plotList) {
 		const bool sym = m_plot->symmetricPadding();
 		if (sym)
@@ -1312,10 +1321,10 @@ void CartesianPlotDock::verticalPaddingChanged(double value) {
 	}
 }
 
-void CartesianPlotDock::bottomPaddingChanged(double value) {
+void CartesianPlotDock::bottomPaddingChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	double padding = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* plot : m_plotList)
 		plot->setBottomPadding(padding);
 }
@@ -1570,11 +1579,11 @@ void CartesianPlotDock::borderTypeChanged() {
 		plot->plotArea()->setBorderType(type);
 }
 
-void CartesianPlotDock::borderCornerRadiusChanged(double value) {
+void CartesianPlotDock::borderCornerRadiusChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* plot : m_plotList)
-		plot->plotArea()->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
+		plot->plotArea()->setBorderCornerRadius(Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit));
 }
 
 void CartesianPlotDock::exportPlotTemplate() {
@@ -1906,7 +1915,7 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	// Border
 	group.writeEntry("BorderType", static_cast<int>(m_plot->plotArea()->borderType()));
 	borderLineWidget->saveConfig(group);
-	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
+	// group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
 
 	config.sync();
 }

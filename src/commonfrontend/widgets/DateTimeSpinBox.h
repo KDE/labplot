@@ -12,11 +12,14 @@
 
 #include <QAbstractSpinBox>
 
+#include "backend/lib/Common.h"
+
 class QRegularExpressionValidator;
 
 // Assumption: Month has always 30 days
 /*!
- * Intended to be used for differences in datetimes
+ * Intended to be used for differences in datetimes,
+ * for example the spacing of the axis ticks when datetime is used
  */
 class DateTimeSpinBox : public QAbstractSpinBox {
 	Q_OBJECT
@@ -33,7 +36,7 @@ public:
 	Type determineType(int cursorPos) const;
 	void writeValue();
 	void setValue(qint64 increment);
-	qint64 value();
+	const Common::ExpressionValue value();
 	void getValue();
 	void setCursorPosition(Type type);
 	bool valid();

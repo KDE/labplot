@@ -229,7 +229,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 
 	// edit image
 	connect(ui.cbPlotImageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::plotImageTypeChanged);
-	connect(ui.sbRotation, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::rotationChanged);
+	connect(ui.sbRotation, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::rotationChanged);
 	connect(ssIntensity, &SpanSlider::spanChanged, this, &DatapickerImageWidget::intensitySpanChanged);
 	connect(ssIntensity, &SpanSlider::spanChanged, gvIntensity, &HistogramView::setSpan);
 	connect(ssForeground, &SpanSlider::spanChanged, this, &DatapickerImageWidget::foregroundSpanChanged);
@@ -245,16 +245,16 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 
 	// axis point
 	connect(ui.cbGraphType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::graphTypeChanged);
-	connect(ui.sbTernaryScale, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::ternaryScaleChanged);
-	connect(ui.sbPositionX1, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY1, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionX2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionX3, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY3, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ1, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ3, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbTernaryScale, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::ternaryScaleChanged);
+	connect(ui.sbPositionX1, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY1, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionX2, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY2, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionX3, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY3, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ1, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ2, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ3, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
 
 	connect(ui.chbSymbolVisible, &QCheckBox::clicked, this, &DatapickerImageWidget::pointsVisibilityChanged);
 }
@@ -404,11 +404,11 @@ void DatapickerImageWidget::graphTypeChanged(int index) {
 		image->setAxisPoints(points);
 }
 
-void DatapickerImageWidget::ternaryScaleChanged(double value) {
+void DatapickerImageWidget::ternaryScaleChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	DatapickerImage::ReferencePoints points = m_image->axisPoints();
-	points.ternaryScale = value;
+	points.ternaryScale = value.value<double>();
 
 	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
@@ -418,15 +418,15 @@ void DatapickerImageWidget::logicalPositionChanged() {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	auto points = m_image->axisPoints();
-	points.logicalPos[0].setX(ui.sbPositionX1->value());
-	points.logicalPos[0].setY(ui.sbPositionY1->value());
-	points.logicalPos[1].setX(ui.sbPositionX2->value());
-	points.logicalPos[1].setY(ui.sbPositionY2->value());
-	points.logicalPos[2].setX(ui.sbPositionX3->value());
-	points.logicalPos[2].setY(ui.sbPositionY3->value());
-	points.logicalPos[0].setZ(ui.sbPositionZ1->value());
-	points.logicalPos[1].setZ(ui.sbPositionZ2->value());
-	points.logicalPos[2].setZ(ui.sbPositionZ3->value());
+	points.logicalPos[0].setX(ui.sbPositionX1->value().value<double>());
+	points.logicalPos[0].setY(ui.sbPositionY1->value().value<double>());
+	points.logicalPos[1].setX(ui.sbPositionX2->value().value<double>());
+	points.logicalPos[1].setY(ui.sbPositionY2->value().value<double>());
+	points.logicalPos[2].setX(ui.sbPositionX3->value().value<double>());
+	points.logicalPos[2].setY(ui.sbPositionY3->value().value<double>());
+	points.logicalPos[0].setZ(ui.sbPositionZ1->value().value<double>());
+	points.logicalPos[1].setZ(ui.sbPositionZ2->value().value<double>());
+	points.logicalPos[2].setZ(ui.sbPositionZ3->value().value<double>());
 
 	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
@@ -496,11 +496,11 @@ void DatapickerImageWidget::plotImageTypeChanged(int index) {
 		image->setPlotImageType(DatapickerImage::PlotImageType(index));
 }
 
-void DatapickerImageWidget::rotationChanged(double value) {
+void DatapickerImageWidget::rotationChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* image : m_imagesList)
-		image->setRotationAngle(value);
+		image->setRotationAngle(value.value<double>());
 }
 
 void DatapickerImageWidget::minSegmentLengthChanged(int value) {

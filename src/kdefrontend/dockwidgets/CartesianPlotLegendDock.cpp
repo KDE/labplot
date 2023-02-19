@@ -71,28 +71,58 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	connect(ui.kfrLabelFont, &KFontRequester::fontSelected, this, &CartesianPlotLegendDock::labelFontChanged);
 	connect(ui.kcbLabelColor, &KColorButton::changed, this, &CartesianPlotLegendDock::labelColorChanged);
 	connect(ui.cbOrder, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::labelOrderChanged);
-	connect(ui.sbLineSymbolWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::lineSymbolWidthChanged);
+	connect(ui.sbLineSymbolWidth,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotLegendDock::lineSymbolWidthChanged);
 
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CartesianPlotLegendDock::bindingChanged);
 	connect(ui.cbPositionX, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::positionYChanged);
-	connect(ui.sbPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::customPositionXChanged);
-	connect(ui.sbPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::customPositionYChanged);
+	connect(ui.sbPositionX,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotLegendDock::customPositionXChanged);
+	connect(ui.sbPositionY,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotLegendDock::customPositionYChanged);
 
 	connect(ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::horizontalAlignmentChanged);
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::verticalAlignmentChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotLegendDock::rotationChanged);
 
 	// Border
-	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::borderCornerRadiusChanged);
+	connect(ui.sbBorderCornerRadius,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotLegendDock::borderCornerRadiusChanged);
 
 	// Layout
-	connect(ui.sbLayoutTopMargin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutTopMarginChanged);
-	connect(ui.sbLayoutBottomMargin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutBottomMarginChanged);
-	connect(ui.sbLayoutLeftMargin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutLeftMarginChanged);
-	connect(ui.sbLayoutRightMargin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutRightMarginChanged);
-	connect(ui.sbLayoutHorizontalSpacing, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutHorizontalSpacingChanged);
-	connect(ui.sbLayoutVerticalSpacing, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutVerticalSpacingChanged);
+	connect(ui.sbLayoutTopMargin,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotLegendDock::layoutTopMarginChanged);
+	connect(ui.sbLayoutBottomMargin,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotLegendDock::layoutBottomMarginChanged);
+	connect(ui.sbLayoutLeftMargin,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotLegendDock::layoutLeftMarginChanged);
+	connect(ui.sbLayoutRightMargin,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotLegendDock::layoutRightMarginChanged);
+	connect(ui.sbLayoutHorizontalSpacing,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotLegendDock::layoutHorizontalSpacingChanged);
+	connect(ui.sbLayoutVerticalSpacing,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&CartesianPlotLegendDock::layoutVerticalSpacingChanged);
 	connect(ui.sbLayoutColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutColumnCountChanged);
 
 	// template handler
@@ -210,30 +240,30 @@ void CartesianPlotLegendDock::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");
-		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() * 2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() * 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() * 2.54);
-		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() * 2.54);
-		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value() * 2.54);
-		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value() * 2.54);
-		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value() * 2.54);
-		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value() * 2.54);
-		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value() * 2.54);
+		ui.sbLineSymbolWidth->setScaling(2.54);
+		ui.sbPositionX->setScaling(2.54);
+		ui.sbPositionY->setScaling(2.54);
+		ui.sbBorderCornerRadius->setScaling(2.54);
+		ui.sbLayoutTopMargin->setScaling(2.54);
+		ui.sbLayoutBottomMargin->setScaling(2.54);
+		ui.sbLayoutLeftMargin->setScaling(2.54);
+		ui.sbLayoutRightMargin->setScaling(2.54);
+		ui.sbLayoutHorizontalSpacing->setScaling(2.54);
+		ui.sbLayoutVerticalSpacing->setScaling(2.54);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String(" in");
-		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value() / 2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() / 2.54);
-		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value() / 2.54);
-		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value() / 2.54);
-		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value() / 2.54);
-		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value() / 2.54);
-		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value() / 2.54);
-		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value() / 2.54);
-		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value() / 2.54);
+		ui.sbLineSymbolWidth->setScaling(1 / 2.54);
+		ui.sbPositionX->setScaling(1 / 2.54);
+		ui.sbPositionY->setScaling(1 / 2.54);
+		ui.sbBorderCornerRadius->setScaling(1 / 2.54);
+		ui.sbLayoutTopMargin->setScaling(1 / 2.54);
+		ui.sbLayoutBottomMargin->setScaling(1 / 2.54);
+		ui.sbLayoutLeftMargin->setScaling(1 / 2.54);
+		ui.sbLayoutRightMargin->setScaling(1 / 2.54);
+		ui.sbLayoutHorizontalSpacing->setScaling(1 / 2.54);
+		ui.sbLayoutVerticalSpacing->setScaling(1 / 2.54);
 	}
 
 	ui.sbLineSymbolWidth->setSuffix(suffix);
@@ -327,11 +357,12 @@ void CartesianPlotLegendDock::labelOrderChanged(const int index) {
 		legend->setLabelColumnMajor(columnMajor);
 }
 
-void CartesianPlotLegendDock::lineSymbolWidthChanged(double value) {
+void CartesianPlotLegendDock::lineSymbolWidthChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
+	const double width = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* legend : m_legendList)
-		legend->setLineSymbolWidth(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
+		legend->setLineSymbolWidth(width);
 }
 
 /*!
@@ -372,20 +403,20 @@ void CartesianPlotLegendDock::positionYChanged(int index) {
 		legend->setPosition(position);
 }
 
-void CartesianPlotLegendDock::customPositionXChanged(double value) {
+void CartesianPlotLegendDock::customPositionXChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
+	position.point.setX(Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit));
 	for (auto* legend : m_legendList)
 		legend->setPosition(position);
 }
 
-void CartesianPlotLegendDock::customPositionYChanged(double value) {
+void CartesianPlotLegendDock::customPositionYChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
+	position.point.setY(Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit));
 	for (auto* legend : m_legendList)
 		legend->setPosition(position);
 }
@@ -438,54 +469,54 @@ void CartesianPlotLegendDock::bindingChanged(bool checked) {
 }
 
 // "Border"-tab
-void CartesianPlotLegendDock::borderCornerRadiusChanged(double value) {
+void CartesianPlotLegendDock::borderCornerRadiusChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* legend : m_legendList)
-		legend->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
+		legend->setBorderCornerRadius(Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit));
 }
 
 // Layout
-void CartesianPlotLegendDock::layoutTopMarginChanged(double margin) {
+void CartesianPlotLegendDock::layoutTopMarginChanged(Common::ExpressionValue margin) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
+		legend->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin.value<double>(), m_worksheetUnit));
 }
 
-void CartesianPlotLegendDock::layoutBottomMarginChanged(double margin) {
+void CartesianPlotLegendDock::layoutBottomMarginChanged(Common::ExpressionValue margin) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
+		legend->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin.value<double>(), m_worksheetUnit));
 }
 
-void CartesianPlotLegendDock::layoutLeftMarginChanged(double margin) {
+void CartesianPlotLegendDock::layoutLeftMarginChanged(Common::ExpressionValue margin) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
+		legend->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin.value<double>(), m_worksheetUnit));
 }
 
-void CartesianPlotLegendDock::layoutRightMarginChanged(double margin) {
+void CartesianPlotLegendDock::layoutRightMarginChanged(Common::ExpressionValue margin) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
+		legend->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin.value<double>(), m_worksheetUnit));
 }
 
-void CartesianPlotLegendDock::layoutHorizontalSpacingChanged(double spacing) {
+void CartesianPlotLegendDock::layoutHorizontalSpacingChanged(Common::ExpressionValue spacing) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, m_worksheetUnit));
+		legend->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing.value<double>(), m_worksheetUnit));
 }
 
-void CartesianPlotLegendDock::layoutVerticalSpacingChanged(double spacing) {
+void CartesianPlotLegendDock::layoutVerticalSpacingChanged(Common::ExpressionValue spacing) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, m_worksheetUnit));
+		legend->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing.value<double>(), m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutColumnCountChanged(int count) {
@@ -789,13 +820,13 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LabelFont", font);
 	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
 	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex() == 0); // true for "column major", false for "row major"
-	group.writeEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), m_worksheetUnit));
+	ui.sbLineSymbolWidth->value().configWriteEntry(group, QStringLiteral("LineSymbolWidth"), m_worksheetUnit);
 
 	// Geometry
 	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
-	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(), m_worksheetUnit));
+	ui.sbPositionX->value().configWriteEntry(group, QStringLiteral("PositionXValue"), m_worksheetUnit);
 	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
-	group.writeEntry("PositionYValue", Worksheet::convertToSceneUnits(ui.sbPositionY->value(), m_worksheetUnit));
+	ui.sbPositionY->value().configWriteEntry(group, QStringLiteral("PositionYValue"), m_worksheetUnit);
 	group.writeEntry("Rotation", ui.sbRotation->value());
 
 	group.writeEntry("Visible", ui.chkVisible->isChecked());
@@ -805,15 +836,15 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 
 	// Border
 	borderLineWidget->saveConfig(group);
-	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
+	ui.sbBorderCornerRadius->value().configWriteEntry(group, QStringLiteral("BorderCornerRadius"), m_worksheetUnit);
 
 	// Layout
-	group.writeEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), m_worksheetUnit));
-	group.writeEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), m_worksheetUnit));
-	group.writeEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), m_worksheetUnit));
+	ui.sbLayoutTopMargin->value().configWriteEntry(group, QStringLiteral("LayoutTopMargin"), m_worksheetUnit);
+	ui.sbLayoutBottomMargin->value().configWriteEntry(group, QStringLiteral("LayoutBottomMargin"), m_worksheetUnit);
+	ui.sbLayoutLeftMargin->value().configWriteEntry(group, QStringLiteral("LayoutLeftMargin"), m_worksheetUnit);
+	ui.sbLayoutRightMargin->value().configWriteEntry(group, QStringLiteral("LayoutRightMargin"), m_worksheetUnit);
+	ui.sbLayoutVerticalSpacing->value().configWriteEntry(group, QStringLiteral("LayoutVerticalSpacing"), m_worksheetUnit);
+	ui.sbLayoutHorizontalSpacing->value().configWriteEntry(group, QStringLiteral("LayoutHorizontalSpacing"), m_worksheetUnit);
 	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
 
 	// Title

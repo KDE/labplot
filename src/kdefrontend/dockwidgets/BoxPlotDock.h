@@ -80,13 +80,13 @@ private Q_SLOTS:
 	// whiskers
 	void whiskersTypeChanged(int);
 	void whiskersRangeParameterChanged(const QString&);
-	void whiskersCapSizeChanged(double) const;
+	void whiskersCapSizeChanged(Common::ExpressionValue) const;
 
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool);
-	void rugLengthChanged(double) const;
-	void rugWidthChanged(double) const;
-	void rugOffsetChanged(double) const;
+	void rugLengthChanged(Common::ExpressionValue) const;
+	void rugWidthChanged(Common::ExpressionValue) const;
+	void rugOffsetChanged(Common::ExpressionValue) const;
 
 	// SLOTs for changes triggered in BoxPlot
 	// general

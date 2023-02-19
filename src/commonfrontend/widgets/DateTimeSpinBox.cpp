@@ -101,8 +101,10 @@ void DateTimeSpinBox::setValue(qint64 increment) {
 	writeValue();
 }
 
-qint64 DateTimeSpinBox::value() {
-	return m_millisecond + 1000 * (m_second + 60 * (m_minute + 60 * (m_hour + 24 * (m_day + 30 * (m_month + 12 * m_year)))));
+const Common::ExpressionValue DateTimeSpinBox::value() {
+	return Common::ExpressionValue(QStringLiteral(""),
+								   m_millisecond + 1000 * (m_second + 60 * (m_minute + 60 * (m_hour + 24 * (m_day + 30 * (m_month + 12 * m_year))))),
+								   Worksheet::Unit::None);
 }
 
 /*!

@@ -42,8 +42,14 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	connect(ui.teComment, &QTextEdit::textChanged, this, &ReferenceRangeDock::commentChanged);
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceRangeDock::orientationChanged);
-	connect(ui.sbPositionStart, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalStartChanged);
-	connect(ui.sbPositionEnd, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalEndChanged);
+	connect(ui.sbPositionStart,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&ReferenceRangeDock::positionLogicalStartChanged);
+	connect(ui.sbPositionEnd,
+			QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged),
+			this,
+			&ReferenceRangeDock::positionLogicalEndChanged);
 	connect(ui.dtePositionStart, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceRangeDock::positionLogicalDateTimeStartChanged);
 	connect(ui.dtePositionEnd, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceRangeDock::positionLogicalDateTimeEndChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceRangeDock::plotRangeChanged);
@@ -170,28 +176,28 @@ void ReferenceRangeDock::orientationChanged(int index) {
 	}
 }
 
-void ReferenceRangeDock::positionLogicalStartChanged(double pos) {
+void ReferenceRangeDock::positionLogicalStartChanged(Common::ExpressionValue pos) {
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* range : m_rangeList) {
 		auto positionLogical = range->positionLogicalStart();
 		if (range->orientation() == ReferenceRange::Orientation::Horizontal)
-			positionLogical.setY(pos);
+			positionLogical.setY(pos.value<double>());
 		else
-			positionLogical.setX(pos);
+			positionLogical.setX(pos.value<double>());
 		range->setPositionLogicalStart(positionLogical);
 	}
 }
 
-void ReferenceRangeDock::positionLogicalEndChanged(double pos) {
+void ReferenceRangeDock::positionLogicalEndChanged(Common::ExpressionValue pos) {
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* range : m_rangeList) {
 		auto positionLogical = range->positionLogicalEnd();
 		if (range->orientation() == ReferenceRange::Orientation::Horizontal)
-			positionLogical.setY(pos);
+			positionLogical.setY(pos.value<double>());
 		else
-			positionLogical.setX(pos);
+			positionLogical.setX(pos.value<double>());
 		range->setPositionLogicalEnd(positionLogical);
 	}
 }

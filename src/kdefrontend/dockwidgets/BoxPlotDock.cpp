@@ -146,13 +146,13 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	// Tab "Whiskers"
 	connect(ui.cbWhiskersType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersTypeChanged);
 	connect(ui.leWhiskersRangeParameter, &QLineEdit::textChanged, this, &BoxPlotDock::whiskersRangeParameterChanged);
-	connect(ui.sbWhiskersCapSize, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapSizeChanged);
+	connect(ui.sbWhiskersCapSize, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapSizeChanged);
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &BoxPlotDock::rugEnabledChanged);
-	connect(ui.sbRugLength, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::rugLengthChanged);
-	connect(ui.sbRugWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::rugWidthChanged);
-	connect(ui.sbRugOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::rugOffsetChanged);
+	connect(ui.sbRugLength, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::rugLengthChanged);
+	connect(ui.sbRugWidth, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::rugWidthChanged);
+	connect(ui.sbRugOffset, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::rugOffsetChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -554,10 +554,10 @@ void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) {
 }
 
 // whiskers cap
-void BoxPlotDock::whiskersCapSizeChanged(double value) const {
+void BoxPlotDock::whiskersCapSizeChanged(Common::ExpressionValue value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	float size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	float size = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersCapSize(size);
 }
@@ -570,26 +570,26 @@ void BoxPlotDock::rugEnabledChanged(bool state) {
 		curve->setRugEnabled(state);
 }
 
-void BoxPlotDock::rugLengthChanged(double value) const {
+void BoxPlotDock::rugLengthChanged(Common::ExpressionValue value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double length = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_boxPlots))
 		curve->setRugLength(length);
 }
 
-void BoxPlotDock::rugWidthChanged(double value) const {
+void BoxPlotDock::rugWidthChanged(Common::ExpressionValue value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double width = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_boxPlots))
 		curve->setRugWidth(width);
 }
 
-void BoxPlotDock::rugOffsetChanged(double value) const {
+void BoxPlotDock::rugOffsetChanged(Common::ExpressionValue value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	const double offset = Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_boxPlots))
 		curve->setRugOffset(offset);
 }
@@ -762,7 +762,7 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	whiskersLineWidget->saveConfig(group);
 
 	// whiskers cap
-	group.writeEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(ui.sbWhiskersCapSize->value(), Worksheet::Unit::Point));
+	ui.sbWhiskersCapSize->value().configWriteEntry(group, QStringLiteral("WhiskersCapSize"), Worksheet::Unit::Point);
 	whiskersCapLineWidget->saveConfig(group);
 
 	config.sync();

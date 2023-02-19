@@ -61,7 +61,7 @@ ValueWidget::ValueWidget(QWidget* parent)
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ValueWidget::typeChanged);
 	connect(cbColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ValueWidget::columnChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ValueWidget::positionChanged);
-	connect(ui.sbDistance, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ValueWidget::distanceChanged);
+	connect(ui.sbDistance, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &ValueWidget::distanceChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &ValueWidget::rotationChanged);
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ValueWidget::opacityChanged);
 	connect(ui.cbNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ValueWidget::numericFormatChanged);
@@ -226,11 +226,11 @@ void ValueWidget::positionChanged(int index) {
 		value->setPosition(Value::Position(index));
 }
 
-void ValueWidget::distanceChanged(double v) {
+void ValueWidget::distanceChanged(Common::ExpressionValue v) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* value : m_values)
-		value->setDistance(Worksheet::convertToSceneUnits(v, Worksheet::Unit::Point));
+		value->setDistance(Worksheet::convertToSceneUnits(v.value<double>(), Worksheet::Unit::Point));
 }
 
 void ValueWidget::rotationChanged(int v) {
@@ -399,7 +399,7 @@ void ValueWidget::loadConfig(const KConfigGroup& group) {
 void ValueWidget::saveConfig(KConfigGroup& group) const {
 	group.writeEntry("ValuesType", ui.cbType->currentIndex());
 	group.writeEntry("ValuesPosition", ui.cbPosition->currentIndex());
-	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbDistance->value(), Worksheet::Unit::Point));
+	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbDistance->value().value<double>(), Worksheet::Unit::Point));
 	group.writeEntry("ValuesRotation", ui.sbRotation->value());
 	group.writeEntry("ValuesOpacity", ui.sbOpacity->value() / 100.0);
 	group.writeEntry("ValuesPrefix", ui.lePrefix->text());

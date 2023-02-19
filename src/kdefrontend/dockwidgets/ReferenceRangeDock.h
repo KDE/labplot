@@ -44,8 +44,8 @@ private Q_SLOTS:
 
 	// Position
 	void orientationChanged(int);
-	void positionLogicalStartChanged(double);
-	void positionLogicalEndChanged(double);
+	void positionLogicalStartChanged(Common::ExpressionValue);
+	void positionLogicalEndChanged(Common::ExpressionValue);
 	void positionLogicalDateTimeStartChanged(qint64);
 	void positionLogicalDateTimeEndChanged(qint64);
 

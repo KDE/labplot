@@ -82,16 +82,16 @@ private Q_SLOTS:
 	void colorChanged(const QColor&);
 	void orientationChanged(int);
 	void positionChanged(int);
-	void positionChanged(double value);
-	void logicalPositionChanged(double value);
+	void positionChanged(Common::ExpressionValue value);
+	void logicalPositionChanged(const Common::ExpressionValue& value);
 	void scaleChanged(int);
 	void rangeTypeChanged(int);
-	void startChanged(double);
-	void endChanged(double);
+	void startChanged(Common::ExpressionValue);
+	void endChanged(Common::ExpressionValue);
 	void startDateTimeChanged(qint64);
 	void endDateTimeChanged(qint64);
-	void zeroOffsetChanged(double);
-	void scalingFactorChanged(double);
+	void zeroOffsetChanged(Common::ExpressionValue);
+	void scalingFactorChanged(Common::ExpressionValue);
 	void showScaleOffsetChanged(bool);
 	void setLeftOffset();
 	void setCenterOffset();
@@ -114,13 +114,13 @@ private Q_SLOTS:
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
 	void majorTicksStartTypeChanged(int state);
-	void majorTicksStartOffsetChanged(double);
-	void majorTicksStartValueChanged(double);
+	void majorTicksStartOffsetChanged(Common::ExpressionValue);
+	void majorTicksStartValueChanged(Common::ExpressionValue);
 	void setTickOffsetData(bool nice = false); // set first tick on first data point (if nice: nice value)
 	void setTickOffsetAuto() {
 		setTickOffsetData(true);
 	}
-	void majorTicksLengthChanged(double);
+	void majorTicksLengthChanged(Common::ExpressionValue);
 
 	//"Minor ticks"-tab
 	void minorTicksDirectionChanged(int);
@@ -129,7 +129,7 @@ private Q_SLOTS:
 	void minorTicksNumberChanged(int);
 	void minorTicksSpacingChanged();
 	void minorTicksColumnChanged(const QModelIndex&);
-	void minorTicksLengthChanged(double);
+	void minorTicksLengthChanged(Common::ExpressionValue);
 
 	//"Extra ticks"-tab
 
@@ -140,7 +140,7 @@ private Q_SLOTS:
 	void labelsAutoPrecisionChanged(bool);
 	void labelsDateTimeFormatChanged();
 	void labelsPositionChanged(int);
-	void labelsOffsetChanged(double);
+	void labelsOffsetChanged(Common::ExpressionValue);
 	void labelsRotationChanged(int);
 	void labelsTextTypeChanged(int);
 	void labelsTextColumnChanged(const QModelIndex&);

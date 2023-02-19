@@ -338,6 +338,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
 	${BACKEND_DIR}/lib/Range.cpp
+	${BACKEND_DIR}/lib/Common.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 	${BACKEND_DIR}/matrix/Matrix.cpp

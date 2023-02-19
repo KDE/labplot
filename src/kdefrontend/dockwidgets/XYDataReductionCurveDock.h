@@ -63,9 +63,9 @@ private Q_SLOTS:
 	void xRangeMaxDateTimeChanged(qint64);
 	void typeChanged(int);
 	void autoToleranceChanged();
-	void toleranceChanged(double);
+	void toleranceChanged(Common::ExpressionValue);
 	void autoTolerance2Changed();
-	void tolerance2Changed(double);
+	void tolerance2Changed(Common::ExpressionValue);
 
 	void recalculateClicked();
 	void enableRecalculate() const;

@@ -9,6 +9,8 @@
 #ifndef NUMBERSPINBOX_H
 #define NUMBERSPINBOX_H
 
+#include "backend/lib/Common.h"
+
 #include <QDoubleSpinBox>
 
 class EquationHighlighter;
@@ -35,8 +37,8 @@ public:
 	};
 
 	enum class Errors {
-        NoErrorNumeric,
-        NoErrorExpression,
+		NoErrorNumeric,
+		NoErrorExpression,
 		NoNumber,
 		Invalid,
 		Min, // value smaller than min
@@ -48,25 +50,35 @@ public:
 public:
 	NumberSpinBox(QWidget* parent = nullptr);
 	NumberSpinBox(double initValue, QWidget* parent = nullptr);
-	NumberSpinBox(double initValue, bool feedback, QWidget* parent = nullptr);
+	NumberSpinBox(const QString& initExpression, QWidget* parent = nullptr);
+	NumberSpinBox(const QString& initExpression, bool feedback, QWidget* parent = nullptr);
 	QString errorToString(Errors);
+	// bool setExpression(const QString&, bool skipValidation = false);
+	QString expression();
+	// TODO: rename to scale() to indicate that it will be executed only once
+	void setScaling(double);
 	bool setValue(double);
+	bool setValue(const Common::ExpressionValue&);
 	void setFeedback(bool enable);
 	bool feedback();
 	void setStrongFocus(bool);
-	double value();
 	void setClearButtonEnabled(bool);
 	double minimum() const;
 	void setMinimum(double min);
 	double maximum() const;
 	void setMaximum(double max);
+	const Common::ExpressionValue& value() const;
+	template<typename T>
+	T numericValue() const {
+		return m_value.value<T>();
+	}
 
 Q_SIGNALS:
-	void valueChanged(double);
+	void valueChanged(const Common::ExpressionValue&);
 	void feedbackChanged(bool);
 
 private:
-	void init(double initValue, bool feedback);
+	void init(const QString& initExpression, bool feedback);
 	void keyPressEvent(QKeyEvent*) override;
 	void wheelEvent(QWheelEvent* event) override;
 	void setInvalid(Errors e);
@@ -79,21 +91,22 @@ private:
 	virtual QString textFromValue(double value) const override;
 	virtual double valueFromText(const QString&) const override;
 	QAbstractSpinBox::StepEnabled stepEnabled() const override;
-    virtual QValidator::State validate(QString& input, int& pos) const override;
-    Errors validate(QString& input, double& value, QString& valueStr) const;
+	virtual QValidator::State validate(QString& input, int& pos) const override;
+	Errors validate(QString& input, Common::ExpressionValue& value) const;
 	void setText(const QString&);
 
-    bool error(Errors e) const;
+	bool error(Errors e) const;
 
 	void increaseValue();
 	void decreaseValue();
 	void valueChanged();
 
-    bool validateExpression(const QString &text, bool force) const;
-    void insertCompletion(const QString& completion);
+	bool validateExpression(const QString& text, bool force) const;
+	void insertCompletion(const QString& completion);
+	QString convertToInternalRep(const QString&) const;
+	QString convertFromInternalRep(const QString&) const;
 
 private:
-	QString m_valueStr;
 	// See https://invent.kde.org/education/labplot/-/merge_requests/167
 	// for explanation of the feature
 	bool m_feedback{true}; // defines if the spinbox expects a feedback
@@ -102,16 +115,13 @@ private:
 
 	bool m_strongFocus{true};
 
-	// The value stored in QAbstractSpinBox is rounded to
-	// decimals and this is not desired
-	double m_value{0};
+	Common::ExpressionValue m_value{Common::ExpressionValue(0.0)};
+
 	double m_maximum{std::numeric_limits<double>::max()};
 	double m_minimum{std::numeric_limits<double>::lowest()};
-
-    // Everything related to expression handling
-    EquationHighlighter* m_highlighter{nullptr};
-    QCompleter* m_completer{nullptr};
-    QString m_currentExpression;
+	// Everything related to expression handling
+	EquationHighlighter* m_highlighter{nullptr};
+	QCompleter* m_completer{nullptr};
 
 	friend class WidgetsTest;
 };

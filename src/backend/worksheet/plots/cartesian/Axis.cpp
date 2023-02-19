@@ -441,7 +441,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majo
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType)
 BASIC_SHARED_D_READER_IMPL(Axis, bool, majorTicksAutoNumber, majorTicksAutoNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksSpacing, majorTicksSpacing)
+BASIC_SHARED_D_READER_IMPL(Axis, double, majorTicksSpacing, majorTicksSpacing)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, majorTicksColumn, majorTicksColumn)
 QString& Axis::majorTicksColumnPath() const {
 	D(Axis);
@@ -565,7 +565,7 @@ void Axis::setScale(RangeT::Scale scale) {
 }
 
 STD_SETTER_CMD_IMPL_F(Axis, SetOffset, double, offset, retransform)
-void Axis::setOffset(double offset, bool undo) {
+void Axis::setOffset(const double offset, bool undo) {
 	Q_D(Axis);
 	if (offset != d->offset) {
 		if (undo) {
@@ -754,7 +754,7 @@ void Axis::setMajorTicksNumber(int number, bool automatic) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksSpacing, qreal, majorTicksSpacing, retransformTicks)
-void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
+void Axis::setMajorTicksSpacing(double majorTicksSpacing) {
 	double range = this->range().length();
 	DEBUG(Q_FUNC_INFO << ", major spacing = " << majorTicksSpacing << ", range = " << range)
 	// fix spacing if incorrect (not set or > 100 ticks)
@@ -836,7 +836,7 @@ void Axis::setMinorTicksNumber(int minorTicksNumber) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksSpacing, qreal, minorTicksIncrement, retransformTicks)
-void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
+void Axis::setMinorTicksSpacing(double minorTicksSpacing) {
 	Q_D(Axis);
 	double range = this->range().length();
 	int numberTicks = 0;

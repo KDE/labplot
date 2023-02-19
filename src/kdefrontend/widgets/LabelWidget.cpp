@@ -250,17 +250,17 @@ LabelWidget::LabelWidget(QWidget* parent)
 	// geometry
 	connect(ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionYChanged);
-	connect(ui.sbPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
-	connect(ui.sbPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
+	connect(ui.sbPositionX, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
 	connect(ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
 
-	connect(ui.sbPositionXLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionXLogicalChanged);
+	connect(ui.sbPositionXLogical, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionXLogicalChanged);
 	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &LabelWidget::positionXLogicalDateTimeChanged);
-	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionYLogicalChanged);
+	connect(ui.sbPositionYLogical, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionYLogicalChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
-	connect(ui.sbOffsetX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
-	connect(ui.sbOffsetY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
+	connect(ui.sbOffsetX, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
+	connect(ui.sbOffsetY, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
 	connect(ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &LabelWidget::bindingChanged);
@@ -270,7 +270,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.cbBorderShape, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LabelWidget::borderShapeChanged);
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LabelWidget::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &LabelWidget::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::borderWidthChanged);
+	connect(ui.sbBorderWidth, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::borderWidthChanged);
 	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::borderOpacityChanged);
 
 	// TODO: https://bugreports.qt.io/browse/QTBUG-25420
@@ -514,14 +514,14 @@ void LabelWidget::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");
-		ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionX->value() * 2.54);
+		ui.sbPositionX->setScaling(2.54);
+		ui.sbPositionY->setScaling(2.54);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String(" in");
-		ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() / 2.54);
+		ui.sbPositionX->setScaling(1 / 2.54);
+		ui.sbPositionY->setScaling(1 / 2.54);
 	}
 
 	ui.sbPositionX->setSuffix(suffix);
@@ -959,10 +959,10 @@ void LabelWidget::verticalAlignmentChanged(int index) {
 		label->setVerticalAlignment(TextLabel::VerticalAlignment(index));
 }
 
-void LabelWidget::customPositionXChanged(double value) {
+void LabelWidget::customPositionXChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double x = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	const double x = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* label : m_labelsList) {
 		auto position = label->position();
 		position.point.setX(x);
@@ -970,10 +970,10 @@ void LabelWidget::customPositionXChanged(double value) {
 	}
 }
 
-void LabelWidget::customPositionYChanged(double value) {
+void LabelWidget::customPositionYChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double y = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	const double y = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* label : m_labelsList) {
 		auto position = label->position();
 		position.point.setY(y);
@@ -982,11 +982,11 @@ void LabelWidget::customPositionYChanged(double value) {
 }
 
 // positioning using logical plot coordinates
-void LabelWidget::positionXLogicalChanged(double value) {
+void LabelWidget::positionXLogicalChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPointF pos = m_label->positionLogical();
-	pos.setX(value);
+	pos.setX(value.value<double>());
 	for (auto* label : m_labelsList)
 		label->setPositionLogical(pos);
 }
@@ -1000,11 +1000,11 @@ void LabelWidget::positionXLogicalDateTimeChanged(qint64 value) {
 		label->setPositionLogical(pos);
 }
 
-void LabelWidget::positionYLogicalChanged(double value) {
+void LabelWidget::positionYLogicalChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPointF pos = m_label->positionLogical();
-	pos.setY(value);
+	pos.setY(value.value<double>());
 	for (auto* label : m_labelsList)
 		label->setPositionLogical(pos);
 }
@@ -1016,18 +1016,18 @@ void LabelWidget::rotationChanged(int value) {
 		label->setRotationAngle(value);
 }
 
-void LabelWidget::offsetXChanged(double value) {
+void LabelWidget::offsetXChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
-		axis->setTitleOffsetX(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
+		axis->setTitleOffsetX(Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point));
 }
 
-void LabelWidget::offsetYChanged(double value) {
+void LabelWidget::offsetYChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
-		axis->setTitleOffsetY(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
+		axis->setTitleOffsetY(Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point));
 }
 
 void LabelWidget::visibilityChanged(bool state) {
@@ -1079,13 +1079,13 @@ void LabelWidget::borderColorChanged(const QColor& color) {
 	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
 }
 
-void LabelWidget::borderWidthChanged(double value) {
+void LabelWidget::borderWidthChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPen pen;
 	for (auto* label : m_labelsList) {
 		pen = label->borderPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
+		pen.setWidthF(Worksheet::convertToSceneUnits(value.value<double>(), Worksheet::Unit::Point));
 		label->setBorderPen(pen);
 	}
 }
@@ -1560,13 +1560,13 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 
 	// Geometry
 	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
-	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(), m_worksheetUnit));
+	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value().value<double>(), m_worksheetUnit));
 	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
-	group.writeEntry("PositionYValue", Worksheet::convertToSceneUnits(ui.sbPositionY->value(), m_worksheetUnit));
+	group.writeEntry("PositionYValue", Worksheet::convertToSceneUnits(ui.sbPositionY->value().value<double>(), m_worksheetUnit));
 
 	if (!m_axesList.isEmpty()) {
-		group.writeEntry("OffsetX", Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Unit::Point));
-		group.writeEntry("OffsetY", Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Unit::Point));
+		group.writeEntry("OffsetX", Worksheet::convertToSceneUnits(ui.sbOffsetX->value().value<double>(), Worksheet::Unit::Point));
+		group.writeEntry("OffsetY", Worksheet::convertToSceneUnits(ui.sbOffsetY->value().value<double>(), Worksheet::Unit::Point));
 	}
 	group.writeEntry("HorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
 	group.writeEntry("VerticalAlignment", ui.cbVerticalAlignment->currentIndex());
@@ -1576,6 +1576,6 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	group.writeEntry("BorderShape", ui.cbBorderShape->currentIndex());
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
+	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value().value<double>(), Worksheet::Unit::Point));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value() / 100.0);
 }

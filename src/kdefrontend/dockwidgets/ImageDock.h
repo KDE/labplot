@@ -45,16 +45,16 @@ private Q_SLOTS:
 	void opacityChanged(int);
 
 	// geometry
-	void widthChanged(double);
-	void heightChanged(double);
+	void widthChanged(Common::ExpressionValue);
+	void heightChanged(Common::ExpressionValue);
 	void keepRatioChanged(int);
 	void positionXChanged(int);
 	void positionYChanged(int);
-	void customPositionXChanged(double);
-	void customPositionYChanged(double);
-	void positionXLogicalChanged(double);
+	void customPositionXChanged(Common::ExpressionValue);
+	void customPositionYChanged(Common::ExpressionValue);
+	void positionXLogicalChanged(Common::ExpressionValue);
 	void positionXLogicalDateTimeChanged(qint64);
-	void positionYLogicalChanged(double);
+	void positionYLogicalChanged(Common::ExpressionValue);
 	void horizontalAlignmentChanged(int);
 	void verticalAlignmentChanged(int);
 	void rotationChanged(int);

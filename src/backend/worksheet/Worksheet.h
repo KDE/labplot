@@ -38,13 +38,21 @@ public:
 	explicit Worksheet(const QString& name, bool loading = false);
 	~Worksheet() override;
 
-	enum class Unit { Millimeter, Centimeter, Inch, Point };
+	enum class Unit { None, Millimeter, Centimeter, Inch, Point };
 	enum class Layout { NoLayout, VerticalLayout, HorizontalLayout, GridLayout };
 	enum class CartesianPlotActionMode { ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY };
 	enum class ZoomFit { None, Fit, FitToHeight, FitToWidth, FitToSelection };
 
+	static QString unitToString(const Unit unit);
+	static Unit stringToUnit(const QString&);
+
 	static double convertToSceneUnits(const double value, const Worksheet::Unit unit);
 	static double convertFromSceneUnits(const double value, const Worksheet::Unit unit);
+	static double convertUnits(const double value, const Worksheet::Unit oldUnit, const Worksheet::Unit newUnit);
+	static double convertMillimeterToUnit(const double value, const Worksheet::Unit unit);
+	static double convertCentimeterToUnit(const double value, const Worksheet::Unit unit);
+	static double convertInchToUnit(const double value, const Worksheet::Unit unit);
+	static double convertPointToUnit(const double value, const Worksheet::Unit unit);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;

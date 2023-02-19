@@ -17,6 +17,10 @@
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
+namespace Common {
+struct ExpressionValue;
+} // namespace Common
+
 class CartesianPlot;
 class Line;
 class TextLabel;
@@ -136,10 +140,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, majorTicksAutoNumber, MajorTicksAutoNumber)
 	int majorTicksNumber() const;
 	void setMajorTicksNumber(const int number, bool automatic = false);
-	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
+	BASIC_D_ACCESSOR_DECL(double, majorTicksSpacing, MajorTicksSpacing)
 	BASIC_D_ACCESSOR_DECL(TicksStartType, majorTicksStartType, MajorTicksStartType)
-	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
-	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartValue, MajorTickStartValue)
+	BASIC_D_ACCESSOR_DECL(double, majorTickStartOffset, MajorTickStartOffset)
+	BASIC_D_ACCESSOR_DECL(double, majorTickStartValue, MajorTickStartValue)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
 	QString& majorTicksColumnPath() const;
 	Line* majorTicksLine() const;
@@ -149,7 +153,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(TicksType, minorTicksType, MinorTicksType)
 	BASIC_D_ACCESSOR_DECL(bool, minorTicksAutoNumber, MinorTicksAutoNumber)
 	BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
-	BASIC_D_ACCESSOR_DECL(qreal, minorTicksSpacing, MinorTicksSpacing)
+	BASIC_D_ACCESSOR_DECL(double, minorTicksSpacing, MinorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
 	QString& minorTicksColumnPath() const;
 	Line* minorTicksLine() const;
@@ -228,7 +232,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void orientationChanged(Orientation);
 	void positionChanged(Position);
-	void positionChanged(double);
+	void positionChanged(const double);
 	void scaleChanged(RangeT::Scale);
 	void startChanged(double);
 	void rangeTypeChanged(RangeType);
@@ -237,7 +241,7 @@ Q_SIGNALS:
 	void zeroOffsetChanged(qreal);
 	void scalingFactorChanged(qreal);
 	void showScaleOffsetChanged(bool);
-	void logicalPositionChanged(double);
+	void logicalPositionChanged(const double&);
 	void shiftSignal(int delta, Dimension dim, int index);
 
 	// title

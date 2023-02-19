@@ -78,7 +78,7 @@ private Q_SLOTS:
 	void plotImageTypeChanged(int);
 
 	//"Edit image"-tab
-	void rotationChanged(double);
+	void rotationChanged(Common::ExpressionValue);
 	void intensitySpanChanged(int, int);
 	void foregroundSpanChanged(int, int);
 	void hueSpanChanged(int, int);
@@ -88,7 +88,7 @@ private Q_SLOTS:
 	void minSegmentLengthChanged(int);
 	void pointSeparationChanged(int);
 	void graphTypeChanged(int);
-	void ternaryScaleChanged(double);
+	void ternaryScaleChanged(Common::ExpressionValue);
 	void logicalPositionChanged();
 
 	// symbol properties

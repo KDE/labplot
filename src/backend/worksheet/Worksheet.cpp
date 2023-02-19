@@ -106,6 +106,32 @@ void Worksheet::init() {
 	loadTheme(d->theme);
 }
 
+QString Worksheet::unitToString(const Unit unit) {
+	switch (unit) {
+	case Unit::Millimeter:
+		return QStringLiteral("Millimeter");
+	case Unit::Centimeter:
+		return QStringLiteral("Centimeter");
+	case Unit::Inch:
+		return QStringLiteral("Inch");
+	case Unit::Point:
+		return QStringLiteral("Point");
+	}
+	return QStringLiteral("");
+}
+
+Worksheet::Unit Worksheet::stringToUnit(const QString& s) {
+	if (s.compare(unitToString(Worksheet::Unit::Millimeter)) == 0)
+		return Worksheet::Unit::Millimeter;
+	else if (s.compare(unitToString(Worksheet::Unit::Centimeter)) == 0)
+		return Worksheet::Unit::Centimeter;
+	else if (s.compare(unitToString(Worksheet::Unit::Inch)) == 0)
+		return Worksheet::Unit::Inch;
+	else if (s.compare(unitToString(Worksheet::Unit::Point)) == 0)
+		return Worksheet::Unit::Point;
+	return Worksheet::Unit::None;
+}
+
 /*!
 	converts from \c unit to the scene units. At the moment, 1 scene unit corresponds to 1/10 mm.
  */
@@ -137,9 +163,89 @@ double Worksheet::convertFromSceneUnits(const double value, const Worksheet::Uni
 		return value / 25.4 / 10.;
 	case Unit::Point:
 		return value / 25.4 / 10. * 72.;
+	case Unit::None:
+		return value;
 	}
 
 	return 0;
+}
+
+double Worksheet::convertMillimeterToUnit(const double value, const Worksheet::Unit unit) {
+	switch (unit) {
+	case Unit::Millimeter:
+		return value;
+	case Unit::Centimeter:
+		return value / 10;
+	case Unit::Inch:
+		return value / 25.4;
+	case Unit::Point:
+		return value * 72. / 25.4;
+	case Unit::None:
+		return value;
+	}
+}
+
+double Worksheet::convertCentimeterToUnit(const double value, const Worksheet::Unit unit) {
+	switch (unit) {
+	case Unit::Millimeter:
+		return value * 10;
+	case Unit::Centimeter:
+		return value;
+	case Unit::Inch:
+		return value / 2.54;
+	case Unit::Point:
+		return value * 72. / 2.54;
+	case Unit::None:
+		return value;
+	}
+}
+
+double Worksheet::convertInchToUnit(const double value, const Worksheet::Unit unit) {
+	switch (unit) {
+	case Unit::Millimeter:
+		return value * 25.4;
+	case Unit::Centimeter:
+		return value * 2.54;
+	case Unit::Inch:
+		return value;
+	case Unit::Point:
+		return value * 72.;
+	case Unit::None:
+		return value;
+	}
+}
+
+double Worksheet::convertPointToUnit(const double value, const Worksheet::Unit unit) {
+	switch (unit) {
+	case Unit::Millimeter:
+		return value / 72. * 25.4;
+	case Unit::Centimeter:
+		return value / 72. * 2.54;
+	case Unit::Inch:
+		return value / 72.;
+	case Unit::Point:
+		return value;
+	case Unit::None:
+		return value;
+	}
+}
+
+double Worksheet::convertUnits(const double value, const Worksheet::Unit oldUnit, const Worksheet::Unit newUnit) {
+	if (oldUnit == newUnit)
+		return value;
+
+	switch (oldUnit) {
+	case Unit::None:
+		return value;
+	case Unit::Millimeter:
+		return convertMillimeterToUnit(value, newUnit);
+	case Unit::Centimeter:
+		return convertCentimeterToUnit(value, newUnit);
+	case Unit::Inch:
+		return convertInchToUnit(value, newUnit);
+	case Unit::Point:
+		return convertPointToUnit(value, newUnit);
+	}
 }
 
 QIcon Worksheet::icon() const {

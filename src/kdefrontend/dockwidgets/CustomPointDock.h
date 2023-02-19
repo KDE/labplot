@@ -41,14 +41,14 @@ private Q_SLOTS:
 	// General-Tab
 	void positionXChanged(int);
 	void positionYChanged(int);
-	void customPositionXChanged(double);
-	void customPositionYChanged(double);
+	void customPositionXChanged(Common::ExpressionValue);
+	void customPositionYChanged(Common::ExpressionValue);
 	void visibilityChanged(bool);
 	void bindingChanged(bool checked);
 
-	void positionXLogicalChanged(double);
+	void positionXLogicalChanged(Common::ExpressionValue);
 	void positionXLogicalDateTimeChanged(qint64);
-	void positionYLogicalChanged(double);
+	void positionYLogicalChanged(Common::ExpressionValue);
 	void positionYLogicalDateTimeChanged(qint64);
 
 	// SLOTs for changes triggered in CustomPoint

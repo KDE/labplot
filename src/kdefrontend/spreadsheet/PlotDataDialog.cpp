@@ -12,6 +12,7 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/Common.h"
 #include "backend/lib/Range.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/TextLabel.h"

@@ -97,22 +97,22 @@ ImageDock::ImageDock(QWidget* parent)
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::opacityChanged);
 
 	// Size
-	connect(ui.sbWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::widthChanged);
-	connect(ui.sbHeight, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::heightChanged);
+	connect(ui.sbWidth, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &ImageDock::widthChanged);
+	connect(ui.sbHeight, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &ImageDock::heightChanged);
 	connect(ui.chbKeepRatio, &QCheckBox::clicked, this, &ImageDock::keepRatioChanged);
 
 	// Position
 	connect(ui.cbPositionX, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::positionYChanged);
-	connect(ui.sbPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::customPositionXChanged);
-	connect(ui.sbPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::customPositionYChanged);
+	connect(ui.sbPositionX, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &ImageDock::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &ImageDock::customPositionYChanged);
 	connect(ui.cbHorizontalAlignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::horizontalAlignmentChanged);
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::verticalAlignmentChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::rotationChanged);
 
 	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ImageDock::positionXLogicalDateTimeChanged);
 	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ImageDock::positionXLogicalDateTimeChanged);
-	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::positionYLogicalChanged);
+	connect(ui.sbPositionYLogical, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &ImageDock::positionYLogicalChanged);
 
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &ImageDock::bindingChanged);
 	connect(ui.chbVisible, &QCheckBox::clicked, this, &ImageDock::visibilityChanged);
@@ -203,18 +203,18 @@ void ImageDock::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QStringLiteral(" cm");
-		ui.sbWidth->setValue(ui.sbWidth->value() * 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() * 2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() * 2.54);
+		ui.sbWidth->setScaling(2.54);
+		ui.sbHeight->setScaling(2.54);
+		ui.sbPositionX->setScaling(2.54);
+		ui.sbPositionY->setScaling(2.54);
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QStringLiteral(" in");
-		ui.sbWidth->setValue(ui.sbWidth->value() / 2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value() / 2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() / 2.54);
+		ui.sbWidth->setScaling(1 / 2.54);
+		ui.sbHeight->setScaling(1 / 2.54);
+		ui.sbPositionX->setScaling(1 / 2.54);
+		ui.sbPositionY->setScaling(1 / 2.54);
 	}
 
 	ui.sbWidth->setSuffix(suffix);
@@ -286,18 +286,18 @@ void ImageDock::opacityChanged(int value) {
 }
 
 // Size
-void ImageDock::widthChanged(double value) {
+void ImageDock::widthChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	int width = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	value.setValue(Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit));
 	for (auto* image : m_imageList)
-		image->setWidth(width);
+		image->setWidth(value.value<double>());
 }
 
-void ImageDock::heightChanged(double value) {
+void ImageDock::heightChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	int height = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	int height = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* image : m_imageList)
 		image->setHeight(height);
 }
@@ -334,10 +334,10 @@ void ImageDock::positionYChanged(int index) {
 		image->setPosition(position);
 }
 
-void ImageDock::customPositionXChanged(double value) {
+void ImageDock::customPositionXChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double x = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	const double x = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* image : m_imageList) {
 		auto position = image->position();
 		position.point.setX(x);
@@ -345,10 +345,10 @@ void ImageDock::customPositionXChanged(double value) {
 	}
 }
 
-void ImageDock::customPositionYChanged(double value) {
+void ImageDock::customPositionYChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	const double y = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	const double y = Worksheet::convertToSceneUnits(value.value<double>(), m_worksheetUnit);
 	for (auto* image : m_imageList) {
 		auto position = image->position();
 		position.point.setY(y);
@@ -399,11 +399,11 @@ void ImageDock::bindingChanged(bool checked) {
 }
 
 // positioning using logical plot coordinates
-void ImageDock::positionXLogicalChanged(double value) {
+void ImageDock::positionXLogicalChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPointF pos = m_image->positionLogical();
-	pos.setX(value);
+	pos.setX(value.value<double>());
 	for (auto* label : m_imageList)
 		label->setPositionLogical(pos);
 }
@@ -417,11 +417,11 @@ void ImageDock::positionXLogicalDateTimeChanged(qint64 value) {
 		label->setPositionLogical(pos);
 }
 
-void ImageDock::positionYLogicalChanged(double value) {
+void ImageDock::positionYLogicalChanged(Common::ExpressionValue value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPointF pos = m_image->positionLogical();
-	pos.setY(value);
+	pos.setY(value.value<double>());
 	for (auto* label : m_imageList)
 		label->setPositionLogical(pos);
 }

@@ -50,7 +50,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	// general
 	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
 	connect(ui->teComment, &QTextEdit::textChanged, this, &InfoElementDock::commentChanged);
-	connect(ui->sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &InfoElementDock::positionChanged);
+	connect(ui->sbPosition, QOverload<const Common::ExpressionValue&>::of(&NumberSpinBox::valueChanged), this, &InfoElementDock::positionChanged);
 	connect(ui->dateTimeEditPosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &InfoElementDock::positionDateTimeChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
 	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
@@ -195,11 +195,11 @@ InfoElementDock::~InfoElementDock() {
 }
 
 // general tab
-void InfoElementDock::positionChanged(double pos) {
+void InfoElementDock::positionChanged(Common::ExpressionValue pos) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* element : m_elements)
-		element->setPositionLogical(pos);
+		element->setPositionLogical(pos.value<double>());
 }
 
 void InfoElementDock::positionDateTimeChanged(qint64 value) {

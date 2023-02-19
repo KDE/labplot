@@ -52,26 +52,26 @@ private Q_SLOTS:
 	void labelFontChanged(const QFont&);
 	void labelColorChanged(const QColor&);
 	void labelOrderChanged(int);
-	void lineSymbolWidthChanged(double);
+	void lineSymbolWidthChanged(Common::ExpressionValue);
 	void positionXChanged(int);
 	void positionYChanged(int);
-	void customPositionXChanged(double);
-	void customPositionYChanged(double);
+	void customPositionXChanged(Common::ExpressionValue);
+	void customPositionYChanged(Common::ExpressionValue);
 	void horizontalAlignmentChanged(int index);
 	void verticalAlignmentChanged(int index);
 	void rotationChanged(int value);
 	void bindingChanged(bool checked);
 
 	// "Background"-tab
-	void borderCornerRadiusChanged(double);
+	void borderCornerRadiusChanged(Common::ExpressionValue);
 
 	//"Layout"-tab
-	void layoutTopMarginChanged(double);
-	void layoutBottomMarginChanged(double);
-	void layoutRightMarginChanged(double);
-	void layoutLeftMarginChanged(double);
-	void layoutHorizontalSpacingChanged(double);
-	void layoutVerticalSpacingChanged(double);
+	void layoutTopMarginChanged(Common::ExpressionValue);
+	void layoutBottomMarginChanged(Common::ExpressionValue);
+	void layoutRightMarginChanged(Common::ExpressionValue);
+	void layoutLeftMarginChanged(Common::ExpressionValue);
+	void layoutHorizontalSpacingChanged(Common::ExpressionValue);
+	void layoutVerticalSpacingChanged(Common::ExpressionValue);
 	void layoutColumnCountChanged(int);
 
 	// SLOTs for changes triggered in CartesianPlotLegend
