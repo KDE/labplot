@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -129,6 +129,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.chkVariableWidth, &QCheckBox::toggled, this, &BoxPlotDock::variableWidthChanged);
 	connect(ui.chkNotches, &QCheckBox::toggled, this, &BoxPlotDock::notchesEnabledChanged);
 	connect(ui.chkVisible, &QCheckBox::toggled, this, &BoxPlotDock::visibilityChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::plotRangeChanged);
 
 	// Tab "Box"
 	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::currentBoxChanged);
@@ -224,12 +225,15 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	loadConfig(config);
 	loadDataColumns();
 
+	updatePlotRanges();
+
 	// set the current locale
 	updateLocale();
 
 	// SIGNALs/SLOTs
 	// general
 	connect(m_boxPlot, &AbstractAspect::aspectDescriptionChanged, this, &BoxPlotDock::plotDescriptionChanged);
+	connect(m_boxPlot, &WorksheetElement::plotRangeListChanged, this, &BoxPlotDock::updatePlotRanges);
 	connect(m_boxPlot, &BoxPlot::visibleChanged, this, &BoxPlotDock::plotVisibilityChanged);
 	connect(m_boxPlot, &BoxPlot::orientationChanged, this, &BoxPlotDock::plotOrientationChanged);
 	connect(m_boxPlot, &BoxPlot::variableWidthChanged, this, &BoxPlotDock::plotVariableWidthChanged);
@@ -269,6 +273,10 @@ void BoxPlotDock::updateLocale() {
 	medianLineWidget->updateLocale();
 	whiskersLineWidget->updateLocale();
 	whiskersCapLineWidget->updateLocale();
+}
+
+void BoxPlotDock::updatePlotRanges() {
+	updatePlotRangeList(ui.cbPlotRanges);
 }
 
 void BoxPlotDock::loadDataColumns() {

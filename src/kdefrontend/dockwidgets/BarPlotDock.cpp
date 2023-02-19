@@ -108,6 +108,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::typeChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::orientationChanged);
 	connect(ui.chkVisible, &QCheckBox::toggled, this, &BarPlotDock::visibilityChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::plotRangeChanged);
 
 	// Tab "Bars"
 	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarChanged);
@@ -179,6 +180,8 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	loadConfig(config);
 	cbXColumn->setColumn(m_barPlot->xColumn(), m_barPlot->xColumnPath());
 	loadDataColumns();
+
+	updatePlotRanges();
 
 	// set the current locale
 	updateLocale();
