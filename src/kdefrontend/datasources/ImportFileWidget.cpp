@@ -915,7 +915,7 @@ void ImportFileWidget::selectDBCFile() {
 	const QString entry = QStringLiteral("DBCDir");
 	KConfigGroup conf(KSharedConfig::openConfig(), QStringLiteral("ImportFileWidget"));
 	const QString& dir = conf.readEntry(entry, "");
-	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the DBC file"), dir);
+	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the DBC file"), dir, i18n("DBC file (*.dbc)"));
 	DEBUG("	dir = " << STDSTRING(dir))
 	DEBUG("	path = " << STDSTRING(path))
 	if (path.isEmpty()) // cancel was clicked in the file-dialog
