@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-20 00:53+0000\n"
-"PO-Revision-Date: 2023-02-16 10:31+0300\n"
+"PO-Revision-Date: 2023-02-20 17:30+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1621,7 +1621,7 @@ msgstr "XYZ (gri tonlu)"
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
 msgid "XYRGB"
-msgstr "XYRGB"
+msgstr "XYKYM"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:229
 #, kde-format
