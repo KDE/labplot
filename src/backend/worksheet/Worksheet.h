@@ -38,7 +38,7 @@ public:
 	explicit Worksheet(const QString& name, bool loading = false);
 	~Worksheet() override;
 
-	enum class Unit { None, Millimeter, Centimeter, Inch, Point };
+	enum class Unit { None, Scene, Millimeter, Centimeter, Inch, Point };
 	enum class Layout { NoLayout, VerticalLayout, HorizontalLayout, GridLayout };
 	enum class CartesianPlotActionMode { ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY };
 	enum class ZoomFit { None, Fit, FitToHeight, FitToWidth, FitToSelection };
@@ -49,10 +49,10 @@ public:
 	static double convertToSceneUnits(const double value, const Worksheet::Unit unit);
 	static double convertFromSceneUnits(const double value, const Worksheet::Unit unit);
 	static double convertUnits(const double value, const Worksheet::Unit oldUnit, const Worksheet::Unit newUnit);
-	static double convertMillimeterToUnit(const double value, const Worksheet::Unit unit);
-	static double convertCentimeterToUnit(const double value, const Worksheet::Unit unit);
-	static double convertInchToUnit(const double value, const Worksheet::Unit unit);
-	static double convertPointToUnit(const double value, const Worksheet::Unit unit);
+	static double convertFromMillimeterUnits(const double value, const Worksheet::Unit unit);
+	static double convertFromCentimeterUnits(const double value, const Worksheet::Unit unit);
+	static double convertFromInchUnits(const double value, const Worksheet::Unit unit);
+	static double convertFromPointUnits(const double value, const Worksheet::Unit unit);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
