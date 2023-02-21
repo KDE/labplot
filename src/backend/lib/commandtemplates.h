@@ -18,45 +18,6 @@
 #include <KLocalizedString>
 
 template<class target_class, typename value_type>
-class StandardSetterCmd : public QUndoCommand {
-public:
-	StandardSetterCmd(target_class* target,
-					  value_type target_class::*field,
-					  value_type newValue,
-					  const KLocalizedString& description,
-					  QUndoCommand* parent = nullptr) // use ki18n("%1: ...")
-		: QUndoCommand(parent)
-		, m_target(target)
-		, m_field(field)
-		, m_otherValue(newValue) {
-		setText(description.subs(m_target->name()).toString());
-	}
-
-	virtual void initialize() {
-	}
-	virtual void finalize() {
-	}
-
-	void redo() override {
-		initialize();
-		value_type tmp = *m_target.*m_field;
-		*m_target.*m_field = m_otherValue;
-		m_otherValue = tmp;
-		QUndoCommand::redo(); // redo all childs
-		finalize();
-	}
-
-	void undo() override {
-		redo();
-	}
-
-protected:
-	target_class* m_target;
-	value_type target_class::*m_field;
-	value_type m_otherValue;
-};
-
-template<class target_class, typename value_type>
 class StandardQVectorSetterCmd : public QUndoCommand {
 public:
 	StandardQVectorSetterCmd(target_class* target,
@@ -97,14 +58,17 @@ protected:
 	value_type m_otherValue;
 };
 
+// Finalize for redo and undo are different in this class, compared to the Standard setter
 template<class target_class, typename value_type>
 class StandardMacroSetterCmd : public QUndoCommand {
 public:
 	StandardMacroSetterCmd(target_class* target,
 						   value_type target_class::*field,
 						   value_type newValue,
-						   const KLocalizedString& description) // use ki18n("%1: ...")
-		: m_target(target)
+						   const KLocalizedString& description, // use ki18n("%1: ...")
+						   QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_target(target)
 		, m_field(field)
 		, m_otherValue(newValue) {
 		setText(description.subs(m_target->name()).toString());
@@ -142,6 +106,25 @@ protected:
 	target_class* m_target;
 	value_type target_class::*m_field;
 	value_type m_otherValue;
+};
+
+template<class target_class, typename value_type>
+class StandardSetterCmd : public StandardMacroSetterCmd<target_class, value_type> {
+public:
+	StandardSetterCmd(target_class* target,
+					  value_type target_class::*field,
+					  value_type newValue,
+					  const KLocalizedString& description, // use ki18n("%1: ...")
+					  QUndoCommand* parent = nullptr)
+		: StandardMacroSetterCmd<target_class, value_type>(target, field, newValue, description, parent) {
+	}
+
+	virtual void finalizeUndo() override {
+		finalize();
+	}
+
+	virtual void finalize() override {
+	}
 };
 
 template<class target_class, typename value_type>
