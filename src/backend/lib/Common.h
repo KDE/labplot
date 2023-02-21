@@ -110,7 +110,6 @@ struct ExpressionValue {
 		return value<double>() * other;
 	}
 
-	static ExpressionValue loadFromConfig(const KConfigGroup& group, const QString& prefix, double defaultValue);
 	static ExpressionValue loadFromConfig(const KConfigGroup& group, const QString& prefix, const ExpressionValue& defaultValue);
 	void configWriteEntry(KConfigGroup& group, const QString& prefix, Worksheet::Unit unit) const;
 

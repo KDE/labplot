@@ -434,7 +434,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 
 	lineEdit()->setCursorPosition(newPos + prefix().size());
 
-	m_value = v;
+	m_value.setValue(v);
 	return Errors::NoErrorNumeric;
 }
 

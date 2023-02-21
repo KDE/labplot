@@ -64,17 +64,6 @@ ExpressionValue ExpressionValue::loadFromConfig(const KConfigGroup& group, const
 	return ExpressionValue(expression, unit);
 }
 
-ExpressionValue ExpressionValue::loadFromConfig(const KConfigGroup& group, const QString& prefix, double defaultValue) {
-	if (!group.hasGroup(prefix))
-		return ExpressionValue(defaultValue);
-
-	auto& g = group.group(prefix);
-	const QString expression = g.readEntry(QStringLiteral("Expression"), QStringLiteral("0"));
-	const bool type = g.readEntry(QStringLiteral("Type"), true);
-	Worksheet::Unit unit = Worksheet::stringToUnit(g.readEntry(QStringLiteral("Unit"), Worksheet::unitToString(Worksheet::Unit::None)));
-	return ExpressionValue(expression, unit);
-}
-
 void ExpressionValue::configWriteEntry(KConfigGroup& group, const QString& prefix, Worksheet::Unit unit) const {
 	KConfigGroup g(&group, prefix);
 	g.writeEntry(QStringLiteral("Expression"), toString());
