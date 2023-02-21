@@ -168,11 +168,11 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	uiGeneralTab.chkAuto->setChecked(m_dataReductionData.autoTolerance);
 	this->autoToleranceChanged();
 	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
-	this->toleranceChanged(m_dataReductionData.tolerance);
+	this->toleranceChanged(Common::ExpressionValue(m_dataReductionData.tolerance));
 	uiGeneralTab.chkAuto2->setChecked(m_dataReductionData.autoTolerance2);
 	this->autoTolerance2Changed();
 	uiGeneralTab.sbTolerance2->setValue(m_dataReductionData.tolerance2);
-	this->tolerance2Changed(m_dataReductionData.tolerance2);
+	this->tolerance2Changed(Common::ExpressionValue(m_dataReductionData.tolerance2));
 
 	this->showDataReductionResult();
 
