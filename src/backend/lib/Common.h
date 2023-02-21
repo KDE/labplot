@@ -9,12 +9,15 @@
 // TODO: get rid of this include!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 #include "backend/worksheet/Worksheet.h"
 
+class QXmlStreamWriter;
+class XmlStreamReader;
+
 namespace Common {
 
 struct ExpressionValue {
 	ExpressionValue();
-	ExpressionValue(qint64 v);
-	ExpressionValue(double v);
+	explicit ExpressionValue(qint64 v);
+	explicit ExpressionValue(double v);
 	ExpressionValue(const QString& expression, double v, Worksheet::Unit);
 	ExpressionValue(const QString& expression, Worksheet::Unit);
 
@@ -32,6 +35,7 @@ struct ExpressionValue {
 
 	template<typename T>
 	void setValue(T v) {
+		m_expression.clear();
 		if (m_d)
 			m_value.d = v;
 		else
@@ -80,7 +84,7 @@ struct ExpressionValue {
 	//     return false;
 	// }
 
-	bool operator!=(const ExpressionValue& rhs) {
+	bool operator!=(const ExpressionValue& rhs) const {
 		if (m_expression.isEmpty()) {
 			if (!rhs.m_expression.isEmpty())
 				return true;
@@ -93,13 +97,25 @@ struct ExpressionValue {
 			return true;
 
 		if (m_d)
-			return m_value.d == rhs.m_value.d;
-		return m_value.i64 == rhs.m_value.i64;
+			return m_value.d != rhs.m_value.d;
+		return m_value.i64 != rhs.m_value.i64;
+	}
+
+	double operator*(const ExpressionValue& other) const {
+		return value<double>() * other.value<double>();
+	}
+
+	template<typename T>
+	double operator*(T other) const {
+		return value<double>() * other;
 	}
 
 	static ExpressionValue loadFromConfig(const KConfigGroup& group, const QString& prefix, double defaultValue);
 	static ExpressionValue loadFromConfig(const KConfigGroup& group, const QString& prefix, const ExpressionValue& defaultValue);
 	void configWriteEntry(KConfigGroup& group, const QString& prefix, Worksheet::Unit unit) const;
+
+	void save(QXmlStreamWriter*, const QString& prefix) const;
+	bool load(const XmlStreamReader*, const QString& prefix);
 
 private:
 	QString m_expression;

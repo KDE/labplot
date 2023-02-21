@@ -489,7 +489,8 @@ bool NumberSpinBox::validateExpression(const QString& text, bool force) const {
 	if (textChanged || force) {
 		valid = ExpressionParser::getInstance()->isValid(text, {});
 		// m_currentExpression = text;
-	}
+	} else if (!textChanged)
+		valid = true;
 	// if (textChanged)
 	//     Q_EMIT expressionChanged();
 	return valid;
@@ -551,6 +552,11 @@ bool NumberSpinBox::setValue(const Common::ExpressionValue& ev) {
 			}
 		}
 		return true;
+	}
+
+	if (!ev.expressionEmpty()) {
+		if (!validateExpression(ev.expression(), false))
+			return false;
 	}
 
 	m_value = ev;
