@@ -116,7 +116,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
 	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range)
-	void setStart(const double);
+	void setStart(const Common::ExpressionValue&);
 	void setEnd(const double);
 	void setRange(const double, const double);
 	void setOffset(const double, const bool = true);
@@ -140,7 +140,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, majorTicksAutoNumber, MajorTicksAutoNumber)
 	int majorTicksNumber() const;
 	void setMajorTicksNumber(const int number, bool automatic = false);
-	BASIC_D_ACCESSOR_DECL(double, majorTicksSpacing, MajorTicksSpacing)
+	CLASS_D_ACCESSOR_DECL(Common::ExpressionValue, majorTicksSpacing, MajorTicksSpacing)
 	BASIC_D_ACCESSOR_DECL(TicksStartType, majorTicksStartType, MajorTicksStartType)
 	BASIC_D_ACCESSOR_DECL(double, majorTickStartOffset, MajorTickStartOffset)
 	BASIC_D_ACCESSOR_DECL(double, majorTickStartValue, MajorTickStartValue)
@@ -258,7 +258,7 @@ Q_SIGNALS:
 	void majorTicksTypeChanged(TicksType);
 	void majorTicksAutoNumberChanged(bool);
 	void majorTicksNumberChanged(int);
-	void majorTicksSpacingChanged(qreal);
+	void majorTicksSpacingChanged(const Common::ExpressionValue&);
 	void majorTicksColumnChanged(const AbstractColumn*);
 	void majorTicksStartTypeChanged(TicksStartType);
 	void majorTickStartOffsetChanged(qreal);

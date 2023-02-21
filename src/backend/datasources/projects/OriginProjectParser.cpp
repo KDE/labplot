@@ -16,6 +16,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/lib/Common.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -1449,7 +1450,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// ticks
 	axis->setMajorTicksType(Axis::TicksType::Spacing);
-	axis->setMajorTicksSpacing(originAxis.step);
+	axis->setMajorTicksSpacing(Common::ExpressionValue(originAxis.step));
 	DEBUG(Q_FUNC_INFO << ", anchor = " << originAxis.anchor)
 	// TODO: set offset from step and anchor (not currently available in liborigin)
 	axis->setMajorTickStartOffset(0.0);

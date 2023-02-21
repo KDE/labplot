@@ -13,6 +13,7 @@
 
 #include "Axis.h"
 
+#include "backend/lib/Common.h"
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QFont>
 #include <QPen>
@@ -79,7 +80,7 @@ public:
 	Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
 	bool majorTicksAutoNumber{true}; //!< If the number of ticks should be adjusted automatically or not
 	int majorTicksNumber; //!< number of major ticks
-	qreal majorTicksSpacing; //!< spacing (step) for the major ticks
+	Common::ExpressionValue majorTicksSpacing{Common::ExpressionValue(1.)}; //!< spacing (step) for the major ticks
 	const AbstractColumn* majorTicksColumn{nullptr}; //!< column containing values for major ticks' positions
 	QString majorTicksColumnPath;
 	qreal majorTicksLength; //!< major tick length (in page units!)

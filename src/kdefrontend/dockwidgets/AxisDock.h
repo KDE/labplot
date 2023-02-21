@@ -86,7 +86,7 @@ private Q_SLOTS:
 	void logicalPositionChanged(const Common::ExpressionValue& value);
 	void scaleChanged(int);
 	void rangeTypeChanged(int);
-	void startChanged(Common::ExpressionValue);
+	void startChanged(const Common::ExpressionValue&);
 	void endChanged(Common::ExpressionValue);
 	void startDateTimeChanged(qint64);
 	void endDateTimeChanged(qint64);
@@ -176,7 +176,7 @@ private Q_SLOTS:
 	void axisMajorTicksTypeChanged(Axis::TicksType);
 	void axisMajorTicksAutoNumberChanged(bool);
 	void axisMajorTicksNumberChanged(int);
-	void axisMajorTicksSpacingChanged(qreal);
+	void axisMajorTicksSpacingChanged(const Common::ExpressionValue&);
 	void axisMajorTicksStartTypeChanged(Axis::TicksStartType);
 	void axisMajorTicksStartOffsetChanged(qreal);
 	void axisMajorTicksStartValueChanged(qreal);

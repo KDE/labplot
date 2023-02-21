@@ -11,6 +11,7 @@
 #include "AxisPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/lib/Common.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -159,8 +160,10 @@ void Axis::init(Orientation orientation) {
 	d->majorTicksDirection = (Axis::TicksDirection)group.readEntry("MajorTicksDirection", (int)Axis::ticksOut);
 	d->majorTicksType = (TicksType)group.readEntry("MajorTicksType", static_cast<int>(TicksType::TotalNumber));
 	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
-	d->majorTicksSpacing =
-		group.readEntry("MajorTicksIncrement", 0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
+	d->majorTicksSpacing.loadFromConfig(
+		group,
+		QStringLiteral("MajorTicksIncrement"),
+		Common::ExpressionValue(0.0)); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
 	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
 
 	d->majorTicksLine = new Line(QString());
@@ -441,7 +444,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majo
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType)
 BASIC_SHARED_D_READER_IMPL(Axis, bool, majorTicksAutoNumber, majorTicksAutoNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber)
-BASIC_SHARED_D_READER_IMPL(Axis, double, majorTicksSpacing, majorTicksSpacing)
+BASIC_SHARED_D_READER_IMPL(Axis, Common::ExpressionValue, majorTicksSpacing, majorTicksSpacing)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, majorTicksColumn, majorTicksColumn)
 QString& Axis::majorTicksColumnPath() const {
 	D(Axis);
@@ -590,13 +593,13 @@ void Axis::setRange(Range<double> range) {
 			setMajorTicksNumber(d->range.autoTickCount(), true);
 	}
 }
-void Axis::setStart(double min) {
+void Axis::setStart(const Common::ExpressionValue& min) {
 	Q_D(Axis);
 	Range<double> range = d->range;
 	const auto scale = range.scale();
-	if (!(((scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) && min <= 0)
-		  || (scale == RangeT::Scale::Sqrt && min < 0))) {
-		range.setStart(min);
+	if (!(((scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) && min.value<double>() <= 0)
+		  || (scale == RangeT::Scale::Sqrt && min.value<double>() < 0))) {
+		range.setStart(min.value<double>());
 		setRange(range);
 	}
 	emit startChanged(range.start()); // Feedback
@@ -753,19 +756,20 @@ void Axis::setMajorTicksNumber(int number, bool automatic) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksSpacing, qreal, majorTicksSpacing, retransformTicks)
-void Axis::setMajorTicksSpacing(double majorTicksSpacing) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksSpacing, Common::ExpressionValue, majorTicksSpacing, retransformTicks)
+void Axis::setMajorTicksSpacing(const Common::ExpressionValue& majorTicksSpacing) {
 	double range = this->range().length();
-	DEBUG(Q_FUNC_INFO << ", major spacing = " << majorTicksSpacing << ", range = " << range)
+	double spacingValue = majorTicksSpacing.value<double>();
+	DEBUG(Q_FUNC_INFO << ", major spacing = " << spacingValue << ", range = " << range)
 	// fix spacing if incorrect (not set or > 100 ticks)
-	if (majorTicksSpacing == 0. || range / majorTicksSpacing > 100.) {
-		if (majorTicksSpacing == 0.)
-			majorTicksSpacing = range / (majorTicksNumber() - 1);
+	if (spacingValue == 0. || range / spacingValue > 100.) {
+		if (spacingValue == 0.)
+			spacingValue = range / (majorTicksNumber() - 1);
 
-		if (range / majorTicksSpacing > 100.)
-			majorTicksSpacing = range / 100.;
+		if (range / spacingValue > 100.)
+			spacingValue = range / 100.;
 
-		emit majorTicksSpacingChanged(majorTicksSpacing);
+		emit majorTicksSpacingChanged(Common::ExpressionValue(majorTicksSpacing));
 		return;
 	}
 
@@ -2856,7 +2860,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->majorTicksType)));
 	writer->writeAttribute(QStringLiteral("numberAuto"), QString::number(d->majorTicksAutoNumber));
 	writer->writeAttribute(QStringLiteral("number"), QString::number(d->majorTicksNumber));
-	writer->writeAttribute(QStringLiteral("increment"), QString::number(d->majorTicksSpacing));
+	d->majorTicksSpacing.save(writer, QStringLiteral("increment"));
 	WRITE_COLUMN(d->majorTicksColumn, majorTicksColumn);
 	writer->writeAttribute(QStringLiteral("length"), QString::number(d->majorTicksLength));
 	d->majorTicksLine->save(writer);
@@ -2988,7 +2992,8 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("type", majorTicksType, Axis::TicksType);
 			READ_INT_VALUE("numberAuto", majorTicksAutoNumber, bool);
 			READ_INT_VALUE("number", majorTicksNumber, int);
-			READ_DOUBLE_VALUE("increment", majorTicksSpacing);
+			if (!d->majorTicksSpacing.load(reader, QStringLiteral("increment")))
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("increment")).toString());
 			READ_COLUMN(majorTicksColumn);
 			READ_DOUBLE_VALUE("length", majorTicksLength);
 			d->majorTicksLine->load(reader, preview);

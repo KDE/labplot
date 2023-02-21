@@ -751,11 +751,11 @@ void AxisDock::rangeTypeChanged(int index) {
 	updateLocale(); // update values
 }
 
-void AxisDock::startChanged(Common::ExpressionValue value) {
+void AxisDock::startChanged(const Common::ExpressionValue& value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
-		axis->setStart(value.value<double>());
+		axis->setStart(value);
 }
 
 void AxisDock::endChanged(Common::ExpressionValue value) {
@@ -769,7 +769,7 @@ void AxisDock::startDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
-		axis->setStart(value);
+		axis->setStart(Common::ExpressionValue(value));
 }
 
 void AxisDock::endDateTimeChanged(qint64 value) {
@@ -1083,17 +1083,17 @@ void AxisDock::majorTicksNumberChanged(int value) {
 
 void AxisDock::majorTicksSpacingChanged() {
 	bool numeric = m_axis->isNumeric();
-	auto spacing = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
+	auto& spacing = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
 	if (numeric) {
 		CONDITIONAL_RETURN_NO_LOCK;
 
 		for (auto* axis : m_axesList)
-			axis->setMajorTicksSpacing(spacing.value<double>());
+			axis->setMajorTicksSpacing(spacing);
 	} else {
 		CONDITIONAL_LOCK_RETURN;
 
 		for (auto* axis : m_axesList)
-			axis->setMajorTicksSpacing(spacing.value<double>());
+			axis->setMajorTicksSpacing(spacing);
 	}
 }
 
@@ -1636,12 +1636,12 @@ void AxisDock::axisMajorTicksNumberChanged(int number) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbMajorTicksNumber->setValue(number);
 }
-void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
+void AxisDock::axisMajorTicksSpacingChanged(const Common::ExpressionValue& increment) {
 	CONDITIONAL_LOCK_RETURN;
 	if (m_axis->isNumeric())
 		ui.sbMajorTicksSpacingNumeric->setValue(increment);
 	else
-		dtsbMajorTicksIncrement->setValue(increment);
+		dtsbMajorTicksIncrement->setValue(increment.value<qint64>());
 }
 void AxisDock::axisMajorTicksStartTypeChanged(Axis::TicksStartType type) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1899,9 +1899,9 @@ void AxisDock::load() {
 	ui.sbMajorTicksNumber->setValue(m_axis->majorTicksNumber());
 	auto value{m_axis->majorTicksSpacing()};
 	if (numeric)
-		ui.sbMajorTicksSpacingNumeric->setValue(Common::ExpressionValue(value));
+		ui.sbMajorTicksSpacingNumeric->setValue(value);
 	else
-		dtsbMajorTicksIncrement->setValue(value);
+		dtsbMajorTicksIncrement->setValue(value.value<qint64>());
 	ui.cbMajorTicksStartType->setCurrentIndex(static_cast<int>(m_axis->majorTicksStartType()));
 	ui.sbMajorTickStartOffset->setValue(m_axis->majorTickStartOffset());
 	ui.sbMajorTickStartValue->setValue(m_axis->majorTickStartValue());
@@ -2000,7 +2000,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	else
 		ui.cbPosition->setCurrentIndex(index);
 
-	ui.sbPositionLogical->setValue(Common::ExpressionValue::loadFromConfig(group, QStringLiteral("LogicalPosition"), m_axis->logicalPosition()));
+	ui.sbPositionLogical->setValue(
+		Common::ExpressionValue::loadFromConfig(group, QStringLiteral("LogicalPosition"), Common::ExpressionValue(m_axis->logicalPosition())));
 	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
 	ui.cbScale->setCurrentIndex(group.readEntry("Scale", static_cast<int>(m_axis->scale())));
 	ui.cbRangeType->setCurrentIndex(group.readEntry("RangeType", static_cast<int>(m_axis->rangeType())));
@@ -2033,8 +2034,10 @@ void AxisDock::loadConfig(KConfig& config) {
 	else
 		dtsbMajorTicksIncrement->setValue(ev.value<qint64>());
 	ui.cbMajorTicksStartType->setCurrentIndex(group.readEntry("MajorTicksStartType", (int)m_axis->majorTicksStartType()));
-	ui.sbMajorTickStartOffset->setValue(Common::ExpressionValue::loadFromConfig(group, QStringLiteral("MajorTickStartOffset"), m_axis->majorTickStartOffset()));
-	ui.sbMajorTickStartValue->setValue(Common::ExpressionValue::loadFromConfig(group, QStringLiteral("MajorTickStartValue"), m_axis->majorTickStartValue()));
+	ui.sbMajorTickStartOffset->setValue(
+		Common::ExpressionValue::loadFromConfig(group, QStringLiteral("MajorTickStartOffset"), Common::ExpressionValue(m_axis->majorTickStartOffset())));
+	ui.sbMajorTickStartValue->setValue(
+		Common::ExpressionValue::loadFromConfig(group, QStringLiteral("MajorTickStartValue"), Common::ExpressionValue(m_axis->majorTickStartValue())));
 	// ev = Common::ExpressionValue::loadFromConfig(group, QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength());
 	// ev.setValue(Worksheet::convertFromSceneUnits(ev.value<double>(), Worksheet::Unit::Point));
 	// ui.sbMajorTicksLength->setValue(ev);
@@ -2044,7 +2047,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbMinorTicksDirection->setCurrentIndex(group.readEntry("MinorTicksDirection", (int)m_axis->minorTicksDirection()));
 	ui.cbMinorTicksType->setCurrentIndex(group.readEntry("MinorTicksType", (int)m_axis->minorTicksType()));
 	ui.sbMinorTicksNumber->setValue(group.readEntry("MinorTicksNumber", m_axis->minorTicksNumber()));
-	ev = Common::ExpressionValue::loadFromConfig(group, QStringLiteral("MinorTicksIncrement"), m_axis->minorTicksSpacing());
+	ev = Common::ExpressionValue::loadFromConfig(group, QStringLiteral("MinorTicksIncrement"), Common::ExpressionValue(m_axis->minorTicksSpacing()));
 	if (numeric)
 		ui.sbMinorTicksSpacingNumeric->setValue(ev);
 	else

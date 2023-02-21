@@ -28,6 +28,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/lib/Common.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -3273,7 +3274,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 			if (!qFuzzyIsNull(deltaMin)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setStart(rangep.range.start());
+				axis->setStart(Common::ExpressionValue(rangep.range.start()));
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
