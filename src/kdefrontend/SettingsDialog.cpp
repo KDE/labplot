@@ -118,7 +118,7 @@ void SettingsDialog::slotButtonClicked(QAbstractButton* button) {
 	} else if (button == buttonBox()->button(QDialogButtonBox::RestoreDefaults)) {
 		const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
-		if (KMessageBox::questiontwoActions(this, QString(), KStandardGuiItem::reset(), KStandardGuiItem::cancel()) == KMessageBox::Yes) {
+		if (KMessageBox::questionTwoActions(this, text, QString(), KStandardGuiItem::reset(), KStandardGuiItem::cancel()) == KMessageBox::Yes) {
 #else
 		if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
 #endif
