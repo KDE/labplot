@@ -1194,7 +1194,7 @@ void CartesianPlotDock::removePlotRange() {
 				KMessageBox::warningTwoActions(this,
 											   i18n("Plot range %1 is used by element \"%2\". ", currentRow + 1, element->name()) + i18n("Really remove it?"),
 											   QString(),
-											   StandardGuiItem::remove(),
+											   KStandardGuiItem::remove(),
 											   KStandardGuiItem::cancel());
 #else
 			auto status =
