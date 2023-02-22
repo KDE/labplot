@@ -892,10 +892,25 @@ void MainWin::colorSchemeChanged(QAction* action) {
  */
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
-		int want_save = KMessageBox::warningYesNoCancel(this,
-														i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
-														i18n("Save Project"));
-		switch (want_save) {
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		int option = KMessageBox::warningTwoActionsCancel(this,
+														  i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
+														  i18n("Save Project"),
+														  KStandardGuiItem::save(),
+														  KStandardGuiItem::dontSave());
+		switch (option) {
+		case KMessageBox::PrimaryAction:
+			return !saveProject();
+		case KMessageBox::SecondaryAction:
+			break;
+		case KMessageBox::Cancel:
+			return true;
+		}
+#else
+		int option = KMessageBox::warningYesNoCancel(this,
+													 i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
+													 i18n("Save Project"));
+		switch (option) {
 		case KMessageBox::Yes:
 			return !saveProject();
 		case KMessageBox::No:
@@ -903,6 +918,7 @@ bool MainWin::warnModified() {
 		case KMessageBox::Cancel:
 			return true;
 		}
+#endif
 	}
 
 	return false;
