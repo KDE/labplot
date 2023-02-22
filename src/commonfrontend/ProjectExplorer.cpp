@@ -18,6 +18,20 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/core/PartMdiView.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KMessageWidget>
+#include <KSharedConfig>
+#include <kcoreaddons_version.h>
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 79, 0)
+#define HAS_FUZZY_MATCHER true
+#include <KFuzzyMatcher>
+#else
+#define HAS_FUZZY_MATCHER false
+#endif
+
 #include <QClipboard>
 #include <QContextMenuEvent>
 #include <QDrag>
@@ -29,21 +43,6 @@
 #include <QPushButton>
 #include <QTreeView>
 #include <QVBoxLayout>
-
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KMessageWidget>
-#include <KSharedConfig>
-
-#include <kcoreaddons_version.h>
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 79, 0)
-#define HAS_FUZZY_MATCHER true
-#include <KFuzzyMatcher>
-#else
-#define HAS_FUZZY_MATCHER false
-#endif
 
 /*!
   \class ProjectExplorer
@@ -909,9 +908,17 @@ void ProjectExplorer::deleteSelected() {
 	else
 		msg = i18n("Do you really want to delete %1?", aspects.constFirst()->name());
 
-	int rc = KMessageBox::warningYesNo(this, msg, i18np("Delete selected object", "Delete selected objects", aspects.size()));
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+	auto status = KMessageBox::warningTwoActions(this,
+												 msg,
+												 i18np("Delete selected object", "Delete selected objects", aspects.size()),
+												 KStandardGuiItem::del(),
+												 KStandardGuiItem::cancel());
+#else
+	auto status = KMessageBox::warningYesNo(this, msg, i18np("Delete selected object", "Delete selected objects", aspects.size()));
+#endif
 
-	if (rc == KMessageBox::No)
+	if (status == KMessageBox::No)
 		return;
 
 	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size() / 4));

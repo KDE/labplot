@@ -38,6 +38,13 @@
 #endif
 #endif
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KFilterDev>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <kcoreaddons_version.h>
+
 #include <QBuffer>
 #include <QDateTime>
 #include <QFile>
@@ -46,12 +53,6 @@
 #include <QMimeData>
 #include <QThreadPool>
 #include <QUndoStack>
-
-#include <KConfig>
-#include <KConfigGroup>
-#include <KFilterDev>
-#include <KLocalizedString>
-#include <KMessageBox>
 
 namespace {
 // xmlVersion of this labplot version
@@ -679,8 +680,12 @@ bool Project::load(const QString& filename, bool preview) {
 			"If you modify and save the project, the CAS content will be lost.\n\n"
 			"Do you want to continue?",
 			reader.missingCASWarning());
-		auto rc = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));
-		if (rc == KMessageBox::ButtonCode::No) {
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		auto status = KMessageBox::warningTwoActions(nullptr, msg, i18n("Missing Support for CAS"), KStandardGuiItem::cont(), KStandardGuiItem::cancel());
+#else
+		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));
+#endif
+		if (status == KMessageBox::No) {
 			file->close();
 			delete file;
 			return false;

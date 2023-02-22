@@ -14,6 +14,13 @@
 #include "kdefrontend/GuiTools.h"
 #include "ui_exportspreadsheetwidget.h"
 
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KSharedConfig>
+#include <KWindowConfig>
+#include <kcoreaddons_version.h>
+
 #include <QCompleter>
 #include <QDialogButtonBox>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
@@ -26,12 +33,6 @@
 #include <QSqlDatabase>
 #include <QStandardItemModel>
 #include <QWindow>
-
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KSharedConfig>
-#include <KWindowConfig>
 
 /*!
 	\class ExportSpreadsheetDialog
@@ -301,8 +302,16 @@ void ExportSpreadsheetDialog::setExportToImage(bool possible) {
 void ExportSpreadsheetDialog::okClicked() {
 	if (format() != Format::FITS)
 		if (QFile::exists(ui->leFileName->text())) {
-			int r = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-			if (r == KMessageBox::No)
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+			int status = KMessageBox::questionTwoActions(this,
+														 i18n("The file already exists. Do you really want to overwrite it?"),
+														 i18n("Export"),
+														 KStandardGuiItem::overwrite(),
+														 KStandardGuiItem::cancel());
+#else
+			int status = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
+#endif
+			if (status == KMessageBox::No)
 				return;
 		}
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");

@@ -25,6 +25,7 @@
 
 #include <KIconLoader>
 #include <KMessageBox>
+#include <kcoreaddons_version.h>
 
 #include <QButtonGroup>
 #include <QDebug>
@@ -1126,11 +1127,22 @@ void CartesianPlotDock::removeRange(const Dimension dim) {
 
 	if (msg.size() > 0) {
 		DEBUG(Q_FUNC_INFO << ", range used in plot range " << STDSTRING(msg))
-		auto ret = KMessageBox::warningYesNo(
+
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		auto status = KMessageBox::warningTwoActions(
+			this,
+			i18n("%1 range %2 is used in plot range %3. ", CartesianCoordinateSystem::dimensionToString(dim).toUpper(), currentRow + 1, msg)
+				+ i18n("Really remove it?"),
+			QString(),
+			KStandardGuiItem::remove(),
+			KStandardGuiItem::cancel());
+#else
+		auto status = KMessageBox::warningYesNo(
 			this,
 			i18n("%1 range %2 is used in plot range %3. ", CartesianCoordinateSystem::dimensionToString(dim).toUpper(), currentRow + 1, msg)
 				+ i18n("Really remove it?"));
-		if (ret == KMessageBox::No)
+#endif
+		if (status == KMessageBox::No)
 			return;
 		else {
 			// reset x ranges of cSystems using the range to be removed
@@ -1176,9 +1188,19 @@ void CartesianPlotDock::removePlotRange() {
 		DEBUG(Q_FUNC_INFO << ", element x index = " << cSystemIndex)
 		if (cSystemIndex == currentRow) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: plot range used in element")
-			auto ret =
+
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+			auto status =
+				KMessageBox::warningTwoActions(this,
+											   i18n("Plot range %1 is used by element \"%2\". ", currentRow + 1, element->name()) + i18n("Really remove it?"),
+											   QString(),
+											   StandardGuiItem::remove(),
+											   KStandardGuiItem::cancel());
+#else
+			auto status =
 				KMessageBox::warningYesNo(this, i18n("Plot range %1 is used by element \"%2\". ", currentRow + 1, element->name()) + i18n("Really remove it?"));
-			if (ret == KMessageBox::No)
+#endif
+			if (status == KMessageBox::No)
 				return;
 			else
 				element->setCoordinateSystemIndex(0); // reset

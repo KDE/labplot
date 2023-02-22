@@ -487,7 +487,7 @@ void XYFourierFilterCurveDock::recalculateClicked() {
 	m_filterData.cutoff2 = uiGeneralTab.sbCutoff2->value();
 
 	if ((m_filterData.type == nsl_filter_type_band_pass || m_filterData.type == nsl_filter_type_band_reject) && m_filterData.cutoff2 <= m_filterData.cutoff) {
-		KMessageBox::sorry(this,
+		KMessageBox::error(this,
 						   i18n("The band width is <= 0 since lower cutoff value is not smaller than upper cutoff value. Please fix this."),
 						   i18n("band width <= 0"));
 		return;

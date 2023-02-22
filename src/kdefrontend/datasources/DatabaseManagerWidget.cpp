@@ -16,17 +16,18 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
-
-#include <QFileDialog>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QTimer>
+#include <kcoreaddons_version.h>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
+
+#include <QFileDialog>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QTimer>
 
 /*!
    \class DatabaseManagerWidget
@@ -345,10 +346,19 @@ void DatabaseManagerWidget::addConnection() {
 	removes the current selected connection.
  */
 void DatabaseManagerWidget::deleteConnection() {
-	int ret = KMessageBox::questionYesNo(this,
-										 i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
-										 i18n("Delete Connection"));
-	if (ret != KMessageBox::Yes)
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+	auto status = KMessageBox::questionTwoActions(this,
+												  i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
+												  i18n("Delete Connection"),
+												  KStandardGuiItem::del(),
+												  KStandardGuiItem::cancel());
+#else
+	auto status = KMessageBox::questionYesNo(this,
+											 i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
+											 i18n("Delete Connection"));
+#endif
+
+	if (status != KMessageBox::Yes)
 		return;
 
 	// remove the current selected connection

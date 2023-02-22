@@ -28,6 +28,16 @@
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
 
+#ifdef Q_OS_MAC
+#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
+#endif
+
+#include <KColorScheme>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <kcoreaddons_version.h>
+
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
@@ -44,15 +54,6 @@
 #include <QToolButton>
 #include <QWheelEvent>
 #include <QWidgetAction>
-
-#include <KColorScheme>
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <KMessageBox>
-
-#ifdef Q_OS_MAC
-#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
-#endif
 
 #include <limits>
 
@@ -1641,12 +1642,21 @@ void WorksheetView::deleteElement() {
 	if (m_selectedItems.isEmpty())
 		return;
 
-	int rc = KMessageBox::warningYesNo(
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+	auto status = KMessageBox::warningTwoActions(
+		this,
+		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
+		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()),
+		KStandardGuiItem::del(),
+		KStandardGuiItem::cancel());
+#else
+	auto status = KMessageBox::warningYesNo(
 		this,
 		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
 		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
+#endif
 
-	if (rc == KMessageBox::No)
+	if (status == KMessageBox::No)
 		return;
 
 	m_suppressSelectionChangedEvent = true;
