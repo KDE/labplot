@@ -228,7 +228,7 @@ private:
 	QList<QColor> m_themeColorPalette;
 	bool m_menusInitialized{false};
 
-	QAction* visibilityAction;
+	QAction* visibilityAction{nullptr};
 
 	//"add new" actions
 	QAction* addCurveAction{nullptr};

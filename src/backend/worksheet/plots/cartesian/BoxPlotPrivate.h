@@ -58,10 +58,10 @@ public:
 	bool notchesEnabled{false};
 	qreal opacity{1.0};
 
-	double xMin;
-	double xMax;
-	double yMin;
-	double yMax;
+	double xMin{0.5};
+	double xMax{1.5};
+	double yMin{0.5};
+	double yMax{1.5};
 
 	// box
 	QVector<Background*> backgrounds;
