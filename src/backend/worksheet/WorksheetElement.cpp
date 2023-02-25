@@ -505,7 +505,15 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 		READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
 		READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
 	}
-	QGRAPHICSITEM_READ_DOUBLE_VALUE("rotationAngle", Rotation);
+	if (project()->xmlVersion() >= 8) {
+		QGRAPHICSITEM_READ_DOUBLE_VALUE("rotationAngle", Rotation);
+	} else {
+		str = attribs.value(QStringLiteral("rotationAngle")).toString();
+		if (str.isEmpty())
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("rotationAngle")).toString());
+		else
+			d->setRotation(-1 * str.toDouble());
+	}
 	READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 	str = attribs.value(QStringLiteral("visible")).toString();
