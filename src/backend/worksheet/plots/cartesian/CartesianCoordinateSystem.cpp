@@ -189,8 +189,8 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 	const double xPage = pageRect.x(), yPage = pageRect.y();
 	const double w = pageRect.width(), h = pageRect.height();
 
-	const int numberOfPixelX = pageRect.width();
-	const int numberOfPixelY = pageRect.height();
+	const int numberOfPixelX = std::ceil(pageRect.width());
+	const int numberOfPixelY = std::ceil(pageRect.height());
 
 	if (numberOfPixelX <= 0 || numberOfPixelY <= 0)
 		return;
