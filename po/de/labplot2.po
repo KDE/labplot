@@ -3,21 +3,22 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 # Frederik Schwarzer <schwarzer@kde.org>, 2014, 2016, 2020, 2022.
 # Stefan Gerlach <stefan.gerlach@uni.kn>, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Frank Steinmetzger <dev-kde@felsenfleischer.de>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-23 00:54+0000\n"
-"PO-Revision-Date: 2023-02-08 08:58+0100\n"
-"Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
-"Language-Team: German <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2023-02-20 11:12+0100\n"
+"Last-Translator: Frank Steinmetzger <dev-kde@felsenfleischer.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2125,18 +2126,17 @@ msgstr "Größe des TStreamerInfo Eintrags: %1 Bytes"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:89
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
-msgstr ""
+msgstr "Big Endian wird nicht unterstützt. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:92
 #, kde-format
 msgid "Message too long. CAN id: %1"
-msgstr ""
+msgstr "Nachricht zu lang. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown id: %1"
-msgstr "Unbekannt"
+msgstr "Unbekannte id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:98
 #, fuzzy, kde-format
@@ -4929,7 +4929,7 @@ msgstr "Anzahl der Sekunden in einer Woche "
 #: src/backend/gsl/ExpressionParser.cpp:1094
 #, kde-format
 msgid "Length of 1 inch"
-msgstr "Länge eines Zoll"
+msgstr "Länge eines Zolls"
 
 #: src/backend/gsl/ExpressionParser.cpp:1097
 #, kde-format
@@ -4949,7 +4949,7 @@ msgstr "Länge einer Meile"
 #: src/backend/gsl/ExpressionParser.cpp:1106
 #, kde-format
 msgid "Length of 1/1000th of an inch"
-msgstr "Länge eines tausendstel Zoll"
+msgstr "Länge eines tausendstel Zolls"
 
 #: src/backend/gsl/ExpressionParser.cpp:1114
 #, kde-format
@@ -4984,7 +4984,7 @@ msgstr "Länge eines Druckerpunkts [1/72 Zoll]"
 #: src/backend/gsl/ExpressionParser.cpp:1137
 #, kde-format
 msgid "length of 1 TeX point [1/72.27 inch]"
-msgstr "Länge eines TeX-Punktes [1/72.27 Zoll]"
+msgstr "Länge eines TeX-Punkts [1/72.27 Zoll]"
 
 #: src/backend/gsl/ExpressionParser.cpp:1145
 #, kde-format
@@ -15106,10 +15106,9 @@ msgstr "Schrittweite"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:178
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:435
-#, fuzzy, kde-format
-#| msgid "Not enough memory for data"
+#, kde-format
 msgid "Not enough memory to perform this operation."
-msgstr "Nicht genug Arbeitsspeicher für die Daten"
+msgstr "Nicht genügend Speicher um die Operation durchzuführen."
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:183
 #, kde-format
@@ -16919,16 +16918,15 @@ msgstr "Kategorie"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportErrorDialog)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:14
-#, fuzzy, kde-format
-#| msgid "y-Data"
+#, kde-format
 msgid "Parse Errors"
-msgstr "y-Daten"
+msgstr "Lesefehler"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38
 #, kde-format
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbDataSource)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:44
