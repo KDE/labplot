@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:54+0000\n"
+"POT-Creation-Date: 2023-02-26 00:54+0000\n"
 "PO-Revision-Date: 2023-02-20 17:30+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -992,7 +992,7 @@ msgstr "%1: Görünürlüğünü ayarla"
 #: src/backend/datapicker/DatapickerImage.cpp:283
 #: src/backend/worksheet/InfoElement.cpp:813
 #: src/backend/worksheet/WorksheetElement.cpp:130
-#: src/backend/worksheet/WorksheetElement.cpp:622
+#: src/backend/worksheet/WorksheetElement.cpp:630
 #: src/backend/worksheet/WorksheetElementContainer.cpp:70
 #: src/backend/worksheet/WorksheetElementContainer.cpp:88
 #, kde-format
@@ -1016,7 +1016,7 @@ msgid "%1: upload image"
 msgstr "%1: Görsel yükle"
 
 #: src/backend/datapicker/DatapickerImage.cpp:258
-#: src/backend/worksheet/WorksheetElement.cpp:663
+#: src/backend/worksheet/WorksheetElement.cpp:671
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: Döndürme açısını ayarla"
@@ -1043,7 +1043,7 @@ msgstr "%1: Tüm eksen noktalarını kaldır"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:211
 #: src/backend/worksheet/InfoElement.cpp:783
-#: src/backend/worksheet/WorksheetElement.cpp:584
+#: src/backend/worksheet/WorksheetElement.cpp:592
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: Konum ayarla"
@@ -8580,22 +8580,22 @@ msgstr "%1: %2 ögesinin arkasına taşı."
 msgid "%1: move in front of %2."
 msgstr "%1: %2 ögesinin önüne taşı."
 
-#: src/backend/worksheet/WorksheetElement.cpp:596
+#: src/backend/worksheet/WorksheetElement.cpp:604
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: Yatay hizalamayı ayarla"
 
-#: src/backend/worksheet/WorksheetElement.cpp:608
+#: src/backend/worksheet/WorksheetElement.cpp:616
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: Dikey hizalamayı ayarla"
 
-#: src/backend/worksheet/WorksheetElement.cpp:622
+#: src/backend/worksheet/WorksheetElement.cpp:630
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: Mantıksal koordinatlar kullan"
 
-#: src/backend/worksheet/WorksheetElement.cpp:632
+#: src/backend/worksheet/WorksheetElement.cpp:640
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: Mantıksal konum ayarla"

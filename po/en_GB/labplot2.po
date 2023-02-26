@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:54+0000\n"
+"POT-Creation-Date: 2023-02-26 00:54+0000\n"
 "PO-Revision-Date: 2022-12-31 19:02+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -990,7 +990,7 @@ msgstr "%1: set visible"
 #: src/backend/datapicker/DatapickerImage.cpp:283
 #: src/backend/worksheet/InfoElement.cpp:813
 #: src/backend/worksheet/WorksheetElement.cpp:130
-#: src/backend/worksheet/WorksheetElement.cpp:622
+#: src/backend/worksheet/WorksheetElement.cpp:630
 #: src/backend/worksheet/WorksheetElementContainer.cpp:70
 #: src/backend/worksheet/WorksheetElementContainer.cpp:88
 #, kde-format
@@ -1014,7 +1014,7 @@ msgid "%1: upload image"
 msgstr "%1: upload image"
 
 #: src/backend/datapicker/DatapickerImage.cpp:258
-#: src/backend/worksheet/WorksheetElement.cpp:663
+#: src/backend/worksheet/WorksheetElement.cpp:671
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: set rotation angle"
@@ -1041,7 +1041,7 @@ msgstr "%1: remove all axis points"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:211
 #: src/backend/worksheet/InfoElement.cpp:783
-#: src/backend/worksheet/WorksheetElement.cpp:584
+#: src/backend/worksheet/WorksheetElement.cpp:592
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: set position"
@@ -8588,22 +8588,22 @@ msgstr "%1: move behind %2."
 msgid "%1: move in front of %2."
 msgstr "%1: move in front of %2."
 
-#: src/backend/worksheet/WorksheetElement.cpp:596
+#: src/backend/worksheet/WorksheetElement.cpp:604
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: set horizontal alignment"
 
-#: src/backend/worksheet/WorksheetElement.cpp:608
+#: src/backend/worksheet/WorksheetElement.cpp:616
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: set vertical alignment"
 
-#: src/backend/worksheet/WorksheetElement.cpp:622
+#: src/backend/worksheet/WorksheetElement.cpp:630
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: use logical coordinates"
 
-#: src/backend/worksheet/WorksheetElement.cpp:632
+#: src/backend/worksheet/WorksheetElement.cpp:640
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: set logical position"

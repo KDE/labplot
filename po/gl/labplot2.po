@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:54+0000\n"
+"POT-Creation-Date: 2023-02-26 00:54+0000\n"
 "PO-Revision-Date: 2020-01-12 12:23+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -1033,7 +1033,7 @@ msgstr "%1: definir a visibilidade"
 #: src/backend/datapicker/DatapickerImage.cpp:283
 #: src/backend/worksheet/InfoElement.cpp:813
 #: src/backend/worksheet/WorksheetElement.cpp:130
-#: src/backend/worksheet/WorksheetElement.cpp:622
+#: src/backend/worksheet/WorksheetElement.cpp:630
 #: src/backend/worksheet/WorksheetElementContainer.cpp:70
 #: src/backend/worksheet/WorksheetElementContainer.cpp:88
 #, kde-format
@@ -1057,7 +1057,7 @@ msgid "%1: upload image"
 msgstr "%1: enviar unha imaxe"
 
 #: src/backend/datapicker/DatapickerImage.cpp:258
-#: src/backend/worksheet/WorksheetElement.cpp:663
+#: src/backend/worksheet/WorksheetElement.cpp:671
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: definir o ángulo de xiro"
@@ -1084,7 +1084,7 @@ msgstr "%1: retirar todos os puntos dos eixes"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:211
 #: src/backend/worksheet/InfoElement.cpp:783
-#: src/backend/worksheet/WorksheetElement.cpp:584
+#: src/backend/worksheet/WorksheetElement.cpp:592
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: definir a posición"
@@ -8943,23 +8943,23 @@ msgstr "%1: colocar detrás de %2."
 msgid "%1: move in front of %2."
 msgstr "%1: colocar diante de %2."
 
-#: src/backend/worksheet/WorksheetElement.cpp:596
+#: src/backend/worksheet/WorksheetElement.cpp:604
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: definir o aliñamento horizontal"
 
-#: src/backend/worksheet/WorksheetElement.cpp:608
+#: src/backend/worksheet/WorksheetElement.cpp:616
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: estabelecer o aliñamento vertical"
 
-#: src/backend/worksheet/WorksheetElement.cpp:622
+#: src/backend/worksheet/WorksheetElement.cpp:630
 #, fuzzy, kde-format
 #| msgid "%1: set matrix coordinates"
 msgid "%1: use logical coordinates"
 msgstr "%1: definir as coordenadas da matriz"
 
-#: src/backend/worksheet/WorksheetElement.cpp:632
+#: src/backend/worksheet/WorksheetElement.cpp:640
 #, fuzzy, kde-format
 #| msgid "%1: set labels position"
 msgid "%1: set logical position"

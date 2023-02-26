@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-23 00:54+0000\n"
+"POT-Creation-Date: 2023-02-26 00:54+0000\n"
 "PO-Revision-Date: 2014-03-19 20:12+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -985,7 +985,7 @@ msgstr ""
 #: src/backend/datapicker/DatapickerImage.cpp:283
 #: src/backend/worksheet/InfoElement.cpp:813
 #: src/backend/worksheet/WorksheetElement.cpp:130
-#: src/backend/worksheet/WorksheetElement.cpp:622
+#: src/backend/worksheet/WorksheetElement.cpp:630
 #: src/backend/worksheet/WorksheetElementContainer.cpp:70
 #: src/backend/worksheet/WorksheetElementContainer.cpp:88
 #, kde-format
@@ -1009,7 +1009,7 @@ msgid "%1: upload image"
 msgstr ""
 
 #: src/backend/datapicker/DatapickerImage.cpp:258
-#: src/backend/worksheet/WorksheetElement.cpp:663
+#: src/backend/worksheet/WorksheetElement.cpp:671
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr ""
@@ -1036,7 +1036,7 @@ msgstr ""
 
 #: src/backend/datapicker/DatapickerPoint.cpp:211
 #: src/backend/worksheet/InfoElement.cpp:783
-#: src/backend/worksheet/WorksheetElement.cpp:584
+#: src/backend/worksheet/WorksheetElement.cpp:592
 #, kde-format
 msgid "%1: set position"
 msgstr ""
@@ -8556,22 +8556,22 @@ msgstr ""
 msgid "%1: move in front of %2."
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:596
+#: src/backend/worksheet/WorksheetElement.cpp:604
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:608
+#: src/backend/worksheet/WorksheetElement.cpp:616
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:622
+#: src/backend/worksheet/WorksheetElement.cpp:630
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr ""
 
-#: src/backend/worksheet/WorksheetElement.cpp:632
+#: src/backend/worksheet/WorksheetElement.cpp:640
 #, kde-format
 msgid "%1: set logical position"
 msgstr ""
