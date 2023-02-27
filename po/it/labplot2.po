@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-26 00:54+0000\n"
-"PO-Revision-Date: 2023-02-11 08:29+0100\n"
+"PO-Revision-Date: 2023-02-25 14:36+0100\n"
 "Last-Translator: Paolo Zamponi <zapaolo@email.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -2144,16 +2144,14 @@ msgid "Unknown id: %1"
 msgstr "Id sconosciuto: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:98
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid blf file"
-msgstr "File di metadati non valido"
+msgstr "File blf non valido"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "File format version: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1"
-msgstr "Versione del formato del file: %1"
+msgstr "Impossibile calcolare la conversione: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
 #, kde-format
@@ -2161,16 +2159,14 @@ msgid "No dbc parser installed"
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid dbc file"
-msgstr "File di metadati non valido"
+msgstr "File dbc non valido"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
-#, fuzzy, kde-format
-#| msgid "Unknown MQTT error"
+#, kde-format
 msgid "Unknown error"
-msgstr "Errore MQTT sconosciuto"
+msgstr "Errore sconosciuto"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, fuzzy, kde-format
