@@ -223,6 +223,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	m_messageWidget->setWordWrap(true);
 	auto* gridLayout = qobject_cast<QGridLayout*>(layout());
 	gridLayout->addWidget(m_messageWidget, 2, 3);
+	m_messageWidget->hide(); // will be shown later once there is a latex render result
 
 	// SLOTS
 	connect(ui.leName, &QLineEdit::textChanged, this, &LabelWidget::nameChanged);

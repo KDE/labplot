@@ -4,7 +4,7 @@
 	Description          : Text label supporting reach text and latex formatting
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -1127,7 +1127,6 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
-	bool teXImageFound = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1172,7 +1171,6 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			QString content = reader->text().toString().trimmed();
 			d->teXPdfData = QByteArray::fromBase64(content.toLatin1());
 			d->teXImage = GuiTools::imageFromPDFData(d->teXPdfData);
-			teXImageFound = true;
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())
@@ -1186,10 +1184,13 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	// in case we use latex and the image was stored (older versions of LabPlot didn't save the image)and loaded,
 	// we just need to call updateBoundingRect() to calculate the new rect.
 	// otherwise, we set the static text and call updateBoundingRect() in updateText()
-	if (!(d->textWrapper.mode == TextLabel::Mode::LaTeX && teXImageFound))
+	if (!(d->textWrapper.mode == TextLabel::Mode::LaTeX && !d->teXPdfData.isEmpty()))
 		d->updateText();
-	else
+	else {
+		d->m_textItem->hide();
+		d->zoomFactor = 1.0; // on load the view is not zoomed yet
 		d->updateBoundingRect();
+	}
 
 	return true;
 }

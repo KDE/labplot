@@ -4,7 +4,7 @@
 	Description          : Text label supporting reach text and latex formatting
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,7 +13,6 @@
 
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "tools/TeXRenderer.h"
 
 #include <QTextEdit>
