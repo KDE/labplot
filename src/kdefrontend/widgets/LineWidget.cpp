@@ -121,7 +121,10 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 	connect(m_line, &Line::colorChanged, this, &LineWidget::lineColorChanged);
 	connect(m_line, &Line::widthChanged, this, &LineWidget::lineWidthChanged);
 	connect(m_line, &Line::opacityChanged, this, &LineWidget::lineOpacityChanged);
+}
 
+void LineWidget::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
 	adjustLayout();
 }
 
