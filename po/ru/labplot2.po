@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:54+0000\n"
+"POT-Creation-Date: 2023-02-28 00:54+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -123,7 +123,7 @@ msgstr "Атрибут «%1» отсутствует или пуст, испол
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:725
 #: src/backend/worksheet/plots/PlotArea.cpp:405
-#: src/backend/worksheet/TextLabel.cpp:1177
+#: src/backend/worksheet/TextLabel.cpp:1175
 #: src/backend/worksheet/Worksheet.cpp:1798
 #, kde-format
 msgid "unknown element '%1'"
@@ -22053,14 +22053,14 @@ msgstr ""
 "с применением LaTeX, требуется установка LaTeX</li><li>Markdown — разметка "
 "осуществляется с помощью языка разметки Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:867
-#: src/kdefrontend/widgets/LabelWidget.cpp:893
+#: src/kdefrontend/widgets/LabelWidget.cpp:868
+#: src/kdefrontend/widgets/LabelWidget.cpp:894
 #, kde-format
 msgid "Date"
 msgstr "Дата"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:875
-#: src/kdefrontend/widgets/LabelWidget.cpp:901
+#: src/kdefrontend/widgets/LabelWidget.cpp:876
+#: src/kdefrontend/widgets/LabelWidget.cpp:902
 #, kde-format
 msgid "Date and Time"
 msgstr "Дата и время"

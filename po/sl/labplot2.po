@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:54+0000\n"
+"POT-Creation-Date: 2023-02-28 00:54+0000\n"
 "PO-Revision-Date: 2023-02-25 09:20+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -121,7 +121,7 @@ msgstr "Atribut »%1« manjka ali je prazen, uporabljena je privzeta vrednost"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:725
 #: src/backend/worksheet/plots/PlotArea.cpp:405
-#: src/backend/worksheet/TextLabel.cpp:1177
+#: src/backend/worksheet/TextLabel.cpp:1175
 #: src/backend/worksheet/Worksheet.cpp:1798
 #, kde-format
 msgid "unknown element '%1'"
@@ -21369,14 +21369,14 @@ msgstr ""
 "uporabo LaTeXa, potrebna je namestitev LaTeXa;</li><li> Markdown - "
 "stavljenje besedila z označevalnim jezikom Markdown.</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:867
-#: src/kdefrontend/widgets/LabelWidget.cpp:893
+#: src/kdefrontend/widgets/LabelWidget.cpp:868
+#: src/kdefrontend/widgets/LabelWidget.cpp:894
 #, kde-format
 msgid "Date"
 msgstr "Datum"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:875
-#: src/kdefrontend/widgets/LabelWidget.cpp:901
+#: src/kdefrontend/widgets/LabelWidget.cpp:876
+#: src/kdefrontend/widgets/LabelWidget.cpp:902
 #, kde-format
 msgid "Date and Time"
 msgstr "Datum in čas"

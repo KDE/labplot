@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:54+0000\n"
+"POT-Creation-Date: 2023-02-28 00:54+0000\n"
 "PO-Revision-Date: 2023-02-16 10:25+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -117,7 +117,7 @@ msgstr "Attribuut '%1' ontbreekt of is leeg, standaard waarde gebruikt"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:725
 #: src/backend/worksheet/plots/PlotArea.cpp:405
-#: src/backend/worksheet/TextLabel.cpp:1177
+#: src/backend/worksheet/TextLabel.cpp:1175
 #: src/backend/worksheet/Worksheet.cpp:1798
 #, kde-format
 msgid "unknown element '%1'"
@@ -21313,14 +21313,14 @@ msgstr ""
 "li><li>LaTeX  - tekst instellen met LaTeX, LaTeX moet zijn geïnstalleerd</"
 "li><li>Markdown  - tekst instellen met Markdown tekstmarkering</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:867
-#: src/kdefrontend/widgets/LabelWidget.cpp:893
+#: src/kdefrontend/widgets/LabelWidget.cpp:868
+#: src/kdefrontend/widgets/LabelWidget.cpp:894
 #, kde-format
 msgid "Date"
 msgstr "Datum"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:875
-#: src/kdefrontend/widgets/LabelWidget.cpp:901
+#: src/kdefrontend/widgets/LabelWidget.cpp:876
+#: src/kdefrontend/widgets/LabelWidget.cpp:902
 #, kde-format
 msgid "Date and Time"
 msgstr "Datum en tijd"

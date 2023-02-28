@@ -1,15 +1,15 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Steve Allewell <steve.allewell@gmail.com>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Steve Allewell <steve.allewell@gmail.com>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-26 00:54+0000\n"
-"PO-Revision-Date: 2022-12-31 19:02+0000\n"
+"POT-Creation-Date: 2023-02-28 00:54+0000\n"
+"PO-Revision-Date: 2023-02-27 21:15+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
-"Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
+"Language-Team: English <kde-l10n-en_gb@kde.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -116,7 +116,7 @@ msgstr "Attribute '%1' missing or empty, default value is used"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:725
 #: src/backend/worksheet/plots/PlotArea.cpp:405
-#: src/backend/worksheet/TextLabel.cpp:1177
+#: src/backend/worksheet/TextLabel.cpp:1175
 #: src/backend/worksheet/Worksheet.cpp:1798
 #, kde-format
 msgid "unknown element '%1'"
@@ -2114,64 +2114,57 @@ msgstr "Size of TStreamerInfo record: %1 bytes"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:89
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
-msgstr ""
+msgstr "Big Endian not supported. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:92
 #, kde-format
 msgid "Message too long. CAN id: %1"
-msgstr ""
+msgstr "Message too long. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown id: %1"
-msgstr "Unknown"
+msgstr "Unknown id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:98
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid blf file"
-msgstr "Invalid metadata file"
+msgstr "Invalid blf file"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "File format version: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1"
-msgstr "File format version: %1"
+msgstr "Unable to calculate conversion: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
 #, kde-format
 msgid "No dbc parser installed"
-msgstr ""
+msgstr "No dbc parser installed"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid dbc file"
-msgstr "Invalid metadata file"
+msgstr "Invalid dbc file"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
-#, fuzzy, kde-format
-#| msgid "Unknown MQTT error"
+#, kde-format
 msgid "Unknown error"
-msgstr "Unknown MQTT error"
+msgstr "Unknown error"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:352
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgid "Time_s"
-msgstr "Time"
+msgstr "Time_s"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:354
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgid "Time_ns"
-msgstr "Time"
+msgstr "Time_ns"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:356
 #, kde-format
 msgid "Time_10µs"
-msgstr ""
+msgstr "Time_10µs"
 
 #: src/backend/datasources/LiveDataSource.cpp:434
 #: src/backend/datasources/MQTTTopic.cpp:142
@@ -7287,10 +7280,9 @@ msgstr "Reference Line"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:372
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1985
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgid "Reference Range"
-msgstr "Reference Line"
+msgstr "Reference Range"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:404
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:459
@@ -7818,22 +7810,19 @@ msgstr ""
 "then the minimum value."
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
-#, fuzzy, kde-format
-#| msgid "Border"
+#, kde-format
 msgid "Border Line"
-msgstr "Border"
+msgstr "Border Line"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: set logical position"
+#, kde-format
 msgid "%1: set start logical position"
-msgstr "%1: set logical position"
+msgstr "%1: set start logical position"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:242
-#, fuzzy, kde-format
-#| msgid "%1: set logical position"
+#, kde-format
 msgid "%1: set end logical position"
-msgstr "%1: set logical position"
+msgstr "%1: set end logical position"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:151
 #, kde-format
@@ -9252,10 +9241,9 @@ msgid "Fuzzy Matching"
 msgstr "Fuzzy Matching"
 
 #: src/commonfrontend/ProjectExplorer.cpp:883
-#, fuzzy, kde-format
-#| msgid "%1: set visible"
+#, kde-format
 msgid "%1 elements: set visible: %2"
-msgstr "%1: set visible"
+msgstr "%1 elements: set visible: %2"
 
 #: src/commonfrontend/ProjectExplorer.cpp:907
 #, kde-format
@@ -9362,10 +9350,9 @@ msgstr "&Search"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:291
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:428
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Column Statistics..."
-msgstr "Column Statistics"
+msgstr "Column Statistics..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #, kde-format
@@ -9436,10 +9423,9 @@ msgstr "Reverse"
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
-#, fuzzy, kde-format
-#| msgid "Subtract Value"
+#, kde-format
 msgid "Subtract Baseline"
-msgstr "Subtract Value"
+msgstr "Subtract Baseline"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:353
 #, kde-format
@@ -9802,10 +9788,9 @@ msgid "%1: column statistics"
 msgstr "%1: column statistics"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Selection in %1"
-msgstr "Selection"
+msgstr "Selection in %1"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3176
 #, kde-format
@@ -9958,10 +9943,9 @@ msgid "Spreadsheet"
 msgstr "Spreadsheet"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:158
-#, fuzzy, kde-format
-#| msgid "Auto fit:"
+#, kde-format
 msgid "No fit"
-msgstr "Auto fit:"
+msgstr "No fit"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:168
 #, kde-format
@@ -10492,12 +10476,12 @@ msgstr ""
 #: src/kdefrontend/datasources/CANOptionsWidget.cpp:13
 #, kde-format
 msgid "Use NAN"
-msgstr ""
+msgstr "Use NAN"
 
 #: src/kdefrontend/datasources/CANOptionsWidget.cpp:14
 #, kde-format
 msgid "Use previous value"
-msgstr ""
+msgstr "Use previous value"
 
 #: src/kdefrontend/datasources/DatabaseManagerDialog.cpp:30
 #, kde-format
@@ -10914,10 +10898,9 @@ msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:106
-#, fuzzy, kde-format
-#| msgid "Binary files (*.*)"
+#, kde-format
 msgid "Vector Binary Logfile (BLF)"
-msgstr "Binary files (*.*)"
+msgstr "Vector Binary Logfile (BLF)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:113
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:133
@@ -11048,11 +11031,10 @@ msgid "Select the File Data Source"
 msgstr "Select the File Data Source"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:918
-#, fuzzy, kde-format
-#| msgid "Select the image file"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
-msgstr "Select the image file"
+msgstr "Select the DBC file"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
@@ -11963,16 +11945,14 @@ msgid "Transparent"
 msgstr "Transparent"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:591
-#, fuzzy, kde-format
-#| msgid "%1: set values color"
+#, kde-format
 msgid "%1: set axis color"
-msgstr "%1: set values colour"
+msgstr "%1: set axis colour"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:593
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1 axes: set color"
-msgstr "%1: set font colour"
+msgstr "%1 axes: set colour"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1965
 #, kde-format
@@ -13323,11 +13303,10 @@ msgid "Reference Line"
 msgstr "Reference Line"
 
 #: src/kdefrontend/GuiObserver.cpp:380
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
-msgstr "Reference Line"
+msgstr "Reference Range"
 
 #: src/kdefrontend/GuiObserver.cpp:385
 #, kde-format
@@ -13766,10 +13745,9 @@ msgstr ""
 "Analysis software accessible to everyone."
 
 #: src/kdefrontend/LabPlot.cpp:94
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2022"
+#, kde-format
 msgid "(c) 2007-2023"
-msgstr "(c) 2007-2022"
+msgstr "(c) 2007-2023"
 
 #: src/kdefrontend/LabPlot.cpp:97
 #, kde-format
@@ -14825,10 +14803,9 @@ msgid "Subtract Value"
 msgstr "Subtract Value"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:115
-#, fuzzy, kde-format
-#| msgid "Subtract"
+#, kde-format
 msgid "Subtract:"
-msgstr "Subtract"
+msgstr "Subtract:"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
 #, kde-format
@@ -14865,10 +14842,9 @@ msgid "Mean"
 msgstr "Mean"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "Custom Query"
+#, kde-format
 msgid "Custom Value"
-msgstr "Custom Query"
+msgstr "Custom Value"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:144
 #, kde-format
@@ -14876,10 +14852,9 @@ msgid "Difference"
 msgstr "Difference"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "Base 10 logarithm"
+#, kde-format
 msgid "Baseline (arPLS Algorithm)"
-msgstr "Base 10 logarithm"
+msgstr "Baseline (arPLS Algorithm)"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:167
 #, kde-format
@@ -14887,6 +14862,8 @@ msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
 "background."
 msgstr ""
+"Smoothness parameter - the larger the value the smoother the resulting "
+"background."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:171
 #, kde-format
@@ -14894,36 +14871,33 @@ msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
 "less negative values."
 msgstr ""
+"Weighting termination ratio - value between 0 and 1, smaller values allow "
+"less negative values."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:175
-#, fuzzy, kde-format
-#| msgid "Number of bins to preview:"
+#, kde-format
 msgid "Number of iterations to perform."
-msgstr "Number of bins to preview:"
+msgstr "Number of iterations to perform."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:514
-#, fuzzy, kde-format
-#| msgid "On new data"
+#, kde-format
 msgid "raw data"
-msgstr "On new data"
+msgstr "raw data"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:521
-#, fuzzy, kde-format
-#| msgid "Dash line"
+#, kde-format
 msgid "baseline"
-msgstr "Dash line"
+msgstr "baseline"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:530
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "result"
-msgstr "Results:"
+msgstr "result"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:611
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Ratio: %1"
-msgstr "Rotation:"
+msgstr "Ratio: %1"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:655
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:662
@@ -14948,10 +14922,9 @@ msgid "%1: subtract %2 from column values"
 msgstr "%1: subtract %2 from column values"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1199
-#, fuzzy, kde-format
-#| msgid "%1: subtract %2 from column values"
+#, kde-format
 msgid "%1: subtract baseline from column values"
-msgstr "%1: subtract %2 from column values"
+msgstr "%1: subtract baseline from column values"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1202
 #, kde-format
@@ -15135,10 +15108,9 @@ msgstr "Increment"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:178
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:435
-#, fuzzy, kde-format
-#| msgid "Not enough memory for data"
+#, kde-format
 msgid "Not enough memory to perform this operation."
-msgstr "Not enough memory for data"
+msgstr "Not enough memory to perform this operation."
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:183
 #, kde-format
@@ -15204,10 +15176,9 @@ msgid "FITS files (*.fits *.fit *.fts)"
 msgstr "FITS files (*.fits *.fit *.fts)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:374
-#, fuzzy, kde-format
-#| msgid "Excel 2007+ (XSLX)"
+#, kde-format
 msgid "Excel 2007+ (*.xlsx)"
-msgstr "Excel 2007+ (XSLX)"
+msgstr "Excel 2007+ (*.xlsx)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:377
 #, kde-format
@@ -16706,17 +16677,15 @@ msgstr "Form"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:25
-#, fuzzy, kde-format
-#| msgid "Import to"
+#, kde-format
 msgid "Import mode:"
-msgstr "Import to"
+msgstr "Import mode:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:32
-#, fuzzy, kde-format
-#| msgid "Convert NaN to 0"
+#, kde-format
 msgid "Convert time to seconds"
-msgstr "Convert NaN to 0"
+msgstr "Convert time to seconds"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:33
@@ -16950,16 +16919,15 @@ msgstr "Categories"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportErrorDialog)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:14
-#, fuzzy, kde-format
-#| msgid "Database Error"
+#, kde-format
 msgid "Parse Errors"
-msgstr "Database Error"
+msgstr "Parse Errors"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/ImportErrorDialog.ui:38
 #, kde-format
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbDataSource)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:44
@@ -17097,10 +17065,9 @@ msgstr "Source:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:371
-#, fuzzy, kde-format
-#| msgid "Database"
+#, kde-format
 msgid "DBC Database"
-msgstr "Database"
+msgstr "DBC Database"
 
 #. i18n: ectx: property (text), widget (QLabel, lWarningLimitedMessages)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:547
@@ -17108,6 +17075,7 @@ msgstr "Database"
 msgid ""
 "Not all variables might be visible, because of limited number of messages"
 msgstr ""
+"Not all variables might be visible, because of limited number of messages"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartRow)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:567
@@ -18907,19 +18875,17 @@ msgstr "Plot range:"
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:63
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:111
-#, fuzzy, kde-format
-#| msgid "Start:"
+#, kde-format
 msgid "Start x:"
-msgstr "Start:"
+msgstr "Start x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeEnd)
 #. i18n: ectx: property (text), widget (QLabel, lPositionEnd)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:223
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:285
-#, fuzzy, kde-format
-#| msgid "End row:"
+#, kde-format
 msgid "End x:"
-msgstr "End row:"
+msgstr "End x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:161
@@ -20447,17 +20413,15 @@ msgstr "End Time:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:205
-#, fuzzy, kde-format
-#| msgid "Smooth:"
+#, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Smooth:"
+msgstr "Smoothness (Power of 10):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:218
-#, fuzzy, kde-format
-#| msgid "Orientation:"
+#, kde-format
 msgid "Termination Ratio:"
-msgstr "Orientation:"
+msgstr "Termination Ratio:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:234
@@ -21323,14 +21287,14 @@ msgstr ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:867
-#: src/kdefrontend/widgets/LabelWidget.cpp:893
+#: src/kdefrontend/widgets/LabelWidget.cpp:868
+#: src/kdefrontend/widgets/LabelWidget.cpp:894
 #, kde-format
 msgid "Date"
 msgstr "Date"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:875
-#: src/kdefrontend/widgets/LabelWidget.cpp:901
+#: src/kdefrontend/widgets/LabelWidget.cpp:876
+#: src/kdefrontend/widgets/LabelWidget.cpp:902
 #, kde-format
 msgid "Date and Time"
 msgstr "Date and Time"
