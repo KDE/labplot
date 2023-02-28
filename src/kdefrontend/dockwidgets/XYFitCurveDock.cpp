@@ -183,7 +183,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(1, 0)->setText(uiGeneralTab.twGoodness->item(1, 0)->text() + UTF8_QSTRING(" (χ²/dof)"));
 	uiGeneralTab.twGoodness->item(3, 0)->setText(uiGeneralTab.twGoodness->item(3, 0)->text() + UTF8_QSTRING(" (R²)"));
 	uiGeneralTab.twGoodness->item(4, 0)->setText(uiGeneralTab.twGoodness->item(4, 0)->text() + UTF8_QSTRING(" (R̄²)"));
-	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" ( P > χ²)"));
+	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" (P > χ²)"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -342,7 +342,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_fitCurve = static_cast<XYFitCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 
-	// we need a second model for data source comboboxe which will be dynamically
+	// we need a second model for data source comboboxes which will be dynamically
 	// updated in the slot depending on the current type (spreadsheet, curve or histogram)
 	// to allow to select the relevant aspects only
 	m_dataSourceModel = new AspectTreeModel(m_curve->project());
@@ -368,8 +368,8 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 		m_messageWidget->close();
 
 	showFitResult();
-	enableRecalculate();
 	m_initializing = false;
+	enableRecalculate();
 
 	updatePlotRanges();
 
@@ -397,8 +397,9 @@ bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
-	DEBUG("SOURCE TYPE: " << index)
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
+	DEBUG(Q_FUNC_INFO << ", source type = " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, type))
 	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.cbCategory->setEnabled(true);
 		uiGeneralTab.lDataSourceCurve->hide();
@@ -471,7 +472,8 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
+	// CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
@@ -1272,6 +1274,7 @@ void XYFitCurveDock::enableRecalculate() {
 		hasSourceData = (m_fitCurve->dataSourceHistogram() != nullptr);
 	}
 
+	DEBUG(Q_FUNC_INFO << ", hasSourceData = " << hasSourceData << ", m_parametersValid = " << m_parametersValid)
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData && m_parametersValid);
 
 	// PREVIEW as soon as recalculate is enabled (does not need source data)
