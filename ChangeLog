@@ -6,10 +6,8 @@ New features:
 		* Histogram
 			* Error bars (Possion sqrt(N) error or values from custom columns)
 			* Rug plots
-			* Allow to create a data spreadsheet with the positions and values of the histogram bins
 		* Box Plot
 			* Rug plots
-			* Allow to create a data spreadsheet with the box plot metrics (quartiles, median, etc.)
 			* Symbols for whisker end points
 			* Allow to modify box properties (color, etc.) for every data set independently of each other
 			* Draw a legend item for every dataset in the box plot
@@ -39,9 +37,9 @@ New features:
 	* [analysis]
 		* Maximum Likelyhood estimation for several distributions
 		* Guess start values of fit parameter for polynomial models by linear regression
-		* Allow to create a spreadsheet with the data steming from the result of the computation
 		* Implement fourier filtering for datetimes
 	* [general]
+		* Allow to create a spreadsheet with the data steming from an equation curve, an analysis curve, a histogram or a box plot
 		* Add settings option for GUM compliant terms
 
 Performance improvements:

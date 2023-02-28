@@ -6,6 +6,7 @@
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -344,30 +345,34 @@ QMenu* AbstractAspect::createContextMenu() {
 	}
 	menu->addSeparator();
 
-	// action to create data spreadsheet based on the results of the calculations for analysis curves and histograms and box plots
-	QAction* actionDataSpreadsheet{nullptr};
+	// action to create data spreadsheet based on the results of the calculations for types that support it
+	QAction* actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
 
-	// handle analysis curves
-	const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this);
-	if (analysisCurve && analysisCurve->resultAvailable()) {
-		actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
-		connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
-	} else {
-		// handle histograms and box plots
-		const auto* histogram = dynamic_cast<Histogram*>(this);
-		if (histogram && histogram->bins()) {
-			actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
+	// handle types that support it
+	bool dataAvailable = false;
+	if (const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this)) {
+		if (analysisCurve->resultAvailable()) {
+			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
+			dataAvailable = true;
 		}
-
-		const auto* boxPlot = dynamic_cast<BoxPlot*>(this);
-		if (boxPlot && !boxPlot->dataColumns().isEmpty()) {
-			actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+	} else if (const auto* equationCurve = dynamic_cast<XYEquationCurve*>(this)) {
+		if (equationCurve->dataAvailable()) {
+			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYEquationCurve*>(this), &XYEquationCurve::createDataSpreadsheet);
+			dataAvailable = true;
+		}
+	} else if (const auto* histogram = dynamic_cast<Histogram*>(this)) {
+		if (histogram->bins()) {
+			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
+			dataAvailable = true;
+		}
+	} else if (const auto* boxPlot = dynamic_cast<BoxPlot*>(this)) {
+		if (!boxPlot->dataColumns().isEmpty()) {
 			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<BoxPlot*>(this), &BoxPlot::createDataSpreadsheet);
+			dataAvailable = true;
 		}
 	}
 
-	if (actionDataSpreadsheet) {
+	if (dataAvailable) {
 		menu->addAction(actionDataSpreadsheet);
 		menu->addSeparator();
 	}
