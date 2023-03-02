@@ -75,7 +75,7 @@ if (ENABLE_VECTOR_BLF)
       FetchContent_Declare(
         dbc_parser_cpp
         GIT_REPOSITORY https://github.com/Murmele/dbc_parser_cpp.git
-        GIT_TAG 735d4e963e2c0a0719ef9e68885fed8c19904c3a
+        GIT_TAG ca69d0dd08a03fc0210820a4f81bfd217ad25722
         #GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
         #GIT_TAG        master
       )
@@ -99,13 +99,15 @@ if (ENABLE_VECTOR_BLF)
         #GIT_REPOSITORY https://github.com/Technica-Engineering/vector_blf.git
         #GIT_TAG 02f0a2fe1f7915da1e24025869b98f6d15de937b
         GIT_REPOSITORY https://github.com/Murmele/vector_blf.git
-        GIT_TAG 8e6cf6460c8c8959d5a89c4c7fe02145698c4e91
+        GIT_TAG b7a419c4d8edbf495ab309b57a380a2444ee2730
       )
+      set(CMAKE_PROJECT_Vector_BLF_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_blf_config.cmake")
       FetchContent_MakeAvailable(vector_blf)
       # headerfiles of the projects are referring to <Vector/BLF/someheader.h> and therefore
       # the path must be added
-      target_include_directories(labplot2lib PUBLIC ${vector_blf_SOURCE_DIR}/src
-                         ${vector_blf_BINARY_DIR}/src) # config.h is in there
+      set(CMAKE_SYSTEM_INCLUDE_PATH ${CMAKE_SYSTEM_INCLUDE_PATH}
+          ${vector_blf_SOURCE_DIR}/src
+          ${vector_blf_BINARY_DIR}/src) # config.h is in there
       target_include_directories(Vector_BLF PUBLIC ${vector_blf_SOURCE_DIR}/src
                           ${vector_blf_BINARY_DIR}/src) # config.h is in there
       target_link_libraries(labplot2lib Vector_BLF)
