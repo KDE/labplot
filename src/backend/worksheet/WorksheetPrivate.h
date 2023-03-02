@@ -10,6 +10,7 @@
 #ifndef WORKSHEETPRIVATE_H
 #define WORKSHEETPRIVATE_H
 
+#include "backend/lib/Common.h"
 #include <backend/worksheet/Worksheet.h>
 
 #include <QColor>
@@ -44,7 +45,7 @@ public:
 	Worksheet::Layout layout{Worksheet::Layout::VerticalLayout};
 	bool suppressLayoutUpdate{false};
 	bool suppressCursorPosChanged{false};
-	double layoutTopMargin{0.0};
+    Common::ExpressionValue layoutTopMargin{Common::ExpressionValue(0.0)};
 	double layoutBottomMargin{0.0};
 	double layoutLeftMargin{0.0};
 	double layoutRightMargin{0.0};

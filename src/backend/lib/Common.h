@@ -16,6 +16,7 @@ namespace Common {
 
 struct ExpressionValue {
 	ExpressionValue();
+    ExpressionValue(const ExpressionValue&, double v);
 	explicit ExpressionValue(qint64 v);
 	explicit ExpressionValue(double v);
 	ExpressionValue(const QString& expression, double v, Worksheet::Unit);
@@ -33,6 +34,10 @@ struct ExpressionValue {
 		return m_d;
 	}
 
+    Worksheet::Unit unit() const {
+        return m_unit;
+    }
+
 	template<typename T>
 	void setValue(T v) {
 		m_expression.clear();
@@ -43,10 +48,14 @@ struct ExpressionValue {
 	}
 
 	template<typename T>
-	T value() const {
+    T value(/*Worksheet::Unit unit = Worksheet::Unit::None*/) const {
+        //T value;
 		if (m_d)
-			return m_value.d;
-		return m_value.i64;
+            return m_value.d;
+        return m_value.i64;
+//        if (unit != Worksheet::Unit::None)
+//            value = Worksheet::convertFromSceneUnits(value, unit);
+//        return value;
 	}
 
 	double valueDouble() const {

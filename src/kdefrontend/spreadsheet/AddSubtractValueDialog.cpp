@@ -13,6 +13,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/Common.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/GuiTools.h"
@@ -450,7 +451,7 @@ void AddSubtractValueDialog::initPreview() {
 	m_project->setUndoAware(false);
 	auto* ws = new Worksheet(QString());
 	ws->setUseViewSize(true);
-	ws->setLayoutTopMargin(0.);
+    ws->setLayoutTopMargin(Common::ExpressionValue(0.));
 	ws->setLayoutBottomMargin(0.);
 	ws->setLayoutLeftMargin(0.);
 	ws->setLayoutRightMargin(0.);

@@ -15,6 +15,8 @@
 
 #include <QUndoCommand>
 
+#include "backend/lib/Common.h"
+
 #include <KLocalizedString>
 
 template<class target_class, typename value_type>
@@ -107,6 +109,58 @@ protected:
 	value_type target_class::*m_field;
 	value_type m_otherValue;
 };
+
+//// Specialized for ExpressionValue
+//template<class target_class>
+//class StandardMacroSetterCmd<target_class, Common::ExpressionValue> : public QUndoCommand {
+//public:
+//    StandardMacroSetterCmd(target_class* target,
+//                           Common::ExpressionValue target_class::*field,
+//                           const Common::ExpressionValue& newValue,
+//                           const KLocalizedString& description, // use ki18n("%1: ...")
+//                           QUndoCommand* parent = nullptr)
+//        : QUndoCommand(parent)
+//        , m_target(target)
+//        , m_field(field){
+//        // Internally everywhere scene units are used
+//        //m_otherValue(newValue, Worksheet::convertToSceneUnits(newValue.value<double>(), newValue.unit()));
+//        m_otherValue = newValue;
+//        setText(description.subs(m_target->name()).toString());
+//    }
+
+//    virtual void initialize() {
+//    }
+//    virtual void finalize() {
+//    }
+//    virtual void finalizeUndo() {
+//    }
+
+//    void redo() override {
+//        initialize();
+//        Common::ExpressionValue tmp = *m_target.*m_field;
+//        *m_target.*m_field = m_otherValue;
+//        m_otherValue = tmp;
+//        QUndoCommand::redo(); // redo all childs
+//        finalize();
+//    }
+
+//    // call finalizeUndo() at the end where only the signal is emitted
+//    // and no actual finalize-method is called that can potentially
+//    // cause  new entries on the undo-stack
+//    void undo() override {
+//        initialize();
+//        Common::ExpressionValue tmp = *m_target.*m_field;
+//        *m_target.*m_field = m_otherValue;
+//        m_otherValue = tmp;
+//        QUndoCommand::undo(); // undo all childs
+//        finalizeUndo();
+//    }
+
+//protected:
+//    target_class* m_target;
+//    Common::ExpressionValue target_class::*m_field;
+//    Common::ExpressionValue m_otherValue;
+//};
 
 template<class target_class, typename value_type>
 class StandardSetterCmd : public StandardMacroSetterCmd<target_class, value_type> {

@@ -102,7 +102,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, useViewSize, UseViewSize)
 	BASIC_D_ACCESSOR_DECL(ZoomFit, zoomFit, ZoomFit)
 	BASIC_D_ACCESSOR_DECL(Worksheet::Layout, layout, Layout)
-	BASIC_D_ACCESSOR_DECL(double, layoutTopMargin, LayoutTopMargin)
+    CLASS_D_ACCESSOR_DECL(Common::ExpressionValue, layoutTopMargin, LayoutTopMargin)
 	BASIC_D_ACCESSOR_DECL(double, layoutBottomMargin, LayoutBottomMargin)
 	BASIC_D_ACCESSOR_DECL(double, layoutLeftMargin, LayoutLeftMargin)
 	BASIC_D_ACCESSOR_DECL(double, layoutRightMargin, LayoutRightMargin)

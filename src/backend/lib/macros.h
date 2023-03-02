@@ -169,6 +169,12 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	type classname::method() const {                                                                                                                           \
 		return d->var;                                                                                                                                         \
 	}
+
+#define CLASS_D_READER_IMPL(classname, type, method, var)                                                                                                      \
+    const type& classname::method() const {                                                                                                                           \
+        return d->var;                                                                                                                                         \
+    }
+
 // replaces CLASS_SHARED_D_READER_IMPL
 #define BASIC_SHARED_D_READER_IMPL(classname, type, method, var)                                                                                               \
 	type classname::method() const {                                                                                                                           \

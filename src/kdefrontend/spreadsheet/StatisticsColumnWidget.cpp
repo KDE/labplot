@@ -661,7 +661,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	auto* ws = new Worksheet(QString());
 	ws->setUseViewSize(true);
-	ws->setLayoutTopMargin(0.);
+    ws->setLayoutTopMargin(Common::ExpressionValue(0.));
 	ws->setLayoutBottomMargin(0.);
 	ws->setLayoutLeftMargin(0.);
 	ws->setLayoutRightMargin(0.);

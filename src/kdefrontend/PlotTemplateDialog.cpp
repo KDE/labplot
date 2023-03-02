@@ -13,6 +13,7 @@
 
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/Common.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
@@ -61,7 +62,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	m_worksheet = new Worksheet(QString());
 	m_worksheet->setInteractive(false);
 	m_worksheet->setUseViewSize(true);
-	m_worksheet->setLayoutTopMargin(0.);
+    m_worksheet->setLayoutTopMargin(Common::ExpressionValue(0.));
 	m_worksheet->setLayoutBottomMargin(0.);
 	m_worksheet->setLayoutLeftMargin(0.);
 	m_worksheet->setLayoutRightMargin(0.);

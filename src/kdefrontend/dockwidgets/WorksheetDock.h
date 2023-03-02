@@ -61,7 +61,7 @@ private Q_SLOTS:
 
 	//"Layout"-tab
 	void layoutChanged(int);
-	void layoutTopMarginChanged(Common::ExpressionValue);
+    void layoutTopMarginChanged(const Common::ExpressionValue &);
 	void layoutBottomMarginChanged(Common::ExpressionValue);
 	void layoutRightMarginChanged(Common::ExpressionValue);
 	void layoutLeftMarginChanged(Common::ExpressionValue);

@@ -10,6 +10,10 @@ namespace Common {
 ExpressionValue::ExpressionValue() {
 }
 
+ExpressionValue::ExpressionValue(const ExpressionValue& other, double v): m_d(true), m_unit(other.m_unit), m_expression(other.expression()) {
+    m_value.d = v;
+}
+
 ExpressionValue::ExpressionValue(qint64 v)
 	: m_d{false}
 	, m_unit(Worksheet::Unit::None) {

@@ -728,7 +728,7 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 		const auto plot = plots.constFirst();
 		double height = Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Unit::Centimeter);
 		if (height < 4.) {
-			double newHeight = worksheet->layoutTopMargin() + worksheet->layoutBottomMargin() + (count - 1) * worksheet->layoutHorizontalSpacing()
+            double newHeight = worksheet->layoutTopMargin().value<double>() + worksheet->layoutBottomMargin() + (count - 1) * worksheet->layoutHorizontalSpacing()
 				+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
 			QRectF newRect = worksheet->pageRect();
 			newRect.setHeight(round(newHeight));

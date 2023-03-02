@@ -148,6 +148,8 @@ double Worksheet::convertToSceneUnits(const double value, const Worksheet::Unit 
  */
 double Worksheet::convertFromSceneUnits(const double value, const Worksheet::Unit unit) {
 	switch (unit) {
+    case Unit::Scene:
+        return value;
 	case Unit::Millimeter:
 		return value / 10.0;
 	case Unit::Centimeter:
@@ -717,7 +719,7 @@ Background* Worksheet::background() const {
 
 /* =============================== getter methods for layout options ====================================== */
 BASIC_D_READER_IMPL(Worksheet, Worksheet::Layout, layout, layout)
-BASIC_D_READER_IMPL(Worksheet, double, layoutTopMargin, layoutTopMargin)
+CLASS_D_READER_IMPL(Worksheet, Common::ExpressionValue, layoutTopMargin, layoutTopMargin)
 BASIC_D_READER_IMPL(Worksheet, double, layoutBottomMargin, layoutBottomMargin)
 BASIC_D_READER_IMPL(Worksheet, double, layoutLeftMargin, layoutLeftMargin)
 BASIC_D_READER_IMPL(Worksheet, double, layoutRightMargin, layoutRightMargin)
@@ -755,8 +757,8 @@ void Worksheet::setLayout(Worksheet::Layout layout) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutTopMargin, double, layoutTopMargin, updateLayout)
-void Worksheet::setLayoutTopMargin(double margin) {
+STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutTopMargin, Common::ExpressionValue, layoutTopMargin, updateLayout)
+void Worksheet::setLayoutTopMargin(const Common::ExpressionValue& margin) {
 	if (margin != d->layoutTopMargin) {
 		beginMacro(i18n("%1: set layout top margin", name()));
 		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, ki18n("%1: set layout top margin")));

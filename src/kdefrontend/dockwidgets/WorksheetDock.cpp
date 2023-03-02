@@ -453,11 +453,11 @@ void WorksheetDock::layoutChanged(int index) {
 		worksheet->setLayout(layout);
 }
 
-void WorksheetDock::layoutTopMarginChanged(Common::ExpressionValue margin) {
+void WorksheetDock::layoutTopMarginChanged(const Common::ExpressionValue& margin) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* worksheet : m_worksheetList)
-		worksheet->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin.value<double>(), m_worksheetUnit));
+        worksheet->setLayoutTopMargin(margin);
 }
 
 void WorksheetDock::layoutBottomMarginChanged(Common::ExpressionValue margin) {
@@ -605,7 +605,7 @@ void WorksheetDock::load() {
 
 	// Layout
 	ui.cbLayout->setCurrentIndex((int)m_worksheet->layout());
-	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), m_worksheetUnit));
+    ui.sbLayoutTopMargin->setValue(Common::ExpressionValue(m_worksheet->layoutTopMargin(), Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin().value<double>(), m_worksheetUnit)));
 	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(m_worksheet->layoutBottomMargin(), m_worksheetUnit));
 	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(m_worksheet->layoutLeftMargin(), m_worksheetUnit));
 	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(m_worksheet->layoutRightMargin(), m_worksheetUnit));
@@ -651,8 +651,8 @@ void WorksheetDock::loadConfig(KConfig& config) {
 	backgroundWidget->loadConfig(group);
 
 	// Layout
-	ui.cbLayout->setCurrentIndex(group.readEntry("Layout", (int)m_worksheet->layout()));
-	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LayoutTopMargin", m_worksheet->layoutTopMargin()), m_worksheetUnit));
+    ui.cbLayout->setCurrentIndex(group.readEntry("Layout", (int)m_worksheet->layout()));
+    ui.sbLayoutTopMargin->setValue(Common::ExpressionValue::loadFromConfig(group, QStringLiteral("LayoutTopMargin"), m_worksheet->layoutTopMargin()));
 	ui.sbLayoutBottomMargin->setValue(
 		Worksheet::convertFromSceneUnits(group.readEntry("LayoutBottomMargin", m_worksheet->layoutBottomMargin()), m_worksheetUnit));
 	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LayoutLeftMargin", m_worksheet->layoutLeftMargin()), m_worksheetUnit));
