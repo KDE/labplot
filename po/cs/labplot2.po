@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-28 00:54+0000\n"
+"POT-Creation-Date: 2023-03-02 00:50+0000\n"
 "PO-Revision-Date: 2023-02-17 09:27+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -80,7 +80,7 @@ msgstr "Nelze najít moduly panelu. Prosím, zkontrolujte svou instalaci."
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3237
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:269
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:226
-#: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:185
+#: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:225
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2810
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:295
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:258
@@ -123,67 +123,65 @@ msgstr ""
 msgid "unknown element '%1'"
 msgstr "neznámý prvek '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:223
+#: src/backend/core/AbstractAspect.cpp:224
 #, kde-format
 msgid ""
 "Intended name \"%1\" was changed to \"%2\" in order to avoid name collision."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:227
+#: src/backend/core/AbstractAspect.cpp:228
 #, kde-format
 msgid "%1: rename to %2"
 msgstr "%1: Přejmenovat na %2"
 
-#: src/backend/core/AbstractAspect.cpp:241
+#: src/backend/core/AbstractAspect.cpp:242
 #, kde-format
 msgid "%1: change comment"
 msgstr "%1: změnit komentář"
 
-#: src/backend/core/AbstractAspect.cpp:326
+#: src/backend/core/AbstractAspect.cpp:327
 #, kde-format
 msgid "Duplicate Here"
 msgstr "Zde duplikovat"
 
-#: src/backend/core/AbstractAspect.cpp:341
+#: src/backend/core/AbstractAspect.cpp:342
 #, kde-format
 msgid "Paste '%1'"
 msgstr "Vložit '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:353
-#: src/backend/core/AbstractAspect.cpp:359
-#: src/backend/core/AbstractAspect.cpp:365
+#: src/backend/core/AbstractAspect.cpp:349
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "Vytvořit sešit s daty"
 
-#: src/backend/core/AbstractAspect.cpp:392
+#: src/backend/core/AbstractAspect.cpp:397
 #, kde-format
 msgid "Rename"
 msgstr "Přejmenovat"
 
-#: src/backend/core/AbstractAspect.cpp:394
+#: src/backend/core/AbstractAspect.cpp:399
 #: src/commonfrontend/worksheet/WorksheetView.cpp:129
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:271
 #, kde-format
 msgid "Delete"
 msgstr "Smazat"
 
-#: src/backend/core/AbstractAspect.cpp:402
+#: src/backend/core/AbstractAspect.cpp:407
 #, kde-format
 msgid "Move"
 msgstr "Přesunout"
 
-#: src/backend/core/AbstractAspect.cpp:405
+#: src/backend/core/AbstractAspect.cpp:410
 #, kde-format
 msgid "Up"
 msgstr "Nahoru"
 
-#: src/backend/core/AbstractAspect.cpp:408
+#: src/backend/core/AbstractAspect.cpp:413
 #, kde-format
 msgid "Down"
 msgstr "Dolů"
 
-#: src/backend/core/AbstractAspect.cpp:502
+#: src/backend/core/AbstractAspect.cpp:507
 #: src/backend/core/aspectcommands.h:102
 #: src/backend/datapicker/Datapicker.cpp:212
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1950
@@ -191,63 +189,63 @@ msgstr "Dolů"
 msgid "%1: add %2"
 msgstr "%1: přidat %2"
 
-#: src/backend/core/AbstractAspect.cpp:504
-#: src/backend/core/AbstractAspect.cpp:533
+#: src/backend/core/AbstractAspect.cpp:509
+#: src/backend/core/AbstractAspect.cpp:538
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:531
+#: src/backend/core/AbstractAspect.cpp:536
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: vložit %2 před %3"
 
-#: src/backend/core/AbstractAspect.cpp:531
+#: src/backend/core/AbstractAspect.cpp:536
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:571 src/backend/core/aspectcommands.h:26
+#: src/backend/core/AbstractAspect.cpp:576 src/backend/core/aspectcommands.h:26
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: odstranit %2"
 
-#: src/backend/core/AbstractAspect.cpp:580
+#: src/backend/core/AbstractAspect.cpp:585
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: odstranit všechny potomky"
 
-#: src/backend/core/AbstractAspect.cpp:659
+#: src/backend/core/AbstractAspect.cpp:664
 #, kde-format
 msgid "%1: move up"
 msgstr "%1: posunout nahoru"
 
-#: src/backend/core/AbstractAspect.cpp:671
+#: src/backend/core/AbstractAspect.cpp:676
 #, kde-format
 msgid "%1: move down"
 msgstr "%1: posunout dolů"
 
-#: src/backend/core/AbstractAspect.cpp:778
+#: src/backend/core/AbstractAspect.cpp:783
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: Vloženo '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:780
+#: src/backend/core/AbstractAspect.cpp:785
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: duplikováno '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:781
+#: src/backend/core/AbstractAspect.cpp:786
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Kopie '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:911
+#: src/backend/core/AbstractAspect.cpp:916
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:918
+#: src/backend/core/AbstractAspect.cpp:923
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -285,7 +283,7 @@ msgstr "Dnů"
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
 #: src/kdefrontend/GuiTools.cpp:145
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:122
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:125
 #: src/kdefrontend/widgets/LineWidget.cpp:52
 #, kde-format
 msgid "None"
@@ -1104,7 +1102,7 @@ msgstr ""
 #: src/commonfrontend/worksheet/WorksheetView.cpp:376
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1557
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:95
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:131
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:134
 #, kde-format
 msgid "Image"
 msgstr "Obrázek"
@@ -2238,7 +2236,7 @@ msgstr "%1: Importovat z %2"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1212
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1214
 #, kde-format
 msgid "Success"
 msgstr "Úspěch"
@@ -5706,7 +5704,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1176
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:245
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:295
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:786
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:788
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:87
 #, kde-format
 msgid "Custom"
@@ -6656,7 +6654,7 @@ msgstr "Styl"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:144
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:160
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:318
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:130
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:133
 #, kde-format
 msgid "Color"
 msgstr "Barva"
@@ -6940,6 +6938,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:312
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:183
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:331
+#: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
 msgstr "%1 - Data"
@@ -8344,7 +8343,7 @@ msgstr ""
 msgid "%1: set options and perform the differentiation"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:89
+#: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:97
 #, kde-format
 msgid "%1: set equation"
 msgstr "%1: nastavit rovnici"
@@ -11559,7 +11558,7 @@ msgid "Bottom"
 msgstr "Dole"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:239
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:146
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:149
 #, kde-format
 msgid "Centered"
 msgstr "Na střed"
@@ -11634,7 +11633,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
 #: src/kdefrontend/SettingsGeneralPage.cpp:191
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:126
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:129
 #: src/kdefrontend/widgets/LabelWidget.cpp:135
 #: src/kdefrontend/widgets/LabelWidget.cpp:152
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
@@ -11653,7 +11652,7 @@ msgstr "Vlevo"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:66
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:127
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:130
 #: src/kdefrontend/widgets/LabelWidget.cpp:137
 #: src/kdefrontend/widgets/LabelWidget.cpp:154
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
@@ -12203,17 +12202,17 @@ msgid "Expand all curves"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1343
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1349
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1355
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1346
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1352
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1358
 #, kde-format
 msgid "Copy Selection"
 msgstr "Zkopírovat výběr"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1344
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1350
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1356
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1347
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1353
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
 #, kde-format
 msgid "Copy All"
 msgstr "Zkopírovat vše"
@@ -12598,14 +12597,14 @@ msgid "Custom Column"
 msgstr "Vlastní sloupec"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:368
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:123
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:126
 #: src/kdefrontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "Nad"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:369
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:124
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:127
 #: src/kdefrontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
@@ -12794,7 +12793,7 @@ msgid "test"
 msgstr "test"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:433
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:434
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:113
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:225
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:108
@@ -12808,34 +12807,34 @@ msgstr "test"
 msgid "Curve:"
 msgstr "Křivka:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:453
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:454
 #, kde-format
 msgid "Histogram:"
 msgstr "Histogram:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:834
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:836
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:620
 #, kde-format
 msgid "Degree:"
 msgstr "Stupeň:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:891
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:893
 #, kde-format
 msgid "Number of peaks:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1213
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1215
 #, kde-format
 msgid "Fit status: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1390
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1393
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1391
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1394
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -15799,9 +15798,9 @@ msgstr "Styl:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:388
 #: src/kdefrontend/ui/labelwidget.ui:152 src/kdefrontend/ui/symbolwidget.ui:192
 #: src/kdefrontend/ui/symbolwidget.ui:247
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:209
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:233
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:261
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:212
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:236
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:264
 #: src/kdefrontend/worksheet/GridDialog.cpp:65
 #, kde-format
 msgid "Color:"
@@ -17601,8 +17600,8 @@ msgstr "Povoleno:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFirstColor)
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:155
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:213
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:265
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:216
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:268
 #, kde-format
 msgid "First color:"
 msgstr "První barva:"
@@ -20504,72 +20503,72 @@ msgstr "Uložit pozadí:"
 msgid "Resolution:"
 msgstr "Rozlišení:"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:125
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:128
 #, kde-format
 msgid "Zero Baseline"
 msgstr ""
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:132
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:135
 #, kde-format
 msgid "Pattern"
 msgstr "Vzorek"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:135
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:138
 #, kde-format
 msgid "Single Color"
 msgstr "Jedna barva"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:136
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:139
 #, kde-format
 msgid "Horizontal Gradient"
 msgstr "Vodorovný přechod"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:137
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:140
 #, kde-format
 msgid "Vertical Gradient"
 msgstr "Svislý přechod"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:138
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:141
 #, kde-format
 msgid "Diag. Gradient (From Top Left)"
 msgstr ""
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:139
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:142
 #, kde-format
 msgid "Diag. Gradient (From Bottom Left)"
 msgstr ""
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:140
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:143
 #, kde-format
 msgid "Radial Gradient"
 msgstr "Paprskovitý přechod"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:143
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:146
 #, kde-format
 msgid "Scaled and Cropped"
 msgstr "Zvětšená a oříznutá"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:144
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:147
 #, kde-format
 msgid "Scaled"
 msgstr "Zvětšená"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:145
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:148
 #, kde-format
 msgid "Scaled, Keep Proportions"
 msgstr "Zvětšená s proporcemi"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:147
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:150
 #, kde-format
 msgid "Tiled"
 msgstr "Vydlážděná"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:148
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:151
 #, kde-format
 msgid "Center Tiled"
 msgstr "Vydlážděná na střed"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:274
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:277
 #, kde-format
 msgid "%1 elements: background color style changed"
 msgstr ""
