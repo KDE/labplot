@@ -473,7 +473,7 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 
 void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
-	// CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
