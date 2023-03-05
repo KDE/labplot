@@ -17996,7 +17996,7 @@ msgstr "٪"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:43
 #, fuzzy, kde-format
 msgid "k:"
-msgstr "كلڤن"
+msgstr "كلفن"
 
 #. i18n: ectx: property (text), widget (QLabel, lNotches)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:125
