@@ -45,6 +45,9 @@
 #define SETLABELTEXTPROPERTY(TextEditFunction, TextEditArgument)                                                                                               \
 	auto cursor = ui.teLabel->textCursor();                                                                                                                    \
 	int cursorAnchor = cursor.anchor(), cursorPos = cursor.position();                                                                                         \
+	/* move position with right allows only positive numbers (from left to right) */                                                                           \
+	if (cursorAnchor > cursorPos)                                                                                                                              \
+		qSwap(cursorAnchor, cursorPos);                                                                                                                        \
 	bool cursorHasSelection = cursor.hasSelection();                                                                                                           \
 	if (!cursorHasSelection)                                                                                                                                   \
 		ui.teLabel->selectAll();                                                                                                                               \
