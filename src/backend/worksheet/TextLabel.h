@@ -77,6 +77,10 @@ public:
 			return te.toHtml();
 		}
 
+		bool isHtml() const {
+			return text.startsWith(QStringLiteral("<!DOCTYPE HTML"));
+		}
+
 		QString text;
 		TextLabel::Mode mode{TextLabel::Mode::Text};
 		/*! Determines if the Textlabe can have a placeholder or not.

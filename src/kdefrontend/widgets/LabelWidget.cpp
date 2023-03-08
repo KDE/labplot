@@ -672,13 +672,12 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 		return;
 
 	// when text is empty the default color of format is black instead of the theme color!
-	if (format.foreground().color().isValid() && !ui.teLabel->toPlainText().isEmpty()) {
+	if (m_label->text().isHtml() && format.foreground().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
 		ui.kcbFontColor->setColor(format.foreground().color());
-	} else {
+	else
 		ui.kcbFontColor->setColor(m_label->fontColor());
-	}
 
-	if (format.background().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
+	if (m_label->text().isHtml() && format.background().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
 		ui.kcbBackgroundColor->setColor(format.background().color());
 	else
 		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
@@ -1357,11 +1356,16 @@ void LabelWidget::load() {
 
 	auto format = ui.teLabel->currentCharFormat();
 
-	ui.kcbFontColor->setColor(m_label->fontColor());
-	ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
-	// alternative:
-	// ui.kcbFontColor->setColor(format.foreground().color());
-	// ui.kcbBackgroundColor->setColor(format.background().color());
+	// when text is empty the default color of format is black instead of the theme color!
+	if (m_label->text().isHtml() && format.foreground().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
+		ui.kcbFontColor->setColor(format.foreground().color());
+	else
+		ui.kcbFontColor->setColor(m_label->fontColor());
+
+	if (m_label->text().isHtml() && format.background().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
+		ui.kcbBackgroundColor->setColor(format.background().color());
+	else
+		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue(m_label->teXFont().pointSize());
