@@ -14908,7 +14908,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to File"
-msgstr "Exporta a un fitxer"
+msgstr "Exporta cap a un fitxer"
 
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:33
 #, kde-format
@@ -20106,7 +20106,7 @@ msgstr "Àrea que s'ha d'exportar:"
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:237
 #, kde-format
 msgid "Export to:"
-msgstr "Exporta a:"
+msgstr "Exporta cap a:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnAsUnits)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:247
@@ -20877,7 +20877,7 @@ msgstr "Mapa de píxels X11 (*.xpm *.XPM)"
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:310
 #, kde-format
 msgid "Export to file and close the dialog."
-msgstr "Exporta a un fitxer i tanca el diàleg."
+msgstr "Exporta cap a un fitxer i tanca el diàleg."
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:313
 #, kde-format
