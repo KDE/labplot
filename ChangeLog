@@ -12,6 +12,7 @@ New features:
 			* Allow to modify box properties (color, etc.) for every data set independently of each other
 			* Draw a legend item for every dataset in the box plot
 		* Reference Range - custom area on the plot to highlight a certain x- or y-range
+		* Show LaTeX error messages in text labels when rendering with LaTeX
 	* [spreadsheet]
 		* Use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns
@@ -29,13 +30,14 @@ New features:
 		* Zooming in the image view
 	* [import]
 		* Import data from Excel .xlsx files using QXlsx library
+		* Import of Binary Log File (BLF) files from Vektor Informatik
 		* HDF5: support VLEN data import
 		* Live data: support multiple values via TCP
 	* [export]
 		* Export spreadsheet and matrix in Excel .xlsx format using QXlsx library
 		* Use the current working project directory, if available, as the default export path
 	* [analysis]
-		* Maximum Likelyhood estimation for several distributions
+		* Maximum likelihood estimation for several distributions
 		* Guess start values of fit parameter for polynomial models by linear regression
 		* Implement fourier filtering for datetimes
 	* [general]
