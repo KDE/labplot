@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-02 00:50+0000\n"
+"POT-Creation-Date: 2023-03-09 00:42+0000\n"
 "PO-Revision-Date: 2022-10-03 17:20+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -389,7 +389,7 @@ msgstr "Stora heltal"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1495
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:267
-#: src/kdefrontend/widgets/LabelWidget.cpp:188
+#: src/kdefrontend/widgets/LabelWidget.cpp:191
 #, kde-format
 msgid "Text"
 msgstr "Text"
@@ -8800,7 +8800,7 @@ msgid "Command"
 msgstr "Kommando"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:97
-#: src/kdefrontend/widgets/LabelWidget.cpp:191
+#: src/kdefrontend/widgets/LabelWidget.cpp:194
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -8808,7 +8808,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:189
+#: src/kdefrontend/widgets/LabelWidget.cpp:192
 #, kde-format
 msgid "LaTeX"
 msgstr "Latex"
@@ -11865,8 +11865,8 @@ msgstr "Fältstorlek"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:60
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:68
 #: src/kdefrontend/SettingsGeneralPage.cpp:189
-#: src/kdefrontend/widgets/LabelWidget.cpp:139
-#: src/kdefrontend/widgets/LabelWidget.cpp:156
+#: src/kdefrontend/widgets/LabelWidget.cpp:142
+#: src/kdefrontend/widgets/LabelWidget.cpp:159
 #, kde-format
 msgid "Top"
 msgstr "Överst"
@@ -11881,8 +11881,8 @@ msgstr "Överst"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:62
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:70
 #: src/kdefrontend/SettingsGeneralPage.cpp:190
-#: src/kdefrontend/widgets/LabelWidget.cpp:141
-#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/widgets/LabelWidget.cpp:144
+#: src/kdefrontend/widgets/LabelWidget.cpp:161
 #, kde-format
 msgid "Bottom"
 msgstr "Underst"
@@ -11969,8 +11969,8 @@ msgstr "Halvfylld, stor"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
 #: src/kdefrontend/SettingsGeneralPage.cpp:191
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:129
-#: src/kdefrontend/widgets/LabelWidget.cpp:135
-#: src/kdefrontend/widgets/LabelWidget.cpp:152
+#: src/kdefrontend/widgets/LabelWidget.cpp:138
+#: src/kdefrontend/widgets/LabelWidget.cpp:155
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -11988,8 +11988,8 @@ msgstr "Till vänster"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
 #: src/kdefrontend/SettingsGeneralPage.cpp:192
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:130
-#: src/kdefrontend/widgets/LabelWidget.cpp:137
-#: src/kdefrontend/widgets/LabelWidget.cpp:154
+#: src/kdefrontend/widgets/LabelWidget.cpp:140
+#: src/kdefrontend/widgets/LabelWidget.cpp:157
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -12480,10 +12480,10 @@ msgstr "Huvudrad"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:61
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:65
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:69
-#: src/kdefrontend/widgets/LabelWidget.cpp:136
-#: src/kdefrontend/widgets/LabelWidget.cpp:140
-#: src/kdefrontend/widgets/LabelWidget.cpp:153
-#: src/kdefrontend/widgets/LabelWidget.cpp:157
+#: src/kdefrontend/widgets/LabelWidget.cpp:139
+#: src/kdefrontend/widgets/LabelWidget.cpp:143
+#: src/kdefrontend/widgets/LabelWidget.cpp:156
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
 #, kde-format
 msgid "Center"
 msgstr "Centrera"
@@ -21410,7 +21410,7 @@ msgstr "Kan inte ta bort obligatoriskt nyckelord."
 msgid "Removing Keyword"
 msgstr "Tar bort nyckelord"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:110
+#: src/kdefrontend/widgets/LabelWidget.cpp:113
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
@@ -21419,137 +21419,137 @@ msgstr ""
 "Använd logiska istället för absoluta koordinater för att ange position i "
 "diagrammet"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:125
+#: src/kdefrontend/widgets/LabelWidget.cpp:128
 #, kde-format
 msgid "Bold"
 msgstr "Fetstil"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:126
+#: src/kdefrontend/widgets/LabelWidget.cpp:129
 #, kde-format
 msgid "Italic"
 msgstr "Kursiv"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:127
+#: src/kdefrontend/widgets/LabelWidget.cpp:130
 #, kde-format
 msgid "Underline"
 msgstr "Understruken"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:128
+#: src/kdefrontend/widgets/LabelWidget.cpp:131
 #, kde-format
 msgid "Strike Out"
 msgstr "Överstruken"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:129
+#: src/kdefrontend/widgets/LabelWidget.cpp:132
 #, kde-format
 msgid "Super Script"
 msgstr "Upphöjt"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:130
+#: src/kdefrontend/widgets/LabelWidget.cpp:133
 #, kde-format
 msgid "Sub-Script"
 msgstr "Nedsänkt"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:131
+#: src/kdefrontend/widgets/LabelWidget.cpp:134
 #, kde-format
 msgid "Insert Symbol"
 msgstr "Infoga symbol"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:132
+#: src/kdefrontend/widgets/LabelWidget.cpp:135
 #, kde-format
 msgid "Insert Date/Time"
 msgstr "Infoga datum och tid"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:160
+#: src/kdefrontend/widgets/LabelWidget.cpp:163
 #, kde-format
 msgid "No Border"
 msgstr "Utan kant"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:161
+#: src/kdefrontend/widgets/LabelWidget.cpp:164
 #, kde-format
 msgid "Rectangle"
 msgstr "Rektangel"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:162
+#: src/kdefrontend/widgets/LabelWidget.cpp:165
 #, kde-format
 msgid "Ellipse"
 msgstr "Ellips"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:163
+#: src/kdefrontend/widgets/LabelWidget.cpp:166
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Rektangel med runda sidor"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:164
+#: src/kdefrontend/widgets/LabelWidget.cpp:167
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Rektangel med runda hörn"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:165
+#: src/kdefrontend/widgets/LabelWidget.cpp:168
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Rektangel med inåtriktade runda hörn"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:169
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Rektangel med bucklig kant"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
+#: src/kdefrontend/widgets/LabelWidget.cpp:170
 #, kde-format
 msgid "Cuboid"
 msgstr "Rätblock"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:171
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr "Uppåtpekande rektangel"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:169
+#: src/kdefrontend/widgets/LabelWidget.cpp:172
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr "Neråtpekande rektangel"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr "Vänsterpekande rektangel"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:174
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Högerpekande rektangel"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:173
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
 #, kde-format
 msgid "No line"
 msgstr "Ingen linje"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, kde-format
 msgid "Solid line"
 msgstr "Heldragen linje"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:178
 #, kde-format
 msgid "Dash line"
 msgstr "Streckad linje"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:176
+#: src/kdefrontend/widgets/LabelWidget.cpp:179
 #, kde-format
 msgid "Dot line"
 msgstr "Punktlinje"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:180
 #, kde-format
 msgid "Dash dot line"
 msgstr "Streck-punktlinje"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:181
 #, kde-format
 msgid "Dash dot dot line"
 msgstr "Streck-punkt-punktlinje"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:195
+#: src/kdefrontend/widgets/LabelWidget.cpp:198
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -21561,14 +21561,14 @@ msgstr ""
 "installation av Latex krävs</li><li>Markdown - textinställning som använder "
 "markörspråket Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:868
-#: src/kdefrontend/widgets/LabelWidget.cpp:894
+#: src/kdefrontend/widgets/LabelWidget.cpp:870
+#: src/kdefrontend/widgets/LabelWidget.cpp:896
 #, kde-format
 msgid "Date"
 msgstr "Datum"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:876
-#: src/kdefrontend/widgets/LabelWidget.cpp:902
+#: src/kdefrontend/widgets/LabelWidget.cpp:878
+#: src/kdefrontend/widgets/LabelWidget.cpp:904
 #, kde-format
 msgid "Date and Time"
 msgstr "Datum och tid"
