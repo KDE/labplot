@@ -85,7 +85,7 @@ protected:
 			return static_cast<QVector<T>*>(m_dataContainer.at(indexDataContainer))->at(indexData);
 		}
 
-		int size() const;
+		size_t size() const;
 		const QVector<AbstractColumn::ColumnMode> columnModes() const;
 
 		/*!
@@ -95,7 +95,7 @@ protected:
 		 */
 		std::vector<void*> dataContainer() const;
 		AbstractColumn::ColumnMode columnMode(int index) const;
-		const void* datas(int index) const;
+		const void* datas(size_t index) const;
 		bool resize(uint32_t) const;
 
 	private:

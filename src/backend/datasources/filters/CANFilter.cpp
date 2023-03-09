@@ -123,7 +123,7 @@ void CANFilterPrivate::DataContainer::clear() {
 	m_dataContainer.clear();
 }
 
-int CANFilterPrivate::DataContainer::size() const {
+size_t CANFilterPrivate::DataContainer::size() const {
 	return m_dataContainer.size();
 }
 
@@ -144,7 +144,7 @@ AbstractColumn::ColumnMode CANFilterPrivate::DataContainer::columnMode(int index
 	return m_columnModes.at(index);
 }
 
-const void* CANFilterPrivate::DataContainer::datas(int index) const {
+const void* CANFilterPrivate::DataContainer::datas(size_t index) const {
 	if (index < size())
 		return m_dataContainer.at(index);
 	return nullptr;
@@ -242,7 +242,7 @@ QVector<QStringList> CANFilterPrivate::preview(const QString& fileName, int line
 
 	for (int i = 0; i < readMessages; i++) {
 		QStringList l;
-		for (int c = 0; c < m_DataContainer.size(); c++) {
+		for (size_t c = 0; c < m_DataContainer.size(); c++) {
 			const auto* data_ptr = m_DataContainer.datas(c);
 			if (!data_ptr)
 				continue;

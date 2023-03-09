@@ -186,7 +186,6 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	m_DataContainer.clear();
 
 #ifdef HAVE_VECTOR_BLF
-
 	Vector::BLF::File file;
 	file.open(fileName.toLocal8Bit().data());
 
@@ -194,7 +193,7 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 	QVector<const Vector::BLF::ObjectHeaderBase*> v;
 	Vector::BLF::ObjectHeaderBase* ohb = nullptr;
 	QVector<uint32_t> ids;
-	uint64_t message_counter = 0;
+	int message_counter = 0;
 	{
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QLatin1String("Parsing BLF file"));
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
@@ -276,14 +275,14 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			} else
 				m_DataContainer.setData<qint64>(0, message_index, timestamp);
 
-			const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
-			for (int i = 1; i < startIndex; i++) {
+			const size_t startIndex = idIndexTable.value(id) + 1; // +1 because of time
+			for (size_t i = 1; i < startIndex; i++) {
 				m_DataContainer.setData<double>(i, message_index, std::nan("0"));
 			}
-			for (int i = startIndex; i < startIndex + values.size(); i++) {
+			for (size_t i = startIndex; i < startIndex + values.size(); i++) {
 				m_DataContainer.setData<double>(i, message_index, values.at(i - startIndex));
 			}
-			for (int i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
+			for (size_t i = startIndex + values.size(); i < m_DataContainer.size(); i++) {
 				m_DataContainer.setData<double>(i, message_index, std::nan("0"));
 			}
 			message_index++;
@@ -320,8 +319,8 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			} else
 				m_DataContainer.setData<qint64>(0, message_index, timestamp);
 
+			const std::vector<double>::size_type startIndex = idIndexTable.value(id) + 1; // +1 because of time
 			if (firstMessageValid) {
-				const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
 				for (std::vector<double>::size_type i = 1; i < startIndex; i++) {
 					const auto prevValue = m_DataContainer.data<double>(i, message_index - 1);
 					m_DataContainer.setData<double>(i, message_index, prevValue);
@@ -334,7 +333,6 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 					m_DataContainer.setData<double>(i, message_index, prevValue);
 				}
 			} else {
-				const auto startIndex = idIndexTable.value(id) + 1; // +1 because of time
 				for (std::vector<double>::size_type i = 1; i < startIndex; i++)
 					m_DataContainer.setData<double>(i, message_index, std::nan("0"));
 				for (std::vector<double>::size_type i = startIndex; i < startIndex + values.size(); i++)
