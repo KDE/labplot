@@ -18,7 +18,7 @@
 #include <QLineEdit>
 #include <QLocale>
 #include <QString>
-#include <QStringRef>
+#include <QStringView>
 
 #include <cmath>
 #include <limits>
@@ -210,7 +210,7 @@ QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, 
 
 QString NumberSpinBox::strip(const QString& t) const {
 	// Copied from QAbstractSpinBox.cpp
-	QStringRef text(&t);
+	QStringView text(t);
 
 	int size = text.size();
 	const QString p = prefix();

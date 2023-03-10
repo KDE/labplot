@@ -17,7 +17,6 @@
 
 class AbstractColumnPrivate;
 class AbstractSimpleFilter;
-class QStringList;
 class QString;
 class QDateTime;
 class QDate;
@@ -26,6 +25,7 @@ template<class T>
 class QVector;
 template<class T>
 class Interval;
+class QStringList;
 
 class AbstractColumn : public AbstractAspect {
 	Q_OBJECT
