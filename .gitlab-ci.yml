@@ -6,9 +6,9 @@ include:
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 # replaced with own rule
 # - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
+# - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 
 .windows_qt515:
   stage: build
@@ -99,6 +99,34 @@ include:
     - ninja
 # tests currently fail due to gcc 12?
 #    - ninja test
+
+# see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
+flatpak:
+  stage: deploy
+  image: kdeorg/flatpak-builder:latest
+  tags:
+    - Linux
+  variables:
+    KDE_FLATPAK_MODULE_NAME: labplot2
+    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
+  interruptible: true
+  before_script:
+    - git clone https://invent.kde.org/sysadmin/ci-utilities.git
+  script:
+    - echo ${KDE_FLATPAK_MODULE_NAME}
+    - echo ${KDE_FLATPAK_APP_ID}
+    # Build and install
+    - python3 -u ci-utilities/flatpak-build.py ${KDE_FLATPAK_MODULE_NAME}
+    # Make Bundle
+    - flatpak build-bundle repo ${KDE_FLATPAK_MODULE_NAME}.flatpak ${KDE_FLATPAK_APP_ID} master
+  artifacts:
+    name: Flatpak artifacts
+    expose_as: 'Flatpak Bundle'
+    when: on_success
+    paths:
+      - "${KDE_FLATPAK_MODULE_NAME}.flatpak"
+    expire_in: 14 days
+
 
 clang_format:
   stage: build
