@@ -10,6 +10,7 @@ include:
 # - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
 # - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 
+# prepend '.' to temporary disable
 .windows_qt515:
   stage: build
   image: kdeorg/windows-msvc2019-qt515:latest
@@ -71,9 +72,9 @@ include:
     - ninja
 #    - ctest -V
 
-.fedora_36_min:
+fedora_37_min:
   stage: build
-  image: fedora:36
+  image: fedora:37
   only:
 #    - merge_requests
     - master
@@ -101,7 +102,7 @@ include:
 #    - ninja test
 
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
-flatpak:
+.flatpak:
   stage: deploy
   image: kdeorg/flatpak-builder:latest
   tags:
@@ -128,7 +129,7 @@ flatpak:
     expire_in: 14 days
 
 
-clang_format:
+.clang_format:
   stage: build
   image: debian:testing
   before_script:
