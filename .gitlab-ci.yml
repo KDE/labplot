@@ -3,14 +3,12 @@
 # SPDX-License-Identifier: CC0-1.0
 
 include:
-# currently fails linking test to libpoppler
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
-#  uses Qt6 already?
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
-  #- https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
-# fails in final steps
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
+# replaced with own rule
+# - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
 
 windows_qt515:
   stage: build

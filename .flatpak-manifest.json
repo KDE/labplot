@@ -209,6 +209,9 @@
         {
             "name": "labplot2",
             "buildsystem": "cmake-ninja",
+            "build-options": {
+                "build-args": ["--share=network"]
+            },
             "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt" ],
 	    "sources": [
                 {
