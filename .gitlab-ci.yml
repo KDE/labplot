@@ -3,9 +3,12 @@
 # SPDX-License-Identifier: CC0-1.0
 
 include:
+# Tumbleweed
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
+# not supported yet (see CMakeLists.txt dependencies)
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/craft-appimage.yml
 # replaced with own rule
 # - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
 # - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
@@ -100,6 +103,21 @@ include:
     - ninja
 # tests currently fail due to gcc 12?
 #   - ninja test
+
+Leap_15.4_min:
+  stage: build
+  image: opensuse/leap:15.4
+  only:
+#    - merge_requests
+    - master
+  before_script:
+    - zypper ref
+    - zypper install -y cmake
+  script:
+    - mkdir -p build && cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - ninja
+    - ninja test
 
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
 .flatpak:
