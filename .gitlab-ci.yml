@@ -43,7 +43,7 @@ ubuntu_22.04_min:
   image: ubuntu:22.04
   only:
 #    - merge_requests
-    - master
+#    - master
   before_script:
     - apt update
     - apt install --yes eatmydata
@@ -59,7 +59,7 @@ ubuntu_22.04_full:
   image: ubuntu:22.04
   only:
 #    - merge_requests
-    - master
+#    - master
   before_script:
     - apt update
     - apt install --yes eatmydata
@@ -76,7 +76,7 @@ fedora_36_min:
   image: fedora:36
   only:
 #    - merge_requests
-    - master
+#    - master
   before_script:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel zlib-devel
   script:
@@ -90,7 +90,7 @@ fedora_36_full:
   image: fedora:36
   only:
 #   - merge_requests
-    - master
+#   - master
   before_script:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel kf5-kparts-devel kf5-syntax-highlighting-devel cantor-devel poppler-qt5-devel libspectre-devel liborigin-devel fftw3-devel netcdf-devel qt5-qtserialport-devel cfitsio-devel libcerf-devel lz4-devel matio-devel discount
   script:
