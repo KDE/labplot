@@ -22,8 +22,6 @@ class QDateTime;
 class QDate;
 class QTime;
 template<class T>
-class QVector;
-template<class T>
 class Interval;
 class QStringList;
 
