@@ -23,7 +23,6 @@ class QDate;
 class QTime;
 template<class T>
 class Interval;
-class QStringList;
 
 class AbstractColumn : public AbstractAspect {
 	Q_OBJECT
