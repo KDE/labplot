@@ -1,5 +1,5 @@
 add_executable (WorksheetElementTest WorksheetElementTest.cpp)
 
-target_link_libraries(WorksheetElementTest Qt5::Test labplot2lib labplot2test)
+target_link_libraries(WorksheetElementTest labplot2lib labplot2test)
 
 add_test(NAME WorksheetElementTest COMMAND WorksheetElementTest)

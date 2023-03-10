@@ -9,11 +9,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
-set(QT_MINIMUM_VERSION 5.10.0)
+set(QT_MINIMUM_VERSION "5.10.0")
 set(KF5_MIN_VERSION "5.16.0")
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
-find_package(ECM REQUIRED NO_MODULE)
+find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
@@ -30,20 +30,15 @@ include(FeatureSummary)
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
-set(QT_MAJOR_VERSION 5)
-find_package(QT NAMES Qt5 COMPONENTS
-    Concurrent
-    Gui
-# 	Qml
-# 	Quick
-# 	QuickWidgets
-    PrintSupport
-    Sql
-    Svg
-    Widgets
-    Test
-    REQUIRED)
-find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
+if (QT_MAJOR_VERSION STREQUAL "6")
+    set(QT_REQUIRED_VERSION "6.4.0")
+    set(KF_MIN_VERSION "5.240.0")
+    set(KF_MAJOR_VERSION "6")
+else()
+    set(KF_MAJOR_VERSION "5")
+endif()
+
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
 	Gui
 # 	Qml
@@ -56,7 +51,7 @@ find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Test
 )
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
+find_package(KF${KF_MAJOR_VERSION} ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
 	Completion
 	Config
@@ -78,20 +73,20 @@ OPTIONAL_COMPONENTS
 	SyntaxHighlighting
 )
 # TODO: make NewStuff optional?
-IF (KF5NewStuff_FOUND)
+IF (KF${KF_MAJOR_VERSION}NewStuff_FOUND)
 	add_definitions (-DHAVE_KF5_NEW_STUFF)
 ELSE ()
         MESSAGE (STATUS "KF5 new stuff not found")
 ENDIF ()
 # TODO: service not used?
-IF (NOT KF5Service_FOUND)
+IF (NOT KF${KF_MAJOR_VERSION}Service_FOUND)
 	MESSAGE (STATUS "KF5 service not found")
 ENDIF ()
 # TODO: parts not used?
-IF (NOT KF5Parts_FOUND)
+IF (NOT KF${KF_MAJOR_VERSION}Parts_FOUND)
 	MESSAGE (STATUS "KF5 parts not found")
 ENDIF ()
-IF (KF5SyntaxHighlighting_FOUND)
+IF (KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
 	add_definitions (-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
 ELSE ()
 	MESSAGE (STATUS "KF5 syntax highlighting not found")
@@ -598,7 +593,11 @@ install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
-find_package(KF5I18n CONFIG REQUIRED)
-ki18n_install(po)
-find_package(KF5DocTools CONFIG REQUIRED)
-kdoctools_install(po)
+find_package(KF${KF_MAJOR_VERSION}I18n CONFIG REQUIRED)
+
+IF (KF${KF_MAJOR_VERSION}I18n_FOUND)
+	ki18n_install(po)
+ENDIF()
+if (KF${KF_MAJOR_VERSION}DocTools_FOUND)
+	kdoctools_install(po)
+ENDIF()

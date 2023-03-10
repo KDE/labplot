@@ -506,27 +506,27 @@ add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES
 target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 
 target_link_libraries( labplot2lib
-	KF5::Archive
-	KF5::Completion
-	KF5::ConfigCore
-	KF5::Crash
-	KF5::I18n
-	KF5::IconThemes
-	KF5::KIOCore
-	KF5::KIOFileWidgets
-	KF5::KIOWidgets
-	KF5::TextWidgets
-	KF5::XmlGui
-	KF5::NewStuff
-	KF5::NewStuffCore
-	Qt5::Svg
-	Qt5::Core
-	Qt5::Network
-	Qt5::PrintSupport
-	Qt5::Sql
-# 	Qt5::Qml
-# 	Qt5::Quick
-# 	Qt5::QuickWidgets
+	KF${KF_MAJOR_VERSION}::Archive
+	KF${KF_MAJOR_VERSION}::Completion
+	KF${KF_MAJOR_VERSION}::ConfigCore
+	KF${KF_MAJOR_VERSION}::Crash
+	KF${KF_MAJOR_VERSION}::I18n
+	KF${KF_MAJOR_VERSION}::IconThemes
+	KF${KF_MAJOR_VERSION}::KIOCore
+	KF${KF_MAJOR_VERSION}::KIOFileWidgets
+	KF${KF_MAJOR_VERSION}::KIOWidgets
+	KF${KF_MAJOR_VERSION}::TextWidgets
+	KF${KF_MAJOR_VERSION}::XmlGui
+	KF${KF_MAJOR_VERSION}::NewStuff
+	KF${KF_MAJOR_VERSION}::NewStuffCore
+	Qt${QT_MAJOR_VERSION}::Svg
+	Qt${QT_MAJOR_VERSION}::Core
+	Qt${QT_MAJOR_VERSION}::Network
+	Qt${QT_MAJOR_VERSION}::PrintSupport
+	Qt${QT_MAJOR_VERSION}::Sql
+# 	Qt${QT_MAJOR_VERSION}::Qml
+# 	Qt${QT_MAJOR_VERSION}::Quick
+# 	Qt${QT_MAJOR_VERSION}::QuickWidgets
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES}
 	${Poppler_LIBRARIES}
@@ -540,14 +540,14 @@ target_link_libraries( labplot2lib
 	${ZLIB_LIBRARIES}
 	)
 
-IF (Qt5SerialPort_FOUND)
-	target_link_libraries( labplot2lib Qt5::SerialPort )
+IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
+	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::SerialPort )
 ENDIF ()
-IF (Qt5Mqtt_FOUND)
-	target_link_libraries( labplot2lib Qt5::Mqtt )
+IF (Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
+	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::Mqtt )
 ENDIF ()
-IF (KF5SyntaxHighlighting_FOUND)
-	target_link_libraries( labplot2lib KF5::SyntaxHighlighting )
+IF (KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
+	target_link_libraries( labplot2lib KF${KF_MAJOR_VERSION}::SyntaxHighlighting )
 ENDIF ()
 if (KUserFeedback_FOUND)
     target_link_libraries( labplot2lib KUserFeedbackWidgets )
