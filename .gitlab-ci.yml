@@ -72,7 +72,7 @@ include:
     - ninja
 #    - ctest -V
 
-fedora_37_min:
+.fedora_37_min:
   stage: build
   image: fedora:37
   only:
@@ -86,9 +86,9 @@ fedora_37_min:
     - ninja
 #    - ctest -V
 
-.fedora_36_full:
+fedora_37_full:
   stage: build
-  image: fedora:36
+  image: fedora:37
   only:
 #   - merge_requests
     - master
@@ -99,7 +99,7 @@ fedora_37_min:
     - cmake -G Ninja ..
     - ninja
 # tests currently fail due to gcc 12?
-#    - ninja test
+    - ninja test
 
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
 .flatpak:
