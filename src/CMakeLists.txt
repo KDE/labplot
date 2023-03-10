@@ -506,6 +506,14 @@ add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES
 target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 
 target_link_libraries( labplot2lib
+	Qt${QT_MAJOR_VERSION}::Svg
+	Qt${QT_MAJOR_VERSION}::Core
+	Qt${QT_MAJOR_VERSION}::Network
+	Qt${QT_MAJOR_VERSION}::PrintSupport
+	Qt${QT_MAJOR_VERSION}::Sql
+# 	Qt${QT_MAJOR_VERSION}::Qml
+# 	Qt${QT_MAJOR_VERSION}::Quick
+# 	Qt${QT_MAJOR_VERSION}::QuickWidgets
 	KF${KF_MAJOR_VERSION}::Archive
 	KF${KF_MAJOR_VERSION}::Completion
 	KF${KF_MAJOR_VERSION}::ConfigCore
@@ -517,15 +525,6 @@ target_link_libraries( labplot2lib
 	KF${KF_MAJOR_VERSION}::KIOWidgets
 	KF${KF_MAJOR_VERSION}::TextWidgets
 	KF${KF_MAJOR_VERSION}::XmlGui
-	KF${KF_MAJOR_VERSION}::NewStuff
-	Qt${QT_MAJOR_VERSION}::Svg
-	Qt${QT_MAJOR_VERSION}::Core
-	Qt${QT_MAJOR_VERSION}::Network
-	Qt${QT_MAJOR_VERSION}::PrintSupport
-	Qt${QT_MAJOR_VERSION}::Sql
-# 	Qt${QT_MAJOR_VERSION}::Qml
-# 	Qt${QT_MAJOR_VERSION}::Quick
-# 	Qt${QT_MAJOR_VERSION}::QuickWidgets
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES}
 	${Poppler_LIBRARIES}
@@ -554,11 +553,13 @@ endif()
 IF (Discount_FOUND)
 	target_link_libraries( labplot2lib Discount::Lib )
 ENDIF ()
-#TODO: KF5::NewStuff
+IF (KF${KF_MAJOR_VERSION}NewStuff_FOUND)
+	target_link_libraries( labplot2lib KF${KF_MAJOR_VERSION}::NewStuff )
+ENDIF ()
 
 IF (RECENT_CANTOR)
-	# KF5::Service, KF5::Parts is optional but probably required by Cantor
-	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts )
+	# KFX::Service, KFX::Parts is optional but probably required by Cantor
+	target_link_libraries( labplot2lib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts )
 ENDIF ()
 
 IF (ENABLE_READSTAT)
