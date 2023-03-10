@@ -553,8 +553,9 @@ endif()
 IF (Discount_FOUND)
 	target_link_libraries( labplot2lib Discount::Lib )
 ENDIF ()
-IF (KF${KF_MAJOR_VERSION}NewStuff_FOUND)
-	target_link_libraries( labplot2lib KF${KF_MAJOR_VERSION}::NewStuff )
+# TODO: KF6::NewStuff not found even though KF6NewStuff_FOUND
+IF (KF5NewStuff_FOUND)
+	target_link_libraries( labplot2lib KF5::NewStuff )
 ENDIF ()
 
 IF (RECENT_CANTOR)
