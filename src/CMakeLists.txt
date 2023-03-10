@@ -518,7 +518,6 @@ target_link_libraries( labplot2lib
 	KF${KF_MAJOR_VERSION}::TextWidgets
 	KF${KF_MAJOR_VERSION}::XmlGui
 	KF${KF_MAJOR_VERSION}::NewStuff
-	KF${KF_MAJOR_VERSION}::NewStuffCore
 	Qt${QT_MAJOR_VERSION}::Svg
 	Qt${QT_MAJOR_VERSION}::Core
 	Qt${QT_MAJOR_VERSION}::Network
