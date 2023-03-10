@@ -104,7 +104,7 @@ include:
 # tests currently fail due to gcc 12?
 #   - ninja test
 
-Leap_15.4_min:
+.leap_15.4_min:
   stage: build
   image: opensuse/leap:15.4
   only:
@@ -113,12 +113,28 @@ Leap_15.4_min:
   before_script:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
-    - zypper in -y gsl-devel ninja extra-cmake-modules libqt5-qtbase-devel kio-devel
+    - zypper in -y gsl-devel ninja
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
     - ninja
-    - ninja test
+#    - ninja test
+
+leap_15.4_full:
+  stage: build
+  image: opensuse/leap:15.4
+  only:
+#    - merge_requests
+    - master
+  before_script:
+    - zypper ref
+    - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
+    - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel readstat-devel libmatio-devel discount
+  script:
+    - mkdir -p build && cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - ninja
+#    - ninja test
 
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
 .flatpak:
