@@ -120,7 +120,7 @@ include:
     - ninja
 #    - ninja test
 
-leap_15.4_full:
+.leap_15.4_full:
   stage: build
   image: opensuse/leap:15.4
   only:
@@ -129,7 +129,25 @@ leap_15.4_full:
   before_script:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
-    - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel readstat-devel libmatio-devel discount
+# readstat-devel in Science repo only
+    - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount
+  script:
+    - mkdir -p build && cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - ninja
+#    - ninja test
+
+tumbleweed_full:
+  stage: build
+  image: opensuse/tumbleweed
+  only:
+#    - merge_requests
+    - master
+  before_script:
+    - zypper ref
+    - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
+# readstat-devel in Science repo only
+    - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
