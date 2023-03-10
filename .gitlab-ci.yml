@@ -112,7 +112,9 @@ Leap_15.4_min:
     - master
   before_script:
     - zypper ref
-    - zypper install -y cmake
+    - zypper in -y -t pattern devel_qt5 devel_kde_frameworks
+    - zypper in -y gsl-devel
+#    - zypper install -y cmake gcc-c++ ninja extra-cmake-modules bison
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
