@@ -3,14 +3,14 @@
 # SPDX-License-Identifier: CC0-1.0
 
 include:
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 # replaced with own rule
 # - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
 
-windows_qt515:
+.windows_qt515:
   stage: build
   image: kdeorg/windows-msvc2019-qt515:latest
   tags:
@@ -38,12 +38,12 @@ windows_qt515:
     reports:
       junit: JUnitTestResults.xml
 
-ubuntu_22.04_min:
+.ubuntu_22.04_min:
   stage: build
   image: ubuntu:22.04
   only:
 #    - merge_requests
-#    - master
+    - master
   before_script:
     - apt update
     - apt install --yes eatmydata
@@ -54,12 +54,12 @@ ubuntu_22.04_min:
     - ninja
 #    - ctest -V
 
-ubuntu_22.04_full:
+.ubuntu_22.04_full:
   stage: build
   image: ubuntu:22.04
   only:
 #    - merge_requests
-#    - master
+    - master
   before_script:
     - apt update
     - apt install --yes eatmydata
@@ -71,12 +71,12 @@ ubuntu_22.04_full:
     - ninja
 #    - ctest -V
 
-fedora_36_min:
+.fedora_36_min:
   stage: build
   image: fedora:36
   only:
 #    - merge_requests
-#    - master
+    - master
   before_script:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel zlib-devel
   script:
@@ -85,12 +85,12 @@ fedora_36_min:
     - ninja
 #    - ctest -V
 
-fedora_36_full:
+.fedora_36_full:
   stage: build
   image: fedora:36
   only:
 #   - merge_requests
-#   - master
+    - master
   before_script:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel kf5-kparts-devel kf5-syntax-highlighting-devel cantor-devel poppler-qt5-devel libspectre-devel liborigin-devel fftw3-devel netcdf-devel qt5-qtserialport-devel cfitsio-devel libcerf-devel lz4-devel matio-devel discount
   script:
@@ -100,7 +100,6 @@ fedora_36_full:
 # tests currently fail due to gcc 12?
 #    - ninja test
 
-# copied from okular
 clang_format:
   stage: build
   image: debian:testing
