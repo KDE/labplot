@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-09 00:42+0000\n"
+"POT-Creation-Date: 2023-03-10 00:42+0000\n"
 "PO-Revision-Date: 2022-11-11 04:37+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -2168,19 +2168,19 @@ msgstr "Meta-datuen fitxategi baliogabea"
 msgid "Unknown error"
 msgstr "Ezezaguna"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:350
 #, fuzzy, kde-format
 #| msgid "Time"
 msgid "Time_s"
 msgstr "Ordua"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, fuzzy, kde-format
 #| msgid "Time"
 msgid "Time_ns"
 msgstr "Ordua"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:356
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, kde-format
 msgid "Time_10µs"
 msgstr ""

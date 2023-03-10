@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-09 00:42+0000\n"
+"POT-Creation-Date: 2023-03-10 00:42+0000\n"
 "PO-Revision-Date: 2022-08-06 09:40+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -2181,19 +2181,19 @@ msgstr "Nieprawidłowy plik metadanych"
 msgid "Unknown error"
 msgstr "Nieznany błąd MQTT"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:350
 #, fuzzy, kde-format
 #| msgid "Time"
 msgid "Time_s"
 msgstr "Czas"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, fuzzy, kde-format
 #| msgid "Time"
 msgid "Time_ns"
 msgstr "Czas"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:356
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, kde-format
 msgid "Time_10µs"
 msgstr ""

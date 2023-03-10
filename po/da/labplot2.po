@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-09 00:42+0000\n"
+"POT-Creation-Date: 2023-03-10 00:42+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -2306,17 +2306,17 @@ msgstr "Værdier"
 msgid "Unknown error"
 msgstr "ukendt"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:350
 #, kde-format
 msgid "Time_s"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, kde-format
 msgid "Time_ns"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:356
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, kde-format
 msgid "Time_10µs"
 msgstr ""

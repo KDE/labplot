@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-09 00:42+0000\n"
+"POT-Creation-Date: 2023-03-10 00:42+0000\n"
 "PO-Revision-Date: 2014-06-30 02:02+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: lt\n"
@@ -2143,17 +2143,17 @@ msgstr ""
 msgid "Unknown error"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:350
 #, kde-format
 msgid "Time_s"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, kde-format
 msgid "Time_ns"
 msgstr ""
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:356
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, kde-format
 msgid "Time_10µs"
 msgstr ""

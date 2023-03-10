@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-09 00:42+0000\n"
+"POT-Creation-Date: 2023-03-10 00:42+0000\n"
 "PO-Revision-Date: 2022-07-27 16:51+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -2319,19 +2319,19 @@ msgstr "Virheellinen osoitin"
 msgid "Unknown error"
 msgstr "tuntematon"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:350
 #, fuzzy, kde-format
 #| msgid "Timestamp"
 msgid "Time_s"
 msgstr "Aikaleima"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, fuzzy, kde-format
 #| msgid "Timestamp"
 msgid "Time_ns"
 msgstr "Aikaleima"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:356
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, kde-format
 msgid "Time_10µs"
 msgstr ""
