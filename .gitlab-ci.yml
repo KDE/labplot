@@ -112,8 +112,8 @@ Leap_15.4_min:
     - master
   before_script:
     - zypper ref
-    - zypper in -y -t pattern devel_qt5 devel_kde_frameworks
-    - zypper in -y gsl-devel ninja extra-cmake-modules
+    - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
+    - zypper in -y gsl-devel ninja extra-cmake-modules libqt5-qtbase-devel kio-devel
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
