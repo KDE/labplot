@@ -31,6 +31,7 @@ include(FeatureSummary)
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 # Qt6 not supported yet
+set(QT_MAJOR_VERSION "5")
 #if (QT_MAJOR_VERSION STREQUAL "6")
 #    set(QT_MIN_VERSION "6.4.0")
 #    set(KF_MIN_VERSION "5.240.0")
