@@ -16,12 +16,12 @@
 #include <QApplication>
 #include <QColor>
 #include <QComboBox>
-#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QImageReader>
 #include <QLineEdit>
 #include <QMenu>
 #include <QPainter>
+#include <QScreen>
 
 #ifdef HAVE_POPPLER
 #include <poppler-qt5.h>
@@ -310,7 +310,7 @@ QImage GuiTools::importPDFFile(const QString& fileName) {
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
-	const static int dpi = QApplication::desktop()->logicalDpiX();
+	const static int dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
 	QImage image = page->renderToImage(dpi, dpi);
 
 	delete page;
@@ -344,7 +344,7 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
-	const static int dpi = QApplication::desktop()->logicalDpiX();
+	const static int dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
 	QImage image = page->renderToImage(zoomFactor * dpi, zoomFactor * dpi);
 
 	delete page;

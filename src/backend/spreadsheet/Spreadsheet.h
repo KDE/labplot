@@ -17,8 +17,6 @@
 class AbstractFileFilter;
 class SpreadsheetView;
 class SpreadsheetModel;
-template<class T>
-class QVector;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT

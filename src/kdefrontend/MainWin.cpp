@@ -100,8 +100,8 @@
 #include <KActionMenu>
 #include <KColorScheme>
 #include <KColorSchemeManager>
+#include <KCompressionDevice>
 #include <KConfigGroup>
-#include <KFilterDev>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KRecentFilesAction>
@@ -1708,7 +1708,7 @@ bool MainWin::save(const QString& fileName) {
 		else
 			file = new KCompressionDevice(tempFileName, KCompressionDevice::Xz);
 	} else // use file ending to find out how to compress file
-		file = new KFilterDev(tempFileName);
+		file = new KCompressionDevice(tempFileName);
 	if (!file)
 		file = new QFile(tempFileName);
 

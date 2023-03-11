@@ -16,8 +16,6 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QVector>
 
-class QStringList;
-
 class AbstractDataSource : public AbstractPart {
 	Q_OBJECT
 

@@ -93,7 +93,7 @@ void HistoryDialog::clearUndoStack() {
 										i18n("Clear History"),
 										KStandardGuiItem::clear(),
 										KStandardGuiItem::cancel())
-		== KMessageBox::Yes)
+		== KMessageBox::PrimaryAction)
 #else
 	if (KMessageBox::questionYesNo(this, i18n("Do you really want to clear the undo history?"), i18n("Clear History")) == KMessageBox::Yes)
 #endif
