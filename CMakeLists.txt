@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
-set(QT_MINIMUM_VERSION "5.10.0")
+set(QT_MIN_VERSION "5.10.0")
 set(KF_MIN_VERSION "5.16.0")
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
@@ -30,13 +30,14 @@ include(FeatureSummary)
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
-if (QT_MAJOR_VERSION STREQUAL "6")
-    set(QT_REQUIRED_VERSION "6.4.0")
-    set(KF_MIN_VERSION "5.240.0")
-    set(KF_MAJOR_VERSION "6")
-else()
+# Qt6 not supported yet
+#if (QT_MAJOR_VERSION STREQUAL "6")
+#    set(QT_MIN_VERSION "6.4.0")
+#    set(KF_MIN_VERSION "5.240.0")
+#    set(KF_MAJOR_VERSION "6")
+#else()
     set(KF_MAJOR_VERSION "5")
-endif()
+#endif()
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
