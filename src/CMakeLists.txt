@@ -505,6 +505,9 @@ add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 
+# Qt6 not supported yet
+set(QT_MAJOR_VERSION "5")
+
 target_link_libraries( labplot2lib
 	Qt${QT_MAJOR_VERSION}::Svg
 	Qt${QT_MAJOR_VERSION}::Core
