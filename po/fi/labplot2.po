@@ -5749,8 +5749,7 @@ msgid "FFT"
 msgstr "FFT"
 
 #: src/backend/nsl/nsl_conv.c:22
-#, fuzzy, kde-format
-#| msgid "Sum"
+#, kde-format
 msgid "Sum"
 msgstr "Summa"
 
