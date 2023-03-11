@@ -494,7 +494,7 @@ set( LABPLOT_SRCS ${GUI_SOURCES} )
 ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
 # see also QT_MIN_VERSION in CMakeLists.txt
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
-#IF (QT_VERSION_MAJOR MATCHES 5 AND QT_VERSION_MINOR MATCHES 15)
+#IF (QT_MAJOR_VERSION MATCHES 5 AND QT_MINOR_VERSION MATCHES 15)
 #	add_definitions(-DQT_NO_DEPRECATED_WARNINGS)
 #ENDIF ()
 # check for Qt6 compatability
@@ -504,9 +504,6 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
 add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
-
-# Qt6 not supported yet
-set(QT_MAJOR_VERSION "5")
 
 target_link_libraries( labplot2lib
 	Qt${QT_MAJOR_VERSION}::Svg
