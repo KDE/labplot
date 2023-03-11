@@ -4,16 +4,17 @@
 
 include:
 # Tumbleweed
-#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
-#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
+  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
+  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
+#  needs more work
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
 # replaced with own rule
 # - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
 # - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 
 # prepend '.' to temporary disable
 
-.windows_qt515:
+windows_qt515:
   stage: build
   image: kdeorg/windows-msvc2019-qt515:latest
   tags:
@@ -41,7 +42,7 @@ include:
     reports:
       junit: JUnitTestResults.xml
 
-.ubuntu_22.04_min:
+ubuntu_22.04_min:
   stage: build
   image: ubuntu:22.04
   only:
@@ -57,7 +58,7 @@ include:
     - ninja
 #    - ctest -V
 
-.ubuntu_22.04_full:
+ubuntu_22.04_full:
   stage: build
   image: ubuntu:22.04
   only:
@@ -74,7 +75,7 @@ include:
     - ninja
 #    - ctest -V
 
-.fedora_37_min:
+fedora_37_min:
   stage: build
   image: fedora:37
   only:
@@ -88,7 +89,7 @@ include:
     - ninja
 #    - ctest -V
 
-.fedora_37_full:
+fedora_37_full:
   stage: build
   image: fedora:37
   only:
@@ -103,7 +104,7 @@ include:
 # tests currently fail due to gcc 12?
 #   - ninja test
 
-.leap_15.4_min:
+leap_15.4_min:
   stage: build
   image: opensuse/leap:15.4
   only:
@@ -119,7 +120,7 @@ include:
     - ninja
 #    - ninja test
 
-.leap_15.4_full:
+leap_15.4_full:
   stage: build
   image: opensuse/leap:15.4
   only:
@@ -136,7 +137,7 @@ include:
     - ninja
 #    - ninja test
 
-.tumbleweed_full:
+tumbleweed_full:
   stage: build
   image: opensuse/tumbleweed
   only:
@@ -154,7 +155,7 @@ include:
 #    - ninja test
 
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
-.flatpak:
+flatpak:
   stage: deploy
   image: kdeorg/flatpak-builder:latest
   tags:
@@ -180,7 +181,7 @@ include:
       - "${KDE_FLATPAK_MODULE_NAME}.flatpak"
     expire_in: 14 days
 
-.clang_format:
+clang_format:
   stage: test
   image: debian:testing
   before_script:
