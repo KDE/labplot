@@ -174,16 +174,16 @@ add_library(labplot ${GUI_SOURCES} ${BACKEND_SOURCES} ${NSL_SOURCES} ${COMMONFRO
 generate_export_header(labplot)
 
 target_link_libraries( labplot
-	KF5::Archive
-	KF5::ConfigCore
-	KF5::ConfigWidgets
-	KF5::I18n
-	KF5::KIOCore
-	Qt5::Svg
-	Qt5::Core
-	Qt5::Gui
-	Qt5::Widgets
-	Qt5::PrintSupport
+	KF${KF_MAJOR_VERSION}::Archive
+	KF${KF_MAJOR_VERSION}::ConfigCore
+	KF${KF_MAJOR_VERSION}::ConfigWidgets
+	KF${KF_MAJOR_VERSION}::I18n
+	KF${KF_MAJOR_VERSION}::KIOCore
+	Qt${QT_MAJOR_VERSION}::Svg
+	Qt${QT_MAJOR_VERSION}::Core
+	Qt${QT_MAJOR_VERSION}::Gui
+	Qt${QT_MAJOR_VERSION}::Widgets
+	Qt${QT_MAJOR_VERSION}::PrintSupport
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES}
 	${FFTW3_LIBRARIES}
