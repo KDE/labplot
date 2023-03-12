@@ -476,7 +476,11 @@ void MainWin::createADS() {
 	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
 		QMap<QString, ads::CDockWidget*> m(m_DockManager->dockWidgetsMap());
 		for (auto e : m.keys()) {
-			m_DockManager->removeDockWidget(m.value(e));
+			auto dock = m.value(e);
+			// Do not remove them, because it makes no sense
+			if (dock == m_projectExplorerDock || dock == m_propertiesDock)
+				continue;
+			m_DockManager->removeDockWidget(dock);
 		}
 	});
 }
