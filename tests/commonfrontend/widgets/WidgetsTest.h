@@ -25,6 +25,12 @@ private Q_SLOTS:
 	void numberSpinBoxChangingValueKeyPress();
 	void numberSpinBoxLimit();
 	void numberSpinBoxPrefixSuffix();
+	void numberSpinBoxSuffixFrontToBackSelection();
+	void numberSpinBoxSuffixSetCursor();
+	void numberSpinBoxSuffixBackToFrontSelection();
+	void numberSpinBoxPrefixFrontToBackSelection();
+	void numberSpinBoxPrefixBackToFrontSelection();
+	void numberSpinBoxPrefixSetCursorPosition();
 	void numberSpinBoxEnterNumber();
 	void numberSpinBoxFeedback();
 	void numberSpinBoxFeedback2();

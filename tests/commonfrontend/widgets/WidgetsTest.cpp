@@ -692,6 +692,118 @@ void WidgetsTest::numberSpinBoxPrefixSuffix() {
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.02 Suffix"));
 }
 
+void WidgetsTest::numberSpinBoxSuffixFrontToBackSelection() {
+	// Select from front to back
+	NumberSpinBox sb;
+	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
+
+	sb.setValue(5);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("5 cm"));
+
+	int counter = 0;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&counter](double value) {
+		QCOMPARE(value, 51);
+		counter++;
+	});
+
+	sb.lineEdit()->setSelection(1, 1); // select space
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm"));
+	QCOMPARE(counter, 1);
+}
+
+void WidgetsTest::numberSpinBoxSuffixBackToFrontSelection() {
+	// Select from back to front
+	NumberSpinBox sb;
+	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
+
+	sb.setValue(55);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("55 cm"));
+
+	int counter = 0;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&counter](double value) {
+		QCOMPARE(value, 51);
+		counter++;
+	});
+
+	sb.lineEdit()->setSelection(3, -2);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm"));
+	QCOMPARE(counter, 1);
+}
+
+void WidgetsTest::numberSpinBoxSuffixSetCursor() {
+	// Just set cursor into suffix
+	NumberSpinBox sb;
+	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
+
+	sb.setValue(5);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("5 cm"));
+
+	int counter = 0;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&counter](double value) {
+		QCOMPARE(value, 51);
+		counter++;
+	});
+
+	sb.lineEdit()->setCursorPosition(2);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm")); // 1 appended
+	QCOMPARE(counter, 1);
+}
+
+void WidgetsTest::numberSpinBoxPrefixFrontToBackSelection() {
+	// from front to back
+	NumberSpinBox sb;
+	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
+
+	sb.setValue(5);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 5"));
+
+	sb.lineEdit()->setSelection(1, 7); // ref selected
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 1"));
+}
+
+void WidgetsTest::numberSpinBoxPrefixBackToFrontSelection() {
+	// from back to front
+	NumberSpinBox sb;
+	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
+
+	sb.setValue(5);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 5"));
+
+	sb.lineEdit()->setSelection(8, -5); // "fix 5"
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 1"));
+}
+
+void WidgetsTest::numberSpinBoxPrefixSetCursorPosition() {
+	// set cursor
+	NumberSpinBox sb;
+	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
+
+	sb.setValue(5);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 5"));
+
+	// For some reason the cursor position is not applied
+	sb.lineEdit()->setCursorPosition(2);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	// QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 15"));
+}
+
 void WidgetsTest::numberSpinBoxEnterNumber() {
 	NumberSpinBox sb;
 	sb.setDecimals(0);

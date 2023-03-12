@@ -44,6 +44,7 @@ void NumberSpinBox::init(double initValue, bool feedback) {
 	m_feedback = feedback; // must be after setValue()!
 	setInvalid(Errors::NoError);
 	setDecimals(2);
+	lineEdit()->setValidator(nullptr);
 }
 
 QString NumberSpinBox::errorToString(Errors e) {
@@ -70,9 +71,24 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	case Qt::Key_Up:
 		increaseValue();
 		return;
-	default:
+	default: {
+		if (lineEdit()->selectionLength() > 0) {
+			int selectionStart = qMax(lineEdit()->selectionStart(), prefix().length());
+			selectionStart = qMin(selectionStart, lineEdit()->text().length() - suffix().length());
+
+			int selectionEnd = qMax(lineEdit()->selectionEnd(), prefix().length());
+			selectionEnd = qMin(selectionEnd, lineEdit()->text().length() - suffix().length());
+
+			lineEdit()->setSelection(selectionStart, selectionEnd - selectionStart);
+		} else {
+			int cursorPos = lineEdit()->cursorPosition();
+			cursorPos = qMax(lineEdit()->cursorPosition(), prefix().length());
+			cursorPos = qMin(cursorPos, lineEdit()->text().length() - suffix().length());
+			lineEdit()->setCursorPosition(cursorPos);
+		}
 		QDoubleSpinBox::keyPressEvent(event);
 		break;
+	}
 	}
 	QString text = lineEdit()->text();
 	double v;
