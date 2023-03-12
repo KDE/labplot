@@ -1647,10 +1647,12 @@ bool MainWin::closeProject() {
 			m_autoSaveTimer.stop();
 	}
 
-	m_DockManager->removeDockWidget(cursorDock);
-	delete cursorDock;
-	cursorDock = nullptr;
-	cursorWidget = nullptr; // is deleted, because it's the child of cursorDock
+	if (cursorDock) {
+		m_DockManager->removeDockWidget(cursorDock);
+		delete cursorDock;
+		cursorDock = nullptr;
+		cursorWidget = nullptr; // is deleted, because it's the child of cursorDock
+	}
 
 	return true;
 }
