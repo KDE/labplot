@@ -215,6 +215,7 @@ private Q_SLOTS:
 	// 	void resetWelcomeScreen();
 	// void createMdiArea();
 	void createADS();
+	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();
 	void dockWidgetAboutToBeRemoved(ads::CDockWidget*);

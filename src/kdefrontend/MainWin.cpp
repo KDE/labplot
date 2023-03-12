@@ -488,6 +488,12 @@ void MainWin::createADS() {
 	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
 }
 
+void MainWin::changeVisibleAllDocks(bool visible) {
+	QMap<QString, ads::CDockWidget*> m(m_DockManager->dockWidgetsMap());
+	for (auto e : m.keys())
+		m.value(e)->toggleView(visible);
+}
+
 void MainWin::activateNextDock() {
 	const auto* focusedDock = m_DockManager->focusedDockWidget();
 
@@ -1144,6 +1150,9 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_undoAction->setEnabled(false);
 	m_redoAction->setEnabled(false);
 
+	qDebug() << windowState;
+	if (!windowState.isEmpty())
+		changeVisibleAllDocks(false);
 	m_DockManager->restoreState(windowState);
 }
 
@@ -1686,7 +1695,8 @@ void MainWin::openProject(const QString& filename) {
 	updateTitleBar();
 	updateGUIOnProjectChanges(m_project->windowState().toUtf8());
 	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
-	updateDockWindowVisibility();
+	if (m_project->windowState().toUtf8().isEmpty())
+		updateDockWindowVisibility();
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
 
