@@ -483,6 +483,99 @@ void MainWin::createADS() {
 			m_DockManager->removeDockWidget(dock);
 		}
 	});
+
+	connect(m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
+	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
+}
+
+void MainWin::activateNextDock() {
+	const auto* focusedDock = m_DockManager->focusedDockWidget();
+
+	auto itrForward = m_DockManager->dockWidgetsMap().constBegin();
+
+	bool focusedFound = false;
+	while (itrForward != m_DockManager->dockWidgetsMap().constEnd()) {
+		auto* dock = itrForward.value();
+		if (focusedFound) {
+			if (dock != m_projectExplorerDock && dock != m_propertiesDock) {
+				dock->toggleView(true);
+				m_DockManager->setDockWidgetFocused(dock);
+				return;
+			}
+		}
+
+		if (dock == focusedDock) {
+			focusedFound = true;
+		}
+		itrForward++;
+	}
+
+	if (!focusedFound) {
+		if (!m_DockManager->dockWidgetsMap().count())
+			return;
+		auto* dock = m_DockManager->dockWidgetsMap().first();
+		dock->toggleView(true);
+		m_DockManager->setDockWidgetFocused(dock);
+		return;
+	}
+
+	// wrap around
+	auto itrWrap = m_DockManager->dockWidgetsMap().constBegin();
+	while (itrWrap != m_DockManager->dockWidgetsMap().constEnd()) {
+		auto* dock = itrWrap.value();
+		if (dock != m_projectExplorerDock && dock != m_propertiesDock) {
+			dock->toggleView(true);
+			m_DockManager->setDockWidgetFocused(dock);
+			return;
+		}
+		itrWrap++;
+	}
+}
+
+void MainWin::activatePreviousDock() {
+	const auto* focusedDock = m_DockManager->focusedDockWidget();
+
+	auto itrForward = QMapIterator<QString, ads::CDockWidget*>(m_DockManager->dockWidgetsMap());
+	itrForward.toBack();
+
+	bool focusedFound = false;
+	while (itrForward.hasPrevious()) {
+		itrForward.previous();
+		auto* dock = itrForward.value();
+		if (focusedFound) {
+			if (dock != m_projectExplorerDock && dock != m_propertiesDock) {
+				dock->toggleView(true);
+				m_DockManager->setDockWidgetFocused(dock);
+				return;
+			}
+		}
+
+		if (dock == focusedDock) {
+			focusedFound = true;
+		}
+	}
+
+	if (!focusedFound) {
+		if (!m_DockManager->dockWidgetsMap().count())
+			return;
+		auto* dock = m_DockManager->dockWidgetsMap().first();
+		dock->toggleView(true);
+		m_DockManager->setDockWidgetFocused(dock);
+		return;
+	}
+
+	// wrap around
+	auto itrWrap = QMapIterator<QString, ads::CDockWidget*>(m_DockManager->dockWidgetsMap());
+	itrWrap.toBack();
+	while (itrWrap.hasPrevious()) {
+		itrWrap.previous();
+		auto* dock = itrWrap.value();
+		if (dock != m_projectExplorerDock && dock != m_propertiesDock) {
+			dock->toggleView(true);
+			m_DockManager->setDockWidgetFocused(dock);
+			return;
+		}
+	}
 }
 
 void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
