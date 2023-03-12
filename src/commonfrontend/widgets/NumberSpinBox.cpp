@@ -81,8 +81,7 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 
 			lineEdit()->setSelection(selectionStart, selectionEnd - selectionStart);
 		} else {
-			int cursorPos = lineEdit()->cursorPosition();
-			cursorPos = qMax(lineEdit()->cursorPosition(), prefix().length());
+			int cursorPos = qMax(lineEdit()->cursorPosition(), prefix().length());
 			cursorPos = qMin(cursorPos, lineEdit()->text().length() - suffix().length());
 			lineEdit()->setCursorPosition(cursorPos);
 		}
