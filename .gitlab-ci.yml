@@ -158,6 +158,9 @@ tumbleweed_full:
 flatpak:
   stage: deploy
   image: kdeorg/flatpak-builder:latest
+  only:
+#    - merge_requests
+    - master
   tags:
     - Linux
   variables:
