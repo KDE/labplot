@@ -215,6 +215,8 @@ private Q_SLOTS:
 	// 	void resetWelcomeScreen();
 	// void createMdiArea();
 	void createADS();
+	void dockWidgetAboutToBeRemoved(ads::CDockWidget*);
+	void dockWidgetRemoved(ads::CDockWidget*);
 	void dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now);
 	void updateGUI();
 	void updateGUIOnProjectChanges(const QByteArray& windowState = QByteArray());

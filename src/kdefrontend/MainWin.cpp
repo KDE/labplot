@@ -467,6 +467,8 @@ void MainWin::createADS() {
 	m_DockManager = new ads::CDockManager(this);
 	connect(m_DockManager, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
 	// setCentralWidget(m_DockManager); // Automatically done by CDockManager
+	connect(m_DockManager, &ads::CDockManager::dockWidgetAboutToBeRemoved, this, &MainWin::dockWidgetAboutToBeRemoved);
+	connect(m_DockManager, &ads::CDockManager::dockWidgetRemoved, this, &MainWin::dockWidgetRemoved);
 
 	connect(m_closeWindowAction, &QAction::triggered, [this] {
 		m_DockManager->removeDockWidget(m_currentDock);
@@ -477,6 +479,25 @@ void MainWin::createADS() {
 			m_DockManager->removeDockWidget(m.value(e));
 		}
 	});
+}
+
+void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
+	if (w == m_projectExplorerDock) {
+		delete m_projectExplorerDock;
+		m_projectExplorerDock = nullptr;
+	} else if (w == m_propertiesDock) {
+		delete m_propertiesDock;
+		m_propertiesDock = nullptr;
+	}
+}
+
+void MainWin::dockWidgetAboutToBeRemoved(ads::CDockWidget* w) {
+	if (w == m_projectExplorerDock) {
+		delete m_projectExplorer;
+		m_projectExplorer = nullptr;
+	} else if (w == m_propertiesDock) {
+		delete m_propertiesDock->widget();
+	}
 }
 
 void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
@@ -1339,8 +1360,8 @@ bool MainWin::newProject() {
 	m_projectExplorer->setProject(m_project);
 	m_projectExplorer->setCurrentAspect(m_project);
 
-	m_projectExplorerDock->show();
-	m_propertiesDock->show();
+	m_projectExplorerDock->toggleView(true);
+	m_propertiesDock->toggleView(true);
 	updateGUIOnProjectChanges();
 	m_newProjectAction->setEnabled(false);
 
@@ -1612,15 +1633,14 @@ bool MainWin::closeProject() {
 		// 		}
 	}
 
-	// hide the sub-windows prior to deleting them in order to get rid of the shadows
-	// drawn across the sub-windows by the style. The shadow is removed by closing/hiding
-	// the sub-window explicitly but not if we just delete it.
-	// TODO: the actual fix is in https://invent.kde.org/plasma/breeze/-/merge_requests/43,
-	// we can remove this hack later.
 	QMap<QString, ads::CDockWidget*> m(m_DockManager->dockWidgetsMap());
 	QList<ads::CDockWidget*> l;
 	for (auto e : m.keys()) {
-		m_DockManager->removeDockWidget(m.value(e));
+		auto dock = m.value(e);
+		// No need to delete them, because they are used everywhere and can be reused
+		if (dock == m_projectExplorerDock || dock == m_propertiesDock)
+			continue;
+		m_DockManager->removeDockWidget(dock);
 	}
 
 	m_projectClosing = true;
@@ -1636,8 +1656,8 @@ bool MainWin::closeProject() {
 	// update the UI if we're just closing a project
 	// and not closing(quitting) the application
 	if (!m_closing) {
-		m_projectExplorerDock->hide();
-		m_propertiesDock->hide();
+		m_projectExplorerDock->toggleView(false);
+		m_propertiesDock->toggleView(false);
 		m_currentAspect = nullptr;
 		m_currentFolder = nullptr;
 		updateGUIOnProjectChanges();
@@ -1648,7 +1668,6 @@ bool MainWin::closeProject() {
 	}
 
 	if (cursorDock) {
-		m_DockManager->removeDockWidget(cursorDock);
 		delete cursorDock;
 		cursorDock = nullptr;
 		cursorWidget = nullptr; // is deleted, because it's the child of cursorDock
@@ -2202,21 +2221,25 @@ void MainWin::updateDockWindowVisibility() const {
 	switch (m_project->dockVisibility()) {
 	case Project::DockVisibility::allDocks:
 		for (auto* window : windows)
-			window->show();
+			window->toggleView(true);
 
 		break;
 	case Project::DockVisibility::folderOnly:
 		for (auto* window : windows) {
-			auto* view = static_cast<ContentDockWidget*>(window);
-			bool visible = view->part()->folder() == m_currentFolder;
-			window->setVisible(visible);
+			auto* view = dynamic_cast<ContentDockWidget*>(window);
+			if (view) {
+				bool visible = view->part()->folder() == m_currentFolder;
+				window->toggleView(visible);
+			}
 		}
 		break;
 	case Project::DockVisibility::folderAndSubfolders:
 		for (auto* window : windows) {
-			auto* view = static_cast<ContentDockWidget*>(window);
-			bool visible = view->part()->isDescendantOf(m_currentFolder);
-			window->setVisible(visible);
+			auto* view = dynamic_cast<ContentDockWidget*>(window);
+			if (view) {
+				bool visible = view->part()->isDescendantOf(m_currentFolder);
+				window->toggleView(visible);
+			}
 		}
 		break;
 	}
@@ -2265,7 +2288,7 @@ void MainWin::toggleMenuBar(bool checked) {
 
 void MainWin::propertiesExplorerRequested() {
 	if (!m_propertiesDock->isVisible())
-		m_propertiesDock->show();
+		m_propertiesDock->toggleView(true);
 }
 
 /*
