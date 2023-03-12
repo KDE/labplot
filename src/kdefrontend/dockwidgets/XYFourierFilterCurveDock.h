@@ -38,6 +38,7 @@ private:
 
 	XYFourierFilterCurve* m_filterCurve{nullptr};
 	XYFourierFilterCurve::FilterData m_filterData;
+	bool m_dateTimeRange{false};
 
 protected:
 	void setModel() override;
@@ -52,6 +53,8 @@ private Q_SLOTS:
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
+	void xRangeMinDateTimeChanged(qint64);
+	void xRangeMaxDateTimeChanged(qint64);
 	void typeChanged();
 	void formChanged();
 	void orderChanged();
