@@ -2345,7 +2345,7 @@ void MainWin::cursorDockVisibilityChanged(bool visible) {
 void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 	if (mode != CartesianPlot::MouseMode::Cursor) {
 		if (cursorDock)
-			cursorDock->hide();
+			cursorDock->toggleView(false);
 	} else {
 		if (!cursorDock) {
 			cursorDock = new ads::CDockWidget(i18n("Cursor"), this);
@@ -2359,7 +2359,7 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 		auto* worksheet = static_cast<Worksheet*>(QObject::sender());
 		connect(cursorWidget, &CursorDock::cursorUsed, this, &MainWin::focusCursorDock);
 		cursorWidget->setWorksheet(worksheet);
-		cursorDock->show();
+		cursorDock->toggleView(true);
 	}
 }
 
