@@ -379,20 +379,27 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
  * Called if the background color of the parent aspect has changed.
  */
 void LabelWidget::updateBackground() const {
-	QColor color(Qt::white);
-	if (static_cast<TextLabel::Mode>(ui.cbMode->currentIndex()) == TextLabel::Mode::Text) {
-		const auto type = m_label->parentAspect()->type();
-		if (type == AspectType::Worksheet)
-			color = static_cast<const Worksheet*>(m_label->parentAspect())->background()->firstColor();
-		else if (type == AspectType::CartesianPlot)
-			color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->background()->firstColor();
-		else if (type == AspectType::CartesianPlotLegend)
-			color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->background()->firstColor();
-		else if (type == AspectType::InfoElement || type == AspectType::Axis)
-			color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->background()->firstColor();
-		else
-			DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
+	// if latex or markdown mode is used, use the default palette from the desktop theme
+	// since we have additional highlighting for latex and markdown and we don't want it to
+	// collide with the modified background color of QTextEdit. Modify it only for rich-text.
+	const auto mode = static_cast<TextLabel::Mode>(ui.cbMode->currentIndex());
+	if (mode != TextLabel::Mode::Text) {
+		ui.teLabel->setPalette(QPalette());
+		return;
 	}
+
+	QColor color(Qt::white);
+	const auto type = m_label->parentAspect()->type();
+	if (type == AspectType::Worksheet)
+		color = static_cast<const Worksheet*>(m_label->parentAspect())->background()->firstColor();
+	else if (type == AspectType::CartesianPlot)
+		color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->background()->firstColor();
+	else if (type == AspectType::CartesianPlotLegend)
+		color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->background()->firstColor();
+	else if (type == AspectType::InfoElement || type == AspectType::Axis)
+		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->background()->firstColor();
+	else
+		DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
 
 	auto p = ui.teLabel->palette();
 	// QDEBUG(Q_FUNC_INFO << ", color = " << color)
