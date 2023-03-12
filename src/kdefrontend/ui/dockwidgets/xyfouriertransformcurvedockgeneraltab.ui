@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>415</width>
-    <height>1041</height>
+    <width>359</width>
+    <height>771</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -22,22 +22,6 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="20" column="2">
-    <spacer name="verticalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>38</width>
        <height>18</height>
       </size>
      </property>
@@ -267,22 +251,6 @@
    <item row="14" column="2" colspan="2">
     <widget class="KComboBox" name="cbWindowType"/>
    </item>
-   <item row="2" column="2">
-    <spacer name="verticalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="8" column="2" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
@@ -335,15 +303,47 @@
      </item>
     </layout>
    </item>
-   <item row="24" column="2">
-    <widget class="QComboBox" name="cbPlotRanges"/>
-   </item>
    <item row="24" column="0" colspan="2">
     <widget class="QLabel" name="lPlotRange">
      <property name="text">
       <string>Plot Range:</string>
      </property>
     </widget>
+   </item>
+   <item row="24" column="2" colspan="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
+   </item>
+   <item row="2" column="2" colspan="2">
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="20" column="2" colspan="2">
+    <spacer name="verticalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>38</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

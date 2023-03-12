@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>451</width>
-    <height>1019</height>
+    <width>356</width>
+    <height>941</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -33,22 +33,6 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
-   </item>
-   <item row="14" column="4">
-    <spacer name="verticalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="16" column="0">
     <widget class="QLabel" name="lDirection">
@@ -161,9 +145,6 @@
      </property>
     </widget>
    </item>
-   <item row="26" column="2">
-    <widget class="QComboBox" name="cbPlotRanges"/>
-   </item>
    <item row="19" column="0">
     <widget class="QLabel" name="lWrap">
      <property name="text">
@@ -194,19 +175,6 @@
       <string>X-Range:</string>
      </property>
     </widget>
-   </item>
-   <item row="25" column="3">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>266</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="13" column="2" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -244,6 +212,7 @@
     <widget class="QLabel" name="lData">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -266,6 +235,7 @@
     <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -334,6 +304,7 @@
     <widget class="QLabel" name="lConvolution">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -353,7 +324,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>10</height>
+       <height>18</height>
       </size>
      </property>
     </spacer>
@@ -434,6 +405,38 @@
       <bool>false</bool>
      </property>
     </widget>
+   </item>
+   <item row="25" column="2" colspan="2">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>266</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="26" column="2" colspan="3">
+    <widget class="QComboBox" name="cbPlotRanges"/>
+   </item>
+   <item row="14" column="2" colspan="3">
+    <spacer name="verticalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
