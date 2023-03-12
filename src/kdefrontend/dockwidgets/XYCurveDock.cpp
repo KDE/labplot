@@ -454,6 +454,10 @@ void XYCurveDock::setModel() {
 	ui.lLineIncreasingXOnly->setVisible(visible);
 	ui.chkLineIncreasingXOnly->setVisible(visible);
 
+	// if it's not a xy-curve, it's an analysis curve and the line widget is always enables since we always draw the line
+	if (!visible)
+		lineWidget->setEnabled(true);
+
 	// remove the tab "Error bars" for analysis curves
 	if (!visible)
 		ui.tabWidget->removeTab(5);

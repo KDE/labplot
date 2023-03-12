@@ -110,8 +110,10 @@ void AddSubtractValueDialog::init() {
 		m_okButton->setText(i18n("&Add"));
 		break;
 	case Subtract:
-	case SubtractBaseline:
 		setWindowTitle(i18nc("@title:window", "Subtract Value"));
+		[[fallthrough]];
+	case SubtractBaseline:
+		setWindowTitle(i18nc("@title:window", "Subtract Baseline"));
 		ui.lType->setText(i18n("Subtract:")); // only relevant for Add and for Subtract, Add is set in the ui file
 		m_okButton->setText(i18n("&Subtract"));
 		break;
