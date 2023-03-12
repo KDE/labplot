@@ -974,7 +974,7 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", 5));
 }
-/*
+
 void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
 	NumberSpinBox sb(5.11);
 	sb.setFeedback(true);
@@ -1179,6 +1179,5 @@ void WidgetsTest::numberSpinBoxDecimalsMinMax() {
 	sb.setMinimum(1.289343892e-15);
 	QCOMPARE(sb.minimum(), 1.289343892e-15); // not rounded!
 }
-*/
 
 QTEST_MAIN(WidgetsTest)
