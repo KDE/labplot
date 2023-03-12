@@ -1151,9 +1151,13 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_redoAction->setEnabled(false);
 
 	qDebug() << windowState;
-	if (!windowState.isEmpty())
+	if (!windowState.isEmpty()) {
 		changeVisibleAllDocks(false);
-	m_DockManager->restoreState(windowState);
+		m_DockManager->restoreState(windowState);
+	} else {
+		m_projectExplorerDock->toggleView(true);
+		m_propertiesDock->toggleView(true);
+	}
 }
 
 /*
@@ -1466,8 +1470,6 @@ bool MainWin::newProject() {
 	m_projectExplorer->setProject(m_project);
 	m_projectExplorer->setCurrentAspect(m_project);
 
-	m_projectExplorerDock->toggleView(true);
-	m_propertiesDock->toggleView(true);
 	updateGUIOnProjectChanges();
 	m_newProjectAction->setEnabled(false);
 
