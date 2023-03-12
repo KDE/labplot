@@ -2225,17 +2225,17 @@ void MainWin::updateDockWindowVisibility() const {
 void MainWin::toggleDockWidget(QAction* action) {
 	if (action->objectName() == QLatin1String("toggle_project_explorer_dock")) {
 		if (m_projectExplorerDock->isVisible())
-			m_projectExplorerDock->hide();
+			m_projectExplorerDock->toggleView(false);
 		// 			toggleHideWidget(m_projectExplorerDock, true);
 		else
-			m_projectExplorerDock->show();
+			m_projectExplorerDock->toggleView(true);
 		// 			toggleShowWidget(m_projectExplorerDock, true);
 	} else if (action->objectName() == QLatin1String("toggle_properties_explorer_dock")) {
 		if (m_propertiesDock->isVisible())
-			m_propertiesDock->hide();
+			m_propertiesDock->toggleView(false);
 		// 			toggleHideWidget(m_propertiesDock, false);
 		else
-			m_propertiesDock->show();
+			m_propertiesDock->toggleView(true);
 		// 			toggleShowWidget(m_propertiesDock, false);
 	}
 }
