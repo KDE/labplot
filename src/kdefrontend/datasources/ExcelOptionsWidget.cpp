@@ -126,10 +126,9 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 
 		const auto rows = importedStrings.size();
 		ui.twPreview->clear();
-		// TODO: set column names from first row if enabled
 		const bool firstRowAsHeader = m_fileWidget->excelUseFirstRowAsColNames();
 		DEBUG("first row as header enabled = " << firstRowAsHeader)
-		ui.twPreview->setRowCount(rows);
+		ui.twPreview->setRowCount(rows - firstRowAsHeader);
 
 		int colCount = 0;
 		const int maxColumns = 50;
@@ -140,24 +139,32 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 			if (i == 0) {
 				ui.twPreview->setColumnCount(colCount);
 
-				for (int col = 0; col < colCount; ++col) {
-					auto colName = ExcelFilter::convertFromNumberToExcelColumn(selectedRegion.firstColumn() + col);
-					// DEBUG("COLUMN " << col + 1 << " NAME = " << STDSTRING(colName))
-					//  TODO: show column modes
-					// auto* item = new QTableWidgetItem(colName + QStringLiteral(" {") + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode,
-					// columnModes[i])) + QStringLiteral("}"));
-					auto* item = new QTableWidgetItem(colName);
+				if (firstRowAsHeader) {
+					for (int col = 0; col < colCount; ++col) {
+						auto* item = new QTableWidgetItem(lineString.at(col));
+						ui.twPreview->setHorizontalHeaderItem(col, item);
+					}
+					continue; // data used as header
+				} else {
+					for (int col = 0; col < colCount; ++col) {
+						auto colName = ExcelFilter::convertFromNumberToExcelColumn(selectedRegion.firstColumn() + col);
+						// DEBUG("COLUMN " << col + 1 << " NAME = " << STDSTRING(colName))
+						//  TODO: show column modes?
+						// auto* item = new QTableWidgetItem(colName + QStringLiteral(" {") + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode,
+						//	filter->columnModes().at(i))) + QStringLiteral("}"));
+						auto* item = new QTableWidgetItem(colName);
 
-					ui.twPreview->setHorizontalHeaderItem(col, item);
+						ui.twPreview->setHorizontalHeaderItem(col, item);
+					}
 				}
 			}
 
-			auto* item = new QTableWidgetItem(QString::number(selectedRegion.firstRow() + i));
-			ui.twPreview->setVerticalHeaderItem(i, item);
+			auto* item = new QTableWidgetItem(QString::number(selectedRegion.firstRow() + i - firstRowAsHeader));
+			ui.twPreview->setVerticalHeaderItem(i - firstRowAsHeader, item);
 
 			for (int j = 0; j < colCount; ++j) {
 				auto* item = new QTableWidgetItem(lineString.at(j));
-				ui.twPreview->setItem(i, j, item);
+				ui.twPreview->setItem(i - firstRowAsHeader, j, item);
 			}
 		}
 		ui.twPreview->resizeColumnsToContents();

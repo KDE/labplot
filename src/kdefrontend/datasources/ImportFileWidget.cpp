@@ -1814,7 +1814,7 @@ void ImportFileWidget::refreshPreview() {
 						columnName = vectorNameList.at(i);
 
 					auto* item = new QTableWidgetItem(columnName + QStringLiteral(" {")
-													  + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i])) + QStringLiteral("}"));
+													  + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes.at(i))) + QStringLiteral("}"));
 					item->setTextAlignment(Qt::AlignLeft);
 					item->setIcon(AbstractColumn::modeIcon(columnModes.at(i)));
 
