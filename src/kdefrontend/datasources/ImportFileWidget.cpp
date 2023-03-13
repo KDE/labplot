@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import file data widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2009-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2009-2021 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
@@ -1648,9 +1648,8 @@ void ImportFileWidget::refreshPreview() {
 	}
 
 	case AbstractFileFilter::FileType::Excel: {
-		ui.tePreview->clear();
 		importedStrings = m_excelOptionsWidget->previewString();
-		tmpTableWidget = m_excelOptionsWidget->previewWidget();
+		// Nothing else to do. Excel has it's own preview table
 
 		break;
 	}
@@ -1796,7 +1795,7 @@ void ImportFileWidget::refreshPreview() {
 			tmpTableWidget->setRowCount(rows);
 
 			for (int i = 0; i < rows; ++i) {
-				const int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();
+				const int cols = importedStrings.at(i).size() > maxColumns ? maxColumns : importedStrings[i].size();
 				if (cols > tmpTableWidget->columnCount())
 					tmpTableWidget->setColumnCount(cols);
 
@@ -1812,13 +1811,14 @@ void ImportFileWidget::refreshPreview() {
 				for (int i = 0; i < std::min(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
 					QString columnName = QString::number(i + 1);
 					if (i < vectorNameList.size())
-						columnName = vectorNameList[i];
+						columnName = vectorNameList.at(i);
 
 					auto* item = new QTableWidgetItem(columnName + QStringLiteral(" {")
 													  + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i])) + QStringLiteral("}"));
 					item->setTextAlignment(Qt::AlignLeft);
-					item->setIcon(AbstractColumn::modeIcon(columnModes[i]));
+					item->setIcon(AbstractColumn::modeIcon(columnModes.at(i)));
 
+					DEBUG("COLUMN " << i + 1 << " NAME = " << STDSTRING(columnName))
 					tmpTableWidget->setHorizontalHeaderItem(i, item);
 				}
 			}

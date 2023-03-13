@@ -37,9 +37,8 @@ QString ExcelFilter::fileInfoString(const QString& fileName) {
 	ExcelFilter filter;
 
 	QVector<int> rangesPerSheet;
-	for (const auto& sheet : doc.sheetNames()) {
+	for (const auto& sheet : doc.sheetNames())
 		rangesPerSheet.push_back(filter.dataRegions(fileName, sheet).size());
-	}
 
 	const QStringList& sheetNames = doc.sheetNames();
 	QString info(i18n("Sheet count: %1", QString::number(sheetNames.size())));
@@ -428,7 +427,7 @@ void ExcelFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 #ifdef HAVE_EXCEL
 void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO << ", col/row range = " << region.firstColumn() << " .. " << region.lastColumn() << ", " << region.firstRow() << " .. "
-					  << region.lastRow())
+					  << region.lastRow() << ". first row as column names = " << firstRowAsColumnNames)
 
 	int columnOffset = 0;
 	const auto rowCount = currentRange.rowCount();
@@ -446,7 +445,6 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 		for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
 			if (firstRowAsColumnNames) {
 				columnNumericTypes.push_back(isColumnNumericInRange(col, regionToRead));
-
 				columnNames.push_back(m_document->read(regionToRead.firstRow() - 1, col).toString());
 			} else {
 				columnNumericTypes.push_back(isColumnNumericInRange(col, regionToRead));
@@ -617,25 +615,20 @@ QVector<QStringList> ExcelFilterPrivate::previewForDataRegion(const QString& she
 		m_document = new QXlsx::Document(m_fileName);
 	}
 
-	if (!m_document->selectSheet(sheet)) {
-		// invalid sheet name
-	} else {
-		if (region.isValid()) {
-			if (okToMatrix)
-				if (dataRangeCanBeExportedToMatrix(region)) {
-					*okToMatrix = true;
+	if (m_document->selectSheet(sheet) && region.isValid()) { // valid sheet name and region
+		if (okToMatrix && dataRangeCanBeExportedToMatrix(region))
+			*okToMatrix = true;
+
+		const auto& documentRegion = m_document->dimension();
+		if (region.lastRow() <= documentRegion.lastRow() && region.lastColumn() <= documentRegion.lastColumn()) {
+			const int rows = std::min(lines, region.lastRow());
+			for (int row = region.firstRow(); row <= rows; ++row) {
+				QStringList line;
+				for (int col = region.firstColumn(); col <= region.lastColumn(); ++col) {
+					const auto val = m_document->read(row, col);
+					line << val.toString();
 				}
-			const auto& documentRegion = m_document->dimension();
-			if (region.lastRow() <= documentRegion.lastRow() && region.lastColumn() <= documentRegion.lastColumn()) {
-				const int rows = std::min(lines, region.lastRow());
-				for (int row = region.firstRow(); row <= rows; ++row) {
-					QStringList line;
-					for (int col = region.firstColumn(); col <= region.lastColumn(); ++col) {
-						const auto val = m_document->read(row, col);
-						line << val.toString();
-					}
-					infoString << line;
-				}
+				infoString << line;
 			}
 		}
 	}
