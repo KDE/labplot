@@ -463,22 +463,20 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 				spreadsheet->setRowCount(rowCount);
 		}
 
-		numericDataPointers.reserve(colCount);
-		stringDataPointers.reserve(colCount);
-
 		for (int n = 0; n < colCount; ++n) {
+			auto* col = spreadsheet->column(columnOffset + n);
 			if (columnNumericTypes.at(n)) {
-				spreadsheet->column(columnOffset + n)->setColumnMode(AbstractColumn::ColumnMode::Double);
-				auto* datap = static_cast<QVector<double>*>(spreadsheet->column(columnOffset + n)->data());
-				numericDataPointers.push_back(datap);
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
+				auto* data = static_cast<QVector<double>*>(col->data());
+				numericDataPointers.push_back(data);
 				if (importMode == AbstractFileFilter::ImportMode::Replace)
-					datap->clear();
+					data->clear();
 			} else {
-				spreadsheet->column(columnOffset + n)->setColumnMode(AbstractColumn::ColumnMode::Text);
-				auto* list = static_cast<QVector<QString>*>(spreadsheet->column(columnOffset + n)->data());
-				stringDataPointers.push_back(list);
+				col->setColumnMode(AbstractColumn::ColumnMode::Text);
+				auto* data = static_cast<QVector<QString>*>(col->data());
+				stringDataPointers.push_back(data);
 				if (importMode == AbstractFileFilter::ImportMode::Replace)
-					list->clear();
+					data->clear();
 			}
 		}
 
