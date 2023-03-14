@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:44+0000\n"
+"POT-Creation-Date: 2023-03-14 00:42+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -1275,12 +1275,12 @@ msgstr "не удалось открыть устройство"
 msgid "data selection empty"
 msgstr "пустая выборка данных"
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:45
+#: src/backend/datasources/filters/ExcelFilter.cpp:44
 #, kde-format
 msgid "Sheet count: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:47
+#: src/backend/datasources/filters/ExcelFilter.cpp:46
 #, kde-format
 msgid "Sheets: "
 msgstr ""
@@ -22062,14 +22062,14 @@ msgstr ""
 "с применением LaTeX, требуется установка LaTeX</li><li>Markdown — разметка "
 "осуществляется с помощью языка разметки Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:870
-#: src/kdefrontend/widgets/LabelWidget.cpp:896
+#: src/kdefrontend/widgets/LabelWidget.cpp:877
+#: src/kdefrontend/widgets/LabelWidget.cpp:903
 #, kde-format
 msgid "Date"
 msgstr "Дата"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:878
-#: src/kdefrontend/widgets/LabelWidget.cpp:904
+#: src/kdefrontend/widgets/LabelWidget.cpp:885
+#: src/kdefrontend/widgets/LabelWidget.cpp:911
 #, kde-format
 msgid "Date and Time"
 msgstr "Дата и время"

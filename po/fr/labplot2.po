@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:44+0000\n"
+"POT-Creation-Date: 2023-03-14 00:42+0000\n"
 "PO-Revision-Date: 2023-02-16 19:39+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -1261,12 +1261,12 @@ msgstr "impossible d'ouvrir le périphérique"
 msgid "data selection empty"
 msgstr "sélection vide"
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:45
+#: src/backend/datasources/filters/ExcelFilter.cpp:44
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Compteur de feuilles : %1"
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:47
+#: src/backend/datasources/filters/ExcelFilter.cpp:46
 #, kde-format
 msgid "Sheets: "
 msgstr "Feuilles :"
@@ -21463,14 +21463,14 @@ msgstr ""
 "est nécessaire,</li><li>Markdown - Configuration du texte par utilisation du "
 "langage à balises « Markdown ».</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:870
-#: src/kdefrontend/widgets/LabelWidget.cpp:896
+#: src/kdefrontend/widgets/LabelWidget.cpp:877
+#: src/kdefrontend/widgets/LabelWidget.cpp:903
 #, kde-format
 msgid "Date"
 msgstr "Date"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:878
-#: src/kdefrontend/widgets/LabelWidget.cpp:904
+#: src/kdefrontend/widgets/LabelWidget.cpp:885
+#: src/kdefrontend/widgets/LabelWidget.cpp:911
 #, kde-format
 msgid "Date and Time"
 msgstr "Date et heure"

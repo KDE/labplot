@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:44+0000\n"
+"POT-Creation-Date: 2023-03-14 00:42+0000\n"
 "PO-Revision-Date: 2022-11-11 04:37+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -1251,12 +1251,12 @@ msgstr "Ezin izan du gailua ireki"
 msgid "data selection empty"
 msgstr "datu hautapena hutsik"
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:45
+#: src/backend/datasources/filters/ExcelFilter.cpp:44
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Orri kopurua: %1"
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:47
+#: src/backend/datasources/filters/ExcelFilter.cpp:46
 #, kde-format
 msgid "Sheets: "
 msgstr "Orriak: "
@@ -21253,14 +21253,14 @@ msgstr ""
 "LaTeX instalatu beharra dago</li><li>Markdown - Markdown markatzeko lengoaia "
 "erabiltzen duen testu-ezarpena</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:870
-#: src/kdefrontend/widgets/LabelWidget.cpp:896
+#: src/kdefrontend/widgets/LabelWidget.cpp:877
+#: src/kdefrontend/widgets/LabelWidget.cpp:903
 #, kde-format
 msgid "Date"
 msgstr "Data"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:878
-#: src/kdefrontend/widgets/LabelWidget.cpp:904
+#: src/kdefrontend/widgets/LabelWidget.cpp:885
+#: src/kdefrontend/widgets/LabelWidget.cpp:911
 #, kde-format
 msgid "Date and Time"
 msgstr "Data eta ordua"

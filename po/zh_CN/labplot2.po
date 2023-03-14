@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:44+0000\n"
+"POT-Creation-Date: 2023-03-14 00:42+0000\n"
 "PO-Revision-Date: 2023-03-11 04:52\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1225,12 +1225,12 @@ msgstr "无法打开设备 "
 msgid "data selection empty"
 msgstr ""
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:45
+#: src/backend/datasources/filters/ExcelFilter.cpp:44
 #, kde-format
 msgid "Sheet count: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:47
+#: src/backend/datasources/filters/ExcelFilter.cpp:46
 #, kde-format
 msgid "Sheets: "
 msgstr ""
@@ -20953,14 +20953,14 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:870
-#: src/kdefrontend/widgets/LabelWidget.cpp:896
+#: src/kdefrontend/widgets/LabelWidget.cpp:877
+#: src/kdefrontend/widgets/LabelWidget.cpp:903
 #, kde-format
 msgid "Date"
 msgstr "日期"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:878
-#: src/kdefrontend/widgets/LabelWidget.cpp:904
+#: src/kdefrontend/widgets/LabelWidget.cpp:885
+#: src/kdefrontend/widgets/LabelWidget.cpp:911
 #, kde-format
 msgid "Date and Time"
 msgstr "日期和时间"

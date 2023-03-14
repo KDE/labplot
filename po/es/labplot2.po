@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:44+0000\n"
-"PO-Revision-Date: 2023-02-17 20:12+0100\n"
+"POT-Creation-Date: 2023-03-14 00:42+0000\n"
+"PO-Revision-Date: 2023-03-13 21:10+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1241,12 +1241,12 @@ msgstr "no se ha podido abrir el dispositivo"
 msgid "data selection empty"
 msgstr "selección de datos vacía"
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:45
+#: src/backend/datasources/filters/ExcelFilter.cpp:44
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Número de hojas: %1"
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:47
+#: src/backend/datasources/filters/ExcelFilter.cpp:46
 #, kde-format
 msgid "Sheets: "
 msgstr "Hojas: "
@@ -14865,8 +14865,7 @@ msgid "Subtract Value"
 msgstr "Restar valor"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
-#, fuzzy, kde-format
-#| msgid "Subtract Baseline"
+#, kde-format
 msgctxt "@title:window"
 msgid "Subtract Baseline"
 msgstr "Restar línea base"
@@ -21369,14 +21368,14 @@ msgstr ""
 "LaTeX (se necesita la instalación de LaTeX)</li><li>Markdown  - "
 "configuración de texto con el lenguaje de marcado Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:870
-#: src/kdefrontend/widgets/LabelWidget.cpp:896
+#: src/kdefrontend/widgets/LabelWidget.cpp:877
+#: src/kdefrontend/widgets/LabelWidget.cpp:903
 #, kde-format
 msgid "Date"
 msgstr "Fecha"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:878
-#: src/kdefrontend/widgets/LabelWidget.cpp:904
+#: src/kdefrontend/widgets/LabelWidget.cpp:885
+#: src/kdefrontend/widgets/LabelWidget.cpp:911
 #, kde-format
 msgid "Date and Time"
 msgstr "Fecha y hora"

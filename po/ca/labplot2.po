@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-13 00:44+0000\n"
-"PO-Revision-Date: 2023-02-16 09:30+0100\n"
+"POT-Creation-Date: 2023-03-14 00:42+0000\n"
+"PO-Revision-Date: 2023-03-13 09:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -1252,12 +1252,12 @@ msgstr "no s'ha pogut obrir el dispositiu"
 msgid "data selection empty"
 msgstr "la selecció de dades està buida"
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:45
+#: src/backend/datasources/filters/ExcelFilter.cpp:44
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Comptador de fulls: %1"
 
-#: src/backend/datasources/filters/ExcelFilter.cpp:47
+#: src/backend/datasources/filters/ExcelFilter.cpp:46
 #, kde-format
 msgid "Sheets: "
 msgstr "Fulls: "
@@ -14968,11 +14968,10 @@ msgid "Subtract Value"
 msgstr "Sostracció de valor"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
-#, fuzzy, kde-format
-#| msgid "Subtract Baseline"
+#, kde-format
 msgctxt "@title:window"
 msgid "Subtract Baseline"
-msgstr "Sostreu la línia base"
+msgstr "Sostracció de la línia base"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:117
 #, kde-format
@@ -21500,14 +21499,14 @@ msgstr ""
 "requereix la instal·lació del LaTeX</li><li>Markdown - definició del text "
 "usant el llenguatge de marcadors Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:870
-#: src/kdefrontend/widgets/LabelWidget.cpp:896
+#: src/kdefrontend/widgets/LabelWidget.cpp:877
+#: src/kdefrontend/widgets/LabelWidget.cpp:903
 #, kde-format
 msgid "Date"
 msgstr "Data"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:878
-#: src/kdefrontend/widgets/LabelWidget.cpp:904
+#: src/kdefrontend/widgets/LabelWidget.cpp:885
+#: src/kdefrontend/widgets/LabelWidget.cpp:911
 #, kde-format
 msgid "Date and Time"
 msgstr "Data i hora"
