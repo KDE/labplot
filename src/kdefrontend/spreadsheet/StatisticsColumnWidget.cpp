@@ -246,6 +246,9 @@ void StatisticsColumnWidget::showOverview() {
 }
 
 void StatisticsColumnWidget::showOverviewPlot() {
+	if (!m_column->isNumeric())
+		return;
+
 	// add plot
 	auto* plot = addPlot(&m_overviewPlotWidget);
 	plot->setSymmetricPadding(false);
@@ -569,6 +572,8 @@ void StatisticsColumnWidget::showBarPlot() {
 			axis->majorGridLine()->setStyle(Qt::NoPen);
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 			axis->setMajorTickStartOffset(0.5);
+			axis->setMajorTicksType(Axis::TicksType::Spacing);
+			axis->setMajorTicksSpacing(1.);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
 			axis->setLabelsTextColumn(labelsColumn);
 		} else {
@@ -703,6 +708,8 @@ void StatisticsColumnWidget::showParetoPlot() {
 			axis->majorGridLine()->setStyle(Qt::NoPen);
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 			axis->setMajorTickStartOffset(0.5);
+			axis->setMajorTicksType(Axis::TicksType::Spacing);
+			axis->setMajorTicksSpacing(1.);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
 			axis->setLabelsTextColumn(labelsColumn);
 		} else {

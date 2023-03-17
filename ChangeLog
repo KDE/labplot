@@ -17,7 +17,7 @@ New features:
 		* Use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns
 		* When generating random numbers, allow to specify the seed number
-		* Column statistics for text columns
+		* Column statistics for text columns including the frequency table, bar and Pareto plots
 		* Column statistics for selected cells only
 		* Dropping and masking of values also for text and datetime columns
 		* Data sampling (random and periodic methods)
