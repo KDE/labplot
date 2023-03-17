@@ -6194,7 +6194,7 @@ msgstr "ذو حدين"
 #: src/backend/nsl/nsl_sf_stats.c:40
 #, kde-format
 msgid "Pascal"
-msgstr "پاسكال"
+msgstr "باسكال"
 
 #: src/backend/nsl/nsl_sf_stats.c:41
 #, kde-format
