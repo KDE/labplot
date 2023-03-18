@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-14 00:42+0000\n"
+"POT-Creation-Date: 2023-03-18 00:54+0000\n"
 "PO-Revision-Date: 2014-02-09 10:11+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -5587,9 +5587,9 @@ msgstr ""
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:828
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:222
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:317
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:575
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:710
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:320
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:580
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:717
 #: src/kdefrontend/widgets/ValueWidget.cpp:32
 #, kde-format
 msgid "Frequency"
@@ -15509,23 +15509,23 @@ msgid "Percent"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:341
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:344
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:403
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:406
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:405
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:408
 #, kde-format
 msgid "Sample Quantiles"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:715
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:722
 #, kde-format
 msgid "Cumulative Percentage"
 msgstr ""

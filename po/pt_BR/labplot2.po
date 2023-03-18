@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-14 00:42+0000\n"
+"POT-Creation-Date: 2023-03-18 00:54+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -5764,9 +5764,9 @@ msgstr ""
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:828
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:222
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:317
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:575
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:710
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:320
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:580
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:717
 #: src/kdefrontend/widgets/ValueWidget.cpp:32
 #, kde-format
 msgid "Frequency"
@@ -16583,25 +16583,25 @@ msgid "Percent"
 msgstr "ladrilhado centralizado"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:341
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:344
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Densidade"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:403
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:406
 #, fuzzy, kde-format
 #| msgid "derivative"
 msgid "Theoretical Quantiles"
 msgstr "derivada"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:405
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:408
 #, fuzzy, kde-format
 #| msgid "Cap size"
 msgid "Sample Quantiles"
 msgstr "Tamanho do extremo"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:715
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:722
 #, kde-format
 msgid "Cumulative Percentage"
 msgstr ""
