@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-18 00:54+0000\n"
-"PO-Revision-Date: 2023-03-16 11:49+0100\n"
+"PO-Revision-Date: 2023-03-18 08:00+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -99,7 +99,7 @@ msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 #: src/commonfrontend/ProjectExplorer.cpp:1041
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
-msgstr "Atribut »%1« manjka ali je prazen, uporabljena je privzeta vrednost"
+msgstr "Atribut '%1' manjka ali je prazen, uporabljena je privzeta vrednost"
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
@@ -125,14 +125,14 @@ msgstr "Atribut »%1« manjka ali je prazen, uporabljena je privzeta vrednost"
 #: src/backend/worksheet/Worksheet.cpp:1798
 #, kde-format
 msgid "unknown element '%1'"
-msgstr "neznan element »%1«"
+msgstr "neznan element '%1'"
 
 #: src/backend/core/AbstractAspect.cpp:224
 #, kde-format
 msgid ""
 "Intended name \"%1\" was changed to \"%2\" in order to avoid name collision."
 msgstr ""
-"Predvideno ime »%1« je bilo spremenjeno v »%2«, da bi se izognili sporu."
+"Predvideno ime \"%1\" je bilo spremenjeno v \"%2\", da bi se izognili sporu."
 
 #: src/backend/core/AbstractAspect.cpp:228
 #, kde-format
@@ -198,7 +198,7 @@ msgstr "%1: dodaj %2"
 #: src/backend/core/AbstractAspect.cpp:538
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
-msgstr "Preimenovanje »%1« v »%2«, da bi se izognili sporu zaradi imena."
+msgstr "Preimenovanje \"%1\" v \"%2\", da bi se izognili sporu zaradi imena."
 
 #: src/backend/core/AbstractAspect.cpp:536
 #, kde-format
