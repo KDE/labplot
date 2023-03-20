@@ -10380,12 +10380,12 @@ msgid ""
 "Sunday</td></tr></table><br><br>In case the provided expression is empty, "
 "the format will be auto-detected."
 msgstr ""
-"Biçim karakter dizisinin tarih bölümü için kullanılabilen ifadeler: "
-"<table><tr><td>d</td><td>başında sıfır olmadan sayı olarak gün (1'den 31'e)."
-"</td></tr><tr><td>dd</td><td>başında sıfır ile sayı olarak gün (01'den 31'e)."
-"</td></tr><tr><td>ddd</td><td>kısaltılmış yerelleştirilmiş gün adı (örn. "
-"'Pzt'den 'Paz'a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</"
-"td></tr><tr><td>dddd</td><td>uzun yerelleştirilmiş ad (örn. 'Pazartesi'nden "
+"Biçim dizisinin tarih bölümü için kullanılabilen ifadeler: <table><tr><td>d</"
+"td><td>başında sıfır olmadan sayı olarak gün (1'den 31'e).</td></"
+"tr><tr><td>dd</td><td>başında sıfır ile sayı olarak gün (01'den 31'e).</td></"
+"tr><tr><td>ddd</td><td>kısaltılmış yerelleştirilmiş gün adı (örn. 'Pzt'den "
+"'Paz'a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
+"tr><tr><td>dddd</td><td>uzun yerelleştirilmiş ad (örn. 'Pazartesi'nden "
 "'Pazar'a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
 "tr><tr><td>M</td><td>başında sıfır olmadan ay (1'den 12'ye).</td></"
 "tr><tr><td>MM</td><td>başına sıfır koyarak ay (01'den 12'ye).</td></"
@@ -10472,7 +10472,7 @@ msgid ""
 "on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr></table>"
 msgstr ""
 "<table><tr><td>küçük son haneli</td><td>Intel x86 işlemciler üzerindeki "
-"tipik bayt sırasıdır (endianlık).</td></tr><tr><td>büyük endian</"
+"tipik bayt sırasıdır (endianlık).</td></tr><tr><td>büyük son haneli</"
 "td><td>Mainframes (IBM) ve SPARC/PowerPC/Motorola işlemciler üzerindeki "
 "tipik bayt sırasıdır<tr></tr></table>"
 
@@ -11472,12 +11472,12 @@ msgid ""
 "td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
 "Sunday</td></tr></table>"
 msgstr ""
-"Biçim karakter dizisinin tarih bölümü için kullanılabilen ifadeler: "
-"<table><tr><td>d</td><td>başında sıfır olmadan sayı olarak gün (1'den 31'e)."
-"</td></tr><tr><td>dd</td><td>başında sıfır ile sayı olarak gün (01'den 31'e)."
-"</td></tr><tr><td>ddd</td><td>kısaltılmış yerelleştirilmiş gün adı (örn. "
-"'Pzt'den 'Paz'a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</"
-"td></tr><tr><td>dddd</td><td>uzun yerelleştirilmiş ad (örn. 'Pazartesi'nden "
+"Biçim dizisinin tarih bölümü için kullanılabilen ifadeler: <table><tr><td>d</"
+"td><td>başında sıfır olmadan sayı olarak gün (1'den 31'e).</td></"
+"tr><tr><td>dd</td><td>başında sıfır ile sayı olarak gün (01'den 31'e).</td></"
+"tr><tr><td>ddd</td><td>kısaltılmış yerelleştirilmiş gün adı (örn. 'Pzt'den "
+"'Paz'a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
+"tr><tr><td>dddd</td><td>uzun yerelleştirilmiş ad (örn. 'Pazartesi'nden "
 "'Pazar'a). Sistem yerel ayarını adı yerelleştirmek için kullanır.</td></"
 "tr><tr><td>M</td><td>başında sıfır olmadan ay (1'den 12'ye).</td></"
 "tr><tr><td>MM</td><td>başına sıfır koyarak ay (01'den 12'ye).</td></"
@@ -11754,11 +11754,11 @@ msgid ""
 "points, respectively</li><li>Custom - manually specify the start and end "
 "points of the axis</li></ul>"
 msgstr ""
-"Eksen erimi - Eksenin başlangıç ve bitiş noktalarını kendiliğinden geçerli "
-"çizim erimlerine ayarla</li><li>Otomatik Veri - Eksenin başlangıç ve bitiş "
-"noktalarını otomatik olarak en küçük ve en büyük çizilmiş veri noktalarına "
-"sırasıyla ayarla</li><li>Özel - Eksenin başlangıç ve bitiş noktalarını el "
-"ile ayarla</li></ul>"
+"Eksen erimi:<ul><li>Otomatik - Eksenin başlangıç ve bitiş noktalarını "
+"kendiliğinden geçerli çizim erimlerine ayarla</li><li>Otomatik Veri - "
+"Eksenin başlangıç ve bitiş noktalarını otomatik olarak en küçük ve en büyük "
+"çizilmiş veri noktalarına sırasıyla ayarla</li><li>Özel - Eksenin başlangıç "
+"ve bitiş noktalarını el ile ayarla</li></ul>"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:266
 #, kde-format
@@ -21578,168 +21578,3 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
-
-#~ msgid "Baseline"
-#~ msgstr "Taban çizgisi"
-
-#~ msgid "Weighting:"
-#~ msgstr "Tartma:"
-
-#~ msgid "Add the specified value to column values"
-#~ msgstr "Sütun değerlerine belirtilen değeri ekle"
-
-#~ msgid "Subtract the specified value from column values"
-#~ msgstr "Sütun değerlerinden belirtilen değeri çıkar"
-
-#~ msgid "Multiply column values by the specified value"
-#~ msgstr "Sütun değerlerini belirtilen değerle çarp"
-
-#~ msgid "Divide column values by the specified value"
-#~ msgstr "Sütun değerlerini belirtilen değere böl"
-
-#~ msgid "Add the specified value to matrix values"
-#~ msgstr "Matris değerlerine belirtilen değeri ekle"
-
-#~ msgid "Subtract the specified value from matrix values"
-#~ msgstr "Matris değerlerinden belirtilen değeri çıkar"
-
-#~ msgid "Multiply matrix values by the specified value"
-#~ msgstr "Matris değerlerini belirtilen değerle çarp"
-
-#~ msgid "Divide matrix values by the specified value"
-#~ msgstr "Matris değerlerini belirtilen değere böl"
-
-#~ msgid "Statisti&cs..."
-#~ msgstr "İstatisti&kler..."
-
-#~ msgid "Column Statisti&cs"
-#~ msgstr "Sütun İstatisti&kleri"
-
-#~ msgid "Created: %1"
-#~ msgstr "Oluşturulma: %1"
-
-#~ msgid "Advanced"
-#~ msgstr "Gelişmiş"
-
-#~ msgid "X-data:"
-#~ msgstr "X verisi:"
-
-#~ msgid "Y-data:"
-#~ msgstr "Y verisi:"
-
-#~ msgid "Add plots to"
-#~ msgstr "Şuralara çizimler ekle"
-
-#~ msgid "X-error"
-#~ msgstr "X hatası"
-
-#~ msgid "Y-error"
-#~ msgstr "Y hatası"
-
-#~ msgid "auto"
-#~ msgstr "otomaik"
-
-#~ msgid "maximum"
-#~ msgstr "en yüksek değer"
-
-#~ msgid "imaginary part"
-#~ msgstr "sanal bölüm"
-
-#~ msgid "linear"
-#~ msgstr "doğrusal"
-
-#~ msgid "polynomial"
-#~ msgstr "polinominal"
-
-#~ msgid "cubic spline (natural)"
-#~ msgstr "kübik eğri (doğal)"
-
-#~ msgid "cubic spline (periodic)"
-#~ msgstr "kübik eğri (periodik)"
-
-#~ msgid "Akima-spline (natural)"
-#~ msgstr "Akima-yiv (doğal)"
-
-#~ msgid "Akima-spline (periodic)"
-#~ msgstr "Akima-spline (periyodik)"
-
-#~ msgid "cosine"
-#~ msgstr "kosinüs"
-
-#~ msgid "exponential"
-#~ msgstr "üstel"
-
-#~ msgid "function"
-#~ msgstr "işlev"
-
-#~ msgid "derivative"
-#~ msgstr "türev"
-
-#~ msgid "percentile"
-#~ msgstr "persantil"
-
-#~ msgid "constant"
-#~ msgstr "sabit"
-
-#~ msgid "periodic"
-#~ msgstr "periyodik"
-
-#~ msgid "binomial"
-#~ msgstr "binominal"
-
-#~ msgid "y-Start:"
-#~ msgstr "y Başlangıcı:"
-
-#~ msgid "y-End:"
-#~ msgstr "y Sonu:"
-
-#~ msgid "x-Range:"
-#~ msgstr "x Erimi:"
-
-#~ msgid "Plot ranges:"
-#~ msgstr "Çizim erimleri:"
-
-#~ msgid "x-data:"
-#~ msgstr "x verisi:"
-
-#~ msgid "y-data:"
-#~ msgstr "y verisi:"
-
-#~ msgid "y-Data:"
-#~ msgstr "y Verisi:"
-
-#~ msgid "y-Weight:"
-#~ msgstr "y Ağırlığı:"
-
-#~ msgid "%1: set whiskers cap pen"
-#~ msgstr "%1: Kılların kap kalemini ayarla"
-
-#~ msgid "%1: set whiskers cap opacity"
-#~ msgstr "%1: Kılların kap matlığını ayarla"
-
-#~ msgid "Select y-Region and Zoom In"
-#~ msgstr "Y Bölgesi Seç ve Yakınlaştır"
-
-#~ msgid "Hilbert-Transform"
-#~ msgstr "Hilbert Dönüşümü"
-
-#~ msgctxt "@title:window"
-#~ msgid "xy-Curve"
-#~ msgstr "xy Eğrisi"
-
-#~ msgctxt "@title:window"
-#~ msgid "xy-Equation"
-#~ msgstr "xy Denklemi"
-
-#~ msgctxt "@title:window"
-#~ msgid "Histogram Properties"
-#~ msgstr "Histogram Özellikleri"
-
-#~ msgid "Font"
-#~ msgstr "Yazıtipi"
-
-#~ msgid "x-Range"
-#~ msgstr "x Erimi"
-
-#~ msgid "Font color:"
-#~ msgstr "Yazıtipi rengi:"
