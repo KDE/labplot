@@ -2198,7 +2198,7 @@ msgstr "Ha fallat per un error en arredonir"
 #: src/backend/gsl/errors.h:61
 #, kde-format
 msgid "Matrix, vector lengths are not conformant"
-msgstr "Matriu, les longituds dels vectors no són conformes"
+msgstr "Matriu, les llargàries dels vectors no són conformes"
 
 #: src/backend/gsl/errors.h:63
 #, kde-format
@@ -15990,7 +15990,7 @@ msgstr "Segments"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1201
 #, kde-format
 msgid "Length:"
-msgstr "Llargària:"
+msgstr "Longitud:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
