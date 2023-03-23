@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-18 00:54+0000\n"
+"POT-Creation-Date: 2023-03-23 00:43+0000\n"
 "PO-Revision-Date: 2023-02-27 11:31+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -11041,6 +11041,11 @@ msgstr "Datenquellendatei auswählen"
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Wählen Sie die DBC Datei"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:918
+#, kde-format
+msgid "DBC file (*.dbc)"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format

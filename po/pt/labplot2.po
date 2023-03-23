@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-18 00:54+0000\n"
+"POT-Creation-Date: 2023-03-23 00:43+0000\n"
 "PO-Revision-Date: 2023-03-20 14:27+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -11127,6 +11127,11 @@ msgstr "Seleccionar a Fonte de Dados do Ficheiro"
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Seleccionar o ficheiro DBC"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:918
+#, kde-format
+msgid "DBC file (*.dbc)"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format

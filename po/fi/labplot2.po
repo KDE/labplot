@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-18 00:54+0000\n"
+"POT-Creation-Date: 2023-03-23 00:43+0000\n"
 "PO-Revision-Date: 2022-07-27 16:51+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -11621,6 +11621,11 @@ msgstr "Valitse tiedostodatalähde"
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Valitse kuvatiedosto"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:918
+#, kde-format
+msgid "DBC file (*.dbc)"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
