@@ -432,6 +432,8 @@ void DatapickerImageWidget::fileNameChanged() {
 	for (auto* image : m_imagesList) {
 		image->setRelativeFilePath(relative);
 		image->setFileName(fileName);
+        if (image->embedded())
+            image->setOriginalImage(fileName);
 	}
 }
 
