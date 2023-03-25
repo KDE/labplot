@@ -244,11 +244,11 @@ bool Datapicker::xDateTime() const {
 	return m_image->axisPoints().datetime;
 }
 
-QVector3D Datapicker::mapSceneToLogical(QPointF point) const {
+Vector3D Datapicker::mapSceneToLogical(QPointF point) const {
 	return m_transform->mapSceneToLogical(point, m_image->axisPoints());
 }
 
-QVector3D Datapicker::mapSceneLengthToLogical(QPointF point) const {
+Vector3D Datapicker::mapSceneLengthToLogical(QPointF point) const {
 	return m_transform->mapSceneLengthToLogical(point, m_image->axisPoints());
 }
 

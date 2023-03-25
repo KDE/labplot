@@ -12,6 +12,7 @@
 #ifndef DATAPICKER_H
 #define DATAPICKER_H
 
+#include "Vector3D.h"
 #include "backend/core/AbstractPart.h"
 
 class Spreadsheet;
@@ -50,8 +51,8 @@ public:
 
 	bool xDateTime() const;
 
-	QVector3D mapSceneToLogical(QPointF) const;
-	QVector3D mapSceneLengthToLogical(QPointF) const;
+	Vector3D mapSceneToLogical(QPointF) const;
+	Vector3D mapSceneLengthToLogical(QPointF) const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

@@ -715,9 +715,9 @@ void DatapickerImageWidget::load() {
 	const double x2 = m_image->axisPoints().logicalPos[1].x();
 	const double x3 = m_image->axisPoints().logicalPos[2].x();
 
-	ui.dtePositionX1->setDateTime(QDateTime::fromMSecsSinceEpoch(x1));
-	ui.dtePositionX2->setDateTime(QDateTime::fromMSecsSinceEpoch(x2));
-	ui.dtePositionX3->setDateTime(QDateTime::fromMSecsSinceEpoch(x3));
+	ui.dtePositionX1->setMSecsSinceEpochUTC(x1);
+	ui.dtePositionX2->setMSecsSinceEpochUTC(x2);
+	ui.dtePositionX3->setMSecsSinceEpochUTC(x3);
 
 	ui.sbPositionX1->setValue(x1);
 	ui.sbPositionY1->setValue(m_image->axisPoints().logicalPos[0].y());

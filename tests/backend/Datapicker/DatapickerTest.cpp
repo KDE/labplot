@@ -982,9 +982,9 @@ void DatapickerTest::imageAxisPointsChanged() {
 	w.setImages({image});
 
 	DatapickerImage::ReferencePoints points;
-	points.logicalPos[0] = QVector3D(-1, 2, 4);
-	points.logicalPos[1] = QVector3D(-5, -867, 236);
-	points.logicalPos[2] = QVector3D(43, -231.2f, 234);
+	points.logicalPos[0] = Vector3D(-1, 2, 4);
+	points.logicalPos[1] = Vector3D(-5, -867, 236);
+	points.logicalPos[2] = Vector3D(43, -231.2f, 234);
 	points.scenePos[0] = QPointF(-3, 2);
 	points.scenePos[1] = QPointF(-291, 3249);
 	points.scenePos[2] = QPointF(-239, 349);
@@ -1086,9 +1086,9 @@ void DatapickerTest::datapickerDateTime() {
 	QDateTime dt1 = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
 	QDateTime dt2 = QDateTime::fromString(QLatin1String("2000-12-01 00:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
 	QDateTime dt3 = QDateTime::fromString(QLatin1String("2000-12-01 06:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"));
-	w.ui.dtePositionX1->setDateTime(dt1);
-	w.ui.dtePositionX2->setDateTime(dt2);
-	w.ui.dtePositionX3->setDateTime(dt3);
+	w.ui.dtePositionX1->setMSecsSinceEpochUTC(dt1.toMSecsSinceEpoch());
+	w.ui.dtePositionX2->setMSecsSinceEpochUTC(dt2.toMSecsSinceEpoch());
+	w.ui.dtePositionX3->setMSecsSinceEpochUTC(dt3.toMSecsSinceEpoch());
 
 	QCOMPARE(curve->posXColumn()->rowCount(), 1);
 	QCOMPARE(curve->posXColumn()->columnMode(), AbstractColumn::ColumnMode::DateTime);

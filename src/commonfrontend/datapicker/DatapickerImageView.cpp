@@ -508,7 +508,7 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 
 	// show the current coordinates under the mouse cursor in the status bar
 	if (m_image->plotPointsType() == DatapickerImage::PointsType::CurvePoints) {
-		QVector3D logicalPos = m_transform->mapSceneToLogical(pos, m_image->axisPoints());
+		Vector3D logicalPos = m_transform->mapSceneToLogical(pos, m_image->axisPoints());
 		if (m_image->axisPoints().type == DatapickerImage::GraphType::Ternary) {
 			Q_EMIT statusInfo(QStringLiteral("a =") + QString::number(logicalPos.x()) + QStringLiteral(", b =") + QString::number(logicalPos.y())
 							  + QStringLiteral(", c =") + QString::number(logicalPos.z()));

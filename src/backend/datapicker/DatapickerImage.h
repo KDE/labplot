@@ -12,12 +12,12 @@
 #ifndef DATAPICKERIMAGE_H
 #define DATAPICKERIMAGE_H
 
+#include "Vector3D.h"
 #include "backend/core/AbstractPart.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <QPen>
-#include <QVector3D>
 
 class DatapickerImagePrivate;
 class DatapickerImageView;
@@ -42,7 +42,7 @@ public:
 	struct ReferencePoints {
 		GraphType type{GraphType::Linear};
 		QPointF scenePos[3];
-		QVector3D logicalPos[3];
+		Vector3D logicalPos[3];
 		double ternaryScale{1.0};
 		bool datetime{false}; // Datetime for the x axis
 	};

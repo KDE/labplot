@@ -435,12 +435,14 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 	if ((m_datetime && !xDateTime) || (!m_datetime && xDateTime))
 		updateColumns(xDateTime);
 
-	QVector3D data = datapicker->mapSceneToLogical(point->position());
+	Vector3D data = datapicker->mapSceneToLogical(point->position());
 
 	if (d->posXColumn) {
-		if (datapicker->xDateTime())
-			d->posXColumn->setDateTimeAt(row, QDateTime::fromMSecsSinceEpoch(data.x()));
-		else
+		if (xDateTime) {
+			auto dt = QDateTime::fromMSecsSinceEpoch(data.x());
+			dt.setTimeSpec(Qt::TimeSpec::UTC);
+			d->posXColumn->setDateTimeAt(row, dt);
+		} else
 			d->posXColumn->setValueAt(row, data.x());
 	}
 

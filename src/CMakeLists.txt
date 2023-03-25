@@ -305,6 +305,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2BigIntFilter.h
 	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
+	${BACKEND_DIR}/datapicker/Vector3D.cpp
 	${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
 	${BACKEND_DIR}/datapicker/DatapickerImage.cpp
 	${BACKEND_DIR}/datapicker/Datapicker.cpp

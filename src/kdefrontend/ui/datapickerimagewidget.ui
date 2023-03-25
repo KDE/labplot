@@ -431,13 +431,13 @@
           </widget>
          </item>
          <item row="0" column="2">
-          <widget class="QDateTimeEdit" name="dtePositionX1"/>
+          <widget class="UTCDateTimeEdit" name="dtePositionX1"/>
          </item>
          <item row="1" column="2">
-          <widget class="QDateTimeEdit" name="dtePositionX2"/>
+          <widget class="UTCDateTimeEdit" name="dtePositionX2"/>
          </item>
          <item row="2" column="2">
-          <widget class="QDateTimeEdit" name="dtePositionX3"/>
+          <widget class="UTCDateTimeEdit" name="dtePositionX3"/>
          </item>
         </layout>
        </item>
@@ -902,6 +902,11 @@
    <class>NumberSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>NumberSpinBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>
