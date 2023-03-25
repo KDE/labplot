@@ -92,6 +92,7 @@ Q_SIGNALS:
 	void changed();
 	void requestNavigateTo(const QString& path);
 	void closeRequested();
+	void saved() const;
 
 private:
 	Private* d;

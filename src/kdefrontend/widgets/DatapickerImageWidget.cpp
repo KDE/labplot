@@ -308,6 +308,8 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	connect(m_image, &DatapickerImage::minSegmentLengthChanged, this, &DatapickerImageWidget::imageMinSegmentLengthChanged);
 	connect(m_image, &DatapickerImage::pointVisibilityChanged, this, &DatapickerImageWidget::symbolVisibleChanged);
 	connect(m_image, QOverload<int>::of(&DatapickerImage::referencePointSelected), this, &DatapickerImageWidget::imageReferencePointSelected);
+	if (m_image->project())
+		connect(m_image->project(), &Project::saved, this, &DatapickerImageWidget::updateFileRelativePathCheckBoxEnable);
 
 	handleWidgetActions();
 	updateSymbolWidgets();

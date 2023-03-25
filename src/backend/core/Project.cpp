@@ -582,6 +582,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 
 	writer->writeEndElement();
 	writer->writeEndDocument();
+	Q_EMIT saved();
 }
 
 bool Project::load(const QString& filename, bool preview) {
