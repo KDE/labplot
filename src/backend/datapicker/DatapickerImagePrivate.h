@@ -33,7 +33,7 @@ public:
 	QGraphicsScene* m_scene;
 	float rotationAngle{0.0};
 	QString fileName;
-	bool relativeFilePath{false};
+	bool isRelativeFilePath{false};
 	bool embedded{false};
 	int pointSeparation{30};
 	int minSegmentLength{30};

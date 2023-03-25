@@ -101,7 +101,7 @@ public:
 	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
-	BASIC_D_ACCESSOR_DECL(bool, relativeFilePath, RelativeFilePath)
+	BASIC_D_ACCESSOR_DECL(bool, isRelativeFilePath, RelativeFilePath)
 	BASIC_D_ACCESSOR_DECL(bool, embedded, Embedded)
 	CLASS_D_ACCESSOR_DECL(DatapickerImage::ReferencePoints, axisPoints, AxisPoints)
 	CLASS_D_ACCESSOR_DECL(DatapickerImage::EditorSettings, settings, Settings)
@@ -132,6 +132,7 @@ Q_SIGNALS:
 	void requestUpdate();
 	void requestUpdateActions();
 
+	void relativeFilePathChanged(bool);
 	void fileNameChanged(const QString&);
 	void embeddedChanged(bool);
 	void rotationAngleChanged(float);

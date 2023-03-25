@@ -243,7 +243,7 @@ bool DatapickerImage::setOriginalImage(const QImage& image) {
 
 /* =============================== getter methods for background options ================================= */
 BASIC_D_READER_IMPL(DatapickerImage, QString, fileName, fileName)
-BASIC_D_READER_IMPL(DatapickerImage, bool, relativeFilePath, relativeFilePath)
+BASIC_D_READER_IMPL(DatapickerImage, bool, isRelativeFilePath, isRelativeFilePath)
 BASIC_D_READER_IMPL(DatapickerImage, bool, embedded, embedded)
 BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::ReferencePoints, axisPoints, axisPoints)
 BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::EditorSettings, settings, settings)
@@ -269,9 +269,33 @@ void DatapickerImage::setFileName(const QString& fileName) {
 	}
 }
 
+class DatapickerImageSetRelativeFilePathCmd : public StandardSetterCmd<DatapickerImage::Private, bool> {
+public:
+	DatapickerImageSetRelativeFilePathCmd(DatapickerImage::Private* target, bool newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)
+		: StandardSetterCmd<DatapickerImage::Private, bool>(target, &DatapickerImage::Private::isRelativeFilePath, newValue, description, parent) {
+	}
+	virtual void finalize() override {
+		if (m_target->q->project()) {
+			QString filename;
+			if (m_target->isRelativeFilePath) {
+				// Calculate from absolute to relative
+				QFileInfo fi(m_target->q->project()->fileName());
+				filename = fi.absoluteDir().relativeFilePath(m_target->fileName);
+			} else {
+				// Calculate from relative to absolute
+				QFileInfo fi(m_target->q->project()->fileName());
+				fi.setFile(m_target->fileName);
+				filename = fi.absoluteFilePath();
+			}
+			m_target->q->setFileName(filename);
+		}
+		emit m_target->q->relativeFilePathChanged(m_target->*m_field);
+	}
+};
+
 void DatapickerImage::setRelativeFilePath(bool relative) {
-	d->relativeFilePath = relative;
-	d->updateFileName();
+	if (relative != d->isRelativeFilePath)
+		exec(new DatapickerImageSetRelativeFilePathCmd(d, relative, ki18n("%1: upload image")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetEmbedded, bool, embedded)
@@ -451,18 +475,13 @@ DatapickerImagePrivate::~DatapickerImagePrivate() {
 void DatapickerImagePrivate::updateFileName() {
 	WAIT_CURSOR;
 	q->isLoaded = false;
-	QString address = fileName.trimmed();
 
-	if (!address.isEmpty()) {
-		if (relativeFilePath) {
-			QFileInfo fi(q->project()->fileName());
-			address = fi.absoluteDir().absoluteFilePath(address);
-		}
-		if (uploadImage(address))
-			fileName = address;
-	} else {
+	QString address = fileName.trimmed();
+	if (address.isEmpty()) {
 		// hide segments if they are visible
 		q->m_segments->setSegmentsVisible(false);
+	} else {
+		uploadImage(fileName);
 	}
 
 	auto points = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
@@ -488,7 +507,7 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	// general properties
 	writer->writeStartElement(QStringLiteral("general"));
 	writer->writeAttribute(QStringLiteral("embedded"), QString::number(d->embedded));
-	writer->writeAttribute(QStringLiteral("relativePath"), QString::number(d->relativeFilePath));
+	writer->writeAttribute(QStringLiteral("relativePath"), QString::number(d->isRelativeFilePath));
 	writer->writeAttribute(QStringLiteral("fileName"), d->fileName);
 	writer->writeAttribute(QStringLiteral("plotPointsType"), QString::number(static_cast<int>(d->plotPointsType)));
 	writer->writeAttribute(QStringLiteral("pointVisibility"), QString::number(d->pointVisibility));
@@ -574,7 +593,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("embedded", embedded, bool);
-			READ_INT_VALUE("relativePath", relativeFilePath, bool);
+			READ_INT_VALUE("relativePath", isRelativeFilePath, bool);
 			str = attribs.value(QStringLiteral("fileName")).toString();
 			d->fileName = str;
 

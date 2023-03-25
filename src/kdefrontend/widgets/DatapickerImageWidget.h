@@ -76,6 +76,7 @@ private Q_SLOTS:
 	//"General"-tab
 	void embeddedChanged(int state);
 	void fileNameChanged();
+	void relativeChanged(bool checked);
 	void selectFile();
 	void plotImageTypeChanged(int);
 
@@ -108,6 +109,7 @@ private Q_SLOTS:
 	void symbolVisibleChanged(bool);
 	void imageReferencePointSelected(int);
 	void imageEmbeddedChanged(bool embedded);
+	void imageRelativeChanged(bool);
 
 	void updateFileRelativePathCheckBoxEnable();
 

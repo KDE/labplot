@@ -227,7 +227,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	connect(ui.bOpen, &QPushButton::clicked, this, &DatapickerImageWidget::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
-	connect(ui.cbFileRelativePath, &QCheckBox::clicked, this, &DatapickerImageWidget::fileNameChanged);
+	connect(ui.cbFileRelativePath, &QCheckBox::clicked, this, &DatapickerImageWidget::relativeChanged);
 	connect(ui.cbFileEmbedd, &QCheckBox::stateChanged, this, &DatapickerImageWidget::embeddedChanged);
 
 	// edit image
@@ -308,6 +308,7 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	connect(m_image, &DatapickerImage::minSegmentLengthChanged, this, &DatapickerImageWidget::imageMinSegmentLengthChanged);
 	connect(m_image, &DatapickerImage::pointVisibilityChanged, this, &DatapickerImageWidget::symbolVisibleChanged);
 	connect(m_image, QOverload<int>::of(&DatapickerImage::referencePointSelected), this, &DatapickerImageWidget::imageReferencePointSelected);
+	connect(m_image, &DatapickerImage::relativeFilePathChanged, this, &DatapickerImageWidget::imageRelativeChanged);
 	if (m_image->project())
 		connect(m_image->project(), &Project::saved, this, &DatapickerImageWidget::updateFileRelativePathCheckBoxEnable);
 
@@ -386,6 +387,7 @@ void DatapickerImageWidget::selectFile() {
 	if (path.isEmpty())
 		return;
 
+	ui.cbFileRelativePath->setChecked(false);
 	ui.leFileName->setText(path);
 }
 
@@ -407,35 +409,28 @@ void DatapickerImageWidget::embeddedChanged(int state) {
 		ui.leFileName->setText(m_image->fileName());
 }
 
+void DatapickerImageWidget::relativeChanged(bool relative) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* image : m_imagesList) {
+		image->setRelativeFilePath(relative);
+	}
+}
+
 void DatapickerImageWidget::fileNameChanged() {
 	CONDITIONAL_LOCK_RETURN;
 
 	handleWidgetActions();
 
 	QString fileName = ui.leFileName->text();
-	const bool relative = ui.cbFileRelativePath->isChecked();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	// const bool relative = ui.cbFileRelativePath->isChecked();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName) && !ui.cbFileEmbedd->isChecked());
 	GuiTools::highlight(ui.leFileName, invalid);
 
-	if (relative) {
-		const auto* project = m_image->project();
-		if (project) {
-			if (project->fileName().isEmpty()) {
-				// If the project is not saved, it makes no sense to calculate a relative path
-				ui.cbFileRelativePath->setChecked(false);
-			} else {
-				QFileInfo fi(project->fileName());
-				fileName = fi.absoluteDir().relativeFilePath(fileName);
-				ui.leFileName->setText(fileName);
-			}
-		}
-	}
-
 	for (auto* image : m_imagesList) {
-		image->setRelativeFilePath(relative);
 		image->setFileName(fileName);
-        if (image->embedded())
-            image->setOriginalImage(fileName);
+		if (image->embedded())
+			image->setOriginalImage(fileName);
 	}
 }
 
@@ -614,8 +609,10 @@ void DatapickerImageWidget::pointSeparationChanged(int value) {
 //******** SLOTs for changes triggered in DatapickerImage ***********
 //*******************************************************************
 void DatapickerImageWidget::imageFileNameChanged(const QString& name) {
-	CONDITIONAL_LOCK_RETURN;
+	handleWidgetActions();
 	ui.leFileName->setText(name);
+
+	CONDITIONAL_LOCK_RETURN;
 }
 
 void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
@@ -663,6 +660,11 @@ void DatapickerImageWidget::imageEmbeddedChanged(bool embedded) {
 	ui.cbFileEmbedd->setChecked(embedded);
 }
 
+void DatapickerImageWidget::imageRelativeChanged(bool relative) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbFileRelativePath->setChecked(relative);
+}
+
 void DatapickerImageWidget::updateSymbolWidgets() {
 	int pointCount = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	if (pointCount)
@@ -692,7 +694,7 @@ void DatapickerImageWidget::load() {
 	// No lock, because it is done already in the caller function
 	ui.cbFileEmbedd->setChecked(m_image->embedded());
 	embeddedChanged(m_image->embedded() ? Qt::Checked : Qt::Unchecked);
-	ui.cbFileRelativePath->setChecked(m_image->relativeFilePath());
+	ui.cbFileRelativePath->setChecked(m_image->isRelativeFilePath());
 	updateFileRelativePathCheckBoxEnable();
 	ui.leFileName->setText(m_image->fileName());
 
