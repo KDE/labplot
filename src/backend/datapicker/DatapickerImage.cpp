@@ -298,7 +298,7 @@ void DatapickerImage::setRelativeFilePath(bool relative) {
 		exec(new DatapickerImageSetRelativeFilePathCmd(d, relative, ki18n("%1: upload image")));
 }
 
-STD_SETTER_CMD_IMPL_S(DatapickerImage, SetEmbedded, bool, embedded)
+STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetEmbedded, bool, embedded, updateFileName)
 void DatapickerImage::setEmbedded(bool embedded) {
 	if (embedded != d->embedded)
 		exec(new DatapickerImageSetEmbeddedCmd(d, embedded, ki18n("%1: embed image")));

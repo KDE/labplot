@@ -394,7 +394,7 @@ void DatapickerImageWidget::selectFile() {
 void DatapickerImageWidget::embeddedChanged(int state) {
 	bool embedded = state == Qt::Checked;
 	ui.leFileName->setEnabled(!embedded);
-	ui.cbFileRelativePath->setEnabled(!embedded);
+	ui.cbFileRelativePath->setVisible(!embedded);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -656,6 +656,8 @@ void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
 }
 
 void DatapickerImageWidget::imageEmbeddedChanged(bool embedded) {
+	ui.cbFileRelativePath->setVisible(!embedded);
+
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbFileEmbedd->setChecked(embedded);
 }
