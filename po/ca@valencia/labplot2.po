@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-23 00:43+0000\n"
-"PO-Revision-Date: 2023-03-13 09:55+0100\n"
+"PO-Revision-Date: 2023-03-23 09:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -11157,7 +11157,7 @@ msgstr "Seleccioneu el fitxer DBC"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:918
 #, kde-format
 msgid "DBC file (*.dbc)"
-msgstr ""
+msgstr "Fitxer DBC (*.dbc)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
