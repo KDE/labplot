@@ -814,9 +814,9 @@ void DatapickerTest::referenceMoveKeyPress() {
 	auto view = static_cast<DatapickerImageView*>(datapicker.image()->view());
 	view->shiftLeftAction->triggered(true);
 
-	VALUES_EQUAL(points[0]->position().x(), 0);
-	VALUES_EQUAL(points[1]->position().x(), 0);
-	VALUES_EQUAL(points[2]->position().x(), 2);
+	VALUES_EQUAL(points[0]->position().x(), 0.);
+	VALUES_EQUAL(points[1]->position().x(), 0.);
+	VALUES_EQUAL(points[2]->position().x(), 2.);
 
 	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 0.5 / 2 * 10);
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.);
@@ -982,9 +982,9 @@ void DatapickerTest::imageAxisPointsChanged() {
 	w.setImages({image});
 
 	DatapickerImage::ReferencePoints points;
-	points.logicalPos[0] = Vector3D(-1, 2, 4);
-	points.logicalPos[1] = Vector3D(-5, -867, 236);
-	points.logicalPos[2] = Vector3D(43, -231.2f, 234);
+	points.logicalPos[0] = Vector3D(-1., 2., 4.);
+	points.logicalPos[1] = Vector3D(-5., -867., 236.);
+	points.logicalPos[2] = Vector3D(43., -231.2f, 234.);
 	points.scenePos[0] = QPointF(-3, 2);
 	points.scenePos[1] = QPointF(-291, 3249);
 	points.scenePos[2] = QPointF(-239, 349);
@@ -1037,19 +1037,19 @@ void DatapickerTest::datapickerDateTime() {
 	auto* image = datapicker.image();
 
 	// add reference points
-	datapicker.addNewPoint(QPointF(0, 1), image); // scene coordinates
-	datapicker.addNewPoint(QPointF(0, 0), image); // scene coordinates
-	datapicker.addNewPoint(QPointF(1, 0), image); // scene coordinates
+	datapicker.addNewPoint(QPointF(0., 1.), image); // scene coordinates
+	datapicker.addNewPoint(QPointF(0., 0.), image); // scene coordinates
+	datapicker.addNewPoint(QPointF(1., 0.), image); // scene coordinates
 
 	w.setImages({image});
 
 	w.ui.sbPositionX1->setValue(0);
-	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionY1->setValue(10.);
 	w.ui.sbPositionZ1->setValue(0);
 	w.ui.sbPositionX2->setValue(0);
 	w.ui.sbPositionY2->setValue(0);
 	w.ui.sbPositionZ2->setValue(0);
-	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionX3->setValue(10.);
 	w.ui.sbPositionY3->setValue(0);
 	w.ui.sbPositionZ3->setValue(0);
 	w.logicalPositionChanged();
@@ -1111,12 +1111,12 @@ void DatapickerTest::datapickerDeleteCurvePoint() {
 	w.setImages({image});
 
 	w.ui.sbPositionX1->setValue(0);
-	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionY1->setValue(10.);
 	w.ui.sbPositionZ1->setValue(0);
 	w.ui.sbPositionX2->setValue(0);
 	w.ui.sbPositionY2->setValue(0);
 	w.ui.sbPositionZ2->setValue(0);
-	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionX3->setValue(10.);
 	w.ui.sbPositionY3->setValue(0);
 	w.ui.sbPositionZ3->setValue(0);
 	w.logicalPositionChanged();
