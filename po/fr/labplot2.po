@@ -10139,7 +10139,7 @@ msgstr ""
 #: src/commonfrontend/worksheet/WorksheetView.cpp:298
 #, kde-format
 msgid "Selected Plot Areas"
-msgstr "Zones sélectionnées de tracé  "
+msgstr "Zones sélectionnées de tracé"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:286
 #: src/commonfrontend/worksheet/WorksheetView.cpp:300
