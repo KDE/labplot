@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-23 00:43+0000\n"
+"POT-Creation-Date: 2023-03-29 00:43+0000\n"
 "PO-Revision-Date: 2023-03-23 09:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -57,9 +57,9 @@ msgstr ""
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
 #: src/backend/core/column/Column.cpp:1250
-#: src/backend/datapicker/DatapickerCurve.cpp:501
-#: src/backend/datapicker/DatapickerImage.cpp:511
-#: src/backend/datapicker/DatapickerPoint.cpp:498
+#: src/backend/datapicker/DatapickerCurve.cpp:553
+#: src/backend/datapicker/DatapickerImage.cpp:580
+#: src/backend/datapicker/DatapickerPoint.cpp:502
 #: src/backend/datasources/filters/AsciiFilter.cpp:2003
 #: src/backend/datasources/filters/BinaryFilter.cpp:562
 #: src/backend/datasources/filters/JsonFilter.cpp:776
@@ -108,10 +108,10 @@ msgstr "L'atribut «%1» falta o està buit, s'usarà el valor per omissió"
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1380 src/backend/core/Folder.cpp:151
-#: src/backend/core/Project.cpp:751
-#: src/backend/datapicker/DatapickerCurve.cpp:659
-#: src/backend/datapicker/DatapickerImage.cpp:753
-#: src/backend/datapicker/DatapickerPoint.cpp:575
+#: src/backend/core/Project.cpp:752
+#: src/backend/datapicker/DatapickerCurve.cpp:711
+#: src/backend/datapicker/DatapickerImage.cpp:828
+#: src/backend/datapicker/DatapickerPoint.cpp:579
 #: src/backend/datasources/LiveDataSource.cpp:968
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
@@ -192,7 +192,7 @@ msgstr "Avall"
 
 #: src/backend/core/AbstractAspect.cpp:507
 #: src/backend/core/aspectcommands.h:102
-#: src/backend/datapicker/Datapicker.cpp:212
+#: src/backend/datapicker/Datapicker.cpp:217
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1950
 #, kde-format
 msgid "%1: add %2"
@@ -801,32 +801,32 @@ msgstr "%1: estableix l'autor"
 msgid "%1: save calculation changed"
 msgstr "%1: ha canviat els càlculs desats"
 
-#: src/backend/core/Project.cpp:596 src/backend/core/Project.cpp:630
+#: src/backend/core/Project.cpp:597 src/backend/core/Project.cpp:631
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "No s'ha pogut obrir el fitxer per a lectura."
 
-#: src/backend/core/Project.cpp:607 src/backend/core/Project.cpp:637
+#: src/backend/core/Project.cpp:608 src/backend/core/Project.cpp:638
 #, kde-format
 msgid "The project file is empty."
 msgstr "El fitxer de projecte ja es troba obert."
 
-#: src/backend/core/Project.cpp:607 src/backend/core/Project.cpp:637
+#: src/backend/core/Project.cpp:608 src/backend/core/Project.cpp:638
 #, kde-format
 msgid "Error opening project"
 msgstr "Error en obrir el projecte"
 
-#: src/backend/core/Project.cpp:656
+#: src/backend/core/Project.cpp:657
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Error desconegut en obrir el projecte %1."
 
-#: src/backend/core/Project.cpp:657
+#: src/backend/core/Project.cpp:658
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Ha succeït un error en obrir el projecte"
 
-#: src/backend/core/Project.cpp:677
+#: src/backend/core/Project.cpp:678
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -845,27 +845,27 @@ msgstr ""
 "\n"
 "Voleu continuar?"
 
-#: src/backend/core/Project.cpp:684 src/backend/core/Project.cpp:686
+#: src/backend/core/Project.cpp:685 src/backend/core/Project.cpp:687
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Manca la implementació per al CAS"
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:716
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Falta l'atribut «versió»."
 
-#: src/backend/core/Project.cpp:758
+#: src/backend/core/Project.cpp:759
 #, kde-format
 msgid "no project element found"
 msgstr "no s'ha trobat cap element de projecte"
 
-#: src/backend/core/Project.cpp:760
+#: src/backend/core/Project.cpp:761
 #, kde-format
 msgid "no valid XML document found"
 msgstr "s'ha trobat un document XML no vàlid"
 
-#: src/backend/core/Project.cpp:1059
+#: src/backend/core/Project.cpp:1060
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Hora de modificació del projecte no vàlida. S'usarà l'hora actual."
@@ -882,8 +882,8 @@ msgstr "element «%1» desconegut del llibre de treball"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
-#: src/backend/datapicker/Datapicker.cpp:340
-#: src/kdefrontend/ui/datapickerimagewidget.ui:151
+#: src/backend/datapicker/Datapicker.cpp:353
+#: src/kdefrontend/ui/datapickerimagewidget.ui:317
 #, kde-format
 msgid "Plot"
 msgstr "Diagrama"
@@ -894,12 +894,12 @@ msgid "%1, active curve \"%2\""
 msgstr "%1, corba activa «%2»"
 
 # skip-rule: t-sc-plot
-#: src/backend/datapicker/Datapicker.cpp:209
+#: src/backend/datapicker/Datapicker.cpp:214
 #, kde-format
 msgid "Point %1"
 msgstr "Punt %1"
 
-#: src/backend/datapicker/Datapicker.cpp:357
+#: src/backend/datapicker/Datapicker.cpp:370
 #, kde-format
 msgid "unknown datapicker element '%1'"
 msgstr "element «%1» desconegut del selector de dades"
@@ -908,7 +908,7 @@ msgstr "element «%1» desconegut del selector de dades"
 #. i18n: ectx: property (text), widget (QLabel, lData)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QRadioButton, rbJitter)
-#: src/backend/datapicker/DatapickerCurve.cpp:154
+#: src/backend/datapicker/DatapickerCurve.cpp:176
 #: src/commonfrontend/matrix/MatrixView.cpp:129
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:332
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:371
@@ -932,64 +932,64 @@ msgstr "element «%1» desconegut del selector de dades"
 msgid "Data"
 msgstr "Dades"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:244
-#: src/backend/datapicker/DatapickerCurve.cpp:245
+#: src/backend/datapicker/DatapickerCurve.cpp:267
+#: src/backend/datapicker/DatapickerCurve.cpp:268
 #, kde-format
 msgid "%1: set xy-error type"
 msgstr "%1: estableix el tipus d'error XY"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:283
+#: src/backend/datapicker/DatapickerCurve.cpp:306
 #, kde-format
 msgid "%1: set position X column"
 msgstr "%1: estableix la posició X de la columna"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:290
+#: src/backend/datapicker/DatapickerCurve.cpp:313
 #, kde-format
 msgid "%1: set position Y column"
 msgstr "%1: estableix la posició Y de la columna"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:297
+#: src/backend/datapicker/DatapickerCurve.cpp:320
 #, kde-format
 msgid "%1: set position Z column"
 msgstr "%1: estableix la posició Z de la columna"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:304
+#: src/backend/datapicker/DatapickerCurve.cpp:327
 #, kde-format
 msgid "%1: set +delta_X column"
 msgstr "%1: estableix el +delta_X de la columna"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:311
+#: src/backend/datapicker/DatapickerCurve.cpp:334
 #, kde-format
 msgid "%1: set -delta_X column"
 msgstr "%1: estableix el -delta_X de la columna"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:318
+#: src/backend/datapicker/DatapickerCurve.cpp:341
 #, kde-format
 msgid "%1: set +delta_Y column"
 msgstr "%1: estableix el +delta_Y de la columna"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:325
+#: src/backend/datapicker/DatapickerCurve.cpp:348
 #, kde-format
 msgid "%1: set -delta_Y column"
 msgstr "%1: estableix el -delta_Y de la columna"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:332
+#: src/backend/datapicker/DatapickerCurve.cpp:355
 #, kde-format
 msgid "%1: set error bar size"
 msgstr "%1: estableix la mida de la barra d'errors"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:339
+#: src/backend/datapicker/DatapickerCurve.cpp:362
 #, kde-format
 msgid "%1: set error bar filling"
 msgstr "%1: estableix l'ompliment de la barra d'errors"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:346
+#: src/backend/datapicker/DatapickerCurve.cpp:369
 #, kde-format
 msgid "%1: set error bar outline style"
 msgstr "%1: estableix l'estil del contorn de la barra d'errors"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:353
-#: src/backend/datapicker/DatapickerImage.cpp:283
+#: src/backend/datapicker/DatapickerCurve.cpp:376
+#: src/backend/datapicker/DatapickerImage.cpp:335
 #: src/backend/worksheet/InfoElement.cpp:813
 #: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElementContainer.cpp:67
@@ -998,8 +998,8 @@ msgstr "%1: estableix l'estil del contorn de la barra d'errors"
 msgid "%1: set visible"
 msgstr "%1: estableix com a visible"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:353
-#: src/backend/datapicker/DatapickerImage.cpp:283
+#: src/backend/datapicker/DatapickerCurve.cpp:376
+#: src/backend/datapicker/DatapickerImage.cpp:335
 #: src/backend/worksheet/InfoElement.cpp:813
 #: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElement.cpp:630
@@ -1009,88 +1009,101 @@ msgstr "%1: estableix com a visible"
 msgid "%1: set invisible"
 msgstr "%1: estableix com a invisible"
 
-#: src/backend/datapicker/DatapickerImage.cpp:174
+#: src/backend/datapicker/DatapickerImage.cpp:177
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr "Imprimeix la imatge del selector de dades"
 
-#: src/backend/datapicker/DatapickerImage.cpp:249
+#: src/backend/datapicker/DatapickerImage.cpp:266
 #, kde-format
 msgid "%1: upload new image"
 msgstr "%1: puja una imatge nova"
 
-#: src/backend/datapicker/DatapickerImage.cpp:250
+#: src/backend/datapicker/DatapickerImage.cpp:267
+#: src/backend/datapicker/DatapickerImage.cpp:298
 #, kde-format
 msgid "%1: upload image"
 msgstr "%1: puja una imatge"
 
-#: src/backend/datapicker/DatapickerImage.cpp:258
+#: src/backend/datapicker/DatapickerImage.cpp:304
+#: src/backend/worksheet/Image.cpp:161
+#, kde-format
+msgid "%1: embed image"
+msgstr "%1: incrusta una imatge"
+
+#: src/backend/datapicker/DatapickerImage.cpp:310
 #: src/backend/worksheet/WorksheetElement.cpp:671
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: estableix l'angle del gir"
 
-#: src/backend/datapicker/DatapickerImage.cpp:264
+#: src/backend/datapicker/DatapickerImage.cpp:316
 #, kde-format
 msgid "%1: set Axis points"
 msgstr "%1: estableix els punts de l'eix"
 
-#: src/backend/datapicker/DatapickerImage.cpp:270
+#: src/backend/datapicker/DatapickerImage.cpp:322
 #, kde-format
 msgid "%1: set editor settings"
 msgstr "%1: estableix la configuració de l'editor"
 
-#: src/backend/datapicker/DatapickerImage.cpp:276
+#: src/backend/datapicker/DatapickerImage.cpp:328
 #, kde-format
 msgid "%1: set minimum segment length"
 msgstr "%1: estableix la longitud mínima del segment"
 
-#: src/backend/datapicker/DatapickerImage.cpp:302
+#: src/backend/datapicker/DatapickerImage.cpp:354
 #, kde-format
 msgid "%1: remove all axis points"
 msgstr "%1: elimina tots els punts de l'eix"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:211
+#: src/backend/datapicker/DatapickerImage.cpp:605
+#: src/backend/worksheet/Image.cpp:453
+#, kde-format
+msgid "Failed to read image data"
+msgstr "Ha fallat en llegir les dades de la imatge."
+
+#: src/backend/datapicker/DatapickerPoint.cpp:213
 #: src/backend/worksheet/InfoElement.cpp:783
 #: src/backend/worksheet/WorksheetElement.cpp:592
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: estableix una posició"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:222
+#: src/backend/datapicker/DatapickerPoint.cpp:224
 #, kde-format
 msgid "%1: set +delta_X position"
 msgstr "%1: estableix la posició +delta_X"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:224
-#: src/backend/datapicker/DatapickerPoint.cpp:227
+#: src/backend/datapicker/DatapickerPoint.cpp:226
+#: src/backend/datapicker/DatapickerPoint.cpp:229
 #, kde-format
 msgid "%1: set +delta X position"
 msgstr "%1: estableix la posició +delta X"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:240
 #: src/backend/datapicker/DatapickerPoint.cpp:242
-#: src/backend/datapicker/DatapickerPoint.cpp:245
+#: src/backend/datapicker/DatapickerPoint.cpp:244
+#: src/backend/datapicker/DatapickerPoint.cpp:247
 #, kde-format
 msgid "%1: set -delta_X position"
 msgstr "%1: estableix la posició -delta_X"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:258
 #: src/backend/datapicker/DatapickerPoint.cpp:260
-#: src/backend/datapicker/DatapickerPoint.cpp:263
+#: src/backend/datapicker/DatapickerPoint.cpp:262
+#: src/backend/datapicker/DatapickerPoint.cpp:265
 #, kde-format
 msgid "%1: set +delta_Y position"
 msgstr "%1: estableix la posició +delta_Y"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:276
 #: src/backend/datapicker/DatapickerPoint.cpp:278
-#: src/backend/datapicker/DatapickerPoint.cpp:281
+#: src/backend/datapicker/DatapickerPoint.cpp:280
+#: src/backend/datapicker/DatapickerPoint.cpp:283
 #, kde-format
 msgid "%1: set -delta_Y position"
 msgstr "%1: estableix la posició -delta_Y"
 
-#: src/backend/datapicker/Segment.cpp:168
+#: src/backend/datapicker/Segment.cpp:169
 #, kde-format
 msgid "%1: draw points over segment"
 msgstr "%1: dibuixa punts sobre el segment"
@@ -6538,7 +6551,7 @@ msgstr "%1: estableix l'opacitat del fons"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:192
 #: src/backend/worksheet/TextLabel.cpp:253
 #: src/kdefrontend/ui/datapickercurvewidget.ui:178
-#: src/kdefrontend/ui/datapickerimagewidget.ui:710
+#: src/kdefrontend/ui/datapickerimagewidget.ui:757
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:58
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:535
@@ -6571,11 +6584,6 @@ msgstr "Visible"
 msgid "%1: set image"
 msgstr "%1: estableix la imatge"
 
-#: src/backend/worksheet/Image.cpp:161
-#, kde-format
-msgid "%1: embed image"
-msgstr "%1: incrusta una imatge"
-
 #: src/backend/worksheet/Image.cpp:168 src/backend/worksheet/TextLabel.cpp:369
 #, kde-format
 msgid "%1: set border opacity"
@@ -6595,11 +6603,6 @@ msgstr "%1: estableix l'alçada"
 #, kde-format
 msgid "%1: change keep ratio"
 msgstr "%1: canvia mantenir les proporcions"
-
-#: src/backend/worksheet/Image.cpp:453
-#, kde-format
-msgid "Failed to read image data"
-msgstr "Ha fallat en llegir les dades de la imatge."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:132
@@ -8710,7 +8713,7 @@ msgid "Failed to initialize %1."
 msgstr "Ha fallat en inicialitzar %1."
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:48
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:116
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:119
 #: src/commonfrontend/matrix/MatrixView.cpp:189
 #: src/commonfrontend/worksheet/WorksheetView.cpp:138
 #: src/commonfrontend/worksheet/WorksheetView.cpp:427
@@ -8719,7 +8722,7 @@ msgid "Zoom In"
 msgstr "Apropa"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:52
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:119
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:122
 #: src/commonfrontend/matrix/MatrixView.cpp:190
 #: src/commonfrontend/worksheet/WorksheetView.cpp:139
 #: src/commonfrontend/worksheet/WorksheetView.cpp:431
@@ -8845,163 +8848,163 @@ msgstr "S'està calculant..."
 msgid "Ready"
 msgstr "Llest"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:122
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:125
 #: src/commonfrontend/matrix/MatrixView.cpp:191
 #: src/commonfrontend/worksheet/WorksheetView.cpp:140
 #, kde-format
 msgid "Original Size"
 msgstr "Mida original"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:125
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:128
 #: src/commonfrontend/worksheet/WorksheetView.cpp:162
 #, kde-format
 msgid "Fit to Height"
 msgstr "Ajusta a l'alçada"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:129
 #: src/commonfrontend/worksheet/WorksheetView.cpp:165
 #, kde-format
 msgid "Fit to Width"
 msgstr "Ajusta a l'amplada"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:129
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:132
 #: src/commonfrontend/worksheet/WorksheetView.cpp:179
 #, kde-format
 msgid "Navigate"
 msgstr "Navega"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:133
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:136
 #: src/commonfrontend/worksheet/WorksheetView.cpp:182
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Selecciona i amplia"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:137
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Estableix els punts de l'eix"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:141
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Estableix els punts de la corba"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:145
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Selecciona els segments de la corba"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:149
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:152
 #, kde-format
 msgid "New Curve"
 msgstr "Corba nova"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:151
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:154
 #, kde-format
 msgid "Shift Left"
 msgstr "Desplaça a l'esquerra"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:154
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:157
 #, kde-format
 msgid "Shift Right"
 msgstr "Desplaça a la dreta"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:157
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
 msgid "Shift Up"
 msgstr "Desplaça amunt"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:160
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:163
 #, kde-format
 msgid "Shift Down"
 msgstr "Desplaça avall"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:163
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:166
 #: src/commonfrontend/worksheet/WorksheetView.cpp:186
 #, kde-format
 msgid "No Magnification"
 msgstr "Sense augment"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:167
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:170
 #: src/commonfrontend/worksheet/WorksheetView.cpp:190
 #, kde-format
 msgid "2x Magnification"
 msgstr "Augment 2x"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:170
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:173
 #: src/commonfrontend/worksheet/WorksheetView.cpp:193
 #, kde-format
 msgid "3x Magnification"
 msgstr "Augment 3x"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:173
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:176
 #: src/commonfrontend/worksheet/WorksheetView.cpp:196
 #, kde-format
 msgid "4x Magnification"
 msgstr "Augment 4x"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:176
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:179
 #: src/commonfrontend/worksheet/WorksheetView.cpp:199
 #, kde-format
 msgid "5x Magnification"
 msgstr "Augment 5x"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:209
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:212
 #: src/commonfrontend/worksheet/WorksheetView.cpp:491
 #: src/commonfrontend/worksheet/WorksheetView.cpp:542
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Mode del ratolí"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:218
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:221
 #, kde-format
 msgid "Zoom View"
 msgstr "Vista de zoom"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:226
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:229
 #, kde-format
 msgid "Move Last Point"
 msgstr "Mou el darrer punt"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:232
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:235
 #: src/commonfrontend/worksheet/WorksheetView.cpp:508
 #, kde-format
 msgid "Magnification"
 msgstr "Ampliació"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:505
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:527
 #, kde-format
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
 msgstr "%1, corba activa «%2»: %3=%4, %5=%6"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:594
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:616
 #, kde-format
 msgid "Remove existing reference points?"
 msgstr "Elimino els punts de referència existents?"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:595
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:617
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
 msgstr ""
 "S'eliminaran tots els punts de referència disponibles. Voleu continuar?"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:655
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:677
 #, kde-format
 msgid "%1: change position of selected DatapickerPoints."
 msgstr "%1: canvia la posició dels punts seleccionats al selector de dades."
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:706
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:728
 #, kde-format
 msgid "%1: add new curve."
 msgstr "%1: afegeix una corba nova."
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:707
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:729
 #, kde-format
 msgid "Curve"
 msgstr "Corba"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3833
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2399
@@ -9009,7 +9012,7 @@ msgstr "Corba"
 msgid "Failed to export"
 msgstr "Ha fallat en exportar"
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3833
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2399
@@ -15122,7 +15125,7 @@ msgstr "Afegeix una etiqueta de valors"
 #. i18n: ectx: property (text), widget (QLabel, lTimeValue)
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:42
 #: src/kdefrontend/ui/constantswidget.ui:57
-#: src/kdefrontend/ui/datapickerimagewidget.ui:794
+#: src/kdefrontend/ui/datapickerimagewidget.ui:841
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:46
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:94
@@ -16073,7 +16076,7 @@ msgstr "Tipus d'error Y:"
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:49
-#: src/kdefrontend/ui/datapickerimagewidget.ui:270
+#: src/kdefrontend/ui/datapickerimagewidget.ui:343
 #: src/kdefrontend/ui/dockwidgets/aspectdock.ui:37
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:184
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:172
@@ -16116,7 +16119,7 @@ msgstr "Comentari:"
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:88
-#: src/kdefrontend/ui/datapickerimagewidget.ui:188
+#: src/kdefrontend/ui/datapickerimagewidget.ui:260
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:56
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:259
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:116
@@ -16308,29 +16311,29 @@ msgstr "Mida:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRightValue)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLeftValue)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPercentile)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTernaryScale)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRotation)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionX1)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionZ3)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionX2)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTernaryScale)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY1)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionZ1)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY3)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionZ3)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionX1)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionX3)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionZ2)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY2)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionX2)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY3)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionZ1)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:269
-#: src/kdefrontend/ui/datapickerimagewidget.ui:65
-#: src/kdefrontend/ui/datapickerimagewidget.ui:227
-#: src/kdefrontend/ui/datapickerimagewidget.ui:369
-#: src/kdefrontend/ui/datapickerimagewidget.ui:388
-#: src/kdefrontend/ui/datapickerimagewidget.ui:417
-#: src/kdefrontend/ui/datapickerimagewidget.ui:436
-#: src/kdefrontend/ui/datapickerimagewidget.ui:455
-#: src/kdefrontend/ui/datapickerimagewidget.ui:490
-#: src/kdefrontend/ui/datapickerimagewidget.ui:525
-#: src/kdefrontend/ui/datapickerimagewidget.ui:586
-#: src/kdefrontend/ui/datapickerimagewidget.ui:605
+#: src/kdefrontend/ui/datapickerimagewidget.ui:75
+#: src/kdefrontend/ui/datapickerimagewidget.ui:136
+#: src/kdefrontend/ui/datapickerimagewidget.ui:406
+#: src/kdefrontend/ui/datapickerimagewidget.ui:425
+#: src/kdefrontend/ui/datapickerimagewidget.ui:444
+#: src/kdefrontend/ui/datapickerimagewidget.ui:548
+#: src/kdefrontend/ui/datapickerimagewidget.ui:574
+#: src/kdefrontend/ui/datapickerimagewidget.ui:609
+#: src/kdefrontend/ui/datapickerimagewidget.ui:628
+#: src/kdefrontend/ui/datapickerimagewidget.ui:663
+#: src/kdefrontend/ui/datapickerimagewidget.ui:708
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:119
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:215
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:234
@@ -16469,118 +16472,11 @@ msgstr " pt"
 msgid "Image:"
 msgstr "Imatge:"
 
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:46
-#: src/kdefrontend/ui/datapickerimagewidget.ui:246
-#, kde-format
-msgid " px"
-msgstr " px"
-
 #. i18n: ectx: property (text), widget (QLabel, lTernaryScale)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:75
+#: src/kdefrontend/ui/datapickerimagewidget.ui:40
 #, kde-format
 msgid "x+y+z="
 msgstr "x+y+z="
-
-#. i18n: ectx: property (text), widget (QLabel, lRugLength)
-#. i18n: ectx: property (text), widget (QLabel, lMajorTicksLength)
-#. i18n: ectx: property (text), widget (QLabel, lMinorTicksLength)
-#. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:114
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:894
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1071
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:823
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:515
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:806
-#, kde-format
-msgid "Length:"
-msgstr "Longitud:"
-
-#. i18n: ectx: property (text), widget (QLabel, lSegments)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:126
-#, kde-format
-msgid "Segments"
-msgstr "Segments"
-
-#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:160
-#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:99
-#, kde-format
-msgid "Specify the name of the image file."
-msgstr "Indiqueu el nom del fitxer de la imatge."
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:176
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:61
-#, kde-format
-msgid " Select the image file"
-msgstr " Seleccioneu el fitxer d'imatge"
-
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbRotation)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsRotation)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesRotation)
-#. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRotation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:230
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1224
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:108
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:27
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:121
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:483
-#: src/kdefrontend/ui/labelwidget.ui:129 src/kdefrontend/ui/symbolwidget.ui:100
-#, kde-format
-msgid "°"
-msgstr "°"
-
-#. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:263
-#, kde-format
-msgid "Point Separation:"
-msgstr "Separació entre punts:"
-
-#. i18n: ectx: property (text), widget (QLabel, lRotation)
-#. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
-#. i18n: ectx: property (text), widget (QLabel, lValuesRotation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:309
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1250
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:325
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:421
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:421
-#: src/kdefrontend/ui/labelwidget.ui:709 src/kdefrontend/ui/symbolwidget.ui:84
-#, kde-format
-msgid "Rotation:"
-msgstr "Gir:"
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionX3)
-#. i18n: ectx: property (text), widget (QLabel, lPositionX2)
-#. i18n: ectx: property (text), widget (QLabel, lPositionX1)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:324
-#: src/kdefrontend/ui/datapickerimagewidget.ui:471
-#: src/kdefrontend/ui/datapickerimagewidget.ui:535
-#, kde-format
-msgid "x="
-msgstr "x="
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionZ1)
-#. i18n: ectx: property (text), widget (QLabel, lPositionZ2)
-#. i18n: ectx: property (text), widget (QLabel, lPositionZ3)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:334
-#: src/kdefrontend/ui/datapickerimagewidget.ui:398
-#: src/kdefrontend/ui/datapickerimagewidget.ui:551
-#, kde-format
-msgid "z="
-msgstr "z="
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionY3)
-#. i18n: ectx: property (text), widget (QLabel, lPositionY2)
-#. i18n: ectx: property (text), widget (QLabel, lPositionY1)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:350
-#: src/kdefrontend/ui/datapickerimagewidget.ui:506
-#: src/kdefrontend/ui/datapickerimagewidget.ui:567
-#, kde-format
-msgid "y="
-msgstr "y="
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -16597,7 +16493,7 @@ msgstr "y="
 #. i18n: ectx: property (text), widget (QLabel, lLayout)
 #. i18n: ectx: property (text), widget (QLabel, lFileType)
 #. i18n: ectx: property (text), widget (QLabel, lPlotType)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:617
+#: src/kdefrontend/ui/datapickerimagewidget.ui:47
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:165
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:572
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:682
@@ -16628,44 +16524,172 @@ msgstr "y="
 msgid "Type:"
 msgstr "Tipus:"
 
+#. i18n: ectx: property (text), widget (QLabel, lSegments)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:59
+#, kde-format
+msgid "Segments"
+msgstr "Segments"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbRotation)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsRotation)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesRotation)
+#. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRotation)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:78
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1224
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:108
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:27
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:121
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:483
+#: src/kdefrontend/ui/labelwidget.ui:129 src/kdefrontend/ui/symbolwidget.ui:100
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:117
+#: src/kdefrontend/ui/datapickerimagewidget.ui:273
+#, kde-format
+msgid " px"
+msgstr " px"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:158
+#, fuzzy, kde-format
+#| msgid "Embedded:"
+msgid "Embedd"
+msgstr "Incrustada:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:165
+#, fuzzy, kde-format
+#| msgid "Relative Path:"
+msgid "Relative Path"
+msgstr "Camí relatiu:"
+
+#. i18n: ectx: property (text), widget (QLabel, lRotation)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
+#. i18n: ectx: property (text), widget (QLabel, lValuesRotation)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:187
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1250
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:325
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:421
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:421
+#: src/kdefrontend/ui/labelwidget.ui:709 src/kdefrontend/ui/symbolwidget.ui:84
+#, kde-format
+msgid "Rotation:"
+msgstr "Gir:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:207
+#, kde-format
+msgid "Point Separation:"
+msgstr "Separació entre punts:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:216
+#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:99
+#, kde-format
+msgid "Specify the name of the image file."
+msgstr "Indiqueu el nom del fitxer de la imatge."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:232
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:61
+#, kde-format
+msgid " Select the image file"
+msgstr " Seleccioneu el fitxer d'imatge"
+
+#. i18n: ectx: property (text), widget (QLabel, lRugLength)
+#. i18n: ectx: property (text), widget (QLabel, lMajorTicksLength)
+#. i18n: ectx: property (text), widget (QLabel, lMinorTicksLength)
+#. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:324
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:894
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1071
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:823
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:515
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:806
+#, kde-format
+msgid "Length:"
+msgstr "Longitud:"
+
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:645
+#: src/kdefrontend/ui/datapickerimagewidget.ui:336
 #, kde-format
 msgid "Reference Points"
 msgstr "Punts de referència"
 
+#. i18n: ectx: property (text), widget (QCheckBox, cbDatetime)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:382
+#, fuzzy, kde-format
+#| msgid "DateTime:"
+msgid "Datetime"
+msgstr "Data i hora:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionX3)
+#. i18n: ectx: property (text), widget (QLabel, lPositionX1)
+#. i18n: ectx: property (text), widget (QLabel, lPositionX2)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:460
+#: src/kdefrontend/ui/datapickerimagewidget.ui:493
+#: src/kdefrontend/ui/datapickerimagewidget.ui:590
+#, kde-format
+msgid "x="
+msgstr "x="
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionY1)
+#. i18n: ectx: property (text), widget (QLabel, lPositionY3)
+#. i18n: ectx: property (text), widget (QLabel, lPositionY2)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:476
+#: src/kdefrontend/ui/datapickerimagewidget.ui:519
+#: src/kdefrontend/ui/datapickerimagewidget.ui:644
+#, kde-format
+msgid "y="
+msgstr "y="
+
+#. i18n: ectx: property (text), widget (QLabel, lRefPoint3)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:486
+#, kde-format
+msgid "3."
+msgstr "3."
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionZ2)
+#. i18n: ectx: property (text), widget (QLabel, lPositionZ1)
+#. i18n: ectx: property (text), widget (QLabel, lPositionZ3)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:503
+#: src/kdefrontend/ui/datapickerimagewidget.ui:673
+#: src/kdefrontend/ui/datapickerimagewidget.ui:689
+#, kde-format
+msgid "z="
+msgstr "z="
+
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:652
+#: src/kdefrontend/ui/datapickerimagewidget.ui:532
 #, kde-format
 msgid "1."
 msgstr "1."
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:659
+#: src/kdefrontend/ui/datapickerimagewidget.ui:558
 #, kde-format
 msgid "2."
 msgstr "2."
 
-#. i18n: ectx: property (text), widget (QLabel, lRefPoint3)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:686
-#, kde-format
-msgid "3."
-msgstr "3."
-
 #. i18n: ectx: attribute (title), widget (QWidget, tSymbol)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:704
+#: src/kdefrontend/ui/datapickerimagewidget.ui:751
 #, kde-format
 msgid "Ref. Points Symbol"
 msgstr "Símbol de punts de ref."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tEdit)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:731
+#: src/kdefrontend/ui/datapickerimagewidget.ui:778
 #, kde-format
 msgid "Edit Image"
 msgstr "Edita la imatge"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntensity)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:746
+#: src/kdefrontend/ui/datapickerimagewidget.ui:793
 #, kde-format
 msgid "Intensity:"
 msgstr "Intensitat:"
@@ -16674,7 +16698,7 @@ msgstr "Intensitat:"
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionY)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionY)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPlotImageType)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:768
+#: src/kdefrontend/ui/datapickerimagewidget.ui:815
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:312
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:167
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:481
@@ -16684,25 +16708,25 @@ msgid "Vertical position relative to label's parent"
 msgstr "Posició vertical relativa al pare de l'etiqueta"
 
 #. i18n: ectx: property (text), widget (QLabel, lHue)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:801
+#: src/kdefrontend/ui/datapickerimagewidget.ui:848
 #, kde-format
 msgid "Hue:"
 msgstr "To:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotImageType)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:821
+#: src/kdefrontend/ui/datapickerimagewidget.ui:868
 #, kde-format
 msgid "Current Image:"
 msgstr "Imatge actual:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaturation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:834
+#: src/kdefrontend/ui/datapickerimagewidget.ui:881
 #, kde-format
 msgid "Saturation:"
 msgstr "Saturació:"
 
 #. i18n: ectx: property (text), widget (QLabel, lForeground)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:841
+#: src/kdefrontend/ui/datapickerimagewidget.ui:888
 #, kde-format
 msgid "Foreground:"
 msgstr "Primer pla:"
@@ -21054,8 +21078,8 @@ msgstr ""
 "Cal tenir en compte que no és possible canviar aquest tipus una vegada "
 "s'hagi llegit almenys un punt."
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:141
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:195
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:142
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:196
 #, kde-format
 msgid ""
 "Select the range for the hue.\n"
@@ -21064,8 +21088,8 @@ msgstr ""
 "Seleccioneu l'interval per al to.\n"
 "Qualsevol valor fora d'aquest interval s'establirà com a blanc."
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:146
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:200
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:147
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:201
 #, kde-format
 msgid ""
 "Select the range for the saturation.\n"
@@ -21074,8 +21098,8 @@ msgstr ""
 "Seleccioneu l'interval per a la saturació.\n"
 "Qualsevol valor fora d'aquest interval s'establirà com a blanc."
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:151
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:205
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:152
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:206
 #, kde-format
 msgid ""
 "Select the range for the value, the degree of lightness of the color.\n"
@@ -21084,8 +21108,8 @@ msgstr ""
 "Seleccioneu l'interval per al valor del grau de lluminositat del color.\n"
 "Qualsevol valor fora d'aquest interval s'establirà com a blanc."
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:156
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:210
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:157
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:211
 #, kde-format
 msgid ""
 "Select the range for the intensity.\n"
@@ -21094,8 +21118,8 @@ msgstr ""
 "Seleccioneu l'interval per a la intensitat.\n"
 "Qualsevol valor fora d'aquest interval s'establirà com a blanc."
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:162
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:216
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:163
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:217
 #, kde-format
 msgid ""
 "Select the range for the colors that are not part of the background color.\n"
@@ -21104,70 +21128,75 @@ msgstr ""
 "Seleccioneu l'interval dels colors que no formen part del color de fons.\n"
 "Qualsevol valor fora d'aquest interval s'establirà com a blanc."
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:166
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:167
 #, kde-format
 msgid "Cartesian (x, y)"
 msgstr "Cartesià (x, y)"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:167
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:168
 #, kde-format
 msgid "Polar (x, y°)"
 msgstr "Polar (x, y°)"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:168
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:169
 #, kde-format
 msgid "Polar (x, y(rad))"
 msgstr "Polar (x, y(rad))"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:169
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:170
 #, kde-format
 msgid "Logarithmic (ln(x), ln(y))"
 msgstr "Logarítmic (ln(x), ln(y))"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:170
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:171
 #, kde-format
 msgid "Logarithmic (ln(x), y)"
 msgstr "Logarítmic (ln(x), y)"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:171
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:172
 #, kde-format
 msgid "Logarithmic (x, ln(y))"
 msgstr "Logarítmic (x, ln(y))"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:172
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
 #, kde-format
 msgid "Logarithmic (log(x), log(y))"
 msgstr "Logarítmic (log(x), log(y))"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
 #, kde-format
 msgid "Logarithmic (log(x), y)"
 msgstr "Logarítmic (log(x), y)"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:175
 #, kde-format
 msgid "Logarithmic (x, log(y))"
 msgstr "Logarítmic (x, log(y))"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:175
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:176
 #, kde-format
 msgid "Ternary (x, y, z)"
 msgstr "Ternari (x, y, z)"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:186
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:187
 #, kde-format
 msgid "No Image"
 msgstr "Sense imatge"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:187
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:188
 #, kde-format
 msgid "Original Image"
 msgstr "Imatge original"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:188
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:189
 #, kde-format
 msgid "Processed Image"
 msgstr "Imatge processada"
+
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:374
+#, kde-format
+msgid "Save project before using this option"
+msgstr ""
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
