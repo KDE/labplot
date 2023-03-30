@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-29 00:43+0000\n"
-"PO-Revision-Date: 2023-03-23 09:55+0100\n"
+"PO-Revision-Date: 2023-03-29 13:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -16555,17 +16555,15 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:158
-#, fuzzy, kde-format
-#| msgid "Embedded:"
+#, kde-format
 msgid "Embedd"
-msgstr "Incrustada:"
+msgstr "Incrustada"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:165
-#, fuzzy, kde-format
-#| msgid "Relative Path:"
+#, kde-format
 msgid "Relative Path"
-msgstr "Camí relatiu:"
+msgstr "Camí relatiu"
 
 #. i18n: ectx: property (text), widget (QLabel, lRotation)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
@@ -16623,10 +16621,9 @@ msgstr "Punts de referència"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbDatetime)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:382
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#, kde-format
 msgid "Datetime"
-msgstr "Data i hora:"
+msgstr "Data i hora"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX3)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX1)
@@ -21196,7 +21193,7 @@ msgstr "Imatge processada"
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:374
 #, kde-format
 msgid "Save project before using this option"
-msgstr ""
+msgstr "Deseu el projecte abans d'usar aquesta opció"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
