@@ -2717,6 +2717,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		if (!curve->isVisible() || !curve->dataColumn())
 			continue;
 
+		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
+			continue;
+
 		const double min = curve->minimum(dim);
 		if (d->dataRange(dim, index).start() > min)
 			d->dataRange(dim, index).start() = min;
@@ -2731,6 +2734,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		if (!curve->isVisible() || curve->dataColumns().isEmpty())
 			continue;
 
+		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
+			continue;
+
 		const double min = curve->minimum(dim);
 		if (d->dataRange(dim, index).start() > min)
 			d->dataRange(dim, index).start() = min;
@@ -2743,6 +2749,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 	// loop over all box plots and determine the maximum and minimum x-values
 	for (const auto* curve : this->children<const BarPlot>()) {
 		if (!curve->isVisible() || curve->dataColumns().isEmpty())
+			continue;
+
+		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
 			continue;
 
 		const double min = curve->minimum(dim);
