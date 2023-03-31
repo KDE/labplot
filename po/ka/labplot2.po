@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-29 00:43+0000\n"
-"PO-Revision-Date: 2023-03-14 05:13+0100\n"
+"PO-Revision-Date: 2023-03-30 06:29+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8749,12 +8749,12 @@ msgstr "ახალი მრუდი"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:154
 #, kde-format
 msgid "Shift Left"
-msgstr ""
+msgstr "მარცხნივ წანაცვლება"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:157
 #, kde-format
 msgid "Shift Right"
-msgstr ""
+msgstr "მარჯვნივ წანაცვლება"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
@@ -15362,7 +15362,7 @@ msgstr "%1: სემპლის მნიშვნელობები"
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:209
 #, kde-format
 msgid "Sample of %1"
-msgstr ""
+msgstr "%1-ის ნიმუში"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:29
 #, kde-format
@@ -16114,16 +16114,15 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:158
-#, fuzzy, kde-format
-#| msgid "Embedded:"
+#, kde-format
 msgid "Embedd"
-msgstr "ჩადგმული:"
+msgstr "ჩადგმული"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:165
 #, kde-format
 msgid "Relative Path"
-msgstr ""
+msgstr "შეფარდებითი ბილიკი"
 
 #. i18n: ectx: property (text), widget (QLabel, lRotation)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
@@ -16181,10 +16180,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbDatetime)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:382
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#, kde-format
 msgid "Datetime"
-msgstr "თარიღი და დრო:"
+msgstr "თარიღი და დრო"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX3)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX1)
