@@ -598,9 +598,8 @@ void MainWin::dockWidgetAboutToBeRemoved(ads::CDockWidget* w) {
 	if (w == m_projectExplorerDock) {
 		delete m_projectExplorer;
 		m_projectExplorer = nullptr;
-	} else if (w == m_propertiesDock) {
+	} else if (w == m_propertiesDock)
 		delete m_propertiesDock->widget();
-	}
 }
 
 void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
