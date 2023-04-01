@@ -611,7 +611,7 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 
 	auto* view = dynamic_cast<ContentDockWidget*>(now);
 	if (!view)
-		return;
+		return; // project explorer or propertiesexplorer can be ignored
 	if (view == m_currentDock) {
 		// do nothing, if the current sub-window gets selected again.
 		// This event happens, when labplot loses the focus (modal window is opened or the user switches to another application)
