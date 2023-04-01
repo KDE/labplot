@@ -1154,8 +1154,11 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		changeVisibleAllDocks(false);
 		m_DockManager->restoreState(windowState);
 	} else {
-		m_projectExplorerDock->toggleView(true);
-		m_propertiesDock->toggleView(true);
+		// They might be not available, if at startup the "Do nothing" option is selected
+		if (m_projectExplorerDock)
+			m_projectExplorerDock->toggleView(true);
+		if (m_propertiesDock)
+			m_propertiesDock->toggleView(true);
 	}
 }
 
