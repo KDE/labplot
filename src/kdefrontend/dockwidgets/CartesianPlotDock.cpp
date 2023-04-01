@@ -1150,9 +1150,9 @@ void CartesianPlotDock::removeRange(const Dimension dim) {
 				auto* cSystem{m_plot->coordinateSystem(i)};
 
 				if (cSystem->index(dim) == currentRow)
-					cSystem->setIndex(dim, 0); // first range
+					m_plot->setCoordinateSystemRangeIndex(i, dim, 0); // first range
 				else if (cSystem->index(dim) > currentRow)
-					cSystem->setIndex(dim, cSystem->index(dim) - 1);
+					m_plot->setCoordinateSystemRangeIndex(i, dim, cSystem->index(dim) - 1);
 			}
 		}
 	}
@@ -1217,7 +1217,7 @@ void CartesianPlotDock::PlotRangeChanged(const int plotRangeIndex, const Dimensi
 	DEBUG(Q_FUNC_INFO << ", Set " << dimStr << " range of plot range " << plotRangeIndex + 1 << " to " << index + 1)
 	auto* cSystem{m_plot->coordinateSystem(plotRangeIndex)};
 	const auto indexOld = cSystem->index(dim);
-	cSystem->setIndex(dim, index);
+	m_plot->setCoordinateSystemRangeIndex(plotRangeIndex, dim, index);
 
 	m_plot->setRangeDirty(dim, index, true);
 	m_plot->setRangeDirty(dim, indexOld, true);

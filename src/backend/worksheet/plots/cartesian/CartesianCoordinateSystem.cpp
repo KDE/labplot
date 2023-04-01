@@ -676,9 +676,11 @@ void CartesianCoordinateSystem::setIndex(const Dimension dim, const int index) {
 	switch (dim) {
 	case Dimension::X:
 		d->xIndex = index;
+		d->xScales.clear();
 		break;
 	case Dimension::Y:
 		d->yIndex = index;
+		d->yScales.clear();
 		break;
 	}
 }

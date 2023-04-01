@@ -200,6 +200,7 @@ public:
 	void addCoordinateSystem(CartesianCoordinateSystem* cSystem); // add a coordinate system
 	void removeCoordinateSystem(int index); // remove coordinate system index
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystemIndex, DefaultCoordinateSystemIndex)
+	void setCoordinateSystemRangeIndex(int cSystemIndex, Dimension, int rangeIndex);
 
 	void retransformScales();
 	void retransformScale(Dimension, int index);

@@ -599,8 +599,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	// add second range for the cumulative percentage of the total number of occurences
 	plot->addYRange(Range<double>(0, 100)); // add second y range
 	plot->addCoordinateSystem(); // add cs for second y range
-	auto* cs = plot->coordinateSystem(plot->coordinateSystemCount() - 1); // get new cs
-	cs->setIndex(Dimension::Y, 1); // specify new y range
+	plot->setCoordinateSystemRangeIndex(plot->coordinateSystemCount() - 1, Dimension::Y, 1); // specify new y range for new cs
 	plot->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
 
 	// add second y-axis

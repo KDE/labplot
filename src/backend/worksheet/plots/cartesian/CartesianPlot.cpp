@@ -1485,6 +1485,11 @@ CartesianCoordinateSystem* CartesianPlot::defaultCoordinateSystem() const {
 	return d->defaultCoordinateSystem();
 }
 
+void CartesianPlot::setCoordinateSystemRangeIndex(int cSystemIndex, Dimension dim, int rangeIndex) {
+	coordinateSystem(cSystemIndex)->setIndex(dim, rangeIndex);
+	retransformScale(dim, rangeIndex);
+}
+
 // range breaks
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBreakingEnabled)
