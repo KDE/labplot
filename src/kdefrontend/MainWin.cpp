@@ -1340,6 +1340,7 @@ bool MainWin::newProject() {
 	m_newProjectAction->setEnabled(false);
 
 	m_guiObserver = new GuiObserver(this); // initialize after all docks were createad
+	m_guiObserver->selectedAspectsChanged({static_cast<AbstractAspect*>(m_project)}); // Trigger showing properties
 
 	connect(m_project, &Project::aspectAdded, this, &MainWin::handleAspectAdded);
 	connect(m_project, &Project::aspectRemoved, this, &MainWin::handleAspectRemoved);

@@ -148,7 +148,7 @@ void raiseDockSetupConnect(T*& dock, QStatusBar* statusBar, QStackedWidget* pare
 }
 
 template<class T>
-QList<T*> castList(QList<AbstractAspect*>& selectedAspects) {
+QList<T*> castList(const QList<AbstractAspect*>& selectedAspects) {
 	QList<T*> list;
 	for (auto* aspect : selectedAspects)
 		list << static_cast<T*>(aspect);
@@ -175,7 +175,7 @@ GuiObserver::~GuiObserver() {
   Determines the type of the currently selected objects (aspects)
   and activates the corresponding dockwidgets, toolbars etc.
 */
-void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects) {
+void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedAspects) {
 	DEBUG(Q_FUNC_INFO)
 	auto clearDock = [&]() {
 		if (m_mainWindow->stackedWidget->currentWidget())
