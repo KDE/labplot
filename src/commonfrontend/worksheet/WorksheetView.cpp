@@ -2046,7 +2046,7 @@ void WorksheetView::handleReferenceLineSelected() {
 	cartesianPlotCursorModeAction->setEnabled(false);
 }
 
-void WorksheetView::handleXYCurveSelected() {
+void WorksheetView::handlePlotSelected() {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
 	 * Action to X: action is applied to all x ranges
@@ -2225,17 +2225,10 @@ void WorksheetView::handleCartesianPlotActions() {
 			m_selectedElement = w;
 			handleCartesianPlotSelected(static_cast<CartesianPlot*>(m_selectedElement));
 			break;
-		} else if (w->inherits(AspectType::XYCurve)) {
+		} else if (dynamic_cast<Plot*>(w)) {
 			handled = true;
 			m_selectedElement = w;
-			// XYCurvePrivate does not depend yet on WorksheetElementContainerPrivate
-			// m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
-			handleXYCurveSelected();
-			break;
-		} else if (w->inherits(AspectType::XYAnalysisCurve)) {
-			handled = true;
-			m_selectedElement = w;
-			handleXYCurveSelected();
+			handlePlotSelected();
 			break;
 		} else if (w->type() == AspectType::ReferenceLine) {
 			handled = true;

@@ -83,7 +83,7 @@ private:
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 	void handleAxisSelected(const Axis*);
 	void handleCartesianPlotSelected(const CartesianPlot*);
-	void handleXYCurveSelected();
+	void handlePlotSelected();
 	void handleReferenceLineSelected();
 	bool eventFilter(QObject* watched, QEvent*) override;
 	void updateLabelsZoom() const;
