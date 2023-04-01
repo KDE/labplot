@@ -1226,8 +1226,7 @@ void CartesianPlotDock::PlotRangeChanged(const int plotRangeIndex, const Dimensi
 	if (m_plot->range(dim, index).autoScale()) {
 		autoScaleRange(dim, index, true);
 		updateRangeList(dim);
-	} else
-		m_plot->retransformScale(dim, index);
+	}
 
 	for (auto* axis : m_plot->children<Axis>()) {
 		const int cSystemIndex{axis->coordinateSystemIndex()};
