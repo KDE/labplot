@@ -628,7 +628,7 @@ int CartesianPlot::cSystemIndex(WorksheetElement* e) {
 	auto type = e->type();
 	if (type == AspectType::CartesianPlot)
 		return -1;
-	else if (dynamic_cast<Plot*>(e) || type == AspectType::ReferenceLine || type == AspectType::Axis)
+	else if (dynamic_cast<Plot*>(e) || e->coordinateBindingEnabled() || type == AspectType::Axis)
 		return e->coordinateSystemIndex();
 	return -1;
 }

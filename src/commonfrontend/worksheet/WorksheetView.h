@@ -85,6 +85,8 @@ private:
 	void handleCartesianPlotSelected(const CartesianPlot*);
 	void handlePlotSelected();
 	void handleReferenceLineSelected();
+	void handleReferenceRangeSelected();
+	void handleReferences(bool vertical);
 	bool eventFilter(QObject* watched, QEvent*) override;
 	void updateLabelsZoom() const;
 	void updateScrollBarPolicy();

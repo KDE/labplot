@@ -21,6 +21,7 @@
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "commonfrontend/core/PartMdiView.h"
 #include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
@@ -1962,7 +1963,19 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot) {
 	cartesianPlotCursorModeAction->setEnabled(true);
 }
 
+void WorksheetView::handleReferenceRangeSelected() {
+	auto l = static_cast<ReferenceRange*>(m_selectedElement);
+	bool vert = (l->orientation() == ReferenceRange::Orientation::Vertical);
+	handleReferences(vert);
+}
+
 void WorksheetView::handleReferenceLineSelected() {
+	auto l = static_cast<ReferenceLine*>(m_selectedElement);
+	bool vert = (l->orientation() == ReferenceLine::Orientation::Vertical);
+	handleReferences(vert);
+}
+
+void WorksheetView::handleReferences(bool vertical) {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
 	 * Action to X: action is applied to all x ranges
@@ -1975,9 +1988,6 @@ void WorksheetView::handleReferenceLineSelected() {
 	 * - x zoom selection: if vertical: zoom only into the range from the reference line
 	 * - y zoom selection: if !vertical:zoom only into the range from the reference line
 	 */
-
-	auto l = static_cast<ReferenceLine*>(m_selectedElement);
-	bool vert = (l->orientation() == ReferenceLine::Orientation::Vertical);
 
 	zoomInAction->setEnabled(false);
 	zoomOutAction->setEnabled(false);
@@ -1996,50 +2006,50 @@ void WorksheetView::handleReferenceLineSelected() {
 		shiftRightXAction->setEnabled(false);
 		shiftUpYAction->setEnabled(false);
 		shiftDownYAction->setEnabled(false);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
-		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
-		zoomInXAction->setEnabled(vert);
-		zoomOutXAction->setEnabled(vert);
-		zoomInYAction->setEnabled(!vert);
-		zoomOutYAction->setEnabled(!vert);
-		shiftLeftXAction->setEnabled(vert);
-		shiftRightXAction->setEnabled(vert);
-		shiftUpYAction->setEnabled(!vert);
-		shiftDownYAction->setEnabled(!vert);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vertical);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vertical);
+		zoomInXAction->setEnabled(vertical);
+		zoomOutXAction->setEnabled(vertical);
+		zoomInYAction->setEnabled(!vertical);
+		zoomOutYAction->setEnabled(!vertical);
+		shiftLeftXAction->setEnabled(vertical);
+		shiftRightXAction->setEnabled(vertical);
+		shiftUpYAction->setEnabled(!vertical);
+		shiftDownYAction->setEnabled(!vertical);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
-		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
-		zoomInXAction->setEnabled(vert);
-		zoomOutXAction->setEnabled(vert);
-		zoomInYAction->setEnabled(!vert);
-		zoomOutYAction->setEnabled(!vert);
-		shiftLeftXAction->setEnabled(vert);
-		shiftRightXAction->setEnabled(vert);
-		shiftUpYAction->setEnabled(!vert);
-		shiftDownYAction->setEnabled(!vert);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vertical);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vertical);
+		zoomInXAction->setEnabled(vertical);
+		zoomOutXAction->setEnabled(vertical);
+		zoomInYAction->setEnabled(!vertical);
+		zoomOutYAction->setEnabled(!vertical);
+		shiftLeftXAction->setEnabled(vertical);
+		shiftRightXAction->setEnabled(vertical);
+		shiftUpYAction->setEnabled(!vertical);
+		shiftDownYAction->setEnabled(!vertical);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
-		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
-		zoomInXAction->setEnabled(vert);
-		zoomOutXAction->setEnabled(vert);
-		zoomInYAction->setEnabled(!vert);
-		zoomOutYAction->setEnabled(!vert);
-		shiftLeftXAction->setEnabled(vert);
-		shiftRightXAction->setEnabled(vert);
-		shiftUpYAction->setEnabled(!vert);
-		shiftDownYAction->setEnabled(!vert);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vertical);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vertical);
+		zoomInXAction->setEnabled(vertical);
+		zoomOutXAction->setEnabled(vertical);
+		zoomInYAction->setEnabled(!vertical);
+		zoomOutYAction->setEnabled(!vertical);
+		shiftLeftXAction->setEnabled(vertical);
+		shiftRightXAction->setEnabled(vertical);
+		shiftUpYAction->setEnabled(!vertical);
+		shiftDownYAction->setEnabled(!vertical);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	}
 	cartesianPlotSelectionModeAction->setEnabled(true);
@@ -2225,19 +2235,24 @@ void WorksheetView::handleCartesianPlotActions() {
 			m_selectedElement = w;
 			handleCartesianPlotSelected(static_cast<CartesianPlot*>(m_selectedElement));
 			break;
-		} else if (dynamic_cast<Plot*>(w)) {
-			handled = true;
-			m_selectedElement = w;
-			handlePlotSelected();
-			break;
 		} else if (w->type() == AspectType::ReferenceLine) {
 			handled = true;
 			m_selectedElement = w;
 			handleReferenceLineSelected();
+		} else if (w->type() == AspectType::ReferenceRange) {
+			handled = true;
+			m_selectedElement = w;
+			handleReferenceRangeSelected();
 		} else if (w->type() == AspectType::Axis) {
 			handled = true;
 			m_selectedElement = w;
 			handleAxisSelected(static_cast<Axis*>(m_selectedElement));
+			break;
+		} else if (dynamic_cast<Plot*>(w) || w->coordinateBindingEnabled()) {
+			// Plot and other WorksheetElements like custompoint, infoelement, textlabel
+			handled = true;
+			m_selectedElement = w;
+			handlePlotSelected();
 			break;
 		}
 	}
