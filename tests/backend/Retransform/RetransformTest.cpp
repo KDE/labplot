@@ -1384,7 +1384,8 @@ void RetransformTest::TestChangePlotRangeElement2() {
 
 	// No update of the scales, because the range did not change
 	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1); // The respective coordinate system must be rescaled
 
 	c.resetRetransformCount();
 
@@ -1591,7 +1592,8 @@ void RetransformTest::TestChangePlotRangeElement3() {
 
 	// No update of the scales, because the range did not change
 	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1); // The respective coordinate system must be rescaled
 
 	c.resetRetransformCount();
 
