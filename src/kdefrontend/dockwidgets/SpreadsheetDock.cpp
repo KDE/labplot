@@ -51,7 +51,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 /*!
 	set the current spreadsheet(s)
 */
-void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
+void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	CONDITIONAL_LOCK_RETURN;
 	m_spreadsheetList = list;
 	m_spreadsheet = list.first();
