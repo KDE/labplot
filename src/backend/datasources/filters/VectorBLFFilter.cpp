@@ -7,11 +7,6 @@
 	SPDX-License-Identifier: GPL-3.0-or-later
 */
 
-/* TODO:
- * Feature: implement missing data types and ranks
- * Performance: only fill dataPointer or dataStrings (not both)
- */
-
 #include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/datasources/filters/VectorBLFFilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
