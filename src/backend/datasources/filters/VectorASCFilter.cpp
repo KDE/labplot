@@ -1,6 +1,5 @@
 #include "VectorASCFilter.h"
 #include "VectorASCFilterPrivate.h"
-#include "VectorASCReader.h"
 
 #ifdef HAVE_VECTOR_ASC
 #include <Vector/ASC.h>
