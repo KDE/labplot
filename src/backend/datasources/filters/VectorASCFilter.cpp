@@ -17,7 +17,7 @@
 
 /*!
 	\class VectorASCFilter
-	\brief Manages the import/export of data from/to a Vector BLF file.
+	\brief Manages the import/export of data from/to a Vector ASC file.
 
 	\ingroup datasources
 */
