@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-01 00:47+0000\n"
-"PO-Revision-Date: 2023-03-26 14:29+0100\n"
+"PO-Revision-Date: 2023-04-01 17:51+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -16372,17 +16372,15 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:158
-#, fuzzy, kde-format
-#| msgid "Embedded:"
+#, kde-format
 msgid "Embedd"
-msgstr "Embedded:"
+msgstr "Embed"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:165
-#, fuzzy, kde-format
-#| msgid "Relative Path:"
+#, kde-format
 msgid "Relative Path"
-msgstr "Relative Path:"
+msgstr "Relative Path"
 
 #. i18n: ectx: property (text), widget (QLabel, lRotation)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
@@ -16440,10 +16438,9 @@ msgstr "Reference Points"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbDatetime)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:382
-#, fuzzy, kde-format
-#| msgid "datetime"
+#, kde-format
 msgid "Datetime"
-msgstr "datetime"
+msgstr "Datetime"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX3)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX1)
@@ -20998,7 +20995,7 @@ msgstr "Processed Image"
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:374
 #, kde-format
 msgid "Save project before using this option"
-msgstr ""
+msgstr "Save project before using this option"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
