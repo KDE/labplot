@@ -397,6 +397,7 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::NETCDF:
 	case AbstractFileFilter::FileType::Excel:
 	case AbstractFileFilter::FileType::VECTOR_BLF:
+	case AbstractFileFilter::FileType::VECTOR_ASC:
 		break;
 	case AbstractFileFilter::FileType::FITS:
 		icon = QIcon::fromTheme(QStringLiteral("kstars_fitsviewer"));

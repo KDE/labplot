@@ -185,6 +185,10 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	else if (fileName.endsWith(QLatin1String("blf")) && VectorBLFFilter::isValid(fileName))
 		fileType = FileType::VECTOR_BLF;
 #endif
+#ifdef HAVE_VECTOR_ASC
+	else if (fileName.endsWith(QLatin1String("asc")) && VectorBLFFilter::isValid(fileName))
+		fileType = FileType::VECTOR_ASC;
+#endif
 #ifdef HAVE_FITS
 	else if (fileInfo.contains(QLatin1String("FITS image data")) || fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive)
 			 || fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive))

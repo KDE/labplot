@@ -105,6 +105,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_VECTOR_BLF
 		ui.cbFileType->addItem(i18n("Vector Binary Logfile (BLF)"), static_cast<int>(AbstractFileFilter::FileType::VECTOR_BLF));
 #endif
+#ifdef HAVE_VECTOR_ASC
+		ui.cbFileType->addItem(i18n("Vector Ascii Logfile (ASC)"), static_cast<int>(AbstractFileFilter::FileType::VECTOR_ASC));
+#endif
 #ifdef HAVE_FITS
 		ui.cbFileType->addItem(i18n("Flexible Image Transport System Data Format (FITS)"), static_cast<int>(AbstractFileFilter::FileType::FITS));
 #endif
@@ -796,6 +799,19 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
+	case AbstractFileFilter::FileType::VECTOR_ASC: {
+		DEBUG(Q_FUNC_INFO << ", VECTOR_ASC");
+		if (!m_currentFilter) {
+			auto filter = new VectorASCFilter;
+			filter->setDBCFile(dbcFileName());
+			m_currentFilter.reset(filter);
+		}
+		auto filter = static_cast<VectorASCFilter*>(m_currentFilter.get());
+		if (m_canOptionsWidget)
+			m_canOptionsWidget->applyFilterSettings(filter);
+
+		break;
+	}
 	case AbstractFileFilter::FileType::FITS: {
 		DEBUG(Q_FUNC_INFO << ", FITS");
 		if (!m_currentFilter)
@@ -1322,6 +1338,11 @@ const QStringList ImportFileWidget::selectedHDF5Names() const {
 
 const QStringList ImportFileWidget::selectedVectorBLFNames() const {
 	// return m_vectorBLFOptionsWidget->selectedNames();
+	return QStringList();
+}
+
+const QStringList ImportFileWidget::selectedVectorASCNames() const {
+	// return m_vectorASCOptionsWidget->selectedNames();
 	return QStringList();
 }
 

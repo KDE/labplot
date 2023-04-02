@@ -65,6 +65,7 @@ public:
 	bool excelUseFirstRowAsColNames() const;
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedVectorBLFNames() const;
+	const QStringList selectedVectorASCNames() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedMatioNames() const;
 	const QStringList selectedFITSExtensions() const;

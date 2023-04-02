@@ -217,12 +217,14 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		// multiple data sets/variables for special types
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
 			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel
-			|| fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
+			|| fileType == AbstractFileFilter::FileType::VECTOR_BLF || fileType == AbstractFileFilter::FileType::VECTOR_ASC) {
 			QStringList names;
 			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
 			else if (fileType == AbstractFileFilter::FileType::VECTOR_BLF)
 				names = m_importFileWidget->selectedVectorBLFNames();
+			else if (fileType == AbstractFileFilter::FileType::VECTOR_ASC)
+				names = m_importFileWidget->selectedVectorASCNames();
 			else if (fileType == AbstractFileFilter::FileType::NETCDF)
 				names = m_importFileWidget->selectedNetCDFNames();
 			else if (fileType == AbstractFileFilter::FileType::ROOT)
