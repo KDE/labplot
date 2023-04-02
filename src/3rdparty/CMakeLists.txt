@@ -130,7 +130,7 @@ if (ENABLE_VECTOR_ASC)
           GIT_REPOSITORY https://bitbucket.org/tobylorenz/vector_asc.git
           GIT_TAG c304a20a0cd49d15aeebafde777c5ca6d93a2fe6
         )
-        #set(CMAKE_PROJECT_Vector_ASC_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_asc_config.cmake")
+        set(CMAKE_PROJECT_Vector_ASC_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_asc_config.cmake")
         FetchContent_MakeAvailable(vector_asc)
         # headerfiles of the projects are referring to <Vector/ASC/someheader.h> and therefore
         # the path must be added
