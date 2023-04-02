@@ -1,5 +1,5 @@
 #include "CANOptionsWidget.h"
-#include "backend/datasources/filters/VectorBLFFilter.h"
+#include "backend/datasources/filters/CANFilter.h"
 #include "ui_CANOptionsWidget.h"
 
 #include <KConfigGroup>
@@ -10,10 +10,10 @@ CANOptionsWidget::CANOptionsWidget(QWidget* parent)
 	, ui(new Ui::CANOptionsWidget) {
 	ui->setupUi(this);
 
-	ui->cbImportMode->addItem(i18n("Use NAN"), (int)VectorBLFFilter::TimeHandling::ConcatNAN);
-	ui->cbImportMode->addItem(i18n("Use previous value"), (int)VectorBLFFilter::TimeHandling::ConcatPrevious);
+	ui->cbImportMode->addItem(i18n("Use NAN"), (int)CANFilter::TimeHandling::ConcatNAN);
+	ui->cbImportMode->addItem(i18n("Use previous value"), (int)CANFilter::TimeHandling::ConcatPrevious);
 	// Not yet implemented
-	// ui->cbImportMode->addItem(i18n("Separate time columns"), (int)VectorBLFFilter::TimeHandling::Separate);
+	// ui->cbImportMode->addItem(i18n("Separate time columns"), (int)CANFilter::TimeHandling::Separate);
 
 	loadSettings();
 }
@@ -22,9 +22,13 @@ CANOptionsWidget::~CANOptionsWidget() {
 	delete ui;
 }
 
-void CANOptionsWidget::applyFilterSettings(VectorBLFFilter* filter) const {
+void CANOptionsWidget::applyFilterSettings(CANFilter* filter) const {
 	filter->setConvertTimeToSeconds(ui->cbConvertSeconds->isChecked());
-	filter->setTimeHandlingMode(static_cast<VectorBLFFilter::TimeHandling>(ui->cbImportMode->itemData(ui->cbImportMode->currentIndex()).toInt()));
+	filter->setTimeHandlingMode(static_cast<CANFilter::TimeHandling>(ui->cbImportMode->itemData(ui->cbImportMode->currentIndex()).toInt()));
+
+	ui->cbConvertSeconds->setVisible(false);
+	if (filter->type() == AbstractFileFilter::FileType::VECTOR_BLF)
+		ui->cbConvertSeconds->setVisible(true);
 
 	saveSettings();
 }
@@ -40,7 +44,7 @@ void CANOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
 
 	ui->cbConvertSeconds->setChecked(conf.readEntry("ConvertSeconds", true));
-	const auto mode = conf.readEntry("TimeHandlingMode", (int)VectorBLFFilter::TimeHandling::ConcatPrevious);
+	const auto mode = conf.readEntry("TimeHandlingMode", (int)CANFilter::TimeHandling::ConcatPrevious);
 
 	for (int i = 0; i < ui->cbImportMode->count(); i++) {
 		if (mode == ui->cbImportMode->itemData(i).toInt()) {

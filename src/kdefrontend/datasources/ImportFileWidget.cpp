@@ -1320,9 +1320,10 @@ const QStringList ImportFileWidget::selectedHDF5Names() const {
 	return m_hdf5OptionsWidget->selectedNames();
 }
 
-// const QStringList ImportFileWidget::selectedVectorBLFNames() const {
-//	return m_vectorBLFOptionsWidget->selectedNames();
-// }
+const QStringList ImportFileWidget::selectedVectorBLFNames() const {
+	// return m_vectorBLFOptionsWidget->selectedNames();
+	return QStringList();
+}
 
 const QStringList ImportFileWidget::selectedNetCDFNames() const {
 	return m_netcdfOptionsWidget->selectedNames();

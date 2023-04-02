@@ -7,7 +7,7 @@ namespace Ui {
 class CANOptionsWidget;
 }
 
-class VectorBLFFilter;
+class CANFilter;
 
 class CANOptionsWidget : public QWidget {
 	Q_OBJECT
@@ -16,7 +16,7 @@ public:
 	explicit CANOptionsWidget(QWidget* parent = nullptr);
 	~CANOptionsWidget();
 
-	void applyFilterSettings(VectorBLFFilter* filter) const;
+	void applyFilterSettings(CANFilter* filter) const;
 
 	void saveSettings() const;
 	void loadSettings() const;

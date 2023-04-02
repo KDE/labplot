@@ -222,7 +222,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
 			else if (fileType == AbstractFileFilter::FileType::VECTOR_BLF)
-				names = QStringList({QStringLiteral("TODO")}); // m_importFileWidget->selectedVectorBLFNames();
+				names = m_importFileWidget->selectedVectorBLFNames();
 			else if (fileType == AbstractFileFilter::FileType::NETCDF)
 				names = m_importFileWidget->selectedNetCDFNames();
 			else if (fileType == AbstractFileFilter::FileType::ROOT)
