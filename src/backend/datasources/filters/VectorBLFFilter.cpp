@@ -201,12 +201,8 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 			if (ohb->objectType != Vector::BLF::ObjectType::CAN_MESSAGE2)
 				continue;
 
-			int id;
-			if (ohb->objectType == Vector::BLF::ObjectType::CAN_MESSAGE2) {
-				const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(ohb);
-				id = message->id;
-			} else
-				return 0;
+			const auto message = reinterpret_cast<Vector::BLF::CanMessage2*>(ohb);
+			const int id = message->id;
 
 			v.append(ohb);
 			if (!ids.contains(id))
