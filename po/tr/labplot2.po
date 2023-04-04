@@ -10477,7 +10477,7 @@ msgstr ""
 "<table><tr><td>küçük son haneli</td><td>Intel x86 işlemciler üzerindeki "
 "tipik bayt sırasıdır (endianlık).</td></tr><tr><td>büyük son haneli</"
 "td><td>Mainframes (IBM) ve SPARC/PowerPC/Motorola işlemciler üzerindeki "
-"tipik bayt sırasıdır<tr></tr></table>"
+"tipik bayt sırasıdır</td></tr></table>"
 
 #: src/kdefrontend/datasources/CANOptionsWidget.cpp:13
 #, kde-format
