@@ -27,50 +27,50 @@ extern "C" {
 #include <gsl/gsl_statistics.h>
 }
 
-void ColumnPrivate::Labels::initLabels(AbstractColumn::ColumnMode mode) {
+void ColumnPrivate::ValueLabels::initLabels(AbstractColumn::ColumnMode mode) {
 	if (!m_labels) {
 		m_mode = mode;
 		switch (m_mode) {
 		case AbstractColumn::ColumnMode::Double:
-			m_labels = new QMap<double, QString>();
+			m_labels = new QVector<Column::ValueLabel<double>>();
 			break;
 		case AbstractColumn::ColumnMode::Integer:
-			m_labels = new QMap<int, QString>();
+			m_labels = new QVector<Column::ValueLabel<int>>();
 			break;
 		case AbstractColumn::ColumnMode::BigInt:
-			m_labels = new QMap<qint64, QString>();
+			m_labels = new QVector<Column::ValueLabel<qint64>>();
 			break;
 		case AbstractColumn::ColumnMode::Text:
-			m_labels = new QMap<QString, QString>();
+			m_labels = new QVector<Column::ValueLabel<QString>>();
 			break;
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
-			m_labels = new QMap<QDateTime, QString>();
+			m_labels = new QVector<Column::ValueLabel<QDateTime>>();
 			break;
 		}
 	}
 }
 
-void ColumnPrivate::Labels::clearLabels() {
+void ColumnPrivate::ValueLabels::clearLabels() {
 	if (m_labels) {
 		switch (m_mode) {
 		case AbstractColumn::ColumnMode::Double:
-			delete static_cast<QMap<double, QString>*>(m_labels);
+			delete cast_vector<double>();
 			break;
 		case AbstractColumn::ColumnMode::Integer:
-			delete static_cast<QMap<int, QString>*>(m_labels);
+			delete cast_vector<int>();
 			break;
 		case AbstractColumn::ColumnMode::BigInt:
-			delete static_cast<QMap<qint64, QString>*>(m_labels);
+			delete cast_vector<qint64>();
 			break;
 		case AbstractColumn::ColumnMode::Text:
-			delete static_cast<QMap<QString, QString>*>(m_labels);
+			delete cast_vector<QString>();
 			break;
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
-			delete static_cast<QMap<QDateTime, QString>*>(m_labels);
+			delete cast_vector<QDateTime>();
 			break;
 		}
 
@@ -78,48 +78,69 @@ void ColumnPrivate::Labels::clearLabels() {
 	}
 }
 
-void ColumnPrivate::Labels::addValueLabel(const QString& value, const QString& label) {
+int ColumnPrivate::ValueLabels::count() const {
+	if (!hasValueLabels())
+		return 0;
+
+	switch (m_mode) {
+	case AbstractColumn::ColumnMode::Double:
+		return cast_vector<double>()->count();
+	case AbstractColumn::ColumnMode::Integer:
+		return cast_vector<int>()->count();
+	case AbstractColumn::ColumnMode::BigInt:
+		return cast_vector<qint64>()->count();
+	case AbstractColumn::ColumnMode::Text:
+		return cast_vector<QString>()->count();
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		return cast_vector<QDateTime>()->count();
+	}
+	return 0;
+}
+
+void ColumnPrivate::ValueLabels::addValueLabel(const QString& value, const QString& label) {
 	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::Text)
 		return;
 
 	initLabels(AbstractColumn::ColumnMode::Text);
-	static_cast<QMap<QString, QString>*>(m_labels)->operator[](value) = label;
+	cast_vector<QString>()->append({value, label});
 }
 
-void ColumnPrivate::Labels::addValueLabel(const QDateTime& value, const QString& label) {
+void ColumnPrivate::ValueLabels::addValueLabel(const QDateTime& value, const QString& label) {
 	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::DateTime && m_mode != AbstractColumn::ColumnMode::Day
 		&& m_mode != AbstractColumn::ColumnMode::Month)
 		return;
 
 	initLabels(AbstractColumn::ColumnMode::Month);
-	static_cast<QMap<QDateTime, QString>*>(m_labels)->operator[](value) = label;
+	cast_vector<QDateTime>()->append({value, label});
 }
 
-void ColumnPrivate::Labels::addValueLabel(double value, const QString& label) {
+void ColumnPrivate::ValueLabels::addValueLabel(double value, const QString& label) {
 	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::Double)
 		return;
 
 	initLabels(AbstractColumn::ColumnMode::Double);
-	static_cast<QMap<double, QString>*>(m_labels)->operator[](value) = label;
+	cast_vector<double>()->append({value, label});
 }
 
-void ColumnPrivate::Labels::addValueLabel(int value, const QString& label) {
+void ColumnPrivate::ValueLabels::addValueLabel(int value, const QString& label) {
 	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::Integer)
 		return;
 
 	initLabels(AbstractColumn::ColumnMode::Integer);
-	static_cast<QMap<int, QString>*>(m_labels)->operator[](value) = label;
+	cast_vector<int>()->append({value, label});
 }
 
-void ColumnPrivate::Labels::addValueLabel(qint64 value, const QString& label) {
+void ColumnPrivate::ValueLabels::addValueLabel(qint64 value, const QString& label) {
 	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::BigInt)
 		return;
 
 	initLabels(AbstractColumn::ColumnMode::BigInt);
-	static_cast<QMap<qint64, QString>*>(m_labels)->operator[](value) = label;
+	cast_vector<qint64>()->append({value, label});
 }
 
-void ColumnPrivate::Labels::removeValueLabel(const QString& key) {
+void ColumnPrivate::ValueLabels::removeValueLabel(const QString& key) {
 	if (!hasValueLabels())
 		return;
 
@@ -129,25 +150,41 @@ void ColumnPrivate::Labels::removeValueLabel(const QString& key) {
 		double value = QLocale().toDouble(key, &ok);
 		if (!ok)
 			return;
-		static_cast<QMap<double, QString>*>(m_labels)->remove(value);
+		auto* v = cast_vector<double>();
+		for (int i = 0; i < v->length(); i++) {
+			if (v->at(i).value == value)
+				v->remove(i);
+		}
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer: {
 		int value = QLocale().toInt(key, &ok);
 		if (!ok)
 			return;
-		static_cast<QMap<int, QString>*>(m_labels)->remove(value);
+		auto* v = cast_vector<int>();
+		for (int i = 0; i < v->length(); i++) {
+			if (v->at(i).value == value)
+				v->remove(i);
+		}
 		break;
 	}
 	case AbstractColumn::ColumnMode::BigInt: {
 		qint64 value = QLocale().toLongLong(key, &ok);
 		if (!ok)
 			return;
-		static_cast<QMap<qint64, QString>*>(m_labels)->remove(value);
+		auto* v = cast_vector<qint64>();
+		for (int i = 0; i < v->length(); i++) {
+			if (v->at(i).value == value)
+				v->remove(i);
+		}
 		break;
 	}
 	case AbstractColumn::ColumnMode::Text: {
-		static_cast<QMap<QString, QString>*>(m_labels)->remove(key);
+		auto* v = cast_vector<QString>();
+		for (int i = 0; i < v->length(); i++) {
+			if (v->at(i).value == key)
+				v->remove(i);
+		}
 		break;
 	}
 	case AbstractColumn::ColumnMode::Month:
@@ -159,41 +196,46 @@ void ColumnPrivate::Labels::removeValueLabel(const QString& key) {
 		} else {
 			f.setFormat(QStringLiteral("dddd"));
 		}
-		static_cast<QMap<QDateTime, QString>*>(m_labels)->remove(QDateTime::fromString(key, f.format()));
+		const auto ref = QDateTime::fromString(key, f.format());
+		auto* v = cast_vector<QDateTime>();
+		for (int i = 0; i < v->length(); i++) {
+			if (v->at(i).value == ref)
+				v->remove(i);
+		}
 		break;
 	}
 	}
 }
 
-const QMap<QString, QString>* ColumnPrivate::Labels::textValueLabels() {
+const QVector<Column::ValueLabel<QString>>* ColumnPrivate::ValueLabels::textValueLabels() const {
 	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::Text)
 		return nullptr;
-	return static_cast<QMap<QString, QString>*>(m_labels);
+	return cast_vector<QString>();
 }
 
-const QMap<QDateTime, QString>* ColumnPrivate::Labels::dateTimeValueLabels() {
+const QVector<Column::ValueLabel<QDateTime>>* ColumnPrivate::ValueLabels::dateTimeValueLabels() const {
 	if (!hasValueLabels()
 		|| (m_mode != AbstractColumn::ColumnMode::DateTime && m_mode != AbstractColumn::ColumnMode::Day && m_mode != AbstractColumn::ColumnMode::Month))
 		return nullptr;
-	return static_cast<QMap<QDateTime, QString>*>(m_labels);
+	return cast_vector<QDateTime>();
 }
 
-const QMap<double, QString>* ColumnPrivate::Labels::valueLabels() {
+const QVector<Column::ValueLabel<double>>* ColumnPrivate::ValueLabels::valueLabels() const {
 	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::Double)
 		return nullptr;
-	return static_cast<QMap<double, QString>*>(m_labels);
+	return cast_vector<double>();
 }
 
-const QMap<int, QString>* ColumnPrivate::Labels::intValueLabels() {
+const QVector<Column::ValueLabel<int>>* ColumnPrivate::ValueLabels::intValueLabels() const {
 	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::Integer)
 		return nullptr;
-	return static_cast<QMap<int, QString>*>(m_labels);
+	return cast_vector<int>();
 }
 
-const QMap<qint64, QString>* ColumnPrivate::Labels::bigIntValueLabels() {
+const QVector<Column::ValueLabel<qint64>>* ColumnPrivate::ValueLabels::bigIntValueLabels() const {
 	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::BigInt)
 		return nullptr;
-	return static_cast<QMap<qint64, QString>*>(m_labels);
+	return cast_vector<qint64>();
 }
 
 // ######################################################################################################
@@ -1360,23 +1402,27 @@ void ColumnPrivate::clearValueLabels() {
 	m_labels.clearLabels();
 }
 
-const QMap<QString, QString>* ColumnPrivate::textValueLabels() {
+const QVector<Column::ValueLabel<QString>>* ColumnPrivate::textValueLabels() const {
 	return m_labels.textValueLabels();
 }
 
-const QMap<QDateTime, QString>* ColumnPrivate::dateTimeValueLabels() {
+const QVector<Column::ValueLabel<QDateTime>>* ColumnPrivate::dateTimeValueLabels() const {
 	return m_labels.dateTimeValueLabels();
 }
 
-const QMap<double, QString>* ColumnPrivate::valueLabels() {
+int ColumnPrivate::valueLabelsCount() const {
+	return m_labels.count();
+}
+
+const QVector<Column::ValueLabel<double>>* ColumnPrivate::valueLabels() const {
 	return m_labels.valueLabels();
 }
 
-const QMap<int, QString>* ColumnPrivate::intValueLabels() {
+const QVector<Column::ValueLabel<int>>* ColumnPrivate::intValueLabels() const {
 	return m_labels.intValueLabels();
 }
 
-const QMap<qint64, QString>* ColumnPrivate::bigIntValueLabels() {
+const QVector<Column::ValueLabel<qint64>>* ColumnPrivate::bigIntValueLabels() const {
 	return m_labels.bigIntValueLabels();
 }
 //@}
@@ -2616,7 +2662,7 @@ void ColumnPrivate::calculateStatistics() {
 	statistics.iqr = statistics.thirdQuartile - statistics.firstQuartile;
 	statistics.trimean = (statistics.firstQuartile + 2. * statistics.median + statistics.thirdQuartile) / 4.;
 
-	//######  dispersion and shape measures  #######
+	// ######  dispersion and shape measures  #######
 	statistics.variance = 0.;
 	statistics.meanDeviation = 0.;
 	statistics.meanDeviationAroundMedian = 0.;

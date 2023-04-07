@@ -707,7 +707,7 @@ void DatapickerImageWidget::load() {
 
 	imageReferencePointSelected(m_image->currentSelectedReferencePoint());
 
-	ui.cbGraphType->setCurrentIndex((int)m_image->axisPoints().type);
+	ui.cbGraphType->setCurrentIndex(ui.cbGraphType->findData((int)m_image->axisPoints().type));
 	ui.sbTernaryScale->setValue(m_image->axisPoints().ternaryScale);
 	const bool datetime = m_image->axisPoints().datetime;
 	ui.cbDatetime->setChecked(datetime);

@@ -230,8 +230,8 @@ void ColumnDock::showValueLabels() {
 			ui.twLabels->setRowCount(labels->size());
 			auto it = labels->constBegin();
 			while (it != labels->constEnd()) {
-				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
-				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it->value)));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it->label));
 				++it;
 				++i;
 			}
@@ -244,8 +244,8 @@ void ColumnDock::showValueLabels() {
 			ui.twLabels->setRowCount(labels->size());
 			auto it = labels->constBegin();
 			while (it != labels->constEnd()) {
-				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
-				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it->value)));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it->label));
 				++it;
 				++i;
 			}
@@ -258,8 +258,8 @@ void ColumnDock::showValueLabels() {
 			ui.twLabels->setRowCount(labels->size());
 			auto it = labels->constBegin();
 			while (it != labels->constEnd()) {
-				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
-				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it->value)));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it->label));
 				++it;
 				++i;
 			}
@@ -272,8 +272,8 @@ void ColumnDock::showValueLabels() {
 			ui.twLabels->setRowCount(labels->size());
 			auto it = labels->constBegin();
 			while (it != labels->constEnd()) {
-				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it.key()));
-				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it->value));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it->label));
 				++it;
 				++i;
 			}
@@ -289,8 +289,8 @@ void ColumnDock::showValueLabels() {
 			auto it = labels->constBegin();
 			const QString& format = ui.cbDateTimeFormat->currentText();
 			while (it != labels->constEnd()) {
-				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it.key().toString(format)));
-				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it->value.toString(format)));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it->label));
 				++it;
 				++i;
 			}

@@ -982,23 +982,27 @@ void Column::clearValueLabels() {
 	project()->setChanged(true);
 }
 
-const QMap<QString, QString>* Column::textValueLabels() {
+const QVector<Column::ValueLabel<QString>>* Column::textValueLabels() const {
 	return d->textValueLabels();
 }
 
-const QMap<QDateTime, QString>* Column::dateTimeValueLabels() {
+const QVector<Column::ValueLabel<QDateTime>>* Column::dateTimeValueLabels() const {
 	return d->dateTimeValueLabels();
 }
 
-const QMap<double, QString>* Column::valueLabels() {
+int Column::valueLabelsCount() const {
+	return d->valueLabelsCount();
+}
+
+const QVector<Column::ValueLabel<double>>* Column::valueLabels() const {
 	return d->valueLabels();
 }
 
-const QMap<int, QString>* Column::intValueLabels() {
+const QVector<Column::ValueLabel<int>>* Column::intValueLabels() const {
 	return d->intValueLabels();
 }
 
-const QMap<qint64, QString>* Column::bigIntValueLabels() {
+const QVector<Column::ValueLabel<qint64>>* Column::bigIntValueLabels() const {
 	return d->bigIntValueLabels();
 }
 
@@ -1091,8 +1095,8 @@ void Column::save(QXmlStreamWriter* writer) const {
 				auto it = labels->constBegin();
 				while (it != labels->constEnd()) {
 					writer->writeStartElement(QStringLiteral("valueLabel"));
-					writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
-					writer->writeAttribute(QStringLiteral("label"), it.value());
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
 					writer->writeEndElement();
 					++it;
 				}
@@ -1105,8 +1109,8 @@ void Column::save(QXmlStreamWriter* writer) const {
 				auto it = labels->constBegin();
 				while (it != labels->constEnd()) {
 					writer->writeStartElement(QStringLiteral("valueLabel"));
-					writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
-					writer->writeAttribute(QStringLiteral("label"), it.value());
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
 					writer->writeEndElement();
 					++it;
 				}
@@ -1119,8 +1123,8 @@ void Column::save(QXmlStreamWriter* writer) const {
 				auto it = labels->constBegin();
 				while (it != labels->constEnd()) {
 					writer->writeStartElement(QStringLiteral("valueLabel"));
-					writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
-					writer->writeAttribute(QStringLiteral("label"), it.value());
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
 					writer->writeEndElement();
 					++it;
 				}
@@ -1133,8 +1137,8 @@ void Column::save(QXmlStreamWriter* writer) const {
 				auto it = labels->constBegin();
 				while (it != labels->constEnd()) {
 					writer->writeStartElement(QStringLiteral("valueLabel"));
-					writer->writeAttribute(QStringLiteral("value"), it.key());
-					writer->writeAttribute(QStringLiteral("label"), it.value());
+					writer->writeAttribute(QStringLiteral("value"), it->value);
+					writer->writeAttribute(QStringLiteral("label"), it->label);
 					writer->writeEndElement();
 					++it;
 				}
@@ -1149,8 +1153,8 @@ void Column::save(QXmlStreamWriter* writer) const {
 				auto it = labels->constBegin();
 				while (it != labels->constEnd()) {
 					writer->writeStartElement(QStringLiteral("valueLabel"));
-					writer->writeAttribute(QStringLiteral("value"), QString::number(it.key().toMSecsSinceEpoch()));
-					writer->writeAttribute(QStringLiteral("label"), it.value());
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value.toMSecsSinceEpoch()));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
 					writer->writeEndElement();
 					++it;
 				}

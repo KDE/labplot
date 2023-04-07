@@ -280,9 +280,10 @@ void AxisDock::init() {
 	ui.cbMajorTicksDirection->addItem(i18n("Out"));
 	ui.cbMajorTicksDirection->addItem(i18n("In and Out"));
 
-	ui.cbMajorTicksType->addItem(i18n("Number"));
-	ui.cbMajorTicksType->addItem(i18n("Spacing"));
-	ui.cbMajorTicksType->addItem(i18n("Custom column"));
+	ui.cbMajorTicksType->addItem(i18n("Number"), (int)Axis::TicksType::TotalNumber);
+	ui.cbMajorTicksType->addItem(i18n("Spacing"), (int)Axis::TicksType::Spacing);
+	ui.cbMajorTicksType->addItem(i18n("Custom column"), (int)Axis::TicksType::CustomColumn);
+	ui.cbMajorTicksType->addItem(i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
 
 	ui.cbMajorTicksStartType->addItem(i18n("Absolute Value"));
 	ui.cbMajorTicksStartType->addItem(i18n("Offset"));
@@ -295,13 +296,15 @@ void AxisDock::init() {
 	ui.cbMinorTicksType->addItem(i18n("Number"));
 	ui.cbMinorTicksType->addItem(i18n("Spacing"));
 	ui.cbMinorTicksType->addItem(i18n("Custom column"));
+	// ui.cbMinorTicksType->addItem(i18n("Column labels"));
 
 	// labels
 	ui.cbLabelsPosition->addItem(i18n("No labels"));
 	ui.cbLabelsPosition->addItem(i18n("Top"));
 	ui.cbLabelsPosition->addItem(i18n("Bottom"));
-	ui.cbLabelsTextType->addItem(i18n("Position values"));
-	ui.cbLabelsTextType->addItem(i18n("Custom column"));
+
+	ui.cbLabelsTextType->addItem(i18n("Position values"), (int)Axis::LabelsTextType::PositionValues);
+	ui.cbLabelsTextType->addItem(i18n("Custom column"), (int)Axis::LabelsTextType::CustomValues);
 
 	// see Axis::labelsFormatToIndex() and Axis::indexToLabelsFormat()
 	ui.cbLabelsFormat->addItem(i18n("Decimal notation"));
@@ -970,8 +973,15 @@ void AxisDock::majorTicksTypeChanged(int index) {
 				 // axis are available
 		return;
 
-	auto type = Axis::TicksType(index);
-	if (type == Axis::TicksType::TotalNumber) {
+	auto type = (Axis::TicksType)ui.cbMajorTicksType->itemData(index).toInt(); // WRONG!
+
+	ui.lLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
+	ui.cbLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
+	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels);
+	cbLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels);
+
+	switch (type) {
+	case Axis::TicksType::TotalNumber: {
 		ui.lMajorTicksNumber->show();
 		ui.sbMajorTicksNumber->show();
 		ui.lMajorTicksSpacingNumeric->hide();
@@ -987,7 +997,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.tbFirstTickAuto->show();
 		ui.tbFirstTickData->show();
 		updateMajorTicksStartType(true);
-	} else if (type == Axis::TicksType::Spacing) {
+		break;
+	}
+	case Axis::TicksType::Spacing: {
 		ui.lMajorTicksNumber->hide();
 		ui.sbMajorTicksNumber->hide();
 		ui.cbMajorTicksAutoNumber->hide();
@@ -1016,7 +1028,12 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 		// Check if spacing is not too small
 		majorTicksSpacingChanged();
-	} else { // custom column
+		break;
+	}
+
+	case Axis::TicksType::ColumnLabels:
+		// Fall through
+	case Axis::TicksType::CustomColumn: {
 		ui.lMajorTicksNumber->hide();
 		ui.sbMajorTicksNumber->hide();
 		ui.cbMajorTicksAutoNumber->hide();
@@ -1034,6 +1051,8 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		cbMajorTicksColumn->show();
 
 		updateMajorTicksStartType(false);
+		break;
+	}
 	}
 
 	CONDITIONAL_LOCK_RETURN;
@@ -1349,8 +1368,9 @@ void AxisDock::labelsTextTypeChanged(int index) {
 	if (!m_axis)
 		return; // don't do anything when we're addItem()'ing strings and the axis is not available yet
 
-	auto type = Axis::LabelsTextType(index);
-	if (type == Axis::LabelsTextType::PositionValues) {
+	const auto type = static_cast<Axis::LabelsTextType>(ui.cbLabelsTextType->itemData(index).toInt());
+	switch (type) {
+	case Axis::LabelsTextType::PositionValues: {
 		ui.lLabelsTextColumn->hide();
 		cbLabelsTextColumn->hide();
 
@@ -1361,10 +1381,14 @@ void AxisDock::labelsTextTypeChanged(int index) {
 		ui.frameLabelsPrecision->setVisible(numeric);
 		ui.lLabelsDateTimeFormat->setVisible(!numeric);
 		ui.cbLabelsDateTimeFormat->setVisible(!numeric);
-	} else {
+		break;
+	}
+	case Axis::LabelsTextType::CustomValues: {
 		ui.lLabelsTextColumn->show();
 		cbLabelsTextColumn->show();
 		labelsTextColumnChanged(cbLabelsTextColumn->currentModelIndex());
+		break;
+	}
 	}
 
 	CONDITIONAL_LOCK_RETURN;
@@ -1411,14 +1435,18 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 			break;
 		}
 	} else {
-		auto type = Axis::LabelsTextType(ui.cbLabelsTextType->currentIndex());
-		if (type == Axis::LabelsTextType::CustomValues) {
+		auto type = Axis::LabelsTextType(ui.cbLabelsTextType->currentData().toInt());
+		switch (type) {
+		case Axis::LabelsTextType::CustomValues:
 			ui.lLabelsFormat->hide();
 			ui.frameLabelsFormat->hide();
 			ui.lLabelsPrecision->hide();
 			ui.frameLabelsPrecision->hide();
 			ui.lLabelsDateTimeFormat->hide();
 			ui.cbLabelsDateTimeFormat->hide();
+			break;
+		case Axis::LabelsTextType::PositionValues:
+			break;
 		}
 	}
 
@@ -1607,7 +1635,8 @@ void AxisDock::axisMajorTicksDirectionChanged(Axis::TicksDirection direction) {
 }
 void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbMajorTicksType->setCurrentIndex(static_cast<int>(type));
+	const int index = ui.cbMajorTicksType->findData((int)type);
+	ui.cbMajorTicksType->itemData(index);
 }
 void AxisDock::axisMajorTicksAutoNumberChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1713,7 +1742,8 @@ void AxisDock::axisLabelsRotationAngleChanged(qreal rotation) {
 }
 void AxisDock::axisLabelsTextTypeChanged(Axis::LabelsTextType type) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbLabelsTextType->setCurrentIndex(static_cast<int>(type));
+	const int index = ui.cbLabelsTextType->findData((int)type);
+	ui.cbLabelsTextType->setCurrentIndex(index);
 }
 void AxisDock::axisLabelsTextColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1873,7 +1903,7 @@ void AxisDock::load() {
 
 	// Major ticks
 	ui.cbMajorTicksDirection->setCurrentIndex((int)m_axis->majorTicksDirection());
-	ui.cbMajorTicksType->setCurrentIndex((int)m_axis->majorTicksType());
+	ui.cbMajorTicksType->setCurrentIndex(ui.cbMajorTicksType->findData((int)m_axis->majorTicksType()));
 	ui.cbMajorTicksAutoNumber->setChecked(m_axis->majorTicksAutoNumber());
 	ui.sbMajorTicksNumber->setEnabled(!m_axis->majorTicksAutoNumber());
 
@@ -1905,7 +1935,8 @@ void AxisDock::load() {
 	ui.cbLabelsPosition->setCurrentIndex((int)m_axis->labelsPosition());
 	ui.sbLabelsOffset->setValue(Worksheet::convertFromSceneUnits(m_axis->labelsOffset(), Worksheet::Unit::Point));
 	ui.sbLabelsRotation->setValue(m_axis->labelsRotationAngle());
-	ui.cbLabelsTextType->setCurrentIndex((int)m_axis->labelsTextType());
+	const int idx = ui.cbLabelsTextType->findData((int)m_axis->labelsTextType());
+	ui.cbLabelsTextType->setCurrentIndex(idx);
 	ui.cbLabelsFormat->setCurrentIndex(Axis::labelsFormatToIndex(m_axis->labelsFormat()));
 	ui.cbLabelsFormat->setEnabled(!m_axis->labelsFormatAuto());
 	ui.chkLabelsFormatAuto->setChecked(m_axis->labelsFormatAuto());
@@ -2006,7 +2037,7 @@ void AxisDock::loadConfig(KConfig& config) {
 
 	// Major ticks
 	ui.cbMajorTicksDirection->setCurrentIndex(group.readEntry("MajorTicksDirection", (int)m_axis->majorTicksDirection()));
-	ui.cbMajorTicksType->setCurrentIndex(group.readEntry("MajorTicksType", (int)m_axis->majorTicksType()));
+	ui.cbMajorTicksType->setCurrentIndex(ui.cbMajorTicksType->findData(group.readEntry("MajorTicksType", (int)m_axis->majorTicksType())));
 	ui.sbMajorTicksNumber->setValue(group.readEntry("MajorTicksNumber", m_axis->majorTicksNumber()));
 	auto value{group.readEntry("MajorTicksIncrement", m_axis->majorTicksSpacing())};
 	bool numeric = m_axis->isNumeric();
@@ -2105,7 +2136,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 
 	// Major ticks
 	group.writeEntry("MajorTicksDirection", ui.cbMajorTicksDirection->currentIndex());
-	group.writeEntry("MajorTicksType", ui.cbMajorTicksType->currentIndex());
+	group.writeEntry("MajorTicksType", ui.cbMajorTicksType->itemData(ui.cbMajorTicksType->currentIndex()));
 	group.writeEntry("MajorTicksNumber", ui.sbMajorTicksNumber->value());
 	bool numeric = m_axis->isNumeric();
 	if (numeric)

@@ -95,8 +95,6 @@ public:
 	void replaceTexts(int first, const QVector<QString>&);
 	int dictionaryIndex(int row) const;
 	const QMap<QString, int>& frequencies() const;
-	void addValueLabel(const QString&, const QString&);
-	const QMap<QString, QString>* textValueLabels();
 
 	QDate dateAt(int row) const;
 	void setDateAt(int row, QDate);
@@ -107,31 +105,23 @@ public:
 	void setDateTimeAt(int row, const QDateTime&);
 	void replaceValues(int first, const QVector<QDateTime>&);
 	void replaceDateTimes(int first, const QVector<QDateTime>&);
-	void addValueLabel(const QDateTime&, const QString&);
-	const QMap<QDateTime, QString>* dateTimeValueLabels();
 
 	double doubleAt(int row) const;
 	double valueAt(int row) const;
 	void setValueAt(int row, double new_value);
 	void replaceValues(int first, const QVector<double>&);
-	void addValueLabel(double, const QString&);
-	const QMap<double, QString>* valueLabels();
 
 	int integerAt(int row) const;
 	void setValueAt(int row, int new_value);
 	void setIntegerAt(int row, int new_value);
 	void replaceValues(int first, const QVector<int>&);
 	void replaceInteger(int first, const QVector<int>&);
-	void addValueLabel(int, const QString&);
-	const QMap<int, QString>* intValueLabels();
 
 	qint64 bigIntAt(int row) const;
 	void setValueAt(int row, qint64 new_value);
 	void setBigIntAt(int row, qint64 new_value);
 	void replaceValues(int first, const QVector<qint64>&);
 	void replaceBigInt(int first, const QVector<qint64>&);
-	void addValueLabel(qint64, const QString&);
-	const QMap<qint64, QString>* bigIntValueLabels();
 
 	void updateProperties();
 	void calculateStatistics();
@@ -165,9 +155,10 @@ public:
 	AbstractColumn::Properties properties{
 		AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
 
-	struct Labels {
+	struct ValueLabels {
 		void initLabels(AbstractColumn::ColumnMode);
 		void clearLabels();
+		int count() const;
 		void addValueLabel(qint64, const QString&);
 		void addValueLabel(int, const QString&);
 		void addValueLabel(double, const QString&);
@@ -180,17 +171,36 @@ public:
 			return m_labels != nullptr;
 		}
 		void removeValueLabel(const QString&);
-		const QMap<QString, QString>* textValueLabels();
-		const QMap<QDateTime, QString>* dateTimeValueLabels();
-		const QMap<double, QString>* valueLabels();
-		const QMap<int, QString>* intValueLabels();
-		const QMap<qint64, QString>* bigIntValueLabels();
+		template<typename T>
+		inline QVector<Column::ValueLabel<T>>* cast_vector() {
+			return static_cast<QVector<Column::ValueLabel<T>>*>(m_labels);
+		}
+		template<typename T>
+		inline const QVector<Column::ValueLabel<T>>* cast_vector() const {
+			return static_cast<QVector<Column::ValueLabel<T>>*>(m_labels);
+		}
+		const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
+		const QVector<Column::ValueLabel<QDateTime>>* dateTimeValueLabels() const;
+		const QVector<Column::ValueLabel<double>>* valueLabels() const;
+		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
+		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
 
 	private:
 		AbstractColumn::ColumnMode m_mode;
 		void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
 	};
-	Labels m_labels;
+	ValueLabels m_labels;
+	int valueLabelsCount() const;
+	void addValueLabel(qint64, const QString&);
+	const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
+	void addValueLabel(int, const QString&);
+	const QVector<Column::ValueLabel<int>>* intValueLabels() const;
+	void addValueLabel(double, const QString&);
+	const QVector<Column::ValueLabel<double>>* valueLabels() const;
+	void addValueLabel(const QDateTime&, const QString&);
+	const QVector<Column::ValueLabel<QDateTime>>* dateTimeValueLabels() const;
+	void addValueLabel(const QString&, const QString&);
+	const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
 
 private:
 	AbstractColumn::ColumnMode m_columnMode; // type of column data

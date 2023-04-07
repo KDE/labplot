@@ -363,9 +363,9 @@ void SpiceFilterTest::NgSpiceACBinaryStartRowNotZero() {
 	COMPARE_ROW_VALUES_START_END_ROW(sheet, refData, refDataRowCount, refColumnCount, startRow, endRow);
 }
 
-//########################################################################################################
+// ########################################################################################################
 //
-//########################################################################################################
+// ########################################################################################################
 
 void SpiceFilterTest::NgSpiceDCBinaryBulkReadNumberLines() {
 	using namespace dc_binary;

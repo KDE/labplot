@@ -85,7 +85,7 @@ void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 			while (it != labels->constEnd()) {
 				if (!text.isEmpty())
 					text += QLatin1Char('\n');
-				text += QString::number(it.key()) + QLatin1String(" = ") + it.value();
+				text += QString::number(it->value) + QLatin1String(" = ") + it->label;
 				++it;
 			}
 			break;
@@ -98,7 +98,7 @@ void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 			while (it != labels->constEnd()) {
 				if (!text.isEmpty())
 					text += QLatin1Char('\n');
-				text += QString::number(it.key()) + QLatin1String(" = ") + it.value();
+				text += QString::number(it->value) + QLatin1String(" = ") + it->label;
 				++it;
 			}
 			break;
@@ -111,7 +111,7 @@ void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 			while (it != labels->constEnd()) {
 				if (!text.isEmpty())
 					text += QLatin1Char('\n');
-				text += QString::number(it.key()) + QLatin1String(" = ") + it.value();
+				text += QString::number(it->value) + QLatin1String(" = ") + it->label;
 				++it;
 			}
 			break;
@@ -124,7 +124,7 @@ void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 			while (it != labels->constEnd()) {
 				if (!text.isEmpty())
 					text += QLatin1Char('\n');
-				text += it.key() + QLatin1String(" = ") + it.value();
+				text += it->value + QLatin1String(" = ") + it->label;
 				++it;
 			}
 			break;
@@ -141,7 +141,7 @@ void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 			while (it != labels->constEnd()) {
 				if (!text.isEmpty())
 					text += QLatin1Char('\n');
-				text += it.key().toString(dateTimeFormat) + QLatin1String(" = ") + it.value();
+				text += it->value.toString(dateTimeFormat) + QLatin1String(" = ") + it->label;
 				++it;
 			}
 			break;
