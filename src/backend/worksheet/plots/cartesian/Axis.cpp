@@ -1876,7 +1876,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	// category of format
 	bool numeric = false, datetime = false, text = false;
-	if (labelsTextType == Axis::LabelsTextType::PositionValues) {
+	if (majorTicksType == Axis::TicksType::ColumnLabels)
+		text = true;
+	else if (labelsTextType == Axis::LabelsTextType::PositionValues) {
 		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
 		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 		numeric = ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
