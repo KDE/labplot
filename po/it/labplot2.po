@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-03 00:42+0000\n"
+"POT-Creation-Date: 2023-04-07 00:42+0000\n"
 "PO-Revision-Date: 2023-03-19 17:08+0100\n"
 "Last-Translator: Paolo Zamponi <zapaolo@email.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 "Impossibile trovare il pannello delle estensioni. Controlla l'installazione."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
-#: src/backend/core/column/Column.cpp:1250
+#: src/backend/core/column/Column.cpp:1260
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:580
 #: src/backend/datapicker/DatapickerPoint.cpp:502
@@ -100,7 +100,7 @@ msgstr "L'attributo «%1» è mancate o vuoto, uso il valore predefinito"
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1380 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1390 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:752
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:828
@@ -660,9 +660,9 @@ msgstr "Calcoli"
 #. }
 #: src/backend/core/column/Column.cpp:376
 #: src/backend/core/column/columncommands.cpp:89
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:332
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:356
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:391
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:342
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:366
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:401
 #, kde-format
 msgid "%1: change column type"
 msgstr "%1: cambia il tipo di colonna"
@@ -673,14 +673,14 @@ msgstr "%1: cambia il tipo di colonna"
 msgid "%1: clear column"
 msgstr "%1: cancella la colonna"
 
-#: src/backend/core/column/Column.cpp:1524
+#: src/backend/core/column/Column.cpp:1534
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "indice di riga non valido o mancante"
 
-#: src/backend/core/column/Column.cpp:1533
-#: src/backend/core/column/Column.cpp:1542
-#: src/backend/core/column/Column.cpp:1551
+#: src/backend/core/column/Column.cpp:1543
+#: src/backend/core/column/Column.cpp:1552
+#: src/backend/core/column/Column.cpp:1561
 #, kde-format
 msgid "invalid row value"
 msgstr "valore di riga non valido"
@@ -12444,17 +12444,17 @@ msgstr "Automatico (e)"
 msgid "Automatic (E)"
 msgstr "Automatico (E)"
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:313
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:323
 #, kde-format
 msgid "Add a new value label"
 msgstr "Aggiungi una nuova etichetta di valore"
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:314
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:324
 #, kde-format
 msgid "Remove the selected value label"
 msgstr "Rimuovi l'etichetta di valore selezionata"
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:315
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:325
 #, kde-format
 msgid "Modify multiple values labels in a batch mode"
 msgstr ""
@@ -15069,7 +15069,7 @@ msgstr "Modifica etichette di valore"
 msgid "Value Labels:"
 msgstr "Etichette di valore:"
 
-#: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:144
+#: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:153
 #, kde-format
 msgid "Provide the list of value-label pairs like in the following example:"
 msgstr ""

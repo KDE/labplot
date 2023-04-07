@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-03 00:42+0000\n"
+"POT-Creation-Date: 2023-04-07 00:42+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -54,7 +54,7 @@ msgstr ""
 "установки."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
-#: src/backend/core/column/Column.cpp:1250
+#: src/backend/core/column/Column.cpp:1260
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:580
 #: src/backend/datapicker/DatapickerPoint.cpp:502
@@ -105,7 +105,7 @@ msgstr "Атрибут «%1» отсутствует или пуст, испол
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1380 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1390 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:752
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:828
@@ -684,9 +684,9 @@ msgstr "Вычисления"
 #. }
 #: src/backend/core/column/Column.cpp:376
 #: src/backend/core/column/columncommands.cpp:89
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:332
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:356
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:391
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:342
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:366
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:401
 #, kde-format
 msgid "%1: change column type"
 msgstr "%1: изменение типа столбца"
@@ -697,14 +697,14 @@ msgstr "%1: изменение типа столбца"
 msgid "%1: clear column"
 msgstr "%1: очистка содержимого столбца"
 
-#: src/backend/core/column/Column.cpp:1524
+#: src/backend/core/column/Column.cpp:1534
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "недопустимый или отсутствующий индекс строки"
 
-#: src/backend/core/column/Column.cpp:1533
-#: src/backend/core/column/Column.cpp:1542
-#: src/backend/core/column/Column.cpp:1551
+#: src/backend/core/column/Column.cpp:1543
+#: src/backend/core/column/Column.cpp:1552
+#: src/backend/core/column/Column.cpp:1561
 #, kde-format
 msgid "invalid row value"
 msgstr "недопустимое значение строки"
@@ -12801,17 +12801,17 @@ msgstr "Автоматически (e)"
 msgid "Automatic (E)"
 msgstr "Автоматически (E)"
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:313
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:323
 #, kde-format
 msgid "Add a new value label"
 msgstr "Добавить новую подпись значения"
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:314
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:324
 #, kde-format
 msgid "Remove the selected value label"
 msgstr "Удалить подпись выбранного значения"
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:315
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:325
 #, kde-format
 msgid "Modify multiple values labels in a batch mode"
 msgstr "Изменить подписи нескольких значений в пакетном режиме"
@@ -15501,7 +15501,7 @@ msgstr "Редактирование подписей значений"
 msgid "Value Labels:"
 msgstr "Подписи значений:"
 
-#: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:144
+#: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:153
 #, kde-format
 msgid "Provide the list of value-label pairs like in the following example:"
 msgstr "Введите список пар «значение-подпись» в соответствии с примером ниже:"

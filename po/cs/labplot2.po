@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-03 00:42+0000\n"
+"POT-Creation-Date: 2023-04-07 00:42+0000\n"
 "PO-Revision-Date: 2023-03-29 16:16+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -48,7 +48,7 @@ msgid "Couldn't find panel plugins. Please check your installation."
 msgstr "Nelze najít moduly panelu. Prosím, zkontrolujte svou instalaci."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
-#: src/backend/core/column/Column.cpp:1250
+#: src/backend/core/column/Column.cpp:1260
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:580
 #: src/backend/datapicker/DatapickerPoint.cpp:502
@@ -99,7 +99,7 @@ msgstr ""
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1380 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1390 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:752
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:828
@@ -655,9 +655,9 @@ msgstr "Výpočty"
 #. }
 #: src/backend/core/column/Column.cpp:376
 #: src/backend/core/column/columncommands.cpp:89
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:332
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:356
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:391
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:342
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:366
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:401
 #, kde-format
 msgid "%1: change column type"
 msgstr ""
@@ -668,14 +668,14 @@ msgstr ""
 msgid "%1: clear column"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1524
+#: src/backend/core/column/Column.cpp:1534
 #, kde-format
 msgid "invalid or missing row index"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1533
-#: src/backend/core/column/Column.cpp:1542
-#: src/backend/core/column/Column.cpp:1551
+#: src/backend/core/column/Column.cpp:1543
+#: src/backend/core/column/Column.cpp:1552
+#: src/backend/core/column/Column.cpp:1561
 #, kde-format
 msgid "invalid row value"
 msgstr ""
@@ -12184,17 +12184,17 @@ msgstr ""
 msgid "Automatic (E)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:313
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:323
 #, kde-format
 msgid "Add a new value label"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:314
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:324
 #, kde-format
 msgid "Remove the selected value label"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:315
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:325
 #, kde-format
 msgid "Modify multiple values labels in a batch mode"
 msgstr ""
@@ -14763,7 +14763,7 @@ msgstr ""
 msgid "Value Labels:"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:144
+#: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:153
 #, kde-format
 msgid "Provide the list of value-label pairs like in the following example:"
 msgstr ""
