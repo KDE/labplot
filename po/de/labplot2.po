@@ -1,7 +1,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Burkhard Lück <lueck@hube-lueck.de>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2014, 2016, 2020, 2022.
+# Frederik Schwarzer <schwarzer@kde.org>, 2014, 2016, 2020, 2022, 2023.
 # Stefan Gerlach <stefan.gerlach@uni.kn>, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Frank Steinmetzger <dev-kde@felsenfleischer.de>, 2023.
 #
@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-07 00:42+0000\n"
-"PO-Revision-Date: 2023-02-27 11:31+0100\n"
-"Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
+"PO-Revision-Date: 2023-04-03 16:41+0200\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -11048,7 +11048,7 @@ msgstr "Wählen Sie die DBC Datei"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:918
 #, kde-format
 msgid "DBC file (*.dbc)"
-msgstr ""
+msgstr "DBC-Datei (*.dbc)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
@@ -16374,10 +16374,9 @@ msgstr "Eingebettet:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:165
-#, fuzzy, kde-format
-#| msgid "Relative Path:"
+#, kde-format
 msgid "Relative Path"
-msgstr "Relativer Pfad:"
+msgstr "Relativer Pfad"
 
 #. i18n: ectx: property (text), widget (QLabel, lRotation)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
@@ -16435,8 +16434,7 @@ msgstr "Referenzpunkte"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbDatetime)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:382
-#, fuzzy, kde-format
-#| msgid "datetime"
+#, kde-format
 msgid "Datetime"
 msgstr "Datum und Zeit"
 
