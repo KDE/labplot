@@ -35,6 +35,8 @@ private Q_SLOTS:
 
 	void automaticTicNumberUpdateDockMajorTicks();
 	void automaticTicNumberUpdateDockMinorTicks();
+
+	void columnLabelValues();
 };
 
 #endif // WORKSHEETELEMENTTEST_H
