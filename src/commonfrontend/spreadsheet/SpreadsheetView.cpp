@@ -1712,126 +1712,105 @@ void SpreadsheetView::pasteIntoSelection() {
 	int last_row = lastSelectedRow();
 	int input_row_count = 0;
 	int input_col_count = 0;
-
-	QString input_str = QLatin1String(mime_data->data(QStringLiteral("text/plain"))).trimmed();
 	QVector<QStringList> cellTexts;
-	QString separator;
-	if (input_str.indexOf(QLatin1String("\r\n")) != -1)
-		separator = QLatin1String("\r\n");
-	else
-		separator = QLatin1Char('\n');
 
-	QStringList input_rows(input_str.split(separator));
-	input_row_count = input_rows.count();
-	input_col_count = 0;
-	bool hasTabs = false;
-	if (input_row_count > 0 && input_rows.constFirst().indexOf(QLatin1Char('\t')) != -1)
-		hasTabs = true;
-
-	const auto numberLocale = QLocale();
-	// TEST ' ' as group separator:
-	// numberLocale = QLocale(QLocale::French, QLocale::France);
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	for (int i = 0; i < input_row_count; i++) {
-		if (hasTabs)
-			cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
-		else if (numberLocale.groupSeparator().isSpace()
-				 && !(numberLocale.numberOptions() & QLocale::OmitGroupSeparator)) // locale with ' ' as group separator && omit group separator not set
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1)); // split with two spaces
-#else
-			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (QString::SplitBehavior)0x1)); // split with two spaces
-#endif
+	try {
+		QString input_str = QLatin1String(mime_data->data(QStringLiteral("text/plain"))).trimmed();
+		QString separator;
+		if (input_str.indexOf(QLatin1String("\r\n")) != -1)
+			separator = QLatin1String("\r\n");
 		else
-			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s+"))));
+			separator = QLatin1Char('\n');
 
-		if (cellTexts.at(i).count() > input_col_count)
-			input_col_count = cellTexts.at(i).count();
-	}
+		QStringList input_rows(input_str.split(separator));
+		input_str.clear(); // not needed anymore, release memory
+		input_row_count = input_rows.count();
+		input_col_count = 0;
+		bool hasTabs = false;
+		if (input_row_count > 0 && input_rows.constFirst().indexOf(QLatin1Char('\t')) != -1)
+			hasTabs = true;
 
-	// when pasting DateTime data in the format 'yyyy-MM-dd hh:mm:ss' and similar, it get's split above because of the space separator.
-	// here we check whether we have such a situation and merge the first two columns to get the proper value,
-	// for example "2018-03-21 10:00:00" and not "2018-03-21" and "10:00:00"
-	if (!cellTexts.isEmpty() && cellTexts.constFirst().size() > 1) {
-		const auto& firstCell = cellTexts.constFirst().at(0);
-		const auto& secondCell = cellTexts.constFirst().at(1);
-		QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
-		const auto firstMode = AbstractFileFilter::columnMode(firstCell, dateTimeFormat, numberLocale);
-		dateTimeFormat.clear();
-		const auto secondMode = AbstractFileFilter::columnMode(secondCell, dateTimeFormat, numberLocale);
+		const auto numberLocale = QLocale();
+		// TEST ' ' as group separator:
+		// numberLocale = QLocale(QLocale::French, QLocale::France);
+		const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+		for (int i = 0; i < input_row_count; i++) {
+			if (hasTabs)
+				cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
+			else if (numberLocale.groupSeparator().isSpace()
+					 && !(numberLocale.numberOptions() & QLocale::OmitGroupSeparator)) // locale with ' ' as group separator && omit group separator not set
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+				cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1)); // split with two spaces
+#else
+				cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (QString::SplitBehavior)0x1)); // split with two spaces
+#endif
+			else
+				cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s+"))));
 
-		// if both first columns are DateTime, check whether the combination of them is also DateTime
-		if (firstMode == AbstractColumn::ColumnMode::DateTime && secondMode == AbstractColumn::ColumnMode::DateTime) {
-			dateTimeFormat.clear();
-			const QString newCell = firstCell + QLatin1Char(' ') + secondCell;
-			const auto newMode = AbstractFileFilter::columnMode(newCell, dateTimeFormat, numberLocale);
-			if (newMode == AbstractColumn::ColumnMode::DateTime) {
-				// merge the first two colums
-				for (auto& row : cellTexts) {
-					row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
-					row.takeFirst();
-				}
-				--input_col_count;
-			}
+			if (cellTexts.at(i).count() > input_col_count)
+				input_col_count = cellTexts.at(i).count();
 		}
-	}
 
-	// 	bool localeDetermined = false;
+		input_rows.clear(); // not needed anymore, release memory
 
-	// expand the current selection to the needed size if
-	// 1. there is no selection
-	// 2. only one cell selected
-	// 3. the whole column is selected (the use clicked on the header)
-	// Also, set the proper column mode if the target column doesn't have any values yet
-	// and set the proper column mode if the column is empty
-	if ((first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col)
-		|| (first_row == 0 && last_row == m_spreadsheet->rowCount() - 1)) {
-		int current_row, current_col;
-		getCurrentCell(&current_row, &current_col);
-		if (current_row == -1)
-			current_row = 0;
-		if (current_col == -1)
-			current_col = 0;
-		setCellSelected(current_row, current_col);
-		first_col = current_col;
-		first_row = current_row;
-		last_row = first_row + input_row_count - 1;
-		last_col = first_col + input_col_count - 1;
-		const int columnCount = m_spreadsheet->columnCount();
-		// if the target columns that are already available don't have any values yet,
-		// convert their mode to the mode of the data to be pasted
-		for (int c = first_col; c <= last_col && c < columnCount; ++c) {
-			Column* col = m_spreadsheet->column(c);
-			if (col->hasValues())
-				continue;
-
-			// first non-empty value in the column to paste determines the column mode/type of the new column to be added
-			const int curCol = c - first_col;
-			QString nonEmptyValue;
-			for (auto& r : cellTexts) {
-				if (curCol < r.count() && !r.at(curCol).isEmpty()) {
-					nonEmptyValue = r.at(curCol);
-					break;
-				}
-			}
-
-			// 			if (!localeDetermined)
-			// 				localeDetermined = determineLocale(nonEmptyValue, locale);
-
+		// when pasting DateTime data in the format 'yyyy-MM-dd hh:mm:ss' and similar, it get's split above because of the space separator.
+		// here we check whether we have such a situation and merge the first two columns to get the proper value,
+		// for example "2018-03-21 10:00:00" and not "2018-03-21" and "10:00:00"
+		if (!cellTexts.isEmpty() && cellTexts.constFirst().size() > 1) {
+			const auto& firstCell = cellTexts.constFirst().at(0);
+			const auto& secondCell = cellTexts.constFirst().at(1);
 			QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
-			const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
-			col->setColumnMode(mode);
-			if (mode == AbstractColumn::ColumnMode::DateTime) {
-				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-				filter->setFormat(dateTimeFormat);
+			const auto firstMode = AbstractFileFilter::columnMode(firstCell, dateTimeFormat, numberLocale);
+			dateTimeFormat.clear();
+			const auto secondMode = AbstractFileFilter::columnMode(secondCell, dateTimeFormat, numberLocale);
+
+			// if both first columns are DateTime, check whether the combination of them is also DateTime
+			if (firstMode == AbstractColumn::ColumnMode::DateTime && secondMode == AbstractColumn::ColumnMode::DateTime) {
+				dateTimeFormat.clear();
+				const QString newCell = firstCell + QLatin1Char(' ') + secondCell;
+				const auto newMode = AbstractFileFilter::columnMode(newCell, dateTimeFormat, numberLocale);
+				if (newMode == AbstractColumn::ColumnMode::DateTime) {
+					// merge the first two colums
+					for (auto& row : cellTexts) {
+						row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
+						row.takeFirst();
+					}
+					--input_col_count;
+				}
 			}
 		}
 
-		// add columns if necessary
-		if (last_col >= columnCount) {
-			for (int c = 0; c < last_col - (columnCount - 1); ++c) {
-				const int curCol = columnCount - first_col + c;
+		// 	bool localeDetermined = false;
+
+		// expand the current selection to the needed size if
+		// 1. there is no selection
+		// 2. only one cell selected
+		// 3. the whole column is selected (the use clicked on the header)
+		// Also, set the proper column mode if the target column doesn't have any values yet
+		// and set the proper column mode if the column is empty
+		if ((first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col)
+			|| (first_row == 0 && last_row == m_spreadsheet->rowCount() - 1)) {
+			int current_row, current_col;
+			getCurrentCell(&current_row, &current_col);
+			if (current_row == -1)
+				current_row = 0;
+			if (current_col == -1)
+				current_col = 0;
+			setCellSelected(current_row, current_col);
+			first_col = current_col;
+			first_row = current_row;
+			last_row = first_row + input_row_count - 1;
+			last_col = first_col + input_col_count - 1;
+			const int columnCount = m_spreadsheet->columnCount();
+			// if the target columns that are already available don't have any values yet,
+			// convert their mode to the mode of the data to be pasted
+			for (int c = first_col; c <= last_col && c < columnCount; ++c) {
+				Column* col = m_spreadsheet->column(c);
+				if (col->hasValues())
+					continue;
+
 				// first non-empty value in the column to paste determines the column mode/type of the new column to be added
+				const int curCol = c - first_col;
 				QString nonEmptyValue;
 				for (auto& r : cellTexts) {
 					if (curCol < r.count() && !r.at(curCol).isEmpty()) {
@@ -1840,100 +1819,131 @@ void SpreadsheetView::pasteIntoSelection() {
 					}
 				}
 
-				// 				if (!localeDetermined)
-				// 					localeDetermined = determineLocale(nonEmptyValue, locale);
+				// 			if (!localeDetermined)
+				// 				localeDetermined = determineLocale(nonEmptyValue, locale);
 
 				QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
 				const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
-				Column* new_col = new Column(QString::number(curCol), mode);
+				col->setColumnMode(mode);
 				if (mode == AbstractColumn::ColumnMode::DateTime) {
-					auto* filter = static_cast<DateTime2StringFilter*>(new_col->outputFilter());
+					auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 					filter->setFormat(dateTimeFormat);
 				}
-				new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
-				new_col->insertRows(0, m_spreadsheet->rowCount());
-				m_spreadsheet->addChild(new_col);
 			}
+
+			// add columns if necessary
+			if (last_col >= columnCount) {
+				for (int c = 0; c < last_col - (columnCount - 1); ++c) {
+					const int curCol = columnCount - first_col + c;
+					// first non-empty value in the column to paste determines the column mode/type of the new column to be added
+					QString nonEmptyValue;
+					for (auto& r : cellTexts) {
+						if (curCol < r.count() && !r.at(curCol).isEmpty()) {
+							nonEmptyValue = r.at(curCol);
+							break;
+						}
+					}
+
+					// 				if (!localeDetermined)
+					// 					localeDetermined = determineLocale(nonEmptyValue, locale);
+
+					QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
+					const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, dateTimeFormat, numberLocale);
+					Column* new_col = new Column(QString::number(curCol), mode);
+					if (mode == AbstractColumn::ColumnMode::DateTime) {
+						auto* filter = static_cast<DateTime2StringFilter*>(new_col->outputFilter());
+						filter->setFormat(dateTimeFormat);
+					}
+					new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+					new_col->insertRows(0, m_spreadsheet->rowCount());
+					m_spreadsheet->addChild(new_col);
+				}
+			}
+
+			// add rows if necessary
+			if (last_row >= m_spreadsheet->rowCount())
+				m_spreadsheet->appendRows(last_row + 1 - m_spreadsheet->rowCount());
+
+			// select the rectangle to be pasted in
+			setCellsSelected(first_row, first_col, last_row, last_col);
 		}
 
-		// add rows if necessary
-		if (last_row >= m_spreadsheet->rowCount())
-			m_spreadsheet->appendRows(last_row + 1 - m_spreadsheet->rowCount());
-
-		// select the rectangle to be pasted in
-		setCellsSelected(first_row, first_col, last_row, last_col);
-	}
-
-	const int rows = last_row - first_row + 1;
-	const int cols = last_col - first_col + 1;
-	for (int c = 0; c < cols && c < input_col_count; c++) {
-		Column* col = m_spreadsheet->column(first_col + c);
-		col->setSuppressDataChangedSignal(true);
-		if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
-			if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
-				QVector<double> new_data(rows);
-				for (int r = 0; r < rows; ++r) {
-					if (c < cellTexts.at(r).count())
-						new_data[r] = numberLocale.toDouble(cellTexts.at(r).at(c));
+		const int rows = last_row - first_row + 1;
+		const int cols = last_col - first_col + 1;
+		for (int c = 0; c < cols && c < input_col_count; c++) {
+			Column* col = m_spreadsheet->column(first_col + c);
+			col->setSuppressDataChangedSignal(true);
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
+				if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
+					QVector<double> new_data(rows);
+					for (int r = 0; r < rows; ++r) {
+						if (c < cellTexts.at(r).count())
+							new_data[r] = numberLocale.toDouble(cellTexts.at(r).at(c));
+					}
+					col->setValues(new_data);
+				} else {
+					for (int r = 0; r < rows && r < input_row_count; r++) {
+						if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count())) {
+							if (!cellTexts.at(r).at(c).isEmpty())
+								col->setValueAt(first_row + r, numberLocale.toDouble(cellTexts.at(r).at(c)));
+							else
+								col->setValueAt(first_row + r, std::numeric_limits<double>::quiet_NaN());
+						}
+					}
 				}
-				col->setValues(new_data);
+			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
+				if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
+					QVector<int> new_data(rows);
+					for (int r = 0; r < rows; ++r) {
+						if (c < cellTexts.at(r).count())
+							new_data[r] = numberLocale.toInt(cellTexts.at(r).at(c));
+					}
+					col->setIntegers(new_data);
+				} else {
+					for (int r = 0; r < rows && r < input_row_count; r++) {
+						if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count())) {
+							if (!cellTexts.at(r).at(c).isEmpty())
+								col->setIntegerAt(first_row + r, numberLocale.toInt(cellTexts.at(r).at(c)));
+							else
+								col->setIntegerAt(first_row + r, 0);
+						}
+					}
+				}
+			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+				if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
+					QVector<qint64> new_data(rows);
+					for (int r = 0; r < rows; ++r)
+						new_data[r] = numberLocale.toLongLong(cellTexts.at(r).at(c));
+					col->setBigInts(new_data);
+				} else {
+					for (int r = 0; r < rows && r < input_row_count; r++) {
+						if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count())) {
+							if (!cellTexts.at(r).at(c).isEmpty())
+								col->setBigIntAt(first_row + r, numberLocale.toLongLong(cellTexts.at(r).at(c)));
+							else
+								col->setBigIntAt(first_row + r, 0);
+						}
+					}
+				}
 			} else {
 				for (int r = 0; r < rows && r < input_row_count; r++) {
 					if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count())) {
-						if (!cellTexts.at(r).at(c).isEmpty())
-							col->setValueAt(first_row + r, numberLocale.toDouble(cellTexts.at(r).at(c)));
-						else
-							col->setValueAt(first_row + r, std::numeric_limits<double>::quiet_NaN());
+						// 					if (formulaModeActive())
+						// 						col->setFormula(first_row + r, cellTexts.at(r).at(c));
+						// 					else
+						col->asStringColumn()->setTextAt(first_row + r, cellTexts.at(r).at(c));
 					}
 				}
 			}
-		} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
-			if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
-				QVector<int> new_data(rows);
-				for (int r = 0; r < rows; ++r) {
-					if (c < cellTexts.at(r).count())
-						new_data[r] = numberLocale.toInt(cellTexts.at(r).at(c));
-				}
-				col->setIntegers(new_data);
-			} else {
-				for (int r = 0; r < rows && r < input_row_count; r++) {
-					if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count())) {
-						if (!cellTexts.at(r).at(c).isEmpty())
-							col->setIntegerAt(first_row + r, numberLocale.toInt(cellTexts.at(r).at(c)));
-						else
-							col->setIntegerAt(first_row + r, 0);
-					}
-				}
-			}
-		} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
-			if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
-				QVector<qint64> new_data(rows);
-				for (int r = 0; r < rows; ++r)
-					new_data[r] = numberLocale.toLongLong(cellTexts.at(r).at(c));
-				col->setBigInts(new_data);
-			} else {
-				for (int r = 0; r < rows && r < input_row_count; r++) {
-					if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count())) {
-						if (!cellTexts.at(r).at(c).isEmpty())
-							col->setBigIntAt(first_row + r, numberLocale.toLongLong(cellTexts.at(r).at(c)));
-						else
-							col->setBigIntAt(first_row + r, 0);
-					}
-				}
-			}
-		} else {
-			for (int r = 0; r < rows && r < input_row_count; r++) {
-				if (isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count())) {
-					// 					if (formulaModeActive())
-					// 						col->setFormula(first_row + r, cellTexts.at(r).at(c));
-					// 					else
-					col->asStringColumn()->setTextAt(first_row + r, cellTexts.at(r).at(c));
-				}
-			}
-		}
 
-		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
+			col->setSuppressDataChangedSignal(false);
+			col->setChanged();
+		} // end of for-loop
+	} catch (std::bad_alloc&) {
+		cellTexts.clear();
+		m_spreadsheet->endMacro();
+		RESET_CURSOR;
+		KMessageBox::error(this, i18n("Not enough memory to finalize this operation."));
 	}
 
 	m_spreadsheet->endMacro();
