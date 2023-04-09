@@ -19,6 +19,8 @@ class Matrix;
 class Project;
 class TextLabel;
 class XYCurve;
+
+class QSpacerItem;
 class QPushButton;
 
 class AddSubtractValueDialog : public QDialog {
@@ -39,6 +41,7 @@ private:
 	void generateForMatrices();
 	void subtractBaseline(QVector<double>&);
 	QString getMessage(const QString&);
+	void updateSpacer(bool);
 
 	bool setIntValue(int& value, int columnIndex = 0) const;
 	bool setBigIntValue(qint64& value, int columnIndex = 0) const;
@@ -46,6 +49,7 @@ private:
 	bool setDateTimeValue(qint64& value, int columnIndex = 0) const;
 
 	Ui::AddSubtractValueWidget ui;
+	QSpacerItem* m_verticalSpacer{nullptr};
 	Spreadsheet* m_spreadsheet{nullptr};
 	QVector<Column*> m_columns;
 	Matrix* m_matrix{nullptr};

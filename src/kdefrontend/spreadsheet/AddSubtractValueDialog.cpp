@@ -229,13 +229,18 @@ void AddSubtractValueDialog::init() {
 		if (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline) {
 			ui.chbPreview->setChecked(conf.readEntry("Preview", false));
 			ui.framePreview->setVisible(ui.chbPreview->isChecked());
-		} else
+			updateSpacer(!ui.chbPreview->isChecked());
+		} else {
 			ui.framePreview->hide();
+			updateSpacer(true);
+		}
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
-	} else
+	} else {
+		updateSpacer(true);
 		resize(QSize(300, 0).expandedTo(minimumSize()));
+	}
 
 	if (m_operation == SubtractBaseline) {
 		ui.cbType->setCurrentIndex(ui.cbType->findData(static_cast<int>(ValueType::Baseline)));
@@ -435,12 +440,24 @@ void AddSubtractValueDialog::typeChanged(int index) {
 
 void AddSubtractValueDialog::previewChanged(bool state) {
 	bool visible = state && (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline);
+	updateSpacer(!visible);
+
 	ui.framePreview->setVisible(visible);
 	updatePreview();
 
 	// resize the dialog
 	layout()->activate();
 	resize(QSize(this->width(), 0).expandedTo(minimumSize()));
+}
+
+void AddSubtractValueDialog::updateSpacer(bool add) {
+	if (add) {
+		m_verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        ui.gridLayout->addItem(m_verticalSpacer, 12, 0, 1, 1);
+	} else {
+		if (m_verticalSpacer)
+			ui.gridLayout->removeItem(m_verticalSpacer);
+	}
 }
 
 //##############################################################################
