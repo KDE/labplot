@@ -1,49 +1,30 @@
-/***************************************************************************
-    File                 : constans.h
-    Project              : LabPlot
-    Description          : definition of mathematical and physical constants
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2014-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : constants.h
+	Project              : LabPlot
+	Description          : definition of mathematical and physical constants
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef GSL_CONSTANTS_H
 #define GSL_CONSTANTS_H
 
-#include <gsl/gsl_math.h>
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
+#include <gsl/gsl_math.h>
 
 #include "parser.h"
 
 /* sync with ExpressionParser.cpp */
-struct con _constants[] = {
+struct cons _constants[] = {
 	/* Mathematical constants */
 	{"e", M_E},
 	{"pi", M_PI},
 	{"euler", M_EULER},
 
-	/* Physical constants: http://www.gnu.org/software/gsl/manual/html_node/Physical-Constants.html */
+	/* Physical constants: https://www.gnu.org/software/gsl/doc/html/const.html */
 	/* Physical constants in MKSA system */
 
 	/* Fundamental Constants */
@@ -89,7 +70,7 @@ struct con _constants[] = {
 	{"pD", GSL_CONST_MKSA_DEBYE},
 
 	/* Measurement of Time */
-	{"min", GSL_CONST_MKSA_MINUTE},
+	{"minute", GSL_CONST_MKSA_MINUTE},
 	{"hour", GSL_CONST_MKSA_HOUR},
 	{"day", GSL_CONST_MKSA_DAY},
 	{"week", GSL_CONST_MKSA_WEEK},
@@ -177,7 +158,6 @@ struct con _constants[] = {
 
 	/* ignore '...' */
 	{"...", 0},
-	{0, 0}
-};
+	{0, 0}};
 
 #endif /* CONSTANTS_H */

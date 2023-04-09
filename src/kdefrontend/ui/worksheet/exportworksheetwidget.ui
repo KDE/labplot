@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>334</width>
-    <height>338</height>
+    <width>741</width>
+    <height>410</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -17,34 +17,7 @@
       <string>Export</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lOutputFormat">
-        <property name="text">
-         <string>Format:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KComboBox" name="cbFormat"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lFileName">
-        <property name="text">
-         <string>File name:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="leFileName">
-        <property name="toolTip">
-         <string>Specify the name of the file to import.</string>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
+      <item row="2" column="2">
        <widget class="QPushButton" name="bOpen">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -60,6 +33,57 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="KComboBox" name="cbFormat">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lFileName">
+        <property name="text">
+         <string>File Name:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lOutputFormat">
+        <property name="text">
+         <string>Format:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="leFileName">
+        <property name="toolTip">
+         <string>Specify the name of the file to import.</string>
+        </property>
+        <property name="clearButtonEnabled" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lExportTo">
+        <property name="text">
+         <string>Target:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cbExportTo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -72,7 +96,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lExportArea">
         <property name="text">
-         <string>Area to export:</string>
+         <string>Area to Export:</string>
         </property>
        </widget>
       </item>
@@ -92,7 +116,7 @@
          <string>Check this option if the worksheet background should be exported.</string>
         </property>
         <property name="text">
-         <string>Export background:</string>
+         <string>Export Background:</string>
         </property>
        </widget>
       </item>
@@ -135,6 +159,15 @@
    <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbFormat</tabstop>
+  <tabstop>cbExportTo</tabstop>
+  <tabstop>leFileName</tabstop>
+  <tabstop>bOpen</tabstop>
+  <tabstop>cbExportArea</tabstop>
+  <tabstop>chkExportBackground</tabstop>
+  <tabstop>cbResolution</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

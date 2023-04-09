@@ -1,169 +1,35 @@
+/*
+	File                 : CartesianCoordinateSystem.cpp
+	Project              : LabPlot
+	Description          : Cartesian coordinate system for plots.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012-2016 Alexander Semke <alexander.semke@web.de>
 
-/***************************************************************************
-    File                 : CartesianCoordinateSystem.cpp
-    Project              : LabPlot
-    Description          : Cartesian coordinate system for plots.
-    --------------------------------------------------------------------
-    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/lib/macros.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystemPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
-/* ============================================================================ */
-/* =================================== scales ================================= */
-/* ============================================================================ */
-/**
- * \class CartesianScale
- * \brief Base class for cartesian coordinate system scales.
- */
-CartesianScale::CartesianScale(ScaleType type, const Interval<double> &interval, double a, double b, double c)
-	: m_type(type), m_interval(interval), m_a(a), m_b(b), m_c(c) {
+extern "C" {
+#include "backend/nsl/nsl_math.h"
 }
 
-CartesianScale::~CartesianScale() = default;
-
-void CartesianScale::getProperties(ScaleType *type, Interval<double> *interval,
-		double *a, double *b, double *c) const {
-	if (type)
-		*type = m_type;
-	if (interval)
-		*interval = m_interval;
-	if (a)
-		*a = m_a;
-	if (b)
-		*b = m_b;
-	if (c)
-		*c = m_c;
-}
-
-double CartesianScale::start() const {
-	return m_interval.start();
-}
-
-double CartesianScale::end() const {
-	return m_interval.end();
-}
-
-bool CartesianScale::contains(double value) const {
-	return m_interval.contains(value);
-}
-
-/**
- * \class CartesianCoordinateSystem::LinearScale
- * \brief implementation of the linear scale for cartesian coordinate system.
- */
-class LinearScale : public CartesianScale {
-public:
-	LinearScale(const Interval<double> &interval, double offset, double gradient)
-		: CartesianScale(ScaleLinear, interval, offset, gradient, 0) {
-			Q_ASSERT(gradient != 0.0);
-
-		}
-
-	~LinearScale() override = default;
-
-	bool map(double *value) const override {
-		*value = *value * m_b + m_a;
-		return true;
-	}
-
-	bool inverseMap(double *value) const override {
-		if (m_b == 0.0)
-			return false;
-		*value = (*value - m_a) / m_b;
-		return true;
-	}
-
-	int direction() const override {
-		return m_b < 0 ? -1 : 1;
-	}
-};
-
-/**
- * \class CartesianCoordinateSystem::LinearScale
- * \brief implementation of the linear scale for cartesian coordinate system.
- */
-class LogScale : public CartesianScale {
-public:
-	LogScale(const Interval<double> &interval, double offset, double scaleFactor, double base, bool abs)
-		: CartesianScale(ScaleLog, interval, offset, scaleFactor, base), m_abs(abs) {
-			Q_ASSERT(scaleFactor != 0.0);
-			Q_ASSERT(base > 0.0);
-	}
-
-	~LogScale() override = default;
-
-	bool map(double *value) const override {
-		if (*value > 0.0)
-			*value = log(*value)/log(m_c) * m_b + m_a;
-		else if (m_abs)
-			*value = log(fabs(*value))/log(m_c) * m_b + m_a;
-		else
-			return false;
-
-		return true;
-	}
-
-	bool inverseMap(double *value) const override {
-		if (m_a == 0.0)
-			return false;
-		if (m_c <= 0.0)
-			return false;
-
-		*value = pow(m_c, (*value - m_a) / m_b);
-		return true;
-	}
-	int direction() const override {
-		return m_b < 0 ? -1 : 1;
-	}
-
-private:
-	bool m_abs;
-};
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 /* ============================================================================ */
 /* ========================= coordinate system ================================ */
 /* ============================================================================ */
-//TODO: own header
-class CartesianCoordinateSystemPrivate {
-public:
-	CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
-	~CartesianCoordinateSystemPrivate();
-
-	CartesianCoordinateSystem* const q;
-	CartesianPlot* plot{nullptr};
-	QVector<CartesianScale*> xScales;
-	QVector<CartesianScale*> yScales;
-};
-
 /**
  * \class CartesianCoordinateSystem
  * \brief Cartesian coordinate system for plots.
  */
 CartesianCoordinateSystem::CartesianCoordinateSystem(CartesianPlot* plot)
-		: AbstractCoordinateSystem(plot), d(new CartesianCoordinateSystemPrivate(this)) {
-			d->plot = plot;
+	: AbstractCoordinateSystem(plot)
+	, d(new CartesianCoordinateSystemPrivate(this)) {
+	d->plot = plot;
 	// TODO: set some standard scales
 }
 
@@ -171,187 +37,297 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 	delete d;
 }
 
-CartesianScale *CartesianScale::createLinearScale(const Interval<double> &interval,
-		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
-
-	double lDiff = logicalEnd - logicalStart;
-	if (lDiff == 0.0)
-		return nullptr;
-
-	double b = (sceneEnd - sceneStart) / lDiff;
-	double a = sceneStart - b * logicalStart;
-
-	return new LinearScale(interval, a, b);
+QString CartesianCoordinateSystem::dimensionToString(Dimension dim) {
+	switch (dim) {
+	case Dimension::X:
+		return QLatin1String("x");
+	case Dimension::Y:
+		return QLatin1String("y");
+	}
+	return {};
 }
 
-CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
-		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, CartesianPlot::Scale type) {
+QString CartesianCoordinateSystem::info() const {
+	DEBUG(Q_FUNC_INFO)
+	if (d->plot)
+		return QString(QLatin1String("x = ") + d->plot->range(Dimension::X, d->xIndex).toString() + QLatin1String(", y = ")
+					   + d->plot->range(Dimension::Y, d->yIndex).toString());
 
-	double base;
-	if (type == CartesianPlot::ScaleLog10 || type == CartesianPlot::ScaleLog10Abs)
-		base = 10.0;
-	else if (type == CartesianPlot::ScaleLog2 || type == CartesianPlot::ScaleLog2Abs)
-		base = 2.0;
-	else
-		base = M_E;
-
-
-	if (logicalStart < 0.0 || logicalStart == 0.0)
-		return nullptr;
-	if (logicalEnd < 0.0 || logicalEnd == 0.0)
-		return nullptr;
-
-	double lDiff = (log(logicalEnd) - log(logicalStart)) / log(base);
-	if (lDiff == 0.0)
-		return nullptr;
-
-	double b = (sceneEnd - sceneStart) / lDiff;
-	double a = sceneStart - b * log(logicalStart)/log(base);
-
-	bool abs = (type == CartesianPlot::ScaleLog10Abs || type == CartesianPlot::ScaleLog2Abs || type == CartesianPlot::ScaleLnAbs);
-	return new LogScale(interval, a, b, base, abs);
+	return i18n("no info available");
 }
 
 //##############################################################################
 //######################### logical to scene mappers ###########################
 //##############################################################################
-QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF> &points, MappingFlags flags) const {
+Points CartesianCoordinateSystem::mapLogicalToScene(const Points& points, MappingFlags flags) const {
+	// DEBUG(Q_FUNC_INFO << ", (points with flags)")
 	const QRectF pageRect = d->plot->dataRect();
-	QVector<QPointF> result;
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const bool limit = flags & MappingFlag::Limit;
+	const double xPage = pageRect.x(), yPage = pageRect.y();
+	const double w = pageRect.width(), h = pageRect.height();
 
+	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+
+	Points result;
+	result.reserve(points.size());
 	for (const auto* xScale : d->xScales) {
-		if (!xScale) continue;
+		if (!xScale)
+			continue;
 
 		for (const auto* yScale : d->yScales) {
-			if (!yScale) continue;
+			if (!yScale)
+				continue;
 
 			for (const auto& point : points) {
-				double x = point.x();
-				double y = point.y();
+				double x = point.x(), y = point.y();
 
-				if (!xScale->contains(x))
+				if (!xScale->contains(x) || !yScale->contains(y))
+					continue;
+				if (!xScale->map(&x) || !yScale->map(&y))
 					continue;
 
-				if (!yScale->contains(y))
-					continue;
+				if (limit) {
+					// set to max/min if passed over
+					x = qBound(xPage, x, xPage + w);
+					y = qBound(yPage, y, yPage + h);
+				}
 
-				if (!xScale->map(&x))
-					continue;
-
-				if (!yScale->map(&y))
-					continue;
+				if (noPageClippingY)
+					y = yPage + h / 2.;
 
 				const QPointF mappedPoint(x, y);
-				if (noPageClipping || rectContainsPoint(pageRect, mappedPoint))
+				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint))
 					result.append(mappedPoint);
 			}
 		}
 	}
+	result.squeeze();
 
 	return result;
 }
 
 /*!
-	Maps the points in logical coordinates from \c points and fills the \c visiblePoints with the points in logical coordinates restricted to the current intervals.
-	\param logicalPoints List of points in logical coordinates
-	\param scenePoints List for the points in scene coordinates
-	\param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
-	\param flags
+	Maps the points in logical coordinates from @p points and fills the @p visiblePoints with the points in logical coordinates restricted to the current
+   intervals.
+	@param logicalPoints List of points in logical coordinates
+	@param scenePoints List for the points in scene coordinates
+	@param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
+	@param flags
  */
-void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logicalPoints,
-		QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, MappingFlags flags) const {
+void CartesianCoordinateSystem::mapLogicalToScene(const Points& logicalPoints,
+												  Points& scenePoints,
+												  std::vector<bool>& visiblePoints,
+												  MappingFlags flags) const {
+	// DEBUG(Q_FUNC_INFO << ", (curve with all points)")
 	const QRectF pageRect = d->plot->dataRect();
-	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const bool limit = flags & MappingFlag::Limit;
+	const double xPage = pageRect.x(), yPage = pageRect.y();
+	const double w = pageRect.width(), h = pageRect.height();
+
+	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	for (const auto* xScale : d->xScales) {
-		if (!xScale) continue;
+		if (!xScale)
+			continue;
 
 		for (const auto* yScale : d->yScales) {
-			if (!yScale) continue;
+			if (!yScale)
+				continue;
 
-			for (int i = 0; i < logicalPoints.size(); ++i) {
-				const QPointF& point = logicalPoints.at(i);
-
-				double x = point.x();
-				if (!xScale->contains(x))
+			int i = 0;
+			for (const auto& point : logicalPoints) {
+				double x = point.x(), y = point.y();
+				if (!xScale->contains(x) || !yScale->contains(y))
+					continue;
+				if (!xScale->map(&x) || !yScale->map(&y))
 					continue;
 
-				if (!xScale->map(&x))
-					continue;
+				if (limit) {
+					// set to max/min if passed over
+					x = qBound(xPage, x, xPage + w);
+					y = qBound(yPage, y, yPage + h);
+				}
 
-				double y = point.y();
-				if (!yScale->contains(y))
-					continue;
-
-				if (!yScale->map(&y))
-					continue;
+				if (noPageClippingY)
+					y = yPage + h / 2.;
 
 				const QPointF mappedPoint(x, y);
-				if (noPageClipping || rectContainsPoint(pageRect, mappedPoint)) {
+				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
 					scenePoints.append(mappedPoint);
-					visiblePoints[i].flip();
-				}
+					visiblePoints[i] = true;
+				} else
+					visiblePoints[i] = false;
+
+				i++;
 			}
 		}
 	}
 }
 
-QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, MappingFlags flags) const {
+/*!
+	Maps the points in logical coordinates from \c points and fills the \c visiblePoints with the points in logical coordinates restricted to the current
+   intervals. If there are points, that lie on another one they will not be added a second time.
+	@param logicalPoints List of points in logical coordinates
+	@param scenePoints List for the points in scene coordinates
+	@param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
+ */
+void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
+												  int endIndex,
+												  const Points& logicalPoints,
+												  Points& scenePoints,
+												  std::vector<bool>& visiblePoints,
+												  MappingFlags flags) const {
+	// DEBUG(Q_FUNC_INFO << ", (curve points)")
 	const QRectF pageRect = d->plot->dataRect();
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const bool limit = flags & MappingFlag::Limit;
+	const double xPage = pageRect.x(), yPage = pageRect.y();
+	const double w = pageRect.width(), h = pageRect.height();
 
-	double x = logicalPoint.x();
-	double y = logicalPoint.y();
+	const int numberOfPixelX = std::ceil(pageRect.width());
+	const int numberOfPixelY = std::ceil(pageRect.height());
+
+	if (numberOfPixelX <= 0 || numberOfPixelY <= 0)
+		return;
+
+	// eliminate multiple scene points (size (numberOfPixelX + 1) * (numberOfPixelY + 1))
+	QVector<QVector<bool>> scenePointsUsed(numberOfPixelX + 1);
+	for (auto& col : scenePointsUsed)
+		col.resize(numberOfPixelY + 1);
+
+	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	for (const auto* xScale : d->xScales) {
-		if (!xScale) continue;
+		if (!xScale)
+			continue;
 
 		for (const auto* yScale : d->yScales) {
-			if (!yScale) continue;
-
-			if (!xScale->contains(x))
+			if (!yScale)
 				continue;
 
-			if (!xScale->map(&x))
+			for (int i = startIndex; i <= endIndex; i++) {
+				const QPointF& point = logicalPoints.at(i);
+
+				double x = point.x(), y = point.y();
+				if (!xScale->contains(x) || !yScale->contains(y))
+					continue;
+				if (!xScale->map(&x) || !yScale->map(&y))
+					continue;
+
+				if (limit) {
+					// set to max/min if passed over
+					x = qBound(xPage, x, xPage + w);
+					y = qBound(yPage, y, yPage + h);
+				}
+
+				if (noPageClippingY)
+					y = yPage + h / 2.;
+
+				const QPointF mappedPoint(x, y);
+				// DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
+				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
+					// TODO: check
+					const int indexX = std::round(x - xPage);
+					const int indexY = std::round(y - yPage);
+					if (scenePointsUsed.at(indexX).at(indexY))
+						continue;
+
+					scenePointsUsed[indexX][indexY] = true;
+					scenePoints.append(mappedPoint);
+					// DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
+					visiblePoints[i] = true;
+				} else
+					visiblePoints[i] = false;
+			}
+		}
+	}
+}
+
+/*
+ * Map a single point
+ * */
+QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool& visible, MappingFlags flags) const {
+	// DEBUG(Q_FUNC_INFO << ", (single point)")
+	const QRectF pageRect = d->plot->dataRect();
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping) || (flags & MappingFlag::SuppressPageClippingVisible);
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const bool limit = flags & MappingFlag::Limit;
+	const bool visibleFlag = flags & MappingFlag::SuppressPageClippingVisible;
+
+	double x = logicalPoint.x(), y = logicalPoint.y();
+	const double xPage = pageRect.x(), yPage = pageRect.y();
+	const double w = pageRect.width(), h = pageRect.height();
+
+	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+
+	for (const auto* xScale : d->xScales) {
+		if (!xScale)
+			continue;
+
+		for (const auto* yScale : d->yScales) {
+			if (!yScale)
 				continue;
 
-			if (!yScale->contains(y))
+			if (!xScale->contains(x) || !yScale->contains(y))
+				continue;
+			if (!xScale->map(&x) || !yScale->map(&y))
 				continue;
 
-			if (!yScale->map(&y))
-				continue;
+			if (limit) {
+				// set to max/min if passed over
+				x = qBound(xPage, x, xPage + w);
+				y = qBound(yPage, y, yPage + h);
+			}
+
+			if (noPageClippingY)
+				y = pageRect.y() + h / 2.;
 
 			QPointF mappedPoint(x, y);
-			if (noPageClipping || rectContainsPoint(pageRect, mappedPoint))
+			const bool containsPoint = rectContainsPoint(pageRect, mappedPoint);
+			if (noPageClipping || limit || containsPoint) {
+				if (visibleFlag)
+					visible = containsPoint;
+				else
+					visible = true;
 				return mappedPoint;
+			}
 		}
 	}
 
+	visible = false;
 	return QPointF{};
 }
 
-QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLineF> &lines, MappingFlags flags) const {
+Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
-	QVector<QLineF> result;
-	const bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
+	Lines result;
+	const bool doPageClipping = !pageRect.isNull() && !(flags & MappingFlag::SuppressPageClipping);
 
-	double xGapBefore = NAN;
+	double xGapBefore;
 	double xGapAfter = NAN;
-	double yGapBefore = NAN;
+	double yGapBefore;
 	double yGapAfter = NAN;
 
- 	QVectorIterator<CartesianScale *> xIterator(d->xScales);
+	DEBUG(Q_FUNC_INFO << ", xScales/yScales size: " << d->xScales.size() << '/' << d->yScales.size())
+
+	QVectorIterator<CartesianScale*> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
 		const CartesianScale* xScale = xIterator.next();
-		if (!xScale) continue;
+		if (!xScale)
+			continue;
 
 		xGapBefore = xGapAfter;
 		if (xIterator.hasNext()) {
 			const CartesianScale* nextXScale = xIterator.peekNext();
-			if (!nextXScale) continue;
-			Interval<double> nextXInterval;
-			nextXScale->getProperties(nullptr, &nextXInterval);
+			if (!nextXScale)
+				continue;
+			Range<double> nextXRange;
+			nextXScale->getProperties(&nextXRange);
 
 			double x1 = xScale->end();
 			double x2 = nextXScale->start();
@@ -369,12 +345,14 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 		QVectorIterator<CartesianScale*> yIterator(d->yScales);
 		while (yIterator.hasNext()) {
 			const CartesianScale* yScale = yIterator.next();
-			if (!yScale) continue;
+			if (!yScale)
+				continue;
 
 			yGapBefore = yGapAfter;
 			if (yIterator.hasNext()) {
 				const CartesianScale* nextYScale = yIterator.peekNext();
-				if (!nextYScale) continue;
+				if (!nextYScale)
+					continue;
 
 				double y1 = yScale->end();
 				double y2 = nextYScale->start();
@@ -389,10 +367,10 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 			} else
 				yGapAfter = NAN;
 
-			const QRectF scaleRect = QRectF(xScale->start(), yScale->start(),
-								xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();
+			const QRectF scaleRect = QRectF(xScale->start(), yScale->start(), xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();
 
 			for (auto line : lines) {
+				// QDEBUG(Q_FUNC_INFO << ", LINE " << line)
 				LineClipResult clipResult;
 				if (!AbstractCoordinateSystem::clipLineToRect(&line, scaleRect, &clipResult))
 					continue;
@@ -413,58 +391,56 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 				if (!yScale->map(&y2))
 					continue;
 
-				if (flags & MarkGaps) {
-					//mark the end of the gap
+				if (flags & MappingFlag::MarkGaps) {
+					// mark the end of the gap
 					if (!std::isnan(xGapBefore)) {
 						if (clipResult.xClippedLeft[0]) {
-							QLineF gapMarker(x1 + xGapBefore/4, y1 - xGapBefore/2, x1 - xGapBefore/4, y1 + xGapBefore/2);
-// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-								result.append(gapMarker);
+							QLineF gapMarker(x1 + xGapBefore / 4., y1 - xGapBefore / 2., x1 - xGapBefore / 4., y1 + xGapBefore / 2.);
+							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker);
 						}
 						if (clipResult.xClippedLeft[1]) {
-							QLineF gapMarker(x2 + xGapBefore/4, y2 - xGapBefore/2, x2 - xGapBefore/4, y2 + xGapBefore/2);
-// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-								result.append(gapMarker);
+							QLineF gapMarker(x2 + xGapBefore / 4., y2 - xGapBefore / 2., x2 - xGapBefore / 4., y2 + xGapBefore / 2.);
+							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker);
 						}
 					}
 
-					//mark the beginning of the gap
+					// mark the beginning of the gap
 					if (!std::isnan(xGapAfter)) {
 						if (clipResult.xClippedRight[0]) {
-							QLineF gapMarker(x1 + xGapAfter/4, y1 - xGapAfter/2, x1 - xGapAfter/4, y1 + xGapAfter/2);
-// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-								result.append(gapMarker);
+							QLineF gapMarker(x1 + xGapAfter / 4., y1 - xGapAfter / 2., x1 - xGapAfter / 4., y1 + xGapAfter / 2.);
+							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker);
 						}
 						if (clipResult.xClippedRight[1]) {
-							QLineF gapMarker(x2 + xGapAfter/4, y2 - xGapAfter/2, x2 - xGapAfter/4, y2 + xGapAfter/2);
-// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-								result.append(gapMarker);
+							QLineF gapMarker(x2 + xGapAfter / 4., y2 - xGapAfter / 2., x2 - xGapAfter / 4., y2 + xGapAfter / 2.);
+							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker);
 						}
 					}
 
 					if (!std::isnan(yGapBefore)) {
 						if (clipResult.yClippedTop[0]) {
-							QLineF gapMarker(x1 + yGapBefore/2, y1 - yGapBefore/4, x1 - yGapBefore/2, y1 + yGapBefore/4);
-// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-								result.append(gapMarker);
+							QLineF gapMarker(x1 + yGapBefore / 2., y1 - yGapBefore / 4., x1 - yGapBefore / 2., y1 + yGapBefore / 4.);
+							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker);
 						}
 						if (clipResult.yClippedTop[1]) {
-							QLineF gapMarker(x2 + yGapBefore/2, y2 - yGapBefore/4, x2 - yGapBefore/2, y2 + yGapBefore/4);
-// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-								result.append(gapMarker);
+							QLineF gapMarker(x2 + yGapBefore / 2., y2 - yGapBefore / 4., x2 - yGapBefore / 2., y2 + yGapBefore / 4.);
+							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker);
 						}
 					}
 
 					if (!std::isnan(yGapAfter)) {
 						if (clipResult.yClippedBottom[0]) {
-							QLineF gapMarker(QPointF(x1 + yGapAfter / 2, y1 - yGapAfter / 4),
-									QPointF(x1 - yGapAfter / 2, y1 + yGapAfter / 4));
+							QLineF gapMarker(QPointF(x1 + yGapAfter / 2., y1 - yGapAfter / 4.), QPointF(x1 - yGapAfter / 2., y1 + yGapAfter / 4.));
 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.yClippedBottom[1]) {
-							QLineF gapMarker(QPointF(x2 + yGapAfter / 2, y2 - yGapAfter / 4),
-									QPointF(x2 - yGapAfter / 2, y2 + yGapAfter / 4));
+							QLineF gapMarker(QPointF(x2 + yGapAfter / 2., y2 - yGapAfter / 4.), QPointF(x2 - yGapAfter / 2., y2 + yGapAfter / 4.));
 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
@@ -473,10 +449,13 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 
 				QLineF mappedLine(QPointF(x1, y1), QPointF(x2, y2));
 				if (doPageClipping) {
-					if (!AbstractCoordinateSystem::clipLineToRect(&mappedLine, pageRect))
+					if (!AbstractCoordinateSystem::clipLineToRect(&mappedLine, pageRect)) {
+						DEBUG(Q_FUNC_INFO << ", WARNING: OMIT mapped line!")
 						continue;
+					}
 				}
 
+				//				QDEBUG(Q_FUNC_INFO << ", append line " << mappedLine)
 				result.append(mappedLine);
 			}
 		}
@@ -488,25 +467,45 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 //##############################################################################
 //######################### scene to logical mappers ###########################
 //##############################################################################
-QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPointF>& points, MappingFlags flags) const {
+Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
-	QVector<QPointF> result;
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+	Points result;
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool limit = flags & MappingFlag::Limit;
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const double xPage = pageRect.x();
+	const double yPage = pageRect.y();
+	const double w = pageRect.width();
+	const double h = pageRect.height();
+
+	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	for (const auto& point : points) {
-		if (noPageClipping || pageRect.contains(point)) {
+		double x = point.x();
+		double y = point.y();
+		if (limit) {
+			// set to max/min if passed over
+			x = qBound(xPage, x, xPage + w);
+			y = qBound(yPage, y, yPage + h);
+		}
+
+		if (noPageClippingY)
+			y = yPage + h / 2.;
+
+		if (noPageClipping || limit || pageRect.contains(point)) {
 			bool found = false;
 
-			double x = point.x();
-			double y = point.y();
-
 			for (const auto* xScale : d->xScales) {
-				if (found) break;
-				if (!xScale) continue;
+				if (found)
+					break;
+				if (!xScale)
+					continue;
 
 				for (const auto* yScale : d->yScales) {
-					if (found) break;
-					if (!yScale) continue;
+					if (found)
+						break;
+					if (!yScale)
+						continue;
 
 					if (!xScale->inverseMap(&x)) {
 						x = point.x();
@@ -541,28 +540,37 @@ QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPoi
 QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	QPointF result;
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+	bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	bool limit = flags & MappingFlag::Limit;
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 
-	if (noPageClipping || pageRect.contains(logicalPoint)) {
+	if (limit) {
+		// set to max/min if passed over
+		logicalPoint.setX(qBound(pageRect.x(), logicalPoint.x(), pageRect.x() + pageRect.width()));
+		logicalPoint.setY(qBound(pageRect.y(), logicalPoint.y(), pageRect.y() + pageRect.height()));
+	}
+
+	if (noPageClippingY)
+		logicalPoint.setY(pageRect.y() + pageRect.height() / 2.);
+
+	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+
+	if (noPageClipping || limit || pageRect.contains(logicalPoint)) {
 		double x = logicalPoint.x();
 		double y = logicalPoint.y();
+		// DEBUG(Q_FUNC_INFO << ", x/y = " << x << " " << y)
 
 		for (const auto* xScale : d->xScales) {
-			if (!xScale) continue;
-
+			if (!xScale)
+				continue;
 			for (const auto* yScale : d->yScales) {
-				if (!yScale) continue;
-
-				if (!xScale->inverseMap(&x))
+				if (!yScale)
 					continue;
 
-				if (!yScale->inverseMap(&y))
+				if (!xScale->inverseMap(&x) || !yScale->inverseMap(&y))
 					continue;
 
-				if (!xScale->contains(x))
-					continue;
-
-				if (!yScale->contains(y))
+				if (!xScale->contains(x) || !yScale->contains(y))
 					continue;
 
 				result.setX(x);
@@ -575,55 +583,106 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 	return result;
 }
 
-/**
- * \brief Determine the horizontal direction relative to the page.
- *
- * This function is needed for untransformed lengths such as axis tick length.
- * \return 1 or -1
- */
-int CartesianCoordinateSystem::xDirection() const {
-	if (d->xScales.isEmpty())
-		return 1;
+bool CartesianCoordinateSystem::isValid() const {
+	if (d->xScales.isEmpty() || d->yScales.isEmpty())
+		return false;
 
-	return d->xScales.at(0)->direction();
+	for (const auto* scale : d->xScales) {
+		if (!scale)
+			return false;
+	}
+
+	for (const auto* scale : d->yScales) {
+		if (!scale)
+			return false;
+	}
+	return true;
 }
 
+/**************************************************************************************/
+
 /**
- * \brief Determine the vertical direction relative to the page.
+ * \brief Determine the direction relative to the page in different directions
  *
  * This function is needed for untransformed lengths such as axis tick length.
  * \return 1 or -1
  */
-int CartesianCoordinateSystem::yDirection() const {
-	if (d->yScales.isEmpty())
-		return 1;
+int CartesianCoordinateSystem::direction(const Dimension dim) const {
+	switch (dim) {
+	case Dimension::X: {
+		if (d->xScales.isEmpty() || !d->xScales.at(0)) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
+			return 1;
+		}
 
-	return d->yScales.at(0)->direction();
+		return d->xScales.at(0)->direction();
+	}
+	case Dimension::Y: {
+		if (d->yScales.isEmpty() || !d->yScales.at(0)) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: no y scale!")
+			return 1;
+		}
+
+		return d->yScales.at(0)->direction();
+	}
+	}
+	return 1;
 }
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
-bool CartesianCoordinateSystem::setXScales(const QVector<CartesianScale *> &scales) {
-	while (!d->xScales.isEmpty())
-		delete d->xScales.takeFirst();
+bool CartesianCoordinateSystem::setScales(const Dimension dim, const QVector<CartesianScale*>& scales) {
+	DEBUG(Q_FUNC_INFO)
+	switch (dim) {
+	case Dimension::X: {
+		while (!d->xScales.isEmpty())
+			delete d->xScales.takeFirst();
 
-	d->xScales = scales;
-	return true; // TODO: check scales validity
+		d->xScales = scales;
+		return true; // TODO: check scales validity
+	}
+	case Dimension::Y: {
+		while (!d->yScales.isEmpty())
+			delete d->yScales.takeFirst();
+
+		d->yScales = scales;
+		return true; // TODO: check scales validity
+	}
+	}
+	return 1;
 }
 
-QVector<CartesianScale*> CartesianCoordinateSystem::xScales() const {
-	return d->xScales; // TODO: should rather return a copy of the scales here
+QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Dimension dim) const {
+	DEBUG(Q_FUNC_INFO)
+	switch (dim) {
+	case Dimension::X:
+		return d->xScales; // TODO: should rather return a copy of the scales here
+	case Dimension::Y:
+		return d->yScales; // TODO: should rather return a copy of the scales here
+	}
+	return QVector<CartesianScale*>();
 }
 
-bool CartesianCoordinateSystem::setYScales(const QVector<CartesianScale*> &scales) {
-	while (!d->yScales.isEmpty())
-		delete d->yScales.takeFirst();
-
-	d->yScales = scales;
-	return true; // TODO: check scales validity
+int CartesianCoordinateSystem::index(const Dimension dim) const {
+	switch (dim) {
+	case Dimension::X:
+		return d->xIndex;
+	case Dimension::Y:
+		return d->yIndex;
+	}
+	return 0;
 }
 
-QVector<CartesianScale*> CartesianCoordinateSystem::yScales() const {
-	return d->yScales; // TODO: should rather return a copy of the scales here
+void CartesianCoordinateSystem::setIndex(const Dimension dim, const int index) {
+	switch (dim) {
+	case Dimension::X:
+		d->xIndex = index;
+		d->xScales.clear();
+		break;
+	case Dimension::Y:
+		d->yIndex = index;
+		d->yScales.clear();
+		break;
+	}
 }
 
 /*!
@@ -640,12 +699,11 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF po
 		l += w;
 	else
 		r += w;
-	if ( AbstractCoordinateSystem::essentiallyEqual(l, r)) // null rect
+	if (nsl_math_essentially_equal(l, r)) // null rect
 		return false;
 
-	if ( AbstractCoordinateSystem::definitelyLessThan(point.x(), l)
-		|| AbstractCoordinateSystem::definitelyGreaterThan(point.x(), r) )
- 	return false;
+	if (nsl_math_definitely_less_than(point.x(), l) || nsl_math_definitely_greater_than(point.x(), r))
+		return false;
 
 	qreal t = rect.y();
 	qreal b = rect.y();
@@ -653,11 +711,10 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF po
 		t += h;
 	else
 		b += h;
- 	if ( AbstractCoordinateSystem::essentiallyEqual(t, b) ) // null rect
+	if (nsl_math_essentially_equal(t, b)) // null rect
 		return false;
 
-	if ( AbstractCoordinateSystem::definitelyLessThan(point.y(), t)
-		|| AbstractCoordinateSystem::definitelyGreaterThan(point.y(), b) )
+	if (nsl_math_definitely_less_than(point.y(), t) || nsl_math_definitely_greater_than(point.y(), b))
 		return false;
 
 	return true;
@@ -666,7 +723,8 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF po
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner) :q(owner) {
+CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem* owner)
+	: q(owner) {
 }
 
 CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate() {

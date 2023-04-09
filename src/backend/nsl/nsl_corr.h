@@ -1,30 +1,11 @@
-/***************************************************************************
-    File                 : nsl_corr.h
-    Project              : LabPlot
-    Description          : NSL discrete correlation functions
-    --------------------------------------------------------------------
-    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : nsl_corr.h
+	Project              : LabPlot
+	Description          : NSL discrete correlation functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef NSL_CORR_H
 #define NSL_CORR_H
@@ -33,7 +14,7 @@
 
 #define NSL_CORR_TYPE_COUNT 2
 /* linear (zero-padded), circular */
-typedef enum {nsl_corr_type_linear, nsl_corr_type_circular} nsl_corr_type_type;
+typedef enum { nsl_corr_type_linear, nsl_corr_type_circular } nsl_corr_type_type;
 extern const char* nsl_corr_type_name[];
 
 #define NSL_CORR_NORM_COUNT 4
@@ -42,9 +23,8 @@ extern const char* nsl_corr_type_name[];
  * unbiased - 1/(N-|m|)
  * coeff - 1/sqrt(R_xx(0) R_yy(0)) = 1/sqrt(sum x_i^2 sum y_i^2) [used in Origin]
  * */
-typedef enum {nsl_corr_norm_none, nsl_corr_norm_biased, nsl_corr_norm_unbiased, nsl_corr_norm_coeff} nsl_corr_norm_type;
+typedef enum { nsl_corr_norm_none, nsl_corr_norm_biased, nsl_corr_norm_unbiased, nsl_corr_norm_coeff } nsl_corr_norm_type;
 extern const char* nsl_corr_norm_name[];
-
 
 int nsl_corr_correlation(double s[], size_t n, double r[], size_t m, nsl_corr_type_type, nsl_corr_norm_type normalize, double out[]);
 

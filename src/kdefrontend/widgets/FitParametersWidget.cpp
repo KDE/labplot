@@ -1,36 +1,21 @@
-/***************************************************************************
-    File                 : FitParametersWidget.cc
-    Project              : LabPlot
-    Description          : widget for editing fit parameters
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+/*
+	File                 : FitParametersWidget.cc
+	Project              : LabPlot
+	Description          : widget for editing fit parameters
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #include "FitParametersWidget.h"
-#include <QLineEdit>
+
+#include <KLocalizedString>
+
 #include <QCheckBox>
 #include <QKeyEvent>
-#include <KLocalizedString>
+#include <QLineEdit>
+#include <QScrollBar>
 
 /*!
 	\class FitParametersWidget
@@ -40,7 +25,8 @@
 
 	\ingroup kdefrontend
  */
-FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent) {
+FitParametersWidget::FitParametersWidget(QWidget* parent)
+	: QWidget(parent) {
 	ui.setupUi(this);
 
 	ui.tableWidget->setColumnCount(5);
@@ -70,18 +56,20 @@ FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.tableWidget->installEventFilter(this);
 
-	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
+	connect(ui.tableWidget, SIGNAL(cellChanged(int, int)), this, SLOT(changed()));
+	updateTableSize();
 }
 
 void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
-	DEBUG("FitParametersWidget::setFitData()");
+	DEBUG(Q_FUNC_INFO);
 	m_initializing = true;
 	m_fitData = data;
 
 	int np = m_fitData->paramNames.size();
 	DEBUG("# params = " << np);
 	DEBUG("# start values = " << m_fitData->paramStartValues.size());
-	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
+	const auto numberLocale = QLocale();
+	if (m_fitData->modelCategory != nsl_fit_model_custom) { // pre-defined models
 		ui.tableWidget->setRowCount(np);
 
 		for (int i = 0; i < np; ++i) {
@@ -95,12 +83,12 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 			auto* le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
-			le->insert(QString::number(m_fitData->paramStartValues.at(i), 'g'));
+			le->insert(numberLocale.toString(m_fitData->paramStartValues.at(i)));
 			ui.tableWidget->setCellWidget(i, 1, le);
-			connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
+			connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()));
 
 			// fixed
-			QWidget* widget = new QWidget();
+			auto* widget = new QWidget();
 			auto* cb = new QCheckBox();
 			cb->setChecked(m_fitData->paramFixed.at(i));
 			auto* cbl = new QHBoxLayout(widget);
@@ -109,28 +97,28 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 			cbl->setContentsMargins(0, 0, 0, 0);
 			widget->setLayout(cbl);
 			ui.tableWidget->setCellWidget(i, 2, widget);
-			connect(cb, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
+			connect(cb, SIGNAL(stateChanged(int)), this, SLOT(changed()));
 
 			// limits
 			le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
 			if (m_fitData->paramLowerLimits.at(i) > -std::numeric_limits<double>::max())
-				le->insert(QString::number(m_fitData->paramLowerLimits.at(i), 'g'));
+				le->insert(numberLocale.toString(m_fitData->paramLowerLimits.at(i)));
 			ui.tableWidget->setCellWidget(i, 3, le);
-			connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
+			connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()));
 
 			le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
 			if (m_fitData->paramUpperLimits.at(i) < std::numeric_limits<double>::max())
-				le->insert(QString::number(m_fitData->paramUpperLimits.at(i), 'g'));
+				le->insert(numberLocale.toString(m_fitData->paramUpperLimits.at(i)));
 			ui.tableWidget->setCellWidget(i, 4, le);
-			connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
+			connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()));
 		}
 		ui.tableWidget->setCurrentCell(0, 1);
-	} else {	// custom model
-		if (!m_fitData->paramNames.isEmpty()) {	// parameters for the custom model are already available -> show them
+	} else { // custom model
+		if (!m_fitData->paramNames.isEmpty()) { // parameters for the custom model are already available -> show them
 			ui.tableWidget->setRowCount(np);
 
 			for (int i = 0; i < np; ++i) {
@@ -143,12 +131,12 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 				auto* le = new QLineEdit(ui.tableWidget);
 				le->setValidator(new QDoubleValidator(le));
 				le->setFrame(false);
-				le->insert(QString::number(m_fitData->paramStartValues.at(i), 'g'));
+				le->insert(numberLocale.toString(m_fitData->paramStartValues.at(i)));
 				ui.tableWidget->setCellWidget(i, 1, le);
-				connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
+				connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()));
 
 				// fixed
-				QWidget* widget = new QWidget();
+				auto* widget = new QWidget();
 				auto* cb = new QCheckBox();
 				cb->setChecked(m_fitData->paramFixed.at(i));
 				auto* cbl = new QHBoxLayout(widget);
@@ -157,26 +145,26 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 				cbl->setContentsMargins(0, 0, 0, 0);
 				widget->setLayout(cbl);
 				ui.tableWidget->setCellWidget(i, 2, widget);
-				connect(cb, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
+				connect(cb, SIGNAL(stateChanged(int)), this, SLOT(changed()));
 
 				// limits
 				le = new QLineEdit(ui.tableWidget);
 				le->setValidator(new QDoubleValidator(le));
 				le->setFrame(false);
 				if (m_fitData->paramLowerLimits.at(i) > -std::numeric_limits<double>::max())
-					le->insert(QString::number(m_fitData->paramLowerLimits.at(i), 'g'));
+					le->insert(numberLocale.toString(m_fitData->paramLowerLimits.at(i)));
 				ui.tableWidget->setCellWidget(i, 3, le);
-				connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
+				connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()));
 
 				le = new QLineEdit(ui.tableWidget);
 				le->setValidator(new QDoubleValidator(le));
 				le->setFrame(false);
 				if (m_fitData->paramUpperLimits.at(i) < std::numeric_limits<double>::max())
-					le->insert(QString::number(m_fitData->paramUpperLimits.at(i), 'g'));
+					le->insert(numberLocale.toString(m_fitData->paramUpperLimits.at(i)));
 				ui.tableWidget->setCellWidget(i, 4, le);
-				connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
+				connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()));
 			}
-		} else {			// no parameters available yet -> create the first row in the table for the first parameter
+		} else { // no parameters available yet -> create the first row in the table for the first parameter
 			ui.tableWidget->setRowCount(1);
 			// name
 			auto* item = new QTableWidgetItem();
@@ -188,10 +176,10 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
 			ui.tableWidget->setCellWidget(0, 1, le);
-			connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
+			connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()));
 
 			// fixed
-			QWidget* widget = new QWidget();
+			auto* widget = new QWidget();
 			auto* cb = new QCheckBox();
 			auto* cbl = new QHBoxLayout(widget);
 			cbl->addWidget(cb);
@@ -199,24 +187,26 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 			cbl->setContentsMargins(0, 0, 0, 0);
 			widget->setLayout(cbl);
 			ui.tableWidget->setCellWidget(0, 2, widget);
-			connect(cb, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
+			connect(cb, SIGNAL(stateChanged(int)), this, SLOT(changed()));
 
 			// limits
 			le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
 			ui.tableWidget->setCellWidget(0, 3, le);
-			connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
+			connect(le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()));
 
 			le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
 			ui.tableWidget->setCellWidget(0, 4, le);
-			connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
+			connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()));
 		}
 		ui.tableWidget->setCurrentCell(0, 0);
 	}
 	m_initializing = false;
+
+	updateTableSize();
 }
 
 bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
@@ -224,8 +214,8 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 		if (event->type() == QEvent::KeyPress) {
 			auto* keyEvent = static_cast<QKeyEvent*>(event);
 			if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-				//on the second column with the values is editable.
-				//navigate to the next cell in the second column
+				// on the second column with the values is editable.
+				// navigate to the next cell in the second column
 				if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount() - 1)
 					ui.tableWidget->clearSelection();
 				else
@@ -239,11 +229,42 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 	return QWidget::eventFilter(watched, event);
 }
 
+void FitParametersWidget::resizeEvent(QResizeEvent*) {
+	updateTableSize();
+}
+
+void FitParametersWidget::updateTableSize() {
+	if (m_resizing)
+		return;
+
+	m_resizing = true;
+	auto horHeader = ui.tableWidget->horizontalHeader();
+	auto vertHeader = ui.tableWidget->verticalHeader();
+	int count = vertHeader->count();
+
+	// show the vertrical scrollbar if we have more than 5 rows and limit the max size to 5 rows
+	if (count <= 5)
+		ui.tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	else {
+		ui.tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+		count = 5;
+	}
+
+	// set the size of the table to the minimum possible
+	int h = horHeader->height();
+	h += vertHeader->sectionSize(0) * count;
+	if (ui.tableWidget->horizontalScrollBar()->isVisible())
+		h += ui.tableWidget->horizontalScrollBar()->height();
+	setMinimumSize(16777215, h);
+	setMaximumSize(16777215, h);
+	m_resizing = false;
+}
+
 void FitParametersWidget::changed() {
 	DEBUG("FitParametersWidget::changed()");
 	if (!m_initializing) {
 		apply();
-		emit parametersChanged(false);
+		Q_EMIT parametersChanged(false);
 	}
 }
 
@@ -252,46 +273,47 @@ void FitParametersWidget::changed() {
  */
 void FitParametersWidget::apply() {
 	DEBUG("FitParametersWidget::apply()");
-	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
+	if (m_fitData->modelCategory != nsl_fit_model_custom) { // pre-defined models
 		for (int i = 0; i < ui.tableWidget->rowCount(); ++i) {
-			m_fitData->paramStartValues[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble();
+			SET_DOUBLE_FROM_LE(m_fitData->paramStartValues[i], (QLineEdit*)ui.tableWidget->cellWidget(i, 1))
 
-			QWidget *widget = ui.tableWidget->cellWidget(i, 2)->layout()->itemAt(0)->widget();
-			m_fitData->paramFixed[i] = (qobject_cast<QCheckBox *>(widget))->isChecked();
+			QWidget* widget = ui.tableWidget->cellWidget(i, 2)->layout()->itemAt(0)->widget();
+			m_fitData->paramFixed[i] = (qobject_cast<QCheckBox*>(widget))->isChecked();
 
-			if ( !((QLineEdit *)ui.tableWidget->cellWidget(i, 3))->text().isEmpty() )
-				m_fitData->paramLowerLimits[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 3))->text().toDouble();
+			if (!((QLineEdit*)ui.tableWidget->cellWidget(i, 3))->text().isEmpty())
+				SET_DOUBLE_FROM_LE(m_fitData->paramLowerLimits[i], (QLineEdit*)ui.tableWidget->cellWidget(i, 3))
 			else
 				m_fitData->paramLowerLimits[i] = -std::numeric_limits<double>::max();
-			if ( !((QLineEdit *)ui.tableWidget->cellWidget(i, 4))->text().isEmpty() )
-				m_fitData->paramUpperLimits[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 4))->text().toDouble();
+			if (!((QLineEdit*)ui.tableWidget->cellWidget(i, 4))->text().isEmpty())
+				SET_DOUBLE_FROM_LE(m_fitData->paramUpperLimits[i], (QLineEdit*)ui.tableWidget->cellWidget(i, 4))
 			else
 				m_fitData->paramUpperLimits[i] = std::numeric_limits<double>::max();
 		}
-	} else {	// custom model
+	} else { // custom model
 		m_fitData->paramNames.clear();
 		m_fitData->paramNamesUtf8.clear();
 		m_fitData->paramStartValues.clear();
 		m_fitData->paramFixed.clear();
 		m_fitData->paramLowerLimits.clear();
 		m_fitData->paramUpperLimits.clear();
+
+		const auto numberLocale = QLocale();
 		for (int i = 0; i < ui.tableWidget->rowCount(); ++i) {
 			// skip those rows where either the name or the value is empty
-			if ( !ui.tableWidget->item(i, 0)->text().simplified().isEmpty()
-				&& !((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().simplified().isEmpty() ) {
-				m_fitData->paramNames.append( ui.tableWidget->item(i, 0)->text() );
-				m_fitData->paramNamesUtf8.append( ui.tableWidget->item(i, 0)->text() );
-				m_fitData->paramStartValues.append( ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble() );
+			if (!ui.tableWidget->item(i, 0)->text().simplified().isEmpty() && !((QLineEdit*)ui.tableWidget->cellWidget(i, 1))->text().simplified().isEmpty()) {
+				m_fitData->paramNames.append(ui.tableWidget->item(i, 0)->text());
+				m_fitData->paramNamesUtf8.append(ui.tableWidget->item(i, 0)->text());
+				m_fitData->paramStartValues.append(numberLocale.toDouble(((QLineEdit*)ui.tableWidget->cellWidget(i, 1))->text()));
 
-				QWidget *widget = ui.tableWidget->cellWidget(i, 2)->layout()->itemAt(0)->widget();
-				m_fitData->paramFixed.append( (qobject_cast<QCheckBox *>(widget))->isChecked() );
+				QWidget* widget = ui.tableWidget->cellWidget(i, 2)->layout()->itemAt(0)->widget();
+				m_fitData->paramFixed.append((qobject_cast<QCheckBox*>(widget))->isChecked());
 
-				if ( !((QLineEdit *)ui.tableWidget->cellWidget(i, 3))->text().isEmpty() )
-					m_fitData->paramLowerLimits.append( ((QLineEdit *)ui.tableWidget->cellWidget(i, 3))->text().toDouble() );
+				if (!((QLineEdit*)ui.tableWidget->cellWidget(i, 3))->text().isEmpty())
+					m_fitData->paramLowerLimits.append(numberLocale.toDouble(((QLineEdit*)ui.tableWidget->cellWidget(i, 3))->text()));
 				else
 					m_fitData->paramLowerLimits.append(-std::numeric_limits<double>::max());
-				if ( !((QLineEdit *)ui.tableWidget->cellWidget(i, 4))->text().isEmpty() )
-					m_fitData->paramUpperLimits.append( ((QLineEdit *)ui.tableWidget->cellWidget(i, 4))->text().toDouble() );
+				if (!((QLineEdit*)ui.tableWidget->cellWidget(i, 4))->text().isEmpty())
+					m_fitData->paramUpperLimits.append(numberLocale.toDouble(((QLineEdit*)ui.tableWidget->cellWidget(i, 4))->text()));
 				else
 					m_fitData->paramUpperLimits.append(std::numeric_limits<double>::max());
 			}
@@ -305,17 +327,14 @@ void FitParametersWidget::apply() {
 void FitParametersWidget::startValueChanged() {
 	DEBUG("FitParametersWidget::startValueChanged()");
 	const int row = ui.tableWidget->currentRow();
-	const double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
+	double value{1};
+	SET_DOUBLE_FROM_LE(value, (QLineEdit*)ui.tableWidget->cellWidget(row, 1))
 
-	double lowerLimit, upperLimit;
-	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
-		lowerLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().toDouble();
-	else
-		lowerLimit = -std::numeric_limits<double>::max();
-	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().isEmpty() )
-		upperLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().toDouble();
-	else
-		upperLimit = std::numeric_limits<double>::max();
+	double lowerLimit{-std::numeric_limits<double>::max()}, upperLimit{std::numeric_limits<double>::max()};
+	if (!((QLineEdit*)ui.tableWidget->cellWidget(row, 3))->text().isEmpty())
+		SET_DOUBLE_FROM_LE(lowerLimit, (QLineEdit*)ui.tableWidget->cellWidget(row, 3))
+	if (!((QLineEdit*)ui.tableWidget->cellWidget(row, 4))->text().isEmpty())
+		SET_DOUBLE_FROM_LE(upperLimit, (QLineEdit*)ui.tableWidget->cellWidget(row, 4))
 
 	const bool invalid = (value < lowerLimit || value > upperLimit);
 	highlightInvalid(row, 1, invalid);
@@ -325,7 +344,7 @@ void FitParametersWidget::startValueChanged() {
 	if (m_rehighlighting)
 		return;
 
-	//start value was changed -> check whether the lower and upper limits are valid and highlight them if not
+	// start value was changed -> check whether the lower and upper limits are valid and highlight them if not
 	m_invalidRanges = invalid;
 	m_rehighlighting = true;
 	lowerLimitChanged();
@@ -340,17 +359,14 @@ void FitParametersWidget::lowerLimitChanged() {
 	DEBUG("FitParametersWidget::lowerLimitChanged()");
 	const int row = ui.tableWidget->currentRow();
 
-	const double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
+	double value{1};
+	SET_DOUBLE_FROM_LE(value, (QLineEdit*)ui.tableWidget->cellWidget(row, 1))
 
-	double lowerLimit, upperLimit;
-	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
-		lowerLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().toDouble();
-	else
-		lowerLimit = -std::numeric_limits<double>::max();
-	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().isEmpty() )
-		upperLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().toDouble();
-	else
-		upperLimit = std::numeric_limits<double>::max();
+	double lowerLimit{-std::numeric_limits<double>::max()}, upperLimit{std::numeric_limits<double>::max()};
+	if (!((QLineEdit*)ui.tableWidget->cellWidget(row, 3))->text().isEmpty())
+		SET_DOUBLE_FROM_LE(lowerLimit, (QLineEdit*)ui.tableWidget->cellWidget(row, 3))
+	if (!((QLineEdit*)ui.tableWidget->cellWidget(row, 4))->text().isEmpty())
+		SET_DOUBLE_FROM_LE(upperLimit, (QLineEdit*)ui.tableWidget->cellWidget(row, 4))
 
 	const bool invalid = (lowerLimit > value || lowerLimit > upperLimit);
 	highlightInvalid(row, 3, invalid);
@@ -360,7 +376,7 @@ void FitParametersWidget::lowerLimitChanged() {
 	if (m_rehighlighting)
 		return;
 
-	//lower limit was changed -> check whether the start value and the upper limit are valid and highlight them if not
+	// lower limit was changed -> check whether the start value and the upper limit are valid and highlight them if not
 	m_invalidRanges = invalid;
 	m_rehighlighting = true;
 	startValueChanged();
@@ -375,17 +391,14 @@ void FitParametersWidget::upperLimitChanged() {
 	DEBUG("FitParametersWidget::upperLimitChanged()");
 	const int row = ui.tableWidget->currentRow();
 
-	const double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
+	double value{1};
+	SET_DOUBLE_FROM_LE(value, (QLineEdit*)ui.tableWidget->cellWidget(row, 1))
 
-	double lowerLimit, upperLimit;
-	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
-		lowerLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().toDouble();
-	else
-		lowerLimit = -std::numeric_limits<double>::max();
-	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().isEmpty() )
-		upperLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().toDouble();
-	else
-		upperLimit = std::numeric_limits<double>::max();
+	double lowerLimit{-std::numeric_limits<double>::max()}, upperLimit{std::numeric_limits<double>::max()};
+	if (!((QLineEdit*)ui.tableWidget->cellWidget(row, 3))->text().isEmpty())
+		SET_DOUBLE_FROM_LE(lowerLimit, (QLineEdit*)ui.tableWidget->cellWidget(row, 3))
+	if (!((QLineEdit*)ui.tableWidget->cellWidget(row, 4))->text().isEmpty())
+		SET_DOUBLE_FROM_LE(upperLimit, (QLineEdit*)ui.tableWidget->cellWidget(row, 4))
 
 	const bool invalid = (upperLimit < value || upperLimit < lowerLimit);
 	highlightInvalid(row, 4, invalid);
@@ -395,7 +408,7 @@ void FitParametersWidget::upperLimitChanged() {
 	if (m_rehighlighting)
 		return;
 
-	//upper limit was changed -> check whether the start value and the lower limit are valid and highlight them if not
+	// upper limit was changed -> check whether the start value and the lower limit are valid and highlight them if not
 	m_invalidRanges = invalid;
 	m_rehighlighting = true;
 	startValueChanged();
@@ -408,12 +421,12 @@ void FitParametersWidget::upperLimitChanged() {
 void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) {
 	QLineEdit* le = ((QLineEdit*)ui.tableWidget->cellWidget(row, col));
 	if (invalid)
-		le->setStyleSheet("QLineEdit{background: red;}");
+		SET_WARNING_STYLE(le)
 	else
 		le->setStyleSheet(QString());
 
 	if (m_invalidRanges)
-		emit parametersValid(false);
+		Q_EMIT parametersValid(false);
 	else
-		emit parametersValid(true);
+		Q_EMIT parametersValid(true);
 }

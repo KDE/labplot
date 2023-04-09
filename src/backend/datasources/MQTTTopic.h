@@ -1,45 +1,24 @@
-/***************************************************************************
-File		: MQTTTopic.h
-Project		: LabPlot
-Description	: Represents a topic of a MQTTSubscription
---------------------------------------------------------------------
-Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
+/*
+	File		: MQTTTopic.h
+	Project		: LabPlot
+	Description	: Represents a topic of a MQTTSubscription
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
 
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef MQTTTOPIC_H
 #define MQTTTOPIC_H
 
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#ifdef HAVE_MQTT
 class MQTTSubscription;
 class MQTTClient;
-#endif
 
 class AsciiFilter;
 
 class MQTTTopic : public Spreadsheet {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -69,16 +48,14 @@ private:
 	QVector<QString> m_messagePuffer;
 	QAction* m_plotDataAction;
 
-public slots:
+public Q_SLOTS:
 	void read();
 
-private slots:
+private Q_SLOTS:
 	void plotData();
 
-signals:
+Q_SIGNALS:
 	void readOccured();
-
-#endif // HAVE_MQTT
 };
 
 #endif // MQTTTOPIC_H

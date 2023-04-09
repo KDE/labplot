@@ -1,21 +1,14 @@
-INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
 
 # basic functions
-add_executable (nslsfbasictest NSLSFBasicTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
+add_executable (NSLSFBasicTest NSLSFBasicTest.cpp)
 
-target_link_libraries(nslsfbasictest Qt5::Test)
-target_link_libraries(nslsfbasictest ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+target_link_libraries(NSLSFBasicTest labplot2lib labplot2test)
 
-target_link_libraries(nslsfbasictest labplot2lib)
-
-add_test(NAME nslsfbasictest COMMAND nslsfbasictest)
+add_test(NAME NSLSFBasicTest COMMAND NSLSFBasicTest)
 
 # window functions
-add_executable (nslsfwindowtest NSLSFWindowTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
+add_executable (NSLSFWindowTest NSLSFWindowTest.cpp)
 
-target_link_libraries(nslsfwindowtest Qt5::Test)
-target_link_libraries(nslsfwindowtest ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+target_link_libraries(NSLSFWindowTest labplot2lib labplot2test)
 
-target_link_libraries(nslsfwindowtest labplot2lib)
-
-add_test(NAME nslsfwindowtest COMMAND nslsfwindowtest)
+add_test(NAME NSLSFWindowTest COMMAND NSLSFWindowTest)

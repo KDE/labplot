@@ -1,40 +1,22 @@
-/***************************************************************************
-    File             : XYIntegrationCurveDock.cpp
-    Project          : LabPlot
-    --------------------------------------------------------------------
-    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description      : widget for editing properties of integration curves
+/*
+	File             : XYIntegrationCurveDock.cpp
+	Project          : LabPlot
+	Description      : widget for editing properties of integration curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "XYIntegrationCurveDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <QStandardItemModel>
 
 extern "C" {
 #include "backend/nsl/nsl_int.h"
@@ -54,27 +36,24 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYIntegrationCurveDock::XYIntegrationCurveDock(QWidget* parent) : XYCurveDock(parent) {
-	//hide the line connection type
-	ui.cbLineType->setDisabled(true);
-
-	//remove the tab "Error bars"
-	ui.tabWidget->removeTab(5);
+XYIntegrationCurveDock::XYIntegrationCurveDock(QWidget* parent)
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
  * 	// Tab "General"
  */
 void XYIntegrationCurveDock::setupGeneral() {
-	QWidget* generalTab = new QWidget(ui.tabGeneral);
+	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	m_leName = uiGeneralTab.leName;
+	m_teComment = uiGeneralTab.teComment;
+	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
-	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
-	if (gridLayout) {
-		gridLayout->setContentsMargins(2,2,2,2);
-		gridLayout->setHorizontalSpacing(2);
-		gridLayout->setVerticalSpacing(2);
-	}
+	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
+	gridLayout->setContentsMargins(2, 2, 2, 2);
+	gridLayout->setHorizontalSpacing(2);
+	gridLayout->setVerticalSpacing(2);
 
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
 	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
@@ -89,89 +68,120 @@ void XYIntegrationCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_INT_NETHOD_COUNT; i++)
 		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
 
-	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
+	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	//Slots
-	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYIntegrationCurveDock::nameChanged );
-	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYIntegrationCurveDock::commentChanged );
-	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
-	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
-	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
-	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
-	connect( uiGeneralTab.cbMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(methodChanged()) );
-	connect( uiGeneralTab.cbAbsolute, SIGNAL(clicked(bool)), this, SLOT(absoluteChanged()) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+	// Slots
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYIntegrationCurveDock::nameChanged);
+	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYIntegrationCurveDock::commentChanged);
+	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYIntegrationCurveDock::visibilityChanged);
+	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYIntegrationCurveDock::dataSourceTypeChanged);
+	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYIntegrationCurveDock::autoRangeChanged);
+	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYIntegrationCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYIntegrationCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.dateTimeEditMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYIntegrationCurveDock::xRangeMinDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYIntegrationCurveDock::xRangeMaxDateTimeChanged);
+	connect(uiGeneralTab.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYIntegrationCurveDock::methodChanged);
+	connect(uiGeneralTab.cbAbsolute, &QCheckBox::clicked, this, &XYIntegrationCurveDock::absoluteChanged);
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYIntegrationCurveDock::recalculateClicked);
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYIntegrationCurveDock::plotRangeChanged);
 
-	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
+	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYIntegrationCurveDock::dataSourceCurveChanged);
+	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYIntegrationCurveDock::xDataColumnChanged);
+	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYIntegrationCurveDock::yDataColumnChanged);
 }
 
 void XYIntegrationCurveDock::initGeneralTab() {
-	//if there are more then one curve in the list, disable the tab "general"
+	// if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.leComment->setEnabled(true);
+		uiGeneralTab.teComment->setEnabled(true);
 
 		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.leComment->setText(m_curve->comment());
+		uiGeneralTab.teComment->setText(m_curve->comment());
 	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.leComment->setEnabled(false);
+		uiGeneralTab.teComment->setEnabled(false);
 
 		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.leComment->setText(QString());
+		uiGeneralTab.teComment->setText(QString());
 	}
 
-	//show the properties of the first curve
-	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
-
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_integrationCurve->dataSourceType());
+	// show the properties of the first curve
+	// data source
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_integrationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_integrationCurve->dataSourceCurve());
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_integrationCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_integrationCurve->yDataColumn());
+	cbDataSourceCurve->setAspect(m_integrationCurve->dataSourceCurve());
+	cbXDataColumn->setColumn(m_integrationCurve->xDataColumn(), m_integrationCurve->xDataColumnPath());
+	cbYDataColumn->setColumn(m_integrationCurve->yDataColumn(), m_integrationCurve->yDataColumnPath());
+
+	// range widgets
+	const auto* plot = static_cast<const CartesianPlot*>(m_integrationCurve->parentAspect());
+	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
+	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
+	if (!m_dateTimeRange) {
+		const auto numberLocale = QLocale();
+		uiGeneralTab.leMin->setText(numberLocale.toString(m_integrationData.xRange.first()));
+		uiGeneralTab.leMax->setText(numberLocale.toString(m_integrationData.xRange.last()));
+	} else {
+		uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(m_integrationData.xRange.first());
+		uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(m_integrationData.xRange.last());
+	}
+
+	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.leMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.leMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.lMinDateTime->setVisible(m_dateTimeRange);
+	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
+	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
+	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
+
+	// auto range
 	uiGeneralTab.cbAutoRange->setChecked(m_integrationData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_integrationData.xRange.first());
-	uiGeneralTab.sbMax->setValue(m_integrationData.xRange.last());
 	this->autoRangeChanged();
+
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbMethod->setCurrentIndex(m_integrationData.method);
-	this->methodChanged();
+	this->methodChanged(m_integrationData.method);
 	uiGeneralTab.cbAbsolute->setChecked(m_integrationData.absolute);
 	this->absoluteChanged();
 
 	this->showIntegrationResult();
 
-	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
-	//Slots
-	connect(m_integrationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_integrationCurve, SIGNAL(dataSourceTypeChanged(XYAnalysisCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType)));
-	connect(m_integrationCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
-	connect(m_integrationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
-	connect(m_integrationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
-	connect(m_integrationCurve, SIGNAL(integrationDataChanged(XYIntegrationCurve::IntegrationData)), this, SLOT(curveIntegrationDataChanged(XYIntegrationCurve::IntegrationData)));
-	connect(m_integrationCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+	// Slots
+	connect(m_integrationCurve, &XYIntegrationCurve::aspectDescriptionChanged, this, &XYIntegrationCurveDock::aspectDescriptionChanged);
+	connect(m_integrationCurve, &XYIntegrationCurve::dataSourceTypeChanged, this, &XYIntegrationCurveDock::curveDataSourceTypeChanged);
+	connect(m_integrationCurve, &XYIntegrationCurve::dataSourceCurveChanged, this, &XYIntegrationCurveDock::curveDataSourceCurveChanged);
+	connect(m_integrationCurve, &XYIntegrationCurve::xDataColumnChanged, this, &XYIntegrationCurveDock::curveXDataColumnChanged);
+	connect(m_integrationCurve, &XYIntegrationCurve::yDataColumnChanged, this, &XYIntegrationCurveDock::curveYDataColumnChanged);
+	connect(m_integrationCurve, &XYIntegrationCurve::integrationDataChanged, this, &XYIntegrationCurveDock::curveIntegrationDataChanged);
+	connect(m_integrationCurve, &XYIntegrationCurve::sourceDataChanged, this, &XYIntegrationCurveDock::enableRecalculate);
+	connect(m_integrationCurve, &WorksheetElement::plotRangeListChanged, this, &XYIntegrationCurveDock::updatePlotRanges);
+	connect(m_integrationCurve, &WorksheetElement::visibleChanged, this, &XYIntegrationCurveDock::curveVisibilityChanged);
 }
 
 void XYIntegrationCurveDock::setModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
+	QList<AspectType> list{AspectType::Folder,
+						   AspectType::Datapicker,
+						   AspectType::Worksheet,
+						   AspectType::CartesianPlot,
+						   AspectType::XYCurve,
+						   AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -179,9 +189,16 @@ void XYIntegrationCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list.clear();
-	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-		<<"LiveDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+	list = {AspectType::Folder,
+			AspectType::Workbook,
+			AspectType::Datapicker,
+			AspectType::DatapickerCurve,
+			AspectType::Spreadsheet,
+			AspectType::LiveDataSource,
+			AspectType::Column,
+			AspectType::Worksheet,
+			AspectType::CartesianPlot,
+			AspectType::XYFitCurve};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -199,39 +216,35 @@ void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
-	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
+	setAspects(list);
+	m_integrationCurve = static_cast<XYIntegrationCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_integrationData = m_integrationCurve->integrationData();
+
 	initGeneralTab();
 	initTabs();
+	setSymbols(list);
 	m_initializing = false;
 
-	//hide the "skip gaps" option after the curves were set
+	updatePlotRanges();
+
+	// hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
 	ui.chkLineSkipGaps->hide();
+}
+
+void XYIntegrationCurveDock::updatePlotRanges() {
+	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYIntegrationCurveDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setName(uiGeneralTab.leName->text());
-}
-
-void XYIntegrationCurveDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_curve->setComment(uiGeneralTab.leComment->text());
-}
 
 void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
-	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -247,46 +260,45 @@ void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->hide();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYIntegrationCurve*>(curve)->setDataSourceType(type);
+		static_cast<XYIntegrationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
 	// disable integration orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYIntegrationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+		static_cast<XYIntegrationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYIntegrationCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYIntegrationCurve*>(curve)->setXDataColumn(column);
 
-	if (column != nullptr) {
+	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
+			const auto numberLocale = QLocale();
+			uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
+			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
 
 		// disable integration methods that need more data points
 		this->updateSettings(column);
 	}
+
+	cbXDataColumn->useCurrentIndexText(true);
+	cbXDataColumn->setInvalid(false);
 }
 
 /*!
@@ -296,35 +308,42 @@ void XYIntegrationCurveDock::updateSettings(const AbstractColumn* column) {
 	if (!column)
 		return;
 
-	//TODO
-// 	size_t n = 0;
-// 	for (int row = 0; row < column->rowCount(); row++)
-// 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
-// 			n++;
+	// TODO
+	// 	size_t n = 0;
+	// 	for (int row = 0; row < column->rowCount(); row++)
+	// 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
+	// 			n++;
 }
 void XYIntegrationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	cbYDataColumn->hidePopup();
+
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);
+
+	cbYDataColumn->useCurrentIndexText(true);
+	cbYDataColumn->setInvalid(false);
 }
 
 void XYIntegrationCurveDock::autoRangeChanged() {
 	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
 	m_integrationData.autoRange = autoRange;
 
-	if (autoRange) {
-		uiGeneralTab.lMin->setEnabled(false);
-		uiGeneralTab.sbMin->setEnabled(false);
-		uiGeneralTab.lMax->setEnabled(false);
-		uiGeneralTab.sbMax->setEnabled(false);
+	uiGeneralTab.lMin->setEnabled(!autoRange);
+	uiGeneralTab.leMin->setEnabled(!autoRange);
+	uiGeneralTab.lMax->setEnabled(!autoRange);
+	uiGeneralTab.leMax->setEnabled(!autoRange);
+	uiGeneralTab.lMinDateTime->setEnabled(!autoRange);
+	uiGeneralTab.dateTimeEditMin->setEnabled(!autoRange);
+	uiGeneralTab.lMaxDateTime->setEnabled(!autoRange);
+	uiGeneralTab.dateTimeEditMax->setEnabled(!autoRange);
 
+	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+		if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_integrationCurve->xDataColumn();
 		else {
 			if (m_integrationCurve->dataSourceCurve())
@@ -332,33 +351,42 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+			if (!m_dateTimeRange) {
+				const auto numberLocale = QLocale();
+				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
+				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
+			} else {
+				uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(xDataColumn->minimum());
+				uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(xDataColumn->maximum());
+			}
 		}
-	} else {
-		uiGeneralTab.lMin->setEnabled(true);
-		uiGeneralTab.sbMin->setEnabled(true);
-		uiGeneralTab.lMax->setEnabled(true);
-		uiGeneralTab.sbMax->setEnabled(true);
 	}
-
 }
-void XYIntegrationCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
 
-	m_integrationData.xRange.first() = xMin;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+void XYIntegrationCurveDock::xRangeMinChanged() {
+	SET_DOUBLE_FROM_LE_REC(m_integrationData.xRange.first(), uiGeneralTab.leMin);
 }
 
 void XYIntegrationCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
+	SET_DOUBLE_FROM_LE_REC(m_integrationData.xRange.last(), uiGeneralTab.leMax);
+}
 
-	m_integrationData.xRange.last() = xMax;
+void XYIntegrationCurveDock::xRangeMinDateTimeChanged(qint64 value) {
+	CONDITIONAL_LOCK_RETURN;
+
+	m_integrationData.xRange.first() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYIntegrationCurveDock::methodChanged() {
-	const auto method = (nsl_int_method_type)uiGeneralTab.cbMethod->currentIndex();
+void XYIntegrationCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
+	CONDITIONAL_LOCK_RETURN;
+
+	m_integrationData.xRange.last() = value;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYIntegrationCurveDock::methodChanged(int index) {
+	const auto method = (nsl_int_method_type)index;
 	m_integrationData.method = method;
 
 	// update absolute option
@@ -387,25 +415,32 @@ void XYIntegrationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
+		static_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Integration status: %1", m_integrationCurve->integrationResult().status));
+	Q_EMIT info(i18n("Integration status: %1", m_integrationCurve->integrationResult().status));
 	QApplication::restoreOverrideCursor();
 }
 
 void XYIntegrationCurveDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
-	//no integration possible without the x- and y-data
+	// no integration possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		hasSourceData = (aspectX && aspectY);
+		if (aspectX) {
+			cbXDataColumn->useCurrentIndexText(true);
+			cbXDataColumn->setInvalid(false);
+		}
+		if (aspectY) {
+			cbYDataColumn->useCurrentIndexText(true);
+			cbYDataColumn->setInvalid(false);
+		}
 	} else {
-		 hasSourceData = (m_integrationCurve->dataSourceCurve() != nullptr);
+		hasSourceData = (m_integrationCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
@@ -415,85 +450,54 @@ void XYIntegrationCurveDock::enableRecalculate() const {
  * show the result and details of the integration
  */
 void XYIntegrationCurveDock::showIntegrationResult() {
-	const XYIntegrationCurve::IntegrationResult& integrationResult = m_integrationCurve->integrationResult();
-	if (!integrationResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
+	showResult(m_integrationCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+}
 
-	QString str = i18n("status: %1", integrationResult.status) + "<br>";
-
-	if (!integrationResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	if (integrationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QString::number(integrationResult.elapsedTime/1000)) + "<br>";
-	else
-		str += i18n("calculation time: %1 ms", QString::number(integrationResult.elapsedTime)) + "<br>";
-
-	str += i18n("value: %1", QString::number(integrationResult.value)) + "<br>";
- 	str += "<br><br>";
-
-	uiGeneralTab.teResult->setText(str);
-
-	//enable the "recalculate"-button if the source data was changed since the last integration
-	uiGeneralTab.pbRecalculate->setEnabled(m_integrationCurve->isSourceDataChangedSinceLastRecalc());
+QString XYIntegrationCurveDock::customText() const {
+	const auto numberLocale = QLocale();
+	return i18n("value: %1", numberLocale.toString(m_integrationCurve->integrationResult().value)) + QStringLiteral("<br>");
 }
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
-//General-Tab
-void XYIntegrationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text())
-		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.leComment->text())
-		uiGeneralTab.leComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
+// General-Tab
 void XYIntegrationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 }
 
 void XYIntegrationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	cbDataSourceCurve->setAspect(curve);
 }
 
 void XYIntegrationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	cbXDataColumn->setColumn(column, m_integrationCurve->xDataColumnPath());
 }
 
 void XYIntegrationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	cbYDataColumn->setColumn(column, m_integrationCurve->yDataColumnPath());
 }
 
 void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurve::IntegrationData& integrationData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_integrationData = integrationData;
 	uiGeneralTab.cbMethod->setCurrentIndex(m_integrationData.method);
-	this->methodChanged();
+	this->methodChanged(m_integrationData.method);
 	uiGeneralTab.cbAbsolute->setChecked(m_integrationData.absolute);
 	this->absoluteChanged();
 
 	this->showIntegrationResult();
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::dataChanged() {
 	this->enableRecalculate();
+}
+
+void XYIntegrationCurveDock::curveVisibilityChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	uiGeneralTab.chkVisible->setChecked(on);
 }

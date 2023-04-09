@@ -1,41 +1,24 @@
-/***************************************************************************
-    File                 : AbstractColumn.cpp
-    Project              : LabPlot
-    Description          : Interface definition for data with column logic
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : AbstractColumn.cpp
+	Project              : LabPlot
+	Description          : Interface definition for data with column logic
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
 #include "backend/core/abstractcolumncommands.h"
-#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
+#include "backend/lib/XmlStreamReader.h"
 
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KSharedConfig>
 #include <QDateTime>
 #include <QIcon>
-#include <KLocalizedString>
 
 #include <cmath>
 
@@ -81,58 +64,196 @@
  *
  * \param name the column name (= aspect name)
  */
-AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
-	d( new AbstractColumnPrivate(this) ) {
+AbstractColumn::AbstractColumn(const QString& name, AspectType type)
+	: AbstractAspect(name, type)
+	, d(new AbstractColumnPrivate(this)) {
 }
 
 AbstractColumn::~AbstractColumn() {
-	emit aboutToBeDestroyed(this);
+	Q_EMIT aboutToBeDestroyed(this);
 	delete d;
 }
 
 QStringList AbstractColumn::dateFormats() {
-	static const QStringList dates{"yyyy-MM-dd", "yyyy/MM/dd", "dd/MM/yyyy",
-		"dd/MM/yy", "dd.MM.yyyy", "dd.MM.yy", "MM/yyyy", "dd.MM.", "yyyyMMdd"};
+	static const QStringList dates{QStringLiteral("yyyy-MM-dd"),
+								   QStringLiteral("yyyy.MM.dd"),
+								   QStringLiteral("yyyy/MM/dd"),
+								   QStringLiteral("yyyyMMdd"),
+								   QStringLiteral("dd-MM-yyyy"),
+								   QStringLiteral("dd.MM.yyyy"),
+								   QStringLiteral("dd/MM/yyyy"),
+								   QStringLiteral("ddMMyyyy"),
+								   QStringLiteral("dd-MM-yy"),
+								   QStringLiteral("dd.MM.yy"),
+								   QStringLiteral("dd/MM/yy"),
+								   QStringLiteral("ddMMyy"),
+								   QStringLiteral("MM-yyyy"),
+								   QStringLiteral("MM.yyyy"),
+								   QStringLiteral("MM/yyyy"),
+								   QStringLiteral("dd-MM"),
+								   QStringLiteral("dd.MM"),
+								   QStringLiteral("dd/MM"),
+								   QStringLiteral("ddMM")};
 
 	return dates;
 }
 
 QStringList AbstractColumn::timeFormats() {
-	static const QStringList times{"hh", "hh ap", "hh:mm", "hh:mm ap",
-		"hh:mm:ss", "hh:mm:ss.zzz", "hh:mm:ss:zzz", "mm:ss.zzz", "hhmmss"};
+	static const QStringList times{QStringLiteral("hh"),
+								   QStringLiteral("hh ap"),
+								   QStringLiteral("hh:mm"),
+								   QStringLiteral("hh:mm ap"),
+								   QStringLiteral("hh:mm:ss"),
+								   QStringLiteral("hh:mm:ss.zzz"),
+								   QStringLiteral("hh:mm:ss:zzz"),
+								   QStringLiteral("mm:ss.zzz"),
+								   QStringLiteral("hhmmss")};
 
 	return times;
 }
 
 QStringList AbstractColumn::dateTimeFormats() {
-	// any combination of date and times
 	QStringList dateTimes = dateFormats();
-	for (const auto& t : timeFormats())
-		dateTimes << t;
+	dateTimes << timeFormats();
+	// any combination of date and times
 	for (const auto& d : dateFormats())
 		for (const auto& t : timeFormats())
-			dateTimes << d + ' ' + t;
+			dateTimes << d + QLatin1Char(' ') + t;
 
 	return dateTimes;
 }
 
 /**
- * \brief Convenience method for mode-dependent icon
+ * \brief Convenience method for getting time unit string
+ * translated since used in UI
  */
-QIcon AbstractColumn::iconForMode(ColumnMode mode) {
-	switch (mode) {
-	case AbstractColumn::Numeric:
-	case AbstractColumn::Integer:
-		break;
-	case AbstractColumn::Text:
-		return QIcon::fromTheme("draw-text");
-	case AbstractColumn::DateTime:
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
-		return QIcon::fromTheme("chronometer");
+QString AbstractColumn::timeUnitString(TimeUnit unit) {
+	switch (unit) {
+	case TimeUnit::Milliseconds:
+		return i18n("Milliseconds");
+	case TimeUnit::Seconds:
+		return i18n("Seconds");
+	case TimeUnit::Minutes:
+		return i18n("Minutes");
+	case TimeUnit::Hours:
+		return i18n("Hours");
+	case TimeUnit::Days:
+		return i18n("Days");
 	}
 
-	return QIcon::fromTheme("x-shape-text");
+	return {};
+}
+
+/**
+ * \brief Convenience method for getting plot designation string
+ * translated since used in UI
+ */
+QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBrackets) {
+	QString s;
+
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	switch (d) {
+	case PlotDesignation::NoDesignation:
+		s = i18n("None");
+		break;
+	case PlotDesignation::X:
+		s = QStringLiteral("X");
+		break;
+	case PlotDesignation::Y:
+		s = QStringLiteral("Y");
+		break;
+	case PlotDesignation::Z:
+		s = QStringLiteral("Z");
+		break;
+	case PlotDesignation::XError:
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("X-Uncertainty");
+		else
+			s = i18n("X-Error");
+		break;
+	case PlotDesignation::XErrorPlus:
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("X-Uncertainty +");
+		else
+			s = i18n("X-Error +");
+		break;
+	case PlotDesignation::XErrorMinus:
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("X-Uncertainty -");
+		else
+			s = i18n("X-Error -");
+		break;
+	case PlotDesignation::YError:
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("Y-Uncertainty");
+		else
+			s = i18n("Y-Error");
+		break;
+	case PlotDesignation::YErrorPlus:
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("Y-Uncertainty +");
+		else
+			s = i18n("Y-Error +");
+		break;
+	case PlotDesignation::YErrorMinus:
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("Y-Uncertainty -");
+		else
+			s = i18n("Y-Error -");
+		break;
+	default:
+		return {};
+	}
+
+	if (withBrackets)
+		s = QStringLiteral("[") + s + QLatin1Char(']');
+
+	return s;
+}
+
+/**
+ * \brief Convenience method for getting mode string
+ * translated since used in UI
+ */
+QString AbstractColumn::columnModeString(ColumnMode mode) {
+	switch (mode) {
+	case ColumnMode::Double:
+		return i18n("Double");
+	case ColumnMode::Integer:
+		return i18n("Integer");
+	case ColumnMode::BigInt:
+		return i18n("Big Integer");
+	case ColumnMode::Text:
+		return i18n("Text");
+	case ColumnMode::DateTime:
+		return i18n("Date & Time");
+	case ColumnMode::Month:
+		return i18n("Month Names");
+	case ColumnMode::Day:
+		return i18n("Day Names");
+	}
+
+	return i18n("UNDEFINED");
+}
+
+/**
+ * \brief Convenience method for mode-dependent icon
+ */
+QIcon AbstractColumn::modeIcon(ColumnMode mode) {
+	switch (mode) {
+	case ColumnMode::Double:
+	case ColumnMode::Integer:
+	case ColumnMode::BigInt:
+		break;
+	case ColumnMode::Text:
+		return QIcon::fromTheme(QStringLiteral("draw-text"));
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day:
+		return QIcon::fromTheme(QStringLiteral("chronometer"));
+	}
+
+	return QIcon::fromTheme(QStringLiteral("x-shape-text"));
 }
 
 /**
@@ -155,7 +276,8 @@ QIcon AbstractColumn::iconForMode(ColumnMode mode) {
  * This sets the column mode and, if
  * necessary, converts it to another datatype.
  */
-void AbstractColumn::setColumnMode(AbstractColumn::ColumnMode) {}
+void AbstractColumn::setColumnMode(AbstractColumn::ColumnMode) {
+}
 
 /**
  * \brief Copy another column of the same type
@@ -164,8 +286,7 @@ void AbstractColumn::setColumnMode(AbstractColumn::ColumnMode) {}
  * of 'other' is not the same as the type of 'this'.
  * Use a filter to convert a column to another type.
  */
-bool AbstractColumn::copy(const AbstractColumn *other) {
-	Q_UNUSED(other)
+bool AbstractColumn::copy(const AbstractColumn* /*other*/) {
 	return false;
 }
 
@@ -179,11 +300,7 @@ bool AbstractColumn::copy(const AbstractColumn *other) {
  * \param destination_start first row to copy in
  * \param num_rows the number of rows to copy
  */
-bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int destination_start, int num_rows) {
-	Q_UNUSED(source)
-	Q_UNUSED(source_start)
-	Q_UNUSED(destination_start)
-	Q_UNUSED(num_rows)
+bool AbstractColumn::copy(const AbstractColumn* /*source*/, int /*source_start*/, int /*destination_start*/, int /*num_rows*/) {
 	return false;
 }
 
@@ -193,17 +310,32 @@ bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int de
  */
 
 /**
+ * \fn int AbstractColumn::availableRowCount() const
+ * \brief Return the number of available data rows
+ */
+
+/**
  * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count) {
-	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
-	exec(new SignallingUndoCommand("pre-signal", this, "rowsAboutToBeInserted", "rowsRemoved",
-	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
+	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
+	exec(new SignallingUndoCommand(QStringLiteral("pre-signal"),
+								   this,
+								   "rowsAboutToBeInserted",
+								   "rowsRemoved",
+								   Q_ARG(const AbstractColumn*, this),
+								   Q_ARG(int, before),
+								   Q_ARG(int, count)));
 
 	handleRowInsertion(before, count);
 
-	exec(new SignallingUndoCommand("post-signal", this, "rowsInserted", "rowsAboutToBeRemoved",
-	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
+	exec(new SignallingUndoCommand(QStringLiteral("post-signal"),
+								   this,
+								   "rowsInserted",
+								   "rowsAboutToBeRemoved",
+								   Q_ARG(const AbstractColumn*, this),
+								   Q_ARG(int, before),
+								   Q_ARG(int, count)));
 	endMacro();
 }
 
@@ -215,14 +347,24 @@ void AbstractColumn::handleRowInsertion(int before, int count) {
  * \brief Remove 'count' rows starting from row 'first'
  */
 void AbstractColumn::removeRows(int first, int count) {
-	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
-	exec(new SignallingUndoCommand("change signal", this, "rowsAboutToBeRemoved", "rowsInserted",
-	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
+	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
+	exec(new SignallingUndoCommand(QStringLiteral("change signal"),
+								   this,
+								   "rowsAboutToBeRemoved",
+								   "rowsInserted",
+								   Q_ARG(const AbstractColumn*, this),
+								   Q_ARG(int, first),
+								   Q_ARG(int, count)));
 
 	handleRowRemoval(first, count);
 
-	exec(new SignallingUndoCommand("change signal", this, "rowsRemoved", "rowsAboutToBeInserted",
-	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
+	exec(new SignallingUndoCommand(QStringLiteral("change signal"),
+								   this,
+								   "rowsRemoved",
+								   "rowsAboutToBeInserted",
+								   Q_ARG(const AbstractColumn*, this),
+								   Q_ARG(int, first),
+								   Q_ARG(int, count)));
 	endMacro();
 }
 
@@ -238,39 +380,42 @@ void AbstractColumn::handleRowRemoval(int first, int count) {
 /**
  * \brief Set the column plot designation
  */
-void AbstractColumn::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
-	Q_UNUSED(pd)
+void AbstractColumn::setPlotDesignation(AbstractColumn::PlotDesignation) {
 }
 
 bool AbstractColumn::isNumeric() const {
-	const AbstractColumn::ColumnMode mode = columnMode();
-	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer);
+	const auto mode = columnMode();
+	return (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt);
 }
 
 bool AbstractColumn::isPlottable() const {
-	const AbstractColumn::ColumnMode mode = columnMode();
-	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer || mode == AbstractColumn::DateTime);
+	const auto mode = columnMode();
+	return (isNumeric() || mode == ColumnMode::DateTime);
 }
 
 /**
  * \brief Clear the whole column
  */
-void AbstractColumn::clear() {}
+void AbstractColumn::clear() {
+}
 
 /**
  * \brief Convenience method for mode-independent testing of validity
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-	case AbstractColumn::Numeric:
-		return !std::isnan(valueAt(row));
-	case AbstractColumn::Integer:	// there is no invalid integer
+	case ColumnMode::Double: {
+		double value = valueAt(row);
+		return std::isfinite(value);
+	}
+	case ColumnMode::Integer: // there is no invalid integer
+	case ColumnMode::BigInt:
 		return true;
-	case AbstractColumn::Text:
+	case ColumnMode::Text:
 		return !textAt(row).isNull();
-	case AbstractColumn::DateTime:
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day:
 		return dateTimeAt(row).isValid();
 	}
 
@@ -299,7 +444,7 @@ bool AbstractColumn::isMasked(const Interval<int>& i) const {
 /**
  * \brief Return all intervals of masked rows
  */
-QVector< Interval<int> > AbstractColumn::maskedIntervals() const {
+QVector<Interval<int>> AbstractColumn::maskedIntervals() const {
 	return d->m_masking.intervals();
 }
 
@@ -307,8 +452,7 @@ QVector< Interval<int> > AbstractColumn::maskedIntervals() const {
  * \brief Clear all masking information
  */
 void AbstractColumn::clearMasks() {
-	exec(new AbstractColumnClearMasksCmd(d),
-	     "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
+	exec(new AbstractColumnClearMasksCmd(d), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
 }
 
 /**
@@ -318,15 +462,14 @@ void AbstractColumn::clearMasks() {
  * \param mask true: mask, false: unmask
  */
 void AbstractColumn::setMasked(const Interval<int>& i, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(d, i, mask),
-	     "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
+	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
 }
 
 /**
  * \brief Overloaded function for convenience
  */
 void AbstractColumn::setMasked(int row, bool mask) {
-	setMasked(Interval<int>(row,row), mask);
+	setMasked(Interval<int>(row, row), mask);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -341,9 +484,8 @@ void AbstractColumn::setMasked(int row, bool mask) {
 /**
  * \brief Return the formula associated with row 'row'
  */
-QString AbstractColumn::formula(int row) const {
-	Q_UNUSED(row);
-	return QString();
+QString AbstractColumn::formula(int /*row*/) const {
+	return {};
 }
 
 /**
@@ -359,28 +501,47 @@ QString AbstractColumn::formula(int row) const {
  * 	list << QString(interval.toString() + ": " + my_column.formula(interval.start()));
  * \endcode
  */
-QVector< Interval<int> > AbstractColumn::formulaIntervals() const {
-	return QVector< Interval<int> >();
+QVector<Interval<int>> AbstractColumn::formulaIntervals() const {
+	return {};
 }
 
 /**
  * \brief Set a formula string for an interval of rows
  */
-void AbstractColumn::setFormula(const Interval<int>& i, const QString& formula) {
-	Q_UNUSED(i) Q_UNUSED(formula)
+void AbstractColumn::setFormula(const Interval<int>&, const QString& /*formula*/) {
 }
 
 /**
  * \brief Overloaded function for convenience
  */
-void AbstractColumn::setFormula(int row, const QString& formula) {
-	Q_UNUSED(row) Q_UNUSED(formula)
+void AbstractColumn::setFormula(int /*row*/, const QString& /*formula*/) {
 }
 
 /**
  * \brief Clear all formulas
  */
-void AbstractColumn::clearFormulas() {};
+void AbstractColumn::clearFormulas() {
+}
+
+// conditional formatting
+bool AbstractColumn::hasHeatmapFormat() const {
+	return (d->m_heatmapFormat != nullptr);
+}
+
+AbstractColumn::HeatmapFormat& AbstractColumn::heatmapFormat() const {
+	if (!d->m_heatmapFormat)
+		d->m_heatmapFormat = new HeatmapFormat();
+
+	return *(d->m_heatmapFormat);
+}
+
+void AbstractColumn::setHeatmapFormat(const AbstractColumn::HeatmapFormat& format) {
+	exec(new AbstractColumnSetHeatmapFormatCmd(d, format));
+}
+
+void AbstractColumn::removeFormat() {
+	exec(new AbstractColumnRemoveHeatmapFormatCmd(d));
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //@}
@@ -396,9 +557,8 @@ void AbstractColumn::clearFormulas() {};
  *
  * Use this only when columnMode() is Text
  */
-QString AbstractColumn::textAt(int row) const {
-	Q_UNUSED(row);
-	return QString();
+QString AbstractColumn::textAt(int /*row*/) const {
+	return {};
 }
 
 /**
@@ -406,8 +566,7 @@ QString AbstractColumn::textAt(int row) const {
  *
  * Use this only when columnMode() is Text
  */
-void AbstractColumn::setTextAt(int row, const QString& new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
+void AbstractColumn::setTextAt(int /*row*/, const QString& /*new_text*/) {
 }
 
 /**
@@ -415,17 +574,23 @@ void AbstractColumn::setTextAt(int row, const QString& new_value) {
  *
  * Use this only when columnMode() is Text
  */
-void AbstractColumn::replaceTexts(int first, const QVector<QString>& new_values) {
-	Q_UNUSED(first) Q_UNUSED(new_values)
-};
+void AbstractColumn::replaceTexts(int /*first*/, const QVector<QString>& /*new_text*/) {
+}
 
+/**
+ * \brief Return the position/index in the dictionary for the text value at \param row
+ *
+ * Use this only when columnMode() is Text
+ */
+int AbstractColumn::dictionaryIndex(int /* row */) const {
+	return 0;
+}
 /**
  * \brief Return the date part of row 'row'
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-QDate AbstractColumn::dateAt(int row) const {
-	Q_UNUSED(row);
+QDate AbstractColumn::dateAt(int /*row*/) const {
 	return QDate{};
 }
 
@@ -434,18 +599,16 @@ QDate AbstractColumn::dateAt(int row) const {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::setDateAt(int row, QDate new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
-};
+void AbstractColumn::setDateAt(int /*row*/, QDate) {
+}
 
 /**
  * \brief Return the time part of row 'row'
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-QTime AbstractColumn::timeAt(int row) const {
-	Q_UNUSED(row);
-	return QTime{};
+QTime AbstractColumn::timeAt(int /*row*/) const {
+	return {};
 }
 
 /**
@@ -453,8 +616,7 @@ QTime AbstractColumn::timeAt(int row) const {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::setTimeAt(int row, QTime new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
+void AbstractColumn::setTimeAt(int /*row*/, QTime) {
 }
 
 /**
@@ -462,9 +624,8 @@ void AbstractColumn::setTimeAt(int row, QTime new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-QDateTime AbstractColumn::dateTimeAt(int row) const {
-	Q_UNUSED(row);
-	return QDateTime();
+QDateTime AbstractColumn::dateTimeAt(int /*row*/) const {
+	return {};
 }
 
 /**
@@ -472,26 +633,32 @@ QDateTime AbstractColumn::dateTimeAt(int row) const {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::setDateTimeAt(int row, const QDateTime& new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
-};
+void AbstractColumn::setDateTimeAt(int /*row*/, const QDateTime&) {
+}
 
 /**
  * \brief Replace a range of values
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
-	Q_UNUSED(first) Q_UNUSED(new_values)
-};
+void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) {
+}
 
 /**
  * \brief Return the double value in row 'row'
  *
  * Use this only when columnMode() is Numeric
  */
-double AbstractColumn::valueAt(int row) const {
-	Q_UNUSED(row);
+double AbstractColumn::doubleAt(int /*row*/) const {
+	return NAN;
+}
+
+/**
+ * \brief Return the double value in row 'row' independent of the column mode.
+ *
+ * Integer and big integer values are converted to double, NAN is returned for other modes.
+ */
+double AbstractColumn::valueAt(int /*row*/) const {
 	return NAN;
 }
 
@@ -500,17 +667,15 @@ double AbstractColumn::valueAt(int row) const {
  *
  * Use this only when columnMode() is Numeric
  */
-void AbstractColumn::setValueAt(int row, const double new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
-};
+void AbstractColumn::setValueAt(int /*row*/, const double) {
+}
 
 /**
  * \brief Replace a range of values
  *
  * Use this only when columnMode() is Numeric
  */
-void AbstractColumn::replaceValues(int first, const QVector<double>& new_values) {
-	Q_UNUSED(first) Q_UNUSED(new_values)
+void AbstractColumn::replaceValues(int /*first*/, const QVector<double>&) {
 }
 
 /**
@@ -518,8 +683,7 @@ void AbstractColumn::replaceValues(int first, const QVector<double>& new_values)
  *
  * Use this only when columnMode() is Integer
  */
-int AbstractColumn::integerAt(int row) const {
-	Q_UNUSED(row);
+int AbstractColumn::integerAt(int /*row*/) const {
 	return 42;
 }
 
@@ -528,21 +692,44 @@ int AbstractColumn::integerAt(int row) const {
  *
  * Use this only when columnMode() is Integer
  */
-void AbstractColumn::setIntegerAt(int row, const int new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
-};
+void AbstractColumn::setIntegerAt(int /*row*/, const int) {
+}
 
 /**
  * \brief Replace a range of values
  *
  * Use this only when columnMode() is Integer
  */
-void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
-	Q_UNUSED(first) Q_UNUSED(new_values)
+void AbstractColumn::replaceInteger(int /*first*/, const QVector<int>&) {
 }
 
 /**
- * Returns the properties hold by this column (no, monotonic increasing, monotonic decreasing,...)
+ * \brief Return the bigint value in row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+qint64 AbstractColumn::bigIntAt(int /*row*/) const {
+	return 42;
+}
+
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+void AbstractColumn::setBigIntAt(int /*row*/, const qint64) {
+}
+
+/**
+ * \brief Replace a range of values
+ *
+ * Use this only when columnMode() is BigInt
+ */
+void AbstractColumn::replaceBigInt(int /*first*/, const QVector<qint64>&) {
+}
+
+/**
+ * Returns the properties hold by this column (no, constant, monotonic increasing, monotonic decreasing,...)
  * Is used in XYCurve to improve the search velocity for the y value for a specific x value
  */
 AbstractColumn::Properties AbstractColumn::properties() const {
@@ -550,14 +737,28 @@ AbstractColumn::Properties AbstractColumn::properties() const {
 }
 
 /**********************************************************************/
-double AbstractColumn::minimum(int count) const {
-	Q_UNUSED(count);
+double AbstractColumn::minimum(int /*count*/) const {
+	return INFINITY;
+}
+
+double AbstractColumn::minimum(int /*startIndex*/, int /*endIndex*/) const {
+	return INFINITY;
+}
+
+double AbstractColumn::maximum(int /*count*/) const {
 	return -INFINITY;
 }
 
-double AbstractColumn::maximum(int count) const {
-	Q_UNUSED(count);
-	return INFINITY;
+double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
+	return -INFINITY;
+}
+
+bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/, int& /*end*/) const {
+	return false;
+}
+
+int AbstractColumn::indexForValue(double /*x*/) const {
+	return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -679,19 +880,20 @@ double AbstractColumn::maximum(int count) const {
 /**
  * \brief Read XML mask element
  */
-bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
-	Q_ASSERT(reader->isStartElement() && reader->name() == "mask");
+bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
+	Q_ASSERT(reader->isStartElement() && reader->name() == QLatin1String("mask"));
 
 	bool ok1, ok2;
 	int start, end;
-	start = reader->readAttributeInt("start_row", &ok1);
-	end = reader->readAttributeInt("end_row", &ok2);
+	start = reader->readAttributeInt(QStringLiteral("start_row"), &ok1);
+	end = reader->readAttributeInt(QStringLiteral("end_row"), &ok2);
 	if (!ok1 || !ok2) {
 		reader->raiseError(i18n("invalid or missing start or end row"));
 		return false;
 	}
-	setMasked(Interval<int>(start,end));
-	if (!reader->skipToEndElement()) return false;
+	setMasked(Interval<int>(start, end));
+	if (!reader->skipToEndElement())
+		return false;
 
 	return true;
 }
@@ -699,11 +901,11 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
 /**
  * \brief Write XML mask element
  */
-void AbstractColumn::XmlWriteMask(QXmlStreamWriter *writer) const {
+void AbstractColumn::XmlWriteMask(QXmlStreamWriter* writer) const {
 	for (const auto& interval : maskedIntervals()) {
-		writer->writeStartElement("mask");
-		writer->writeAttribute("start_row", QString::number(interval.start()));
-		writer->writeAttribute("end_row", QString::number(interval.end()));
+		writer->writeStartElement(QStringLiteral("mask"));
+		writer->writeAttribute(QStringLiteral("start_row"), QString::number(interval.start()));
+		writer->writeAttribute(QStringLiteral("end_row"), QString::number(interval.end()));
 		writer->writeEndElement();
 	}
 }

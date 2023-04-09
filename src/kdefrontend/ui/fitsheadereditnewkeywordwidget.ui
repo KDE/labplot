@@ -6,19 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>576</width>
-    <height>88</height>
+    <width>454</width>
+    <height>159</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="0,0,0,0,0">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Key</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="3">
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="2">
     <widget class="QLineEdit" name="leKey">
      <property name="placeholderText">
       <string>Enter search term here</string>
@@ -28,17 +21,14 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="3">
-    <widget class="QLineEdit" name="leValue">
-     <property name="placeholderText">
-      <string>Enter search term here</string>
-     </property>
-     <property name="clearButtonEnabled">
-      <bool>true</bool>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLabel" name="lComment">
+     <property name="text">
+      <string>Comment:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="4">
+   <item row="2" column="2">
     <widget class="QLineEdit" name="leComment">
      <property name="placeholderText">
       <string>Enter search term here</string>
@@ -48,22 +38,37 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="4">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Comment</string>
+   <item row="1" column="2">
+    <widget class="QLineEdit" name="leValue">
+     <property name="placeholderText">
+      <string>Enter search term here</string>
+     </property>
+     <property name="clearButtonEnabled">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="0" column="3">
-    <widget class="QLabel" name="label_2">
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="lValue">
      <property name="text">
-      <string>Value</string>
+      <string>Value:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="lKey">
+     <property name="text">
+      <string>Key:</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>leKey</tabstop>
+  <tabstop>leValue</tabstop>
+  <tabstop>leComment</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

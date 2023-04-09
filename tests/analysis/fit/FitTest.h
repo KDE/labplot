@@ -1,30 +1,13 @@
-/***************************************************************************
-    File                 : FitTest.h
-    Project              : LabPlot
-    Description          : Tests for data fitting
-    --------------------------------------------------------------------
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
- ***************************************************************************/
+/*
+	File                 : FitTest.h
+	Project              : LabPlot
+	Description          : Tests for data fitting
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef FITTEST_H
 #define FITTEST_H
 
@@ -33,14 +16,14 @@
 class FitTest : public AnalysisTest {
 	Q_OBJECT
 
-private slots:
-	//linear regression (see NIST/linear data)
+private Q_SLOTS:
+	// linear regression (see NIST/linear data)
 	void testLinearNorris();
 	void testLinearPontius();
-	void testLinearNoInt1();	// using custom model
-	void testLinearNoInt1_2();	// using polynomial model with fixed parameter
-	void testLinearNoInt2();	// using custom model
-	void testLinearNoInt2_2();	// using polynomial model with fixed parameter
+	void testLinearNoInt1(); // using custom model
+	void testLinearNoInt1_2(); // using polynomial model with fixed parameter
+	void testLinearNoInt2(); // using custom model
+	void testLinearNoInt2_2(); // using polynomial model with fixed parameter
 	void testLinearFilip();
 
 	void testLinearWampler1();
@@ -52,32 +35,32 @@ private slots:
 	void testLinearWP_OLS();
 	void testLinearR_lm2();
 
-	//non-linear regression
+	// non-linear regression
 	void testNonLinearMisra1a();
-	void testNonLinearMisra1a_2();	// second set of start values
-	void testNonLinearMisra1a_3();	// third set of start values
+	void testNonLinearMisra1a_2(); // second set of start values
+	void testNonLinearMisra1a_3(); // third set of start values
 	void testNonLinearMisra1b();
-	void testNonLinearMisra1b_2();	// second set of start values
-	void testNonLinearMisra1b_3();	// third set of start values
+	void testNonLinearMisra1b_2(); // second set of start values
+	void testNonLinearMisra1b_3(); // third set of start values
 	void testNonLinearMisra1c();
-	void testNonLinearMisra1c_2();	// second set of start values
-	void testNonLinearMisra1c_3();	// third set of start values
+	void testNonLinearMisra1c_2(); // second set of start values
+	void testNonLinearMisra1c_3(); // third set of start values
 	void testNonLinearMisra1d();
-	void testNonLinearMisra1d_2();	// second set of start values
-	void testNonLinearMisra1d_3();	// third set of start values
+	void testNonLinearMisra1d_2(); // second set of start values
+	void testNonLinearMisra1d_3(); // third set of start values
 	void testNonLinearMGH09();
-	void testNonLinearMGH09_2();	// second set of start values
-	void testNonLinearMGH09_3();	// third set of start values
+	void testNonLinearMGH09_2(); // second set of start values
+	void testNonLinearMGH09_3(); // third set of start values
 	void testNonLinearMGH10();
-	void testNonLinearMGH10_2();	// second set of start values
-	void testNonLinearMGH10_3();	// third set of start values
+	void testNonLinearMGH10_2(); // second set of start values
+	void testNonLinearMGH10_3(); // third set of start values
 	void testNonLinearRat43();
-	void testNonLinearRat43_2();	// second set of start values
-	void testNonLinearRat43_3();	// third set of start values
+	void testNonLinearRat43_2(); // second set of start values
+	void testNonLinearRat43_3(); // third set of start values
 
 	void testNonLinearMichaelis_Menten();
 
-	//fits with weights
+	// fits with weights
 	void testNonLinearGP_lcdemo();
 	void testLinearGP_PY_noerror();
 	void testLinearGP_PY_yerror_polynomial();
@@ -86,5 +69,17 @@ private slots:
 	void testLinearGP_PY_xyerror_custom();
 	void testLinearGP_PY_xyerror_custom_instrumental_weight();
 	void testLinearGP_PY_xyerror_custom_inverse_weight();
+
+	void testNonLinear_yerror_zero_bug408535();
+
+	// histogram fit
+	void testHistogramFit();
+	void testHistogramGaussianML();
+	void testHistogramExponentialML();
+	void testHistogramLaplaceML();
+	void testHistogramCauchyML();
+	void testHistogramLognormalML();
+	void testHistogramPoissonML();
+	void testHistogramBinomialML();
 };
 #endif

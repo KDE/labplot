@@ -1,31 +1,13 @@
-/***************************************************************************
-    File                 : PartMdiView.cpp
-    Project              : LabPlot
-    Description          : QMdiSubWindow wrapper for aspect views.
-    --------------------------------------------------------------------
-    Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
+/*
+	File                 : PartMdiView.cpp
+	Project              : LabPlot
+	Description          : QMdiSubWindow wrapper for aspect views.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #include "commonfrontend/core/PartMdiView.h"
 #include "backend/core/AbstractPart.h"
 #include "backend/worksheet/Worksheet.h"
@@ -42,17 +24,24 @@
  * this class automatically updates the window title when AbstractAspect::caption() is changed
  * and holds the connection to the actual data visualized in this window via the pointer to \c AbstractPart.
  */
-PartMdiView::PartMdiView(AbstractPart* part) : QMdiSubWindow(nullptr), m_part(part) {
+PartMdiView::PartMdiView(AbstractPart* part)
+	: QMdiSubWindow(nullptr)
+	, m_part(part) {
 	setWindowIcon(m_part->icon());
 	setWidget(m_part->view());
 	setAttribute(Qt::WA_DeleteOnClose);
 	handleAspectDescriptionChanged(m_part);
 
-	//resize the MDI sub window to fit the content of the view
+	// resize the MDI sub window to fit the content of the view
 	resize(m_part->view()->size());
 
 	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &PartMdiView::handleAspectDescriptionChanged);
 	connect(m_part, &AbstractPart::aspectAboutToBeRemoved, this, &PartMdiView::handleAspectAboutToBeRemoved);
+	connect(this, &QMdiSubWindow::windowStateChanged, this, &PartMdiView::slotWindowStateChanged);
+}
+
+PartMdiView::~PartMdiView() {
+	m_closing = true;
 }
 
 AbstractPart* PartMdiView::part() const {
@@ -73,7 +62,17 @@ void PartMdiView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	close();
 }
 
-void PartMdiView::closeEvent(QCloseEvent *event) {
+void PartMdiView::closeEvent(QCloseEvent* event) {
 	m_part->deleteView();
 	event->accept();
+}
+
+void PartMdiView::slotWindowStateChanged(Qt::WindowStates /*oldState*/, Qt::WindowStates newState) {
+	if (m_closing)
+		return;
+
+	if (newState.testFlag(Qt::WindowActive) || newState.testFlag(Qt::WindowMaximized))
+		m_part->registerShortcuts();
+	else
+		m_part->unregisterShortcuts();
 }

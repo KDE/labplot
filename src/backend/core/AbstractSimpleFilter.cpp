@@ -1,38 +1,20 @@
-/***************************************************************************
-    File                 : AbstractSimpleFilter.cpp
-    Project              : AbstractColumn
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007,2008 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
-    Description          : Simplified filter interface for filters with
-                           only one output port.
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : AbstractSimpleFilter.cpp
+	Project              : AbstractColumn
+	Description          : Simplified filter interface for filters with
+	only one output port.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007, 2008 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "AbstractSimpleFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 
-#include <QDateTime>
 #include <QDate>
+#include <QDateTime>
 #include <QTime>
 
 #include <KLocalizedString>
@@ -129,8 +111,9 @@
  * \brief Ctor
  */
 AbstractSimpleFilter::AbstractSimpleFilter()
-	: AbstractFilter("SimpleFilter"), m_output_column(new SimpleFilterColumn(this)) {
-	addChild(m_output_column);
+	: AbstractFilter(QStringLiteral("SimpleFilter"))
+	, m_output_column(new SimpleFilterColumn(this)) {
+	addChildFast(m_output_column);
 }
 
 /**
@@ -151,7 +134,7 @@ int AbstractSimpleFilter::outputCount() const {
  * \brief Copy plot designation of input port 0.
  */
 AbstractColumn::PlotDesignation AbstractSimpleFilter::plotDesignation() const {
-	return m_inputs.value(0) ? m_inputs.at(0)->plotDesignation() : AbstractColumn::NoDesignation;
+	return m_inputs.value(0) ? m_inputs.at(0)->plotDesignation() : AbstractColumn::PlotDesignation::NoDesignation;
 }
 
 /**
@@ -165,7 +148,7 @@ AbstractColumn::ColumnMode AbstractSimpleFilter::columnMode() const {
 	// calling this function while m_input is empty is a sign of very bad code
 	// nevertheless it will return some rather meaningless value to
 	// avoid crashes
-	return m_inputs.value(0) ? m_inputs.at(0)->columnMode() : AbstractColumn::Text;
+	return m_inputs.value(0) ? m_inputs.at(0)->columnMode() : AbstractColumn::ColumnMode::Text;
 }
 
 /**
@@ -223,6 +206,15 @@ int AbstractSimpleFilter::integerAt(int row) const {
 }
 
 /**
+ * \brief Return the bigint value in row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+qint64 AbstractSimpleFilter::bigIntAt(int row) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->bigIntAt(row) : 0;
+}
+
+/**
  * \brief Number of output rows == number of input rows
  *
  * ... unless overridden in a subclass.
@@ -232,13 +224,22 @@ int AbstractSimpleFilter::rowCount() const {
 }
 
 /**
+ * \brief Number of output rows == number of input rows
+ *
+ * ... unless overridden in a subclass.
+ */
+int AbstractSimpleFilter::availableRowCount(int max) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->availableRowCount(max) : 0;
+}
+
+/**
  * \brief Rows that will change when the given input interval changes.
  *
  * This implementation assumes a 1:1 correspondence between input and output rows, but can be
  * overridden in subclasses.
  */
-QList< Interval<int> > AbstractSimpleFilter::dependentRows(const Interval<int>& inputRange) const {
-	return QList< Interval<int> >() << inputRange;
+QList<Interval<int>> AbstractSimpleFilter::dependentRows(const Interval<int>& inputRange) const {
+	return QList<Interval<int>>() << inputRange;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -247,53 +248,47 @@ QList< Interval<int> > AbstractSimpleFilter::dependentRows(const Interval<int>& 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void AbstractSimpleFilter::inputPlotDesignationAboutToChange(const AbstractColumn*) {
-	emit m_output_column->plotDesignationAboutToChange(m_output_column);
+	Q_EMIT m_output_column->plotDesignationAboutToChange(m_output_column);
 }
 
 void AbstractSimpleFilter::inputPlotDesignationChanged(const AbstractColumn*) {
-	emit m_output_column->plotDesignationChanged(m_output_column);
+	Q_EMIT m_output_column->plotDesignationChanged(m_output_column);
 }
 
 void AbstractSimpleFilter::inputModeAboutToChange(const AbstractColumn*) {
-	emit m_output_column->dataAboutToChange(m_output_column);
+	Q_EMIT m_output_column->dataAboutToChange(m_output_column);
 }
 
 void AbstractSimpleFilter::inputModeChanged(const AbstractColumn*) {
-	emit m_output_column->dataChanged(m_output_column);
+	Q_EMIT m_output_column->dataChanged(m_output_column);
 }
 
 void AbstractSimpleFilter::inputDataAboutToChange(const AbstractColumn*) {
-	emit m_output_column->dataAboutToChange(m_output_column);
+	Q_EMIT m_output_column->dataAboutToChange(m_output_column);
 }
 
 void AbstractSimpleFilter::inputDataChanged(const AbstractColumn*) {
-	emit m_output_column->dataChanged(m_output_column);
+	Q_EMIT m_output_column->dataChanged(m_output_column);
 }
 
-void AbstractSimpleFilter::inputRowsAboutToBeInserted(const AbstractColumn * source, int before, int count) {
-	Q_UNUSED(source);
-	Q_UNUSED(count);
+void AbstractSimpleFilter::inputRowsAboutToBeInserted(const AbstractColumn* /*source*/, int before, int /*count*/) {
 	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
-		emit m_output_column->rowsAboutToBeInserted(m_output_column, output_range.start(), output_range.size());
+		Q_EMIT m_output_column->rowsAboutToBeInserted(m_output_column, output_range.start(), output_range.size());
 }
 
-void AbstractSimpleFilter::inputRowsInserted(const AbstractColumn * source, int before, int count) {
-	Q_UNUSED(source);
-	Q_UNUSED(count);
+void AbstractSimpleFilter::inputRowsInserted(const AbstractColumn* /*source*/, int before, int /*count*/) {
 	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
-		emit m_output_column->rowsInserted(m_output_column, output_range.start(), output_range.size());
+		Q_EMIT m_output_column->rowsInserted(m_output_column, output_range.start(), output_range.size());
 }
 
-void AbstractSimpleFilter::inputRowsAboutToBeRemoved(const AbstractColumn * source, int first, int count) {
-	Q_UNUSED(source);
-	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(first, first+count-1)))
-		emit m_output_column->rowsAboutToBeRemoved(m_output_column, output_range.start(), output_range.size());
+void AbstractSimpleFilter::inputRowsAboutToBeRemoved(const AbstractColumn* /*source*/, int first, int count) {
+	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(first, first + count - 1)))
+		Q_EMIT m_output_column->rowsAboutToBeRemoved(m_output_column, output_range.start(), output_range.size());
 }
 
-void AbstractSimpleFilter::inputRowsRemoved(const AbstractColumn * source, int first, int count) {
-	Q_UNUSED(source);
-	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(first, first+count-1)))
-		emit m_output_column->rowsRemoved(m_output_column, output_range.start(), output_range.size());
+void AbstractSimpleFilter::inputRowsRemoved(const AbstractColumn* /*source*/, int first, int count) {
+	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(first, first + count - 1)))
+		Q_EMIT m_output_column->rowsRemoved(m_output_column, output_range.start(), output_range.size());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -303,11 +298,11 @@ void AbstractSimpleFilter::inputRowsRemoved(const AbstractColumn * source, int f
 /**
  * \brief Return a pointer to #m_output_column on port 0 (don't override unless you really know what you are doing).
  */
-AbstractColumn *AbstractSimpleFilter::output(int port) {
+AbstractColumn* AbstractSimpleFilter::output(int port) {
 	return port == 0 ? static_cast<AbstractColumn*>(m_output_column) : nullptr;
 }
 
-const AbstractColumn *AbstractSimpleFilter::output(int port) const {
+const AbstractColumn* AbstractSimpleFilter::output(int port) const {
 	return port == 0 ? static_cast<const AbstractColumn*>(m_output_column) : nullptr;
 }
 
@@ -319,11 +314,11 @@ const AbstractColumn *AbstractSimpleFilter::output(int port) const {
 /**
  * \brief Save to XML
  */
-void AbstractSimpleFilter::save(QXmlStreamWriter * writer) const {
-	writer->writeStartElement("simple_filter");
+void AbstractSimpleFilter::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement(QStringLiteral("simple_filter"));
 	writeBasicAttributes(writer);
 	writeExtraAttributes(writer);
-	writer->writeAttribute("filter_name", metaObject()->className());
+	writer->writeAttribute(QStringLiteral("filter_name"), QLatin1String(metaObject()->className()));
 	writeCommentElement(writer);
 	writer->writeEndElement();
 }
@@ -331,8 +326,7 @@ void AbstractSimpleFilter::save(QXmlStreamWriter * writer) const {
 /**
  * \brief Override this in derived classes if they have other attributes than filter_name
  */
-void AbstractSimpleFilter::writeExtraAttributes(QXmlStreamWriter * writer) const {
-	Q_UNUSED(writer)
+void AbstractSimpleFilter::writeExtraAttributes(QXmlStreamWriter*) const {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -342,15 +336,13 @@ void AbstractSimpleFilter::writeExtraAttributes(QXmlStreamWriter * writer) const
 /**
  * \brief Load from XML
  */
-bool AbstractSimpleFilter::load(XmlStreamReader* reader, bool preview) {
-	Q_UNUSED(preview); //TODO
-
+bool AbstractSimpleFilter::load(XmlStreamReader* reader, bool /*preview*/) {
 	if (!readBasicAttributes(reader))
 		return false;
 
 	QXmlStreamAttributes attribs = reader->attributes();
-	QString str = attribs.value(reader->namespaceUri().toString(), "filter_name").toString();
-	if (str != metaObject()->className()) {
+	QString str = attribs.value(reader->namespaceUri().toString(), QStringLiteral("filter_name")).toString();
+	if (str != QLatin1String(metaObject()->className())) {
 		reader->raiseError(i18n("incompatible filter type"));
 		return false;
 	}
@@ -359,14 +351,17 @@ bool AbstractSimpleFilter::load(XmlStreamReader* reader, bool preview) {
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement()) break;
+		if (reader->isEndElement())
+			break;
 
 		if (reader->isStartElement()) {
-			if (reader->name() == "comment") {
-				if (!readCommentElement(reader)) return false;
+			if (reader->name() == QLatin1String("comment")) {
+				if (!readCommentElement(reader))
+					return false;
 			} else { // unknown element
 				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-				if (!reader->skipToEndElement()) return false;
+				if (!reader->skipToEndElement())
+					return false;
 			}
 		}
 	}
@@ -404,4 +399,8 @@ double SimpleFilterColumn::valueAt(int row) const {
 
 int SimpleFilterColumn::integerAt(int row) const {
 	return m_owner->integerAt(row);
+}
+
+qint64 SimpleFilterColumn::bigIntAt(int row) const {
+	return m_owner->bigIntAt(row);
 }

@@ -1,90 +1,77 @@
-/***************************************************************************
-    File                 : DatapickerView.cpp
-    Project              : LabPlot
-    Description          : View class for Datapicker
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : DatapickerView.cpp
+	Project              : LabPlot
+	Description          : View class for Datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
 
- ***************************************************************************/
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "DatapickerView.h"
 #include "backend/datapicker/Datapicker.h"
+#include "backend/datapicker/DatapickerCurve.h"
+#include "backend/datapicker/DatapickerImage.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/datapicker/DatapickerImage.h"
-#include "commonfrontend/workbook/WorkbookView.h"
-#include "backend/datapicker/DatapickerCurve.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
+#include "commonfrontend/workbook/WorkbookView.h"
 
 #include <QHBoxLayout>
 #include <QMenu>
+#include <QTabBar>
 #include <QTabWidget>
 
 #include <KLocalizedString>
 
 /*!
-    \class DatapickerView
-    \brief View class for Datapicker
+	\class DatapickerView
+	\brief View class for Datapicker
 
-    \ingroup commonfrontend
+	\ingroup commonfrontend
  */
-DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
-	m_tabWidget(new TabWidget(this)),
-	m_datapicker(datapicker) {
-
+DatapickerView::DatapickerView(Datapicker* datapicker)
+	: QWidget()
+	, m_tabWidget(new QTabWidget(this))
+	, m_datapicker(datapicker) {
 	m_tabWidget->setTabPosition(QTabWidget::South);
 	m_tabWidget->setTabShape(QTabWidget::Rounded);
-//     m_tabWidget->setMovable(true);
+	// m_tabWidget->setMovable(true);
 	m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-	m_tabWidget->setMinimumSize(600, 600);
 
 	auto* layout = new QHBoxLayout(this);
-	layout->setContentsMargins(0,0,0,0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(m_tabWidget);
 
-	//add tab for each children view
+	// add tab for each children view
 	m_initializing = true;
-	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)) {
+	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden)) {
 		handleAspectAdded(aspect);
-		for (const auto* child : aspect->children<AbstractAspect>()) {
+		for (const auto* child : aspect->children<AbstractAspect>())
 			handleAspectAdded(child);
-		}
 	}
 	m_initializing = false;
 
-	//SIGNALs/SLOTs
-	connect(m_datapicker, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(handleDescriptionChanged(const AbstractAspect*)));
-	connect(m_datapicker, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
-	connect(m_datapicker, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-	connect(m_datapicker, SIGNAL(datapickerItemSelected(int)), this, SLOT(itemSelected(int)));
+	if (!m_datapicker->isLoading()) {
+		const auto& size = m_datapicker->image()->view()->size();
+		resize(size.width() * 1.1, size.height() * 1.1);
+	}
 
-	connect(m_tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
-	connect(m_tabWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTabContextMenu(QPoint)));
-	connect(m_tabWidget, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
+	// SIGNALs/SLOTs
+	connect(m_datapicker, &Datapicker::aspectDescriptionChanged, this, &DatapickerView::handleDescriptionChanged);
+	connect(m_datapicker, &Datapicker::aspectAdded, this, &DatapickerView::handleAspectAdded);
+	connect(m_datapicker, &Datapicker::aspectAboutToBeRemoved, this, &DatapickerView::handleAspectAboutToBeRemoved);
+	connect(m_datapicker, &Datapicker::datapickerItemSelected, this, &DatapickerView::itemSelected);
+
+	connect(m_tabWidget, &QTabWidget::currentChanged, this, &DatapickerView::tabChanged);
+	connect(m_tabWidget, &QTabWidget::customContextMenuRequested, this, &DatapickerView::showTabContextMenu);
+	connect(m_tabWidget->tabBar(), &QTabBar::tabMoved, this, &DatapickerView::tabMoved);
 }
 
 DatapickerView::~DatapickerView() {
-	//delete all children views here, its own view will be deleted in ~AbstractPart()
-	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)) {
+	// delete all children views here, its own view will be deleted in ~AbstractPart()
+	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden)) {
 		for (const auto* child : aspect->children<AbstractAspect>()) {
 			const auto* part = dynamic_cast<const AbstractPart*>(child);
 			if (part)
@@ -97,7 +84,7 @@ DatapickerView::~DatapickerView() {
 }
 
 void DatapickerView::fillToolBar(QToolBar* toolBar) {
-	auto* view = dynamic_cast<DatapickerImageView*>(m_datapicker->image()->view());
+	auto* view = static_cast<DatapickerImageView*>(m_datapicker->image()->view());
 	view->fillToolBar(toolBar);
 }
 
@@ -118,10 +105,7 @@ int DatapickerView::currentIndex() const {
   or of a \c DatapickerImage object to \c Datapicker.
 */
 void DatapickerView::tabChanged(int index) {
-	if (m_initializing)
-		return;
-
-	if (index == -1)
+	if (m_initializing || index == -1)
 		return;
 
 	m_datapicker->setChildSelectedInView(lastSelectedIndex, false);
@@ -129,20 +113,18 @@ void DatapickerView::tabChanged(int index) {
 	lastSelectedIndex = index;
 }
 
-void DatapickerView::tabMoved(int from, int to) {
-	Q_UNUSED(from);
-	Q_UNUSED(to);
-	//TODO:
-// 	AbstractAspect* aspect = m_datapicker->child<AbstractAspect>(to);
-// 	if (aspect) {
-// 		m_tabMoving = true;
-// 		AbstractAspect* sibling = m_datapicker->child<AbstractAspect>(from);
-// 		qDebug()<<"insert: " << to << "  " <<  aspect->name() << ",  " << from << "  " << sibling->name();
-// 		aspect->remove();
-// 		m_datapicker->insertChildBefore(aspect, sibling);
-// 		qDebug()<<"inserted";
-// 		m_tabMoving = false;
-// 	}
+void DatapickerView::tabMoved(int /*from*/, int /*to*/) {
+	// TODO:
+	// 	AbstractAspect* aspect = m_datapicker->child<AbstractAspect>(to);
+	// 	if (aspect) {
+	// 		m_tabMoving = true;
+	// 		AbstractAspect* sibling = m_datapicker->child<AbstractAspect>(from);
+	// 		qDebug()<<"insert: " << to << "  " <<  aspect->name() << ",  " << from << "  " << sibling->name();
+	// 		aspect->remove();
+	// 		m_datapicker->insertChildBefore(aspect, sibling);
+	// 		qDebug()<<"inserted";
+	// 		m_tabMoving = false;
+	// 	}
 }
 
 void DatapickerView::itemSelected(int index) {
@@ -153,7 +135,7 @@ void DatapickerView::itemSelected(int index) {
 
 void DatapickerView::showTabContextMenu(QPoint point) {
 	QMenu* menu = nullptr;
-	auto* aspect = m_datapicker->child<AbstractAspect>(m_tabWidget->currentIndex(), AbstractAspect::IncludeHidden);
+	auto* aspect = m_datapicker->child<AbstractAspect>(m_tabWidget->currentIndex(), AbstractAspect::ChildIndexFlag::IncludeHidden);
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	if (spreadsheet) {
 		menu = spreadsheet->createContextMenu();
@@ -167,17 +149,27 @@ void DatapickerView::showTabContextMenu(QPoint point) {
 		menu->exec(m_tabWidget->mapToGlobal(point));
 }
 
+/*!
+ * handle the renames of child aspects to adjust the names of the tabs accordingly.
+ */
 void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
+	// nothing to do if the parent itself was renamed, we only need to handle curves and data spreadsheets.
+	if (aspect == m_datapicker || aspect == m_datapicker->image())
+		return;
+
+	// determine the child that was changed and adjust the name of the corresponding tab widget
 	int index = -1;
 	QString name;
 	if (aspect->parentAspect() == m_datapicker) {
-		//datapicker curve was renamed
-		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
-		name = aspect->name() + ": " + aspect->children<Spreadsheet>().constFirst()->name();
+		// datapicker curve was renamed
+		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::ChildIndexFlag::IncludeHidden);
+		if (index != -1)
+			name = aspect->name() + QStringLiteral(": ") + aspect->children<Spreadsheet>().constFirst()->name();
 	} else {
-		//data spreadsheet was renamed or one of its columns, which is not relevant here
-		index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect(), AbstractAspect::IncludeHidden);
-		name = aspect->parentAspect()->name() + ": " + aspect->name();
+		// data spreadsheet was renamed or one of its columns, which is not relevant here
+		index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect(), AbstractAspect::ChildIndexFlag::IncludeHidden);
+		if (index != -1)
+			name = aspect->parentAspect()->name() + QStringLiteral(": ") + aspect->name();
 	}
 
 	if (index != -1)
@@ -185,22 +177,18 @@ void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
-	int index;
-	const AbstractPart* part;
+	int index = 0;
 	QString name;
-	if (dynamic_cast<const DatapickerImage*>(aspect)) {
-		index = 0;
-		part = dynamic_cast<const AbstractPart*>(aspect);
+	const AbstractPart* part = dynamic_cast<const DatapickerImage*>(aspect);
+	if (part) {
 		name = aspect->name();
 	} else if (dynamic_cast<const DatapickerCurve*>(aspect)) {
-		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
-		const Spreadsheet* spreadsheet = dynamic_cast<const Spreadsheet*>(aspect->child<AbstractAspect>(0));
-		Q_ASSERT(spreadsheet);
-		part = dynamic_cast<const AbstractPart*>(spreadsheet);
-		name = aspect->name() + ": " + spreadsheet->name();
-	} else {
+		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::ChildIndexFlag::IncludeHidden);
+		const auto* spreadsheet = static_cast<const Spreadsheet*>(aspect->child<AbstractAspect>(0));
+		part = spreadsheet;
+		name = aspect->name() + QStringLiteral(": ") + spreadsheet->name();
+	} else
 		return;
-	}
 
 	m_tabWidget->insertTab(index, part->view(), name);
 	m_tabWidget->setTabIcon(m_tabWidget->count(), aspect->icon());
@@ -209,7 +197,7 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 void DatapickerView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* curve = dynamic_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
-		int index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
+		int index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::ChildIndexFlag::IncludeHidden);
 		m_tabWidget->removeTab(index);
 	}
 }

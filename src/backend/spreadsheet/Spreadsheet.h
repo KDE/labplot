@@ -1,50 +1,33 @@
-/***************************************************************************
-    File                 : Spreadsheet.h
-    Project              : LabPlot
-    Description          : Aspect providing a spreadsheet table with column logic
-    --------------------------------------------------------------------
-    Copyright            : (C) 2010-2017 Alexander Semke(alexander.semke@web.de)
-    Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
+/*
+	File                 : Spreadsheet.h
+	Project              : LabPlot
+	Description          : Aspect providing a spreadsheet table with column logic
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2006-2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef SPREADSHEET_H
 #define SPREADSHEET_H
 
-#include "backend/datasources/AbstractDataSource.h"
 #include "backend/core/column/ColumnStringIO.h"
+#include "backend/datasources/AbstractDataSource.h"
 
 class AbstractFileFilter;
 class SpreadsheetView;
 class SpreadsheetModel;
-template <class T> class QVector;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
 
 public:
-	explicit Spreadsheet(const QString& name, bool loading = false);
+	explicit Spreadsheet(const QString& name, bool loading = false, AspectType type = AspectType::Spreadsheet);
+	~Spreadsheet() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
+	void fillColumnContextMenu(QMenu*, Column*);
 	QWidget* view() const override;
 
 	bool exportView() const override;
@@ -52,13 +35,19 @@ public:
 	bool printPreview() const override;
 
 	void setModel(SpreadsheetModel*);
-	SpreadsheetModel* model();
+	SpreadsheetModel* model() const;
+
+	QVector<AspectType> pasteTypes() const override;
+	QVector<AspectType> dropableOn() const override;
+
+	void updateHorizontalHeader();
+	void updateLocale();
 
 	int columnCount() const;
 	int columnCount(AbstractColumn::PlotDesignation) const;
 	Column* column(int index) const;
 	Column* column(const QString&) const;
-	int rowCount() const;
+	int rowCount() const; // TODO: should be size_t?
 
 	void removeRows(int first, int count);
 	void insertRows(int before, int count);
@@ -77,17 +66,25 @@ public:
 	void setColumnSelectedInView(int index, bool selected);
 
 	// used from model to inform dock
-	void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
-	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
+	void emitRowCountChanged() {
+		emit rowCountChanged(rowCount());
+	}
+	void emitColumnCountChanged() {
+		emit columnCountChanged(columnCount());
+	}
 
-	//data import
-	int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
-		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
-	void finalizeImport(int columnOffset, int startColumn , int endColumn, int numRows,
-		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
+	// data import
+	int prepareImport(std::vector<void*>& dataContainer,
+					  AbstractFileFilter::ImportMode,
+					  int rows,
+					  int cols,
+					  QStringList colNameList,
+					  QVector<AbstractColumn::ColumnMode>,
+					  bool initializeContainer) override;
+	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 
-public slots:
+public Q_SLOTS:
 	void appendRows(int);
 	void appendRow();
 	void appendColumns(int);
@@ -101,18 +98,20 @@ public slots:
 	void clearMasks();
 
 	void moveColumn(int from, int to);
-	void sortColumns(Column* leading, QVector<Column*>, bool ascending);
+	void sortColumns(Column* leading, const QVector<Column*>&, bool ascending);
 
 private:
 	void init();
-	mutable SpreadsheetView* m_view{nullptr};
 	SpreadsheetModel* m_model{nullptr};
 
-private slots:
+protected:
+	mutable SpreadsheetView* m_view{nullptr};
+
+private Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void columnSelected(int);
 	void columnDeselected(int);
@@ -120,6 +119,8 @@ signals:
 	// for spreadsheet dock
 	void rowCountChanged(int);
 	void columnCountChanged(int);
+	void aboutToResize();
+	void resizeFinished();
 };
 
 #endif

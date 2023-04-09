@@ -1,55 +1,41 @@
-/***************************************************************************
-File                 : FITSHeaderEditNewKeywordDialog.cpp
-Project              : LabPlot
-Description          : Widget for adding new keyword in the FITS edit widget
---------------------------------------------------------------------
-Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+/*
+	File                 : FITSHeaderEditNewKeywordDialog.cpp
+	Project              : LabPlot
+	Description          : Widget for adding new keyword in the FITS edit widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2017 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2016-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "FITSHeaderEditNewKeywordDialog.h"
 
-#include <QCompleter>
+#include <KMessageBox>
+#include <KSharedConfig>
+#include <KWindowConfig>
+#include <kcoreaddons_version.h>
 
+#include <QCompleter>
 #include <QDialog>
-#include <QMessageBox>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QWindow>
 
-#include <KMessageBox>
-
-#define FLEN_KEYWORD   75  /* max length of a keyword (HIERARCH convention) */
-#define FLEN_VALUE     71  /* max length of a keyword value string */
-#define FLEN_COMMENT   73  /* max length of a keyword comment string */
+#define FLEN_KEYWORD 75 /* max length of a keyword (HIERARCH convention) */
+#define FLEN_VALUE 71 /* max length of a keyword value string */
+#define FLEN_COMMENT 73 /* max length of a keyword comment string */
 
 /*! \class FITSHeaderEditNewKeywordDialog
  * \brief Dialog class for adding new keywords to the FITSHeaderEditDialog's table.
  * \since 2.4.0
  * \ingroup widgets
  */
-FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) : QDialog(parent) {
+FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget* parent)
+	: QDialog(parent) {
 	ui.setupUi(this);
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-	ui.gridLayout->addWidget(btnBox);
+	ui.gridLayout->addWidget(btnBox, 3, 1, 1, 2);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
@@ -58,9 +44,9 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 	connect(btnBox, &QDialogButtonBox::clicked, this, &FITSHeaderEditNewKeywordDialog::slotButtonClicked);
 
 	setWindowTitle(i18nc("@title:window", "Specify the New Keyword"));
-	setWindowIcon(QIcon::fromTheme("document-new"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-new")));
 
-	QCompleter* keyCompleter = new QCompleter(FITSFilter::standardKeywords(), this);
+	auto* keyCompleter = new QCompleter(FITSFilter::standardKeywords(), this);
 	keyCompleter->setCaseSensitivity(Qt::CaseInsensitive);
 	ui.leKey->setCompleter(keyCompleter);
 
@@ -71,6 +57,20 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 	ui.leKey->setMaxLength(FLEN_KEYWORD);
 	ui.leValue->setMaxLength(FLEN_VALUE);
 	ui.leComment->setMaxLength(FLEN_COMMENT);
+
+	// restore saved settings if available
+	create(); // ensure there's a window created
+	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditNewKeywordDialog");
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
+}
+
+FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditNewKeywordDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 /*!
@@ -82,11 +82,18 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
 		m_newKeyword = FITSFilter::Keyword(ui.leKey->text(), ui.leValue->text(), ui.leComment->text());
 		return QMessageBox::Ok;
 	} else {
-		const int yesNo = KMessageBox::warningYesNo(this, i18n("Cannot add new keyword without key, would you like to try again?"),
-		                  i18n("Cannot add empty key"));
-		if (yesNo == KMessageBox::No)
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		auto status = KMessageBox::warningTwoActions(this,
+													 i18n("Cannot add new keyword without key, would you like to try again?"),
+													 i18n("Cannot add empty key"),
+													 KStandardGuiItem::ok(),
+													 KStandardGuiItem::cancel());
+#else
+		auto status = KMessageBox::warningYesNo(this, i18n("Cannot add new keyword without key, would you like to try again?"), i18n("Cannot add empty key"));
+#endif
+		if (status == KMessageBox::No)
 			return QMessageBox::Cancel;
-		return yesNo;
+		return status;
 	}
 }
 

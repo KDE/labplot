@@ -1,38 +1,18 @@
-/***************************************************************************
-    File                 : PluginManager.cpp
-    Project              : LabPlot/SciDAVis
-    Description          : This class manages all plugins.
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : PluginManager.cpp
+	Project              : LabPlot/SciDAVis
+	Description          : This class manages all plugins.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs*gmx.net  (use @ for *)>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "backend/core/plugin/PluginManager.h"
 #include "backend/core/plugin/PluginLoader.h"
 #include <QPluginLoader>
+#include <QSet>
 #include <QSettings>
 #include <QtDebug>
-#include <QSet>
 
 /**
  * \class PluginManager
@@ -47,9 +27,9 @@
    ...
    // somewhere else in the application
    foreach(QObject *plugin, PluginManager::plugins()) {
-     MyInterface *myObject = qobject_cast<MyInterface *>(plugin);
-        if (myObject)
-           // found a suitable plugin
+	 MyInterface *myObject = qobject_cast<MyInterface *>(plugin);
+		if (myObject)
+		   // found a suitable plugin
    }
    \endcode
  *
@@ -63,8 +43,8 @@
 
 PluginManager::PluginManager() = default;
 
-QList<PluginLoader *> PluginManager::m_loadedPlugins;
-QList<PluginLoader *> PluginManager::m_pluginsWithErrors;
+QList<PluginLoader*> PluginManager::m_loadedPlugins;
+QList<PluginLoader*> PluginManager::m_pluginsWithErrors;
 QObjectList PluginManager::m_staticPlugins;
 bool PluginManager::m_loaded = false;
 QObjectList PluginManager::m_allPlugins;
@@ -76,24 +56,20 @@ QObjectList PluginManager::m_allPlugins;
  * \return True, if the plugin was successfully loaded. Even if false is returned,
  * the path is still appended to the settings.
  */
-bool PluginManager::enablePlugin(const QString &absolutePath) {
+bool PluginManager::enablePlugin(const QString& absolutePath) {
 	loadAll();
 
 	// save the plugin in the settings
-	//TODO
-// 	QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
-// 	settings.beginGroup("PluginManager");
-// 	QStringList pluginPaths = settings.value("enabledPlugins", QStringList()).toStringList();
-// #if QT_VERSION >= 0x040500
-// 	pluginPaths.removeDuplicates();
-// #else
-// 	pluginPaths = QSet<QString>::fromList(pluginPaths).toList();
-// #endif
-// 	if (!pluginPaths.contains(absolutePath)) {
-// 		pluginPaths << absolutePath;
-// 		settings.setValue("enabledPlugins", pluginPaths);
-// 	}
-// 	settings.endGroup();
+	// TODO
+	// 	QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
+	// 	settings.beginGroup("PluginManager");
+	// 	QStringList pluginPaths = settings.value("enabledPlugins", QStringList()).toStringList();
+	// 	pluginPaths.removeDuplicates();
+	// 	if (!pluginPaths.contains(absolutePath)) {
+	// 		pluginPaths << absolutePath;
+	// 		settings.setValue("enabledPlugins", pluginPaths);
+	// 	}
+	// 	settings.endGroup();
 
 	// check whether it's already loaded
 	bool result = true;
@@ -106,7 +82,7 @@ bool PluginManager::enablePlugin(const QString &absolutePath) {
 	}
 
 	if (!alreadyLoaded) {
-		PluginLoader *pluginLoader = nullptr;
+		PluginLoader* pluginLoader = nullptr;
 		// check whether a loader for this plugin already exists
 		for (auto* loader : m_pluginsWithErrors) {
 			if (loader->fileName() == absolutePath) {
@@ -138,25 +114,21 @@ bool PluginManager::enablePlugin(const QString &absolutePath) {
  * \param rightNow Set this to true if you want to unload the plugin immediately (which is not
  * always a good idea). The default behavior is to disable the plugin for the next program startup.
  */
-void PluginManager::disablePlugin(const QString &absolutePath, bool rightNow) {
+void PluginManager::disablePlugin(const QString& absolutePath, bool rightNow) {
 	loadAll();
 
 	// remove the plugin from the settings
-	//TODO
-// 	QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
-// 	settings.beginGroup("PluginManager");
-// 	QStringList pluginPaths = settings.value("enabledPlugins", QStringList()).toStringList();
-// #if QT_VERSION >= 0x040500
-// 	pluginPaths.removeDuplicates();
-// #else
-// 	pluginPaths = QSet<QString>::fromList(pluginPaths).toList();
-// #endif
-// 	int index = pluginPaths.indexOf(absolutePath);
-// 	if (index > -1) {
-// 		pluginPaths.removeAt(index);
-// 		settings.setValue("enabledPlugins", pluginPaths);
-// 	}
-// 	settings.endGroup();
+	// TODO
+	// 	QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
+	// 	settings.beginGroup("PluginManager");
+	// 	QStringList pluginPaths = settings.value("enabledPlugins", QStringList()).toStringList();
+	// 	pluginPaths.removeDuplicates();
+	// 	int index = pluginPaths.indexOf(absolutePath);
+	// 	if (index > -1) {
+	// 		pluginPaths.removeAt(index);
+	// 		settings.setValue("enabledPlugins", pluginPaths);
+	// 	}
+	// 	settings.endGroup();
 
 	// remove the related loader if it is in the list of failed loaders
 	for (auto* loader : m_pluginsWithErrors) {
@@ -202,25 +174,21 @@ void PluginManager::loadAll() {
 		m_staticPlugins = QPluginLoader::staticInstances();
 		m_allPlugins << m_staticPlugins;
 
-		//TODO:
-// 		QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
-// 		settings.beginGroup("PluginManager");
-// 		QStringList plugins = settings.value("enabledPlugins", QStringList()).toStringList();
-// #if QT_VERSION >= 0x040500
-// 		plugins.removeDuplicates();
-// #else
-// 		plugins = QSet<QString>::fromList(plugins).toList();
-// #endif
-// 		foreach (const QString& plugin, plugins) {
-// 			PluginLoader *pluginLoader = new PluginLoader(plugin);
-// 			if (!pluginLoader->load()) {
-// 				m_pluginsWithErrors << pluginLoader;
-// 			} else {
-// 				m_loadedPlugins << pluginLoader;
-// 				m_allPlugins << pluginLoader->instance();
-// 			}
-// 		}
-// 		settings.endGroup();
+		// TODO:
+		// 		QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
+		// 		settings.beginGroup("PluginManager");
+		// 		QStringList plugins = settings.value("enabledPlugins", QStringList()).toStringList();
+		// 		plugins.removeDuplicates();
+		// 		foreach (const QString& plugin, plugins) {
+		// 			PluginLoader *pluginLoader = new PluginLoader(plugin);
+		// 			if (!pluginLoader->load()) {
+		// 				m_pluginsWithErrors << pluginLoader;
+		// 			} else {
+		// 				m_loadedPlugins << pluginLoader;
+		// 				m_allPlugins << pluginLoader->instance();
+		// 			}
+		// 		}
+		// 		settings.endGroup();
 
 		m_loaded = true;
 	}
@@ -249,7 +217,7 @@ QStringList PluginManager::failedPluginFileNames() {
 /**
  * \brief Get the error messages of a plugin that failed to load.
  */
-QString PluginManager::errorOfPlugin(const QString &fileName) {
+QString PluginManager::errorOfPlugin(const QString& fileName) {
 	QString result;
 	for (auto* loader : m_pluginsWithErrors)
 		if (loader->fileName() == fileName)
@@ -260,7 +228,7 @@ QString PluginManager::errorOfPlugin(const QString &fileName) {
 /**
  * \brief Get the plugin root instance for a given file name.
  */
-QObject* PluginManager::instanceOfPlugin(const QString &fileName) {
+QObject* PluginManager::instanceOfPlugin(const QString& fileName) {
 	QObject* result = nullptr;
 	for (auto* loader : m_loadedPlugins)
 		if (loader->fileName() == fileName)
@@ -278,7 +246,5 @@ void PluginManager::printAll() {
 	for (auto* loader : m_pluginsWithErrors) {
 		qDebug() << loader->statusString();
 	}
-
 }
 #endif
-

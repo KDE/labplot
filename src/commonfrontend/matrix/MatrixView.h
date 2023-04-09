@@ -1,39 +1,18 @@
-/***************************************************************************
-    File                 : MatrixView.cpp
-    Project              : LabPlot
-    Description          : View class for Matrix
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : MatrixView.cpp
+	Project              : LabPlot
+	Description          : View class for Matrix
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef MATRIXVIEW_H
 #define MATRIXVIEW_H
 
+#include <QLocale>
 #include <QWidget>
-#include <QList>
-#include "backend/datasources/filters/FITSFilter.h"
-#include "kdefrontend/widgets/FITSHeaderEditWidget.h"
 
 class Matrix;
 class MatrixModel;
@@ -46,7 +25,7 @@ class QStackedWidget;
 class QTableView;
 
 class MatrixView : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit MatrixView(Matrix*);
@@ -70,24 +49,29 @@ public:
 	void resizeHeaders();
 	void adjustHeaders();
 	void exportToFile(const QString& path, const QString& separator, QLocale::Language) const;
-	void exportToLaTeX(const QString&, const bool verticalHeaders, const bool horizontalHeaders,
-                           const bool latexHeaders, const bool gridLines,
-                           const bool entire, const bool captions) const;
+	void exportToLaTeX(const QString&,
+					   const bool verticalHeaders,
+					   const bool horizontalHeaders,
+					   const bool latexHeaders,
+					   const bool gridLines,
+					   const bool entire,
+					   const bool captions) const;
 	void exportToFits(const QString& fileName, const int exportTo) const;
-public slots:
-	void createContextMenu(QMenu*) const;
+
+public Q_SLOTS:
+	void createContextMenu(QMenu*);
 	void print(QPrinter*) const;
 
 private:
 	void init();
 	void initActions();
 	void initMenus();
-	void connectActions();
 	void goToCell(int row, int col);
 	void updateImage();
 
 	bool eventFilter(QObject*, QEvent*) override;
 	void keyPressEvent(QKeyEvent*) override;
+	void wheelEvent(QWheelEvent*) override;
 
 	QStackedWidget* m_stackedWidget;
 	QTableView* m_tableView;
@@ -96,8 +80,9 @@ private:
 	MatrixModel* m_model;
 	QImage m_image;
 	bool m_imageIsDirty{true};
+	double m_zoomFactor{1.};
 
-	//Actions
+	// Actions
 	QAction* action_cut_selection;
 	QAction* action_copy_selection;
 	QAction* action_paste_into_selection;
@@ -139,14 +124,21 @@ private:
 	QAction* action_fill_function;
 	QAction* action_fill_const;
 
-	//Menus
-	QMenu* m_selectionMenu;
-	QMenu* m_columnMenu;
-	QMenu* m_rowMenu;
-	QMenu* m_matrixMenu;
-	QMenu* m_headerFormatMenu;
+	QAction* zoomInAction{nullptr};
+	QAction* zoomOutAction{nullptr};
+	QAction* zoomOriginAction{nullptr};
 
-private slots:
+	// Menus
+	QMenu* m_selectionMenu{nullptr};
+	QMenu* m_columnMenu{nullptr};
+	QMenu* m_rowMenu{nullptr};
+	QMenu* m_headerFormatMenu{nullptr};
+	QMenu* m_generateDataMenu{nullptr};
+	QMenu* m_manipulateDataMenu{nullptr};
+	QMenu* m_viewMenu{nullptr};
+	QMenu* m_zoomMenu{nullptr};
+
+private Q_SLOTS:
 	void goToCell();
 	void advanceCell();
 	void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
@@ -178,6 +170,8 @@ private slots:
 
 	void showColumnStatistics();
 	void showRowStatistics();
+
+	void changeZoom(QAction*);
 };
 
 #endif

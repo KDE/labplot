@@ -1,0 +1,12 @@
+c++ code:
+
+binary_motion.cpp and binary_motion_binary.cpp simulate Brownian motion and write the output to a file in ASCII or in the binary format, respectively.
+To change the number of particle paths as well as the number of iterations adjust the corresponding parameters in the code.
+To compile, use
+* g++ brownian_motion.cpp -lgsl -lgslcblas -lm -o brownian_motion
+* g++ brownian_motion_binary.cpp -lgsl -lgslcblas -lm -o brownian_motion_binary
+
+
+
+python scripts:
+TODO: document the scripts

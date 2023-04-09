@@ -1,76 +1,98 @@
-/***************************************************************************
-    File                 : TextLabel.h
-    Project              : LabPlot
-    Description          : Text label supporting reach text and latex formatting
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : TextLabel.h
+	Project              : LabPlot
+	Description          : Text label supporting reach text and latex formatting
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
 #include "backend/lib/macros.h"
-#include "tools/TeXRenderer.h"
 #include "backend/worksheet/WorksheetElement.h"
+#include "tools/TeXRenderer.h"
 
-#include <QPen>
+#include <QTextEdit>
 
 class QBrush;
 class QFont;
 class TextLabelPrivate;
+class CartesianPlot;
+class QPen;
 
 class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
+	enum class Type { General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel };
+	enum class Mode { Text, LaTeX, Markdown };
+	enum class BorderShape {
+		NoBorder,
+		Rect,
+		Ellipse,
+		RoundSideRect,
+		RoundCornerRect,
+		InwardsRoundCornerRect,
+		DentedBorderRect,
+		Cuboid,
+		UpPointingRectangle,
+		DownPointingRectangle,
+		LeftPointingRectangle,
+		RightPointingRectangle
+	};
 
-	enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
-	enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
-
-	enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
-	enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
-
-	enum BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
-			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
-
+	// The text is always in HMTL format
 	struct TextWrapper {
-		TextWrapper() {}
-		TextWrapper(const QString& t, bool b) : text(t), teXUsed(b) {}
-		TextWrapper(const QString& t) : text(t) {}
+		TextWrapper() = default;
+		TextWrapper(const QString& text, TextLabel::Mode mode, bool html)
+			: mode(mode) {
+			if (mode == TextLabel::Mode::Text)
+				this->text = createHtml(text, html);
+			else // LaTeX and markdown use plain string
+				this->text = text;
+		}
+		TextWrapper(const QString& text)
+			: mode(TextLabel::Mode::Text) {
+			// assume text is not HTML yet
+			this->text = createHtml(text, false);
+		}
+		TextWrapper(const QString& text, bool html, QString& placeholder)
+			: allowPlaceholder(true)
+			, textPlaceholder(placeholder) {
+			this->text = createHtml(text, html);
+		}
+		TextWrapper(const QString& text, TextLabel::Mode mode, bool html, bool allowPlaceholder)
+			: allowPlaceholder(allowPlaceholder) {
+			TextWrapper(text, mode, html);
+		}
+		QString createHtml(QString text, bool isHtml) {
+			if (isHtml || text.isEmpty())
+				return text;
+
+			QTextEdit te(text);
+			// the html does not contain any colors!
+			return te.toHtml();
+		}
+
+		bool isHtml() const {
+			return text.startsWith(QStringLiteral("<!DOCTYPE HTML"));
+		}
 
 		QString text;
-		bool teXUsed{false};
+		TextLabel::Mode mode{TextLabel::Mode::Text};
+		/*! Determines if the Textlabe can have a placeholder or not.
+		 * Depending on this variable in the LabelWidget between
+		 * the text and the placeholder text can be switched
+		 */
+		bool allowPlaceholder{false};
+		QString textPlaceholder{QLatin1String("")}; // text with placeholders
 	};
 
-	struct PositionWrapper {
-		QPointF point;
-		HorizontalPosition horizontalPosition;
-		VerticalPosition verticalPosition;
-	};
-
-	explicit TextLabel(const QString& name, Type type = General);
+	explicit TextLabel(const QString& name, Type = Type::General);
+	TextLabel(const QString& name, CartesianPlot*, Type = Type::General);
 	~TextLabel() override;
 
 	Type type() const;
@@ -87,36 +109,43 @@ public:
 	CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text)
 	BASIC_D_ACCESSOR_DECL(QColor, fontColor, FontColor)
 	BASIC_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
+	CLASS_D_ACCESSOR_DECL(TextWrapper, textPlaceholder, PlaceholderText)
+	BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor)
+	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
-	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
-	void setPosition(QPointF);
-	void setPositionInvalid(bool);
-	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
-	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
-	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
-	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape);
+	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape)
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
-	void setVisible(bool on) override;
-	bool isVisible() const override;
-	void setPrinting(bool) override;
+	void setZoomFactor(double);
+	QRectF size();
+	QPointF findNearestGluePoint(QPointF scenePoint);
+	int gluePointCount();
+	struct GluePoint {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0)) // we need a default constructor for QVector
+		GluePoint() = default;
+#endif
+		GluePoint(QPointF point, QString name)
+			: point(point)
+			, name(name) {
+		}
+		QPointF point;
+		QString name;
+	};
+
+	GluePoint gluePointAt(int index);
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	typedef TextLabelPrivate Private;
 
-private slots:
+private Q_SLOTS:
 	void updateTeXImage();
 
-	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChanged();
-
 protected:
-	TextLabelPrivate* const d_ptr;
-	TextLabel(const QString& name, TextLabelPrivate* dd, Type type = General);
+	TextLabel(const QString& name, TextLabelPrivate*, Type = Type::General);
 
 private:
 	Q_DECLARE_PRIVATE(TextLabel)
@@ -125,23 +154,18 @@ private:
 	Type m_type;
 	QAction* visibilityAction{nullptr};
 
-signals:
+Q_SIGNALS:
 	void textWrapperChanged(const TextLabel::TextWrapper&);
 	void teXFontSizeChanged(const int);
 	void teXFontChanged(const QFont);
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
-	void positionChanged(const TextLabel::PositionWrapper&);
-	void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
-	void verticalAlignmentChanged(TextLabel::VerticalAlignment);
-	void rotationAngleChanged(qreal);
-	void visibleChanged(bool);
+
 	void borderShapeChanged(TextLabel::BorderShape);
 	void borderPenChanged(QPen&);
 	void borderOpacityChanged(float);
 
-	void teXImageUpdated(bool);
-	void changed();
+	void teXImageUpdated(const TeXRenderer::Result&);
 };
 
 #endif

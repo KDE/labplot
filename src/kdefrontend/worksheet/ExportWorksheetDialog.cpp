@@ -1,45 +1,35 @@
-/***************************************************************************
-    File                 : ExportWorksheetDialog.cpp
-    Project              : LabPlot
-    Description          : export worksheet dialog
-    --------------------------------------------------------------------
-    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : ExportWorksheetDialog.cpp
+	Project              : LabPlot
+	Description          : export worksheet dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "ExportWorksheetDialog.h"
+#include "commonfrontend/worksheet/WorksheetView.h"
+#include "kdefrontend/GuiTools.h"
 #include "ui_exportworksheetwidget.h"
 
-#include <QCompleter>
-#include <QDesktopWidget>
-#include <QDirModel>
-#include <QFileDialog>
-#include <QWindow>
-
-#include <QDialogButtonBox>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
 #include <KWindowConfig>
+#include <kcoreaddons_version.h>
+
+#include <QCompleter>
+#include <QDesktopWidget>
+// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QFileSystemModel>
+#else
+#include <QDirModel>
+#endif
+#include <QDialogButtonBox>
+#include <QFileDialog>
+#include <QWindow>
 
 /*!
 	\class ExportWorksheetDialog
@@ -48,10 +38,12 @@
 	\ingroup kdefrontend
 */
 
-ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ExportWorksheetWidget()) {
+ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
+	: QDialog(parent)
+	, ui(new Ui::ExportWorksheetWidget()) {
 	ui->setupUi(this);
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	m_showOptionsButton = new QPushButton;
 
 	connect(btnBox, &QDialogButtonBox::clicked, this, &ExportWorksheetDialog::slotButtonClicked);
@@ -61,18 +53,34 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
+
+	m_cancelButton->setToolTip(i18n("Close this dialog without exporting."));
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	ui->leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
+#else
 	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
+#endif
 
 	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
 
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("application-pdf")), QLatin1String("Portable Data Format (PDF)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")), QLatin1String("Scalable Vector Graphics (SVG)"));
+	// see WorksheetView::ExportFormat
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("application-pdf")), i18n("Portable Data Format (PDF)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")), i18n("Scalable Vector Graphics (SVG)"));
 	ui->cbFormat->insertSeparator(3);
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), QLatin1String("Portable Network Graphics (PNG)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-png")), i18n("Portable Network Graphics (PNG)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-jpeg")), i18n("Joint Photographic Experts Group (JPG)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-bmp")), i18n("Windows Bitmap (BMP)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("Portable Pixmap (PPM)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XBM)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XPM)"));
 
-	ui->cbExportArea->addItem(i18n("Object's bounding box"));
-	ui->cbExportArea->addItem(i18n("Current selection"));
-	ui->cbExportArea->addItem(i18n("Complete worksheet"));
+	ui->cbExportTo->addItem(i18n("File"));
+	ui->cbExportTo->addItem(i18n("Clipboard"));
+
+	ui->cbExportArea->addItem(i18n("Object's Bounding Box"));
+	ui->cbExportArea->addItem(i18n("Current Selection"));
+	ui->cbExportArea->addItem(i18n("Complete Worksheet"));
 
 	ui->cbResolution->addItem(i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(QApplication::desktop()->physicalDpiX())));
 	ui->cbResolution->addItem(QLatin1String("100"));
@@ -82,7 +90,8 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	ui->cbResolution->addItem(QLatin1String("600"));
 	ui->cbResolution->setValidator(new QIntValidator(ui->cbResolution));
 
-	connect(ui->cbFormat, static_cast<void (QComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &ExportWorksheetDialog::formatChanged );
+	connect(ui->cbFormat, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ExportWorksheetDialog::formatChanged);
+	connect(ui->cbExportTo, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ExportWorksheetDialog::exportToChanged);
 	connect(ui->bOpen, &QPushButton::clicked, this, &ExportWorksheetDialog::selectFile);
 	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportWorksheetDialog::fileNameChanged);
 	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportWorksheetDialog::toggleOptions);
@@ -91,15 +100,15 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	setWindowTitle(i18nc("@title:window", "Export Worksheet"));
 	setWindowIcon(QIcon::fromTheme(QLatin1String("document-export-database")));
 
-	//restore saved settings if available
+	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
+	ui->cbExportTo->setCurrentIndex(conf.readEntry("ExportTo", 0));
 	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 0));
 	ui->chkExportBackground->setChecked(conf.readEntry("Background", true));
 	ui->cbResolution->setCurrentIndex(conf.readEntry("Resolution", 0));
 	m_showOptions = conf.readEntry("ShowOptions", true);
-	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
-				m_showOptionsButton->setText(i18n("Show Options"));
+	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) : m_showOptionsButton->setText(i18n("Show Options"));
 	ui->gbOptions->setVisible(m_showOptions);
 
 	create(); // ensure there's a window created
@@ -111,9 +120,10 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 }
 
 ExportWorksheetDialog::~ExportWorksheetDialog() {
-	//save current settings
+	// save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
+	conf.writeEntry("ExportTo", ui->cbExportTo->currentIndex());
 	conf.writeEntry("Area", ui->cbExportArea->currentIndex());
 	conf.writeEntry("Background", ui->chkExportBackground->isChecked());
 	conf.writeEntry("Resolution", ui->cbResolution->currentIndex());
@@ -122,22 +132,43 @@ ExportWorksheetDialog::~ExportWorksheetDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
+/*!
+ * sets the current project file name. If not empty, the path of the project file
+ * is determined that is then used as the default location for the exported file.
+ */
+void ExportWorksheetDialog::setProjectFileName(const QString& name) {
+	if (name.isEmpty())
+		return;
+
+	QFileInfo fi(name);
+	m_projectPath = fi.dir().canonicalPath();
+}
+
 void ExportWorksheetDialog::setFileName(const QString& name) {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-	QString dir = conf.readEntry("LastDir", "");
-	if (dir.isEmpty()) dir = QDir::homePath();
-	ui->leFileName->setText(dir + QDir::separator() +  name);
-	this->formatChanged(ui->cbFormat->currentIndex());
+	if (m_projectPath.isEmpty()) {
+		// no project folder is available (yet), use the last used directory in this dialog
+		KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+		QString dir = conf.readEntry("LastDir", "");
+		if (dir.isEmpty())
+			dir = QDir::homePath();
+		ui->leFileName->setText(dir + QLatin1String("/") + name);
+	} else
+		ui->leFileName->setText(m_projectPath + QLatin1String("/") + name);
+
+	formatChanged(ui->cbFormat->currentIndex());
+	exportToChanged(ui->cbExportTo->currentIndex());
 }
 
 QString ExportWorksheetDialog::path() const {
-	return ui->leFileName->text();
+	if (ui->cbExportTo->currentIndex() == 0)
+		return ui->leFileName->text();
+	return {};
 }
 
 WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const {
 	int index = ui->cbFormat->currentIndex();
 
-	//we have a separator in the format combobox at the 3th position -> skip it
+	// we have a separator in the format combobox at the 3th position -> skip it
 	if (index > 2)
 		index--;
 
@@ -162,29 +193,32 @@ int ExportWorksheetDialog::exportResolution() const {
 void ExportWorksheetDialog::slotButtonClicked(QAbstractButton* button) {
 	if (button == m_okButton)
 		okClicked();
-	else if (button == m_cancelButton) {
-	    reject();
-	}
+	else if (button == m_cancelButton)
+		reject();
 }
 
-//SLOTS
+// SLOTS
 void ExportWorksheetDialog::okClicked() {
-	if ( QFile::exists(ui->leFileName->text()) ) {
-		int r = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-		if (r == KMessageBox::No)
+	if (ui->cbExportTo->currentIndex() == 0 /*export to file*/
+		&& m_askOverwrite && QFile::exists(ui->leFileName->text())) {
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		int status = KMessageBox::questionTwoActions(this,
+													 i18n("The file already exists. Do you really want to overwrite it?"),
+													 i18n("Export"),
+													 KStandardGuiItem::overwrite(),
+													 KStandardGuiItem::cancel());
+#else
+		int status = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
+#endif
+		if (status == KMessageBox::No)
 			return;
 	}
 
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-	conf.writeEntry("Format", ui->cbFormat->currentIndex());
-	conf.writeEntry("Area", ui->cbExportArea->currentIndex());
-	conf.writeEntry("Resolution", ui->cbResolution->currentIndex());
-
-	QString path = ui->leFileName->text();
+	const auto& path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
-		ui->leFileName->setText(path);
-		int pos = path.lastIndexOf(QDir::separator());
+		int pos = path.lastIndexOf(QLatin1String("/"));
 		if (pos != -1) {
 			QString newDir = path.left(pos);
 			if (newDir != dir)
@@ -201,12 +235,11 @@ void ExportWorksheetDialog::okClicked() {
 void ExportWorksheetDialog::toggleOptions() {
 	m_showOptions = !m_showOptions;
 	ui->gbOptions->setVisible(m_showOptions);
-	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
-			m_showOptionsButton->setText(i18n("Show Options"));
-	//resize the dialog
-	resize(layout()->minimumSize());
+	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) : m_showOptionsButton->setText(i18n("Show Options"));
+
+	// resize the dialog
 	layout()->activate();
-	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
+	resize(QSize(this->width(), 0).expandedTo(minimumSize()));
 }
 
 /*!
@@ -216,22 +249,54 @@ void ExportWorksheetDialog::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	const QString dir = conf.readEntry("LastDir", "");
 
+	DEBUG(Q_FUNC_INFO << ", format" << ui->cbFormat->currentIndex())
 	QString format;
-	if (ui->cbFormat->currentIndex() == 0)
-		format = i18n("Portable Data Format (PDF) (*.pdf *.PDF)");
-	else if (ui->cbFormat->currentIndex() == 1)
-		format = i18n("Scalable Vector Graphics (SVG) (*.svg *.SVG)");
-	else
-		format = i18n("Portable Network Graphics (PNG) (*.png *.PNG)");
+	int index = ui->cbFormat->currentIndex();
+	if (index > 2) // consider separator
+		index--;
 
-	const QString path = QFileDialog::getSaveFileName(this, i18n("Export to file"), dir, format);
+	switch ((WorksheetView::ExportFormat)index) {
+	case WorksheetView::ExportFormat::PDF:
+		format = i18n("Portable Data Format (*.pdf *.PDF)");
+		break;
+	case WorksheetView::ExportFormat::SVG:
+		format = i18n("Scalable Vector Graphics (*.svg *.SVG)");
+		break;
+	case WorksheetView::ExportFormat::PNG:
+		format = i18n("Portable Network Graphics (*.png *.PNG)");
+		break;
+	case WorksheetView::ExportFormat::JPG:
+		format = i18n("Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)");
+		break;
+	case WorksheetView::ExportFormat::BMP:
+		format = i18n("Windows Bitmap (*.bmp *.BMP)");
+		break;
+	case WorksheetView::ExportFormat::PPM:
+		format = i18n("Portable Pixmap (*.ppm *.PPM)");
+		break;
+	case WorksheetView::ExportFormat::XBM:
+		format = i18n("X11 Bitmap (*.xbm *.XBM)");
+		break;
+	case WorksheetView::ExportFormat::XPM:
+		format = i18n("X11 Bitmap (*.xpm *.XPM)");
+		break;
+	}
+
+	const QString path = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Export to File"), dir, format);
 	if (!path.isEmpty()) {
-		ui->leFileName->setText(path);
+		// if the file is already existing, the user was already asked
+		// in QFileDialog whether to overwrite or not.
+		// Don't ask again when the user click on Ok-button.
+		m_askOverwrite = false;
 
-		int pos = path.lastIndexOf(QDir::separator());
+		m_initializing = true;
+		ui->leFileName->setText(path);
+		m_initializing = false;
+
+		int pos = path.lastIndexOf(QLatin1String("/"));
 		if (pos != -1) {
 			const QString newDir = path.left(pos);
-			if (newDir != dir)
+			if (newDir != dir && QDir(newDir).exists())
 				conf.writeEntry("LastDir", newDir);
 		}
 	}
@@ -241,12 +306,14 @@ void ExportWorksheetDialog::selectFile() {
 	called when the output format was changed. Adjusts the extension for the specified file.
  */
 void ExportWorksheetDialog::formatChanged(int index) {
-	//we have a separator in the format combobox at the 3rd position -> skip it
+	// we have a separator in the format combobox at the 3rd position -> skip it
 	if (index > 2)
-		index --;
+		index--;
 
 	QStringList extensions;
-	extensions << QLatin1String(".pdf") << QLatin1String(".svg") << QLatin1String(".png");
+	// see WorksheetView::ExportFormat
+	extensions << QLatin1String(".pdf") << QLatin1String(".svg") << QLatin1String(".png") << QLatin1String(".jpg") << QLatin1String(".bmp")
+			   << QLatin1String(".ppm") << QLatin1String(".xbm") << QLatin1String(".xpm");
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(QLatin1Char('.'));
 	if (i == -1)
@@ -257,10 +324,48 @@ void ExportWorksheetDialog::formatChanged(int index) {
 	ui->leFileName->setText(path);
 
 	// show resolution option for png format
-	ui->lResolution->setVisible(index == 3);
-	ui->cbResolution->setVisible(index == 3);
+	bool visible = (index == 2);
+	ui->lResolution->setVisible(visible);
+	ui->cbResolution->setVisible(visible);
+}
+
+/*!
+	called when the target destination (file or clipboard) format was changed.
+ */
+void ExportWorksheetDialog::exportToChanged(int index) {
+	bool toFile = (index == 0);
+	ui->lFileName->setVisible(toFile);
+	ui->leFileName->setVisible(toFile);
+	ui->bOpen->setVisible(toFile);
+
+	if (toFile) {
+		m_okButton->setToolTip(i18n("Export to file and close the dialog."));
+		fileNameChanged(ui->leFileName->text()); // call this to check whether a valid file name was provided
+	} else {
+		m_okButton->setToolTip(i18n("Export to clipboard and close the dialog."));
+		m_okButton->setEnabled(true);
+	}
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
-	m_okButton->setEnabled(!name.simplified().isEmpty());
+	CONDITIONAL_LOCK_RETURN;
+
+	if (name.simplified().isEmpty()) {
+		m_okButton->setEnabled(false);
+		return;
+	}
+	QString path = ui->leFileName->text();
+	int pos = path.lastIndexOf(QLatin1String("/"));
+	if (pos != -1) {
+		QString dir = path.left(pos);
+		bool invalid = !QDir(dir).exists();
+		GuiTools::highlight(ui->leFileName, invalid);
+		if (invalid) {
+			m_okButton->setEnabled(false);
+			return;
+		}
+	}
+
+	m_askOverwrite = true;
+	m_okButton->setEnabled(true);
 }

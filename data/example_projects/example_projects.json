@@ -1,0 +1,66 @@
+[{
+		"name": "Magnitude dataset plot",
+		"fileName": "magnitude_plot.lml",
+		"tags": ["datasets", "plot", "x-y-curve"]
+	},
+{
+		"name": "Cat weight plot",
+		"fileName": "cat-weight.lml",
+		"tags": ["datasets", "plot", "x-y-curve"]
+	},
+{
+		"name": "Cooling water plot",
+		"fileName": "cooling-water.lml",
+		"tags": ["datasets", "plot", "x-y-curve"]
+	},
+{
+		"name": "weight-speed plot",
+		"fileName": "weight-speed.lml",
+		"tags": ["datasets", "plot", "x-y-curve"]
+	},
+{
+		"name": "Amount of rainfall",
+		"fileName": "Rainfall.lml",
+		"tags": ["datasets", "plot", "x-y-curve"]
+	},
+{
+		"name": "Big City Population",
+		"fileName": "Big-city-pop.lml",
+		"tags": ["datasets", "plot", "histogram", "statistics"]
+	},
+{
+		"name": "Women weight-height",
+		"fileName": "weight-height.lml",
+		"tags": ["datasets", "plot", "histogram", "statistics", "x-y-curve"]
+	},
+{
+		"name": "Level of Lake Huron",
+		"fileName": "lake-level.lml",
+		"tags": ["datasets", "plot", "histogram", "statistics", "x-y-curve"]
+	},
+{
+		"name": "Accidental Deaths",
+		"fileName": "acc-deaths.lml",
+		"tags": ["datasets", "plot", "histogram", "statistics", "x-y-curve"]
+	},
+{
+		"name": "Alcohol Consumption Per Country",
+		"fileName": "alcohol-cons.lml",
+		"tags": ["datasets", "plot", "histogram", "statistics"]
+	},
+{
+		"name": "Logarithm scales",
+		"fileName": "log_scales.lml",
+		"tags": ["maths", "plot", "x-y-curve"]
+	},
+{
+		"name": "Mathematical Functions",
+		"fileName": "mathematical_functions.lml",
+		"tags": ["maths", "plot", "curves", "functions"]
+	},
+{
+		"name": "Anscombe's quartet.lml",
+		"fileName": "fit (Anscombe's quartet).lml",
+		"tags": ["maths", "plot", "x-y-curve"]
+	}
+]

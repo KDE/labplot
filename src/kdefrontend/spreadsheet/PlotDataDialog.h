@@ -1,42 +1,28 @@
-/***************************************************************************
-    File                 : PlotDataDialog.h
-    Project              : LabPlot
-    Description          : Dialog for generating plots for the spreadsheet data
-    --------------------------------------------------------------------
-    Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : PlotDataDialog.h
+	Project              : LabPlot
+	Description          : Dialog for generating plots for the spreadsheet data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef PLOTDATADIALOG_H
 #define PLOTDATADIALOG_H
 
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
+
 namespace Ui {
-	class PlotDataWidget;
+class PlotDataWidget;
 }
 
 #include <QDialog>
 
 class QComboBox;
+class AbstractAspect;
 class AspectTreeModel;
 class CartesianPlot;
+class AbstractColumn;
 class Column;
 class Spreadsheet;
 class TreeViewComboBox;
@@ -46,16 +32,12 @@ class PlotDataDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum PlotType {PlotXYCurve, PlotHistogram};
-	enum AnalysisAction {DataReduction,
-		Differentiation, Integration, Interpolation, Smoothing,
-		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
-		FourierFilter};
+	enum class PlotType { XYCurve, Histogram, BoxPlot, BarPlot };
 
-	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotXYCurve, QWidget* parent = nullptr);
+	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
-	void setAnalysisAction(AnalysisAction);
+	void setAnalysisAction(XYAnalysisCurve::AnalysisAction);
 
 private:
 	Ui::PlotDataWidget* ui;
@@ -68,25 +50,28 @@ private:
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
 	PlotType m_plotType;
-	AnalysisAction m_analysisAction{Differentiation};
+	XYAnalysisCurve::AnalysisAction m_analysisAction{XYAnalysisCurve::AnalysisAction::Differentiation};
 	bool m_analysisMode{false};
+	AbstractAspect* m_lastAddedCurve{nullptr};
 
 	void processColumns();
 	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);
 	void processColumnsForHistogram(const QStringList&);
-	void addCurvesToPlot(CartesianPlot*) const;
-	void addCurvesToPlots(Worksheet*) const;
-	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*) const;
-	void addHistogram(const QString& name, Column* column, CartesianPlot*) const;
+	void addCurvesToPlot(CartesianPlot*);
+	void addCurvesToPlots(Worksheet*);
+	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*);
+	void addHistogram(const QString& name, Column* column, CartesianPlot*);
+	void addBoxPlot(const QString& name, const QVector<const AbstractColumn*>&, CartesianPlot*);
+	void addBarPlot(const QString& name, const QVector<const AbstractColumn*>&, CartesianPlot*);
 	Column* columnFromName(const QString&) const;
+	void adjustWorksheetSize(Worksheet*) const;
+	void setAxesTitles(CartesianPlot*, const QString& yColumnName = QString()) const;
 
-protected  slots:
-	virtual void checkOkButton();
-
-private slots:
+private Q_SLOTS:
 	void plot();
 	void curvePlacementChanged();
 	void plotPlacementChanged();
+	void checkOkButton();
 };
 
 #endif

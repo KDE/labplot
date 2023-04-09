@@ -1,31 +1,12 @@
-/***************************************************************************
-    File                 : XYAnalysisCurve.h
-    Project              : LabPlot
-    Description          : Base class for all analysis curves
-    --------------------------------------------------------------------
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : XYAnalysisCurve.h
+	Project              : LabPlot
+	Description          : Base class for all analysis curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef XYANALYSISCURVE_H
 #define XYANALYSISCURVE_H
@@ -36,14 +17,53 @@ class XYAnalysisCurvePrivate;
 
 class XYAnalysisCurve : public XYCurve {
 	Q_OBJECT
+	Q_ENUMS(DataSourceType)
 
 public:
-	enum DataSourceType {DataSourceSpreadsheet, DataSourceCurve};
+	enum class DataSourceType { Spreadsheet, Curve, Histogram };
+	enum class AnalysisAction {
+		DataReduction,
+		Differentiation,
+		Integration,
+		Interpolation,
+		Smoothing,
+		FitLinear,
+		FitPower,
+		FitExp1,
+		FitExp2,
+		FitInvExp,
+		FitGauss,
+		FitCauchyLorentz,
+		FitTan,
+		FitTanh,
+		FitErrFunc,
+		FitCustom,
+		FourierFilter
+	};
 
-	explicit XYAnalysisCurve(const QString&);
+	struct Result {
+		Result(){};
+
+		bool available{false};
+		bool valid{false};
+		QString status;
+		qint64 elapsedTime{0};
+	};
+
 	~XYAnalysisCurve() override;
 
+	static void copyData(QVector<double>& xData,
+						 QVector<double>& yData,
+						 const AbstractColumn* xDataColumn,
+						 const AbstractColumn* yDataColumn,
+						 double xMin,
+						 double xMax,
+						 bool avgUniqueX = false);
+
 	virtual void recalculate() = 0;
+	bool resultAvailable() const;
+	virtual const Result& result() const = 0;
+
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
@@ -53,25 +73,36 @@ public:
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, y2DataColumn, Y2DataColumn)	// optional
-	const QString& xDataColumnPath() const;
-	const QString& yDataColumnPath() const;
-	const QString& y2DataColumnPath() const;
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, y2DataColumn, Y2DataColumn) // optional
+	CLASS_D_ACCESSOR_DECL(QString, xDataColumnPath, XDataColumnPath)
+	CLASS_D_ACCESSOR_DECL(QString, yDataColumnPath, YDataColumnPath)
+	CLASS_D_ACCESSOR_DECL(QString, y2DataColumnPath, Y2DataColumnPath)
+
+	bool saveCalculations() const;
 
 	typedef XYAnalysisCurvePrivate Private;
 
 protected:
-	XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd);
+	XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate*, AspectType);
 
 private:
 	Q_DECLARE_PRIVATE(XYAnalysisCurve)
 	void init();
 
-public slots:
+public Q_SLOTS:
 	void handleSourceDataChanged();
+	void createDataSpreadsheet();
 
-signals:
-	void sourceDataChanged(); //emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
+private Q_SLOTS:
+	void xDataColumnAboutToBeRemoved(const AbstractAspect*);
+	void yDataColumnAboutToBeRemoved(const AbstractAspect*);
+	void y2DataColumnAboutToBeRemoved(const AbstractAspect*);
+	void xDataColumnNameChanged();
+	void yDataColumnNameChanged();
+	void y2DataColumnNameChanged();
+
+Q_SIGNALS:
+	void sourceDataChanged(); // emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
 	void dataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void dataSourceCurveChanged(const XYCurve*);
 	void xDataColumnChanged(const AbstractColumn*);

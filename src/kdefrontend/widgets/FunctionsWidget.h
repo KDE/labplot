@@ -1,30 +1,12 @@
-/***************************************************************************
-    File                 : FunctionsWidget.h
-    Project              : LabPlot
-    Description          : widget for selecting functions
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : FunctionsWidget.h
+	Project              : LabPlot
+	Description          : widget for selecting functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef FUNCTIONSWIDGET_H
 #define FUNCTIONSWIDGET_H
 
@@ -34,7 +16,7 @@
 
 class ExpressionParser;
 
-class FunctionsWidget: public QWidget {
+class FunctionsWidget : public QWidget {
 	Q_OBJECT
 
 public:
@@ -44,14 +26,14 @@ private:
 	Ui::FunctionsWidget ui;
 	ExpressionParser* m_expressionParser;
 
-signals:
+Q_SIGNALS:
 	void functionSelected(const QString&);
 	void canceled();
 
-private slots:
+private Q_SLOTS:
 	void groupChanged(int);
 	void filterChanged(const QString&);
 	void insertClicked();
 };
 
-#endif //FUNCTIONSWIDGET_H
+#endif // FUNCTIONSWIDGET_H

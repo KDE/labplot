@@ -1,30 +1,11 @@
-/***************************************************************************
-    File                 : nsl_conv.h
-    Project              : LabPlot
-    Description          : NSL discrete convolution functions
-    --------------------------------------------------------------------
-    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : nsl_conv.h
+	Project              : LabPlot
+	Description          : NSL discrete convolution functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef NSL_CONV_H
 #define NSL_CONV_H
@@ -37,27 +18,27 @@
 
 #define NSL_CONV_DIRECTION_COUNT 2
 /* forward: convolution, backward: deconvolution */
-typedef enum {nsl_conv_direction_forward, nsl_conv_direction_backward} nsl_conv_direction_type;
+typedef enum { nsl_conv_direction_forward, nsl_conv_direction_backward } nsl_conv_direction_type;
 extern const char* nsl_conv_direction_name[];
 
 #define NSL_CONV_TYPE_COUNT 2
 /* linear (zero-padded), circular */
-typedef enum {nsl_conv_type_linear, nsl_conv_type_circular} nsl_conv_type_type;
+typedef enum { nsl_conv_type_linear, nsl_conv_type_circular } nsl_conv_type_type;
 extern const char* nsl_conv_type_name[];
 
 #define NSL_CONV_METHOD_COUNT 3
 /* auto: use direct method for small data size (NSL_CONV_METHOD_BORDER) and FFT method otherwise */
-typedef enum {nsl_conv_method_auto, nsl_conv_method_direct, nsl_conv_method_fft} nsl_conv_method_type;
+typedef enum { nsl_conv_method_auto, nsl_conv_method_direct, nsl_conv_method_fft } nsl_conv_method_type;
 extern const char* nsl_conv_method_name[];
 
 #define NSL_CONV_NORM_COUNT 3
 /* how to normalize response */
-typedef enum {nsl_conv_norm_none, nsl_conv_norm_sum, nsl_conv_norm_euclidean} nsl_conv_norm_type;
+typedef enum { nsl_conv_norm_none, nsl_conv_norm_sum, nsl_conv_norm_euclidean } nsl_conv_norm_type;
 extern const char* nsl_conv_norm_name[];
 
 #define NSL_CONV_WRAP_COUNT 3
 /* how to wrap response */
-typedef enum {nsl_conv_wrap_none, nsl_conv_wrap_max, nsl_conv_wrap_center} nsl_conv_wrap_type;
+typedef enum { nsl_conv_wrap_none, nsl_conv_wrap_max, nsl_conv_wrap_center } nsl_conv_wrap_type;
 extern const char* nsl_conv_wrap_name[];
 
 /* TODO: mode: full, same, valid (see NumPy, SciPy) */
@@ -66,8 +47,18 @@ extern const char* nsl_conv_wrap_name[];
 /* standard kernel (response)
  * option: number of points
  */
-typedef enum {nsl_conv_kernel_avg, nsl_conv_kernel_smooth_triangle, nsl_conv_kernel_smooth_gaussian, nsl_conv_kernel_first_derivative, nsl_conv_kernel_smooth_first_derivative,
-	nsl_conv_kernel_second_derivative, nsl_conv_kernel_third_derivative, nsl_conv_kernel_fourth_derivative, nsl_conv_kernel_gaussian, nsl_conv_kernel_lorentzian} nsl_conv_kernel_type;
+typedef enum {
+	nsl_conv_kernel_avg,
+	nsl_conv_kernel_smooth_triangle,
+	nsl_conv_kernel_smooth_gaussian,
+	nsl_conv_kernel_first_derivative,
+	nsl_conv_kernel_smooth_first_derivative,
+	nsl_conv_kernel_second_derivative,
+	nsl_conv_kernel_third_derivative,
+	nsl_conv_kernel_fourth_derivative,
+	nsl_conv_kernel_gaussian,
+	nsl_conv_kernel_lorentzian
+} nsl_conv_kernel_type;
 extern const char* nsl_conv_kernel_name[];
 
 /* standard kernel */
@@ -76,21 +67,46 @@ int nsl_conv_standard_kernel(double k[], size_t n, nsl_conv_kernel_type);
 /* calculate convolution/deconvolution
  * of signal s of size n with response r of size m
  */
-int nsl_conv_convolution_direction(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type, nsl_conv_type_type, nsl_conv_method_type, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
+int nsl_conv_convolution_direction(double s[],
+								   size_t n,
+								   double r[],
+								   size_t m,
+								   nsl_conv_direction_type,
+								   nsl_conv_type_type,
+								   nsl_conv_method_type,
+								   nsl_conv_norm_type normalize,
+								   nsl_conv_wrap_type wrap,
+								   double out[]);
 
-int nsl_conv_convolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type, nsl_conv_method_type, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
+int nsl_conv_convolution(double s[],
+						 size_t n,
+						 double r[],
+						 size_t m,
+						 nsl_conv_type_type,
+						 nsl_conv_method_type,
+						 nsl_conv_norm_type normalize,
+						 nsl_conv_wrap_type wrap,
+						 double out[]);
 /* deconvolution only supported by FFT method */
 int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_type_type, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
 
 /* linear/circular convolution using direct method
  * s and r are untouched
  */
-int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
-int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
+int nsl_conv_linear_direct(const double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
+int nsl_conv_circular_direct(const double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
 /* linear/circular convolution/deconvolution using FFT method
  * s and r are untouched
  */
-int nsl_conv_fft_type(double s[], size_t n, double r[], size_t m, nsl_conv_direction_type, nsl_conv_type_type, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
+int nsl_conv_fft_type(const double s[],
+					  size_t n,
+					  double r[],
+					  size_t m,
+					  nsl_conv_direction_type,
+					  nsl_conv_type_type,
+					  nsl_conv_norm_type normalize,
+					  nsl_conv_wrap_type wrap,
+					  double out[]);
 /* actual FFT method calculation using zero-padded arrays
  * uses FFTW if available and GSL otherwise
  * wi is the wrap index

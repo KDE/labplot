@@ -1,41 +1,25 @@
-/***************************************************************************
-    File                 : columncommands.h
-    Project              : LabPlot
-    Description          : Commands to be called by Column to modify ColumnPrivate
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2010 by Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : columncommands.h
+	Project              : LabPlot
+	Description          : Commands to be called by Column to modify ColumnPrivate
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef COLUMNCOMMANDS_H
 #define COLUMNCOMMANDS_H
 
-#include "backend/lib/IntervalAttribute.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnPrivate.h"
+#include "backend/lib/IntervalAttribute.h"
 
-#include <QUndoCommand>
+#include <KLocalizedString>
+
 #include <QDateTime>
+#include <QUndoCommand>
 
 class QStringList;
 class AbstractSimpleFilter;
@@ -50,7 +34,7 @@ public:
 
 private:
 	ColumnPrivate* m_col;
-	AbstractColumn::ColumnMode m_old_mode;
+	AbstractColumn::ColumnMode m_old_mode{AbstractColumn::ColumnMode::Double};
 	AbstractColumn::ColumnMode m_mode;
 	void* m_old_data{nullptr};
 	void* m_new_data{nullptr};
@@ -87,7 +71,7 @@ public:
 
 private:
 	ColumnPrivate* m_col;
-	const AbstractColumn * m_src;
+	const AbstractColumn* m_src;
 	ColumnPrivate* m_col_backup{nullptr};
 	ColumnPrivate* m_src_backup{nullptr};
 	Column* m_col_backup_owner{nullptr};
@@ -138,7 +122,7 @@ public:
 private:
 	ColumnPrivate* m_col;
 	AbstractColumn::PlotDesignation m_new_pd;
-	AbstractColumn::PlotDesignation m_old_pd;
+	AbstractColumn::PlotDesignation m_old_pd{AbstractColumn::PlotDesignation::X};
 };
 
 class ColumnClearCmd : public QUndoCommand {
@@ -154,12 +138,11 @@ private:
 	void* m_data{nullptr};
 	void* m_empty_data{nullptr};
 	bool m_undone{false};
-
 };
 
 class ColumnSetGlobalFormulaCmd : public QUndoCommand {
 public:
-	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames, QStringList variableColumnPathes);
+	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames, QVector<Column*> columns, bool autoUpdate);
 
 	void redo() override;
 	void undo() override;
@@ -168,10 +151,12 @@ private:
 	ColumnPrivate* m_col;
 	QString m_formula;
 	QStringList m_variableNames;
-	QStringList m_variableColumnPathes;
+	QVector<Column*> m_variableColumns;
+	bool m_autoUpdate{false};
 	QString m_newFormula;
 	QStringList m_newVariableNames;
-	QStringList m_newVariableColumnPathes;
+	QVector<Column*> m_newVariableColumns;
+	bool m_newAutoUpdate{false};
 	bool m_copied{false};
 };
 
@@ -204,128 +189,129 @@ private:
 	bool m_copied{false};
 };
 
-class ColumnSetTextCmd : public QUndoCommand {
+template<typename T>
+class ColumnSetCmd : public QUndoCommand {
 public:
-	explicit ColumnSetTextCmd(ColumnPrivate* col, int row, QString new_value, QUndoCommand* parent = nullptr);
+	/**
+	 * \var ColumnSetTextCmd::m_col
+	 * \brief The private column data to modify
+	 */
+	/**
+	 * \var ColumnSetTextCmd::m_row
+	 * \brief The row to modify
+	 */
+	/**
+	 * \var ColumnSetTextCmd::m_new_value
+	 * \brief The new value
+	 */
+	/**
+	 * \var ColumnSetTextCmd::m_old_value
+	 * \brief The old value
+	 */
+	/**
+	 * \var ColumnSetTextCmd::m_row_count
+	 * \brief The old number of rows
+	 */
+	explicit ColumnSetCmd(ColumnPrivate* col, int row, const T& old_value, const T& new_value, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_col(col)
+		, m_row(row)
+		, m_new_value(std::move(new_value))
+		, m_old_value(std::move(old_value)) {
+		setText(i18n("%1: set value for row %2", col->name(), row));
+	}
 
-	void redo() override;
-	void undo() override;
+	void redo() override {
+		m_row_count = m_col->rowCount();
+		m_col->setValueAt(m_row, m_new_value);
+	}
+	void undo() override {
+		m_col->setValueAt(m_row, m_old_value);
+	}
 
 private:
 	ColumnPrivate* m_col;
 	int m_row;
-	QString m_new_value;
-	QString m_old_value;
+	T m_new_value;
+	T m_old_value;
 	int m_row_count{0};
 };
 
-class ColumnSetValueCmd : public QUndoCommand {
+template<typename T>
+class ColumnReplaceCmd : public QUndoCommand {
 public:
-	explicit ColumnSetValueCmd(ColumnPrivate* col, int row, double new_value, QUndoCommand* parent = nullptr);
+	/**
+	 * \var ColumnReplaceTextsCmd::m_col
+	 * \brief The private column data to modify
+	 */
 
-	void redo() override;
-	void undo() override;
+	/**
+	 * \var ColumnReplaceTextsCmd::m_first
+	 * \brief The first row to replace
+	 */
 
-private:
-	ColumnPrivate* m_col;
-	int m_row;
-	double m_new_value;
-	double m_old_value{0.};
-	int m_row_count{0};
-};
+	/**
+	 * \var ColumnReplaceTextsCmd::m_new_values
+	 * \brief The new values
+	 */
 
-class ColumnSetIntegerCmd : public QUndoCommand {
-public:
-	explicit ColumnSetIntegerCmd(ColumnPrivate* col, int row, int new_value, QUndoCommand* parent = nullptr);
+	/**
+	 * \var ColumnReplaceTextsCmd::m_old_values
+	 * \brief The old values
+	 */
 
-	void redo() override;
-	void undo() override;
+	/**
+	 * \var ColumnReplaceTextsCmd::m_copied
+	 * \brief Status flag
+	 */
 
-private:
-	ColumnPrivate* m_col;
-	int m_row;
-	int m_new_value;
-	int m_old_value{0};
-	int m_row_count{0};
-};
+	/**
+	 * \var ColumnReplaceTextsCmd::m_row_count
+	 * \brief The old number of rows
+	 */
+	explicit ColumnReplaceCmd(ColumnPrivate* col, int first, const QVector<T>& new_values, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_col(col)
+		, m_first(first)
+		, m_new_values(new_values) {
+		if (m_first < 0)
+			setText(i18n("%1: replace values", col->name()));
+		else
+			setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() - 1));
+	}
 
-class ColumnSetDateTimeCmd : public QUndoCommand {
-public:
-	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, QDateTime new_value, QUndoCommand* parent = nullptr);
+	void redo() override {
+		auto* data = m_col->data();
+		if (!data)
+			return;
 
-	void redo() override;
-	void undo() override;
+		if (m_first < 0)
+			m_old_values = *static_cast<QVector<T>*>(data);
+		else
+			m_old_values = static_cast<QVector<T>*>(data)->mid(m_first, m_new_values.count());
 
-private:
-	ColumnPrivate* m_col;
-	int m_row;
-	QDateTime m_new_value;
-	QDateTime m_old_value;
-	int m_row_count{0};
-};
+		m_col->replaceValues(m_first, m_new_values);
+		m_new_values.clear(); // delete values, because otherwise we use a lot of ram even if we don't need it
+	}
+	void undo() override {
+		auto* data = m_col->data();
+		if (!data)
+			return;
 
-class ColumnReplaceTextsCmd : public QUndoCommand {
-public:
-	explicit ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QVector<QString>& new_values, QUndoCommand* parent = nullptr);
+		if (m_first < 0)
+			m_new_values = *static_cast<QVector<T>*>(data);
+		else
+			m_new_values = static_cast<QVector<T>*>(data)->mid(m_first, m_old_values.count());
 
-	void redo() override;
-	void undo() override;
-
-private:
-	ColumnPrivate* m_col;
-	int m_first;
-	QVector<QString> m_new_values;
-	QVector<QString> m_old_values;
-	bool m_copied{false};
-	int m_row_count{0};
-};
-
-class ColumnReplaceValuesCmd : public QUndoCommand {
-public:
-	explicit ColumnReplaceValuesCmd(ColumnPrivate* col, int first, const QVector<double>& new_values, QUndoCommand* parent = nullptr);
-
-	void redo() override;
-	void undo() override;
-
-private:
-	ColumnPrivate* m_col;
-	int m_first;
-	QVector<double> m_new_values;
-	QVector<double> m_old_values;
-	bool m_copied{false};
-	int m_row_count{0};
-};
-
-class ColumnReplaceIntegersCmd : public QUndoCommand {
-public:
-	explicit ColumnReplaceIntegersCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent = nullptr);
-
-	void redo() override;
-	void undo() override;
+		m_col->replaceValues(m_first, m_old_values);
+		m_old_values.clear();
+	}
 
 private:
 	ColumnPrivate* m_col;
 	int m_first;
-	QVector<int> m_new_values;
-	QVector<int> m_old_values;
-	bool m_copied{false};
-	int m_row_count{0};
-};
-
-class ColumnReplaceDateTimesCmd : public QUndoCommand {
-public:
-	explicit ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QVector<QDateTime>& new_values, QUndoCommand* parent = nullptr);
-
-	void redo() override;
-	void undo() override;
-
-private:
-	ColumnPrivate* m_col;
-	int m_first;
-	QVector<QDateTime> m_new_values;
-	QVector<QDateTime> m_old_values;
-	bool m_copied{false};
-	int m_row_count{0};
+	QVector<T> m_new_values;
+	QVector<T> m_old_values;
 };
 
 #endif

@@ -1,29 +1,12 @@
-/***************************************************************************
-    File                 : IntegrationTest.cpp
-    Project              : LabPlot
-    Description          : Tests for numerical integration
-    --------------------------------------------------------------------
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
- ***************************************************************************/
+/*
+	File                 : IntegrationTest.cpp
+	Project              : LabPlot
+	Description          : Tests for numerical integration
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "IntegrationTest.h"
 #include "backend/core/column/Column.h"
@@ -33,29 +16,29 @@
 
 void IntegrationTest::testLinear() {
 	// data
-	QVector<int> xData = {1,2,3,4};
-	QVector<double> yData = {1.,2.,3.,4.};
+	QVector<int> xData = {1, 2, 3, 4};
+	QVector<double> yData = {1., 2., 3., 4.};
 
-	//data source columns
-	Column xDataColumn("x", AbstractColumn::Integer);
+	// data source columns
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::Numeric);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYIntegrationCurve integrationCurve("integration");
+	XYIntegrationCurve integrationCurve(QStringLiteral("integration"));
 	integrationCurve.setXDataColumn(&xDataColumn);
 	integrationCurve.setYDataColumn(&yDataColumn);
 
-	//prepare the integration
+	// prepare the integration
 	XYIntegrationCurve::IntegrationData integrationData = integrationCurve.integrationData();
 	integrationCurve.setIntegrationData(integrationData);
 
-	//perform the integration
+	// perform the integration
 	integrationCurve.recalculate();
 	const XYIntegrationCurve::IntegrationResult& integrationResult = integrationCurve.integrationResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(integrationResult.available, true);
 	QCOMPARE(integrationResult.valid, true);
 

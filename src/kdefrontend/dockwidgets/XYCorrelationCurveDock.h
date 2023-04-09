@@ -1,41 +1,23 @@
-/***************************************************************************
-    File             : XYCorrelationCurveDock.h
-    Project          : LabPlot
-    --------------------------------------------------------------------
-    Copyright        : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description      : widget for editing properties of correlation curves
+/*
+	File             : XYCorrelationCurveDock.h
+	Project          : LabPlot
+	Description      : widget for editing properties of correlation curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef XYCORRELATIONCURVEDOCK_H
 #define XYCORRELATIONCURVEDOCK_H
 
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xycorrelationcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYCorrelationCurveDock: public XYCurveDock {
+class XYCorrelationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
@@ -45,6 +27,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void updatePlotRanges() override;
 	void showCorrelationResult();
 
 	Ui::XYCorrelationCurveDockGeneralTab uiGeneralTab;
@@ -59,11 +42,9 @@ private:
 protected:
 	void setModel() override;
 
-private slots:
-	//SLOTs for changes triggered in XYCorrelationCurveDock
-	//general tab
-	void nameChanged();
-	void commentChanged();
+private Q_SLOTS:
+	// SLOTs for changes triggered in XYCorrelationCurveDock
+	// general tab
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
@@ -79,9 +60,8 @@ private slots:
 	void recalculateClicked();
 	void enableRecalculate() const;
 
-	//SLOTs for changes triggered in XYCurve
-	//General-Tab
-	void curveDescriptionChanged(const AbstractAspect*);
+	// SLOTs for changes triggered in XYCurve
+	// General-Tab
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);
@@ -89,6 +69,7 @@ private slots:
 	void curveY2DataColumnChanged(const AbstractColumn*);
 	void curveCorrelationDataChanged(const XYCorrelationCurve::CorrelationData&);
 	void dataChanged();
+	void curveVisibilityChanged(bool);
 };
 
 #endif

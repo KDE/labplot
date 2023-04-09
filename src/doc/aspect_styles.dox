@@ -7,7 +7,7 @@ Comparable concepts:
 -    Templates in Origin.
 -    CSS styles for web pages.
 
-\csetnio concept Current concept
+\section concept Current concept
 
 All styles/themes inherit the following interface:
 @code

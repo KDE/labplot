@@ -1,36 +1,19 @@
-/***************************************************************************
-    File                 : Segments.cpp
-    Project              : LabPlot
-    Description          : Contains methods to trace curve of image/plot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
- ***************************************************************************/
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : Segments.cpp
+	Project              : LabPlot
+	Description          : Contains methods to trace curve of image/plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "Segments.h"
-#include "backend/datapicker/Segment.h"
 #include "backend/datapicker/ImageEditor.h"
+#include "backend/datapicker/Segment.h"
 
+#include <QGraphicsItem>
 #include <QGraphicsScene>
 #include <QImage>
-#include <QGraphicsItem>
 
 /**
  * \class Segments
@@ -44,16 +27,17 @@
  * * \ingroup datapicker
  */
 
-Segments::Segments(DatapickerImage* image): m_image(image) {
+Segments::Segments(DatapickerImage* image)
+	: m_image(image) {
 }
 
 /*!
-    segments are built when the original image is loaded. they start out hidden
-     and remain so until showSegments is called
+	segments are built when the original image is loaded. they start out hidden
+	 and remain so until showSegments is called
 */
-void Segments::makeSegments(QImage &imageProcessed) {
-// 	QElapsedTimer timer;
-// 	timer.start();
+void Segments::makeSegments(QImage& imageProcessed) {
+	// 	QElapsedTimer timer;
+	// 	timer.start();
 	clearSegments();
 
 	const int width = imageProcessed.width();
@@ -72,14 +56,14 @@ void Segments::makeSegments(QImage &imageProcessed) {
 	//     else
 	//       "this run is appended to the segment on the left
 
-	bool* lastBool = new bool [height];
-	bool* currBool = new bool [height];
-	bool* nextBool = new bool [height];
-	Segment** lastSegment = new Segment* [(size_t)height];
-	Segment** currSegment = new Segment* [(size_t)height];
+	bool* lastBool = new bool[height];
+	bool* currBool = new bool[height];
+	bool* nextBool = new bool[height];
+	auto** lastSegment = new Segment*[(size_t)height];
+	auto** currSegment = new Segment*[(size_t)height];
 	loadSegment(lastSegment, height);
 
-	//initialize one column of boolean flags using the pixels of the specified column
+	// initialize one column of boolean flags using the pixels of the specified column
 	for (int y = 0; y < height; ++y) {
 		lastBool[y] = false;
 		currBool[y] = ImageEditor::processedPixelIsOn(imageProcessed, 0, y);
@@ -97,7 +81,7 @@ void Segments::makeSegments(QImage &imageProcessed) {
 
 		if (x + 1 < width) {
 			for (int y = 0; y < height; ++y)
-				nextBool[y] = ImageEditor::processedPixelIsOn(imageProcessed, x+1, y);
+				nextBool[y] = ImageEditor::processedPixelIsOn(imageProcessed, x + 1, y);
 		}
 		scrollSegment(lastSegment, currSegment, height);
 	}
@@ -107,33 +91,32 @@ void Segments::makeSegments(QImage &imageProcessed) {
 	delete[] nextBool;
 	delete[] lastSegment;
 	delete[] currSegment;
-// 	qDebug() << "Made segments in " << timer.elapsed() << "ms";
+	// 	qDebug() << "Made segments in " << timer.elapsed() << "ms";
 }
 
 /*!
-    scroll the segment pointers of the right column into the left column
+	scroll the segment pointers of the right column into the left column
 */
 void Segments::scrollSegment(Segment** left, Segment** right, int height) {
 	for (int y = 0; y < height; ++y)
-		left [y] = right [y];
+		left[y] = right[y];
 }
 
 /*!
-    identify the runs in a column, and connect them to segments
+	identify the runs in a column, and connect them to segments
 */
-void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** lastSegment,
-                                   bool* currBool, Segment** currSegment, bool* nextBool) {
+void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** lastSegment, const bool* currBool, Segment** currSegment, bool* nextBool) {
 	loadSegment(currSegment, height);
 
 	int yStart = 0;
 	bool inRun = false;
 	for (int y = 0; y < height; ++y) {
-		if (!inRun && currBool [y]) {
+		if (!inRun && currBool[y]) {
 			inRun = true;
 			yStart = y;
 		}
 
-		if ((y + 1 >= height) || !currBool [y + 1]) {
+		if ((y + 1 >= height) || !currBool[y + 1]) {
 			if (inRun)
 				finishRun(lastBool, nextBool, lastSegment, currSegment, x, yStart, y, height);
 
@@ -145,17 +128,17 @@ void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** 
 }
 
 /*!
-    remove unneeded lines belonging to segments that just finished in the previous column.
+	remove unneeded lines belonging to segments that just finished in the previous column.
 */
 void Segments::removeUnneededLines(Segment** lastSegment, Segment** currSegment, int height) {
 	Segment* segLast = nullptr;
 	for (int yLast = 0; yLast < height; ++yLast) {
-		if (lastSegment [yLast] && (lastSegment [yLast] != segLast)) {
-			segLast = lastSegment [yLast];
+		if (lastSegment[yLast] && (lastSegment[yLast] != segLast)) {
+			segLast = lastSegment[yLast];
 
 			bool found = false;
 			for (int yCur = 0; yCur < height; ++yCur)
-				if (segLast == currSegment [yCur]) {
+				if (segLast == currSegment[yCur]) {
 					found = true;
 					break;
 				}
@@ -172,11 +155,11 @@ void Segments::removeUnneededLines(Segment** lastSegment, Segment** currSegment,
 }
 
 /*!
-    initialize one column of segment pointers
+	initialize one column of segment pointers
 */
 void Segments::loadSegment(Segment** columnSegment, int height) {
 	for (int y = 0; y < height; ++y)
-		columnSegment [y] = nullptr;
+		columnSegment[y] = nullptr;
 }
 
 void Segments::clearSegments() {
@@ -187,7 +170,7 @@ void Segments::clearSegments() {
 }
 
 /*!
-    set segments visible
+	set segments visible
 */
 void Segments::setSegmentsVisible(bool on) {
 	for (auto* seg : segments)
@@ -196,20 +179,18 @@ void Segments::setSegmentsVisible(bool on) {
 
 void Segments::setAcceptHoverEvents(bool on) {
 	for (auto* seg : segments) {
-		QGraphicsItem *item = seg->graphicsItem();
+		QGraphicsItem* item = seg->graphicsItem();
 		item->setAcceptHoverEvents(on);
 		item->setFlag(QGraphicsItem::ItemIsSelectable, on);
 	}
 }
 
 /*!
-    process a run of pixels. if there are fewer than two adjacent pixel runs on
-    either side, this run will be added to an existing segment, or the start of
-    a new segment
+	process a run of pixels. if there are fewer than two adjacent pixel runs on
+	either side, this run will be added to an existing segment, or the start of
+	a new segment
 */
-void Segments::finishRun(bool* lastBool, bool* nextBool, Segment** lastSegment, Segment** currSegment,
-                         int x, int yStart, int yStop, int height) {
-
+void Segments::finishRun(bool* lastBool, bool* nextBool, Segment** lastSegment, Segment** currSegment, int x, int yStart, int yStop, int height) {
 	// count runs that touch on the left
 	if (adjacentRuns(lastBool, yStart, yStop, height) > 1)
 		return;
@@ -219,18 +200,18 @@ void Segments::finishRun(bool* lastBool, bool* nextBool, Segment** lastSegment, 
 		return;
 
 	Segment* seg;
-	int y = (int) ((yStart + yStop) / 2);
+	int y = (int)((yStart + yStop) / 2);
 	if (adjacentSegments(lastSegment, yStart, yStop, height) == 0) {
 		seg = new Segment(m_image);
-		QLine* line = new QLine(QPoint(x, y),QPoint( x, y));
+		QLine* line = new QLine(QPoint(x, y), QPoint(x, y));
 		seg->path.append(line);
-		seg->yLast  = y;
+		seg->yLast = y;
 		segments.append(seg);
 	} else {
 		// this is the continuation of an existing segment
 		seg = adjacentSegment(lastSegment, yStart, yStop, height);
-		QLine* line = new QLine(QPoint(x - 1, seg->yLast),QPoint( x, y));
-		seg->length  += abs(1 + (seg->yLast - y)*(seg->yLast - y));
+		QLine* line = new QLine(QPoint(x - 1, seg->yLast), QPoint(x, y));
+		seg->length += abs(1 + (seg->yLast - y) * (seg->yLast - y));
 		seg->path.append(line);
 		seg->yLast = y;
 	}
@@ -238,21 +219,21 @@ void Segments::finishRun(bool* lastBool, bool* nextBool, Segment** lastSegment, 
 	seg->retransform();
 
 	for (int y = yStart; y <= yStop; ++y)
-		currSegment [y] = seg;
+		currSegment[y] = seg;
 }
 
 /*!
-    return the number of runs adjacent to the pixels from yStart to yStop (inclusive)
+	return the number of runs adjacent to the pixels from yStart to yStop (inclusive)
 */
-int Segments::adjacentRuns(bool* columnBool, int yStart, int yStop, int height) {
+int Segments::adjacentRuns(const bool* columnBool, int yStart, int yStop, int height) {
 	int runs = 0;
 	bool inRun = false;
 	for (int y = yStart - 1; y <= yStop + 1; ++y) {
 		if ((0 <= y) && (y < height)) {
-			if (!inRun && columnBool [y]) {
+			if (!inRun && columnBool[y]) {
 				inRun = true;
 				++runs;
-			} else if (inRun && !columnBool [y])
+			} else if (inRun && !columnBool[y])
 				inRun = false;
 		}
 	}
@@ -261,30 +242,30 @@ int Segments::adjacentRuns(bool* columnBool, int yStart, int yStop, int height) 
 }
 
 /*!
-    find the single segment pointer among the adjacent pixels from yStart-1 to yStop+1
+	find the single segment pointer among the adjacent pixels from yStart-1 to yStop+1
 */
 Segment* Segments::adjacentSegment(Segment** lastSegment, int yStart, int yStop, int height) {
 	for (int y = yStart - 1; y <= yStop + 1; ++y) {
 		if ((0 <= y) && (y < height))
-			if (lastSegment [y])
-				return lastSegment [y];
+			if (lastSegment[y])
+				return lastSegment[y];
 	}
 
 	return nullptr;
 }
 
 /*!
-    return the number of segments adjacent to the pixels from yStart to yStop (inclusive)
+	return the number of segments adjacent to the pixels from yStart to yStop (inclusive)
 */
 int Segments::adjacentSegments(Segment** lastSegment, int yStart, int yStop, int height) {
 	int count = 0;
 	bool inSegment = false;
 	for (int y = yStart - 1; y <= yStop + 1; ++y) {
 		if ((0 <= y) && (y < height)) {
-			if (!inSegment && lastSegment [y]) {
+			if (!inSegment && lastSegment[y]) {
 				inSegment = true;
 				++count;
-			} else if (inSegment && !lastSegment [y])
+			} else if (inSegment && !lastSegment[y])
 				inSegment = false;
 		}
 	}

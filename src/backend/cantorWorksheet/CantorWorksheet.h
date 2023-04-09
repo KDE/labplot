@@ -1,31 +1,13 @@
-/***************************************************************************
-    File                 : CantorWorksheet.h
-    Project              : LabPlot
-    Description          : Aspect providing a Cantor Worksheets for Multiple backends
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
-    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : CantorWorksheet.h
+	Project              : LabPlot
+	Description          : Aspect providing a Cantor Worksheets for Multiple backends
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef CANTORWORKSHEET_H
 #define CANTORWORKSHEET_H
 
@@ -51,6 +33,9 @@ class CantorWorksheet : public AbstractPart {
 public:
 	explicit CantorWorksheet(const QString& name, bool loading = false);
 
+	bool init(QByteArray* content = nullptr);
+	const QString& error() const;
+
 	QWidget* view() const override;
 	QMenu* createContextMenu() override;
 	QIcon icon() const override;
@@ -58,6 +43,9 @@ public:
 	bool exportView() const override;
 	bool printView() override;
 	bool printPreview() const override;
+
+	void evaluate();
+	void restart();
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -69,22 +57,24 @@ public:
 private:
 	mutable CantorWorksheetView* m_view{nullptr};
 	QString m_backendName;
+	QString m_error;
 	Cantor::Session* m_session{nullptr};
 	KParts::ReadWritePart* m_part{nullptr};
 	QList<Cantor::PanelPlugin*> m_plugins;
+	bool m_pluginsLoaded{false};
 	QAbstractItemModel* m_variableModel{nullptr};
 	Cantor::WorksheetAccessInterface* m_worksheetAccess{nullptr};
 
-	bool init(QByteArray* content = nullptr);
+	void parseData(int row);
 
-private slots:
+private Q_SLOTS:
 	void dataChanged(const QModelIndex&);
-	void rowsInserted(const QModelIndex & parent, int first, int last);
-	void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
+	void rowsInserted(const QModelIndex& parent, int first, int last);
+	void rowsAboutToBeRemoved(const QModelIndex& parent, int first, int last);
 	void modelReset();
 	void modified();
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void statusChanged(Cantor::Session::Status);
 };

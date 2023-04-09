@@ -1,4 +1,4 @@
-To compile LabPlot following packages are required:
+To compile LabPlot from source following packages are required:
 	* CMake version 3.2.0 or higher
 	* ECM (extra cmake modules)
 	* KDE Frameworks 5.16.0 or higher (including the devel-package),
@@ -6,20 +6,28 @@ To compile LabPlot following packages are required:
 	* Qt version 5.6 or higher (including the devel-package, libqt5-devel or similar)
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
 
-optional
-	* LaTeX to enable LaTeX typesetting in LabPlot, requires also 'convert' from ImageMagick and 'dvips'.
-		* Required LaTeX packages: 'color', 'preview' and, in case xelatex or lualatex are used, 'xltxtra'.
-		* On Windows you need a LaTeX installation (like MiKTeX) and ghostscript for LaTeX support.
-		* On macOS you need a LaTeX installation (like MacTeX) and ImageMagick for LaTeX support.
+optional packages
+	* LaTeX and Poppler version 0.62 or higher (including the devel-package, libpoppler-qt5-devel or similar) to enable LaTeX typesetting in LabPlot
+		* Required LaTeX packages: 'color', 'preview' and, in case xelatex or lualatex is used, 'xltxtra'.
+		* On Windows you need a LaTeX installation (like MiKTeX or TeX Live) for LaTeX support.
+		* On macOS you need a LaTeX installation (like MacTeX) for LaTeX support.
 	* FFTW version 3.3 or higher (including the devel-package, fftw3-devel or similar)
 	* HDF5 version 1.8 or higher (including the devel-package, hdf5-devel or similar)
 	* NetCDF version 3 or higher (including the devel-package, netcdf-devel or similar)
 	* CFITSIO version 3 or higher to support FITS data format (including the devel-package, cfitsio-devel or similar)
 	* libcerf version 1.0 or higher to support complex error and related functions (including the devel-package, libcerf-devel or similar)
-	* Cantor version 16.04 or higher (including the devel package, cantor-devel or similar)
-	* ZLIB and LZ4 to support ROOT (CERN) TH1 histograms (including the devel package, zlib-devel and liblz4-devel or similar)
+	* Cantor version 19.12 or higher (including the devel-package, cantor-devel or similar)
+		* To use the backends the corresponding application must be installed
+		* The Python backend needs Python 3.8 installed on Windows
+	* ZLIB and LZ4 to support ROOT (CERN) TH1 histograms (including the devel-package, zlib-devel and liblz4-devel or similar)
+	* ReadStat for importing serveral statistical data formats (will be build if not available)
+	* liborigin version 3 or higher for importing Origin project files (will be build if not available)
+	* Matio for importing binary MATLAB MAT files (including the devel-package, libmatio-devel or similar)
+	* QXlsx for importing Excel xlsx files (will be build if not available)
+	* Qt SerialPort to support serial port functionality
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
-
+	* KUserFeedback to support collecting feedback from users
+	* Discount to support Markdown markup language text
 
 ===============================================================================
 To build LabPlot execute
@@ -41,10 +49,25 @@ To compile LabPlot without optional dependencies even if they are present on the
 -DENABLE_FITS=OFF
 -DENABLE_LIBCERF=OFF
 -DENABLE_CANTOR=OFF
+-DENABLE_ROOT=OFF
+-DENABLE_READSTAT=OFF
+-DENABLE_MATIO=OFF
 -DENABLE_MQTT=OFF
+-DENABLE_QTSERIALPORT=OFF
 -DENABLE_LIBORIGIN=OFF
+-DENABLE_TOUCHBAR=OFF
+-DENABLE_EXCEL=OFF
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
+
+To enable reproducable builds, use
+-DENABLE_REPRODUCIBLE=ON
+
+================================================================================
+To run the tests execute
+
+# cd build
+# make test
 
 ================================================================================
 To install LabPlot execute

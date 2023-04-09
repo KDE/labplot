@@ -1,45 +1,31 @@
-/***************************************************************************
-File                 : FITSHeaderEditDialog.h
-Project              : LabPlot
-Description          : Dialog for listing/editing FITS header keywords
---------------------------------------------------------------------
-Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+/*
+	File                 : FITSHeaderEditDialog.h
+	Project              : LabPlot
+	Description          : Dialog for listing/editing FITS header keywords
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2017 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2016-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "FITSHeaderEditDialog.h"
-#include <KSharedConfig>
-#include <KWindowConfig>
+
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QWindow>
+
+#include <KSharedConfig>
+#include <KWindowConfig>
 
 /*! \class FITSHeaderEditDialog
  * \brief Dialog class for editing FITS header units.
  * \since 2.4.0
  * \ingroup widgets
  */
-FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent) {
-	m_headerEditWidget = new FITSHeaderEditWidget(this);
-
+FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent)
+	: QDialog(parent)
+	, m_headerEditWidget(new FITSHeaderEditWidget(this)) {
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	auto* layout = new QVBoxLayout;
 
@@ -57,19 +43,21 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent) {
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FITSHeaderEditDialog::reject);
 
 	setWindowTitle(i18nc("@title:window", "FITS Metadata Editor"));
-	setWindowIcon(QIcon::fromTheme("document-edit"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
 
 	connect(m_okButton, &QPushButton::clicked, this, &FITSHeaderEditDialog::save);
 	connect(m_headerEditWidget, &FITSHeaderEditWidget::changed, this, &FITSHeaderEditDialog::headersChanged);
 
 	setAttribute(Qt::WA_DeleteOnClose);
 
-	//restore saved settings if available
+	// restore saved settings if available
+	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditDialog");
-	if (conf.exists())
+	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-	else
-		resize( QSize(400,0).expandedTo(minimumSize()) );
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
 }
 
 /*!

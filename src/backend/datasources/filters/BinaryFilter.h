@@ -1,34 +1,17 @@
-/***************************************************************************
-File                 : BinaryFilter.h
-Project              : LabPlot
-Description          : Binary I/O-filter
---------------------------------------------------------------------
-Copyright            : (C) 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+/*
+	File                 : BinaryFilter.h
+	Project              : LabPlot
+	Description          : Binary I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef BINARYFILTER_H
 #define BINARYFILTER_H
 
-#include <QDataStream>
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include <QDataStream>
+#include <limits>
 
 class BinaryFilterPrivate;
 class QStringList;
@@ -39,21 +22,21 @@ class BinaryFilter : public AbstractFileFilter {
 	Q_ENUMS(DataType)
 
 public:
-	//TODO; use ColumnMode when it supports all these types
-	enum DataType {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64};
+	// TODO; use ColumnMode when it supports all these types
+	enum class DataType { INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64 };
 
 	BinaryFilter();
 	~BinaryFilter() override;
 
 	static QStringList dataTypes();
 	static int dataSize(BinaryFilter::DataType);
-	static size_t rowNumber(const QString& fileName, const size_t vectors, const BinaryFilter::DataType);
+	static size_t rowNumber(const QString& fileName, size_t vectors, BinaryFilter::DataType, size_t maxRows = std::numeric_limits<std::size_t>::max());
 	static QString fileInfoString(const QString&);
 
 	// read data from any device
-	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	void readDataFromFile(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
+	void
+	readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	void readDataFromFile(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(const QString& fileName, int lines);
 

@@ -1,51 +1,31 @@
-/***************************************************************************
-File                 : PresenterWidget.cpp
-Project              : LabPlot
-Description          : Widget for static presenting of worksheets
---------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+/*
+	File                 : PresenterWidget.cpp
+	Project              : LabPlot
+	Description          : Widget for static presenting of worksheets
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "PresenterWidget.h"
 #include "SlidingPanel.h"
 
+#include <QApplication>
 #include <QKeyEvent>
 #include <QLabel>
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QTimeLine>
 #include <QPushButton>
+#include <QScreen>
+#include <QTimeLine>
 
-#include <KLocalizedString>
-
-PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheetName, QWidget *parent) : QWidget(parent),
-	m_imageLabel(new QLabel(this)), m_timeLine(new QTimeLine(600)) {
-
+PresenterWidget::PresenterWidget(const QPixmap& pixmap, const QString& worksheetName, QWidget* parent)
+	: QWidget(parent)
+	, m_imageLabel(new QLabel(this))
+	, m_timeLine(new QTimeLine(600)) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	m_imageLabel->setPixmap(pixmap);
 	m_imageLabel->adjustSize();
 
-	QDesktopWidget* const dw = QApplication::desktop();
-	const int primaryScreenIdx = dw->primaryScreen();
-	const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
+	const QRect& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
 
 	const int moveRight = (screenSize.width() - m_imageLabel->width()) / 2.0;
 	const int moveDown = (screenSize.height() - m_imageLabel->height()) / 2.0;
@@ -54,10 +34,9 @@ PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheet
 	m_panel = new SlidingPanel(this, worksheetName);
 	qApp->installEventFilter(this);
 	connect(m_timeLine, &QTimeLine::valueChanged, m_panel, &SlidingPanel::movePanel);
-	connect(m_panel->quitButton(), &QPushButton::clicked, this, &PresenterWidget::close);
-
-	slideUp();
-	setFocus();
+	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=]() {
+		close();
+	});
 }
 
 PresenterWidget::~PresenterWidget() {
@@ -65,8 +44,7 @@ PresenterWidget::~PresenterWidget() {
 	delete m_timeLine;
 }
 
-bool PresenterWidget::eventFilter(QObject* watched, QEvent* event) {
-	Q_UNUSED(watched);
+bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		if (m_panel->y() != 0 && m_panel->rect().contains(QCursor::pos()))
 			slideDown();
@@ -77,7 +55,7 @@ bool PresenterWidget::eventFilter(QObject* watched, QEvent* event) {
 	return false;
 }
 
-void PresenterWidget::keyPressEvent(QKeyEvent *event) {
+void PresenterWidget::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Escape)
 		close();
 }

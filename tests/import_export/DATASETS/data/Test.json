@@ -1,0 +1,140 @@
+{
+    "categories": [
+        {
+            "category_name": "Test_Cat",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "filename": "test1",
+                            "DateTime_format": "yyyy-MM-dd",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "The excess return for the Acme Cleveland Corporation are recorded along with those for all stocks listed on the New York and American Stock Exchanges were recorded over a five year period. These excess returns are relative to the return on a risk-less investment such a U.S. Treasury bills. ",
+                            "download": "http://vincentarelbundock.github.io/Rdatasets/csv/boot/acme.csv",
+                            "name": "Monthly Excess Returns",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": true,
+                            "skip_empty_parts": false,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Test_Subcat"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd hh:mm:ss.zzz",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Test",
+                            "download": "Test.com",
+                            "filename": "Test",
+                            "name": "Test",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": true,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Test_Subcat2"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd hh:mm:ss.zzz",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Test",
+                            "download": "Test.com",
+                            "filename": "Test2",
+                            "name": "Test",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": true,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Test_Subcat3"
+                },
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd hh:mm:ss.zzz",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "Test",
+                            "download": "Test.com",
+                            "filename": "Test3",
+                            "name": "Test",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": true,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "Test_Subcat4"
+                }
+            ]
+        },
+        {
+            "category_name": "Test_Cat_2",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd hh:mm:ss.zzz",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "test\n",
+                            "download": "test.com",
+                            "filename": "test2",
+                            "name": "test",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": true,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "TesT_Subcat"
+                }
+            ]
+        },
+        {
+            "category_name": "Test_Cat_3",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "DateTime_format": "yyyy-MM-dd hh:mm:ss.zzz",
+                            "comment_character": "#",
+                            "create_index_column": false,
+                            "description": "test",
+                            "download": "test.com",
+                            "filename": "test3",
+                            "name": "test",
+                            "number_format": 31,
+                            "remove_quotes": true,
+                            "separator": ",",
+                            "simplify_whitespaces": false,
+                            "skip_empty_parts": true,
+                            "use_first_row_for_vectorname": true
+                        }
+                    ],
+                    "subcategory_name": "test_subcat"
+                }
+            ]
+        }
+    ],
+    "collection_name": "Test"
+}

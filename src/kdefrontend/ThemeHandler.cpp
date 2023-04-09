@@ -1,36 +1,17 @@
-/***************************************************************************
-    File                 : ThemeHandler.cpp
-    Project              : LabPlot
-    Description          : Widget for handling saving and loading of themes
-    --------------------------------------------------------------------
-    Copyright            : (C) 2016 Prakriti Bhardwaj (p_bhardwaj14@informatik.uni-kl.de)
-    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : ThemeHandler.cpp
+	Project              : LabPlot
+	Description          : Widget for handling saving and loading of themes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Prakriti Bhardwaj <p_bhardwaj14@informatik.uni-kl.de>
+	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "ThemeHandler.h"
-#include "widgets/ThemesWidget.h"
 #include "backend/lib/macros.h"
+#include "widgets/ThemesWidget.h"
 
 #include <QDir>
 #include <QDirIterator>
@@ -44,7 +25,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-#include <KMessageBox>
+// #include <KMessageBox>
 // #include <KNS3/UploadDialog>
 
 /*!
@@ -57,29 +38,31 @@
   \ingroup kdefrontend
 */
 
-ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
+ThemeHandler::ThemeHandler(QWidget* parent)
+	: QWidget(parent) {
 	auto* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
-	horizontalLayout->setMargin(0);
+	horizontalLayout->setContentsMargins(0, 0, 0, 0);
 
 	m_pbLoadTheme = new QPushButton(this);
 	horizontalLayout->addWidget(m_pbLoadTheme);
-	m_pbLoadTheme->setText(i18n("Apply Theme"));
+	m_pbLoadTheme->setText(i18n("Theme"));
+	m_pbLoadTheme->setIcon(QIcon::fromTheme(QLatin1String("color-management")));
 
-// 	pbSaveTheme = new QPushButton(this);
-// 	horizontalLayout->addWidget(pbSaveTheme);
-// 	pbSaveTheme->setText(i18n("Save Theme"));
+	// 	pbSaveTheme = new QPushButton(this);
+	// 	horizontalLayout->addWidget(pbSaveTheme);
+	// 	pbSaveTheme->setText(i18n("Save Theme"));
 
-/*
-	pbPublishTheme = new QPushButton(this);
-	horizontalLayout->addWidget(pbPublishTheme);
-	pbPublishTheme->setText("Publish Theme");
-	pbPublishTheme->setEnabled(false);
-*/
+	/*
+		pbPublishTheme = new QPushButton(this);
+		horizontalLayout->addWidget(pbPublishTheme);
+		pbPublishTheme->setText("Publish Theme");
+		pbPublishTheme->setEnabled(false);
+	*/
 
 	connect(m_pbLoadTheme, &QPushButton::clicked, this, &ThemeHandler::showPanel);
-// 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
-// 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
+	// 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
+	// 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
 	m_themeList = themeList();
 
@@ -92,9 +75,9 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
  * get list of all theme files (full path)
  */
 QStringList ThemeHandler::themeList() {
-	DEBUG("ThemeHandler::themeList()");
+	DEBUG(Q_FUNC_INFO);
 	// find all available themes files (system wide and user specific local files)
-	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, QLatin1String("themes"), QStandardPaths::LocateDirectory);
 
 	QStringList themes;
 	for (const auto& dir : dirs) {
@@ -103,7 +86,9 @@ QStringList ThemeHandler::themeList() {
 			themes.append(it.next());
 	}
 
-	DEBUG("	first theme path: " << themes.first().toStdString());
+	if (!themes.isEmpty())
+		DEBUG("	first theme path: " << STDSTRING(themes.first()));
+
 	return themes;
 }
 
@@ -117,11 +102,16 @@ QStringList ThemeHandler::themes() {
 	QStringList themes;
 	for (int i = 0; i < themePaths.size(); ++i) {
 		QFileInfo fileinfo(themePaths.at(i));
-		themes.append(fileinfo.fileName().split('.').at(0));
+		themes.append(fileinfo.fileName().split(QLatin1Char('.')).at(0));
 	}
 
-	DEBUG("	first theme: " << themes.first().toStdString());
-	QDEBUG("	themes = " << themes);
+	if (!themes.isEmpty()) {
+		DEBUG("	first theme: " << STDSTRING(themes.first()));
+		QDEBUG("	themes = " << themes);
+	}
+
+	themes.sort();
+
 	return themes;
 }
 
@@ -129,27 +119,29 @@ QStringList ThemeHandler::themes() {
  * get path for theme of name 'name'
  */
 const QString ThemeHandler::themeFilePath(const QString& name) {
-	DEBUG("ThemeHandler::themeFilePath() name = " << name.toStdString());
+	DEBUG("ThemeHandler::themeFilePath() name = " << STDSTRING(name));
 	QStringList themePaths = themeList();
 
 	for (int i = 0; i < themePaths.size(); ++i) {
-		if (themePaths.at(i).indexOf(name) != -1) {
-			DEBUG("	theme \"" << name.toStdString() << "\" path: " << themePaths.at(i).toStdString());
-			return themePaths.at(i);
+		const QString& path = themePaths.at(i);
+		const QString& fileName = QFileInfo(path).fileName();
+		if (fileName == name) {
+			DEBUG("	theme \"" << STDSTRING(name) << "\" path: " << STDSTRING(path));
+			return path;
 		}
 	}
 
-	return QString();
+	return {};
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ThemeHandler::setCurrentTheme(const QString& name) {
 	if (!name.isEmpty()) {
-		m_pbLoadTheme->setText(i18n("Apply theme [active '%1']", name));
+		m_pbLoadTheme->setText(i18n("Theme '%1'", name));
 		m_pbLoadTheme->setToolTip(i18n("Theme '%1' is active. Click on the button to change the theme.", name));
 	} else {
-		m_pbLoadTheme->setText(i18n("Apply Theme"));
+		m_pbLoadTheme->setText(i18n("Theme"));
 		m_pbLoadTheme->setToolTip(i18n("No theme is active. Click on the button to select a theme."));
 	}
 
@@ -157,28 +149,30 @@ void ThemeHandler::setCurrentTheme(const QString& name) {
 }
 
 void ThemeHandler::loadSelected(const QString& name) {
-	emit loadThemeRequested(name);
+	Q_EMIT loadThemeRequested(name);
 	this->setCurrentTheme(name);
 
 	if (!name.isEmpty())
-		emit info( i18n("Theme \"%1\" was loaded.", name) );
+		Q_EMIT info(i18n("Theme \"%1\" was loaded.", name));
 	else
-		emit info( i18n("Theming deactivated.") );
+		Q_EMIT info(i18n("Theming deactivated."));
 
-	//in case a local theme file was loaded (we have write access), allow to publish it
-	//TODO: activate this later
-// 	if (KStandardDirs::checkAccess(themeFilePath, W_OK)) {
-// 		pbPublishTheme->setEnabled(true);
-// 		m_currentLocalTheme = themeFilePath.right(themeFilePath.length() - themeFilePath.lastIndexOf(QDir::separator()) - 1);
-// 	} else {
-// 		pbPublishTheme->setEnabled(false);
-// 		m_currentLocalTheme.clear();
-// 	}
+	// in case a local theme file was loaded (we have write access), allow to publish it
+	// TODO: activate this later
+	// 	if (KStandardDirs::checkAccess(themeFilePath, W_OK)) {
+	// 		pbPublishTheme->setEnabled(true);
+	// 		m_currentLocalTheme = themeFilePath.right(themeFilePath.length() - themeFilePath.lastIndexOf(QLatin1String("/")) - 1);
+	// 	} else {
+	// 		pbPublishTheme->setEnabled(false);
+	// 		m_currentLocalTheme.clear();
+	// 	}
 }
 
 void ThemeHandler::showPanel() {
+#ifndef SDK
 	QMenu menu;
 	ThemesWidget themeWidget(&menu);
+	themeWidget.setFixedMode();
 	connect(&themeWidget, &ThemesWidget::themeSelected, this, &ThemeHandler::loadSelected);
 	connect(&themeWidget, &ThemesWidget::themeSelected, &menu, &QMenu::close);
 	connect(&themeWidget, &ThemesWidget::canceled, &menu, &QMenu::close);
@@ -187,9 +181,9 @@ void ThemeHandler::showPanel() {
 	widgetAction->setDefaultWidget(&themeWidget);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width()+m_pbLoadTheme->width(),-menu.sizeHint().height());
-	menu.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+	QPoint pos(-menu.sizeHint().width() + m_pbLoadTheme->width(), -menu.sizeHint().height());
 	menu.exec(m_pbLoadTheme->mapToGlobal(pos));
+#endif
 }
 
 // void ThemeHandler::saveMenu() {
@@ -218,9 +212,9 @@ void ThemeHandler::showPanel() {
 // }
 
 // void ThemeHandler::saveNewSelected(const QString& filename) {
-// 	KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
-// 	emit saveThemeRequested(config);
-// 	emit info( i18n("New theme \"%1\" was saved.", filename) );
+// 	KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
+// 	Q_EMIT saveThemeRequested(config);
+// 	Q_EMIT info( i18n("New theme \"%1\" was saved.", filename) );
 //
 // 	m_currentLocalTheme = filename;
 // 	m_themeList.append(config.name());
@@ -243,7 +237,7 @@ void ThemeHandler::showPanel() {
 //
 // 	// creating upload dialog
 // 	KNS3::UploadDialog dialog("labplot2_themes.knsrc", this);
-// 	dialog.setUploadFile(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + m_currentLocalTheme);
+// 	dialog.setUploadFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/' + "themes" + '/' + m_currentLocalTheme);
 // 	dialog.setUploadName(m_currentLocalTheme);
 // 	//dialog.setDescription(); TODO: allow the user to provide a short description for the theme to be uploaded
 // 	dialog.exec();

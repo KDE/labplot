@@ -1,54 +1,47 @@
-/***************************************************************************
-    File                 : CantorWorksheet.cpp
-    Project              : LabPlot
-    Description          : Aspect providing a Cantor Worksheets for Multiple backends
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
-    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : CantorWorksheet.cpp
+	Project              : LabPlot
+	Description          : Aspect providing a Cantor Worksheets for Multiple backends
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #include "CantorWorksheet.h"
 #include "VariableParser.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
-#include "backend/core/Project.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KParts/ReadWritePart>
-
-#include <QAction>
-#include <QModelIndex>
-#include <QDebug>
-
-#include "cantor/cantor_part.h"
-#include <cantor/panelpluginhandler.h>
-#include <cantor/panelplugin.h>
+#include "3rdparty/cantor/cantor_part.h"
+#include <cantor/cantorlibs_version.h>
 #include <cantor/worksheetaccess.h>
 
-CantorWorksheet::CantorWorksheet(const QString &name, bool loading) : AbstractPart(name),
-	m_backendName(name)  {
+#ifdef HAVE_NEW_CANTOR_LIBS
+#include <cantor/panelplugin.h>
+#include <cantor/panelpluginhandler.h>
+#else
+#include "3rdparty/cantor/panelplugin.h"
+#include "3rdparty/cantor/panelpluginhandler.h"
+#endif
 
+#include <KLocalizedString>
+#include <KParts/ReadWritePart>
+#include <KPluginFactory>
+#include <KPluginMetaData>
+#include <kcoreaddons_version.h>
+
+#include <QAction>
+#include <QFileInfo>
+#include <QModelIndex>
+
+CantorWorksheet::CantorWorksheet(const QString& name, bool loading)
+	: AbstractPart(name, AspectType::CantorWorksheet)
+	, m_backendName(name) {
 	if (!loading)
 		init();
 }
@@ -57,104 +50,201 @@ CantorWorksheet::CantorWorksheet(const QString &name, bool loading) : AbstractPa
 	initializes Cantor's part and plugins
 */
 bool CantorWorksheet::init(QByteArray* content) {
-	KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
-	if (factory) {
+	DEBUG(Q_FUNC_INFO)
+
+#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 86, 0)
+	KPluginLoader loader(QLatin1String("kf5/parts/cantorpart"));
+	KPluginLoader oldLoader(QLatin1String("cantorpart")); // old path
+	KPluginFactory* factory = loader.factory();
+
+	if (!factory) { // try old path
+		WARN("Failed to load Cantor plugins; file name: " << STDSTRING(loader.fileName()))
+		WARN("Error message: " << STDSTRING(loader.errorString()))
+		factory = oldLoader.factory();
+	}
+	if (!factory) {
+		// we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
+		// return false here, a proper error message will be created in load() and propagated further.
+		WARN("Failed to load Cantor plugins; file name: " << STDSTRING(oldLoader.fileName()))
+		WARN("Error message: " << STDSTRING(oldLoader.errorString()))
+		m_error = i18n("Couldn't find the dynamic library 'cantorpart'. Please check your installation.");
+		return false;
+	} else {
 		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));
+
+#else
+	const auto result = KPluginFactory::instantiatePlugin<KParts::ReadWritePart>(KPluginMetaData(QStringLiteral("kf5/parts/cantorpart")),
+																				 this,
+																				 QVariantList() << m_backendName << QLatin1String("--noprogress"));
+
+	if (!result) {
+		WARN("Could not find cantorpart part");
+		return false;
+	} else {
+		m_part = result.plugin;
+#endif
 		if (!m_part) {
-			qDebug() << "Could not create the Cantor Part.";
+			WARN("Could not create the Cantor Part for backend " << STDSTRING(m_backendName))
+			m_error = i18n("Couldn't find the plugin for %1. Please check your installation.", m_backendName);
 			return false;
 		}
-		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
 
-		//load worksheet content if available
+		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
+		if (!m_worksheetAccess)
+			return false;
+
+		// load worksheet content if available
 		if (content)
 			m_worksheetAccess->loadWorksheetFromByteArray(content);
 
 		connect(m_worksheetAccess, SIGNAL(modified()), this, SLOT(modified()));
 
-		//Cantor's session
+		// Cantor's session
 		m_session = m_worksheetAccess->session();
-		connect(m_session, SIGNAL(statusChanged(Cantor::Session::Status)), this, SIGNAL(statusChanged(Cantor::Session::Status)));
+		if (m_session) {
+			connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
 
-		//variable model
-#ifndef OLD_CANTORLIBS_VERSION
-		m_variableModel = m_session->variableDataModel();
-#else
-		m_variableModel = m_session->variableModel();
-#endif
-		connect(m_variableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(dataChanged(QModelIndex)));
-		connect(m_variableModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
-		connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex,int,int)));
-		connect(m_variableModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
-
-		//available plugins
-		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
-		if (!handler) {
-			KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
-			return false;
+			// variable model
+			m_variableModel = m_session->variableDataModel();
+			connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &CantorWorksheet::dataChanged);
+			connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
+			connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
+			connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
 		}
-		m_plugins = handler->plugins();
+
+		// default settings
+		const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
+
+		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
+		// and we need to go through the actions provided in cantor_part.
+		//-> redesign this! expose Cantor's Worksheet directly and add more settings here.
+		auto* action = m_part->action("enable_highlighting");
+		if (action) {
+			bool value = group.readEntry(QLatin1String("SyntaxHighlighting"), false);
+			action->setChecked(value);
+		}
+
+		action = m_part->action("enable_completion");
+		if (action) {
+			bool value = group.readEntry(QLatin1String("SyntaxCompletion"), false);
+			action->setChecked(value);
+		}
+
+		action = m_part->action("enable_expression_numbers");
+		if (action) {
+			bool value = group.readEntry(QLatin1String("LineNumbers"), false);
+			action->setChecked(value);
+		}
+
+		action = m_part->action("enable_typesetting");
+		if (action) {
+			bool value = group.readEntry(QLatin1String("LatexTypesetting"), false);
+			action->setChecked(value);
+		}
+
+		action = m_part->action("enable_animations");
+		if (action) {
+			bool value = group.readEntry(QLatin1String("Animations"), false);
+			action->setChecked(value);
+		}
+
+		// bool value = group.readEntry(QLatin1String("ReevaluateEntries"), false);
+		// value = group.readEntry(QLatin1String("AskConfirmation"), true);
 	}
-	else {
-		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
-		//return false here, a proper error message will be created in load() and propagated further.
-		DEBUG("Failed to load cantor plugin");
-		return false;
-	}
+
 	return true;
 }
 
-//SLots
-void CantorWorksheet::dataChanged(const QModelIndex& index) {
-	const QString& name = m_variableModel->data(m_variableModel->index(index.row(), 0)).toString();
-	Column* col = child<Column>(name);
-	if (col) {
-		// Cantor::DefaultVariableModel::DataRole == 257
-		QVariant dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1), 257);
-		if (dataValue.isNull())
-			dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1));
-		const QString& value = dataValue.toString();
-		auto* parser = new VariableParser(m_backendName, value);
-		if (parser->isParsed())
-			col->replaceValues(0, parser->values());
-	}
-
+const QString& CantorWorksheet::error() const {
+	return m_error;
 }
 
-void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int last) {
-	Q_UNUSED(parent)
-	for (int i = first; i <= last; ++i) {
-		const QString& name = m_variableModel->data(m_variableModel->index(i, 0)).toString();
-		QVariant dataValue = m_variableModel->data(m_variableModel->index(i, 1), 257);
-		if (dataValue.isNull())
-			dataValue = m_variableModel->data(m_variableModel->index(i, 1));
-		const QString& value = dataValue.toString();
-		auto* parser = new VariableParser(m_backendName, value);
-		if (parser->isParsed()) {
-			Column* col = child<Column>(name);
-			if (col) {
-				col->replaceValues(0, parser->values());
-			} else {
-				col = new Column(name, parser->values());
-				col->setUndoAware(false);
-				addChild(col);
+// SLots
+void CantorWorksheet::dataChanged(const QModelIndex& index) {
+	parseData(index.row());
+}
 
-				//TODO: Cantor currently ignores the order of variables in the worksheets
-				//and adds new variables at the last position in the model.
-				//Fix this in Cantor and switch to insertChildBefore here later.
-				//insertChildBefore(col, child<Column>(i));
-			}
-		} else {
-			//the already existing variable doesn't contain any numerical values -> remove it
-			Column* col = child<Column>(name);
-			if (col)
-				removeChild(col);
-		}
-
-		delete(parser);
-	}
+void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int last) {
+	for (int i = first; i <= last; ++i)
+		parseData(i);
 
 	project()->setChanged(true);
+}
+
+void CantorWorksheet::parseData(int row) {
+	const QString& name = m_variableModel->data(m_variableModel->index(row, 0)).toString();
+	QVariant dataValue = m_variableModel->data(m_variableModel->index(row, 1), 257);
+	if (dataValue.isNull())
+		dataValue = m_variableModel->data(m_variableModel->index(row, 1));
+
+	const QString& value = dataValue.toString();
+	VariableParser parser(m_backendName, value);
+
+	if (parser.isParsed()) {
+		auto* col = child<Column>(name);
+		if (col) {
+			switch (parser.dataType()) {
+			case AbstractColumn::ColumnMode::Integer:
+				col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+				col->setIntegers(parser.integers());
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+				col->setBigInts(parser.bigInt());
+				break;
+			case AbstractColumn::ColumnMode::Double:
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
+				col->setValues(parser.doublePrecision());
+				break;
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+				col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+				col->setDateTimes(parser.dateTime());
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				col->setColumnMode(AbstractColumn::ColumnMode::Text);
+				col->setText(parser.text());
+				break;
+			}
+		} else {
+			// Column doesn't exist for this variable yet either because it was not defined yet or
+			// because its values was changed now to an array-like structure after the initial definition.
+			// -> create a new column for the current variable
+			switch (parser.dataType()) {
+			case AbstractColumn::ColumnMode::Integer:
+				col = new Column(name, parser.integers());
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				col = new Column(name, parser.bigInt());
+				break;
+			case AbstractColumn::ColumnMode::Double:
+				col = new Column(name, parser.doublePrecision());
+				break;
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+				col = new Column(name, parser.dateTime(), parser.dataType());
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				col = new Column(name, parser.text());
+				break;
+			}
+			col->setUndoAware(false);
+			col->setFixed(true);
+			addChild(col);
+
+			// TODO: Cantor currently ignores the order of variables in the worksheets
+			// and adds new variables at the last position in the model.
+			// Fix this in Cantor and switch to insertChildBefore here later.
+			// insertChildBefore(col, child<Column>(i));
+		}
+	} else {
+		// the already existing variable doesn't contain any numerical values -> remove it
+		Column* col = child<Column>(name);
+		if (col)
+			removeChild(col);
+	}
 }
 
 void CantorWorksheet::modified() {
@@ -162,29 +252,39 @@ void CantorWorksheet::modified() {
 }
 
 void CantorWorksheet::modelReset() {
-	for (int i = 0; i < childCount<Column>(); ++i)
-		child<Column>(i)->remove();
+	for (auto* column : children<Column>())
+		column->remove();
 }
 
-void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {
-	Q_UNUSED(parent);
-#ifndef OLD_CANTORLIBS_VERSION
+void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex& /*parent*/, int first, int last) {
 	for (int i = first; i <= last; ++i) {
 		const QString& name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 		Column* column = child<Column>(name);
 		if (column)
 			column->remove();
 	}
-#else
-	Q_UNUSED(first);
-	Q_UNUSED(last);
-	//TODO: Old Cantor removes rows from the model even when the variable was changed only.
-	//We don't want this behaviour since this removes the columns from the datasource in the curve.
-	return;
-#endif
 }
 
 QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins() {
+	if (!m_pluginsLoaded) {
+#ifdef HAVE_NEW_CANTOR_LIBS
+		auto* handler = new Cantor::PanelPluginHandler(this);
+		handler->loadPlugins();
+		m_plugins = handler->activePluginsForSession(m_session, Cantor::PanelPluginHandler::PanelStates());
+		for (auto* plugin : m_plugins)
+			plugin->connectToShell(m_part);
+#else
+		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
+		if (!handler) {
+			m_error = i18n("Couldn't find panel plugins. Please check your installation.");
+			return false;
+		}
+		m_plugins = handler->plugins();
+#endif
+
+		m_pluginsLoaded = true;
+	}
+
 	return m_plugins;
 }
 
@@ -195,7 +295,7 @@ KParts::ReadWritePart* CantorWorksheet::part() {
 QIcon CantorWorksheet::icon() const {
 	if (m_session)
 		return QIcon::fromTheme(m_session->backend()->icon());
-	return QIcon();
+	return {};
 }
 
 QWidget* CantorWorksheet::view() const {
@@ -204,6 +304,16 @@ QWidget* CantorWorksheet::view() const {
 		m_view->setBaseSize(1500, 1500);
 		m_partView = m_view;
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
+
+		// set the current path in the session to the path of the project file
+		if (m_session) {
+			const Project* project = const_cast<CantorWorksheet*>(this)->project();
+			const QString& fileName = project->fileName();
+			if (!fileName.isEmpty()) {
+				QFileInfo fi(fileName);
+				m_session->setWorksheetPath(fi.filePath());
+			}
+		}
 	}
 	return m_partView;
 }
@@ -215,7 +325,7 @@ QWidget* CantorWorksheet::view() const {
 QMenu* CantorWorksheet::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
-	emit requestProjectContextMenu(menu);
+	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 
@@ -223,7 +333,7 @@ QString CantorWorksheet::backendName() {
 	return this->m_backendName;
 }
 
-//TODO
+// TODO
 bool CantorWorksheet::exportView() const {
 	return false;
 }
@@ -238,30 +348,38 @@ bool CantorWorksheet::printPreview() const {
 	return true;
 }
 
+void CantorWorksheet::evaluate() {
+	m_part->action("evaluate_worksheet")->trigger();
+}
+
+void CantorWorksheet::restart() {
+	m_part->action("restart_backend")->trigger();
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 
 //! Save as XML
-void CantorWorksheet::save(QXmlStreamWriter* writer) const{
-	writer->writeStartElement("cantorWorksheet");
+void CantorWorksheet::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement(QStringLiteral("cantorWorksheet"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//general
-	writer->writeStartElement( "general" );
-	writer->writeAttribute( "backend_name", m_backendName);
-	//TODO: save worksheet settings
+	// general
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("backend_name"), m_backendName);
+	// TODO: save worksheet settings
 	writer->writeEndElement();
 
-	//save the content of Cantor's worksheet
+	// save the content of Cantor's worksheet
 	QByteArray content = m_worksheetAccess->saveWorksheetToByteArray();
-	writer->writeStartElement("worksheet");
-	writer->writeAttribute("content", content.toBase64());
+	writer->writeStartElement(QStringLiteral("worksheet"));
+	writer->writeAttribute(QStringLiteral("content"), QLatin1String(content.toBase64()));
 	writer->writeEndElement();
 
-	//save columns(variables)
-	for (auto* col : children<Column>(IncludeHidden))
+	// save columns(variables)
+	for (auto* col : children<Column>(ChildIndexFlag::IncludeHidden))
 		col->save(writer);
 
 	writer->writeEndElement(); // close "cantorWorksheet" section
@@ -269,56 +387,67 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 
 //! Load from XML
 bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
+	// reset the status of the reader differentiating between
+	//"failed because of the missing CAS" and "failed because of the broken XML"
+	reader->setFailedCASMissing(false);
+
 	if (!readBasicAttributes(reader))
 		return false;
 
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
-	QString str;
 	bool rc = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "cantorWorksheet")
+		if (reader->isEndElement() && reader->name() == QLatin1String("cantorWorksheet"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
-			m_backendName = attribs.value("backend_name").toString().trimmed();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("backend_name").toString());
-		} else if (!preview && reader->name() == "worksheet") {
+			m_backendName = attribs.value(QStringLiteral("backend_name")).toString().trimmed();
+			if (m_backendName.isEmpty())
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("backend_name")).toString());
+		} else if (!preview && reader->name() == QLatin1String("worksheet")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("content").toString().trimmed();
+			QString str = attribs.value(QStringLiteral("content")).toString().trimmed();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("content").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("content")).toString());
 
 			QByteArray content = QByteArray::fromBase64(str.toLatin1());
 			rc = init(&content);
-			if  (!rc) {
-				QString msg = i18n("This project has Cantor content but no Cantor plugins were found. Please check your installation. The project will be closed.");
-				reader->raiseError(msg);
+			if (!rc) {
+				reader->raiseMissingCASWarning(m_backendName);
+
+				// failed to load this object because of the missing CAS plugin
+				// and not because of the broken project XML. Set this flag to
+				// handle this case correctly.
+				// TODO: we also can fail in the limit in cases where Cantor's content is broken
+				// and not because of the missing CAS plugin. This also needs to be treated accrodingly...
+				reader->setFailedCASMissing(true);
 				return false;
 			}
-		} else if (!preview && reader->name() == "column") {
+		} else if (!preview && reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString());
 			column->setUndoAware(false);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
+			column->setFixed(true);
 			addChild(column);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

@@ -1,69 +1,45 @@
-/***************************************************************************
-File                 : DynamicPresenterWidget.cpp
-Project              : LabPlot
-Description          : Widget for dynamic presenting of worksheets
---------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+/*
+	File                 : DynamicPresenterWidget.cpp
+	Project              : LabPlot
+	Description          : Widget for dynamic presenting of worksheets
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "DynamicPresenterWidget.h"
-#include "commonfrontend/worksheet/WorksheetView.h"
 #include "SlidingPanel.h"
+#include "commonfrontend/worksheet/WorksheetView.h"
 
 #include <QKeyEvent>
-#include <QDesktopWidget>
-#include <QTimeLine>
 #include <QPushButton>
+#include <QScreen>
+#include <QTimeLine>
 
-#include <KLocalizedString>
-
-DynamicPresenterWidget::DynamicPresenterWidget(Worksheet *worksheet, QWidget *parent) : QWidget(parent),
-	m_view(new WorksheetView(worksheet)), m_timeLine(new QTimeLine(600)) {
-
+DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, QWidget* parent)
+	: QWidget(parent)
+	, m_view(new WorksheetView(worksheet))
+	, m_timeLine(new QTimeLine(600)) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setFocus();
 
 	m_view->setParent(this);
 	m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	m_view->setContextMenuPolicy(Qt::NoContextMenu);
+	m_view->initActions(); // init the actions so we can also navigate in the plots
 
-	m_view->fitInView(m_view->sceneRect(), Qt::KeepAspectRatio);
-	m_view->adjustSize();
-
-	QDesktopWidget* const dw = QApplication::desktop();
-	const int primaryScreenIdx = dw->primaryScreen();
-	const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
-
-	const int moveRight = (screenSize.width() - m_view->width()) / 2.0;
-	const int moveDown = (screenSize.height() - m_view->height()) / 2.0;
-	m_view->move(moveRight, moveDown);
+	const QRect& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
+	m_view->setGeometry(screenSize); // use the full screen size for the view
 	m_view->show();
+	m_view->setFocus();
 
 	m_panel = new SlidingPanel(this, worksheet->name());
 	qApp->installEventFilter(this);
 	connect(m_timeLine, &QTimeLine::valueChanged, m_panel, &SlidingPanel::movePanel);
-	connect(m_panel->quitButton(), &QPushButton::clicked, this, &DynamicPresenterWidget::close);
-	grabMouse();
-
-	slideUp();
+	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=]() {
+		close();
+	});
 }
 
 DynamicPresenterWidget::~DynamicPresenterWidget() {
@@ -71,8 +47,7 @@ DynamicPresenterWidget::~DynamicPresenterWidget() {
 	delete m_view;
 }
 
-bool DynamicPresenterWidget::eventFilter(QObject* watched, QEvent* event) {
-	Q_UNUSED(watched);
+bool DynamicPresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		if (m_panel->y() != 0 && m_panel->rect().contains(QCursor::pos()))
 			slideDown();
@@ -83,7 +58,7 @@ bool DynamicPresenterWidget::eventFilter(QObject* watched, QEvent* event) {
 	return false;
 }
 
-void DynamicPresenterWidget::keyPressEvent(QKeyEvent *event) {
+void DynamicPresenterWidget::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Escape)
 		close();
 }
@@ -103,7 +78,7 @@ void DynamicPresenterWidget::startTimeline() {
 		m_timeLine->start();
 }
 
-void DynamicPresenterWidget::focusOutEvent(QFocusEvent *e) {
+void DynamicPresenterWidget::focusOutEvent(QFocusEvent* e) {
 	if (m_view->hasFocus())
 		setFocus();
 

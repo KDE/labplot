@@ -1,95 +1,100 @@
-/***************************************************************************
-    File                 : CartesianPlotDock.h
-    Project              : LabPlot
-    Description          : widget for cartesian plot properties
-    --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+/*
+	File                 : CartesianPlotDock.h
+	Project              : LabPlot
+	Description          : widget for cartesian plot properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef CARTESIANPLOTDOCK_H
 #define CARTESIANPLOTDOCK_H
 
-#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_cartesianplotdock.h"
 
 #include <KConfig>
 
-template <class T> class QList;
+template<class T>
+class QList;
+class BackgroundWidget;
 class LabelWidget;
+class LineWidget;
 class ThemeHandler;
-class KLocalizedString;
 
-class CartesianPlotDock : public QWidget {
+class CartesianPlotDock : public BaseDock {
 	Q_OBJECT
 
 public:
 	explicit CartesianPlotDock(QWidget*);
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
+	void updateLocale() override;
+	void updateUnits() override;
+	void updateRangeList(const Dimension dim);
+	void updatePlotRangeList();
 
 private:
 	Ui::CartesianPlotDock ui;
+	BackgroundWidget* backgroundWidget{nullptr};
 	QList<CartesianPlot*> m_plotList;
 	CartesianPlot* m_plot{nullptr};
 	LabelWidget* labelWidget{nullptr};
-	bool m_initializing{false};
+	LineWidget* borderLineWidget{nullptr};
+	LineWidget* cursorLineWidget{nullptr};
 	ThemeHandler* m_themeHandler;
+	QButtonGroup* m_bgDefaultPlotRange{nullptr};
+	bool m_autoScale{false};
+	bool m_updateUI{true};
 
+	void autoScaleRange(const Dimension, const int index, bool);
 	void loadConfig(KConfig&);
 
-private slots:
+private Q_SLOTS:
 	void init();
 	void retranslateUi();
 
-	//SLOTs for changes triggered in CartesianPlotDock
+	// SLOTs for changes triggered in CartesianPlotDock
 	//"General"-tab
-	void nameChanged();
-	void commentChanged();
 	void visibilityChanged(bool);
+
+	void rangeTypeChanged(int);
+	void niceExtendChanged(bool checked);
+	void rangePointsChanged(const QString&);
+
+	void autoScaleChanged(const Dimension, const int rangeIndex, bool);
+	void minDateTimeChanged(const QObject* sender, const Dimension, qint64 value);
+	void maxDateTimeChanged(const QObject* sender, const Dimension, qint64);
+	// void xRangeDateTimeChanged(const Range<quint64>&);
+	void rangeFormatChanged(const QObject* sender, const Dimension, int index);
+	void scaleChanged(const QObject* sender, const Dimension, int);
+	void addXRange();
+	void addYRange();
+	void removeRange(const Dimension dim);
+	void removeXRange();
+	void removeYRange();
+	void addPlotRange();
+	void removePlotRange();
+	void PlotRangeChanged(const int cSystemIndex, const Dimension, const int index);
+	void PlotRangeXChanged(const int index);
+	void PlotRangeYChanged(const int index);
+
+	void minChanged(const Dimension dim, const int index, double min);
+	void maxChanged(const Dimension dim, const int index, double max);
+	// void yRangeDateTimeChanged(const Range<quint64>&);
+
+	// "Layout"-tab
 	void geometryChanged();
 	void layoutChanged(Worksheet::Layout);
-
-	void rangeTypeChanged();
-	void rangeFirstChanged(const QString&);
-	void rangeLastChanged(const QString&);
-
-	void autoScaleXChanged(int);
-	void xMinChanged(const QString&);
-	void xMaxChanged(const QString&);
-	void xMinDateTimeChanged(const QDateTime&);
-	void xMaxDateTimeChanged(const QDateTime&);
-	void xRangeFormatChanged(int);
-	void xScaleChanged(int);
-
-	void autoScaleYChanged(int);
-	void yMinChanged(const QString&);
-	void yMaxChanged(const QString&);
-	void yMinDateTimeChanged(const QDateTime&);
-	void yMaxDateTimeChanged(const QDateTime&);
-	void yRangeFormatChanged(int);
-	void yScaleChanged(int);
+	void symmetricPaddingChanged(bool);
+	void horizontalPaddingChanged(double);
+	void rightPaddingChanged(double);
+	void verticalPaddingChanged(double);
+	void bottomPaddingChanged(double);
 
 	//"Range Breaks"-tab
 	void toggleXBreak(bool);
@@ -111,79 +116,62 @@ private slots:
 	void yBreakStyleChanged(int);
 
 	//"Plot area"-tab
-	void backgroundTypeChanged(int);
-	void backgroundColorStyleChanged(int);
-	void backgroundImageStyleChanged(int);
-	void backgroundBrushStyleChanged(int);
-	void backgroundFirstColorChanged(const QColor&);
-	void backgroundSecondColorChanged(const QColor&);
-	void selectFile();
-	void fileNameChanged();
-	void backgroundOpacityChanged(int);
-	void borderStyleChanged(int);
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
+	void borderTypeChanged();
 	void borderCornerRadiusChanged(double);
-	void borderOpacityChanged(int);
-	void horizontalPaddingChanged(double);
-	void verticalPaddingChanged(double);
 
-	//SLOTs for changes triggered in CartesianPlot
-	//general
-	void plotDescriptionChanged(const AbstractAspect*);
-	void plotRectChanged(QRectF&);
+	void exportPlotTemplate();
+
+	// SLOTs for changes triggered in CartesianPlot
+	// general
+
 	void plotRangeTypeChanged(CartesianPlot::RangeType);
 	void plotRangeFirstValuesChanged(int);
 	void plotRangeLastValuesChanged(int);
 
-	void plotXAutoScaleChanged(bool);
-	void plotXMinChanged(double);
-	void plotXMaxChanged(double);
-	void plotXRangeFormatChanged(CartesianPlot::RangeFormat);
-	void plotXScaleChanged(int);
+	void plotAutoScaleChanged(const Dimension, int, bool);
+	void plotMinChanged(const Dimension, int yRangeIndex, double);
+	void plotMaxChanged(const Dimension, int xRangeIndex, double);
+	void plotRangeChanged(const Dimension, int, Range<double>);
+	void plotRangeFormatChanged(const Dimension, int rangeIndex, RangeT::Format format);
+	void plotScaleChanged(const Dimension, int xRangeIndex, RangeT::Scale);
 
-
-	void plotYAutoScaleChanged(bool);
-	void plotYMinChanged(double);
-	void plotYMaxChanged(double);
-	void plotYRangeFormatChanged(CartesianPlot::RangeFormat);
-	void plotYScaleChanged(int);
+	void defaultPlotRangeChanged();
 
 	void plotVisibleChanged(bool);
 
-	//range breaks
+	// layout
+	void plotRectChanged(QRectF&);
+	void plotHorizontalPaddingChanged(double);
+	void plotVerticalPaddingChanged(double);
+	void plotRightPaddingChanged(double);
+	void plotBottomPaddingChanged(double);
+	void plotSymmetricPaddingChanged(bool);
+
+	// range breaks
 	void plotXRangeBreakingEnabledChanged(bool);
 	void plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void plotYRangeBreakingEnabledChanged(bool);
 	void plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
-	//background
-	void plotBackgroundTypeChanged(PlotArea::BackgroundType);
-	void plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
-	void plotBackgroundBrushStyleChanged(Qt::BrushStyle);
-	void plotBackgroundFirstColorChanged(QColor&);
-	void plotBackgroundSecondColorChanged(QColor&);
-	void plotBackgroundFileNameChanged(QString&);
-	void plotBackgroundOpacityChanged(float);
-	void plotBorderPenChanged(QPen&);
-	void plotBorderCornerRadiusChanged(float);
-	void plotBorderOpacityChanged(float);
-	void plotHorizontalPaddingChanged(float);
-	void plotVerticalPaddingChanged(float);
+	// background
+	void plotBorderTypeChanged(PlotArea::BorderType);
+	void plotBorderCornerRadiusChanged(double);
 
-	//save/load template
+	// save/load template
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-	//save/load themes
+	// save/load themes
 	void loadTheme(const QString&);
-	void saveTheme(KConfig& config) const;
+	void saveTheme(KConfig&) const;
 
 	void load();
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
+
+	friend class RetransformTest;
+	friend class WidgetsTest;
 };
 
 #endif

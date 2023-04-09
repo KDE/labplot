@@ -1,50 +1,38 @@
-/***************************************************************************
-    File                 : XYFitCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by a fit model
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : XYFitCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by a fit model
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef XYFITCURVE_H
 #define XYFITCURVE_H
 
+#include "backend/lib/Range.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
-#include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
 
 extern "C" {
 #include "backend/nsl/nsl_fit.h"
 }
 
 class XYFitCurvePrivate;
+class Histogram;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYFitCurve : public XYAnalysisCurve {
+#else
 class XYFitCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
 	struct FitData {
-		FitData() {};
+		FitData() {
+		}
 
 		nsl_fit_model_category modelCategory{nsl_fit_model_basic};
 		int modelType{0};
@@ -53,34 +41,34 @@ public:
 		int degree{1};
 		QString model;
 		QStringList paramNames;
-		QStringList paramNamesUtf8;	// Utf8 version of paramNames
+		QStringList paramNamesUtf8; // Utf8 version of paramNames
 		QVector<double> paramStartValues;
 		QVector<double> paramLowerLimits;
 		QVector<double> paramUpperLimits;
 		QVector<bool> paramFixed;
+		nsl_fit_algorithm algorithm{nsl_fit_algorithm_lm};
 
 		int maxIterations{500};
 		double eps{1.e-4};
 		size_t evaluatedPoints{1000};
-		bool useDataErrors{true};	// use given data errors when fitting (default)
-		bool useResults{true};		// use results as new start values (default)
-		bool previewEnabled{true};	// preview fit function with given start parameters
+		bool useDataErrors{true}; // use given data errors when fitting (default)
+		bool useResults{true}; // use results as new start values (default)
+		bool previewEnabled{true}; // preview fit function with given start parameters
+		double confidenceInterval{95.}; // confidence interval for fit result
 
-		bool autoRange{true};		// use all data points? (default)
-		bool autoEvalRange{true};	// evaluate fit function on full data range (default)
-		QVector<double> fitRange{0., 0.};	// x fit range
-		QVector<double> evalRange{0., 0.};	// x evaluation range
+		bool autoRange{true}; // use all data points? (default)
+		bool autoEvalRange{true}; // evaluate fit function on full data range (default)
+		Range<double> fitRange{0., 0.}; // x range of data to fit
+		Range<double> evalRange{0., 0.}; // x range to evaluate fit function
 	};
 
-	struct FitResult {
-		FitResult() {};
+	struct FitResult : public XYAnalysisCurve::Result {
+		FitResult() {
+		}
+		void calculateResult(size_t n, unsigned int np); // calculate depending results (uses dof, sse, sst)
 
-		bool available{false};
-		bool valid{false};
-		QString status;
 		int iterations{0};
-		qint64 elapsedTime{0};
-		double dof{0}; //degrees of freedom
+		double dof{0}; // degrees of freedom
 		// residuals: r_i = y_i - Y_i
 		double sse{0}; // sum of squared errors (SSE) / residual sum of squares (RSS) / sum of sq. residuals (SSR) / S = chi^2 = \sum_i^n r_i^2
 		double sst{0}; // total sum of squares (SST) = \sum_i^n (y_i - <y>)^2
@@ -91,35 +79,43 @@ public:
 		double mae{0}; // mean absolute error = \sum_i^n |r_i|
 		double rsquare{0};
 		double rsquareAdj{0};
-		double chisq_p{0};	// chi^2 distribution p-value
-		double fdist_F{0};	// F distribution F-value
-		double fdist_p{0};	// F distribution p-value
-		double logLik{0};	// log likelihood
-		double aic{0};	// Akaike information criterion
-		double bic{0};	// Schwarz Bayesian information criterion
-		// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
+		double chisq_p{0}; // chi^2 distribution p-value
+		double fdist_F{0}; // F distribution F-value
+		double fdist_p{0}; // F distribution p-value
+		double logLik{0}; // log likelihood
+		double aic{0}; // Akaike information criterion
+		double bic{0}; // Schwarz Bayesian information criterion
+		// see also https://www.originlab.com/doc/Origin-Help/NLFit-Theory
 		QVector<double> paramValues;
 		QVector<double> errorValues;
 		QVector<double> tdist_tValues;
 		QVector<double> tdist_pValues;
-		QVector<double> tdist_marginValues;
+		QVector<double> marginValues; // lower confidence
+		QVector<double> margin2Values; // upper confidence
+		QVector<double> correlationMatrix;
 		QString solverOutput;
 	};
 
 	explicit XYFitCurve(const QString& name);
 	~XYFitCurve() override;
 
+	POINTER_D_ACCESSOR_DECL(const Histogram, dataSourceHistogram, DataSourceHistogram)
+	const QString& dataSourceHistogramPath() const;
+
 	void recalculate() override;
 	void evaluate(bool preview);
-	void initFitData(PlotDataDialog::AnalysisAction);
-	static void initFitData(XYFitCurve::FitData&);
+	virtual const XYAnalysisCurve::Result& result() const override;
 	void initStartValues(const XYCurve*);
-	static void initStartValues(XYFitCurve::FitData&, const XYCurve*);
+	void initStartValues(XYFitCurve::FitData&, const XYCurve*);
+	void initFitData(XYAnalysisCurve::AnalysisAction);
+	static void initFitData(XYFitCurve::FitData&);
+	void clearFitResult();
 
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+	const AbstractColumn* residualsColumn() const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorColumn, XErrorColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorColumn, YErrorColumn)
 	const QString& xErrorColumnPath() const;
@@ -136,7 +132,8 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYFitCurve)
 
-signals:
+Q_SIGNALS:
+	void dataSourceHistogramChanged(const Histogram*);
 	void xErrorColumnChanged(const AbstractColumn*);
 	void yErrorColumnChanged(const AbstractColumn*);
 	void fitDataChanged(const XYFitCurve::FitData&);

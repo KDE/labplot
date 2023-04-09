@@ -1,29 +1,12 @@
-/***************************************************************************
-    File                 : DifferentiationTest.h
-    Project              : LabPlot
-    Description          : Tests for numerical differentiation
-    --------------------------------------------------------------------
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
- ***************************************************************************/
+/*
+	File                 : DifferentiationTest.h
+	Project              : LabPlot
+	Description          : Tests for numerical differentiation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef DIFFERENTIATIONTEST_H
 #define DIFFERENTIATIONTEST_H
 
@@ -32,7 +15,7 @@
 class DifferentiationTest : public AnalysisTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testLinear();
 	void testLinearNonEquidistant();
 	void testQuadratic();
@@ -43,6 +26,8 @@ private slots:
 	void testCubicSecondOrder();
 	void testCubicThirdOrder();
 
-//	void testPerformance();
+	// duplicate X
+	void testLinearDuplicateX();
+	//	void testPerformance();
 };
 #endif

@@ -1,64 +1,41 @@
-/***************************************************************************
-    File                 : ProjectDock.h
-    Project              : LabPlot
-    Description          : widget for worksheet properties
-    --------------------------------------------------------------------
-    Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+/*
+	File                 : ProjectDock.h
+	Project              : LabPlot
+	Description          : widget for worksheet properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef PROJECTDOCK_H
 #define PROJECTDOCK_H
 
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_projectdock.h"
 
 class Project;
-class AbstractAspect;
 class KConfig;
 
-class ProjectDock: public QWidget {
+class ProjectDock : public BaseDock {
 	Q_OBJECT
 
 public:
-	explicit ProjectDock(QWidget* parent);
-	void setProject(Project* project);
+	explicit ProjectDock(QWidget*);
+	void setProject(Project*);
 
 private:
 	Ui::ProjectDock ui;
 	Project* m_project{nullptr};
-	bool m_initializing{false};
 
-private slots:
-	void retranslateUi();
+private Q_SLOTS:
+	void authorChanged();
+	void saveCalculationsChanged(bool);
 
-	void titleChanged(const QString&);
-	void authorChanged(const QString&);
-	void commentChanged();
-
-	//SLOTs for changes triggered in Project
-	void projectDescriptionChanged(const AbstractAspect*);
-
-	void loadConfig(KConfig&);
-	void saveConfig(KConfig&);
+	// SLOTs for changes triggered in Project
+	void projectAuthorChanged(const QString&);
+	void projectSaveCalculationsChanged(bool);
 };
 
 #endif // PROJECTDOCK_H

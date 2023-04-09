@@ -9,11 +9,13 @@ set -e
 
 NAME=labplot2
 PNAME=LabPlot2
-VERSION=2.6.0
+VERSION=2.8.0
 PREFIX=kde/Applications
 INPREFIX=$PREFIX/$PNAME.app/Contents
 TMPDIR=LabPlot2
 SIGNATURE="Stefan Gerlach"
+
+GCP=/opt/local/libexec/gnubin/cp
 
 #########################################
 
@@ -49,20 +51,29 @@ cp -v kde/share/metainfo/org.kde.labplot2.appdata.xml $INPREFIX/share/appdata/
 cp -v kde/share/applications/org.kde.$NAME.desktop $INPREFIX/share/applications/
 
 # cantor
-# TODO: currently disabled
-#cp -v kde/Applications/KDE/cantor.app/Contents/MacOS/cantor $INPREFIX/MacOS
-#cp -v kde/Applications/KDE/cantor_scripteditor.app/Contents/MacOS/cantor_scripteditor $INPREFIX/MacOS
-#cp -vr kde/plugins/cantor $INPREFIX/PlugIns
-#cp -v kde/lib/libcantor_config.dylib $INPREFIX/Frameworks/
-#cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
-#cp -v kde/lib/libcantorlibs.18.07.70.dylib $INPREFIX/Frameworks/libcantorlibs.18.dylib
+cp -v kde/Applications/cantor.app/Contents/MacOS/cantor $INPREFIX/MacOS
+cp -v kde/Applications/cantor_scripteditor.app/Contents/MacOS/cantor_scripteditor $INPREFIX/MacOS
+cp -vr kde/plugins/cantor $INPREFIX/PlugIns
+cp -v kde/lib/libcantor_config.dylib $INPREFIX/Frameworks/
+cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
 
 # icons
 cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
 
+# kcharselect data
+mkdir -p $INPREFIX/Resources/kf5/kcharselect
+cp -v kde/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/kf5/kcharselect/
+
 # misc
 cp -v labplot/admin/Info.plist $INPREFIX
 cp -v /Applications/KDE/labplot2.app/Contents/Resources/{LABPLOT_ICONS.icns,LML_ICONS.icns} $INPREFIX/Resources
+
+# translation (locale)
+cd kde/share
+$GCP -vf --parents locale/*/LC_MESSAGES/labplot2.mo ../../$INPREFIX/Resources
+$GCP -vf --parents locale/*/LC_MESSAGES/kconfigwidgets5.mo ../../$INPREFIX/Resources
+$GCP -vf --parents locale/*/LC_MESSAGES/kxmlgui5.mo ../../$INPREFIX/Resources
+cd ../..
 
 ### TODO
 # package icon

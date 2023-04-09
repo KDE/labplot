@@ -86,9 +86,9 @@
        </spacer>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="lNumberFormat">
+       <widget class="QLabel" name="lDecimalSeparator">
         <property name="text">
-         <string>Number format:</string>
+         <string>Decimal separator:</string>
         </property>
        </widget>
       </item>
@@ -100,7 +100,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QComboBox" name="cbNumberFormat"/>
+       <widget class="QComboBox" name="cbDecimalSeparator"/>
       </item>
       <item row="4" column="1">
        <widget class="KComboBox" name="cbDateTimeFormat">
@@ -236,7 +236,7 @@
       </widget>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
-        <string>Data portion to read</string>
+        <string>Data Portion to Read</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">

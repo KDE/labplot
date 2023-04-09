@@ -1,55 +1,37 @@
-/***************************************************************************
-    File                 : AxisPrivate.h
-    Project              : LabPlot
-    Description          : Private members of Axis.
-    --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : AxisPrivate.h
+	Project              : LabPlot
+	Description          : Private members of Axis.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef AXISPRIVATE_H
 #define AXISPRIVATE_H
 
-#include <QGraphicsItem>
-#include <QPen>
-#include <QFont>
 #include "Axis.h"
+
+#include "backend/worksheet/WorksheetElementPrivate.h"
+#include <QFont>
+#include <QPen>
 
 class QGraphicsSceneHoverEvent;
 
 class AxisGrid;
-class CartesianPlot;
-class CartesianCoordinateSystem;
+class Line;
 class TextLabel;
 
-class AxisPrivate: public QGraphicsItem {
+class AxisPrivate : public WorksheetElementPrivate {
 public:
 	explicit AxisPrivate(Axis*);
 
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	QString name() const;
-	void retransform();
+	void retransform() override;
+	void retransformRange();
 	void retransformLine();
 	void retransformArrow();
 	void retransformTicks();
@@ -57,97 +39,117 @@ public:
 	void retransformTickLabelStrings();
 	void retransformMinorGrid();
 	void retransformMajorGrid();
+	void updateGrid();
 	bool swapVisible(bool);
-	void recalcShapeAndBoundingRect();
-	void setPrinting(bool);
+	void recalcShapeAndBoundingRect() override;
+	bool isHovered() const;
+	static QString createScientificRepresentation(const QString& mantissa, const QString& exponent);
 
-	//general
-	bool autoScale;
-	Axis::AxisOrientation orientation; //!< horizontal or vertical
-	Axis::AxisPosition position; //!< left, right, bottom, top or custom (usually not changed after creation)
-	Axis::AxisScale scale;
-	double offset; //!< offset from zero in the direction perpendicular to the axis
-	double start; //!< start coordinate of the axis line
-	double end; //!< end coordinate of the axis line
-	qreal scalingFactor;
-	qreal zeroOffset;
+	bool isDefault{false};
 
-	//line
+	// general
+	Axis::RangeType rangeType{Axis::RangeType::Auto};
+	Axis::Orientation orientation{Axis::Orientation::Horizontal}; //!< horizontal or vertical
+	Axis::Position position{Axis::Position::Centered}; //!< left, right, bottom, top or custom (usually not changed after creation)
+	RangeT::Scale scale{RangeT::Scale::Linear};
+	double offset{0}; //!< offset from zero in the direction perpendicular to the axis
+	Range<double> range; //!< coordinate range of the axis line
+	Axis::TicksStartType majorTicksStartType{Axis::TicksStartType::Offset};
+	qreal majorTickStartOffset{0};
+	qreal majorTickStartValue{0};
+	qreal scalingFactor{1};
+	qreal zeroOffset{0};
+	bool showScaleOffset{true};
+	double logicalPosition{0};
+
+	// line
 	QVector<QLineF> lines;
-	QPen linePen;
-	qreal lineOpacity;
-	Axis::ArrowType arrowType;
-	Axis::ArrowPosition arrowPosition;
-	qreal arrowSize;
+	Line* line{nullptr};
+	Axis::ArrowType arrowType{Axis::ArrowType::NoArrow};
+	Axis::ArrowPosition arrowPosition{Axis::ArrowPosition::Right};
+	qreal arrowSize{Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point)};
 
 	// Title
-	TextLabel* title;
-	qreal titleOffsetX; //distance to the axis line
-	qreal titleOffsetY; //distance to the axis line
+	TextLabel* title{nullptr};
+	qreal titleOffsetX{Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point)}; // distance to the axis line
+	qreal titleOffsetY{Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point)}; // distance to the axis line
 
 	// Ticks
-	Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
-	Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
-	int majorTicksNumber; //!< number of major ticks
-	qreal majorTicksIncrement; //!< increment (step) for the major ticks
+	Axis::TicksDirection majorTicksDirection{Axis::ticksOut}; //!< major ticks direction: inwards, outwards, both, or none
+	Axis::TicksType majorTicksType{
+		Axis::TicksType::TotalNumber}; //!< the way how the number of major ticks is specified  - either as a total number or an increment
+	bool majorTicksAutoNumber{true}; //!< If the number of ticks should be adjusted automatically or not
+	int majorTicksNumber{11}; //!< number of major ticks
+	qreal majorTicksSpacing{0.0}; //!< spacing (step) for the major ticks
 	const AbstractColumn* majorTicksColumn{nullptr}; //!< column containing values for major ticks' positions
 	QString majorTicksColumnPath;
-	qreal majorTicksLength; //!< major tick length (in page units!)
-	QPen majorTicksPen;
-	qreal majorTicksOpacity;
+	qreal majorTicksLength{Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point)}; //!< major tick length (in page units!)
+	Line* majorTicksLine{nullptr};
 
-	Axis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
-	Axis::TicksType minorTicksType;  //!< the way how the number of minor ticks is specified  - either as a total number or an increment
-	int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
-	qreal minorTicksIncrement; //!< increment (step) for the minor ticks
+	Axis::TicksDirection minorTicksDirection{Axis::ticksOut}; //!< minor ticks direction: inwards, outwards, both, or none
+	Axis::TicksType minorTicksType{
+		Axis::TicksType::TotalNumber}; //!< the way how the number of minor ticks is specified  - either as a total number or an increment
+	bool minorTicksAutoNumber{true}; //!< If the number of ticks should be adjusted automatically or not
+	int minorTicksNumber{1}; //!< number of minor ticks (between each two major ticks)
+	qreal minorTicksIncrement{0.0}; //!< spacing (step) for the minor ticks
 	const AbstractColumn* minorTicksColumn{nullptr}; //!< column containing values for minor ticks' positions
 	QString minorTicksColumnPath;
-	qreal minorTicksLength; //!< minor tick length (in page units!)
-	QPen minorTicksPen;
-	qreal minorTicksOpacity;
+	qreal minorTicksLength{Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point)}; //!< minor tick length (in page units!)
+	Line* minorTicksLine{nullptr};
 
 	// Tick Label
-	Axis::LabelsFormat labelsFormat;
-	int labelsPrecision;
-	bool labelsAutoPrecision;
+	Axis::LabelsFormat labelsFormat{Axis::LabelsFormat::Decimal};
+	bool labelsFormatAuto{true};
+	int labelsPrecision{1};
+	bool labelsAutoPrecision{true};
 	QString labelsDateTimeFormat;
-	Axis::LabelsPosition labelsPosition;
-	qreal labelsRotationAngle;
+	Axis::LabelsPosition labelsPosition{Axis::LabelsPosition::Out};
+	Axis::LabelsTextType labelsTextType{Axis::LabelsTextType::PositionValues};
+	const AbstractColumn* labelsTextColumn{nullptr};
+	QString labelsTextColumnPath;
+	qreal labelsRotationAngle{0};
 	QColor labelsColor;
 	QFont labelsFont;
-	qreal labelsOffset; //!< offset, distance to the end of the tick line (in page units)
-	qreal labelsOpacity;
+	Axis::LabelsBackgroundType labelsBackgroundType{Axis::LabelsBackgroundType::Transparent};
+	QColor labelsBackgroundColor;
+	qreal labelsOffset{Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point)}; //!< offset, distance to the end of the tick line (in page units)
+	qreal labelsOpacity{1.0};
 	QString labelsPrefix;
 	QString labelsSuffix;
 
-	//Grid
-	AxisGrid* gridItem;
-	QPen majorGridPen;
-	qreal majorGridOpacity;
-	QPen minorGridPen;
-	qreal minorGridOpacity;
+	// Grid
+	AxisGrid* gridItem{nullptr};
+	Line* majorGridLine{nullptr};
+	Line* minorGridLine{nullptr};
 
-	Axis* const q;
+	Axis* const q{nullptr};
 
 	QPainterPath linePath;
 	QPainterPath majorGridPath;
 	QPainterPath minorGridPath;
-	bool suppressRetransform{false};
-	bool labelsFormatDecimalOverruled{false};
-	bool labelsFormatAutoChanged{false};
 
-	CartesianPlot* plot{nullptr};
-	const CartesianCoordinateSystem* cSystem{nullptr};
+	QVector<QPointF> majorTickPoints; //!< position of the major ticks  on the axis.
+	QVector<QPointF> minorTickPoints; //!< position of the major ticks  on the axis.
+	QVector<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
+	QVector<double> tickLabelValues; //!< major tick labels values
+	QVector<QString> tickLabelValuesString; //!< major tick labels used when a custom text column is selected
+	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
 
 private:
+	CartesianPlot* plot() const {
+		return q->m_plot; // convenience method
+	}
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void addArrow(QPointF point, int direction);
-	int upperLabelsPrecision(int);
-	int lowerLabelsPrecision(int);
+	int upperLabelsPrecision(int precision, Axis::LabelsFormat);
+	int lowerLabelsPrecision(int precision, Axis::LabelsFormat);
 	bool transformAnchor(QPointF*);
 
 	QPainterPath arrowPath;
@@ -156,15 +158,10 @@ private:
 	QRectF boundingRectangle;
 	QPainterPath axisShape;
 
-	QVector<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
-	QVector<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
-	QVector<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
-	QVector<double> tickLabelValues; //!< major tick labels values
-	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
-
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};
-	bool m_printing{false};
+	bool m_panningStarted{false};
+	QPointF m_panningStart;
 };
 
 #endif

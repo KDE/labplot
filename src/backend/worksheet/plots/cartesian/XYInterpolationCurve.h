@@ -1,39 +1,20 @@
-/***************************************************************************
-    File                 : XYInterpolationCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by an interpolation
-    --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : XYInterpolationCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by an interpolation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef XYINTERPOLATIONCURVE_H
 #define XYINTERPOLATIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 extern "C" {
-#include <gsl/gsl_version.h>
 #include "backend/nsl/nsl_interp.h"
+#include <gsl/gsl_version.h>
 }
 
 class XYInterpolationCurvePrivate;
@@ -42,38 +23,33 @@ class XYInterpolationCurve : public XYAnalysisCurve {
 	Q_OBJECT
 
 public:
-	enum PointsMode {Auto, Multiple, Custom};
+	enum class PointsMode { Auto, Multiple, Custom };
 	struct InterpolationData {
-		InterpolationData() : xRange(2) {};
+		InterpolationData(){};
 
-		nsl_interp_type type{nsl_interp_type_linear};			// type of interpolation
-		nsl_interp_pch_variant variant{nsl_interp_pch_variant_finite_difference};		// variant of cubic Hermite interpolation
-		double tension{0.0}, continuity{0.0}, bias{0.0};		// TCB values
-		nsl_interp_evaluate evaluate{nsl_interp_evaluate_function};	// what to evaluate
-		size_t npoints{100};						// nr. of points
-		XYInterpolationCurve::PointsMode pointsMode{XYInterpolationCurve::Auto};	// mode to interpret points
-		bool autoRange{true};						// use all data?
-		QVector<double> xRange;						// x range for interpolation
-	};
-	struct InterpolationResult {
-		InterpolationResult() {};
-
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
+		nsl_interp_type type{nsl_interp_type_linear}; // type of interpolation
+		nsl_interp_pch_variant variant{nsl_interp_pch_variant_finite_difference}; // variant of cubic Hermite interpolation
+		double tension{0.0}, continuity{0.0}, bias{0.0}; // TCB values
+		nsl_interp_evaluate evaluate{nsl_interp_evaluate_function}; // what to evaluate
+		size_t npoints{100}; // nr. of points
+		XYInterpolationCurve::PointsMode pointsMode{PointsMode::Auto}; // mode to interpret points
+		bool autoRange{true}; // use all data?
+		// TODO: use Range
+		QVector<double> xRange{0, 0}; // x range for interpolation
 	};
 
 	explicit XYInterpolationCurve(const QString& name);
 	~XYInterpolationCurve() override;
 
 	void recalculate() override;
+
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
 	CLASS_D_ACCESSOR_DECL(InterpolationData, interpolationData, InterpolationData)
-	const InterpolationResult& interpolationResult() const;
+	typedef XYAnalysisCurve::Result InterpolationResult;
+	virtual const XYAnalysisCurve::Result& result() const override;
 
 	typedef XYInterpolationCurvePrivate Private;
 
@@ -83,7 +59,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYInterpolationCurve)
 
-signals:
+Q_SIGNALS:
 	void interpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
 };
 

@@ -1,0 +1,415 @@
+{
+    "name": "StatLib",
+    "categories": [
+        {
+            "name": "Medicine",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch14.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch14.dat",
+                            "filename": "Leukemia-Trial",
+                            "name": "Interpretation of a Leukemia Trial Stopped Early",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch15.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch15.dat",
+                            "filename": "Lung-Cancer",
+                            "name": "Early Lung Cancer Detection Studies",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch16a.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch16a.dat",
+                            "filename": "Choroidal-Melanoma 1",
+                            "name": "Modeling Interrater Agreement for Pathological Features of Choroidal Melanoma",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch16b.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch16b.dat",
+                            "filename": "Choroidal-Melanoma 2",
+                            "name": "Modeling Interrater Agreement for Pathological Features of Choroidal Melanoma",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch18a.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch18a.dat",
+                            "filename": "Cervical-Cancer 1",
+                            "name": "Modeling the Precursors of Cervical Cancer",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch18b.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch18b.dat",
+                            "filename": "Cervical-Cancer 2",
+                            "name": "Modeling the Precursors of Cervical Cancer\n",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Oncology"
+                },
+                {
+                    "datasets": [
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch1b.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch1b.dat",
+                            "filename": "Disease-Clusters",
+                            "name": "Spatial Pattern Analysis to Detect Rare Disease Clusters",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch17.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch17.dat",
+                            "filename": "Bone-Mineral",
+                            "name": "Quality Control for Bone Mineral Density Scans",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch21a.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch21a.dat",
+                            "filename": "Drug-Interactions 1",
+                            "name": "Drug Interactions Between Morphine and Marijuana\n",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch21b.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch21b.dat",
+                            "filename": "Drug-Interactions 2",
+                            "name": "Drug Interactions Between Morphine and Marijuana\n",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Other"
+                },
+                {
+                    "datasets": [
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch20.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch20.dat",
+                            "filename": "Adolescent-Depression",
+                            "name": "Two-Stage Sampling Designs for Adolescent Depression Studies",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Psychology"
+                },
+                {
+                    "datasets": [
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch19.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch19a.dat",
+                            "filename": "never-smokers",
+                            "name": "never-smokers",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch19.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch19b.dat",
+                            "filename": "current-smokers-m",
+                            "name": "current smokers: male",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch19.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch19c.dat",
+                            "filename": "current-smokers-f",
+                            "name": "current smokers: female",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch19.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch19d.dat",
+                            "filename": "former-smokers-mnc",
+                            "name": "former smokers:  male, no college",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch19.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch19e.dat",
+                            "filename": "former-smokers-msc",
+                            "name": "former smokers:  male, some college ",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch19.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch19f.dat",
+                            "filename": "former-smokers-fnc",
+                            "name": "former smokers:  female, no college",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch19.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch19g.dat",
+                            "filename": "former-smokers-fsc",
+                            "name": "former smokers:  female, some college",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Smoking"
+                }
+            ]
+        },
+        {
+            "name": "Nature",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch3a.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch3a.dat",
+                            "filename": "Ozone 1",
+                            "name": "Prediction Models for Personal Ozone Exposure Assessment",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch3b.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch3b.dat",
+                            "filename": "Ozone 2",
+                            "name": "Prediction Models for Personal Ozone Exposure Assessment",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Weather"
+                },
+                {
+                    "datasets": [
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch2.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch2.dat",
+                            "filename": "Pollutants",
+                            "name": "Assessing Toxicity of Pollutants in Aquatic Systems ",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description": "For a selection of months in the period 1970 to 1983, a measurement of the\nocean salinity at a depth of 100 meters off the Alaskan coast, given in parts\nper thousand.  Columns are:\n\n      1. year\n      2. month\n      3. salinity",
+                            "url": "http://lib.stat.cmu.edu/crab/salinity",
+                            "filename": "salinity-2",
+                            "name": "ocean salinity",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description": "For a selection of months in the period 1970 to 1983, a measurement of the\nocean temperature at a depth of 100 meters off the Alaskan coast, given in\ndegrees Celsius.  Columns are:\n\n      1. year\n      2. month\n      3. temperature",
+                            "url": "http://lib.stat.cmu.edu/crab/celsius",
+                            "filename": "celsius",
+                            "name": "ocean temperature",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Waters"
+                },
+                {
+                    "datasets": [
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch4a.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch4a.dat",
+                            "filename": "Gypsy-Moth",
+                            "name": "Measurement Error Models for Gypsy Moth Studies",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch4b.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch4b.dat",
+                            "filename": "Gypsy-Moth2",
+                            "name": "Measurement Error Models for Gypsy Moth Studies",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch7.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch7.dat",
+                            "filename": "Atlantic-Halibut",
+                            "name": "Survival Analysis for Size Regulation of Atlantic Halibut",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch9.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch9.dat",
+                            "filename": "Hummingbirds",
+                            "name": "Spatial Association Learning in Hummingbirds\n",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch10.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch10.dat",
+                            "filename": "Habitat-Association",
+                            "name": "Habitat Association Studies of the Northern Spotted\nOwl, Field Grouse, and Flammulated Owl\n",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch11a.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch11a.dat",
+                            "filename": "Beaver-Body-Temperatures",
+                            "name": "Time-Series Analyses of Beaver Body Temperatures",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch11b.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch11b.dat",
+                            "filename": "Beaver-Body-Temperatures2",
+                            "name": "\nTime-Series Analyses of Beaver Body Temperatures\n",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description": "The main data set consists of king crab pot survey data for the years 1973\nthrough 1986.  The surveys were conducted in the waters around Kodiak Island,\nAlaska, using pots similar to the pots used by the commercial fishing fleet.\n(A crab pot is a trap that resembles a wooden crate.)  A fixed sampling grid\nwas used to place strings of pots (stations) consisting usually of 10 pots in\nopen ocean, or of 2-5 pots in bays.  The pots were left in the water for\nperiods of 16-24 hours, removed, and the crab counts recorded.  The survey was\nconducted each summer, 2-4 weeks prior to start of the commercial fishing\nseason.  The crab counts are classified by size (roughly representing age) and\nsex into six categories.\n\nThe basic survey data is a file \"survey\", containing a 3,450 by 14 matrix\nwith these columns:\n\n      1. Year (last two digits)\n      2. Fishing district (one of four)\n      3. Station identifier (alphabetic)\n      4. The number of pots fished\n    5-6. Latitude and longitude of the location halfway between\n             the first and last pot of the station\n      7. Number of pre-recruit-4 crab\n      8. Number of pre-recruit-3 crab\n      9. Number of pre-recruit-2 crab\n     10. Number of pre-recruit-1 crab\n     11. Number of recruit males\n     12. Number of post-recruit males\n     13. Number of juvenile females\n     14. Number of adult females",
+                            "url": "http://lib.stat.cmu.edu/crab/survey",
+                            "filename": "survey",
+                            "name": "Survey",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description": "For each of the years in the survey (1973 to 1986), a frequency distribution\nof the crab by size (in 1 mm increments) that were surveyed.  Separate\ndistributions are given for juvenile females, adult females, and all males.\nThe five columns are:\n\n      1. year\n      2. length in mm\n      3. count of juvenile females\n      4. count of adult females\n      5. count of all males",
+                            "url": "http://lib.stat.cmu.edu/crab/dstns",
+                            "filename": "dstns",
+                            "name": "dstns",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description": "For each of the 14 years in the survey (1973-86), an estimate of the number of\neggs per female.  Columns are:\n\n      1. year\n      2. estimated eggs per adult female",
+                            "url": "http://lib.stat.cmu.edu/crab/eggs",
+                            "filename": "eggs",
+                            "name": "eggs per female",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description": "For each year in the survey, a frequency distribution of all females\ncross-classified by size (in 1 mm increments) and percent clutch fullness (5\ncategories).  Clutch fullness is, roughly, the realized egg-bearing potential\nof a female crab.  The seven columns are:\n\n      1. year\n      2. size, in mm\n      3. count of females with 0% fullness\n      4. count of females with 1-29% fullness\n      5. count of females with 30-59% fullness\n      6. count of females with 60-89% fullness\n      7. count of females with 90-100% fullness",
+                            "url": "http://lib.stat.cmu.edu/crab/fullness",
+                            "filename": "fullness",
+                            "name": "Clutch fullness",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Animals"
+                },
+                {
+                    "datasets": [
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch5.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch5.dat",
+                            "filename": "Pine-Seedling",
+                            "name": "Estimating Pine Seedling Response to Ozone and Acid Rain",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch8.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch8.dat",
+                            "filename": "Hybrid-Onions",
+                            "name": "\nMixture Fraction and Linkage Analyses for Hybrid Onions",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Plants"
+                },
+                {
+                    "datasets": [
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch6.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch6.dat",
+                            "filename": "Scallop-Abundance",
+                            "name": "Geostatistical Estimates of Scallop Abundance",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Geology"
+                },
+                {
+                    "datasets": [
+                        {
+                            "description": "Geographical coordinates of the shoreline of the 17 islands that form the\nKodiak Island group.  The two columns are\n\n      1.  latitude\n      2.  longitude\n\nmeasured in degrees and fractions of a degree.  Each of the 17 groups of\ncoordinates is terminated by a pair of \"NA\"s, and the end of each group loops\nback to the beginning.  For drawing maps, bear in mind that longitude is\nmeasured East to West, which is right to left.  This suggests plotting\nnegative longitude instead of longitude.  Also, to draw maps that \"look right\"\nto an Alaskan, you must take into account that in this part of the world the\naspect ratio of one degree latitude (y-axis) to one degree longitude (x-axis)\nis 1:1.8 (in terms of actual ground distance).",
+                            "url": "http://lib.stat.cmu.edu/crab/kodiak",
+                            "filename": "kodiak",
+                            "name": "Geographical coordinates of the shoreline of Kodiak Island group",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Other"
+                }
+            ]
+        },
+        {
+            "name": "Statistics",
+            "subcategories": [
+                {
+                    "datasets": [
+                        {
+                            "description": "Some statistics on the fishing fleet and commercial catch, for each year\nbetween 1960 and 1982.  The six columns are:\n\n      1. year\n      2. number of vessels registered for fishing\n      3. number of crab caught\n      4. total weight in kilograms of crab caught\n      5. total number of pot-lifts.\n      6. wholesale price of king crab in dollars per pound",
+                            "url": "http://lib.stat.cmu.edu/crab/fleet",
+                            "filename": "fleet",
+                            "name": "fishing fleet and commercial catch",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description": "Commercial catch data for 1960-1982, broken out by district.  The four columns\nare:\n\n      1. year\n      2. district number (1, 2, 3 or 4)\n      3. total catch as a count\n      4. total catch in kilograms",
+                            "url": "http://lib.stat.cmu.edu/crab/catch",
+                            "filename": "catch",
+                            "name": "Commercial catch data",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Economics"
+                },
+                {
+                    "datasets": [
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch12.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch12.dat",
+                            "filename": "Nursing-Home-Usage",
+                            "name": "\nParametric Duration Analysis of Nursing Home Usage",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        },
+                        {
+                            "description_url": "http://lib.stat.cmu.edu/datasets/csb/ch13.txt",
+                            "url": "http://lib.stat.cmu.edu/datasets/csb/ch13.dat",
+                            "filename": "Smoking-Restrictions",
+                            "name": "Analysis of Attitudes Towards Workplace Smoking Restrictions",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": false
+                        }
+                    ],
+                    "name": "Population"
+                }
+            ]
+        }
+    ]
+}

@@ -1,4 +1,276 @@
------2.6-----
+-----2.10.1 () -----
+-----2.10.0 (21.03.2023) -----
+New features:
+	* [worksheet]
+		* Bar plots
+		* Plot templates - allow to save and re-use custom plot configurations
+		* Histogram
+			* Error bars (Possion sqrt(N) error or values from custom columns)
+			* Rug plots
+		* Box Plot
+			* Rug plots
+			* Symbols for whisker end points
+			* Allow to modify box properties (color, etc.) for every data set independently of each other
+			* Draw a legend item for every dataset in the box plot
+		* Reference Range - custom area on the plot to highlight a certain x- or y-range
+		* Show LaTeX error messages in text labels when rendering with LaTeX
+	* [spreadsheet]
+		* Use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
+		* Heatmap formatting for categorical data in text columns
+		* When generating random numbers, allow to specify the seed number
+		* Column statistics for text columns including the frequency table, bar and Pareto plots
+		* Column statistics for selected cells only
+		* Dropping and masking of values also for text and datetime columns
+		* Data sampling (random and periodic methods)
+		* Data 'flattening' - convert pivoted data to column base format
+		* Column statistics (size, mean, stddev, etc.) are available in the function dialog
+		* Function values dialog supports accessing arbitrary cells of columns with cell(f(index), g(column,..)) and other moving functions
+		* Allow to subtract and add a value by providing a difference between two values
+		* Allow to subtract a baseline
+	* [matrix]
+		* Zooming in the image view
+	* [import]
+		* Import data from Excel .xlsx files using QXlsx library
+		* Import of Binary Log File (BLF) files from Vektor Informatik
+		* HDF5: support VLEN data import
+		* Live data: support multiple values via TCP
+	* [export]
+		* Export spreadsheet and matrix in Excel .xlsx format using QXlsx library
+		* Use the current working project directory, if available, as the default export path
+	* [analysis]
+		* Maximum likelihood estimation for several distributions
+		* Guess start values of fit parameter for polynomial models by linear regression
+		* Implement fourier filtering for datetimes
+	* [general]
+		* Allow to create a spreadsheet with the data steming from an equation curve, an analysis curve, a histogram or a box plot
+		* Add settings option for GUM compliant terms
+
+Performance improvements:
+	* Reduce the memory consumption during the spreadsheet export to Sqlite
+	* Reduce the memory consumption when importing from a database table into the spreadsheet
+	* Faster import of files with a big number of columns
+	* Faster creation of a big number of columns in the spreadsheet
+
+Bug fixes:
+	* [worksheet]
+		* don't crash when undoing the step "add info element".
+		* don't crash when changing the error bar types in the curve with no x-column selected yet
+		* don't show any context menu in the presenter widget
+		* use the full screen size in the dynamic presenter widget for worksheets with "use view size" property set to true
+		* allow to zoom the view in the dynamic presenter widget
+		* fix using custom value label with invalid data points in xy-curve (BUG 455214)
+		* don't crash when deleting a text label that was added after worksheet objects (plots and curves) were created via the plot data dialog (BUG 455096)
+		* fix displayed end value of date time plot range
+		* fix shifts in date time values due to locale settings (BUG 455579 & 462370)
+	* [spreadsheet] properly paste the data in the format 'yyyy-MM-dd hh:mm:ss' and similar
+	* [fit] fix locale usage in evaluation range
+	* [fit] correctly invalidate fit result when model changes
+	* [i18n] fix switch language option
+
+
+-----2.9.0 (03.05.2022) -----
+	* [general]
+		* Allow to copy&paste and to duplicate single objects in the project explorer
+		* Allow to change the order of objects in the project explorer (move up and down)
+		* Added global settings for numbers
+		* Color maps manager allowing the access to multiple collections of color maps
+		* Show git hash in about dialog for convenience
+		* Use system liborigin when available
+		* Open new project per default on startup
+		* Examples Dialog - an easy way to browse through all available example projects and to open them directly in the application
+		* Allow to save the project without the results of the calculations in the analysis curves to reduce the size of project file
+		* Use XZ compression of project files per default with compatibility option for older versions of LabPlot
+		* Improve preview resolution of distributions and fit functions
+		* Add parser functions to generate non-uniform random numbers of several distributions
+		* Fuzzy matching when doing search/filter in the Project Explorer
+	* [analysis]
+		* Support Mathieu functions via GSL
+		* Support fitting of any distribution to a histogram
+		* Added Hilbert transform including envelope
+		* Improve entering ranges for various methods
+	* [import]
+		* Add Option to specify header line in ASCII data
+		* Import SAS, Stata and SPSS files using readstat library
+		* Import MATLAB MAT files using matio library
+		* Import LTspice files
+		* HDF5: Select first variable when loading file
+		* HDF5: Use data type when importing data
+		* HDF5: Preview and import 2d data of strings
+		* Improved OPJ project import
+		* Improve binary data preview and import data types and speed
+	* [spreadsheet]:
+		* Allow to freeze the first column
+		* Search in the spreadsheet
+		* Conditional heatmap formatting
+		* Support value labels
+		* Extended statistics dialog - show additional visualizations (histogram, KDE plot, normal Q-Q plot, BoxPlot)
+		* List random number distributions alphabetically
+	* [worksheet]:
+		* Info Element - a new worksheet element to annotate curve values on the plot
+		* Image Element - allow to embed the image data and save it in the project file
+		* BoxPlot
+		* Crosshair cursor mode in the plot
+		* New themes "Monokai", "ggplot grey", "ggplot dark", "Tufte"
+		* Many more curve symbols
+		* Allow to specify text label's position in logical plot coordinates
+		* Allow to use a custom column to set the text for the axis ticks
+		* Allow to resize the plots on the worksheet with the mouse when no layout is active
+		* Plot border type - allow to specify which lines of the plot rectangular to draw (left, top, etc.)
+		* Support multiple plot ranges
+		* Support real scientific notation and improve all formats of axes tick label
+		* Support axes auto tick number and improve range auto scaling
+		* Optional showing axis scale and offset in plot
+		* Add inverse axis scale
+		* Add first tick offset to better place axis ticks
+		* Rug plot - visualization where the data points are displayed as marks along the axes
+		* Tufte's "range frames" - a new mode in Axis to automatically set the start and end points of the axis to the min and max data points
+		* Allow to specify which curves should be shown in the plot legend
+		* Switched to Poppler for better LaTeX typesetting support
+		* Support background color for label
+
+Bug fixes:
+	* Fitting: Fix missing locale support in evaluating range of fit function
+	* Fitting: Fix pseudovoigt model
+	* Fix crash in convolution and correlation
+	* Windows: use breeze as default for better dark mode
+	* Properly save the geometry of visible windows in the project
+	* Interpolation: avoid crash when x data contains invalid data points or is not strictly increasing
+	* HDF5: Fix reading attribute strings and better handle strings in compound data
+
+-----2.8.2 (01.04.2021) -----
+Bug fixes:
+	* [CAS]
+		* Fixed the regression introduced after the python2 backend was deprecated in Cantor
+		* Warn about the potential data looses when a project with CAS content is opened but no CAS support is available
+	* [worksheet]:
+		* DateTime support for Custom Points and for Histograms
+		* Fix "power of" notations for negative values, show "0" for zero and improve auto precision for small values for axis labels
+		* Show all available symbols styles for CustomPoint, the last one was missing
+		* Convert the plot range format to datetime also when the first histogram for datetime data was added to the plot
+		* Properly restore the saved values column and also save the values formatting properties in the histogram
+		* If the deleted columns are being restored, restore the column pointers also in the histograms
+		* Properly react in the histogram when data columns are deleted or renamed
+		* Save/load the values format in xy-curve
+		* React on text changes for values prefix and suffix and not on return pressed event in the curve properties explorer
+		* Fix log scale axis for one tick and ln-scale typo
+		* Fix sqrt and square axis scale
+		* adjust the range format (numeric vs. datetime) also when the the column of the first curve is changed and not only when a new curve is added
+		* simplified the naming of the initial axes for the default plot types (box blot with four axes,  etc.) - use "x" instead of "x axis 1", etc.
+		* export to more image formats (jpg, bmp, ppm, xbm, xpm)
+	* [spreadsheet]
+		* show column statistics also for bigint columns
+		* when selecting a column in the project explorer, make sure it becomes visible in the spreadsheet by scrolling horizontaly to its position
+		* when removing or inserting rows in the spreadsheet, properly update the headers in the spreadsheet
+	* [import]
+		* Don't try to parse a netCDF file when the application was compiled without any support for netCDF, and similar for other formats
+		* Show the last recently imported projects in a combobox also in ImportProjectDialog similar to how it's already done in ImportFileDialog
+		* Don't show any error messages when the source file or local socket is empty when the import dialog is opened for the first time
+		* Fixed ASCII import when start column > 1
+	* Don't change the current selection in the Project Explorer when objects are being added or removed during undo or redo
+	* Improved LaTeX support in export dialog and export of big spreadsheets
+	* BUG 427190 - Fixed resetting parser error count on some platforms (Debian, Manjaro)
+	* BUG 429110 - Support semicolon as function argument separator for locale with comma as decimal separator
+	* BUG 429368 - Fix validation of custom model equation in fit dock
+	* BUG 431535 - Save/Load value format
+	* BUG 432291 - Show the relevant parts of the drop lines also when the data points are outside of the plot range
+
+-----2.8.1 (13.11.2020) -----
+	* [worksheet] allow to change the background color for axis labels (default: transparent)
+	* [worksheet] allow to copy the plot cursor cordinates
+	* [spreadsheet] better auto-detection of datetime format for values pasted in the spreadsheet
+	* [live data] allow to add the timestamp column for all network live sources (TCP/UDP), not only for MQTT
+	* [live data] better error handling and user notifications
+
+Bug fixes:
+	* Fix compiling with Cantor 20.08.X and X>0
+	* Fix drawing lines between points of datetime data
+	* Fix drawing axis tick label in color when in HTML mode
+	* Fix size of dock widgets when changing between them
+	* BUG 389920 - remove sub-window shadow remnants when closing the project
+	* BUG 428029 - changing font of text label for newer Qt versions
+	* BUG 428813 - full screen not restored (also fixed full screen on macOS)
+	* BUG 428698 - Don't crash when doing drag&drop between different main windows
+	* Fix missing settings dialog on macOS
+	* Parser improvements (found in "Generate Function Values"):
+		* Fix Crash using variable name of pre-defined functions as function ("sin()")
+		* Allow variable names containing function names ("sina")
+		* Correctly remove variables when changing name
+		* Use application number locale
+		* insert predefined functions with correct number of arguments
+
+-----2.8 (16.09.2020) -----
+	* Improved DateTime data support
+	* Show the size of the members in the JSON file in the import file dialog
+	* [worksheet] In the Export Worksheet Dialog allow to export to the clipboard
+	* [worksheet] Allow to move plots, text labels and legend with arrow keys
+	* [worksheet] Image worksheet element
+	* [worksheet] Reference line on the plot
+	* [worksheet] Support for imperial units for geometry and size settings of objects
+	* [worksheet] Improve axes major and minor tick settings
+	* [spreadsheet] show infinite values as such and not as NaN
+	* [spreadsheet] support big integer (64 bit) as data type
+	* [spreadsheet] column normalization methods "divide by max", "divide by min", etc.
+	* [spreadsheet] Tukey's ladder of powers
+	* [spreadsheet] added the size of the data set, its mode, 1st and 3rd quartiles and IQR to the column statistics
+	* [analysis] calculate and expose the rough values as the result of a smooth (data = smooth + rough)
+	* Allow to open Cantor and Jupyter projects
+	* [Windows] improved craft blueprint and installer package
+	* [macOS] added support for touchbar
+	* Support global user specified decimal separator
+	* Improved locale support in number input fields
+	* Extended "About"-Dialog
+
+Bug fixes:
+	* BUG 421193 - import float(4) data from hdf5
+	* BUG 418390 - Ignore infinite values (created in CAS worksheets for example) in curves
+	* BUG 412455 - Don't crash (sporadically) when opening the color scheme menu
+	* BUG 415214 - Better algorithm to draw the error bar caps
+	* BUG 413397 - Properly handle removal of columns in the spreadsheet model
+	* BUG 413401 - In plot data dialog, don't add new worksheets as children to workbooks, use the proper parent aspect
+	* Fix Cantor support and Unicode characters on Windows
+	* Fix evaluating fit residuals
+
+-----2.7 (24.10.2019)-----
+New features:
+	* Allow to move objects (drag&drop) to different folders in the project explorer
+	* [spreadsheet] allow to insert multiple rows and columns in one step
+	* [spreadsheet] improved the handling of calculated columns (values calculated via a formula):
+		* Allow to automatically update the calculated column on data changes in the variable columns
+		* Invalidate the calculated column if one of the variable columns was deleted
+		* In "Functions Values" dialog highlight the variable column combobox red if the variable column was deleted in the project
+		* In "Functions Values" dialog don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
+		* In "Used in" context menu of a column show all other calculated columns where this column is used as a variable
+	* [spreadsheet] when pasting data into empty columns, automatically convert their type to the type of the data to be pasted
+	* Automatically update curves if a data column deleted before was re-added again (during the import or manually)
+	* When auto-scaling in the plot take also the error bars into account, if available
+	* For live data sources allow to save the relative path to the data source
+
+UX improvements:
+	* in the "Import Data" dialog show the history of the recently imported files
+	* Improved the selection of curves in the plot that are near to or behind each other
+	* BUG 408529 - Allow to use DEL to delete cells in spreadsheet and matrix
+	* BUG 408537 - Allow to insert multiple rows and columns in the spreadsheet in one step
+	* Added translations to Windows and macOS packages
+	* Allow to stop the current selection in the plot with ESC
+	* BUG 410855 - Seed the random number generator with the current time in order not to generate repetitive numbers in the spreadsheet.
+
+Performance:
+	* Increased the plotting speed for curves with many data points by removing points which are shown on the same pixel in the scene
+
+Bug fixes:
+	* Disable auto-scale when zooming, otherwise wrong (= auto scaled) data region is shown after project save&open
+	* [macOS] fix determining number of lines of data files
+	* Bug 408530 - correctly show error bars for data source columns having NANs
+	* Bug 407847 - fixed the broken project import
+	* Bug 411122 - fixed missing option for the resolution of PNG files in the export dialog
+	* BUG 406805 - support for directory structures in ROOT files
+	* [data fitting] handle weighted fitting with zero errors correctly
+	* [data fitting] allow weighted fitting with data source from curve
+	* [data fitting] fix function for calculating bounded values
+	* [nsl] fix memory leak in line simplification (Douglas Peuker variant)
+	* [nsl] fix bug in calculating Bessel polynomials on Windows (used in Bessel filter)
+
+-----2.6 (19.04.2019)-----
 New features:
 	* Histogram
 	* Import from MQTT sources
@@ -31,7 +303,7 @@ Bug fixes:
 	* [import] fix preview update and add missing close of netcdf files
 	* Don't crash when a scaling factor equal to zero was set for axis
 
------2.5-----
+-----2.5 (21.06.2018)-----
 New features:
 	* Support for reading and plotting of live-data
 	* Improved data fitting
@@ -87,7 +359,7 @@ Bug fixes:
 	* Correctly save and restore masked cells
 	* Don't crash if the rc-file was not found during the startup
 
------2.4-----
+-----2.4 (09.04.2017)-----
 New features:
 	* Support themes for plots
 	* Import and editing of FITS data files
@@ -117,7 +389,7 @@ Bug fixes:
 	* Constants are now available with full accuracy
 	* Windows: Import of files and open recent files fixed
 
------2.3-----
+-----2.3 (23.07.2016)-----
 New features:
 	* Integration of Cantor - Support for different open-source computer algebra systems
 	* Statistics on spreadsheets and matrices
@@ -141,7 +413,7 @@ Bug fixes:
 	* Save and restore custom column widths in the spreadsheet
 	* Fixed sporadic crashes during project close
 
------2.2-----
+-----2.2 (29.03.2016)-----
 New features:
 	* Datapicker - tool for extracting curves and data points from imported images
 	* Custom point on the plot with user-defined position and appearance
@@ -160,7 +432,7 @@ Bug fixes:
 	* Fixed some bugs in painting of the selection band on the worksheet
 	* Allow to open gz- and bz2-compressed LabPlot project files on the command line interface
 
------2.1-----
+-----2.1 (25.10.2015)-----
 New features:
 	* New Matrix view for handling matrix data.
 	* Workbook - a new container for grouping several objects of type Spreadsheet and/or Matrix.
@@ -181,7 +453,7 @@ Performance improvements:
 Bug fixes:
 	* Fixed wrong behaviour when doing "zoom&select" in a plot and then deselecting the plot - it was not possible anymore to select the plot again on the worksheet.
 
------2.0.2-----
+-----2.0.2 (15.03.2015)-----
 New features:
 	* Plot 2D-curves defined by mathematical equations in cartesian and polar coordinates or via a parametric equation.
 	* Linear and non-linear regression analysis. Several predefined fit-models are provided. User-defined models are also possible.
@@ -208,12 +480,12 @@ Bug fixes:
 	* BUG: 330774 - fixed wrong positioning of axis on orientation changes.
 	* Update main window title when project name is changed
 
------2.0.1-----
+-----2.0.1 (01.03.2014)-----
 Bug fix release. Solved issues:
 	* Fixed wrong scaling of legend's text labels in pdf-export
 	* Fixed memory corruption in CartesianPlotDock that can lead to crashes
 
------2.0.0-----
+-----2.0.0 (19.01.2014)-----
 First stable release of LabPlot2. LabPlot2 is a complete rewrite of LabPlot1 and lacks in this release a lot of features available in the predecessor. On the other hand, the GUI and the usability is more superior as compared to LabPlot1 and there are several new features that were not available in LabPlot1.
 
 Brief summary of features and capabilities of LabPlot2 implemented in the first release:

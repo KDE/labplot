@@ -1,47 +1,30 @@
-/***************************************************************************
-    File                 : Notes.cpp
-    Project              : LabPlot
-    Description          : Notes Widget for taking notes
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009-2015 Garvit Khatri (garvitdelhi@gmail.com)
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : Notes.cpp
+	Project              : LabPlot
+	Description          : Notes Widget for taking notes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "Note.h"
-#include "commonfrontend/note/NoteView.h"
+#include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
+#include "commonfrontend/note/NoteView.h"
 
 #include <QPalette>
-#include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#include <QPrinter>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-Note::Note(const QString& name) : AbstractPart(name) {
+Note::Note(const QString& name)
+	: AbstractPart(name, AspectType::Note) {
 	KConfig config;
 	KConfigGroup group = config.group("Notes");
 
@@ -51,7 +34,7 @@ Note::Note(const QString& name) : AbstractPart(name) {
 }
 
 QIcon Note::icon() const {
-	return QIcon::fromTheme("document-new");
+	return QIcon::fromTheme(QStringLiteral("document-new"));
 }
 
 bool Note::printView() {
@@ -59,7 +42,7 @@ bool Note::printView() {
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
 	bool ret;
-	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
+	if ((ret = (dlg->exec() == QDialog::Accepted)))
 		m_view->print(&printer);
 
 	delete dlg;
@@ -67,7 +50,7 @@ bool Note::printView() {
 }
 
 bool Note::printPreview() const {
-	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &NoteView::print);
 	return dlg->exec();
 }
@@ -78,6 +61,7 @@ bool Note::exportView() const {
 
 void Note::setNote(const QString& note) {
 	m_note = note;
+	project()->setChanged(true);
 }
 
 const QString& Note::note() const {
@@ -86,7 +70,7 @@ const QString& Note::note() const {
 
 void Note::setBackgroundColor(const QColor& color) {
 	m_backgroundColor = color;
-	emit backgroundColorChanged(color);
+	Q_EMIT backgroundColorChanged(color);
 }
 
 const QColor& Note::backgroundColor() const {
@@ -95,16 +79,16 @@ const QColor& Note::backgroundColor() const {
 
 void Note::setTextColor(const QColor& color) {
 	m_textColor = color;
-	emit textColorChanged(color);
+	Q_EMIT textColorChanged(color);
 }
 
-const QColor& Note::textColor() const{
+const QColor& Note::textColor() const {
 	return m_textColor;
 }
 
 void Note::setTextFont(const QFont& font) {
 	m_textFont = font;
-	emit textFontChanged(font);
+	Q_EMIT textFontChanged(font);
 }
 
 const QFont& Note::textFont() const {
@@ -124,25 +108,25 @@ QWidget* Note::view() const {
 //##############################################################################
 //! Save as XML
 void Note::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("note");
+	writer->writeStartElement(QStringLiteral("note"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	writer->writeStartElement("background");
+	writer->writeStartElement(QStringLiteral("background"));
 	WRITE_QCOLOR(m_backgroundColor);
 	writer->writeEndElement();
 
-	writer->writeStartElement("text");
+	writer->writeStartElement(QStringLiteral("text"));
 	WRITE_QCOLOR(m_textColor);
 	WRITE_QFONT(m_textFont);
-	writer->writeAttribute("text", m_note);
+	writer->writeAttribute(QStringLiteral("text"), m_note);
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "note" section
 }
 
 bool Note::load(XmlStreamReader* reader, bool preview) {
-	if (!reader->isStartElement() || reader->name() != "note") {
+	if (!reader->isStartElement() || reader->name() != QLatin1String("note")) {
 		reader->raiseError(i18n("no note element found"));
 		return false;
 	}
@@ -156,23 +140,23 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "note")
+		if (reader->isEndElement() && reader->name() == QLatin1String("note"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "background") {
+		} else if (!preview && reader->name() == QLatin1String("background")) {
 			attribs = reader->attributes();
 			READ_QCOLOR(m_backgroundColor);
-		} else if (!preview && reader->name() == "text") {
+		} else if (!preview && reader->name() == QLatin1String("text")) {
 			attribs = reader->attributes();
 			READ_QCOLOR(m_textColor);
 			READ_QFONT(m_textFont);
-			m_note = attribs.value("text").toString();
+			m_note = attribs.value(QStringLiteral("text")).toString();
 		}
 	}
 

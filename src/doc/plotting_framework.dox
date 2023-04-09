@@ -47,85 +47,89 @@ Bits and pieces
 
 (incomplete, only examples given)
 
+\verbatim
 AbstractAspect
-¦
+|
 +- AbstractPart
-¦    ¦
-¦    `- Worksheet
-¦
+|    |
+|    `- Worksheet
+|
 `- AbstractWorksheetElement
-     ¦
+     |
      +- LineElement
-     ¦
+     |
      +- TextElement
-     ¦
+     |
      +- AbstractPlot
-     ¦     ¦
-     ¦     +- CurvePlot
-     ¦     ¦
-     ¦     `- PieChartPlot
-     ¦
+     |     |
+     |     +- CurvePlot
+     |     |
+     |     `- PieChartPlot
+     |
      +- AbstractCoordinateSystem
-     ¦     ¦
-     ¦     +- CartesianCoordinateSystem
-     ¦     ¦
-     ¦     +- PolarCoordinateSystem
-     ¦     ¦
-     ¦     `- TernaryCoordinateSystem
-     ¦
+     |     |
+     |     +- CartesianCoordinateSystem
+     |     |
+     |     +- PolarCoordinateSystem
+     |     |
+     |     `- TernaryCoordinateSystem
+     |
      +- AbstractCurve
-     ¦     ¦
-     ¦     +- LineSymbolCurve
-     ¦     ¦
-     ¦     +- AreaCurve
-     ¦     ¦
-     ¦     `- BarCurve
-     ¦
+     |     |
+     |     +- LineSymbolCurve
+     |     |
+     |     +- AreaCurve
+     |     |
+     |     `- BarCurve
+     |
      `- AbstractAxis
-          ¦
+          |
           +- LinearAxis
-          ¦
+          |
           +- LogAxis
-          ¦
+          |
           `- SqrtAxis
+\endverbatim
 
 A sample object (aspect) hierarchy
 
 (as displayed by the project explorer)
 
+\verbatim
 MyProject
-¦
+|
 `- Worksheet1
-     ¦
+     |
      + Title (a TextElement)
-     ¦
+     |
      `- Plot1 (a CurvePlot)
-           ¦
+           |
            + Coords1 (a CartesianCoordinateSystem)
-           ¦     ¦
-           ¦     +- XAxis (a LinearAxis)
-           ¦     ¦     ¦
-           ¦     ¦     `- Title (a TextElement)
-           ¦     ¦
-           ¦     +- YAxis (a LogAxis)
-           ¦     ¦     ¦
-           ¦     ¦     `- Title (a TextElement)
-           ¦     ¦
-           ¦     `- Curve1 (a LineSymbolCurve)
-           ¦
+           |     |
+           |     +- XAxis (a LinearAxis)
+           |     |     |
+           |     |     `- Title (a TextElement)
+           |     |
+           |     +- YAxis (a LogAxis)
+           |     |     |
+           |     |     `- Title (a TextElement)
+           |     |
+           |     `- Curve1 (a LineSymbolCurve)
+           |
            `- Legend (possibly multiple child elements)
+\endverbatim
 
 \section Features
 
-See this [https://sourceforge.net/tracker2/'limit=10&group_id=199120&atid=968217&status=1&category=1166914 Feature tracker]
+See this <a href="https://sourceforge.net/p/labplot/todo/">Feature tracker</a>
 
 \section Related Projects
 
 A lot of information to related projects is gathered in Wikipedia, so if
-somebody needs inspirations' http://en.wikipedia.org/wiki/List_of_graphing_software
+somebody needs inspirations' https://en.wikipedia.org/wiki/List_of_graphing_software
 
 -    LabPlot 1.x
--    Qtiplot aims to be a free clone of Microcal Origin®.
+-    Qtiplot aims to be a free clone of Microcal Origin&reg;.
 -    Grace is a widely used WYSIWYG application for making two-dimensional plots of numerical data. It's based on Motif and somewhat moldy. Relatively active though; improved GUIs based on GTK and Qt are under development.
 -    gnuplot is THE tool for command-line driven interactive data and function plotting. The license is a bit restrictive.
 -    Veusz is designed to produce publication-ready Postscript/PDF output. It is written in Python and actively maintained.
@@ -137,8 +141,8 @@ somebody needs inspirations' http://en.wikipedia.org/wiki/List_of_graphing_softw
 -    KMatplot describes itself as 'gnuplot-like', but is really quite close to what we're trying to do (even with 2D and 3D plots integrated on one worksheet). Last version from 2002, so probably dead. Definitely worth a look, though.
 -    HippoDraw is an 'interactive data analysis environment' built on top of Qt, which appears to have a thought-out architecture (makes use of design patterns). Not very active these days either, last release made early in 2008 (Windows installer only' latest source release older still).
 -    MathGL is a library for scientific graphics in two, three and four dimensions (although MathGL itself doesn't seem to count the codomain; the homepage talks about 1D, 2D and 3D graphics). Written in C++, GPL licensed, actively maintained and with an emphasis on output quality => definitely interesting. Lacks good object-oriented architecture though (huge classes!), so using/extending for our needs could get tricky.
--    Altaxo is an 'Alternative to plotting programs like MathSoft Axum® or Microcal Origin®' written in C#. Like most other projects in this area, development is slow to stalled (latest release dated February 2007).
--    JAS3 'is a general purpose, open-source, data analysis tool' geared towards high-energy physics. Based on [http://aida.freehep.org/ AIDA] conventions.
+-    Altaxo is an 'Alternative to plotting programs like MathSoft Axum&reg; or Microcal Origin&reg;' written in C#. Like most other projects in this area, development is slow to stalled (latest release dated February 2007).
+-    JAS3 'is a general purpose, open-source, data analysis tool' geared towards high-energy physics. Based on <a href="ftp://ftp.slac.stanford.edu/software/freehep/AIDA/">AIDA</a> conventions.
 -    MCDfit is a Qt/Qwt/Qwtplot3D based application for spectroscopic analyses with emphasis on on-screen display. Seems to have been inactive for more than a year now, CVS is even older.
 -    SciGraphica is 'a scientific application for data analysis and technical graphics' written in C/Gtk. Looks pretty dead (last release in 2005, last post to devel list in 2008 remained unanswered).
 -    GumTree ' An integrated scientific workbench based on Eclipse.

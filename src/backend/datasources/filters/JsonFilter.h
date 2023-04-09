@@ -1,37 +1,18 @@
-/***************************************************************************
-    File                 : JsonFilter.h
-    Project              : LabPlot
-    Description          : JSON I/O-filter.
-    --------------------------------------------------------------------
-    --------------------------------------------------------------------
-    Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : JsonFilter.h
+	Project              : LabPlot
+	Description          : JSON I/O-filter.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
+	SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef JSONFILTER_H
 #define JSONFILTER_H
 
-#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
 
 #include <QJsonValue>
 
@@ -45,7 +26,7 @@ class JsonFilter : public AbstractFileFilter {
 	Q_OBJECT
 
 public:
-	enum DataContainerType {Array, Object};
+	enum class DataContainerType { Array, Object };
 
 	JsonFilter();
 	~JsonFilter() override;
@@ -55,21 +36,23 @@ public:
 	static QString fileInfoString(const QString&);
 
 	// read data from any device
-	void readDataFromDevice(QIODevice& device, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+	void readDataFromDevice(QIODevice& device, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	// overloaded function to read from file
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
+	void
+	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
-	QVector<QStringList> preview(const QString& fileName);
-	QVector<QStringList> preview(QIODevice& device);
-	QVector<QStringList> preview(QJsonDocument& doc);
+	QVector<QStringList> preview(const QString& fileName, int lines);
+	QVector<QStringList> preview(QIODevice& device, int lines);
 
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
 	void setDataRowType(const QJsonValue::Type);
 	QJsonValue::Type dataRowType() const;
-	void setModelRows(const QVector<int>);
+
+	void setModel(QJsonModel*);
+	void setModelRows(const QVector<int>&);
 	QVector<int> modelRows() const;
 
 	void setDateTimeFormat(const QString&);
