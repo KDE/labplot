@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-09 00:43+0000\n"
+"POT-Creation-Date: 2023-04-10 00:42+0000\n"
 "PO-Revision-Date: 2020-01-12 12:23+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -15542,65 +15542,65 @@ msgstr ""
 msgid "Number of iterations to perform."
 msgstr "Número de arcas da vista previa:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:516
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:533
 #, fuzzy, kde-format
 #| msgid "Binary data"
 msgid "raw data"
 msgstr "Datos binarios"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:523
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:540
 #, fuzzy, kde-format
 #| msgid "Dash line"
 msgid "baseline"
 msgstr "Liña de guións"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:532
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:549
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgid "result"
 msgstr "Resultados:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:613
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:630
 #, fuzzy, kde-format
 #| msgid "Rotation:"
 msgid "Ratio: %1"
 msgstr "Rotación:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:657
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:664
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:671
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:678
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:876
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:920
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:964
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1008
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:674
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:681
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:688
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:695
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:893
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:937
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:981
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1025
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Wrong numeric value provided."
 msgstr "o valor da fila é incorrecto"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1195
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: engadir %2 aos valores da columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1198
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: restar %2 aos valores da columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1201
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, fuzzy, kde-format
 #| msgid "%1: subtract %2 from column values"
 msgid "%1: subtract baseline from column values"
 msgstr "%1: restar %2 aos valores da columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1204
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: multiplicar os valores da columna por %2"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1207
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1224
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: dividir os valores da columna entre %2"
@@ -15618,8 +15618,8 @@ msgstr "Engadir o valor"
 #: src/kdefrontend/ui/constantswidget.ui:57
 #: src/kdefrontend/ui/datapickerimagewidget.ui:841
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:46
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:94
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:26
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:55
 #, kde-format
 msgid "Value:"
 msgstr "Valor:"
@@ -21011,7 +21011,7 @@ msgstr "Gardar como modelo"
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:47
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:260
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:143
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgid "Preview:"
@@ -21294,58 +21294,58 @@ msgid "Typesetting engine:"
 msgstr "Motor de composición:"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:42
 #, kde-format
 msgid "Add:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:62
-#, fuzzy, kde-format
-#| msgid "Start value"
-msgid "Start Value:"
-msgstr "Valor inicial"
-
-#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
-#, fuzzy, kde-format
-#| msgid "Value:"
-msgid "End Value:"
-msgstr "Valor:"
-
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:153
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
 #, fuzzy, kde-format
 #| msgid "Start:"
 msgid "Start Time:"
 msgstr "Inicio:"
 
-#. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:179
+#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
 #, fuzzy, kde-format
-#| msgid "Date and Time"
-msgid "End Time:"
-msgstr "Data e hora"
+#| msgid "Value:"
+msgid "End Value:"
+msgstr "Valor:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:205
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:130
 #, fuzzy, kde-format
 #| msgid "Smooth:"
 msgid "Smoothness (Power of 10):"
 msgstr "Suavizado:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:218
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:156
 #, fuzzy, kde-format
 #| msgid "Orientation:"
 msgid "Termination Ratio:"
 msgstr "Orientación:"
 
+#. i18n: ectx: property (text), widget (QLabel, lValueStart)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:169
+#, fuzzy, kde-format
+#| msgid "Start value"
+msgid "Start Value:"
+msgstr "Valor inicial"
+
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:234
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:251
 #, kde-format
 msgid "Iterations:"
 msgstr "Iteracións:"
+
+#. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:302
+#, fuzzy, kde-format
+#| msgid "Date and Time"
+msgid "End Time:"
+msgstr "Data e hora"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
@@ -21394,9 +21394,9 @@ msgstr "Axuste:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
-#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
-#, kde-format
-msgid "Specify the name of the file to import."
+#, fuzzy, kde-format
+#| msgid "Specify the name of the file to import."
+msgid "Specify the name of the file to export."
 msgstr "Indique o nome do ficheiro para importar."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
@@ -21654,6 +21654,12 @@ msgstr "Xuntos"
 #, kde-format
 msgid "Leading column:"
 msgstr "Primeira columna:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
+#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
+#, kde-format
+msgid "Specify the name of the file to import."
+msgstr "Indique o nome do ficheiro para importar."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportTo)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:73

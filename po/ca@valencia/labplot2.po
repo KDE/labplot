@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-09 00:43+0000\n"
-"PO-Revision-Date: 2023-03-29 13:38+0200\n"
+"POT-Creation-Date: 2023-04-10 00:42+0000\n"
+"PO-Revision-Date: 2023-04-09 09:19+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 20.12.0\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -9726,10 +9726,9 @@ msgid "%1: cut selected cells"
 msgstr "%1: retalla les cel·les seleccionades"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1946
-#, fuzzy, kde-format
-#| msgid "Not enough memory to perform this operation."
+#, kde-format
 msgid "Not enough memory to finalize this operation."
-msgstr "No hi ha prou memòria per a portar a terme esta operació."
+msgstr "No hi ha prou memòria per a finalitzar esta operació."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1960
 #, kde-format
@@ -15061,59 +15060,59 @@ msgstr ""
 msgid "Number of iterations to perform."
 msgstr "Nombre d'iteracions que es realitzaran."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:516
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:533
 #, kde-format
 msgid "raw data"
 msgstr "dades sense processar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:523
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:540
 #, kde-format
 msgid "baseline"
 msgstr "línia base"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:532
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:549
 #, kde-format
 msgid "result"
 msgstr "resultat"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:613
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:630
 #, kde-format
 msgid "Ratio: %1"
 msgstr "Relació: %1"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:657
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:664
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:671
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:678
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:876
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:920
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:964
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1008
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:674
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:681
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:688
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:695
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:893
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:937
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:981
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1025
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr "S'ha proporcionat un valor numèric no vàlid."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1195
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: afig %2 als valors de la columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1198
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: sostrau %2 dels valors de la columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1201
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, kde-format
 msgid "%1: subtract baseline from column values"
 msgstr "%1: sostrau la línia base dels valors de la columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1204
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: multiplica els valors de la columna per %2"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1207
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1224
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: dividix els valors de la columna per %2"
@@ -15130,8 +15129,8 @@ msgstr "Afig una etiqueta de valors"
 #: src/kdefrontend/ui/constantswidget.ui:57
 #: src/kdefrontend/ui/datapickerimagewidget.ui:841
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:46
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:94
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:26
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:55
 #, kde-format
 msgid "Value:"
 msgstr "Valor:"
@@ -20345,7 +20344,7 @@ msgstr "Plantilles instal·lades:"
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:47
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:260
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:143
 #, kde-format
 msgid "Preview:"
 msgstr "Vista prèvia:"
@@ -20618,52 +20617,52 @@ msgid "Typesetting engine:"
 msgstr "Motor de la composició tipogràfica:"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:42
 #, kde-format
 msgid "Add:"
 msgstr "Suma:"
 
-#. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:62
-#, kde-format
-msgid "Start Value:"
-msgstr "Valor inicial:"
-
-#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
-#, kde-format
-msgid "End Value:"
-msgstr "Valor final:"
-
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:153
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
 #, kde-format
 msgid "Start Time:"
 msgstr "Hora d'inici:"
 
-#. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:179
+#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
 #, kde-format
-msgid "End Time:"
-msgstr "Hora final:"
+msgid "End Value:"
+msgstr "Valor final:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:205
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:130
 #, kde-format
 msgid "Smoothness (Power of 10):"
 msgstr "Suavitzat (potències de 10):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:218
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:156
 #, kde-format
 msgid "Termination Ratio:"
 msgstr "Relació de terminació:"
 
+#. i18n: ectx: property (text), widget (QLabel, lValueStart)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:169
+#, kde-format
+msgid "Start Value:"
+msgstr "Valor inicial:"
+
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:234
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:251
 #, kde-format
 msgid "Iterations:"
 msgstr "Iteracions:"
+
+#. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:302
+#, kde-format
+msgid "End Time:"
+msgstr "Hora final:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
@@ -20709,9 +20708,9 @@ msgstr "Fix:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
-#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
-#, kde-format
-msgid "Specify the name of the file to import."
+#, fuzzy, kde-format
+#| msgid "Specify the name of the file to import."
+msgid "Specify the name of the file to export."
 msgstr "Indiqueu el nom del fitxer per a importar."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
@@ -20961,6 +20960,12 @@ msgstr "Juntes"
 #, kde-format
 msgid "Leading column:"
 msgstr "Columna inicial:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
+#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
+#, kde-format
+msgid "Specify the name of the file to import."
+msgstr "Indiqueu el nom del fitxer per a importar."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportTo)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:73

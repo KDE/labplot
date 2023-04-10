@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-09 00:43+0000\n"
-"PO-Revision-Date: 2023-03-29 08:03+0300\n"
+"POT-Creation-Date: 2023-04-10 00:42+0000\n"
+"PO-Revision-Date: 2023-04-09 08:36+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -9700,10 +9700,9 @@ msgid "%1: cut selected cells"
 msgstr "%1: вирізати позначені комірки"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1946
-#, fuzzy, kde-format
-#| msgid "Not enough memory to perform this operation."
+#, kde-format
 msgid "Not enough memory to finalize this operation."
-msgstr "Недостатньо пам'яті для виконання цієї дії."
+msgstr "Недостатньо пам'яті для завершення цієї дії."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1960
 #, kde-format
@@ -15019,59 +15018,59 @@ msgstr ""
 msgid "Number of iterations to perform."
 msgstr "Кількість ітерацій, які слід виконати."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:516
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:533
 #, kde-format
 msgid "raw data"
 msgstr "необроблені дані"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:523
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:540
 #, kde-format
 msgid "baseline"
 msgstr "основна лінія"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:532
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:549
 #, kde-format
 msgid "result"
 msgstr "результат"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:613
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:630
 #, kde-format
 msgid "Ratio: %1"
 msgstr "Коефіцієнт: %1"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:657
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:664
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:671
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:678
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:876
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:920
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:964
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1008
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:674
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:681
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:688
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:695
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:893
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:937
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:981
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1025
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr "Надано помилкове числове значення."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1195
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: додавання %2 до значень у стовпчику"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1198
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: віднімання %2 від значень у стовпчику"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1201
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, kde-format
 msgid "%1: subtract baseline from column values"
 msgstr "%1: віднімання базової лінії від значень у стовпчику"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1204
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: множення значень у стовпчику на %2"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1207
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1224
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: ділення значень у стовпчику на %2"
@@ -15088,8 +15087,8 @@ msgstr "Додавання мітки значення"
 #: src/kdefrontend/ui/constantswidget.ui:57
 #: src/kdefrontend/ui/datapickerimagewidget.ui:841
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:46
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:94
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:26
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:55
 #, kde-format
 msgid "Value:"
 msgstr "Значення:"
@@ -20291,7 +20290,7 @@ msgstr "Встановлені шаблони:"
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:47
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:260
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:143
 #, kde-format
 msgid "Preview:"
 msgstr "Перегляд:"
@@ -20563,52 +20562,52 @@ msgid "Typesetting engine:"
 msgstr "Рушій типографського набору:"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:42
 #, kde-format
 msgid "Add:"
 msgstr "Додати:"
 
-#. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:62
-#, kde-format
-msgid "Start Value:"
-msgstr "Початкове значення:"
-
-#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
-#, kde-format
-msgid "End Value:"
-msgstr "Кінцеве значення:"
-
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:153
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
 #, kde-format
 msgid "Start Time:"
 msgstr "Час початку:"
 
-#. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:179
+#. i18n: ectx: property (text), widget (QLabel, lValueEnd)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
 #, kde-format
-msgid "End Time:"
-msgstr "Час завершення:"
+msgid "End Value:"
+msgstr "Кінцеве значення:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:205
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:130
 #, kde-format
 msgid "Smoothness (Power of 10):"
 msgstr "Плавність (степінь 10):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:218
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:156
 #, kde-format
 msgid "Termination Ratio:"
 msgstr "Коефіцієнт переривання:"
 
+#. i18n: ectx: property (text), widget (QLabel, lValueStart)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:169
+#, kde-format
+msgid "Start Value:"
+msgstr "Початкове значення:"
+
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:234
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:251
 #, kde-format
 msgid "Iterations:"
 msgstr "Ітерацій:"
+
+#. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:302
+#, kde-format
+msgid "End Time:"
+msgstr "Час завершення:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
@@ -20654,9 +20653,9 @@ msgstr "Виправлення:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
-#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
-#, kde-format
-msgid "Specify the name of the file to import."
+#, fuzzy, kde-format
+#| msgid "Specify the name of the file to import."
+msgid "Specify the name of the file to export."
 msgstr "Вкажіть назву файла для імпортування."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
@@ -20906,6 +20905,12 @@ msgstr "Разом"
 #, kde-format
 msgid "Leading column:"
 msgstr "Основний стовпчик:"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
+#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:63
+#, kde-format
+msgid "Specify the name of the file to import."
+msgstr "Вкажіть назву файла для імпортування."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportTo)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:73
