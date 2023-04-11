@@ -31,6 +31,7 @@ class ReferenceRangeDock;
 class ColumnDock;
 class LiveDataDock;
 class MatrixDock;
+class PivotTableDock;
 class ProjectDock;
 class SpreadsheetDock;
 class XYCurveDock;
@@ -77,6 +78,7 @@ private:
 	LiveDataDock* m_liveDataDock{nullptr};
 	MatrixDock* m_matrixDock{nullptr};
 	SpreadsheetDock* m_spreadsheetDock{nullptr};
+	PivotTableDock* m_pivotTableDock{nullptr};
 	ProjectDock* m_projectDock{nullptr};
 	XYCurveDock* m_xyCurveDock{nullptr};
 	XYEquationCurveDock* m_xyEquationCurveDock{nullptr};

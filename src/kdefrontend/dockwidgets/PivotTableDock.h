@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for pivot table properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2019-2023 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,8 +29,10 @@
 #ifndef PIVOTTABLEDOCK_H
 #define PIVOTTABLEDOCK_H
 
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/pivot/PivotTable.h"
 #include "ui_pivottabledock.h"
+
 #include <QSqlDatabase>
 
 class AspectTreeModel;
@@ -38,7 +40,7 @@ class PivotTable;
 class TreeViewComboBox;
 class KConfig;
 
-class PivotTableDock : public QWidget {
+class PivotTableDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -61,7 +63,7 @@ private:
 	void updateFields();
 	bool fieldSelected(const QString&);
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in PivotTableDock
 	void nameChanged();
 	void commentChanged();
@@ -83,7 +85,7 @@ private slots:
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

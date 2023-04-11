@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Folder in a project
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -18,6 +18,7 @@
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
+#include "backend/pivot/PivotTable.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #endif
@@ -255,6 +256,15 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			return false;
 		}
 		addChildFast(matrix);
+#endif
+	} else if (element_name == QLatin1String("pivotTable")) {
+#ifndef SDK
+		auto* pivot = new PivotTable(QString(), true);
+		if (!pivot->load(reader, preview)) {
+			delete pivot;
+			return false;
+		}
+		addChildFast(pivot);
 #endif
 	} else if (element_name == QLatin1String("worksheet")) {
 		auto* worksheet = new Worksheet(QString(), true);

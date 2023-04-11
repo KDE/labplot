@@ -84,6 +84,7 @@ enum class AspectType : quint64 {
 	Note = 0x0420008,
 	Workbook = 0x0420010,
 	Worksheet = 0x0420020,
+	PivotTable = 0x0420040,
 
 	AbstractColumn = 0x1000000,
 	Column = 0x1000001,
@@ -203,6 +204,8 @@ public:
 			return QStringLiteral("Matrix");
 		case AspectType::Spreadsheet:
 			return QStringLiteral("Spreadsheet");
+		case AspectType::PivotTable:
+			return QStringLiteral("PivotTable");
 		case AspectType::LiveDataSource:
 			return QStringLiteral("LiveDataSource");
 		case AspectType::MQTTTopic:

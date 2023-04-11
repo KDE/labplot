@@ -1,24 +1,12 @@
-/* Copyright 2016 Lee Cho Kang.
-* email: pzesseto@gmail.com
-* This file is part of the HierarchicalHeaderView.
-*
-* The HierarchicalHeaderView is free software: you can redistribute it
-* and/or modify it under the terms of the GNU General Public License as
-* published by the Free Software Foundation, either version 3 of the
-* License, or (at your option) any later version.
-*
-* The HierarchicalHeaderView is distributed in the hope that it will be
-* useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-* Public License for more details.
-*
-* You should have received a copy of the GNU General Public License along
-* with the HierarchicalHeaderView. If not, see http://www.gnu.org/licenses/.
-*/
 /*
- * HierarchicalHeaderView.h
- *  Created on: 2016. 6. 13.
- */
+	File                 : HierarchicalHeaderView.h
+	Project              : LabPlot
+	Description          : Hierarchical header view
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Lee Cho Kang <pzesseto@gmail.com>
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-3.0-or-later
+*/
 
 #ifndef HIERARCHICALHEADERVIEW_H
 #define HIERARCHICALHEADERVIEW_H
@@ -32,10 +20,10 @@
 #include <QPair>
 
 enum eRbHeaderRole {
-	COLUMN_SPAN_ROLE = Qt::UserRole+1,
+	COLUMN_SPAN_ROLE = Qt::UserRole + 1,
 	ROW_SPAN_ROLE,
 	COLUMN_SIZE_ROLE,
-	ROW_SIZE_ROLE,
+	ROW_SIZE_ROLE
 };
 
 class HierarchicalHeaderItem {
@@ -65,6 +53,10 @@ private:
 	QHash<int,QVariant> role_datas;
 };
 
+/****************************************************************************************************
+ *
+ *                              MODEL DECLARATIONS
+ * *************************************************************************************************/
 
 class HierarchicalHeaderModel: public QAbstractTableModel {
 	Q_OBJECT
@@ -85,11 +77,22 @@ public:
 	Qt::ItemFlags flags(const QModelIndex &index) const override;
 	void clear();
 
+    void setBaseSectionSize(QSize size);
+    void setOrientation(Qt::Orientation orient);
 private:
 	int m_rowCount{0};
 	int m_columnCount{0};
 	HierarchicalHeaderItem* m_rootItem{nullptr};
+
+    int *maxWidthArr;
+    QSize baseSectionSize;
+    Qt::Orientation orientation;
 };
+
+/****************************************************************************************************
+ *
+ *                              VIEW DECLARATIONS
+ * *************************************************************************************************/
 
 class HierarchicalHeaderView : public QHeaderView {
 	Q_OBJECT
@@ -104,6 +107,9 @@ public:
 	void setCellBackgroundColor(const QModelIndex&, const QColor&);
 	void setCellForegroundColor(const QModelIndex&, const QColor&);
 
+    QSize getBaseSectionSize() const;
+    void setNewModel(HierarchicalHeaderModel* model);
+
 protected:
 	void mousePressEvent(QMouseEvent*) override;
 	QModelIndex indexAt(const QPoint&) const override;
@@ -116,14 +122,15 @@ protected:
 	int rowSpanSize(int column, int from, int spanCount) const;
 	int getSectionRange(QModelIndex& index, int* beginSection, int* endSection) const;
 
-protected slots:
+protected Q_SLOTS:
 	void onSectionResized(int logicalIndex,int oldSize,int newSize);
 
-signals:
+Q_SIGNALS:
 	void sectionPressed(int from, int to);
 
 private:
 	HierarchicalHeaderModel* m_model{nullptr};
+    QSize baseSectionSize;
 };
 
 #endif

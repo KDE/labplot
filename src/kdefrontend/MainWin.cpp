@@ -16,6 +16,7 @@
 #include "backend/core/Workbook.h"
 #include "backend/datasources/DatasetHandler.h"
 #include "backend/datasources/LiveDataSource.h"
+#include "backend/pivot/PivotTable.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
@@ -1916,7 +1917,7 @@ void MainWin::newMatrix() {
 	adds a new pivot table to the project.
 */
 void MainWin::newPivotTable() {
-	PivotTable* pivotTable = new PivotTable(i18n("PivotTable"));
+	PivotTable* pivotTable = new PivotTable(i18n("Pivot Table"));
 	this->addAspectToProject(pivotTable);
 }
 

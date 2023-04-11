@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Aspect providing a pivot table functionality
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 Alexander Semke(alexander.semke@web.de)
+    Copyright            : (C) 2019-2023 Alexander Semke(alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -81,16 +81,15 @@ public:
 
 	typedef PivotTablePrivate Private;
 
-public slots:
-
 private:
+	Q_DECLARE_PRIVATE(PivotTable)
 	void init();
 
 	PivotTablePrivate* const d;
 	mutable PivotTableView* m_view{nullptr};
 	friend class PivotTablePrivate;
 
-signals:
+Q_SIGNALS:
 	void changed();
 	void requestProjectContextMenu(QMenu*);
 	void dataSourceTypeChanged(PivotTable::DataSourceType);

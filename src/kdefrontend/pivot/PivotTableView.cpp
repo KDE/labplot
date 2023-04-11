@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for PivotTable
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2019-2023 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -137,7 +137,7 @@ void PivotTableView::goToCell() {
 }
 
 void PivotTableView::goToCell(int row, int col) {
-	QModelIndex index = m_tableView->model()->index(row, col);
+	const auto& index = m_tableView->model()->index(row, col);
 	m_tableView->scrollTo(index);
 	m_tableView->setCurrentIndex(index);
 }
@@ -149,12 +149,12 @@ bool PivotTableView::exportView() {
 bool PivotTableView::printView() {
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, this);
-	dlg->setWindowTitle(i18nc("@title:window", "Print Spreadsheet"));
+	dlg->setWindowTitle(i18nc("@title:window", "Print Pivot Table"));
 
 	bool ret;
-	if ((ret = dlg->exec()) == QDialog::Accepted) {
+	if ((ret = dlg->exec()) == QDialog::Accepted)
 		print(&printer);
-	}
+
 	delete dlg;
 	return ret;
 }
@@ -175,8 +175,25 @@ void PivotTableView::print(QPrinter* printer) const {
 	RESET_CURSOR;
 }
 
- void PivotTableView::changed() {
+void PivotTableView::changed() {
+     qDebug() << "in PivotTableView::changed()";
+	// m_pivotTable->setHorizontalHeaderModel(m_horizontalHeaderView->hierarchicalModel());
+	// m_pivotTable->setVerticalHeaderModel(m_verticalHeaderView->hierarchicalModel());
 
+
+     HierarchicalHeaderModel* horizontalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_horizontalHeaderView->hierarchicalModel());
+     HierarchicalHeaderModel* verticalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_verticalHeaderView->hierarchicalModel());
+
+     horizontalHeaderModel->setOrientation(Qt::Horizontal);
+     verticalHeaderModel->setOrientation(Qt::Vertical);
+
+//     qDebug() << " setting size for horizontal header";
+//     qDebug() << " rows, cols = " << horizontalHeaderModel->rowCount() << ", " << horizontalHeaderModel->columnCount();
+     horizontalHeaderModel->setBaseSectionSize(m_horizontalHeaderView->getBaseSectionSize());
+
+//     qDebug() << "settign size for vertical header";
+//     qDebug() << " rows, cols = " << verticalHeaderModel->rowCount() << ", " << verticalHeaderModel->columnCount();
+     verticalHeaderModel->setBaseSectionSize(m_verticalHeaderView->getBaseSectionSize());
 }
 
 void PivotTableView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
@@ -187,8 +204,7 @@ void PivotTableView::exportToFile(const QString& path, const bool exportHeader, 
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
 
-	PERFTRACE("export pivot table to file");
-
+	PERFTRACE(QLatin1String("export pivot table to file"));
 }
 
 void PivotTableView::exportToLaTeX(const QString & path, const bool exportHeaders,
@@ -204,5 +220,5 @@ void PivotTableView::exportToLaTeX(const QString & path, const bool exportHeader
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
 
-	PERFTRACE("export pivot table to latex");
+	PERFTRACE(QLatin1String("export pivot table to latex"));
 }

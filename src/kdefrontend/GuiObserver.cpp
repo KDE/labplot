@@ -224,7 +224,6 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_spreadsheetDock->setSpreadsheets(castList<Spreadsheet>(selectedAspects));
 		break;
 	case AspectType::Column: {
->>>>>>> master
 #ifdef HAVE_CANTOR_LIBS
 		auto* casParent = dynamic_cast<CantorWorksheet*>(selectedAspects.first()->parentAspect());
 		if (casParent) {
@@ -425,7 +424,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	case AspectType::PivotTable:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Pivot Table"));
 		raiseDock(m_pivotTableDock, m_mainWindow->stackedWidget);
-		m_pivotTable->setPivotTable(static_cast<PivotTable*>(selectedAspects.first()));
+		m_pivotTableDock->setPivotTable(static_cast<PivotTable*>(selectedAspects.first()));
 		break;
 	case AspectType::InfoElement: {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Info Element"));

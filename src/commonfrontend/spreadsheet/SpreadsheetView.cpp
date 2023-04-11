@@ -290,7 +290,7 @@ void SpreadsheetView::initActions() {
 	action_search = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Search"), this);
 	action_search->setShortcut(QKeySequence::Find);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
-	action_pivot_table = new QAction(QIcon::fromTheme("table"), i18n("Pivot Table"), this);
+	action_pivot_table = new QAction(QIcon::fromTheme(QLatin1String("table")), i18n("Pivot Table"), this);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
