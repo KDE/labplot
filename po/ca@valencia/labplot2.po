@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-10 00:42+0000\n"
-"PO-Revision-Date: 2023-04-09 09:19+0100\n"
+"PO-Revision-Date: 2023-04-10 10:01+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -20708,10 +20708,9 @@ msgstr "Fix:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
-#, fuzzy, kde-format
-#| msgid "Specify the name of the file to import."
+#, kde-format
 msgid "Specify the name of the file to export."
-msgstr "Indiqueu el nom del fitxer per a importar."
+msgstr "Indiqueu el nom del fitxer per a exportar."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:81

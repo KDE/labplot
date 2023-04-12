@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-10 00:42+0000\n"
-"PO-Revision-Date: 2023-04-01 08:46+0200\n"
+"PO-Revision-Date: 2023-04-10 10:30+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -9686,8 +9686,7 @@ msgid "%1: cut selected cells"
 msgstr "%1 : couper les cellules sélectionnées"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1946
-#, fuzzy, kde-format
-#| msgid "Not enough memory to perform this operation."
+#, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Pas assez de mémoire pour terminer cette opération."
 
