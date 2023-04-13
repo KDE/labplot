@@ -4,4 +4,4 @@ if (ENABLE_VECTOR_BLF)
     target_link_libraries(BLFFilterTest labplot2lib labplot2test)
 
     add_test(NAME BLFFilterTest COMMAND BLFFilterTest)
-endif() # ENABLE_VECTOR_BLF
+endif()
