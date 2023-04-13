@@ -67,8 +67,9 @@ Include(FetchContent)
 
 ### Vector BLF ###############################
 FIND_PACKAGE(PkgConfig REQUIRED)
-option(LOCAL_DBC_PARSER "Use local build of dbc parser" ON)
-option(LOCAL_VECTOR_BLF "Use local build of Vector BLF" ON)
+# git download is not allowed on all system (set to ON if needed)
+option(LOCAL_DBC_PARSER "Use local build of dbc parser" OFF)
+option(LOCAL_VECTOR_BLF "Use local build of Vector BLF" OFF)
 if (ENABLE_VECTOR_BLF)
   set(OPTION_RUN_DOXYGEN OFF CACHE BOOL "" FORCE) # disable running doxygen
   if (${LOCAL_DBC_PARSER})
