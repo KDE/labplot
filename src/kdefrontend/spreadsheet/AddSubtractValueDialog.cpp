@@ -453,7 +453,7 @@ void AddSubtractValueDialog::previewChanged(bool state) {
 void AddSubtractValueDialog::updateSpacer(bool add) {
 	if (add) {
 		m_verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-        ui.gridLayout->addItem(m_verticalSpacer, 12, 0, 1, 1);
+		ui.gridLayout->addItem(m_verticalSpacer, 12, 0, 1, 1);
 	} else {
 		if (m_verticalSpacer)
 			ui.gridLayout->removeItem(m_verticalSpacer);

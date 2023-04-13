@@ -15,6 +15,8 @@
 #include "qtestcase.h"
 #include <math.h>
 
+#ifdef HAVE_VECTOR_BLF
+
 #include <Vector/BLF.h>
 
 static const std::string PRIMITIVE_DBC =
@@ -946,5 +948,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 		}
 	}
 }
+
+#endif
 
 QTEST_MAIN(BLFFilterTest)
