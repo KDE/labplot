@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-10 00:42+0000\n"
-"PO-Revision-Date: 2023-03-30 06:29+0200\n"
+"PO-Revision-Date: 2023-04-12 06:20+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -9187,7 +9187,7 @@ msgstr "დიდი ასოს გმრძნობიარე"
 #: src/commonfrontend/ProjectExplorer.cpp:658
 #, kde-format
 msgid "Match Complete Word"
-msgstr ""
+msgstr "სიტყვის სრული დამთხვევა"
 
 #: src/commonfrontend/ProjectExplorer.cpp:667
 #, kde-format
@@ -14496,7 +14496,7 @@ msgstr "არაბული (٫)"
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
 msgid "Enable syntax highlighting"
-msgstr ""
+msgstr "სინტაქსის გამოკვეთის ჩართვა"
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:24
 #, kde-format
@@ -20233,10 +20233,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
-#, fuzzy, kde-format
-#| msgid "Specify the name of the image file"
+#, kde-format
 msgid "Specify the name of the file to export."
-msgstr "მიუთითეთ გამოსახულების სახელი"
+msgstr "მიუთითეთ გასატანი ფაილის სახელი."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:81
