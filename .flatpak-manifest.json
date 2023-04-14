@@ -212,7 +212,7 @@
             "build-options": {
                 "build-args": ["--share=network"]
             },
-            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt" ],
+            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_DBC_PARSER=ON", "-DLOCAL_VECTOR_BLF=ON" ],
 	    "sources": [
                 {
                     "type": "dir",

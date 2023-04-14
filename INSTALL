@@ -28,7 +28,7 @@ optional packages
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 	* KUserFeedback to support collecting feedback from users
 	* Discount to support Markdown markup language text
-	* Vector BLF support (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON and -DLOCAL_VECTOR_BLF=ON)
+	* fast_float, dbc_parser_cpp and vector_blf for Vector BLF support (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON and -DLOCAL_VECTOR_BLF=ON)
 
 ===============================================================================
 To build LabPlot execute
