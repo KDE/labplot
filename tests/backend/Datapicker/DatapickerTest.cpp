@@ -1354,4 +1354,283 @@ void DatapickerTest::datapickerImageLoadImageRelative() {
 	}
 }
 
+void DatapickerTest::datapickerImageLoadImageEmbeddAbsolute() {
+	const auto img = createImage();
+
+	QTemporaryFile imgFileName(QStringLiteral("Testimage_XXXXXX.png"));
+	QVERIFY(imgFileName.open());
+	img.save(imgFileName.fileName(), "PNG");
+	QVERIFY(QFile::exists(imgFileName.fileName()));
+
+	QString savePath;
+	{
+		Project project;
+		auto* datapicker = new Datapicker(QStringLiteral("Test"));
+		project.addChild(datapicker);
+		auto* image = datapicker->image();
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		w.ui.leFileName->setText(imgFileName.fileName());
+		// w.fileNameChanged(); will be called
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project is not saved
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		QCOMPARE(image->fileName(), imgFileName.fileName());
+		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+		QCOMPARE(w.ui.leFileName->text(), imgFileName.fileName());
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+
+		w.ui.cbFileEmbedd->clicked(true); // Embedding image
+
+		SAVE_PROJECT("DatapickerTestProject");
+	}
+
+	// Deleting image to verify embedding worked
+	QFile f(imgFileName.fileName());
+	QVERIFY(f.remove());
+
+	// Load project
+	// Image was deleted before
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		auto datapicker = project.child<Datapicker>(0);
+		QVERIFY(datapicker);
+		auto* image = datapicker->image();
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project was loaded, but file does not exist
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		QCOMPARE(image->fileName(), imgFileName.fileName());
+		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+		QCOMPARE(w.ui.leFileName->text(), imgFileName.fileName());
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+	}
+}
+
+void DatapickerTest::datapickerImageLoadImageEmbeddAbsoluteUndoRedo() {
+	const auto img = createImage();
+
+	QTemporaryFile imgFileName(QStringLiteral("Testimage_XXXXXX.png"));
+	QVERIFY(imgFileName.open());
+	img.save(imgFileName.fileName(), "PNG");
+	QVERIFY(QFile::exists(imgFileName.fileName()));
+
+	QString savePath;
+
+	Project project;
+	auto* datapicker = new Datapicker(QStringLiteral("Test"));
+	project.addChild(datapicker);
+	auto* image = datapicker->image();
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	w.ui.leFileName->setText(imgFileName.fileName());
+	// w.fileNameChanged(); will be called
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project is not saved
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	QCOMPARE(image->fileName(), imgFileName.fileName());
+	QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+	QCOMPARE(w.ui.leFileName->text(), imgFileName.fileName());
+	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+
+	w.ui.cbFileEmbedd->clicked(true); // Embedding image
+
+	SAVE_PROJECT("DatapickerTestProject");
+
+	// Deleting image to verify embedding worked
+	QFile f(imgFileName.fileName());
+	QVERIFY(f.remove());
+
+	image->undoStack()->undo();
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(image->originalPlotImage.isNull(), true); // image does not exist anymore
+	QCOMPARE(w.ui.leFileName->text(), imgFileName.fileName());
+	QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral("")); // image does not exist anymore
+
+	image->undoStack()->redo();
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+	QCOMPARE(image->originalPlotImage.isNull(), false); // image is embedded
+	QCOMPARE(w.ui.leFileName->text(), imgFileName.fileName());
+	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // image is embedded
+}
+
+void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
+	const auto img = createImage();
+
+	QTemporaryFile imgFileName(QStringLiteral("Testimage_XXXXXX.png"));
+	QVERIFY(imgFileName.open());
+	img.save(imgFileName.fileName(), "PNG");
+	QVERIFY(QFile::exists(imgFileName.fileName()));
+
+	QString savePath;
+	{
+		Project project;
+		auto* datapicker = new Datapicker(QStringLiteral("Test"));
+		project.addChild(datapicker);
+		auto* image = datapicker->image();
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		w.ui.leFileName->setText(imgFileName.fileName());
+		// w.fileNameChanged(); will be called
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project is not saved
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		QCOMPARE(image->fileName(), imgFileName.fileName());
+		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+		QCOMPARE(w.ui.leFileName->text(), imgFileName.fileName());
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+
+		SAVE_PROJECT("DatapickerTestProject");
+
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), true); // project is now saved so calculating the relative path is possible
+
+		w.ui.cbFileRelativePath->clicked(true);
+
+		// QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+		QFileInfo fi(imgFileName);
+		QCOMPARE(image->fileName(), fi.fileName());
+		QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+
+		w.ui.cbFileEmbedd->clicked(true); // Embedding image
+
+		SAVE_PROJECT("DatapickerTestProject"); // Save again to save relative path
+	}
+
+	// Deleting image
+	QFile f(imgFileName.fileName());
+	QVERIFY(f.remove());
+
+	// Load project
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		auto datapicker = project.child<Datapicker>(0);
+		QVERIFY(datapicker);
+		auto* image = datapicker->image();
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true); // image is valid because embedded
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // image is valid, but embedd is turned on
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+
+		QFileInfo fi(imgFileName);
+		QCOMPARE(image->fileName(), fi.fileName());
+		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+		QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+	}
+}
+
+void DatapickerTest::datapickerImageLoadImageEmbeddRelativeUndoRedo() {
+	const auto img = createImage();
+
+	QTemporaryFile imgFileName(QStringLiteral("Testimage_XXXXXX.png"));
+	QVERIFY(imgFileName.open());
+	img.save(imgFileName.fileName(), "PNG");
+	QVERIFY(QFile::exists(imgFileName.fileName()));
+
+	QString savePath;
+	Project project;
+	auto* datapicker = new Datapicker(QStringLiteral("Test"));
+	project.addChild(datapicker);
+	auto* image = datapicker->image();
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	w.ui.leFileName->setText(imgFileName.fileName());
+	// w.fileNameChanged(); will be called
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project is not saved
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	QCOMPARE(image->fileName(), imgFileName.fileName());
+	QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+	QCOMPARE(w.ui.leFileName->text(), imgFileName.fileName());
+	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+
+	SAVE_PROJECT("DatapickerTestProject");
+
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), true); // project is now saved so calculating the relative path is possible
+
+	w.ui.cbFileRelativePath->clicked(true);
+
+	// QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+	QFileInfo fi(imgFileName);
+	QCOMPARE(image->fileName(), fi.fileName());
+	QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+
+	w.ui.cbFileEmbedd->clicked(true); // Embedding image
+
+	SAVE_PROJECT("DatapickerTestProject"); // Save again to save relative path
+
+	// Deleting image
+	QFile f(imgFileName.fileName());
+	QVERIFY(f.remove());
+
+	image->undoStack()->undo();
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(image->originalPlotImage.isNull(), true); // image does not exist anymore
+	QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+	QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral("")); // image does not exist anymore
+
+	image->undoStack()->redo();
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+	QCOMPARE(image->originalPlotImage.isNull(), false); // image is embedded
+	QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // image is embedded
+}
+
 QTEST_MAIN(DatapickerTest)

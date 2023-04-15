@@ -228,7 +228,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.cbFileRelativePath, &QCheckBox::clicked, this, &DatapickerImageWidget::relativeChanged);
-	connect(ui.cbFileEmbedd, &QCheckBox::stateChanged, this, &DatapickerImageWidget::embeddedChanged);
+	connect(ui.cbFileEmbedd, &QCheckBox::clicked, this, &DatapickerImageWidget::embeddedChanged);
 
 	// edit image
 	connect(ui.cbPlotImageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::plotImageTypeChanged);
@@ -339,7 +339,7 @@ void DatapickerImageWidget::handleWidgetActions() {
 	ui.sbMinSegmentLength->setEnabled(b);
 	ui.sbPointSeparation->setEnabled(b);
 
-	const bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName) && !ui.cbFileEmbedd->isChecked());
+	const bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName) && !embedded);
 	GuiTools::highlight(ui.leFileName, invalid);
 
 	if (b) {
@@ -405,8 +405,7 @@ void DatapickerImageWidget::selectFile() {
 	ui.leFileName->setText(path);
 }
 
-void DatapickerImageWidget::embeddedChanged(int state) {
-	bool embedded = state == Qt::Checked;
+void DatapickerImageWidget::embeddedChanged(bool embedded) {
 	ui.leFileName->setEnabled(!embedded);
 	ui.cbFileRelativePath->setVisible(!embedded);
 
