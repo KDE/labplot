@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-10 00:42+0000\n"
-"PO-Revision-Date: 2023-03-29 16:16+0200\n"
+"PO-Revision-Date: 2023-04-11 18:04+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -9587,10 +9587,9 @@ msgid "%1: cut selected cells"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1946
-#, fuzzy, kde-format
-#| msgid "Not enough memory to perform this operation."
+#, kde-format
 msgid "Not enough memory to finalize this operation."
-msgstr "Pro provedené této operace není dostatek paměti."
+msgstr "Pro dokončení této operace není dostatek paměti."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1960
 #, kde-format
@@ -20258,10 +20257,9 @@ msgstr "Opravit:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
-#, fuzzy, kde-format
-#| msgid " Select the file to import"
+#, kde-format
 msgid "Specify the name of the file to export."
-msgstr " Vyberte soubor pro import"
+msgstr "Zadejte název souboru pro export."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:81
