@@ -186,6 +186,17 @@ public:
 		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
 
 	private:
+		// Do not call manually, because it is not doing a type checking!
+		template<typename T>
+		void removeValueLabel(const T& value) {
+			auto* v = cast_vector<T>();
+			for (int i = 0; i < v->length(); i++) {
+				if (v->at(i).value == value)
+					v->remove(i);
+			}
+		}
+
+	private:
 		AbstractColumn::ColumnMode m_mode;
 		void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
 	};

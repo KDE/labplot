@@ -150,41 +150,25 @@ void ColumnPrivate::ValueLabels::removeValueLabel(const QString& key) {
 		double value = QLocale().toDouble(key, &ok);
 		if (!ok)
 			return;
-		auto* v = cast_vector<double>();
-		for (int i = 0; i < v->length(); i++) {
-			if (v->at(i).value == value)
-				v->remove(i);
-		}
+		removeValueLabel<double>(value);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer: {
 		int value = QLocale().toInt(key, &ok);
 		if (!ok)
 			return;
-		auto* v = cast_vector<int>();
-		for (int i = 0; i < v->length(); i++) {
-			if (v->at(i).value == value)
-				v->remove(i);
-		}
+		removeValueLabel<int>(value);
 		break;
 	}
 	case AbstractColumn::ColumnMode::BigInt: {
 		qint64 value = QLocale().toLongLong(key, &ok);
 		if (!ok)
 			return;
-		auto* v = cast_vector<qint64>();
-		for (int i = 0; i < v->length(); i++) {
-			if (v->at(i).value == value)
-				v->remove(i);
-		}
+		removeValueLabel<qint64>(value);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Text: {
-		auto* v = cast_vector<QString>();
-		for (int i = 0; i < v->length(); i++) {
-			if (v->at(i).value == key)
-				v->remove(i);
-		}
+		removeValueLabel<QString>(key);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Month:
@@ -197,11 +181,7 @@ void ColumnPrivate::ValueLabels::removeValueLabel(const QString& key) {
 			f.setFormat(QStringLiteral("dddd"));
 		}
 		const auto ref = QDateTime::fromString(key, f.format());
-		auto* v = cast_vector<QDateTime>();
-		for (int i = 0; i < v->length(); i++) {
-			if (v->at(i).value == ref)
-				v->remove(i);
-		}
+		removeValueLabel<QDateTime>(ref);
 		break;
 	}
 	}
