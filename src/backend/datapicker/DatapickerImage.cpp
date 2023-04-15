@@ -229,16 +229,79 @@ DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 	return d->plotImageType;
 }
 
-bool DatapickerImage::setOriginalImage(const QString& fileName) {
-	originalPlotImage.load(fileName);
-	setEmbedded(true);
-	return d->uploadImage(QStringLiteral(""));
+class DatapickerImageSetOriginalImageCmd : public QUndoCommand {
+public:
+	DatapickerImageSetOriginalImageCmd(DatapickerImage::Private* target,
+									   const QImage& newImage,
+									   const QString& filename,
+									   bool embedded,
+									   const KLocalizedString& description,
+									   QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_img(newImage)
+		, m_filename(filename)
+		, m_embedded(embedded)
+		, m_target(target) {
+		setText(description.subs(m_target->name()).toString());
+	}
+	virtual void redo() override {
+		const QImage tmp = m_target->q->originalPlotImage;
+		const QString tmpFilename = m_target->q->fileName();
+		const bool tmpEmbedded = m_target->q->embedded();
+
+		if (m_embedded)
+			m_target->q->originalPlotImage = m_img;
+		else
+			m_target->q->originalPlotImage.load(m_filename);
+		m_target->fileName = m_filename;
+		m_target->embedded = m_embedded;
+
+		if (tmpEmbedded)
+			m_img = tmp;
+		else
+			m_img = QImage();
+		m_filename = tmpFilename;
+		m_embedded = tmpEmbedded;
+		QUndoCommand::redo(); // redo all childs
+
+		finalize();
+		Q_EMIT m_target->q->fileNameChanged(m_target->fileName);
+		Q_EMIT m_target->q->embeddedChanged(m_target->embedded);
+	}
+
+	virtual void undo() override {
+		redo();
+	}
+
+	void finalize() {
+		m_target->updateImage();
+	}
+
+private:
+	QImage m_img;
+	QString m_filename;
+	bool m_embedded;
+	DatapickerImage::Private* m_target;
+};
+
+// 1. Image from clipboard, 2. file from path (embedded or not embedded)
+//     -> important to store qimage, because otherwise image is lost when doing undo
+// 1. Image from clipboard, 2. image from clipboard
+//     -> important to store qimage, because otherwise image is lost when doing undo
+// 1. Image from path (embedded or not embedded), 2. image from clipboard
+//     -> important to store qimage, because when doing redo after undo the image must be available
+// 1. Image from path (not embedded), 2. image from path
+//     -> storing qimage is not important
+// 1. Image from path (embedded), 2. image from path
+//     -> storing qimage is important because otherwise if undo and path is anymore valid image is anymore available
+
+void DatapickerImage::setImage(const QString& fileName, bool embedded) {
+	return setImage(QImage(), fileName, embedded);
 }
 
-bool DatapickerImage::setOriginalImage(const QImage& image) {
-	originalPlotImage = image;
-	setEmbedded(true);
-	return d->uploadImage(QStringLiteral(""));
+void DatapickerImage::setImage(const QImage& image, const QString& filename, bool embedded) {
+	if (image != originalPlotImage || filename != fileName() || embedded != this->embedded())
+		exec(new DatapickerImageSetOriginalImageCmd(d, image, filename, embedded, ki18n("%1: upload image")));
 }
 
 /* =============================== getter methods for background options ================================= */
@@ -260,13 +323,8 @@ Symbol* DatapickerImage::symbol() const {
 
 BASIC_D_READER_IMPL(DatapickerImage, bool, pointVisibility, pointVisibility)
 /* ============================ setter methods and undo commands  for background options  ================= */
-STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetFileName, QString, fileName, updateFileName)
 void DatapickerImage::setFileName(const QString& fileName) {
-	if (fileName != d->fileName) {
-		beginMacro(i18n("%1: upload new image", name()));
-		exec(new DatapickerImageSetFileNameCmd(d, fileName, ki18n("%1: upload image")));
-		endMacro();
-	}
+	setImage(fileName, embedded());
 }
 
 class DatapickerImageSetRelativeFilePathCmd : public StandardSetterCmd<DatapickerImage::Private, bool> {
@@ -287,21 +345,28 @@ public:
 				fi.setFile(m_target->fileName);
 				filename = fi.absoluteFilePath();
 			}
-			m_target->q->setFileName(filename);
+			// setting relative is only possible if the image is not embedded!
+			m_target->q->setImage(filename, false);
 		}
 		emit m_target->q->relativeFilePathChanged(m_target->*m_field);
 	}
 };
 
 void DatapickerImage::setRelativeFilePath(bool relative) {
-	if (relative != d->isRelativeFilePath)
+	if (relative != d->isRelativeFilePath) {
+		beginMacro(i18n("%1: upload new image", name()));
 		exec(new DatapickerImageSetRelativeFilePathCmd(d, relative, ki18n("%1: upload image")));
+		endMacro();
+	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetEmbedded, bool, embedded, updateFileName)
 void DatapickerImage::setEmbedded(bool embedded) {
-	if (embedded != d->embedded)
-		exec(new DatapickerImageSetEmbeddedCmd(d, embedded, ki18n("%1: embed image")));
+	if (embedded != d->embedded) {
+		if (embedded)
+			setImage(originalPlotImage, fileName(), true);
+		else
+			setImage(fileName(), false);
+	}
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetRotationAngle, float, rotationAngle)
@@ -413,12 +478,8 @@ void DatapickerImagePrivate::retransform() {
 		point->retransform();
 }
 
-bool DatapickerImagePrivate::uploadImage(const QString& address) {
-	bool rc;
-	if (embedded)
-		rc = !q->originalPlotImage.isNull(); // already stored in originalPlotImage
-	else
-		rc = q->originalPlotImage.load(address);
+bool DatapickerImagePrivate::uploadImage() {
+	const bool rc = !q->originalPlotImage.isNull();
 
 	if (rc) {
 		// convert the image to 32bit-format if this is not the case yet
@@ -472,17 +533,15 @@ DatapickerImagePrivate::~DatapickerImagePrivate() {
 	delete m_scene;
 }
 
-void DatapickerImagePrivate::updateFileName() {
+void DatapickerImagePrivate::updateImage() {
 	WAIT_CURSOR;
 	q->isLoaded = false;
 
-	QString address = fileName.trimmed();
-	if (address.isEmpty()) {
+	if (q->originalPlotImage.isNull()) {
 		// hide segments if they are visible
 		q->m_segments->setSegmentsVisible(false);
-	} else {
-		uploadImage(fileName);
-	}
+	} else
+		uploadImage();
 
 	auto points = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	if (!points.isEmpty()) {
@@ -831,7 +890,10 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	d->uploadImage(d->fileName);
+	// No undo redo
+	if (originalPlotImage.isNull())
+		originalPlotImage.load(d->fileName);
+	d->uploadImage();
 	d->retransform();
 	return true;
 }

@@ -317,10 +317,15 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 }
 
 void DatapickerImageWidget::handleWidgetActions() {
-	QString fileName = ui.leFileName->text().trimmed();
-	bool b = !fileName.isEmpty();
-	ui.tEdit->setEnabled(b);
+	const QString fileName = m_image->fileName();
+	const bool embedded = m_image->embedded();
+	const bool valid = !m_image->originalPlotImage.isNull();
+	const bool b = !fileName.isEmpty() || (embedded && valid);
+	updateFileRelativePathCheckBoxEnable();
+	ui.tEdit->setEnabled(b && !embedded);
+	ui.cbFileEmbedd->setEnabled(valid);
 	ui.cbGraphType->setEnabled(b);
+	ui.cbDatetime->setEnabled(b);
 	ui.sbRotation->setEnabled(b);
 	ui.sbPositionX1->setEnabled(b);
 	ui.sbPositionX2->setEnabled(b);
@@ -333,6 +338,9 @@ void DatapickerImageWidget::handleWidgetActions() {
 	ui.dtePositionX3->setEnabled(b);
 	ui.sbMinSegmentLength->setEnabled(b);
 	ui.sbPointSeparation->setEnabled(b);
+
+	const bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName) && !ui.cbFileEmbedd->isChecked());
+	GuiTools::highlight(ui.leFileName, invalid);
 
 	if (b) {
 		// upload histogram to view
@@ -372,9 +380,15 @@ void DatapickerImageWidget::updateFileRelativePathCheckBoxEnable() {
 	if (!project || project->fileName().isEmpty()) {
 		ui.cbFileRelativePath->setEnabled(false);
 		ui.cbFileRelativePath->setToolTip(i18n("Save project before using this option"));
-	} else {
+	} else if (m_image->embedded()) {
+		ui.cbFileRelativePath->setEnabled(false);
+		ui.cbFileRelativePath->setToolTip(QStringLiteral(""));
+	} else if (!m_image->fileName().isEmpty() && QFile::exists(m_image->fileName())) {
 		ui.cbFileRelativePath->setEnabled(true);
 		ui.cbFileRelativePath->setToolTip(QStringLiteral(""));
+	} else {
+		ui.cbFileRelativePath->setEnabled(false);
+		ui.cbFileRelativePath->setToolTip(i18n("Invalid image"));
 	}
 }
 
@@ -415,23 +429,19 @@ void DatapickerImageWidget::relativeChanged(bool relative) {
 	for (auto* image : m_imagesList) {
 		image->setRelativeFilePath(relative);
 	}
+
+	// Load new filename
+	ui.leFileName->setText(m_image->fileName());
 }
 
 void DatapickerImageWidget::fileNameChanged() {
-	CONDITIONAL_LOCK_RETURN;
-
 	handleWidgetActions();
 
-	QString fileName = ui.leFileName->text();
-	// const bool relative = ui.cbFileRelativePath->isChecked();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName) && !ui.cbFileEmbedd->isChecked());
-	GuiTools::highlight(ui.leFileName, invalid);
+	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* image : m_imagesList) {
-		image->setFileName(fileName);
-		if (image->embedded())
-			image->setOriginalImage(fileName);
-	}
+	const QString fileName = ui.leFileName->text();
+	for (auto* image : m_imagesList)
+		image->setImage(fileName, image->embedded());
 }
 
 void DatapickerImageWidget::graphTypeChanged(int index) {
@@ -610,9 +620,10 @@ void DatapickerImageWidget::pointSeparationChanged(int value) {
 //*******************************************************************
 void DatapickerImageWidget::imageFileNameChanged(const QString& name) {
 	handleWidgetActions();
-	ui.leFileName->setText(name);
 
 	CONDITIONAL_LOCK_RETURN;
+
+	ui.leFileName->setText(name);
 }
 
 void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
@@ -657,6 +668,8 @@ void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
 
 void DatapickerImageWidget::imageEmbeddedChanged(bool embedded) {
 	ui.cbFileRelativePath->setVisible(!embedded);
+
+	handleWidgetActions();
 
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbFileEmbedd->setChecked(embedded);

@@ -56,6 +56,9 @@ private Q_SLOTS:
 	void datapickerDateTime();
 
 	void datapickerDeleteCurvePoint();
+
+	void datapickerImageLoadImageAbsolute();
+	void datapickerImageLoadImageRelative();
 };
 
 #endif // DATAPICKERTEST_H
