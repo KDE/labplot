@@ -1,3 +1,8 @@
+-----XX.XX.XX () -----
+New features:
+	* [worksheet]
+		* Add possibility to use column labels as axis ticks
+
 -----2.10.1 () -----
 Bug fixes:
 	* Improve Vector BLF dependency (git download must be enabled if needed)
