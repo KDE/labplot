@@ -321,6 +321,7 @@ void DatapickerImageWidget::handleWidgetActions() {
 	const bool embedded = m_image->embedded();
 	const bool valid = !m_image->originalPlotImage.isNull();
 	const bool b = !fileName.isEmpty() || (embedded && valid);
+	ui.leFileName->setEnabled(!embedded);
 	updateFileRelativePathCheckBoxEnable();
 	ui.tEdit->setEnabled(b && !embedded);
 	ui.cbFileEmbedd->setEnabled(valid);
@@ -390,6 +391,8 @@ void DatapickerImageWidget::updateFileRelativePathCheckBoxEnable() {
 		ui.cbFileRelativePath->setEnabled(false);
 		ui.cbFileRelativePath->setToolTip(i18n("Invalid image"));
 	}
+
+	ui.cbFileRelativePath->setVisible(!m_image->embedded());
 }
 
 //**********************************************************
@@ -406,9 +409,6 @@ void DatapickerImageWidget::selectFile() {
 }
 
 void DatapickerImageWidget::embeddedChanged(bool embedded) {
-	ui.leFileName->setEnabled(!embedded);
-	ui.cbFileRelativePath->setVisible(!embedded);
-
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
@@ -434,8 +434,6 @@ void DatapickerImageWidget::relativeChanged(bool relative) {
 }
 
 void DatapickerImageWidget::fileNameChanged() {
-	handleWidgetActions();
-
 	CONDITIONAL_LOCK_RETURN;
 
 	const QString fileName = ui.leFileName->text();
@@ -666,8 +664,6 @@ void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
 }
 
 void DatapickerImageWidget::imageEmbeddedChanged(bool embedded) {
-	ui.cbFileRelativePath->setVisible(!embedded);
-
 	handleWidgetActions();
 
 	CONDITIONAL_LOCK_RETURN;

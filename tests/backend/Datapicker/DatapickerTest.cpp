@@ -30,6 +30,41 @@
 	VALUES_EQUAL(vec.y(), ref.y());                                                                                                                            \
 	VALUES_EQUAL(vec.z(), ref.z());
 
+namespace {
+QImage createImage() {
+	QImage image(3, 3, QImage::Format_RGB32);
+	QRgb value;
+
+	value = qRgb(189, 149, 39); // 0xffbd9527
+	image.setPixel(1, 1, value);
+
+	value = qRgb(122, 163, 39); // 0xff7aa327
+	image.setPixel(0, 1, value);
+	image.setPixel(1, 0, value);
+
+	value = qRgb(237, 187, 51); // 0xffedba31
+	image.setPixel(2, 1, value);
+	return image;
+}
+
+// Different image to the one created by createImage()
+QImage createImage2() {
+	QImage image(3, 3, QImage::Format_RGB32);
+	QRgb value;
+
+	value = qRgb(189, 149, 39); // 0xffbd9527
+	image.setPixel(0, 1, value);
+
+	value = qRgb(122, 163, 39); // 0xff7aa327
+	image.setPixel(1, 1, value);
+	image.setPixel(1, 0, value);
+
+	value = qRgb(237, 187, 51); // 0xffedba31
+	image.setPixel(2, 1, value);
+	return image;
+}
+} // anonymous namespace
+
 void DatapickerTest::mapCartesianToCartesian() {
 	DatapickerImage::ReferencePoints points;
 	points.type = DatapickerImage::GraphType::Linear;
@@ -1143,22 +1178,6 @@ void DatapickerTest::datapickerDeleteCurvePoint() {
 	QCOMPARE(curve->posYColumn()->rowCount(), 1);
 }
 
-QImage createImage() {
-	QImage image(3, 3, QImage::Format_RGB32);
-	QRgb value;
-
-	value = qRgb(189, 149, 39); // 0xffbd9527
-	image.setPixel(1, 1, value);
-
-	value = qRgb(122, 163, 39); // 0xff7aa327
-	image.setPixel(0, 1, value);
-	image.setPixel(1, 0, value);
-
-	value = qRgb(237, 187, 51); // 0xffedba31
-	image.setPixel(2, 1, value);
-	return image;
-}
-
 void DatapickerTest::datapickerImageLoadImageAbsolute() {
 	const auto img = createImage();
 
@@ -1631,6 +1650,94 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelativeUndoRedo() {
 	QCOMPARE(image->originalPlotImage.isNull(), false); // image is embedded
 	QCOMPARE(w.ui.leFileName->text(), fi.fileName());
 	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // image is embedded
+}
+
+void DatapickerTest::datapickerImageClipboard() {
+	const auto img = createImage();
+
+	QTemporaryFile imgFileName(QStringLiteral("Testimage_XXXXXX.png"));
+	QVERIFY(imgFileName.open());
+	img.save(imgFileName.fileName(), "PNG");
+	QVERIFY(QFile::exists(imgFileName.fileName()));
+
+	QString savePath;
+	Project project;
+	auto* datapicker = new Datapicker(QStringLiteral("Test"));
+	project.addChild(datapicker);
+	auto* image = datapicker->image();
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	// Set image from clipboard
+	image->setImage(img, QStringLiteral(""), true);
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	QCOMPARE(w.ui.leFileName->isEnabled(), false);
+}
+
+void DatapickerTest::datapickerImageClipboardSelectImageFromPath() {
+	const auto img = createImage();
+	const auto img2 = createImage2();
+
+	QTemporaryFile imgFileName(QStringLiteral("Testimage_XXXXXX.png"));
+	QVERIFY(imgFileName.open());
+	img.save(imgFileName.fileName(), "PNG");
+	QVERIFY(QFile::exists(imgFileName.fileName()));
+
+	QString savePath;
+	Project project;
+	auto* datapicker = new Datapicker(QStringLiteral("Test"));
+	project.addChild(datapicker);
+	auto* image = datapicker->image();
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	// Set image from clipboard
+	image->setImage(img2, QStringLiteral(""), true);
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	QCOMPARE(w.ui.leFileName->isEnabled(), false);
+
+	QCOMPARE(image->originalPlotImage, img2);
+
+	w.ui.leFileName->setText(imgFileName.fileName());
+
+	// Embedded is still turned on
+	QCOMPARE(w.ui.leFileName->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+
+	QCOMPARE(image->originalPlotImage.isNull(), false); // valid image
+
+	w.ui.cbFileEmbedd->clicked(false);
+
+	QCOMPARE(w.ui.leFileName->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+
+	QCOMPARE(image->originalPlotImage.isNull(), false); // valid image
+
+	QCOMPARE(image->originalPlotImage, img);
 }
 
 QTEST_MAIN(DatapickerTest)

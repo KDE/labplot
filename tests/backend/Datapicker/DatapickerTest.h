@@ -61,9 +61,10 @@ private Q_SLOTS:
 	void datapickerImageLoadImageRelative();
 	void datapickerImageLoadImageEmbeddAbsolute();
 	void datapickerImageLoadImageEmbeddAbsoluteUndoRedo();
-
 	void datapickerImageLoadImageEmbeddRelative();
 	void datapickerImageLoadImageEmbeddRelativeUndoRedo();
+	void datapickerImageClipboard();
+	void datapickerImageClipboardSelectImageFromPath();
 };
 
 #endif // DATAPICKERTEST_H

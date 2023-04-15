@@ -249,7 +249,7 @@ public:
 		const QString tmpFilename = m_target->q->fileName();
 		const bool tmpEmbedded = m_target->q->embedded();
 
-		if (m_embedded)
+		if (m_embedded && !m_img.isNull())
 			m_target->q->originalPlotImage = m_img;
 		else
 			m_target->q->originalPlotImage.load(m_filename);
