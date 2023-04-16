@@ -450,7 +450,7 @@ void ColumnDock::plotDesignationChanged(int index) {
 void ColumnDock::addLabel() {
 	if (!m_column->valueLabelsInitialized()) {
 		if (!m_column->initializeValueLabels(m_column->columnMode())) {
-			qDebug() << "WARNING: unable to initialize value labels";
+			QDEBUG("WARNING: unable to initialize value labels");
 			return;
 		}
 	}
