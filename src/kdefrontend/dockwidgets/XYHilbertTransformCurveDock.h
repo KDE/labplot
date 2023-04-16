@@ -36,7 +36,7 @@ private:
 	XYHilbertTransformCurve::TransformData m_transformData;
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYHilbertTransformCurveDock

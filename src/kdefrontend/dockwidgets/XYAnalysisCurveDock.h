@@ -14,7 +14,7 @@ protected:
 	void showResult(const XYAnalysisCurve* curve, QTextEdit* teResult, QPushButton* pbRecalculate);
 	virtual QString customText() const;
 
-	virtual void setModel(const QList<AspectType>& list);
+	void setModel(const QList<AspectType>& list);
 
 protected:
 	TreeViewComboBox* cbDataSourceCurve{nullptr};
