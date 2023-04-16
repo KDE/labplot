@@ -103,7 +103,7 @@ if (ENABLE_VECTOR_BLF)
         #GIT_REPOSITORY https://github.com/Technica-Engineering/vector_blf.git
         #GIT_TAG 02f0a2fe1f7915da1e24025869b98f6d15de937b
         GIT_REPOSITORY https://github.com/Murmele/vector_blf.git
-        GIT_TAG b7a419c4d8edbf495ab309b57a380a2444ee2730
+        GIT_TAG 4f2069c9fa0a47397959af0c0a6109eb2b14acad
       )
       set(CMAKE_PROJECT_Vector_BLF_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_blf_config.cmake")
       FetchContent_MakeAvailable(vector_blf)
