@@ -448,6 +448,12 @@ void ColumnDock::plotDesignationChanged(int index) {
 
 // value labels
 void ColumnDock::addLabel() {
+	if (!m_column->valueLabelsInitialized()) {
+		if (!m_column->initializeValueLabels(m_column->columnMode())) {
+			qDebug() << "WARNING: unable to initialize value labels";
+			return;
+		}
+	}
 	const auto mode = m_column->labelsMode();
 	auto* dlg = new AddValueLabelDialog(this, m_column);
 
