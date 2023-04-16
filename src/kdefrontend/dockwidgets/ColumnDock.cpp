@@ -218,7 +218,7 @@ void ColumnDock::showValueLabels() {
 	for (int i = 0; ui.twLabels->rowCount(); ++i)
 		ui.twLabels->removeRow(0);
 
-	if (m_column->hasValueLabels()) {
+	if (m_column->valueLabelsInitialized()) {
 		auto mode = m_column->labelsMode();
 		int i = 0;
 

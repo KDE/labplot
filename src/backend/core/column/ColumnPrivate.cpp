@@ -27,32 +27,34 @@ extern "C" {
 #include <gsl/gsl_statistics.h>
 }
 
-void ColumnPrivate::ValueLabels::initLabels(AbstractColumn::ColumnMode mode) {
-	if (!m_labels) {
-		m_mode = mode;
-		switch (m_mode) {
-		case AbstractColumn::ColumnMode::Double:
-			m_labels = new QVector<Column::ValueLabel<double>>();
-			break;
-		case AbstractColumn::ColumnMode::Integer:
-			m_labels = new QVector<Column::ValueLabel<int>>();
-			break;
-		case AbstractColumn::ColumnMode::BigInt:
-			m_labels = new QVector<Column::ValueLabel<qint64>>();
-			break;
-		case AbstractColumn::ColumnMode::Text:
-			m_labels = new QVector<Column::ValueLabel<QString>>();
-			break;
-		case AbstractColumn::ColumnMode::DateTime:
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day:
-			m_labels = new QVector<Column::ValueLabel<QDateTime>>();
-			break;
-		}
+bool ColumnPrivate::ValueLabels::initLabels(AbstractColumn::ColumnMode mode) {
+	if (initialized())
+		return false;
+
+	m_mode = mode;
+	switch (m_mode) {
+	case AbstractColumn::ColumnMode::Double:
+		m_labels = new QVector<Column::ValueLabel<double>>();
+		break;
+	case AbstractColumn::ColumnMode::Integer:
+		m_labels = new QVector<Column::ValueLabel<int>>();
+		break;
+	case AbstractColumn::ColumnMode::BigInt:
+		m_labels = new QVector<Column::ValueLabel<qint64>>();
+		break;
+	case AbstractColumn::ColumnMode::Text:
+		m_labels = new QVector<Column::ValueLabel<QString>>();
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		m_labels = new QVector<Column::ValueLabel<QDateTime>>();
+		break;
 	}
+	return true;
 }
 
-void ColumnPrivate::ValueLabels::clearLabels() {
+void ColumnPrivate::ValueLabels::deinitialize() {
 	if (m_labels) {
 		switch (m_mode) {
 		case AbstractColumn::ColumnMode::Double:
@@ -79,7 +81,7 @@ void ColumnPrivate::ValueLabels::clearLabels() {
 }
 
 int ColumnPrivate::ValueLabels::count() const {
-	if (!hasValueLabels())
+	if (!initialized())
 		return 0;
 
 	switch (m_mode) {
@@ -100,7 +102,7 @@ int ColumnPrivate::ValueLabels::count() const {
 }
 
 void ColumnPrivate::ValueLabels::addValueLabel(const QString& value, const QString& label) {
-	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::Text)
+	if (initialized() && m_mode != AbstractColumn::ColumnMode::Text)
 		return;
 
 	initLabels(AbstractColumn::ColumnMode::Text);
@@ -108,7 +110,7 @@ void ColumnPrivate::ValueLabels::addValueLabel(const QString& value, const QStri
 }
 
 void ColumnPrivate::ValueLabels::addValueLabel(const QDateTime& value, const QString& label) {
-	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::DateTime && m_mode != AbstractColumn::ColumnMode::Day
+	if (initialized() && m_mode != AbstractColumn::ColumnMode::DateTime && m_mode != AbstractColumn::ColumnMode::Day
 		&& m_mode != AbstractColumn::ColumnMode::Month)
 		return;
 
@@ -117,7 +119,7 @@ void ColumnPrivate::ValueLabels::addValueLabel(const QDateTime& value, const QSt
 }
 
 void ColumnPrivate::ValueLabels::addValueLabel(double value, const QString& label) {
-	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::Double)
+	if (initialized() && m_mode != AbstractColumn::ColumnMode::Double)
 		return;
 
 	initLabels(AbstractColumn::ColumnMode::Double);
@@ -125,7 +127,7 @@ void ColumnPrivate::ValueLabels::addValueLabel(double value, const QString& labe
 }
 
 void ColumnPrivate::ValueLabels::addValueLabel(int value, const QString& label) {
-	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::Integer)
+	if (initialized() && m_mode != AbstractColumn::ColumnMode::Integer)
 		return;
 
 	initLabels(AbstractColumn::ColumnMode::Integer);
@@ -133,7 +135,7 @@ void ColumnPrivate::ValueLabels::addValueLabel(int value, const QString& label) 
 }
 
 void ColumnPrivate::ValueLabels::addValueLabel(qint64 value, const QString& label) {
-	if (hasValueLabels() && m_mode != AbstractColumn::ColumnMode::BigInt)
+	if (initialized() && m_mode != AbstractColumn::ColumnMode::BigInt)
 		return;
 
 	initLabels(AbstractColumn::ColumnMode::BigInt);
@@ -141,7 +143,7 @@ void ColumnPrivate::ValueLabels::addValueLabel(qint64 value, const QString& labe
 }
 
 void ColumnPrivate::ValueLabels::removeValueLabel(const QString& key) {
-	if (!hasValueLabels())
+	if (!initialized())
 		return;
 
 	bool ok;
@@ -188,32 +190,32 @@ void ColumnPrivate::ValueLabels::removeValueLabel(const QString& key) {
 }
 
 const QVector<Column::ValueLabel<QString>>* ColumnPrivate::ValueLabels::textValueLabels() const {
-	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::Text)
+	if (!initialized() || m_mode != AbstractColumn::ColumnMode::Text)
 		return nullptr;
 	return cast_vector<QString>();
 }
 
 const QVector<Column::ValueLabel<QDateTime>>* ColumnPrivate::ValueLabels::dateTimeValueLabels() const {
-	if (!hasValueLabels()
+	if (!initialized()
 		|| (m_mode != AbstractColumn::ColumnMode::DateTime && m_mode != AbstractColumn::ColumnMode::Day && m_mode != AbstractColumn::ColumnMode::Month))
 		return nullptr;
 	return cast_vector<QDateTime>();
 }
 
 const QVector<Column::ValueLabel<double>>* ColumnPrivate::ValueLabels::valueLabels() const {
-	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::Double)
+	if (!initialized() || m_mode != AbstractColumn::ColumnMode::Double)
 		return nullptr;
 	return cast_vector<double>();
 }
 
 const QVector<Column::ValueLabel<int>>* ColumnPrivate::ValueLabels::intValueLabels() const {
-	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::Integer)
+	if (!initialized() || m_mode != AbstractColumn::ColumnMode::Integer)
 		return nullptr;
 	return cast_vector<int>();
 }
 
 const QVector<Column::ValueLabel<qint64>>* ColumnPrivate::ValueLabels::bigIntValueLabels() const {
-	if (!hasValueLabels() || m_mode != AbstractColumn::ColumnMode::BigInt)
+	if (!initialized() || m_mode != AbstractColumn::ColumnMode::BigInt)
 		return nullptr;
 	return cast_vector<qint64>();
 }
@@ -1370,16 +1372,20 @@ AbstractSimpleFilter* ColumnPrivate::outputFilter() const {
 
 //! \name Labels related functions
 //@{
-bool ColumnPrivate::hasValueLabels() const {
-	return m_labels.hasValueLabels();
+bool ColumnPrivate::initializeValueLabels(Column::ColumnMode mode) {
+	return m_labels.initLabels(mode);
+}
+
+void ColumnPrivate::deinitializeValueLabels() {
+	m_labels.deinitialize();
+}
+
+bool ColumnPrivate::valueLabelsInitialized() const {
+	return m_labels.initialized();
 }
 
 void ColumnPrivate::removeValueLabel(const QString& key) {
 	m_labels.removeValueLabel(key);
-}
-
-void ColumnPrivate::clearValueLabels() {
-	m_labels.clearLabels();
 }
 
 const QVector<Column::ValueLabel<QString>>* ColumnPrivate::textValueLabels() const {

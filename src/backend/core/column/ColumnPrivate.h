@@ -57,9 +57,10 @@ public:
 	void setData(void*);
 	void* data() const;
 	void deleteData();
-	bool hasValueLabels() const;
+	bool valueLabelsInitialized() const;
 	void removeValueLabel(const QString&);
-	void clearValueLabels();
+	bool initializeValueLabels(Column::ColumnMode mode);
+	void deinitializeValueLabels();
 
 	AbstractSimpleFilter* inputFilter() const;
 	AbstractSimpleFilter* outputFilter() const;
@@ -156,8 +157,8 @@ public:
 		AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
 
 	struct ValueLabels {
-		void initLabels(AbstractColumn::ColumnMode);
-		void clearLabels();
+		bool initLabels(AbstractColumn::ColumnMode);
+		void deinitialize();
 		int count() const;
 		void addValueLabel(qint64, const QString&);
 		void addValueLabel(int, const QString&);
@@ -167,7 +168,7 @@ public:
 		AbstractColumn::ColumnMode mode() const {
 			return m_mode;
 		}
-		bool hasValueLabels() const {
+		bool initialized() const {
 			return m_labels != nullptr;
 		}
 		void removeValueLabel(const QString&);
