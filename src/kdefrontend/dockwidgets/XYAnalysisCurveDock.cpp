@@ -61,6 +61,11 @@ void XYAnalysisCurveDock::setModel(const QList<AspectType>& topLevelClasses) {
 		cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 	}
 
+	if (cbY2DataColumn) {
+		cbY2DataColumn->setTopLevelClasses(topLevelClasses);
+		cbY2DataColumn->setModel(m_aspectTreeModel);
+	}
+
 	cbXDataColumn->setTopLevelClasses(topLevelClasses);
 	cbYDataColumn->setTopLevelClasses(topLevelClasses);
 

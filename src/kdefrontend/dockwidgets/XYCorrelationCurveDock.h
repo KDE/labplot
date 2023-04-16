@@ -31,7 +31,6 @@ private:
 	void showCorrelationResult();
 
 	Ui::XYCorrelationCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbY2DataColumn{nullptr};
 
 	XYCorrelationCurve* m_correlationCurve{nullptr};
 	XYCorrelationCurve::CorrelationData m_correlationData;

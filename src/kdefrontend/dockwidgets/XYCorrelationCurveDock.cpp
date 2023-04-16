@@ -176,9 +176,6 @@ void XYCorrelationCurveDock::setModel() {
 	list.append(AspectType::XYCorrelationCurve);
 
 	XYAnalysisCurveDock::setModel(list);
-
-	cbY2DataColumn->setTopLevelClasses(list);
-	cbY2DataColumn->setModel(m_aspectTreeModel);
 	DEBUG("XYCorrelationCurveDock::setModel() DONE");
 }
 

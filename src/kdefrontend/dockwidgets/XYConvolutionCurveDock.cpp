@@ -190,9 +190,6 @@ void XYConvolutionCurveDock::setModel() {
 
 	XYAnalysisCurveDock::setModel(list);
 
-	cbY2DataColumn->setTopLevelClasses(list);
-	cbY2DataColumn->setModel(m_aspectTreeModel);
-
 	DEBUG("XYConvolutionCurveDock::setModel() DONE");
 }
 
