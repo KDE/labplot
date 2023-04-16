@@ -178,7 +178,19 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	this->autoRangeChanged();
 
 	// update list of selectable types
-	xDataColumnChanged(cbXDataColumn->currentModelIndex());
+	switch (m_interpolationCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
+		xDataColumnChanged(cbXDataColumn->currentModelIndex());
+		break;
+	case XYAnalysisCurve::DataSourceType::Curve:
+		// Fall through
+	case XYAnalysisCurve::DataSourceType::Histogram: {
+		auto c = static_cast<XYCurve*>(cbDataSourceCurve->currentAspect());
+		if (c)
+			updateSettings(c->xColumn());
+		break;
+	}
+	}
 
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
 	this->typeChanged(m_interpolationData.type);
