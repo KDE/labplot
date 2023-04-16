@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-10 00:42+0000\n"
+"POT-Creation-Date: 2023-04-16 00:43+0000\n"
 "PO-Revision-Date: 2014-03-19 20:12+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -45,7 +45,7 @@ msgid "Couldn't find panel plugins. Please check your installation."
 msgstr ""
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
-#: src/backend/core/column/Column.cpp:1260
+#: src/backend/core/column/Column.cpp:1264
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:580
 #: src/backend/datapicker/DatapickerPoint.cpp:502
@@ -60,7 +60,7 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2916
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2989
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4620
@@ -96,7 +96,7 @@ msgstr ""
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1390 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1394 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:752
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:828
@@ -107,7 +107,7 @@ msgstr ""
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:465
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3045
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3118
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
@@ -275,7 +275,7 @@ msgstr ""
 #: src/backend/core/AbstractColumn.cpp:157 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
 #: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:278
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:290
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:291
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
 #: src/kdefrontend/GuiTools.cpp:145
@@ -667,14 +667,14 @@ msgstr ""
 msgid "%1: clear column"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1534
+#: src/backend/core/column/Column.cpp:1538
 #, kde-format
 msgid "invalid or missing row index"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1543
-#: src/backend/core/column/Column.cpp:1552
-#: src/backend/core/column/Column.cpp:1561
+#: src/backend/core/column/Column.cpp:1547
+#: src/backend/core/column/Column.cpp:1556
+#: src/backend/core/column/Column.cpp:1565
 #, kde-format
 msgid "invalid row value"
 msgstr ""
@@ -6426,7 +6426,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chbSymbolVisible)
 #: src/backend/worksheet/Image.cpp:124
 #: src/backend/worksheet/InfoElement.cpp:173
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:253
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:254
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:217
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:473
@@ -6584,7 +6584,7 @@ msgstr ""
 msgid "%1: set bottom padding"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:262
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:263
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:226
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:111
@@ -6602,7 +6602,7 @@ msgstr ""
 
 #. i18n("AvgShifted Histogram"));
 #. Orientation
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:265
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:266
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:229
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:114
@@ -6620,7 +6620,7 @@ msgstr ""
 msgid "Vertical"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:285
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:286
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:237
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
@@ -6633,7 +6633,7 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tabLine)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:291
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:292
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:137
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:467
@@ -6647,264 +6647,264 @@ msgstr ""
 msgid "Line"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:293
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:294
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:139
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:155
 #, kde-format
 msgid "Style"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:298
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:299
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:144
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:160
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:318
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:321
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
 #, kde-format
 msgid "Color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:520
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:521
 #, kde-format
 msgid "%1: set axis range type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:550
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:636
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:551
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:639
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:557
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:558
 #, kde-format
 msgid "%1: set axis position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:564
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:565
 #, kde-format
 msgid "%1: set axis scale"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:572
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:573
 #, kde-format
 msgid "%1: set axis offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:587
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:588
 #, kde-format
 msgid "%1: set axis range"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:627
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:628
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:634
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:635
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:642
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:643
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:654
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:655
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:663
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:664
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:669
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:670
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:676
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:677
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:684
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:691
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:685
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:692
 #, kde-format
 msgid "%1: set title offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:699
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:700
 #, kde-format
 msgid "%1: set arrow type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:706
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:707
 #, kde-format
 msgid "%1: set arrow position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:713
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:714
 #, kde-format
 msgid "%1: set arrow size"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:721
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:728
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:729
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:736
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:737
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:738
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:749
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:739
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:750
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:751
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:833
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:752
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:834
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:774
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:775
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:781
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:782
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:795
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:796
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:803
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:804
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:810
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:811
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:818
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:819
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:821
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:832
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:822
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:833
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:863
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:864
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:870
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:871
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:884
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:885
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:893
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:894
 #, kde-format
 msgid "%1: set labels format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:900
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:901
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:907
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:914
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:908
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:915
 #, kde-format
 msgid "%1: set labels precision"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:921
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:922
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:928
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:929
 #, kde-format
 msgid "%1: set labels position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:935
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:936
 #, kde-format
 msgid "%1: set label offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:942
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:943
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:949
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:950
 #, kde-format
 msgid "%1: set labels text type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:956
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:957
 #, kde-format
 msgid "%1: set labels text column"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:970
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:971
 #, kde-format
 msgid "%1: set label color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:977
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:978
 #, kde-format
 msgid "%1: set label font"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:984
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:985
 #, kde-format
 msgid "%1: set labels background type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:991
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:992
 #, kde-format
 msgid "%1: set label background color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:998
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:999
 #, kde-format
 msgid "%1: set label prefix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1005
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1006
 #, kde-format
 msgid "%1: set label suffix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1012
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1013
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr ""
@@ -11562,9 +11562,9 @@ msgstr ""
 
 #. i18n("Center") ); // must not updated
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:237
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:301
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:496
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:303
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:499
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:502
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:275
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
@@ -11578,9 +11578,9 @@ msgid "Top"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:238
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:302
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:497
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:304
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:500
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:503
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:269
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:277
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
@@ -11660,8 +11660,8 @@ msgstr ""
 #. i18n("Custom"));
 #. Positioning and alignment
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:274
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:504
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:508
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:507
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:511
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:263
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:271
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
@@ -11679,8 +11679,8 @@ msgstr ""
 
 #. i18n("Center") ); // must not updated
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:275
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:505
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:507
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:508
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:510
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:273
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:49
@@ -11703,25 +11703,25 @@ msgid "Both"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:279
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:291
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:292
 #, kde-format
 msgid "In"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:280
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:292
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:293
 #, kde-format
 msgid "Out"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:281
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:293
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:294
 #, kde-format
 msgid "In and Out"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:283
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:295
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:296
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:55
 #, kde-format
 msgid "Number"
@@ -11729,7 +11729,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSpacing)
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:284
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:296
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:297
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:638
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:454
 #, kde-format
@@ -11737,88 +11737,96 @@ msgid "Spacing"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:285
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:297
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:304
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:298
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:307
 #, kde-format
 msgid "Custom column"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:287
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:286
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Column labels"
+msgstr "Statistik"
+
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
 msgid "Absolute Value"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:288
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:289
 #, kde-format
 msgid "Offset"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:300
+#. i18n("Column labels"));
+#. labels
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:302
 #, kde-format
 msgid "No labels"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:303
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:306
 #, kde-format
 msgid "Position values"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:307
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:310
 #, kde-format
 msgid "Decimal notation"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:308
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:311
 #, kde-format
 msgid "Scientific notation"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:309
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:312
 #, kde-format
 msgid "Scientific E notation"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:310
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:313
 #, kde-format
 msgid "Powers of 10"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:311
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:314
 #, kde-format
 msgid "Powers of 2"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:312
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:315
 #, kde-format
 msgid "Powers of e"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:313
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:316
 #, kde-format
 msgid "Multiples of π"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:317
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:320
 #, kde-format
 msgid "Transparent"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:591
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:594
 #, kde-format
 msgid "%1: set axis color"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:593
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:596
 #, kde-format
 msgid "%1 axes: set color"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1965
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1996
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1967
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:531
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:741
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
