@@ -76,7 +76,7 @@ if (ENABLE_VECTOR_BLF)
       FetchContent_Declare(
         dbc_parser_cpp
         GIT_REPOSITORY https://github.com/Murmele/dbc_parser_cpp.git
-        GIT_TAG 18a2a4e46f44a06617e1fa9c2e4524eff2bc389d
+        GIT_TAG 3960d0930385c7e806df2a87476f33638cb08bfb
         #GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
         #GIT_TAG        master
       )
