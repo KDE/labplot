@@ -411,7 +411,7 @@ void PlotDataDialog::plot() {
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			if (m_columnComboBoxes.count() == 2)
-				customizePlot(plot, m_columnComboBoxes.at(1)->currentText());
+				setAxesColumnLabels(plot, m_columnComboBoxes.at(1)->currentText());
 
 			addCurvesToPlot(plot);
 			setAxesTitles(plot);
@@ -441,7 +441,7 @@ void PlotDataDialog::plot() {
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			if (m_columnComboBoxes.count() == 2)
-				customizePlot(plot, m_columnComboBoxes.at(1)->currentText());
+				setAxesColumnLabels(plot, m_columnComboBoxes.at(1)->currentText());
 			addCurvesToPlot(plot);
 			setAxesTitles(plot);
 		} else {
@@ -570,7 +570,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
-			customizePlot(plot, yColumn);
+			setAxesColumnLabels(plot, yColumn);
 			addCurve(name, xColumn, yColumn, plot);
 			plot->scaleAuto(-1, -1);
 			plot->retransform();
@@ -775,7 +775,7 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 	}
 }
 
-void PlotDataDialog::customizePlot(CartesianPlot* plot, const Column* column) {
+void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const Column* column) {
 	// Use value labels if possible
 	if (column && column->hasValueLabels()) {
 		auto axes = plot->children(AspectType::Axis);
@@ -791,9 +791,9 @@ void PlotDataDialog::customizePlot(CartesianPlot* plot, const Column* column) {
 	}
 }
 
-void PlotDataDialog::customizePlot(CartesianPlot* plot, const QString& columnName) {
+void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const QString& columnName) {
 	Column* column = columnFromName(columnName);
-	customizePlot(plot, column);
+	setAxesColumnLabels(plot, column);
 }
 
 void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) const {
