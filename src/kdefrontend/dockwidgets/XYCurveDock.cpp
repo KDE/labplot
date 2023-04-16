@@ -380,22 +380,26 @@ void XYCurveDock::init() {
 	ui.cbYErrorType->addItem(i18n("Asymmetric"));
 }
 
+QList<AspectType> XYCurveDock::defaultColumnTopLevelClasses() {
+	return {AspectType::Folder,
+			AspectType::Workbook,
+			AspectType::Datapicker,
+			AspectType::DatapickerCurve,
+			AspectType::Spreadsheet,
+			AspectType::LiveDataSource,
+			AspectType::Column,
+			AspectType::Worksheet,
+			AspectType::CartesianPlot,
+			AspectType::CantorWorksheet};
+}
+
 void XYCurveDock::setModel() {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Workbook,
-						   AspectType::Datapicker,
-						   AspectType::DatapickerCurve,
-						   AspectType::Spreadsheet,
-						   AspectType::LiveDataSource,
-						   AspectType::Column,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYFitCurve,
-						   AspectType::XYSmoothCurve,
-						   AspectType::CantorWorksheet};
+	QList<AspectType> list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYFitCurve);
+	list.append(AspectType::XYSmoothCurve);
 
 	if (cbXColumn && cbYColumn) {
 		cbXColumn->setTopLevelClasses(list);

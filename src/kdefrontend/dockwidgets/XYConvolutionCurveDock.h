@@ -31,9 +31,6 @@ private:
 	void showConvolutionResult();
 
 	Ui::XYConvolutionCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 	TreeViewComboBox* cbY2DataColumn{nullptr};
 
 	XYConvolutionCurve* m_convolutionCurve{nullptr};

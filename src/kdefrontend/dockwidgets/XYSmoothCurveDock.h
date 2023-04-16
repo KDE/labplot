@@ -31,9 +31,6 @@ private:
 	void showSmoothResult();
 
 	Ui::XYSmoothCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYSmoothCurve* m_smoothCurve{nullptr};
 	XYSmoothCurve::SmoothData m_smoothData;
