@@ -10,9 +10,9 @@
 #ifndef SEARCHREPLACEWIDGET_H
 #define SEARCHREPLACEWIDGET_H
 
-#include <QWidget>
-#include "ui_searchwidget.h"
 #include "ui_searchreplacewidget.h"
+#include "ui_searchwidget.h"
+#include <QWidget>
 
 class SearchReplaceWidget : public QWidget {
 	Q_OBJECT
@@ -34,6 +34,9 @@ private:
 	void initSearchWidget();
 	void initSearchReplaceWidget();
 
+	void showExtendedContextMenu(bool forPattern, const QPoint&);
+	QVector<QString> capturePatterns(const QString& pattern) const;
+
 private Q_SLOTS:
 	void findNext();
 	void findPrevious();
@@ -50,7 +53,6 @@ private Q_SLOTS:
 	void switchFindReplace();
 
 Q_SIGNALS:
-
 };
 
 #endif

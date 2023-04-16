@@ -53,12 +53,12 @@
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
-        <cstring>cbFindPattern</cstring>
+        <cstring>cbFind</cstring>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cbFindPattern">
+      <widget class="QComboBox" name="cbFind">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>

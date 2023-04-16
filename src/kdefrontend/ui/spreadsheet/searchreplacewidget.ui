@@ -45,7 +45,7 @@
       <number>0</number>
      </property>
      <item row="1" column="1">
-      <widget class="QComboBox" name="cbReplacePattern">
+      <widget class="QComboBox" name="cbReplace">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>9</horstretch>
@@ -72,7 +72,7 @@
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
-        <cstring>cbFindPattern</cstring>
+        <cstring>cbFind</cstring>
        </property>
       </widget>
      </item>
@@ -90,7 +90,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="cbFindPattern">
+      <widget class="QComboBox" name="cbFind">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>9</horstretch>
@@ -120,7 +120,7 @@
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
-        <cstring>cbReplacePattern</cstring>
+        <cstring>cbReplace</cstring>
        </property>
       </widget>
      </item>
@@ -349,8 +349,8 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>cbFindPattern</tabstop>
-  <tabstop>cbReplacePattern</tabstop>
+  <tabstop>cbFind</tabstop>
+  <tabstop>cbReplace</tabstop>
   <tabstop>cbMode</tabstop>
  </tabstops>
  <resources/>
