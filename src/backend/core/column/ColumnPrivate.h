@@ -197,7 +197,7 @@ public:
 		}
 
 	private:
-		AbstractColumn::ColumnMode m_mode;
+		AbstractColumn::ColumnMode m_mode{AbstractColumn::ColumnMode::Integer};
 		void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
 	};
 	ValueLabels m_labels;
