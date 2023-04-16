@@ -130,7 +130,7 @@ if (LOCAL_QT_ADVANCED_DOCK)
     FetchContent_Declare(
         qt_advanced_dock
         GIT_REPOSITORY https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git
-        GIT_TAG 7b30322946fe77d9d680edcfac1df4035cc765f5
+        GIT_TAG c6595563afb5955e13ea3c9f26bc280146a944d1
       )
       FetchContent_MakeAvailable(qt_advanced_dock)
 else()

@@ -537,7 +537,7 @@ target_link_libraries( labplot2lib
 	${LZ4_LIBRARIES}
 	${MATIO_LIBRARIES}
 	${ZLIB_LIBRARIES}
-	ads::qtadvanceddocking
+	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
 
 IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
