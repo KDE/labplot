@@ -40,6 +40,7 @@
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
 #include "kdefrontend/spreadsheet/RescaleDialog.h"
 #include "kdefrontend/spreadsheet/SampleValuesDialog.h"
+#include "kdefrontend/spreadsheet/SearchReplaceWidget.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
@@ -288,6 +289,8 @@ void SpreadsheetView::initActions() {
 	action_go_to_cell = new QAction(QIcon::fromTheme(QStringLiteral("go-jump")), i18n("&Go to Cell..."), this);
 	action_search = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Search"), this);
 	action_search->setShortcut(QKeySequence::Find);
+	action_search_replace = new QAction(QIcon::fromTheme(QStringLiteral("edit-find-replace")), i18n("&Replace"), this);
+	action_search_replace->setShortcut(QKeySequence::Replace);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
 	// column related actions
@@ -756,6 +759,7 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
 	m_spreadsheetMenu->addAction(action_search);
+	m_spreadsheetMenu->addAction(action_search_replace);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
@@ -806,7 +810,8 @@ void SpreadsheetView::connectActions() {
 	connect(action_clear_masks, &QAction::triggered, m_spreadsheet, &Spreadsheet::clearMasks);
 	connect(action_sort_spreadsheet, &QAction::triggered, this, &SpreadsheetView::sortSpreadsheet);
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
-	connect(action_search, &QAction::triggered, this, &SpreadsheetView::showSearch);
+	connect(action_search, &QAction::triggered, this, &SpreadsheetView::showSearchReplace);
+	connect(action_search_replace, &QAction::triggered, this, &SpreadsheetView::showSearchReplace);
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
@@ -1046,20 +1051,20 @@ void SpreadsheetView::goToCell(int row, int col) {
 }
 
 void SpreadsheetView::searchTextChanged(const QString& text) {
-	m_model->setSearchText(text);
-	m_tableView->setFocus(); // set the focus so the table gets updated with the highlighted found entries
-	m_leSearch->setFocus(); // set the focus back to the line edit so we can continue typing
+	// m_model->setSearchText(text);
+	// m_tableView->setFocus(); // set the focus so the table gets updated with the highlighted found entries
+	// m_leSearch->setFocus(); // set the focus back to the line edit so we can continue typing
 }
 
 /*!
  * determines the first cell in the spreadsheet matching the current search string and navigates to it
  */
 void SpreadsheetView::searchReturnPressed() {
-	const auto& index = m_model->index(m_leSearch->text());
-	goToCell(index.row(), index.column());
-	m_leSearch->setText(QString());
-	m_frameSearch->hide();
-	m_tableView->setFocus();
+	// const auto& index = m_model->index(m_leSearch->text());
+	// goToCell(index.row(), index.column());
+	// m_leSearch->setText(QString());
+	// m_frameSearch->hide();
+	// m_tableView->setFocus();
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
@@ -1447,10 +1452,12 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			// 				}
 			// 			}
 		} else if (key_event->matches(QKeySequence::Find)) {
-			showSearch();
-		} else if (key_event->key() == Qt::Key_Escape && m_frameSearch && m_frameSearch->isVisible()) {
-			m_leSearch->clear();
-			m_frameSearch->hide();
+			showSearchReplace();
+		} else if (key_event->matches(QKeySequence::Replace)) {
+			showSearchReplace(/* replace */ true);
+		} else if (key_event->key() == Qt::Key_Escape && m_searchReplaceWidget && m_searchReplaceWidget->isVisible()) {
+			m_searchReplaceWidget->clear();
+			m_searchReplaceWidget->hide();
 		} else if (key_event->matches(QKeySequence::Cut))
 			cutSelection();
 	}
@@ -3406,42 +3413,24 @@ void SpreadsheetView::goToCell() {
 	delete dlg;
 }
 
-void SpreadsheetView::showSearch() {
-	if (!m_frameSearch) {
-		// initialize the widgets for search options
-		m_frameSearch = new QFrame(this);
-		auto* layout = new QHBoxLayout(m_frameSearch);
-		layout->setSpacing(0);
-		layout->setContentsMargins(0, 0, 0, 0);
+void SpreadsheetView::searchReplace() {
+	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
+	if (action == action_search_replace)
+		showSearchReplace(true); // search&replace mode
+	else
+		showSearchReplace(false); // search mode
+}
 
-		m_leSearch = new QLineEdit(m_frameSearch);
-		m_leSearch->setClearButtonEnabled(true);
-		m_leSearch->setPlaceholderText(i18n("Search..."));
-		layout->addWidget(m_leSearch);
-		/*
-				auto* bFilterOptions = new QToolButton(m_frameSearch);
-				bFilterOptions->setIcon(QIcon::fromTheme("configure"));
-				bFilterOptions->setCheckable(true);
-				layoutSearch->addWidget(bFilterOptions);
-		*/
-		auto* bCloseSearch = new QPushButton(this);
-		bCloseSearch->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
-		bCloseSearch->setToolTip(i18n("End Search"));
-		bCloseSearch->setFlat(true);
-		layout->addWidget(bCloseSearch);
-		connect(bCloseSearch, &QPushButton::clicked, this, [=]() {
-			m_leSearch->clear();
-			m_frameSearch->hide();
-		});
-
-		static_cast<QVBoxLayout*>(this->layout())->addWidget(m_frameSearch);
-
-		connect(m_leSearch, &QLineEdit::textChanged, this, &SpreadsheetView::searchTextChanged);
-		connect(m_leSearch, &QLineEdit::returnPressed, this, &SpreadsheetView::searchReturnPressed);
-		// connect(bFilterOptions, &QPushButton::toggled, this, &SpreadsheetView::toggleSearchOptionsMenu);
+void SpreadsheetView::showSearchReplace(bool replace) {
+	if (!m_searchReplaceWidget) {
+		m_searchReplaceWidget = new SearchReplaceWidget(this);
+		static_cast<QVBoxLayout*>(this->layout())->addWidget(m_searchReplaceWidget);
 	}
-	m_frameSearch->show();
-	m_leSearch->setFocus();
+
+	m_searchReplaceWidget->setReplaceEnabled(replace);
+
+	m_searchReplaceWidget->show();
+	m_searchReplaceWidget->setFocus();
 }
 
 //! Open the sort dialog for the given columns

@@ -19,6 +19,7 @@
 
 class AbstractAspect;
 class Column;
+class SearchReplaceWidget;
 class Spreadsheet;
 class SpreadsheetHeaderView;
 class SpreadsheetModel;
@@ -103,14 +104,14 @@ private:
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetModel* m_model;
 	SpreadsheetHeaderView* m_horizontalHeader;
-	QFrame* m_frameSearch{nullptr};
-	QLineEdit* m_leSearch{nullptr};
+	SearchReplaceWidget* m_searchReplaceWidget{nullptr};
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
 	void checkSpreadsheetSelectionMenu();
 	void checkColumnMenus(bool numeric, bool datetime, bool text, bool hasValues);
+	void showSearchReplace(bool replace = false);
 
 	// selection related actions
 	QAction* action_cut_selection{nullptr};
@@ -138,6 +139,7 @@ private:
 	QAction* action_formatting_remove{nullptr};
 	QAction* action_go_to_cell{nullptr};
 	QAction* action_search{nullptr};
+	QAction* action_search_replace{nullptr};
 	QAction* action_statistics_all_columns{nullptr};
 
 	// column related actions
@@ -233,7 +235,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 	void goToCell(int row, int col);
-	void showSearch();
+	void searchReplace();
 	void toggleComments();
 	void goToNextColumn();
 	void goToPreviousColumn();
