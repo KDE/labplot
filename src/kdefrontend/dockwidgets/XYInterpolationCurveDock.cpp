@@ -201,10 +201,18 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	uiGeneralTab.sbBias->setValue(m_interpolationData.bias);
 	uiGeneralTab.cbEval->setCurrentIndex(m_interpolationData.evaluate);
 
-	if (m_interpolationData.pointsMode == XYInterpolationCurve::PointsMode::Multiple)
+	switch (m_interpolationData.pointsMode) {
+	case XYInterpolationCurve::PointsMode::Auto:
 		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints / 5.);
-	else
+		break;
+	case XYInterpolationCurve::PointsMode::Multiple: {
+		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints / qMax(dataPoints, (unsigned int)1));
+		break;
+	}
+	case XYInterpolationCurve::PointsMode::Custom:
 		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
+		break;
+	}
 	uiGeneralTab.cbPointsMode->setCurrentIndex(static_cast<int>(m_interpolationData.pointsMode));
 
 	this->showInterpolationResult();
