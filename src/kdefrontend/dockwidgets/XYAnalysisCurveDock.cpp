@@ -44,22 +44,22 @@ QString XYAnalysisCurveDock::customText() const {
 }
 
 void XYAnalysisCurveDock::setModel(const QList<AspectType>& topLevelClasses) {
-    if (cbDataSourceCurve) {
-        // The FourierTransformCurveDock and the XYHilbertTransformCurveDock don't use this datasource
-        // choosing therefore cbDataSourceCurve will not be initialized
-        QList<AspectType> list{AspectType::Folder,
-                               AspectType::Datapicker,
-                               AspectType::Worksheet,
-                               AspectType::CartesianPlot,
-                               AspectType::XYCurve,
-                               AspectType::XYAnalysisCurve};
-        cbDataSourceCurve->setTopLevelClasses(list);
+	if (cbDataSourceCurve) {
+		// The FourierTransformCurveDock and the XYHilbertTransformCurveDock don't use this datasource
+		// choosing therefore cbDataSourceCurve will not be initialized
+		QList<AspectType> list{AspectType::Folder,
+							   AspectType::Datapicker,
+							   AspectType::Worksheet,
+							   AspectType::CartesianPlot,
+							   AspectType::XYCurve,
+							   AspectType::XYAnalysisCurve};
+		cbDataSourceCurve->setTopLevelClasses(list);
 
-        QList<const AbstractAspect*> hiddenAspects;
-        for (auto* curve : m_curvesList)
-            hiddenAspects << curve;
-        cbDataSourceCurve->setHiddenAspects(hiddenAspects);
-    }
+		QList<const AbstractAspect*> hiddenAspects;
+		for (auto* curve : m_curvesList)
+			hiddenAspects << curve;
+		cbDataSourceCurve->setHiddenAspects(hiddenAspects);
+	}
 
 	cbXDataColumn->setTopLevelClasses(topLevelClasses);
 	cbYDataColumn->setTopLevelClasses(topLevelClasses);
