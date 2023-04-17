@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-16 00:43+0000\n"
+"POT-Creation-Date: 2023-04-17 00:44+0000\n"
 "PO-Revision-Date: 2023-04-01 12:03+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -168,7 +168,7 @@ msgstr ""
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1394 src/backend/core/Folder.cpp:151
-#: src/backend/core/Project.cpp:752
+#: src/backend/core/Project.cpp:757
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:828
 #: src/backend/datapicker/DatapickerPoint.cpp:579
@@ -912,17 +912,17 @@ msgstr "Falta o Suporte para o CAS"
 msgid "Attribute 'version' is missing."
 msgstr "Falta o atributo 'version'."
 
-#: src/backend/core/Project.cpp:759
+#: src/backend/core/Project.cpp:764
 #, kde-format
 msgid "no project element found"
 msgstr "não foi encontrado o elemento do projecto"
 
-#: src/backend/core/Project.cpp:761
+#: src/backend/core/Project.cpp:766
 #, kde-format
 msgid "no valid XML document found"
 msgstr "não foi encontrado nenhum documento em XML válido"
 
-#: src/backend/core/Project.cpp:1060
+#: src/backend/core/Project.cpp:1063
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "A hora de modificação do projecto é inválida. A usar a hora actual."
@@ -5706,7 +5706,7 @@ msgid "Raw"
 msgstr "Em Bruto"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:828
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:855
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:222
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:320
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:580
@@ -7190,7 +7190,7 @@ msgstr "Histograma"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:345
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1670
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:452
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:531
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:536
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:145
 #, kde-format
 msgid "Bar Plot"
@@ -7200,7 +7200,7 @@ msgstr "Gráfico de Barras"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1674
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
 #: src/commonfrontend/worksheet/WorksheetView.cpp:342
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:529
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:534
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:142
 #, kde-format
 msgid "Box Plot"
@@ -7557,7 +7557,7 @@ msgid "%1: reduce '%2'"
 msgstr "%1: reduzir o '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1695
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:643
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:649
 #, kde-format
 msgid "Reduction of '%1'"
 msgstr "Redução de '%1'"
@@ -7573,7 +7573,7 @@ msgid "%1: differentiate '%2'"
 msgstr "%1: derivada do '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1715
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:646
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:652
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Derivada de '%1'"
@@ -7589,7 +7589,7 @@ msgid "%1: integrate '%2'"
 msgstr "%1: integral de '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1735
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:649
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:655
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Integral de '%1'"
@@ -7605,7 +7605,7 @@ msgid "%1: interpolate '%2'"
 msgstr "%1: interpolação de '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1755
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:652
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:658
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Interpolação de '%1'"
@@ -7621,7 +7621,7 @@ msgid "%1: smooth '%2'"
 msgstr "%1: suavização de %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1775
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:655
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:661
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Suavização de '%1'"
@@ -7637,7 +7637,7 @@ msgid "%1: fit to '%2'"
 msgstr "%1: ajuste a '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1795
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:668
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:674
 #, kde-format
 msgid "Fit to '%1'"
 msgstr "Ajuste a '%1'"
@@ -7663,8 +7663,8 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: adicionar uma curva de filtro de Fourier"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1861
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:461
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:466
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:433
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:438
 #, kde-format
 msgid "Convolution"
 msgstr "Convolução"
@@ -12087,7 +12087,7 @@ msgstr "%1 eixos: foi carregado o modelo \"%2\""
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:265
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:620
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1308
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1312
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: foi carregado o modelo \"%2\""
@@ -12158,7 +12158,7 @@ msgstr "Coluna:"
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:529
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:739
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:757
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1306
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1310
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 curvas em XY: foi carregado o modelo \"%2\""
@@ -12655,8 +12655,8 @@ msgid "Custom Error Values, asymmetric"
 msgstr "Valores de Erros Personalizados, assimétricos"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:552
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:956
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1011
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:960
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1015
 #, kde-format
 msgid "Data, +-:"
 msgstr "Dados, +-:"
@@ -12665,8 +12665,8 @@ msgstr "Dados, +-:"
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:559
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:963
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1018
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:967
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1022
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:404
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:654
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:661
@@ -12798,17 +12798,17 @@ msgstr "Página-Padrão"
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "%1 folhas de trabalho: foi carregado o modelo \"%2\""
 
-#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:17
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:19
 #, kde-format
 msgid "status: %1"
 msgstr "estado: %1"
 
-#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:26
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:28
 #, kde-format
 msgid "calculation time: %1 s"
 msgstr "tempo de cálculo: %1 s"
 
-#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:28
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:30
 #, kde-format
 msgid "calculation time: %1 ms"
 msgstr "tempo de cálculo: %1 ms"
@@ -12827,34 +12827,34 @@ msgid "XY-Curve"
 msgstr "Curva-XY"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:273
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:245
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:30
 #, kde-format
 msgid "or Kernel/Size:"
 msgstr "ou Núcleo/Tamanho:"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:287
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:259
 #, kde-format
 msgid "with Kernel/Size:"
 msgstr "com o Núcleo/Tamanho:"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:462
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:465
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:434
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:437
 #, kde-format
 msgid "Deconvolution"
 msgstr "Desconvolução"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:502
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:474
 #, kde-format
 msgid "Convolution status: %1"
 msgstr "Estado da convolução: %1"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:504
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:476
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr "Estado da desconvolução: %1"
 
-#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:397
+#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:369
 #, kde-format
 msgid "Correlation status: %1"
 msgstr "Estado da correlação: %1"
@@ -12946,8 +12946,8 @@ msgstr "Simétricos"
 msgid "Asymmetric"
 msgstr "Assimétrico"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:615
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:616
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:619
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:620
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -12956,8 +12956,8 @@ msgstr ""
 "Se estiver assinalada, liga os pontos vizinhos com linhas, mesmo que existam "
 "lacunas (valores inválidos ou mascarados) entre eles"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:617
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:618
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:621
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:622
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -12970,69 +12970,69 @@ msgstr ""
 msgid "This method is much slower than any other"
 msgstr "Este método é muito mais lento que outro qualquer"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:453
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:485
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:530
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:426
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:458
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:503
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "Tolerância (distância):"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:464
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:437
 #, kde-format
 msgid "Number of points:"
 msgstr "Número de pontos:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:475
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:448
 #, kde-format
 msgid "Step size:"
 msgstr "Tamanho do passo:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:492
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:465
 #, kde-format
 msgid "Repeats:"
 msgstr "Repetições:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:502
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:475
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "Tolerância (área):"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:513
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:486
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "Tolerância mínima:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:517
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:490
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "Tolerância máxima:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:534
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:507
 #, kde-format
 msgid "Search region:"
 msgstr "Região da pesquisa:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:600
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:573
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Estado da redução de dados: %1"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:639
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:612
 #, kde-format
 msgid "number of points: %1"
 msgstr "número de pontos: %1"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:640
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:613
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "erro ao quadrado da posição: %1"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:641
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:614
 #, kde-format
 msgid "area error: %1"
 msgstr "erro da área: %1"
 
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:496
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:469
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Estado da derivada: %1"
@@ -13164,23 +13164,23 @@ msgid "%1 % upper confidence level"
 msgstr "Nível de confiança de %1 % superior"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:382
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:355
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:241
 #, kde-format
 msgid "Cutoff:"
 msgstr "Corte:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:390
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:363
 #, kde-format
 msgid "Lower cutoff:"
 msgstr "Corte inferior:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:391
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:364
 #, kde-format
 msgid "Upper cutoff:"
 msgstr "Corte superior:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:525
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:498
 #, kde-format
 msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
@@ -13189,32 +13189,32 @@ msgstr ""
 "A largura de banda é <= 0, porque o valor de corte inferior não é menor que "
 "o valor superior. Por favor, corrija isto."
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:526
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:499
 #, kde-format
 msgid "band width <= 0"
 msgstr "largura de banda <= 0"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:535
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:508
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "Estado do filtro de Fourier: %1"
 
-#: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:303
+#: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:289
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr "Estado da transformada de Fourier: %1"
 
-#: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:251
+#: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:237
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr "Estado da transformada de Hilbert: %1"
 
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:421
+#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:394
 #, kde-format
 msgid "Integration status: %1"
 msgstr "Estado do integral: %1"
 
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:458
+#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:431
 #, kde-format
 msgid "value: %1"
 msgstr "valor: %1"
@@ -13229,12 +13229,12 @@ msgstr "Automáticos (5x pontos de dados)"
 msgid "Multiple of data points"
 msgstr "múltiplo dos pontos de dados"
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:632
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:624
 #, kde-format
 msgid "Interpolation status: %1"
 msgstr "Estado da interpolação: %1"
 
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:527
+#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:499
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "Estado da suavização: %1"
@@ -15575,70 +15575,70 @@ msgstr "Adicionar os Gráficos de Barras a"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:399
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:410
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:437
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:440
 #, kde-format
 msgid "Plot Area - %1"
 msgstr "Área do Gráfico - %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:406
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:432
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:435
 #, kde-format
 msgid "Worksheet - %1"
 msgstr "Folha de Trabalho - %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:431
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:434
 #, kde-format
 msgid "Plot data from %1"
 msgstr "Gráfico dos dados de %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:565
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:580
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:596
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:570
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:586
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:602
 #, kde-format
 msgid "Plot Area %1"
 msgstr "Área do Gráfico %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:673
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:679
 #, kde-format
 msgid "Fourier Filter of '%1'"
 msgstr "Filtro de Fourier de '%1'"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:933
 #, kde-format
 msgid "new plot in an existing worksheet"
 msgstr "novo gráfico numa folha de trabalho existente"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:907
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:934
 #, kde-format
 msgid "new plot in a new worksheet"
 msgstr "novo gráfico numa nova folha de trabalho"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
 #, kde-format
 msgid "new plots in an existing worksheet"
 msgstr "novos gráficos numa folha de trabalho existente"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:913
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:940
 #, kde-format
 msgid "new plots in a new worksheet"
 msgstr "novos gráficos numa nova folha de trabalho"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:937
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:964
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Sem dados seleccionados para desenhar."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:942
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:969
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr "Tem de seleccionar um gráfico já existente."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:947
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:974
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Tem de seleccionar uma folha de trabalho já existente."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:953
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:980
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Fecha a janela e desenha o gráfico dos dados."
@@ -20758,13 +20758,13 @@ msgstr "actualização automática"
 msgid "Placement"
 msgstr "Colocação"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement1)
+#. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOnePlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
 #, kde-format
 msgid "All Plots in one Plot Area"
 msgstr "Todos os Gráficos numa Área de Gráfico"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement2)
+#. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOwnPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
 #, kde-format
 msgid "One Plot Area per Plot"
@@ -20776,19 +20776,19 @@ msgstr "Uma Área de Gráfico por Gráfico"
 msgid "Add Plots to"
 msgstr "Adicionar os Gráficos a"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement1)
+#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
 #, kde-format
 msgid "Existing Plot Area"
 msgstr "Área de Gráfico Existente"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement2)
+#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:196
 #, kde-format
 msgid "&New Plot Area in an existing Worksheet"
 msgstr "&Nova Área de Gráfico numa Folha de Trabalho Existente"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement3)
+#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:203
 #, kde-format
 msgid "New Plot Area in a new Worksheet"
