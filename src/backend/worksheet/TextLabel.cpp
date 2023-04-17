@@ -600,8 +600,19 @@ void TextLabelPrivate::updateText() {
 	case TextLabel::Mode::Markdown: {
 #ifdef HAVE_DISCOUNT
 		auto mdCharArray = textWrapper.text.toUtf8();
+		unsigned int flags = MKD_LATEX | MKD_FENCEDCODE | MKD_GITHUBTAGS;
+#ifdef HAVE_DISCOUNT3
+		MMIOT* mdHandle = mkd_string(mdCharArray.data(), mdCharArray.size() + 1, nullptr);
+
+		mkd_flag_t v3flags;
+		convert_v2flags(flags, &v3flags);
+
+		if (!mkd_compile((Document*)mdHandle, &v3flags)) {
+#else
 		MMIOT* mdHandle = mkd_string(mdCharArray.data(), mdCharArray.size() + 1, 0);
-		if (!mkd_compile(mdHandle, MKD_LATEX | MKD_FENCEDCODE | MKD_GITHUBTAGS)) {
+
+		if (!mkd_compile(mdHandle, flags)) {
+#endif
 			DEBUG(Q_FUNC_INFO << ", Failed to compile the markdown document");
 			mkd_cleanup(mdHandle);
 			return;

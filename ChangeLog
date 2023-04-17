@@ -1,4 +1,7 @@
 -----2.10.1 () -----
+Bug fixes:
+	* Support markdown library discount version 3
+	* Improve Vector BLF dependency (git download must be enabled if needed)
 -----2.10.0 (21.03.2023) -----
 New features:
 	* [worksheet]
