@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-17 00:44+0000\n"
-"PO-Revision-Date: 2023-04-12 06:20+0200\n"
+"POT-Creation-Date: 2023-04-18 00:43+0000\n"
+"PO-Revision-Date: 2023-04-17 06:31+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -90,7 +90,7 @@ msgstr "პანელის დამატებები ვერ ვიპ
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:429
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:271
 #: src/backend/worksheet/plots/PlotArea.cpp:376
-#: src/backend/worksheet/TextLabel.cpp:1127
+#: src/backend/worksheet/TextLabel.cpp:1140
 #: src/backend/worksheet/Worksheet.cpp:1705
 #: src/backend/worksheet/WorksheetElement.cpp:460
 #: src/commonfrontend/ProjectExplorer.cpp:1041
@@ -118,7 +118,7 @@ msgstr "ატრიბუტი '%1' აკლია ან ცარიელ�
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:725
 #: src/backend/worksheet/plots/PlotArea.cpp:405
-#: src/backend/worksheet/TextLabel.cpp:1175
+#: src/backend/worksheet/TextLabel.cpp:1188
 #: src/backend/worksheet/Worksheet.cpp:1798
 #, kde-format
 msgid "unknown element '%1'"
@@ -11696,10 +11696,9 @@ msgid "Custom column"
 msgstr "მორგებული სვეტი"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:286
-#, fuzzy, kde-format
-#| msgid "No labels"
+#, kde-format
 msgid "Column labels"
-msgstr "ჭდის გარეშე"
+msgstr "სვეტის ჭდეები"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
@@ -11802,7 +11801,7 @@ msgstr "დაჯგუფებული"
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:54
 #, kde-format
 msgid "Stacked"
-msgstr ""
+msgstr "ჩალაგებული"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:55
 #, kde-format
