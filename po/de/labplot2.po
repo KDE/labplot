@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-18 00:43+0000\n"
-"PO-Revision-Date: 2023-04-16 13:57+0200\n"
+"PO-Revision-Date: 2023-04-18 22:39+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -11886,10 +11886,9 @@ msgid "Custom column"
 msgstr "Benutzerdefinierte Spalte"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:286
-#, fuzzy, kde-format
-#| msgid "No labels"
+#, kde-format
 msgid "Column labels"
-msgstr "Keine Beschriftung"
+msgstr "Spaltenbeschriftung"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
