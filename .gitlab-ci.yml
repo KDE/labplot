@@ -5,7 +5,7 @@
 include:
 # Tumbleweed
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
 #  needs more work
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
 # replaced with own rule
@@ -190,7 +190,7 @@ cppcheck:
 
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
 # own rule needed for correct module name
-.flatpak:
+flatpak:
   stage: deploy
   image: kdeorg/flatpak-builder:latest
   only:
