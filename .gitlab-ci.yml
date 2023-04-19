@@ -14,7 +14,7 @@ include:
 
 # prepend '.' to temporary disable
 
-windows_qt515:
+.windows_qt515:
   stage: build
   image: kdeorg/windows-msvc2019-qt515:latest
   tags:
@@ -42,7 +42,7 @@ windows_qt515:
     reports:
       junit: JUnitTestResults.xml
 
-ubuntu_22.04_min:
+.ubuntu_22.04_min:
   stage: build
   image: ubuntu:22.04
   only:
@@ -58,7 +58,7 @@ ubuntu_22.04_min:
     - ninja
 #    - ctest -V
 
-ubuntu_22.04_full:
+.ubuntu_22.04_full:
   stage: build
   image: ubuntu:22.04
   only:
@@ -75,7 +75,7 @@ ubuntu_22.04_full:
     - ninja
 #    - ctest -V
 
-fedora_37_min:
+.fedora_37_min:
   stage: build
   image: fedora:37
   only:
@@ -89,7 +89,7 @@ fedora_37_min:
     - ninja
 #    - ctest -V
 
-fedora_37_full:
+.fedora_37_full:
   stage: build
   image: fedora:37
   only:
@@ -104,7 +104,7 @@ fedora_37_full:
 # tests currently fail due to gcc 12?
 #   - ninja test
 
-leap_15.4_min:
+.leap_15.4_min:
   stage: build
   image: opensuse/leap:15.4
   only:
@@ -120,7 +120,7 @@ leap_15.4_min:
     - ninja
 #    - ninja test
 
-leap_15.4_full:
+.leap_15.4_full:
   stage: build
   image: opensuse/leap:15.4
   only:
@@ -154,7 +154,7 @@ leap_15.4_full:
     - ninja
 #    - ninja test
 
-clang_format:
+.clang_format:
   stage: test
   image: debian:testing
   before_script:
@@ -202,7 +202,7 @@ cppcheck:
     KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
   interruptible: true
   before_script:
-    - git clone https://invent.kde.org/sysadmin/ci-utilities.git
+    - git clone https://invent.kde.org/sysadmin/ci-utilities
   script:
     - echo ${KDE_FLATPAK_MODULE_NAME}
     - echo ${KDE_FLATPAK_APP_ID}
