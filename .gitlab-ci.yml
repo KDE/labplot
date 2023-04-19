@@ -154,6 +154,40 @@ leap_15.4_full:
     - ninja
 #    - ninja test
 
+clang_format:
+  stage: test
+  image: debian:testing
+  before_script:
+    - apt-get update
+    - apt-get install --yes --no-install-recommends git clang-format-13
+  script: |
+    ./cl-fmt.sh
+    git diff --exit-code
+
+cppcheck:
+  stage: test
+  image: invent-registry.kde.org/sysadmin/ci-images/suse-qt515:latest
+  tags:
+    - Linux
+  interruptible: true
+  before_script:
+    - git clone https://invent.kde.org/sysadmin/ci-utilities
+  script:
+    - python3 -u ci-utilities/run-cppcheck.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME
+  rules:
+    - changes:
+      - "**/*.c"
+      - "**/*.h"
+      - "**/*.cc"
+      - "**/*.hh"
+      - "**/*.cpp"
+      - "**/*.hpp"
+  artifacts:
+    expire_in: 1 week
+    when: on_success
+    reports:
+      codequality: cppcheck.json
+
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
 flatpak:
   stage: deploy
@@ -184,12 +218,3 @@ flatpak:
       - "${KDE_FLATPAK_MODULE_NAME}.flatpak"
     expire_in: 14 days
 
-clang_format:
-  stage: test
-  image: debian:testing
-  before_script:
-    - apt-get update
-    - apt-get install --yes --no-install-recommends git clang-format-13
-  script: |
-    ./cl-fmt.sh
-    git diff --exit-code
