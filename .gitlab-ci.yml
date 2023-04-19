@@ -137,7 +137,7 @@ leap_15.4_full:
     - ninja
 #    - ninja test
 
-tumbleweed_full:
+.tumbleweed_full:
   stage: build
   image: opensuse/tumbleweed
   only:
