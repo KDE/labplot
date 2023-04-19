@@ -192,7 +192,7 @@ cppcheck:
 # own rule needed for correct module name
 flatpak:
   stage: deploy
-  image: kdeorg/flatpak-builder:latest
+  image: invent-registry.kde.org/sysadmin/ci-images/flatpak-builder:latest
   only:
 #    - merge_requests
     - master
