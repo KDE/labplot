@@ -10,7 +10,7 @@ include:
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
 # replaced with own rule
 # - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
-# - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
+ - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 
 # prepend '.' to temporary disable
 
@@ -189,7 +189,7 @@ cppcheck:
       codequality: cppcheck.json
 
 # see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
-flatpak:
+.flatpak:
   stage: deploy
   image: kdeorg/flatpak-builder:latest
   only:
