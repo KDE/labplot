@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-18 00:43+0000\n"
-"PO-Revision-Date: 2023-04-11 18:22+0200\n"
+"PO-Revision-Date: 2023-04-18 07:06+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -11994,10 +11994,9 @@ msgid "Custom column"
 msgstr "Colonne personnalisée"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:286
-#, fuzzy, kde-format
-#| msgid "No labels"
+#, kde-format
 msgid "Column labels"
-msgstr "Aucune étiquette"
+msgstr "Étiquettes de colonne"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
