@@ -5,28 +5,29 @@
 #include <QHash>
 #include <QStringList>
 
-bool DbcParser::isValid() {
-	return m_valid;
+DbcParser::ParseStatus DbcParser::isValid() {
+	return m_parseFileStatus;
 }
-bool DbcParser::parseFile(const QString& filename) {
-	m_valid = false;
+DbcParser::ParseStatus DbcParser::parseFile(const QString& filename) {
+	m_parseFileStatus = DbcParser::ParseStatus::ErrorDBCParserUnsupported;
 #ifdef HAVE_DBC_PARSER
 	try {
 		m_parser.parse_file(filename.toStdString());
-		m_valid = true;
+		m_parseFileStatus = DbcParser::ParseStatus::Success;
 	} catch (libdbc::validity_error e) {
 		// e.what(); // TODO: turn on
+		m_parseFileStatus = DbcParser::ParseStatus::ErrorInvalidFile;
 	}
 #else
 	Q_UNUSED(filename)
 #endif
-	return m_valid;
+	return m_parseFileStatus;
 }
 
 DbcParser::ParseStatus DbcParser::parseMessage(const uint32_t id, const std::vector<uint8_t>& data, std::vector<double>& out) {
-	if (!m_valid)
-		return ParseStatus::ErrorInvalidFile;
 #ifdef HAVE_DBC_PARSER
+	if (m_parseFileStatus != ParseStatus::Success)
+		return m_parseFileStatus;
 	switch (m_parser.parseMessage(id, data, out)) {
 	case libdbc::Message::ParseSignalsStatus::Success:
 		return ParseStatus::Success;

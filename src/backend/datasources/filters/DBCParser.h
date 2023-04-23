@@ -21,8 +21,8 @@ public:
 		ErrorInvalidConversion,
 	};
 
-	bool isValid();
-	bool parseFile(const QString& filename);
+	ParseStatus isValid();
+	ParseStatus parseFile(const QString& filename);
 
 	ParseStatus parseMessage(const uint32_t id, const std::vector<uint8_t>& data, std::vector<double>& out);
 
@@ -56,7 +56,7 @@ public:
 	void getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType s, QHash<uint32_t, int>& idIndex, Signals& out) const;
 
 private:
-	bool m_valid{false};
+	DbcParser::ParseStatus m_parseFileStatus{DbcParser::ParseStatus::ErrorDBCParserUnsupported};
 	// QMap<uint32_t, libdbc::Message> m_messages;
 #ifdef HAVE_DBC_PARSER
 	libdbc::DbcParser m_parser;
