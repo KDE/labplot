@@ -15765,7 +15765,7 @@ msgstr "Taille de l'échantillon :"
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:206
 #, kde-format
 msgid "%1: sample values"
-msgstr "%1 :  valeurs d'échantillon"
+msgstr "%1 : valeurs d'échantillon"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:209
 #, kde-format

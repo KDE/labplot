@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-18 00:43+0000\n"
-"PO-Revision-Date: 2023-04-01 17:51+0100\n"
+"PO-Revision-Date: 2023-04-22 10:57+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -9617,10 +9617,9 @@ msgid "%1: cut selected cells"
 msgstr "%1: cut selected cells"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1946
-#, fuzzy, kde-format
-#| msgid "Not enough memory to perform this operation."
+#, kde-format
 msgid "Not enough memory to finalize this operation."
-msgstr "Not enough memory to perform this operation."
+msgstr "Not enough memory to finalise this operation."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1960
 #, kde-format
@@ -11898,10 +11897,9 @@ msgid "Custom column"
 msgstr "Custom column"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:286
-#, fuzzy, kde-format
-#| msgid "No labels"
+#, kde-format
 msgid "Column labels"
-msgstr "No labels"
+msgstr "Column labels"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
@@ -20520,10 +20518,9 @@ msgstr "Fix:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
-#, fuzzy, kde-format
-#| msgid "Specify the name of the file to import."
+#, kde-format
 msgid "Specify the name of the file to export."
-msgstr "Specify the name of the file to import."
+msgstr "Specify the name of the file to export."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:81
