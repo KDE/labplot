@@ -136,9 +136,9 @@ public:
 	void setData(void*);
 	bool hasValues() const;
 	bool valueLabelsInitialized() const;
-	bool initializeValueLabels(ColumnMode mode);
+	void setLabelsMode(ColumnMode mode);
 	void removeValueLabel(const QString&);
-	void deinitializeValueLabels();
+	void valueLabelsRemoveAll();
 
 	Properties properties() const override;
 	void invalidateProperties();

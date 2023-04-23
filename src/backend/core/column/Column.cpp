@@ -972,16 +972,13 @@ bool Column::valueLabelsInitialized() const {
 	return d->valueLabelsInitialized();
 }
 
-bool Column::initializeValueLabels(ColumnMode mode) {
-	if (d->initializeValueLabels(mode)) {
-		project()->setChanged(true);
-		return true;
-	}
-	return false;
+void Column::setLabelsMode(ColumnMode mode) {
+	d->setLabelsMode(mode);
+	project()->setChanged(true);
 }
 
-void Column::deinitializeValueLabels() {
-	d->deinitializeValueLabels();
+void Column::valueLabelsRemoveAll() {
+	d->valueLabelsRemoveAll();
 	project()->setChanged(true);
 }
 

@@ -27,7 +27,14 @@ extern "C" {
 #include <gsl/gsl_statistics.h>
 }
 
-bool ColumnPrivate::ValueLabels::initLabels(AbstractColumn::ColumnMode mode) {
+void ColumnPrivate::ValueLabels::setMode(AbstractColumn::ColumnMode mode) {
+	if (!initialized())
+		init(mode);
+	else
+		migrateLabels(mode);
+}
+
+bool ColumnPrivate::ValueLabels::init(AbstractColumn::ColumnMode mode) {
 	if (initialized())
 		return false;
 
@@ -54,7 +61,7 @@ bool ColumnPrivate::ValueLabels::initLabels(AbstractColumn::ColumnMode mode) {
 	return true;
 }
 
-void ColumnPrivate::ValueLabels::deinitialize() {
+void ColumnPrivate::ValueLabels::deinit() {
 	if (m_labels) {
 		switch (m_mode) {
 		case AbstractColumn::ColumnMode::Double:
@@ -80,6 +87,200 @@ void ColumnPrivate::ValueLabels::deinitialize() {
 	}
 }
 
+void ColumnPrivate::ValueLabels::migrateLabels(AbstractColumn::ColumnMode newMode) {
+	switch (mode()) {
+	case AbstractColumn::ColumnMode::Double:
+		migrateDoubleTo(newMode);
+		break;
+	case AbstractColumn::ColumnMode::Integer:
+		migrateIntTo(newMode);
+		break;
+	case AbstractColumn::ColumnMode::BigInt:
+		migrateBigIntTo(newMode);
+		break;
+	case AbstractColumn::ColumnMode::Text:
+		migrateTextTo(newMode);
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		migrateDateTimeTo(newMode);
+		break;
+	}
+}
+
+void ColumnPrivate::ValueLabels::migrateDoubleTo(AbstractColumn::ColumnMode newMode) {
+	if (newMode == AbstractColumn::ColumnMode::Double)
+		return;
+
+	auto vector = *cast_vector<double>();
+	deinit();
+	init(newMode);
+	switch (newMode) {
+	case AbstractColumn::ColumnMode::Double:
+		break; // Nothing to do
+	case AbstractColumn::ColumnMode::Integer:
+		for (auto value : vector)
+			add((int)value.value, value.label);
+		break;
+	case AbstractColumn::ColumnMode::BigInt:
+		for (auto value : vector)
+			add((qint64)value.value, value.label);
+		break;
+	case AbstractColumn::ColumnMode::Text:
+		for (auto value : vector)
+			add(QString::number(value.value), value.label);
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		// Not possible
+		// All value labels deleted
+		break;
+	}
+}
+
+void ColumnPrivate::ValueLabels::migrateIntTo(AbstractColumn::ColumnMode newMode) {
+	if (newMode == AbstractColumn::ColumnMode::Integer)
+		return;
+
+	auto vector = *cast_vector<int>();
+	deinit();
+	init(newMode);
+	switch (newMode) {
+	case AbstractColumn::ColumnMode::Double:
+		for (auto value : vector)
+			add((double)value.value, value.label);
+		break;
+	case AbstractColumn::ColumnMode::Integer:
+		// nothing to do
+		break;
+	case AbstractColumn::ColumnMode::BigInt:
+		for (auto value : vector)
+			add((qint64)value.value, value.label);
+		break;
+	case AbstractColumn::ColumnMode::Text:
+		for (auto value : vector)
+			add(QString::number(value.value), value.label);
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		// Not possible
+		// All value labels deleted
+		break;
+	}
+}
+
+void ColumnPrivate::ValueLabels::migrateBigIntTo(AbstractColumn::ColumnMode newMode) {
+	if (newMode == AbstractColumn::ColumnMode::BigInt)
+		return;
+
+	auto vector = *cast_vector<qint64>();
+	deinit();
+	init(newMode);
+	switch (newMode) {
+	case AbstractColumn::ColumnMode::Double:
+		for (auto value : vector)
+			add((double)value.value, value.label);
+		break;
+	case AbstractColumn::ColumnMode::Integer:
+		for (auto value : vector)
+			add((int)value.value, value.label);
+		break;
+	case AbstractColumn::ColumnMode::BigInt:
+		// Nothing to do
+		break;
+	case AbstractColumn::ColumnMode::Text:
+		for (auto value : vector)
+			add(QString::number(value.value), value.label);
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		// Not possible
+		// All value labels deleted
+		break;
+	}
+}
+
+void ColumnPrivate::ValueLabels::migrateTextTo(AbstractColumn::ColumnMode newMode) {
+	if (newMode == AbstractColumn::ColumnMode::Text)
+		return;
+
+	auto vector = *cast_vector<QString>();
+	deinit();
+	init(newMode);
+	switch (newMode) {
+	case AbstractColumn::ColumnMode::Double: {
+		for (auto value : vector) {
+			bool ok;
+			double v = value.value.toDouble(&ok);
+			if (ok)
+				add(v, value.label);
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: {
+		for (auto value : vector) {
+			bool ok;
+			int v = value.value.toInt(&ok);
+			if (ok)
+				add(v, value.label);
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		for (auto value : vector) {
+			bool ok;
+			qint64 v = value.value.toLongLong(&ok);
+			if (ok)
+				add(v, value.label);
+		}
+		break;
+	}
+	case AbstractColumn::ColumnMode::Text:
+		// Nothing to do
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		// Not supported
+		break;
+	}
+}
+
+void ColumnPrivate::ValueLabels::migrateDateTimeTo(AbstractColumn::ColumnMode newMode) {
+	if (newMode == AbstractColumn::ColumnMode::DateTime || newMode == AbstractColumn::ColumnMode::Day || newMode == AbstractColumn::ColumnMode::Month)
+		return;
+
+	// auto vector = *cast_vector<QDateTime>();
+	deinit();
+	init(newMode);
+	// switch (newMode) {
+	// case AbstractColumn::ColumnMode::Double: {
+	//     // Not possible
+	//     break;
+	// }
+	// case AbstractColumn::ColumnMode::Integer: {
+	//     // Not possible
+	//     break;
+	// }
+	// case AbstractColumn::ColumnMode::BigInt: {
+	//     // Not possible
+	//     break;
+	// }
+	// case AbstractColumn::ColumnMode::Text:
+	//     // Not supported
+	//     break;
+	// case AbstractColumn::ColumnMode::DateTime:
+	// case AbstractColumn::ColumnMode::Month:
+	// case AbstractColumn::ColumnMode::Day:
+	//     // Nothing to do
+	//     break;
+	// }
+}
+
 int ColumnPrivate::ValueLabels::count() const {
 	if (!initialized())
 		return 0;
@@ -101,48 +302,56 @@ int ColumnPrivate::ValueLabels::count() const {
 	return 0;
 }
 
-void ColumnPrivate::ValueLabels::addValueLabel(const QString& value, const QString& label) {
+void ColumnPrivate::ValueLabels::add(const QString& value, const QString& label) {
 	if (initialized() && m_mode != AbstractColumn::ColumnMode::Text)
 		return;
 
-	initLabels(AbstractColumn::ColumnMode::Text);
+	init(AbstractColumn::ColumnMode::Text);
 	cast_vector<QString>()->append({value, label});
 }
 
-void ColumnPrivate::ValueLabels::addValueLabel(const QDateTime& value, const QString& label) {
+void ColumnPrivate::ValueLabels::add(const QDateTime& value, const QString& label) {
 	if (initialized() && m_mode != AbstractColumn::ColumnMode::DateTime && m_mode != AbstractColumn::ColumnMode::Day
 		&& m_mode != AbstractColumn::ColumnMode::Month)
 		return;
 
-	initLabels(AbstractColumn::ColumnMode::Month);
+	init(AbstractColumn::ColumnMode::Month);
 	cast_vector<QDateTime>()->append({value, label});
 }
 
-void ColumnPrivate::ValueLabels::addValueLabel(double value, const QString& label) {
+void ColumnPrivate::ValueLabels::add(double value, const QString& label) {
 	if (initialized() && m_mode != AbstractColumn::ColumnMode::Double)
 		return;
 
-	initLabels(AbstractColumn::ColumnMode::Double);
+	init(AbstractColumn::ColumnMode::Double);
 	cast_vector<double>()->append({value, label});
 }
 
-void ColumnPrivate::ValueLabels::addValueLabel(int value, const QString& label) {
+void ColumnPrivate::ValueLabels::add(int value, const QString& label) {
 	if (initialized() && m_mode != AbstractColumn::ColumnMode::Integer)
 		return;
 
-	initLabels(AbstractColumn::ColumnMode::Integer);
+	init(AbstractColumn::ColumnMode::Integer);
 	cast_vector<int>()->append({value, label});
 }
 
-void ColumnPrivate::ValueLabels::addValueLabel(qint64 value, const QString& label) {
+void ColumnPrivate::ValueLabels::add(qint64 value, const QString& label) {
 	if (initialized() && m_mode != AbstractColumn::ColumnMode::BigInt)
 		return;
 
-	initLabels(AbstractColumn::ColumnMode::BigInt);
+	init(AbstractColumn::ColumnMode::BigInt);
 	cast_vector<qint64>()->append({value, label});
 }
 
-void ColumnPrivate::ValueLabels::removeValueLabel(const QString& key) {
+void ColumnPrivate::ValueLabels::removeAll() {
+	if (!initialized())
+		return;
+
+	deinit();
+	init(m_mode);
+}
+
+void ColumnPrivate::ValueLabels::remove(const QString& key) {
 	if (!initialized())
 		return;
 
@@ -152,25 +361,25 @@ void ColumnPrivate::ValueLabels::removeValueLabel(const QString& key) {
 		double value = QLocale().toDouble(key, &ok);
 		if (!ok)
 			return;
-		removeValueLabel<double>(value);
+		remove<double>(value);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer: {
 		int value = QLocale().toInt(key, &ok);
 		if (!ok)
 			return;
-		removeValueLabel<int>(value);
+		remove<int>(value);
 		break;
 	}
 	case AbstractColumn::ColumnMode::BigInt: {
 		qint64 value = QLocale().toLongLong(key, &ok);
 		if (!ok)
 			return;
-		removeValueLabel<qint64>(value);
+		remove<qint64>(value);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Text: {
-		removeValueLabel<QString>(key);
+		remove<QString>(key);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Month:
@@ -183,7 +392,7 @@ void ColumnPrivate::ValueLabels::removeValueLabel(const QString& key) {
 			f.setFormat(QStringLiteral("dddd"));
 		}
 		const auto ref = QDateTime::fromString(key, f.format());
-		removeValueLabel<QDateTime>(ref);
+		remove<QDateTime>(ref);
 		break;
 	}
 	}
@@ -797,6 +1006,7 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 	}
 
 	m_columnMode = mode;
+	setLabelsMode(mode);
 	m_data = data;
 
 	m_inputFilter = in_filter;
@@ -1372,12 +1582,12 @@ AbstractSimpleFilter* ColumnPrivate::outputFilter() const {
 
 //! \name Labels related functions
 //@{
-bool ColumnPrivate::initializeValueLabels(Column::ColumnMode mode) {
-	return m_labels.initLabels(mode);
+void ColumnPrivate::setLabelsMode(Column::ColumnMode mode) {
+	m_labels.setMode(mode);
 }
 
-void ColumnPrivate::deinitializeValueLabels() {
-	m_labels.deinitialize();
+void ColumnPrivate::valueLabelsRemoveAll() {
+	m_labels.removeAll();
 }
 
 bool ColumnPrivate::valueLabelsInitialized() const {
@@ -1385,7 +1595,7 @@ bool ColumnPrivate::valueLabelsInitialized() const {
 }
 
 void ColumnPrivate::removeValueLabel(const QString& key) {
-	m_labels.removeValueLabel(key);
+	m_labels.remove(key);
 }
 
 const QVector<Column::ValueLabel<QString>>* ColumnPrivate::textValueLabels() const {
@@ -2192,23 +2402,23 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 }
 
 void ColumnPrivate::addValueLabel(const QString& value, const QString& label) {
-	m_labels.addValueLabel(value, label);
+	m_labels.add(value, label);
 }
 
 void ColumnPrivate::addValueLabel(const QDateTime& value, const QString& label) {
-	m_labels.addValueLabel(value, label);
+	m_labels.add(value, label);
 }
 
 void ColumnPrivate::addValueLabel(double value, const QString& label) {
-	m_labels.addValueLabel(value, label);
+	m_labels.add(value, label);
 }
 
 void ColumnPrivate::addValueLabel(int value, const QString& label) {
-	m_labels.addValueLabel(value, label);
+	m_labels.add(value, label);
 }
 
 void ColumnPrivate::addValueLabel(qint64 value, const QString& label) {
-	m_labels.addValueLabel(value, label);
+	m_labels.add(value, label);
 }
 
 /**

@@ -159,7 +159,7 @@ void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 void BatchEditValueLabelsDialog::save() const {
 	// remove all already available labels first
 	for (auto* column : m_columns)
-		column->deinitializeValueLabels();
+		column->valueLabelsRemoveAll();
 
 	// add new labels
 	const auto numberLocale = QLocale();
