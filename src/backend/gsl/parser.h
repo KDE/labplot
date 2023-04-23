@@ -11,23 +11,14 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "constants.h"
+#include "functions.h"
+#include "gsl/gsl_version.h"
+#include <QString>
+#include <klocalizedstring.h>
+
 /* uncomment to enable parser specific debugging */
 /* #define PDEBUG 1 */
-
-struct cons {
-	const char* name;
-	double value;
-};
-
-struct funs {
-	const char* name;
-#ifdef _MSC_VER /* MSVC needs void argument */
-	double (*fnct)(void);
-#else
-	double (*fnct)();
-#endif
-	int argc;
-};
 
 /* variables to pass to parser */
 #define MAX_VARNAME_LENGTH 10
@@ -65,8 +56,5 @@ symbol* assign_symbol(const char* symbol_name, double value);
 int remove_symbol(const char* symbol_name);
 double parse(const char* string, const char* locale);
 double parse_with_vars(const char[], const parser_var[], int nvars, const char* locale);
-
-extern struct cons _constants[];
-extern struct funs _functions[];
 
 #endif /*PARSER_H*/

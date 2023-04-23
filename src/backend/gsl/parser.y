@@ -13,17 +13,20 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <cmath>
 #ifdef HAVE_XLOCALE
 #include <xlocale.h>
 #endif
 #include "parser.h"
-#include "constants.h"
-#include "functions.h"
 #if defined(_WIN32)
 #define locale_t _locale_t
 #define strtod_l _strtod_l
 #define freelocale _free_locale
 #endif
+
+extern "C" {
+    #include "gsl/gsl_sf_gamma.h"
+}
 
 #ifdef PDEBUG
 #include <stdio.h>
@@ -103,7 +106,7 @@ expr:      NUM       { $$ = $1;                            }
 %%
 
 /* global symbol table (as linked list) */
-symbol *symbol_table = 0;
+symbol *symbol_table = nullptr;
 
 int parse_errors(void) {
 	return yynerrs;
@@ -192,15 +195,15 @@ symbol* get_symbol(const char *symbol_name) {
 void init_table(void) {
 	pdebug("PARSER: init_table()\n");
 
-	symbol *ptr = 0;
+	symbol *ptr = nullptr;
 	int i;
 	/* add functions */
-	for (i = 0; _functions[i].name != 0; i++) {
+	for (i = 0; i < _number_functions; i++) {
 		ptr = put_symbol(_functions[i].name, FNCT);
 		ptr->value.fnctptr = _functions[i].fnct;
 	}
 	/* add constants */
-	for (i = 0; _constants[i].name != 0; i++) {
+	for (i = 0; i < _number_constants; i++) {
 		ptr = put_symbol(_constants[i].name, VAR);
 		ptr->value.var = _constants[i].value;
 	}
@@ -381,7 +384,7 @@ int yylex(param *p) {
 	/* process symbol */
 	if (isalpha (c) || c == '.') {
 		pdebug("PARSER: Found SYMBOL (starts with alpha)\n");
-		static char *symbol_name = 0;
+		static char *symbol_name = nullptr;
 		static int length = 0;
 		int i = 0;
 

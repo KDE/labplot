@@ -21,7 +21,7 @@ if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
 endif ()
 
 # do not process these files
-set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
+set_property(SOURCE gsl_parser.hpp gsl_parser.cpp PROPERTY SKIP_AUTOMOC ON)
 
 set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/DatasetModel.cpp
@@ -348,6 +348,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
+	${BACKEND_DIR}/gsl/constants.cpp
+	${BACKEND_DIR}/gsl/functions.cpp
 	${BACKEND_DIR}/lib/Range.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
@@ -493,7 +495,7 @@ set(TOOLS_SOURCES
 
 bison_target(GslParser
 	${BACKEND_DIR}/gsl/parser.y
-	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
+	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.cpp
 )
 set(GENERATED_SOURCES
 	${BISON_GslParser_OUTPUTS}

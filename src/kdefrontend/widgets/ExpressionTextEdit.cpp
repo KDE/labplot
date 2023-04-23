@@ -200,7 +200,7 @@ void ExpressionTextEdit::mouseMoveEvent(QMouseEvent* e) {
 		static const QStringList& functions = ExpressionParser::getInstance()->functions();
 		index = functions.indexOf(token);
 		if (index != -1) {
-			static const QStringList& names = ExpressionParser::getInstance()->functionsNames();
+			static const QStringList& names = ExpressionParser::getInstance()->functionsDescriptions();
 			setToolTip(functions.at(index) + QStringLiteral(" - ") + names.at(index));
 		} else
 			setToolTip(QString());
