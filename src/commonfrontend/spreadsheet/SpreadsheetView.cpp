@@ -3423,7 +3423,7 @@ void SpreadsheetView::searchReplace() {
 
 void SpreadsheetView::showSearchReplace(bool replace) {
 	if (!m_searchReplaceWidget) {
-		m_searchReplaceWidget = new SearchReplaceWidget(this);
+		m_searchReplaceWidget = new SearchReplaceWidget(m_spreadsheet, this);
 		static_cast<QVBoxLayout*>(this->layout())->addWidget(m_searchReplaceWidget);
 	}
 

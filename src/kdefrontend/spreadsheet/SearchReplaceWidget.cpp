@@ -9,6 +9,10 @@
 */
 
 #include "SearchReplaceWidget.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/spreadsheet/SpreadsheetModel.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <QLineEdit>
 #include <QMenu>
@@ -92,8 +96,12 @@ struct ParInfo {
 	int captureNumber; // 1..9
 };
 
-SearchReplaceWidget::SearchReplaceWidget(QWidget* parent)
-	: QWidget(parent) {
+SearchReplaceWidget::SearchReplaceWidget(Spreadsheet* spreadsheet, QWidget* parent) :
+	QWidget(parent),
+	m_spreadsheet(spreadsheet) {
+
+	m_view = static_cast<SpreadsheetView*>(spreadsheet->view());
+
 	auto* layout = new QVBoxLayout(this);
 	this->setLayout(layout);
 	QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -109,13 +117,66 @@ void SearchReplaceWidget::setReplaceEnabled(bool enabled) {
 }
 
 void SearchReplaceWidget::clear() {
+
 }
 
 // SLOTS
-void SearchReplaceWidget::findNext() {
+bool SearchReplaceWidget::findNext(bool proceed) {
+	QString text;
+	if (m_searchWidget->isVisible())
+		text = uiSearch.cbFind->currentText();
+	else
+		text = uiSearchReplace.cbFind->currentText();
+
+	int curRow = m_view->firstSelectedRow();
+	int curCol = m_view->firstSelectedColumn();
+	const int colCount = m_spreadsheet->columnCount();
+	const int rowCount = m_spreadsheet->rowCount();
+
+	if (proceed) {
+		++curRow;
+		++curCol;
+	}
+	bool columnMajor = true;
+	bool textMode = true;
+
+	if (textMode) {
+		if (columnMajor) {
+			for (int col = curCol; col < colCount; ++col) {
+				auto* column = m_spreadsheet->column(col);
+				if (column->columnMode() != AbstractColumn::ColumnMode::Text)
+					continue;
+
+				for (int row = curRow; row < rowCount; ++row) {
+					if (column->textAt(row).indexOf(text) != -1) {
+						m_view->goToCell(row, col);
+						return true;
+					}
+				}
+			}
+		} else { //row-major
+			for (int row = curRow; row < rowCount; ++row) {
+				for (int col = curCol; col < colCount; ++col) {
+					auto* column = m_spreadsheet->column(col);
+					if (column->columnMode() != AbstractColumn::ColumnMode::Text)
+						continue;
+
+					if (column->textAt(row).indexOf(text) != -1) {
+						m_view->goToCell(row, col);
+						return true;
+					}
+				}
+			}
+		}
+	} else { //numeric
+
+	}
+
+	return false;
 }
 
-void SearchReplaceWidget::findPrevious() {
+bool SearchReplaceWidget::findPrevious(bool procced) {
+	return true;
 }
 
 void SearchReplaceWidget::findAll() {
@@ -171,6 +232,20 @@ void SearchReplaceWidget::initSearchWidget() {
 	uiSearch.setupUi(m_searchWidget);
 	layout()->addWidget(m_searchWidget);
 
+	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+			if (uiSearch.cbFind->lineEdit()->text().isEmpty())
+				return;
+			bool rc = findNext(true);
+			GuiTools::highlight(uiSearch.cbFind->lineEdit(), !rc);
+		});
+	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=]() {
+			if (!uiSearch.cbFind->lineEdit()->text().isEmpty()) {
+				bool rc = findNext(false);
+				GuiTools::highlight(uiSearch.cbFind->lineEdit(), !rc);
+			} else
+				GuiTools::highlight(uiSearch.cbFind->lineEdit(), false);
+		});
+
 	connect(uiSearch.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
 	connect(uiSearch.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
 
@@ -183,6 +258,20 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	m_searchReplaceWidget = new QWidget(this);
 	uiSearchReplace.setupUi(m_searchReplaceWidget);
 	layout()->addWidget(m_searchReplaceWidget);
+
+	connect(uiSearchReplace.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+			if (uiSearchReplace.cbFind->lineEdit()->text().isEmpty())
+				return;
+			bool rc = findNext(true);
+			GuiTools::highlight(uiSearchReplace.cbFind->lineEdit(), !rc);
+			});
+	connect(uiSearchReplace.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=]() {
+			if (!uiSearchReplace.cbFind->lineEdit()->text().isEmpty()) {
+				bool rc = findNext(false);
+				GuiTools::highlight(uiSearchReplace.cbFind->lineEdit(), !rc);
+			} else
+				GuiTools::highlight(uiSearchReplace.cbFind->lineEdit(), false);
+			});
 
 	connect(uiSearchReplace.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
 	connect(uiSearchReplace.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);

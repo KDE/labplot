@@ -14,11 +14,14 @@
 #include "ui_searchwidget.h"
 #include <QWidget>
 
+class Spreadsheet;
+class SpreadsheetView;
+
 class SearchReplaceWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit SearchReplaceWidget(QWidget* parent = nullptr);
+	explicit SearchReplaceWidget(Spreadsheet*, QWidget* parent = nullptr);
 	~SearchReplaceWidget() override;
 
 	void setReplaceEnabled(bool enabled);
@@ -30,6 +33,8 @@ private:
 	QWidget* m_searchWidget{nullptr};
 	QWidget* m_searchReplaceWidget{nullptr};
 	bool m_replaceEnabled{false};
+	Spreadsheet* m_spreadsheet{nullptr};
+	SpreadsheetView* m_view{nullptr};
 
 	void initSearchWidget();
 	void initSearchReplaceWidget();
@@ -38,8 +43,8 @@ private:
 	QVector<QString> capturePatterns(const QString& pattern) const;
 
 private Q_SLOTS:
-	void findNext();
-	void findPrevious();
+	bool findNext(bool procced = true);
+	bool findPrevious(bool procced = true);
 	void findAll();
 	void replaceNext();
 	void replaceAll();

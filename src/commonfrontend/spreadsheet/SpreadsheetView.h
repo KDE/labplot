@@ -232,9 +232,9 @@ public Q_SLOTS:
 	void fillWithRowNumbers();
 	void selectColumn(int);
 	void deselectColumn(int);
+	void goToCell(int row, int col);
 
 private Q_SLOTS:
-	void goToCell(int row, int col);
 	void searchReplace();
 	void toggleComments();
 	void goToNextColumn();
