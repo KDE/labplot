@@ -331,7 +331,7 @@ void DatabaseManagerWidget::addConnection() {
 	driverChanged();
 	m_initializing = false;
 
-	// we have now more then one connection, enable widgets
+	// we have now more than one connection, enable widgets
 	ui.tbDelete->setEnabled(true);
 	ui.leName->setEnabled(true);
 	ui.leDatabase->setEnabled(true);

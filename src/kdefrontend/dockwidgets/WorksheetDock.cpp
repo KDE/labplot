@@ -109,7 +109,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	m_worksheet = list.first();
 	setAspects(list);
 
-	// if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
+	// if there are more than one worksheet in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);

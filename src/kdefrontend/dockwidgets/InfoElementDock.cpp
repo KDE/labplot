@@ -93,7 +93,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	ui->lwCurves->clear();
 	ui->cbConnectToCurve->clear();
 
-	// if there are more then one info element in the list, disable the name and comment fields
+	// if there are more than one info element in the list, disable the name and comment fields
 	if (list.size() == 1) {
 		ui->lName->setEnabled(true);
 		ui->leName->setEnabled(true);

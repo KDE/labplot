@@ -73,7 +73,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 		ui.leName->setText(m_spreadsheet->name());
 		ui.teComment->setText(m_spreadsheet->comment());
 	} else {
-		// disable the fields "Name" and "Comment" if there are more then one spreadsheet
+		// disable the fields "Name" and "Comment" if there are more than one spreadsheet
 		ui.leName->setEnabled(false);
 		ui.teComment->setEnabled(false);
 

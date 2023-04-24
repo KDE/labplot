@@ -121,7 +121,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	m_legend = list.first();
 	setAspects(list);
 
-	// if there is more then one legend in the list, disable the tab "general"
+	// if there is more than one legend in the list, disable the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
