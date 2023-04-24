@@ -1,15 +1,15 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the labplot package.
-# Paolo Zamponi <zapaolo@email.it>, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Paolo Zamponi <feus73@gmail.com>, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2020, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-18 00:43+0000\n"
-"PO-Revision-Date: 2023-04-09 18:40+0200\n"
-"Last-Translator: Paolo Zamponi <zapaolo@email.it>\n"
+"POT-Creation-Date: 2023-04-24 00:43+0000\n"
+"PO-Revision-Date: 2023-04-15 11:20+0200\n"
+"Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr "Paolo Zamponi"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "zapaolo@email.it"
+msgstr "feus73@gmail.com"
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:70
 #, kde-format
@@ -49,7 +49,7 @@ msgstr ""
 "Impossibile trovare il pannello delle estensioni. Controlla l'installazione."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
-#: src/backend/core/column/Column.cpp:1264
+#: src/backend/core/column/Column.cpp:1269
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:580
 #: src/backend/datapicker/DatapickerPoint.cpp:502
@@ -100,7 +100,7 @@ msgstr "L'attributo «%1» è mancate o vuoto, uso il valore predefinito"
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1394 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1399 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:757
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:828
@@ -668,47 +668,47 @@ msgid "%1: change column type"
 msgstr "%1: cambia il tipo di colonna"
 
 #: src/backend/core/column/Column.cpp:512
-#: src/backend/core/column/columncommands.cpp:563
+#: src/backend/core/column/columncommands.cpp:565
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: cancella la colonna"
 
-#: src/backend/core/column/Column.cpp:1538
+#: src/backend/core/column/Column.cpp:1543
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "indice di riga non valido o mancante"
 
-#: src/backend/core/column/Column.cpp:1547
-#: src/backend/core/column/Column.cpp:1556
-#: src/backend/core/column/Column.cpp:1565
+#: src/backend/core/column/Column.cpp:1552
+#: src/backend/core/column/Column.cpp:1561
+#: src/backend/core/column/Column.cpp:1570
 #, kde-format
 msgid "invalid row value"
 msgstr "valore di riga non valido"
 
-#: src/backend/core/column/columncommands.cpp:214
-#: src/backend/core/column/columncommands.cpp:325
+#: src/backend/core/column/columncommands.cpp:216
+#: src/backend/core/column/columncommands.cpp:327
 #, kde-format
 msgid "%1: change cell values"
 msgstr "%1: cambia i valori della cella"
 
-#: src/backend/core/column/columncommands.cpp:514
+#: src/backend/core/column/columncommands.cpp:516
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2634
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: imposta la designazione dei grafici"
 
-#: src/backend/core/column/columncommands.cpp:687
+#: src/backend/core/column/columncommands.cpp:689
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "%1: imposta la formula"
 
-#: src/backend/core/column/columncommands.cpp:754
+#: src/backend/core/column/columncommands.cpp:756
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "%1: imposta la formula della cella"
 
-#: src/backend/core/column/columncommands.cpp:796
+#: src/backend/core/column/columncommands.cpp:798
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "%1: cancella tutte le formule"
@@ -9661,10 +9661,9 @@ msgid "%1: cut selected cells"
 msgstr "%1: taglia le celle selezionate"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1946
-#, fuzzy, kde-format
-#| msgid "Not enough memory to perform this operation."
+#, kde-format
 msgid "Not enough memory to finalize this operation."
-msgstr "Non c'è abbastanza memoria per eseguire questa operazione."
+msgstr "Non c'è abbastanza memoria per finalizzare questa operazione."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1960
 #, kde-format
@@ -15069,7 +15068,7 @@ msgstr "Aggiungi etichetta valore"
 msgid "Value:"
 msgstr "Valore:"
 
-#: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:81
+#: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:83
 #, kde-format
 msgid "Label:"
 msgstr "Etichetta:"
