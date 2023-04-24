@@ -347,7 +347,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 
 	labelWidget->setAxes(list);
 
-	// if there are more then one axis in the list, disable the tab "general"
+	// if there are more than one axis in the list, disable the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);

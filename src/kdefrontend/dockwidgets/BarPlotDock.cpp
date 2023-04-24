@@ -137,7 +137,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_barPlot->project());
 	setModel();
 
-	// if there is more then one point in the list, disable the comment and name widgets in "general"
+	// if there is more than one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);

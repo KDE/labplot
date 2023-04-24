@@ -410,7 +410,7 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner)
 
 	// scaling:
 	// we need to scale from the font size specified in points to scene units.
-	// furhermore, we create the tex-image in a higher resolution then usual desktop resolution
+	// furthermore, we create the tex-image in a higher resolution than usual desktop resolution
 	//  -> take this into account
 	// m_textItem is only used for the normal text not for latex. So the scale is only needed for the
 	// normal text, for latex the generated image will be shown directly
