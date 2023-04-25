@@ -158,7 +158,7 @@ QString FunctionGroupsToString(FunctionGroups group) {
 
 /* list of functions (sync with ExpressionParser.cpp!) */
 struct funs _functions[] = {
-	// 	StandardMathematicalFunctions = addFunctionGroup(i18n("Standard Mathematical Functions"));
+	// Standard Mathematical Functions
 	{i18n("pseudo-random integer [0,RAND_MAX]"), "rand", (func_t)nsl_sf_rand, 0, FunctionGroups::StandardMathematicalFunctions},
 	{i18n("nonlinear additive feedback rng [0,RAND_MAX]"), "random", (func_t)nsl_sf_random, 0, FunctionGroups::StandardMathematicalFunctions},
 	{i18n("nonlinear additive feedback rng [0,1]"), "drand", (func_t)nsl_sf_drand, 0, FunctionGroups::StandardMathematicalFunctions},
@@ -177,11 +177,7 @@ struct funs _functions[] = {
 	{i18n("Extract the exponent"), "logb", (func_t) static_cast<double (*)(double)>(&logb), 1, FunctionGroups::StandardMathematicalFunctions},
 	{i18n("Round to an integer value"), "rint", (func_t) static_cast<double (*)(double)>(&rint), 1, FunctionGroups::StandardMathematicalFunctions},
 	{i18n("Round to the nearest integer"), "round", (func_t) static_cast<double (*)(double)>(&round), 1, FunctionGroups::StandardMathematicalFunctions},
-	{i18n("Round to the nearest integer"),
-	 "trunc",
-	 (func_t) static_cast<double (*)(double)>(&trunc),
-	 1,
-	 FunctionGroups::StandardMathematicalFunctions}, /// TODO: ???
+	{i18n("Round to the nearest integer"), "trunc", (func_t) static_cast<double (*)(double)>(&trunc), 1, FunctionGroups::StandardMathematicalFunctions},
 #endif
 	{QStringLiteral("log(1+x)"), "log1p", (func_t)gsl_log1p, 1, FunctionGroups::StandardMathematicalFunctions},
 	{QStringLiteral("x * 2^e"), "ldexp", (func_t)nsl_sf_ldexp, 2, FunctionGroups::StandardMathematicalFunctions},
@@ -195,14 +191,14 @@ struct funs _functions[] = {
 	{QStringLiteral("x^8"), "pow8", (func_t)gsl_pow_8, 1, FunctionGroups::StandardMathematicalFunctions},
 	{QStringLiteral("x^9"), "pow9", (func_t)gsl_pow_9, 1, FunctionGroups::StandardMathematicalFunctions},
 
-	// 	ComparsionFunctions = addFunctionGroup(i18n("Comparsion Functions"));
+	// Comparsion Functions
 	{i18n("greaterThen"), "greaterThen", (func_t)greaterThen, 2, FunctionGroups::ComparsionFunctions},
 	{i18n("lessThan"), "lessThan", (func_t)lessThen, 2, FunctionGroups::ComparsionFunctions},
 	{i18n("greaterEqualThen"), "greaterEqualThen", (func_t)greaterEqualThen, 2, FunctionGroups::ComparsionFunctions},
 	{i18n("lessEqualThen"), "lessEqualThen", (func_t)lessEqualThen, 2, FunctionGroups::ComparsionFunctions},
 	{i18n("equal"), "equal", (func_t)equal, 2, FunctionGroups::ComparsionFunctions},
 
-	// 	ColumnStatistics = addFunctionGroup(i18n("Column Statistics"));
+	// Column Statistics
 	{i18n("Size"), "size", (func_t)nsl_sf_dummy, 1, FunctionGroups::ColumnStatistics},
 	{i18n("Minimum"), "min", (func_t)nsl_sf_dummy, 1, FunctionGroups::ColumnStatistics},
 	{i18n("Maximum"), "max", (func_t)nsl_sf_dummy, 1, FunctionGroups::ColumnStatistics},
@@ -233,7 +229,7 @@ struct funs _functions[] = {
 	{i18n("Quantile"), "quantile", (func_t)nsl_sf_dummy2, 2, FunctionGroups::ColumnStatistics},
 	{i18n("Percentile"), "percentile", (func_t)nsl_sf_dummy2, 2, FunctionGroups::ColumnStatistics},
 
-	// 	MovingStatistics = addFunctionGroup(i18n("Moving Statistics"));
+	// Moving Statistics
 	{i18n("Cell"), "cell", (func_t)nsl_sf_dummy2, 2, FunctionGroups::MovingStatistics},
 	{i18n("Moving Average"), "ma", (func_t)nsl_sf_dummy, 1, FunctionGroups::MovingStatistics},
 	{i18n("Moving Range"), "mr", (func_t)nsl_sf_dummy, 1, FunctionGroups::MovingStatistics},
@@ -243,7 +239,7 @@ struct funs _functions[] = {
 	{i18n("Simple Moving Range"), "smr", (func_t)nsl_sf_dummy, 2, FunctionGroups::MovingStatistics},
 
 	// https://www.gnu.org/software/gsl/doc/html/specfunc.html
-	// 	AiryFunctionsAndDerivatives = addFunctionGroup(i18n("Airy Functions and Derivatives"));
+	// Airy Functions and Derivatives
 	{i18n("Airy function of the first kind"), "Ai", (func_t)nsl_sf_airy_Ai, 1, FunctionGroups::AiryFunctionsAndDerivatives},
 	{i18n("Airy function of the second kind"), "Bi", (func_t)nsl_sf_airy_Bi, 1, FunctionGroups::AiryFunctionsAndDerivatives},
 	{i18n("Scaled Airy function of the first kind"), "Ais", (func_t)nsl_sf_airy_Ais, 1, FunctionGroups::AiryFunctionsAndDerivatives},
@@ -257,7 +253,7 @@ struct funs _functions[] = {
 	{i18n("n-th zero of the Airy function derivative of the first kind"), "Aid0", (func_t)nsl_sf_airy_0_Aid, 1, FunctionGroups::AiryFunctionsAndDerivatives},
 	{i18n("n-th zero of the Airy function derivative of the second kind"), "Bid0", (func_t)nsl_sf_airy_0_Bid, 1, FunctionGroups::AiryFunctionsAndDerivatives},
 
-	// 	BesselFunctions = addFunctionGroup(i18n("Bessel Functions"));
+	// Bessel Functions
 	{i18n("Regular cylindrical Bessel function of zeroth order"), "J0", (func_t)gsl_sf_bessel_J0, 1, FunctionGroups::BesselFunctions},
 	{i18n("Regular cylindrical Bessel function of first order"), "J1", (func_t)gsl_sf_bessel_J1, 1, FunctionGroups::BesselFunctions},
 	{i18n("Regular cylindrical Bessel function of order n"), "Jn", (func_t)nsl_sf_bessel_Jn, 2, FunctionGroups::BesselFunctions},
@@ -363,10 +359,10 @@ struct funs _functions[] = {
 	{i18n("n-th positive zero of the Bessel function J1"), "J1_0", (func_t)nsl_sf_bessel_0_J1, 1, FunctionGroups::BesselFunctions},
 	{i18n("n-th positive zero of the Bessel function Jnu"), "Jnu_0", (func_t)nsl_sf_bessel_0_Jnu, 2, FunctionGroups::BesselFunctions},
 
-	// 	ClausenFunctions = addFunctionGroup(i18n("Clausen Functions"));
+	// Clausen Functions
 	{i18n("Clausen function"), "clausen", (func_t)gsl_sf_clausen, 1, FunctionGroups::ClausenFunctions},
 
-	// 	CoulombFunctions = addFunctionGroup(i18n("Coulomb Functions"));
+	// Coulomb Functions
 	{i18n("Lowest-order normalized hydrogenic bound state radial wavefunction"),
 	 "hydrogenicR_1",
 	 (func_t)gsl_sf_hydrogenicR_1,
@@ -374,10 +370,10 @@ struct funs _functions[] = {
 	 FunctionGroups::CoulombFunctions},
 	{i18n("n-th normalized hydrogenic bound state radial wavefunction"), "hydrogenicR", (func_t)nsl_sf_hydrogenicR, 4, FunctionGroups::CoulombFunctions},
 
-	// 	DawsonFunction = addFunctionGroup(i18n("Dawson Function"));
+	// Dawson Function
 	{i18n("Dawson integral"), "dawson", (func_t)nsl_sf_dawson, 1, FunctionGroups::DawsonFunction},
 
-	// 	DebyeFunctions = addFunctionGroup(i18n("Debye Functions"));
+	// Debye Functions
 	{i18n("First-order Debye function"), "D1", (func_t)gsl_sf_debye_1, 1, FunctionGroups::DebyeFunctions},
 	{i18n("Second-order Debye function"), "D2", (func_t)gsl_sf_debye_2, 1, FunctionGroups::DebyeFunctions},
 	{i18n("Third-order Debye function"), "D3", (func_t)gsl_sf_debye_3, 1, FunctionGroups::DebyeFunctions},
@@ -385,10 +381,10 @@ struct funs _functions[] = {
 	{i18n("Fifth-order Debye function"), "D5", (func_t)gsl_sf_debye_5, 1, FunctionGroups::DebyeFunctions},
 	{i18n("Sixth-order Debye function"), "D6", (func_t)gsl_sf_debye_6, 1, FunctionGroups::DebyeFunctions},
 
-	// 	Dilogarithm = addFunctionGroup(i18n("Dilogarithm"));
+	// Dilogarithm
 	{i18n("Dilogarithm for a real argument"), "Li2", (func_t)gsl_sf_dilog, 1, FunctionGroups::Dilogarithm},
 
-	// 	EllipticIntegrals = addFunctionGroup(i18n("Elliptic Integrals"));
+	// Elliptic Integrals
 	{i18n("Legendre form of complete elliptic integral K"), "Kc", (func_t)nsl_sf_ellint_Kc, 1, FunctionGroups::EllipticIntegrals},
 	{i18n("Legendre form of complete elliptic integral E"), "Ec", (func_t)nsl_sf_ellint_Ec, 1, FunctionGroups::EllipticIntegrals},
 	{i18n("Legendre form of complete elliptic integral Pi"), "Pc", (func_t)nsl_sf_ellint_Pc, 2, FunctionGroups::EllipticIntegrals},
@@ -401,11 +397,7 @@ struct funs _functions[] = {
 	{i18n("Carlson form of incomplete elliptic integral RF"), "RF", (func_t)nsl_sf_ellint_RF, 3, FunctionGroups::EllipticIntegrals},
 	{i18n("Carlson form of incomplete elliptic integral RJ"), "RJ", (func_t)nsl_sf_ellint_RJ, 4, FunctionGroups::EllipticIntegrals},
 
-#ifndef _MSC_VER
-// 	ErrorFunctionsAndRelatedFunctions = addFunctionGroup(i18n("Error Functions and Related Functions"));
-#else
-	indexGroup = addGroup(i18n("Error Functions"));
-#endif
+	// Error Functions
 	{i18n("Error function"), "erf", (func_t)gsl_sf_erf, 1, FunctionGroups::ErrorFunctions},
 	{i18n("Complementary error function"), "erfc", (func_t)gsl_sf_erfc, 1, FunctionGroups::ErrorFunctions},
 	{i18n("Logarithm of complementary error function"), "log_erfc", (func_t)gsl_sf_log_erfc, 1, FunctionGroups::ErrorFunctions},
@@ -425,7 +417,7 @@ struct funs _functions[] = {
 #endif
 	{i18n("Pseudo-Voigt profile (same width)"), "pseudovoigt1", (func_t)nsl_sf_pseudovoigt1, 3, FunctionGroups::ErrorFunctions},
 
-	// 	ExponentialFunctions = addFunctionGroup(i18n("Exponential Functions"));
+	// Exponential Functions
 	{i18n("Exponential function"), "exp", (func_t)gsl_sf_exp, 1, FunctionGroups::ExponentialFunctions},
 	{i18n("exponentiate x and multiply by y"), "exp_mult", (func_t)gsl_sf_exp_mult, 2, FunctionGroups::ExponentialFunctions},
 	{QStringLiteral("exp(x) - 1"), "expm1", (func_t)gsl_expm1, 1, FunctionGroups::ExponentialFunctions},
@@ -433,7 +425,7 @@ struct funs _functions[] = {
 	{QStringLiteral("2(exp(x)-1-x)/x^2"), "exprel2", (func_t)gsl_sf_exprel_2, 1, FunctionGroups::ExponentialFunctions},
 	{i18n("n-relative exponential"), "expreln", (func_t)nsl_sf_exprel_n, 2, FunctionGroups::ExponentialFunctions},
 
-	// 	ExponentialIntegrals = addFunctionGroup(i18n("Exponential Integrals"));
+	// Exponential Integrals
 	{i18n("Exponential integral"), "E1", (func_t)gsl_sf_expint_E1, 1, FunctionGroups::ExponentialIntegrals},
 	{i18n("Second order exponential integral"), "E2", (func_t)gsl_sf_expint_E2, 1, FunctionGroups::ExponentialIntegrals},
 	{i18n("Exponential integral of order n"), "En", (func_t)gsl_sf_expint_En, 2, FunctionGroups::ExponentialIntegrals},
@@ -445,7 +437,7 @@ struct funs _functions[] = {
 	{i18n("Cosine integral"), "Ci", (func_t)gsl_sf_Ci, 1, FunctionGroups::ExponentialIntegrals},
 	{i18n("Arctangent integral"), "Atanint", (func_t)gsl_sf_atanint, 1, FunctionGroups::ExponentialIntegrals},
 
-	// 	FermiDiracFunction = addFunctionGroup(i18n("Fermi-Dirac Function"));
+	// Fermi-Dirac Function
 	{i18n("Complete Fermi-Dirac integral with index -1"), "Fm1", (func_t)gsl_sf_fermi_dirac_m1, 1, FunctionGroups::FermiDiracFunction},
 	{i18n("Complete Fermi-Dirac integral with index 0"), "F0", (func_t)gsl_sf_fermi_dirac_0, 1, FunctionGroups::FermiDiracFunction},
 	{i18n("Complete Fermi-Dirac integral with index 1"), "F1", (func_t)gsl_sf_fermi_dirac_1, 1, FunctionGroups::FermiDiracFunction},
@@ -456,7 +448,7 @@ struct funs _functions[] = {
 	{i18n("Complete Fermi-Dirac integral with index 3/2"), "F3half", (func_t)gsl_sf_fermi_dirac_3half, 1, FunctionGroups::FermiDiracFunction},
 	{i18n("Incomplete Fermi-Dirac integral with index zero"), "Finc0", (func_t)gsl_sf_fermi_dirac_inc_0, 2, FunctionGroups::FermiDiracFunction},
 
-	// 	GammaAndBetaFunctions = addFunctionGroup(i18n("Gamma and Beta Functions"));
+	// Gamma and Beta Functions
 	{i18n("Gamma function"), "gamma", (func_t)gsl_sf_gamma, 1, FunctionGroups::GammaAndBetaFunctions},
 	{i18n("Gamma function"), "tgamma", (func_t)gsl_sf_gamma, 1, FunctionGroups::GammaAndBetaFunctions},
 	{i18n("Logarithm of the gamma function"), "lgamma", (func_t)gsl_sf_lngamma, 1, FunctionGroups::GammaAndBetaFunctions},
@@ -482,14 +474,14 @@ struct funs _functions[] = {
 	{i18n("Logarithm of the beta function"), "lnbeta", (func_t)gsl_sf_lnbeta, 2, FunctionGroups::GammaAndBetaFunctions},
 	{i18n("Normalized incomplete beta function"), "betainc", (func_t)gsl_sf_beta_inc, 3, FunctionGroups::GammaAndBetaFunctions},
 
-	// 	GegenbauerFunctions = addFunctionGroup(i18n("Gegenbauer Functions"));
+	// Gegenbauer Functions
 	{i18n("Gegenbauer polynomial C_1"), "C1", (func_t)gsl_sf_gegenpoly_1, 2, FunctionGroups::GegenbauerFunctions},
 	{i18n("Gegenbauer polynomial C_2"), "C2", (func_t)gsl_sf_gegenpoly_2, 2, FunctionGroups::GegenbauerFunctions},
 	{i18n("Gegenbauer polynomial C_3"), "C3", (func_t)gsl_sf_gegenpoly_3, 2, FunctionGroups::GegenbauerFunctions},
 	{i18n("Gegenbauer polynomial C_n"), "Cn", (func_t)nsl_sf_gegenpoly_n, 3, FunctionGroups::GegenbauerFunctions},
 
 #if (GSL_MAJOR_VERSION > 2) || (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION >= 4)
-	// 	HermitePolynomialsAndFunctions = addFunctionGroup(i18n("Hermite Polynomials and Functions"));
+	// Hermite Polynomials and Functions
 	{i18n("Hermite polynomials physicists version"), "Hn", (func_t)nsl_sf_hermite, 2, FunctionGroups::HermitePolynomialsAndFunctions},
 	{i18n("Hermite polynomials probabilists version"), "Hen", (func_t)nsl_sf_hermite_prob, 2, FunctionGroups::HermitePolynomialsAndFunctions},
 	{i18n("Hermite functions"), "Hfn", (func_t)nsl_sf_hermite_func, 2, FunctionGroups::HermitePolynomialsAndFunctions},
@@ -505,7 +497,7 @@ struct funs _functions[] = {
 	{i18n("Derivatives of Hermite functions"), "Hfnd", (func_t)nsl_sf_hermite_func_der, 3, FunctionGroups::HermitePolynomialsAndFunctions},
 #endif
 
-	// 	HypergeometricFunctions = addFunctionGroup(i18n("Hypergeometric Functions"));
+	// Hypergeometric Functions
 	{i18n("Hypergeometric function 0F1"), "hyperg_0F1", (func_t)gsl_sf_hyperg_0F1, 2, FunctionGroups::HypergeometricFunctions},
 	{i18n("Confluent hypergeometric function 1F1 for integer parameters"),
 	 "hyperg_1F1i",
@@ -529,17 +521,17 @@ struct funs _functions[] = {
 	 FunctionGroups::HypergeometricFunctions},
 	{i18n("Hypergeometric function 2F0"), "hyperg_2F0", (func_t)gsl_sf_hyperg_2F0, 3, FunctionGroups::HypergeometricFunctions},
 
-	// 	LaguerreFunctions = addFunctionGroup(i18n("Laguerre Functions"));
+	// Laguerre Functions
 	{i18n("generalized Laguerre polynomials L_1"), "L1", (func_t)gsl_sf_laguerre_1, 2, FunctionGroups::LaguerreFunctions},
 	{i18n("generalized Laguerre polynomials L_2"), "L2", (func_t)gsl_sf_laguerre_2, 2, FunctionGroups::LaguerreFunctions},
 	{i18n("generalized Laguerre polynomials L_3"), "L3", (func_t)gsl_sf_laguerre_3, 2, FunctionGroups::LaguerreFunctions},
 	{i18n("generalized Laguerre polynomials L_n"), "Ln", (func_t)nsl_sf_laguerre_n, 3, FunctionGroups::LaguerreFunctions},
 
-	// 	LambertWFunctions = addFunctionGroup(i18n("Lambert W Functions"));
+	// Lambert W Functions
 	{i18n("Principal branch of the Lambert W function"), "W0", (func_t)gsl_sf_lambert_W0, 1, FunctionGroups::LambertWFunctions},
 	{i18n("Secondary real-valued branch of the Lambert W function"), "Wm1", (func_t)gsl_sf_lambert_Wm1, 1, FunctionGroups::LambertWFunctions},
 
-	// 	LegendreFunctionsAndSphericalHarmonics = addFunctionGroup(i18n("Legendre Functions and Spherical Harmonics"));
+	// Legendre Functions and Spherical Harmonics
 	{i18n("Legendre polynomial P_1"), "P1", (func_t)gsl_sf_legendre_P1, 1, FunctionGroups::LegendreFunctionsAndSphericalHarmonics},
 	{i18n("Legendre polynomial P_2"), "P2", (func_t)gsl_sf_legendre_P2, 1, FunctionGroups::LegendreFunctionsAndSphericalHarmonics},
 	{i18n("Legendre polynomial P_3"), "P3", (func_t)gsl_sf_legendre_P3, 1, FunctionGroups::LegendreFunctionsAndSphericalHarmonics},
@@ -572,14 +564,14 @@ struct funs _functions[] = {
 	 3,
 	 FunctionGroups::LegendreFunctionsAndSphericalHarmonics},
 
-	// 	LogarithmAndRelatedFunctions = addFunctionGroup(i18n("Logarithm and Related Functions"));
+	// Logarithm and Related Functions
 	{i18n("Logarithm"), "log", (func_t)gsl_sf_log, 1, FunctionGroups::LogarithmAndRelatedFunctions},
 	{i18n("Logarithm of the magnitude"), "logabs", (func_t)gsl_sf_log_abs, 1, FunctionGroups::LogarithmAndRelatedFunctions},
 	{QStringLiteral("log(1+x)"), "logp", (func_t)gsl_sf_log_1plusx, 1, FunctionGroups::LogarithmAndRelatedFunctions},
 	{QStringLiteral("log(1+x) - x"), "logpm", (func_t)gsl_sf_log_1plusx_mx, 1, FunctionGroups::LogarithmAndRelatedFunctions},
 
 #if (GSL_MAJOR_VERSION >= 2)
-	// 	MathieuFunctions = addFunctionGroup(i18n("Mathieu Functions"));
+	// Mathieu Functions
 	{i18n("Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"), "an", (func_t)nsl_sf_mathieu_a, 2, FunctionGroups::MathieuFunctions},
 	{i18n("Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"), "bn", (func_t)nsl_sf_mathieu_b, 2, FunctionGroups::MathieuFunctions},
 	{i18n("Angular Mathieu functions ce_n(q,x)"), "ce", (func_t)nsl_sf_mathieu_ce, 3, FunctionGroups::MathieuFunctions},
@@ -588,10 +580,10 @@ struct funs _functions[] = {
 	{i18n("Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"), "Ms", (func_t)nsl_sf_mathieu_Ms, 4, FunctionGroups::MathieuFunctions},
 #endif
 
-	// 	PowerFunction = addFunctionGroup(i18n("Power Function"));
+	// Power Function
 	{i18n("x^n for integer n with an error estimate"), "gsl_powint", (func_t)nsl_sf_powint, 2, FunctionGroups::PowerFunction},
 
-	// 	PsiDigammaFunction = addFunctionGroup(i18n("Psi (Digamma) Function"));
+	// Psi (Digamma) Function
 	{i18n("Digamma function for positive integer n"), "psiint", (func_t)nsl_sf_psiint, 1, FunctionGroups::PsiDigammaFunction},
 	{i18n("Digamma function"), "psi", (func_t)gsl_sf_psi, 1, FunctionGroups::PsiDigammaFunction},
 	{i18n("Real part of the digamma function on the line 1+i y"), "psi1piy", (func_t)gsl_sf_psi_1piy, 1, FunctionGroups::PsiDigammaFunction},
@@ -599,17 +591,17 @@ struct funs _functions[] = {
 	{i18n("Trigamma function psi'"), "psi1", (func_t)gsl_sf_psi_1, 1, FunctionGroups::PsiDigammaFunction},
 	{i18n("Polygamma function psi^(n)"), "psin", (func_t)nsl_sf_psin, 2, FunctionGroups::PsiDigammaFunction},
 
-	// 	SynchrotronFunctions = addFunctionGroup(i18n("Synchrotron Functions"));
+	// Synchrotron Functions
 	{i18n("First synchrotron function"), "synchrotron1", (func_t)gsl_sf_synchrotron_1, 1, FunctionGroups::SynchrotronFunctions},
 	{i18n("Second synchrotron function"), "synchrotron2", (func_t)gsl_sf_synchrotron_2, 1, FunctionGroups::SynchrotronFunctions},
 
-	// 	TransportFunctions = addFunctionGroup(i18n("Transport Functions"));
+	// Transport Functions
 	{i18n("Transport function"), "J2", (func_t)gsl_sf_transport_2, 1, FunctionGroups::TransportFunctions},
 	{i18n("Transport function"), "J3", (func_t)gsl_sf_transport_3, 1, FunctionGroups::TransportFunctions},
 	{i18n("Transport function"), "J4", (func_t)gsl_sf_transport_4, 1, FunctionGroups::TransportFunctions},
 	{i18n("Transport function"), "J5", (func_t)gsl_sf_transport_5, 1, FunctionGroups::TransportFunctions},
 
-	// 	TrigonometricFunctions = addFunctionGroup(i18n("Trigonometric Functions"));
+	// Trigonometric Functions
 	{i18n("Sine"), "sin", (func_t)gsl_sf_sin, 1, FunctionGroups::TrigonometricFunctions},
 	{i18n("Cosine"), "cos", (func_t)gsl_sf_cos, 1, FunctionGroups::TrigonometricFunctions},
 	{i18n("Tangent"), "tan", (func_t) static_cast<double (*)(double)>(&tan), 1, FunctionGroups::TrigonometricFunctions},
@@ -643,7 +635,7 @@ struct funs _functions[] = {
 	{i18n("restrict to [-pi,pi]"), "anglesymm", (func_t)gsl_sf_angle_restrict_symm, 1, FunctionGroups::TrigonometricFunctions},
 	{i18n("restrict to [0,2 pi]"), "anglepos", (func_t)gsl_sf_angle_restrict_pos, 1, FunctionGroups::TrigonometricFunctions},
 
-	// 	ZetaFunctions = addFunctionGroup(i18n("Zeta Functions"));
+	// Zeta Functions
 	{i18n("Riemann zeta function for integer n"), "zetaint", (func_t)nsl_sf_zetaint, 1, FunctionGroups::ZetaFunctions},
 	{i18n("Riemann zeta function"), "zeta", (func_t)gsl_sf_zeta, 1, FunctionGroups::ZetaFunctions},
 	{i18n("zeta(n)-1 for integer n"), "zetam1int", (func_t)nsl_sf_zetam1int, 1, FunctionGroups::ZetaFunctions},
@@ -653,7 +645,7 @@ struct funs _functions[] = {
 	{i18n("Eta function"), "eta", (func_t)gsl_sf_eta, 1, FunctionGroups::ZetaFunctions},
 
 	// GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html
-	// 	RandomNumberGenerator = addFunctionGroup(i18n("Random number generator"));
+	// Random number generator
 	{i18n("Gaussian random numbers"), "randgaussian", (func_t)nsl_sf_ran_gaussian, 1, FunctionGroups::RandomNumberGenerator},
 	{i18n("Exponential random numbers"), "randexponential", (func_t)nsl_sf_ran_exponential, 1, FunctionGroups::RandomNumberGenerator},
 	{i18n("Laplacian random numbers"), "randlaplace", (func_t)nsl_sf_ran_laplace, 1, FunctionGroups::RandomNumberGenerator},
@@ -673,7 +665,7 @@ struct funs _functions[] = {
 	{i18n("Binomial random numbers"), "randbinomial", (func_t)nsl_sf_ran_binomial, 2, FunctionGroups::RandomNumberGenerator},
 
 	// GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html
-	// 	GaussianDistribution = addFunctionGroup(i18n("Gaussian Distribution"));
+	// Gaussian Distribution
 	{i18n("Probability density for a Gaussian distribution"), "gaussian", (func_t)gsl_ran_gaussian_pdf, 2, FunctionGroups::GaussianDistribution},
 	{i18n("Probability density for a unit Gaussian distribution"), "ugaussian", (func_t)gsl_ran_ugaussian_pdf, 1, FunctionGroups::GaussianDistribution},
 	{i18n("Cumulative distribution function P"), "gaussianP", (func_t)gsl_cdf_gaussian_P, 2, FunctionGroups::GaussianDistribution},
@@ -697,33 +689,33 @@ struct funs _functions[] = {
 	 5,
 	 FunctionGroups::GaussianDistribution},
 
-	// 	ExponentialDistribution = addFunctionGroup(i18n("Exponential Distribution"));
+	// Exponential Distribution
 	{i18n("Probability density for an exponential distribution"), "exponential", (func_t)gsl_ran_exponential_pdf, 2, FunctionGroups::ExponentialDistribution},
 	{i18n("Cumulative distribution function P"), "exponentialP", (func_t)gsl_cdf_exponential_P, 2, FunctionGroups::ExponentialDistribution},
 	{i18n("Cumulative distribution function Q"), "exponentialQ", (func_t)gsl_cdf_exponential_Q, 2, FunctionGroups::ExponentialDistribution},
 	{i18n("Inverse cumulative distribution function P"), "exponentialPinv", (func_t)gsl_cdf_exponential_Pinv, 2, FunctionGroups::ExponentialDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "exponentialQinv", (func_t)gsl_cdf_exponential_Qinv, 2, FunctionGroups::ExponentialDistribution},
 
-	// 	LaplaceDistribution = addFunctionGroup(i18n("Laplace Distribution"));
+	// Laplace Distribution
 	{i18n("Probability density for a Laplace distribution"), "laplace", (func_t)gsl_ran_laplace_pdf, 2, FunctionGroups::LaplaceDistribution},
 	{i18n("Cumulative distribution function P"), "laplaceP", (func_t)gsl_cdf_laplace_P, 2, FunctionGroups::LaplaceDistribution},
 	{i18n("Cumulative distribution function Q"), "laplaceQ", (func_t)gsl_cdf_laplace_Q, 2, FunctionGroups::LaplaceDistribution},
 	{i18n("Inverse cumulative distribution function P"), "laplacePinv", (func_t)gsl_cdf_laplace_Pinv, 2, FunctionGroups::LaplaceDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "laplaceQinv", (func_t)gsl_cdf_laplace_Qinv, 2, FunctionGroups::LaplaceDistribution},
 
-	// 	ExponentialPowerDistribution = addFunctionGroup(i18n("Exponential Power Distribution"));
+	// Exponential Power Distribution
 	{i18n("Probability density for an exponential power distribution"), "exppow", (func_t)gsl_ran_exppow_pdf, 3, FunctionGroups::ExponentialPowerDistribution},
 	{i18n("cumulative distribution function P"), "exppowP", (func_t)gsl_cdf_exppow_P, 3, FunctionGroups::ExponentialPowerDistribution},
 	{i18n("Cumulative distribution function Q"), "exppowQ", (func_t)gsl_cdf_exppow_Q, 3, FunctionGroups::ExponentialPowerDistribution},
 
-	// 	CauchyDistribution = addFunctionGroup(i18n("Cauchy Distribution"));
+	// Cauchy Distribution
 	{i18n("Probability density for a Cauchy distribution"), "cauchy", (func_t)gsl_ran_cauchy_pdf, 2, FunctionGroups::CauchyDistribution},
 	{i18n("Cumulative distribution function P"), "cauchyP", (func_t)gsl_cdf_cauchy_P, 2, FunctionGroups::CauchyDistribution},
 	{i18n("Cumulative distribution function Q"), "cauchyQ", (func_t)gsl_cdf_cauchy_Q, 2, FunctionGroups::CauchyDistribution},
 	{i18n("Inverse cumulative distribution function P"), "cauchyPinv", (func_t)gsl_cdf_cauchy_Pinv, 2, FunctionGroups::CauchyDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "cauchyQinv", (func_t)gsl_cdf_cauchy_Qinv, 2, FunctionGroups::CauchyDistribution},
 
-	// 	RayleighDistribution = addFunctionGroup(i18n("Rayleigh Distribution"));
+	// Rayleigh Distribution
 	{i18n("Probability density for a Rayleigh distribution"), "rayleigh", (func_t)gsl_ran_rayleigh_pdf, 2, FunctionGroups::RayleighDistribution},
 	{i18n("Cumulative distribution function P"), "rayleighP", (func_t)gsl_cdf_rayleigh_P, 2, FunctionGroups::RayleighDistribution},
 	{i18n("Cumulative distribution function Q"), "rayleighQ", (func_t)gsl_cdf_rayleigh_Q, 2, FunctionGroups::RayleighDistribution},
@@ -731,80 +723,80 @@ struct funs _functions[] = {
 	{i18n("Inverse cumulative distribution function Q"), "rayleighQinv", (func_t)gsl_cdf_rayleigh_Qinv, 2, FunctionGroups::RayleighDistribution},
 	{i18n("Probability density for a Rayleigh tail distribution"), "rayleigh_tail", (func_t)gsl_ran_rayleigh_tail_pdf, 3, FunctionGroups::RayleighDistribution},
 
-	// 	LandauDistribution = addFunctionGroup(i18n("Landau Distribution"));
+	// Landau Distribution
 	{i18n("Probability density for a Landau distribution"), "landau", (func_t)gsl_ran_landau_pdf, 1, FunctionGroups::LandauDistribution},
 
-	// 	GammaDistribution = addFunctionGroup(i18n("Gamma Distribution"));
+	// Gamma Distribution
 	{i18n("Probability density for a gamma distribution"), "gammapdf", (func_t)gsl_ran_gamma_pdf, 3, FunctionGroups::GammaDistribution},
 	{i18n("Cumulative distribution function P"), "gammaP", (func_t)gsl_cdf_gamma_P, 3, FunctionGroups::GammaDistribution},
 	{i18n("Cumulative distribution function Q"), "gammaQ", (func_t)gsl_cdf_gamma_Q, 3, FunctionGroups::GammaDistribution},
 	{i18n("Inverse cumulative distribution function P"), "gammaPinv", (func_t)gsl_cdf_gamma_Pinv, 3, FunctionGroups::GammaDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "gammaQinv", (func_t)gsl_cdf_gamma_Qinv, 3, FunctionGroups::GammaDistribution},
 
-	// 	FlatUniformDistribution = addFunctionGroup(i18n("Flat (Uniform) Distribution"));
+	// Flat (Uniform) Distribution
 	{i18n("Probability density for a uniform distribution"), "flat", (func_t)gsl_ran_flat_pdf, 3, FunctionGroups::FlatUniformDistribution},
 	{i18n("Cumulative distribution function P"), "flatP", (func_t)gsl_cdf_flat_P, 3, FunctionGroups::FlatUniformDistribution},
 	{i18n("Cumulative distribution function Q"), "flatQ", (func_t)gsl_cdf_flat_Q, 3, FunctionGroups::FlatUniformDistribution},
 	{i18n("Inverse cumulative distribution function P"), "flatPinv", (func_t)gsl_cdf_flat_Pinv, 3, FunctionGroups::FlatUniformDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "flatQinv", (func_t)gsl_cdf_flat_Qinv, 3, FunctionGroups::FlatUniformDistribution},
 
-	// 	LognormalDistribution = addFunctionGroup(i18n("Lognormal Distribution"));
+	// Lognormal Distribution
 	{i18n("Probability density for a lognormal distribution"), "lognormal", (func_t)gsl_ran_lognormal_pdf, 3, FunctionGroups::LognormalDistribution},
 	{i18n("Cumulative distribution function P"), "lognormalP", (func_t)gsl_cdf_lognormal_P, 3, FunctionGroups::LognormalDistribution},
 	{i18n("Cumulative distribution function Q"), "lognormalQ", (func_t)gsl_cdf_lognormal_Q, 3, FunctionGroups::LognormalDistribution},
 	{i18n("Inverse cumulative distribution function P"), "lognormalPinv", (func_t)gsl_cdf_lognormal_Pinv, 3, FunctionGroups::LognormalDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "lognormalQinv", (func_t)gsl_cdf_lognormal_Qinv, 3, FunctionGroups::LognormalDistribution},
 
-	// 	ChisquaredDistribution = addFunctionGroup(i18n("Chi-squared Distribution"));
+	// Chi-squared Distribution
 	{i18n("Probability density for a chi squared distribution"), "chisq", (func_t)gsl_ran_chisq_pdf, 2, FunctionGroups::ChisquaredDistribution},
 	{i18n("Cumulative distribution function P"), "chisqP", (func_t)gsl_cdf_chisq_P, 2, FunctionGroups::ChisquaredDistribution},
 	{i18n("Cumulative distribution function Q"), "chisqQ", (func_t)gsl_cdf_chisq_Q, 2, FunctionGroups::ChisquaredDistribution},
 	{i18n("Inverse cumulative distribution function P"), "chisqPinv", (func_t)gsl_cdf_chisq_Pinv, 2, FunctionGroups::ChisquaredDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "chisqQinv", (func_t)gsl_cdf_chisq_Qinv, 2, FunctionGroups::ChisquaredDistribution},
 
-	// 	Fdistribution = addFunctionGroup(i18n("F-distribution"));
+	// F-distribution
 	{i18n("Probability density for a F-distribution"), "fdist", (func_t)gsl_ran_fdist_pdf, 3, FunctionGroups::Fdistribution},
 	{i18n("Cumulative distribution function P"), "fdistP", (func_t)gsl_cdf_fdist_P, 3, FunctionGroups::Fdistribution},
 	{i18n("Cumulative distribution function Q"), "fdistQ", (func_t)gsl_cdf_fdist_Q, 3, FunctionGroups::Fdistribution},
 	{i18n("Inverse cumulative distribution function P"), "fdistPinv", (func_t)gsl_cdf_fdist_Pinv, 3, FunctionGroups::Fdistribution},
 	{i18n("Inverse cumulative distribution function Q"), "fdistQinv", (func_t)gsl_cdf_fdist_Qinv, 3, FunctionGroups::Fdistribution},
 
-	// 	Tdistribution = addFunctionGroup(i18n("t-distribution"));
+	// t-distribution
 	{i18n("Probability density for a t-distribution"), "tdist", (func_t)gsl_ran_tdist_pdf, 2, FunctionGroups::Tdistribution},
 	{i18n("Cumulative distribution function P"), "tdistP", (func_t)gsl_cdf_tdist_P, 2, FunctionGroups::Tdistribution},
 	{i18n("Cumulative distribution function Q"), "tdistQ", (func_t)gsl_cdf_tdist_Q, 2, FunctionGroups::Tdistribution},
 	{i18n("Inverse cumulative distribution function P"), "tdistPinv", (func_t)gsl_cdf_tdist_Pinv, 2, FunctionGroups::Tdistribution},
 	{i18n("Inverse cumulative distribution function Q"), "tdistQinv", (func_t)gsl_cdf_tdist_Qinv, 2, FunctionGroups::Tdistribution},
 
-	// 	BetaDistribution = addFunctionGroup(i18n("Beta Distribution"));
+	// Beta Distribution
 	{i18n("Probability density for a beta distribution"), "betapdf", (func_t)gsl_ran_beta_pdf, 3, FunctionGroups::BetaDistribution},
 	{i18n("Cumulative distribution function P"), "betaP", (func_t)gsl_cdf_beta_P, 3, FunctionGroups::BetaDistribution},
 	{i18n("Cumulative distribution function Q"), "betaQ", (func_t)gsl_cdf_beta_Q, 3, FunctionGroups::BetaDistribution},
 	{i18n("Inverse cumulative distribution function P"), "betaPinv", (func_t)gsl_cdf_beta_Pinv, 3, FunctionGroups::BetaDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "betaQinv", (func_t)gsl_cdf_beta_Qinv, 3, FunctionGroups::BetaDistribution},
 
-	// 	LogisticDistribution = addFunctionGroup(i18n("Logistic Distribution"));
+	// Logistic Distribution
 	{i18n("Probability density for a logistic distribution"), "logistic", (func_t)gsl_ran_logistic_pdf, 2, FunctionGroups::LogisticDistribution},
 	{i18n("Cumulative distribution function P"), "logisticP", (func_t)gsl_cdf_logistic_P, 2, FunctionGroups::LogisticDistribution},
 	{i18n("Cumulative distribution function Q"), "logisticQ", (func_t)gsl_cdf_logistic_Q, 2, FunctionGroups::LogisticDistribution},
 	{i18n("Inverse cumulative distribution function P"), "logisticPinv", (func_t)gsl_cdf_logistic_Pinv, 2, FunctionGroups::LogisticDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "logisticQinv", (func_t)gsl_cdf_logistic_Qinv, 2, FunctionGroups::LogisticDistribution},
 
-	// 	ParetoDistribution = addFunctionGroup(i18n("Pareto Distribution"));
+	// Pareto Distribution
 	{i18n("Probability density for a Pareto distribution"), "pareto", (func_t)gsl_ran_pareto_pdf, 3, FunctionGroups::ParetoDistribution},
 	{i18n("Cumulative distribution function P"), "paretoP", (func_t)gsl_cdf_pareto_P, 3, FunctionGroups::ParetoDistribution},
 	{i18n("Cumulative distribution function Q"), "paretoQ", (func_t)gsl_cdf_pareto_Q, 3, FunctionGroups::ParetoDistribution},
 	{i18n("Inverse cumulative distribution function P"), "paretoPinv", (func_t)gsl_cdf_pareto_Pinv, 3, FunctionGroups::ParetoDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "paretoQinv", (func_t)gsl_cdf_pareto_Qinv, 3, FunctionGroups::ParetoDistribution},
 
-	// 	WeibullDistribution = addFunctionGroup(i18n("Weibull Distribution"));
+	// Weibull Distribution
 	{i18n("Probability density for a Weibull distribution"), "weibull", (func_t)gsl_ran_weibull_pdf, 3, FunctionGroups::WeibullDistribution},
 	{i18n("Cumulative distribution function P"), "weibullP", (func_t)gsl_cdf_weibull_P, 3, FunctionGroups::WeibullDistribution},
 	{i18n("Cumulative distribution function Q"), "weibullQ", (func_t)gsl_cdf_weibull_Q, 3, FunctionGroups::WeibullDistribution},
 	{i18n("Inverse cumulative distribution function P"), "weibullPinv", (func_t)gsl_cdf_weibull_Pinv, 3, FunctionGroups::WeibullDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "weibullQinv", (func_t)gsl_cdf_weibull_Qinv, 3, FunctionGroups::WeibullDistribution},
 
-	// 	GumbelDistribution = addFunctionGroup(i18n("Gumbel Distribution"));
+	// Gumbel Distribution
 	{i18n("Probability density for a Type-1 Gumbel distribution"), "gumbel1", (func_t)gsl_ran_gumbel1_pdf, 3, FunctionGroups::GumbelDistribution},
 	{i18n("Cumulative distribution function P"), "gumbel1P", (func_t)gsl_cdf_gumbel1_P, 3, FunctionGroups::GumbelDistribution},
 	{i18n("Cumulative distribution function Q"), "gumbel1Q", (func_t)gsl_cdf_gumbel1_Q, 3, FunctionGroups::GumbelDistribution},
@@ -816,15 +808,15 @@ struct funs _functions[] = {
 	{i18n("Inverse cumulative distribution function P"), "gumbel2Pinv", (func_t)gsl_cdf_gumbel2_Pinv, 3, FunctionGroups::GumbelDistribution},
 	{i18n("Inverse cumulative distribution function Q"), "gumbel2Qinv", (func_t)gsl_cdf_gumbel2_Qinv, 3, FunctionGroups::GumbelDistribution},
 
-	// 	PoissonDistribution = addFunctionGroup(i18n("Poisson Distribution"));
+	// Poisson Distribution
 	{i18n("Probability density for a Poisson distribution"), "poisson", (func_t)nsl_sf_poisson, 2, FunctionGroups::PoissonDistribution},
 	{i18n("Cumulative distribution function P"), "poissonP", (func_t)gsl_cdf_poisson_P, 2, FunctionGroups::PoissonDistribution},
 	{i18n("Cumulative distribution function Q"), "poissonQ", (func_t)gsl_cdf_poisson_Q, 2, FunctionGroups::PoissonDistribution},
 
-	// 	BernoulliDistribution = addFunctionGroup(i18n("Bernoulli Distribution"));
+	// Bernoulli Distribution
 	{i18n("Probability density for a Bernoulli distribution"), "bernoulli", (func_t)nsl_sf_bernoulli, 2, FunctionGroups::BernoulliDistribution},
 
-	// 	BinomialDistribution = addFunctionGroup(i18n("Binomial Distribution"));
+	// Binomial Distribution
 	{i18n("Probability density for a binomial distribution"), "binomial", (func_t)nsl_sf_binomial, 3, FunctionGroups::BinomialDistribution},
 	{i18n("Cumulative distribution function P"), "binomialP", (func_t)gsl_cdf_binomial_P, 3, FunctionGroups::BinomialDistribution},
 	{i18n("Cumulative distribution function Q"), "binomialQ", (func_t)gsl_cdf_binomial_Q, 3, FunctionGroups::BinomialDistribution},
@@ -836,17 +828,17 @@ struct funs _functions[] = {
 	{i18n("Cumulative distribution function P"), "negative_binomialP", (func_t)gsl_cdf_negative_binomial_P, 3, FunctionGroups::BinomialDistribution},
 	{i18n("Cumulative distribution function Q"), "negative_binomialQ", (func_t)gsl_cdf_negative_binomial_Q, 3, FunctionGroups::BinomialDistribution},
 
-	// 	PascalDistribution = addFunctionGroup(i18n("Pascal Distribution"));
+	// Pascal Distribution
 	{i18n("Probability density for a Pascal distribution"), "pascal", (func_t)nsl_sf_pascal, 3, FunctionGroups::PascalDistribution},
 	{i18n("Cumulative distribution function P"), "pascalP", (func_t)gsl_cdf_pascal_P, 3, FunctionGroups::PascalDistribution},
 	{i18n("Cumulative distribution function Q"), "pascalQ", (func_t)gsl_cdf_pascal_Q, 3, FunctionGroups::PascalDistribution},
 
-	// 	GeometricDistribution = addFunctionGroup(i18n("Geometric Distribution"));
+	// Geometric Distribution
 	{i18n("Probability density for a geometric distribution"), "geometric", (func_t)nsl_sf_geometric, 2, FunctionGroups::GeometricDistribution},
 	{i18n("Cumulative distribution function P"), "geometricP", (func_t)gsl_cdf_geometric_P, 2, FunctionGroups::GeometricDistribution},
 	{i18n("Cumulative distribution function Q"), "geometricQ", (func_t)gsl_cdf_geometric_Q, 2, FunctionGroups::GeometricDistribution},
 
-	// 	HypergeometricDistribution = addFunctionGroup(i18n("Hypergeometric Distribution"));
+	// Hypergeometric Distribution
 	{i18n("Probability density for a hypergeometric distribution"),
 	 "hypergeometric",
 	 (func_t)nsl_sf_hypergeometric,
@@ -855,7 +847,7 @@ struct funs _functions[] = {
 	{i18n("Cumulative distribution function P"), "hypergeometricP", (func_t)gsl_cdf_hypergeometric_P, 4, FunctionGroups::HypergeometricDistribution},
 	{i18n("Cumulative distribution function Q"), "hypergeometricQ", (func_t)gsl_cdf_hypergeometric_Q, 4, FunctionGroups::HypergeometricDistribution},
 
-	// 	LogarithmicDistribution = addFunctionGroup(i18n("Logarithmic Distribution"));
+	// Logarithmic Distribution
 	{i18n("Probability density for a logarithmic distribution"), "logarithmic", (func_t)nsl_sf_logarithmic, 2, FunctionGroups::LogarithmicDistribution},
 };
 
