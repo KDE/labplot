@@ -1149,7 +1149,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_undoAction->setEnabled(false);
 	m_redoAction->setEnabled(false);
 
-	qDebug() << windowState;
 	if (!windowState.isEmpty()) {
 		changeVisibleAllDocks(false);
 		m_DockManager->restoreState(windowState);
