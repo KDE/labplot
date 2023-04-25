@@ -109,20 +109,16 @@ QMenu* AbstractPart::createContextMenu() {
 	// window state related actions
 	if (m_dockWidget) {
 		const QStyle* style = m_dockWidget->style();
-		// if (m_dockWidget->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
-		//     auto* action = menu->addAction(i18n("&Restore"), m_dockWidget, &QMdiSubWindow::showNormal);
-		//			action->setIcon(style->standardIcon(QStyle::SP_TitleBarNormalButton));
-		//		}
-
-		// if (!(m_dockWidget->windowState() & Qt::WindowMinimized)) {
-		//     auto* action = menu->addAction(i18n("Mi&nimize"), m_dockWidget, &QMdiSubWindow::showMinimized);
-		//			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMinButton));
-		//		}
-
-		// if (!(m_dockWidget->windowState() & Qt::WindowMaximized)) {
-		//     auto* action = menu->addAction(i18n("Ma&ximize"), m_dockWidget, &QMdiSubWindow::showMaximized);
-		//			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMaxButton));
-		//		}
+		if (!m_dockWidget->isClosed()) {
+			auto* action = menu->addAction(i18n("&Close"), [this]() {
+				m_dockWidget->toggleView(false);
+			});
+			action->setIcon(style->standardIcon(QStyle::SP_TitleBarCloseButton));
+		} else {
+			menu->addAction(i18n("Show"), [this]() {
+				m_dockWidget->toggleView(true);
+			});
+		}
 	} else {
 		// if the mdi window was closed, add the "Show" action.
 		// Don't add it for:
@@ -131,8 +127,11 @@ QMenu* AbstractPart::createContextMenu() {
 		auto parentType = parentAspect()->type();
 		bool disableShow = ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && parentType == AspectType::Workbook)
 			|| (type == AspectType::Spreadsheet && parentType == AspectType::DatapickerCurve);
-		if (!disableShow)
-			menu->addAction(i18n("Show"), this, &AbstractPart::showRequested);
+		if (!disableShow) {
+			menu->addAction(i18n("Show"), [this]() {
+				m_dockWidget->toggleView(true);
+			});
+		}
 	}
 
 	return menu;
