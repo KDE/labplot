@@ -125,14 +125,19 @@ if (ENABLE_VECTOR_BLF)
   endif()
 endif()
 
-option(LOCAL_QT_ADVANCED_DOCK "Use local build of qt advanced dock" ON)
-if (LOCAL_QT_ADVANCED_DOCK)
+option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
+option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
+if (LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
     FetchContent_Declare(
         qt_advanced_dock
         GIT_REPOSITORY https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git
         GIT_TAG a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6
       )
       FetchContent_MakeAvailable(qt_advanced_dock)
+elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
+    # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
+    set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
+    add_subdirectory(Qt-Advanced-Docking-System)
 else()
     find_package(qtadvanceddocking CONFIG REQUIRED)
 endif()
