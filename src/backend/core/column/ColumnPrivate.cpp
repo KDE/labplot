@@ -1399,6 +1399,11 @@ void ColumnPrivate::updateFormula() {
 	bool valid = true;
 	QStringList formulaVariableNames;
 	int maxRowCount = 0;
+
+	auto numberLocale = QLocale();
+	// need to disable group separator since parser can't handle it
+	numberLocale.setNumberOptions(QLocale::OmitGroupSeparator);
+
 	for (const auto& formulaData : m_formulaData) {
 		auto* column = formulaData.column();
 		if (!column) {
@@ -1408,9 +1413,9 @@ void ColumnPrivate::updateFormula() {
 		auto varName = formulaData.variableName();
 		formulaVariableNames << varName;
 
-		// care about special expressions
+		/////// care about special expressions ////////
 		// A) replace statistical values
-		// list of available statistical methods (see AbstractColumn.h)
+		// 	all available statistical methods (see AbstractColumn.h)
 		QVector<QPair<QString, double>> methodList = {{QStringLiteral("size"), static_cast<double>(column->statistics().size)},
 													  {QStringLiteral("min"), column->minimum()},
 													  {QStringLiteral("max"), column->maximum()},
@@ -1440,7 +1445,7 @@ void ColumnPrivate::updateFormula() {
 													  {QStringLiteral("entropy"), column->statistics().entropy}};
 
 		for (auto& m : methodList)
-			formula.replace(m.first + QStringLiteral("(%1)").arg(varName), QLocale().toString(m.second));
+			formula.replace(m.first + QStringLiteral("(%1)").arg(varName), numberLocale.toString(m.second));
 
 		// B) methods with options like method(p, x): get option p and calculate value to replace method
 		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // quantile(p, x)
@@ -1453,7 +1458,7 @@ void ColumnPrivate::updateFormula() {
 			int pos = 0;
 			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
 				QDEBUG("method call:" << rx.cap(0))
-				double p = QLocale().toDouble(rx.cap(1)); // option
+				double p = numberLocale.toDouble(rx.cap(1)); // option
 				DEBUG("p = " << p)
 
 				// scale (quantile: p=0..1, percentile: p=0..100)
@@ -1494,7 +1499,7 @@ void ColumnPrivate::updateFormula() {
 					break;
 				}
 
-				formula.replace(rx.cap(0), QLocale().toString(value));
+				formula.replace(rx.cap(0), numberLocale.toString(value));
 			}
 		}
 
@@ -1513,14 +1518,14 @@ void ColumnPrivate::updateFormula() {
 			int pos = 0;
 			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
 				QDEBUG("method call:" << rx.cap(0))
-				const int N = QLocale().toInt(rx.cap(1));
+				const int N = numberLocale.toInt(rx.cap(1));
 				DEBUG("N = " << N)
 
 				formula.replace(rx.cap(0), m.second.arg(QLocale().toString(N)).arg(varName));
 			}
 		}
 
-		QDEBUG("FORMULA: " << formula);
+		QDEBUG("FORMULA:" << formula);
 
 		if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 			// convert integers to doubles first
@@ -1552,7 +1557,7 @@ void ColumnPrivate::updateFormula() {
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
-		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << m_formula << ", var names: " << formulaVariableNames)
+		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << formula << ", var names: " << formulaVariableNames)
 		parser->evaluateCartesian(formula, formulaVariableNames, xVectors, &new_data);
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
 		replaceValues(-1, new_data);

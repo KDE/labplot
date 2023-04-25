@@ -1694,6 +1694,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 
 	// calculate values
 	const auto numberLocale = QLocale();
+	DEBUG("Parsing with locale " << qPrintable(numberLocale.name()))
+
 	for (int i = 0; i < minSize; i++) {
 		QString tmpExpr = expr;
 
@@ -1804,8 +1806,10 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		// QDEBUG("FINAL expression to parse = " << tmpExpr)
 
 		double y = parse(qPrintable(tmpExpr), qPrintable(numberLocale.name()));
-		if (parse_errors() > 0) // try default locale if failing
+		if (parse_errors() > 0) { // try default locale if failing
+			// DEBUG("Parsing with locale failed. Using en_US.")
 			y = parse(qPrintable(tmpExpr), "en_US");
+		}
 		// continue with next value
 		// if (parse_errors() > 0)
 		//	return false;
