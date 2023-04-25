@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:43+0000\n"
+"POT-Creation-Date: 2023-04-25 00:45+0000\n"
 "PO-Revision-Date: 2022-08-06 09:40+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -8004,9 +8004,12 @@ msgid "%1: set error column"
 msgstr "%1: ustaw kolumnę błędu x"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:890
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Calculation of the histogram not possible. The max value must be bigger "
+#| "then the min value."
 msgid ""
-"Calculation of the histogram not possible. The max value must be bigger then "
+"Calculation of the histogram not possible. The max value must be bigger than "
 "the min value."
 msgstr ""
 "Obliczenie histogramu jest niemożliwe. Największa wartość musi być większa "

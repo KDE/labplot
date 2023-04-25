@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:43+0000\n"
+"POT-Creation-Date: 2023-04-25 00:45+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -8106,9 +8106,12 @@ msgid "%1: set error column"
 msgstr "%1: задание столбца пределов погрешностей по X"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:890
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Calculation of the histogram not possible. The max value must be bigger "
+#| "then the min value."
 msgid ""
-"Calculation of the histogram not possible. The max value must be bigger then "
+"Calculation of the histogram not possible. The max value must be bigger than "
 "the min value."
 msgstr ""
 "Расчёт гистограммы невозможен. Максимальное значение должно быть больше "

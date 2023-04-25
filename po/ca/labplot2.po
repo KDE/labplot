@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-24 00:43+0000\n"
+"POT-Creation-Date: 2023-04-25 00:45+0000\n"
 "PO-Revision-Date: 2023-04-16 10:47+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -7901,9 +7901,12 @@ msgid "%1: set error column"
 msgstr "%1: estableix la columna d'error"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:890
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Calculation of the histogram not possible. The max value must be bigger "
+#| "then the min value."
 msgid ""
-"Calculation of the histogram not possible. The max value must be bigger then "
+"Calculation of the histogram not possible. The max value must be bigger than "
 "the min value."
 msgstr ""
 " No és possible calcular l'histograma. El valor màxim cal que sigui més gran "
