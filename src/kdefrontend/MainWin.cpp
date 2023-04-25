@@ -474,9 +474,7 @@ void MainWin::createADS() {
 		m_DockManager->removeDockWidget(m_currentDock);
 	});
 	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
-		QMap<QString, ads::CDockWidget*> m(m_DockManager->dockWidgetsMap());
-		for (auto e : m.keys()) {
-			auto dock = m.value(e);
+		for (auto dock : m_DockManager->dockWidgetsMap()) {
 			// Do not remove them, because it makes no sense
 			if (dock == m_projectExplorerDock || dock == m_propertiesDock)
 				continue;
@@ -489,9 +487,8 @@ void MainWin::createADS() {
 }
 
 void MainWin::changeVisibleAllDocks(bool visible) {
-	QMap<QString, ads::CDockWidget*> m(m_DockManager->dockWidgetsMap());
-	for (auto e : m.keys())
-		m.value(e)->toggleView(visible);
+	for (auto dock : m_DockManager->dockWidgetsMap())
+		dock->toggleView(visible);
 }
 
 void MainWin::activateNextDock() {
@@ -510,9 +507,8 @@ void MainWin::activateNextDock() {
 			}
 		}
 
-		if (dock == focusedDock) {
+		if (dock == focusedDock)
 			focusedFound = true;
-		}
 		itrForward++;
 	}
 
@@ -1744,10 +1740,7 @@ bool MainWin::closeProject() {
 		// 		}
 	}
 
-	QMap<QString, ads::CDockWidget*> m(m_DockManager->dockWidgetsMap());
-	QList<ads::CDockWidget*> l;
-	for (auto e : m.keys()) {
-		auto dock = m.value(e);
+	for (auto dock : m_DockManager->dockWidgetsMap()) {
 		// No need to delete them, because they are used everywhere and can be reused
 		if (dock == m_projectExplorerDock || dock == m_propertiesDock)
 			continue;
