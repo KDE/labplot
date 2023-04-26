@@ -181,7 +181,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		auto errors = filter->lastErrors();
 		if (errors.isEmpty()) {
 			// Default message, because not all filters implement lastErrors yet
-			errors.append(i18n("Unable to import data"));
+			errors.append(i18n("No data to import."));
 		}
 		ImportErrorDialog* d = new ImportErrorDialog(errors);
 		d->setAttribute(Qt::WA_DeleteOnClose);
