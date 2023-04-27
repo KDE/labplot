@@ -11,4 +11,7 @@ CMakeLists.txt.user*
 .clangd
 .directory
 .vscode
+
+# Flatpak
 .flatpak-builder
+LabplotRepo
