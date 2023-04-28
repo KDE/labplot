@@ -17,7 +17,6 @@ if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
         MESSAGE (STATUS "Building local version of Qt-Advanced-Docking-System.")
     else ()
 	MESSAGE (FATAL_ERROR "Missing Qt5::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
-	return ()
     endif ()
 endif ()
 
@@ -516,6 +515,13 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
 add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
+
+# add system QADS include path
+if (qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
+	get_target_property(QADS_INCLUDES ads::qt5advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
+	# MESSAGE (STATUS "QADS INCLUDES: ${QADS_INCLUDES}")
+	target_include_directories( labplot2lib PRIVATE ${QADS_INCLUDES} )
+endif ()
 target_compile_definitions(labplot2lib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 target_link_libraries( labplot2lib
@@ -549,6 +555,7 @@ target_link_libraries( labplot2lib
 	${LZ4_LIBRARIES}
 	${MATIO_LIBRARIES}
 	${ZLIB_LIBRARIES}
+	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
 
 
@@ -623,9 +630,6 @@ IF (APPLE AND ENABLE_TOUCHBAR)
 	target_link_libraries( labplot2lib KDMacTouchBar )
 ENDIF ()
 
-IF (LOCAL_QT_ADVANCED_DOCK_DOWNLOAD OR LOCAL_QT_ADVANCED_DOCK_COPY)
-	target_link_libraries( labplot2lib ads::qt${QT_VERSION_MAJOR}advanceddocking )
-ENDIF ()
 
 # icons for the executable and project files on Windows and Mac OS X
 
