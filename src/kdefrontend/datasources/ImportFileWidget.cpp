@@ -569,8 +569,8 @@ QString ImportFileWidget::selectedObject() const {
  * returns \c true if the number of lines to be imported from the currently selected file is zero ("file is empty"),
  * returns \c false otherwise.
  */
-bool ImportFileWidget::isFileEmpty() const {
-	return m_fileEmpty;
+bool ImportFileWidget::importValid() const {
+	return m_importValid;
 }
 
 QString ImportFileWidget::host() const {
@@ -1825,9 +1825,9 @@ void ImportFileWidget::refreshPreview() {
 		}
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
-		m_fileEmpty = false;
+		m_importValid = false;
 	} else
-		m_fileEmpty = true;
+		m_importValid = true;
 
 	RESET_CURSOR;
 }

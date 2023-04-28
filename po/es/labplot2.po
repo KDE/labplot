@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-27 00:44+0000\n"
-"PO-Revision-Date: 2023-04-26 23:31+0200\n"
+"PO-Revision-Date: 2023-04-27 11:27+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -13185,11 +13185,10 @@ msgid "Properties"
 msgstr "Propiedades"
 
 #: src/kdefrontend/GuiObserver.cpp:220
-#, fuzzy, kde-format
-#| msgid "&Sort Spreadsheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr "&Ordenar hoja de cálculo"
+msgstr "Propiedades: Hoja de cálculo"
 
 #: src/kdefrontend/GuiObserver.cpp:230
 #, kde-format
@@ -13198,25 +13197,22 @@ msgid "%1 Worksheet"
 msgstr "Hoja de trabajo de %1"
 
 #: src/kdefrontend/GuiObserver.cpp:235
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "Propiedades"
+msgstr "Propiedades: Columna"
 
 #: src/kdefrontend/GuiObserver.cpp:242
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr "Propiedades"
+msgstr "Propiedades: Matriz"
 
 #: src/kdefrontend/GuiObserver.cpp:247
-#, fuzzy, kde-format
-#| msgid "Complete Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "Hoja de trabajo completa"
+msgstr "Propiedades: Hoja de trabajo"
 
 #: src/kdefrontend/GuiObserver.cpp:253
 #, fuzzy, kde-format
@@ -13226,18 +13222,16 @@ msgid "Properties: Plot Area"
 msgstr "Explorador de propiedades"
 
 #: src/kdefrontend/GuiObserver.cpp:259
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "Propiedades"
+msgstr "Propiedades: Leyenda"
 
 #: src/kdefrontend/GuiObserver.cpp:264
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr "Propiedades"
+msgstr "Propiedades: Eje"
 
 #: src/kdefrontend/GuiObserver.cpp:269
 #, fuzzy, kde-format

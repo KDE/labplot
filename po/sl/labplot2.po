@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-27 00:44+0000\n"
-"PO-Revision-Date: 2023-04-26 07:49+0200\n"
+"PO-Revision-Date: 2023-04-27 06:49+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -13208,11 +13208,10 @@ msgid "Properties"
 msgstr "Lastnosti"
 
 #: src/kdefrontend/GuiObserver.cpp:220
-#, fuzzy, kde-format
-#| msgid "&Sort Spreadsheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr "&Razvrsti preglednico"
+msgstr "Lastnosti: Preglednica"
 
 #: src/kdefrontend/GuiObserver.cpp:230
 #, kde-format
@@ -13221,187 +13220,160 @@ msgid "%1 Worksheet"
 msgstr "Delovni list %1"
 
 #: src/kdefrontend/GuiObserver.cpp:235
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Stolpec"
 
 #: src/kdefrontend/GuiObserver.cpp:242
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Matrika"
 
 #: src/kdefrontend/GuiObserver.cpp:247
-#, fuzzy, kde-format
-#| msgid "Complete Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "Celoten delovni list"
+msgstr "Lastnosti: Delovni list"
 
 #: src/kdefrontend/GuiObserver.cpp:253
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
-msgstr "Raziskovalec lastnosti"
+msgstr "Lastnosti: Področje risanja"
 
 #: src/kdefrontend/GuiObserver.cpp:259
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Legenda"
 
 #: src/kdefrontend/GuiObserver.cpp:264
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Os"
 
 #: src/kdefrontend/GuiObserver.cpp:269
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Krivulja XY"
 
 #: src/kdefrontend/GuiObserver.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "XY-Equation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
-msgstr "Enačba XY"
+msgstr "Lastnosti: Enačba XY"
 
 #: src/kdefrontend/GuiObserver.cpp:279
-#, fuzzy, kde-format
-#| msgid "Data Reduction"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
-msgstr "Skrčenje podatkov"
+msgstr "Lastnosti: Skrčenje podatkov"
 
 #: src/kdefrontend/GuiObserver.cpp:295
-#, fuzzy, kde-format
-#| msgid "Differentiation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
-msgstr "Odvajanje"
+msgstr "Lastnosti: Odvajanje"
 
 #: src/kdefrontend/GuiObserver.cpp:300
-#, fuzzy, kde-format
-#| msgid "Integration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
-msgstr "Integracija"
+msgstr "Lastnosti: Integracija"
 
 #: src/kdefrontend/GuiObserver.cpp:305
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
-msgstr "Interpolacija"
+msgstr "Lastnosti: Interpolacija"
 
 #: src/kdefrontend/GuiObserver.cpp:310
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Glajenje"
 
 #: src/kdefrontend/GuiObserver.cpp:315
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Prileganje"
 
 #: src/kdefrontend/GuiObserver.cpp:320
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
-msgstr "Fourierova transformacija"
+msgstr "Lastnosti: Fourierova transformacija"
 
 #: src/kdefrontend/GuiObserver.cpp:325
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
-msgstr "Hilbertova transformacija"
+msgstr "Lastnosti: Hilbertova transformacija"
 
 #: src/kdefrontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgid "Fourier Filter"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
-msgstr "Fourierjev filter"
+msgstr "Lastnosti: Fourierjev filter"
 
 #: src/kdefrontend/GuiObserver.cpp:335
-#, fuzzy, kde-format
-#| msgid "Convolution/Deconvolution"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
-msgstr "Konvolucija/dekonvolucija"
+msgstr "Lastnosti: Konvolucija/dekonvolucija"
 
 #: src/kdefrontend/GuiObserver.cpp:340
-#, fuzzy, kde-format
-#| msgid "Auto-/Cross-Correlation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
-msgstr "Samodejna/navzkrižna korelacija"
+msgstr "Lastnosti: Samodejna/navzkrižna korelacija"
 
 #: src/kdefrontend/GuiObserver.cpp:345
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
-msgstr "Raziskovalec lastnosti"
+msgstr "Lastnosti: Histogram"
 
 #: src/kdefrontend/GuiObserver.cpp:350
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Stolpični diagram"
 
 #: src/kdefrontend/GuiObserver.cpp:355
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr "Raziskovalec lastnosti"
+msgstr "Lastnosti: Grafikon kvantilov"
 
 #: src/kdefrontend/GuiObserver.cpp:360
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
-msgstr "Raziskovalec lastnosti"
+msgstr "Lastnosti: Besedilna oznaka"
 
 #: src/kdefrontend/GuiObserver.cpp:365
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Slika"
 
 #: src/kdefrontend/GuiObserver.cpp:370
-#, fuzzy, kde-format
-#| msgid "Custom Point"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
-msgstr "Točka po meri"
+msgstr "Lastnosti: Točka po meri"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
-msgstr "Referenčna črta"
+msgstr "Lastnosti: Referenčna črta"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -13410,27 +13382,22 @@ msgid "Reference Range"
 msgstr "Referenčni interval"
 
 #: src/kdefrontend/GuiObserver.cpp:385
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
-msgstr "Krivulja izbirnika podatkov"
+msgstr "Lastnosti: Krivulja izbirnika podatkov"
 
 #: src/kdefrontend/GuiObserver.cpp:390
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Data Extractor"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
-msgstr "Izvlečnik podatkov"
+msgstr "Lastnosti: Izvlečnik podatkov"
 
 #: src/kdefrontend/GuiObserver.cpp:400
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Projekt"
 
 #: src/kdefrontend/GuiObserver.cpp:410
 #, kde-format
@@ -13439,56 +13406,47 @@ msgid "%1 Notebook"
 msgstr "Zvezek %1"
 
 #: src/kdefrontend/GuiObserver.cpp:412
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Beležnica"
 
 #: src/kdefrontend/GuiObserver.cpp:418
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Opombe"
 
 #: src/kdefrontend/GuiObserver.cpp:423
-#, fuzzy, kde-format
-#| msgid "Info Element"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
-msgstr "Element informacije"
+msgstr "Lastnosti: Element informacije"
 
 #: src/kdefrontend/GuiObserver.cpp:430 src/kdefrontend/GuiObserver.cpp:437
 #: src/kdefrontend/GuiObserver.cpp:444
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "MQTT Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
-msgstr "Vir podatkov MQTT"
+msgstr "Lastnosti: Vir podatkov MQTT"
 
 #: src/kdefrontend/GuiObserver.cpp:450
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Live Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
-msgstr "Vir podatkov v živo"
+msgstr "Lastnosti: Vir podatkov v živo"
 
 #: src/kdefrontend/GuiObserver.cpp:464
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr "Raziskovalec lastnosti"
+msgstr "Lastnosti: Mapa"
 
 #: src/kdefrontend/GuiObserver.cpp:471
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
-msgstr "Lastnosti"
+msgstr "Lastnosti: Delovni zvezek"
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format

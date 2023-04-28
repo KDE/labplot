@@ -337,7 +337,7 @@ void CANFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*
 }
 
 bool CANFilterPrivate::setDBCFile(const QString& filename) {
-	return m_dbcParser.parseFile(filename);
+	return m_dbcParser.parseFile(filename) == DbcParser::ParseStatus::Success;
 }
 
 const QVector<AbstractColumn::ColumnMode> CANFilterPrivate::columnModes() {

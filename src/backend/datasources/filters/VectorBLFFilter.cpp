@@ -175,8 +175,9 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		return 0;
 	}
 
-	if (!m_dbcParser.isValid()) {
-		errors.append({ParseStatus::DBCInvalidFile, 0});
+	const auto status = m_dbcParser.isValid();
+	if (status != DbcParser::ParseStatus::Success) {
+		errors.append({DBCParserParseStatusToVectorBLFStatus(status), 0});
 		return 0;
 	}
 

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-27 00:44+0000\n"
-"PO-Revision-Date: 2023-04-25 10:14+0200\n"
+"PO-Revision-Date: 2023-04-27 11:56+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -13287,11 +13287,10 @@ msgid "Properties"
 msgstr "Propietats"
 
 #: src/kdefrontend/GuiObserver.cpp:220
-#, fuzzy, kde-format
-#| msgid "&Sort Spreadsheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr "O&rdena el full de càlcul"
+msgstr "Propietats: Full de càlc"
 
 #: src/kdefrontend/GuiObserver.cpp:230
 #, kde-format
@@ -13300,187 +13299,160 @@ msgid "%1 Worksheet"
 msgstr "Full de treball %1"
 
 #: src/kdefrontend/GuiObserver.cpp:235
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "Propietats"
+msgstr "Propietats: Columna"
 
 #: src/kdefrontend/GuiObserver.cpp:242
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr "Propietats"
+msgstr "Propietats: Matriu"
 
 #: src/kdefrontend/GuiObserver.cpp:247
-#, fuzzy, kde-format
-#| msgid "Complete Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "Tot el full de treball"
+msgstr "Propietats: Full de treball"
 
 #: src/kdefrontend/GuiObserver.cpp:253
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
-msgstr "Explorador de les propietats"
+msgstr "Propietats: Àrea del diagrama"
 
 #: src/kdefrontend/GuiObserver.cpp:259
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "Propietats"
+msgstr "Propietats: Llegenda"
 
 #: src/kdefrontend/GuiObserver.cpp:264
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr "Propietats"
+msgstr "Propietats: Eix"
 
 #: src/kdefrontend/GuiObserver.cpp:269
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
-msgstr "Propietats"
+msgstr "Propietats: Corba-XY"
 
 #: src/kdefrontend/GuiObserver.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "XY-Equation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
-msgstr "Equació XY"
+msgstr "Propietats: Equació-XY"
 
 #: src/kdefrontend/GuiObserver.cpp:279
-#, fuzzy, kde-format
-#| msgid "Data Reduction"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
-msgstr "Reducció de les dades"
+msgstr "Propietats: Reducció de dades"
 
 #: src/kdefrontend/GuiObserver.cpp:295
-#, fuzzy, kde-format
-#| msgid "Differentiation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
-msgstr "Diferenciació"
+msgstr "Propietats: Diferenciació"
 
 #: src/kdefrontend/GuiObserver.cpp:300
-#, fuzzy, kde-format
-#| msgid "Integration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
-msgstr "Integració"
+msgstr "Propietats: Integració"
 
 #: src/kdefrontend/GuiObserver.cpp:305
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
-msgstr "Interpolació"
+msgstr "Propietats: Interpolació"
 
 #: src/kdefrontend/GuiObserver.cpp:310
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
-msgstr "Propietats"
+msgstr "Propietats: Suavitzat"
 
 #: src/kdefrontend/GuiObserver.cpp:315
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr "Propietats"
+msgstr "Propietats: Ajust"
 
 #: src/kdefrontend/GuiObserver.cpp:320
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
-msgstr "Transformada de Fourier"
+msgstr "Propietats: Transformada de Fourier"
 
 #: src/kdefrontend/GuiObserver.cpp:325
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
-msgstr "Transformada de Hilbert"
+msgstr "Propietats: Transformada de Hilbert"
 
 #: src/kdefrontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgid "Fourier Filter"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
-msgstr "Filtre de Fourier"
+msgstr "Propietats: Filtre de Fourier"
 
 #: src/kdefrontend/GuiObserver.cpp:335
-#, fuzzy, kde-format
-#| msgid "Convolution/Deconvolution"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
-msgstr "Convolució/Desconvolució"
+msgstr "Propietats: Convolució/Desconvolució"
 
 #: src/kdefrontend/GuiObserver.cpp:340
-#, fuzzy, kde-format
-#| msgid "Auto-/Cross-Correlation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
-msgstr "Correlació creuada/automàtica"
+msgstr "Propietats: Correlació creuada/automàtica"
 
 #: src/kdefrontend/GuiObserver.cpp:345
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
-msgstr "Explorador de les propietats"
+msgstr "Propietats: Histograma"
 
 #: src/kdefrontend/GuiObserver.cpp:350
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr "Propietats"
+msgstr "Propietats: Diagrama de barres"
 
 #: src/kdefrontend/GuiObserver.cpp:355
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr "Explorador de les propietats"
+msgstr "Propietats: Diagrama de caixes"
 
 #: src/kdefrontend/GuiObserver.cpp:360
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
-msgstr "Explorador de les propietats"
+msgstr "Propietats: Etiqueta de text"
 
 #: src/kdefrontend/GuiObserver.cpp:365
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
-msgstr "Propietats"
+msgstr "Propietats: Imatge"
 
 #: src/kdefrontend/GuiObserver.cpp:370
-#, fuzzy, kde-format
-#| msgid "Custom Point"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
-msgstr "Punt personalitzat"
+msgstr "Propietats: Punt personalitzat"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
-msgstr "Línia de referència"
+msgstr "Propietats: Línia de referència"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -13489,27 +13461,22 @@ msgid "Reference Range"
 msgstr "Interval de referència"
 
 #: src/kdefrontend/GuiObserver.cpp:385
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
-msgstr "Corba del selector de dades"
+msgstr "Propietats: Corba del selector de dades"
 
 #: src/kdefrontend/GuiObserver.cpp:390
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Data Extractor"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
-msgstr "Extractor de dades"
+msgstr "Propietats: Extractor de dades"
 
 #: src/kdefrontend/GuiObserver.cpp:400
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
-msgstr "Propietats"
+msgstr "Propietats: Projecte"
 
 #: src/kdefrontend/GuiObserver.cpp:410
 #, kde-format
@@ -13518,56 +13485,47 @@ msgid "%1 Notebook"
 msgstr "Bloc de notes del %1"
 
 #: src/kdefrontend/GuiObserver.cpp:412
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
-msgstr "Propietats"
+msgstr "Propietats: Bloc de notes"
 
 #: src/kdefrontend/GuiObserver.cpp:418
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
-msgstr "Propietats"
+msgstr "Propietats: Notes"
 
 #: src/kdefrontend/GuiObserver.cpp:423
-#, fuzzy, kde-format
-#| msgid "Info Element"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
-msgstr "Element d'informació"
+msgstr "Propietats: Element d'informació"
 
 #: src/kdefrontend/GuiObserver.cpp:430 src/kdefrontend/GuiObserver.cpp:437
 #: src/kdefrontend/GuiObserver.cpp:444
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "MQTT Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
-msgstr "Origen de les dades MQTT"
+msgstr "Propietats: Origen de dades MQTT"
 
 #: src/kdefrontend/GuiObserver.cpp:450
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Live Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
-msgstr "Dades en viu d'origen"
+msgstr "Propietats: Dades en viu d'origen"
 
 #: src/kdefrontend/GuiObserver.cpp:464
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr "Explorador de les propietats"
+msgstr "Propietats: Carpeta"
 
 #: src/kdefrontend/GuiObserver.cpp:471
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
-msgstr "Propietats"
+msgstr "Propietats: Llibre de treball"
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
@@ -21783,178 +21741,3 @@ msgstr "El procés «convert» ha fallat, codi de sortida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "&Restore"
-#~ msgstr "&Restaura"
-
-#~ msgid "Mi&nimize"
-#~ msgstr "Mi&nimitza"
-
-#~ msgid "Ma&ximize"
-#~ msgstr "Ma&ximitza"
-
-#~ msgctxt "@title:window"
-#~ msgid "Spreadsheet"
-#~ msgstr "Full de càlcul"
-
-#~ msgctxt "@title:window"
-#~ msgid "Column"
-#~ msgstr "Columna"
-
-#~ msgctxt "@title:window"
-#~ msgid "Matrix"
-#~ msgstr "Matriu"
-
-#~ msgctxt "@title:window"
-#~ msgid "Worksheet"
-#~ msgstr "Full de treball"
-
-#~ msgctxt "@title:window"
-#~ msgid "Plot Area"
-#~ msgstr "Àrea del diagrama"
-
-#~ msgctxt "@title:window"
-#~ msgid "Legend"
-#~ msgstr "Llegenda"
-
-#~ msgctxt "@title:window"
-#~ msgid "Axis"
-#~ msgstr "Eix"
-
-#~ msgctxt "@title:window"
-#~ msgid "XY-Curve"
-#~ msgstr "Corba XY"
-
-#~ msgctxt "@title:window"
-#~ msgid "Data Reduction"
-#~ msgstr "Reducció de les dades"
-
-#~ msgctxt "@title:window"
-#~ msgid "Differentiation"
-#~ msgstr "Diferenciació"
-
-#~ msgctxt "@title:window"
-#~ msgid "Integration"
-#~ msgstr "Integració"
-
-#~ msgctxt "@title:window"
-#~ msgid "Interpolation"
-#~ msgstr "Interpolació"
-
-#~ msgctxt "@title:window"
-#~ msgid "Smoothing"
-#~ msgstr "Suavitzat"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fit"
-#~ msgstr "Ajusta"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fourier Transform"
-#~ msgstr "Transformada de Fourier"
-
-#~ msgctxt "@title:window"
-#~ msgid "Hilbert Transform"
-#~ msgstr "Transformada de Hilbert"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fourier Filter"
-#~ msgstr "Filtre de Fourier"
-
-#~ msgctxt "@title:window"
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Convolució/Desconvolució"
-
-#~ msgctxt "@title:window"
-#~ msgid "Auto-/Cross-Correlation"
-#~ msgstr "Correlació creuada/automàtica"
-
-#~ msgctxt "@title:window"
-#~ msgid "Histogram"
-#~ msgstr "Histograma"
-
-# skip-rule: kct-box
-#~ msgctxt "@title:window"
-#~ msgid "Bar Plot"
-#~ msgstr "Diagrama de barres"
-
-# skip-rule: kct-box
-#~ msgctxt "@title:window"
-#~ msgid "Box Plot"
-#~ msgstr "Diagrama de caixes"
-
-#~ msgctxt "@title:window"
-#~ msgid "Text Label"
-#~ msgstr "Etiqueta de text"
-
-#~ msgctxt "@title:window"
-#~ msgid "Image"
-#~ msgstr "Imatge"
-
-#~ msgctxt "@title:window"
-#~ msgid "Custom Point"
-#~ msgstr "Punt personalitzat"
-
-#~ msgctxt "@title:window"
-#~ msgid "Reference Line"
-#~ msgstr "Línia de referència"
-
-#~ msgctxt "@title:window"
-#~ msgid "Project"
-#~ msgstr "Projecte"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notebook"
-#~ msgstr "Bloc de notes"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notes"
-#~ msgstr "Notes"
-
-#~ msgctxt "@title:window"
-#~ msgid "Info Element"
-#~ msgstr "Element d'informació"
-
-#~ msgctxt "@title:window"
-#~ msgid "Folder"
-#~ msgstr "Carpeta"
-
-#~ msgctxt "@title:window"
-#~ msgid "Workbook"
-#~ msgstr "Llibre de treball"
-
-#~ msgid "&Tile"
-#~ msgstr "&Mosaic"
-
-#~ msgid "Tile the windows"
-#~ msgstr "Organitza les finestres en mosaic"
-
-#~ msgid "&Cascade"
-#~ msgstr "&Cascada"
-
-#~ msgid "Cascade the windows"
-#~ msgstr "Organitza les finestres en cascada"
-
-#~ msgid "Sub-window View"
-#~ msgstr "Vista en subfinestres"
-
-#~ msgid "Tabbed View"
-#~ msgstr "Vista en pestanyes"
-
-#~ msgid "Show Windows of the Current Folder Only"
-#~ msgstr "Mostra només les finestres de la carpeta actual"
-
-#~ msgid "Show Windows of the Current Folder and its Subfolders Only"
-#~ msgstr "Mostra només les finestres de la carpeta actual i les subcarpetes"
-
-#~ msgid "Show all Windows"
-#~ msgstr "Mostra totes les finestres"
-
-#~ msgid "Tab position:"
-#~ msgstr "Posició de la pestanya:"
-
-#~ msgid "Interface:"
-#~ msgstr "Interfície:"
-
-#~ msgid "Sub-window visibility:"
-#~ msgstr "Visibilitat de la subfinestra:"

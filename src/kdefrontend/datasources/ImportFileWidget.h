@@ -61,7 +61,7 @@ public:
 	QString fileName() const;
 	QString dbcFileName() const;
 	QString selectedObject() const;
-	bool isFileEmpty() const;
+	bool importValid() const;
 	bool excelUseFirstRowAsColNames() const;
 	const QStringList selectedHDF5Names() const;
 	//	const QStringList selectedVectorBLFNames() const;
@@ -110,7 +110,7 @@ private:
 	KUrlComboBox* m_cbDBCFileName{nullptr};
 	const QString& m_fileName;
 	const QString m_dbcFileName;
-	bool m_fileEmpty{false};
+	bool m_importValid{false};
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 
