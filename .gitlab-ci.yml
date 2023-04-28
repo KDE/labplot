@@ -51,7 +51,7 @@ ubuntu_22.04_min:
   before_script:
     - apt update
     - apt install --yes eatmydata
-    - eatmydata apt install --yes --no-install-recommends locales-all ninja-build git cmake make g++ extra-cmake-modules libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev pkg-config ca-certificates zlib1g-dev
+    - eatmydata apt install --yes --no-install-recommends locales-all ninja-build git cmake make g++ extra-cmake-modules libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev pkg-config ca-certificates zlib1g-dev qtbase5-private-dev
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
@@ -82,7 +82,7 @@ fedora_37_min:
 #    - merge_requests
     - master
   before_script:
-    - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel zlib-devel
+    - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel zlib-devel qt5-qtbase-private-devel
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
@@ -96,7 +96,7 @@ fedora_37_full:
 #   - merge_requests
     - master
   before_script:
-    - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel kf5-kparts-devel kf5-syntax-highlighting-devel cantor-devel poppler-qt5-devel libspectre-devel liborigin-devel fftw3-devel netcdf-devel qt5-qtserialport-devel cfitsio-devel libcerf-devel lz4-devel matio-devel discount
+    - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel kf5-kparts-devel kf5-syntax-highlighting-devel cantor-devel poppler-qt5-devel libspectre-devel liborigin-devel fftw3-devel netcdf-devel qt5-qtserialport-devel cfitsio-devel libcerf-devel lz4-devel matio-devel discount qt5-qtbase-private-devel
   script:
     - mkdir -p build && cd build
     - cmake -G Ninja ..
@@ -113,7 +113,7 @@ leap_15.4_min:
   before_script:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
-    - zypper in -y gsl-devel ninja
+    - zypper in -y gsl-devel ninja libQt5Gui-private-headers-devel
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
@@ -130,7 +130,7 @@ leap_15.4_full:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
 # readstat-devel in Science repo only
-    - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount
+    - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount libQt5Gui-private-headers-devel
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
@@ -147,7 +147,7 @@ leap_15.4_full:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
 # readstat-devel in Science repo only
-    - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount
+    - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount libQt5Gui-private-headers-devel
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
