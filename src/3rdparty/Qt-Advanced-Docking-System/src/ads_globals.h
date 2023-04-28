@@ -144,7 +144,7 @@ enum SideBarLocation
 	SideBarBottom,
 	SideBarNone
 };
-Q_ENUMS(SideBarLocation);
+Q_ENUMS(SideBarLocation)
 
 
 namespace internal
@@ -234,7 +234,7 @@ T findParent(const QWidget* w)
 		}
 		parentWidget = parentWidget->parentWidget();
 	}
-	return 0;
+	return nullptr;
 }
 
 /**

@@ -95,7 +95,7 @@ void FloatingWidgetTitleBarPrivate::createLayout()
 	// The standard icons do does not look good on high DPI screens
 	QIcon CloseIcon;
 	QPixmap normalPixmap = _this->style()->standardPixmap(
-	    QStyle::SP_TitleBarCloseButton, 0, CloseButton);
+	    QStyle::SP_TitleBarCloseButton, nullptr, CloseButton);
 	CloseIcon.addPixmap(normalPixmap, QIcon::Normal);
 	CloseIcon.addPixmap(internal::createTransparentPixmap(normalPixmap, 0.25),
 	    QIcon::Disabled);
@@ -137,11 +137,11 @@ CFloatingWidgetTitleBar::CFloatingWidgetTitleBar(CFloatingDockContainer *parent)
 	d->FloatingWidget = parent;
 	d->createLayout();
 
-    auto normalPixmap = this->style()->standardPixmap(QStyle::SP_TitleBarNormalButton, 0, d->MaximizeButton);
+    auto normalPixmap = this->style()->standardPixmap(QStyle::SP_TitleBarNormalButton, nullptr, d->MaximizeButton);
     d->NormalIcon.addPixmap(normalPixmap, QIcon::Normal);
     d->NormalIcon.addPixmap(internal::createTransparentPixmap(normalPixmap, 0.25), QIcon::Disabled);
 
-    auto maxPixmap = this->style()->standardPixmap(QStyle::SP_TitleBarMaxButton, 0, d->MaximizeButton);
+    auto maxPixmap = this->style()->standardPixmap(QStyle::SP_TitleBarMaxButton, nullptr, d->MaximizeButton);
     d->MaximizeIcon.addPixmap(maxPixmap, QIcon::Normal);
     d->MaximizeIcon.addPixmap(internal::createTransparentPixmap(maxPixmap, 0.25), QIcon::Disabled);
     setMaximizedIcon(d->Maximized);
