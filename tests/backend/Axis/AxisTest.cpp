@@ -827,7 +827,7 @@ void AxisTest::columnLabelValues() {
 	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
 	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 	auto* yAxis = static_cast<Axis*>(axes.at(1));
-	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	// auto* xAxis = static_cast<Axis*>(axes.at(0));
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);

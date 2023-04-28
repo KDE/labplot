@@ -1496,6 +1496,7 @@ void AxisPrivate::retransformTicks() {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
 		}
+		break;
 	case Axis::TicksType::ColumnLabels:
 		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 		if (c && c->valueLabelsInitialized())
@@ -1588,8 +1589,8 @@ void AxisPrivate::retransformTicks() {
 				case Column::ColumnMode::DateTime:
 					majorTickPos = c->dateTimeValueLabels()->at(iMajor).value.toMSecsSinceEpoch();
 					break;
-				default:
-					// TODO handle!
+				case Column::ColumnMode::Text:
+					// TODO
 					break;
 				}
 			}

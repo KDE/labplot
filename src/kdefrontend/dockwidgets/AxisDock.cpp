@@ -1053,6 +1053,8 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		updateMajorTicksStartType(false);
 		break;
 	}
+	case Axis::TicksType::CustomValues:
+		break;
 	}
 
 	CONDITIONAL_LOCK_RETURN;

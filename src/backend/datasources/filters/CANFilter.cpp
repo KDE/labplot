@@ -311,7 +311,7 @@ int CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSour
 
 	// Assign value labels to the column
 	auto columns = dataSource->children<Column>();
-	if (columns.size() == m_signals.value_descriptions.size()) {
+	if ((size_t)columns.size() == m_signals.value_descriptions.size()) {
 		int counter = 0;
 		auto signal_descriptions = m_signals.value_descriptions.begin();
 		while (signal_descriptions != m_signals.value_descriptions.end()) {
