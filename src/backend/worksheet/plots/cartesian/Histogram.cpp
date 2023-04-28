@@ -887,7 +887,7 @@ void HistogramPrivate::recalcHistogram() {
 
 		if (binRangesMin >= binRangesMax) {
 			Q_EMIT q->dataChanged();
-			Q_EMIT q->info(i18n("Calculation of the histogram not possible. The max value must be bigger then the min value."));
+			Q_EMIT q->info(i18n("Calculation of the histogram not possible. The max value must be bigger than the min value."));
 			return;
 		}
 
@@ -978,7 +978,7 @@ void HistogramPrivate::recalcHistogram() {
 					m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
 			}
 		} else
-			DEBUG("Number of bins must be positiv integer")
+			DEBUG("Number of bins must be positive integer")
 	}
 
 	// histogram changed because of the actual data changes or because of new bin settings,

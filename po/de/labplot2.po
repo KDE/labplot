@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-16 00:43+0000\n"
-"PO-Revision-Date: 2023-04-03 16:41+0200\n"
+"POT-Creation-Date: 2023-04-27 00:44+0000\n"
+"PO-Revision-Date: 2023-04-26 19:37+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 22.07.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -54,7 +54,7 @@ msgstr ""
 "überprüfen."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
-#: src/backend/core/column/Column.cpp:1264
+#: src/backend/core/column/Column.cpp:1269
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:580
 #: src/backend/datapicker/DatapickerPoint.cpp:502
@@ -95,7 +95,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:429
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:271
 #: src/backend/worksheet/plots/PlotArea.cpp:376
-#: src/backend/worksheet/TextLabel.cpp:1127
+#: src/backend/worksheet/TextLabel.cpp:1140
 #: src/backend/worksheet/Worksheet.cpp:1705
 #: src/backend/worksheet/WorksheetElement.cpp:460
 #: src/commonfrontend/ProjectExplorer.cpp:1041
@@ -106,8 +106,8 @@ msgstr ""
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1394 src/backend/core/Folder.cpp:151
-#: src/backend/core/Project.cpp:752
+#: src/backend/core/column/Column.cpp:1399 src/backend/core/Folder.cpp:151
+#: src/backend/core/Project.cpp:760
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:828
 #: src/backend/datapicker/DatapickerPoint.cpp:579
@@ -124,7 +124,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:725
 #: src/backend/worksheet/plots/PlotArea.cpp:405
-#: src/backend/worksheet/TextLabel.cpp:1175
+#: src/backend/worksheet/TextLabel.cpp:1188
 #: src/backend/worksheet/Worksheet.cpp:1798
 #, kde-format
 msgid "unknown element '%1'"
@@ -169,7 +169,7 @@ msgid "Rename"
 msgstr "Umbenennen"
 
 #: src/backend/core/AbstractAspect.cpp:399
-#: src/commonfrontend/worksheet/WorksheetView.cpp:130
+#: src/commonfrontend/worksheet/WorksheetView.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:271
 #, kde-format
 msgid "Delete"
@@ -382,8 +382,8 @@ msgstr "Große Ganzzahl"
 #: src/backend/core/AbstractColumn.cpp:227
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:367
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:91
-#: src/commonfrontend/worksheet/WorksheetView.cpp:214
-#: src/commonfrontend/worksheet/WorksheetView.cpp:376
+#: src/commonfrontend/worksheet/WorksheetView.cpp:216
+#: src/commonfrontend/worksheet/WorksheetView.cpp:378
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1495
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
@@ -472,13 +472,13 @@ msgstr "Ein%1"
 msgid "Import Data"
 msgstr "Daten importieren"
 
-#: src/backend/core/AbstractPart.cpp:93 src/kdefrontend/MainWin.cpp:569
-#: src/kdefrontend/MainWin.cpp:578
+#: src/backend/core/AbstractPart.cpp:93 src/kdefrontend/MainWin.cpp:704
+#: src/kdefrontend/MainWin.cpp:713
 #, kde-format
 msgid "From File..."
 msgstr "Aus Datei..."
 
-#: src/backend/core/AbstractPart.cpp:95 src/kdefrontend/MainWin.cpp:585
+#: src/backend/core/AbstractPart.cpp:95 src/kdefrontend/MainWin.cpp:720
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Aus SQL-Datenbank..."
@@ -505,22 +505,12 @@ msgstr "Drucken"
 msgid "Print Preview"
 msgstr "Druckvorschau"
 
-#: src/backend/core/AbstractPart.cpp:113
+#: src/backend/core/AbstractPart.cpp:113 src/kdefrontend/MainWin.cpp:787
 #, kde-format
-msgid "&Restore"
-msgstr "&Wiederherstellen"
+msgid "&Close"
+msgstr "S&chließen"
 
-#: src/backend/core/AbstractPart.cpp:118
-#, kde-format
-msgid "Mi&nimize"
-msgstr "&Minimieren"
-
-#: src/backend/core/AbstractPart.cpp:123
-#, kde-format
-msgid "Ma&ximize"
-msgstr "Ma&ximieren"
-
-#: src/backend/core/AbstractPart.cpp:135
+#: src/backend/core/AbstractPart.cpp:118 src/backend/core/AbstractPart.cpp:131
 #, kde-format
 msgid "Show"
 msgstr "Anzeigen"
@@ -671,47 +661,47 @@ msgid "%1: change column type"
 msgstr "%1: Spaltentyp ändern"
 
 #: src/backend/core/column/Column.cpp:512
-#: src/backend/core/column/columncommands.cpp:563
+#: src/backend/core/column/columncommands.cpp:565
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: Spalte löschen"
 
-#: src/backend/core/column/Column.cpp:1538
+#: src/backend/core/column/Column.cpp:1543
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "Ungültiger oder fehlender Zeilenindex"
 
-#: src/backend/core/column/Column.cpp:1547
-#: src/backend/core/column/Column.cpp:1556
-#: src/backend/core/column/Column.cpp:1565
+#: src/backend/core/column/Column.cpp:1552
+#: src/backend/core/column/Column.cpp:1561
+#: src/backend/core/column/Column.cpp:1570
 #, kde-format
 msgid "invalid row value"
 msgstr "Ungültiger Zeilenwert"
 
-#: src/backend/core/column/columncommands.cpp:214
-#: src/backend/core/column/columncommands.cpp:325
+#: src/backend/core/column/columncommands.cpp:216
+#: src/backend/core/column/columncommands.cpp:327
 #, kde-format
 msgid "%1: change cell values"
 msgstr "%1: Zellenwerte ändern"
 
-#: src/backend/core/column/columncommands.cpp:514
+#: src/backend/core/column/columncommands.cpp:516
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2634
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: Plotzuordnung festlegen"
 
-#: src/backend/core/column/columncommands.cpp:687
+#: src/backend/core/column/columncommands.cpp:689
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
 msgstr "%1: Formel festlegen"
 
-#: src/backend/core/column/columncommands.cpp:754
+#: src/backend/core/column/columncommands.cpp:756
 #, kde-format
 msgid "%1: set cell formula"
 msgstr "%1: Zellenformel festlegen"
 
-#: src/backend/core/column/columncommands.cpp:796
+#: src/backend/core/column/columncommands.cpp:798
 #, kde-format
 msgid "%1: clear all formulas"
 msgstr "%1: Alle Zellenformeln löschen"
@@ -777,54 +767,54 @@ msgstr "Noch nicht geladen."
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:166 src/backend/core/Project.cpp:181
+#: src/backend/core/Project.cpp:167 src/backend/core/Project.cpp:182
 #: src/kdefrontend/labplot2ui.rc:6
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Projekt"
 
-#: src/backend/core/Project.cpp:243
+#: src/backend/core/Project.cpp:244
 #, kde-format
 msgid "Close"
 msgstr "Schließen"
 
-#: src/backend/core/Project.cpp:274
+#: src/backend/core/Project.cpp:276
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: Autor festlegen"
 
-#: src/backend/core/Project.cpp:280
+#: src/backend/core/Project.cpp:282
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: Berechnungen speichern geändert"
 
-#: src/backend/core/Project.cpp:597 src/backend/core/Project.cpp:631
+#: src/backend/core/Project.cpp:600 src/backend/core/Project.cpp:634
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Die Datei kann leider nicht zum Lesen geöffnet werden."
 
-#: src/backend/core/Project.cpp:608 src/backend/core/Project.cpp:638
+#: src/backend/core/Project.cpp:611 src/backend/core/Project.cpp:641
 #, kde-format
 msgid "The project file is empty."
 msgstr "Die Projektdatei ist leer."
 
-#: src/backend/core/Project.cpp:608 src/backend/core/Project.cpp:638
+#: src/backend/core/Project.cpp:611 src/backend/core/Project.cpp:641
 #, kde-format
 msgid "Error opening project"
 msgstr "Fehler beim Öffnen des Projekts"
 
-#: src/backend/core/Project.cpp:657
+#: src/backend/core/Project.cpp:660
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Unbekannter Fehler beim Öffnen des Projekts %1."
 
-#: src/backend/core/Project.cpp:658
+#: src/backend/core/Project.cpp:661
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Fehler beim Öffnen des Projekts"
 
-#: src/backend/core/Project.cpp:678
+#: src/backend/core/Project.cpp:681
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -843,27 +833,27 @@ msgstr ""
 "\n"
 "Möchten Sie fortfahren?"
 
-#: src/backend/core/Project.cpp:685 src/backend/core/Project.cpp:687
+#: src/backend/core/Project.cpp:688 src/backend/core/Project.cpp:690
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Fehlende Unterstützung für CAS"
 
-#: src/backend/core/Project.cpp:716
+#: src/backend/core/Project.cpp:719
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Das Attribut „version“ fehlt."
 
-#: src/backend/core/Project.cpp:759
+#: src/backend/core/Project.cpp:767
 #, kde-format
 msgid "no project element found"
 msgstr "Kein Projektelement gefunden"
 
-#: src/backend/core/Project.cpp:761
+#: src/backend/core/Project.cpp:769
 #, kde-format
 msgid "no valid XML document found"
 msgstr "Kein gültiges XML-Dokument gefunden"
 
-#: src/backend/core/Project.cpp:1060
+#: src/backend/core/Project.cpp:1066
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -1127,9 +1117,9 @@ msgstr "Es gibt keine Dowload-URL in der Metadatendatei!"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1932
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:104
 #: src/commonfrontend/matrix/MatrixView.cpp:132
-#: src/commonfrontend/worksheet/WorksheetView.cpp:215
-#: src/commonfrontend/worksheet/WorksheetView.cpp:377
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1558
+#: src/commonfrontend/worksheet/WorksheetView.cpp:217
+#: src/commonfrontend/worksheet/WorksheetView.cpp:379
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1560
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:95
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:134
 #, kde-format
@@ -1855,7 +1845,7 @@ msgstr "Unbekannt"
 #: src/backend/datasources/filters/MatioFilter.cpp:448
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:536 src/kdefrontend/MainWin.cpp:1895
+#: src/kdefrontend/MainWin.cpp:671 src/kdefrontend/MainWin.cpp:2032
 #, kde-format
 msgid "Matrix"
 msgstr "Matrix"
@@ -5650,7 +5640,7 @@ msgid "Raw"
 msgstr "Unverarbeitet"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:828
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:855
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:222
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:320
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:580
@@ -5918,8 +5908,8 @@ msgstr "Radialer Abstand"
 #: src/backend/nsl/nsl_geom_linesim.c:23
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:352
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1750
-#: src/commonfrontend/worksheet/WorksheetView.cpp:366
-#: src/commonfrontend/worksheet/WorksheetView.cpp:405
+#: src/commonfrontend/worksheet/WorksheetView.cpp:368
+#: src/commonfrontend/worksheet/WorksheetView.cpp:407
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:259
 #, kde-format
 msgid "Interpolation"
@@ -7124,7 +7114,7 @@ msgstr "XY-Kurve"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:344
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1629
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:448
-#: src/commonfrontend/worksheet/WorksheetView.cpp:341
+#: src/commonfrontend/worksheet/WorksheetView.cpp:343
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:82
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:139
 #, kde-format
@@ -7134,7 +7124,7 @@ msgstr "Histogramm"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:345
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1670
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:452
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:531
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:536
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:145
 #, kde-format
 msgid "Bar Plot"
@@ -7143,8 +7133,8 @@ msgstr "Bar-Plot"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:346
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1674
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
-#: src/commonfrontend/worksheet/WorksheetView.cpp:342
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:529
+#: src/commonfrontend/worksheet/WorksheetView.cpp:344
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:534
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:142
 #, kde-format
 msgid "Box Plot"
@@ -7161,8 +7151,8 @@ msgstr "XY-Kurve aus einer Formel"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:349
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:403
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1690
-#: src/commonfrontend/worksheet/WorksheetView.cpp:349
-#: src/commonfrontend/worksheet/WorksheetView.cpp:385
+#: src/commonfrontend/worksheet/WorksheetView.cpp:351
+#: src/commonfrontend/worksheet/WorksheetView.cpp:387
 #, kde-format
 msgid "Data Reduction"
 msgstr "Datenreduktion"
@@ -7173,8 +7163,8 @@ msgstr "Datenreduktion"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:350
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:143
-#: src/commonfrontend/worksheet/WorksheetView.cpp:352
-#: src/commonfrontend/worksheet/WorksheetView.cpp:388
+#: src/commonfrontend/worksheet/WorksheetView.cpp:354
+#: src/commonfrontend/worksheet/WorksheetView.cpp:390
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:226
 #, kde-format
 msgid "Differentiation"
@@ -7186,8 +7176,8 @@ msgstr "Differentiation"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1730
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:149
-#: src/commonfrontend/worksheet/WorksheetView.cpp:355
-#: src/commonfrontend/worksheet/WorksheetView.cpp:391
+#: src/commonfrontend/worksheet/WorksheetView.cpp:357
+#: src/commonfrontend/worksheet/WorksheetView.cpp:393
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:243
 #, kde-format
 msgid "Integration"
@@ -7198,8 +7188,8 @@ msgstr "Integration"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:407
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1770
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:467
-#: src/commonfrontend/worksheet/WorksheetView.cpp:367
-#: src/commonfrontend/worksheet/WorksheetView.cpp:406
+#: src/commonfrontend/worksheet/WorksheetView.cpp:369
+#: src/commonfrontend/worksheet/WorksheetView.cpp:408
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:110
 #, kde-format
 msgid "Smooth"
@@ -7214,9 +7204,9 @@ msgstr "Glättung"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:530
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1790
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:567
-#: src/commonfrontend/worksheet/WorksheetView.cpp:172
-#: src/commonfrontend/worksheet/WorksheetView.cpp:368
-#: src/commonfrontend/worksheet/WorksheetView.cpp:407
+#: src/commonfrontend/worksheet/WorksheetView.cpp:174
+#: src/commonfrontend/worksheet/WorksheetView.cpp:370
+#: src/commonfrontend/worksheet/WorksheetView.cpp:409
 #, kde-format
 msgid "Fit"
 msgstr "Anpassung"
@@ -7225,8 +7215,8 @@ msgstr "Anpassung"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1832
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:514
-#: src/commonfrontend/worksheet/WorksheetView.cpp:370
-#: src/commonfrontend/worksheet/WorksheetView.cpp:409
+#: src/commonfrontend/worksheet/WorksheetView.cpp:372
+#: src/commonfrontend/worksheet/WorksheetView.cpp:411
 #, kde-format
 msgid "Fourier Filter"
 msgstr "Fourier Filter"
@@ -7234,8 +7224,8 @@ msgstr "Fourier Filter"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:356
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1849
-#: src/commonfrontend/worksheet/WorksheetView.cpp:372
-#: src/commonfrontend/worksheet/WorksheetView.cpp:411
+#: src/commonfrontend/worksheet/WorksheetView.cpp:374
+#: src/commonfrontend/worksheet/WorksheetView.cpp:413
 #, kde-format
 msgid "Fourier Transform"
 msgstr "Fourier Transformation"
@@ -7245,7 +7235,7 @@ msgstr "Fourier Transformation"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:357
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1855
-#: src/commonfrontend/worksheet/WorksheetView.cpp:400
+#: src/commonfrontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Hilbert Transform"
 msgstr "Hilbert-Transformation"
@@ -7254,7 +7244,7 @@ msgstr "Hilbert-Transformation"
 #. cartesianPlotAddNewActionGroup);
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:358
-#: src/commonfrontend/worksheet/WorksheetView.cpp:358
+#: src/commonfrontend/worksheet/WorksheetView.cpp:360
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:312
 #, kde-format
 msgid "(De-)Convolution"
@@ -7270,20 +7260,20 @@ msgstr "Auto-/Kreuzkorrelation"
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:361
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1885
-#: src/commonfrontend/worksheet/WorksheetView.cpp:373
+#: src/commonfrontend/worksheet/WorksheetView.cpp:375
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:147
 #, kde-format
 msgid "Legend"
 msgstr "Legende"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:365
-#: src/commonfrontend/worksheet/WorksheetView.cpp:374
+#: src/commonfrontend/worksheet/WorksheetView.cpp:376
 #, kde-format
 msgid "Horizontal Axis"
 msgstr "Waagerechte Achse"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:366
-#: src/commonfrontend/worksheet/WorksheetView.cpp:375
+#: src/commonfrontend/worksheet/WorksheetView.cpp:377
 #, kde-format
 msgid "Vertical Axis"
 msgstr "Senkrechte Achse"
@@ -7296,7 +7286,7 @@ msgstr "Info Element"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:370
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1952
-#: src/commonfrontend/worksheet/WorksheetView.cpp:378
+#: src/commonfrontend/worksheet/WorksheetView.cpp:380
 #, kde-format
 msgid "Custom Point"
 msgstr "Benutzerdefinierter Punkt"
@@ -7368,15 +7358,15 @@ msgstr "Fehlerfunktion"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:481
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:162
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
-#: src/commonfrontend/worksheet/WorksheetView.cpp:484
-#: src/commonfrontend/worksheet/WorksheetView.cpp:553
-#: src/kdefrontend/MainWin.cpp:765
+#: src/commonfrontend/worksheet/WorksheetView.cpp:486
+#: src/commonfrontend/worksheet/WorksheetView.cpp:555
+#: src/kdefrontend/MainWin.cpp:892
 #, kde-format
 msgid "Add New"
 msgstr "Neu hinzufügen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:490
-#: src/commonfrontend/worksheet/WorksheetView.cpp:561
+#: src/commonfrontend/worksheet/WorksheetView.cpp:563
 #, kde-format
 msgid "Analysis Curve"
 msgstr "Analysekurve    "
@@ -7388,7 +7378,7 @@ msgid "Analysis"
 msgstr "Analyse"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:568
-#: src/commonfrontend/worksheet/WorksheetView.cpp:639
+#: src/commonfrontend/worksheet/WorksheetView.cpp:641
 #: src/kdefrontend/ThemeHandler.cpp:49 src/kdefrontend/ThemeHandler.cpp:144
 #, kde-format
 msgid "Theme"
@@ -7501,7 +7491,7 @@ msgid "%1: reduce '%2'"
 msgstr "%1: %2 reduzieren"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1695
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:643
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:649
 #, kde-format
 msgid "Reduction of '%1'"
 msgstr "Reduzierung von '%1'"
@@ -7517,7 +7507,7 @@ msgid "%1: differentiate '%2'"
 msgstr "%1: Differenziere '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1715
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:646
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:652
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Ableitung von „%1“"
@@ -7533,7 +7523,7 @@ msgid "%1: integrate '%2'"
 msgstr "%1: Integriere '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1735
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:649
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:655
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Integral von „%1“"
@@ -7549,7 +7539,7 @@ msgid "%1: interpolate '%2'"
 msgstr "%1: interpoliere '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1755
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:652
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:658
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Interpolation von „%1“"
@@ -7565,7 +7555,7 @@ msgid "%1: smooth '%2'"
 msgstr "%1: glätte '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1775
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:655
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:661
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Glättung von '%1'"
@@ -7581,7 +7571,7 @@ msgid "%1: fit to '%2'"
 msgstr "%1: Anpassung an '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1795
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:668
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:674
 #, kde-format
 msgid "Fit to '%1'"
 msgstr "Anpassung an '%1'"
@@ -7607,15 +7597,15 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: Neue Fourier-Filterkurve hinzufügen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1861
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:461
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:466
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:433
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:438
 #, kde-format
 msgid "Convolution"
 msgstr "Faltung"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1915
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1554
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1555
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1556
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1557
 #, kde-format
 msgid "Text Label"
 msgstr "Textmarke"
@@ -7832,7 +7822,7 @@ msgstr "%1: Fehlerspalte festlegen"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:890
 #, kde-format
 msgid ""
-"Calculation of the histogram not possible. The max value must be bigger then "
+"Calculation of the histogram not possible. The max value must be bigger than "
 "the min value."
 msgstr ""
 "Berechnung des Histogramms nicht möglich. Der Maximalwert muss größer als "
@@ -8633,8 +8623,8 @@ msgstr "Initialisierung von %1 fehlgeschlagen."
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:48
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:119
 #: src/commonfrontend/matrix/MatrixView.cpp:189
-#: src/commonfrontend/worksheet/WorksheetView.cpp:139
-#: src/commonfrontend/worksheet/WorksheetView.cpp:428
+#: src/commonfrontend/worksheet/WorksheetView.cpp:141
+#: src/commonfrontend/worksheet/WorksheetView.cpp:430
 #, kde-format
 msgid "Zoom In"
 msgstr "Vergrößern"
@@ -8642,8 +8632,8 @@ msgstr "Vergrößern"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:52
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:122
 #: src/commonfrontend/matrix/MatrixView.cpp:190
-#: src/commonfrontend/worksheet/WorksheetView.cpp:140
-#: src/commonfrontend/worksheet/WorksheetView.cpp:432
+#: src/commonfrontend/worksheet/WorksheetView.cpp:142
+#: src/commonfrontend/worksheet/WorksheetView.cpp:434
 #, kde-format
 msgid "Zoom Out"
 msgstr "Verkleinern"
@@ -8768,31 +8758,31 @@ msgstr "Fertig"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:125
 #: src/commonfrontend/matrix/MatrixView.cpp:191
-#: src/commonfrontend/worksheet/WorksheetView.cpp:141
+#: src/commonfrontend/worksheet/WorksheetView.cpp:143
 #, kde-format
 msgid "Original Size"
 msgstr "Originalgröße"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:128
-#: src/commonfrontend/worksheet/WorksheetView.cpp:163
+#: src/commonfrontend/worksheet/WorksheetView.cpp:165
 #, kde-format
 msgid "Fit to Height"
 msgstr "An Höhe anpassen"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:129
-#: src/commonfrontend/worksheet/WorksheetView.cpp:166
+#: src/commonfrontend/worksheet/WorksheetView.cpp:168
 #, kde-format
 msgid "Fit to Width"
 msgstr "An Breite anpassen"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:132
-#: src/commonfrontend/worksheet/WorksheetView.cpp:180
+#: src/commonfrontend/worksheet/WorksheetView.cpp:182
 #, kde-format
 msgid "Navigate"
 msgstr "Navigieren"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:136
-#: src/commonfrontend/worksheet/WorksheetView.cpp:183
+#: src/commonfrontend/worksheet/WorksheetView.cpp:185
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Auswählen und vergrößern"
@@ -8838,38 +8828,38 @@ msgid "Shift Down"
 msgstr "Nach unten schieben"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:166
-#: src/commonfrontend/worksheet/WorksheetView.cpp:187
+#: src/commonfrontend/worksheet/WorksheetView.cpp:189
 #, kde-format
 msgid "No Magnification"
 msgstr "Keine Vergrößerung"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:170
-#: src/commonfrontend/worksheet/WorksheetView.cpp:191
+#: src/commonfrontend/worksheet/WorksheetView.cpp:193
 #, kde-format
 msgid "2x Magnification"
 msgstr "2-fache Vergrößerung"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:173
-#: src/commonfrontend/worksheet/WorksheetView.cpp:194
+#: src/commonfrontend/worksheet/WorksheetView.cpp:196
 #, kde-format
 msgid "3x Magnification"
 msgstr "3-fache Vergrößerung"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:176
-#: src/commonfrontend/worksheet/WorksheetView.cpp:197
+#: src/commonfrontend/worksheet/WorksheetView.cpp:199
 #, kde-format
 msgid "4x Magnification"
 msgstr "4-fache Vergrößerung"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:179
-#: src/commonfrontend/worksheet/WorksheetView.cpp:200
+#: src/commonfrontend/worksheet/WorksheetView.cpp:202
 #, kde-format
 msgid "5x Magnification"
 msgstr "5-fache Vergrößerung"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:212
-#: src/commonfrontend/worksheet/WorksheetView.cpp:492
-#: src/commonfrontend/worksheet/WorksheetView.cpp:543
+#: src/commonfrontend/worksheet/WorksheetView.cpp:494
+#: src/commonfrontend/worksheet/WorksheetView.cpp:545
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Maus-Modus"
@@ -8885,7 +8875,7 @@ msgid "Move Last Point"
 msgstr "Letzten Punkt verschieben"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:235
-#: src/commonfrontend/worksheet/WorksheetView.cpp:509
+#: src/commonfrontend/worksheet/WorksheetView.cpp:511
 #, kde-format
 msgid "Magnification"
 msgstr "Vergrößerung"
@@ -8925,7 +8915,7 @@ msgstr "Kurve"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3789
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3843
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2407
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2409
 #, kde-format
 msgid "Failed to export"
 msgstr "Fehler beim Exportieren"
@@ -8933,7 +8923,7 @@ msgstr "Fehler beim Exportieren"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3789
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3843
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2407
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2409
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Fehler beim Schreiben von '%1'. Bitte den Pfad überprüfen."
@@ -8963,7 +8953,7 @@ msgstr "&Auswahl aufheben"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:124
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:268
-#: src/commonfrontend/worksheet/WorksheetView.cpp:126
+#: src/commonfrontend/worksheet/WorksheetView.cpp:128
 #, kde-format
 msgid "Select All"
 msgstr "Alles auswählen"
@@ -9121,7 +9111,7 @@ msgid "Header Format"
 msgstr "Vorspannformat"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:292
-#: src/commonfrontend/worksheet/WorksheetView.cpp:498
+#: src/commonfrontend/worksheet/WorksheetView.cpp:500
 #, kde-format
 msgid "Zoom"
 msgstr "Zoom"
@@ -9285,8 +9275,8 @@ msgstr "Möchten Sie „%1“ wirklich löschen?"
 
 #: src/commonfrontend/ProjectExplorer.cpp:914
 #: src/commonfrontend/ProjectExplorer.cpp:918
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1650
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1657
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1652
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1659
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -9581,7 +9571,7 @@ msgid "Row Statisti&cs"
 msgstr "Zeilen-Statisti&ken"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
-#: src/commonfrontend/worksheet/WorksheetView.cpp:340
+#: src/commonfrontend/worksheet/WorksheetView.cpp:342
 #, kde-format
 msgid "xy-Curve"
 msgstr "XY-Kurve"
@@ -9643,10 +9633,9 @@ msgid "%1: cut selected cells"
 msgstr "%1: Ausgewählte Zellen ausschneiden"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1946
-#, fuzzy, kde-format
-#| msgid "Not enough memory to perform this operation."
+#, kde-format
 msgid "Not enough memory to finalize this operation."
-msgstr "Nicht genügend Speicher um die Operation durchzuführen."
+msgstr "Nicht genügend Speicher um die Operation abzuschließen."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1960
 #, kde-format
@@ -9970,24 +9959,24 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:58
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:62
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
-#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:530
-#: src/kdefrontend/MainWin.cpp:1877 src/kdefrontend/SettingsDialog.cpp:66
+#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:665
+#: src/kdefrontend/MainWin.cpp:2014 src/kdefrontend/SettingsDialog.cpp:66
 #, kde-format
 msgid "Spreadsheet"
 msgstr "Tabelle"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:159
+#: src/commonfrontend/worksheet/WorksheetView.cpp:161
 #, kde-format
 msgid "No fit"
 msgstr "Keine Anpassung"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:169
+#: src/commonfrontend/worksheet/WorksheetView.cpp:171
 #, kde-format
 msgid "Fit to Selection"
 msgstr "An Auswahl anpassen"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:177
-#: src/commonfrontend/worksheet/WorksheetView.cpp:308
+#: src/commonfrontend/worksheet/WorksheetView.cpp:179
+#: src/commonfrontend/worksheet/WorksheetView.cpp:310
 #, kde-format
 msgid "Select and Edit"
 msgstr "Auswählen und bearbeiten"
@@ -9995,104 +9984,104 @@ msgstr "Auswählen und bearbeiten"
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
 #. "Add new" related actions
-#: src/commonfrontend/worksheet/WorksheetView.cpp:208
+#: src/commonfrontend/worksheet/WorksheetView.cpp:210
 #, kde-format
 msgid "Four Axes"
 msgstr "Vier Achsen"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:209
+#: src/commonfrontend/worksheet/WorksheetView.cpp:211
 #, kde-format
 msgid "Two Axes"
 msgstr "Zwei Achsen"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:210
+#: src/commonfrontend/worksheet/WorksheetView.cpp:212
 #, kde-format
 msgid "Two Axes, Centered"
 msgstr "Zwei Achsen, zentriert"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:212
+#: src/commonfrontend/worksheet/WorksheetView.cpp:214
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
 msgstr "Zwei Achsen, Kreuzung am Ursprung"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:213
+#: src/commonfrontend/worksheet/WorksheetView.cpp:215
 #, kde-format
 msgid "Load from Template"
 msgstr "Aus Vorlage laden"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:223
+#: src/commonfrontend/worksheet/WorksheetView.cpp:225
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:46
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Senkrechtes Layout"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:226
+#: src/commonfrontend/worksheet/WorksheetView.cpp:228
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:47
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Waagrechtes Layout"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:229
+#: src/commonfrontend/worksheet/WorksheetView.cpp:231
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:48
 #, kde-format
 msgid "Grid Layout"
 msgstr "Gitter-Layout"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:232
+#: src/commonfrontend/worksheet/WorksheetView.cpp:234
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:45
 #, kde-format
 msgid "No Layout"
 msgstr "Kein Layout"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:236
+#: src/commonfrontend/worksheet/WorksheetView.cpp:238
 #, kde-format
 msgid "No Grid"
 msgstr "Kein Gitter"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:241
+#: src/commonfrontend/worksheet/WorksheetView.cpp:243
 #, kde-format
 msgid "Dense Line Grid"
 msgstr "Dichtes Liniengitter"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:244
+#: src/commonfrontend/worksheet/WorksheetView.cpp:246
 #, kde-format
 msgid "Sparse Line Grid"
 msgstr "Dünnes Liniengitter"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:247
+#: src/commonfrontend/worksheet/WorksheetView.cpp:249
 #, kde-format
 msgid "Dense Dot Grid"
 msgstr "Dichtes Punktgitter"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:250
+#: src/commonfrontend/worksheet/WorksheetView.cpp:252
 #, kde-format
 msgid "Sparse Dot Grid"
 msgstr "Dünnes Punktgitter"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:253
+#: src/commonfrontend/worksheet/WorksheetView.cpp:255
 #, kde-format
 msgid "Custom Grid"
 msgstr "Benutzerdefiniertes Gitter"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:256
+#: src/commonfrontend/worksheet/WorksheetView.cpp:258
 #, kde-format
 msgid "Snap to Grid"
 msgstr "An Gitter ausrichten"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/commonfrontend/worksheet/WorksheetView.cpp:259
-#: src/kdefrontend/MainWin.cpp:202
+#: src/commonfrontend/worksheet/WorksheetView.cpp:261
+#: src/kdefrontend/MainWin.cpp:203
 #: src/kdefrontend/ui/settingsworksheetpage.ui:75
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Präsentationsmodus"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:276
+#: src/commonfrontend/worksheet/WorksheetView.cpp:278
 #, kde-format
 msgid "Non-interactive Plots"
 msgstr "nicht interaktive Plots"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:277
+#: src/commonfrontend/worksheet/WorksheetView.cpp:279
 #, kde-format
 msgid ""
 "If activated, plots on the worksheet don't react on drag and mouse wheel "
@@ -10100,150 +10089,150 @@ msgid ""
 msgstr ""
 "Wenn aktiv, reagieren Plots im Arbeitsblatt nicht auf Mausradereignisse."
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:285
-#: src/commonfrontend/worksheet/WorksheetView.cpp:299
+#: src/commonfrontend/worksheet/WorksheetView.cpp:287
+#: src/commonfrontend/worksheet/WorksheetView.cpp:301
 #, kde-format
 msgid "Selected Plot Areas"
 msgstr "Ausgewählte Plotbereiche"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:287
-#: src/commonfrontend/worksheet/WorksheetView.cpp:301
+#: src/commonfrontend/worksheet/WorksheetView.cpp:289
+#: src/commonfrontend/worksheet/WorksheetView.cpp:303
 #, kde-format
 msgid "All Plot Areas"
 msgstr "Alle Plotbereiche"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:289
+#: src/commonfrontend/worksheet/WorksheetView.cpp:291
 #, kde-format
 msgid "All Plot Areas X"
 msgstr "Alle X-Plotbereiche"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:291
+#: src/commonfrontend/worksheet/WorksheetView.cpp:293
 #, kde-format
 msgid "All Plot Areas Y"
 msgstr "Alle Y-Plotbereiche"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:313
+#: src/commonfrontend/worksheet/WorksheetView.cpp:315
 #, kde-format
 msgid "Crosshair"
 msgstr "Fadenkreuz"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:318
+#: src/commonfrontend/worksheet/WorksheetView.cpp:320
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Bereich auswählen und vergrößern"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:323
+#: src/commonfrontend/worksheet/WorksheetView.cpp:325
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "X-Bereich Auswählen und Vergrößern"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:328
+#: src/commonfrontend/worksheet/WorksheetView.cpp:330
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Y-Bereich Auswählen und Vergrößern"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/commonfrontend/worksheet/WorksheetView.cpp:333
-#: src/kdefrontend/MainWin.cpp:2356
+#: src/commonfrontend/worksheet/WorksheetView.cpp:335
+#: src/kdefrontend/MainWin.cpp:2478
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
 msgstr "Cursor"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:344
+#: src/commonfrontend/worksheet/WorksheetView.cpp:346
 #, kde-format
 msgid "xy-Curve from a Formula"
 msgstr "XY-Kurve von einer Formel"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:346
-#: src/commonfrontend/worksheet/WorksheetView.cpp:382
+#: src/commonfrontend/worksheet/WorksheetView.cpp:348
+#: src/commonfrontend/worksheet/WorksheetView.cpp:384
 #, kde-format
 msgid "Data Operation"
 msgstr "Datenoperation"
 
 #. i18n("Convolution/Deconvolution"),
 #. cartesianPlotAddNewActionGroup);
-#: src/commonfrontend/worksheet/WorksheetView.cpp:362
-#: src/commonfrontend/worksheet/WorksheetView.cpp:397
+#: src/commonfrontend/worksheet/WorksheetView.cpp:364
+#: src/commonfrontend/worksheet/WorksheetView.cpp:399
 #, kde-format
 msgid "Auto/Cross Correlation"
 msgstr "Auto-/Kreuzkorrelation"
 
 #. i18n("Integration"),
 #. cartesianPlotAddNewActionGroup);
-#: src/commonfrontend/worksheet/WorksheetView.cpp:394
+#: src/commonfrontend/worksheet/WorksheetView.cpp:396
 #, kde-format
 msgid "Convolution/Deconvolution"
 msgstr "Faltung/Dekonvolution"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:416
+#: src/commonfrontend/worksheet/WorksheetView.cpp:418
 #, kde-format
 msgid "Auto Scale"
 msgstr "Automatisch skalieren"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:420
+#: src/commonfrontend/worksheet/WorksheetView.cpp:422
 #, kde-format
 msgid "Auto Scale X"
 msgstr "X Automatisch skalieren"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:424
+#: src/commonfrontend/worksheet/WorksheetView.cpp:426
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Y Automatisch skalieren"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:436
+#: src/commonfrontend/worksheet/WorksheetView.cpp:438
 #, kde-format
 msgid "Zoom In X"
 msgstr "X vergrößern"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:440
+#: src/commonfrontend/worksheet/WorksheetView.cpp:442
 #, kde-format
 msgid "Zoom Out X"
 msgstr "X verkleinern"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:444
+#: src/commonfrontend/worksheet/WorksheetView.cpp:446
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Y vergrößern"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:448
+#: src/commonfrontend/worksheet/WorksheetView.cpp:450
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Y verkleinern"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:452
+#: src/commonfrontend/worksheet/WorksheetView.cpp:454
 #, kde-format
 msgid "Shift Left X"
 msgstr "X nach links schieben"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:454
+#: src/commonfrontend/worksheet/WorksheetView.cpp:456
 #, kde-format
 msgid "Shift Right X"
 msgstr "X nach rechts schieben"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:456
+#: src/commonfrontend/worksheet/WorksheetView.cpp:458
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Y nach oben schieben"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:458
+#: src/commonfrontend/worksheet/WorksheetView.cpp:460
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Y nach unten schieben"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:476
-#: src/commonfrontend/worksheet/WorksheetView.cpp:540
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1512
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1519
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1526
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1533
+#: src/commonfrontend/worksheet/WorksheetView.cpp:478
+#: src/commonfrontend/worksheet/WorksheetView.cpp:542
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1514
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1521
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1528
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1535
 #, kde-format
 msgid "Plot Area"
 msgstr "Plotbereich"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
-#: src/commonfrontend/worksheet/WorksheetView.cpp:517
+#: src/commonfrontend/worksheet/WorksheetView.cpp:519
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:599
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:265
@@ -10253,48 +10242,48 @@ msgstr "Layout"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGrid)
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
-#: src/commonfrontend/worksheet/WorksheetView.cpp:525
+#: src/commonfrontend/worksheet/WorksheetView.cpp:527
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1591
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:441
 #, kde-format
 msgid "Grid"
 msgstr "Gitter"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:591
+#: src/commonfrontend/worksheet/WorksheetView.cpp:593
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "Zoom/Navigieren"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:612
+#: src/commonfrontend/worksheet/WorksheetView.cpp:614
 #, kde-format
 msgid "Apply Actions to"
 msgstr "Aktionen anwenden auf"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:619
+#: src/commonfrontend/worksheet/WorksheetView.cpp:621
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "Cursor anwenden auf"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:633
+#: src/commonfrontend/worksheet/WorksheetView.cpp:635
 #, kde-format
 msgid "Data Manipulation"
 msgstr "Datenmanipulation"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1649
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1656
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1651
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1658
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "Möchten Sie das ausgewählte Objekt wirklich löschen?"
 msgstr[1] "Möchten Sie die %1 ausgewählten Objekte wirklich löschen?"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1664
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1666
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Ausgewählte Arbeitsblattelemente entfernen"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2648
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2669
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2650
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2671
 #, kde-format
 msgid "%1: Add curve to %2 plots"
 msgstr "%1: Kurve zu %2 Plots hinzufügen"
@@ -10948,7 +10937,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1175
-#: src/kdefrontend/SettingsGeneralPage.cpp:200
+#: src/kdefrontend/SettingsGeneralPage.cpp:172
 #, kde-format
 msgid "Automatic"
 msgstr "Automatisch"
@@ -11357,7 +11346,7 @@ msgid "Open LabPlot Project"
 msgstr "LabPlot-Projekt öffnen"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:379
-#: src/kdefrontend/MainWin.cpp:1362
+#: src/kdefrontend/MainWin.cpp:1495
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot-Projekte (%1)"
@@ -11369,7 +11358,7 @@ msgid "Open Origin Project"
 msgstr "Origin-Projekt öffnen"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:385
-#: src/kdefrontend/MainWin.cpp:1367
+#: src/kdefrontend/MainWin.cpp:1500
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Origin-Projekte (%1)"
@@ -11630,7 +11619,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2678
+#: src/kdefrontend/MainWin.cpp:2793
 #, kde-format
 msgid "Warning"
 msgstr "Warnung"
@@ -11708,7 +11697,6 @@ msgstr "Feldgröße"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:60
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:68
-#: src/kdefrontend/SettingsGeneralPage.cpp:189
 #: src/kdefrontend/widgets/LabelWidget.cpp:142
 #: src/kdefrontend/widgets/LabelWidget.cpp:159
 #, kde-format
@@ -11724,7 +11712,6 @@ msgstr "Oben"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:62
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:70
-#: src/kdefrontend/SettingsGeneralPage.cpp:190
 #: src/kdefrontend/widgets/LabelWidget.cpp:144
 #: src/kdefrontend/widgets/LabelWidget.cpp:161
 #, kde-format
@@ -11811,7 +11798,6 @@ msgstr "Halb gefüllt, groß"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:56
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
-#: src/kdefrontend/SettingsGeneralPage.cpp:191
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:129
 #: src/kdefrontend/widgets/LabelWidget.cpp:138
 #: src/kdefrontend/widgets/LabelWidget.cpp:155
@@ -11830,7 +11816,6 @@ msgstr "Links"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:58
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:66
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
-#: src/kdefrontend/SettingsGeneralPage.cpp:192
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:130
 #: src/kdefrontend/widgets/LabelWidget.cpp:140
 #: src/kdefrontend/widgets/LabelWidget.cpp:157
@@ -11887,10 +11872,9 @@ msgid "Custom column"
 msgstr "Benutzerdefinierte Spalte"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:286
-#, fuzzy, kde-format
-#| msgid "No labels"
+#, kde-format
 msgid "Column labels"
-msgstr "Keine Beschriftung"
+msgstr "Spaltenbeschriftung"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
@@ -11980,7 +11964,7 @@ msgstr "%1-Achsen: Vorlage \"%2\" geladen"
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:265
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:620
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1308
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1312
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: Vorlage \"%2\" geladen"
@@ -12049,7 +12033,7 @@ msgstr "Spalte:"
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:529
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:739
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:757
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1306
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1310
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1: XY-Kurven: Vorlage \"%2\" wurde geladen"
@@ -12401,7 +12385,7 @@ msgstr "Alle Kurven einklappen"
 msgid "Expand all curves"
 msgstr "Alle Kurven ausklappen"
 
-#: src/kdefrontend/dockwidgets/CursorDock.cpp:148
+#: src/kdefrontend/dockwidgets/CursorDock.cpp:150
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1346
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1352
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1358
@@ -12409,7 +12393,7 @@ msgstr "Alle Kurven ausklappen"
 msgid "Copy Selection"
 msgstr "Auswahl kopieren"
 
-#: src/kdefrontend/dockwidgets/CursorDock.cpp:149
+#: src/kdefrontend/dockwidgets/CursorDock.cpp:151
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1347
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1353
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
@@ -12544,8 +12528,8 @@ msgid "Custom Error Values, asymmetric"
 msgstr "Eigener Fehlerwert, asymmetrisch"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:552
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:956
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1011
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:960
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1015
 #, kde-format
 msgid "Data, +-:"
 msgstr "Daten, +-:"
@@ -12554,8 +12538,8 @@ msgstr "Daten, +-:"
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:559
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:963
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1018
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:967
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1022
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:404
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:654
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:661
@@ -12686,17 +12670,17 @@ msgstr "Standardseite"
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "Arbeitsblatt %1: Vorlage \"%2\" wurde geladen"
 
-#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:17
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:19
 #, kde-format
 msgid "status: %1"
 msgstr "Status: %1"
 
-#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:26
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:28
 #, kde-format
 msgid "calculation time: %1 s"
 msgstr "Berechnungszeit: %1 s"
 
-#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:28
+#: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:30
 #, kde-format
 msgid "calculation time: %1 ms"
 msgstr "Berechnungszeit: %1 ms"
@@ -12715,34 +12699,34 @@ msgid "XY-Curve"
 msgstr "XY-Kurve"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:273
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:245
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:30
 #, kde-format
 msgid "or Kernel/Size:"
 msgstr "oder Kernel/Größe:"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:287
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:259
 #, kde-format
 msgid "with Kernel/Size:"
 msgstr "mit Kernel/Größe:"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:462
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:465
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:434
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:437
 #, kde-format
 msgid "Deconvolution"
 msgstr "Dekonvolution"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:502
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:474
 #, kde-format
 msgid "Convolution status: %1"
 msgstr "Faltungsstatus:  %1"
 
-#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:504
+#: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:476
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr "Dekonvolutionsstatus:  %1"
 
-#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:397
+#: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:369
 #, kde-format
 msgid "Correlation status: %1"
 msgstr "Korrelationsstatus:  %1"
@@ -12834,8 +12818,8 @@ msgstr "Symmetrisch"
 msgid "Asymmetric"
 msgstr "Asymmetrisch"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:615
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:616
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:619
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:620
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -12844,8 +12828,8 @@ msgstr ""
 "Wenn aktviert, werden benachbarte Punkte mit Linien verbunden, sogar bei "
 "Lücken (invaliden oder maskierten Werten)"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:617
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:618
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:621
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:622
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -12856,69 +12840,69 @@ msgstr "Wenn aktiv, verbinde Datenpunkte nur für strikt zunehmende x-Werte"
 msgid "This method is much slower than any other"
 msgstr "Diese Methode ist deutlich langsamer als die anderen"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:453
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:485
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:530
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:426
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:458
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:503
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "Toleranz (Abstand):"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:464
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:437
 #, kde-format
 msgid "Number of points:"
 msgstr "Anzahl der Punkte:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:475
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:448
 #, kde-format
 msgid "Step size:"
 msgstr "Schrittweite:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:492
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:465
 #, kde-format
 msgid "Repeats:"
 msgstr "Wiederholungen:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:502
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:475
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "Toleranz (Fläche):"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:513
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:486
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "Min. Toleranz:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:517
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:490
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "Max. Toleranz:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:534
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:507
 #, kde-format
 msgid "Search region:"
 msgstr "Suchbereich:"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:600
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:573
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Datenreduktion Status: %1"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:639
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:612
 #, kde-format
 msgid "number of points: %1"
 msgstr "Anzahl der Punkte: %1"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:640
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:613
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "quadratischer Lagefehler: %1"
 
-#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:641
+#: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:614
 #, kde-format
 msgid "area error: %1"
 msgstr "Flächenfehler: %1"
 
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:496
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:469
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Differenziationsstatus: %1"
@@ -13050,23 +13034,23 @@ msgid "%1 % upper confidence level"
 msgstr "%1 % obere Vertrauensgrenze"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:382
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:355
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:241
 #, kde-format
 msgid "Cutoff:"
 msgstr "Grenze:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:390
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:363
 #, kde-format
 msgid "Lower cutoff:"
 msgstr "Untere Grenze:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:391
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:364
 #, kde-format
 msgid "Upper cutoff:"
 msgstr "Obere Grenze:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:525
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:498
 #, kde-format
 msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
@@ -13075,32 +13059,32 @@ msgstr ""
 "Die Bandbreite ist <=0 da die untere Grenze nicht kleiner als die obere "
 "Grenze ist. Bitte beheben."
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:526
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:499
 #, kde-format
 msgid "band width <= 0"
 msgstr "Bandbreite <= 0"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:535
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:508
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "Fourier-Filter-Status: %1"
 
-#: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:303
+#: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:289
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr "Fourier-Transformationsstatus: %1"
 
-#: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:251
+#: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:237
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr "Hilbert-Transformationsstatus: %1"
 
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:421
+#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:394
 #, kde-format
 msgid "Integration status: %1"
 msgstr "Integration-Status:  %1"
 
-#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:458
+#: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:431
 #, kde-format
 msgid "value: %1"
 msgstr "Wert:  %1"
@@ -13115,12 +13099,12 @@ msgstr "Automatisch (5x Anzahl der Datenpunkte)"
 msgid "Multiple of data points"
 msgstr "Mehrfaches der Anzahl der Datenpunkte"
 
-#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:632
+#: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:624
 #, kde-format
 msgid "Interpolation status: %1"
 msgstr "Interpolation-Status:  %1"
 
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:527
+#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:499
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "Glättung-Status:  %1"
@@ -13140,17 +13124,18 @@ msgstr ""
 "Beispielsammlung %1 konnte nicht geöffnet werden. Bitte die Installation "
 "überprüfen."
 
-#: src/kdefrontend/GuiObserver.cpp:184 src/kdefrontend/MainWin.cpp:1309
+#: src/kdefrontend/GuiObserver.cpp:184 src/kdefrontend/MainWin.cpp:1442
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
 msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:220
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Sort Spreadsheet"
 msgctxt "@title:window"
-msgid "Spreadsheet"
-msgstr "Tabelle"
+msgid "Properties: Spreadsheet"
+msgstr "Tabelle &sortieren"
 
 #: src/kdefrontend/GuiObserver.cpp:230
 #, kde-format
@@ -13159,159 +13144,186 @@ msgid "%1 Worksheet"
 msgstr "Arbeitsblatt %1"
 
 #: src/kdefrontend/GuiObserver.cpp:235
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Column"
-msgstr "Spalte"
+msgid "Properties: Column"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:242
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Matrix"
-msgstr "Matrix"
+msgid "Properties: Matrix"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:247
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Complete Worksheet"
 msgctxt "@title:window"
-msgid "Worksheet"
-msgstr "Arbeitsblatt"
+msgid "Properties: Worksheet"
+msgstr "Vollständiges Arbeitsblatt"
 
 #: src/kdefrontend/GuiObserver.cpp:253
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
-msgid "Plot Area"
-msgstr "Plotbereich"
+msgid "Properties: Plot Area"
+msgstr "Eigenschaften-Explorer"
 
 #: src/kdefrontend/GuiObserver.cpp:259
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Legend"
-msgstr "Legende"
+msgid "Properties: Legend"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:264
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Axis"
-msgstr "Achse"
+msgid "Properties: Axis"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:269
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "XY-Curve"
-msgstr "XY-Kurve"
+msgid "Properties: XY-Curve"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:274
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "XY-Equation"
 msgctxt "@title:window"
-msgid "XY-Equation"
+msgid "Properties: XY-Equation"
 msgstr "XY-Gleichung"
 
 #: src/kdefrontend/GuiObserver.cpp:279
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Data Reduction"
 msgctxt "@title:window"
-msgid "Data Reduction"
+msgid "Properties: Data Reduction"
 msgstr "Datenreduktion"
 
 #: src/kdefrontend/GuiObserver.cpp:295
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Differentiation"
 msgctxt "@title:window"
-msgid "Differentiation"
+msgid "Properties: Differentiation"
 msgstr "Differentiation"
 
 #: src/kdefrontend/GuiObserver.cpp:300
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Integration"
 msgctxt "@title:window"
-msgid "Integration"
+msgid "Properties: Integration"
 msgstr "Integration"
 
 #: src/kdefrontend/GuiObserver.cpp:305
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Interpolation"
 msgctxt "@title:window"
-msgid "Interpolation"
+msgid "Properties: Interpolation"
 msgstr "Interpolation"
 
 #: src/kdefrontend/GuiObserver.cpp:310
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Smoothing"
-msgstr "Glättung"
+msgid "Properties: Smoothing"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:315
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Fit"
-msgstr "Anpassung"
+msgid "Properties: Fit"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:320
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fourier Transform"
 msgctxt "@title:window"
-msgid "Fourier Transform"
-msgstr "Fourier-Transformation"
+msgid "Properties: Fourier Transform"
+msgstr "Fourier Transformation"
 
 #: src/kdefrontend/GuiObserver.cpp:325
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Hilbert Transform"
 msgctxt "@title:window"
-msgid "Hilbert Transform"
-msgstr "Hilbert Transformation"
+msgid "Properties: Hilbert Transform"
+msgstr "Hilbert-Transformation"
 
 #: src/kdefrontend/GuiObserver.cpp:330
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fourier Filter"
 msgctxt "@title:window"
-msgid "Fourier Filter"
-msgstr "Fourier-Filter"
+msgid "Properties: Fourier Filter"
+msgstr "Fourier Filter"
 
 #: src/kdefrontend/GuiObserver.cpp:335
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Convolution/Deconvolution"
 msgctxt "@title:window"
-msgid "Convolution/Deconvolution"
+msgid "Properties: Convolution/Deconvolution"
 msgstr "Faltung/Dekonvolution"
 
 #: src/kdefrontend/GuiObserver.cpp:340
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Auto-/Cross-Correlation"
 msgctxt "@title:window"
-msgid "Auto-/Cross-Correlation"
+msgid "Properties: Auto-/Cross-Correlation"
 msgstr "Auto-/Kreuzkorrelation"
 
 #: src/kdefrontend/GuiObserver.cpp:345
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
-msgid "Histogram"
-msgstr "Histogramm"
+msgid "Properties: Histogram"
+msgstr "Eigenschaften-Explorer"
 
 #: src/kdefrontend/GuiObserver.cpp:350
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Bar Plot"
-msgstr "Bar-Plot"
+msgid "Properties: Bar Plot"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:355
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
-msgid "Box Plot"
-msgstr "Box-Plot"
+msgid "Properties: Box Plot"
+msgstr "Eigenschaften-Explorer"
 
 #: src/kdefrontend/GuiObserver.cpp:360
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
-msgid "Text Label"
-msgstr "Schriftzug"
+msgid "Properties: Text Label"
+msgstr "Eigenschaften-Explorer"
 
 #: src/kdefrontend/GuiObserver.cpp:365
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Image"
-msgstr "Bild"
+msgid "Properties: Image"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:370
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Custom Point"
 msgctxt "@title:window"
-msgid "Custom Point"
+msgid "Properties: Custom Point"
 msgstr "Benutzerdefinierter Punkt"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Reference Line"
 msgctxt "@title:window"
-msgid "Reference Line"
+msgid "Properties: Reference Line"
 msgstr "Referenzlinie"
 
 #: src/kdefrontend/GuiObserver.cpp:380
@@ -13321,22 +13333,27 @@ msgid "Reference Range"
 msgstr "Referenzbereich"
 
 #: src/kdefrontend/GuiObserver.cpp:385
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Datapicker Curve"
 msgctxt "@title:window"
-msgid "Datapicker Curve"
+msgid "Properties: Datapicker Curve"
 msgstr "Digitalisierte Kurve"
 
 #: src/kdefrontend/GuiObserver.cpp:390
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Data Extractor"
 msgctxt "@title:window"
-msgid "Data Extractor"
+msgid "Properties: Data Extractor"
 msgstr "Datenextraktor"
 
 #: src/kdefrontend/GuiObserver.cpp:400
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Project"
-msgstr "Projekt"
+msgid "Properties: Project"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:410
 #, kde-format
@@ -13345,47 +13362,56 @@ msgid "%1 Notebook"
 msgstr "%1 Notebook"
 
 #: src/kdefrontend/GuiObserver.cpp:412
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Notebook"
-msgstr "Notebook"
+msgid "Properties: Notebook"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:418
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Notes"
-msgstr "Notizen"
+msgid "Properties: Notes"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:423
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Info Element"
 msgctxt "@title:window"
-msgid "Info Element"
-msgstr "Infoelement"
+msgid "Properties: Info Element"
+msgstr "Info Element"
 
 #: src/kdefrontend/GuiObserver.cpp:430 src/kdefrontend/GuiObserver.cpp:437
 #: src/kdefrontend/GuiObserver.cpp:444
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "MQTT Data Source"
 msgctxt "@title:window"
-msgid "MQTT Data Source"
+msgid "Properties: MQTT Data Source"
 msgstr "MQTT-Datenquelle"
 
 #: src/kdefrontend/GuiObserver.cpp:450
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Live Data Source"
 msgctxt "@title:window"
-msgid "Live Data Source"
+msgid "Properties: Live Data Source"
 msgstr "Live-Datenquelle"
 
 #: src/kdefrontend/GuiObserver.cpp:464
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
-msgid "Folder"
-msgstr "Ordner"
+msgid "Properties: Folder"
+msgstr "Eigenschaften-Explorer"
 
 #: src/kdefrontend/GuiObserver.cpp:471
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
-msgid "Workbook"
-msgstr "Arbeitsbuch"
+msgid "Properties: Workbook"
+msgstr "Eigenschaften"
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
@@ -13879,15 +13905,15 @@ msgid "Failed to Open"
 msgstr "Fehler beim Öffnen"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:542
-#: src/kdefrontend/MainWin.cpp:1913 src/kdefrontend/SettingsDialog.cpp:61
+#: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:677
+#: src/kdefrontend/MainWin.cpp:2050 src/kdefrontend/SettingsDialog.cpp:61
 #, kde-format
 msgid "Worksheet"
 msgstr "Arbeitsblatt"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:525
-#: src/kdefrontend/MainWin.cpp:1869
+#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:660
+#: src/kdefrontend/MainWin.cpp:2006
 #, kde-format
 msgid "Data Extractor"
 msgstr "Datenextraktor"
@@ -13983,7 +14009,7 @@ msgstr "E&xtras"
 msgid "&Windows"
 msgstr "&Fenster"
 
-#: src/kdefrontend/MainWin.cpp:202
+#: src/kdefrontend/MainWin.cpp:203
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
@@ -13992,64 +14018,64 @@ msgstr ""
 "Kein Arbeitsblatt verfügbar im Projekt. Die Präsentation wird nicht "
 "gestartet."
 
-#: src/kdefrontend/MainWin.cpp:217
+#: src/kdefrontend/MainWin.cpp:218
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Willkommen zu LabPlot %1"
 
-#: src/kdefrontend/MainWin.cpp:273
+#: src/kdefrontend/MainWin.cpp:274
 #, kde-format
 msgid "GUI configuration file not found"
 msgstr "GUI-Konfigurationsdatei nicht gefunden"
 
-#: src/kdefrontend/MainWin.cpp:274
+#: src/kdefrontend/MainWin.cpp:275
 #, kde-format
 msgid "%1 file was not found. Please check your installation."
 msgstr "%1 Datei nicht gefunden. Bitte die Installation überprüfen."
 
-#: src/kdefrontend/MainWin.cpp:502
+#: src/kdefrontend/MainWin.cpp:637
 #, kde-format
 msgid "&Open Example"
 msgstr "&Beispiel öffnen"
 
-#: src/kdefrontend/MainWin.cpp:520 src/kdefrontend/MainWin.cpp:1861
+#: src/kdefrontend/MainWin.cpp:655 src/kdefrontend/MainWin.cpp:1998
 #, kde-format
 msgid "Workbook"
 msgstr "Arbeitsbuch"
 
-#: src/kdefrontend/MainWin.cpp:522
+#: src/kdefrontend/MainWin.cpp:657
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Erzeugt ein neues Arbeitsbuch zum Sammeln von Tabellen, Matrizen und Plots"
 
-#: src/kdefrontend/MainWin.cpp:526
+#: src/kdefrontend/MainWin.cpp:661
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Erzeugt einen Datenextraktor um Daten aus einem Bild zu extrahieren"
 
-#: src/kdefrontend/MainWin.cpp:532
+#: src/kdefrontend/MainWin.cpp:667
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Erzeugt eine neue Datentabelle zum Editieren von Daten"
 
-#: src/kdefrontend/MainWin.cpp:538
+#: src/kdefrontend/MainWin.cpp:673
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Erzeugt eine neue Matrix zum Editieren von Daten"
 
-#: src/kdefrontend/MainWin.cpp:544
+#: src/kdefrontend/MainWin.cpp:679
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Erzeugt ein neues Arbeitsblatt zur grafischen Anzeige von Daten"
 
-#: src/kdefrontend/MainWin.cpp:548 src/kdefrontend/MainWin.cpp:1921
+#: src/kdefrontend/MainWin.cpp:683 src/kdefrontend/MainWin.cpp:2058
 #, kde-format
 msgid "Note"
 msgstr "Notiz"
 
-#: src/kdefrontend/MainWin.cpp:549
+#: src/kdefrontend/MainWin.cpp:684
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Erzeugt eine neue Notiz für beliebigen Text"
@@ -14057,303 +14083,278 @@ msgstr "Erzeugt eine neue Notiz für beliebigen Text"
 #. i18n("Note/Script"),this);
 #. actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
 #. connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
-#: src/kdefrontend/MainWin.cpp:557 src/kdefrontend/MainWin.cpp:1853
+#: src/kdefrontend/MainWin.cpp:692 src/kdefrontend/MainWin.cpp:1990
 #, kde-format
 msgid "Folder"
 msgstr "Ordner"
 
-#: src/kdefrontend/MainWin.cpp:558
+#: src/kdefrontend/MainWin.cpp:693
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 "Erzeugt einen neuen Ordner zum Sammeln von Seiten und anderen Elementen"
 
-#: src/kdefrontend/MainWin.cpp:563
+#: src/kdefrontend/MainWin.cpp:698
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Live-Datenquelle..."
 
-#: src/kdefrontend/MainWin.cpp:564
+#: src/kdefrontend/MainWin.cpp:699
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr "Erzeugt eine Livedatenquelle um Daten in Echtzeit zu lesen"
 
-#: src/kdefrontend/MainWin.cpp:571 src/kdefrontend/MainWin.cpp:580
+#: src/kdefrontend/MainWin.cpp:706 src/kdefrontend/MainWin.cpp:715
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Daten aus einer Datei importieren"
 
-#: src/kdefrontend/MainWin.cpp:586
+#: src/kdefrontend/MainWin.cpp:721
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Daten aus einer SQL-Datenbank importieren"
 
-#: src/kdefrontend/MainWin.cpp:590
+#: src/kdefrontend/MainWin.cpp:725
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Aus Datensatzsammlung..."
 
-#: src/kdefrontend/MainWin.cpp:591
+#: src/kdefrontend/MainWin.cpp:726
 #, kde-format
 msgid "Imports data from an online dataset"
 msgstr "Daten aus einem Online-Datensatz importieren"
 
-#: src/kdefrontend/MainWin.cpp:595
+#: src/kdefrontend/MainWin.cpp:730
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot-Projekt..."
 
-#: src/kdefrontend/MainWin.cpp:596
+#: src/kdefrontend/MainWin.cpp:731
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Ein Projekt aus einer LabPlot-Projektdatei (.lml) importieren"
 
-#: src/kdefrontend/MainWin.cpp:601
+#: src/kdefrontend/MainWin.cpp:736
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Origin-Projekt (OPJ)..."
 
-#: src/kdefrontend/MainWin.cpp:602
+#: src/kdefrontend/MainWin.cpp:737
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Ein Projekt aus einer Origin-Projektdatei (.opj) importieren"
 
-#: src/kdefrontend/MainWin.cpp:607
+#: src/kdefrontend/MainWin.cpp:742
 #, kde-format
 msgid "Export..."
 msgstr "Exportieren..."
 
-#: src/kdefrontend/MainWin.cpp:608
+#: src/kdefrontend/MainWin.cpp:743
 #, kde-format
 msgid "Export selected element"
 msgstr "Ausgewähltes Element exportieren"
 
-#: src/kdefrontend/MainWin.cpp:614
+#: src/kdefrontend/MainWin.cpp:749
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Farbkartenbrowser"
 
-#: src/kdefrontend/MainWin.cpp:615
+#: src/kdefrontend/MainWin.cpp:750
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Dialog öffnen um die Farbkarten zu durchsuchen."
 
-#: src/kdefrontend/MainWin.cpp:624
+#: src/kdefrontend/MainWin.cpp:759
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS-Metadaten-Editor..."
 
-#: src/kdefrontend/MainWin.cpp:625
+#: src/kdefrontend/MainWin.cpp:760
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Editor Öffnen um FITS Metadaten zu editieren"
 
-#: src/kdefrontend/MainWin.cpp:634
+#: src/kdefrontend/MainWin.cpp:769
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Verlauf Rückgängig/Wiederherstellen..."
 
-#: src/kdefrontend/MainWin.cpp:652
-#, kde-format
-msgid "&Close"
-msgstr "S&chließen"
-
-#: src/kdefrontend/MainWin.cpp:654
+#: src/kdefrontend/MainWin.cpp:789
 #, kde-format
 msgid "Close the active window"
 msgstr "Das aktuelle Fenster schließen"
 
-#: src/kdefrontend/MainWin.cpp:657
+#: src/kdefrontend/MainWin.cpp:792
 #, kde-format
 msgid "Close &All"
 msgstr "&Alle schließen"
 
-#: src/kdefrontend/MainWin.cpp:658
+#: src/kdefrontend/MainWin.cpp:793
 #, kde-format
 msgid "Close all the windows"
 msgstr "Alle Fenster schließen"
 
-#: src/kdefrontend/MainWin.cpp:661
-#, kde-format
-msgid "&Tile"
-msgstr "&Kacheln"
-
-#: src/kdefrontend/MainWin.cpp:662
-#, kde-format
-msgid "Tile the windows"
-msgstr "Die Fenster kacheln"
-
-#: src/kdefrontend/MainWin.cpp:665
-#, kde-format
-msgid "&Cascade"
-msgstr "&Gestaffelt"
-
-#: src/kdefrontend/MainWin.cpp:666
-#, kde-format
-msgid "Cascade the windows"
-msgstr "Fenster staffeln"
-
-#: src/kdefrontend/MainWin.cpp:669
+#: src/kdefrontend/MainWin.cpp:796
 #, kde-format
 msgid "Ne&xt"
 msgstr "Nächstes"
 
-#: src/kdefrontend/MainWin.cpp:671
+#: src/kdefrontend/MainWin.cpp:798
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Aktiviert das nächste Fenster"
 
-#: src/kdefrontend/MainWin.cpp:674
+#: src/kdefrontend/MainWin.cpp:801
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Vorheriges"
 
-#: src/kdefrontend/MainWin.cpp:676
+#: src/kdefrontend/MainWin.cpp:803
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Aktiviert das vorherige Fenster"
 
-#: src/kdefrontend/MainWin.cpp:683
+#: src/kdefrontend/MainWin.cpp:810
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Nur &aktuellen Ordner"
 
-#: src/kdefrontend/MainWin.cpp:688
+#: src/kdefrontend/MainWin.cpp:815
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Aktuellen Ordner &und Unterordner"
 
-#: src/kdefrontend/MainWin.cpp:692
+#: src/kdefrontend/MainWin.cpp:819
 #, kde-format
 msgid "&All"
 msgstr "&Alle"
 
-#: src/kdefrontend/MainWin.cpp:714
+#: src/kdefrontend/MainWin.cpp:841
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Speicherbelegung anzeigen"
 
-#: src/kdefrontend/MainWin.cpp:722
+#: src/kdefrontend/MainWin.cpp:849
 #, kde-format
 msgid "Project Explorer"
 msgstr "Projekt-Explorer"
 
-#: src/kdefrontend/MainWin.cpp:727
+#: src/kdefrontend/MainWin.cpp:854
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Eigenschaften-Explorer"
 
-#: src/kdefrontend/MainWin.cpp:790
+#: src/kdefrontend/MainWin.cpp:917
 #, kde-format
 msgid "Window Visibility"
 msgstr "Sichtbarkeit der Fenster"
 
-#: src/kdefrontend/MainWin.cpp:814
+#: src/kdefrontend/MainWin.cpp:941
 #, kde-format
 msgid "Color Scheme"
 msgstr "Farbschema"
 
-#: src/kdefrontend/MainWin.cpp:861
+#: src/kdefrontend/MainWin.cpp:988
 #, kde-format
 msgid "Configure CAS..."
 msgstr "CAS Konfigurieren..."
 
-#: src/kdefrontend/MainWin.cpp:897 src/kdefrontend/MainWin.cpp:911
+#: src/kdefrontend/MainWin.cpp:1024 src/kdefrontend/MainWin.cpp:1038
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "Das aktuelle Projekt %1 wurde geändert. Möchten Sie es speichern?"
 
-#: src/kdefrontend/MainWin.cpp:898 src/kdefrontend/MainWin.cpp:912
+#: src/kdefrontend/MainWin.cpp:1025 src/kdefrontend/MainWin.cpp:1039
 #, kde-format
 msgid "Save Project"
 msgstr "Projekt speichern"
 
-#: src/kdefrontend/MainWin.cpp:1295
+#: src/kdefrontend/MainWin.cpp:1429
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Projekt-Explorer"
 
-#: src/kdefrontend/MainWin.cpp:1353
+#: src/kdefrontend/MainWin.cpp:1486
 #, kde-format
 msgid "%1: created"
 msgstr "%1: Erzeugt"
 
-#: src/kdefrontend/MainWin.cpp:1373
+#: src/kdefrontend/MainWin.cpp:1506
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Cantor-Projekte (*.cws)"
 
-#: src/kdefrontend/MainWin.cpp:1374
+#: src/kdefrontend/MainWin.cpp:1507
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter Notebooks (.ipynb)"
 
-#: src/kdefrontend/MainWin.cpp:1381
+#: src/kdefrontend/MainWin.cpp:1514
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Alle unterstützten Dateien (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1385
+#: src/kdefrontend/MainWin.cpp:1518
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Projekt öffnen"
 
-#: src/kdefrontend/MainWin.cpp:1402
+#: src/kdefrontend/MainWin.cpp:1535
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Die Projektdatei %1 ist bereits geöffnet."
 
-#: src/kdefrontend/MainWin.cpp:1402
+#: src/kdefrontend/MainWin.cpp:1535
 #, kde-format
 msgid "Open Project"
 msgstr "Projekt öffnen"
 
-#: src/kdefrontend/MainWin.cpp:1415
+#: src/kdefrontend/MainWin.cpp:1548
 #, kde-format
 msgid "Loading %1..."
 msgstr "Lade %1..."
 
-#: src/kdefrontend/MainWin.cpp:1465 src/kdefrontend/MainWin.cpp:1469
-#: src/kdefrontend/MainWin.cpp:1474 src/kdefrontend/MainWin.cpp:1479
-#: src/kdefrontend/MainWin.cpp:1483 src/kdefrontend/MainWin.cpp:1530
-#: src/kdefrontend/MainWin.cpp:1535 src/kdefrontend/MainWin.cpp:1540
-#: src/kdefrontend/MainWin.cpp:1546
+#: src/kdefrontend/MainWin.cpp:1598 src/kdefrontend/MainWin.cpp:1602
+#: src/kdefrontend/MainWin.cpp:1607 src/kdefrontend/MainWin.cpp:1612
+#: src/kdefrontend/MainWin.cpp:1616 src/kdefrontend/MainWin.cpp:1663
+#: src/kdefrontend/MainWin.cpp:1668 src/kdefrontend/MainWin.cpp:1673
+#: src/kdefrontend/MainWin.cpp:1679
 #, kde-format
 msgid "Failed to open project"
 msgstr "Fehler beim Öffnen vom Projekt"
 
-#: src/kdefrontend/MainWin.cpp:1465 src/kdefrontend/MainWin.cpp:1474
-#: src/kdefrontend/MainWin.cpp:1479 src/kdefrontend/MainWin.cpp:1530
-#: src/kdefrontend/MainWin.cpp:1535 src/kdefrontend/MainWin.cpp:1540
+#: src/kdefrontend/MainWin.cpp:1598 src/kdefrontend/MainWin.cpp:1607
+#: src/kdefrontend/MainWin.cpp:1612 src/kdefrontend/MainWin.cpp:1663
+#: src/kdefrontend/MainWin.cpp:1668 src/kdefrontend/MainWin.cpp:1673
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Fehler beim Verarbeiten des Inhalts von Datei '%1'."
 
-#: src/kdefrontend/MainWin.cpp:1469 src/kdefrontend/MainWin.cpp:1483
-#: src/kdefrontend/MainWin.cpp:1546
+#: src/kdefrontend/MainWin.cpp:1602 src/kdefrontend/MainWin.cpp:1616
+#: src/kdefrontend/MainWin.cpp:1679
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Fehler beim Öffnen der Datei '%1'."
 
-#: src/kdefrontend/MainWin.cpp:1560
+#: src/kdefrontend/MainWin.cpp:1693
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: geöffnet"
 
-#: src/kdefrontend/MainWin.cpp:1569
+#: src/kdefrontend/MainWin.cpp:1703
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Das Projekt wurde erfolgreich in %1 Sekunden geöffnet."
 
-#: src/kdefrontend/MainWin.cpp:1665
+#: src/kdefrontend/MainWin.cpp:1799
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Projekt speichern unter"
 
-#: src/kdefrontend/MainWin.cpp:1667
+#: src/kdefrontend/MainWin.cpp:1801
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -14362,73 +14363,73 @@ msgstr ""
 "LabPlot-Projekte (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/kdefrontend/MainWin.cpp:1693
+#: src/kdefrontend/MainWin.cpp:1827
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Die temporäre Datei konnte nicht zum Schreiben geöffnet werden."
 
-#: src/kdefrontend/MainWin.cpp:1745
+#: src/kdefrontend/MainWin.cpp:1882
 #, kde-format
 msgid "Project saved"
 msgstr "Das Projekt wurde gespeichert"
 
-#: src/kdefrontend/MainWin.cpp:1761
+#: src/kdefrontend/MainWin.cpp:1898
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Die Datei '%1' konnte nicht gespeichert werden."
 
-#: src/kdefrontend/MainWin.cpp:1766
+#: src/kdefrontend/MainWin.cpp:1903
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Die Datei '%1' kann nicht zum Schreiben geöffnet werden."
 
-#: src/kdefrontend/MainWin.cpp:1811
+#: src/kdefrontend/MainWin.cpp:1948
 #, kde-format
 msgid "Changed"
 msgstr "Geändert"
 
-#: src/kdefrontend/MainWin.cpp:1827 src/kdefrontend/MainWin.cpp:1840
+#: src/kdefrontend/MainWin.cpp:1964 src/kdefrontend/MainWin.cpp:1977
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Drucken von %1 wird vorbereitet"
 
-#: src/kdefrontend/MainWin.cpp:1829 src/kdefrontend/MainWin.cpp:1842
+#: src/kdefrontend/MainWin.cpp:1966 src/kdefrontend/MainWin.cpp:1979
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 gedruckt"
 
-#: src/kdefrontend/MainWin.cpp:2610
+#: src/kdefrontend/MainWin.cpp:2725
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
 msgstr "Datensatz%1"
 
-#: src/kdefrontend/MainWin.cpp:2641
+#: src/kdefrontend/MainWin.cpp:2756
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportiert"
 
-#: src/kdefrontend/MainWin.cpp:2648
+#: src/kdefrontend/MainWin.cpp:2763
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-Datei gespeichert"
 
-#: src/kdefrontend/MainWin.cpp:2660
+#: src/kdefrontend/MainWin.cpp:2775
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT-Client%1"
 
-#: src/kdefrontend/MainWin.cpp:2678
+#: src/kdefrontend/MainWin.cpp:2793
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Es gibt bereits einen MQTT Client mit dem Host!"
 
-#: src/kdefrontend/MainWin.cpp:2682
+#: src/kdefrontend/MainWin.cpp:2797
 #, kde-format
 msgid "Live data source%1"
 msgstr "Live-Datenquelle%1"
 
-#: src/kdefrontend/MainWin.cpp:2726
+#: src/kdefrontend/MainWin.cpp:2841
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
@@ -14646,92 +14647,67 @@ msgstr "Einstellungen    [Geändert]"
 msgid "min."
 msgstr "Min."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:167
+#: src/kdefrontend/SettingsGeneralPage.cpp:154
 #, kde-format
 msgid "Do Nothing"
 msgstr "Nichts unternehmen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:168
+#: src/kdefrontend/SettingsGeneralPage.cpp:155
 #, kde-format
 msgid "Create New Empty Project"
 msgstr "Neues leeres Projekt erstellen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:169
+#: src/kdefrontend/SettingsGeneralPage.cpp:156
 #, kde-format
 msgid "Create New Project with Worksheet"
 msgstr "Neues Projekt mit Arbeitsblatt erstellen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:170
+#: src/kdefrontend/SettingsGeneralPage.cpp:157
 #, kde-format
 msgid "Create New Project with Spreadsheet"
 msgstr "Neues Projekt mit Tabelle erstellen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:171
+#: src/kdefrontend/SettingsGeneralPage.cpp:158
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Zuletzt verwendetes Projekt laden"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:175
+#: src/kdefrontend/SettingsGeneralPage.cpp:162
 #, kde-format
 msgid "Show File Path"
 msgstr "Dateipfad anzeigen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:176
+#: src/kdefrontend/SettingsGeneralPage.cpp:163
 #, kde-format
 msgid "Show File Name"
 msgstr "Dateinamen anzeigen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:177
+#: src/kdefrontend/SettingsGeneralPage.cpp:164
 #, kde-format
 msgid "Show Project Name"
 msgstr "Projektnamen anzeigen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:180
-#, kde-format
-msgid "Sub-window View"
-msgstr "Unterfenster-Ansicht"
-
-#: src/kdefrontend/SettingsGeneralPage.cpp:181
-#, kde-format
-msgid "Tabbed View"
-msgstr "Karteikartenansicht"
-
-#: src/kdefrontend/SettingsGeneralPage.cpp:184
-#, kde-format
-msgid "Show Windows of the Current Folder Only"
-msgstr "Nur Fenster des aktuellen Ordners anzeigen"
-
-#: src/kdefrontend/SettingsGeneralPage.cpp:185
-#, kde-format
-msgid "Show Windows of the Current Folder and its Subfolders Only"
-msgstr "Nur Fenster des aktuellen Ordners und der Unterordner anzeigen"
-
-#: src/kdefrontend/SettingsGeneralPage.cpp:186
-#, kde-format
-msgid "Show all Windows"
-msgstr "Alle Fenster anzeigen"
-
-#: src/kdefrontend/SettingsGeneralPage.cpp:194
+#: src/kdefrontend/SettingsGeneralPage.cpp:166
 #, kde-format
 msgid "Metric"
 msgstr "Metrisch"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:195
+#: src/kdefrontend/SettingsGeneralPage.cpp:167
 #, kde-format
 msgid "Imperial"
 msgstr "Angloamerikanisch"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:197
+#: src/kdefrontend/SettingsGeneralPage.cpp:169
 #, kde-format
 msgid "Dot (.)"
 msgstr "Punkt (.)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:198
+#: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, kde-format
 msgid "Comma (,)"
 msgstr "Komma (,)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:199
+#: src/kdefrontend/SettingsGeneralPage.cpp:171
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Arabisch (٫)"
@@ -14822,8 +14798,7 @@ msgid "Subtract Value"
 msgstr "Wert abziehen"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
-#, fuzzy, kde-format
-#| msgid "Subtract Baseline"
+#, kde-format
 msgctxt "@title:window"
 msgid "Subtract Baseline"
 msgstr "Grundlinie abziehen"
@@ -14976,7 +14951,7 @@ msgstr "Wertnamen hinzufügen"
 msgid "Value:"
 msgstr "Wert:"
 
-#: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:81
+#: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:83
 #, kde-format
 msgid "Label:"
 msgstr "Beschriftung:"
@@ -15453,70 +15428,70 @@ msgstr "Bar-Plots hinzufügen zu"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:399
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:410
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:437
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:440
 #, kde-format
 msgid "Plot Area - %1"
 msgstr "Plotbereich - %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:406
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:432
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:435
 #, kde-format
 msgid "Worksheet - %1"
 msgstr "Arbeitsblatt - %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:431
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:434
 #, kde-format
 msgid "Plot data from %1"
 msgstr "Daten grafisch darstellen von %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:565
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:580
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:596
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:570
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:586
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:602
 #, kde-format
 msgid "Plot Area %1"
 msgstr "Plotbereich %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:673
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:679
 #, kde-format
 msgid "Fourier Filter of '%1'"
 msgstr "Fourier-Filter von '%1'"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:933
 #, kde-format
 msgid "new plot in an existing worksheet"
 msgstr "Neuer Plot in existierenden Arbeitsblatt"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:907
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:934
 #, kde-format
 msgid "new plot in a new worksheet"
 msgstr "Neuer Plot in neuem Arbeitsblatt"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
 #, kde-format
 msgid "new plots in an existing worksheet"
 msgstr "Neue Plots in existierendem Arbeitsblatt"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:913
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:940
 #, kde-format
 msgid "new plots in a new worksheet"
 msgstr "Neue Plots in neuem Arbeitsblatt"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:937
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:964
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Kein Datensatz zum darstellen ausgewählt."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:942
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:969
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr "Ein existierender Plot muss ausgewählt sein."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:947
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:974
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Ein existierendes Arbeitsblatt muss ausgewählt sein."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:953
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:980
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Schließt den Dialog und zeigt die Daten im Plot an."
@@ -16381,10 +16356,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:158
-#, fuzzy, kde-format
-#| msgid "Embedded:"
+#, kde-format
 msgid "Embedd"
-msgstr "Eingebettet:"
+msgstr "Einbetten"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:165
@@ -17304,7 +17278,7 @@ msgstr "Importieren von:"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/kdefrontend/ui/settingsgeneralpage.ui:56
+#: src/kdefrontend/ui/settingsgeneralpage.ui:191
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
@@ -18777,7 +18751,7 @@ msgstr "Endengröße:"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:33
-#: src/kdefrontend/ui/settingsgeneralpage.ui:211
+#: src/kdefrontend/ui/settingsgeneralpage.ui:128
 #, kde-format
 msgid "Interval:"
 msgstr "Intervall:"
@@ -20192,14 +20166,20 @@ msgstr "Gesamtgröße - "
 msgid "Clear"
 msgstr "Löschen"
 
-#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:17
 #, kde-format
-msgid "Startup:"
-msgstr "Start:"
+msgid "Omit group separator"
+msgstr "Tausendertrenner weglassen"
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:24
+#, kde-format
+msgid "Auto-save:"
+msgstr "Automatisch speichern:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:63
+#: src/kdefrontend/ui/settingsgeneralpage.ui:31
 #, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
@@ -20209,85 +20189,55 @@ msgstr ""
 "LabPlot Versionen (vor 2.9) geöffnet werden kann.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:66
+#: src/kdefrontend/ui/settingsgeneralpage.ui:34
 #, kde-format
 msgid "Save in compatible format"
 msgstr "In kompatiblem Format speichern"
 
-#. i18n: ectx: property (text), widget (QLabel, lTabPosition)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:73
-#, kde-format
-msgid "Tab position:"
-msgstr "Reiterposition:"
-
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:86
-#, kde-format
-msgid "Number options:"
-msgstr "Zahlenoptionen:"
-
-#. i18n: ectx: property (text), widget (QLabel, lInterface)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:93
-#, kde-format
-msgid "Interface:"
-msgstr "Schnittstelle:"
-
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:100
-#, kde-format
-msgid "Auto-save:"
-msgstr "Automatisch speichern:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:129
-#, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr "Folgende Nullen nach dem Komma belassen"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:139
+#: src/kdefrontend/ui/settingsgeneralpage.ui:44
 #, kde-format
 msgid "Omit leading zero in exponent"
 msgstr "Führende 0 im Exponenten weglassen"
 
 #. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:146
+#: src/kdefrontend/ui/settingsgeneralpage.ui:54
 #, kde-format
 msgid "Title Bar:"
 msgstr "Titelleiste:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:153
-#, kde-format
-msgid "Omit group separator"
-msgstr "Tausendertrenner weglassen"
-
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:160
+#: src/kdefrontend/ui/settingsgeneralpage.ui:77
 #, kde-format
 msgid "Units:"
 msgstr "Einheiten:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:188
+#: src/kdefrontend/ui/settingsgeneralpage.ui:105
 #, kde-format
 msgid "Enabled"
 msgstr "Aktiv"
 
-#. i18n: ectx: property (text), widget (QLabel, lMdiVisibility)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:244
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:161
 #, kde-format
-msgid "Sub-window visibility:"
-msgstr "Sichtbarkeit der Unterfenster:"
+msgid "Include trailing zeroes after dot"
+msgstr "Folgende Nullen nach dem Komma belassen"
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:254
+#: src/kdefrontend/ui/settingsgeneralpage.ui:184
 #, kde-format
 msgid "Terms:"
 msgstr "Begriffe:"
 
+#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:198
+#, kde-format
+msgid "Startup:"
+msgstr "Start:"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:261
+#: src/kdefrontend/ui/settingsgeneralpage.ui:205
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -20301,10 +20251,16 @@ msgstr ""
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:264
+#: src/kdefrontend/ui/settingsgeneralpage.ui:208
 #, kde-format
 msgid "GUM compliant"
 msgstr "GUM konform"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/kdefrontend/ui/settingsgeneralpage.ui:234
+#, kde-format
+msgid "Number options:"
+msgstr "Zahlenoptionen:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -20520,10 +20476,9 @@ msgstr "Fest:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
-#, fuzzy, kde-format
-#| msgid "Specify the name of the file to import."
+#, kde-format
 msgid "Specify the name of the file to export."
-msgstr "Geben Sie den Namen der Datei für den Import an."
+msgstr "Geben Sie den Namen der Datei für den Export an."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:81
@@ -20633,13 +20588,13 @@ msgstr "Automatisch aktualisieren"
 msgid "Placement"
 msgstr "Platzierung"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement1)
+#. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOnePlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
 #, kde-format
 msgid "All Plots in one Plot Area"
 msgstr "Alle Plots in einen Plotbereich"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement2)
+#. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOwnPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
 #, kde-format
 msgid "One Plot Area per Plot"
@@ -20651,19 +20606,19 @@ msgstr "Ein Plotbereich pro Plot"
 msgid "Add Plots to"
 msgstr "Plots hinzufügen zu"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement1)
+#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
 #, kde-format
 msgid "Existing Plot Area"
 msgstr "Existierender Plotbereich"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement2)
+#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:196
 #, kde-format
 msgid "&New Plot Area in an existing Worksheet"
 msgstr "&Neuer Plotbereich in existierendem Arbeitsblatt"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement3)
+#. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:203
 #, kde-format
 msgid "New Plot Area in a new Worksheet"
@@ -21018,7 +20973,7 @@ msgstr "Bearbeitetes Bild"
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:374
 #, kde-format
 msgid "Save project before using this option"
-msgstr ""
+msgstr "Speichern Sie das Projekt bevor Sie diese Option wählen"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
@@ -21626,6 +21581,179 @@ msgstr "convert-Prozess fehlgeschlagen, Fehlercode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Fehler beim Öffnen der Datei:"
+
+#~ msgid "&Restore"
+#~ msgstr "&Wiederherstellen"
+
+#~ msgid "Mi&nimize"
+#~ msgstr "&Minimieren"
+
+#~ msgid "Ma&ximize"
+#~ msgstr "Ma&ximieren"
+
+#~ msgctxt "@title:window"
+#~ msgid "Spreadsheet"
+#~ msgstr "Tabelle"
+
+#~ msgctxt "@title:window"
+#~ msgid "Column"
+#~ msgstr "Spalte"
+
+#~ msgctxt "@title:window"
+#~ msgid "Matrix"
+#~ msgstr "Matrix"
+
+#~ msgctxt "@title:window"
+#~ msgid "Worksheet"
+#~ msgstr "Arbeitsblatt"
+
+#~ msgctxt "@title:window"
+#~ msgid "Plot Area"
+#~ msgstr "Plotbereich"
+
+#~ msgctxt "@title:window"
+#~ msgid "Legend"
+#~ msgstr "Legende"
+
+#~ msgctxt "@title:window"
+#~ msgid "Axis"
+#~ msgstr "Achse"
+
+#~ msgctxt "@title:window"
+#~ msgid "XY-Curve"
+#~ msgstr "XY-Kurve"
+
+#~ msgctxt "@title:window"
+#~ msgid "Data Reduction"
+#~ msgstr "Datenreduktion"
+
+#~ msgctxt "@title:window"
+#~ msgid "Differentiation"
+#~ msgstr "Differentiation"
+
+#~ msgctxt "@title:window"
+#~ msgid "Integration"
+#~ msgstr "Integration"
+
+#~ msgctxt "@title:window"
+#~ msgid "Interpolation"
+#~ msgstr "Interpolation"
+
+#~ msgctxt "@title:window"
+#~ msgid "Smoothing"
+#~ msgstr "Glättung"
+
+#~ msgctxt "@title:window"
+#~ msgid "Fit"
+#~ msgstr "Anpassung"
+
+#~ msgctxt "@title:window"
+#~ msgid "Fourier Transform"
+#~ msgstr "Fourier-Transformation"
+
+#~ msgctxt "@title:window"
+#~ msgid "Hilbert Transform"
+#~ msgstr "Hilbert Transformation"
+
+#~ msgctxt "@title:window"
+#~ msgid "Fourier Filter"
+#~ msgstr "Fourier-Filter"
+
+#~ msgctxt "@title:window"
+#~ msgid "Convolution/Deconvolution"
+#~ msgstr "Faltung/Dekonvolution"
+
+#~ msgctxt "@title:window"
+#~ msgid "Auto-/Cross-Correlation"
+#~ msgstr "Auto-/Kreuzkorrelation"
+
+#~ msgctxt "@title:window"
+#~ msgid "Histogram"
+#~ msgstr "Histogramm"
+
+#~ msgctxt "@title:window"
+#~ msgid "Bar Plot"
+#~ msgstr "Bar-Plot"
+
+#~ msgctxt "@title:window"
+#~ msgid "Box Plot"
+#~ msgstr "Box-Plot"
+
+#~ msgctxt "@title:window"
+#~ msgid "Text Label"
+#~ msgstr "Schriftzug"
+
+#~ msgctxt "@title:window"
+#~ msgid "Image"
+#~ msgstr "Bild"
+
+#~ msgctxt "@title:window"
+#~ msgid "Custom Point"
+#~ msgstr "Benutzerdefinierter Punkt"
+
+#~ msgctxt "@title:window"
+#~ msgid "Reference Line"
+#~ msgstr "Referenzlinie"
+
+#~ msgctxt "@title:window"
+#~ msgid "Project"
+#~ msgstr "Projekt"
+
+#~ msgctxt "@title:window"
+#~ msgid "Notebook"
+#~ msgstr "Notebook"
+
+#~ msgctxt "@title:window"
+#~ msgid "Notes"
+#~ msgstr "Notizen"
+
+#~ msgctxt "@title:window"
+#~ msgid "Info Element"
+#~ msgstr "Infoelement"
+
+#~ msgctxt "@title:window"
+#~ msgid "Folder"
+#~ msgstr "Ordner"
+
+#~ msgctxt "@title:window"
+#~ msgid "Workbook"
+#~ msgstr "Arbeitsbuch"
+
+#~ msgid "&Tile"
+#~ msgstr "&Kacheln"
+
+#~ msgid "Tile the windows"
+#~ msgstr "Die Fenster kacheln"
+
+#~ msgid "&Cascade"
+#~ msgstr "&Gestaffelt"
+
+#~ msgid "Cascade the windows"
+#~ msgstr "Fenster staffeln"
+
+#~ msgid "Sub-window View"
+#~ msgstr "Unterfenster-Ansicht"
+
+#~ msgid "Tabbed View"
+#~ msgstr "Karteikartenansicht"
+
+#~ msgid "Show Windows of the Current Folder Only"
+#~ msgstr "Nur Fenster des aktuellen Ordners anzeigen"
+
+#~ msgid "Show Windows of the Current Folder and its Subfolders Only"
+#~ msgstr "Nur Fenster des aktuellen Ordners und der Unterordner anzeigen"
+
+#~ msgid "Show all Windows"
+#~ msgstr "Alle Fenster anzeigen"
+
+#~ msgid "Tab position:"
+#~ msgstr "Reiterposition:"
+
+#~ msgid "Interface:"
+#~ msgstr "Schnittstelle:"
+
+#~ msgid "Sub-window visibility:"
+#~ msgstr "Sichtbarkeit der Unterfenster:"
 
 #, fuzzy
 #~| msgid "Dash line"

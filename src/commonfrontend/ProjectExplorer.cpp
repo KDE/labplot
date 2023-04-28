@@ -16,7 +16,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "commonfrontend/core/PartMdiView.h"
+#include "commonfrontend/core/ContentDockWidget.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -996,7 +996,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 
 		if (part && part->hasMdiSubWindow()) {
 			writer->writeStartElement(QStringLiteral("view"));
-			const auto& geometry = part->mdiSubWindow()->geometry();
+			const auto& geometry = part->dockWidget()->geometry();
 			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeAttribute(QStringLiteral("state"), QString::number(part->view()->windowState()));
 			writer->writeAttribute(QStringLiteral("x"), QString::number(geometry.x()));
@@ -1114,7 +1114,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 						reader->raiseWarning(attributeWarning.subs(QStringLiteral("state")).toString());
 					else {
 						part->view()->setWindowState(Qt::WindowStates(str.toInt()));
-						part->mdiSubWindow()->setWindowState(Qt::WindowStates(str.toInt()));
+						part->dockWidget()->setWindowState(Qt::WindowStates(str.toInt()));
 					}
 
 					if (str != QLatin1String("0"))
@@ -1145,7 +1145,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 					else
 						geometry.setHeight(str.toInt());
 
-					part->mdiSubWindow()->setGeometry(geometry);
+					part->dockWidget()->setGeometry(geometry);
 				}
 			}
 		}
@@ -1182,7 +1182,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 					reader->raiseWarning(attributeWarning.subs(QStringLiteral("state")).toString());
 				else {
 					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
-					part->mdiSubWindow()->setWindowState(Qt::WindowStates(str.toInt()));
+					part->dockWidget()->setWindowState(Qt::WindowStates(str.toInt()));
 				}
 
 				if (str != QLatin1String("0"))
@@ -1213,7 +1213,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				else
 					geometry.setHeight(str.toInt());
 
-				part->mdiSubWindow()->setGeometry(geometry);
+				part->dockWidget()->setGeometry(geometry);
 			}
 		}
 	}

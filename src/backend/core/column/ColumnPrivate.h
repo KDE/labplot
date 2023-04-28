@@ -57,9 +57,10 @@ public:
 	void setData(void*);
 	void* data() const;
 	void deleteData();
-	bool hasValueLabels() const;
+	bool valueLabelsInitialized() const;
 	void removeValueLabel(const QString&);
-	void clearValueLabels();
+	void setLabelsMode(Column::ColumnMode mode);
+	void valueLabelsRemoveAll();
 
 	AbstractSimpleFilter* inputFilter() const;
 	AbstractSimpleFilter* outputFilter() const;
@@ -156,21 +157,27 @@ public:
 		AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
 
 	struct ValueLabels {
-		void initLabels(AbstractColumn::ColumnMode);
-		void clearLabels();
+		void setMode(AbstractColumn::ColumnMode);
+		void migrateLabels(AbstractColumn::ColumnMode newMode);
+		void migrateDoubleTo(AbstractColumn::ColumnMode newMode);
+		void migrateIntTo(AbstractColumn::ColumnMode newMode);
+		void migrateBigIntTo(AbstractColumn::ColumnMode newMode);
+		void migrateTextTo(AbstractColumn::ColumnMode newMode);
+		void migrateDateTimeTo(AbstractColumn::ColumnMode newMode);
 		int count() const;
-		void addValueLabel(qint64, const QString&);
-		void addValueLabel(int, const QString&);
-		void addValueLabel(double, const QString&);
-		void addValueLabel(const QDateTime&, const QString&);
-		void addValueLabel(const QString&, const QString&);
+		void add(qint64, const QString&);
+		void add(int, const QString&);
+		void add(double, const QString&);
+		void add(const QDateTime&, const QString&);
+		void add(const QString&, const QString&);
+		void removeAll();
 		AbstractColumn::ColumnMode mode() const {
 			return m_mode;
 		}
-		bool hasValueLabels() const {
+		bool initialized() const {
 			return m_labels != nullptr;
 		}
-		void removeValueLabel(const QString&);
+		void remove(const QString&);
 		template<typename T>
 		inline QVector<Column::ValueLabel<T>>* cast_vector() {
 			return static_cast<QVector<Column::ValueLabel<T>>*>(m_labels);
@@ -186,9 +193,12 @@ public:
 		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
 
 	private:
+		bool init(AbstractColumn::ColumnMode);
+		void deinit();
+
 		// Do not call manually, because it is not doing a type checking!
 		template<typename T>
-		void removeValueLabel(const T& value) {
+		void remove(const T& value) {
 			auto* v = cast_vector<T>();
 			for (int i = 0; i < v->length(); i++) {
 				if (v->at(i).value == value)
@@ -197,7 +207,7 @@ public:
 		}
 
 	private:
-		AbstractColumn::ColumnMode m_mode;
+		AbstractColumn::ColumnMode m_mode{AbstractColumn::ColumnMode::Integer};
 		void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
 	};
 	ValueLabels m_labels;

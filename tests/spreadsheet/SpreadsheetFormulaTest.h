@@ -39,6 +39,8 @@ private Q_SLOTS:
 	void formulaCell2i_xpy();
 	void formulaCelli_2xpCelli_2y();
 
+	void formulaLocale();
+
 	// moving statistics
 	void formulama();
 	void formulamr();

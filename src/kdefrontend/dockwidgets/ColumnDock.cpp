@@ -218,7 +218,7 @@ void ColumnDock::showValueLabels() {
 	for (int i = 0; ui.twLabels->rowCount(); ++i)
 		ui.twLabels->removeRow(0);
 
-	if (m_column->hasValueLabels()) {
+	if (m_column->valueLabelsInitialized()) {
 		auto mode = m_column->labelsMode();
 		int i = 0;
 
@@ -448,40 +448,42 @@ void ColumnDock::plotDesignationChanged(int index) {
 
 // value labels
 void ColumnDock::addLabel() {
-	const auto mode = m_column->labelsMode();
-	auto* dlg = new AddValueLabelDialog(this, m_column);
+	m_column->setLabelsMode(m_column->columnMode());
+
+	const auto mode = m_column->columnMode();
+	AddValueLabelDialog dlg(this, m_column);
 
 	if (mode == AbstractColumn::ColumnMode::Month || mode == AbstractColumn::ColumnMode::Day || mode == AbstractColumn::ColumnMode::DateTime)
-		dlg->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
+		dlg.setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 
-	if (dlg->exec() == QDialog::Accepted) {
-		const QString& label = dlg->label();
+	if (dlg.exec() == QDialog::Accepted) {
+		const QString& label = dlg.label();
 		const auto& columns = m_columnsList;
 		QString valueStr;
 		switch (mode) {
 		case AbstractColumn::ColumnMode::Double: {
-			double value = dlg->value();
+			double value = dlg.value();
 			valueStr = QString::number(value);
 			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			int value = dlg->valueInt();
+			int value = dlg.valueInt();
 			valueStr = QString::number(value);
 			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			qint64 value = dlg->valueBigInt();
+			qint64 value = dlg.valueBigInt();
 			valueStr = QString::number(value);
 			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
-			valueStr = dlg->valueText();
+			valueStr = dlg.valueText();
 			for (auto* col : columns)
 				col->addValueLabel(valueStr, label);
 			break;
@@ -489,20 +491,18 @@ void ColumnDock::addLabel() {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			const QDateTime& value = dlg->valueDateTime();
+			const QDateTime& value = dlg.valueDateTime();
 			valueStr = value.toString(ui.cbDateTimeFormat->currentText());
 			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		}
-
-		int count = ui.twLabels->rowCount();
-		ui.twLabels->insertRow(count);
-		ui.twLabels->setItem(count, 0, new QTableWidgetItem(valueStr));
-		ui.twLabels->setItem(count, 1, new QTableWidgetItem(label));
 	}
-	delete dlg;
+
+	// reload all, because due to the migration the view
+	// might be changed
+	showValueLabels();
 	m_column->project()->setChanged(true);
 }
 
@@ -524,7 +524,7 @@ void ColumnDock::batchEditLabels() {
 	auto* dlg = new BatchEditValueLabelsDialog(this);
 	dlg->setColumns(m_columnsList);
 	if (dlg->exec() == QDialog::Accepted)
-		showValueLabels(); // new value labels were saved in the dialog, show them here
+		showValueLabels(); // new value labels were saved into the columns in the dialog, show them here
 
 	delete dlg;
 	m_column->project()->setChanged(true);
@@ -539,6 +539,7 @@ void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
 		return;
 
 	updateTypeWidgets(m_column->columnMode());
+	showValueLabels(); // Update value labels shown in the list, because due to the change they might be migrated
 }
 
 void ColumnDock::columnFormatChanged() {

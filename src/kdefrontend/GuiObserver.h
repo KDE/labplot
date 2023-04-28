@@ -108,7 +108,7 @@ private:
 #endif
 
 private Q_SLOTS:
-	void selectedAspectsChanged(QList<AbstractAspect*>&);
+	void selectedAspectsChanged(const QList<AbstractAspect*>&);
 	void hiddenAspectSelected(const AbstractAspect*);
 };
 

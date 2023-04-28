@@ -777,7 +777,7 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 
 void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const Column* column) {
 	// Use value labels if possible
-	if (column && column->hasValueLabels()) {
+	if (column && column->valueLabelsInitialized()) {
 		auto axes = plot->children(AspectType::Axis);
 		for (auto a : axes) {
 			auto axis = static_cast<Axis*>(a);

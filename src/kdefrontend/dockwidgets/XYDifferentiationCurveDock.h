@@ -33,16 +33,13 @@ private:
 	void showDifferentiationResult();
 
 	Ui::XYDifferentiationCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYDifferentiationCurve* m_differentiationCurve{nullptr};
 	XYDifferentiationCurve::DifferentiationData m_differentiationData;
 	bool m_dateTimeRange{false};
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYDifferentiationCurveDock

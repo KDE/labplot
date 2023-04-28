@@ -14,7 +14,7 @@
 #include "src/kdefrontend/datasources/ImportFileWidget.h"
 
 #ifdef HAVE_EXCEL
-#include "3rdparty/QXlsx/header/xlsxcellrange.h"
+#include "xlsxcellrange.h"
 #endif
 
 #include <QAbstractItemModel>

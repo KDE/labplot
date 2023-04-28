@@ -31,16 +31,12 @@ private:
 	void showConvolutionResult();
 
 	Ui::XYConvolutionCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
-	TreeViewComboBox* cbY2DataColumn{nullptr};
 
 	XYConvolutionCurve* m_convolutionCurve{nullptr};
 	XYConvolutionCurve::ConvolutionData m_convolutionData;
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYConvolutionCurveDock

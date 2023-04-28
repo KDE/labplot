@@ -26,7 +26,7 @@ class Project : public Folder {
 	Q_OBJECT
 
 public:
-	enum class MdiWindowVisibility { folderOnly, folderAndSubfolders, allMdiWindows };
+	enum class DockVisibility { folderOnly, folderAndSubfolders, allDocks };
 
 public:
 	Project();
@@ -45,12 +45,13 @@ public:
 	QMenu* createContextMenu() override;
 	virtual QMenu* createFolderContextMenu(const Folder*);
 
-	void setMdiWindowVisibility(MdiWindowVisibility visibility);
-	MdiWindowVisibility mdiWindowVisibility() const;
+	void setDockVisibility(DockVisibility visibility);
+	DockVisibility dockVisibility() const;
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
 	CLASS_D_ACCESSOR_DECL(QString, author, Author)
 	CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
 	BASIC_D_ACCESSOR_DECL(bool, saveCalculations, SaveCalculations)
+	CLASS_D_ACCESSOR_DECL(QString, windowState, WindowState)
 
 	void setChanged(const bool value = true);
 	bool hasChanged() const;

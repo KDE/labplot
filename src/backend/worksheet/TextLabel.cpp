@@ -410,7 +410,7 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner)
 
 	// scaling:
 	// we need to scale from the font size specified in points to scene units.
-	// furhermore, we create the tex-image in a higher resolution then usual desktop resolution
+	// furthermore, we create the tex-image in a higher resolution than usual desktop resolution
 	//  -> take this into account
 	// m_textItem is only used for the normal text not for latex. So the scale is only needed for the
 	// normal text, for latex the generated image will be shown directly
@@ -600,8 +600,21 @@ void TextLabelPrivate::updateText() {
 	case TextLabel::Mode::Markdown: {
 #ifdef HAVE_DISCOUNT
 		auto mdCharArray = textWrapper.text.toUtf8();
+#ifdef HAVE_DISCOUNT3
+		MMIOT* mdHandle = mkd_string(mdCharArray.data(), mdCharArray.size() + 1, nullptr);
+
+		mkd_flag_t* v3flags = mkd_flags();
+		mkd_set_flag_num(v3flags, MKD_LATEX);
+		mkd_set_flag_num(v3flags, MKD_FENCEDCODE);
+		mkd_set_flag_num(v3flags, MKD_GITHUBTAGS);
+
+		if (!mkd_compile(mdHandle, v3flags)) {
+#else
 		MMIOT* mdHandle = mkd_string(mdCharArray.data(), mdCharArray.size() + 1, 0);
-		if (!mkd_compile(mdHandle, MKD_LATEX | MKD_FENCEDCODE | MKD_GITHUBTAGS)) {
+
+		unsigned int flags = MKD_LATEX | MKD_FENCEDCODE | MKD_GITHUBTAGS;
+		if (!mkd_compile(mdHandle, flags)) {
+#endif
 			DEBUG(Q_FUNC_INFO << ", Failed to compile the markdown document");
 			mkd_cleanup(mdHandle);
 			return;

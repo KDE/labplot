@@ -135,9 +135,10 @@ public:
 	void* data() const;
 	void setData(void*);
 	bool hasValues() const;
-	bool hasValueLabels() const;
+	bool valueLabelsInitialized() const;
+	void setLabelsMode(ColumnMode mode);
 	void removeValueLabel(const QString&);
-	void clearValueLabels();
+	void valueLabelsRemoveAll();
 
 	Properties properties() const override;
 	void invalidateProperties();

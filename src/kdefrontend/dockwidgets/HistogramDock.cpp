@@ -262,7 +262,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	valueWidget->setValues(values);
 	errorBarsLineWidget->setLines(errorBarLines);
 
-	// if there are more then one curve in the list, disable the content in the tab "general"
+	// if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);

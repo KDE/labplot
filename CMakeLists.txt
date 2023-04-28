@@ -31,7 +31,8 @@ include(FeatureSummary)
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 # Qt6 not supported yet
-set(QT_MAJOR_VERSION "5")
+set(QT_VERSION_MAJOR "5")
+set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
 #if (QT_MAJOR_VERSION STREQUAL "6")
 #    set(QT_MIN_VERSION "6.4.0")
 #    set(KF_MIN_VERSION "5.240.0")
@@ -74,6 +75,7 @@ OPTIONAL_COMPONENTS
 	Parts
 	SyntaxHighlighting
 )
+
 # TODO: make NewStuff optional?
 IF (KF${KF_MAJOR_VERSION}NewStuff_FOUND)
 	add_definitions (-DHAVE_KF5_NEW_STUFF)
@@ -179,7 +181,7 @@ endif ()
 ##########################################################
 
 # see also https://wiki.qt.io/Using_QString_Effectively
-add_definitions(
+set(LABPLOT_COMPILE_DEFINITIONS
     -DQT_NO_CAST_TO_ASCII
     -DQT_NO_CAST_FROM_ASCII
     -DQT_NO_CAST_FROM_BYTEARRAY
@@ -542,6 +544,10 @@ IF (ENABLE_DISCOUNT)
 		TYPE OPTIONAL)
 	IF (Discount_FOUND)
 		add_definitions (-DHAVE_DISCOUNT)
+		MESSAGE (STATUS "Found Markdown Library Discount ${Discount_VERSION}")
+		IF (${Discount_VERSION} VERSION_GREATER "2.99")
+			add_definitions (-DHAVE_DISCOUNT3)
+		ENDIF ()
 	ELSE ()
 		MESSAGE (STATUS "Discount library NOT FOUND.")
 	ENDIF ()

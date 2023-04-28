@@ -46,7 +46,7 @@ public:
 	bool labelColumnMajor{true};
 	qreal lineSymbolWidth{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)}; // the width of line+symbol
 	QList<float> maxColumnTextWidths; // the maximal width of the text within each column
-	int columnCount{0}; // the actual number of columns, can be smaller then the specified layoutColumnCount
+	int columnCount{0}; // the actual number of columns, can be smaller than the specified layoutColumnCount
 	int rowCount{0}; // the number of rows in the legend, depends on the number of curves and on columnCount
 
 	const CartesianPlot* plot{nullptr};

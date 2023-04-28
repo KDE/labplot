@@ -142,7 +142,7 @@ public:
 		return mXmlVersion;
 	}
 
-	MdiWindowVisibility mdiWindowVisibility{Project::MdiWindowVisibility::folderOnly};
+	DockVisibility dockVisibility{DockVisibility::folderOnly};
 	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
 
@@ -153,6 +153,7 @@ public:
 	QDateTime modificationTime;
 	Project* const q;
 	QString fileName;
+	QString windowState;
 	QString author;
 	bool saveCalculations{true};
 	QUndoStack undo_stack;
@@ -254,16 +255,17 @@ QMenu* Project::createFolderContextMenu(const Folder* folder) {
 	return menu;
 }
 
-void Project::setMdiWindowVisibility(MdiWindowVisibility visibility) {
-	d->mdiWindowVisibility = visibility;
+void Project::setDockVisibility(DockVisibility visibility) {
+	d->dockVisibility = visibility;
 	Q_EMIT mdiWindowVisibilityChanged();
 }
 
-Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
-	return d->mdiWindowVisibility;
+Project::DockVisibility Project::dockVisibility() const {
+	return d->dockVisibility;
 }
 
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
+CLASS_D_ACCESSOR_IMPL(Project, QString, windowState, WindowState, windowState);
 BASIC_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
 BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
@@ -547,6 +549,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
 	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
+	writer->writeAttribute(QStringLiteral("windowState"), d->windowState);
 
 	QString image;
 	if (!thumbnail.isNull()) {
@@ -746,6 +749,11 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 						// and the state of the project explorer (expanded items, currently selected item).
 						//"state" is read at the very end of XML, restore the pointers here so the current index
 						// can be properly selected in ProjectExplorer after requestLoadState() is called.
+						// Restore pointers and retransform elements before loading the state,
+						// otherwise curves don't have column pointers assigned and therefore calculations
+						// in the docks might be wrong
+						restorePointers(this, preview);
+						retransformElements(this);
 						Q_EMIT requestLoadState(reader);
 					} else {
 						if (!preview)
@@ -760,8 +768,6 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	} else // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
-	restorePointers(this, preview);
-	retransformElements(this);
 	return !reader->hasError();
 }
 
@@ -1064,6 +1070,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 
 	d->author = attribs.value(QStringLiteral("author")).toString();
 	d->saveCalculations = attribs.value(QStringLiteral("saveCalculations")).toInt();
+	d->windowState = attribs.value(QStringLiteral("windowState")).toString();
 
 	return true;
 }

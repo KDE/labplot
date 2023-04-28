@@ -1070,7 +1070,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		int columns = childCount<Column>();
 
 		if (columns > cols) {
-			// there're more columns in the data source then required -> remove the superfluous columns
+			// there are more columns in the data source than required -> remove the superfluous columns
 			for (int i = 0; i < columns - cols; i++)
 				removeChild(child<Column>(0));
 		} else {

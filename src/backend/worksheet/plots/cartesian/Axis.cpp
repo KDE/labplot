@@ -1498,7 +1498,7 @@ void AxisPrivate::retransformTicks() {
 		}
 	case Axis::TicksType::ColumnLabels:
 		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
-		if (c && c->hasValueLabels())
+		if (c && c->valueLabelsInitialized())
 			tmpMajorTicksNumber = c->valueLabelsCount();
 		else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
@@ -1691,7 +1691,7 @@ void AxisPrivate::retransformTicks() {
 				if (majorTicksType == Axis::TicksType::ColumnLabels) {
 					const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 					// majorTicksType == Axis::TicksType::ColumnLabels
-					if (c && c->hasValueLabels()) {
+					if (c && c->valueLabelsInitialized()) {
 						switch (c->labelsMode()) {
 						case AbstractColumn::ColumnMode::Double: {
 							if (iMajor < c->valueLabelsCount())

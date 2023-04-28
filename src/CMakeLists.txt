@@ -9,6 +9,12 @@ set(TOOLS_DIR tools)
 set(CMAKE_AUTOMOC ON)
 set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
+find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
+if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
+    option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
+    option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
+endif()
+
 # do not process these files
 set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
 
@@ -308,7 +314,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2BigIntFilter.h
 	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
-	${BACKEND_DIR}/datapicker/Vector3D.cpp
 	${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
 	${BACKEND_DIR}/datapicker/DatapickerImage.cpp
 	${BACKEND_DIR}/datapicker/Datapicker.cpp
@@ -453,7 +458,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
-	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
+	${COMMONFRONTEND_DIR}/core/ContentDockWidget.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
 	${COMMONFRONTEND_DIR}/widgets/MemoryWidget.cpp
@@ -508,6 +513,7 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
 add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
+target_compile_definitions(labplot2lib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 target_link_libraries( labplot2lib
 	Qt${QT_MAJOR_VERSION}::Svg
@@ -540,6 +546,7 @@ target_link_libraries( labplot2lib
 	${LZ4_LIBRARIES}
 	${MATIO_LIBRARIES}
 	${ZLIB_LIBRARIES}
+	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
 
 IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
@@ -585,7 +592,12 @@ ENDIF ()
 IF (ENABLE_EXCEL)
         # build before use
         IF (BUILD_EXCEL)
+                target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header" )
                 add_dependencies( labplot2lib QXlsx )
+        ENDIF ()
+
+        IF (QXLSX_FOUND)
+                target_include_directories( labplot2lib PRIVATE ${QXLSX_INCLUDE_DIR} )
         ENDIF ()
 
 	IF (QXLSX_FOUND OR BUILD_EXCEL)
@@ -650,6 +662,7 @@ ENDIF ()
 
 add_executable( labplot2 ${LABPLOT_SOURCE} ${qml_QRC} )
 target_link_libraries( labplot2 labplot2lib )
+target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 ############## installation ################################
 install( TARGETS labplot2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

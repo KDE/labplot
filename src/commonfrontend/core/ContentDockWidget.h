@@ -9,20 +9,20 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef PART_MDI_VIEW_H
-#define PART_MDI_VIEW_H
+#ifndef CONTENTDOCKWIDGET_H
+#define CONTENTDOCKWIDGET_H
 
-#include <QMdiSubWindow>
+#include <DockWidget.h>
 
 class AbstractAspect;
 class AbstractPart;
 
-class PartMdiView : public QMdiSubWindow {
+class ContentDockWidget : public ads::CDockWidget {
 	Q_OBJECT
 
 public:
-	explicit PartMdiView(AbstractPart*);
-	~PartMdiView() override;
+	explicit ContentDockWidget(AbstractPart*);
+	~ContentDockWidget() override;
 	AbstractPart* part() const;
 
 private:
@@ -36,4 +36,4 @@ private Q_SLOTS:
 	void slotWindowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState);
 };
 
-#endif // ifndef PART_MDI_VIEW_H
+#endif // ifndef CONTENTDOCKWIDGET_H

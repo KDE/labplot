@@ -968,17 +968,22 @@ void Column::setChanged() {
 	invalidateProperties();
 }
 
-bool Column::hasValueLabels() const {
-	return d->hasValueLabels();
+bool Column::valueLabelsInitialized() const {
+	return d->valueLabelsInitialized();
+}
+
+void Column::setLabelsMode(ColumnMode mode) {
+	d->setLabelsMode(mode);
+	project()->setChanged(true);
+}
+
+void Column::valueLabelsRemoveAll() {
+	d->valueLabelsRemoveAll();
+	project()->setChanged(true);
 }
 
 void Column::removeValueLabel(const QString& key) {
 	d->removeValueLabel(key);
-	project()->setChanged(true);
-}
-
-void Column::clearValueLabels() {
-	d->clearValueLabels();
 	project()->setChanged(true);
 }
 
@@ -1086,7 +1091,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	//  	}
 
 	// value labels
-	if (hasValueLabels()) {
+	if (valueLabelsInitialized()) {
 		writer->writeStartElement(QStringLiteral("valueLabels"));
 		switch (d->m_labels.mode()) {
 		case AbstractColumn::ColumnMode::Double: {

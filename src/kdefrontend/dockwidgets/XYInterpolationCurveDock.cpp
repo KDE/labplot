@@ -32,7 +32,7 @@ extern "C" {
 		(2D-curves defined by an interpolation) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -124,7 +124,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 }
 
 void XYInterpolationCurveDock::initGeneralTab() {
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -178,7 +178,19 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	this->autoRangeChanged();
 
 	// update list of selectable types
-	xDataColumnChanged(cbXDataColumn->currentModelIndex());
+	switch (m_interpolationCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
+		xDataColumnChanged(cbXDataColumn->currentModelIndex());
+		break;
+	case XYAnalysisCurve::DataSourceType::Curve:
+		// Fall through
+	case XYAnalysisCurve::DataSourceType::Histogram: {
+		auto c = static_cast<XYCurve*>(cbDataSourceCurve->currentAspect());
+		if (c)
+			updateSettings(c->xColumn());
+		break;
+	}
+	}
 
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
 	this->typeChanged(m_interpolationData.type);
@@ -189,10 +201,18 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	uiGeneralTab.sbBias->setValue(m_interpolationData.bias);
 	uiGeneralTab.cbEval->setCurrentIndex(m_interpolationData.evaluate);
 
-	if (m_interpolationData.pointsMode == XYInterpolationCurve::PointsMode::Multiple)
+	switch (m_interpolationData.pointsMode) {
+	case XYInterpolationCurve::PointsMode::Auto:
 		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints / 5.);
-	else
+		break;
+	case XYInterpolationCurve::PointsMode::Multiple: {
+		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints / qMax(dataPoints, (unsigned int)1));
+		break;
+	}
+	case XYInterpolationCurve::PointsMode::Custom:
 		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
+		break;
+	}
 	uiGeneralTab.cbPointsMode->setCurrentIndex(static_cast<int>(m_interpolationData.pointsMode));
 
 	this->showInterpolationResult();
@@ -211,38 +231,10 @@ void XYInterpolationCurveDock::initGeneralTab() {
 }
 
 void XYInterpolationCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Datapicker,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYCurve,
-						   AspectType::XYAnalysisCurve};
-	cbDataSourceCurve->setTopLevelClasses(list);
+	auto list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYFitCurve);
 
-	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
-		hiddenAspects << curve;
-	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
-
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve,
-			AspectType::CantorWorksheet};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-
-	cbDataSourceCurve->setModel(m_aspectTreeModel);
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-
-	XYCurveDock::setModel();
+	XYAnalysisCurveDock::setModel(list);
 }
 
 /*!
