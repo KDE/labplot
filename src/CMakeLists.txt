@@ -13,7 +13,13 @@ find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
 if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
     option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
-endif()
+    if (TARGET Qt5::GuiPrivate)
+        MESSAGE (STATUS "Building local version of Qt-Advanced-Docking-System.")
+    else ()
+	MESSAGE (FATAL_ERROR "Missing Qt5::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
+	return ()
+    endif ()
+endif ()
 
 # do not process these files
 set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
@@ -543,8 +549,8 @@ target_link_libraries( labplot2lib
 	${LZ4_LIBRARIES}
 	${MATIO_LIBRARIES}
 	${ZLIB_LIBRARIES}
-	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
+
 
 IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
 	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::SerialPort )
@@ -615,7 +621,11 @@ ENDIF ()
 
 IF (APPLE AND ENABLE_TOUCHBAR)
 	target_link_libraries( labplot2lib KDMacTouchBar )
-ENDIF()
+ENDIF ()
+
+IF (LOCAL_QT_ADVANCED_DOCK_DOWNLOAD OR LOCAL_QT_ADVANCED_DOCK_COPY)
+	target_link_libraries( labplot2lib ads::qt${QT_VERSION_MAJOR}advanceddocking )
+ENDIF ()
 
 # icons for the executable and project files on Windows and Mac OS X
 
