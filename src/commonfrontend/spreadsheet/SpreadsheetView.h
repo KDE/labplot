@@ -112,7 +112,7 @@ private:
 	void checkSpreadsheetMenu();
 	void checkSpreadsheetSelectionMenu();
 	void checkColumnMenus(bool numeric, bool datetime, bool text, bool hasValues);
-	void showSearchReplace(bool replace = false);
+	void showSearchReplace(bool replace);
 
 	// selection related actions
 	QAction* action_cut_selection{nullptr};

@@ -157,6 +157,13 @@ void SearchReplaceWidget::setReplaceEnabled(bool enabled) {
 	switchFindReplace();
 }
 
+void SearchReplaceWidget::setFocus() {
+	if (m_replaceEnabled)
+		uiSearchReplace.cbFind->setFocus();
+	else
+		uiSearch.cbFind->setFocus();
+}
+
 void SearchReplaceWidget::clear() {
 
 }
@@ -308,20 +315,16 @@ void SearchReplaceWidget::switchFindReplace() {
 			initSearchReplaceWidget();
 
 		m_searchReplaceWidget->show();
-		m_searchReplaceWidget->setFocus();
-		uiSearchReplace.cbFind->setFocus();
 
-		if (m_searchWidget && m_searchWidget->isVisible())
+		if (m_searchWidget)
 			m_searchWidget->hide();
 	} else { // show the find widget
 		if (!m_searchWidget)
 			initSearchWidget();
 
 		m_searchWidget->show();
-		m_searchWidget->setFocus();
-		uiSearch.cbFind->setFocus();
 
-		if (m_searchReplaceWidget && m_searchReplaceWidget->isVisible())
+		if (m_searchReplaceWidget)
 			m_searchReplaceWidget->hide();
 	}
 }

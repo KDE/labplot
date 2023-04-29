@@ -814,8 +814,8 @@ void SpreadsheetView::connectActions() {
 	connect(action_clear_masks, &QAction::triggered, m_spreadsheet, &Spreadsheet::clearMasks);
 	connect(action_sort_spreadsheet, &QAction::triggered, this, &SpreadsheetView::sortSpreadsheet);
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
-	connect(action_search, &QAction::triggered, this, &SpreadsheetView::showSearchReplace);
-	connect(action_search_replace, &QAction::triggered, this, &SpreadsheetView::showSearchReplace);
+	connect(action_search, &QAction::triggered, this, &SpreadsheetView::searchReplace);
+	connect(action_search_replace, &QAction::triggered, this, &SpreadsheetView::searchReplace);
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
@@ -1439,7 +1439,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			// 				}
 			// 			}
 		} else if (key_event->matches(QKeySequence::Find)) {
-			showSearchReplace();
+			showSearchReplace(/* replace */ false);
 		} else if (key_event->matches(QKeySequence::Replace)) {
 			showSearchReplace(/* replace */ true);
 		} else if (key_event->key() == Qt::Key_Escape && m_searchReplaceWidget && m_searchReplaceWidget->isVisible()) {
@@ -3415,9 +3415,13 @@ void SpreadsheetView::showSearchReplace(bool replace) {
 	}
 
 	m_searchReplaceWidget->setReplaceEnabled(replace);
-
 	m_searchReplaceWidget->show();
-	m_searchReplaceWidget->setFocus();
+
+	// interrupt the event loop to show/render the widget first and set the focus
+	// after this otherwise the focus in the search field is not set
+	QTimer::singleShot(0, this, [=]() {
+		m_searchReplaceWidget->setFocus();
+	});
 }
 
 //! Open the sort dialog for the given columns

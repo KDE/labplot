@@ -26,6 +26,7 @@ public:
 	~SearchReplaceWidget() override;
 
 	void setReplaceEnabled(bool enabled);
+	void setFocus();
 	void clear();
 
 private:
