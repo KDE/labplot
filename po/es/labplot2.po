@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2023-02-09 03:24+0100\n"
+"PO-Revision-Date: 2023-04-29 01:54+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -905,7 +905,7 @@ msgstr "%1: definir como no visible"
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
-msgstr "Imprimir imagen de captura de datos"
+msgstr "Imprimir imagen del selector de datos"
 
 #: src/backend/datapicker/DatapickerImage.cpp:236
 #, kde-format
@@ -6763,7 +6763,7 @@ msgstr "(De-)Convolución"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:355
 #, kde-format
 msgid "Auto-/Cross-Correlation"
-msgstr "Correlación Auto/-Cruzada"
+msgstr "Correlación automática/cruzada"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:356
@@ -8579,8 +8579,7 @@ msgstr ""
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:650
 #, kde-format
 msgid "%1: change position of selected DatapickerPoints."
-msgstr ""
-"%1: cambiar la posición de los puntos de captura de datos seleccionados."
+msgstr "%1: cambiar la posición de los puntos del selector de datos."
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:700
 #, kde-format
