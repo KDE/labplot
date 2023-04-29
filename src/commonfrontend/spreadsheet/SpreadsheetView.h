@@ -49,6 +49,7 @@ public:
 	~SpreadsheetView() override;
 
 	void resizeHeader();
+	void setFocus();
 
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
@@ -242,8 +243,6 @@ private Q_SLOTS:
 	void goToCell();
 	void sortSpreadsheet();
 	void sortDialog(const QVector<Column*>&);
-	void searchTextChanged(const QString&);
-	void searchReturnPressed();
 	void formatHeatmap();
 	void removeFormat();
 

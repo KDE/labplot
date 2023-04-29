@@ -16,6 +16,7 @@
 
 class Spreadsheet;
 class SpreadsheetView;
+class QRadioButton;
 
 class SearchReplaceWidget : public QWidget {
 	Q_OBJECT
@@ -32,6 +33,11 @@ private:
 	Ui::SearchReplaceWidget uiSearchReplace;
 	QWidget* m_searchWidget{nullptr};
 	QWidget* m_searchReplaceWidget{nullptr};
+	QRadioButton* m_rbNumeric{nullptr};
+	QRadioButton* m_rbText{nullptr};
+	QRadioButton* m_rbColumnMajor{nullptr};
+	QRadioButton* m_rbRowMajor{nullptr};
+
 	bool m_replaceEnabled{false};
 	Spreadsheet* m_spreadsheet{nullptr};
 	SpreadsheetView* m_view{nullptr};
@@ -39,12 +45,15 @@ private:
 	void initSearchWidget();
 	void initSearchReplaceWidget();
 
+	bool findNextImpl(const QString&, bool proceed);
+	bool findPreviousImpl(const QString&, bool proceed);
+
 	void showExtendedContextMenu(bool forPattern, const QPoint&);
 	QVector<QString> capturePatterns(const QString& pattern) const;
 
 private Q_SLOTS:
-	bool findNext(bool procced = true);
-	bool findPrevious(bool procced = true);
+	void findNext(bool proceed);
+	void findPrevious(bool proceed);
 	void findAll();
 	void replaceNext();
 	void replaceAll();

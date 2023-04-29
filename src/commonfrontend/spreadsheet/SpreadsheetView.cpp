@@ -245,6 +245,10 @@ void SpreadsheetView::resizeHeader() {
 	}
 }
 
+void SpreadsheetView::setFocus() {
+	m_tableView->setFocus();
+}
+
 void SpreadsheetView::resizeEvent(QResizeEvent* event) {
 	QWidget::resizeEvent(event);
 	if (m_frozenTableView)
@@ -1048,23 +1052,6 @@ void SpreadsheetView::goToCell(int row, int col) {
 	QModelIndex index = m_model->index(row, col);
 	m_tableView->scrollTo(index);
 	m_tableView->setCurrentIndex(index);
-}
-
-void SpreadsheetView::searchTextChanged(const QString& text) {
-	// m_model->setSearchText(text);
-	// m_tableView->setFocus(); // set the focus so the table gets updated with the highlighted found entries
-	// m_leSearch->setFocus(); // set the focus back to the line edit so we can continue typing
-}
-
-/*!
- * determines the first cell in the spreadsheet matching the current search string and navigates to it
- */
-void SpreadsheetView::searchReturnPressed() {
-	// const auto& index = m_model->index(m_leSearch->text());
-	// goToCell(index.row(), index.column());
-	// m_leSearch->setText(QString());
-	// m_frameSearch->hide();
-	// m_tableView->setFocus();
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
