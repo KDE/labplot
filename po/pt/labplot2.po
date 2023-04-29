@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-27 00:44+0000\n"
-"PO-Revision-Date: 2023-04-25 21:18+0100\n"
+"POT-Creation-Date: 2023-04-29 00:44+0000\n"
+"PO-Revision-Date: 2023-04-28 12:29+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -130,7 +130,7 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2989
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2990
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4620
@@ -178,7 +178,7 @@ msgstr ""
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:465
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3118
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3119
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
@@ -2225,17 +2225,17 @@ msgstr "Ficheiro DBC inválido"
 msgid "Unknown error"
 msgstr "Erro desconhecido"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:350
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
 #, kde-format
 msgid "Time_s"
 msgstr "Tempo_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
 #, kde-format
 msgid "Time_ns"
 msgstr "Tempo_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:355
 #, kde-format
 msgid "Time_10µs"
 msgstr "Tempo_10µs"
@@ -10853,7 +10853,7 @@ msgid "Add New Live Data Source"
 msgstr "Adicionar uma Nova Fonte de Dados em Directo"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:340
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:347
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:128
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:342
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:111
@@ -10863,7 +10863,7 @@ msgid "Hide Options"
 msgstr "Esconder as Opções"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:340
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:347
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:128
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:342
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:111
@@ -10877,34 +10877,29 @@ msgstr "Mostrar as Opções"
 msgid "Live data source created in %1 seconds."
 msgstr "A fonte de dados em directo foi criada em %1 segundos."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:180
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:184
 #, kde-format
 msgid "No data to import."
 msgstr "Sem dados para importar."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:180
-#, kde-format
-msgid "No Data"
-msgstr "Sem Dados"
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:324
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:331
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "O ficheiro %1 foi importado em %2 segundos."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:359
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:395
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:422
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:446
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:471
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:504
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:527
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:366
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:402
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:429
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:453
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:478
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:511
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:534
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:157
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr "Fecha a janela e importa os dados."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:361
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:368
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:151
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
@@ -10912,57 +10907,57 @@ msgstr ""
 "Não é possível importar para uma matriz, dado que os dados contêm dados não-"
 "numéricos."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:373
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:380
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:135
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr ""
 "Seleccione um contentor de dados para onde têm de ser importados os dados."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:398
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:405
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "O ficheiro fornecido não existe."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:426
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:433
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "Não foi possível contactar o 'socket' local indicado. Erro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:432
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:439
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 "Não foi possível contactar o 'socket' local indicado. O mesmo não existe."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:451
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:458
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Não foi possível contactar o 'socket' de TCP indicado. Erro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:457
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:483
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:464
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:490
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Falta o nome da máquina ou o número do porto."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:477
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:484
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Não foi possível contactar o 'socket' de UDP indicado. Erro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:508
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:515
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr "Não foi possível contactar a porta série indicada."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:521
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Falta o número da porta série."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:530
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:537
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -12055,12 +12050,12 @@ msgstr "%1: mudar a cor do eixo"
 msgid "%1 axes: set color"
 msgstr "eixos do %1: mudar a cor"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1996
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 eixos: foi carregado o modelo \"%2\""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:531
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:741
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
@@ -13245,11 +13240,10 @@ msgid "Properties"
 msgstr "Propriedades"
 
 #: src/kdefrontend/GuiObserver.cpp:220
-#, fuzzy, kde-format
-#| msgid "&Sort Spreadsheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr "&Ordenar a Folha de Cálculo"
+msgstr "Propriedades: Folha de Cálculo"
 
 #: src/kdefrontend/GuiObserver.cpp:230
 #, kde-format
@@ -13258,187 +13252,160 @@ msgid "%1 Worksheet"
 msgstr "Folha de Trabalho %1"
 
 #: src/kdefrontend/GuiObserver.cpp:235
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "Propriedades"
+msgstr "Propriedades: Coluna"
 
 #: src/kdefrontend/GuiObserver.cpp:242
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr "Propriedades"
+msgstr "Propriedades: Matriz"
 
 #: src/kdefrontend/GuiObserver.cpp:247
-#, fuzzy, kde-format
-#| msgid "Complete Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "Folha de Trabalho Total"
+msgstr "Propriedades: Folha de Trabalho"
 
 #: src/kdefrontend/GuiObserver.cpp:253
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
-msgstr "Explorador de Propriedades"
+msgstr "Propriedades: Área do Gráfico"
 
 #: src/kdefrontend/GuiObserver.cpp:259
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "Propriedades"
+msgstr "Propriedades: Legenda"
 
 #: src/kdefrontend/GuiObserver.cpp:264
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr "Propriedades"
+msgstr "Propriedades: Eixo"
 
 #: src/kdefrontend/GuiObserver.cpp:269
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
-msgstr "Propriedades"
+msgstr "Propriedades: Curva-XY"
 
 #: src/kdefrontend/GuiObserver.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "XY-Equation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
-msgstr "Equação-XY"
+msgstr "Propriedades: Equação-XY"
 
 #: src/kdefrontend/GuiObserver.cpp:279
-#, fuzzy, kde-format
-#| msgid "Data Reduction"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
-msgstr "Redução de Dados"
+msgstr "Propriedades: Redução de Dados"
 
 #: src/kdefrontend/GuiObserver.cpp:295
-#, fuzzy, kde-format
-#| msgid "Differentiation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
-msgstr "Derivada"
+msgstr "Propriedades: Derivada"
 
 #: src/kdefrontend/GuiObserver.cpp:300
-#, fuzzy, kde-format
-#| msgid "Integration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
-msgstr "Integração"
+msgstr "Propriedades: Integração"
 
 #: src/kdefrontend/GuiObserver.cpp:305
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
-msgstr "Interpolação"
+msgstr "Propriedades: Interpolação"
 
 #: src/kdefrontend/GuiObserver.cpp:310
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
-msgstr "Propriedades"
+msgstr "Propriedades: Suavização"
 
 #: src/kdefrontend/GuiObserver.cpp:315
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr "Propriedades"
+msgstr "Propriedades: Ajuste"
 
 #: src/kdefrontend/GuiObserver.cpp:320
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
-msgstr "Transformada de Fourier"
+msgstr "Propriedades: Transformada de Fourier"
 
 #: src/kdefrontend/GuiObserver.cpp:325
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
-msgstr "Transformada de Hilbert"
+msgstr "Propriedades: Transformada de Hilbert"
 
 #: src/kdefrontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgid "Fourier Filter"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
-msgstr "Filtro de Fourier"
+msgstr "Propriedades: Filtro de Fourier"
 
 #: src/kdefrontend/GuiObserver.cpp:335
-#, fuzzy, kde-format
-#| msgid "Convolution/Deconvolution"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
-msgstr "Convolução/Desconvolução"
+msgstr "Propriedades: Convolução/Desconvolução"
 
 #: src/kdefrontend/GuiObserver.cpp:340
-#, fuzzy, kde-format
-#| msgid "Auto-/Cross-Correlation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
-msgstr "Correlação Auto/Cruzada"
+msgstr "Propriedades: Correlação Auto/Cruzada"
 
 #: src/kdefrontend/GuiObserver.cpp:345
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
-msgstr "Explorador de Propriedades"
+msgstr "Propriedades: Histograma"
 
 #: src/kdefrontend/GuiObserver.cpp:350
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr "Propriedades"
+msgstr "Propriedades: Gráfico de Barras"
 
 #: src/kdefrontend/GuiObserver.cpp:355
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr "Explorador de Propriedades"
+msgstr "Propriedades: Gráfico em Caixa"
 
 #: src/kdefrontend/GuiObserver.cpp:360
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
-msgstr "Explorador de Propriedades"
+msgstr "Propriedades: Legenda de Texto"
 
 #: src/kdefrontend/GuiObserver.cpp:365
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
-msgstr "Propriedades"
+msgstr "Propriedades: Imagem"
 
 #: src/kdefrontend/GuiObserver.cpp:370
-#, fuzzy, kde-format
-#| msgid "Custom Point"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
-msgstr "Ponto Personalizado"
+msgstr "Propriedades: Ponto Personalizado"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
-msgstr "Linha de Referência"
+msgstr "Propriedades: Linha de Referência"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -13447,27 +13414,22 @@ msgid "Reference Range"
 msgstr "Intervalo de Referência"
 
 #: src/kdefrontend/GuiObserver.cpp:385
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
-msgstr "Curva do Selector de Dados"
+msgstr "Propriedades: Curva do Selector de Dados"
 
 #: src/kdefrontend/GuiObserver.cpp:390
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Data Extractor"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
-msgstr "Extracção de Dados"
+msgstr "Propriedades: Extracção de Dados"
 
 #: src/kdefrontend/GuiObserver.cpp:400
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
-msgstr "Propriedades"
+msgstr "Propriedades: Projecto"
 
 #: src/kdefrontend/GuiObserver.cpp:410
 #, kde-format
@@ -13476,56 +13438,47 @@ msgid "%1 Notebook"
 msgstr "Bloco de Notas do %1"
 
 #: src/kdefrontend/GuiObserver.cpp:412
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
-msgstr "Propriedades"
+msgstr "Propriedades: Bloco de Notas"
 
 #: src/kdefrontend/GuiObserver.cpp:418
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
-msgstr "Propriedades"
+msgstr "Propriedades: Notas"
 
 #: src/kdefrontend/GuiObserver.cpp:423
-#, fuzzy, kde-format
-#| msgid "Info Element"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
-msgstr "Elemento de Informação"
+msgstr "Propriedades: Elemento de Informação"
 
 #: src/kdefrontend/GuiObserver.cpp:430 src/kdefrontend/GuiObserver.cpp:437
 #: src/kdefrontend/GuiObserver.cpp:444
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "MQTT Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
-msgstr "Fonte de Dados MQTT"
+msgstr "Propriedades: Fonte de Dados MQTT"
 
 #: src/kdefrontend/GuiObserver.cpp:450
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Live Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
-msgstr "Fonte de Dados em Directo"
+msgstr "Propriedades: Fonte de Dados em Directo"
 
 #: src/kdefrontend/GuiObserver.cpp:464
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr "Explorador de Propriedades"
+msgstr "Propriedades: Pasta"
 
 #: src/kdefrontend/GuiObserver.cpp:471
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
-msgstr "Propriedades"
+msgstr "Propriedades: Livro de Trabalho"
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
@@ -21710,175 +21663,5 @@ msgstr "o processo de conversão falhou com o código de saída ="
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
 
-#~ msgid "&Restore"
-#~ msgstr "&Repor"
-
-#~ msgid "Mi&nimize"
-#~ msgstr "Mi&nimizar"
-
-#~ msgid "Ma&ximize"
-#~ msgstr "Ma&ximizar"
-
-#~ msgctxt "@title:window"
-#~ msgid "Spreadsheet"
-#~ msgstr "Folha de Cálculo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Column"
-#~ msgstr "Coluna"
-
-#~ msgctxt "@title:window"
-#~ msgid "Matrix"
-#~ msgstr "Matriz"
-
-#~ msgctxt "@title:window"
-#~ msgid "Worksheet"
-#~ msgstr "Folha de Trabalho"
-
-#~ msgctxt "@title:window"
-#~ msgid "Plot Area"
-#~ msgstr "Área do Gráfico"
-
-#~ msgctxt "@title:window"
-#~ msgid "Legend"
-#~ msgstr "Legenda"
-
-#~ msgctxt "@title:window"
-#~ msgid "Axis"
-#~ msgstr "Eixo"
-
-#~ msgctxt "@title:window"
-#~ msgid "XY-Curve"
-#~ msgstr "Curva-XY"
-
-#~ msgctxt "@title:window"
-#~ msgid "Data Reduction"
-#~ msgstr "Redução de Dados"
-
-#~ msgctxt "@title:window"
-#~ msgid "Differentiation"
-#~ msgstr "Derivada"
-
-#~ msgctxt "@title:window"
-#~ msgid "Integration"
-#~ msgstr "Integração"
-
-#~ msgctxt "@title:window"
-#~ msgid "Interpolation"
-#~ msgstr "Interpolação"
-
-#~ msgctxt "@title:window"
-#~ msgid "Smoothing"
-#~ msgstr "Suavização"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fit"
-#~ msgstr "Ajuste"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fourier Transform"
-#~ msgstr "Transformada de Fourier"
-
-#~ msgctxt "@title:window"
-#~ msgid "Hilbert Transform"
-#~ msgstr "Transformada de Hilbert"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fourier Filter"
-#~ msgstr "Filtro de Fourier"
-
-#~ msgctxt "@title:window"
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Convolução/Desconvolução"
-
-#~ msgctxt "@title:window"
-#~ msgid "Auto-/Cross-Correlation"
-#~ msgstr "Correlação Auto/Cruzada"
-
-#~ msgctxt "@title:window"
-#~ msgid "Histogram"
-#~ msgstr "Histograma"
-
-#~ msgctxt "@title:window"
-#~ msgid "Bar Plot"
-#~ msgstr "Gráfico de Barras"
-
-#~ msgctxt "@title:window"
-#~ msgid "Box Plot"
-#~ msgstr "Gráfico em Caixa"
-
-#~ msgctxt "@title:window"
-#~ msgid "Text Label"
-#~ msgstr "Etiqueta Textual"
-
-#~ msgctxt "@title:window"
-#~ msgid "Image"
-#~ msgstr "Imagem"
-
-#~ msgctxt "@title:window"
-#~ msgid "Custom Point"
-#~ msgstr "Ponto Personalizado"
-
-#~ msgctxt "@title:window"
-#~ msgid "Reference Line"
-#~ msgstr "Linha de Referência"
-
-#~ msgctxt "@title:window"
-#~ msgid "Project"
-#~ msgstr "Projecto"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notebook"
-#~ msgstr "Bloco de Notas"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notes"
-#~ msgstr "Notas"
-
-#~ msgctxt "@title:window"
-#~ msgid "Info Element"
-#~ msgstr "Elemento de Informação"
-
-#~ msgctxt "@title:window"
-#~ msgid "Folder"
-#~ msgstr "Pasta"
-
-#~ msgctxt "@title:window"
-#~ msgid "Workbook"
-#~ msgstr "Folha de Trabalho"
-
-#~ msgid "&Tile"
-#~ msgstr "&Lado-a-Lado"
-
-#~ msgid "Tile the windows"
-#~ msgstr "Coloca as janelas lado-a-lado"
-
-#~ msgid "&Cascade"
-#~ msgstr "&Cascata"
-
-#~ msgid "Cascade the windows"
-#~ msgstr "Coloca as janelas em cascata"
-
-#~ msgid "Sub-window View"
-#~ msgstr "Vista em Sub-Janelas"
-
-#~ msgid "Tabbed View"
-#~ msgstr "Vista em Páginas"
-
-#~ msgid "Show Windows of the Current Folder Only"
-#~ msgstr "Mostrar apenas as Janelas da Pasta Actual"
-
-#~ msgid "Show Windows of the Current Folder and its Subfolders Only"
-#~ msgstr "Mostrar Apenas as Janelas da Pasta Actual e das suas Sub-Pastas"
-
-#~ msgid "Show all Windows"
-#~ msgstr "Mostrar Todas as Janelas"
-
-#~ msgid "Tab position:"
-#~ msgstr "Posição da página:"
-
-#~ msgid "Interface:"
-#~ msgstr "Interface:"
-
-#~ msgid "Sub-window visibility:"
-#~ msgstr "Visibilidade da sub-janela:"
+#~ msgid "No Data"
+#~ msgstr "Sem Dados"

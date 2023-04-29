@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-27 00:44+0000\n"
+"POT-Creation-Date: 2023-04-29 00:44+0000\n"
 "PO-Revision-Date: 2023-04-26 19:44+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -65,7 +65,7 @@ msgstr "Ne eblis trovi panelajn kromaĵojn. Bonvolu kontroli vian instaladon."
 #: src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2989
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2990
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4620
@@ -112,7 +112,7 @@ msgstr "Atributo '%1' mankas aŭ malplena, defaŭlta valoro estas uzata"
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:465
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3118
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3119
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
@@ -2154,17 +2154,17 @@ msgstr "Nevalida dbc-dosiero"
 msgid "Unknown error"
 msgstr "Nekonata eraro"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:350
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
 #, kde-format
 msgid "Time_s"
 msgstr "Tempo_j"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
 #, kde-format
 msgid "Time_ns"
 msgstr "Tempo_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:355
 #, kde-format
 msgid "Time_10µs"
 msgstr "Tempo_10µs"
@@ -10753,7 +10753,7 @@ msgid "Add New Live Data Source"
 msgstr "Aldonu Novan Vivan Datumfonton"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:340
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:347
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:128
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:342
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:111
@@ -10763,7 +10763,7 @@ msgid "Hide Options"
 msgstr "Kaŝi Opciojn"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:340
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:347
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:128
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:342
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:111
@@ -10777,89 +10777,84 @@ msgstr "Montri Opciojn"
 msgid "Live data source created in %1 seconds."
 msgstr "Viva datumfonto kreita en %1 sekundoj."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:180
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:184
 #, kde-format
 msgid "No data to import."
 msgstr "Neniuj datumoj por importi."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:180
-#, kde-format
-msgid "No Data"
-msgstr "Neniuj Datumoj"
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:324
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:331
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Dosiero %1 importita en %2 sekundoj."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:359
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:395
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:422
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:446
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:471
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:504
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:527
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:366
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:402
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:429
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:453
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:478
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:511
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:534
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:157
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr "Fermu la dialogon kaj importu la datumojn."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:361
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:368
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:151
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 "Ne povas importi en matricon ĉar la datumoj enhavas ne-nombrajn datumojn."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:373
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:380
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:135
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "Elektu datumujon, kie la datumoj devas esti importitaj."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:398
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:405
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "La provizita dosiero ne ekzistas."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:426
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:433
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "Ne eblis konekti al la provizita loka ingo. Eraro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:432
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:439
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr "Ne eblis konekti al la provizita loka ingo. La ingo ne ekzistas."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:451
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:458
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Ne eblis konekti al la provizita TCP-soko. Eraro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:457
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:483
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:464
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:490
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Aŭ la gastiga nomo aŭ la pordonumero mankas."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:477
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:484
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Ne eblis konekti al la provizita UDP-ingo. Eraro: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:508
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:515
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr "Ne eblis konekti al la provizita seria pordo."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:521
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Mankas seria porda numero."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:530
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:537
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -11942,12 +11937,12 @@ msgstr "%1: agordi la koloron de la akso"
 msgid "%1 axes: set color"
 msgstr "%1 aksoj: agordi koloron"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1996
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 aksoj: ŝablono \"%2\" ŝargita"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:531
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:741
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
@@ -21568,6 +21563,9 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
+
+#~ msgid "No Data"
+#~ msgstr "Neniuj Datumoj"
 
 #~ msgid "&Restore"
 #~ msgstr "&Restaŭri"

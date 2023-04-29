@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-27 00:44+0000\n"
+"POT-Creation-Date: 2023-04-29 00:44+0000\n"
 "PO-Revision-Date: 2023-04-27 06:49+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
-"%100<=4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -67,7 +67,7 @@ msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 #: src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2989
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2990
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4620
@@ -114,7 +114,7 @@ msgstr "Atribut '%1' manjka ali je prazen, uporabljena je privzeta vrednost"
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:465
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3118
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3119
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
@@ -2163,17 +2163,17 @@ msgstr "Neveljavna datoteka dbc"
 msgid "Unknown error"
 msgstr "Neznana napaka"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:350
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
 #, kde-format
 msgid "Time_s"
 msgstr "Čas_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
 #, kde-format
 msgid "Time_ns"
 msgstr "Čas_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:355
 #, kde-format
 msgid "Time_10µs"
 msgstr "Čas_10µs"
@@ -10824,7 +10824,7 @@ msgid "Add New Live Data Source"
 msgstr "Dodaj nov vir podatkov v živo"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:340
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:347
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:128
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:342
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:111
@@ -10834,7 +10834,7 @@ msgid "Hide Options"
 msgstr "Skrij možnosti"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:340
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:347
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:128
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:342
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:111
@@ -10848,58 +10848,53 @@ msgstr "Pokaži možnosti"
 msgid "Live data source created in %1 seconds."
 msgstr "Vir podatkov v živo, ustvarjen v %1 sekundah."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:180
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:184
 #, kde-format
 msgid "No data to import."
 msgstr "Ni podatkov za uvoz."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:180
-#, kde-format
-msgid "No Data"
-msgstr "Ni podatkov"
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:324
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:331
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Datoteka %1, uvožena v %2 s."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:359
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:395
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:422
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:446
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:471
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:504
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:527
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:366
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:402
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:429
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:453
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:478
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:511
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:534
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:157
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr "Zaprite pogovorno okno in uvozite podatke."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:361
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:368
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:151
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr "Uvoz v matriko ni mogoče, ker podatki vsebujejo neštevilske podatke."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:373
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:380
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:135
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "Izberite vsebnik podatkov, v katerega je potrebno uvoziti podatke."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:398
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:405
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "Podana datoteka ne obstaja."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:426
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:433
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 "Povezave z zagotovljeno krajevno vtičnico ni bilo mogoče vzpostaviti. "
 "Napaka: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:432
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:439
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
@@ -10907,33 +10902,33 @@ msgstr ""
 "Povezave z zagotovljeno krajevno vtičnico ni bilo mogoče vzpostaviti. "
 "Vtičnica ne obstaja."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:451
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:458
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Povezave z vtičnico TCP ni bilo mogoče vzpostaviti. Napaka: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:457
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:483
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:464
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:490
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Ime gostitelja ali številka vrat manjka."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:477
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:484
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Povezave z vtičnico UDP ni bilo mogoče vzpostaviti. Napaka: %1."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:508
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:515
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr "Povezave z navedenimi serijskimi vrati ni bilo mogoče vzpostaviti."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:521
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Številka serijskih vrat manjka."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:530
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:537
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -12026,12 +12021,12 @@ msgstr "%1: nastavite barvo osi"
 msgid "%1 axes: set color"
 msgstr "%1: osi: nastavite barvo"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1996
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 osi: naložena predloga »%2«"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:531
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:741
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
@@ -21618,6 +21613,9 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "No Data"
+#~ msgstr "Ni podatkov"
 
 #~ msgid "&Restore"
 #~ msgstr "Obnovi"

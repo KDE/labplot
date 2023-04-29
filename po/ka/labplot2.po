@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-27 00:44+0000\n"
-"PO-Revision-Date: 2023-04-17 06:31+0200\n"
+"POT-Creation-Date: 2023-04-29 00:44+0000\n"
+"PO-Revision-Date: 2023-04-28 06:59+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -64,7 +64,7 @@ msgstr "პანელის დამატებები ვერ ვიპ
 #: src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2989
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2990
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4620
@@ -111,7 +111,7 @@ msgstr "ატრიბუტი '%1' აკლია ან ცარიელ�
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:465
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3118
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3119
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
@@ -2147,17 +2147,17 @@ msgstr "არასწორი dbc ფაილი"
 msgid "Unknown error"
 msgstr "უცნობი შეცდომა"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:350
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:351
 #, kde-format
 msgid "Time_s"
 msgstr "დრო_წმ"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:352
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:353
 #, kde-format
 msgid "Time_ns"
 msgstr "დრო_ნწმ"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:354
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:355
 #, kde-format
 msgid "Time_10µs"
 msgstr ""
@@ -10653,7 +10653,7 @@ msgid "Add New Live Data Source"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:340
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:347
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:128
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:342
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:111
@@ -10663,7 +10663,7 @@ msgid "Hide Options"
 msgstr "პარამეტრების დამალვა"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:340
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:347
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:128
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:342
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:111
@@ -10677,88 +10677,83 @@ msgstr "პარამეტრების ჩვენება"
 msgid "Live data source created in %1 seconds."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:180
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:184
 #, kde-format
 msgid "No data to import."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:180
-#, kde-format
-msgid "No Data"
-msgstr "მონაცემების გარეშე"
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:324
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:331
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:359
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:395
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:422
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:446
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:471
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:504
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:527
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:366
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:402
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:429
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:453
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:478
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:511
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:534
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:157
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:361
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:368
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:151
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:373
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:380
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:135
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:398
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:405
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:426
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:433
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:432
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:439
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:451
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:458
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:457
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:483
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:464
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:490
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:477
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:484
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:508
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:515
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:521
 #, kde-format
 msgid "Serial port number is missing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:530
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:537
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -11758,12 +11753,12 @@ msgstr "%1: ღერძის ფერის დაყენება"
 msgid "%1 axes: set color"
 msgstr "%1 ღერძი: ფერის დაყენება"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1996
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:531
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:741
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
@@ -12914,12 +12909,10 @@ msgid "Properties"
 msgstr "პარამეტრები"
 
 #: src/kdefrontend/GuiObserver.cpp:220
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Spreadsheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr "ელცხრილის დაბეჭდვა"
+msgstr "თვისებები: ელცხრილი"
 
 #: src/kdefrontend/GuiObserver.cpp:230
 #, kde-format
@@ -12928,125 +12921,106 @@ msgid "%1 Worksheet"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:235
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "პარამეტრები"
+msgstr "თვისებები: სვეტი"
 
 #: src/kdefrontend/GuiObserver.cpp:242
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr "პარამეტრები"
+msgstr "თვისებები: მატრიცა"
 
 #: src/kdefrontend/GuiObserver.cpp:247
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Print Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "სამუშაო ფურცლის დაბეჭდვა"
+msgstr "თვისებები: სამუშაო ფურცელი"
 
 #: src/kdefrontend/GuiObserver.cpp:253
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
-msgstr "პარამეტრები"
+msgstr "თვისებები: დასახაზი ადგილი"
 
 #: src/kdefrontend/GuiObserver.cpp:259
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "პარამეტრები"
+msgstr "თვისებები: შინაარსი"
 
 #: src/kdefrontend/GuiObserver.cpp:264
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr "პარამეტრები"
+msgstr "თვისებები: ღერძი"
 
 #: src/kdefrontend/GuiObserver.cpp:269
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
-msgstr "პარამეტრები"
+msgstr "თვისებები: XY-მრუდი"
 
 #: src/kdefrontend/GuiObserver.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "XY-Equation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
-msgstr "XY-ტოლობა"
+msgstr "თვისებები: XY-ტოლობა"
 
 #: src/kdefrontend/GuiObserver.cpp:279
-#, fuzzy, kde-format
-#| msgid "Data Reduction"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
-msgstr "მონაცემების შემცირება"
+msgstr "თვისებები: მონაცემების შემცირება"
 
 #: src/kdefrontend/GuiObserver.cpp:295
-#, fuzzy, kde-format
-#| msgid "Differentiation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
-msgstr "დიფერენციაცია"
+msgstr "თვისებები: დიფერენციაცია"
 
 #: src/kdefrontend/GuiObserver.cpp:300
-#, fuzzy, kde-format
-#| msgid "Integration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
-msgstr "ინტეგრაცია"
+msgstr "თვისებები: ინტეგრაცია"
 
 #: src/kdefrontend/GuiObserver.cpp:305
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
-msgstr "ინტერპოლაცია"
+msgstr "თვისებები: ინტერპოლაცია"
 
 #: src/kdefrontend/GuiObserver.cpp:310
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
-msgstr "პარამეტრები"
+msgstr "თვისებები: მოგლუვება"
 
 #: src/kdefrontend/GuiObserver.cpp:315
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr "პარამეტრები"
+msgstr "თვისებები: ჩატევა"
 
 #: src/kdefrontend/GuiObserver.cpp:320
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
-msgstr "ფურიეს გარდაქმნა"
+msgstr "თვისებები: ფურიეს გარდაქმნა"
 
 #: src/kdefrontend/GuiObserver.cpp:325
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
-msgstr "ჰილბერდის გარდაქმნა"
+msgstr "თვისებები: ჰილბერდის გარდაქმნა"
 
 #: src/kdefrontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgid "Fourier Filter"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
-msgstr "ფურიეს ფილტრი"
+msgstr "თვისებები: ფურიეს ფილტრი"
 
 #: src/kdefrontend/GuiObserver.cpp:335
 #, kde-format
@@ -13055,60 +13029,52 @@ msgid "Properties: Convolution/Deconvolution"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:340
-#, fuzzy, kde-format
-#| msgid "Auto/Cross Correlation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
-msgstr "ავტომატური/ჯვარედინი კორელაცია"
+msgstr "თვისებები: ავტომატური/ჯვარედინი კორელაცია"
 
 #: src/kdefrontend/GuiObserver.cpp:345
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
-msgstr "პარამეტრები"
+msgstr "თვისებები: ჰისტოგრამა"
 
 #: src/kdefrontend/GuiObserver.cpp:350
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr "პარამეტრები"
+msgstr "თვისებები: არასწორ ნახაზი"
 
 #: src/kdefrontend/GuiObserver.cpp:355
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr "პარამეტრები"
+msgstr "თვისებები: ყუთის ნახაზი"
 
 #: src/kdefrontend/GuiObserver.cpp:360
-#, fuzzy, kde-format
-#| msgid "Text Label"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
-msgstr "ტექსტური ჭდე"
+msgstr "თვისებები: ტექსტური ჭდე"
 
 #: src/kdefrontend/GuiObserver.cpp:365
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
-msgstr "პარამეტრები"
+msgstr "თვისებები: გამოსახულება"
 
 #: src/kdefrontend/GuiObserver.cpp:370
-#, fuzzy, kde-format
-#| msgid "Custom Point"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
-msgstr "მორგებადი წერტილი"
+msgstr "თვისებები: მორგებადი წერტილი"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
-msgstr "საკონტროლო ხაზი"
+msgstr "თვისებები: მიმართვის ხაზი"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -13123,19 +13089,16 @@ msgid "Properties: Datapicker Curve"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:390
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Data Extractor"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
-msgstr "მონაცემების გამომღები"
+msgstr "თვისებები: მონაცემების გამომღები"
 
 #: src/kdefrontend/GuiObserver.cpp:400
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
-msgstr "პარამეტრები"
+msgstr "თვისებები: პროექტი"
 
 #: src/kdefrontend/GuiObserver.cpp:410
 #, kde-format
@@ -13144,34 +13107,29 @@ msgid "%1 Notebook"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:412
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
-msgstr "პარამეტრები"
+msgstr "თვისებები: წიგნაკი"
 
 #: src/kdefrontend/GuiObserver.cpp:418
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
-msgstr "პარამეტრები"
+msgstr "თვისებები: შენიშვნები"
 
 #: src/kdefrontend/GuiObserver.cpp:423
-#, fuzzy, kde-format
-#| msgid "Info Element"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
-msgstr "საინფორმაციო ელემენტი"
+msgstr "თვისებები: საინფორმაციო ელემენტი"
 
 #: src/kdefrontend/GuiObserver.cpp:430 src/kdefrontend/GuiObserver.cpp:437
 #: src/kdefrontend/GuiObserver.cpp:444
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "MQTT Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
-msgstr "MQTT მონაცემების წყარო"
+msgstr "თვისებები: MQTT მონაცემების წყარო"
 
 #: src/kdefrontend/GuiObserver.cpp:450
 #, kde-format
@@ -13180,18 +13138,16 @@ msgid "Properties: Live Data Source"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:464
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr "პარამეტრები"
+msgstr "თვისებები: საქაღალდე"
 
 #: src/kdefrontend/GuiObserver.cpp:471
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
-msgstr "პარამეტრები"
+msgstr "თვისებები: სამუშაო წიგნი"
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
@@ -21276,6 +21232,9 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#~ msgid "No Data"
+#~ msgstr "მონაცემების გარეშე"
 
 #~ msgid "&Restore"
 #~ msgstr "ა&ღდგენა"
