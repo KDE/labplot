@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2023-04-16 12:34\n"
+"PO-Revision-Date: 2023-04-29 08:36\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -12771,7 +12771,7 @@ msgstr "文本标签"
 #, kde-format
 msgctxt "@title:window"
 msgid "Image"
-msgstr ""
+msgstr "图像"
 
 #: src/kdefrontend/GuiObserver.cpp:352
 #, kde-format
@@ -12801,7 +12801,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Project"
-msgstr "项目"
+msgstr "工程"
 
 #: src/kdefrontend/GuiObserver.cpp:387
 #, kde-format
@@ -12844,7 +12844,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Folder"
-msgstr ""
+msgstr "文件夹"
 
 #: src/kdefrontend/GuiObserver.cpp:448
 #, kde-format
