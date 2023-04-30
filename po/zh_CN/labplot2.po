@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-29 00:44+0000\n"
-"PO-Revision-Date: 2023-04-16 12:31\n"
+"PO-Revision-Date: 2023-04-29 08:34\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -11645,10 +11645,9 @@ msgid "Custom column"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:286
-#, fuzzy, kde-format
-#| msgid "Columns"
+#, kde-format
 msgid "Column labels"
-msgstr "列"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
@@ -12878,11 +12877,10 @@ msgid "Properties"
 msgstr "属性"
 
 #: src/kdefrontend/GuiObserver.cpp:220
-#, fuzzy, kde-format
-#| msgid "New Spreadsheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr "新建数据表"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:230
 #, kde-format
@@ -12891,60 +12889,52 @@ msgid "%1 Worksheet"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:235
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:242
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:247
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:253
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:259
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:264
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:269
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:274
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:279
 #, kde-format
@@ -12953,39 +12943,34 @@ msgid "Properties: Data Reduction"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:295
-#, fuzzy, kde-format
-#| msgid "Differentiation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
-msgstr "微分"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:300
-#, fuzzy, kde-format
-#| msgid "Integration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
-msgstr "整合"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:305
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
-msgstr "插值"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:310
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:315
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:320
 #, kde-format
@@ -13018,39 +13003,34 @@ msgid "Properties: Auto-/Cross-Correlation"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:345
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:350
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:355
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:360
-#, fuzzy, kde-format
-#| msgid "Text Label"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
-msgstr "文本标签"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:365
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:370
 #, kde-format
@@ -13083,11 +13063,10 @@ msgid "Properties: Data Extractor"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:400
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:410
 #, kde-format
@@ -13096,18 +13075,16 @@ msgid "%1 Notebook"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:412
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:418
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:423
 #, kde-format
@@ -13129,18 +13106,16 @@ msgid "Properties: Live Data Source"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:464
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:471
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
-msgstr "属性"
+msgstr ""
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
@@ -17632,7 +17607,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:371
 #, kde-format
 msgid "Column"
-msgstr ""
+msgstr "列"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilling)
 #. i18n: ectx: attribute (title), widget (QWidget, tabAreaFilling)
@@ -21217,80 +21192,3 @@ msgstr ""
 
 #~ msgid "No Data"
 #~ msgstr "无数据"
-
-#~ msgid "&Restore"
-#~ msgstr "恢复(&R)"
-
-#~ msgid "Mi&nimize"
-#~ msgstr "最小化(&N)"
-
-#~ msgid "Ma&ximize"
-#~ msgstr "最大化(&X)"
-
-#~ msgctxt "@title:window"
-#~ msgid "Spreadsheet"
-#~ msgstr "数据表"
-
-#~ msgctxt "@title:window"
-#~ msgid "Column"
-#~ msgstr "列"
-
-#~ msgctxt "@title:window"
-#~ msgid "Matrix"
-#~ msgstr "矩阵"
-
-#~ msgctxt "@title:window"
-#~ msgid "Worksheet"
-#~ msgstr "工作表"
-
-#~ msgctxt "@title:window"
-#~ msgid "Legend"
-#~ msgstr "图例"
-
-#~ msgctxt "@title:window"
-#~ msgid "Axis"
-#~ msgstr "轴"
-
-#~ msgctxt "@title:window"
-#~ msgid "Differentiation"
-#~ msgstr "微分"
-
-#~ msgctxt "@title:window"
-#~ msgid "Integration"
-#~ msgstr "整合"
-
-#~ msgctxt "@title:window"
-#~ msgid "Interpolation"
-#~ msgstr "插值"
-
-#~ msgctxt "@title:window"
-#~ msgid "Smoothing"
-#~ msgstr "平滑"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fit"
-#~ msgstr "自适应"
-
-#~ msgctxt "@title:window"
-#~ msgid "Text Label"
-#~ msgstr "文本标签"
-
-#~ msgctxt "@title:window"
-#~ msgid "Project"
-#~ msgstr "项目"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notes"
-#~ msgstr "注记"
-
-#~ msgid "&Tile"
-#~ msgstr "平铺(&T)"
-
-#~ msgid "&Cascade"
-#~ msgstr "层叠(&C)"
-
-#~ msgid "Tab position:"
-#~ msgstr "标签位置："
-
-#~ msgid "Interface:"
-#~ msgstr "接口："
