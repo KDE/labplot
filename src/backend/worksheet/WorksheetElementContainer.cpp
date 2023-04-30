@@ -193,9 +193,9 @@ void WorksheetElementContainer::prepareGeometryChange() {
 	d->prepareGeometryChangeRequested();
 }
 
-//################################################################
-//################### Private implementation ##########################
-//################################################################
+// ################################################################
+// ################### Private implementation ##########################
+// ################################################################
 WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {

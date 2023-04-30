@@ -59,9 +59,9 @@ QIcon XYInterpolationCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, XYInterpolationCurve::InterpolationData, interpolationData, interpolationData)
 
 const XYAnalysisCurve::Result& XYInterpolationCurve::result() const {
@@ -69,18 +69,18 @@ const XYAnalysisCurve::Result& XYInterpolationCurve::result() const {
 	return d->interpolationResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYInterpolationCurve, SetInterpolationData, XYInterpolationCurve::InterpolationData, interpolationData, recalculate)
 void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::InterpolationData& interpolationData) {
 	Q_D(XYInterpolationCurve);
 	exec(new XYInterpolationCurveSetInterpolationDataCmd(d, interpolationData, ki18n("%1: set options and perform the interpolation")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -377,9 +377,9 @@ bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYInterpolationCurve);

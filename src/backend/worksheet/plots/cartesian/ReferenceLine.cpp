@@ -205,9 +205,9 @@ void ReferenceLine::setOrientation(Orientation orientation) {
 		exec(new ReferenceLineSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void ReferenceLine::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Orientation::Horizontal);
@@ -230,9 +230,9 @@ void ReferenceLine::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ReferenceLinePrivate::ReferenceLinePrivate(ReferenceLine* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -383,9 +383,9 @@ void ReferenceLinePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void ReferenceLine::save(QXmlStreamWriter* writer) const {
 	Q_D(const ReferenceLine);
@@ -463,9 +463,9 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void ReferenceLine::loadThemeConfig(const KConfig& config) {
 	Q_D(ReferenceLine);
 

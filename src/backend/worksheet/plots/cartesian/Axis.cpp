@@ -1013,9 +1013,9 @@ void Axis::setLabelsOpacity(qreal opacity) {
 		exec(new AxisSetLabelsOpacityCmd(d, opacity, ki18n("%1: set labels opacity")));
 }
 
-//##############################################################################
-//####################################  SLOTs   ################################
-//##############################################################################
+// ##############################################################################
+// ####################################  SLOTs   ################################
+// ##############################################################################
 void Axis::labelChanged() {
 	Q_D(Axis);
 	d->recalcShapeAndBoundingRect();
@@ -1042,9 +1042,9 @@ void Axis::minorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void Axis::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Axis::Orientation::Horizontal);
@@ -1067,9 +1067,9 @@ void Axis::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 AxisPrivate::AxisPrivate(Axis* owner)
 	: WorksheetElementPrivate(owner)
 	, gridItem(new AxisGrid(this))
@@ -2880,9 +2880,9 @@ QString AxisPrivate::createScientificRepresentation(const QString& mantissa, con
 	return mantissa + QStringLiteral("×10<sup>") + exponent + QStringLiteral("</sup>");
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Axis::save(QXmlStreamWriter* writer) const {
 	Q_D(const Axis);
@@ -3125,9 +3125,9 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Axis::loadThemeConfig(const KConfig& config) {
 	Q_D(Axis);
 	const KConfigGroup& group = config.group("Axis");

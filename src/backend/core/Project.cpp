@@ -530,9 +530,9 @@ QVector<quintptr> Project::droppedAspects(const QMimeData* mimeData) {
 	return vec;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	// set the version and the modification time to the current values

@@ -176,9 +176,9 @@ void CartesianPlotLegend::handleResize(double /*horizontalRatio*/, double /*vert
 	// 	Q_D(const CartesianPlotLegend);
 }
 
-//##############################################################################
-//################################  getter methods  ############################
-//##############################################################################
+// ##############################################################################
+// ################################  getter methods  ############################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
@@ -213,9 +213,9 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutHorizontalSpacing, 
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutVerticalSpacing, layoutVerticalSpacing)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, int, layoutColumnCount, layoutColumnCount)
 
-//##############################################################################
-//######################  setter methods and undo commands  ####################
-//##############################################################################
+// ##############################################################################
+// ######################  setter methods and undo commands  ####################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLabelFont, QFont, labelFont, retransform)
 void CartesianPlotLegend::setLabelFont(const QFont& font) {
 	Q_D(CartesianPlotLegend);
@@ -302,21 +302,21 @@ void CartesianPlotLegend::setLayoutColumnCount(int count) {
 		exec(new CartesianPlotLegendSetLayoutColumnCountCmd(d, count, ki18n("%1: set layout column count")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void CartesianPlotLegend::visibilityChangedSlot() {
 	Q_D(const CartesianPlotLegend);
 	this->setVisible(!d->isVisible());
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -854,9 +854,9 @@ void CartesianPlotLegendPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	Q_D(const CartesianPlotLegend);

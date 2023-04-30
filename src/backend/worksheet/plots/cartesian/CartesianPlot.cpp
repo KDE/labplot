@@ -863,9 +863,9 @@ bool CartesianPlot::isSelected() const {
 	return d->isSelected();
 }
 
-//##############################################################################
-//################################  getter methods  ############################
-//##############################################################################
+// ##############################################################################
+// ################################  getter methods  ############################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeType, rangeType, rangeType)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, niceExtend, niceExtend)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeLastValues, rangeLastValues)
@@ -909,9 +909,9 @@ const QString CartesianPlot::rangeDateTimeFormat(const Dimension dim, const int 
 	return d->rangeConst(dim, index).dateTimeFormat();
 }
 
-//##############################################################################
-//######################  setter methods and undo commands  ####################
-//##############################################################################
+// ##############################################################################
+// ######################  setter methods and undo commands  ####################
+// ##############################################################################
 /*!
 	set the rectangular, defined in scene coordinates
  */
@@ -1574,9 +1574,9 @@ void CartesianPlot::retransform() {
 	d->retransform();
 }
 
-//################################################################
-//########################## Slots ###############################
-//################################################################
+// ################################################################
+// ########################## Slots ###############################
+// ################################################################
 void CartesianPlot::addHorizontalAxis() {
 	DEBUG(Q_FUNC_INFO)
 	Axis* axis = new Axis(QStringLiteral("x-axis"), Axis::Orientation::Horizontal);
@@ -3130,9 +3130,9 @@ void CartesianPlot::mouseHoverOutsideDataRect() {
 	d->mouseHoverOutsideDataRect();
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 	: AbstractPlotPrivate(plot)
 	, q(plot) {
@@ -3533,9 +3533,9 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 	return QGraphicsItem::itemChange(change, value);
 }
 
-//##############################################################################
-//##################################  Events  ##################################
-//##############################################################################
+// ##############################################################################
+// ##################################  Events  ##################################
+// ##############################################################################
 
 void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	const auto* cSystem{defaultCoordinateSystem()};
@@ -4481,9 +4481,9 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void CartesianPlot::save(QXmlStreamWriter* writer) const {
@@ -5211,9 +5211,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void CartesianPlot::loadTheme(const QString& theme) {
 	if (!theme.isEmpty()) {
 		KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);

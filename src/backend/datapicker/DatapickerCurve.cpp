@@ -118,9 +118,9 @@ Column* DatapickerCurve::appendColumn(const QString& name) {
 	return col;
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 Symbol* DatapickerCurve::symbol() const {
 	Q_D(const DatapickerCurve);
 	return d->symbol;
@@ -167,9 +167,9 @@ QString& DatapickerCurve::minusDeltaYColumnPath() const {
 	return d_ptr->minusDeltaYColumnPath;
 }
 
-//##############################################################################
-//#########################  setter methods  ###################################
-//##############################################################################
+// ##############################################################################
+// #########################  setter methods  ###################################
+// ##############################################################################
 void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	Q_D(DatapickerCurve);
 
@@ -392,9 +392,9 @@ void DatapickerCurve::setSelectedInView(bool b) {
 		Q_EMIT childAspectDeselectedInView(this);
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void DatapickerCurve::suppressUpdatePoint(bool suppress) {
 	m_supressResizeDatasheet = suppress;
 
@@ -482,9 +482,9 @@ void DatapickerCurve::updateColumns(bool datetime) {
 		d->posXColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 DatapickerCurvePrivate::DatapickerCurvePrivate(DatapickerCurve* curve)
 	: q(curve) {
 }
@@ -501,9 +501,9 @@ void DatapickerCurvePrivate::retransform() {
 		point->retransform();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const DatapickerCurve);

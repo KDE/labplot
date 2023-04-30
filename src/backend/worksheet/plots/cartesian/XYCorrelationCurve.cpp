@@ -60,9 +60,9 @@ QIcon XYCorrelationCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYCorrelationCurve, XYCorrelationCurve::CorrelationData, correlationData, correlationData)
 
 const XYCorrelationCurve::CorrelationResult& XYCorrelationCurve::correlationResult() const {
@@ -70,18 +70,18 @@ const XYCorrelationCurve::CorrelationResult& XYCorrelationCurve::correlationResu
 	return d->correlationResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYCorrelationCurve, SetCorrelationData, XYCorrelationCurve::CorrelationData, correlationData, recalculate)
 void XYCorrelationCurve::setCorrelationData(const XYCorrelationCurve::CorrelationData& correlationData) {
 	Q_D(XYCorrelationCurve);
 	exec(new XYCorrelationCurveSetCorrelationDataCmd(d, correlationData, ki18n("%1: set options and perform the correlation")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -216,9 +216,9 @@ bool XYCorrelationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYCorrelationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYCorrelationCurve);

@@ -242,9 +242,9 @@ void ReferenceRange::setPositionLogicalEnd(QPointF pos) {
 		exec(new ReferenceRangeSetPositionLogicalEndCmd(d, pos, ki18n("%1: set end logical position")));
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void ReferenceRange::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Orientation::Horizontal);
@@ -267,9 +267,9 @@ void ReferenceRange::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ReferenceRangePrivate::ReferenceRangePrivate(ReferenceRange* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -640,9 +640,9 @@ void ReferenceRangePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void ReferenceRange::save(QXmlStreamWriter* writer) const {
 	Q_D(const ReferenceRange);
@@ -730,9 +730,9 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void ReferenceRange::loadThemeConfig(const KConfig& config) {
 	// determine the index of the current range in the list of all range children
 	// and apply the theme color for this index

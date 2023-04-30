@@ -152,9 +152,9 @@ void XYAnalysisCurve::copyData(QVector<double>& xData,
 	}
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, XYAnalysisCurve::DataSourceType, dataSourceType, dataSourceType)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const XYCurve*, dataSourceCurve, dataSourceCurve)
 const QString& XYAnalysisCurve::dataSourceCurvePath() const {
@@ -173,9 +173,9 @@ bool XYAnalysisCurve::saveCalculations() const {
 	return const_cast<XYAnalysisCurve*>(this)->project()->saveCalculations();
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetDataSourceType, XYAnalysisCurve::DataSourceType, dataSourceType)
 void XYAnalysisCurve::setDataSourceType(DataSourceType type) {
 	Q_D(XYAnalysisCurve);
@@ -272,9 +272,9 @@ void XYAnalysisCurve::setY2DataColumnPath(const QString& path) {
 	d->y2DataColumnPath = path;
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void XYAnalysisCurve::handleSourceDataChanged() {
 	Q_D(XYAnalysisCurve);
 	d->sourceDataChangedSinceLastRecalc = true;
@@ -362,9 +362,9 @@ void XYAnalysisCurve::createDataSpreadsheet() {
 	folder()->addChild(spreadsheet);
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner)
 	: XYCurvePrivate(owner)
 	, q(owner) {
@@ -435,9 +435,9 @@ bool XYAnalysisCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColu
 	return tmpXDataColumn && tmpYDataColumn;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYAnalysisCurve);

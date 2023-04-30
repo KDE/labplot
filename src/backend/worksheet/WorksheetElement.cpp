@@ -671,9 +671,9 @@ void WorksheetElement::setRotationAngle(qreal angle) {
 		exec(new WorksheetElementSetRotationAngleCmd(d, angle_graphicsItem, ki18n("%1: set rotation angle")));
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 WorksheetElementPrivate::WorksheetElementPrivate(WorksheetElement* owner)
 	: q(owner) {
 }

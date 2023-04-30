@@ -300,9 +300,9 @@ bool DatapickerPoint::isReferencePoint() const {
 	return d->isReferencePoint;
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 DatapickerPointPrivate::DatapickerPointPrivate(DatapickerPoint* owner)
 	: q(owner) {
 	setFlag(QGraphicsItem::ItemIsMovable);
@@ -459,9 +459,9 @@ void DatapickerPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* ev
 	q->createContextMenu()->exec(event->screenPos());
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 	Q_D(const DatapickerPoint);
