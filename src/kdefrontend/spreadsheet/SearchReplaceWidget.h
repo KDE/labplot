@@ -34,10 +34,6 @@ private:
 	Ui::SearchReplaceWidget uiSearchReplace;
 	QWidget* m_searchWidget{nullptr};
 	QWidget* m_searchReplaceWidget{nullptr};
-	QRadioButton* m_rbNumeric{nullptr};
-	QRadioButton* m_rbText{nullptr};
-	QRadioButton* m_rbColumnMajor{nullptr};
-	QRadioButton* m_rbRowMajor{nullptr};
 
 	bool m_replaceEnabled{false};
 	Spreadsheet* m_spreadsheet{nullptr};
@@ -52,7 +48,13 @@ private:
 	void showExtendedContextMenu(bool forPattern, const QPoint&);
 	QVector<QString> capturePatterns(const QString& pattern) const;
 
+	void showEvent(QShowEvent*) override;
+
 private Q_SLOTS:
+	void dataTypeChanged(int index);
+	void operatorChanged(int) const;
+	void operatorDateTimeChanged(int) const;
+
 	void findNext(bool proceed);
 	void findPrevious(bool proceed);
 	void findAll();

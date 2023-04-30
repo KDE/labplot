@@ -97,56 +97,15 @@ struct ParInfo {
 	int captureNumber; // 1..9
 };
 
-SearchReplaceWidget::SearchReplaceWidget(Spreadsheet* spreadsheet, QWidget* parent) :
-	QWidget(parent),
-	m_spreadsheet(spreadsheet) {
-
+SearchReplaceWidget::SearchReplaceWidget(Spreadsheet* spreadsheet, QWidget* parent)
+	: QWidget(parent)
+	, m_spreadsheet(spreadsheet) {
 	m_view = static_cast<SpreadsheetView*>(spreadsheet->view());
 
 	auto* layout = new QVBoxLayout(this);
 	this->setLayout(layout);
 	QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 	this->setSizePolicy(sizePolicy);
-
-	// add common options
-
-	// data type
-	auto* frameDataType = new QFrame(this);
-	auto* hLayoutDataType = new QHBoxLayout(frameDataType);
-
-	auto* label = new QLabel(i18n("Type:"), frameDataType);
-	hLayoutDataType->addWidget(label);
-
-	m_rbNumeric = new QRadioButton(i18n("Numeric"));
-	hLayoutDataType->addWidget(m_rbNumeric);
-
-	m_rbText = new QRadioButton(i18n("Text"));
-	m_rbText->setChecked(true);
-	hLayoutDataType->addWidget(m_rbText);
-
-	auto* spacerDataType = new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Fixed);
-	hLayoutDataType->addItem(spacerDataType);
-
-	layout->addWidget(frameDataType);
-
-	// navigation order - row-major vs column-major
-	auto* frameOrder = new QFrame(this);
-	auto* hLayoutOrder = new QHBoxLayout(frameOrder);
-
-	label = new QLabel(i18n("Order:"), frameOrder);
-	hLayoutOrder->addWidget(label);
-
-	m_rbColumnMajor = new QRadioButton(i18n("Column Major"));
-	m_rbColumnMajor->setChecked(true);
-	hLayoutOrder->addWidget(m_rbColumnMajor);
-
-	m_rbRowMajor = new QRadioButton(i18n("Row Major"));
-	hLayoutOrder->addWidget(m_rbRowMajor);
-
-	auto* spacerOder = new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Fixed);
-	hLayoutOrder->addItem(spacerOder);
-
-	layout->addWidget(frameOrder);
 }
 
 SearchReplaceWidget::~SearchReplaceWidget() {
@@ -159,13 +118,12 @@ void SearchReplaceWidget::setReplaceEnabled(bool enabled) {
 
 void SearchReplaceWidget::setFocus() {
 	if (m_replaceEnabled)
-		uiSearchReplace.cbFind->setFocus();
+		uiSearchReplace.leValueText->setFocus();
 	else
 		uiSearch.cbFind->setFocus();
 }
 
 void SearchReplaceWidget::clear() {
-
 }
 
 // SLOTS
@@ -175,8 +133,8 @@ bool SearchReplaceWidget::findNextImpl(const QString& text, bool proceed) {
 	const int colCount = m_spreadsheet->columnCount();
 	const int rowCount = m_spreadsheet->rowCount();
 
-	const bool columnMajor = m_rbColumnMajor->isChecked();
-	const bool textMode = m_rbText->isChecked();
+	const bool columnMajor = (uiSearchReplace.cbOrder->currentIndex() == 0);
+	const bool textMode = (uiSearchReplace.cbDataType->currentIndex() == 0);
 
 	if (columnMajor && proceed)
 		++curRow;
@@ -198,7 +156,7 @@ bool SearchReplaceWidget::findNextImpl(const QString& text, bool proceed) {
 					}
 				}
 			}
-		} else { //row-major
+		} else { // row-major
 			for (int row = curRow; row < rowCount; ++row) {
 				for (int col = curCol; col < colCount; ++col) {
 					auto* column = m_spreadsheet->column(col);
@@ -212,8 +170,7 @@ bool SearchReplaceWidget::findNextImpl(const QString& text, bool proceed) {
 				}
 			}
 		}
-	} else { //numeric
-
+	} else { // numeric
 	}
 
 	return false;
@@ -223,8 +180,8 @@ bool SearchReplaceWidget::findPreviousImpl(const QString& text, bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
-	const bool columnMajor = m_rbColumnMajor->isChecked();
-	const bool textMode = m_rbText->isChecked();
+	const bool columnMajor = (uiSearchReplace.cbOrder->currentIndex() == 0);
+	const bool textMode = (uiSearchReplace.cbDataType->currentIndex() == 0);
 
 	if (columnMajor && proceed)
 		--curRow;
@@ -246,7 +203,7 @@ bool SearchReplaceWidget::findPreviousImpl(const QString& text, bool proceed) {
 					}
 				}
 			}
-		} else { //row-major
+		} else { // row-major
 			for (int row = curRow; row >= 0; --row) {
 				for (int col = curCol; col >= 0; --col) {
 					auto* column = m_spreadsheet->column(col);
@@ -260,8 +217,7 @@ bool SearchReplaceWidget::findPreviousImpl(const QString& text, bool proceed) {
 				}
 			}
 		}
-	} else { //numeric
-
+	} else { // numeric
 	}
 
 	return false;
@@ -271,7 +227,7 @@ void SearchReplaceWidget::findAll() {
 	QString text;
 	QLineEdit* lineEdit;
 	if (m_replaceEnabled)
-		lineEdit = uiSearchReplace.cbFind->lineEdit();
+		lineEdit = uiSearchReplace.leValueText;
 	else
 		lineEdit = uiSearch.cbFind->lineEdit();
 
@@ -301,6 +257,38 @@ void SearchReplaceWidget::replaceContextMenuRequest(const QPoint& pos) {
 	showExtendedContextMenu(true /* replace */, pos);
 }
 
+void SearchReplaceWidget::dataTypeChanged(int index) {
+	if (index == 0) { // text
+		uiSearchReplace.frameNumeric->hide();
+		uiSearchReplace.frameText->show();
+		uiSearchReplace.frameDateTime->hide();
+	} else if (index == 1) { // numeric
+		uiSearchReplace.frameNumeric->show();
+		uiSearchReplace.frameText->hide();
+		uiSearchReplace.frameDateTime->hide();
+	} else { // datetime
+		uiSearchReplace.frameNumeric->hide();
+		uiSearchReplace.frameText->hide();
+		uiSearchReplace.frameDateTime->show();
+	}
+}
+
+void SearchReplaceWidget::operatorChanged(int index) const {
+	bool value2 = (index == 2) || (index == 3);
+	uiSearchReplace.lMin->setVisible(value2);
+	uiSearchReplace.lMax->setVisible(value2);
+	uiSearchReplace.lAnd->setVisible(value2);
+	uiSearchReplace.leValue2->setVisible(value2);
+}
+
+void SearchReplaceWidget::operatorDateTimeChanged(int index) const {
+	bool value2 = (index == 2) || (index == 3);
+	uiSearchReplace.lMinDateTime->setVisible(value2);
+	uiSearchReplace.lMaxDateTime->setVisible(value2);
+	uiSearchReplace.lAndDateTime->setVisible(value2);
+	uiSearchReplace.dteValue2->setVisible(value2);
+}
+
 void SearchReplaceWidget::modeChanged() {
 }
 
@@ -315,6 +303,12 @@ void SearchReplaceWidget::switchFindReplace() {
 			initSearchReplaceWidget();
 
 		m_searchReplaceWidget->show();
+
+		// TODO
+		uiSearchReplace.cbDataType->setMinimumWidth(uiSearchReplace.cbOperator->width());
+		uiSearchReplace.cbOrder->setMinimumWidth(uiSearchReplace.cbOperator->width());
+		uiSearchReplace.cbOperatorText->setMinimumWidth(uiSearchReplace.cbOperator->width());
+		uiSearchReplace.cbOperatorDateTime->setMinimumWidth(uiSearchReplace.cbOperator->width());
 
 		if (m_searchWidget)
 			m_searchWidget->hide();
@@ -332,7 +326,7 @@ void SearchReplaceWidget::switchFindReplace() {
 void SearchReplaceWidget::findNext(bool proceed) {
 	QLineEdit* lineEdit;
 	if (m_replaceEnabled)
-		lineEdit = uiSearchReplace.cbFind->lineEdit();
+		lineEdit = uiSearchReplace.leValueText;
 	else
 		lineEdit = uiSearch.cbFind->lineEdit();
 
@@ -345,11 +339,10 @@ void SearchReplaceWidget::findNext(bool proceed) {
 		GuiTools::highlight(lineEdit, false);
 }
 
-
 void SearchReplaceWidget::findPrevious(bool proceed) {
 	QLineEdit* lineEdit;
 	if (m_replaceEnabled)
-		lineEdit = uiSearchReplace.cbFind->lineEdit();
+		lineEdit = uiSearchReplace.leValueText;
 	else
 		lineEdit = uiSearch.cbFind->lineEdit();
 
@@ -365,17 +358,25 @@ void SearchReplaceWidget::findPrevious(bool proceed) {
 void SearchReplaceWidget::initSearchWidget() {
 	m_searchWidget = new QWidget(this);
 	uiSearch.setupUi(m_searchWidget);
-	static_cast<QVBoxLayout*>(layout())->insertWidget(1, m_searchWidget);
+	static_cast<QVBoxLayout*>(layout())->insertWidget(0, m_searchWidget);
 
-	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=] () { findNext(true); });
-	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=] () { findNext(false); });
+	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=]() {
+		findNext(false);
+	});
+
+	connect(uiSearch.tbFindNext, &QToolButton::clicked, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearch.tbFindPrev, &QToolButton::clicked, this, [=]() {
+		findPrevious(true);
+	});
+	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
 
 	connect(uiSearch.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
 	connect(uiSearch.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
-
-	connect(uiSearch.tbFindNext, &QToolButton::clicked, this, [=] () { findNext(true); });
-	connect(uiSearch.tbFindPrev, &QToolButton::clicked, this, [=] () { findPrevious(true); });
-	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
 }
 
 void SearchReplaceWidget::initSearchReplaceWidget() {
@@ -383,51 +384,135 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.setupUi(m_searchReplaceWidget);
 	static_cast<QVBoxLayout*>(layout())->insertWidget(1, m_searchReplaceWidget);
 
-	connect(uiSearchReplace.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=] () { findNext(true); });
-	connect(uiSearchReplace.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=] () { findNext(false); });
+	QStringList items;
+	items << i18n("Equal to");
+	items << i18n("Not Equal to");
+	items << i18n("Between (Incl. End Points)");
+	items << i18n("Between (Excl. End Points)");
+	items << i18n("Greater than");
+	items << i18n("Greater than or Equal to");
+	items << i18n("Less than");
+	items << i18n("Less than or Equal to");
 
-	connect(uiSearchReplace.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
-	connect(uiSearchReplace.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
+	uiSearchReplace.cbOperator->addItems(items);
+	uiSearchReplace.cbOperatorDateTime->addItems(items);
 
-	connect(uiSearchReplace.tbFindNext, &QToolButton::clicked, this, [=] () { findNext(true); });
-	connect(uiSearchReplace.tbFindPrev, &QToolButton::clicked, this, [=] () { findPrevious(true); });
+	uiSearchReplace.cbOperatorText->addItem(i18n("Equal To"));
+	uiSearchReplace.cbOperatorText->addItem(i18n("Not Equal To"));
+	uiSearchReplace.cbOperatorText->addItem(i18n("Starts With"));
+	uiSearchReplace.cbOperatorText->addItem(i18n("Ends With"));
+	uiSearchReplace.cbOperatorText->addItem(i18n("Contains"));
+	uiSearchReplace.cbOperatorText->addItem(i18n("Does Not Contain"));
+	uiSearchReplace.cbOperatorText->insertSeparator(6);
+	uiSearchReplace.cbOperatorText->addItem(i18n("Regular Expression"));
+
+	uiSearchReplace.leValue1->setValidator(new QDoubleValidator(uiSearchReplace.leValue1));
+	uiSearchReplace.leValue2->setValidator(new QDoubleValidator(uiSearchReplace.leValue2));
+
+	// connections
+	connect(uiSearchReplace.cbDataType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::dataTypeChanged);
+
+	connect(uiSearchReplace.cbOperator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorChanged);
+	connect(uiSearchReplace.cbOperatorText, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearchReplace.cbOperatorDateTime, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorDateTimeChanged);
+
+	connect(uiSearchReplace.leValue1, &QLineEdit::returnPressed, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearchReplace.leValue2, &QLineEdit::returnPressed, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearchReplace.leValue1, &QLineEdit::textChanged, this, [=]() {
+		findNext(false);
+	});
+	connect(uiSearchReplace.leValue2, &QLineEdit::textChanged, this, [=]() {
+		findNext(false);
+	});
+
+	connect(uiSearchReplace.leValueText, &QLineEdit::returnPressed, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearchReplace.leValueText, &QLineEdit::textChanged, this, [=]() {
+		findNext(false);
+	});
+
+	connect(uiSearchReplace.dteValue1, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, [=]() {
+		findNext(false);
+	});
+	connect(uiSearchReplace.dteValue2, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, [=]() {
+		findNext(false);
+	});
+
+	connect(uiSearchReplace.tbFindNext, &QToolButton::clicked, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearchReplace.tbFindPrev, &QToolButton::clicked, this, [=]() {
+		findPrevious(true);
+	});
 	connect(uiSearchReplace.bFindAll, &QPushButton::clicked, this, &SearchReplaceWidget::findAll);
 
 	connect(uiSearchReplace.bReplaceNext, &QPushButton::clicked, this, &SearchReplaceWidget::replaceNext);
 	connect(uiSearchReplace.bReplaceAll, &QPushButton::clicked, this, &SearchReplaceWidget::replaceAll);
-	connect(uiSearchReplace.cbMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::modeChanged);
 	connect(uiSearchReplace.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
 
+	connect(uiSearchReplace.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
+	connect(uiSearchReplace.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
+
 	// custom context menus for LineEdit in ComboBox
-	uiSearchReplace.cbFind->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(uiSearchReplace.cbFind, &QComboBox::customContextMenuRequested, this, QOverload<const QPoint&>::of(&SearchReplaceWidget::findContextMenuRequest));
+	uiSearchReplace.leValueText->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(uiSearchReplace.leValueText,
+			&QComboBox::customContextMenuRequested,
+			this,
+			QOverload<const QPoint&>::of(&SearchReplaceWidget::findContextMenuRequest));
 
 	uiSearchReplace.cbReplace->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(uiSearchReplace.cbReplace,
 			&QComboBox::customContextMenuRequested,
 			this,
 			QOverload<const QPoint&>::of(&SearchReplaceWidget::replaceContextMenuRequest));
+
+	// read saved settings
+	// TODO:
+
+	dataTypeChanged(uiSearchReplace.cbDataType->currentIndex());
+	operatorChanged(uiSearchReplace.cbOperator->currentIndex());
+	operatorDateTimeChanged(uiSearchReplace.cbOperatorDateTime->currentIndex());
+}
+
+void SearchReplaceWidget::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
 }
 
 void SearchReplaceWidget::showExtendedContextMenu(bool replace, const QPoint& pos) {
 	// Make original menu
-	auto* comboBox = replace ? uiSearchReplace.cbReplace : uiSearchReplace.cbFind;
-	auto* const contextMenu = comboBox->lineEdit()->createStandardContextMenu();
+	QLineEdit* lineEdit;
+	if (replace)
+		lineEdit = uiSearchReplace.cbReplace->lineEdit();
+	else
+		lineEdit = uiSearchReplace.leValueText;
 
+	auto* const contextMenu = lineEdit->createStandardContextMenu();
 	if (!contextMenu)
 		return;
 
 	bool extendMenu = false;
 	bool regexMode = false;
-	switch (uiSearchReplace.cbMode->currentIndex()) {
-	case MODE_REGEX:
-		regexMode = true;
-		// FALLTHROUGH
-	case MODE_ESCAPE_SEQUENCES:
+	if (uiSearchReplace.cbDataType->currentIndex() == 0) {
+		// TODO
 		extendMenu = true;
-		break;
-	default:
-		break;
+		regexMode = true;
+		// switch (uiSearchReplace.cbMode->currentIndex()) {
+		// case MODE_REGEX:
+		// 	regexMode = true;
+		// 	// FALLTHROUGH
+		// case MODE_ESCAPE_SEQUENCES:
+		// 	extendMenu = true;
+		// 	break;
+		// default:
+		// 	break;
+		// }
 	}
 
 	AddMenuManager addMenuManager(contextMenu, 37);
@@ -519,9 +604,9 @@ void SearchReplaceWidget::showExtendedContextMenu(bool replace, const QPoint& po
 	}
 
 	// Show menu
-	auto* const result = contextMenu->exec(comboBox->mapToGlobal(pos));
+	auto* const result = contextMenu->exec(lineEdit->mapToGlobal(pos));
 	if (result)
-		addMenuManager.handle(result, comboBox->lineEdit());
+		addMenuManager.handle(result, lineEdit);
 }
 
 QVector<QString> SearchReplaceWidget::capturePatterns(const QString& pattern) const {
