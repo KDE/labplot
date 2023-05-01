@@ -203,15 +203,10 @@ void SpreadsheetDock::spreadsheetLinkingChanged(bool linking) {
 	ui.cbLinked->setChecked(linking);
 }
 
-void SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged(const Spreadsheet*) {
+void SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged(const Spreadsheet* spreadsheet) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* sh : m_spreadsheet->children<Spreadsheet>()) {
-		if (m_spreadsheetList.indexOf(sh) == -1) {
-			ui.cbLinkedSpreadsheet->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(sh));
-			break;
-		}
-	}
+	ui.cbLinkedSpreadsheet->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(spreadsheet));
 }
 
 //*************************************************************
