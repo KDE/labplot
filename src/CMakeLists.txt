@@ -519,7 +519,8 @@ target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # s
 # add system QADS include path
 if (qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
 	get_target_property(QADS_INCLUDES ads::qt5advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
-	# MESSAGE (STATUS "QADS INCLUDES: ${QADS_INCLUDES}")
+	get_target_property(QADS_LIBRARIES ads::qt5advanceddocking INTERFACE_LINK_LIBRARIES)
+	MESSAGE (STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
 	target_include_directories( labplot2lib PRIVATE ${QADS_INCLUDES} )
 endif ()
 target_compile_definitions(labplot2lib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
