@@ -1014,11 +1014,6 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 			column->setData(dataContainer[n]);
 		}
 	}
-
-	for (auto* column : columns) {
-		column->setUndoAware(true);
-		column->setSuppressDataChangedSignal(false);
-	}
 	//	QDEBUG("dataPointers =" << dataPointers);
 
 	// DEBUG(Q_FUNC_INFO << ", DONE");
@@ -1144,9 +1139,6 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
 		Column* column = columns.at(columnOffset + n - startColumn);
 		// DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
-
-		column->setUndoAware(false);
-		column->setSuppressDataChangedSignal(true);
 
 		QString comment;
 		switch (column->columnMode()) {
