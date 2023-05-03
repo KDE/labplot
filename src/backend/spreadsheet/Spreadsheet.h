@@ -124,7 +124,6 @@ public Q_SLOTS:
 
 private:
 	void init();
-	void updateLinks();
 	void initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver);
 	Q_DECLARE_PRIVATE(Spreadsheet)
 

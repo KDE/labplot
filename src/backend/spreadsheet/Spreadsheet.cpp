@@ -334,8 +334,7 @@ public:
 		redo();
 	}
 
-	void finalize() {
-		m_target->updateLinks();
+	void finalize() const {
 		emit m_target->q->linkingChanged(m_target->linking.linking);
 		emit m_target->q->linkedSpreadsheetChanged(m_target->linking.linkedSpreadsheet);
 	}
@@ -376,11 +375,6 @@ void Spreadsheet::setLinkedSpreadsheet(const Spreadsheet* linkedSpreadsheet, boo
 QString Spreadsheet::linkedSpreadsheetPath() const {
 	Q_D(const Spreadsheet);
 	return d->linking.spreadsheetPath();
-}
-
-void Spreadsheet::updateLinks() {
-	Q_D(Spreadsheet);
-	d->updateLinks();
 }
 
 /*!
@@ -1474,17 +1468,4 @@ SpreadsheetPrivate::SpreadsheetPrivate(Spreadsheet* owner)
 
 QString SpreadsheetPrivate::name() const {
 	return q->name();
-}
-
-void SpreadsheetPrivate::updateLinks(const AbstractColumn* column) {
-	if (column) {
-		for (int i = 0; i < q->columnCount(); i++) {
-			auto* c = q->column(i);
-			for (const auto& data : c->formulaData()) {
-				if (data.column() == column && c->formulaAutoUpdate()) { }
-			}
-		}
-	} else {
-		// update all
-	}
 }

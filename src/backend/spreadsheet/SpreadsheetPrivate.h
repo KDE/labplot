@@ -7,7 +7,6 @@ class SpreadsheetPrivate : public QObject {
 public:
 	explicit SpreadsheetPrivate(Spreadsheet*);
 
-	void updateLinks(const AbstractColumn* = nullptr);
 	QString name() const;
 
 public:
