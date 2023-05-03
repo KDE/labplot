@@ -115,13 +115,11 @@ if (ENABLE_VECTOR_BLF)
       target_include_directories(Vector_BLF PUBLIC ${vector_blf_SOURCE_DIR}/src
                           ${vector_blf_BINARY_DIR}/src) # config.h is in there
       target_link_libraries(labplot2lib Vector_BLF)
-      target_compile_definitions(labplot2lib PRIVATE HAVE_VECTOR_BLF)
+      target_compile_definitions(labplot2lib PUBLIC HAVE_VECTOR_BLF)
   else()
-    pkg_check_modules(Vector_BLF IMPORTED_TARGET GLOBAL Vector_BLF)
-    if (Vector_BLF_FOUND)
-        target_link_libraries(labplot2lib PkgConfig::Vector_BLF)
-        target_compile_definitions(labplot2lib PRIVATE HAVE_VECTOR_BLF)
-    endif()
+    pkg_check_modules(Vector_BLF REQUIRED IMPORTED_TARGET GLOBAL Vector_BLF)
+    target_link_libraries(labplot2lib PkgConfig::Vector_BLF)
+    target_compile_definitions(labplot2lib PUBLIC HAVE_VECTOR_BLF)
   endif()
 endif()
 
