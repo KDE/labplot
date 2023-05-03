@@ -1805,7 +1805,7 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	// QCOMPARE(dock.ui.sbRowCount->isEnabled(), false);
 	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
-	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QStringLiteral());
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
 	QCOMPARE(sheetCalculations->rowCount(), 2);
 
 	const auto index = dock.m_aspectTreeModel->modelIndexOfAspect(sheetData);
@@ -1841,10 +1841,16 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	sheetCalculations->undoStack()->undo();
 	sheetCalculations->undoStack()->undo();
 
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	sheetCalculations->undoStack()->undo();
 	QCOMPARE(sheetCalculations->linking(), false);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
-	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QStringLiteral());
-	QCOMPARE(sheetCalculations->rowCount(), 2);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
 }
 
 void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
