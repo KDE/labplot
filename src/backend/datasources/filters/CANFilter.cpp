@@ -307,7 +307,7 @@ int CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSour
 
 	auto dc = m_DataContainer.dataContainer();
 	const int columnOffset = dataSource->prepareImport(dc, mode, rows, m_signals.signal_names.length(), m_signals.signal_names, columnModes(), false);
-	dataSource->finalizeImport(columnOffset);
+	dataSource->finalizeImport(columnOffset, 0, m_signals.signal_names.length() - 1);
 
 	// Assign value labels to the column
 	auto columns = dataSource->children<Column>();
