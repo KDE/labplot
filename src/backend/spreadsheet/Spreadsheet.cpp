@@ -964,7 +964,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 
 	if (initializeContainer)
 		dataContainer.resize(actualCols);
-	auto columns = children<Column>(); // get all childs after resizing
+	const auto& columns = children<Column>(); // get all childs after resizing
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		Column* column = columns.at(columnOffset + n);
@@ -1075,7 +1075,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
 		// replace completely the previous content of the data source with the content to be imported.
-		auto columns = children<Column>();
+		const auto& columns = children<Column>();
 		int columnsCount = columns.count();
 
 		if (columnsCount > cols) {
@@ -1139,10 +1139,10 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
-	auto columns = children(AspectType::Column);
+	const auto& columns = children<Column>();
 	for (size_t n = startColumn; n <= endColumn; n++) {
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
-		Column* column = static_cast<Column*>(columns.at(columnOffset + n - startColumn));
+		Column* column = columns.at(columnOffset + n - startColumn);
 		// DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
 
 		column->setUndoAware(false);
