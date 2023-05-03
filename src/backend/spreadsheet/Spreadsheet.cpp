@@ -941,8 +941,11 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 
 	// make the available columns undo unaware before we resize and rename them below,
 	// the same will be done for new columns in this->resize().
-	for (int i = 0; i < childCount<Column>(); i++)
-		child<Column>(i)->setUndoAware(false);
+	for (int i = 0; i < childCount<Column>(); i++) {
+		auto* c = child<Column>(i);
+		c->setUndoAware(false);
+		c->setSuppressDataChangedSignal(true);
+	}
 
 	columnOffset = this->resize(importMode, colNameList, actualCols);
 
@@ -1010,6 +1013,12 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 		} else {
 			column->setData(dataContainer[n]);
 		}
+	}
+
+	for (int i = 0; i < childCount<Column>(); i++) {
+		auto* c = child<Column>(i);
+		c->setUndoAware(true);
+		c->setSuppressDataChangedSignal(false);
 	}
 	//	QDEBUG("dataPointers =" << dataPointers);
 
@@ -1094,7 +1103,6 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		//    will not be connected again to the curves (project.cpp, descriptionChanged)
 		// 5. Enable retransform for all WorksheetElements
 		for (int i = 0; i < childCount<Column>(); i++) {
-			child<Column>(i)->setSuppressDataChangedSignal(true);
 			Q_EMIT child<Column>(i)->reset(child<Column>(i));
 			child<Column>(i)->setName(uniqueNames.at(i), AbstractAspect::NameHandling::UniqueNotRequired);
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
@@ -1133,6 +1141,9 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		Column* column = this->column((int)(columnOffset + n - startColumn));
 		// DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
 
+		column->setUndoAware(false);
+		column->setSuppressDataChangedSignal(true);
+
 		QString comment;
 		switch (column->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
@@ -1161,10 +1172,9 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		}
 		column->setComment(comment);
 
-		if (importMode == AbstractFileFilter::ImportMode::Replace) {
-			column->setSuppressDataChangedSignal(false);
-			column->setChanged();
-		}
+		column->setSuppressDataChangedSignal(false);
+		column->setChanged();
+		column->setUndoAware(true);
 	}
 
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
@@ -1177,8 +1187,6 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 	// make the spreadsheet and all its children undo aware again
 	setUndoAware(true);
-	for (int i = 0; i < childCount<Column>(); i++)
-		child<Column>(i)->setUndoAware(true);
 
 	if (m_model != nullptr)
 		m_model->suppressSignals(false);
