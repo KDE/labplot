@@ -941,10 +941,9 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 
 	// make the available columns undo unaware before we resize and rename them below,
 	// the same will be done for new columns in this->resize().
-	for (int i = 0; i < childCount<Column>(); i++) {
-		auto* c = child<Column>(i);
-		c->setUndoAware(false);
-		c->setSuppressDataChangedSignal(true);
+	for (auto* column : children<Column>()) {
+		column->setUndoAware(false);
+		column->setSuppressDataChangedSignal(true);
 	}
 
 	columnOffset = this->resize(importMode, colNameList, actualCols);
@@ -965,9 +964,10 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 
 	if (initializeContainer)
 		dataContainer.resize(actualCols);
+	auto columns = children<Column>(); // get all childs after resizing
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
-		Column* column = this->child<Column>(columnOffset + n);
+		Column* column = columns.at(columnOffset + n);
 		DEBUG(" column " << n << " columnMode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode[n]));
 		column->setColumnModeFast(columnMode[n]);
 
@@ -1015,10 +1015,9 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 		}
 	}
 
-	for (int i = 0; i < childCount<Column>(); i++) {
-		auto* c = child<Column>(i);
-		c->setUndoAware(true);
-		c->setSuppressDataChangedSignal(false);
+	for (auto* column : columns) {
+		column->setUndoAware(true);
+		column->setSuppressDataChangedSignal(false);
 	}
 	//	QDEBUG("dataPointers =" << dataPointers);
 
@@ -1076,17 +1075,18 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
 		// replace completely the previous content of the data source with the content to be imported.
-		int columns = childCount<Column>();
+		auto columns = children<Column>();
+		int columnsCount = columns.count();
 
-		if (columns > cols) {
+		if (columnsCount > cols) {
 			// there are more columns in the data source than required -> remove the superfluous columns
-			for (int i = 0; i < columns - cols; i++)
+			for (int i = 0; i < columnsCount - cols; i++)
 				removeChild(child<Column>(0));
 		} else {
 			// create additional columns if needed
 			// disconnect from the handleAspectAdded slot in the view, no need to handle it when adding new columns during the import
 			disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
-			for (int i = columns; i < cols; i++) {
+			for (int i = columnsCount; i < cols; i++) {
 				newColumn = new Column(uniqueNames.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->resizeTo(rows);
 				newColumn->setUndoAware(false);
@@ -1102,10 +1102,13 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		// 4. send aspectDescriptionChanged because otherwise the column
 		//    will not be connected again to the curves (project.cpp, descriptionChanged)
 		// 5. Enable retransform for all WorksheetElements
-		for (int i = 0; i < childCount<Column>(); i++) {
-			Q_EMIT child<Column>(i)->reset(child<Column>(i));
-			child<Column>(i)->setName(uniqueNames.at(i), AbstractAspect::NameHandling::UniqueNotRequired);
-			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
+
+		int count = 0;
+		for (auto* column : columns) {
+			Q_EMIT column->reset(column);
+			column->setName(uniqueNames.at(count), AbstractAspect::NameHandling::UniqueNotRequired);
+			column->aspectDescriptionChanged(column);
+			count++;
 		}
 	}
 	emit resizeFinished();
@@ -1136,9 +1139,10 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
+	auto columns = children(AspectType::Column);
 	for (size_t n = startColumn; n <= endColumn; n++) {
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
-		Column* column = this->column((int)(columnOffset + n - startColumn));
+		Column* column = static_cast<Column*>(columns.at(columnOffset + n - startColumn));
 		// DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
 
 		column->setUndoAware(false);
