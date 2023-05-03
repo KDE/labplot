@@ -78,6 +78,8 @@ private Q_SLOTS:
 	void testLinkSpreadsheetRemoveRow();
 	void testLinkSpreadsheetRecalculate();
 	void testLinkSpreadsheetSaveLoad();
+
+	void testLinkSpreadSheetImportBLF();
 };
 
 #endif
