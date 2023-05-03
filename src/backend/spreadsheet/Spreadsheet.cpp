@@ -1135,6 +1135,10 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
 	const auto& columns = children<Column>();
+	for (size_t i = 0; i < columnOffset; i++) {
+		columns.at(i)->setSuppressDataChangedSignal(false);
+		columns.at(i)->setUndoAware(true);
+	}
 	for (size_t n = startColumn; n <= endColumn; n++) {
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
 		Column* column = columns.at(columnOffset + n - startColumn);
@@ -1171,6 +1175,10 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		column->setSuppressDataChangedSignal(false);
 		column->setChanged();
 		column->setUndoAware(true);
+	}
+	for (size_t i = columnOffset + endColumn - startColum; i < columns.length(); i++) {
+		columns.at(i)->setSuppressDataChangedSignal(false);
+		columns.at(i)->setUndoAware(true);
 	}
 
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
