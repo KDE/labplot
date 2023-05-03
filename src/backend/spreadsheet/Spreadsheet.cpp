@@ -964,7 +964,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 
 	if (initializeContainer)
 		dataContainer.resize(actualCols);
-	const auto& columns = children<Column>(); // get all childs after resizing
+	const auto& columns = children<Column>(); // get all children after resizing
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		Column* column = columns.at(columnOffset + n);
