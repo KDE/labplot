@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-29 00:44+0000\n"
-"PO-Revision-Date: 2023-04-26 19:44+0100\n"
+"PO-Revision-Date: 2023-05-03 21:29+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -5736,7 +5736,7 @@ msgstr "Statistiko (Distribuoj)"
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:87
 #, kde-format
 msgid "Custom"
-msgstr "Kutimo"
+msgstr "Propra"
 
 #: src/backend/nsl/nsl_fit.c:26
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:486
@@ -10263,7 +10263,7 @@ msgstr "Retumilo de Koloraj Mapoj"
 #: src/kdefrontend/examples/ExamplesWidget.cpp:33
 #, kde-format
 msgid "Switch between icon and list views"
-msgstr "Ŝaltu inter ikono kaj listvido"
+msgstr "Ŝaltu inter piktogramo kaj listvido"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:48
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:53
@@ -11150,8 +11150,8 @@ msgstr "Grupo: %1"
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 cBajto"
+msgstr[1] "%1 cBajtoj"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1421
 #, kde-format
@@ -12400,7 +12400,7 @@ msgstr "%1 CustomPoints: videbleco ŝanĝiĝis"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:413
 #, kde-format
 msgid "%1 custom points: template \"%2\" loaded"
-msgstr "%1 kutimaj punktoj: ŝablono \"%2\" ŝargita"
+msgstr "%1 propraj punktoj: ŝablono \"%2\" ŝargita"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:83
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
@@ -13121,11 +13121,10 @@ msgid "Properties"
 msgstr "Propraĵoj"
 
 #: src/kdefrontend/GuiObserver.cpp:220
-#, fuzzy, kde-format
-#| msgid "&Sort Spreadsheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr "&Ordigi Tabelfolion"
+msgstr "Proprecoj: Tabelfolio"
 
 #: src/kdefrontend/GuiObserver.cpp:230
 #, kde-format
@@ -13134,187 +13133,160 @@ msgid "%1 Worksheet"
 msgstr "%1 Laborfolio"
 
 #: src/kdefrontend/GuiObserver.cpp:235
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Kolumno"
 
 #: src/kdefrontend/GuiObserver.cpp:242
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Matrico"
 
 #: src/kdefrontend/GuiObserver.cpp:247
-#, fuzzy, kde-format
-#| msgid "Complete Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "Kompleta Laborfolio"
+msgstr "Proprecoj: Laborfolio"
 
 #: src/kdefrontend/GuiObserver.cpp:253
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
-msgstr "Esploristo de Propraĵoj"
+msgstr "Proprecoj: Desegnejo"
 
 #: src/kdefrontend/GuiObserver.cpp:259
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Subteksto"
 
 #: src/kdefrontend/GuiObserver.cpp:264
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Akso"
 
 #: src/kdefrontend/GuiObserver.cpp:269
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: XY-Kurbo"
 
 #: src/kdefrontend/GuiObserver.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "XY-Equation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
-msgstr "XY-ekvacio"
+msgstr "Proprecoj: XY-ekvacio"
 
 #: src/kdefrontend/GuiObserver.cpp:279
-#, fuzzy, kde-format
-#| msgid "Data Reduction"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
-msgstr "Redukto de datumoj"
+msgstr "Proprecoj: Redukto de datumoj"
 
 #: src/kdefrontend/GuiObserver.cpp:295
-#, fuzzy, kde-format
-#| msgid "Differentiation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
-msgstr "Diferencigo"
+msgstr "Proprecoj: Diferencigo"
 
 #: src/kdefrontend/GuiObserver.cpp:300
-#, fuzzy, kde-format
-#| msgid "Integration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
-msgstr "Integriĝo"
+msgstr "Proprecoj: Integriĝo"
 
 #: src/kdefrontend/GuiObserver.cpp:305
-#, fuzzy, kde-format
-#| msgid "Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
-msgstr "Interpolado"
+msgstr "Proprecoj: Interpolado"
 
 #: src/kdefrontend/GuiObserver.cpp:310
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Glatigo"
 
 #: src/kdefrontend/GuiObserver.cpp:315
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Ĝisrandigo"
 
 #: src/kdefrontend/GuiObserver.cpp:320
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
-msgstr "Transformo de Fourier"
+msgstr "Proprecoj: Fourier-Transformo"
 
 #: src/kdefrontend/GuiObserver.cpp:325
-#, fuzzy, kde-format
-#| msgid "Hilbert Transform"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
-msgstr "Hilberta Transformo"
+msgstr "Proprecoj: Hilberta Transformo"
 
 #: src/kdefrontend/GuiObserver.cpp:330
-#, fuzzy, kde-format
-#| msgid "Fourier Filter"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
-msgstr "Filtrilo de Fourier"
+msgstr "Proprecoj: Filtrilo de Fourier"
 
 #: src/kdefrontend/GuiObserver.cpp:335
-#, fuzzy, kde-format
-#| msgid "Convolution/Deconvolution"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
-msgstr "Convolution/Deconvolution"
+msgstr "Proprecoj: Convolution/Deconvolution"
 
 #: src/kdefrontend/GuiObserver.cpp:340
-#, fuzzy, kde-format
-#| msgid "Auto-/Cross-Correlation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
-msgstr "Aŭtomata-/Kruza-Korelacio"
+msgstr "Proprecoj: Aŭtomata-/Kruza-Korelacio"
 
 #: src/kdefrontend/GuiObserver.cpp:345
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
-msgstr "Esploristo de Propraĵoj"
+msgstr "Proprecoj: Esploristo de Propraĵoj"
 
 #: src/kdefrontend/GuiObserver.cpp:350
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Bastondiagramo"
 
 #: src/kdefrontend/GuiObserver.cpp:355
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr "Esploristo de Propraĵoj"
+msgstr "Proprecoj: Skatoldiagramo"
 
 #: src/kdefrontend/GuiObserver.cpp:360
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
-msgstr "Esploristo de Propraĵoj"
+msgstr "Proprecoj: Tekstetikedo"
 
 #: src/kdefrontend/GuiObserver.cpp:365
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Bildo"
 
 #: src/kdefrontend/GuiObserver.cpp:370
-#, fuzzy, kde-format
-#| msgid "Custom Point"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
-msgstr "Propra Punkto"
+msgstr "Proprecoj: Propra Punkto"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Reference Line"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
-msgstr "Referenca Linio"
+msgstr "Proprecoj: Referenca Linio"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -13323,27 +13295,22 @@ msgid "Reference Range"
 msgstr "Referenca Gamo"
 
 #: src/kdefrontend/GuiObserver.cpp:385
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
-msgstr "Datepicker Kurbo"
+msgstr "Proprecoj: Datapicker-Kurbo"
 
 #: src/kdefrontend/GuiObserver.cpp:390
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Data Extractor"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
-msgstr "Eltilo de datumoj"
+msgstr "Proprecoj: Datum-Eltirilo"
 
 #: src/kdefrontend/GuiObserver.cpp:400
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Projekto"
 
 #: src/kdefrontend/GuiObserver.cpp:410
 #, kde-format
@@ -13352,56 +13319,47 @@ msgid "%1 Notebook"
 msgstr "%1 Kajero"
 
 #: src/kdefrontend/GuiObserver.cpp:412
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Kajero"
 
 #: src/kdefrontend/GuiObserver.cpp:418
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
-msgstr "Propraĵoj"
+msgstr "Proprecoj: Notoj"
 
 #: src/kdefrontend/GuiObserver.cpp:423
-#, fuzzy, kde-format
-#| msgid "Info Element"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
-msgstr "Info Elemento"
+msgstr "Proprecoj: Informelemento"
 
 #: src/kdefrontend/GuiObserver.cpp:430 src/kdefrontend/GuiObserver.cpp:437
 #: src/kdefrontend/GuiObserver.cpp:444
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "MQTT Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
-msgstr "MQTT-datumfonto"
+msgstr "Proprecoj: MQTT-datumfonto"
 
 #: src/kdefrontend/GuiObserver.cpp:450
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Live Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
-msgstr "Viva Datuma Fonto"
+msgstr "Properties: Viva Datumfonto"
 
 #: src/kdefrontend/GuiObserver.cpp:464
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr "Esploristo de Propraĵoj"
+msgstr "Properties: Dosierujo"
 
 #: src/kdefrontend/GuiObserver.cpp:471
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
-msgstr "Propraĵoj"
+msgstr "Properties: Laborlibro"
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
@@ -13824,7 +13782,7 @@ msgstr "Andreas Kainz"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
-msgstr "Ikono-dezajnisto"
+msgstr "Piktogramo-dezajnisto"
 
 #: src/kdefrontend/LabPlot.cpp:106
 #, kde-format
@@ -15410,7 +15368,7 @@ msgstr "Unu diagram-areo por bastondiagramo"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:365
 #, kde-format
 msgid "Add Bar Plots to"
-msgstr "Aldonu Trinkejojn al"
+msgstr "Aldoni bastondiagramojn al"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:399
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:410
@@ -15735,7 +15693,7 @@ msgstr "Teksta pozicio"
 #: src/kdefrontend/TemplateHandler.cpp:157
 #, kde-format
 msgid "Icons only"
-msgstr "Nur ikonoj"
+msgstr "Nur piktogramoj"
 
 #: src/kdefrontend/TemplateHandler.cpp:164
 #, kde-format
@@ -15745,12 +15703,12 @@ msgstr "Nur teksto"
 #: src/kdefrontend/TemplateHandler.cpp:171
 #, kde-format
 msgid "Text Alongside Icons"
-msgstr "Teksto Apud Ikonoj"
+msgstr "Teksto apud piktogramoj"
 
 #: src/kdefrontend/TemplateHandler.cpp:178
 #, kde-format
 msgid "Text Under Icons"
-msgstr "Teksto Sub Ikonoj"
+msgstr "Teksto sub piktogramoj"
 
 #: src/kdefrontend/TemplateHandler.cpp:218
 #, kde-format
@@ -16707,13 +16665,13 @@ msgstr "ebligi"
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:46
 #, kde-format
 msgid "Connection String:"
-msgstr "Konekta Ŝnuro:"
+msgstr "Konekta ĉeno:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDriver)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:66
 #, kde-format
 msgid "Driver:"
-msgstr "Ŝoforo:"
+msgstr "Pelilo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHost)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:76
@@ -16797,7 +16755,7 @@ msgstr "Komenta karaktero:"
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:138
 #, kde-format
 msgid "Separating string:"
-msgstr "Disiga ŝnuro:"
+msgstr "Disiga ĉeno:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:93
@@ -19925,7 +19883,7 @@ msgstr "Mediana devio"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:206
 #, kde-format
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillQoS)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:216
@@ -21310,7 +21268,7 @@ msgstr "Duon-Taktoj"
 #: src/kdefrontend/widgets/LineWidget.cpp:88
 #, kde-format
 msgid "Bars with Ends"
-msgstr "Trinkejoj kun Finoj"
+msgstr "Bastonoj kun Finoj"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:98
 #, kde-format
