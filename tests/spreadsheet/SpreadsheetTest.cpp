@@ -2144,127 +2144,131 @@ void createBLFFile(const QString& filename, QVector<Vector::BLF::CanMessage2*> m
 }
 }
 
-// TODO: enable once problem is fixed
 void SpreadsheetTest::testLinkSpreadSheetImportBLF() {
-//	QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
-//	QVERIFY(blfFileName.open());
-//	QVector<Vector::BLF::CanMessage2*> messages{
-//		createCANMessage(337, 5, {0, 4, 252, 19, 0, 0, 0, 0}),
-//		createCANMessage(541, 10, {7, 39, 118, 33, 250, 30, 76, 24}), // 99.91, 85.66, 79.3, 22.2
-//		createCANMessage(337, 15, {47, 4, 60, 29, 0, 0, 0, 0}),
-//		createCANMessage(337, 20, {57, 4, 250, 29, 0, 0, 0, 0}),
-//		createCANMessage(541, 25, {7, 39, 118, 33, 250, 30, 76, 24}), // 99.91, 85.66, 79.3, 22.2
-//	}; // time is in nanoseconds
-//	createBLFFile(blfFileName.fileName(), messages);
+	QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
+	QVERIFY(blfFileName.open());
+	QVector<Vector::BLF::CanMessage2*> messages{
+		createCANMessage(337, 5, {0, 4, 252, 19, 0, 0, 0, 0}),
+		createCANMessage(541, 10, {7, 39, 118, 33, 250, 30, 76, 24}), // 99.91, 85.66, 79.3, 22.2
+		createCANMessage(337, 15, {47, 4, 60, 29, 0, 0, 0, 0}),
+		createCANMessage(337, 20, {57, 4, 250, 29, 0, 0, 0, 0}),
+		createCANMessage(541, 25, {7, 39, 118, 33, 250, 30, 76, 24}), // 99.91, 85.66, 79.3, 22.2
+	}; // time is in nanoseconds
+	createBLFFile(blfFileName.fileName(), messages);
 
-//	QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
-//	QVERIFY(dbcFile.open());
-//	const auto dbcContent = R"(BO_ 337 STATUS: 8 Vector__XXX
-// SG_ Value6 : 27|3@1+ (1,0) [0|7] ""  Vector__XXX
-// SG_ Value5 : 16|11@1+ (0.1,-102) [-102|102] "%"  Vector__XXX
-// SG_ Value2 : 8|2@1+ (1,0) [0|2] ""  Vector__XXX
-// SG_ Value3 : 10|1@1+ (1,0) [0|1] ""  Vector__XXX
-// SG_ Value7 : 30|2@1+ (1,0) [0|3] ""  Vector__XXX
-// SG_ Value4 : 11|4@1+ (1,0) [0|3] ""  Vector__XXX
-// SG_ Value1 : 0|8@1+ (1,0) [0|204] "Km/h"  Vector__XXX"
-//BO_ 541 MSG2: 8 Vector__XXX
-// SG_ MSG2Value4 : 48|16@1+ (0.01,-40) [-40|125] "C"  Vector__XXX
-// SG_ MSG2Value1 : 0|16@1+ (0.01,0) [0|100] "%"  Vector__XXX
-// SG_ MSG2Value3 : 32|16@1+ (0.01,0) [0|100] "%"  Vector__XXX
-// SG_ MSG2Value2 : 16|16@1+ (0.01,0) [0|100] "%"  Vector__XXX
-//)";
-//	createDBCFile(dbcFile.fileName(), dbcContent);
+	QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
+	QVERIFY(dbcFile.open());
+	const auto dbcContent = R"(BO_ 337 STATUS: 8 Vector__XXX
+ SG_ Value6 : 27|3@1+ (1,0) [0|7] ""  Vector__XXX
+ SG_ Value5 : 16|11@1+ (0.1,-102) [-102|102] "%"  Vector__XXX
+ SG_ Value2 : 8|2@1+ (1,0) [0|2] ""  Vector__XXX
+ SG_ Value3 : 10|1@1+ (1,0) [0|1] ""  Vector__XXX
+ SG_ Value7 : 30|2@1+ (1,0) [0|3] ""  Vector__XXX
+ SG_ Value4 : 11|4@1+ (1,0) [0|3] ""  Vector__XXX
+ SG_ Value1 : 0|8@1+ (1,0) [0|204] "Km/h"  Vector__XXX"
+BO_ 541 MSG2: 8 Vector__XXX
+ SG_ MSG2Value4 : 48|16@1+ (0.01,-40) [-40|125] "C"  Vector__XXX
+ SG_ MSG2Value1 : 0|16@1+ (0.01,0) [0|100] "%"  Vector__XXX
+ SG_ MSG2Value3 : 32|16@1+ (0.01,0) [0|100] "%"  Vector__XXX
+ SG_ MSG2Value2 : 16|16@1+ (0.01,0) [0|100] "%"  Vector__XXX
+)";
+	createDBCFile(dbcFile.fileName(), dbcContent);
 
-//	//------------------------------------------------------------------------------------------
-//	Project project;
-//	const auto spreadsheetName = blfFileName.fileName().replace(QStringLiteral(".blf"), QStringLiteral(""));
-//	auto* sheetData = new Spreadsheet(spreadsheetName, false);
-//	project.addChild(sheetData);
-//	sheetData->setColumnCount(2);
-//	sheetData->setRowCount(10);
-//	auto* sheetDataColumn0 = sheetData->child<Column>(0);
-//	sheetDataColumn0->setName(QStringLiteral("Value6_"));
-//	sheetDataColumn0->replaceValues(0, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-//	QVERIFY(sheetDataColumn0);
-//	auto* sheetDataColumn1 = sheetData->child<Column>(1);
-//	sheetDataColumn1->setName(QStringLiteral("Value5_%"));
-//	QVERIFY(sheetDataColumn1);
-//	sheetDataColumn1->replaceValues(0, {1, 2, 1, 2, 1, 2, 1, 2, 1, 3});
+	//------------------------------------------------------------------------------------------
+	Project project;
+	const auto spreadsheetName = blfFileName.fileName().replace(QStringLiteral(".blf"), QStringLiteral(""));
+	auto* sheetData = new Spreadsheet(spreadsheetName, false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(2);
+	sheetData->setRowCount(10);
+	auto* sheetDataColumn0 = sheetData->child<Column>(0);
+	sheetDataColumn0->setName(QStringLiteral("Value6_"));
+	sheetDataColumn0->replaceValues(0, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+	QVERIFY(sheetDataColumn0);
+	auto* sheetDataColumn1 = sheetData->child<Column>(1);
+	sheetDataColumn1->setName(QStringLiteral("Value5_%"));
+	QVERIFY(sheetDataColumn1);
+	sheetDataColumn1->replaceValues(0, {1, 2, 1, 2, 1, 2, 1, 2, 1, 3});
 
-//	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
-//	project.addChild(sheetCalculations);
-//	sheetCalculations->setColumnCount(2);
-//	sheetCalculations->setRowCount(2);
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(2);
+	sheetCalculations->setRowCount(2);
 
-//	auto* sheetCalculationsColumn0 = sheetCalculations->child<Column>(0);
-//	QVERIFY(sheetCalculationsColumn0);
-//	sheetCalculationsColumn0->setFormula(QStringLiteral("2*x"), {QStringLiteral("x")}, {sheetDataColumn0}, true);
-//	sheetCalculationsColumn0->updateFormula();
+	auto* sheetCalculationsColumn0 = sheetCalculations->child<Column>(0);
+	QVERIFY(sheetCalculationsColumn0);
+	sheetCalculationsColumn0->setFormula(QStringLiteral("2*x"), {QStringLiteral("x")}, {sheetDataColumn0}, true);
+	sheetCalculationsColumn0->updateFormula();
 
-//	auto* sheetCalculationsColumn1 = sheetCalculations->child<Column>(1);
-//	QVERIFY(sheetCalculationsColumn1);
-//	sheetCalculationsColumn1->setFormula(QStringLiteral("2*x"), {QStringLiteral("x")}, {sheetDataColumn1}, true);
-//	sheetCalculationsColumn1->updateFormula();
+	auto* sheetCalculationsColumn1 = sheetCalculations->child<Column>(1);
+	QVERIFY(sheetCalculationsColumn1);
+	sheetCalculationsColumn1->setFormula(QStringLiteral("2*x"), {QStringLiteral("x")}, {sheetDataColumn1}, true);
+	sheetCalculationsColumn1->updateFormula();
 
-//	{
-//		QVector<double> ref{2, 4, 6, 8, 10, 12, 14, 16, 18, 20};
-//		QCOMPARE(sheetCalculationsColumn0->rowCount(), 10);
-//		for (int i = 0; i < 10; i++)
-//			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
-//	}
+	{
+		QVector<double> ref{2, 4, 6, 8, 10, 12, 14, 16, 18, 20};
+		QCOMPARE(sheetCalculationsColumn0->rowCount(), 10);
+		for (int i = 0; i < 10; i++)
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
+	}
 
-//	{
-//		QVector<double> ref{2, 4, 2, 4, 2, 4, 2, 4, 2, 6};
-//		QCOMPARE(sheetCalculationsColumn1->rowCount(), 10);
-//		for (int i = 0; i < 10; i++)
-//			VALUES_EQUAL(sheetCalculationsColumn1->doubleAt(i), ref.at(i));
-//	}
+	{
+		QVector<double> ref{2, 4, 2, 4, 2, 4, 2, 4, 2, 6};
+		QCOMPARE(sheetCalculationsColumn1->rowCount(), 10);
+		for (int i = 0; i < 10; i++)
+			VALUES_EQUAL(sheetCalculationsColumn1->doubleAt(i), ref.at(i));
+	}
 
-//	sheetCalculations->setLinking(true);
-//	sheetCalculations->setLinkedSpreadsheet(sheetData);
+	sheetCalculations->setLinking(true);
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
-//	QCOMPARE(sheetCalculations->linking(), true);
-//	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
-//	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
-//	QCOMPARE(sheetCalculations->rowCount(), 10);
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
 
-//	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
 
-//	VectorBLFFilter filter;
-//	filter.setConvertTimeToSeconds(true);
-//	filter.setTimeHandlingMode(CANFilter::TimeHandling::ConcatPrevious);
-//	QCOMPARE(filter.isValid(blfFileName.fileName()), true);
+	VectorBLFFilter filter;
+	filter.setConvertTimeToSeconds(true);
+	filter.setTimeHandlingMode(CANFilter::TimeHandling::ConcatPrevious);
+	QCOMPARE(filter.isValid(blfFileName.fileName()), true);
 
-//	// Valid blf and valid dbc
-//	filter.setDBCFile(dbcFile.fileName());
-//	filter.readDataFromFile(blfFileName.fileName(), sheetData);
-//	QCOMPARE(sheetData->columnCount(), 12);
+	// Valid blf and valid dbc
+	filter.setDBCFile(dbcFile.fileName());
+	filter.readDataFromFile(blfFileName.fileName(), sheetData);
+	QCOMPARE(sheetData->columnCount(), 12);
 
-//	sheetData->setRowCount(5);
-//	QCOMPARE(sheetDataColumn0->rowCount(), 5);
-//	QCOMPARE(sheetDataColumn1->rowCount(), 5);
+	QCOMPARE(sheetData->rowCount(), 5);
+	QCOMPARE(sheetDataColumn0->rowCount(), 5);
+	QCOMPARE(sheetDataColumn1->rowCount(), 5);
 
-//	{
-//		QVector<double> ref{4., 4., 6., 6., 6.};
-//		const auto* sheetCalculationsColumn = sheetData->child<Column>(1);
-//		QCOMPARE(sheetCalculationsColumn->name(), QStringLiteral("Value6_"));
-//		QCOMPARE(sheetCalculationsColumn->rowCount(), ref.count());
-//		for (int i = 0; i < ref.count(); i++) {
-//			qDebug() << i;
-//			VALUES_EQUAL(sheetCalculationsColumn->doubleAt(i), ref.at(i));
-//		}
-//	}
+	const auto* sheetDataColumn6 = sheetData->child<Column>(1);
+	QCOMPARE(sheetDataColumn6->name(), QStringLiteral("Value6_"));
+	const auto* sheetDataColumn5 = sheetData->child<Column>(2);
+	QCOMPARE(sheetDataColumn5->name(), QStringLiteral("Value5_%"));
 
-//	{
-//		QVector<double> ref{0., 0., 64., 102., 102.};
-//		const auto* sheetCalculationsColumn = sheetData->child<Column>(2);
-//		QCOMPARE(sheetCalculationsColumn->name(), QStringLiteral("Value5_%"));
-//		QCOMPARE(sheetCalculationsColumn->rowCount(), ref.count());
-//		for (int i = 0; i < ref.count(); i++) {
-//			qDebug() << i;
-//			VALUES_EQUAL(sheetCalculationsColumn->doubleAt(i), ref.at(i));
-//		}
-//	}
+	{
+		QVector<double> ref{4., 4., 6., 6., 6.};
+		const auto* sheetCalculationsColumn = sheetCalculations->child<Column>(0);
+		QCOMPARE(sheetCalculationsColumn->formulaData().at(0).column(), sheetDataColumn6);
+		QCOMPARE(sheetCalculationsColumn->rowCount(), ref.count());
+		for (int i = 0; i < ref.count(); i++) {
+			qDebug() << i;
+			VALUES_EQUAL(sheetCalculationsColumn->doubleAt(i), ref.at(i));
+		}
+	}
+
+	{
+		QVector<double> ref{0., 0., 64., 102., 102.};
+		const auto* sheetCalculationsColumn = sheetCalculations->child<Column>(1);
+		QCOMPARE(sheetCalculationsColumn->formulaData().at(0).column(), sheetDataColumn5);
+		QCOMPARE(sheetCalculationsColumn->rowCount(), ref.count());
+		for (int i = 0; i < ref.count(); i++) {
+			qDebug() << i;
+			VALUES_EQUAL(sheetCalculationsColumn->doubleAt(i), ref.at(i));
+		}
+	}
 }
 
 QTEST_MAIN(SpreadsheetTest)
