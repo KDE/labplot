@@ -25,6 +25,9 @@ public:
 	explicit SearchReplaceWidget(Spreadsheet*, QWidget* parent = nullptr);
 	~SearchReplaceWidget() override;
 
+	enum class Operator { EqualTo, NotEqualTo, BetweenIncl, BetweenExcl, GreaterThan, GreaterThanEqualTo, LessThan, LessThanEqualTo };
+	enum class OperatorText { EqualTo, NotEqualTo, StartsWith, EndsWith, Contain, NotContain, RegEx };
+
 	void setReplaceEnabled(bool enabled);
 	void setFocus();
 	void clear();
@@ -43,7 +46,17 @@ private:
 	void initSearchReplaceWidget();
 
 	bool findNextImpl(const QString&, bool proceed);
-	bool findPreviousImpl(const QString&, bool proceed);
+	bool findPrevImpl(const QString&, bool proceed);
+
+	bool findNextText(const QString&, bool proceed);
+	bool findPrevText(const QString&, bool proceed);
+	bool checkCellText(const QString& cellText, const QString& text, OperatorText, Qt::CaseSensitivity);
+
+	bool findNextNumeric(const QString&, bool proceed);
+	bool findPrevNumeric(const QString&, bool proceed);
+
+	bool findNextDateTime(const QString&, bool proceed);
+	bool findPrevDateTime(const QString&, bool proceed);
 
 	void showExtendedContextMenu(bool forPattern, const QPoint&);
 	QVector<QString> capturePatterns(const QString& pattern) const;

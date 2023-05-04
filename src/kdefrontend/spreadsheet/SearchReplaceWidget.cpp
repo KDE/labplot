@@ -27,6 +27,8 @@ enum SearchMode {
 	MODE_REGEX = 3
 };
 
+enum class DataType {Text, Numeric, DateTime};
+
 class AddMenuManager {
 private:
 	QVector<QString> m_insertBefore;
@@ -126,103 +128,139 @@ void SearchReplaceWidget::setFocus() {
 void SearchReplaceWidget::clear() {
 }
 
-// SLOTS
-bool SearchReplaceWidget::findNextImpl(const QString& text, bool proceed) {
-	int curRow = m_view->firstSelectedRow();
-	int curCol = m_view->firstSelectedColumn();
-	const int colCount = m_spreadsheet->columnCount();
-	const int rowCount = m_spreadsheet->rowCount();
+void SearchReplaceWidget::initSearchWidget() {
+	m_searchWidget = new QWidget(this);
+	uiSearch.setupUi(m_searchWidget);
+	static_cast<QVBoxLayout*>(layout())->insertWidget(0, m_searchWidget);
 
-	const bool columnMajor = (uiSearchReplace.cbOrder->currentIndex() == 0);
-	const bool textMode = (uiSearchReplace.cbDataType->currentIndex() == 0);
+	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=]() {
+		findNext(false);
+	});
 
-	if (columnMajor && proceed)
-		++curRow;
+	connect(uiSearch.tbFindNext, &QToolButton::clicked, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearch.tbFindPrev, &QToolButton::clicked, this, [=]() {
+		findPrevious(true);
+	});
+	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
 
-	if (!columnMajor && proceed)
-		++curCol;
-
-	if (textMode) {
-		if (columnMajor) {
-			for (int col = curCol; col < colCount; ++col) {
-				auto* column = m_spreadsheet->column(col);
-				if (column->columnMode() != AbstractColumn::ColumnMode::Text)
-					continue;
-
-				for (int row = curRow; row < rowCount; ++row) {
-					if (column->textAt(row).indexOf(text) != -1) {
-						m_view->goToCell(row, col);
-						return true;
-					}
-				}
-			}
-		} else { // row-major
-			for (int row = curRow; row < rowCount; ++row) {
-				for (int col = curCol; col < colCount; ++col) {
-					auto* column = m_spreadsheet->column(col);
-					if (column->columnMode() != AbstractColumn::ColumnMode::Text)
-						continue;
-
-					if (column->textAt(row).indexOf(text) != -1) {
-						m_view->goToCell(row, col);
-						return true;
-					}
-				}
-			}
-		}
-	} else { // numeric
-	}
-
-	return false;
+	connect(uiSearch.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
+	connect(uiSearch.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
 }
 
-bool SearchReplaceWidget::findPreviousImpl(const QString& text, bool proceed) {
-	int curRow = m_view->firstSelectedRow();
-	int curCol = m_view->firstSelectedColumn();
+void SearchReplaceWidget::initSearchReplaceWidget() {
+	m_searchReplaceWidget = new QWidget(this);
+	uiSearchReplace.setupUi(m_searchReplaceWidget);
+	static_cast<QVBoxLayout*>(layout())->insertWidget(1, m_searchReplaceWidget);
 
-	const bool columnMajor = (uiSearchReplace.cbOrder->currentIndex() == 0);
-	const bool textMode = (uiSearchReplace.cbDataType->currentIndex() == 0);
+	QStringList items;
+	items << i18n("Equal to");
+	items << i18n("Not Equal to");
+	items << i18n("Between (Incl. End Points)");
+	items << i18n("Between (Excl. End Points)");
+	items << i18n("Greater than");
+	items << i18n("Greater than or Equal to");
+	items << i18n("Less than");
+	items << i18n("Less than or Equal to");
 
-	if (columnMajor && proceed)
-		--curRow;
+	uiSearchReplace.cbOperator->addItems(items);
+	uiSearchReplace.cbOperatorDateTime->addItems(items);
 
-	if (!columnMajor && proceed)
-		--curCol;
+	uiSearchReplace.cbOperatorText->addItem(i18n("Equal To"), int(OperatorText::EqualTo));
+	uiSearchReplace.cbOperatorText->addItem(i18n("Not Equal To"), int(OperatorText::NotEqualTo));
+	uiSearchReplace.cbOperatorText->addItem(i18n("Starts With"), int(OperatorText::StartsWith));
+	uiSearchReplace.cbOperatorText->addItem(i18n("Ends With"), int(OperatorText::EndsWith));
+	uiSearchReplace.cbOperatorText->addItem(i18n("Contains"), int(OperatorText::Contain));
+	uiSearchReplace.cbOperatorText->addItem(i18n("Does Not Contain"), int(OperatorText::NotContain));
+	uiSearchReplace.cbOperatorText->insertSeparator(6);
+	uiSearchReplace.cbOperatorText->addItem(i18n("Regular Expression"), int(OperatorText::RegEx));
 
-	if (textMode) {
-		if (columnMajor) {
-			for (int col = curCol; col >= 0; --col) {
-				auto* column = m_spreadsheet->column(col);
-				if (column->columnMode() != AbstractColumn::ColumnMode::Text)
-					continue;
+	uiSearchReplace.leValue1->setValidator(new QDoubleValidator(uiSearchReplace.leValue1));
+	uiSearchReplace.leValue2->setValidator(new QDoubleValidator(uiSearchReplace.leValue2));
 
-				for (int row = curRow; row >= 0; --row) {
-					if (column->textAt(row).indexOf(text) != -1) {
-						m_view->goToCell(row, col);
-						return true;
-					}
-				}
-			}
-		} else { // row-major
-			for (int row = curRow; row >= 0; --row) {
-				for (int col = curCol; col >= 0; --col) {
-					auto* column = m_spreadsheet->column(col);
-					if (column->columnMode() != AbstractColumn::ColumnMode::Text)
-						continue;
+	// connections
+	connect(uiSearchReplace.cbDataType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::dataTypeChanged);
 
-					if (column->textAt(row).indexOf(text) != -1) {
-						m_view->goToCell(row, col);
-						return true;
-					}
-				}
-			}
-		}
-	} else { // numeric
-	}
+	connect(uiSearchReplace.cbOperator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorChanged);
+	connect(uiSearchReplace.cbOperatorText, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearchReplace.cbOperatorDateTime, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorDateTimeChanged);
 
-	return false;
+	connect(uiSearchReplace.leValue1, &QLineEdit::returnPressed, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearchReplace.leValue2, &QLineEdit::returnPressed, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearchReplace.leValue1, &QLineEdit::textChanged, this, [=]() {
+		findNext(false);
+	});
+	connect(uiSearchReplace.leValue2, &QLineEdit::textChanged, this, [=]() {
+		findNext(false);
+	});
+
+	connect(uiSearchReplace.leValueText, &QLineEdit::returnPressed, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearchReplace.leValueText, &QLineEdit::textChanged, this, [=]() {
+		findNext(false);
+	});
+
+	connect(uiSearchReplace.dteValue1, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, [=]() {
+		findNext(false);
+	});
+	connect(uiSearchReplace.dteValue2, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, [=]() {
+		findNext(false);
+	});
+
+	connect(uiSearchReplace.tbFindNext, &QToolButton::clicked, this, [=]() {
+		findNext(true);
+	});
+	connect(uiSearchReplace.tbFindPrev, &QToolButton::clicked, this, [=]() {
+		findPrevious(true);
+	});
+	connect(uiSearchReplace.bFindAll, &QPushButton::clicked, this, &SearchReplaceWidget::findAll);
+
+	connect(uiSearchReplace.bReplaceNext, &QPushButton::clicked, this, &SearchReplaceWidget::replaceNext);
+	connect(uiSearchReplace.bReplaceAll, &QPushButton::clicked, this, &SearchReplaceWidget::replaceAll);
+	connect(uiSearchReplace.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
+
+	connect(uiSearchReplace.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
+	connect(uiSearchReplace.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
+
+	// custom context menus for LineEdit in ComboBox
+	uiSearchReplace.leValueText->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(uiSearchReplace.leValueText,
+			&QComboBox::customContextMenuRequested,
+			this,
+			QOverload<const QPoint&>::of(&SearchReplaceWidget::findContextMenuRequest));
+
+	uiSearchReplace.cbReplace->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(uiSearchReplace.cbReplace,
+			&QComboBox::customContextMenuRequested,
+			this,
+			QOverload<const QPoint&>::of(&SearchReplaceWidget::replaceContextMenuRequest));
+
+	// read saved settings
+	// TODO:
+
+	dataTypeChanged(uiSearchReplace.cbDataType->currentIndex());
+	operatorChanged(uiSearchReplace.cbOperator->currentIndex());
+	operatorDateTimeChanged(uiSearchReplace.cbOperatorDateTime->currentIndex());
 }
 
+void SearchReplaceWidget::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
+}
+
+//**********************************************************
+//************************* SLOTs **************************
+//**********************************************************
 void SearchReplaceWidget::findAll() {
 	QString text;
 	QLineEdit* lineEdit;
@@ -349,142 +387,254 @@ void SearchReplaceWidget::findPrevious(bool proceed) {
 	const QString& text = lineEdit->text();
 
 	if (!text.isEmpty()) {
-		bool rc = findPreviousImpl(text, proceed);
+		bool rc = findPrevImpl(text, proceed);
 		GuiTools::highlight(lineEdit, !rc);
 	} else
 		GuiTools::highlight(lineEdit, false);
 }
 
-void SearchReplaceWidget::initSearchWidget() {
-	m_searchWidget = new QWidget(this);
-	uiSearch.setupUi(m_searchWidget);
-	static_cast<QVBoxLayout*>(layout())->insertWidget(0, m_searchWidget);
+//**********************************************************
+//****  data type specific functions implementing find  ***
+//**********************************************************
+bool SearchReplaceWidget::findNextImpl(const QString& text, bool proceed) {
+	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
+	bool rc = false;
 
-	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
-		findNext(true);
-	});
-	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=]() {
-		findNext(false);
-	});
+	switch (type) {
+	case DataType::Text:
+		rc = findNextText(text, proceed);
+		break;
+	case DataType::Numeric:
+		rc = findNextText(text, proceed);
+		break;
+	case DataType::DateTime:
+		rc = findNextText(text, proceed);
+		break;
+	}
 
-	connect(uiSearch.tbFindNext, &QToolButton::clicked, this, [=]() {
-		findNext(true);
-	});
-	connect(uiSearch.tbFindPrev, &QToolButton::clicked, this, [=]() {
-		findPrevious(true);
-	});
-	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
-
-	connect(uiSearch.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
-	connect(uiSearch.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
+	return rc;
 }
 
-void SearchReplaceWidget::initSearchReplaceWidget() {
-	m_searchReplaceWidget = new QWidget(this);
-	uiSearchReplace.setupUi(m_searchReplaceWidget);
-	static_cast<QVBoxLayout*>(layout())->insertWidget(1, m_searchReplaceWidget);
+bool SearchReplaceWidget::findPrevImpl(const QString& text, bool proceed) {
+	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
+	bool rc = false;
 
-	QStringList items;
-	items << i18n("Equal to");
-	items << i18n("Not Equal to");
-	items << i18n("Between (Incl. End Points)");
-	items << i18n("Between (Excl. End Points)");
-	items << i18n("Greater than");
-	items << i18n("Greater than or Equal to");
-	items << i18n("Less than");
-	items << i18n("Less than or Equal to");
+	switch (type) {
+	case DataType::Text:
+		rc = findPrevText(text, proceed);
+		break;
+	case DataType::Numeric:
+		rc = findPrevText(text, proceed);
+		break;
+	case DataType::DateTime:
+		rc = findPrevText(text, proceed);
+		break;
+	}
 
-	uiSearchReplace.cbOperator->addItems(items);
-	uiSearchReplace.cbOperatorDateTime->addItems(items);
-
-	uiSearchReplace.cbOperatorText->addItem(i18n("Equal To"));
-	uiSearchReplace.cbOperatorText->addItem(i18n("Not Equal To"));
-	uiSearchReplace.cbOperatorText->addItem(i18n("Starts With"));
-	uiSearchReplace.cbOperatorText->addItem(i18n("Ends With"));
-	uiSearchReplace.cbOperatorText->addItem(i18n("Contains"));
-	uiSearchReplace.cbOperatorText->addItem(i18n("Does Not Contain"));
-	uiSearchReplace.cbOperatorText->insertSeparator(6);
-	uiSearchReplace.cbOperatorText->addItem(i18n("Regular Expression"));
-
-	uiSearchReplace.leValue1->setValidator(new QDoubleValidator(uiSearchReplace.leValue1));
-	uiSearchReplace.leValue2->setValidator(new QDoubleValidator(uiSearchReplace.leValue2));
-
-	// connections
-	connect(uiSearchReplace.cbDataType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::dataTypeChanged);
-
-	connect(uiSearchReplace.cbOperator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorChanged);
-	connect(uiSearchReplace.cbOperatorText, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=]() {
-		findNext(true);
-	});
-	connect(uiSearchReplace.cbOperatorDateTime, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorDateTimeChanged);
-
-	connect(uiSearchReplace.leValue1, &QLineEdit::returnPressed, this, [=]() {
-		findNext(true);
-	});
-	connect(uiSearchReplace.leValue2, &QLineEdit::returnPressed, this, [=]() {
-		findNext(true);
-	});
-	connect(uiSearchReplace.leValue1, &QLineEdit::textChanged, this, [=]() {
-		findNext(false);
-	});
-	connect(uiSearchReplace.leValue2, &QLineEdit::textChanged, this, [=]() {
-		findNext(false);
-	});
-
-	connect(uiSearchReplace.leValueText, &QLineEdit::returnPressed, this, [=]() {
-		findNext(true);
-	});
-	connect(uiSearchReplace.leValueText, &QLineEdit::textChanged, this, [=]() {
-		findNext(false);
-	});
-
-	connect(uiSearchReplace.dteValue1, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, [=]() {
-		findNext(false);
-	});
-	connect(uiSearchReplace.dteValue2, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, [=]() {
-		findNext(false);
-	});
-
-	connect(uiSearchReplace.tbFindNext, &QToolButton::clicked, this, [=]() {
-		findNext(true);
-	});
-	connect(uiSearchReplace.tbFindPrev, &QToolButton::clicked, this, [=]() {
-		findPrevious(true);
-	});
-	connect(uiSearchReplace.bFindAll, &QPushButton::clicked, this, &SearchReplaceWidget::findAll);
-
-	connect(uiSearchReplace.bReplaceNext, &QPushButton::clicked, this, &SearchReplaceWidget::replaceNext);
-	connect(uiSearchReplace.bReplaceAll, &QPushButton::clicked, this, &SearchReplaceWidget::replaceAll);
-	connect(uiSearchReplace.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
-
-	connect(uiSearchReplace.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
-	connect(uiSearchReplace.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
-
-	// custom context menus for LineEdit in ComboBox
-	uiSearchReplace.leValueText->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(uiSearchReplace.leValueText,
-			&QComboBox::customContextMenuRequested,
-			this,
-			QOverload<const QPoint&>::of(&SearchReplaceWidget::findContextMenuRequest));
-
-	uiSearchReplace.cbReplace->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(uiSearchReplace.cbReplace,
-			&QComboBox::customContextMenuRequested,
-			this,
-			QOverload<const QPoint&>::of(&SearchReplaceWidget::replaceContextMenuRequest));
-
-	// read saved settings
-	// TODO:
-
-	dataTypeChanged(uiSearchReplace.cbDataType->currentIndex());
-	operatorChanged(uiSearchReplace.cbOperator->currentIndex());
-	operatorDateTimeChanged(uiSearchReplace.cbOperatorDateTime->currentIndex());
+	return rc;
 }
 
-void SearchReplaceWidget::showEvent(QShowEvent* event) {
-	QWidget::showEvent(event);
+bool SearchReplaceWidget::findNextText(const QString& text, bool proceed) {
+	int curRow = m_view->firstSelectedRow();
+	int curCol = m_view->firstSelectedColumn();
+	const int colCount = m_spreadsheet->columnCount();
+	const int rowCount = m_spreadsheet->rowCount();
+
+	const bool columnMajor = (uiSearchReplace.cbOrder->currentIndex() == 0);
+	const auto op = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
+	const auto cs = uiSearchReplace.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+	if (columnMajor && proceed)
+		++curRow;
+
+	if (!columnMajor && proceed)
+		++curCol;
+
+	const auto& columns = m_spreadsheet->children<Column>();
+	bool startCol = true;
+	bool startRow = true;
+
+	if (columnMajor) {
+		for (int col = 0; col < colCount; ++col) {
+			if (startCol && col < curCol)
+				continue;
+
+			auto* column = columns.at(col);
+			if (column->columnMode() != AbstractColumn::ColumnMode::Text)
+				continue;
+
+			for (int row = 0; row < rowCount; ++row) {
+				if (startRow && row < curRow)
+					continue;
+
+				if (checkCellText(column->textAt(row), text, op, cs)) {
+					m_view->goToCell(row, col);
+					return true;
+				}
+
+				startRow = false;
+			}
+
+			startCol = false;
+		}
+	} else { // row-major
+		for (int row = 0; row < rowCount; ++row) {
+			if (startRow && row > curRow)
+				continue;
+
+			for (int col = 0; col < colCount; ++col) {
+				if (startCol && col < curCol)
+					continue;
+
+				auto* column = columns.at(col);
+				if (column->columnMode() != AbstractColumn::ColumnMode::Text)
+					continue;
+
+				if (checkCellText(column->textAt(row), text, op, cs)) {
+					m_view->goToCell(row, col);
+					return true;
+				}
+
+				startCol = false;
+			}
+
+			startRow = false;
+		}
+	}
+
+	return false;
 }
 
+bool SearchReplaceWidget::findPrevText(const QString& text, bool proceed) {
+	int curRow = m_view->firstSelectedRow();
+	int curCol = m_view->firstSelectedColumn();
+	const int colCount = m_spreadsheet->columnCount();
+	const int rowCount = m_spreadsheet->rowCount();
+
+	const bool columnMajor = (uiSearchReplace.cbOrder->currentIndex() == 0);
+	const auto op = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
+	const auto cs = uiSearchReplace.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+	if (columnMajor && proceed)
+		--curRow;
+
+	if (!columnMajor && proceed)
+		--curCol;
+
+	const auto& columns = m_spreadsheet->children<Column>();
+	bool startCol = true;
+	bool startRow = true;
+
+	if (columnMajor) {
+		for (int col = colCount; col >= 0; --col) {
+			if (startCol && col > curCol)
+				continue;
+
+			auto* column = columns.at(col);
+			if (column->columnMode() != AbstractColumn::ColumnMode::Text)
+				continue;
+
+			for (int row = rowCount; row >= 0; --row) {
+				if (startRow && row > curRow)
+					continue;
+
+				if (checkCellText(column->textAt(row), text, op, cs)) {
+					m_view->goToCell(row, col);
+					return true;
+				}
+
+				startRow = false;
+			}
+
+			startCol = false;
+		}
+	} else { // row-major
+		for (int row = rowCount; row >= 0; --row) {
+			if (startRow && row > curRow)
+				continue;
+
+			for (int col = curCol; col >= 0; --col) {
+				if (startCol && col > curCol)
+					continue;
+
+				auto* column = columns.at(col);
+				if (column->columnMode() != AbstractColumn::ColumnMode::Text)
+					continue;
+
+				if (checkCellText(column->textAt(row), text, op, cs)) {
+					m_view->goToCell(row, col);
+					return true;
+				}
+
+				startCol = false;
+			}
+
+			startRow = false;
+		}
+	}
+
+	return false;
+}
+
+bool SearchReplaceWidget::checkCellText(const QString& cellText, const QString& pattern, OperatorText op, Qt::CaseSensitivity cs) {
+	bool match = false;
+
+	switch (op) {
+	case OperatorText::EqualTo: {
+		match = (cellText.compare(pattern, cs) == 0);
+		break;
+	}
+	case OperatorText::NotEqualTo: {
+		match = (cellText.compare(pattern, cs) != 0);
+		break;
+	}
+	case OperatorText::StartsWith: {
+		match = cellText.startsWith(pattern, cs);
+		break;
+	}
+	case OperatorText::EndsWith: {
+		match = cellText.endsWith(pattern, cs);
+		break;
+	}
+	case OperatorText::Contain: {
+		match = (cellText.indexOf(pattern, cs) != -1);
+		break;
+	}
+	case OperatorText::NotContain: {
+		match = (cellText.indexOf(pattern, cs) == -1);
+		break;
+	}
+	case OperatorText::RegEx: {
+		QRegularExpression re(pattern);
+		if (cs == Qt::CaseInsensitive)
+			re.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+		match = re.match(cellText).hasMatch();
+		break;
+	}
+	}
+
+	return match;
+}
+
+bool SearchReplaceWidget::findNextNumeric(const QString& text, bool proceed) {
+	return true;
+}
+
+bool SearchReplaceWidget::findPrevNumeric(const QString& text, bool proceed) {
+	return true;
+}
+
+bool SearchReplaceWidget::findNextDateTime(const QString& text, bool proceed) {
+	return true;
+}
+
+bool SearchReplaceWidget::findPrevDateTime(const QString& text, bool proceed) {
+	return true;
+}
+
+//**********************************************************
+//**** SLOTs for changes triggered in CustomPointDock ******
+//**********************************************************
 void SearchReplaceWidget::showExtendedContextMenu(bool replace, const QPoint& pos) {
 	// Make original menu
 	QLineEdit* lineEdit;
