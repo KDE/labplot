@@ -2144,6 +2144,7 @@ void createBLFFile(const QString& filename, QVector<Vector::BLF::CanMessage2*> m
 }
 }
 
+#ifdef HAVE_VECTOR_BLF
 void SpreadsheetTest::testLinkSpreadSheetImportBLF() {
 	QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
 	QVERIFY(blfFileName.open());
@@ -2270,5 +2271,6 @@ BO_ 541 MSG2: 8 Vector__XXX
 		}
 	}
 }
+#endif // HAVE_VECTOR_BLF
 
 QTEST_MAIN(SpreadsheetTest)
