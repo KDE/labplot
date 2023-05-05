@@ -10,7 +10,7 @@
 */
 
 #include "backend/datasources/projects/OriginProjectParser.h"
-#include "3rdparty/liborigin/OriginFile.h"
+#include "OriginFile.h"
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
