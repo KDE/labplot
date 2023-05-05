@@ -10,6 +10,7 @@ Bug fixes:
 	* Correctly use system header of system QXlsx (BUG 468651)
 	* Fix group separator problem in formulas (BUG 468098)
 	* Improve auto scale (Issue #536)
+	* Use system liborigin headers if linking against system liborigin (BUG 469367)
 
 -----2.10.0 (21.03.2023) -----
 New features:
