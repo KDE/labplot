@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-29 00:44+0000\n"
+"POT-Creation-Date: 2023-05-06 00:43+0000\n"
 "PO-Revision-Date: 2014-02-22 22:22-0800\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -44,7 +44,7 @@ msgstr ""
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
 #: src/backend/core/column/Column.cpp:1269
 #: src/backend/datapicker/DatapickerCurve.cpp:553
-#: src/backend/datapicker/DatapickerImage.cpp:580
+#: src/backend/datapicker/DatapickerImage.cpp:639
 #: src/backend/datapicker/DatapickerPoint.cpp:502
 #: src/backend/datasources/filters/AsciiFilter.cpp:2003
 #: src/backend/datasources/filters/BinaryFilter.cpp:562
@@ -94,9 +94,9 @@ msgstr ""
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1399 src/backend/core/Folder.cpp:151
-#: src/backend/core/Project.cpp:760
+#: src/backend/core/Project.cpp:761
 #: src/backend/datapicker/DatapickerCurve.cpp:711
-#: src/backend/datapicker/DatapickerImage.cpp:828
+#: src/backend/datapicker/DatapickerImage.cpp:887
 #: src/backend/datapicker/DatapickerPoint.cpp:579
 #: src/backend/datasources/LiveDataSource.cpp:968
 #: src/backend/datasources/MQTTClient.cpp:1376
@@ -772,32 +772,32 @@ msgstr ""
 msgid "%1: save calculation changed"
 msgstr ""
 
-#: src/backend/core/Project.cpp:600 src/backend/core/Project.cpp:634
+#: src/backend/core/Project.cpp:601 src/backend/core/Project.cpp:635
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr ""
 
-#: src/backend/core/Project.cpp:611 src/backend/core/Project.cpp:641
+#: src/backend/core/Project.cpp:612 src/backend/core/Project.cpp:642
 #, kde-format
 msgid "The project file is empty."
 msgstr ""
 
-#: src/backend/core/Project.cpp:611 src/backend/core/Project.cpp:641
+#: src/backend/core/Project.cpp:612 src/backend/core/Project.cpp:642
 #, kde-format
 msgid "Error opening project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:660
+#: src/backend/core/Project.cpp:661
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr ""
 
-#: src/backend/core/Project.cpp:661
+#: src/backend/core/Project.cpp:662
 #, kde-format
 msgid "Error when opening the project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:681
+#: src/backend/core/Project.cpp:682
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -809,27 +809,27 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: src/backend/core/Project.cpp:688 src/backend/core/Project.cpp:690
+#: src/backend/core/Project.cpp:689 src/backend/core/Project.cpp:691
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr ""
 
-#: src/backend/core/Project.cpp:719
+#: src/backend/core/Project.cpp:720
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr ""
 
-#: src/backend/core/Project.cpp:767
+#: src/backend/core/Project.cpp:768
 #, kde-format
 msgid "no project element found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:769
+#: src/backend/core/Project.cpp:770
 #, kde-format
 msgid "no valid XML document found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:1066
+#: src/backend/core/Project.cpp:1067
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -952,7 +952,7 @@ msgid "%1: set error bar outline style"
 msgstr ""
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
-#: src/backend/datapicker/DatapickerImage.cpp:335
+#: src/backend/datapicker/DatapickerImage.cpp:400
 #: src/backend/worksheet/InfoElement.cpp:813
 #: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElementContainer.cpp:67
@@ -962,7 +962,7 @@ msgid "%1: set visible"
 msgstr ""
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
-#: src/backend/datapicker/DatapickerImage.cpp:335
+#: src/backend/datapicker/DatapickerImage.cpp:400
 #: src/backend/worksheet/InfoElement.cpp:813
 #: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElement.cpp:630
@@ -978,50 +978,44 @@ msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerImage.cpp:266
-#, kde-format
-msgid "%1: upload new image"
-msgstr ""
-
-#: src/backend/datapicker/DatapickerImage.cpp:267
-#: src/backend/datapicker/DatapickerImage.cpp:298
+#: src/backend/datapicker/DatapickerImage.cpp:304
+#: src/backend/datapicker/DatapickerImage.cpp:358
 #, kde-format
 msgid "%1: upload image"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerImage.cpp:304
-#: src/backend/worksheet/Image.cpp:161
+#: src/backend/datapicker/DatapickerImage.cpp:357
 #, kde-format
-msgid "%1: embed image"
+msgid "%1: upload new image"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerImage.cpp:310
+#: src/backend/datapicker/DatapickerImage.cpp:375
 #: src/backend/worksheet/WorksheetElement.cpp:671
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerImage.cpp:316
+#: src/backend/datapicker/DatapickerImage.cpp:381
 #, kde-format
 msgid "%1: set Axis points"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerImage.cpp:322
+#: src/backend/datapicker/DatapickerImage.cpp:387
 #, kde-format
 msgid "%1: set editor settings"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerImage.cpp:328
+#: src/backend/datapicker/DatapickerImage.cpp:393
 #, kde-format
 msgid "%1: set minimum segment length"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerImage.cpp:354
+#: src/backend/datapicker/DatapickerImage.cpp:419
 #, kde-format
 msgid "%1: remove all axis points"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerImage.cpp:605
+#: src/backend/datapicker/DatapickerImage.cpp:664
 #: src/backend/worksheet/Image.cpp:453
 #, kde-format
 msgid "Failed to read image data"
@@ -6436,6 +6430,11 @@ msgstr ""
 msgid "%1: set image"
 msgstr ""
 
+#: src/backend/worksheet/Image.cpp:161
+#, kde-format
+msgid "%1: embed image"
+msgstr ""
+
 #: src/backend/worksheet/Image.cpp:168 src/backend/worksheet/TextLabel.cpp:369
 #, kde-format
 msgid "%1: set border opacity"
@@ -8801,38 +8800,38 @@ msgstr ""
 msgid "Magnification"
 msgstr ""
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:527
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:530
 #, kde-format
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
 msgstr ""
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:616
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:619
 #, kde-format
 msgid "Remove existing reference points?"
 msgstr ""
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:617
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:620
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
 msgstr ""
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:677
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:680
 #, kde-format
 msgid "%1: change position of selected DatapickerPoints."
 msgstr ""
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:728
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:731
 #, kde-format
 msgid "%1: add new curve."
 msgstr ""
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:729
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:732
 #, kde-format
 msgid "Curve"
 msgstr ""
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:866
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3789
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3843
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2409
@@ -8840,7 +8839,7 @@ msgstr ""
 msgid "Failed to export"
 msgstr ""
 
-#: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
+#: src/commonfrontend/datapicker/DatapickerImageView.cpp:866
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3789
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3843
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2409
@@ -20613,9 +20612,14 @@ msgstr ""
 msgid "Processed Image"
 msgstr ""
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:374
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:383
 #, kde-format
 msgid "Save project before using this option"
+msgstr ""
+
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:392
+#, kde-format
+msgid "Invalid image"
 msgstr ""
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
