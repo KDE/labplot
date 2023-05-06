@@ -19,6 +19,9 @@
 #include <QRadioButton>
 #include <QStack>
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 enum SearchMode {
 	// NOTE: Concrete values are important here to work with the combobox index!
 	MODE_PLAIN_TEXT = 0,
@@ -109,6 +112,22 @@ SearchReplaceWidget::SearchReplaceWidget(Spreadsheet* spreadsheet, QWidget* pare
 }
 
 SearchReplaceWidget::~SearchReplaceWidget() {
+	// save the current settings
+	if (m_searchReplaceWidget) {
+		KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
+		conf.writeEntry("Operator", uiSearchReplace.cbOperator->currentData().toInt());
+		conf.writeEntry("Value1", uiSearchReplace.leValue1->text());
+		conf.writeEntry("Value2", uiSearchReplace.leValue2->text());
+		conf.writeEntry("OperatorText", uiSearchReplace.cbOperatorText->currentData().toInt());
+		conf.writeEntry("ValueText", uiSearchReplace.leValueText->text());
+		conf.writeEntry("OperatorDateTime", uiSearchReplace.cbOperatorDateTime->currentData().toInt());
+		conf.writeEntry("Value1DateTime", uiSearchReplace.dteValue1->dateTime().toMSecsSinceEpoch());
+		conf.writeEntry("Value2DateTime", uiSearchReplace.dteValue2->dateTime().toMSecsSinceEpoch());
+
+		conf.writeEntry("Order", uiSearchReplace.cbOrder->currentIndex());
+		conf.writeEntry("MatchCase", uiSearchReplace.tbMatchCase->isChecked());
+		conf.writeEntry("SelectionOnly", uiSearchReplace.tbSelectionOnly->isChecked());
+	}
 }
 
 void SearchReplaceWidget::setReplaceEnabled(bool enabled) {
@@ -132,17 +151,17 @@ void SearchReplaceWidget::initSearchWidget() {
 	static_cast<QVBoxLayout*>(layout())->insertWidget(0, m_searchWidget);
 
 	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
-		findNext(true);
+		findNextSimple(true);
 	});
 	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=]() {
-		findNext(false);
+		findNextSimple(false);
 	});
 
 	connect(uiSearch.tbFindNext, &QToolButton::clicked, this, [=]() {
-		findNext(true);
+		findNextSimple(true);
 	});
 	connect(uiSearch.tbFindPrev, &QToolButton::clicked, this, [=]() {
-		findPrevious(true);
+		findPreviousSimple(true);
 	});
 	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
 
@@ -249,8 +268,20 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 			this,
 			QOverload<const QPoint&>::of(&SearchReplaceWidget::replaceContextMenuRequest));
 
-	// read saved settings
-	// TODO:
+	// restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
+	uiSearchReplace.leValue1->setText(conf.readEntry("Value1", QString()));
+	uiSearchReplace.leValue2->setText(conf.readEntry("Value2", QString()));
+	uiSearchReplace.cbOperator->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Operator", 0)));
+	operatorChanged(uiSearchReplace.cbOperator->currentIndex());
+
+	uiSearchReplace.leValueText->setText(conf.readEntry("ValueText", QString()));
+	uiSearchReplace.cbOperatorText->setCurrentIndex(uiSearchReplace.cbOperatorText->findData(conf.readEntry("OperatorText", 0)));
+
+	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(conf.readEntry("Value1DateTime", now));
+	uiSearchReplace.dteValue2->setMSecsSinceEpochUTC(conf.readEntry("Value2DateTime", now));
+	uiSearchReplace.cbOperatorDateTime->setCurrentIndex(uiSearchReplace.cbOperatorDateTime->findData(conf.readEntry("OperatorDateTime", 0)));
 
 	dataTypeChanged(uiSearchReplace.cbDataType->currentIndex());
 	operatorChanged(uiSearchReplace.cbOperator->currentIndex());
@@ -374,7 +405,106 @@ void SearchReplaceWidget::switchFindReplace() {
 }
 
 //**********************************************************
-//****  data type specific functions implementing find  ***
+//**************  simple find functions  *******************
+//**********************************************************
+/*!
+ * search the next cell in the column-major order that matches
+ * to the specified pattern. The search is done ignoring the data type
+ * and iterpreting everything as text. Used in the "simple search"-mode.
+ */
+bool SearchReplaceWidget::findNextSimple(bool proceed) {
+	const QString& pattern = uiSearch.cbFind->currentText();
+	const auto cs = uiSearch.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+	// spreadsheet size and the start cell
+	const int colCount = m_spreadsheet->columnCount();
+	const int rowCount = m_spreadsheet->rowCount();
+	int curRow = m_view->firstSelectedRow();
+	int curCol = m_view->firstSelectedColumn();
+
+	if (proceed)
+		++curRow;
+
+	// all settings are determined -> search the next cell matching the specified pattern(s)
+	const auto& columns = m_spreadsheet->children<Column>();
+	bool startCol = true;
+	bool startRow = true;
+
+	// search in the column-major order ignoring the data type
+	// and iterpreting everything as text
+	for (int col = 0; col < colCount; ++col) {
+		if (startCol && col < curCol)
+			continue;
+
+		auto* column = columns.at(col)->asStringColumn();
+
+		for (int row = 0; row < rowCount; ++row) {
+			if (startRow && row < curRow)
+				continue;
+
+			if (column->textAt(row).contains(pattern, cs)) {
+				m_view->goToCell(row, col);
+				return true;
+			}
+
+			startRow = false;
+		}
+
+		startCol = false;
+	}
+
+	return false;
+}
+
+/*!
+ * search the previous cell in the column-major order that matches
+ * to the specified pattern. The search is done ignoring the data type
+ * and iterpreting everything as text. Used in the "simple search"-mode.
+ */
+bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
+	const QString& pattern = uiSearch.cbFind->currentText();
+	const auto cs = uiSearch.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+	// spreadsheet size and the start cell
+	const int colCount = m_spreadsheet->columnCount();
+	const int rowCount = m_spreadsheet->rowCount();
+	int curRow = m_view->firstSelectedRow();
+	int curCol = m_view->firstSelectedColumn();
+
+	if (proceed)
+		--curRow;
+
+	// all settings are determined -> search the next cell matching the specified pattern(s)
+	const auto& columns = m_spreadsheet->children<Column>();
+	bool startCol = true;
+	bool startRow = true;
+
+	for (int col = colCount; col >= 0; --col) {
+		if (startCol && col > curCol)
+			continue;
+
+		auto* column = columns.at(col)->asStringColumn();
+
+		for (int row = rowCount; row >= 0; --row) {
+			if (startRow && row > curRow)
+				continue;
+
+			if (column->textAt(row).contains(pattern, cs)) {
+				m_view->goToCell(row, col);
+				return true;
+			}
+
+			startRow = false;
+		}
+
+		startCol = false;
+	}
+
+	return false;
+}
+
+//**********************************************************
+//****  advanced and data type specific find functions  ****
 //**********************************************************
 bool SearchReplaceWidget::findNext(bool proceed) {
 	// QLineEdit* lineEdit;
@@ -503,10 +633,10 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 	int curCol = m_view->firstSelectedColumn();
 
 	if (columnMajor && proceed)
-		++curRow;
+		--curRow;
 
 	if (!columnMajor && proceed)
-		++curCol;
+		--curCol;
 
 	// search pattern(s)
 	QString pattern1;
@@ -624,7 +754,6 @@ bool SearchReplaceWidget::checkColumnRow(Column* column,
 		break;
 	}
 
-	// qDebug()<<"checkColumnRow " << column->name() << "  " << row << "  " << match;
 	return match;
 }
 

@@ -71,6 +71,8 @@ private Q_SLOTS:
 	void operatorChanged(int) const;
 	void operatorDateTimeChanged(int) const;
 
+	bool findNextSimple(bool proceed);
+	bool findPreviousSimple(bool proceed);
 	bool findNext(bool proceed);
 	bool findPrevious(bool proceed);
 	void findAll();
