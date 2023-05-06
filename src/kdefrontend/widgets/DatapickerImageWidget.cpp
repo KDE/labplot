@@ -323,7 +323,7 @@ void DatapickerImageWidget::handleWidgetActions() {
 	const bool b = !fileName.isEmpty() || (embedded && valid);
 	ui.leFileName->setEnabled(!embedded);
 	updateFileRelativePathCheckBoxEnable();
-	ui.tEdit->setEnabled(b && !embedded);
+	ui.tEdit->setEnabled(b);
 	ui.cbFileEmbedd->setEnabled(valid);
 	ui.cbGraphType->setEnabled(b);
 	ui.cbDatetime->setEnabled(b);
