@@ -14,6 +14,7 @@
 #include "ui_searchwidget.h"
 #include <QWidget>
 
+class Column;
 class Spreadsheet;
 class SpreadsheetView;
 class QRadioButton;
@@ -25,6 +26,7 @@ public:
 	explicit SearchReplaceWidget(Spreadsheet*, QWidget* parent = nullptr);
 	~SearchReplaceWidget() override;
 
+	enum class DataType { Text, Numeric, DateTime };
 	enum class Operator { EqualTo, NotEqualTo, BetweenIncl, BetweenExcl, GreaterThan, GreaterThanEqualTo, LessThan, LessThanEqualTo };
 	enum class OperatorText { EqualTo, NotEqualTo, StartsWith, EndsWith, Contain, NotContain, RegEx };
 
@@ -45,18 +47,19 @@ private:
 	void initSearchWidget();
 	void initSearchReplaceWidget();
 
-	bool findNextImpl(const QString&, bool proceed);
-	bool findPrevImpl(const QString&, bool proceed);
-
-	bool findNextText(const QString&, bool proceed);
-	bool findPrevText(const QString&, bool proceed);
-	bool checkCellText(const QString& cellText, const QString& text, OperatorText, Qt::CaseSensitivity);
-
-	bool findNextNumeric(const QString&, bool proceed);
-	bool findPrevNumeric(const QString&, bool proceed);
-
-	bool findNextDateTime(const QString&, bool proceed);
-	bool findPrevDateTime(const QString&, bool proceed);
+	bool checkColumnType(Column*, DataType);
+	bool checkColumnRow(Column*,
+						DataType,
+						int row,
+						OperatorText opText,
+						Operator opNumeric,
+						Operator opDateTime,
+						const QString& pattern1,
+						const QString pattern2,
+						Qt::CaseSensitivity cs);
+	bool checkCellText(const QString& value, const QString& pattern, OperatorText, Qt::CaseSensitivity);
+	bool checkCellNumeric(double value, const QString& pattern1, const QString& pattern2, Operator);
+	bool checkCellDateTime(const QDateTime& value, const QString& pattern1, const QString& pattern2, Operator);
 
 	void showExtendedContextMenu(bool forPattern, const QPoint&);
 	QVector<QString> capturePatterns(const QString& pattern) const;
@@ -68,8 +71,8 @@ private Q_SLOTS:
 	void operatorChanged(int) const;
 	void operatorDateTimeChanged(int) const;
 
-	void findNext(bool proceed);
-	void findPrevious(bool proceed);
+	bool findNext(bool proceed);
+	bool findPrevious(bool proceed);
 	void findAll();
 	void replaceNext();
 	void replaceAll();

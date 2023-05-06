@@ -27,8 +27,6 @@ enum SearchMode {
 	MODE_REGEX = 3
 };
 
-enum class DataType {Text, Numeric, DateTime};
-
 class AddMenuManager {
 private:
 	QVector<QString> m_insertBefore;
@@ -157,19 +155,6 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.setupUi(m_searchReplaceWidget);
 	static_cast<QVBoxLayout*>(layout())->insertWidget(1, m_searchReplaceWidget);
 
-	QStringList items;
-	items << i18n("Equal to");
-	items << i18n("Not Equal to");
-	items << i18n("Between (Incl. End Points)");
-	items << i18n("Between (Excl. End Points)");
-	items << i18n("Greater than");
-	items << i18n("Greater than or Equal to");
-	items << i18n("Less than");
-	items << i18n("Less than or Equal to");
-
-	uiSearchReplace.cbOperator->addItems(items);
-	uiSearchReplace.cbOperatorDateTime->addItems(items);
-
 	uiSearchReplace.cbOperatorText->addItem(i18n("Equal To"), int(OperatorText::EqualTo));
 	uiSearchReplace.cbOperatorText->addItem(i18n("Not Equal To"), int(OperatorText::NotEqualTo));
 	uiSearchReplace.cbOperatorText->addItem(i18n("Starts With"), int(OperatorText::StartsWith));
@@ -178,6 +163,24 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.cbOperatorText->addItem(i18n("Does Not Contain"), int(OperatorText::NotContain));
 	uiSearchReplace.cbOperatorText->insertSeparator(6);
 	uiSearchReplace.cbOperatorText->addItem(i18n("Regular Expression"), int(OperatorText::RegEx));
+
+	uiSearchReplace.cbOperator->addItem(i18n("Equal to"), int(Operator::EqualTo));
+	uiSearchReplace.cbOperator->addItem(i18n("Not Equal to"), int(Operator::NotEqualTo));
+	uiSearchReplace.cbOperator->addItem(i18n("Between (Incl. End Points)"), int(Operator::BetweenIncl));
+	uiSearchReplace.cbOperator->addItem(i18n("Between (Excl. End Points)"), int(Operator::BetweenExcl));
+	uiSearchReplace.cbOperator->addItem(i18n("Greater than"), int(Operator::GreaterThan));
+	uiSearchReplace.cbOperator->addItem(i18n("Greater than or Equal to"), int(Operator::GreaterThanEqualTo));
+	uiSearchReplace.cbOperator->addItem(i18n("Less than"), int(Operator::LessThan));
+	uiSearchReplace.cbOperator->addItem(i18n("Less than or Equal to"), int(Operator::LessThanEqualTo));
+
+	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Equal to"), int(Operator::EqualTo));
+	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Not Equal to"), int(Operator::NotEqualTo));
+	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Between (Incl. End Points)"), int(Operator::BetweenIncl));
+	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Between (Excl. End Points)"), int(Operator::BetweenExcl));
+	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Greater than"), int(Operator::GreaterThan));
+	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Greater than or Equal to"), int(Operator::GreaterThanEqualTo));
+	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Less than"), int(Operator::LessThan));
+	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Less than or Equal to"), int(Operator::LessThanEqualTo));
 
 	uiSearchReplace.leValue1->setValidator(new QDoubleValidator(uiSearchReplace.leValue1));
 	uiSearchReplace.leValue2->setValidator(new QDoubleValidator(uiSearchReplace.leValue2));
@@ -300,37 +303,46 @@ void SearchReplaceWidget::dataTypeChanged(int index) {
 		uiSearchReplace.frameNumeric->hide();
 		uiSearchReplace.frameText->show();
 		uiSearchReplace.frameDateTime->hide();
+		uiSearchReplace.tbMatchCase->show();
 	} else if (index == 1) { // numeric
 		uiSearchReplace.frameNumeric->show();
 		uiSearchReplace.frameText->hide();
 		uiSearchReplace.frameDateTime->hide();
+		uiSearchReplace.tbMatchCase->hide();
 	} else { // datetime
 		uiSearchReplace.frameNumeric->hide();
 		uiSearchReplace.frameText->hide();
 		uiSearchReplace.frameDateTime->show();
+		uiSearchReplace.tbMatchCase->hide();
 	}
 }
 
-void SearchReplaceWidget::operatorChanged(int index) const {
-	bool value2 = (index == 2) || (index == 3);
-	uiSearchReplace.lMin->setVisible(value2);
-	uiSearchReplace.lMax->setVisible(value2);
-	uiSearchReplace.lAnd->setVisible(value2);
-	uiSearchReplace.leValue2->setVisible(value2);
+void SearchReplaceWidget::operatorChanged(int /* index */) const {
+	const auto op = static_cast<Operator>(uiSearchReplace.cbOperator->currentData().toInt());
+	bool visible = (op == Operator::BetweenIncl) || (op == Operator::BetweenExcl);
+
+	uiSearchReplace.lMin->setVisible(visible);
+	uiSearchReplace.lMax->setVisible(visible);
+	uiSearchReplace.lAnd->setVisible(visible);
+	uiSearchReplace.leValue2->setVisible(visible);
 }
 
-void SearchReplaceWidget::operatorDateTimeChanged(int index) const {
-	bool value2 = (index == 2) || (index == 3);
-	uiSearchReplace.lMinDateTime->setVisible(value2);
-	uiSearchReplace.lMaxDateTime->setVisible(value2);
-	uiSearchReplace.lAndDateTime->setVisible(value2);
-	uiSearchReplace.dteValue2->setVisible(value2);
+void SearchReplaceWidget::operatorDateTimeChanged(int /* index */) const {
+	const auto op = static_cast<Operator>(uiSearchReplace.cbOperatorDateTime->currentData().toInt());
+	bool visible = (op == Operator::BetweenIncl) || (op == Operator::BetweenExcl);
+
+	uiSearchReplace.lMinDateTime->setVisible(visible);
+	uiSearchReplace.lMaxDateTime->setVisible(visible);
+	uiSearchReplace.lAndDateTime->setVisible(visible);
+	uiSearchReplace.dteValue2->setVisible(visible);
 }
 
 void SearchReplaceWidget::modeChanged() {
+	findNext(false);
 }
 
 void SearchReplaceWidget::matchCaseToggled() {
+	findNext(false);
 }
 
 // settings
@@ -361,88 +373,37 @@ void SearchReplaceWidget::switchFindReplace() {
 	}
 }
 
-void SearchReplaceWidget::findNext(bool proceed) {
-	QLineEdit* lineEdit;
-	if (m_replaceEnabled)
-		lineEdit = uiSearchReplace.leValueText;
-	else
-		lineEdit = uiSearch.cbFind->lineEdit();
-
-	const QString& text = lineEdit->text();
-
-	if (!text.isEmpty()) {
-		bool rc = findNextImpl(text, proceed);
-		GuiTools::highlight(lineEdit, !rc);
-	} else
-		GuiTools::highlight(lineEdit, false);
-}
-
-void SearchReplaceWidget::findPrevious(bool proceed) {
-	QLineEdit* lineEdit;
-	if (m_replaceEnabled)
-		lineEdit = uiSearchReplace.leValueText;
-	else
-		lineEdit = uiSearch.cbFind->lineEdit();
-
-	const QString& text = lineEdit->text();
-
-	if (!text.isEmpty()) {
-		bool rc = findPrevImpl(text, proceed);
-		GuiTools::highlight(lineEdit, !rc);
-	} else
-		GuiTools::highlight(lineEdit, false);
-}
-
 //**********************************************************
 //****  data type specific functions implementing find  ***
 //**********************************************************
-bool SearchReplaceWidget::findNextImpl(const QString& text, bool proceed) {
+bool SearchReplaceWidget::findNext(bool proceed) {
+	// QLineEdit* lineEdit;
+	// if (m_replaceEnabled)
+	// 	lineEdit = uiSearchReplace.leValueText;
+	// else
+	// 	lineEdit = uiSearch.cbFind->lineEdit();
+	//
+	// // const QString& text = lineEdit->text();
+	// //
+	// // if (!text.isEmpty()) {
+	// 	bool rc = findPrevImpl(proceed);
+	// 	GuiTools::highlight(lineEdit, !rc);
+	// // } else
+	// // 	GuiTools::highlight(lineEdit, false);
+
+	// settings
 	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
-	bool rc = false;
+	const auto opText = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
+	const auto opNumeric = static_cast<Operator>(uiSearchReplace.cbOperator->currentData().toInt());
+	const auto opDateTime = static_cast<Operator>(uiSearchReplace.cbOperatorDateTime->currentData().toInt());
+	const auto cs = uiSearchReplace.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+	const bool columnMajor = (uiSearchReplace.cbOrder->currentIndex() == 0);
 
-	switch (type) {
-	case DataType::Text:
-		rc = findNextText(text, proceed);
-		break;
-	case DataType::Numeric:
-		rc = findNextText(text, proceed);
-		break;
-	case DataType::DateTime:
-		rc = findNextText(text, proceed);
-		break;
-	}
-
-	return rc;
-}
-
-bool SearchReplaceWidget::findPrevImpl(const QString& text, bool proceed) {
-	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
-	bool rc = false;
-
-	switch (type) {
-	case DataType::Text:
-		rc = findPrevText(text, proceed);
-		break;
-	case DataType::Numeric:
-		rc = findPrevText(text, proceed);
-		break;
-	case DataType::DateTime:
-		rc = findPrevText(text, proceed);
-		break;
-	}
-
-	return rc;
-}
-
-bool SearchReplaceWidget::findNextText(const QString& text, bool proceed) {
-	int curRow = m_view->firstSelectedRow();
-	int curCol = m_view->firstSelectedColumn();
+	// spreadsheet size and the start cell
 	const int colCount = m_spreadsheet->columnCount();
 	const int rowCount = m_spreadsheet->rowCount();
-
-	const bool columnMajor = (uiSearchReplace.cbOrder->currentIndex() == 0);
-	const auto op = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
-	const auto cs = uiSearchReplace.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+	int curRow = m_view->firstSelectedRow();
+	int curCol = m_view->firstSelectedColumn();
 
 	if (columnMajor && proceed)
 		++curRow;
@@ -450,9 +411,28 @@ bool SearchReplaceWidget::findNextText(const QString& text, bool proceed) {
 	if (!columnMajor && proceed)
 		++curCol;
 
+	// search pattern(s)
+	QString pattern1;
+	QString pattern2;
+	switch (type) {
+	case DataType::Text:
+		pattern1 = uiSearchReplace.leValueText->text();
+		break;
+	case DataType::Numeric:
+		pattern1 = uiSearchReplace.leValue1->text();
+		pattern2 = uiSearchReplace.leValue2->text();
+		break;
+	case DataType::DateTime:
+		pattern1 = uiSearchReplace.dteValue1->text();
+		pattern1 = uiSearchReplace.dteValue2->text();
+		break;
+	}
+
+	// all settings are determined -> search the next cell matching the specified pattern(s)
 	const auto& columns = m_spreadsheet->children<Column>();
 	bool startCol = true;
 	bool startRow = true;
+	bool match = false;
 
 	if (columnMajor) {
 		for (int col = 0; col < colCount; ++col) {
@@ -460,14 +440,15 @@ bool SearchReplaceWidget::findNextText(const QString& text, bool proceed) {
 				continue;
 
 			auto* column = columns.at(col);
-			if (column->columnMode() != AbstractColumn::ColumnMode::Text)
+			if (!checkColumnType(column, type))
 				continue;
 
 			for (int row = 0; row < rowCount; ++row) {
 				if (startRow && row < curRow)
 					continue;
 
-				if (checkCellText(column->textAt(row), text, op, cs)) {
+				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
+				if (match) {
 					m_view->goToCell(row, col);
 					return true;
 				}
@@ -487,10 +468,11 @@ bool SearchReplaceWidget::findNextText(const QString& text, bool proceed) {
 					continue;
 
 				auto* column = columns.at(col);
-				if (column->columnMode() != AbstractColumn::ColumnMode::Text)
+				if (!checkColumnType(column, type))
 					continue;
 
-				if (checkCellText(column->textAt(row), text, op, cs)) {
+				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
+				if (match) {
 					m_view->goToCell(row, col);
 					return true;
 				}
@@ -505,25 +487,49 @@ bool SearchReplaceWidget::findNextText(const QString& text, bool proceed) {
 	return false;
 }
 
-bool SearchReplaceWidget::findPrevText(const QString& text, bool proceed) {
-	int curRow = m_view->firstSelectedRow();
-	int curCol = m_view->firstSelectedColumn();
+bool SearchReplaceWidget::findPrevious(bool proceed) {
+	// settings
+	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
+	const auto opText = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
+	const auto opNumeric = static_cast<Operator>(uiSearchReplace.cbOperator->currentData().toInt());
+	const auto opDateTime = static_cast<Operator>(uiSearchReplace.cbOperatorDateTime->currentData().toInt());
+	const auto cs = uiSearchReplace.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+	const bool columnMajor = (uiSearchReplace.cbOrder->currentIndex() == 0);
+
+	// spreadsheet size and the start cell
 	const int colCount = m_spreadsheet->columnCount();
 	const int rowCount = m_spreadsheet->rowCount();
-
-	const bool columnMajor = (uiSearchReplace.cbOrder->currentIndex() == 0);
-	const auto op = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
-	const auto cs = uiSearchReplace.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+	int curRow = m_view->firstSelectedRow();
+	int curCol = m_view->firstSelectedColumn();
 
 	if (columnMajor && proceed)
-		--curRow;
+		++curRow;
 
 	if (!columnMajor && proceed)
-		--curCol;
+		++curCol;
 
+	// search pattern(s)
+	QString pattern1;
+	QString pattern2;
+	switch (type) {
+	case DataType::Text:
+		pattern1 = uiSearchReplace.leValueText->text();
+		break;
+	case DataType::Numeric:
+		pattern1 = uiSearchReplace.leValue1->text();
+		pattern2 = uiSearchReplace.leValue2->text();
+		break;
+	case DataType::DateTime:
+		pattern1 = uiSearchReplace.dteValue1->text();
+		pattern1 = uiSearchReplace.dteValue2->text();
+		break;
+	}
+
+	// all settings are determined -> search the next cell matching the specified pattern(s)
 	const auto& columns = m_spreadsheet->children<Column>();
 	bool startCol = true;
 	bool startRow = true;
+	bool match = false;
 
 	if (columnMajor) {
 		for (int col = colCount; col >= 0; --col) {
@@ -531,14 +537,15 @@ bool SearchReplaceWidget::findPrevText(const QString& text, bool proceed) {
 				continue;
 
 			auto* column = columns.at(col);
-			if (column->columnMode() != AbstractColumn::ColumnMode::Text)
+			if (!checkColumnType(column, type))
 				continue;
 
 			for (int row = rowCount; row >= 0; --row) {
 				if (startRow && row > curRow)
 					continue;
 
-				if (checkCellText(column->textAt(row), text, op, cs)) {
+				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
+				if (match) {
 					m_view->goToCell(row, col);
 					return true;
 				}
@@ -558,10 +565,11 @@ bool SearchReplaceWidget::findPrevText(const QString& text, bool proceed) {
 					continue;
 
 				auto* column = columns.at(col);
-				if (column->columnMode() != AbstractColumn::ColumnMode::Text)
+				if (!checkColumnType(column, type))
 					continue;
 
-				if (checkCellText(column->textAt(row), text, op, cs)) {
+				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
+				if (match) {
 					m_view->goToCell(row, col);
 					return true;
 				}
@@ -574,6 +582,50 @@ bool SearchReplaceWidget::findPrevText(const QString& text, bool proceed) {
 	}
 
 	return false;
+}
+
+bool SearchReplaceWidget::checkColumnType(Column* column, DataType type) {
+	bool valid = false;
+
+	switch (type) {
+	case DataType::Text:
+		valid = (column->columnMode() == AbstractColumn::ColumnMode::Text);
+		break;
+	case DataType::Numeric:
+		valid = column->isNumeric();
+		break;
+	case DataType::DateTime:
+		valid = (column->columnMode() == AbstractColumn::ColumnMode::DateTime);
+		break;
+	}
+
+	return valid;
+}
+
+bool SearchReplaceWidget::checkColumnRow(Column* column,
+										 DataType type,
+										 int row,
+										 OperatorText opText,
+										 Operator opNumeric,
+										 Operator opDateTime,
+										 const QString& pattern1,
+										 const QString pattern2,
+										 Qt::CaseSensitivity cs) {
+	bool match = false;
+	switch (type) {
+	case DataType::Text:
+		match = checkCellText(column->textAt(row), pattern1, opText, cs);
+		break;
+	case DataType::Numeric:
+		match = checkCellNumeric(column->valueAt(row), pattern1, pattern2, opNumeric);
+		break;
+	case DataType::DateTime:
+		match = checkCellDateTime(column->dateTimeAt(row), pattern1, pattern2, opDateTime);
+		break;
+	}
+
+	// qDebug()<<"checkColumnRow " << column->name() << "  " << row << "  " << match;
+	return match;
 }
 
 bool SearchReplaceWidget::checkCellText(const QString& cellText, const QString& pattern, OperatorText op, Qt::CaseSensitivity cs) {
@@ -616,20 +668,108 @@ bool SearchReplaceWidget::checkCellText(const QString& cellText, const QString& 
 	return match;
 }
 
-bool SearchReplaceWidget::findNextNumeric(const QString& text, bool proceed) {
-	return true;
+bool SearchReplaceWidget::checkCellNumeric(double cellValue, const QString& pattern1, const QString& pattern2, Operator op) {
+	bool match = false;
+	bool ok;
+	const auto numberLocale = QLocale();
+
+	const double patternValue1 = numberLocale.toDouble(pattern1, &ok);
+	if (!ok)
+		return false;
+
+	const double patternValue2 = numberLocale.toDouble(pattern2, &ok);
+	if (!ok)
+		return false;
+
+	switch (op) {
+	case Operator::EqualTo: {
+		match = (cellValue == patternValue1);
+		break;
+	}
+	case Operator::NotEqualTo: {
+		match = (cellValue != patternValue1);
+		break;
+	}
+	case Operator::BetweenIncl: {
+		match = (cellValue >= patternValue1 && cellValue <= patternValue2);
+		break;
+	}
+	case Operator::BetweenExcl: {
+		match = (cellValue > patternValue1 && cellValue < patternValue2);
+		break;
+	}
+	case Operator::GreaterThan: {
+		match = (cellValue > patternValue1);
+		break;
+	}
+	case Operator::GreaterThanEqualTo: {
+		match = (cellValue >= patternValue1);
+		break;
+	}
+	case Operator::LessThan: {
+		match = (cellValue < patternValue1);
+		break;
+	}
+	case Operator::LessThanEqualTo: {
+		match = (cellValue <= patternValue1);
+		break;
+	}
+	}
+
+	return match;
 }
 
-bool SearchReplaceWidget::findPrevNumeric(const QString& text, bool proceed) {
-	return true;
-}
+bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime, const QString& pattern1, const QString& pattern2, Operator op) {
+	bool match = false;
+	bool ok;
+	const auto numberLocale = QLocale();
 
-bool SearchReplaceWidget::findNextDateTime(const QString& text, bool proceed) {
-	return true;
-}
+	const double patternValue1 = numberLocale.toDouble(pattern1, &ok);
+	if (!ok)
+		return false;
 
-bool SearchReplaceWidget::findPrevDateTime(const QString& text, bool proceed) {
-	return true;
+	const double patternValue2 = numberLocale.toDouble(pattern2, &ok);
+	if (!ok)
+		return false;
+
+	double cellValue = cellValueDateTime.toMSecsSinceEpoch();
+
+	switch (op) {
+	case Operator::EqualTo: {
+		match = (cellValue == patternValue1);
+		break;
+	}
+	case Operator::NotEqualTo: {
+		match = (cellValue != patternValue1);
+		break;
+	}
+	case Operator::BetweenIncl: {
+		match = (cellValue >= patternValue1 && cellValue <= patternValue2);
+		break;
+	}
+	case Operator::BetweenExcl: {
+		match = (cellValue > patternValue1 && cellValue < patternValue2);
+		break;
+	}
+	case Operator::GreaterThan: {
+		match = (cellValue > patternValue1);
+		break;
+	}
+	case Operator::GreaterThanEqualTo: {
+		match = (cellValue >= patternValue1);
+		break;
+	}
+	case Operator::LessThan: {
+		match = (cellValue < patternValue1);
+		break;
+	}
+	case Operator::LessThanEqualTo: {
+		match = (cellValue <= patternValue1);
+		break;
+	}
+	}
+
+	return match;
 }
 
 //**********************************************************
