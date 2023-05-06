@@ -113,20 +113,64 @@ SearchReplaceWidget::SearchReplaceWidget(Spreadsheet* spreadsheet, QWidget* pare
 
 SearchReplaceWidget::~SearchReplaceWidget() {
 	// save the current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
+
+	if (m_searchWidget) {
+		conf.writeEntry("SimpleMatchCase", uiSearchReplace.tbMatchCase->isChecked());
+
+		// history for the text value
+		QStringList items;
+		for (int i = 0; i < uiSearch.cbFind->count(); ++i)
+			items << uiSearch.cbFind->itemText(i);
+
+		if (!items.empty()) {
+			conf.writeEntry("SimpleValueHistory", items);
+			items.clear();
+		}
+	}
+
 	if (m_searchReplaceWidget) {
-		KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
+		conf.writeEntry("DataType", uiSearchReplace.cbDataType->currentIndex());
+		conf.writeEntry("Order", uiSearchReplace.cbOrder->currentIndex());
+		conf.writeEntry("MatchCase", uiSearchReplace.tbMatchCase->isChecked());
+		conf.writeEntry("SelectionOnly", uiSearchReplace.tbSelectionOnly->isChecked());
+
 		conf.writeEntry("Operator", uiSearchReplace.cbOperator->currentData().toInt());
-		conf.writeEntry("Value1", uiSearchReplace.leValue1->text());
-		conf.writeEntry("Value2", uiSearchReplace.leValue2->text());
+		conf.writeEntry("Value1", uiSearchReplace.cbValue1->currentText());
+		conf.writeEntry("Value2", uiSearchReplace.cbValue2->currentText());
 		conf.writeEntry("OperatorText", uiSearchReplace.cbOperatorText->currentData().toInt());
-		conf.writeEntry("ValueText", uiSearchReplace.leValueText->text());
+		conf.writeEntry("ValueText", uiSearchReplace.cbValueText->currentText());
 		conf.writeEntry("OperatorDateTime", uiSearchReplace.cbOperatorDateTime->currentData().toInt());
 		conf.writeEntry("Value1DateTime", uiSearchReplace.dteValue1->dateTime().toMSecsSinceEpoch());
 		conf.writeEntry("Value2DateTime", uiSearchReplace.dteValue2->dateTime().toMSecsSinceEpoch());
 
-		conf.writeEntry("Order", uiSearchReplace.cbOrder->currentIndex());
-		conf.writeEntry("MatchCase", uiSearchReplace.tbMatchCase->isChecked());
-		conf.writeEntry("SelectionOnly", uiSearchReplace.tbSelectionOnly->isChecked());
+		// history for the first numerical value
+		QStringList items;
+		for (int i = 0; i < uiSearchReplace.cbValue1->count(); ++i)
+			items << uiSearchReplace.cbValue1->itemText(i);
+
+		if (!items.empty()) {
+			conf.writeEntry("Value1History", items);
+			items.clear();
+		}
+
+		// history for the second numerical value
+		for (int i = 0; i < uiSearchReplace.cbValue2->count(); ++i)
+			items << uiSearchReplace.cbValue2->itemText(i);
+
+		if (!items.empty()) {
+			conf.writeEntry("Value2History", items);
+			items.clear();
+		}
+
+		// history for the text value
+		for (int i = 0; i < uiSearchReplace.cbValueText->count(); ++i)
+			items << uiSearchReplace.cbValueText->itemText(i);
+
+		if (!items.empty()) {
+			conf.writeEntry("ValueTextHistory", items);
+			items.clear();
+		}
 	}
 }
 
@@ -137,7 +181,7 @@ void SearchReplaceWidget::setReplaceEnabled(bool enabled) {
 
 void SearchReplaceWidget::setFocus() {
 	if (m_replaceEnabled)
-		uiSearchReplace.leValueText->setFocus();
+		uiSearchReplace.cbValueText->setFocus();
 	else
 		uiSearch.cbFind->setFocus();
 }
@@ -152,6 +196,7 @@ void SearchReplaceWidget::initSearchWidget() {
 
 	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
 		findNextSimple(true);
+		addCurrentTextToHistory(uiSearch.cbFind);
 	});
 	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=]() {
 		findNextSimple(false);
@@ -159,14 +204,21 @@ void SearchReplaceWidget::initSearchWidget() {
 
 	connect(uiSearch.tbFindNext, &QToolButton::clicked, this, [=]() {
 		findNextSimple(true);
+		addCurrentTextToHistory(uiSearch.cbFind);
 	});
 	connect(uiSearch.tbFindPrev, &QToolButton::clicked, this, [=]() {
 		findPreviousSimple(true);
+		addCurrentTextToHistory(uiSearch.cbFind);
 	});
 	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
 
 	connect(uiSearch.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
 	connect(uiSearch.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
+
+	// restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
+	uiSearch.cbFind->addItems(conf.readEntry("SimpleValueHistory", QStringList()));
+	uiSearch.tbMatchCase->setChecked(conf.readEntry("SimpleMatchCase", false));
 }
 
 void SearchReplaceWidget::initSearchReplaceWidget() {
@@ -201,8 +253,8 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Less than"), int(Operator::LessThan));
 	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Less than or Equal to"), int(Operator::LessThanEqualTo));
 
-	uiSearchReplace.leValue1->setValidator(new QDoubleValidator(uiSearchReplace.leValue1));
-	uiSearchReplace.leValue2->setValidator(new QDoubleValidator(uiSearchReplace.leValue2));
+	uiSearchReplace.cbValue1->lineEdit()->setValidator(new QDoubleValidator(uiSearchReplace.cbValue1->lineEdit()));
+	uiSearchReplace.cbValue2->lineEdit()->setValidator(new QDoubleValidator(uiSearchReplace.cbValue2->lineEdit()));
 
 	// connections
 	connect(uiSearchReplace.cbDataType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::dataTypeChanged);
@@ -213,23 +265,26 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	});
 	connect(uiSearchReplace.cbOperatorDateTime, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::operatorDateTimeChanged);
 
-	connect(uiSearchReplace.leValue1, &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearchReplace.cbValue1->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
 		findNext(true);
+		addCurrentTextToHistory(uiSearchReplace.cbValue1);
 	});
-	connect(uiSearchReplace.leValue2, &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearchReplace.cbValue2->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
 		findNext(true);
+		addCurrentTextToHistory(uiSearchReplace.cbValue2);
 	});
-	connect(uiSearchReplace.leValue1, &QLineEdit::textChanged, this, [=]() {
+	connect(uiSearchReplace.cbValue1->lineEdit(), &QLineEdit::textChanged, this, [=]() {
 		findNext(false);
 	});
-	connect(uiSearchReplace.leValue2, &QLineEdit::textChanged, this, [=]() {
+	connect(uiSearchReplace.cbValue2->lineEdit(), &QLineEdit::textChanged, this, [=]() {
 		findNext(false);
 	});
 
-	connect(uiSearchReplace.leValueText, &QLineEdit::returnPressed, this, [=]() {
+	connect(uiSearchReplace.cbValueText->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
 		findNext(true);
+		addCurrentTextToHistory(uiSearchReplace.cbValueText);
 	});
-	connect(uiSearchReplace.leValueText, &QLineEdit::textChanged, this, [=]() {
+	connect(uiSearchReplace.cbValueText->lineEdit(), &QLineEdit::textChanged, this, [=]() {
 		findNext(false);
 	});
 
@@ -242,9 +297,23 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 
 	connect(uiSearchReplace.tbFindNext, &QToolButton::clicked, this, [=]() {
 		findNext(true);
+		const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentData().toInt());
+		if (type == DataType::Text)
+			addCurrentTextToHistory(uiSearchReplace.cbValueText);
+		else if (type == DataType::Numeric) {
+			addCurrentTextToHistory(uiSearchReplace.cbValue1);
+			addCurrentTextToHistory(uiSearchReplace.cbValue2);
+		}
 	});
 	connect(uiSearchReplace.tbFindPrev, &QToolButton::clicked, this, [=]() {
 		findPrevious(true);
+		const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentData().toInt());
+		if (type == DataType::Text)
+			addCurrentTextToHistory(uiSearchReplace.cbValueText);
+		else if (type == DataType::Numeric) {
+			addCurrentTextToHistory(uiSearchReplace.cbValue1);
+			addCurrentTextToHistory(uiSearchReplace.cbValue2);
+		}
 	});
 	connect(uiSearchReplace.bFindAll, &QPushButton::clicked, this, &SearchReplaceWidget::findAll);
 
@@ -256,8 +325,8 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	connect(uiSearchReplace.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
 
 	// custom context menus for LineEdit in ComboBox
-	uiSearchReplace.leValueText->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(uiSearchReplace.leValueText,
+	uiSearchReplace.cbValueText->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(uiSearchReplace.cbValueText,
 			&QComboBox::customContextMenuRequested,
 			this,
 			QOverload<const QPoint&>::of(&SearchReplaceWidget::findContextMenuRequest));
@@ -270,12 +339,16 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 
 	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
-	uiSearchReplace.leValue1->setText(conf.readEntry("Value1", QString()));
-	uiSearchReplace.leValue2->setText(conf.readEntry("Value2", QString()));
-	uiSearchReplace.cbOperator->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Operator", 0)));
-	operatorChanged(uiSearchReplace.cbOperator->currentIndex());
+	uiSearchReplace.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
+	uiSearchReplace.cbOrder->setCurrentIndex(conf.readEntry("Order", 0));
+	uiSearchReplace.tbMatchCase->setChecked(conf.readEntry("MatchCase", false));
+	uiSearchReplace.tbSelectionOnly->setChecked(conf.readEntry("SelectionOnly", false));
 
-	uiSearchReplace.leValueText->setText(conf.readEntry("ValueText", QString()));
+	uiSearchReplace.cbValue1->setCurrentText(conf.readEntry("Value1", QString()));
+	uiSearchReplace.cbValue2->setCurrentText(conf.readEntry("Value2", QString()));
+	uiSearchReplace.cbOperator->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Operator", 0)));
+
+	uiSearchReplace.cbValueText->setCurrentText(conf.readEntry("ValueText", QString()));
 	uiSearchReplace.cbOperatorText->setCurrentIndex(uiSearchReplace.cbOperatorText->findData(conf.readEntry("OperatorText", 0)));
 
 	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
@@ -286,20 +359,38 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	dataTypeChanged(uiSearchReplace.cbDataType->currentIndex());
 	operatorChanged(uiSearchReplace.cbOperator->currentIndex());
 	operatorDateTimeChanged(uiSearchReplace.cbOperatorDateTime->currentIndex());
+
+	// history
+	uiSearchReplace.cbValue1->addItems(conf.readEntry("Value1History", QStringList()));
+	uiSearchReplace.cbValue1->addItems(conf.readEntry("Value2History", QStringList()));
+	uiSearchReplace.cbValue1->addItems(conf.readEntry("ValueTextHistory", QStringList()));
 }
 
 void SearchReplaceWidget::showEvent(QShowEvent* event) {
 	QWidget::showEvent(event);
 }
 
-//**********************************************************
-//************************* SLOTs **************************
-//**********************************************************
+void SearchReplaceWidget::addCurrentTextToHistory(QComboBox* comboBox) const {
+	const QString& text = comboBox->currentText();
+	const int index = comboBox->findText(text);
+
+	if (index > 0)
+		comboBox->removeItem(index);
+
+	if (index != 0) {
+		comboBox->insertItem(0, text);
+		comboBox->setCurrentIndex(0);
+	}
+}
+
+// **********************************************************
+// ************************* SLOTs **************************
+// **********************************************************
 void SearchReplaceWidget::findAll() {
 	QString text;
 	QLineEdit* lineEdit;
 	if (m_replaceEnabled)
-		lineEdit = uiSearchReplace.leValueText;
+		lineEdit = uiSearchReplace.cbValueText->lineEdit();
 	else
 		lineEdit = uiSearch.cbFind->lineEdit();
 
@@ -355,7 +446,7 @@ void SearchReplaceWidget::operatorChanged(int /* index */) const {
 	uiSearchReplace.lMin->setVisible(visible);
 	uiSearchReplace.lMax->setVisible(visible);
 	uiSearchReplace.lAnd->setVisible(visible);
-	uiSearchReplace.leValue2->setVisible(visible);
+	uiSearchReplace.cbValue2->setVisible(visible);
 }
 
 void SearchReplaceWidget::operatorDateTimeChanged(int /* index */) const {
@@ -404,9 +495,9 @@ void SearchReplaceWidget::switchFindReplace() {
 	}
 }
 
-//**********************************************************
-//**************  simple find functions  *******************
-//**********************************************************
+// **********************************************************
+// **************  simple find functions  *******************
+// **********************************************************
 /*!
  * search the next cell in the column-major order that matches
  * to the specified pattern. The search is done ignoring the data type
@@ -503,13 +594,13 @@ bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 	return false;
 }
 
-//**********************************************************
-//****  advanced and data type specific find functions  ****
-//**********************************************************
+// **********************************************************
+// ****  advanced and data type specific find functions  ****
+// **********************************************************
 bool SearchReplaceWidget::findNext(bool proceed) {
 	// QLineEdit* lineEdit;
 	// if (m_replaceEnabled)
-	// 	lineEdit = uiSearchReplace.leValueText;
+	// 	lineEdit = uiSearchReplace.cbValueText;
 	// else
 	// 	lineEdit = uiSearch.cbFind->lineEdit();
 	//
@@ -546,11 +637,11 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 	QString pattern2;
 	switch (type) {
 	case DataType::Text:
-		pattern1 = uiSearchReplace.leValueText->text();
+		pattern1 = uiSearchReplace.cbValueText->currentText();
 		break;
 	case DataType::Numeric:
-		pattern1 = uiSearchReplace.leValue1->text();
-		pattern2 = uiSearchReplace.leValue2->text();
+		pattern1 = uiSearchReplace.cbValue1->currentText();
+		pattern2 = uiSearchReplace.cbValue2->currentText();
 		break;
 	case DataType::DateTime:
 		pattern1 = uiSearchReplace.dteValue1->text();
@@ -643,11 +734,11 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 	QString pattern2;
 	switch (type) {
 	case DataType::Text:
-		pattern1 = uiSearchReplace.leValueText->text();
+		pattern1 = uiSearchReplace.cbValueText->currentText();
 		break;
 	case DataType::Numeric:
-		pattern1 = uiSearchReplace.leValue1->text();
-		pattern2 = uiSearchReplace.leValue2->text();
+		pattern1 = uiSearchReplace.cbValue1->currentText();
+		pattern2 = uiSearchReplace.cbValue2->currentText();
 		break;
 	case DataType::DateTime:
 		pattern1 = uiSearchReplace.dteValue1->text();
@@ -901,16 +992,16 @@ bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime, 
 	return match;
 }
 
-//**********************************************************
-//**** SLOTs for changes triggered in CustomPointDock ******
-//**********************************************************
+// **********************************************************
+// ******** context menu related helper functions ***********
+// **********************************************************
 void SearchReplaceWidget::showExtendedContextMenu(bool replace, const QPoint& pos) {
 	// Make original menu
 	QLineEdit* lineEdit;
 	if (replace)
 		lineEdit = uiSearchReplace.cbReplace->lineEdit();
 	else
-		lineEdit = uiSearchReplace.leValueText;
+		lineEdit = uiSearchReplace.cbValueText->lineEdit();
 
 	auto* const contextMenu = lineEdit->createStandardContextMenu();
 	if (!contextMenu)

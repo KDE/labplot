@@ -152,13 +152,10 @@
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <item row="0" column="5">
-          <widget class="QLineEdit" name="leValue2"/>
-         </item>
-         <item row="0" column="3">
-          <widget class="QLabel" name="lAnd">
+         <item row="0" column="2">
+          <widget class="QLabel" name="lMin">
            <property name="text">
-            <string>and</string>
+            <string>min.</string>
            </property>
           </widget>
          </item>
@@ -180,14 +177,37 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLabel" name="lMin">
-           <property name="text">
-            <string>min.</string>
+          <widget class="QComboBox" name="cbValue1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="editable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <widget class="QLineEdit" name="leValue1"/>
+         <item row="0" column="3">
+          <widget class="QLabel" name="lAnd">
+           <property name="text">
+            <string>and</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="5">
+          <widget class="QComboBox" name="cbValue2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="editable">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -288,9 +308,6 @@
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="leValueText"/>
-         </item>
          <item row="0" column="0">
           <widget class="QComboBox" name="cbOperatorText">
            <property name="sizePolicy">
@@ -298,6 +315,19 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="cbValueText">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="editable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

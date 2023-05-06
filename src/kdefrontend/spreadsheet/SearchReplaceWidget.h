@@ -61,6 +61,7 @@ private:
 	bool checkCellNumeric(double value, const QString& pattern1, const QString& pattern2, Operator);
 	bool checkCellDateTime(const QDateTime& value, const QString& pattern1, const QString& pattern2, Operator);
 
+	void addCurrentTextToHistory(QComboBox*) const;
 	void showExtendedContextMenu(bool forPattern, const QPoint&);
 	QVector<QString> capturePatterns(const QString& pattern) const;
 
