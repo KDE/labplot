@@ -11,7 +11,10 @@
 #ifndef ORIGINPROJECTPARSER_H
 #define ORIGINPROJECTPARSER_H
 
+#ifdef HAVE_LIBORIGIN
 #include "OriginFile.h"
+#endif
+
 #include "backend/datasources/projects/ProjectParser.h"
 #include "backend/worksheet/Background.h"
 
