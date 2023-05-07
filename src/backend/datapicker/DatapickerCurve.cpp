@@ -400,7 +400,7 @@ void DatapickerCurve::suppressUpdatePoint(bool suppress) {
 
 	if (!suppress) {
 		// update points
-		auto points = children<DatapickerPoint>();
+		auto points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		m_datasheet->setRowCount(points.count());
 		updatePoints();
 	}
