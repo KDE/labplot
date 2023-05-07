@@ -57,7 +57,7 @@ WorkbookView::WorkbookView(Workbook* workbook)
 	// SIGNALs/SLOTs
 	connect(m_workbook, &Workbook::aspectDescriptionChanged, this, &WorkbookView::handleDescriptionChanged);
 	connect(m_workbook, &Workbook::aspectAdded, this, &WorkbookView::handleAspectAdded);
-	connect(m_workbook, Q & Workbook::childAspectAboutToBeRemoved, this, &WorkbookView::handleAspectAboutToBeRemoved);
+	connect(m_workbook, &Workbook::childAspectAboutToBeRemoved, this, &WorkbookView::handleAspectAboutToBeRemoved);
 	connect(m_workbook, &Workbook::requestProjectContextMenu, this, &WorkbookView::createContextMenu);
 	connect(m_workbook, &Workbook::workbookItemSelected, this, &WorkbookView::itemSelected);
 
