@@ -112,21 +112,20 @@ SearchReplaceWidget::SearchReplaceWidget(Spreadsheet* spreadsheet, QWidget* pare
 }
 
 SearchReplaceWidget::~SearchReplaceWidget() {
-	// save the current settings
+	// save the current settings,
+	// save everything except of the patterns, they will be set when the widget is opened again
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
 
 	if (m_searchWidget) {
-		conf.writeEntry("SimpleMatchCase", uiSearchReplace.tbMatchCase->isChecked());
+		conf.writeEntry("SimpleMatchCase", uiSearch.tbMatchCase->isChecked());
 
 		// history for the text value
 		QStringList items;
 		for (int i = 0; i < uiSearch.cbFind->count(); ++i)
 			items << uiSearch.cbFind->itemText(i);
 
-		if (!items.empty()) {
+		if (!items.empty())
 			conf.writeEntry("SimpleValueHistory", items);
-			items.clear();
-		}
 	}
 
 	if (m_searchReplaceWidget) {
@@ -134,15 +133,9 @@ SearchReplaceWidget::~SearchReplaceWidget() {
 		conf.writeEntry("Order", uiSearchReplace.cbOrder->currentIndex());
 		conf.writeEntry("MatchCase", uiSearchReplace.tbMatchCase->isChecked());
 		conf.writeEntry("SelectionOnly", uiSearchReplace.tbSelectionOnly->isChecked());
-
 		conf.writeEntry("Operator", uiSearchReplace.cbOperator->currentData().toInt());
-		conf.writeEntry("Value1", uiSearchReplace.cbValue1->currentText());
-		conf.writeEntry("Value2", uiSearchReplace.cbValue2->currentText());
 		conf.writeEntry("OperatorText", uiSearchReplace.cbOperatorText->currentData().toInt());
-		conf.writeEntry("ValueText", uiSearchReplace.cbValueText->currentText());
 		conf.writeEntry("OperatorDateTime", uiSearchReplace.cbOperatorDateTime->currentData().toInt());
-		conf.writeEntry("Value1DateTime", uiSearchReplace.dteValue1->dateTime().toMSecsSinceEpoch());
-		conf.writeEntry("Value2DateTime", uiSearchReplace.dteValue2->dateTime().toMSecsSinceEpoch());
 
 		// history for the first numerical value
 		QStringList items;
@@ -167,10 +160,8 @@ SearchReplaceWidget::~SearchReplaceWidget() {
 		for (int i = 0; i < uiSearchReplace.cbValueText->count(); ++i)
 			items << uiSearchReplace.cbValueText->itemText(i);
 
-		if (!items.empty()) {
+		if (!items.empty())
 			conf.writeEntry("ValueTextHistory", items);
-			items.clear();
-		}
 	}
 }
 
@@ -179,14 +170,39 @@ void SearchReplaceWidget::setReplaceEnabled(bool enabled) {
 	switchFindReplace();
 }
 
+void SearchReplaceWidget::setInitialPattern(AbstractColumn::ColumnMode mode, const QString& pattern) {
+	m_initialColumnMode = mode;
+	m_initialPattern = pattern;
+
+	if (m_searchWidget)
+		uiSearch.cbFind->setCurrentText(m_initialPattern);
+	else if (m_searchReplaceWidget) {
+		switch (m_initialColumnMode) {
+		case AbstractColumn::ColumnMode::Text:
+			uiSearchReplace.cbDataType->setCurrentIndex(0);
+			uiSearchReplace.cbValueText->setCurrentText(m_initialPattern);
+			break;
+		case AbstractColumn::ColumnMode::Double:
+		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::BigInt:
+			uiSearchReplace.cbDataType->setCurrentIndex(1);
+			uiSearchReplace.cbValue1->setCurrentText(m_initialPattern);
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+			uiSearchReplace.cbDataType->setCurrentIndex(2);
+			// uiSearchReplace.cbValueText->setCurrentText(m_initialPattern);
+			break;
+		}
+	}
+}
+
 void SearchReplaceWidget::setFocus() {
 	if (m_replaceEnabled)
 		uiSearchReplace.cbValueText->setFocus();
 	else
 		uiSearch.cbFind->setFocus();
-}
-
-void SearchReplaceWidget::clear() {
 }
 
 void SearchReplaceWidget::initSearchWidget() {
@@ -219,6 +235,9 @@ void SearchReplaceWidget::initSearchWidget() {
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
 	uiSearch.cbFind->addItems(conf.readEntry("SimpleValueHistory", QStringList()));
 	uiSearch.tbMatchCase->setChecked(conf.readEntry("SimpleMatchCase", false));
+
+	// set the inital pattern
+	uiSearch.cbFind->setCurrentText(m_initialPattern);
 }
 
 void SearchReplaceWidget::initSearchReplaceWidget() {
@@ -343,17 +362,12 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.cbOrder->setCurrentIndex(conf.readEntry("Order", 0));
 	uiSearchReplace.tbMatchCase->setChecked(conf.readEntry("MatchCase", false));
 	uiSearchReplace.tbSelectionOnly->setChecked(conf.readEntry("SelectionOnly", false));
-
-	uiSearchReplace.cbValue1->setCurrentText(conf.readEntry("Value1", QString()));
-	uiSearchReplace.cbValue2->setCurrentText(conf.readEntry("Value2", QString()));
 	uiSearchReplace.cbOperator->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Operator", 0)));
-
-	uiSearchReplace.cbValueText->setCurrentText(conf.readEntry("ValueText", QString()));
 	uiSearchReplace.cbOperatorText->setCurrentIndex(uiSearchReplace.cbOperatorText->findData(conf.readEntry("OperatorText", 0)));
-
+/*
 	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
 	uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(conf.readEntry("Value1DateTime", now));
-	uiSearchReplace.dteValue2->setMSecsSinceEpochUTC(conf.readEntry("Value2DateTime", now));
+	uiSearchReplace.dteValue2->setMSecsSinceEpochUTC(conf.readEntry("Value2DateTime", now));*/
 	uiSearchReplace.cbOperatorDateTime->setCurrentIndex(uiSearchReplace.cbOperatorDateTime->findData(conf.readEntry("OperatorDateTime", 0)));
 
 	dataTypeChanged(uiSearchReplace.cbDataType->currentIndex());
@@ -362,16 +376,41 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 
 	// history
 	uiSearchReplace.cbValue1->addItems(conf.readEntry("Value1History", QStringList()));
-	uiSearchReplace.cbValue1->addItems(conf.readEntry("Value2History", QStringList()));
-	uiSearchReplace.cbValue1->addItems(conf.readEntry("ValueTextHistory", QStringList()));
+	uiSearchReplace.cbValue2->addItems(conf.readEntry("Value2History", QStringList()));
+	uiSearchReplace.cbValueText->addItems(conf.readEntry("ValueTextHistory", QStringList()));
+
+	// set the inital values
+	switch (m_initialColumnMode) {
+	case AbstractColumn::ColumnMode::Text:
+		uiSearchReplace.cbDataType->setCurrentIndex(0);
+		uiSearchReplace.cbValueText->setCurrentText(m_initialPattern);
+		break;
+	case AbstractColumn::ColumnMode::Double:
+	case AbstractColumn::ColumnMode::Integer:
+	case AbstractColumn::ColumnMode::BigInt:
+		uiSearchReplace.cbDataType->setCurrentIndex(1);
+		uiSearchReplace.cbValue1->setCurrentText(m_initialPattern);
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::Month:
+		uiSearchReplace.cbDataType->setCurrentIndex(2);
+		// uiSearchReplace.cbValueText->setCurrentText(m_initialPattern);
+		break;
+	}
 }
 
-void SearchReplaceWidget::showEvent(QShowEvent* event) {
-	QWidget::showEvent(event);
+void SearchReplaceWidget::hideEvent(QHideEvent* event) {
+	// clear search&replace patterns, will be set when the widget is going to be shown again
+	// TODO: really needed?
+	QWidget::hideEvent(event);
 }
 
 void SearchReplaceWidget::addCurrentTextToHistory(QComboBox* comboBox) const {
 	const QString& text = comboBox->currentText();
+	if (text.isEmpty())
+		return;
+
 	const int index = comboBox->findText(text);
 
 	if (index > 0)
@@ -421,21 +460,27 @@ void SearchReplaceWidget::replaceContextMenuRequest(const QPoint& pos) {
 }
 
 void SearchReplaceWidget::dataTypeChanged(int index) {
-	if (index == 0) { // text
+	const auto type = static_cast<DataType>(index);
+	switch (type) {
+	case DataType::Text: {
 		uiSearchReplace.frameNumeric->hide();
 		uiSearchReplace.frameText->show();
 		uiSearchReplace.frameDateTime->hide();
 		uiSearchReplace.tbMatchCase->show();
-	} else if (index == 1) { // numeric
+		break;
+	} case DataType::Numeric: {
 		uiSearchReplace.frameNumeric->show();
 		uiSearchReplace.frameText->hide();
 		uiSearchReplace.frameDateTime->hide();
 		uiSearchReplace.tbMatchCase->hide();
-	} else { // datetime
+		break;
+	} case DataType::DateTime: {
 		uiSearchReplace.frameNumeric->hide();
 		uiSearchReplace.frameText->hide();
 		uiSearchReplace.frameDateTime->show();
 		uiSearchReplace.tbMatchCase->hide();
+		break;
+	}
 	}
 }
 
@@ -482,16 +527,48 @@ void SearchReplaceWidget::switchFindReplace() {
 		uiSearchReplace.cbOperatorText->setMinimumWidth(uiSearchReplace.cbOperator->width());
 		uiSearchReplace.cbOperatorDateTime->setMinimumWidth(uiSearchReplace.cbOperator->width());
 
-		if (m_searchWidget)
+		if (m_searchWidget) {
+			//switching from simple to advanced search, show the current search pattern
+			const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
+			switch (type) {
+			case DataType::Text: {
+				uiSearchReplace.cbValueText->setCurrentText(uiSearch.cbFind->currentText());
+				break;
+			} case DataType::Numeric: {
+				uiSearchReplace.cbValue1->setCurrentText(uiSearch.cbFind->currentText());
+				break;
+			} case DataType::DateTime: {
+				// uiSearchReplace.dteValue1->setCurrentText(uiSearch.cbFind->currentText());
+				break;
+			}
+			}
+
 			m_searchWidget->hide();
+		}
 	} else { // show the find widget
 		if (!m_searchWidget)
 			initSearchWidget();
 
 		m_searchWidget->show();
 
-		if (m_searchReplaceWidget)
+		if (m_searchReplaceWidget) {
+			//switching from advanced to simple search, show the current search pattern
+			const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
+			switch (type) {
+			case DataType::Text: {
+				uiSearch.cbFind->setCurrentText(uiSearchReplace.cbValueText->currentText());
+				break;
+			} case DataType::Numeric: {
+				uiSearch.cbFind->setCurrentText(uiSearchReplace.cbValue1->currentText());
+				break;
+			} case DataType::DateTime: {
+				uiSearch.cbFind->setCurrentText(uiSearchReplace.dteValue1->text());
+				break;
+			}
+			}
+
 			m_searchReplaceWidget->hide();
+		}
 	}
 }
 

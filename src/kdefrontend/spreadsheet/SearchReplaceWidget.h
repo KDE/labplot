@@ -12,6 +12,7 @@
 
 #include "ui_searchreplacewidget.h"
 #include "ui_searchwidget.h"
+#include "backend/core/AbstractColumn.h"
 #include <QWidget>
 
 class Column;
@@ -31,14 +32,16 @@ public:
 	enum class OperatorText { EqualTo, NotEqualTo, StartsWith, EndsWith, Contain, NotContain, RegEx };
 
 	void setReplaceEnabled(bool enabled);
+	void setInitialPattern(AbstractColumn::ColumnMode, const QString&);
 	void setFocus();
-	void clear();
 
 private:
 	Ui::SearchWidget uiSearch;
 	Ui::SearchReplaceWidget uiSearchReplace;
 	QWidget* m_searchWidget{nullptr};
 	QWidget* m_searchReplaceWidget{nullptr};
+	AbstractColumn::ColumnMode m_initialColumnMode{AbstractColumn::ColumnMode::Text};
+	QString m_initialPattern;
 
 	bool m_replaceEnabled{false};
 	Spreadsheet* m_spreadsheet{nullptr};
@@ -65,7 +68,7 @@ private:
 	void showExtendedContextMenu(bool forPattern, const QPoint&);
 	QVector<QString> capturePatterns(const QString& pattern) const;
 
-	void showEvent(QShowEvent*) override;
+	void hideEvent(QHideEvent*) override;
 
 private Q_SLOTS:
 	void dataTypeChanged(int index);

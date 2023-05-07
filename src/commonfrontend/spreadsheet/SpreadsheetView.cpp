@@ -1438,14 +1438,13 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			// 					scrollBar->setValue(newValue);
 			// 				}
 			// 			}
-		} else if (key_event->matches(QKeySequence::Find)) {
+		} else if (key_event->matches(QKeySequence::Find))
 			showSearchReplace(/* replace */ false);
-		} else if (key_event->matches(QKeySequence::Replace)) {
+		else if (key_event->matches(QKeySequence::Replace))
 			showSearchReplace(/* replace */ true);
-		} else if (key_event->key() == Qt::Key_Escape && m_searchReplaceWidget && m_searchReplaceWidget->isVisible()) {
-			m_searchReplaceWidget->clear();
+		else if (key_event->key() == Qt::Key_Escape && m_searchReplaceWidget && m_searchReplaceWidget->isVisible())
 			m_searchReplaceWidget->hide();
-		} else if (key_event->matches(QKeySequence::Cut))
+		else if (key_event->matches(QKeySequence::Cut))
 			cutSelection();
 	}
 
@@ -3412,6 +3411,14 @@ void SpreadsheetView::showSearchReplace(bool replace) {
 	if (!m_searchReplaceWidget) {
 		m_searchReplaceWidget = new SearchReplaceWidget(m_spreadsheet, this);
 		static_cast<QVBoxLayout*>(this->layout())->addWidget(m_searchReplaceWidget);
+	}
+
+	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = m_spreadsheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		m_searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
 	}
 
 	m_searchReplaceWidget->setReplaceEnabled(replace);
