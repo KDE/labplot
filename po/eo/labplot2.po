@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-06 00:43+0000\n"
-"PO-Revision-Date: 2023-05-03 21:29+0100\n"
+"PO-Revision-Date: 2023-05-06 05:51+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -20914,10 +20914,9 @@ msgid "Save project before using this option"
 msgstr "Konservu projekton antaŭ ol uzi ĉi tiun opcion"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:392
-#, fuzzy, kde-format
-#| msgid "Invalid pointer"
+#, kde-format
 msgid "Invalid image"
-msgstr "Nevalida montrilo"
+msgstr "Nevalida bildo"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
@@ -21526,179 +21525,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "No Data"
-#~ msgstr "Neniuj Datumoj"
-
-#~ msgid "&Restore"
-#~ msgstr "&Restaŭri"
-
-#~ msgid "Mi&nimize"
-#~ msgstr "Mi&nimigi"
-
-#~ msgid "Ma&ximize"
-#~ msgstr "Ma&ksimumigi"
-
-#~ msgctxt "@title:window"
-#~ msgid "Spreadsheet"
-#~ msgstr "Tabelfolio"
-
-#~ msgctxt "@title:window"
-#~ msgid "Column"
-#~ msgstr "Kolumno"
-
-#~ msgctxt "@title:window"
-#~ msgid "Matrix"
-#~ msgstr "Matrico"
-
-#~ msgctxt "@title:window"
-#~ msgid "Worksheet"
-#~ msgstr "Laborfolio"
-
-#~ msgctxt "@title:window"
-#~ msgid "Plot Area"
-#~ msgstr "Diagrama Areo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Legend"
-#~ msgstr "Legendo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Axis"
-#~ msgstr "Akso"
-
-#~ msgctxt "@title:window"
-#~ msgid "XY-Curve"
-#~ msgstr "XY-Kurbo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Data Reduction"
-#~ msgstr "Redukto de datumoj"
-
-#~ msgctxt "@title:window"
-#~ msgid "Differentiation"
-#~ msgstr "Diferencigo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Integration"
-#~ msgstr "Integriĝo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Interpolation"
-#~ msgstr "Interpolado"
-
-#~ msgctxt "@title:window"
-#~ msgid "Smoothing"
-#~ msgstr "Glatigado"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fit"
-#~ msgstr "Ĝisrandigo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fourier Transform"
-#~ msgstr "Transformo de Fourier"
-
-#~ msgctxt "@title:window"
-#~ msgid "Hilbert Transform"
-#~ msgstr "Hilberta Transformo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fourier Filter"
-#~ msgstr "Filtrilo de Fourier"
-
-#~ msgctxt "@title:window"
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Convolution/Deconvolution"
-
-#~ msgctxt "@title:window"
-#~ msgid "Auto-/Cross-Correlation"
-#~ msgstr "Aŭtomata-/Kruza-Korelacio"
-
-#~ msgctxt "@title:window"
-#~ msgid "Histogram"
-#~ msgstr "Histogramo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Bar Plot"
-#~ msgstr "Bastona diagramo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Box Plot"
-#~ msgstr "Skatol-diagramo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Text Label"
-#~ msgstr "Teksta Etikedo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Image"
-#~ msgstr "Bildo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Custom Point"
-#~ msgstr "Propra Punkto"
-
-#~ msgctxt "@title:window"
-#~ msgid "Reference Line"
-#~ msgstr "Referenca Linio"
-
-#~ msgctxt "@title:window"
-#~ msgid "Project"
-#~ msgstr "Projekto"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notebook"
-#~ msgstr "Kajero"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notes"
-#~ msgstr "Notoj"
-
-#~ msgctxt "@title:window"
-#~ msgid "Info Element"
-#~ msgstr "Info Elemento"
-
-#~ msgctxt "@title:window"
-#~ msgid "Folder"
-#~ msgstr "Dosierujo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Workbook"
-#~ msgstr "Laborlibro"
-
-#~ msgid "&Tile"
-#~ msgstr "&Kahelo"
-
-#~ msgid "Tile the windows"
-#~ msgstr "Kaheli la fenestrojn"
-
-#~ msgid "&Cascade"
-#~ msgstr "&Kaskado"
-
-#~ msgid "Cascade the windows"
-#~ msgstr "Kaskadigi la fenestrojn"
-
-#~ msgid "Sub-window View"
-#~ msgstr "Sub-fenestro Vido"
-
-#~ msgid "Tabbed View"
-#~ msgstr "Tabbed Vido"
-
-#~ msgid "Show Windows of the Current Folder Only"
-#~ msgstr "Montru nur Fenestrojn de la Nuna Dosierujo"
-
-#~ msgid "Show Windows of the Current Folder and its Subfolders Only"
-#~ msgstr "Montru Vindozon de la Nuna Dosierujo kaj ĝiaj Subdosierujoj Nur"
-
-#~ msgid "Show all Windows"
-#~ msgstr "Montru ĉiujn Vindozojn"
-
-#~ msgid "Tab position:"
-#~ msgstr "Tab pozicio:"
-
-#~ msgid "Interface:"
-#~ msgstr "Interfaco:"
-
-#~ msgid "Sub-window visibility:"
-#~ msgstr "Videbleco de subfenestroj:"

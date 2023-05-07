@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-06 00:43+0000\n"
-"PO-Revision-Date: 2023-04-29 12:40+0100\n"
+"PO-Revision-Date: 2023-05-06 15:43+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -20927,10 +20927,9 @@ msgid "Save project before using this option"
 msgstr "Save project before using this option"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:392
-#, fuzzy, kde-format
-#| msgid "Invalid pointer"
+#, kde-format
 msgid "Invalid image"
-msgstr "Invalid pointer"
+msgstr "Invalid image"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
