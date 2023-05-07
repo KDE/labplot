@@ -1119,9 +1119,9 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	writer->writeStartElement(QLatin1String("Linking"));
-	writer->writeAttribute(QStringLiteral("linking"), QString::number(d->linking.linking));
-	writer->writeAttribute(QStringLiteral("linkedSpreadsheet"), d->linking.spreadsheetPath());
+	writer->writeStartElement(QLatin1String("linking"));
+	writer->writeAttribute(QStringLiteral("enabled"), QString::number(d->linking.linking));
+	writer->writeAttribute(QStringLiteral("spreadsheet"), d->linking.spreadsheetPath());
 	writer->writeEndElement();
 
 	// columns
@@ -1155,15 +1155,15 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 			if (reader->name() == QLatin1String("comment")) {
 				if (!readCommentElement(reader))
 					return false;
-			} else if (reader->name() == QLatin1String("Linking")) {
+			} else if (reader->name() == QLatin1String("linking")) {
 				attribs = reader->attributes();
-				str = attribs.value(QStringLiteral("linking")).toString();
+				str = attribs.value(QStringLiteral("enabled")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("linking")).toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("enabled")).toString());
 				else
 					d->linking.linking = static_cast<bool>(str.toInt());
 
-				str = attribs.value(QStringLiteral("linkedSpreadsheet")).toString();
+				str = attribs.value(QStringLiteral("spreadsheet")).toString();
 				d->linking.linkedSpreadsheetPath = str;
 			} else if (reader->name() == QLatin1String("column")) {
 				Column* column = new Column(QString());

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for spreadsheet properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -41,15 +41,24 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	connect(ui.sbColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
 	connect(ui.sbRowCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
 	connect(ui.cbShowComments, &QCheckBox::toggled, this, &SpreadsheetDock::commentsShownChanged);
-	connect(ui.cbLinked, &QCheckBox::toggled, this, &SpreadsheetDock::linkingChanged);
+	connect(ui.cbLinkingEnabled, &QCheckBox::toggled, this, &SpreadsheetDock::linkingChanged);
 	connect(ui.cbLinkedSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &SpreadsheetDock::linkedSpreadsheetChanged);
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Spreadsheet);
-	ui.gridLayout->addWidget(templateHandler, 11, 0, 1, 4);
+	ui.gridLayout->addWidget(templateHandler, 16, 0, 1, 4);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &SpreadsheetDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &SpreadsheetDock::info);
+
+	// tooltip texts
+	QString info = i18n("Enable linking to synchronize the number of rows with another spreadsheet");
+	ui.lLinkingEnabled->setToolTip(info);
+	ui.cbLinkingEnabled->setToolTip(info);
+
+	info = i18n("Spreadsheet to synchronize the number of rows with");
+	ui.lLinkedSpreadsheet->setToolTip(info);
+	ui.cbLinkedSpreadsheet->setToolTip(info);
 }
 
 /*!
@@ -156,11 +165,16 @@ void SpreadsheetDock::commentsShownChanged(bool state) {
 }
 
 void SpreadsheetDock::linkingChanged(bool linking) {
+	ui.sbRowCount->setEnabled(!linking);
+	ui.lLinkedSpreadsheet->setVisible(linking);
+	ui.cbLinkedSpreadsheet->setVisible(linking);
+
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* spreadsheet : m_spreadsheetList)
 		spreadsheet->setLinking(linking);
 }
+
 void SpreadsheetDock::linkedSpreadsheetChanged(const QModelIndex& index) {
 	// combobox was potentially red-highlighted because of a missing column
 	// remove the highlighting when we have a valid selection now
@@ -196,16 +210,12 @@ void SpreadsheetDock::spreadsheetShowCommentsChanged(bool checked) {
 }
 
 void SpreadsheetDock::spreadsheetLinkingChanged(bool linking) {
-	ui.sbRowCount->setEnabled(!linking);
-	ui.cbLinkedSpreadsheet->setEnabled(linking);
-
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbLinked->setChecked(linking);
+	ui.cbLinkingEnabled->setChecked(linking);
 }
 
 void SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged(const Spreadsheet* spreadsheet) {
 	CONDITIONAL_LOCK_RETURN;
-
 	ui.cbLinkedSpreadsheet->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(spreadsheet));
 }
 
@@ -220,10 +230,8 @@ void SpreadsheetDock::load() {
 	ui.cbShowComments->setChecked(view->areCommentsShown());
 
 	ui.cbLinkedSpreadsheet->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->linkedSpreadsheet()));
-
-	ui.cbLinked->setChecked(m_spreadsheet->linking());
-	ui.sbRowCount->setEnabled(!m_spreadsheet->linking());
-	ui.cbLinkedSpreadsheet->setEnabled(m_spreadsheet->linking());
+	ui.cbLinkingEnabled->setChecked(m_spreadsheet->linking());
+	linkingChanged(m_spreadsheet->linking()); // call this to update the widgets
 }
 
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
