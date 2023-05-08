@@ -2095,6 +2095,7 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 	}
 }
 
+#ifdef HAVE_VECTOR_BLF
 // Copied from BLFFilterTest.cpp
 namespace {
 static const std::string PRIMITIVE_DBC =
@@ -2146,7 +2147,6 @@ void createBLFFile(const QString& filename, QVector<Vector::BLF::CanMessage2*> m
 }
 }
 
-#ifdef HAVE_VECTOR_BLF
 void SpreadsheetTest::testLinkSpreadSheetImportBLF() {
 	QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
 	QVERIFY(blfFileName.open());
