@@ -1798,14 +1798,14 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	QCOMPARE(dock.ui.cbLinked->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
 	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
 	QCOMPARE(dock.m_spreadsheet->linking(), false);
 
-	dock.ui.cbLinked->toggled(true);
+	dock.ui.cbLinkingEnabled->toggled(true);
 
-	// QCOMPARE(dock.ui.cbLinked->isChecked(), true); // does not work here. Don't know why
+	// QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), true); // does not work here. Don't know why
 	// QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), true);
 	// QCOMPARE(dock.ui.sbRowCount->isEnabled(), false);
 	QCOMPARE(sheetCalculations->linking(), true);
@@ -1873,12 +1873,12 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	QCOMPARE(dock.ui.cbLinked->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
 	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
 	QCOMPARE(sheetCalculations->linking(), false);
 
-	Q_EMIT dock.ui.cbLinked->toggled(true);
+	Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
@@ -1921,12 +1921,12 @@ void SpreadsheetTest::testLinkSpreadsheetAddRow() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	QCOMPARE(dock.ui.cbLinked->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
 	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
 	QCOMPARE(sheetCalculations->linking(), false);
 
-	Q_EMIT dock.ui.cbLinked->toggled(true);
+	Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
@@ -1959,12 +1959,12 @@ void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
 	SpreadsheetDock dock(nullptr);
 	dock.setSpreadsheets({sheetCalculations});
 
-	QCOMPARE(dock.ui.cbLinked->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
 	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
 	QCOMPARE(sheetCalculations->linking(), false);
 
-	dock.ui.cbLinked->toggled(true);
+	dock.ui.cbLinkingEnabled->toggled(true);
 
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
@@ -2054,12 +2054,12 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 		SpreadsheetDock dock(nullptr);
 		dock.setSpreadsheets({sheetCalculations});
 
-		QCOMPARE(dock.ui.cbLinked->isChecked(), false);
+		QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
 		QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
 		QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
 		QCOMPARE(sheetCalculations->linking(), false);
 
-		Q_EMIT dock.ui.cbLinked->toggled(true);
+		Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
 
 		sheetCalculations->setLinkedSpreadsheet(sheetData);
 
