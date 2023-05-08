@@ -20,7 +20,9 @@
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
 
+#ifdef HAVE_VECTOR_BLF
 #include <Vector/BLF.h>
+#endif
 
 #include <QClipboard>
 #include <QModelIndex>
