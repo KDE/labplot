@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-06 00:43+0000\n"
-"PO-Revision-Date: 2023-04-27 08:55+0300\n"
+"PO-Revision-Date: 2023-05-06 08:45+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -21072,10 +21072,9 @@ msgid "Save project before using this option"
 msgstr "Збережіть проєкт, перш ніж користуватися цим пунктом"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:392
-#, fuzzy, kde-format
-#| msgid "Invalid pointer"
+#, kde-format
 msgid "Invalid image"
-msgstr "Некоректний вказівник"
+msgstr "Некоректне зображення"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
