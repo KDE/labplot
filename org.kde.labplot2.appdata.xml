@@ -98,7 +98,7 @@
     <p xml:lang="de">LabPlot erlaubt es auf einfache Weise Grafiken zu erzeugen, zu verwalten und zu bearbeiten.Grafiken können aus externen Daten oder aus einer Tabelle erzeugt werden.Der Export der Grafiken in verschiedene Pixmap- und Vektorformate ist möglich.</p>
     <p xml:lang="el">Το LabPlot παρέχει έναν εύκολο τρόπο δημιουργίας, διαχείρισης και επεξεργασίας γραφικών παραστάσεων. Σας επιτρέπει να δημιουργείτε γραφικές παρασασεις με βάση δεδομένα από φύλλα εργασίας ή εισηγμένα από εξωτερικά αρχεία. Οι γραφικές παραστάσεις μπορούν να εξαχθούν σε διάφορους τύπους αποθήκευσης χρωματικής περίπλεξης ή διανυσματικών γραφικών.</p>
     <p xml:lang="en-GB">LabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.</p>
-    <p xml:lang="eo">LabPlot provizas facilan manieron krei, administri kaj redakti intrigojn. Ĝi permesas vin produkti intrigojn bazitajn sur datumoj de kalkultabelo aŭ sur datumoj importitaj de eksteraj dosieroj. Intrigoj povas esti eksportitaj al pluraj pixmap kaj vektoraj grafikaj formatoj.</p>
+    <p xml:lang="eo">LabPlot provizas facilan manieron krei, administri kaj redakti diagramojn. Ĝi permesas vin produkti diagramojn bazitajn sur datumoj de kalkultabelo aŭ sur datumoj importitaj de eksteraj dosieroj. Diagramoj povas esti eksportitaj al pluraj pixmap kaj vektoraj grafikaj formatoj.</p>
     <p xml:lang="es">LabPlot proporciona un sencillo modo de crear, gestionar y editar gráficos. Le permite generar gráficos basados en datos obtenidos de una hoja de cálculo o importados de archivos externos. Los gráficos se pueden exportar a diversos formatos de imagen y vectoriales.</p>
     <p xml:lang="et">LabPlot võimaldab vähese vaevaga jooniseid luua, hallata ja muuta. Graafikuid saab koostada andmetabelist pärit või võrgufailidest imporditud andmete põhjal. Jooniseid saab eksportida mitmes pikselraster- ja vektorgraafika vormingus.</p>
     <p xml:lang="eu">LabPlot-ek grafikoak sortu, kudeatu eta editatzeko era erraz bat eskaintzen du. Grafikoak sortzen uzten dizu kalkulu-orrietako datuekin edo kanpoko fitxategietatik inportatutako datuekin. Grafikoak hainbat pixel-mapa eta bektore grafiko formatutara esportatu daitezke.</p>
@@ -188,7 +188,7 @@
       <caption xml:lang="ca-valencia">Disposició avançada de diagrames i imatges</caption>
       <caption xml:lang="de">Fortgeschrittenes Layout von Plots und Bildern</caption>
       <caption xml:lang="en-GB">Advanced layouts of plots and images</caption>
-      <caption xml:lang="eo">Altnivela aranĝo de intrigoj kaj bildoj</caption>
+      <caption xml:lang="eo">Altnivela aranĝo de diagramoj kaj bildoj</caption>
       <caption xml:lang="es">Diseño avanzado de gráficos e imágenes</caption>
       <caption xml:lang="eu">Irudien eta trazuen antolamendu aurreratua</caption>
       <caption xml:lang="fi">Kaavioiden ja kuvioiden edistynyt asettelu</caption>
