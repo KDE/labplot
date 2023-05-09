@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-06 00:43+0000\n"
-"PO-Revision-Date: 2023-05-06 05:51+0100\n"
+"PO-Revision-Date: 2023-05-08 19:55+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1638,7 +1638,7 @@ msgstr "Malplena dosiero"
 #: src/backend/datasources/filters/JsonFilter.cpp:211
 #, kde-format
 msgid "Parse error: %1 at offset %2"
-msgstr "Analizeraro: %1 ĉe ofseto %2"
+msgstr "Analizeraro: %1 ĉe deŝovo %2"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:214
 #, kde-format
@@ -6691,7 +6691,7 @@ msgstr "%1: agordi aksan skalon"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:573
 #, kde-format
 msgid "%1: set axis offset"
-msgstr "%1: agordi aksan ofseton"
+msgstr "%1: agordi aksan deŝovon"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:588
 #, kde-format
@@ -6706,7 +6706,7 @@ msgstr "%1: agordu ĉefan tick-komencspecon"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:635
 #, kde-format
 msgid "%1: set major tick start offset"
-msgstr "%1: agordu la ĉefan tik-komencan ofseton"
+msgstr "%1: agordu la ĉefan tik-komencan deŝovon"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:643
 #, kde-format
@@ -6726,7 +6726,7 @@ msgstr "%1: agordi nul-offseton de la akso"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:670
 #, kde-format
 msgid "%1: show scale and offset"
-msgstr "%1: montri skalon kaj ofseton"
+msgstr "%1: montri skalon kaj deŝovon"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:677
 #, kde-format
@@ -6737,7 +6737,7 @@ msgstr "%1: agordi logikan pozicion de la akso"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:692
 #, kde-format
 msgid "%1: set title offset"
-msgstr "%1: agordu titolan ofseton"
+msgstr "%1: agordu titolan deŝovon"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:700
 #, kde-format
@@ -6784,12 +6784,12 @@ msgstr "%1: malŝalti ĉefajn aŭtomatajn ticknombrojn"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:775
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
-msgstr "%1: agordu la interspacon de la ĉefaj iksodoj"
+msgstr "%1: agordu la interspacon de la ĉefaj skaleroj"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:782
 #, kde-format
 msgid "%1: assign major ticks' values"
-msgstr "%1: asigni la valorojn de ĉefaj iksodoj"
+msgstr "%1: asigni la valorojn de ĉefaj skaleroj"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:796
 #, kde-format
@@ -6815,7 +6815,7 @@ msgstr "%1: ebligi/malŝalti negravajn aŭtomatajn tick-nombrojn"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:833
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
-msgstr "%1: agordu la totalan nombron de la etaj iksodoj"
+msgstr "%1: agordu la totalan nombron de la etaj skaleroj"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:864
 #, kde-format
@@ -6825,7 +6825,7 @@ msgstr "%1: agordu la interspacon de la etaj tiktakoj"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:871
 #, kde-format
 msgid "%1: assign minor ticks' values"
-msgstr "%1: asigni valorojn de etaj iksodoj"
+msgstr "%1: asigni valorojn de etaj skaleroj"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:885
 #, kde-format
@@ -16688,7 +16688,7 @@ msgstr "Gastiganto:"
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:72
 #, kde-format
 msgid "Port:"
-msgstr "Haveno:"
+msgstr "Pordo:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbAuthentication)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:156
@@ -16960,7 +16960,7 @@ msgstr "Loka Ingo"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:138
 #, kde-format
 msgid "Serial Port"
-msgstr "Seria Haveno"
+msgstr "Seria Pordo"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bManageFilters)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:155
@@ -17384,13 +17384,13 @@ msgstr "Komenco:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:79
 #, kde-format
 msgid "Show scale and offset beside axis"
-msgstr "Montru skalon kaj ofseton apud akso"
+msgstr "Montru skalon kaj deŝovon apud akso"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowScaleOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:82
 #, kde-format
 msgid "Show scale and offset"
-msgstr "Montru skalon kaj ofseton"
+msgstr "Montru skalon kaj deŝovon"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbUnityScale)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:129
@@ -17410,7 +17410,7 @@ msgstr "1"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:139
 #, kde-format
 msgid "Set factor and offset to get 0 .. 1"
-msgstr "Agordu faktoron kaj ofseton por akiri 0 .. 1"
+msgstr "Agordu faktoron kaj deŝovon por akiri 0 .. 1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbUnityRange)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:142
@@ -17428,7 +17428,7 @@ msgstr "Skalo:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:177
 #, kde-format
 msgid "Zero Offset:"
-msgstr "Nula Ofseto:"
+msgstr "Nula deŝovo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEndDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lEnd)
@@ -17448,7 +17448,7 @@ msgstr "Agordu kompenson por komenci ĉe nulo"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:317
 #, kde-format
 msgid "Set offset to center around zero"
-msgstr "Agordi ofseton al centro ĉirkaŭ nulo"
+msgstr "Agordi deŝovon al centro ĉirkaŭ nulo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbOffsetRight)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:331
@@ -17583,7 +17583,7 @@ msgid ""
 "<html><head/><body><p>Offset of the first tick from the start of the axis</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>Ofset de la unua ikso de la komenco de la akso</p></"
+"<html><head/><body><p>Deŝovo de la unua ikso de la komenco de la akso</p></"
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
@@ -17599,7 +17599,7 @@ msgid ""
 "<html><head/><body><p>Set offset to start ticks at first data point</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Agordu ofseton por komenci tikojn ĉe la unua datuma "
+"<html><head/><body><p>Agordu deŝovon por komenci tikojn ĉe la unua datuma "
 "punkto</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickAuto)
@@ -17609,7 +17609,7 @@ msgid ""
 "<html><head/><body><p>Set offset to start ticks at round value before first "
 "data point</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Agordu ofseton por komenci tikojn je ronda valoro "
+"<html><head/><body><p>Agordu deŝovon por komenci tikojn je ronda valoro "
 "antaŭ la unua datuma punkto</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextType)
@@ -17709,7 +17709,7 @@ msgstr "Sufikso:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:813
 #, kde-format
 msgid "Offset:"
-msgstr "Ofseto:"
+msgstr "Deŝovo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lBorderOpacity)
@@ -19822,7 +19822,7 @@ msgstr "Distanco al la aksaj tick-etikedoj"
 #: src/kdefrontend/ui/labelwidget.ui:651
 #, kde-format
 msgid "Offset X:"
-msgstr "Ofseto X:"
+msgstr "Deŝovo X:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbShowPlaceholderText)
 #: src/kdefrontend/ui/labelwidget.ui:729
@@ -19834,7 +19834,7 @@ msgstr "Montri anstataŭigilon tekston (redaktebla)"
 #: src/kdefrontend/ui/labelwidget.ui:739
 #, kde-format
 msgid "Offset Y:"
-msgstr "Ofseto Y:"
+msgstr "Deŝovo Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116
