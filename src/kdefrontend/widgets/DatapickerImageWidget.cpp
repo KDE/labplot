@@ -703,7 +703,7 @@ void DatapickerImageWidget::load() {
 
 	// No lock, because it is done already in the caller function
 	ui.cbFileEmbedd->setChecked(m_image->embedded());
-	embeddedChanged(m_image->embedded() ? Qt::Checked : Qt::Unchecked);
+	embeddedChanged(m_image->embedded());
 	ui.cbFileRelativePath->setChecked(m_image->isRelativeFilePath());
 	updateFileRelativePathCheckBoxEnable();
 	ui.leFileName->setText(m_image->fileName());
