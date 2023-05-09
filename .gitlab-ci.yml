@@ -9,11 +9,21 @@ include:
 #  needs more work
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
 # replaced with own rule
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 
+# test builds:
+# Win (Release)
+# Ubuntu 22.04 min (Debug)
+# Ubuntu 22.04 full (Release)
+# Fedora 37 min (Debug)
+# Fedora 37 full (Release)
+# OS 15.4 min (Release)
+# OS 15.4 full (Debug)
+#
 # prepend '.' to temporary disable
 
+# only changed "script" section
 windows_qt515:
   stage: build
   image: kdeorg/windows-msvc2019-qt515:latest
@@ -33,7 +43,7 @@ windows_qt515:
     - git clone https://invent.kde.org/sysadmin/repo-metadata ci-utilities/repo-metadata/
   script:
     - . ci-utilities/resources/setup-msvc-env.ps1
-    - python -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared
+    - python -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared --extra-cmake-args "-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON"
   artifacts:
     expire_in: 2 weeks
     when: on_success
@@ -70,8 +80,7 @@ ubuntu_22.04_full:
     - eatmydata apt install --yes --no-install-recommends locales-all ninja-build git cmake g++ extra-cmake-modules libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev libkf5parts-dev libkf5syntaxhighlighting-dev cantor libcantor-dev libpoppler-qt5-dev libfftw3-dev libreadstat-dev liborigin2-dev libhdf5-dev libnetcdf-dev libqt5serialport5-dev libcfitsio-dev libcerf-dev liblz4-dev libmatio-dev libmarkdown2-dev libspectre-dev qtbase5-private-dev ca-certificates
   script:
     - mkdir -p build && cd build
-      # downloading QXlsx is not working: disable xlsx support
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_EXCEL=OFF -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
     - ninja
 #    - ctest -V
 
@@ -99,7 +108,7 @@ fedora_37_full:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel kf5-kparts-devel kf5-syntax-highlighting-devel cantor-devel poppler-qt5-devel libspectre-devel liborigin-devel fftw3-devel netcdf-devel qt5-qtserialport-devel cfitsio-devel libcerf-devel lz4-devel matio-devel discount qt5-qtbase-private-devel
   script:
     - mkdir -p build && cd build
-    - cmake -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
     - ninja
 # tests currently fail due to gcc 12?
 #   - ninja test
@@ -116,7 +125,7 @@ leap_15.4_min:
     - zypper in -y gsl-devel ninja libQt5Gui-private-headers-devel
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
     - ninja
 #    - ninja test
 
