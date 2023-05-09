@@ -1,5 +1,5 @@
 /*
-    File                 : parser.y
+    File                 : parser.ypp
     Project              : LabPlot
     Description          : Parser for mathematical expressions
     --------------------------------------------------------------------
@@ -95,10 +95,10 @@ expr:      NUM       { $$ = $1;                            }
 | expr '/' expr      { $$ = $1 / $3;                       }
 | expr '%' expr      { $$ = (int)($1) % (int)($3);         }
 | '-' expr  %prec NEG{ $$ = -$2;                           }
-| expr '^' expr      { $$ = pow($1, $3);                   }
-| expr '*' '*' expr  { $$ = pow($1, $4);                   }
+| expr '^' expr      { $$ = std::pow($1, $3);              }
+| expr '*' '*' expr  { $$ = std::pow($1, $4);              }
 | '(' expr ')'       { $$ = $2;                            }
-| '|' expr '|'       { $$ = fabs($2);                      }
+| '|' expr '|'       { $$ = std::abs($2);                  }
 | expr '!'           { $$ = gsl_sf_fact((unsigned int)$1); }
 /* logical operators (!,&&,||) are not supported */
 ;
@@ -179,7 +179,7 @@ symbol* get_symbol(const char *symbol_name) {
 	pdebug("PARSER: get_symbol(): symbol_name = '%s'\n", symbol_name);
 	
 	symbol *ptr;
-	for (ptr = symbol_table; ptr != 0; ptr = (symbol *)ptr->next) {
+	for (ptr = symbol_table; ptr != nullptr; ptr = (symbol *)ptr->next) {
 		/* pdebug("%s ", ptr->name); */
 		if (strcmp(ptr->name, symbol_name) == 0) {
 			pdebug("PARSER:		SYMBOL FOUND\n");
@@ -188,7 +188,7 @@ symbol* get_symbol(const char *symbol_name) {
 	}
 
 	pdebug("PARSER:		SYMBOL NOT FOUND\n");
-	return 0;
+	return nullptr;
 }
 
 /* initialize symbol table with all known functions and constants */
@@ -273,7 +273,7 @@ double parse(const char* string, const char* locale) {
 	/* leave space to terminate string by "\n\0" */
 	const size_t slen = strlen(string) + 2;
 	p.string = (char *) malloc(slen * sizeof(char));
-	if (p.string == NULL) {
+	if (p.string == nullptr) {
 		printf("PARSER ERROR: Out of memory for parsing string\n");
 		return 0.;
 	}
@@ -290,7 +290,7 @@ double parse(const char* string, const char* locale) {
 
 	pdebug("PARSER: parse() DONE (result = %g, errors = %d)\n*******************************\n", res, parse_errors());
 	free(p.string);
-	p.string = 0;
+	p.string = nullptr;
 
 	return res;
 }
@@ -347,17 +347,17 @@ int yylex(param *p) {
 			locale = _create_locale(LC_NUMERIC, "");
 		}
 #else
-		locale_t locale = newlocale(LC_NUMERIC_MASK, p->locale, (locale_t)0);
-		if (locale == (locale_t)0) {
+		locale_t locale = newlocale(LC_NUMERIC_MASK, p->locale, (locale_t)nullptr);
+		if (locale == (locale_t)nullptr) {
 			pdebug("PARSER ERROR in newlocale(%s): %s. Trying system locale.\n", p->locale, strerror(errno));
-			locale = newlocale(LC_NUMERIC_MASK, "", (locale_t)0);
+			locale = newlocale(LC_NUMERIC_MASK, "", (locale_t)nullptr);
 			pdebug("PARSER:		Reading: '%s' with system locale\n", s);
 		} else {
 			pdebug("PARSER:		Reading: '%s' with locale %s\n", s, p->locale);
 		}
 #endif
 		double result;
-		if (locale != NULL) {
+		if (locale != nullptr) {
 #if defined(__OpenBSD__)
 			result = strtod(s, &remain);
 #else
@@ -413,7 +413,7 @@ int yylex(param *p) {
 		symbol_name[i] = '\0';
 
 		symbol *s = get_symbol(symbol_name);
-		if(s == 0) {	/* symbol unknown */
+		if(s == nullptr) {	/* symbol unknown */
 			pdebug("PARSER ERROR: Symbol '%s' UNKNOWN\n", symbol_name);
 			yynerrs++;
 			return 0;

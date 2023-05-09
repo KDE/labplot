@@ -14,8 +14,6 @@
 #include "constants.h"
 #include "functions.h"
 #include "gsl/gsl_version.h"
-#include <QString>
-#include <klocalizedstring.h>
 
 /* uncomment to enable parser specific debugging */
 /* #define PDEBUG 1 */

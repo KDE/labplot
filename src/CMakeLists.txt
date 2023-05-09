@@ -20,9 +20,6 @@ if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     endif ()
 endif ()
 
-# do not process these files
-set_property(SOURCE gsl_parser.hpp gsl_parser.cpp PROPERTY SKIP_AUTOMOC ON)
-
 set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/DatasetModel.cpp
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
@@ -494,7 +491,7 @@ set(TOOLS_SOURCES
 )
 
 bison_target(GslParser
-	${BACKEND_DIR}/gsl/parser.y
+	${BACKEND_DIR}/gsl/parser.ypp
 	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.cpp
 )
 set(GENERATED_SOURCES
