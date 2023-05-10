@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: CC0-1.0
 
 include:
-# Tumbleweed
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
+# Tumbleweed (disabled until readstat fixes gcc13 issue)
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
 #  needs more work
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
 # replaced with own target
