@@ -78,6 +78,10 @@ include:
 
 ########################################################
 
+variables:
+  QT_TEST_TIMEOUT_FUNCTION: "600"
+  QT_QPA_PLATFORM: "eglfs"
+
 ubuntu_22.04_min:
   stage: build
   image: ubuntu:22.04
@@ -92,7 +96,7 @@ ubuntu_22.04_min:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
     - ninja
-    - ctest -T Test --output-on-failure --no-compress-output --test-output-size-passed 1048576 --test-output-size-failed 1048576 --timeout 60
+    - xvfb-run ctest -V --output-on-failure
 
 .ubuntu_22.04_full:
   stage: build
