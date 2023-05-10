@@ -28,8 +28,8 @@ QString FunctionGroupsToString(FunctionGroups group) {
 	switch (group) {
 	case FunctionGroups::StandardMathematicalFunctions:
 		return i18n("Standard Mathematical Functions");
-	case FunctionGroups::ComparsionFunctions:
-		return i18n("Comparsion Functions");
+	case FunctionGroups::ComparisonFunctions:
+		return i18n("Comparison Functions");
 	case FunctionGroups::ColumnStatistics:
 		return i18n("Column Statistics");
 	case FunctionGroups::MovingStatistics:
@@ -191,12 +191,12 @@ struct funs _functions[] = {
 	{QStringLiteral("x^8"), "pow8", (func_t)gsl_pow_8, 1, FunctionGroups::StandardMathematicalFunctions},
 	{QStringLiteral("x^9"), "pow9", (func_t)gsl_pow_9, 1, FunctionGroups::StandardMathematicalFunctions},
 
-	// Comparsion Functions
-	{i18n("greaterThen"), "greaterThen", (func_t)greaterThen, 2, FunctionGroups::ComparsionFunctions},
-	{i18n("lessThan"), "lessThan", (func_t)lessThen, 2, FunctionGroups::ComparsionFunctions},
-	{i18n("greaterEqualThen"), "greaterEqualThen", (func_t)greaterEqualThen, 2, FunctionGroups::ComparsionFunctions},
-	{i18n("lessEqualThen"), "lessEqualThen", (func_t)lessEqualThen, 2, FunctionGroups::ComparsionFunctions},
-	{i18n("equal"), "equal", (func_t)equal, 2, FunctionGroups::ComparsionFunctions},
+	// Comparison Functions
+	{i18n("greaterThen"), "greaterThen", (func_t)greaterThen, 2, FunctionGroups::ComparisonFunctions},
+	{i18n("lessThan"), "lessThan", (func_t)lessThen, 2, FunctionGroups::ComparisonFunctions},
+	{i18n("greaterEqualThen"), "greaterEqualThen", (func_t)greaterEqualThen, 2, FunctionGroups::ComparisonFunctions},
+	{i18n("lessEqualThen"), "lessEqualThen", (func_t)lessEqualThen, 2, FunctionGroups::ComparisonFunctions},
+	{i18n("equal"), "equal", (func_t)equal, 2, FunctionGroups::ComparisonFunctions},
 
 	// Column Statistics
 	{i18n("Size"), "size", (func_t)nsl_sf_dummy, 1, FunctionGroups::ColumnStatistics},

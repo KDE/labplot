@@ -34,7 +34,7 @@ extern const int _number_functions;
 
 enum class FunctionGroups : int {
 	StandardMathematicalFunctions,
-	ComparsionFunctions,
+	ComparisonFunctions,
 	ColumnStatistics,
 	MovingStatistics,
 	AiryFunctionsAndDerivatives,
