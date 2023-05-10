@@ -150,7 +150,7 @@ variables:
 # see fedora_37_min
 #    - xvfb-run ctest -T Test --output-on-failure
 
-.leap_15.4_min:
+leap_15.4_min:
   stage: build
   image: opensuse/leap:15.4
   only:
@@ -159,13 +159,12 @@ variables:
   before_script:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
-    - zypper in -y gsl-devel ninja libQt5Gui-private-headers-devel Mesa-libEGL1 xvfb-run
+    - zypper in -y gsl-devel ninja libQt5Gui-private-headers-devel Mesa-libEGL1 xvfb-run libwayland-egl1
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
     - ninja
-# libEGL warning: DRI2: failed to create any config
-#    - xvfb-run ctest -T Test --output-on-failure
+    - xvfb-run ctest -T Test --output-on-failure
 
 .leap_15.4_full:
   stage: build
@@ -195,7 +194,7 @@ tumbleweed_full:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
 # readstat-devel in Science repo only
-    - zypper in -y gsl-devel ninja Mesa-libEGL1 xvfb-run kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount libQt5Gui-private-headers-devel
+    - zypper in -y gsl-devel ninja Mesa-libEGL1 which xvfb-run libwayland-egl1 kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount libQt5Gui-private-headers-devel
   script:
     - mkdir -p build && cd build
 # readstat disabled until fixed for GCC 13
