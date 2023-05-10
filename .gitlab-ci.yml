@@ -92,7 +92,7 @@ ubuntu_22.04_min:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
     - ninja
-#    - ctest -V
+    - ctest -V
 
 ubuntu_22.04_full:
   stage: build
@@ -108,7 +108,7 @@ ubuntu_22.04_full:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
     - ninja
-#    - ctest -V
+    - ctest -V
 
 fedora_37_min:
   stage: build
@@ -122,7 +122,7 @@ fedora_37_min:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
     - ninja
-#    - ctest -V
+    - ctest -V
 
 fedora_37_full:
   stage: build
@@ -137,7 +137,7 @@ fedora_37_full:
     - cmake -DCMAKE_BUILD_TYPE=Release -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
     - ninja
 # tests currently fail due to gcc 12?
-#   - ninja test
+    - ninja test
 
 leap_15.4_min:
   stage: build
@@ -153,7 +153,7 @@ leap_15.4_min:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
     - ninja
-#    - ninja test
+    - ninja test
 
 leap_15.4_full:
   stage: build
@@ -170,8 +170,9 @@ leap_15.4_full:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
     - ninja
-#    - ninja test
+    - ninja test
 
+# disabled until readstat gcc 13 issue is fixed
 .tumbleweed_full:
   stage: build
   image: opensuse/tumbleweed
@@ -187,7 +188,9 @@ leap_15.4_full:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
     - ninja
-#    - ninja test
+    - ninja test
+
+#########################################################
 
 clang_format:
   stage: test
