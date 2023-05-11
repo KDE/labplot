@@ -201,7 +201,8 @@ tumbleweed_full:
   script:
     - mkdir -p build && cd build
 # readstat disabled until fixed for GCC 13
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -DENABLE_READSTAT=OFF -G Ninja ..
+# Vector BLF fails compiling (<cstdint> missing)
+    - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
     - xvfb-run ctest -T Test --output-on-failure
 
