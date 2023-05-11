@@ -855,4 +855,64 @@ void AxisTest::columnLabelValues() {
 	}
 }
 
+void AxisTest::customTextLabels() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->replaceValues(0, QVector<double>({1, 2, 3}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(0, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	Spreadsheet* spreadsheetLabels = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetLabels->setColumnCount(1);
+	spreadsheetLabels->setRowCount(3);
+	project.addChild(spreadsheetLabels);
+	auto* labelsCol = spreadsheetLabels->column(0);
+	labelsCol->setColumnMode(AbstractColumn::ColumnMode::Text);
+	labelsCol->replaceTexts(-1, QVector<QString>({QStringLiteral("A"), QStringLiteral("B"), QStringLiteral("C")}));
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksNumber(3, false);
+	xAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+	xAxis->setLabelsTextColumn(labelsCol);
+
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("A"),
+			QStringLiteral("B"),
+			QStringLiteral("C"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
 QTEST_MAIN(AxisTest)
