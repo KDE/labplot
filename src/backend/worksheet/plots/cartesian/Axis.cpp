@@ -1723,25 +1723,30 @@ void AxisPrivate::retransformTicks() {
 						}
 						}
 					}
-				} else if (labelsTextType == Axis::LabelsTextType::PositionValues)
-					tickLabelValues << value;
-				else if (majorTicksType == Axis::TicksType::CustomColumn) {
-					if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
-						switch (labelsTextColumn->columnMode()) {
-						case AbstractColumn::ColumnMode::Double:
-						case AbstractColumn::ColumnMode::Integer:
-						case AbstractColumn::ColumnMode::BigInt:
-							tickLabelValues << labelsTextColumn->valueAt(iMajor);
-							break;
-						case AbstractColumn::ColumnMode::DateTime:
-						case AbstractColumn::ColumnMode::Month:
-						case AbstractColumn::ColumnMode::Day:
-							tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
-							break;
-						case AbstractColumn::ColumnMode::Text:
-							tickLabelValuesString << labelsTextColumn->textAt(iMajor);
-							break;
+				} else {
+					switch (labelsTextType) {
+					case Axis::LabelsTextType::PositionValues:
+						tickLabelValues << value;
+						break;
+					case Axis::LabelsTextType::CustomValues: {
+						if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
+							switch (labelsTextColumn->columnMode()) {
+							case AbstractColumn::ColumnMode::Double:
+							case AbstractColumn::ColumnMode::Integer:
+							case AbstractColumn::ColumnMode::BigInt:
+								tickLabelValues << labelsTextColumn->valueAt(iMajor);
+								break;
+							case AbstractColumn::ColumnMode::DateTime:
+							case AbstractColumn::ColumnMode::Month:
+							case AbstractColumn::ColumnMode::Day:
+								tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
+								break;
+							case AbstractColumn::ColumnMode::Text:
+								tickLabelValuesString << labelsTextColumn->textAt(iMajor);
+								break;
+							}
 						}
+					}
 					}
 				}
 			}
