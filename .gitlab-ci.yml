@@ -194,7 +194,7 @@ tumbleweed_full:
     - master
   before_script:
     - zypper ref
-    - zypper in --force-resolution xvfb-run
+    - zypper in -y --force-resolution xvfb-run
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
 # readstat-devel in Science repo only
     - zypper in -y gsl-devel ninja Mesa-libEGL1 libwayland-egl1 kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount libQt5Gui-private-headers-devel
