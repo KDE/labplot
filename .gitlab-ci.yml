@@ -24,7 +24,7 @@ include:
 
 # replaced default targets:
 # only changed "script" section
-.windows_qt515:
+windows_qt515:
   stage: build
   image: kdeorg/windows-msvc2019-qt515:latest
   tags:
@@ -53,7 +53,7 @@ include:
       junit: JUnitTestResults.xml
 
 # only changed "script" section
-.freebsd_qt515:
+freebsd_qt515:
   stage: build
   tags:
     - FreeBSD
@@ -83,7 +83,7 @@ variables:
   QT_TEST_TIMEOUT_FUNCTION: "600"
   QT_QPA_PLATFORM: "eglfs"
 
-.ubuntu_22.04_min:
+ubuntu_22.04_min:
   stage: build
   image: ubuntu:22.04
   only:
@@ -100,7 +100,7 @@ variables:
 # 1 test fails: FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-.ubuntu_22.04_full:
+ubuntu_22.04_full:
   stage: build
   image: ubuntu:22.04
   only:
@@ -117,7 +117,7 @@ variables:
 # 1 test fails: FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-.fedora_37_min:
+fedora_37_min:
   stage: build
   image: fedora:37
   only:
@@ -135,7 +135,7 @@ variables:
 # FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-.fedora_37_full:
+fedora_37_full:
   stage: build
   image: fedora:37
   only:
@@ -150,7 +150,7 @@ variables:
 # see fedora_37_min
 #    - xvfb-run ctest -T Test --output-on-failure
 
-.leap_15.4_min:
+leap_15.4_min:
   stage: build
   image: opensuse/leap:15.4
   only:
@@ -168,7 +168,7 @@ variables:
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
 
-.leap_15.4_full:
+leap_15.4_full:
   stage: build
   image: opensuse/leap:15.4
   only:
@@ -204,7 +204,8 @@ tumbleweed_full:
 # Vector BLF fails compiling (<cstdint> missing)
     - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
-    - xvfb-run ctest -T Test --output-on-failure
+# libEGL warning: DRI2: failed to create any config
+#    - xvfb-run ctest -T Test --output-on-failure
 
 #########################################################
 
