@@ -12,6 +12,11 @@ include:
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 
+# needed for tests (use "ctest -V" for more output)
+variables:
+  QT_TEST_TIMEOUT_FUNCTION: "600"
+  QT_QPA_PLATFORM: "eglfs"
+
 # test builds (prepend '.' to temporary disable):
 # Win (Release)
 # FreeBSD (Debug)
@@ -37,6 +42,7 @@ windows_qt515:
     CXX: cl.exe
     CC: cl.exe
     PYTHONUTF8: 1
+    QT_QPA_PLATFORM: "xcb"
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/sysadmin/ci-utilities
@@ -62,6 +68,7 @@ freebsd_qt515:
     KDECI_CACHE_PATH: /var/tmp/gitlab_runner/artifacts/freebsd-qt5.15/
     KDECI_GITLAB_SERVER: https://invent.kde.org/
     KDECI_PACKAGE_PROJECT: teams/ci-artifacts/freebsd-qt5.15
+    QT_QPA_PLATFORM: "xcb"
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/sysadmin/ci-utilities
@@ -77,11 +84,6 @@ freebsd_qt515:
       junit: JUnitTestResults.xml
 
 ########################################################
-
-# needed for tests (use "ctest -V" for more output)
-variables:
-  QT_TEST_TIMEOUT_FUNCTION: "600"
-  QT_QPA_PLATFORM: "eglfs"
 
 ubuntu_22.04_min:
   stage: build
