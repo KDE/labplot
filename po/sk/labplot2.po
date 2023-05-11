@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-10 00:42+0000\n"
+"POT-Creation-Date: 2023-05-11 00:42+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -3211,7 +3211,7 @@ msgstr "Smerodajná odchýlka"
 #: src/backend/gsl/functions.cpp:32
 #, fuzzy, kde-format
 #| msgid "Functions"
-msgid "Comparsion Functions"
+msgid "Comparison Functions"
 msgstr "Funkcie"
 
 #: src/backend/gsl/functions.cpp:34

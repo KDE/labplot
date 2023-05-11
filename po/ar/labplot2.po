@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-10 00:42+0000\n"
+"POT-Creation-Date: 2023-05-11 00:42+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -3057,7 +3057,7 @@ msgstr "انحراف معياري"
 #: src/backend/gsl/functions.cpp:32
 #, fuzzy, kde-format
 #| msgid "Functions"
-msgid "Comparsion Functions"
+msgid "Comparison Functions"
 msgstr "دوال"
 
 #: src/backend/gsl/functions.cpp:34

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-10 00:42+0000\n"
-"PO-Revision-Date: 2023-05-06 12:37+0200\n"
+"POT-Creation-Date: 2023-05-11 00:42+0000\n"
+"PO-Revision-Date: 2023-05-10 09:52+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -2317,10 +2317,9 @@ msgid "Force and Energy"
 msgstr "Kracht en energie"
 
 #: src/backend/gsl/constants.cpp:48
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "Unknown Constant"
-msgstr "Constante"
+msgstr "Onbekende constante"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:57
@@ -3031,9 +3030,9 @@ msgstr "Standaard wiskundige functies"
 
 #: src/backend/gsl/functions.cpp:32
 #, fuzzy, kde-format
-#| msgid "Clausen Functions"
-msgid "Comparsion Functions"
-msgstr "Clausen functies"
+#| msgid "Comparsion Functions"
+msgid "Comparison Functions"
+msgstr "Functies voor vergelijken"
 
 #: src/backend/gsl/functions.cpp:34
 #, kde-format
@@ -3316,10 +3315,9 @@ msgid "Logarithmic Distribution"
 msgstr "Logaritmische verdeling"
 
 #: src/backend/gsl/functions.cpp:156
-#, fuzzy, kde-format
-#| msgid "Power Function"
+#, kde-format
 msgid "Unknown Function"
-msgstr "Machtfunctie"
+msgstr "Onbekende functie"
 
 #: src/backend/gsl/functions.cpp:162
 #, kde-format
@@ -3397,31 +3395,29 @@ msgid "Round to the nearest integer"
 msgstr "Afronden naar meest nabije geheel getal"
 
 #: src/backend/gsl/functions.cpp:195
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterThen"
-msgstr "Groter dan"
+msgstr "groterDan"
 
 #: src/backend/gsl/functions.cpp:196
 #, kde-format
 msgid "lessThan"
-msgstr ""
+msgstr "kleinerDan"
 
 #: src/backend/gsl/functions.cpp:197
 #, kde-format
 msgid "greaterEqualThen"
-msgstr ""
+msgstr "groterGelijkDan"
 
 #: src/backend/gsl/functions.cpp:198
 #, kde-format
 msgid "lessEqualThen"
-msgstr ""
+msgstr "kleinerGelijkDan"
 
 #: src/backend/gsl/functions.cpp:199
-#, fuzzy, kde-format
-#| msgid "Equal to"
+#, kde-format
 msgid "equal"
-msgstr "Gelijk aan"
+msgstr "gelijkAan"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:202
@@ -4277,10 +4273,9 @@ msgid "Logarithm of the gamma function"
 msgstr "Logaritme van de Gamma functie"
 
 #: src/backend/gsl/functions.cpp:455
-#, fuzzy, kde-format
-#| msgid "Logarithm of the gamma function"
+#, kde-format
 msgid "Logarithm naturalis of the gamma function"
-msgstr "Logaritme van de Gamma functie"
+msgstr "Natuurlijke logaritme van de gamma functie"
 
 #: src/backend/gsl/functions.cpp:456
 #, kde-format

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-10 00:42+0000\n"
+"POT-Creation-Date: 2023-05-11 00:42+0000\n"
 "PO-Revision-Date: 2022-10-03 17:20+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -3053,7 +3053,7 @@ msgstr "Matematiska standardfunktioner"
 #: src/backend/gsl/functions.cpp:32
 #, fuzzy, kde-format
 #| msgid "Clausen Functions"
-msgid "Comparsion Functions"
+msgid "Comparison Functions"
 msgstr "Clausen-funktioner"
 
 #: src/backend/gsl/functions.cpp:34
