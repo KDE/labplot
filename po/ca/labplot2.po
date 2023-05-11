@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2023-01-08 11:55+0100\n"
+"PO-Revision-Date: 2023-05-09 21:00+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -4612,7 +4612,7 @@ msgstr "longitud d'1 punt del TeX [1/72,27 polzades]"
 #: src/backend/gsl/ExpressionParser.cpp:1095
 #, kde-format
 msgid "Length of 1 micron"
-msgstr "Longitud d'1 micró"
+msgstr "Longitud d'1 micra"
 
 #: src/backend/gsl/ExpressionParser.cpp:1098
 #, kde-format
