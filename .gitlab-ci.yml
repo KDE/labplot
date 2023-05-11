@@ -42,7 +42,7 @@ windows_qt515:
     CXX: cl.exe
     CC: cl.exe
     PYTHONUTF8: 1
-    QT_QPA_PLATFORM: "xcb"
+    QT_QPA_PLATFORM: "windows"
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/sysadmin/ci-utilities
