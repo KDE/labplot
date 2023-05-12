@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-11 00:42+0000\n"
-"PO-Revision-Date: 2023-05-06 11:49+0100\n"
+"POT-Creation-Date: 2023-05-12 00:43+0000\n"
+"PO-Revision-Date: 2023-05-11 19:54+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -79,7 +79,8 @@ msgstr ""
 "X-POFile-SpellExtra: david XSLX RMSD preview sty latex DP whiskers Whisker\n"
 "X-POFile-IgnoreConsistency: Show\n"
 "X-POFile-SpellExtra: GUM Acausal Coef Sech Quártico Bi Tri Big Endian CAN\n"
-"X-POFile-SpellExtra: Tempons NAN BLF DBC dbc\n"
+"X-POFile-SpellExtra: Tempons NAN BLF DBC dbc maiorQue menorQue maiorIgualA\n"
+"X-POFile-SpellExtra: menorIgualA\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -130,7 +131,7 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2990
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2995
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4620
@@ -178,7 +179,7 @@ msgstr ""
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:465
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3119
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3124
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
@@ -2391,10 +2392,9 @@ msgid "Force and Energy"
 msgstr "Força e Energia"
 
 #: src/backend/gsl/constants.cpp:48
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "Unknown Constant"
-msgstr "Constante"
+msgstr "Constante Desconhecida"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:57
@@ -3104,10 +3104,9 @@ msgid "Standard Mathematical Functions"
 msgstr "Funções-Padrão Matemáticas"
 
 #: src/backend/gsl/functions.cpp:32
-#, fuzzy, kde-format
-#| msgid "Clausen Functions"
+#, kde-format
 msgid "Comparison Functions"
-msgstr "Funções de Clausen"
+msgstr "Funções de Comparação"
 
 #: src/backend/gsl/functions.cpp:34
 #, kde-format
@@ -3390,10 +3389,9 @@ msgid "Logarithmic Distribution"
 msgstr "Distribuição Logarítmica"
 
 #: src/backend/gsl/functions.cpp:156
-#, fuzzy, kde-format
-#| msgid "Power Function"
+#, kde-format
 msgid "Unknown Function"
-msgstr "Funções de Potência"
+msgstr "Função Desconhecida"
 
 #: src/backend/gsl/functions.cpp:162
 #, kde-format
@@ -3474,31 +3472,29 @@ msgid "Round to the nearest integer"
 msgstr "Arredondamento ao inteiro mais próximo"
 
 #: src/backend/gsl/functions.cpp:195
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterThen"
-msgstr "Maior que"
+msgstr "maiorQue"
 
 #: src/backend/gsl/functions.cpp:196
 #, kde-format
 msgid "lessThan"
-msgstr ""
+msgstr "menorQue"
 
 #: src/backend/gsl/functions.cpp:197
 #, kde-format
 msgid "greaterEqualThen"
-msgstr ""
+msgstr "maiorIgualA"
 
 #: src/backend/gsl/functions.cpp:198
 #, kde-format
 msgid "lessEqualThen"
-msgstr ""
+msgstr "menorIgualA"
 
 #: src/backend/gsl/functions.cpp:199
-#, fuzzy, kde-format
-#| msgid "Equal to"
+#, kde-format
 msgid "equal"
-msgstr "Igual a"
+msgstr "igual a"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:202
@@ -4355,10 +4351,9 @@ msgid "Logarithm of the gamma function"
 msgstr "Logaritmo da função gama"
 
 #: src/backend/gsl/functions.cpp:455
-#, fuzzy, kde-format
-#| msgid "Logarithm of the gamma function"
+#, kde-format
 msgid "Logarithm naturalis of the gamma function"
-msgstr "Logaritmo da função gama"
+msgstr "Logaritmo natural da função gama"
 
 #: src/backend/gsl/functions.cpp:456
 #, kde-format

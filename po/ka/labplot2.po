@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-11 00:42+0000\n"
-"PO-Revision-Date: 2023-05-07 06:32+0200\n"
+"POT-Creation-Date: 2023-05-12 00:43+0000\n"
+"PO-Revision-Date: 2023-05-11 06:03+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -64,7 +64,7 @@ msgstr "პანელის დამატებები ვერ ვიპ
 #: src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2990
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2995
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4620
@@ -111,7 +111,7 @@ msgstr "ატრიბუტი '%1' აკლია ან ცარიელ�
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:465
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3119
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3124
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
@@ -2311,10 +2311,9 @@ msgid "Force and Energy"
 msgstr "ძალა და ენერგია"
 
 #: src/backend/gsl/constants.cpp:48
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "Unknown Constant"
-msgstr "კონსტანტა"
+msgstr "უცნობი მუდმივა"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:57
@@ -3024,10 +3023,9 @@ msgid "Standard Mathematical Functions"
 msgstr "სტანდარტული მათემატიკური ფუნქციები"
 
 #: src/backend/gsl/functions.cpp:32
-#, fuzzy, kde-format
-#| msgid "Clausen Functions"
+#, kde-format
 msgid "Comparison Functions"
-msgstr "კლაუზენის ფუნქციები"
+msgstr "შედარების ფუნქციები"
 
 #: src/backend/gsl/functions.cpp:34
 #, kde-format
@@ -3310,10 +3308,9 @@ msgid "Logarithmic Distribution"
 msgstr "ლოგარითმული განაწილება"
 
 #: src/backend/gsl/functions.cpp:156
-#, fuzzy, kde-format
-#| msgid "Power Function"
+#, kde-format
 msgid "Unknown Function"
-msgstr "ხარისხის ფუნქცია"
+msgstr "უცნობი ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:162
 #, kde-format
@@ -3391,10 +3388,9 @@ msgid "Round to the nearest integer"
 msgstr "უახლოეს მთელ რიცხვამდე დამრგვალება"
 
 #: src/backend/gsl/functions.cpp:195
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterThen"
-msgstr "მეტი, ვიდრე"
+msgstr "მეტივიდრე"
 
 #: src/backend/gsl/functions.cpp:196
 #, kde-format
@@ -3412,8 +3408,7 @@ msgid "lessEqualThen"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:199
-#, fuzzy, kde-format
-#| msgid "Equal to"
+#, kde-format
 msgid "equal"
 msgstr "უდრის"
 
@@ -4240,10 +4235,9 @@ msgid "Logarithm of the gamma function"
 msgstr "გამა ფუნქციის ლოგარითმი"
 
 #: src/backend/gsl/functions.cpp:455
-#, fuzzy, kde-format
-#| msgid "Logarithm of the gamma function"
+#, kde-format
 msgid "Logarithm naturalis of the gamma function"
-msgstr "გამა ფუნქციის ლოგარითმი"
+msgstr "გამა ფუნქციის ლოგარითმის ნატურალები"
 
 #: src/backend/gsl/functions.cpp:456
 #, kde-format
