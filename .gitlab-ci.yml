@@ -27,6 +27,17 @@ variables:
 # OS 15.4 min (Release)
 # OS 15.4 full (Debug)
 
+workflow:
+  rules:
+    # Prevent branch pipelines if an MR is open on the branch.
+    - if: $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push" && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    # Allow merge request pipelines.
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # Build tags and branches too
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
+
 # replaced default targets:
 # only changed "script" section
 windows_qt515:
@@ -156,7 +167,7 @@ leap_15.4_min:
   stage: build
   image: opensuse/leap:15.4
   only:
-#    - merge_requests
+    - merge_requests
     - master
   before_script:
     - zypper ref
