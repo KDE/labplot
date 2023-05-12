@@ -11,7 +11,7 @@ cd $BUILDDIR
 export CC=clang
 export CXX=clang++
 
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON && make -j 6
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON && make -j 6
 #cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr && make -j 6
 # debug
 # -ftime-trace for clang >= 9

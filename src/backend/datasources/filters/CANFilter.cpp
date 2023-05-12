@@ -97,9 +97,9 @@ std::vector<void*> CANFilter::dataContainer() const {
 	return d->m_DataContainer.dataContainer();
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 void CANFilterPrivate::DataContainer::clear() {
 	for (uint i = 0; i < m_dataContainer.size(); i++) {
 		switch (m_columnModes.at(i)) {
@@ -307,11 +307,11 @@ int CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSour
 
 	auto dc = m_DataContainer.dataContainer();
 	const int columnOffset = dataSource->prepareImport(dc, mode, rows, m_signals.signal_names.length(), m_signals.signal_names, columnModes(), false);
-	dataSource->finalizeImport(columnOffset);
+	dataSource->finalizeImport(columnOffset, 0, m_signals.signal_names.length() - 1);
 
 	// Assign value labels to the column
 	auto columns = dataSource->children<Column>();
-	if (columns.size() == m_signals.value_descriptions.size()) {
+	if ((size_t)columns.size() == m_signals.value_descriptions.size()) {
 		int counter = 0;
 		auto signal_descriptions = m_signals.value_descriptions.begin();
 		while (signal_descriptions != m_signals.value_descriptions.end()) {
@@ -337,16 +337,16 @@ void CANFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*
 }
 
 bool CANFilterPrivate::setDBCFile(const QString& filename) {
-	return m_dbcParser.parseFile(filename);
+	return m_dbcParser.parseFile(filename) == DbcParser::ParseStatus::Success;
 }
 
 const QVector<AbstractColumn::ColumnMode> CANFilterPrivate::columnModes() {
 	return m_DataContainer.columnModes();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.

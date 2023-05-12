@@ -265,7 +265,7 @@ Project::DockVisibility Project::dockVisibility() const {
 }
 
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
-CLASS_D_ACCESSOR_IMPL(Project, QString, windowState, WindowState, windowState);
+CLASS_D_ACCESSOR_IMPL(Project, QString, windowState, WindowState, windowState)
 BASIC_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
 BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
@@ -530,9 +530,9 @@ QVector<quintptr> Project::droppedAspects(const QMimeData* mimeData) {
 	return vec;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	// set the version and the modification time to the current values
@@ -589,6 +589,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 }
 
 bool Project::load(const QString& filename, bool preview) {
+	setFileName(filename);
 	DEBUG(Q_FUNC_INFO << ", LOADING file " << STDSTRING(filename))
 	QIODevice* file;
 	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive)) {

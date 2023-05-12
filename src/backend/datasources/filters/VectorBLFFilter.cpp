@@ -65,9 +65,9 @@ bool VectorBLFFilter::isValid(const QString& filename) {
 	return false;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 
 VectorBLFFilterPrivate::VectorBLFFilterPrivate(VectorBLFFilter* owner)
 	: CANFilterPrivate(owner)
@@ -175,8 +175,9 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		return 0;
 	}
 
-	if (!m_dbcParser.isValid()) {
-		errors.append({ParseStatus::DBCInvalidFile, 0});
+	const auto status = m_dbcParser.isValid();
+	if (status != DbcParser::ParseStatus::Success) {
+		errors.append({DBCParserParseStatusToVectorBLFStatus(status), 0});
 		return 0;
 	}
 
@@ -372,9 +373,9 @@ int VectorBLFFilterPrivate::readDataFromFileSeparateTime(const QString& /*fileNa
 	return 0; // Not implemented yet
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.

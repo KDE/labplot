@@ -58,9 +58,9 @@ QIcon XYSmoothCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 const AbstractColumn* XYSmoothCurve::roughsColumn() const {
 	Q_D(const XYSmoothCurve);
 	return d->roughColumn;
@@ -73,18 +73,18 @@ const XYAnalysisCurve::Result& XYSmoothCurve::result() const {
 	return d->smoothResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYSmoothCurve, SetSmoothData, XYSmoothCurve::SmoothData, smoothData, recalculate)
 void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 	Q_D(XYSmoothCurve);
 	exec(new XYSmoothCurveSetSmoothDataCmd(d, smoothData, ki18n("%1: set options and perform the smooth")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -215,9 +215,9 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYSmoothCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYSmoothCurve);

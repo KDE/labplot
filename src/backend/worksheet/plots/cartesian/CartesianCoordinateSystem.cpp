@@ -56,9 +56,9 @@ QString CartesianCoordinateSystem::info() const {
 	return i18n("no info available");
 }
 
-//##############################################################################
-//######################### logical to scene mappers ###########################
-//##############################################################################
+// ##############################################################################
+// ######################### logical to scene mappers ###########################
+// ##############################################################################
 Points CartesianCoordinateSystem::mapLogicalToScene(const Points& points, MappingFlags flags) const {
 	// DEBUG(Q_FUNC_INFO << ", (points with flags)")
 	const QRectF pageRect = d->plot->dataRect();
@@ -464,9 +464,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 	return result;
 }
 
-//##############################################################################
-//######################### scene to logical mappers ###########################
-//##############################################################################
+// ##############################################################################
+// ######################### scene to logical mappers ###########################
+// ##############################################################################
 Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	Points result;
@@ -720,9 +720,9 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF po
 	return true;
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem* owner)
 	: q(owner) {
 }

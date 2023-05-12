@@ -44,10 +44,10 @@ public:
 
 	QString name() const;
 	void retransform();
-	void updateFileName();
+	void updateImage();
 	void discretize();
 	void makeSegments();
-	bool uploadImage(const QString&);
+	bool uploadImage();
 };
 
 #endif

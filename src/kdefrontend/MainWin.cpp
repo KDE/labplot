@@ -1002,9 +1002,9 @@ void MainWin::colorSchemeChanged(QAction* action) {
 	QString schemeName = KLocalizedString::removeAcceleratorMarker(action->text());
 
 	// background of the mdi area is not updated on theme changes, do it here.
-	QModelIndex index = m_schemeManager->indexForScheme(schemeName);
-	const QPalette& palette = KColorScheme::createApplicationPalette(KSharedConfig::openConfig(index.data(Qt::UserRole).toString()));
-	const QBrush& brush = palette.brush(QPalette::Dark);
+	// QModelIndex index = m_schemeManager->indexForScheme(schemeName);
+	// const QPalette& palette = KColorScheme::createApplicationPalette(KSharedConfig::openConfig(index.data(Qt::UserRole).toString()));
+	// const QBrush& brush = palette.brush(QPalette::Dark);
 	// m_DockManager->setBackground(brush);
 
 	// save the selected color scheme

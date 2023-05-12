@@ -56,9 +56,9 @@ QIcon XYDataReductionCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYDataReductionCurve, XYDataReductionCurve::DataReductionData, dataReductionData, dataReductionData)
 
 const XYDataReductionCurve::DataReductionResult& XYDataReductionCurve::dataReductionResult() const {
@@ -66,18 +66,18 @@ const XYDataReductionCurve::DataReductionResult& XYDataReductionCurve::dataReduc
 	return d->dataReductionResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYDataReductionCurve, SetDataReductionData, XYDataReductionCurve::DataReductionData, dataReductionData, recalculate)
 void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::DataReductionData& reductionData) {
 	Q_D(XYDataReductionCurve);
 	exec(new XYDataReductionCurveSetDataReductionDataCmd(d, reductionData, ki18n("%1: set options and perform the data reduction")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -217,9 +217,9 @@ bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYDataReductionCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYDataReductionCurve);

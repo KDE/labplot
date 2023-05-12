@@ -13,10 +13,12 @@ find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
 if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
     option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
-endif()
-
-# do not process these files
-set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
+    if (TARGET Qt5::GuiPrivate)
+        MESSAGE (STATUS "Building local version of Qt-Advanced-Docking-System.")
+    else ()
+	MESSAGE (FATAL_ERROR "Missing Qt5::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
+    endif ()
+endif ()
 
 set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/DatasetModel.cpp
@@ -346,6 +348,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
+	${BACKEND_DIR}/gsl/constants.cpp
+	${BACKEND_DIR}/gsl/functions.cpp
 	${BACKEND_DIR}/lib/Range.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
@@ -490,8 +494,8 @@ set(TOOLS_SOURCES
 )
 
 bison_target(GslParser
-	${BACKEND_DIR}/gsl/parser.y
-	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
+	${BACKEND_DIR}/gsl/parser.ypp
+	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.cpp
 )
 set(GENERATED_SOURCES
 	${BISON_GslParser_OUTPUTS}
@@ -513,6 +517,14 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
 add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
+
+# add system QADS include path
+if (qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
+	get_target_property(QADS_INCLUDES ads::qt5advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
+	get_target_property(QADS_LIBRARIES ads::qt5advanceddocking INTERFACE_LINK_LIBRARIES)
+	MESSAGE (STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
+	target_include_directories( labplot2lib PRIVATE ${QADS_INCLUDES} )
+endif ()
 target_compile_definitions(labplot2lib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 target_link_libraries( labplot2lib
@@ -548,6 +560,7 @@ target_link_libraries( labplot2lib
 	${ZLIB_LIBRARIES}
 	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
+
 
 IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
 	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::SerialPort )
@@ -607,8 +620,10 @@ ENDIF ()
 
 IF (ENABLE_LIBORIGIN)
 	IF (LIBORIGIN_FOUND)
+		target_include_directories( labplot2lib PRIVATE ${LIBORIGIN_INCLUDE_DIR} )
 		target_link_libraries( labplot2lib ${LIBORIGIN_LIBRARIES} )
 	ELSE () # own version
+		target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
 		target_link_libraries( labplot2lib liborigin-static )
 	ENDIF()
 ENDIF ()
@@ -618,7 +633,8 @@ ENDIF ()
 
 IF (APPLE AND ENABLE_TOUCHBAR)
 	target_link_libraries( labplot2lib KDMacTouchBar )
-ENDIF()
+ENDIF ()
+
 
 # icons for the executable and project files on Windows and Mac OS X
 

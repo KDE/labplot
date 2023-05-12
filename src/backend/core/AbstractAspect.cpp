@@ -1141,9 +1141,9 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::deselected, this, &AbstractAspect::childDeselected);
 }
 
-//##############################################################################
-//######################  Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ######################  Private implementation ###############################
+// ##############################################################################
 AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QString& name)
 	: m_name(name.isEmpty() ? QLatin1String("1") : name)
 	, q(owner) {

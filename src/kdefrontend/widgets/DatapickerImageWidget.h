@@ -74,7 +74,7 @@ private:
 private Q_SLOTS:
 	// SLOTs for changes triggered in DatapickerImageWidget
 	//"General"-tab
-	void embeddedChanged(int state);
+	void embeddedChanged(bool embedded);
 	void fileNameChanged();
 	void relativeChanged(bool checked);
 	void selectFile();

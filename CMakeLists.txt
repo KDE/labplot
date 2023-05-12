@@ -1,4 +1,5 @@
 project(labplot2)
+set(LABPLOT_VERSION 2.10.0)
 
 cmake_minimum_required (VERSION 3.17.0 FATAL_ERROR)
 set(CMAKE_C_STANDARD 99)
@@ -53,6 +54,9 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 	Widgets
 	Test
 )
+
+# building QADS or Xlsx require Qt5GuiPrivate (QADS is required, Xlsx is optional)
+find_package(Qt5Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
 
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
@@ -204,7 +208,7 @@ endif()
 
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.10.0\")
+add_definitions (-DLVERSION=\"${LABPLOT_VERSION}\")
 add_definitions (-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions (-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
 set(BUILD_SHARED_LIBS true)
@@ -514,9 +518,9 @@ IF (ENABLE_EXCEL)
 
 			MESSAGE (STATUS "QXlsx library NOT FOUND. Building own version.")
 			add_definitions (-DHAVE_EXCEL)
-		ELSE ()
+		else ()
 			MESSAGE (STATUS "Missing Qt5::GuiPrivate to build own QXlsx.")
-		ENDIF ()
+		endif ()
         ENDIF ()
 
 ELSE ()
@@ -545,7 +549,7 @@ IF (ENABLE_DISCOUNT)
 	IF (Discount_FOUND)
 		add_definitions (-DHAVE_DISCOUNT)
 		MESSAGE (STATUS "Found Markdown Library Discount ${Discount_VERSION}")
-		IF (${Discount_VERSION} VERSION_GREATER "2.99")
+		IF (${Discount_VERSION} AND ${Discount_VERSION} VERSION_GREATER "2.99")
 			add_definitions (-DHAVE_DISCOUNT3)
 		ENDIF ()
 	ELSE ()

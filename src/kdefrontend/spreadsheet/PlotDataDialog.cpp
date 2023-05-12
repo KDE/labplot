@@ -924,9 +924,9 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 	}
 }
 
-//################################################################
-//########################## Slots ###############################
-//################################################################
+// ################################################################
+// ########################## Slots ###############################
+// ################################################################
 void PlotDataDialog::curvePlacementChanged() {
 	if (ui->rbCurvePlacementAllInOnePlotArea->isChecked()) {
 		ui->rbPlotPlacementExistingPlotArea->setEnabled(true);

@@ -37,6 +37,7 @@ extern "C" {
    insert two columns with float values into an empty spreadsheet
 */
 void SpreadsheetTest::testCopyPasteColumnMode00() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -98,6 +99,7 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
    the first column has to be converted to integer column, the second to float.
 */
 void SpreadsheetTest::testCopyPasteColumnMode02() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -127,6 +129,7 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
    Properly handle empty values in the tab separated data.
 */
 void SpreadsheetTest::testCopyPasteColumnMode03() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -190,6 +193,7 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 	automatically detect the proper format for the datetime columns
  */
 void SpreadsheetTest::testCopyPasteColumnMode04() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -226,6 +230,7 @@ void SpreadsheetTest::testCopyPasteColumnMode04() {
 	automatically detect the proper format for the datetime columns, time part only
  */
 void SpreadsheetTest::testCopyPasteColumnMode05() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -396,6 +401,7 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
    the spreadsheet has to be extended accordingly
 */
 void SpreadsheetTest::testCopyPasteSizeChange01() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);

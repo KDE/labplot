@@ -1013,9 +1013,9 @@ void Axis::setLabelsOpacity(qreal opacity) {
 		exec(new AxisSetLabelsOpacityCmd(d, opacity, ki18n("%1: set labels opacity")));
 }
 
-//##############################################################################
-//####################################  SLOTs   ################################
-//##############################################################################
+// ##############################################################################
+// ####################################  SLOTs   ################################
+// ##############################################################################
 void Axis::labelChanged() {
 	Q_D(Axis);
 	d->recalcShapeAndBoundingRect();
@@ -1042,9 +1042,9 @@ void Axis::minorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void Axis::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Axis::Orientation::Horizontal);
@@ -1067,9 +1067,9 @@ void Axis::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 AxisPrivate::AxisPrivate(Axis* owner)
 	: WorksheetElementPrivate(owner)
 	, gridItem(new AxisGrid(this))
@@ -1496,6 +1496,7 @@ void AxisPrivate::retransformTicks() {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
 		}
+		break;
 	case Axis::TicksType::ColumnLabels:
 		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 		if (c && c->valueLabelsInitialized())
@@ -1588,8 +1589,8 @@ void AxisPrivate::retransformTicks() {
 				case Column::ColumnMode::DateTime:
 					majorTickPos = c->dateTimeValueLabels()->at(iMajor).value.toMSecsSinceEpoch();
 					break;
-				default:
-					// TODO handle!
+				case Column::ColumnMode::Text:
+					// TODO
 					break;
 				}
 			}
@@ -1722,25 +1723,30 @@ void AxisPrivate::retransformTicks() {
 						}
 						}
 					}
-				} else if (labelsTextType == Axis::LabelsTextType::PositionValues)
-					tickLabelValues << value;
-				else if (majorTicksType == Axis::TicksType::CustomColumn) {
-					if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
-						switch (labelsTextColumn->columnMode()) {
-						case AbstractColumn::ColumnMode::Double:
-						case AbstractColumn::ColumnMode::Integer:
-						case AbstractColumn::ColumnMode::BigInt:
-							tickLabelValues << labelsTextColumn->valueAt(iMajor);
-							break;
-						case AbstractColumn::ColumnMode::DateTime:
-						case AbstractColumn::ColumnMode::Month:
-						case AbstractColumn::ColumnMode::Day:
-							tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
-							break;
-						case AbstractColumn::ColumnMode::Text:
-							tickLabelValuesString << labelsTextColumn->textAt(iMajor);
-							break;
+				} else {
+					switch (labelsTextType) {
+					case Axis::LabelsTextType::PositionValues:
+						tickLabelValues << value;
+						break;
+					case Axis::LabelsTextType::CustomValues: {
+						if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
+							switch (labelsTextColumn->columnMode()) {
+							case AbstractColumn::ColumnMode::Double:
+							case AbstractColumn::ColumnMode::Integer:
+							case AbstractColumn::ColumnMode::BigInt:
+								tickLabelValues << labelsTextColumn->valueAt(iMajor);
+								break;
+							case AbstractColumn::ColumnMode::DateTime:
+							case AbstractColumn::ColumnMode::Month:
+							case AbstractColumn::ColumnMode::Day:
+								tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
+								break;
+							case AbstractColumn::ColumnMode::Text:
+								tickLabelValuesString << labelsTextColumn->textAt(iMajor);
+								break;
+							}
 						}
+					}
 					}
 				}
 			}
@@ -2879,9 +2885,9 @@ QString AxisPrivate::createScientificRepresentation(const QString& mantissa, con
 	return mantissa + QStringLiteral("×10<sup>") + exponent + QStringLiteral("</sup>");
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Axis::save(QXmlStreamWriter* writer) const {
 	Q_D(const Axis);
@@ -3124,9 +3130,9 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Axis::loadThemeConfig(const KConfig& config) {
 	Q_D(Axis);
 	const KConfigGroup& group = config.group("Axis");
