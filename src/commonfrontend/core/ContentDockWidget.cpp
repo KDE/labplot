@@ -16,6 +16,7 @@
 
 #include <QCloseEvent>
 #include <QIcon>
+#include <QUuid>
 
 /*!
  * \class PartMdiView
