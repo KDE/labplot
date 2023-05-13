@@ -587,7 +587,8 @@ void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
 	} else if (w == m_propertiesDock) {
 		delete m_propertiesDock;
 		m_propertiesDock = nullptr;
-	}
+	} else if (w == m_currentAspectDock)
+		m_currentAspectDock = nullptr;
 }
 
 void MainWin::dockWidgetAboutToBeRemoved(ads::CDockWidget* w) {
