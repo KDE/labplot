@@ -36,6 +36,8 @@ ContentDockWidget::ContentDockWidget(AbstractPart* part)
 
 	// resize the MDI sub window to fit the content of the view
 	resize(m_part->view()->size());
+	setWindowTitle(m_part->name());
+	setObjectName(m_part->path());
 
 	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &ContentDockWidget::handleAspectDescriptionChanged);
 	connect(m_part, &AbstractPart::aspectAboutToBeRemoved, this, &ContentDockWidget::handleAspectAboutToBeRemoved);
@@ -55,6 +57,7 @@ void ContentDockWidget::handleAspectDescriptionChanged(const AbstractAspect* asp
 		return;
 
 	setWindowTitle(m_part->name());
+	setObjectName(m_part->path());
 }
 
 void ContentDockWidget::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
