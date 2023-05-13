@@ -241,6 +241,7 @@ public:
 	}
 
 	QString name() const;
+	QUuid uuid() const;
 	QString comment() const;
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
