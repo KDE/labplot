@@ -2206,7 +2206,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 		else
 			win = part->dockWidget();
 
-		auto* dock = m_DockManager->findDockWidget(win->windowTitle());
+		auto* dock = m_DockManager->findDockWidget(win->objectName());
 		if (m_DockManager && dock == nullptr) {
 			// Add new dock if not found
 			if (m_DockManager->dockWidgetsMap().count() == 2 || !m_currentAspectDock) {
