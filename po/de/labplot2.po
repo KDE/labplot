@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-12 00:43+0000\n"
-"PO-Revision-Date: 2023-05-10 20:26+0200\n"
+"PO-Revision-Date: 2023-05-12 19:39+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -3042,10 +3042,9 @@ msgid "Standard Mathematical Functions"
 msgstr "Mathematische Standardfunktionen"
 
 #: src/backend/gsl/functions.cpp:32
-#, fuzzy, kde-format
-#| msgid "Clausen Functions"
+#, kde-format
 msgid "Comparison Functions"
-msgstr "Clausen-Funktionen"
+msgstr "Vergleich-Funktionen"
 
 #: src/backend/gsl/functions.cpp:34
 #, kde-format
@@ -3328,10 +3327,9 @@ msgid "Logarithmic Distribution"
 msgstr "Logarithmische Verteilung"
 
 #: src/backend/gsl/functions.cpp:156
-#, fuzzy, kde-format
-#| msgid "Power Function"
+#, kde-format
 msgid "Unknown Function"
-msgstr "Potenzfunktion"
+msgstr "Unbekannte Funktion"
 
 #: src/backend/gsl/functions.cpp:162
 #, kde-format
@@ -3409,31 +3407,29 @@ msgid "Round to the nearest integer"
 msgstr "Runden zum nächsten ganzzahligen Wert"
 
 #: src/backend/gsl/functions.cpp:195
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterThen"
-msgstr "Größer als"
+msgstr "größerAls"
 
 #: src/backend/gsl/functions.cpp:196
 #, kde-format
 msgid "lessThan"
-msgstr ""
+msgstr "kleinerAls"
 
 #: src/backend/gsl/functions.cpp:197
 #, kde-format
 msgid "greaterEqualThen"
-msgstr ""
+msgstr "größerGleichAls"
 
 #: src/backend/gsl/functions.cpp:198
 #, kde-format
 msgid "lessEqualThen"
-msgstr ""
+msgstr "kleinerGleichAls"
 
 #: src/backend/gsl/functions.cpp:199
-#, fuzzy, kde-format
-#| msgid "Equal to"
+#, kde-format
 msgid "equal"
-msgstr "Gleich"
+msgstr "gleich"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:202
@@ -4299,10 +4295,9 @@ msgid "Logarithm of the gamma function"
 msgstr "Logarithmus der Gammafunktion"
 
 #: src/backend/gsl/functions.cpp:455
-#, fuzzy, kde-format
-#| msgid "Logarithm of the gamma function"
+#, kde-format
 msgid "Logarithm naturalis of the gamma function"
-msgstr "Logarithmus der Gammafunktion"
+msgstr "Natürlicher Logarithmus der Gammafunktion"
 
 #: src/backend/gsl/functions.cpp:456
 #, kde-format

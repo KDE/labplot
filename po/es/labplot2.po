@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-12 00:43+0000\n"
-"PO-Revision-Date: 2023-05-11 00:26+0200\n"
+"PO-Revision-Date: 2023-05-12 20:28+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -3039,8 +3039,7 @@ msgid "Standard Mathematical Functions"
 msgstr "Funciones matemáticas estándar"
 
 #: src/backend/gsl/functions.cpp:32
-#, fuzzy, kde-format
-#| msgid "Comparsion Functions"
+#, kde-format
 msgid "Comparison Functions"
 msgstr "Funciones de comparación"
 
