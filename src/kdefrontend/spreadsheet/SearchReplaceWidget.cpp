@@ -215,6 +215,7 @@ void SearchReplaceWidget::initSearchWidget() {
 		addCurrentTextToHistory(uiSearch.cbFind);
 	});
 	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::textChanged, this, [=]() {
+		m_patternFound = false;
 		findNextSimple(false);
 	});
 
@@ -293,9 +294,11 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 		addCurrentTextToHistory(uiSearchReplace.cbValue2);
 	});
 	connect(uiSearchReplace.cbValue1->lineEdit(), &QLineEdit::textChanged, this, [=]() {
+		m_patternFound = false;
 		findNext(false);
 	});
 	connect(uiSearchReplace.cbValue2->lineEdit(), &QLineEdit::textChanged, this, [=]() {
+		m_patternFound = false;
 		findNext(false);
 	});
 
@@ -304,13 +307,16 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 		addCurrentTextToHistory(uiSearchReplace.cbValueText);
 	});
 	connect(uiSearchReplace.cbValueText->lineEdit(), &QLineEdit::textChanged, this, [=]() {
+		m_patternFound = false;
 		findNext(false);
 	});
 
 	connect(uiSearchReplace.dteValue1, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, [=]() {
+		m_patternFound = false;
 		findNext(false);
 	});
 	connect(uiSearchReplace.dteValue2, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, [=]() {
+		m_patternFound = false;
 		findNext(false);
 	});
 
@@ -582,6 +588,11 @@ void SearchReplaceWidget::switchFindReplace() {
  */
 bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	const QString& pattern = uiSearch.cbFind->currentText();
+	if (pattern.isEmpty()) {
+		GuiTools::highlight(uiSearch.cbFind->lineEdit(), false);
+		return true;
+	}
+
 	const auto cs = uiSearch.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
 
 	// spreadsheet size and the start cell
@@ -611,7 +622,9 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 				continue;
 
 			if (column->textAt(row).contains(pattern, cs)) {
+				m_patternFound = true;
 				m_view->goToCell(row, col);
+				GuiTools::highlight(uiSearch.cbFind->lineEdit(), false);
 				return true;
 			}
 
@@ -621,6 +634,7 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 		startCol = false;
 	}
 
+	GuiTools::highlight(uiSearch.cbFind->lineEdit(), !m_patternFound);
 	return false;
 }
 
@@ -631,6 +645,11 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
  */
 bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 	const QString& pattern = uiSearch.cbFind->currentText();
+	if (pattern.isEmpty()) {
+		GuiTools::highlight(uiSearch.cbFind->lineEdit(), false);
+		return true;
+	}
+
 	const auto cs = uiSearch.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
 
 	// spreadsheet size and the start cell
@@ -658,7 +677,9 @@ bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 				continue;
 
 			if (column->textAt(row).contains(pattern, cs)) {
+				m_patternFound = true;
 				m_view->goToCell(row, col);
+				GuiTools::highlight(uiSearch.cbFind->lineEdit(), false);
 				return true;
 			}
 
@@ -668,6 +689,7 @@ bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 		startCol = false;
 	}
 
+	GuiTools::highlight(uiSearch.cbFind->lineEdit(), !m_patternFound);
 	return false;
 }
 
@@ -675,22 +697,30 @@ bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 // ****  advanced and data type specific find functions  ****
 // **********************************************************
 bool SearchReplaceWidget::findNext(bool proceed) {
-	// QLineEdit* lineEdit;
-	// if (m_replaceEnabled)
-	// 	lineEdit = uiSearchReplace.cbValueText;
-	// else
-	// 	lineEdit = uiSearch.cbFind->lineEdit();
-	//
-	// // const QString& text = lineEdit->text();
-	// //
-	// // if (!text.isEmpty()) {
-	// 	bool rc = findPrevImpl(proceed);
-	// 	GuiTools::highlight(lineEdit, !rc);
-	// // } else
-	// // 	GuiTools::highlight(lineEdit, false);
+	// search pattern(s)
+	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
+	QString pattern1;
+	QString pattern2;
+	switch (type) {
+	case DataType::Text:
+		pattern1 = uiSearchReplace.cbValueText->currentText();
+		break;
+	case DataType::Numeric:
+		pattern1 = uiSearchReplace.cbValue1->currentText();
+		pattern2 = uiSearchReplace.cbValue2->currentText();
+		break;
+	case DataType::DateTime:
+		pattern1 = uiSearchReplace.dteValue1->text();
+		pattern1 = uiSearchReplace.dteValue2->text();
+		break;
+	}
+
+	if (pattern1.isEmpty()) {
+		highlight(type, false);
+		return true;
+	}
 
 	// settings
-	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
 	const auto opText = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
 	const auto opNumeric = static_cast<Operator>(uiSearchReplace.cbOperator->currentData().toInt());
 	const auto opDateTime = static_cast<Operator>(uiSearchReplace.cbOperatorDateTime->currentData().toInt());
@@ -708,23 +738,6 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 
 	if (!columnMajor && proceed)
 		++curCol;
-
-	// search pattern(s)
-	QString pattern1;
-	QString pattern2;
-	switch (type) {
-	case DataType::Text:
-		pattern1 = uiSearchReplace.cbValueText->currentText();
-		break;
-	case DataType::Numeric:
-		pattern1 = uiSearchReplace.cbValue1->currentText();
-		pattern2 = uiSearchReplace.cbValue2->currentText();
-		break;
-	case DataType::DateTime:
-		pattern1 = uiSearchReplace.dteValue1->text();
-		pattern1 = uiSearchReplace.dteValue2->text();
-		break;
-	}
 
 	// all settings are determined -> search the next cell matching the specified pattern(s)
 	const auto& columns = m_spreadsheet->children<Column>();
@@ -747,7 +760,9 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 
 				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
 				if (match) {
+					m_patternFound = true;
 					m_view->goToCell(row, col);
+					highlight(type, false);
 					return true;
 				}
 
@@ -771,7 +786,9 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 
 				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
 				if (match) {
+					m_patternFound = true;
 					m_view->goToCell(row, col);
+					highlight(type, false);
 					return true;
 				}
 
@@ -782,12 +799,35 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 		}
 	}
 
+	highlight(type, !m_patternFound);
 	return false;
 }
 
 bool SearchReplaceWidget::findPrevious(bool proceed) {
-	// settings
+	// search pattern(s)
 	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
+	QString pattern1;
+	QString pattern2;
+	switch (type) {
+	case DataType::Text:
+		pattern1 = uiSearchReplace.cbValueText->currentText();
+		break;
+	case DataType::Numeric:
+		pattern1 = uiSearchReplace.cbValue1->currentText();
+		pattern2 = uiSearchReplace.cbValue2->currentText();
+		break;
+	case DataType::DateTime:
+		pattern1 = uiSearchReplace.dteValue1->text();
+		pattern1 = uiSearchReplace.dteValue2->text();
+		break;
+	}
+
+	if (pattern1.isEmpty()) {
+		highlight(type, false);
+		return true;
+	}
+
+	// settings
 	const auto opText = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
 	const auto opNumeric = static_cast<Operator>(uiSearchReplace.cbOperator->currentData().toInt());
 	const auto opDateTime = static_cast<Operator>(uiSearchReplace.cbOperatorDateTime->currentData().toInt());
@@ -805,23 +845,6 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 
 	if (!columnMajor && proceed)
 		--curCol;
-
-	// search pattern(s)
-	QString pattern1;
-	QString pattern2;
-	switch (type) {
-	case DataType::Text:
-		pattern1 = uiSearchReplace.cbValueText->currentText();
-		break;
-	case DataType::Numeric:
-		pattern1 = uiSearchReplace.cbValue1->currentText();
-		pattern2 = uiSearchReplace.cbValue2->currentText();
-		break;
-	case DataType::DateTime:
-		pattern1 = uiSearchReplace.dteValue1->text();
-		pattern1 = uiSearchReplace.dteValue2->text();
-		break;
-	}
 
 	// all settings are determined -> search the next cell matching the specified pattern(s)
 	const auto& columns = m_spreadsheet->children<Column>();
@@ -844,7 +867,9 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 
 				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
 				if (match) {
+					m_patternFound = true;
 					m_view->goToCell(row, col);
+					highlight(type, false);
 					return true;
 				}
 
@@ -868,7 +893,9 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 
 				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
 				if (match) {
+					m_patternFound = true;
 					m_view->goToCell(row, col);
+					highlight(type, false);
 					return true;
 				}
 
@@ -879,6 +906,7 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 		}
 	}
 
+	highlight(type, !m_patternFound);
 	return false;
 }
 
@@ -1067,6 +1095,23 @@ bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime, 
 	}
 
 	return match;
+}
+
+void SearchReplaceWidget::highlight(DataType type, bool invalid) const {
+	switch (type) {
+	case DataType::Text:
+		GuiTools::highlight(uiSearchReplace.cbValueText->lineEdit(), invalid);
+		break;
+	case DataType::Numeric:
+		GuiTools::highlight(uiSearchReplace.cbValue1->lineEdit(), invalid);
+		GuiTools::highlight(uiSearchReplace.cbValue2->lineEdit(), invalid);
+		break;
+	case DataType::DateTime:
+		GuiTools::highlight(uiSearchReplace.dteValue1, invalid);
+		GuiTools::highlight(uiSearchReplace.dteValue2, invalid);
+		break;
+	}
+
 }
 
 // **********************************************************

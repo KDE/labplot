@@ -42,7 +42,7 @@ private:
 	QWidget* m_searchReplaceWidget{nullptr};
 	AbstractColumn::ColumnMode m_initialColumnMode{AbstractColumn::ColumnMode::Text};
 	QString m_initialPattern;
-
+	bool m_patternFound{false};
 	bool m_replaceEnabled{false};
 	Spreadsheet* m_spreadsheet{nullptr};
 	SpreadsheetView* m_view{nullptr};
@@ -63,6 +63,7 @@ private:
 	bool checkCellText(const QString& value, const QString& pattern, OperatorText, Qt::CaseSensitivity);
 	bool checkCellNumeric(double value, const QString& pattern1, const QString& pattern2, Operator);
 	bool checkCellDateTime(const QDateTime& value, const QString& pattern1, const QString& pattern2, Operator);
+	void highlight(DataType, bool invalid) const;
 
 	void addCurrentTextToHistory(QComboBox*) const;
 	void showExtendedContextMenu(bool forPattern, const QPoint&);
