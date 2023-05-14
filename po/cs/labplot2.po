@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-12 00:43+0000\n"
+"POT-Creation-Date: 2023-05-14 00:42+0000\n"
 "PO-Revision-Date: 2023-04-11 18:04+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -123,65 +123,65 @@ msgstr ""
 msgid "unknown element '%1'"
 msgstr "neznámý prvek '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:224
+#: src/backend/core/AbstractAspect.cpp:228
 #, kde-format
 msgid ""
 "Intended name \"%1\" was changed to \"%2\" in order to avoid name collision."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:228
+#: src/backend/core/AbstractAspect.cpp:232
 #, kde-format
 msgid "%1: rename to %2"
 msgstr "%1: Přejmenovat na %2"
 
-#: src/backend/core/AbstractAspect.cpp:242
+#: src/backend/core/AbstractAspect.cpp:246
 #, kde-format
 msgid "%1: change comment"
 msgstr "%1: změnit komentář"
 
-#: src/backend/core/AbstractAspect.cpp:327
+#: src/backend/core/AbstractAspect.cpp:331
 #, kde-format
 msgid "Duplicate Here"
 msgstr "Zde duplikovat"
 
-#: src/backend/core/AbstractAspect.cpp:342
+#: src/backend/core/AbstractAspect.cpp:346
 #, kde-format
 msgid "Paste '%1'"
 msgstr "Vložit '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:349
+#: src/backend/core/AbstractAspect.cpp:353
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "Vytvořit sešit s daty"
 
-#: src/backend/core/AbstractAspect.cpp:397
+#: src/backend/core/AbstractAspect.cpp:401
 #, kde-format
 msgid "Rename"
 msgstr "Přejmenovat"
 
-#: src/backend/core/AbstractAspect.cpp:399
+#: src/backend/core/AbstractAspect.cpp:403
 #: src/commonfrontend/worksheet/WorksheetView.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:271
 #, kde-format
 msgid "Delete"
 msgstr "Smazat"
 
-#: src/backend/core/AbstractAspect.cpp:407
+#: src/backend/core/AbstractAspect.cpp:411
 #, kde-format
 msgid "Move"
 msgstr "Přesunout"
 
-#: src/backend/core/AbstractAspect.cpp:410
+#: src/backend/core/AbstractAspect.cpp:414
 #, kde-format
 msgid "Up"
 msgstr "Nahoru"
 
-#: src/backend/core/AbstractAspect.cpp:413
+#: src/backend/core/AbstractAspect.cpp:417
 #, kde-format
 msgid "Down"
 msgstr "Dolů"
 
-#: src/backend/core/AbstractAspect.cpp:507
+#: src/backend/core/AbstractAspect.cpp:511
 #: src/backend/core/aspectcommands.h:102
 #: src/backend/datapicker/Datapicker.cpp:217
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1955
@@ -189,63 +189,63 @@ msgstr "Dolů"
 msgid "%1: add %2"
 msgstr "%1: přidat %2"
 
-#: src/backend/core/AbstractAspect.cpp:509
-#: src/backend/core/AbstractAspect.cpp:538
+#: src/backend/core/AbstractAspect.cpp:513
+#: src/backend/core/AbstractAspect.cpp:542
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:536
+#: src/backend/core/AbstractAspect.cpp:540
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: vložit %2 před %3"
 
-#: src/backend/core/AbstractAspect.cpp:536
+#: src/backend/core/AbstractAspect.cpp:540
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:576 src/backend/core/aspectcommands.h:26
+#: src/backend/core/AbstractAspect.cpp:580 src/backend/core/aspectcommands.h:26
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: odstranit %2"
 
-#: src/backend/core/AbstractAspect.cpp:585
+#: src/backend/core/AbstractAspect.cpp:589
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: odstranit všechny potomky"
 
-#: src/backend/core/AbstractAspect.cpp:664
+#: src/backend/core/AbstractAspect.cpp:668
 #, kde-format
 msgid "%1: move up"
 msgstr "%1: posunout nahoru"
 
-#: src/backend/core/AbstractAspect.cpp:676
+#: src/backend/core/AbstractAspect.cpp:680
 #, kde-format
 msgid "%1: move down"
 msgstr "%1: posunout dolů"
 
-#: src/backend/core/AbstractAspect.cpp:783
+#: src/backend/core/AbstractAspect.cpp:787
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: Vloženo '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:785
+#: src/backend/core/AbstractAspect.cpp:789
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: duplikováno '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:786
+#: src/backend/core/AbstractAspect.cpp:790
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Kopie '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:916
+#: src/backend/core/AbstractAspect.cpp:921
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:923
+#: src/backend/core/AbstractAspect.cpp:928
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -464,13 +464,13 @@ msgstr "v%1"
 msgid "Import Data"
 msgstr "Importovat data"
 
-#: src/backend/core/AbstractPart.cpp:93 src/kdefrontend/MainWin.cpp:704
-#: src/kdefrontend/MainWin.cpp:713
+#: src/backend/core/AbstractPart.cpp:93 src/kdefrontend/MainWin.cpp:705
+#: src/kdefrontend/MainWin.cpp:714
 #, kde-format
 msgid "From File..."
 msgstr "Ze souboru..."
 
-#: src/backend/core/AbstractPart.cpp:95 src/kdefrontend/MainWin.cpp:720
+#: src/backend/core/AbstractPart.cpp:95 src/kdefrontend/MainWin.cpp:721
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Z databáze SQL..."
@@ -497,7 +497,7 @@ msgstr "Vytisknout"
 msgid "Print Preview"
 msgstr "Náhled před tiskem"
 
-#: src/backend/core/AbstractPart.cpp:113 src/kdefrontend/MainWin.cpp:787
+#: src/backend/core/AbstractPart.cpp:113 src/kdefrontend/MainWin.cpp:788
 #, kde-format
 msgid "&Close"
 msgstr "&Zavřít"
@@ -1823,7 +1823,7 @@ msgstr "Neznámý"
 #: src/backend/datasources/filters/MatioFilter.cpp:448
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:671 src/kdefrontend/MainWin.cpp:2032
+#: src/kdefrontend/MainWin.cpp:672 src/kdefrontend/MainWin.cpp:2033
 #, kde-format
 msgid "Matrix"
 msgstr "Matice"
@@ -7328,7 +7328,7 @@ msgstr "Chybová funkce"
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:486
 #: src/commonfrontend/worksheet/WorksheetView.cpp:555
-#: src/kdefrontend/MainWin.cpp:892
+#: src/kdefrontend/MainWin.cpp:893
 #, kde-format
 msgid "Add New"
 msgstr "Přidat nové"
@@ -9921,8 +9921,8 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:58
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:62
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
-#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:665
-#: src/kdefrontend/MainWin.cpp:2014 src/kdefrontend/SettingsDialog.cpp:66
+#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:666
+#: src/kdefrontend/MainWin.cpp:2015 src/kdefrontend/SettingsDialog.cpp:66
 #, kde-format
 msgid "Spreadsheet"
 msgstr "Sešit"
@@ -10094,7 +10094,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:335
-#: src/kdefrontend/MainWin.cpp:2478
+#: src/kdefrontend/MainWin.cpp:2481
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -11230,7 +11230,7 @@ msgid "Open LabPlot Project"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:379
-#: src/kdefrontend/MainWin.cpp:1495
+#: src/kdefrontend/MainWin.cpp:1496
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr ""
@@ -11242,7 +11242,7 @@ msgid "Open Origin Project"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:385
-#: src/kdefrontend/MainWin.cpp:1500
+#: src/kdefrontend/MainWin.cpp:1501
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr ""
@@ -11473,7 +11473,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2793
+#: src/kdefrontend/MainWin.cpp:2796
 #, kde-format
 msgid "Warning"
 msgstr "Varování"
@@ -12948,7 +12948,7 @@ msgid ""
 msgstr ""
 "Nelze otevřít soubor sbírek příkladů %1. Prosím zkontrolujte svoji instalaci."
 
-#: src/kdefrontend/GuiObserver.cpp:184 src/kdefrontend/MainWin.cpp:1442
+#: src/kdefrontend/GuiObserver.cpp:184 src/kdefrontend/MainWin.cpp:1443
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -13705,15 +13705,15 @@ msgid "Failed to Open"
 msgstr "Nelze otevřít"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:677
-#: src/kdefrontend/MainWin.cpp:2050 src/kdefrontend/SettingsDialog.cpp:61
+#: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:678
+#: src/kdefrontend/MainWin.cpp:2051 src/kdefrontend/SettingsDialog.cpp:61
 #, kde-format
 msgid "Worksheet"
 msgstr "Pracovní list"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:660
-#: src/kdefrontend/MainWin.cpp:2006
+#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:661
+#: src/kdefrontend/MainWin.cpp:2007
 #, kde-format
 msgid "Data Extractor"
 msgstr "Extraktor dat"
@@ -13832,47 +13832,47 @@ msgstr ""
 msgid "%1 file was not found. Please check your installation."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:637
+#: src/kdefrontend/MainWin.cpp:638
 #, kde-format
 msgid "&Open Example"
 msgstr "&Otevřít příklad"
 
-#: src/kdefrontend/MainWin.cpp:655 src/kdefrontend/MainWin.cpp:1998
+#: src/kdefrontend/MainWin.cpp:656 src/kdefrontend/MainWin.cpp:1999
 #, kde-format
 msgid "Workbook"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:657
+#: src/kdefrontend/MainWin.cpp:658
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:661
+#: src/kdefrontend/MainWin.cpp:662
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:667
+#: src/kdefrontend/MainWin.cpp:668
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:673
+#: src/kdefrontend/MainWin.cpp:674
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:679
+#: src/kdefrontend/MainWin.cpp:680
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:683 src/kdefrontend/MainWin.cpp:2058
+#: src/kdefrontend/MainWin.cpp:684 src/kdefrontend/MainWin.cpp:2059
 #, kde-format
 msgid "Note"
 msgstr "Poznámka"
 
-#: src/kdefrontend/MainWin.cpp:684
+#: src/kdefrontend/MainWin.cpp:685
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr ""
@@ -13880,350 +13880,350 @@ msgstr ""
 #. i18n("Note/Script"),this);
 #. actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
 #. connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
-#: src/kdefrontend/MainWin.cpp:692 src/kdefrontend/MainWin.cpp:1990
+#: src/kdefrontend/MainWin.cpp:693 src/kdefrontend/MainWin.cpp:1991
 #, kde-format
 msgid "Folder"
 msgstr "Složka"
 
-#: src/kdefrontend/MainWin.cpp:693
+#: src/kdefrontend/MainWin.cpp:694
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:698
+#: src/kdefrontend/MainWin.cpp:699
 #, kde-format
 msgid "Live Data Source..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:699
+#: src/kdefrontend/MainWin.cpp:700
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:706 src/kdefrontend/MainWin.cpp:715
+#: src/kdefrontend/MainWin.cpp:707 src/kdefrontend/MainWin.cpp:716
 #, kde-format
 msgid "Import data from a regular file"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:721
+#: src/kdefrontend/MainWin.cpp:722
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:725
+#: src/kdefrontend/MainWin.cpp:726
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:726
+#: src/kdefrontend/MainWin.cpp:727
 #, kde-format
 msgid "Imports data from an online dataset"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:730
+#: src/kdefrontend/MainWin.cpp:731
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Projekt LabPlot..."
 
-#: src/kdefrontend/MainWin.cpp:731
+#: src/kdefrontend/MainWin.cpp:732
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:736
+#: src/kdefrontend/MainWin.cpp:737
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:737
+#: src/kdefrontend/MainWin.cpp:738
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:742
+#: src/kdefrontend/MainWin.cpp:743
 #, kde-format
 msgid "Export..."
 msgstr "Exportovat..."
 
-#: src/kdefrontend/MainWin.cpp:743
+#: src/kdefrontend/MainWin.cpp:744
 #, kde-format
 msgid "Export selected element"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:749
+#: src/kdefrontend/MainWin.cpp:750
 #, kde-format
 msgid "Color Maps Browser"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:750
+#: src/kdefrontend/MainWin.cpp:751
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:759
+#: src/kdefrontend/MainWin.cpp:760
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Editor metadat FITS..."
 
-#: src/kdefrontend/MainWin.cpp:760
+#: src/kdefrontend/MainWin.cpp:761
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:769
+#: src/kdefrontend/MainWin.cpp:770
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Historie kroků zpět/vpřed..."
 
-#: src/kdefrontend/MainWin.cpp:789
+#: src/kdefrontend/MainWin.cpp:790
 #, kde-format
 msgid "Close the active window"
 msgstr "Zavřít aktivní okno"
 
-#: src/kdefrontend/MainWin.cpp:792
+#: src/kdefrontend/MainWin.cpp:793
 #, kde-format
 msgid "Close &All"
 msgstr "Z&avřít vše"
 
-#: src/kdefrontend/MainWin.cpp:793
+#: src/kdefrontend/MainWin.cpp:794
 #, kde-format
 msgid "Close all the windows"
 msgstr "Zavřít všechna okna"
 
-#: src/kdefrontend/MainWin.cpp:796
+#: src/kdefrontend/MainWin.cpp:797
 #, kde-format
 msgid "Ne&xt"
 msgstr "Nás&ledující"
 
-#: src/kdefrontend/MainWin.cpp:798
+#: src/kdefrontend/MainWin.cpp:799
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:801
+#: src/kdefrontend/MainWin.cpp:802
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Předchozí"
 
-#: src/kdefrontend/MainWin.cpp:803
+#: src/kdefrontend/MainWin.cpp:804
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:810
+#: src/kdefrontend/MainWin.cpp:811
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Pouze &současná složka"
 
-#: src/kdefrontend/MainWin.cpp:815
+#: src/kdefrontend/MainWin.cpp:816
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Současná složka a &podsložky"
 
-#: src/kdefrontend/MainWin.cpp:819
+#: src/kdefrontend/MainWin.cpp:820
 #, kde-format
 msgid "&All"
 msgstr "&Vše"
 
-#: src/kdefrontend/MainWin.cpp:841
+#: src/kdefrontend/MainWin.cpp:842
 #, kde-format
 msgid "Show Memory Usage"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:849
+#: src/kdefrontend/MainWin.cpp:850
 #, kde-format
 msgid "Project Explorer"
 msgstr "Prohlížeč projektu"
 
-#: src/kdefrontend/MainWin.cpp:854
+#: src/kdefrontend/MainWin.cpp:855
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Prohlížeč vlastností"
 
-#: src/kdefrontend/MainWin.cpp:917
+#: src/kdefrontend/MainWin.cpp:918
 #, kde-format
 msgid "Window Visibility"
 msgstr "Viditelnost oken"
 
-#: src/kdefrontend/MainWin.cpp:941
+#: src/kdefrontend/MainWin.cpp:942
 #, kde-format
 msgid "Color Scheme"
 msgstr "Barevné schéma"
 
-#: src/kdefrontend/MainWin.cpp:988
+#: src/kdefrontend/MainWin.cpp:989
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Nastavit CAS..."
 
-#: src/kdefrontend/MainWin.cpp:1024 src/kdefrontend/MainWin.cpp:1038
+#: src/kdefrontend/MainWin.cpp:1025 src/kdefrontend/MainWin.cpp:1039
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "Současný projekt %1 byl změněn. Chcete jej uložit?"
 
-#: src/kdefrontend/MainWin.cpp:1025 src/kdefrontend/MainWin.cpp:1039
+#: src/kdefrontend/MainWin.cpp:1026 src/kdefrontend/MainWin.cpp:1040
 #, kde-format
 msgid "Save Project"
 msgstr "Uložit projekt"
 
-#: src/kdefrontend/MainWin.cpp:1429
+#: src/kdefrontend/MainWin.cpp:1430
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Prohlížeč projektu"
 
-#: src/kdefrontend/MainWin.cpp:1486
+#: src/kdefrontend/MainWin.cpp:1487
 #, kde-format
 msgid "%1: created"
 msgstr "%1: vytvořeno"
 
-#: src/kdefrontend/MainWin.cpp:1506
+#: src/kdefrontend/MainWin.cpp:1507
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1507
+#: src/kdefrontend/MainWin.cpp:1508
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1514
+#: src/kdefrontend/MainWin.cpp:1515
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Všechny podporované soubory (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1518
+#: src/kdefrontend/MainWin.cpp:1519
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Otevřít projekt"
 
-#: src/kdefrontend/MainWin.cpp:1535
+#: src/kdefrontend/MainWin.cpp:1536
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1535
+#: src/kdefrontend/MainWin.cpp:1536
 #, kde-format
 msgid "Open Project"
 msgstr "Otevřít projekt"
 
-#: src/kdefrontend/MainWin.cpp:1548
+#: src/kdefrontend/MainWin.cpp:1549
 #, kde-format
 msgid "Loading %1..."
 msgstr "Načítám %1..."
 
-#: src/kdefrontend/MainWin.cpp:1598 src/kdefrontend/MainWin.cpp:1602
-#: src/kdefrontend/MainWin.cpp:1607 src/kdefrontend/MainWin.cpp:1612
-#: src/kdefrontend/MainWin.cpp:1616 src/kdefrontend/MainWin.cpp:1663
-#: src/kdefrontend/MainWin.cpp:1668 src/kdefrontend/MainWin.cpp:1673
-#: src/kdefrontend/MainWin.cpp:1679
+#: src/kdefrontend/MainWin.cpp:1599 src/kdefrontend/MainWin.cpp:1603
+#: src/kdefrontend/MainWin.cpp:1608 src/kdefrontend/MainWin.cpp:1613
+#: src/kdefrontend/MainWin.cpp:1617 src/kdefrontend/MainWin.cpp:1664
+#: src/kdefrontend/MainWin.cpp:1669 src/kdefrontend/MainWin.cpp:1674
+#: src/kdefrontend/MainWin.cpp:1680
 #, kde-format
 msgid "Failed to open project"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1598 src/kdefrontend/MainWin.cpp:1607
-#: src/kdefrontend/MainWin.cpp:1612 src/kdefrontend/MainWin.cpp:1663
-#: src/kdefrontend/MainWin.cpp:1668 src/kdefrontend/MainWin.cpp:1673
+#: src/kdefrontend/MainWin.cpp:1599 src/kdefrontend/MainWin.cpp:1608
+#: src/kdefrontend/MainWin.cpp:1613 src/kdefrontend/MainWin.cpp:1664
+#: src/kdefrontend/MainWin.cpp:1669 src/kdefrontend/MainWin.cpp:1674
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1602 src/kdefrontend/MainWin.cpp:1616
-#: src/kdefrontend/MainWin.cpp:1679
+#: src/kdefrontend/MainWin.cpp:1603 src/kdefrontend/MainWin.cpp:1617
+#: src/kdefrontend/MainWin.cpp:1680
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Nepodařilo se otevřít soubor '%1'."
 
-#: src/kdefrontend/MainWin.cpp:1693
+#: src/kdefrontend/MainWin.cpp:1694
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: otevřeno"
 
-#: src/kdefrontend/MainWin.cpp:1703
+#: src/kdefrontend/MainWin.cpp:1704
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1799
+#: src/kdefrontend/MainWin.cpp:1800
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Uložit projekt jako"
 
-#: src/kdefrontend/MainWin.cpp:1801
+#: src/kdefrontend/MainWin.cpp:1802
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1827
+#: src/kdefrontend/MainWin.cpp:1828
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1882
+#: src/kdefrontend/MainWin.cpp:1883
 #, kde-format
 msgid "Project saved"
 msgstr "Projekt byl uložen"
 
-#: src/kdefrontend/MainWin.cpp:1898
+#: src/kdefrontend/MainWin.cpp:1899
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1903
+#: src/kdefrontend/MainWin.cpp:1904
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1948
+#: src/kdefrontend/MainWin.cpp:1949
 #, kde-format
 msgid "Changed"
 msgstr "Změněno"
 
-#: src/kdefrontend/MainWin.cpp:1964 src/kdefrontend/MainWin.cpp:1977
+#: src/kdefrontend/MainWin.cpp:1965 src/kdefrontend/MainWin.cpp:1978
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1966 src/kdefrontend/MainWin.cpp:1979
+#: src/kdefrontend/MainWin.cpp:1967 src/kdefrontend/MainWin.cpp:1980
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 vytisknuto"
 
-#: src/kdefrontend/MainWin.cpp:2725
+#: src/kdefrontend/MainWin.cpp:2728
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
 msgstr "Soubor dat%1"
 
-#: src/kdefrontend/MainWin.cpp:2756
+#: src/kdefrontend/MainWin.cpp:2759
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2763
+#: src/kdefrontend/MainWin.cpp:2766
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2775
+#: src/kdefrontend/MainWin.cpp:2778
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2793
+#: src/kdefrontend/MainWin.cpp:2796
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2797
+#: src/kdefrontend/MainWin.cpp:2800
 #, kde-format
 msgid "Live data source%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2841
+#: src/kdefrontend/MainWin.cpp:2844
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""

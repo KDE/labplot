@@ -197,6 +197,10 @@ QString AbstractAspect::name() const {
 	return d->m_name;
 }
 
+QUuid AbstractAspect::uuid() const {
+	return d->m_uuid;
+}
+
 /*!
  * \brief AbstractAspect::setName
  * sets the name of the abstract aspect
@@ -900,6 +904,7 @@ bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
 void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QLatin1String("creation_time"), creationTime().toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QLatin1String("name"), name());
+	writer->writeAttribute(QLatin1String("uuid"), uuid().toString());
 }
 
 /**
@@ -930,6 +935,10 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 			d->m_creation_time = QDateTime::currentDateTime();
 	}
 
+	str = attribs.value(QLatin1String("uuid")).toString();
+	if (!str.isEmpty()) {
+		d->m_uuid = QUuid(str);
+	}
 	return true;
 }
 

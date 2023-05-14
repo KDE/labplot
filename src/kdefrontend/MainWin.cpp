@@ -587,7 +587,8 @@ void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
 	} else if (w == m_propertiesDock) {
 		delete m_propertiesDock;
 		m_propertiesDock = nullptr;
-	}
+	} else if (w == m_currentAspectDock)
+		m_currentAspectDock = nullptr;
 }
 
 void MainWin::dockWidgetAboutToBeRemoved(ads::CDockWidget* w) {
@@ -2187,7 +2188,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect* aspect) {
 	updateGUI();
 }
 
-void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
+void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 	Q_ASSERT(aspect);
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
@@ -2206,17 +2207,18 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 		else
 			win = part->dockWidget();
 
-		auto* dock = m_DockManager->findDockWidget(win->windowTitle());
+		auto* dock = m_DockManager->findDockWidget(win->objectName());
 		if (m_DockManager && dock == nullptr) {
 			// Add new dock if not found
-			if (true /*m_DockManager->dockWidgetsMap().count() == 2*/) {
+			if (m_DockManager->dockWidgetsMap().count() == 2 || !m_currentAspectDock) {
 				// If only project explorer and properties dock exist place it right to the project explorer
 				m_DockManager->addDockWidget(ads::RightDockWidgetArea,
 											 win,
 											 m_projectExplorerDock->dockAreaWidget()); // Right of the project explorer by default
-			} /* else {
-				 m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win, m_DockManager->focusedDockWidget()->dockAreaWidget());
-			 }*/
+			} else {
+				// Add dock on top of the current aspect, so it is directly visible
+				m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win, m_currentAspectDock->dockAreaWidget());
+			}
 			win->show();
 
 			// Qt provides its own "system menu" for every sub-window. The shortcut for the close-action
@@ -2227,6 +2229,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 		} else if (m_DockManager)
 			dock->toggleView(true);
 
+		m_currentAspectDock = win;
 		if (m_DockManager)
 			m_DockManager->setDockWidgetFocused(win);
 	} else {

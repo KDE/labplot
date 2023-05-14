@@ -102,6 +102,7 @@ private:
 	ads::CDockWidget* m_projectExplorerDock{nullptr};
 	ads::CDockWidget* m_propertiesDock{nullptr};
 	AbstractAspect* m_currentAspect{nullptr};
+	ads::CDockWidget* m_currentAspectDock{nullptr};
 	Folder* m_currentFolder{nullptr};
 	QString m_undoViewEmptyLabel;
 	bool m_suppressCurrentSubWindowChangedEvent{false};
@@ -194,7 +195,7 @@ private:
 	void initActions();
 	void initMenus();
 	bool warnModified();
-	void activateSubWindowForAspect(const AbstractAspect*) const;
+	void activateSubWindowForAspect(const AbstractAspect*);
 	bool save(const QString&);
 	// 	void toggleShowWidget(QWidget* widget, bool showToRight);
 	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);

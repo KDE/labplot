@@ -16,6 +16,7 @@
 
 #include <QCloseEvent>
 #include <QIcon>
+#include <QUuid>
 
 /*!
  * \class PartMdiView
@@ -36,6 +37,9 @@ ContentDockWidget::ContentDockWidget(AbstractPart* part)
 
 	// resize the MDI sub window to fit the content of the view
 	resize(m_part->view()->size());
+	// Must be unique and must not be changed after the dock was added to the dockmanager, because
+	// the objectname is used in the content manager map
+	setObjectName(m_part->uuid().toString());
 
 	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &ContentDockWidget::handleAspectDescriptionChanged);
 	connect(m_part, &AbstractPart::aspectAboutToBeRemoved, this, &ContentDockWidget::handleAspectAboutToBeRemoved);
