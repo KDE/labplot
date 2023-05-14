@@ -10,9 +10,9 @@
 #ifndef SEARCHREPLACEWIDGET_H
 #define SEARCHREPLACEWIDGET_H
 
+#include "backend/core/AbstractColumn.h"
 #include "ui_searchreplacewidget.h"
 #include "ui_searchwidget.h"
-#include "backend/core/AbstractColumn.h"
 #include <QWidget>
 
 class Column;

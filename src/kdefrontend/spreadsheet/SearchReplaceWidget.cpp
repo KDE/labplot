@@ -370,10 +370,10 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.tbSelectionOnly->setChecked(conf.readEntry("SelectionOnly", false));
 	uiSearchReplace.cbOperator->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Operator", 0)));
 	uiSearchReplace.cbOperatorText->setCurrentIndex(uiSearchReplace.cbOperatorText->findData(conf.readEntry("OperatorText", 0)));
-/*
-	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(conf.readEntry("Value1DateTime", now));
-	uiSearchReplace.dteValue2->setMSecsSinceEpochUTC(conf.readEntry("Value2DateTime", now));*/
+	/*
+		qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
+		uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(conf.readEntry("Value1DateTime", now));
+		uiSearchReplace.dteValue2->setMSecsSinceEpochUTC(conf.readEntry("Value2DateTime", now));*/
 	uiSearchReplace.cbOperatorDateTime->setCurrentIndex(uiSearchReplace.cbOperatorDateTime->findData(conf.readEntry("OperatorDateTime", 0)));
 
 	dataTypeChanged(uiSearchReplace.cbDataType->currentIndex());
@@ -474,13 +474,15 @@ void SearchReplaceWidget::dataTypeChanged(int index) {
 		uiSearchReplace.frameDateTime->hide();
 		uiSearchReplace.tbMatchCase->show();
 		break;
-	} case DataType::Numeric: {
+	}
+	case DataType::Numeric: {
 		uiSearchReplace.frameNumeric->show();
 		uiSearchReplace.frameText->hide();
 		uiSearchReplace.frameDateTime->hide();
 		uiSearchReplace.tbMatchCase->hide();
 		break;
-	} case DataType::DateTime: {
+	}
+	case DataType::DateTime: {
 		uiSearchReplace.frameNumeric->hide();
 		uiSearchReplace.frameText->hide();
 		uiSearchReplace.frameDateTime->show();
@@ -534,16 +536,18 @@ void SearchReplaceWidget::switchFindReplace() {
 		uiSearchReplace.cbOperatorDateTime->setMinimumWidth(uiSearchReplace.cbOperator->width());
 
 		if (m_searchWidget) {
-			//switching from simple to advanced search, show the current search pattern
+			// switching from simple to advanced search, show the current search pattern
 			const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
 			switch (type) {
 			case DataType::Text: {
 				uiSearchReplace.cbValueText->setCurrentText(uiSearch.cbFind->currentText());
 				break;
-			} case DataType::Numeric: {
+			}
+			case DataType::Numeric: {
 				uiSearchReplace.cbValue1->setCurrentText(uiSearch.cbFind->currentText());
 				break;
-			} case DataType::DateTime: {
+			}
+			case DataType::DateTime: {
 				// uiSearchReplace.dteValue1->setCurrentText(uiSearch.cbFind->currentText());
 				break;
 			}
@@ -558,16 +562,18 @@ void SearchReplaceWidget::switchFindReplace() {
 		m_searchWidget->show();
 
 		if (m_searchReplaceWidget) {
-			//switching from advanced to simple search, show the current search pattern
+			// switching from advanced to simple search, show the current search pattern
 			const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
 			switch (type) {
 			case DataType::Text: {
 				uiSearch.cbFind->setCurrentText(uiSearchReplace.cbValueText->currentText());
 				break;
-			} case DataType::Numeric: {
+			}
+			case DataType::Numeric: {
 				uiSearch.cbFind->setCurrentText(uiSearchReplace.cbValue1->currentText());
 				break;
-			} case DataType::DateTime: {
+			}
+			case DataType::DateTime: {
 				uiSearch.cbFind->setCurrentText(uiSearchReplace.dteValue1->text());
 				break;
 			}
@@ -601,8 +607,22 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
-	if (proceed)
-		++curRow;
+	if (proceed) {
+		if (curRow < rowCount - 1)
+			++curRow; // not the last row yet, navigate to the next row
+		else {
+			// last row
+			if (curCol < colCount - 1) {
+				// not the last column yet, navigate to the first row in the next column
+				++curCol;
+				curRow = 0;
+			} else {
+				// last row in the last column, cannot navigate any further
+				GuiTools::highlight(uiSearch.cbFind->lineEdit(), !m_patternFound);
+				return false;
+			}
+		}
+	}
 
 	// all settings are determined -> search the next cell matching the specified pattern(s)
 	const auto& columns = m_spreadsheet->children<Column>();
@@ -658,8 +678,22 @@ bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
-	if (proceed)
-		--curRow;
+	if (proceed) {
+		if (curRow > 0)
+			--curRow; // not the first row yet, navigate to the previous cell
+		else {
+			// first row
+			if (curCol > 0) {
+				// not the first column yet, navigate to the last row in the previous column
+				--curCol;
+				curRow = rowCount - 1;
+			} else {
+				// first row in the first column, cannot navigate any further
+				GuiTools::highlight(uiSearch.cbFind->lineEdit(), !m_patternFound);
+				return false;
+			}
+		}
+	}
 
 	// all settings are determined -> search the next cell matching the specified pattern(s)
 	const auto& columns = m_spreadsheet->children<Column>();
@@ -733,11 +767,39 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
-	if (columnMajor && proceed)
-		++curRow;
+	if (columnMajor && proceed) {
+		if (curRow < rowCount - 1)
+			++curRow; // not the last row yet, navigate to the next row
+		else {
+			// last row
+			if (curCol < colCount - 1) {
+				// not the last column yet, navigate to the first row in the next column
+				++curCol;
+				curRow = 0;
+			} else {
+				// last row in the last column, cannot navigate any further
+				highlight(type, !m_patternFound);
+				return false;
+			}
+		}
+	}
 
-	if (!columnMajor && proceed)
-		++curCol;
+	if (!columnMajor && proceed) {
+		if (curCol < colCount - 1)
+			++curCol; // not the last column yet, navigate to the next column
+		else {
+			// last column
+			if (curRow < rowCount - 1) {
+				// not the last row yet, navigate to the next row in the first column
+				++curRow;
+				curCol = 0;
+			} else {
+				// last row in the last column, cannot navigate any further
+				highlight(type, !m_patternFound);
+				return false;
+			}
+		}
+	}
 
 	// all settings are determined -> search the next cell matching the specified pattern(s)
 	const auto& columns = m_spreadsheet->children<Column>();
@@ -840,11 +902,39 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
-	if (columnMajor && proceed)
-		--curRow;
+	if (columnMajor && proceed) {
+		if (curRow > 0)
+			--curRow; // not the first row yet, navigate to the previous cell
+		else {
+			// first row
+			if (curCol > 0) {
+				// not the first column yet, navigate to the last row in the previous column
+				--curCol;
+				curRow = rowCount - 1;
+			} else {
+				// first row in the first column, cannot navigate any further
+				highlight(type, !m_patternFound);
+				return false;
+			}
+		}
+	}
 
-	if (!columnMajor && proceed)
-		--curCol;
+	if (!columnMajor && proceed) {
+		if (curCol > 0)
+			--curCol; // not the first column yet, navigate to the previous column
+		else {
+			// first column
+			if (curRow > 0) {
+				// not the first row yet, navigate to the previous row in the last column
+				--curRow;
+				curCol = colCount - 1;
+			} else {
+				// first row in the first column, cannot navigate any further
+				highlight(type, !m_patternFound);
+				return false;
+			}
+		}
+	}
 
 	// all settings are determined -> search the next cell matching the specified pattern(s)
 	const auto& columns = m_spreadsheet->children<Column>();
@@ -1111,7 +1201,6 @@ void SearchReplaceWidget::highlight(DataType type, bool invalid) const {
 		GuiTools::highlight(uiSearchReplace.dteValue2, invalid);
 		break;
 	}
-
 }
 
 // **********************************************************
