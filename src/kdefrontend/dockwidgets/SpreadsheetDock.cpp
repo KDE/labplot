@@ -96,7 +96,7 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
 
-	const auto topLevelClasses = {AspectType::Spreadsheet};
+	const QList<AspectType> topLevelClasses = {AspectType::Spreadsheet};
 // needed for buggy compiler
 #if __cplusplus < 201103L
 	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
