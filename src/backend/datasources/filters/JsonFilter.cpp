@@ -224,9 +224,9 @@ QString JsonFilter::fileInfoString(const QString& fileName) {
 	return info;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner)
 	: q(owner) {
 }
@@ -332,7 +332,7 @@ int JsonFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 }
 
 void JsonFilterPrivate::setEmptyValue(int column, int row) {
-	switch (columnModes[column]) {
+	switch (columnModes.at(column)) {
 	case AbstractColumn::ColumnMode::Double:
 		static_cast<QVector<double>*>(m_dataContainer[column])->operator[](row) = nanValue;
 		break;
@@ -356,7 +356,7 @@ void JsonFilterPrivate::setEmptyValue(int column, int row) {
 
 void JsonFilterPrivate::setValueFromString(int column, int row, const QString& valueString) {
 	QLocale locale(numberFormat);
-	switch (columnModes[column]) {
+	switch (columnModes.at(column)) {
 	case AbstractColumn::ColumnMode::Double: {
 		bool isNumber;
 		const double value = locale.toDouble(valueString, &isNumber);
@@ -741,9 +741,9 @@ void JsonFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /
 	// TODO: saving data to json file not supported yet
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
 Saves as XML.
 */

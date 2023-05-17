@@ -16,12 +16,12 @@
 class Transform {
 public:
 	Transform() = default;
-	QVector3D mapSceneToLogical(QPointF, const DatapickerImage::ReferencePoints&);
-	QVector3D mapSceneLengthToLogical(QPointF, const DatapickerImage::ReferencePoints&);
+	Vector3D mapSceneToLogical(QPointF, const DatapickerImage::ReferencePoints&);
+	Vector3D mapSceneLengthToLogical(QPointF, const DatapickerImage::ReferencePoints&);
 
 private:
 	bool mapTypeToCartesian(const DatapickerImage::ReferencePoints&);
-	QVector3D mapCartesianToType(QPointF, const DatapickerImage::ReferencePoints&) const;
+	Vector3D mapCartesianToType(QPointF, const DatapickerImage::ReferencePoints&) const;
 
 	// logical coordinates
 	double x[4]{0};

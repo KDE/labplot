@@ -24,7 +24,7 @@
 		(2D-curves defined by an smooth) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -87,8 +87,8 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYSmoothCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYSmoothCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYSmoothCurveDock::xRangeMaxChanged);
-	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYSmoothCurveDock::xRangeMinDateTimeChanged);
-	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYSmoothCurveDock::xRangeMaxDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYSmoothCurveDock::xRangeMinDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYSmoothCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::typeChanged);
 	// TODO: line edits?
 	connect(uiGeneralTab.sbPoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYSmoothCurveDock::pointsChanged);
@@ -109,7 +109,7 @@ void XYSmoothCurveDock::setupGeneral() {
 void XYSmoothCurveDock::initGeneralTab() {
 	DEBUG(Q_FUNC_INFO);
 
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -145,8 +145,8 @@ void XYSmoothCurveDock::initGeneralTab() {
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_smoothData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_smoothData.xRange.last()));
 	} else {
-		uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.first()));
-		uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.last()));
+		uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(m_smoothData.xRange.first());
+		uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(m_smoothData.xRange.last());
 	}
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
@@ -193,38 +193,10 @@ void XYSmoothCurveDock::initGeneralTab() {
 }
 
 void XYSmoothCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Datapicker,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYCurve,
-						   AspectType::XYAnalysisCurve};
-	cbDataSourceCurve->setTopLevelClasses(list);
+	auto list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYFitCurve);
 
-	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
-		hiddenAspects << curve;
-	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
-
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve,
-			AspectType::CantorWorksheet};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-
-	cbDataSourceCurve->setModel(m_aspectTreeModel);
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-
-	XYCurveDock::setModel();
+	XYAnalysisCurveDock::setModel(list);
 }
 
 /*!
@@ -385,8 +357,8 @@ void XYSmoothCurveDock::autoRangeChanged() {
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
-				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
-				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
+				uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(xDataColumn->minimum());
+				uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(xDataColumn->maximum());
 			}
 		}
 	}
@@ -400,17 +372,17 @@ void XYSmoothCurveDock::xRangeMaxChanged() {
 	SET_DOUBLE_FROM_LE_REC(m_smoothData.xRange.last(), uiGeneralTab.leMax);
 }
 
-void XYSmoothCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
+void XYSmoothCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	m_smoothData.xRange.first() = dateTime.toMSecsSinceEpoch();
+	m_smoothData.xRange.first() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYSmoothCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
+void XYSmoothCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	m_smoothData.xRange.last() = dateTime.toMSecsSinceEpoch();
+	m_smoothData.xRange.last() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

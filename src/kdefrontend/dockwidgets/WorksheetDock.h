@@ -30,6 +30,12 @@ public:
 	void updateLocale() override;
 	void updateUnits() override;
 
+	enum class SizeType {
+		ViewSize = 0,
+		StandardPage,
+		Custom,
+	};
+
 private:
 	Ui::WorksheetDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};

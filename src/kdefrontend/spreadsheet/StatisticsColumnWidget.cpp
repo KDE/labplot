@@ -53,7 +53,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	layout->addWidget(m_tabWidget);
 	setLayout(layout);
 
-	const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
+	const QString htmlColor = DARKMODE ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
 	// clang-format off
 	if (column->isNumeric()) {
 		m_htmlOverview = QStringLiteral("<table border=0 width=100%><tr><td colspan=2 align=center bgcolor=") + htmlColor
@@ -103,9 +103,17 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	// clang-format on
 
 	// create tab widgets for every column and show the initial text with the placeholders
+	auto* vBoxLayout = new QVBoxLayout(&m_overviewWidget);
+	vBoxLayout->setSpacing(0);
+	m_overviewWidget.setLayout(vBoxLayout);
+	m_overviewPlotWidget.setMaximumHeight(150);
+	vBoxLayout->addWidget(&m_overviewPlotWidget);
+
 	m_teOverview = new QTextEdit(this);
 	m_teOverview->setReadOnly(true);
-	m_tabWidget->addTab(m_teOverview, i18n("Overview"));
+	vBoxLayout->addWidget(m_teOverview);
+
+	m_tabWidget->addTab(&m_overviewWidget, i18n("Overview"));
 
 	if (column->isNumeric()) {
 		m_teOverview->setHtml(m_htmlOverview
@@ -208,7 +216,7 @@ void StatisticsColumnWidget::showOverview() {
 	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::Text) {
 		// add the frequencies table
 		const auto& frequencies = m_column->frequencies();
-		const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QStringLiteral("#5f5f5f") : QStringLiteral("#D1D1D1");
+		const QString htmlColor = DARKMODE ? QStringLiteral("#5f5f5f") : QStringLiteral("#D1D1D1");
 		m_htmlOverview += QStringLiteral("<br><table border=0 width=100%>") + QStringLiteral("<tr>") + QStringLiteral("<td colspan=3 align=center bgcolor=")
 			+ htmlColor + QStringLiteral("><b><big>") + i18n("Frequency Table") + QStringLiteral("</big><b></td>") + QStringLiteral("</tr>")
 			+ QStringLiteral("<tr>") + QStringLiteral("<td width=60%></td>") + QStringLiteral("<td>") + i18n("Frequency") + QStringLiteral("</td>")
@@ -233,7 +241,70 @@ void StatisticsColumnWidget::showOverview() {
 												 QDateTime::fromMSecsSinceEpoch(statistics.maximum, Qt::UTC).toString(filter->format())));
 	}
 
+	showOverviewPlot();
 	m_overviewInitialized = true;
+}
+
+void StatisticsColumnWidget::showOverviewPlot() {
+	if (!m_column->isNumeric())
+		return;
+
+	// add plot
+	auto* plot = addPlot(&m_overviewPlotWidget);
+	plot->setSymmetricPadding(false);
+	const double padding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+	plot->setHorizontalPadding(2 * padding);
+	plot->setRightPadding(2 * padding);
+	plot->setVerticalPadding(padding);
+	plot->setBottomPadding(padding);
+	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
+
+	// set the axes labels
+	auto axes = plot->children<Axis>();
+	for (auto* axis : qAsConst(axes)) {
+		axis->setSuppressRetransform(true);
+		if (axis->orientation() == Axis::Orientation::Vertical)
+			axis->title()->setText(QString());
+		else {
+			// TODO: set the font and the offset smaller and show the "Index" title after this
+			// axis->title()->setText(i18n("Index"));
+			axis->title()->setText(QString());
+		}
+
+		auto font = axis->labelsFont();
+		font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+		axis->setLabelsFont(font);
+		axis->setLabelsOffset(2);
+		axis->setMajorTicksDirection(Axis::ticksIn);
+		axis->majorGridLine()->setStyle(Qt::NoPen);
+		axis->setMinorTicksDirection(Axis::noTicks);
+		axis->setArrowType(Axis::ArrowType::NoArrow);
+		axis->setSuppressRetransform(false);
+	}
+
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+
+	// x
+	auto* xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
+	int rows = m_column->rowCount();
+	QVector<int> xData;
+	xData.resize(rows);
+	for (int i = 0; i < rows; ++i)
+		xData[i] = i;
+	xColumn->setIntegers(xData);
+
+	// add curve
+	auto* curve = new XYCurve(QString());
+	curve->setSuppressRetransform(false);
+	plot->addChild(curve);
+	curve->line()->setStyle(Qt::SolidLine);
+	curve->symbol()->setStyle(Symbol::Style::NoSymbols);
+	curve->background()->setPosition(Background::Position::No);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(m_column);
+
+	curve->setSuppressRetransform(false);
+	plot->retransform();
 }
 
 void StatisticsColumnWidget::showHistogram() {
@@ -264,7 +335,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	// add plot
 	auto* plot = addPlot(&m_kdePlotWidget);
 
-	// set the axes lables
+	// set the axes labels
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal)
@@ -305,10 +376,10 @@ void StatisticsColumnWidget::showKDEPlot() {
 	}
 
 	auto* xColumn = new Column(QStringLiteral("x"));
-	xColumn->replaceValues(0, xData);
+	xColumn->setValues(xData);
 
 	auto* yColumn = new Column(QStringLiteral("y"));
-	yColumn->replaceValues(0, yData);
+	yColumn->setValues(yData);
 
 	// add KDE curve
 	auto* curve = new XYCurve(QString());
@@ -355,7 +426,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	for (int i = 1; i < 100; ++i)
 		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, double(i) / 100.);
 
-	yColumn->replaceValues(0, yData);
+	yColumn->setValues(yData);
 
 	// calculate x-values - the percentiles for the standard normal distribution
 	Column* xColumn = new Column(QStringLiteral("x"));
@@ -364,7 +435,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	for (int i = 1; i < 100; ++i)
 		xData << gsl_cdf_gaussian_Pinv(double(i) / 100., 1.0);
 
-	xColumn->replaceValues(0, xData);
+	xColumn->setValues(xData);
 
 	// add curve with the quantiles
 	auto* curve = new XYCurve(QString());
@@ -501,6 +572,8 @@ void StatisticsColumnWidget::showBarPlot() {
 			axis->majorGridLine()->setStyle(Qt::NoPen);
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 			axis->setMajorTickStartOffset(0.5);
+			axis->setMajorTicksType(Axis::TicksType::Spacing);
+			axis->setMajorTicksSpacing(1.);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
 			axis->setLabelsTextColumn(labelsColumn);
 		} else {
@@ -526,8 +599,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	// add second range for the cumulative percentage of the total number of occurences
 	plot->addYRange(Range<double>(0, 100)); // add second y range
 	plot->addCoordinateSystem(); // add cs for second y range
-	auto* cs = plot->coordinateSystem(plot->coordinateSystemCount() - 1); // get new cs
-	cs->setIndex(Dimension::Y, 1); // specify new y range
+	plot->setCoordinateSystemRangeIndex(plot->coordinateSystemCount() - 1, Dimension::Y, 1); // specify new y range for new cs
 	plot->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
 
 	// add second y-axis
@@ -593,14 +665,15 @@ void StatisticsColumnWidget::showParetoPlot() {
 	row = 0;
 	for (auto value : data) {
 		sum += value;
-		yData[row] = (double)sum / totalSumOfFrequencies * 100;
+		if (totalSumOfFrequencies != 0)
+			yData[row] = (double)sum / totalSumOfFrequencies * 100;
 		++row;
 	}
 
 	dataColumn->replaceInteger(0, data);
 	labelsColumn->replaceTexts(0, labels);
-	xColumn->replaceValues(0, xData);
-	yColumn->replaceValues(0, yData);
+	xColumn->setValues(xData);
+	yColumn->setValues(yData);
 
 	QVector<const AbstractColumn*> columns;
 	columns << dataColumn;
@@ -634,6 +707,8 @@ void StatisticsColumnWidget::showParetoPlot() {
 			axis->majorGridLine()->setStyle(Qt::NoPen);
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 			axis->setMajorTickStartOffset(0.5);
+			axis->setMajorTicksType(Axis::TicksType::Spacing);
+			axis->setMajorTicksSpacing(1.);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
 			axis->setLabelsTextColumn(labelsColumn);
 		} else {

@@ -71,8 +71,6 @@ private:
 	DateTimeSpinBox* dtsbMajorTicksIncrement{nullptr};
 	DateTimeSpinBox* dtsbMinorTicksIncrement{nullptr};
 
-	QVector<QMetaObject::Connection> m_connections;
-
 	friend class AxisTest;
 
 private Q_SLOTS:
@@ -90,8 +88,8 @@ private Q_SLOTS:
 	void rangeTypeChanged(int);
 	void startChanged(double);
 	void endChanged(double);
-	void startDateTimeChanged(const QDateTime&);
-	void endDateTimeChanged(const QDateTime&);
+	void startDateTimeChanged(qint64);
+	void endDateTimeChanged(qint64);
 	void zeroOffsetChanged(double);
 	void scalingFactorChanged(double);
 	void showScaleOffsetChanged(bool);
@@ -220,6 +218,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void info(const QString&);
+
+	friend class AxisTest;
 };
 
 #endif

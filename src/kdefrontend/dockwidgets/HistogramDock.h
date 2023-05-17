@@ -74,8 +74,8 @@ private Q_SLOTS:
 	void autoBinRangesChanged(bool);
 	void binRangesMinChanged(const QString&);
 	void binRangesMaxChanged(const QString&);
-	void binRangesMinDateTimeChanged(const QDateTime&);
-	void binRangesMaxDateTimeChanged(const QDateTime&);
+	void binRangesMinDateTimeChanged(qint64);
+	void binRangesMaxDateTimeChanged(qint64);
 
 	//"Error bars"-Tab
 	void errorTypeChanged(int);

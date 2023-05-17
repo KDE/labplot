@@ -77,6 +77,28 @@ void DatapickerCurve::init() {
 		d->retransform();
 	});
 	d->symbol->init(group);
+
+	connect(this, &AbstractAspect::aspectAdded, this, &DatapickerCurve::childAdded);
+	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, &DatapickerCurve::childRemoved);
+}
+
+void DatapickerCurve::childAdded(const AbstractAspect* child) {
+	if (m_supressResizeDatasheet)
+		return;
+	const auto* p = dynamic_cast<const DatapickerPoint*>(child);
+	if (!p)
+		return;
+	m_datasheet->setRowCount(m_datasheet->rowCount() + 1);
+}
+
+void DatapickerCurve::childRemoved(const AbstractAspect* child) {
+	Q_UNUSED(child);
+	const auto* point = dynamic_cast<const DatapickerPoint*>(child);
+	if (!point)
+		return;
+
+	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
+	m_datasheet->removeRows(row, 1);
 }
 
 /*!
@@ -96,9 +118,9 @@ Column* DatapickerCurve::appendColumn(const QString& name) {
 	return col;
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 Symbol* DatapickerCurve::symbol() const {
 	Q_D(const DatapickerCurve);
 	return d->symbol;
@@ -145,14 +167,15 @@ QString& DatapickerCurve::minusDeltaYColumnPath() const {
 	return d_ptr->minusDeltaYColumnPath;
 }
 
-//##############################################################################
-//#########################  setter methods  ###################################
-//##############################################################################
+// ##############################################################################
+// #########################  setter methods  ###################################
+// ##############################################################################
 void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	Q_D(DatapickerCurve);
 
 	m_datasheet = new Spreadsheet(i18n("Data"));
 	m_datasheet->setFixed(true);
+	m_datasheet->setRowCount(0);
 	addChild(m_datasheet);
 
 	QString xLabel;
@@ -369,9 +392,20 @@ void DatapickerCurve::setSelectedInView(bool b) {
 		Q_EMIT childAspectDeselectedInView(this);
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
+void DatapickerCurve::suppressUpdatePoint(bool suppress) {
+	m_supressResizeDatasheet = suppress;
+
+	if (!suppress) {
+		// update points
+		auto points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+		m_datasheet->setRowCount(points.count());
+		updatePoints();
+	}
+}
+
 void DatapickerCurve::updatePoints() {
 	for (auto* point : children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 		updatePoint(point);
@@ -386,6 +420,9 @@ void DatapickerCurve::updatePoints() {
 void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 	Q_D(DatapickerCurve);
 
+	if (m_supressResizeDatasheet)
+		return;
+
 	// TODO: this check shouldn't be required.
 	// redesign the retransform()-call in load() to avoid it.
 	if (!parentAspect())
@@ -394,14 +431,20 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 	auto* datapicker = static_cast<Datapicker*>(parentAspect());
 	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
 
-	// resize the spreadsheet if needed (row starts with 0, add 1 when comparing with rowCount())
-	if (m_datasheet->rowCount() < row + 1)
-		m_datasheet->setRowCount(row + 1);
+	const auto xDateTime = datapicker->xDateTime();
+	if ((m_datetime && !xDateTime) || (!m_datetime && xDateTime))
+		updateColumns(xDateTime);
 
-	QVector3D data = datapicker->mapSceneToLogical(point->position());
+	Vector3D data = datapicker->mapSceneToLogical(point->position());
 
-	if (d->posXColumn)
-		d->posXColumn->setValueAt(row, data.x());
+	if (d->posXColumn) {
+		if (xDateTime) {
+			auto dt = QDateTime::fromMSecsSinceEpoch(data.x());
+			dt.setTimeSpec(Qt::TimeSpec::UTC);
+			d->posXColumn->setDateTimeAt(row, dt);
+		} else
+			d->posXColumn->setValueAt(row, data.x());
+	}
 
 	if (d->posYColumn)
 		d->posYColumn->setValueAt(row, data.y());
@@ -430,9 +473,18 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 	}
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+void DatapickerCurve::updateColumns(bool datetime) {
+	m_datetime = datetime;
+	Q_D(DatapickerCurve);
+	if (datetime)
+		d->posXColumn->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	else
+		d->posXColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+}
+
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 DatapickerCurvePrivate::DatapickerCurvePrivate(DatapickerCurve* curve)
 	: q(curve) {
 }
@@ -449,9 +501,9 @@ void DatapickerCurvePrivate::retransform() {
 		point->retransform();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const DatapickerCurve);

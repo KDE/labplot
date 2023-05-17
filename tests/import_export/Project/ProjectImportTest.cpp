@@ -24,17 +24,17 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-//##############################################################################
-//#####################  import of LabPlot projects ############################
-//##############################################################################
+// ##############################################################################
+// #####################  import of LabPlot projects ############################
+// ##############################################################################
 
 // TODO
 
 #ifdef HAVE_LIBORIGIN
-//##############################################################################
-//######################  import of Origin projects ############################
-//##############################################################################
-// project tree of the file "origin8_test_tree_import.opj"
+// ##############################################################################
+// ######################  import of Origin projects ############################
+// ##############################################################################
+//  project tree of the file "origin8_test_tree_import.opj"
 /*
 test_tree_import\
 					\Book3
@@ -448,8 +448,8 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QVERIFY(curve != nullptr);
 	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
 
-	CHECK_RANGE(plot, curve, Dimension::X, 0, 9);
-	CHECK_RANGE(plot, curve, Dimension::Y, 0, 9);
+	CHECK_RANGE(plot, curve, Dimension::X, 0., 9.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 9.);
 
 	QCOMPARE(curve->xColumnPath(), QLatin1String("2folder-with-graphs/Folder1/Book1/A"));
 	QCOMPARE(curve->yColumnPath(), QLatin1String("2folder-with-graphs/Folder1/Book1/B"));
@@ -617,8 +617,8 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QVERIFY(curve != nullptr);
 	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
 
-	CHECK_RANGE(plot, curve, Dimension::X, 0, 9);
-	CHECK_RANGE(plot, curve, Dimension::Y, 0, 9);
+	CHECK_RANGE(plot, curve, Dimension::X, 0., 9.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 9.);
 
 	QCOMPARE(curve->xColumnPath(), QLatin1String("2graphs/Book1/A"));
 	QCOMPARE(curve->yColumnPath(), QLatin1String("2graphs/Book1/B"));

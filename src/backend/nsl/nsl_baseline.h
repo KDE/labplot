@@ -29,7 +29,8 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, size_t n);
 
 /* ALS algorithm, see https://irfpy.irf.se/projects/ica/_modules/irfpy/ica/baseline.html */
 /*  baseline correction by asymmetrically reweighted penalized least square (arPLS) */
-int nsl_baseline_remove_arpls(double* data, size_t n, double p, double lambda, int niter);
+/*  returns reached tolerance */
+double nsl_baseline_remove_arpls(double* data, size_t n, double p, double lambda, int niter);
 /* TODO: ALS - asymmetric least square, airPLS - adaptive iteratively reweighted Penalized Least Squares */
 
 #endif

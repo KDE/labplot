@@ -35,7 +35,6 @@ private:
 	void retranslateUi();
 
 private Q_SLOTS:
-	void interfaceChanged(int);
 	void autoSaveChanged(bool);
 	void changed();
 

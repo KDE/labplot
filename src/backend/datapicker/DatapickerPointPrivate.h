@@ -10,6 +10,8 @@
 #ifndef DATAPICKERPOINTPRIVATE_H
 #define DATAPICKERPOINTPRIVATE_H
 
+#include "backend/worksheet/Worksheet.h"
+
 #include <QBrush>
 #include <QGraphicsItem>
 #include <QPen>
@@ -30,15 +32,15 @@ public:
 	bool m_printing{false};
 	bool isReferencePoint{false};
 
-	qreal rotationAngle;
+	qreal rotationAngle{0.0};
 	QPointF position;
 	QRectF boundingRectangle;
 	QRectF transformedBoundingRectangle;
-	Symbol::Style pointStyle;
+	Symbol::Style pointStyle{Symbol::Style::NoSymbols};
 	QBrush brush;
 	QPen pen;
-	qreal opacity;
-	qreal size;
+	qreal opacity{1.0};
+	qreal size{1.0};
 	QPainterPath itemShape;
 
 	QPointF plusDeltaXPos;
@@ -47,7 +49,7 @@ public:
 	QPointF minusDeltaYPos;
 	QBrush errorBarBrush;
 	QPen errorBarPen;
-	qreal errorBarSize;
+	qreal errorBarSize{Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point)};
 
 	// reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
@@ -62,6 +64,8 @@ private:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) override;
+
+	friend class DatapickerTest;
 };
 
 #endif

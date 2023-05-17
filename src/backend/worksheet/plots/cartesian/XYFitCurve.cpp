@@ -875,9 +875,9 @@ QIcon XYFitCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 const AbstractColumn* XYFitCurve::residualsColumn() const {
 	Q_D(const XYFitCurve);
 	return d->residualsColumn;
@@ -907,9 +907,9 @@ const XYFitCurve::FitResult& XYFitCurve::fitResult() const {
 	return d->fitResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetDataSourceHistogram, const Histogram*, dataSourceHistogram, retransform)
 void XYFitCurve::setDataSourceHistogram(const Histogram* histogram) {
 	Q_D(XYFitCurve);
@@ -960,9 +960,9 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 	exec(new XYFitCurveSetFitDataCmd(d, fitData, ki18n("%1: set fit options and perform the fit")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -1904,7 +1904,7 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 	const bool update = evaluate(); // calculate the fit function (vectors)
 
 	// ML uses dataSourceHistogram->bins() as x for residuals
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram && fitData.algorithm == nsl_fit_algorithm_ml)
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram && dataSourceHistogram && fitData.algorithm == nsl_fit_algorithm_ml)
 		tmpXDataColumn = dataSourceHistogram->bins();
 
 	if (fitData.autoRange || fitData.algorithm == nsl_fit_algorithm_ml) { // evaluate residuals
@@ -2662,9 +2662,9 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s, double chi) 
 	fitResult.solverOutput += state;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFitCurve);

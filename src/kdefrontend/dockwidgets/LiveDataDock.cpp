@@ -361,7 +361,7 @@ void LiveDataDock::updateNow() {
 
 void LiveDataDock::nameChanged(const QString& name) {
 	if (m_liveDataSource) {
-		if (!m_liveDataSource->setName(name, false)) {
+		if (!m_liveDataSource->setName(name, AbstractAspect::NameHandling::UniqueRequired)) {
 			SET_WARNING_STYLE(m_leName)
 			ui.leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 			return;
@@ -369,7 +369,7 @@ void LiveDataDock::nameChanged(const QString& name) {
 	}
 #ifdef HAVE_MQTT
 	else if (m_mqttClient) {
-		if (!m_mqttClient->setName(name, false)) {
+		if (!m_mqttClient->setName(name, AbstractAspect::NameHandling::UniqueRequired)) {
 			SET_WARNING_STYLE(m_leName)
 			ui.leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 			return;

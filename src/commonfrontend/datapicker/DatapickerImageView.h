@@ -47,6 +47,7 @@ private:
 
 	// events
 	void contextMenuEvent(QContextMenuEvent*) override;
+	void keyPressEvent(QKeyEvent* event) override;
 	void wheelEvent(QWheelEvent*) override;
 	void mousePressEvent(QMouseEvent*) override;
 	void mouseReleaseEvent(QMouseEvent*) override;
@@ -126,6 +127,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void statusInfo(const QString&);
+
+	friend class DatapickerTest;
 };
 
 #endif

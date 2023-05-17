@@ -4,7 +4,7 @@
 	Description      : widget for editing properties of interpolation curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,6 +15,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <QMenu>
 #include <QStandardItemModel>
@@ -31,7 +32,7 @@ extern "C" {
 		(2D-curves defined by an interpolation) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -102,8 +103,8 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYInterpolationCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYInterpolationCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYInterpolationCurveDock::xRangeMaxChanged);
-	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYInterpolationCurveDock::xRangeMinDateTimeChanged);
-	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYInterpolationCurveDock::xRangeMaxDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYInterpolationCurveDock::xRangeMinDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYInterpolationCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::typeChanged);
 	connect(uiGeneralTab.cbVariant, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::variantChanged);
 	// TODO: use line edits?
@@ -123,7 +124,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 }
 
 void XYInterpolationCurveDock::initGeneralTab() {
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -159,8 +160,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_interpolationData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_interpolationData.xRange.last()));
 	} else {
-		uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_interpolationData.xRange.first()));
-		uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_interpolationData.xRange.last()));
+		uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(m_interpolationData.xRange.first());
+		uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(m_interpolationData.xRange.last());
 	}
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
@@ -177,7 +178,19 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	this->autoRangeChanged();
 
 	// update list of selectable types
-	xDataColumnChanged(cbXDataColumn->currentModelIndex());
+	switch (m_interpolationCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
+		xDataColumnChanged(cbXDataColumn->currentModelIndex());
+		break;
+	case XYAnalysisCurve::DataSourceType::Curve:
+		// Fall through
+	case XYAnalysisCurve::DataSourceType::Histogram: {
+		auto c = static_cast<XYCurve*>(cbDataSourceCurve->currentAspect());
+		if (c)
+			updateSettings(c->xColumn());
+		break;
+	}
+	}
 
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
 	this->typeChanged(m_interpolationData.type);
@@ -188,10 +201,18 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	uiGeneralTab.sbBias->setValue(m_interpolationData.bias);
 	uiGeneralTab.cbEval->setCurrentIndex(m_interpolationData.evaluate);
 
-	if (m_interpolationData.pointsMode == XYInterpolationCurve::PointsMode::Multiple)
+	switch (m_interpolationData.pointsMode) {
+	case XYInterpolationCurve::PointsMode::Auto:
 		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints / 5.);
-	else
+		break;
+	case XYInterpolationCurve::PointsMode::Multiple: {
+		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints / qMax(dataPoints, (unsigned int)1));
+		break;
+	}
+	case XYInterpolationCurve::PointsMode::Custom:
 		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
+		break;
+	}
 	uiGeneralTab.cbPointsMode->setCurrentIndex(static_cast<int>(m_interpolationData.pointsMode));
 
 	this->showInterpolationResult();
@@ -210,38 +231,10 @@ void XYInterpolationCurveDock::initGeneralTab() {
 }
 
 void XYInterpolationCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Datapicker,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYCurve,
-						   AspectType::XYAnalysisCurve};
-	cbDataSourceCurve->setTopLevelClasses(list);
+	auto list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYFitCurve);
 
-	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
-		hiddenAspects << curve;
-	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
-
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve,
-			AspectType::CantorWorksheet};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-
-	cbDataSourceCurve->setModel(m_aspectTreeModel);
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-
-	XYCurveDock::setModel();
+	XYAnalysisCurveDock::setModel(list);
 }
 
 /*!
@@ -445,8 +438,8 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
-				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
-				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
+				uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(xDataColumn->minimum());
+				uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(xDataColumn->maximum());
 			}
 		}
 	}
@@ -460,17 +453,17 @@ void XYInterpolationCurveDock::xRangeMaxChanged() {
 	SET_DOUBLE_FROM_LE_REC(m_interpolationData.xRange.last(), uiGeneralTab.leMax);
 }
 
-void XYInterpolationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
+void XYInterpolationCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	m_interpolationData.xRange.first() = dateTime.toMSecsSinceEpoch();
+	m_interpolationData.xRange.first() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
+void XYInterpolationCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	m_interpolationData.xRange.last() = dateTime.toMSecsSinceEpoch();
+	m_interpolationData.xRange.last() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
@@ -615,12 +608,8 @@ void XYInterpolationCurveDock::numberOfPointsChanged() {
 		m_interpolationData.npoints *= dataPoints;
 
 	// warn if points is smaller than data points
-	QPalette palette = uiGeneralTab.sbPoints->palette();
-	if (m_interpolationData.npoints < dataPoints)
-		palette.setColor(QPalette::Text, Qt::red);
-	else
-		palette.setColor(QPalette::Text, Qt::black);
-	uiGeneralTab.sbPoints->setPalette(palette);
+	const bool invalid = (m_interpolationData.npoints < dataPoints);
+	GuiTools::highlight(uiGeneralTab.sbPoints, invalid);
 
 	enableRecalculate();
 }
@@ -642,8 +631,8 @@ void XYInterpolationCurveDock::enableRecalculate() const {
 	// no interpolation possible without the x- and y-data
 	bool hasSourceData = false;
 	if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX && aspectY);
 		if (aspectX) {
 			cbXDataColumn->useCurrentIndexText(true);
@@ -653,9 +642,8 @@ void XYInterpolationCurveDock::enableRecalculate() const {
 			cbYDataColumn->useCurrentIndexText(true);
 			cbYDataColumn->setInvalid(false);
 		}
-	} else {
+	} else
 		hasSourceData = (m_interpolationCurve->dataSourceCurve() != nullptr);
-	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
 }

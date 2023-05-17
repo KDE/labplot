@@ -140,6 +140,8 @@ void DatapickerPoint::init() {
 }
 
 void DatapickerPoint::initErrorBar(DatapickerCurve::Errors errors) {
+	if (m_errorBarItemList.isEmpty() && errors.x == DatapickerCurve::ErrorType::NoError && errors.y == DatapickerCurve::ErrorType::NoError)
+		return; // no need to update
 	m_errorBarItemList.clear();
 	if (errors.x != DatapickerCurve::ErrorType::NoError) {
 		auto* plusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::ErrorBarType::PlusDeltaX);
@@ -298,9 +300,9 @@ bool DatapickerPoint::isReferencePoint() const {
 	return d->isReferencePoint;
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 DatapickerPointPrivate::DatapickerPointPrivate(DatapickerPoint* owner)
 	: q(owner) {
 	setFlag(QGraphicsItem::ItemIsMovable);
@@ -423,6 +425,8 @@ void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 QVariant DatapickerPointPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) {
 	if (change == QGraphicsItem::GraphicsItemChange::ItemSelectedHasChanged && value.toBool())
 		emit q->pointSelected(q);
+	else if (change == QGraphicsItem::GraphicsItemChange::ItemPositionChange)
+		emit q->positionChanged(value.toPointF());
 	return QGraphicsItem::itemChange(change, value);
 }
 
@@ -455,9 +459,9 @@ void DatapickerPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* ev
 	q->createContextMenu()->exec(event->screenPos());
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 	Q_D(const DatapickerPoint);

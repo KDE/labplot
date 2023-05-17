@@ -51,7 +51,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 /*!
 	set the current spreadsheet(s)
 */
-void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
+void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	CONDITIONAL_LOCK_RETURN;
 	m_spreadsheetList = list;
 	m_spreadsheet = list.first();
@@ -73,7 +73,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 		ui.leName->setText(m_spreadsheet->name());
 		ui.teComment->setText(m_spreadsheet->comment());
 	} else {
-		// disable the fields "Name" and "Comment" if there are more then one spreadsheet
+		// disable the fields "Name" and "Comment" if there are more than one spreadsheet
 		ui.leName->setEnabled(false);
 		ui.teComment->setEnabled(false);
 

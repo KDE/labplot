@@ -200,6 +200,7 @@ public:
 	void addCoordinateSystem(CartesianCoordinateSystem* cSystem); // add a coordinate system
 	void removeCoordinateSystem(int index); // remove coordinate system index
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystemIndex, DefaultCoordinateSystemIndex)
+	void setCoordinateSystemRangeIndex(int cSystemIndex, Dimension, int rangeIndex);
 
 	void retransformScales();
 	void retransformScale(Dimension, int index);
@@ -228,48 +229,49 @@ private:
 	QList<QColor> m_themeColorPalette;
 	bool m_menusInitialized{false};
 
-	QAction* visibilityAction;
+	QAction* visibilityAction{nullptr};
 
 	//"add new" actions
-	QAction* addCurveAction;
-	QAction* addEquationCurveAction;
-	QAction* addHistogramAction;
-	QAction* addBarPlotAction;
-	QAction* addBoxPlotAction;
-	QAction* addDataReductionCurveAction;
-	QAction* addDifferentiationCurveAction;
-	QAction* addIntegrationCurveAction;
-	QAction* addInterpolationCurveAction;
-	QAction* addSmoothCurveAction;
-	QAction* addFitCurveAction;
-	QAction* addFourierFilterCurveAction;
-	QAction* addFourierTransformCurveAction;
-	QAction* addHilbertTransformCurveAction;
-	QAction* addConvolutionCurveAction;
-	QAction* addCorrelationCurveAction;
+	QAction* addCurveAction{nullptr};
+	QAction* addEquationCurveAction{nullptr};
+	QAction* addHistogramAction{nullptr};
+	QAction* addBarPlotAction{nullptr};
+	QAction* addBoxPlotAction{nullptr};
+	QAction* addDataReductionCurveAction{nullptr};
+	QAction* addDifferentiationCurveAction{nullptr};
+	QAction* addIntegrationCurveAction{nullptr};
+	QAction* addInterpolationCurveAction{nullptr};
+	QAction* addSmoothCurveAction{nullptr};
+	QAction* addFitCurveAction{nullptr};
+	QAction* addFourierFilterCurveAction{nullptr};
+	QAction* addFourierTransformCurveAction{nullptr};
+	QAction* addHilbertTransformCurveAction{nullptr};
+	QAction* addConvolutionCurveAction{nullptr};
+	QAction* addCorrelationCurveAction{nullptr};
 
-	QAction* addHorizontalAxisAction;
-	QAction* addVerticalAxisAction;
-	QAction* addLegendAction;
-	QAction* addTextLabelAction;
-	QAction* addImageAction;
-	QAction* addInfoElementAction;
-	QAction* addCustomPointAction;
-	QAction* addReferenceLineAction;
+	QAction* addHorizontalAxisAction{nullptr};
+	QAction* addVerticalAxisAction{nullptr};
+	QAction* addLegendAction{nullptr};
+	QAction* addTextLabelAction{nullptr};
+	QAction* addImageAction{nullptr};
+	QAction* addInfoElementAction{nullptr};
+	QAction* addCustomPointAction{nullptr};
+	QAction* addReferenceLineAction{nullptr};
+	QAction* addReferenceRangeAction{nullptr};
 
 	// analysis menu actions
-	QAction* addDataOperationAction;
-	QAction* addDataReductionAction;
-	QAction* addDifferentiationAction;
-	QAction* addIntegrationAction;
-	QAction* addInterpolationAction;
-	QAction* addSmoothAction;
+	QAction* addDataOperationAction{nullptr};
+	QAction* addDataReductionAction{nullptr};
+	QAction* addDifferentiationAction{nullptr};
+	QAction* addIntegrationAction{nullptr};
+	QAction* addInterpolationAction{nullptr};
+	QAction* addSmoothAction{nullptr};
 	QVector<QAction*> addFitActions;
-	QAction* addFourierFilterAction;
-	QAction* addFourierTransformAction;
-	QAction* addHilbertTransformAction;
-	QAction* addConvolutionAction;
-	QAction* addCorrelationAction;
+	QAction* addFourierFilterAction{nullptr};
+	QAction* addFourierTransformAction{nullptr};
+	QAction* addHilbertTransformAction{nullptr};
+	QAction* addConvolutionAction{nullptr};
+	QAction* addCorrelationAction{nullptr};
 
 	QMenu* addNewMenu{nullptr};
 	QMenu* addNewAnalysisMenu{nullptr};
@@ -313,6 +315,7 @@ public Q_SLOTS:
 	void addImage();
 	void addCustomPoint();
 	void addReferenceLine();
+	void addReferenceRange();
 	void addInfoElement();
 
 	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true, bool suppressRetransformScale = false);

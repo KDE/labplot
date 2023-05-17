@@ -31,14 +31,12 @@ private:
 	void showTransformResult();
 
 	Ui::XYHilbertTransformCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYHilbertTransformCurve* m_transformCurve{nullptr};
 	XYHilbertTransformCurve::TransformData m_transformData;
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYHilbertTransformCurveDock

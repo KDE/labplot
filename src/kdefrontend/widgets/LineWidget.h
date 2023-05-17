@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : line settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,6 +13,7 @@
 #include "backend/worksheet/Line.h"
 #include "ui_linewidget.h"
 
+class QShowEvent;
 class KConfigGroup;
 
 class LineWidget : public QWidget {
@@ -38,6 +39,8 @@ private:
 	QList<Line*> m_lines;
 	bool m_initializing{false};
 	QString m_prefix;
+
+	void showEvent(QShowEvent*) override;
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in LineWidget

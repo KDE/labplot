@@ -33,16 +33,13 @@ private:
 	void showDifferentiationResult();
 
 	Ui::XYDifferentiationCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYDifferentiationCurve* m_differentiationCurve{nullptr};
 	XYDifferentiationCurve::DifferentiationData m_differentiationData;
 	bool m_dateTimeRange{false};
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYDifferentiationCurveDock
@@ -54,8 +51,8 @@ private Q_SLOTS:
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
-	void xRangeMinDateTimeChanged(const QDateTime&);
-	void xRangeMaxDateTimeChanged(const QDateTime&);
+	void xRangeMinDateTimeChanged(qint64);
+	void xRangeMaxDateTimeChanged(qint64);
 	void derivOrderChanged(int);
 	void accOrderChanged(int);
 

@@ -1,9 +1,9 @@
 To compile LabPlot from source following packages are required:
-	* CMake version 3.2.0 or higher
-	* ECM (extra cmake modules)
+	* CMake version 3.17.0 or higher
+	* Qt version 5.10 or higher (including the devel-package, libqt5-devel or similar)
 	* KDE Frameworks 5.16.0 or higher (including the devel-package),
 		optional 5.28.0 or higher for syntax highlighting
-	* Qt version 5.6 or higher (including the devel-package, libqt5-devel or similar)
+	* Qt Advanced Docking System (QADS) or Qt5::GuiPrivate to build QADS locally
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
 
 optional packages
@@ -28,6 +28,7 @@ optional packages
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 	* KUserFeedback to support collecting feedback from users
 	* Discount to support Markdown markup language text
+	* fast_float, dbc_parser_cpp and vector_blf for Vector BLF support (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON and -DLOCAL_VECTOR_BLF=ON)
 
 ===============================================================================
 To build LabPlot execute
@@ -57,6 +58,7 @@ To compile LabPlot without optional dependencies even if they are present on the
 -DENABLE_LIBORIGIN=OFF
 -DENABLE_TOUCHBAR=OFF
 -DENABLE_EXCEL=OFF
+-DENABLE_VECTOR_BLF=OFF
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
 

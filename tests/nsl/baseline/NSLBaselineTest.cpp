@@ -16,9 +16,9 @@ extern "C" {
 #include "backend/nsl/nsl_baseline.h"
 }
 
-//##############################################################################
-//#################  constant base lines
-//##############################################################################
+// ##############################################################################
+// #################  constant base lines
+// ##############################################################################
 
 void NSLBaselineTest::testBaselineMinimum() {
 	double data[] = {4., 5., 2.};
@@ -103,9 +103,9 @@ void NSLBaselineTest::testBaselineMedian2() {
 		QCOMPARE(data[i], result[i]);
 }
 
-//##############################################################################
-//#################  non-constant base lines
-//##############################################################################
+// ##############################################################################
+// #################  non-constant base lines
+// ##############################################################################
 
 void NSLBaselineTest::testBaselineEndpoints() {
 	double xdata[] = {1., 2., 4.};
@@ -146,8 +146,10 @@ void NSLBaselineTest::testBaselineARPLS() {
 
 	const size_t N = 10;
 
-	nsl_baseline_remove_arpls(data, N, 1.e-3, 1.e4, 10);
+	double tol = nsl_baseline_remove_arpls(data, N, 1.e-3, 1.e4, 10);
+	WARN("TOL = " << tol)
 
+	QCOMPARE(tol, 0.0043202087307554);
 	for (size_t i = 0; i < N; ++i)
 		QCOMPARE(data[i], result[i]);
 }
@@ -163,8 +165,10 @@ void NSLBaselineTest::testBaselineARPLSSpectrum() {
 		r >> result[i];
 	}
 
-	nsl_baseline_remove_arpls(data, N, 1.e-2, 1.e4, 10);
+	double tol = nsl_baseline_remove_arpls(data, N, 1.e-2, 1.e4, 10);
+	WARN("TOL = " << tol)
 
+	QCOMPARE(tol, 0.108167623062361);
 	for (size_t i = 0; i < N; ++i)
 		FuzzyCompare(data[i], result[i], 2.e-5);
 }
@@ -180,8 +184,10 @@ void NSLBaselineTest::testBaselineARPLS_XRD() {
 		r >> result[i];
 	}
 
-	nsl_baseline_remove_arpls(data, N, 1.e-3, 1.e6, 20);
+	double tol = nsl_baseline_remove_arpls(data, N, 1.e-3, 1.e6, 20);
+	WARN("TOL = " << tol)
 
+	QCOMPARE(tol, 0.0068956252520988);
 	// std::ofstream o("out.dat");
 	for (size_t i = 0; i < N; ++i) {
 		// o << data[i] << std::endl;

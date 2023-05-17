@@ -45,6 +45,9 @@
 #define SETLABELTEXTPROPERTY(TextEditFunction, TextEditArgument)                                                                                               \
 	auto cursor = ui.teLabel->textCursor();                                                                                                                    \
 	int cursorAnchor = cursor.anchor(), cursorPos = cursor.position();                                                                                         \
+	/* move position with right allows only positive numbers (from left to right) */                                                                           \
+	if (cursorAnchor > cursorPos)                                                                                                                              \
+		qSwap(cursorAnchor, cursorPos);                                                                                                                        \
 	bool cursorHasSelection = cursor.hasSelection();                                                                                                           \
 	if (!cursorHasSelection)                                                                                                                                   \
 		ui.teLabel->selectAll();                                                                                                                               \
@@ -214,8 +217,8 @@ LabelWidget::LabelWidget(QWidget* parent)
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
-	m_highlighter->setTheme((palette().color(QPalette::Base).lightness() < 128) ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-																				: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+	m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+									 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 
 	m_messageWidget = new KMessageWidget(this);
@@ -223,6 +226,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	m_messageWidget->setWordWrap(true);
 	auto* gridLayout = qobject_cast<QGridLayout*>(layout());
 	gridLayout->addWidget(m_messageWidget, 2, 3);
+	m_messageWidget->hide(); // will be shown later once there is a latex render result
 
 	// SLOTS
 	connect(ui.leName, &QLineEdit::textChanged, this, &LabelWidget::nameChanged);
@@ -256,7 +260,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
 
 	connect(ui.sbPositionXLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionXLogicalChanged);
-	connect(ui.dtePositionXLogical, &QDateTimeEdit::dateTimeChanged, this, &LabelWidget::positionXLogicalDateTimeChanged);
+	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &LabelWidget::positionXLogicalDateTimeChanged);
 	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionYLogicalChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
 	connect(ui.sbOffsetX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
@@ -298,7 +302,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	ui.teComment->setVisible(visible);
 
 	if (visible) {
-		// if there is more then one point in the list, disable the comment and name widgets in "general"
+		// if there is more than one point in the list, disable the comment and name widgets in "general"
 		if (labels.size() == 1) {
 			ui.lName->setEnabled(true);
 			ui.leName->setEnabled(true);
@@ -375,20 +379,27 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
  * Called if the background color of the parent aspect has changed.
  */
 void LabelWidget::updateBackground() const {
-	QColor color(Qt::white);
-	if (static_cast<TextLabel::Mode>(ui.cbMode->currentIndex()) == TextLabel::Mode::Text) {
-		const auto type = m_label->parentAspect()->type();
-		if (type == AspectType::Worksheet)
-			color = static_cast<const Worksheet*>(m_label->parentAspect())->background()->firstColor();
-		else if (type == AspectType::CartesianPlot)
-			color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->background()->firstColor();
-		else if (type == AspectType::CartesianPlotLegend)
-			color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->background()->firstColor();
-		else if (type == AspectType::InfoElement || type == AspectType::Axis)
-			color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->background()->firstColor();
-		else
-			DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
+	// if latex or markdown mode is used, use the default palette from the desktop theme
+	// since we have additional highlighting for latex and markdown and we don't want it to
+	// collide with the modified background color of QTextEdit. Modify it only for rich-text.
+	const auto mode = static_cast<TextLabel::Mode>(ui.cbMode->currentIndex());
+	if (mode != TextLabel::Mode::Text) {
+		ui.teLabel->setPalette(QPalette());
+		return;
 	}
+
+	QColor color(Qt::white);
+	const auto type = m_label->parentAspect()->type();
+	if (type == AspectType::Worksheet)
+		color = static_cast<const Worksheet*>(m_label->parentAspect())->background()->firstColor();
+	else if (type == AspectType::CartesianPlot)
+		color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->background()->firstColor();
+	else if (type == AspectType::CartesianPlotLegend)
+		color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->background()->firstColor();
+	else if (type == AspectType::InfoElement || type == AspectType::Axis)
+		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->background()->firstColor();
+	else
+		DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
 
 	auto p = ui.teLabel->palette();
 	// QDEBUG(Q_FUNC_INFO << ", color = " << color)
@@ -671,13 +682,12 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 		return;
 
 	// when text is empty the default color of format is black instead of the theme color!
-	if (format.foreground().color().isValid() && !ui.teLabel->toPlainText().isEmpty()) {
+	if (m_label->text().isHtml() && format.foreground().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
 		ui.kcbFontColor->setColor(format.foreground().color());
-	} else {
+	else
 		ui.kcbFontColor->setColor(m_label->fontColor());
-	}
 
-	if (format.background().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
+	if (m_label->text().isHtml() && format.background().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
 		ui.kcbBackgroundColor->setColor(format.background().color());
 	else
 		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
@@ -991,12 +1001,11 @@ void LabelWidget::positionXLogicalChanged(double value) {
 		label->setPositionLogical(pos);
 }
 
-void LabelWidget::positionXLogicalDateTimeChanged(const QDateTime& dateTime) {
+void LabelWidget::positionXLogicalDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 x = dateTime.toMSecsSinceEpoch();
 	QPointF pos = m_label->positionLogical();
-	pos.setX(x);
+	pos.setX(value);
 	for (auto* label : m_labelsList)
 		label->setPositionLogical(pos);
 }
@@ -1248,7 +1257,7 @@ void LabelWidget::labelCoordinateBindingEnabledChanged(bool enabled) {
 void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionXLogical->setValue(pos.x());
-	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
+	ui.dtePositionXLogical->setMSecsSinceEpochUTC(pos.x());
 	ui.sbPositionYLogical->setValue(pos.y());
 }
 
@@ -1357,11 +1366,24 @@ void LabelWidget::load() {
 
 	auto format = ui.teLabel->currentCharFormat();
 
-	ui.kcbFontColor->setColor(m_label->fontColor());
-	ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
-	// alternative:
-	// ui.kcbFontColor->setColor(format.foreground().color());
-	// ui.kcbBackgroundColor->setColor(format.background().color());
+	// when text is empty the default color of format is black instead of the theme color!
+	if (m_label->text().isHtml() && format.foreground().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
+		ui.kcbFontColor->setColor(format.foreground().color());
+	else
+		ui.kcbFontColor->setColor(m_label->fontColor());
+
+	if (m_label->text().isHtml() && format.background().color().isValid() && !ui.teLabel->toPlainText().isEmpty()) {
+		// The html below does not contain any information about the background color. So qt uses black which is not correct
+		// "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\"
+		// content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt;
+		// font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;
+		// text-indent:0px;\"><span style=\" color:#000000;\">1</span></p></body></html>"
+		if (m_label->text().text.contains(QStringLiteral("background-color")))
+			ui.kcbBackgroundColor->setColor(format.background().color());
+		else
+			ui.kcbBackgroundColor->setColor(QColor(Qt::GlobalColor::transparent));
+	} else
+		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue(m_label->teXFont().pointSize());
@@ -1412,9 +1434,10 @@ void LabelWidget::load() {
 			ui.dtePositionXLogical->show();
 
 			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_label->positionLogical().x()));
+			ui.dtePositionXLogical->setMSecsSinceEpochUTC(m_label->positionLogical().x());
 		}
 
+		ui.chbBindLogicalPos->setChecked(m_label->coordinateBindingEnabled());
 		bindingChanged(m_label->coordinateBindingEnabled());
 	} else {
 		ui.lPositionXLogical->hide();

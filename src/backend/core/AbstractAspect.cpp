@@ -6,6 +6,7 @@
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -196,27 +197,33 @@ QString AbstractAspect::name() const {
 	return d->m_name;
 }
 
+QUuid AbstractAspect::uuid() const {
+	return d->m_uuid;
+}
+
 /*!
  * \brief AbstractAspect::setName
  * sets the name of the abstract aspect
- * \param value
- * \param autoUnique
+ * \param value - the new value for the name that needs to be checked and made unique if it's not the case yet
+ * \param autoUnique - if set to \true the new name is automatically made unique, the name is not changed and \c false is returned otherwise. default is \true.
+ * \param skipAutoUnique - if set to \true, don't check for uniqueness, the caller has to guarantee the uniqueness. default is \false.
  * \return returns, if the new name is valid or not
  */
-bool AbstractAspect::setName(const QString& value, bool autoUnique) {
+bool AbstractAspect::setName(const QString& value, NameHandling handling) {
 	if (value.isEmpty())
-		return setName(QLatin1String("1"), autoUnique);
+		return setName(QLatin1String("1"), handling);
 
 	if (value == d->m_name)
 		return true; // name not changed, but the name is valid
 
 	QString new_name;
-	if (d->m_parent) {
+	if ((handling == NameHandling::UniqueRequired || handling == NameHandling::AutoUnique) && d->m_parent) {
 		new_name = d->m_parent->uniqueNameFor(value);
 
-		if (!autoUnique && new_name.compare(value) != 0) // value is not unique, so don't change name
+		if (handling == NameHandling::UniqueRequired && new_name.compare(value) != 0) // value is not unique, so don't change name
 			return false; // this value is used in the dock to check if the name is valid
 
+		// NameHandling::Autounique
 		if (new_name != value)
 			info(i18n(R"(Intended name "%1" was changed to "%2" in order to avoid name collision.)", value, new_name));
 	} else
@@ -342,30 +349,34 @@ QMenu* AbstractAspect::createContextMenu() {
 	}
 	menu->addSeparator();
 
-	// action to create data spreadsheet based on the results of the calculations for analysis curves and histograms and box plots
-	QAction* actionDataSpreadsheet{nullptr};
+	// action to create data spreadsheet based on the results of the calculations for types that support it
+	QAction* actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
 
-	// handle analysis curves
-	const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this);
-	if (analysisCurve && analysisCurve->resultAvailable()) {
-		actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
-		connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
-	} else {
-		// handle histograms and box plots
-		const auto* histogram = dynamic_cast<Histogram*>(this);
-		if (histogram && histogram->bins()) {
-			actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
-			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
+	// handle types that support it
+	bool dataAvailable = false;
+	if (const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this)) {
+		if (analysisCurve->resultAvailable()) {
+			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
+			dataAvailable = true;
 		}
-
-		const auto* boxPlot = dynamic_cast<BoxPlot*>(this);
-		if (boxPlot && !boxPlot->dataColumns().isEmpty()) {
-			actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+	} else if (const auto* equationCurve = dynamic_cast<XYEquationCurve*>(this)) {
+		if (equationCurve->dataAvailable()) {
+			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYEquationCurve*>(this), &XYEquationCurve::createDataSpreadsheet);
+			dataAvailable = true;
+		}
+	} else if (const auto* histogram = dynamic_cast<Histogram*>(this)) {
+		if (histogram->bins()) {
+			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
+			dataAvailable = true;
+		}
+	} else if (const auto* boxPlot = dynamic_cast<BoxPlot*>(this)) {
+		if (!boxPlot->dataColumns().isEmpty()) {
 			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<BoxPlot*>(this), &BoxPlot::createDataSpreadsheet);
+			dataAvailable = true;
 		}
 	}
 
-	if (actionDataSpreadsheet) {
+	if (dataAvailable) {
 		menu->addAction(actionDataSpreadsheet);
 		menu->addSeparator();
 	}
@@ -893,6 +904,7 @@ bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
 void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QLatin1String("creation_time"), creationTime().toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QLatin1String("name"), name());
+	writer->writeAttribute(QLatin1String("uuid"), uuid().toString());
 }
 
 /**
@@ -923,6 +935,10 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 			d->m_creation_time = QDateTime::currentDateTime();
 	}
 
+	str = attribs.value(QLatin1String("uuid")).toString();
+	if (!str.isEmpty()) {
+		d->m_uuid = QUuid(str);
+	}
 	return true;
 }
 
@@ -1134,9 +1150,9 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::deselected, this, &AbstractAspect::childDeselected);
 }
 
-//##############################################################################
-//######################  Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ######################  Private implementation ###############################
+// ##############################################################################
 AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QString& name)
 	: m_name(name.isEmpty() ? QLatin1String("1") : name)
 	, q(owner) {

@@ -4,7 +4,7 @@
 	Description          : Text label supporting reach text and latex formatting
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -51,25 +51,21 @@ public:
 		: QGraphicsTextItem(parent) {
 	}
 
-	void setScaleFactor(double scaleFactor) {
-		m_scaleFactor = scaleFactor;
-	}
-
-	void setRotationAngle(double rotationAngle) {
-		m_rotationAngle = rotationAngle;
-	}
-
 protected:
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override {
-		painter->rotate(-m_rotationAngle);
-		painter->scale(m_scaleFactor, m_scaleFactor);
-		painter->translate(QPointF(-boundingRect().width() / 2, -boundingRect().height() / 2));
+#if DEBUG_TEXTLABEL_BOUNDING_RECT
+		painter->setPen(QColor(Qt::GlobalColor::green));
+		painter->drawRect(boundingRect());
+#endif
+
+#if DEBUG_TEXTLABEL_BOUNDING_RECT
+		painter->setPen(QColor(Qt::GlobalColor::black));
+		painter->drawRect(QRectF(-5, -5, 10, 10));
+#endif
 		QGraphicsTextItem::paint(painter, option, widget);
 	}
 
 private:
-	double m_scaleFactor = 1.;
-	double m_rotationAngle = 0.;
 };
 
 /**
@@ -152,7 +148,7 @@ void TextLabel::init() {
 		d->teXFont.setPointSize(group.readEntry("TeXFontSize", d->teXFont.pointSize()));
 		d->fontColor = group.readEntry("TeXFontColor", d->fontColor);
 		d->backgroundColor = group.readEntry("TeXBackgroundColor", d->backgroundColor);
-		d->rotationAngle = group.readEntry("Rotation", d->rotationAngle);
+		d->setRotation(group.readEntry("Rotation", d->rotation()));
 
 		// border
 		d->borderShape = (TextLabel::BorderShape)group.readEntry("BorderShape", (int)d->borderShape);
@@ -392,7 +388,7 @@ TextLabel::GluePoint TextLabel::gluePointAt(int index) {
 
 int TextLabel::gluePointCount() {
 	Q_D(const TextLabel);
-	return d->m_gluePoints.length();
+	return d->m_gluePointsTransformed.length();
 }
 
 void TextLabel::updateTeXImage() {
@@ -400,9 +396,9 @@ void TextLabel::updateTeXImage() {
 	d->updateTeXImage();
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 TextLabelPrivate::TextLabelPrivate(TextLabel* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -412,8 +408,14 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner)
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
 
+	// scaling:
+	// we need to scale from the font size specified in points to scene units.
+	// furthermore, we create the tex-image in a higher resolution than usual desktop resolution
+	//  -> take this into account
+	// m_textItem is only used for the normal text not for latex. So the scale is only needed for the
+	// normal text, for latex the generated image will be shown directly
 	m_textItem = new ScaledTextItem(this);
-	m_textItem->setScaleFactor(scaleFactor);
+	m_textItem->setScale(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
 	m_textItem->setTextInteractionFlags(Qt::NoTextInteraction);
 }
 
@@ -431,13 +433,14 @@ QRectF TextLabelPrivate::size() {
 		// size is in points, convert to scene units
 		//  TODO: the shift and scaling is just a workaround to avoid the big bounding box
 		//  s.a. TextLabelPrivate::updateBoundingRect()
-		double xShift = 23., yScale = 0.8;
+
+		// double xShift = 23., yScale = 0.8;
 		// better scaling for multiline Markdown
-		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
-			yScale = 0.95;
+		// if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
+		//	yScale = 0.95;
 		// see updateBoundingRect()
-		w = m_textItem->boundingRect().width() * scaleFactor - xShift;
-		h = m_textItem->boundingRect().height() * scaleFactor * yScale;
+		w = m_textItem->boundingRect().width() * m_textItem->scale();
+		h = m_textItem->boundingRect().height() * m_textItem->scale();
 	}
 	qreal x = position.point.x();
 	qreal y = position.point.y();
@@ -451,18 +454,18 @@ QRectF TextLabelPrivate::size() {
  * \return Nearest point to @param point
  */
 QPointF TextLabelPrivate::findNearestGluePoint(QPointF scenePoint) {
-	if (m_gluePoints.isEmpty())
+	if (m_gluePointsTransformed.isEmpty())
 		return boundingRectangle.center();
 
-	if (m_gluePoints.length() == 1)
-		return mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
+	if (m_gluePointsTransformed.length() == 1)
+		return mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(0).point));
 
-	QPointF point = mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
+	QPointF point = mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(0).point));
 	QPointF nearestPoint = point;
 	double distance2 = pow(point.x() - scenePoint.x(), 2) + pow(point.y() - scenePoint.y(), 2);
 	// assumption, more than one point available
-	for (int i = 1; i < m_gluePoints.length(); i++) {
-		point = mapParentToPlotArea(mapToParent(m_gluePoints.at(i).point));
+	for (int i = 1; i < m_gluePointsTransformed.length(); i++) {
+		point = mapParentToPlotArea(mapToParent(m_gluePointsTransformed.at(i).point));
 		double distance2_temp = pow(point.x() - scenePoint.x(), 2) + pow(point.y() - scenePoint.y(), 2);
 		if (distance2_temp < distance2) {
 			nearestPoint = point;
@@ -483,15 +486,15 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 	QPointF pos;
 	QString name;
 
-	if (m_gluePoints.isEmpty() || index > m_gluePoints.length()) {
+	if (m_gluePointsTransformed.isEmpty() || index > m_gluePointsTransformed.length()) {
 		pos = boundingRectangle.center();
 		name = QLatin1String("center");
 	} else if (index < 0) {
-		pos = m_gluePoints.at(0).point;
-		name = m_gluePoints.at(0).name;
+		pos = m_gluePointsTransformed.at(0).point;
+		name = m_gluePointsTransformed.at(0).name;
 	} else {
-		pos = m_gluePoints.at(index).point;
-		name = m_gluePoints.at(index).name;
+		pos = m_gluePointsTransformed.at(index).point;
+		name = m_gluePointsTransformed.at(index).name;
 	}
 
 	return {mapParentToPlotArea(mapToParent(pos)), name};
@@ -506,7 +509,7 @@ void TextLabelPrivate::retransform() {
 	if (suppress)
 		return;
 
-	updatePosition();
+	updatePosition(); // needed, because CartesianPlot calls retransform if some operations are done
 	updateBorder();
 
 	Q_EMIT q->changed();
@@ -597,8 +600,21 @@ void TextLabelPrivate::updateText() {
 	case TextLabel::Mode::Markdown: {
 #ifdef HAVE_DISCOUNT
 		auto mdCharArray = textWrapper.text.toUtf8();
+#ifdef HAVE_DISCOUNT3
+		MMIOT* mdHandle = mkd_string(mdCharArray.data(), mdCharArray.size() + 1, nullptr);
+
+		mkd_flag_t* v3flags = mkd_flags();
+		mkd_set_flag_num(v3flags, MKD_LATEX);
+		mkd_set_flag_num(v3flags, MKD_FENCEDCODE);
+		mkd_set_flag_num(v3flags, MKD_GITHUBTAGS);
+
+		if (!mkd_compile(mdHandle, v3flags)) {
+#else
 		MMIOT* mdHandle = mkd_string(mdCharArray.data(), mdCharArray.size() + 1, 0);
-		if (!mkd_compile(mdHandle, MKD_LATEX | MKD_FENCEDCODE | MKD_GITHUBTAGS)) {
+
+		unsigned int flags = MKD_LATEX | MKD_FENCEDCODE | MKD_GITHUBTAGS;
+		if (!mkd_compile(mdHandle, flags)) {
+#endif
 			DEBUG(Q_FUNC_INFO << ", Failed to compile the markdown document");
 			mkd_cleanup(mdHandle);
 			return;
@@ -641,12 +657,14 @@ void TextLabelPrivate::updateBoundingRect() {
 		// QDEBUG(" BOUNDING RECT = " << m_textItem->boundingRect())
 		//  TODO: the shift and scaling is just a workaround to avoid the big bounding box
 		//  s.a. TextLabelPrivate::size()
-		double xShift = 23., yScale = 0.8;
-		// better scaling for multiline Markdown
-		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
-			yScale = 0.95;
-		w = m_textItem->boundingRect().width() * scaleFactor - xShift;
-		h = m_textItem->boundingRect().height() * scaleFactor * yScale;
+
+		// double xShift = 23., yScale = 0.8;
+		//  better scaling for multiline Markdown
+		// if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
+		//	yScale = 0.95;
+		w = m_textItem->boundingRect().width() * m_textItem->scale(); // - xShift;
+		h = m_textItem->boundingRect().height() * m_textItem->scale(); // * yScale;
+		m_textItem->setPos(QPointF(-w / 2, -h / 2));
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
@@ -946,7 +964,6 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	QMatrix matrix;
-	matrix.rotate(-rotationAngle);
 	labelShape = QPainterPath();
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
@@ -959,10 +976,9 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	labelShape = matrix.map(labelShape);
 
 	// rotate gluePoints
-	for (auto gPoint : m_gluePoints)
-		gPoint.point = matrix.map(gPoint.point);
-
-	m_textItem->setRotationAngle(rotationAngle);
+	m_gluePointsTransformed.clear();
+	for (auto& gPoint : m_gluePoints)
+		m_gluePointsTransformed.append(TextLabel::GluePoint(matrix.map(gPoint.point), gPoint.name));
 
 	Q_EMIT q->changed();
 }
@@ -975,7 +991,6 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	painter->save();
 	switch (textWrapper.mode) {
 	case TextLabel::Mode::LaTeX: {
-		painter->rotate(-rotationAngle);
 		painter->setRenderHint(QPainter::SmoothPixmapTransform);
 		if (boundingRectangle.width() != 0.0 && boundingRectangle.height() != 0.0)
 			painter->drawImage(boundingRectangle, teXImage);
@@ -995,7 +1010,6 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		painter->setPen(borderPen);
 		painter->setOpacity(borderOpacity);
 
-		painter->rotate(-rotationAngle);
 		painter->drawPath(borderShapePath);
 		painter->restore();
 	}
@@ -1020,13 +1034,18 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		painter->drawRect(rect);
 	}
 
-#define DEBUG_TEXTLABEL_GLUEPOINTS 0
+#if DEBUG_TEXTLABEL_BOUNDING_RECT
+	painter->setPen(QColor(Qt::GlobalColor::red));
+	painter->drawRect(boundingRect());
+#endif
+
 #if DEBUG_TEXTLABEL_GLUEPOINTS
 	// just for debugging
 	painter->setPen(QColor(Qt::GlobalColor::red));
 	QRectF gluePointRect(0, 0, 10, 10);
-	for (int i = 0; i < m_gluePoints.length(); i++) {
-		gluePointRect.moveTo(m_gluePoints[i].point.x() - gluePointRect.width() / 2, m_gluePoints[i].point.y() - gluePointRect.height() / 2);
+	for (int i = 0; i < m_gluePointsTransformed.length(); i++) {
+		gluePointRect.moveTo(m_gluePointsTransformed[i].point.x() - gluePointRect.width() / 2,
+							 m_gluePointsTransformed[i].point.y() - gluePointRect.height() / 2);
 		painter->fillRect(gluePointRect, QColor(Qt::GlobalColor::red));
 	}
 #endif
@@ -1063,9 +1082,9 @@ void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void TextLabel::save(QXmlStreamWriter* writer) const {
 	Q_D(const TextLabel);
@@ -1121,7 +1140,6 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
-	bool teXImageFound = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1166,7 +1184,6 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			QString content = reader->text().toString().trimmed();
 			d->teXPdfData = QByteArray::fromBase64(content.toLatin1());
 			d->teXImage = GuiTools::imageFromPDFData(d->teXPdfData);
-			teXImageFound = true;
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())
@@ -1180,17 +1197,20 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	// in case we use latex and the image was stored (older versions of LabPlot didn't save the image)and loaded,
 	// we just need to call updateBoundingRect() to calculate the new rect.
 	// otherwise, we set the static text and call updateBoundingRect() in updateText()
-	if (!(d->textWrapper.mode == TextLabel::Mode::LaTeX && teXImageFound))
+	if (!(d->textWrapper.mode == TextLabel::Mode::LaTeX && !d->teXPdfData.isEmpty()))
 		d->updateText();
-	else
+	else {
+		d->m_textItem->hide();
+		d->zoomFactor = 1.0; // on load the view is not zoomed yet
 		d->updateBoundingRect();
+	}
 
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void TextLabel::loadThemeConfig(const KConfig& config) {
 	DEBUG(Q_FUNC_INFO << ", label = " << STDSTRING(name()))
 	Q_D(TextLabel);

@@ -37,7 +37,7 @@ public:
 
 	PlotArea::BorderType borderType;
 	Line* borderLine{nullptr};
-	qreal borderCornerRadius;
+	qreal borderCornerRadius{0.0};
 
 	PlotArea* const q;
 };

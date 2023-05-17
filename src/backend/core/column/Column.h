@@ -133,10 +133,12 @@ public:
 
 	const AbstractColumn::ColumnStatistics& statistics() const;
 	void* data() const;
+	void setData(void*);
 	bool hasValues() const;
-	bool hasValueLabels() const;
+	bool valueLabelsInitialized() const;
+	void setLabelsMode(ColumnMode mode);
 	void removeValueLabel(const QString&);
-	void clearValueLabels();
+	void valueLabelsRemoveAll();
 
 	Properties properties() const override;
 	void invalidateProperties();
@@ -148,8 +150,6 @@ public:
 	void replaceTexts(int, const QVector<QString>&) override;
 	int dictionaryIndex(int row) const override;
 	const QMap<QString, int>& frequencies() const;
-	void addValueLabel(const QString&, const QString&);
-	const QMap<QString, QString>& textValueLabels();
 
 	QDate dateAt(int) const override;
 	void setDateAt(int, QDate) override;
@@ -159,30 +159,22 @@ public:
 	QDateTime dateTimeAt(int) const override;
 	void setDateTimeAt(int, const QDateTime&) override;
 	void replaceDateTimes(int, const QVector<QDateTime>&) override;
-	void addValueLabel(const QDateTime&, const QString&);
-	const QMap<QDateTime, QString>& dateTimeValueLabels();
 
 	double doubleAt(int) const override;
 	double valueAt(int) const override;
 	void setValues(const QVector<double>&);
 	void setValueAt(int, double) override;
 	void replaceValues(int, const QVector<double>&) override;
-	void addValueLabel(double, const QString&);
-	const QMap<double, QString>& valueLabels();
 
 	int integerAt(int) const override;
 	void setIntegers(const QVector<int>&);
 	void setIntegerAt(int, int) override;
 	void replaceInteger(int, const QVector<int>&) override;
-	void addValueLabel(int, const QString&);
-	const QMap<int, QString>& intValueLabels();
 
 	qint64 bigIntAt(int) const override;
 	void setBigIntAt(int, qint64) override;
 	void setBigInts(const QVector<qint64>&);
 	void replaceBigInt(int, const QVector<qint64>&) override;
-	void addValueLabel(qint64, const QString&);
-	const QMap<qint64, QString>& bigIntValueLabels();
 
 	double maximum(int count = 0) const override;
 	double maximum(int startIndex, int endIndex) const override;
@@ -199,6 +191,25 @@ public:
 	void setSuppressDataChangedSignal(const bool);
 
 	void addUsedInPlots(QVector<CartesianPlot*>&);
+
+	// Value Labels
+	template<typename T>
+	struct ValueLabel {
+		T value;
+		QString label;
+	};
+	AbstractColumn::ColumnMode labelsMode() const;
+	int valueLabelsCount() const;
+	void addValueLabel(qint64, const QString&);
+	const QVector<ValueLabel<qint64>>* bigIntValueLabels() const;
+	void addValueLabel(int, const QString&);
+	const QVector<ValueLabel<int>>* intValueLabels() const;
+	void addValueLabel(double, const QString&);
+	const QVector<ValueLabel<double>>* valueLabels() const;
+	void addValueLabel(const QDateTime&, const QString&);
+	const QVector<ValueLabel<QDateTime>>* dateTimeValueLabels() const;
+	void addValueLabel(const QString&, const QString&);
+	const QVector<ValueLabel<QString>>* textValueLabels() const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

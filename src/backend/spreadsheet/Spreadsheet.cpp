@@ -864,9 +864,9 @@ QVector<AspectType> Spreadsheet::dropableOn() const {
 	return vec;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
   Saves as XML.
  */
@@ -921,15 +921,16 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
-//##############################################################################
-//########################  Data Import  #######################################
-//##############################################################################
+// ##############################################################################
+// ########################  Data Import  #######################################
+// ##############################################################################
 int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 							   AbstractFileFilter::ImportMode importMode,
 							   int actualRows,
 							   int actualCols,
 							   QStringList colNameList,
-							   QVector<AbstractColumn::ColumnMode> columnMode) {
+							   QVector<AbstractColumn::ColumnMode> columnMode,
+							   bool initializeContainer) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
@@ -959,11 +960,12 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 		return -1;
 	}
 
-	dataContainer.resize(actualCols);
+	if (initializeContainer)
+		dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		Column* column = this->child<Column>(columnOffset + n);
-		DEBUG(" column " << n << " columnMode = " << static_cast<int>(columnMode[n]));
+		DEBUG(" column " << n << " columnMode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode[n]));
 		column->setColumnModeFast(columnMode[n]);
 
 		// in most cases the first imported column is meant to be used as x-data.
@@ -975,34 +977,38 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 		else
 			column->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 
-		switch (columnMode[n]) {
-		case AbstractColumn::ColumnMode::Double: {
-			auto* vector = static_cast<QVector<double>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::Integer: {
-			auto* vector = static_cast<QVector<int>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::BigInt: {
-			auto* vector = static_cast<QVector<qint64>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::Text: {
-			auto* vector = static_cast<QVector<QString>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::DateTime: {
-			auto* vector = static_cast<QVector<QDateTime>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
+		if (initializeContainer) {
+			switch (columnMode[n]) {
+			case AbstractColumn::ColumnMode::Double: {
+				auto* vector = static_cast<QVector<double>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::Integer: {
+				auto* vector = static_cast<QVector<int>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::BigInt: {
+				auto* vector = static_cast<QVector<qint64>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::Text: {
+				auto* vector = static_cast<QVector<QString>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime: {
+				auto* vector = static_cast<QVector<QDateTime>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			}
+		} else {
+			column->setData(dataContainer[n]);
 		}
 	}
 	//	QDEBUG("dataPointers =" << dataPointers);
@@ -1064,7 +1070,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		int columns = childCount<Column>();
 
 		if (columns > cols) {
-			// there're more columns in the data source then required -> remove the superfluous columns
+			// there are more columns in the data source than required -> remove the superfluous columns
 			for (int i = 0; i < columns - cols; i++)
 				removeChild(child<Column>(0));
 		} else {
@@ -1090,7 +1096,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		for (int i = 0; i < childCount<Column>(); i++) {
 			child<Column>(i)->setSuppressDataChangedSignal(true);
 			Q_EMIT child<Column>(i)->reset(child<Column>(i));
-			child<Column>(i)->setName(uniqueNames.at(i));
+			child<Column>(i)->setName(uniqueNames.at(i), AbstractAspect::NameHandling::UniqueNotRequired);
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}
 	}

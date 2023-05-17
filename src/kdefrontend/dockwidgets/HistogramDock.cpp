@@ -126,8 +126,8 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(ui.chkAutoBinRanges, &QCheckBox::toggled, this, &HistogramDock::autoBinRangesChanged);
 	connect(ui.leBinRangesMin, &QLineEdit::textChanged, this, &HistogramDock::binRangesMinChanged);
 	connect(ui.leBinRangesMax, &QLineEdit::textChanged, this, &HistogramDock::binRangesMaxChanged);
-	connect(ui.dteBinRangesMin, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
-	connect(ui.dteBinRangesMax, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
+	connect(ui.dteBinRangesMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
+	connect(ui.dteBinRangesMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::plotRangeChanged);
 
 	// Error bars
@@ -262,7 +262,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	valueWidget->setValues(values);
 	errorBarsLineWidget->setLines(errorBarLines);
 
-	// if there are more then one curve in the list, disable the content in the tab "general"
+	// if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -315,8 +315,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	const auto* plot = static_cast<const CartesianPlot*>(m_curve->parent(AspectType::CartesianPlot));
 	ui.dteBinRangesMin->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
 	ui.dteBinRangesMax->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-	ui.dteBinRangesMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_curve->binRangesMin()));
-	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_curve->binRangesMax()));
+	ui.dteBinRangesMin->setMSecsSinceEpochUTC(m_curve->binRangesMin());
+	ui.dteBinRangesMax->setMSecsSinceEpochUTC(m_curve->binRangesMax());
 
 	bool numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
 
@@ -521,20 +521,18 @@ void HistogramDock::binRangesMaxChanged(const QString& value) {
 	}
 }
 
-void HistogramDock::binRangesMinDateTimeChanged(const QDateTime& dateTime) {
+void HistogramDock::binRangesMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	qint64 min = dateTime.toMSecsSinceEpoch();
 	for (auto* hist : m_curvesList)
-		hist->setBinRangesMin(min);
+		hist->setBinRangesMin(value);
 }
 
-void HistogramDock::binRangesMaxDateTimeChanged(const QDateTime& dateTime) {
+void HistogramDock::binRangesMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	qint64 max = dateTime.toMSecsSinceEpoch();
 	for (auto* hist : m_curvesList)
-		hist->setBinRangesMax(max);
+		hist->setBinRangesMax(value);
 }
 
 //"Error bars"-Tab
@@ -672,13 +670,13 @@ void HistogramDock::curveAutoBinRangesChanged(bool value) {
 void HistogramDock::curveBinRangesMinChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.leBinRangesMin->setText(QLocale().toString(value));
-	ui.dteBinRangesMin->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
+	ui.dteBinRangesMin->setMSecsSinceEpochUTC(value);
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.leBinRangesMax->setText(QLocale().toString(value));
-	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
+	ui.dteBinRangesMax->setMSecsSinceEpochUTC(value);
 }
 
 void HistogramDock::curveVisibilityChanged(bool on) {

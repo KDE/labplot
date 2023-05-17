@@ -44,6 +44,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
@@ -368,6 +369,7 @@ void CartesianPlot::initActions() {
 	addInfoElementAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Info Element"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-cross")), i18n("Custom Point"), this);
 	addReferenceLineAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-line")), i18n("Reference Line"), this);
+	addReferenceRangeAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-rectangle")), i18n("Reference Range"), this);
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
 	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
@@ -394,6 +396,7 @@ void CartesianPlot::initActions() {
 	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::addInfoElement);
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
+	connect(addReferenceRangeAction, &QAction::triggered, this, &CartesianPlot::addReferenceRange);
 
 	// Analysis menu actions
 	// 	addDataOperationAction = new QAction(i18n("Data Operation"), this);
@@ -515,6 +518,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 	addNewMenu->addAction(addReferenceLineAction);
+	addNewMenu->addAction(addReferenceRangeAction);
 
 	// Data manipulation menu
 	// 	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
@@ -624,7 +628,7 @@ int CartesianPlot::cSystemIndex(WorksheetElement* e) {
 	auto type = e->type();
 	if (type == AspectType::CartesianPlot)
 		return -1;
-	else if (e->inherits(AspectType::XYCurve) || e->inherits(AspectType::XYAnalysisCurve) || type == AspectType::ReferenceLine || type == AspectType::Axis)
+	else if (dynamic_cast<Plot*>(e) || e->coordinateBindingEnabled() || type == AspectType::Axis)
 		return e->coordinateSystemIndex();
 	return -1;
 }
@@ -859,9 +863,9 @@ bool CartesianPlot::isSelected() const {
 	return d->isSelected();
 }
 
-//##############################################################################
-//################################  getter methods  ############################
-//##############################################################################
+// ##############################################################################
+// ################################  getter methods  ############################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeType, rangeType, rangeType)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, niceExtend, niceExtend)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeLastValues, rangeLastValues)
@@ -905,9 +909,9 @@ const QString CartesianPlot::rangeDateTimeFormat(const Dimension dim, const int 
 	return d->rangeConst(dim, index).dateTimeFormat();
 }
 
-//##############################################################################
-//######################  setter methods and undo commands  ####################
-//##############################################################################
+// ##############################################################################
+// ######################  setter methods and undo commands  ####################
+// ##############################################################################
 /*!
 	set the rectangular, defined in scene coordinates
  */
@@ -1481,6 +1485,11 @@ CartesianCoordinateSystem* CartesianPlot::defaultCoordinateSystem() const {
 	return d->defaultCoordinateSystem();
 }
 
+void CartesianPlot::setCoordinateSystemRangeIndex(int cSystemIndex, Dimension dim, int rangeIndex) {
+	coordinateSystem(cSystemIndex)->setIndex(dim, rangeIndex);
+	retransformScale(dim, rangeIndex);
+}
+
 // range breaks
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBreakingEnabled)
@@ -1565,9 +1574,9 @@ void CartesianPlot::retransform() {
 	d->retransform();
 }
 
-//################################################################
-//########################## Slots ###############################
-//################################################################
+// ################################################################
+// ########################## Slots ###############################
+// ################################################################
 void CartesianPlot::addHorizontalAxis() {
 	DEBUG(Q_FUNC_INFO)
 	Axis* axis = new Axis(QStringLiteral("x-axis"), Axis::Orientation::Horizontal);
@@ -1954,7 +1963,7 @@ void CartesianPlot::addCustomPoint() {
 		d->calledFromContextMenu = false;
 	} else {
 		auto p = point->position();
-		p.point = QPointF(0, 0);
+		p.point = QPointF(0, 0); // Exactly in the middle of the plot in scene coordinates
 		point->setPosition(p);
 		point->setCoordinateBindingEnabled(true);
 	}
@@ -1975,6 +1984,20 @@ void CartesianPlot::addReferenceLine() {
 
 	this->addChild(line);
 	line->retransform();
+}
+
+void CartesianPlot::addReferenceRange() {
+	auto* range = new ReferenceRange(this, i18n("Reference Range"));
+	range->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+
+	// Q_D(CartesianPlot);
+	// 	if (d->calledFromContextMenu) {
+	// 		range->setPositionLogical(d->logicalPos);
+	// 		d->calledFromContextMenu = false;
+	// 	}
+
+	this->addChild(range);
+	range->retransform();
 }
 
 int CartesianPlot::curveCount() {
@@ -2127,7 +2150,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	}
 
 	auto rangeChanged = false;
-	if (checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
+	if (!isLoading() && checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
 		auto xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
 		auto yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 		setRangeDirty(Dimension::X, xIndex, true);
@@ -2545,7 +2568,7 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 			for (const auto* c : m_coordinateSystems) {
 				// All x ranges with this xIndex must be dirty
 				const auto* cs = dynamic_cast<const CartesianCoordinateSystem*>(c);
-				if (cs->index(dim) == index) {
+				if (cs && cs->index(dim) == index) {
 					switch (dim) {
 					case Dimension::X:
 						setRangeDirty(Dimension::Y, cs->index(Dimension::Y), true);
@@ -2699,6 +2722,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		if (!curve->isVisible() || !curve->dataColumn())
 			continue;
 
+		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
+			continue;
+
 		const double min = curve->minimum(dim);
 		if (d->dataRange(dim, index).start() > min)
 			d->dataRange(dim, index).start() = min;
@@ -2713,6 +2739,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		if (!curve->isVisible() || curve->dataColumns().isEmpty())
 			continue;
 
+		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
+			continue;
+
 		const double min = curve->minimum(dim);
 		if (d->dataRange(dim, index).start() > min)
 			d->dataRange(dim, index).start() = min;
@@ -2725,6 +2754,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 	// loop over all box plots and determine the maximum and minimum x-values
 	for (const auto* curve : this->children<const BarPlot>()) {
 		if (!curve->isVisible() || curve->dataColumns().isEmpty())
+			continue;
+
+		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
 			continue;
 
 		const double min = curve->minimum(dim);
@@ -3098,9 +3130,9 @@ void CartesianPlot::mouseHoverOutsideDataRect() {
 	d->mouseHoverOutsideDataRect();
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 	: AbstractPlotPrivate(plot)
 	, q(plot) {
@@ -3501,9 +3533,9 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 	return QGraphicsItem::itemChange(change, value);
 }
 
-//##############################################################################
-//##################################  Events  ##################################
-//##############################################################################
+// ##############################################################################
+// ##################################  Events  ##################################
+// ##############################################################################
 
 void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	const auto* cSystem{defaultCoordinateSystem()};
@@ -4449,9 +4481,9 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void CartesianPlot::save(QXmlStreamWriter* writer) const {
@@ -5119,6 +5151,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete line;
 				return false;
 			}
+		} else if (!preview && reader->name() == QLatin1String("referenceRange")) {
+			auto* range = new ReferenceRange(this, QString());
+			range->setIsLoading(true);
+			if (range->load(reader, preview))
+				addChildFast(range);
+			else {
+				delete range;
+				return false;
+			}
 		} else if (reader->name() == QLatin1String("boxPlot")) {
 			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"));
 			boxPlot->setIsLoading(true);
@@ -5170,9 +5211,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void CartesianPlot::loadTheme(const QString& theme) {
 	if (!theme.isEmpty()) {
 		KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);

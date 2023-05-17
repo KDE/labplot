@@ -199,8 +199,7 @@ QIcon BoxPlot::staticIcon() {
 	QPixmap pm(iconSize, iconSize);
 
 	QPen pen(Qt::SolidLine);
-	const QColor& color = (QApplication::palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
-	pen.setColor(color);
+	pen.setColor(DARKMODE ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
 
 	pm.fill(Qt::transparent);
@@ -566,9 +565,9 @@ void BoxPlot::setRugOffset(double offset) {
 		exec(new BoxPlotSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
 void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(BoxPlot);
@@ -581,9 +580,9 @@ void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void BoxPlot::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Axis::Orientation::Horizontal);
@@ -596,9 +595,9 @@ void BoxPlot::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
@@ -1823,9 +1822,9 @@ void BoxPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void BoxPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const BoxPlot);
@@ -2049,9 +2048,9 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void BoxPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))

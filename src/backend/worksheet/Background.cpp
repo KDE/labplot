@@ -66,9 +66,9 @@ void Background::init(const KConfigGroup& group) {
 		d->position = (Position)group.readEntry(d->prefix + QStringLiteral("Position"), static_cast<int>(Position::No));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Background, bool, enabledAvailable, enabledAvailable)
 BASIC_SHARED_D_READER_IMPL(Background, bool, positionAvailable, positionAvailable)
 
@@ -83,9 +83,9 @@ BASIC_SHARED_D_READER_IMPL(Background, QColor, secondColor, secondColor)
 BASIC_SHARED_D_READER_IMPL(Background, QString, fileName, fileName)
 BASIC_SHARED_D_READER_IMPL(Background, double, opacity, opacity)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 void Background::setEnabledAvailable(bool available) {
 	Q_D(Background);
 	d->enabledAvailable = available;
@@ -166,9 +166,9 @@ void Background::setOpacity(double opacity) {
 		exec(new BackgroundSetOpacityCmd(d, opacity, ki18n("%1: set background opacity")));
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 BackgroundPrivate::BackgroundPrivate(Background* owner)
 	: q(owner) {
 }
@@ -185,9 +185,9 @@ void BackgroundPrivate::updatePosition() {
 	Q_EMIT q->updatePositionRequested();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Background::save(QXmlStreamWriter* writer) const {
 	Q_D(const Background);
@@ -280,9 +280,9 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Background::loadThemeConfig(const KConfigGroup& group) {
 	Q_D(const Background);
 	const QColor themeColor = group.readEntry(d->prefix + QStringLiteral("FirstColor"), QColor(Qt::white));

@@ -81,7 +81,7 @@ void CartesianPlotLegend::init() {
 	d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
 	d->position.point = QPointF(0, 0);
 
-	d->rotationAngle = group.readEntry("Rotation", 0.0);
+	d->setRotation(group.readEntry("Rotation", 0.0));
 
 	// Title
 	d->title = new TextLabel(this->name(), TextLabel::Type::PlotLegendTitle);
@@ -119,12 +119,12 @@ void CartesianPlotLegend::init() {
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
 
 	// Layout
-	d->layoutTopMargin = group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
-	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
-	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
-	d->layoutRightMargin = group.readEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
-	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Unit::Centimeter));
-	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Unit::Centimeter));
+	d->layoutTopMargin = group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutRightMargin = group.readEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter));
+	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter));
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 1);
 
 	this->initActions();
@@ -176,13 +176,13 @@ void CartesianPlotLegend::handleResize(double /*horizontalRatio*/, double /*vert
 	// 	Q_D(const CartesianPlotLegend);
 }
 
-//##############################################################################
-//################################  getter methods  ############################
-//##############################################################################
+// ##############################################################################
+// ################################  getter methods  ############################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, lineSymbolWidth, lineSymbolWidth)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, lineSymbolWidth, lineSymbolWidth)
 
 // Title
 TextLabel* CartesianPlotLegend::title() {
@@ -202,20 +202,20 @@ Line* CartesianPlotLegend::borderLine() const {
 	return d->borderLine;
 }
 
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, borderCornerRadius, borderCornerRadius)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, borderCornerRadius, borderCornerRadius)
 
 // Layout
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutTopMargin, layoutTopMargin)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutBottomMargin, layoutBottomMargin)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutLeftMargin, layoutLeftMargin)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutRightMargin, layoutRightMargin)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutHorizontalSpacing, layoutHorizontalSpacing)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutVerticalSpacing, layoutVerticalSpacing)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutTopMargin, layoutTopMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutBottomMargin, layoutBottomMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutLeftMargin, layoutLeftMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutRightMargin, layoutRightMargin)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutHorizontalSpacing, layoutHorizontalSpacing)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, layoutVerticalSpacing, layoutVerticalSpacing)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, int, layoutColumnCount, layoutColumnCount)
 
-//##############################################################################
-//######################  setter methods and undo commands  ####################
-//##############################################################################
+// ##############################################################################
+// ######################  setter methods and undo commands  ####################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLabelFont, QFont, labelFont, retransform)
 void CartesianPlotLegend::setLabelFont(const QFont& font) {
 	Q_D(CartesianPlotLegend);
@@ -237,8 +237,8 @@ void CartesianPlotLegend::setLabelColumnMajor(bool columnMajor) {
 		exec(new CartesianPlotLegendSetLabelColumnMajorCmd(d, columnMajor, ki18n("%1: change column order")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLineSymbolWidth, float, lineSymbolWidth, retransform)
-void CartesianPlotLegend::setLineSymbolWidth(float width) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLineSymbolWidth, double, lineSymbolWidth, retransform)
+void CartesianPlotLegend::setLineSymbolWidth(double width) {
 	Q_D(CartesianPlotLegend);
 	if (width != d->lineSymbolWidth)
 		exec(new CartesianPlotLegendSetLineSymbolWidthCmd(d, width, ki18n("%1: change line+symbol width")));
@@ -246,50 +246,50 @@ void CartesianPlotLegend::setLineSymbolWidth(float width) {
 
 // Border
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderCornerRadius, qreal, borderCornerRadius, update)
-void CartesianPlotLegend::setBorderCornerRadius(float radius) {
+void CartesianPlotLegend::setBorderCornerRadius(qreal radius) {
 	Q_D(CartesianPlotLegend);
 	if (radius != d->borderCornerRadius)
 		exec(new CartesianPlotLegendSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set border corner radius")));
 }
 
 // Layout
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutTopMargin, float, layoutTopMargin, retransform)
-void CartesianPlotLegend::setLayoutTopMargin(float margin) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutTopMargin, double, layoutTopMargin, retransform)
+void CartesianPlotLegend::setLayoutTopMargin(double margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutTopMargin)
 		exec(new CartesianPlotLegendSetLayoutTopMarginCmd(d, margin, ki18n("%1: set layout top margin")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutBottomMargin, float, layoutBottomMargin, retransform)
-void CartesianPlotLegend::setLayoutBottomMargin(float margin) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutBottomMargin, double, layoutBottomMargin, retransform)
+void CartesianPlotLegend::setLayoutBottomMargin(double margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutBottomMargin)
 		exec(new CartesianPlotLegendSetLayoutBottomMarginCmd(d, margin, ki18n("%1: set layout bottom margin")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutLeftMargin, float, layoutLeftMargin, retransform)
-void CartesianPlotLegend::setLayoutLeftMargin(float margin) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutLeftMargin, double, layoutLeftMargin, retransform)
+void CartesianPlotLegend::setLayoutLeftMargin(double margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutLeftMargin)
 		exec(new CartesianPlotLegendSetLayoutLeftMarginCmd(d, margin, ki18n("%1: set layout left margin")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutRightMargin, float, layoutRightMargin, retransform)
-void CartesianPlotLegend::setLayoutRightMargin(float margin) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutRightMargin, double, layoutRightMargin, retransform)
+void CartesianPlotLegend::setLayoutRightMargin(double margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutRightMargin)
 		exec(new CartesianPlotLegendSetLayoutRightMarginCmd(d, margin, ki18n("%1: set layout right margin")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, retransform)
-void CartesianPlotLegend::setLayoutVerticalSpacing(float spacing) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutVerticalSpacing, double, layoutVerticalSpacing, retransform)
+void CartesianPlotLegend::setLayoutVerticalSpacing(double spacing) {
 	Q_D(CartesianPlotLegend);
 	if (spacing != d->layoutVerticalSpacing)
 		exec(new CartesianPlotLegendSetLayoutVerticalSpacingCmd(d, spacing, ki18n("%1: set layout vertical spacing")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, retransform)
-void CartesianPlotLegend::setLayoutHorizontalSpacing(float spacing) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutHorizontalSpacing, double, layoutHorizontalSpacing, retransform)
+void CartesianPlotLegend::setLayoutHorizontalSpacing(double spacing) {
 	Q_D(CartesianPlotLegend);
 	if (spacing != d->layoutHorizontalSpacing)
 		exec(new CartesianPlotLegendSetLayoutHorizontalSpacingCmd(d, spacing, ki18n("%1: set layout horizontal spacing")));
@@ -302,21 +302,21 @@ void CartesianPlotLegend::setLayoutColumnCount(int count) {
 		exec(new CartesianPlotLegendSetLayoutColumnCountCmd(d, count, ki18n("%1: set layout column count")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void CartesianPlotLegend::visibilityChangedSlot() {
 	Q_D(const CartesianPlotLegend);
 	this->setVisible(!d->isVisible());
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -328,12 +328,7 @@ CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend* owne
 }
 
 QRectF CartesianPlotLegendPrivate::boundingRect() const {
-	if (rotationAngle != 0) {
-		QMatrix matrix;
-		matrix.rotate(-rotationAngle);
-		return matrix.mapRect(rect);
-	} else
-		return rect;
+	return rect;
 }
 
 void CartesianPlotLegendPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -349,12 +344,6 @@ QPainterPath CartesianPlotLegendPrivate::shape() const {
 		path.addRect(rect);
 	else
 		path.addRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-
-	if (rotationAngle != 0) {
-		QTransform trafo;
-		trafo.rotate(-rotationAngle);
-		path = trafo.map(path);
-	}
 
 	return path;
 }
@@ -456,15 +445,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	// add title width if title is available
 	if (title->isVisible() && !title->text().text.isEmpty()) {
 		float titleWidth;
-		if (rotationAngle == 0.0)
-			titleWidth = title->graphicsItem()->boundingRect().width();
-		else {
-			QRectF rect = title->graphicsItem()->boundingRect();
-			QMatrix matrix;
-			matrix.rotate(-rotationAngle);
-			rect = matrix.mapRect(rect);
-			titleWidth = rect.width();
-		}
+		titleWidth = title->graphicsItem()->boundingRect().width();
 
 		if (titleWidth > legendWidth)
 			legendWidth = titleWidth;
@@ -475,15 +456,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	legendHeight += rowCount * h; // height of the rows
 	legendHeight += (rowCount - 1) * layoutVerticalSpacing; // spacing between the rows
 	if (title->isVisible() && !title->text().text.isEmpty()) {
-		if (rotationAngle == 0.0)
-			legendHeight += title->graphicsItem()->boundingRect().height(); // legend title
-		else {
-			QRectF rect = title->graphicsItem()->boundingRect();
-			QMatrix matrix;
-			matrix.rotate(-rotationAngle);
-			rect = matrix.mapRect(rect);
-			legendHeight += rect.height(); // legend title
-		}
+		legendHeight += title->graphicsItem()->boundingRect().height(); // legend title
 	}
 
 	rect.setX(-legendWidth / 2);
@@ -514,7 +487,6 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		return;
 
 	painter->save();
-	painter->rotate(-rotationAngle);
 
 	// draw the area
 	painter->setOpacity(background->opacity());
@@ -882,9 +854,9 @@ void CartesianPlotLegendPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	Q_D(const CartesianPlotLegend);
@@ -1002,7 +974,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 				else
 					d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
 
-				READ_DOUBLE_VALUE("rotation", rotationAngle);
+				QGRAPHICSITEM_READ_DOUBLE_VALUE("rotation", Rotation);
 			}
 		} else if (reader->name() == QLatin1String("textLabel")) {
 			if (!d->title->load(reader, preview)) {

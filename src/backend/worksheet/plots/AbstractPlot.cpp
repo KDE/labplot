@@ -128,9 +128,10 @@ void AbstractPlot::setSymmetricPadding(bool symmetric) {
 		exec(new AbstractPlotSetSymmetricPaddingCmd(d, symmetric, ki18n("%1: set horizontal padding")));
 }
 
-//################################################################
-//################### Private implementation #####################
-//################################################################
+// ################################################################
+// ################### Private implementation #####################
+// ################################################################
 AbstractPlotPrivate::AbstractPlotPrivate(AbstractPlot* owner)
-	: WorksheetElementContainerPrivate(owner) {
+	: WorksheetElementContainerPrivate(owner)
+	, q(owner) {
 }

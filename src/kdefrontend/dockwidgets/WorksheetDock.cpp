@@ -109,7 +109,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	m_worksheet = list.first();
 	setAspects(list);
 
-	// if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
+	// if there are more than one worksheet in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -219,7 +219,7 @@ void WorksheetDock::updateUnits() {
 */
 void WorksheetDock::updatePaperSize() {
 	if (m_worksheet->useViewSize()) {
-		ui.cbSizeType->setCurrentIndex(0);
+		ui.cbSizeType->setCurrentIndex(ui.cbSizeType->findData((int)SizeType::ViewSize));
 		return;
 	}
 
@@ -258,7 +258,9 @@ void WorksheetDock::updatePaperSize() {
 	}
 
 	if (!found)
-		ui.cbSizeType->setCurrentIndex(2); // select "Custom"
+		ui.cbSizeType->setCurrentIndex(ui.cbSizeType->findData((int)SizeType::Custom));
+	else
+		ui.cbSizeType->setCurrentIndex(ui.cbSizeType->findData((int)SizeType::StandardPage));
 }
 
 //*************************************************************
@@ -288,9 +290,9 @@ void WorksheetDock::retranslateUi() {
 	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
 
 	ui.cbSizeType->clear();
-	ui.cbSizeType->addItem(i18n("View Size"));
-	ui.cbSizeType->addItem(i18n("Standard Page"));
-	ui.cbSizeType->addItem(i18n("Custom"));
+	ui.cbSizeType->addItem(i18n("View Size"), (int)SizeType::ViewSize);
+	ui.cbSizeType->addItem(i18n("Standard Page"), (int)SizeType::StandardPage);
+	ui.cbSizeType->addItem(i18n("Custom"), (int)SizeType::Custom);
 
 	const QVector<QPageSize::PageSizeId> pageSizeIds = {
 		QPageSize::A0,	  QPageSize::A1,	 QPageSize::A2,	   QPageSize::A3,	  QPageSize::A4,	  QPageSize::A5,	 QPageSize::A6,	 QPageSize::A7,
@@ -311,33 +313,39 @@ void WorksheetDock::scaleContentChanged(bool scaled) {
 }
 
 void WorksheetDock::sizeTypeChanged(int index) {
-	if (index == 0) { // view size
+	const auto sizeType = static_cast<SizeType>(ui.cbSizeType->itemData(index).toInt());
+
+	switch (sizeType) {
+	case SizeType::ViewSize:
 		ui.lPage->hide();
 		ui.cbPage->hide();
 		ui.lOrientation->hide();
 		ui.cbOrientation->hide();
 		ui.sbWidth->setEnabled(false);
 		ui.sbHeight->setEnabled(false);
-	} else if (index == 1) { // standard page
+		break;
+	case SizeType::StandardPage:
 		ui.lPage->show();
 		ui.cbPage->show();
 		ui.lOrientation->show();
 		ui.cbOrientation->show();
 		ui.sbWidth->setEnabled(false);
 		ui.sbHeight->setEnabled(false);
-	} else { // custom size
+		break;
+	case SizeType::Custom:
 		ui.lPage->hide();
 		ui.cbPage->hide();
 		ui.lOrientation->hide();
 		ui.cbOrientation->hide();
 		ui.sbWidth->setEnabled(true);
 		ui.sbHeight->setEnabled(true);
+		break;
 	}
 
-	CONDITIONAL_LOCK_RETURN;
+	if (m_initializing) // don't lock here since we potentially need to call setters in pageChanged() below
+		return;
 
 	if (index == 0) { // viewSize
-		CONDITIONAL_LOCK_RETURN;
 		for (auto* worksheet : m_worksheetList)
 			worksheet->setUseViewSize(true);
 	} else if (index == 1) { // standard page
@@ -352,8 +360,6 @@ void WorksheetDock::sizeTypeChanged(int index) {
 }
 
 void WorksheetDock::pageChanged(int i) {
-	CONDITIONAL_LOCK_RETURN;
-
 	// determine the width and the height of the to be used predefined layout
 	const auto index = ui.cbPage->itemData(i).value<QPageSize::PageSizeId>();
 	QSizeF s = QPageSize::size(index, QPageSize::Millimeter);
@@ -368,6 +374,8 @@ void WorksheetDock::pageChanged(int i) {
 		ui.sbWidth->setValue(s.width() / 25.4);
 		ui.sbHeight->setValue(s.height() / 25.4);
 	}
+
+	CONDITIONAL_LOCK_RETURN;
 
 	double w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Unit::Millimeter);
 	double h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Unit::Millimeter);
@@ -394,7 +402,7 @@ void WorksheetDock::orientationChanged(int /*index*/) {
 
 //"Layout"-tab
 void WorksheetDock::layoutChanged(int index) {
-	auto layout = (Worksheet::Layout)index;
+	auto layout = static_cast<Worksheet::Layout>(index);
 
 	bool b = (layout != Worksheet::Layout::NoLayout);
 	ui.sbLayoutTopMargin->setEnabled(b);

@@ -10,6 +10,7 @@
 
 #include "AxisTest.h"
 #include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "src/backend/worksheet/Line.h"
@@ -382,6 +383,7 @@ void AxisTest::TestAddingVerticalAxis() {
 }
 
 void AxisTest::tickLabelRepresentationAutomatic() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -445,6 +447,7 @@ void AxisTest::tickLabelRepresentationAutomatic() {
 }
 
 void AxisTest::tickLabelRepresentationManual() {
+	QLocale::setDefault(QLocale::English); // . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -700,6 +703,216 @@ void AxisTest::setTickLabelColor() {
 	CHECK_MAJOR_TICKS_LINE_COLOR(Qt::black);
 	CHECK_MINOR_TICKS_LINE_COLOR(Qt::black);
 	CHECK_LINE_COLOR(Qt::black);
+}
+
+void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+
+	AxisDock dock(nullptr);
+	dock.setAxes({xAxis, yAxis});
+	dock.ui.cbMajorTicksAutoNumber->setChecked(false);
+	dock.ui.sbMajorTicksNumber->setValue(10);
+
+	// Check majorticks numbers of the axes
+	QCOMPARE(xAxis->majorTicksNumber(), 10);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
+	QCOMPARE(yAxis->majorTicksNumber(), 10);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
+	QCOMPARE(dock.ui.cbMajorTicksAutoNumber->isChecked(), false);
+
+	dock.setAxes({xAxis, yAxis}); // Another time
+	dock.ui.cbMajorTicksAutoNumber->setChecked(true);
+
+	QCOMPARE(xAxis->majorTicksNumber(), 6);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+	QCOMPARE(yAxis->majorTicksNumber(), 6);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+	QCOMPARE(dock.ui.sbMajorTicksNumber->value(), 6);
+}
+
+void AxisTest::automaticTicNumberUpdateDockMinorTicks() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+
+	AxisDock dock(nullptr);
+	dock.setAxes({xAxis, yAxis});
+	dock.ui.cbMinorTicksAutoNumber->setChecked(false);
+	dock.ui.sbMinorTicksNumber->setValue(10);
+
+	// Check minorticks numbers of the axes
+	QCOMPARE(xAxis->minorTicksNumber(), 10);
+	QCOMPARE(xAxis->minorTicksAutoNumber(), false);
+	QCOMPARE(yAxis->minorTicksNumber(), 10);
+	QCOMPARE(xAxis->minorTicksAutoNumber(), false);
+	QCOMPARE(dock.ui.cbMinorTicksAutoNumber->isChecked(), false);
+
+	dock.setAxes({xAxis, yAxis}); // Another time
+	QCOMPARE(dock.ui.cbMinorTicksAutoNumber->isChecked(), false);
+	dock.ui.cbMinorTicksAutoNumber->setChecked(true);
+
+	// 1 is the default value for automatic
+	QCOMPARE(xAxis->minorTicksNumber(), 1);
+	QCOMPARE(xAxis->minorTicksAutoNumber(), true);
+	QCOMPARE(yAxis->minorTicksNumber(), 1);
+	QCOMPARE(xAxis->minorTicksAutoNumber(), true);
+	QCOMPARE(dock.ui.sbMinorTicksNumber->value(), 1);
+}
+
+void AxisTest::columnLabelValues() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+	project.addChild(spreadsheet);
+
+	auto* xCol = spreadsheet->column(0);
+	xCol->replaceValues(0, QVector<double>({1, 2, 3}));
+
+	auto* yCol = spreadsheet->column(1);
+	yCol->replaceValues(0, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheet->rowCount(), 3);
+	QCOMPARE(spreadsheet->columnCount(), 2);
+
+	yCol->addValueLabel(2, QStringLiteral("Status 1"));
+	yCol->addValueLabel(3, QStringLiteral("Status 2"));
+	yCol->addValueLabel(4, QStringLiteral("Status 3"));
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	// auto* xAxis = static_cast<Axis*>(axes.at(0));
+
+	{
+		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
+		const auto v = yAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("2.0"),
+			QStringLiteral("2.5"),
+			QStringLiteral("3.0"),
+			QStringLiteral("3.5"),
+			QStringLiteral("4.0"),
+		};
+		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+	}
+
+	{
+		yAxis->setMajorTicksType(Axis::TicksType::ColumnLabels);
+		yAxis->setMajorTicksColumn(yCol);
+
+		QStringList expectedStrings{
+			QStringLiteral("Status 1"),
+			QStringLiteral("Status 2"),
+			QStringLiteral("Status 3"),
+		};
+		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+void AxisTest::customTextLabels() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->replaceValues(0, QVector<double>({1, 2, 3}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(0, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	Spreadsheet* spreadsheetLabels = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetLabels->setColumnCount(1);
+	spreadsheetLabels->setRowCount(3);
+	project.addChild(spreadsheetLabels);
+	auto* labelsCol = spreadsheetLabels->column(0);
+	labelsCol->setColumnMode(AbstractColumn::ColumnMode::Text);
+	labelsCol->replaceTexts(-1, QVector<QString>({QStringLiteral("A"), QStringLiteral("B"), QStringLiteral("C")}));
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksNumber(3, false);
+	xAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+	xAxis->setLabelsTextColumn(labelsCol);
+
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("A"),
+			QStringLiteral("B"),
+			QStringLiteral("C"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
 }
 
 QTEST_MAIN(AxisTest)

@@ -9,18 +9,18 @@
 */
 
 #include "MQTTConnectionManagerWidget.h"
-
 #include "backend/lib/macros.h"
+
+#include <QListWidgetItem>
+#include <QTimer>
+#include <QtMqtt>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
-
-#include <QListWidgetItem>
-#include <QTimer>
-#include <QtMqtt>
+#include <kcoreaddons_version.h>
 
 /*!
    \class MQTTConnectionManagerWidget
@@ -410,10 +410,18 @@ void MQTTConnectionManagerWidget::addConnection() {
 		removes the current selected connection.
  */
 void MQTTConnectionManagerWidget::deleteConnection() {
-	int ret = KMessageBox::questionYesNo(this,
-										 i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
-										 i18n("Delete Connection"));
-	if (ret != KMessageBox::Yes)
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+	auto status = KMessageBox::questionTwoActions(this,
+												  i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
+												  i18n("Delete Connection"),
+												  KStandardGuiItem::del(),
+												  KStandardGuiItem::cancel());
+#else
+	auto status = KMessageBox::questionYesNo(this,
+											 i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
+											 i18n("Delete Connection"));
+#endif
+	if (status != KMessageBox::Yes)
 		return;
 
 	// remove the current selected connection

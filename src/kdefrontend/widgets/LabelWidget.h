@@ -109,7 +109,7 @@ private Q_SLOTS:
 	void verticalAlignmentChanged(int);
 
 	void positionXLogicalChanged(double);
-	void positionXLogicalDateTimeChanged(const QDateTime&);
+	void positionXLogicalDateTimeChanged(qint64);
 	void positionYLogicalChanged(double);
 
 	void rotationChanged(int);
@@ -152,6 +152,7 @@ private Q_SLOTS:
 	friend TextLabelTest;
 	friend class AxisTest;
 	friend class AxisDock; // fontColorChanged() is a private method of LabelWidget, needs to be called
+	friend class WorksheetElementTest;
 };
 
 #endif // LABELWIDGET_H

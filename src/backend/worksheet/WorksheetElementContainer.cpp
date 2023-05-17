@@ -193,9 +193,9 @@ void WorksheetElementContainer::prepareGeometryChange() {
 	d->prepareGeometryChangeRequested();
 }
 
-//################################################################
-//################### Private implementation ##########################
-//################################################################
+// ################################################################
+// ################### Private implementation ##########################
+// ################################################################
 WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -250,7 +250,7 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	QPainterPath path;
 	path.addRect(boundingRectangle);
 
-	// make the shape somewhat thicker then the hoveredPen to make the selection/hovering box more visible
+	// make the shape somewhat thicker than the hoveredPen to make the selection/hovering box more visible
 	containerShape = QPainterPath();
 	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
 }

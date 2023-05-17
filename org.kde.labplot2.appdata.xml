@@ -13,6 +13,7 @@
   <name xml:lang="de">LabPlot</name>
   <name xml:lang="el">LabPlot</name>
   <name xml:lang="en-GB">LabPlot</name>
+  <name xml:lang="eo">LabPlot</name>
   <name xml:lang="es">LabPlot</name>
   <name xml:lang="et">LabPlot</name>
   <name xml:lang="eu">LabPlot</name>
@@ -42,6 +43,7 @@
   <summary xml:lang="ca-valencia">Visualització i anàlisi de dades interactius</summary>
   <summary xml:lang="de">Interaktive Datenvisualisierung und -analyse</summary>
   <summary xml:lang="en-GB">Interactive Data Visualisation and Analysis</summary>
+  <summary xml:lang="eo">Interaga Datuma Bildigo kaj Analizo</summary>
   <summary xml:lang="es">Visualización y análisis de datos interactivo</summary>
   <summary xml:lang="eu">Datuen irudikatze eta analisi elkarreragilea</summary>
   <summary xml:lang="fi">Vuorovaikutteinen tiedon visualisointi ja analyysi</summary>
@@ -68,6 +70,7 @@
     <p xml:lang="ca-valencia">LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
     <p xml:lang="de">LabPlot ist ein FREIE, Open Source und plattformübergreifende Software zur Datenvisualisierung und -analyse, die für jeden verfügbar ist.</p>
     <p xml:lang="en-GB">LabPlot is a FREE, open source and cross-platform Data Visualisation and Analysis software accessible to everyone.</p>
+    <p xml:lang="eo">LabPlot estas SENPAGA, malfermfonta kaj plurplatforma programaro pri Vidigo kaj Analizo de Datumoj alirebla por ĉiuj.</p>
     <p xml:lang="es">LabPlot es un software de visualización y análisis de datos LIBRE, de código abierto y multiplataforma, al que todo el mundo puede acceder.</p>
     <p xml:lang="eu">LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.</p>
     <p xml:lang="fi">LabPlot on VAPAA, kaikkien käytettävissä oleva, avointa lähdekoodia ja monialustainen tiedon visualisointi- ja analyysiohjelma.</p>
@@ -95,6 +98,7 @@
     <p xml:lang="de">LabPlot erlaubt es auf einfache Weise Grafiken zu erzeugen, zu verwalten und zu bearbeiten.Grafiken können aus externen Daten oder aus einer Tabelle erzeugt werden.Der Export der Grafiken in verschiedene Pixmap- und Vektorformate ist möglich.</p>
     <p xml:lang="el">Το LabPlot παρέχει έναν εύκολο τρόπο δημιουργίας, διαχείρισης και επεξεργασίας γραφικών παραστάσεων. Σας επιτρέπει να δημιουργείτε γραφικές παρασασεις με βάση δεδομένα από φύλλα εργασίας ή εισηγμένα από εξωτερικά αρχεία. Οι γραφικές παραστάσεις μπορούν να εξαχθούν σε διάφορους τύπους αποθήκευσης χρωματικής περίπλεξης ή διανυσματικών γραφικών.</p>
     <p xml:lang="en-GB">LabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.</p>
+    <p xml:lang="eo">LabPlot provizas facilan manieron krei, administri kaj redakti diagramojn. Ĝi permesas vin produkti diagramojn bazitajn sur datumoj de kalkultabelo aŭ sur datumoj importitaj de eksteraj dosieroj. Diagramoj povas esti eksportitaj al pluraj pixmap kaj vektoraj grafikaj formatoj.</p>
     <p xml:lang="es">LabPlot proporciona un sencillo modo de crear, gestionar y editar gráficos. Le permite generar gráficos basados en datos obtenidos de una hoja de cálculo o importados de archivos externos. Los gráficos se pueden exportar a diversos formatos de imagen y vectoriales.</p>
     <p xml:lang="et">LabPlot võimaldab vähese vaevaga jooniseid luua, hallata ja muuta. Graafikuid saab koostada andmetabelist pärit või võrgufailidest imporditud andmete põhjal. Jooniseid saab eksportida mitmes pikselraster- ja vektorgraafika vormingus.</p>
     <p xml:lang="eu">LabPlot-ek grafikoak sortu, kudeatu eta editatzeko era erraz bat eskaintzen du. Grafikoak sortzen uzten dizu kalkulu-orrietako datuekin edo kanpoko fitxategietatik inportatutako datuekin. Grafikoak hainbat pixel-mapa eta bektore grafiko formatutara esportatu daitezke.</p>
@@ -129,6 +133,7 @@
       <caption xml:lang="cs">Základní vizualizace dat</caption>
       <caption xml:lang="de">Einfache Visualisierung von Daten</caption>
       <caption xml:lang="en-GB">Basic visualisation of data</caption>
+      <caption xml:lang="eo">Baza bildigo de datumoj</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
@@ -156,6 +161,7 @@
       <caption xml:lang="cs">Základní vizualizace dat</caption>
       <caption xml:lang="de">Einfache Visualisierung von Daten</caption>
       <caption xml:lang="en-GB">Basic visualisation of data</caption>
+      <caption xml:lang="eo">Baza bildigo de datumoj</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
@@ -182,6 +188,7 @@
       <caption xml:lang="ca-valencia">Disposició avançada de diagrames i imatges</caption>
       <caption xml:lang="de">Fortgeschrittenes Layout von Plots und Bildern</caption>
       <caption xml:lang="en-GB">Advanced layouts of plots and images</caption>
+      <caption xml:lang="eo">Altnivela aranĝo de diagramoj kaj bildoj</caption>
       <caption xml:lang="es">Diseño avanzado de gráficos e imágenes</caption>
       <caption xml:lang="eu">Irudien eta trazuen antolamendu aurreratua</caption>
       <caption xml:lang="fi">Kaavioiden ja kuvioiden edistynyt asettelu</caption>
@@ -209,6 +216,7 @@
       <caption xml:lang="cs">Motivy</caption>
       <caption xml:lang="de">Farbmotive</caption>
       <caption xml:lang="en-GB">Theming</caption>
+      <caption xml:lang="eo">Etosigo</caption>
       <caption xml:lang="es">Temas</caption>
       <caption xml:lang="eu">Gaiak aldatzea</caption>
       <caption xml:lang="fi">Teemoitus</caption>
@@ -235,6 +243,7 @@
       <caption xml:lang="ca-valencia">Visualització de funcions matemàtiques</caption>
       <caption xml:lang="de">Visualisierung von mathematischen Funktionen</caption>
       <caption xml:lang="en-GB">Visualisation of mathematical functions</caption>
+      <caption xml:lang="eo">Bildigo de matematikaj funkcioj</caption>
       <caption xml:lang="es">Visualización de funciones matemáticas</caption>
       <caption xml:lang="eu">Funtzio matematikoak irudikatzea</caption>
       <caption xml:lang="fi">Matemaattisten funktioiden visualisointi</caption>
@@ -261,6 +270,7 @@
       <caption xml:lang="ca-valencia">Ajust de models predefinits o personalitzats a les dades</caption>
       <caption xml:lang="de">Anpassung von Daten mit vordefinierten oder eigenen Modellen</caption>
       <caption xml:lang="en-GB">Fit pre-defined or custom models to the data</caption>
+      <caption xml:lang="eo">Adaptu antaŭdifinitajn aŭ kutimajn modelojn al la datumoj</caption>
       <caption xml:lang="es">Ajuste de modelos predefinidos o personalizados a los datos</caption>
       <caption xml:lang="eu">Datuei aurrez definitutako edo neurrira egindako ereduak egokitu</caption>
       <caption xml:lang="fi">Sovita tietoon ennalta-asetettuja ja mukautettuja malleja</caption>
@@ -286,6 +296,7 @@
       <caption xml:lang="ca-valencia">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
       <caption xml:lang="de">Glättung von Daten mithilfe verschiedener Glättungsmethoden</caption>
       <caption xml:lang="en-GB">Smooth the data with the help of various smoothing methods</caption>
+      <caption xml:lang="eo">Glatigu la datumojn helpe de diversaj glatigaj metodoj</caption>
       <caption xml:lang="es">Suavizar los datos con la ayuda de diversos métodos de suavizado</caption>
       <caption xml:lang="eu">Datuak leundu, leuntzeko hainbat metodoen laguntzarekin</caption>
       <caption xml:lang="fi">Tasoita tietoja eri tasoitusmenetelmillä</caption>
@@ -311,6 +322,7 @@
       <caption xml:lang="ca-valencia">Interfície de bloc de notes per a sessions interactives en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="de">Notebookschnittstelle zu interaktiven Sitzungen in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="en-GB">Notebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc</caption>
+      <caption xml:lang="eo">Kajera interfaco por interagaj sesioj en Maxima, Octave, R, Sage, Scilab, Python, Julia ktp.</caption>
       <caption xml:lang="es">Interfaz de bloc de notas para sesiones interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="eu">Ohar-blokaren interfazea, Maxima, Octave, R, Sage, Scilab, Python, Julia, eta abarrekin saio elkarreragileak egiteko</caption>
       <caption xml:lang="fi">Muistiokäyttöliittymä vuorovaikutteisiin istuntoihin Maximassa, Octavessa, R:ssä, Sagessa, Scilabissa, Pythonissa, Juliassa jne.</caption>
@@ -337,6 +349,7 @@
       <caption xml:lang="cs">Analýza signálu</caption>
       <caption xml:lang="de">Signalanalyse</caption>
       <caption xml:lang="en-GB">Signal analysis</caption>
+      <caption xml:lang="eo">Analizo de signalo</caption>
       <caption xml:lang="es">Análisis de señales</caption>
       <caption xml:lang="eu">Seinaleen analisia</caption>
       <caption xml:lang="fi">Signaalianalyysi</caption>
@@ -363,6 +376,7 @@
       <caption xml:lang="ca-valencia">Diagrama Herzsprung-Russel en LabPlot</caption>
       <caption xml:lang="de">Herzsprung-Russel-Diagramm in LabPlot</caption>
       <caption xml:lang="en-GB">Herzsprung-Russel diagram in LabPlot</caption>
+      <caption xml:lang="eo">Hertzsprung-Russell diagramo en LabPlot</caption>
       <caption xml:lang="es">Diagrama de Herzsprung-Russel en LabPlot</caption>
       <caption xml:lang="eu">Herzsprung-Russel diagrama LabPlot-en</caption>
       <caption xml:lang="fi">Herzsprung-Russel-diagrammi LabPlotissa</caption>
@@ -389,6 +403,7 @@
       <caption xml:lang="ca-valencia">Visualització de dades calculades en una sessió interactiva de Maxima</caption>
       <caption xml:lang="de">Visualisierung von Daten, die interaktiv in einer Maxima-Sitzung berechnet werden</caption>
       <caption xml:lang="en-GB">Visualisation of data calculated in an interactive Maxima session</caption>
+      <caption xml:lang="eo">Bildigo de datumoj kalkulitaj en interaga sesio de Maxima</caption>
       <caption xml:lang="es">Visualización de datos calculados en una sesión interactiva de Maxima</caption>
       <caption xml:lang="eu">Maxima saio elkarreragile batean kalkulatuta datuen irudikapena</caption>
       <caption xml:lang="fi">Vuorovaikutteisessa Maxima-istunnossa lasketun tiedon visualisointi</caption>
@@ -414,6 +429,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="2.10.0" date="2023-03-21"/>
     <release version="2.9.0" date="2022-05-03"/>
     <release version="2.8.2" date="2021-04-01"/>
     <release version="2.8.1" date="2020-11-13"/>

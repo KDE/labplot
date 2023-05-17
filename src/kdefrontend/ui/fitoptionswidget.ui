@@ -188,28 +188,28 @@
        <widget class="QLineEdit" name="leEvalMin"/>
       </item>
       <item row="6" column="0">
-       <widget class="QDateTimeEdit" name="dateTimeEditMin">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditMin">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="6" column="3">
-       <widget class="QDateTimeEdit" name="dateTimeEditMax">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditMax">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="9" column="0">
-       <widget class="QDateTimeEdit" name="dateTimeEditEvalMin">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditEvalMin">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="9" column="3">
-       <widget class="QDateTimeEdit" name="dateTimeEditEvalMax">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditEvalMax">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
@@ -268,6 +268,11 @@
    <extends>QFrame</extends>
    <header>kseparator.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

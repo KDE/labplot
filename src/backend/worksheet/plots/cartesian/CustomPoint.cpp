@@ -58,11 +58,15 @@ void CustomPoint::init() {
 	Q_D(CustomPoint);
 
 	// default position
-	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-	const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-	const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-	d->positionLogical = QPointF(x, y);
+	if (plot()) {
+		d->coordinateBindingEnabled = true; // By default on
+		auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
+		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+		DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
+		d->positionLogical = QPointF(x, y);
+	} else
+		d->position.point = QPointF(0, 0);
 	d->updatePosition(); // To update also scene coordinates
 
 	// initialize the symbol
@@ -132,9 +136,9 @@ void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
 	d->setParentItem(item);
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 CustomPointPrivate::CustomPointPrivate(CustomPoint* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -157,7 +161,7 @@ void CustomPointPrivate::retransform() {
 	if (suppressRetransform || q->isLoading())
 		return;
 
-	updatePosition();
+	updatePosition(); // needed, because CartesianPlot calls retransform if some operations are done
 	recalcShapeAndBoundingRect();
 }
 
@@ -244,9 +248,9 @@ void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void CustomPoint::save(QXmlStreamWriter* writer) const {
 	Q_D(const CustomPoint);

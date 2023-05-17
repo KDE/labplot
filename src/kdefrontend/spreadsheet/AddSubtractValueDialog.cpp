@@ -15,6 +15,7 @@
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "kdefrontend/GuiTools.h"
 
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
@@ -25,17 +26,22 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
+extern "C" {
+#include "backend/nsl/nsl_baseline.h"
+}
+
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KWindowConfig>
 
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QTimer>
 #include <QWindow>
 
 #include <cmath>
 
-enum class ValueType { CustomValue, Difference, Minimum, Maximum, Median, Mean };
+enum class ValueType { CustomValue, Difference, Minimum, Maximum, Median, Mean, Baseline };
 /*!
 	\class AddSubtractValueDialog
 	\brief Dialog for adding/subtracting a value from column values.
@@ -50,24 +56,10 @@ AddSubtractValueDialog::AddSubtractValueDialog(Spreadsheet* s, const QVector<Col
 	, m_operation(op) {
 	Q_ASSERT(s != nullptr);
 
+	ui.setupUi(this);
+
+	processColumns();
 	init();
-
-	switch (m_operation) {
-	case Add:
-		m_okButton->setToolTip(i18n("Add the specified value to column values"));
-		break;
-	case Subtract:
-		m_okButton->setToolTip(i18n("Subtract the specified value from column values"));
-		break;
-	case Multiply:
-		m_okButton->setToolTip(i18n("Multiply column values by the specified value"));
-		break;
-	case Divide:
-		m_okButton->setToolTip(i18n("Divide column values by the specified value"));
-		break;
-	}
-
-	updateWidgetsVisiblity();
 }
 
 AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget* parent)
@@ -76,41 +68,24 @@ AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget*
 	, m_operation(op) {
 	Q_ASSERT(m != nullptr);
 
-	init();
+	ui.setupUi(this);
 
-	switch (m_operation) {
-	case Add:
-		m_okButton->setToolTip(i18n("Add the specified value to matrix values"));
-		break;
-	case Subtract:
-		m_okButton->setToolTip(i18n("Subtract the specified value from matrix values"));
-		break;
-	case Multiply:
-		m_okButton->setToolTip(i18n("Multiply matrix values by the specified value"));
-		break;
-	case Divide:
-		m_okButton->setToolTip(i18n("Divide matrix values by the specified value"));
-	}
-
-	const auto mode = m_matrix->mode();
-	const auto numberLocale = QLocale();
-
-	switch (mode) {
+	switch (m_matrix->mode()) {
 	case AbstractColumn::ColumnMode::Integer:
 		m_numeric = true;
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(m_matrix->cell<int>(0, 0)));
+		ui.leValue->setText(QLocale().toString(m_matrix->cell<int>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
 		m_numeric = true;
 		// TODO: QLongLongValidator
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(m_matrix->cell<qint64>(0, 0)));
+		ui.leValue->setText(QLocale().toString(m_matrix->cell<qint64>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::Double:
 		m_numeric = true;
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(m_matrix->cell<double>(0, 0)));
+		ui.leValue->setText(QLocale().toString(m_matrix->cell<double>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Day:
@@ -119,15 +94,14 @@ AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget*
 		m_numeric = false;
 	}
 
-	updateWidgetsVisiblity();
+	init();
 }
 
 void AddSubtractValueDialog::init() {
-	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	ui.gridLayout->addWidget(btnBox, 11, 0, 1, 3);
+	ui.gridLayout->addWidget(btnBox, 14, 0, 1, 3);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 
 	switch (m_operation) {
@@ -137,6 +111,9 @@ void AddSubtractValueDialog::init() {
 		break;
 	case Subtract:
 		setWindowTitle(i18nc("@title:window", "Subtract Value"));
+		[[fallthrough]];
+	case SubtractBaseline:
+		setWindowTitle(i18nc("@title:window", "Subtract Baseline"));
 		ui.lType->setText(i18n("Subtract:")); // only relevant for Add and for Subtract, Add is set in the ui file
 		m_okButton->setText(i18n("&Subtract"));
 		break;
@@ -150,17 +127,124 @@ void AddSubtractValueDialog::init() {
 		break;
 	}
 
+	ui.lBaselineParameter1->hide();
+	ui.sbBaselineParameter1->hide();
+	ui.lBaselineParameter2->hide();
+	ui.leBaselineParameter2->hide();
+	ui.lBaselineParameter3->hide();
+	ui.sbBaselineParameter3->hide();
+
 	if (m_operation == Add || m_operation == Subtract) {
+		if (m_operation == Subtract && m_numeric) {
+			ui.cbType->addItem(i18n("Minimum"), static_cast<int>(ValueType::Minimum));
+			ui.cbType->addItem(i18n("Maximum"), static_cast<int>(ValueType::Maximum));
+			ui.cbType->addItem(i18n("Median"), static_cast<int>(ValueType::Median));
+			ui.cbType->addItem(i18n("Mean"), static_cast<int>(ValueType::Mean));
+		}
+
 		ui.cbType->addItem(i18n("Custom Value"), static_cast<int>(ValueType::CustomValue));
 		ui.cbType->addItem(i18n("Difference"), static_cast<int>(ValueType::Difference));
+
 		for (int i = 0; i < ENUM_COUNT(AbstractColumn, TimeUnit); i++)
 			ui.cbTimeUnits->addItem(AbstractColumn::timeUnitString((AbstractColumn::TimeUnit)i));
+
+		ui.lValueStart->setVisible(m_numeric);
+		ui.leValueStart->setVisible(m_numeric);
+		ui.lValueEnd->setVisible(m_numeric);
+		ui.leValueEnd->setVisible(m_numeric);
+		ui.cbTimeUnits->setVisible(!m_numeric);
+		ui.lTimeValueStart->setVisible(!m_numeric);
+		ui.dteTimeValueStart->setVisible(!m_numeric);
+		ui.lTimeValueEnd->setVisible(!m_numeric);
+		ui.dteTimeValueEnd->setVisible(!m_numeric);
+	} else if (m_operation == SubtractBaseline && m_numeric) {
+		ui.cbType->insertSeparator(6);
+		ui.cbType->insertItem(7, i18n("Baseline (arPLS Algorithm)"), static_cast<int>(ValueType::Baseline));
+
+		ui.leBaselineParameter2->setValidator(new QDoubleValidator(ui.leBaselineParameter2));
+
+		// add tooltip texts for the baseline subtraction algorithms.
+		// at the moment only arPLS (s.a. https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract)
+		// is supported and we show the description of its parameters only.
+		QString info = i18n("Smoothness parameter - the larger the value the smoother the resulting background.");
+		ui.lBaselineParameter1->setToolTip(info);
+		ui.sbBaselineParameter1->setToolTip(info);
+
+		info = i18n("Weighting termination ratio - value between 0 and 1, smaller values allow less negative values.");
+		ui.lBaselineParameter2->setToolTip(info);
+		ui.leBaselineParameter2->setToolTip(info);
+
+		info = i18n("Number of iterations to perform.");
+		ui.lBaselineParameter3->setToolTip(info);
+		ui.sbBaselineParameter3->setToolTip(info);
+
+		ui.lValueStart->hide();
+		ui.leValueStart->hide();
+		ui.lValueEnd->hide();
+		ui.leValueEnd->hide();
+		ui.cbTimeUnits->hide();
+		ui.lTimeValueStart->hide();
+		ui.dteTimeValueStart->hide();
+		ui.lTimeValueEnd->hide();
+		ui.dteTimeValueEnd->hide();
 	} else {
 		ui.lType->hide();
 		ui.cbType->hide();
 		ui.lPreview->hide();
 		ui.chbPreview->hide();
 		ui.framePreview->hide();
+
+		ui.lValueStart->hide();
+		ui.leValueStart->hide();
+		ui.lValueEnd->hide();
+		ui.leValueEnd->hide();
+		ui.cbTimeUnits->hide();
+		ui.lTimeValueStart->hide();
+		ui.dteTimeValueStart->hide();
+		ui.lTimeValueEnd->hide();
+		ui.dteTimeValueEnd->hide();
+	}
+
+	ui.lValue->setVisible(m_numeric);
+	ui.leValue->setVisible(m_numeric);
+	ui.lTimeValue->setVisible(!m_numeric);
+	ui.leTimeValue->setVisible(!m_numeric);
+
+	// restore saved settings if available
+	create(); // ensure there's a window created
+	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
+	if (conf.exists()) {
+		// baseline subtraction specific parameters
+		const auto numberLocale = QLocale();
+		ui.sbBaselineParameter1->setValue(conf.readEntry(QStringLiteral("BaselineParameter1"), 6));
+		ui.leBaselineParameter2->setText(numberLocale.toString(conf.readEntry(QStringLiteral("BaselineParameter2"), 0.1)));
+		ui.sbBaselineParameter3->setValue(conf.readEntry(QStringLiteral("BaselineParameter3"), 10));
+
+		int typeIndex = ui.cbType->findData(conf.readEntry("Type", 0));
+		if (typeIndex != -1)
+			ui.cbType->setCurrentIndex(typeIndex);
+		else
+			ui.cbType->setCurrentIndex(0);
+
+		if (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline) {
+			ui.chbPreview->setChecked(conf.readEntry("Preview", false));
+			ui.framePreview->setVisible(ui.chbPreview->isChecked());
+			updateSpacer(!ui.chbPreview->isChecked());
+		} else {
+			ui.framePreview->hide();
+			updateSpacer(true);
+		}
+
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else {
+		updateSpacer(true);
+		resize(QSize(300, 0).expandedTo(minimumSize()));
+	}
+
+	if (m_operation == SubtractBaseline) {
+		ui.cbType->setCurrentIndex(ui.cbType->findData(static_cast<int>(ValueType::Baseline)));
+		ui.cbType->setEnabled(false);
 	}
 
 	connect(m_okButton, &QPushButton::clicked, this, &AddSubtractValueDialog::generate);
@@ -170,41 +254,48 @@ void AddSubtractValueDialog::init() {
 	connect(ui.chbPreview, &QCheckBox::clicked, this, &AddSubtractValueDialog::previewChanged);
 	connect(ui.leValue, &QLineEdit::textChanged, this, [=]() {
 		m_okButton->setEnabled(!ui.leValue->text().isEmpty());
-		updatePreview();
+		invalidatePreview();
 	});
-	connect(ui.leValueStart, &QLineEdit::textChanged, this, &AddSubtractValueDialog::updatePreview);
-	connect(ui.leValueEnd, &QLineEdit::textChanged, this, &AddSubtractValueDialog::updatePreview);
+	connect(ui.leValueStart, &QLineEdit::textChanged, this, [=]() {
+		m_okButton->setEnabled(!ui.leValueStart->text().isEmpty());
+		invalidatePreview();
+	});
+	connect(ui.leValueEnd, &QLineEdit::textChanged, this, [=]() {
+		m_okButton->setEnabled(!ui.leValueEnd->text().isEmpty());
+		invalidatePreview();
+	});
+	connect(ui.sbBaselineParameter1, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
+	connect(ui.leBaselineParameter2, &QLineEdit::textChanged, this, [=]() {
+		bool valid = false;
+		QLocale().toDouble(ui.leBaselineParameter2->text(), &valid);
+		valid = valid && !ui.leBaselineParameter2->text().isEmpty();
+		GuiTools::highlight(ui.leBaselineParameter2, !valid);
+		m_okButton->setEnabled(valid);
+		if (valid)
+			invalidatePreview();
+	});
+	connect(ui.sbBaselineParameter3, QOverload<int>::of(&QSpinBox::valueChanged), this, &AddSubtractValueDialog::invalidatePreview);
 
-	if (m_spreadsheet)
-		processColumns();
-
-	// restore saved settings if available
-	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
-	if (conf.exists()) {
-		int typeIndex = ui.cbType->findData(conf.readEntry("Type", 0));
-		if (typeIndex != -1)
-			ui.cbType->setCurrentIndex(typeIndex);
-		else
-			ui.cbType->setCurrentIndex(0);
-
-		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-		resize(windowHandle()->size()); // workaround for QTBUG-40584
-
-		if (m_operation == Add || m_operation == Subtract) {
-			ui.chbPreview->setChecked(conf.readEntry("Preview", false));
-			previewChanged(ui.chbPreview->isChecked());
-		}
-	} else
-		resize(QSize(300, 0).expandedTo(minimumSize()));
+	// call typeChanged() to update the status of the widgets and of the preview
+	// after the dialog was completely shown
+	QTimer::singleShot(0, this, [=]() {
+		typeChanged(ui.cbType->currentIndex());
+	});
 }
 
 AddSubtractValueDialog::~AddSubtractValueDialog() {
 	delete m_project;
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
-	conf.writeEntry("Type", ui.cbType->currentData().toInt());
-	conf.writeEntry("Preview", ui.chbPreview->isChecked());
+	KConfigGroup conf(KSharedConfig::openConfig(), QStringLiteral("AddSubtractValueDialog"));
+	conf.writeEntry(QStringLiteral("Type"), ui.cbType->currentData().toInt());
+	conf.writeEntry(QStringLiteral("Preview"), ui.chbPreview->isChecked());
+
+	// baseline subtraction specific parameters
+	const auto numberLocale = QLocale();
+	conf.writeEntry(QStringLiteral("BaselineParameter1"), ui.sbBaselineParameter1->value());
+	conf.writeEntry(QStringLiteral("BaselineParameter2"), numberLocale.toDouble(ui.leBaselineParameter2->text()));
+	conf.writeEntry(QStringLiteral("BaselineParameter3"), ui.sbBaselineParameter3->value());
+
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
@@ -212,12 +303,11 @@ void AddSubtractValueDialog::processColumns() {
 	// depending on the current column mode, activate/deactivate the corresponding widgets
 	// and show the first valid value in the first selected column as the value to add/subtract
 	const auto* column = m_columns.first();
-	const auto numberLocale = QLocale();
 
 	switch (column->columnMode()) {
 	case AbstractColumn::ColumnMode::Integer: {
 		m_numeric = true;
-		const auto str = numberLocale.toString(column->integerAt(0));
+		const auto str = QLocale().toString(column->integerAt(0));
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(str);
 		ui.leValueStart->setValidator(new QIntValidator(ui.leValueStart));
@@ -228,7 +318,7 @@ void AddSubtractValueDialog::processColumns() {
 	}
 	case AbstractColumn::ColumnMode::BigInt: {
 		m_numeric = true;
-		const auto str = numberLocale.toString(column->bigIntAt(0));
+		const auto str = QLocale().toString(column->bigIntAt(0));
 		// TODO: QLongLongValidator
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(str);
@@ -247,7 +337,7 @@ void AddSubtractValueDialog::processColumns() {
 		for (int row = 0; row < column->rowCount(); ++row) {
 			const double value = column->valueAt(row);
 			if (std::isfinite(value)) {
-				const auto str = numberLocale.toString(column->valueAt(row), 'g', 16);
+				const auto str = QLocale().toString(column->valueAt(row), 'g', 16);
 				ui.leValue->setText(str);
 				ui.leValueStart->setText(str);
 				ui.leValueEnd->setText(str);
@@ -278,24 +368,15 @@ void AddSubtractValueDialog::processColumns() {
 		break;
 	}
 	}
-
-	if (m_operation == Subtract && m_numeric) {
-		int curIndex = ui.cbType->currentIndex();
-		ui.cbType->insertItem(0, i18n("Minimum"), static_cast<int>(ValueType::Minimum));
-		ui.cbType->insertItem(1, i18n("Maximum"), static_cast<int>(ValueType::Maximum));
-		ui.cbType->insertItem(2, i18n("Median"), static_cast<int>(ValueType::Median));
-		ui.cbType->insertItem(3, i18n("Mean"), static_cast<int>(ValueType::Mean));
-		ui.cbType->insertSeparator(4);
-
-		ui.cbType->setCurrentIndex(curIndex);
-	}
-
-	updateWidgetsVisiblity();
 }
 
+// ##############################################################################
+// ############################  Slots  #########################################
+// ##############################################################################
 void AddSubtractValueDialog::typeChanged(int index) {
 	auto type = static_cast<ValueType>(ui.cbType->itemData(index).toInt());
 	bool diff = (type == ValueType::Difference);
+	bool baseline = false;
 	if (m_numeric) {
 		ui.lValue->setVisible(!diff);
 		ui.leValue->setVisible(!diff);
@@ -325,9 +406,13 @@ void AddSubtractValueDialog::typeChanged(int index) {
 				ui.leValue->setText(numberLocale.toString(value));
 				ui.leValue->setEnabled(false);
 			}
-		} else
+		} else if (type == ValueType::Baseline) {
+			ui.lValue->hide();
+			ui.leValue->hide();
+			baseline = true;
+		} else // custom value or difference -> enable the value field
 			ui.leValue->setEnabled(true);
-	} else {
+	} else { // datetime
 		ui.lTimeValue->setVisible(!diff);
 		ui.leTimeValue->setVisible(!diff);
 		ui.cbTimeUnits->setVisible(!diff);
@@ -337,191 +422,240 @@ void AddSubtractValueDialog::typeChanged(int index) {
 		ui.dteTimeValueEnd->setVisible(diff);
 	}
 
-	if (m_spreadsheet && (m_operation == Add || m_operation == Subtract))
-		updatePreview();
-	else {
-		ui.lPreview->hide();
-		ui.chbPreview->hide();
-		ui.framePreview->hide();
-	}
-}
+	ui.lBaselineParameter1->setVisible(baseline);
+	ui.sbBaselineParameter1->setVisible(baseline);
+	ui.lBaselineParameter2->setVisible(baseline);
+	ui.leBaselineParameter2->setVisible(baseline);
+	ui.lBaselineParameter3->setVisible(baseline);
+	ui.sbBaselineParameter3->setVisible(baseline);
 
-void AddSubtractValueDialog::updateWidgetsVisiblity() {
-	ui.lValue->setVisible(m_numeric);
-	ui.leValue->setVisible(m_numeric);
-	ui.lTimeValue->setVisible(!m_numeric);
-	ui.leTimeValue->setVisible(!m_numeric);
+	if (m_spreadsheet && (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline)) {
+		// we changed maybe from "Minimum" to "Baseline", etc. and need
+		// to recalculate the x-column for the baseline curve
+		m_xColumnBaselineDirty = true;
 
-	if (m_operation == Add || m_operation == Subtract) {
-		ui.lValueStart->setVisible(m_numeric);
-		ui.leValueStart->setVisible(m_numeric);
-		ui.lValueEnd->setVisible(m_numeric);
-		ui.leValueEnd->setVisible(m_numeric);
-
-		ui.cbTimeUnits->setVisible(!m_numeric);
-		ui.lTimeValueStart->setVisible(!m_numeric);
-		ui.dteTimeValueStart->setVisible(!m_numeric);
-		ui.lTimeValueEnd->setVisible(!m_numeric);
-		ui.dteTimeValueEnd->setVisible(!m_numeric);
-
-		typeChanged(ui.cbType->currentIndex());
-	} else {
-		ui.lValueStart->hide();
-		ui.leValueStart->hide();
-		ui.lValueEnd->hide();
-		ui.leValueEnd->hide();
-		ui.cbTimeUnits->hide();
-		ui.lTimeValueStart->hide();
-		ui.dteTimeValueStart->hide();
-		ui.lTimeValueEnd->hide();
-		ui.dteTimeValueEnd->hide();
+		invalidatePreview();
 	}
 }
 
 void AddSubtractValueDialog::previewChanged(bool state) {
-	bool visible = state && (m_operation == Add || m_operation == Subtract);
-	if (visible) {
-		// initialize the worksheet and the plot if not done yet
-		if (!m_project) {
-			// create project and worksheet
-			m_project = new Project();
-			auto* ws = new Worksheet(QString());
-			ws->setUseViewSize(true);
-			ws->setLayoutTopMargin(0.);
-			ws->setLayoutBottomMargin(0.);
-			ws->setLayoutLeftMargin(0.);
-			ws->setLayoutRightMargin(0.);
-			m_project->addChild(ws);
-
-			// add plot
-			auto* plot = new CartesianPlot(QString());
-			plot->setSuppressRetransform(true);
-			plot->setSymmetricPadding(false);
-			const double padding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
-			plot->setRightPadding(padding);
-			plot->setVerticalPadding(padding);
-			plot->setBottomPadding(padding);
-			plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
-
-			// y-axis
-			auto* axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
-			axis->setDefault(true);
-			axis->setSuppressRetransform(true);
-			plot->addChild(axis);
-			axis->setPosition(Axis::Position::Left);
-			axis->setMajorTicksDirection(Axis::ticksIn);
-			axis->majorGridLine()->setStyle(Qt::NoPen);
-			axis->setMinorTicksDirection(Axis::noTicks);
-			axis->title()->setText(QString());
-			auto font = axis->labelsFont();
-			font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
-			axis->setLabelsFont(font);
-			axis->setSuppressRetransform(false);
-
-			ws->addChild(plot);
-			plot->setSuppressRetransform(false);
-
-			// add the curve for the original data
-			auto* xColumn = new Column(QLatin1String("x"), AbstractColumn::ColumnMode::Integer);
-			const auto* yColumn = m_columns.constFirst();
-			QVector<int> xData;
-			xData.resize(yColumn->rowCount());
-			for (int i = 0; i < yColumn->rowCount(); ++i)
-				xData[i] = i;
-			xColumn->setIntegers(xData);
-
-			m_curveOrigin = new XYCurve(i18n("raw data"));
-			m_curveOrigin->setXColumn(xColumn);
-			m_curveOrigin->setYColumn(yColumn);
-			plot->addChild(m_curveOrigin);
-			m_curveOrigin->line()->setWidth(0.);
-
-			// add the curve for the data to be subtracted
-			m_curveBaseline = new XYCurve(i18n("baseline"));
-			auto* xColumnBaseline = new Column(QLatin1String("xBaseline"), AbstractColumn::ColumnMode::Integer);
-			xColumnBaseline->setIntegerAt(0, 0);
-			xColumnBaseline->setIntegerAt(1, xColumn->rowCount() - 1);
-			auto* yColumnBaseline = new Column(QLatin1String("yBaseline"));
-			m_curveBaseline->setXColumn(xColumnBaseline);
-			m_curveBaseline->setYColumn(yColumnBaseline);
-			plot->addChild(m_curveBaseline);
-			m_curveBaseline->line()->setWidth(0.);
-
-			// add the curve for the result data
-			m_curveResult = new XYCurve(i18n("result"));
-			m_curveResult->setXColumn(xColumn);
-			auto* yColumnResult = new Column(QLatin1String("yResult"), yColumn->columnMode());
-			m_curveResult->setYColumn(yColumnResult);
-			plot->addChild(m_curveResult);
-			m_curveResult->line()->setWidth(0.);
-
-			plot->addLegend();
-			// ws->setTheme(QLatin1String("Tufte"));
-
-			updatePreview();
-
-			auto* layout = new QVBoxLayout(ui.framePreview);
-			layout->setSpacing(0);
-			layout->addWidget(ws->view());
-			ws->setInteractive(false);
-			ui.framePreview->setLayout(layout);
-		}
-	}
+	bool visible = state && (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline);
+	updateSpacer(!visible);
 
 	ui.framePreview->setVisible(visible);
+	updatePreview();
 
 	// resize the dialog
 	layout()->activate();
 	resize(QSize(this->width(), 0).expandedTo(minimumSize()));
 }
 
+void AddSubtractValueDialog::updateSpacer(bool add) {
+	if (add) {
+		m_verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+		ui.gridLayout->addItem(m_verticalSpacer, 12, 0, 1, 1);
+	} else {
+		if (m_verticalSpacer)
+			ui.gridLayout->removeItem(m_verticalSpacer);
+	}
+}
+
+// ##############################################################################
+// #####################  Preview related functions  ############################
+// ##############################################################################
+void AddSubtractValueDialog::initPreview() {
+	// create project and worksheet
+	m_project = new Project();
+	m_project->setUndoAware(false);
+	auto* ws = new Worksheet(QString());
+	ws->setUseViewSize(true);
+	ws->setLayoutTopMargin(0.);
+	ws->setLayoutBottomMargin(0.);
+	ws->setLayoutLeftMargin(0.);
+	ws->setLayoutRightMargin(0.);
+	m_project->addChild(ws);
+
+	// add plot
+	auto* plot = new CartesianPlot(QString());
+	plot->setSuppressRetransform(true);
+	plot->setSymmetricPadding(false);
+	const double padding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+	plot->setRightPadding(padding);
+	plot->setVerticalPadding(padding);
+	plot->setBottomPadding(padding);
+	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
+	m_previewPlotTitle = plot->title();
+
+	// x-axis
+	auto* axis = new Axis(QLatin1String("y"), Axis::Orientation::Horizontal);
+	axis->setDefault(true);
+	axis->setSuppressRetransform(true);
+	plot->addChild(axis);
+	axis->setPosition(Axis::Position::Bottom);
+	axis->setMajorTicksDirection(Axis::ticksIn);
+	axis->majorGridLine()->setStyle(Qt::NoPen);
+	axis->setMinorTicksDirection(Axis::noTicks);
+	axis->title()->setText(QString());
+	auto font = axis->labelsFont();
+	font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	axis->setLabelsFont(font);
+	axis->setLabelsOffset(0);
+	axis->setSuppressRetransform(false);
+
+	// y-axis
+	axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
+	axis->setDefault(true);
+	axis->setSuppressRetransform(true);
+	plot->addChild(axis);
+	axis->setPosition(Axis::Position::Left);
+	axis->setMajorTicksDirection(Axis::ticksIn);
+	axis->majorGridLine()->setStyle(Qt::NoPen);
+	axis->setMinorTicksDirection(Axis::noTicks);
+	axis->title()->setText(QString());
+	font = axis->labelsFont();
+	font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	axis->setLabelsFont(font);
+	axis->setLabelsOffset(0);
+	axis->setSuppressRetransform(false);
+
+	ws->addChild(plot);
+	plot->setSuppressRetransform(false);
+
+	// add the curve for the original data
+	auto* xColumn = new Column(QLatin1String("x"), AbstractColumn::ColumnMode::Integer);
+	const auto* yColumn = m_columns.constFirst();
+	QVector<int> xData;
+	xData.resize(yColumn->rowCount());
+	for (int i = 0; i < yColumn->rowCount(); ++i)
+		xData[i] = i;
+	xColumn->setIntegers(xData);
+
+	m_curveOrigin = new XYCurve(i18n("raw data"));
+	m_curveOrigin->setXColumn(xColumn);
+	m_curveOrigin->setYColumn(yColumn);
+	plot->addChild(m_curveOrigin);
+	m_curveOrigin->line()->setWidth(0.);
+
+	// add the curve for the data to be subtracted
+	m_curveBaseline = new XYCurve(i18n("baseline"));
+	m_xColumnBaseline = new Column(QLatin1String("xBaseline"), AbstractColumn::ColumnMode::Integer);
+	m_yColumnBaseline = new Column(QLatin1String("yBaseline"));
+	m_curveBaseline->setXColumn(m_xColumnBaseline);
+	m_curveBaseline->setYColumn(m_yColumnBaseline);
+	plot->addChild(m_curveBaseline);
+	m_curveBaseline->line()->setWidth(0.);
+
+	// add the curve for the result data
+	m_curveResult = new XYCurve(i18n("result"));
+	m_curveResult->setXColumn(xColumn);
+	m_yColumnResult = new Column(QLatin1String("yResult"), yColumn->columnMode());
+	m_curveResult->setYColumn(m_yColumnResult);
+	plot->addChild(m_curveResult);
+	m_curveResult->line()->setWidth(0.);
+
+	plot->addLegend();
+	// ws->setTheme(QLatin1String("Tufte"));
+
+	auto* layout = new QVBoxLayout(ui.framePreview);
+	layout->setSpacing(0);
+	layout->addWidget(ws->view());
+	ws->setInteractive(false);
+	ui.framePreview->setLayout(layout);
+}
+
+void AddSubtractValueDialog::invalidatePreview() {
+	m_previewDirty = true;
+	updatePreview();
+}
+
 void AddSubtractValueDialog::updatePreview() {
-	if (!ui.framePreview->isVisible())
+	if (!ui.framePreview->isVisible() || !m_previewDirty)
 		return;
 
-	double value = 0.;
-	setDoubleValue(value);
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	WAIT_CURSOR;
 
-	// y for the baseline curve
-	auto* column = const_cast<AbstractColumn*>(m_curveBaseline->yColumn());
-	column->setValueAt(0, value);
-	column->setValueAt(1, value);
+	if (!m_project)
+		initPreview();
 
-	// y for the result curve
-	column = const_cast<AbstractColumn*>(m_curveResult->yColumn());
-	column->copy(m_columns.constFirst());
-	generateForColumn(static_cast<Column*>(column), 0);
-}
+	// y for the result curve - copy the original data into the result column and process it
+	m_yColumnResult->setColumnMode(m_columns.constFirst()->columnMode()); // set the mode to its original value, it was potentially changed in generateForColumn
+	m_yColumnResult->copy(m_columns.constFirst());
+	generateForColumn(m_yColumnResult, 0);
 
-/*!
- * generates new values in the selected columns by adding/subtracting the value provided in this dialog
- * from every column element.
- */
+	auto valueType = static_cast<ValueType>(ui.cbType->itemData(ui.cbType->currentIndex()).toInt());
+	if (valueType == ValueType::Baseline) {
+		// x
+		int rows = m_spreadsheet->rowCount();
+		if (m_xColumnBaselineDirty) {
+			QVector<int> xData;
+			xData.resize(rows);
+			for (int i = 0; i < rows; ++i)
+				xData[i] = i;
+			m_xColumnBaseline->setIntegers(xData);
+			m_xColumnBaselineDirty = false;
+		}
 
-QString AddSubtractValueDialog::getMessage(const QString& name) {
-	QString msg;
-	QString value = ui.leValue->text();
-	switch (m_operation) {
-	case Add:
-		msg = i18n("%1: add %2 to column values", name, value);
-		break;
-	case Subtract:
-		msg = i18n("%1: subtract %2 from column values", name, value);
-		break;
-	case Multiply:
-		msg = i18n("%1: multiply column values by %2", name, value);
-		break;
-	case Divide:
-		msg = i18n("%1: divide column values by %2", name, value);
-		break;
+		// y
+		const auto* col = m_columns.constFirst();
+		QVector<double> baselineData(rows);
+		const auto* newData = static_cast<QVector<double>*>(m_yColumnResult->data());
+		switch (col->columnMode()) {
+		case AbstractColumn::ColumnMode::Integer: {
+			auto* data = static_cast<QVector<int>*>(col->data());
+			for (int i = 0; i < rows; ++i)
+				baselineData[i] = data->at(i) - newData->at(i);
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			auto* data = static_cast<QVector<qint64>*>(col->data());
+			for (int i = 0; i < rows; ++i)
+				baselineData[i] = data->at(i) - newData->at(i);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Double: {
+			auto* data = static_cast<QVector<double>*>(col->data());
+			for (int i = 0; i < rows; ++i)
+				baselineData[i] = data->at(i) - newData->at(i);
+			break;
+		}
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Text:
+			break;
+		}
+		m_yColumnBaseline->setValues(baselineData);
+
+		m_previewPlotTitle->setText(i18n("Ratio: %1", m_arplsRatio));
+	} else {
+		// x
+		if (m_xColumnBaselineDirty) {
+			m_xColumnBaseline->resizeTo(2);
+			m_xColumnBaseline->setIntegerAt(0, 0);
+			m_xColumnBaseline->setIntegerAt(1, m_spreadsheet->rowCount() - 1);
+			m_xColumnBaselineDirty = false;
+		}
+
+		// y
+		double value = 0.;
+		setDoubleValue(value);
+		m_yColumnBaseline->resizeTo(2);
+		m_yColumnBaseline->setValueAt(0, value);
+		m_yColumnBaseline->setValueAt(1, value);
 	}
-	return msg;
+
+	m_previewDirty = false;
+	RESET_CURSOR;
 }
 
+// ##############################################################################
+// ############################  "generate"  ####################################
+// ##############################################################################
 void AddSubtractValueDialog::generate() {
-	if (m_spreadsheet != nullptr)
+	if (m_spreadsheet)
 		generateForColumns();
-	else if (m_matrix != nullptr)
+	else // matrix
 		generateForMatrices();
 }
 
@@ -579,7 +713,7 @@ void AddSubtractValueDialog::generateForColumns() {
 }
 
 void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
-	const auto mode = m_columns.constFirst()->columnMode();
+	const auto mode = col->columnMode();
 	const int rows = m_spreadsheet->rowCount();
 
 	if (mode == AbstractColumn::ColumnMode::Integer) {
@@ -589,28 +723,40 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 		QVector<int> new_data(rows);
 
 		switch (m_operation) {
-		case Subtract:
-		case Add: {
-			if (m_operation == Subtract)
-				value *= -1.;
-
+		case SubtractBaseline: {
+			// copy the int data to doubles
+			QVector<double> new_data(rows);
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->operator[](i) + value;
+				new_data[i] = data->at(i);
 
-			col->replaceInteger(0, new_data);
+			subtractBaseline(new_data);
+
+			// convert the column mode from int to double and subtract the baseline
+			col->setColumnMode(AbstractColumn::ColumnMode::Double);
+			col->setValues(new_data);
+			break;
+		}
+		case Subtract:
+			value *= -1.;
+			[[fallthrough]];
+		case Add: {
+			for (int i = 0; i < rows; ++i)
+				new_data[i] = data->at(i) + value;
+
+			col->setIntegers(new_data);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->operator[](i) * value;
+				new_data[i] = data->at(i) * value;
 
-			col->replaceInteger(0, new_data);
+			col->setIntegers(new_data);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->operator[](i) / value;
+				new_data[i] = data->at(i) / value;
 
-			col->replaceInteger(0, new_data);
+			col->setIntegers(new_data);
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
@@ -620,28 +766,40 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 		QVector<qint64> new_data(rows);
 
 		switch (m_operation) {
-		case Subtract:
-		case Add: {
-			if (m_operation == Subtract)
-				value *= -1.;
-
+		case SubtractBaseline: {
+			// copy the big int data to doubles
+			QVector<double> new_data(rows);
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->operator[](i) + value;
+				new_data[i] = data->at(i);
 
-			col->replaceBigInt(0, new_data);
+			subtractBaseline(new_data);
+
+			// convert the column mode from int to double and set the new data
+			col->setColumnMode(AbstractColumn::ColumnMode::Double);
+			col->setValues(new_data);
+			break;
+		}
+		case Subtract:
+			value *= -1.;
+			[[fallthrough]];
+		case Add: {
+			for (int i = 0; i < rows; ++i)
+				new_data[i] = data->at(i) + value;
+
+			col->setBigInts(new_data);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->operator[](i) * value;
+				new_data[i] = data->at(i) * value;
 
-			col->replaceBigInt(0, new_data);
+			col->setBigInts(new_data);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->operator[](i) / value;
+				new_data[i] = data->at(i) / value;
 
-			col->replaceBigInt(0, new_data);
+			col->setBigInts(new_data);
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::Double) {
@@ -651,28 +809,34 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 		QVector<double> new_data(rows);
 
 		switch (m_operation) {
+		case SubtractBaseline: {
+			// copy the data
+			QVector<double> new_data(*data);
+			subtractBaseline(new_data);
+			col->setValues(new_data);
+			break;
+		}
 		case Subtract:
+			value *= -1.;
+			[[fallthrough]];
 		case Add: {
-			if (m_operation == Subtract)
-				value *= -1.;
-
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->operator[](i) + value;
+				new_data[i] = data->at(i) + value;
 
-			col->replaceValues(0, new_data);
+			col->setValues(new_data);
 			break;
 		}
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->operator[](i) * value;
+				new_data[i] = data->at(i) * value;
 
-			col->replaceValues(0, new_data);
+			col->setValues(new_data);
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = data->operator[](i) / value;
+				new_data[i] = data->at(i) / value;
 
-			col->replaceValues(0, new_data);
+			col->setValues(new_data);
 			break;
 		}
 	} else { // datetime
@@ -684,19 +848,31 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			// fall through
+			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = QDateTime::fromMSecsSinceEpoch(data->operator[](i).toMSecsSinceEpoch() + value, Qt::UTC);
+				new_data[i] = QDateTime::fromMSecsSinceEpoch(data->at(i).toMSecsSinceEpoch() + value, Qt::UTC);
 
 			col->replaceDateTimes(0, new_data);
 			break;
 		case Multiply:
 		case Divide:
+		case SubtractBaseline:
 			break;
 		}
 	}
 }
+
+void AddSubtractValueDialog::subtractBaseline(QVector<double>& newData) {
+	const auto numberLocale = QLocale();
+	bool ok;
+	const double lambda = pow(ui.sbBaselineParameter1->value(), 10);
+	const double p = numberLocale.toDouble(ui.leBaselineParameter2->text(), &ok);
+	const int niter = ui.sbBaselineParameter3->value();
+	int size = newData.size();
+	m_arplsRatio = nsl_baseline_remove_arpls(newData.data(), static_cast<size_t>(size), p, lambda, niter);
+}
+
 void AddSubtractValueDialog::generateForMatrices() {
 	Q_ASSERT(m_matrix);
 
@@ -724,7 +900,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			// fall through
+			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
 				for (int j = 0; j < cols; ++j) {
@@ -748,6 +924,8 @@ void AddSubtractValueDialog::generateForMatrices() {
 					new_data /= value;
 					m_matrix->setCell(i, j, new_data);
 				}
+			break;
+		case SubtractBaseline:
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
@@ -766,7 +944,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			// fall through
+			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
 				for (int j = 0; j < cols; ++j) {
@@ -790,6 +968,8 @@ void AddSubtractValueDialog::generateForMatrices() {
 					new_data /= value;
 					m_matrix->setCell(i, j, new_data);
 				}
+			break;
+		case SubtractBaseline:
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::Double) {
@@ -808,7 +988,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1.;
-			// fall through
+			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
 				for (int j = 0; j < cols; ++j) {
@@ -833,6 +1013,8 @@ void AddSubtractValueDialog::generateForMatrices() {
 					m_matrix->setCell(i, j, new_data);
 				}
 			break;
+		case SubtractBaseline:
+			break;
 		}
 	} else { // datetime
 		qint64 value;
@@ -850,7 +1032,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			// fall through
+			[[fallthrough]];
 		case Add:
 			for (int i = 0; i < rows; ++i)
 				for (int j = 0; j < cols; ++j) {
@@ -861,6 +1043,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Multiply:
 		case Divide:
+		case SubtractBaseline:
 			break;
 		}
 	}
@@ -897,6 +1080,8 @@ bool AddSubtractValueDialog::setIntValue(int& value, int columnIndex) const {
 		case ValueType::Mean:
 			value = round(m_columns.at(columnIndex)->statistics().arithmeticMean);
 			break;
+		case ValueType::Baseline:
+			break;
 		}
 	} else
 		value = numberLocale.toInt(ui.leValue->text(), &ok);
@@ -931,6 +1116,8 @@ bool AddSubtractValueDialog::setBigIntValue(qint64& value, int columnIndex) cons
 		case ValueType::Mean:
 			value = round(m_columns.at(columnIndex)->statistics().arithmeticMean);
 			break;
+		case ValueType::Baseline:
+			break;
 		}
 	} else
 		value = numberLocale.toLongLong(ui.leValue->text(), &ok);
@@ -964,6 +1151,8 @@ bool AddSubtractValueDialog::setDoubleValue(double& value, int columnIndex) cons
 			break;
 		case ValueType::Mean:
 			value = m_columns.at(columnIndex)->statistics().arithmeticMean;
+			break;
+		case ValueType::Baseline:
 			break;
 		}
 	} else
@@ -1008,4 +1197,32 @@ bool AddSubtractValueDialog::setDateTimeValue(qint64& value, int columnIndex) co
 	}
 
 	return true;
+}
+
+/*!
+ * generates new values in the selected columns by adding/subtracting the value provided in this dialog
+ * from every column element.
+ */
+
+QString AddSubtractValueDialog::getMessage(const QString& name) {
+	QString msg;
+	QString value = ui.leValue->text();
+	switch (m_operation) {
+	case Add:
+		msg = i18n("%1: add %2 to column values", name, value);
+		break;
+	case Subtract:
+		msg = i18n("%1: subtract %2 from column values", name, value);
+		break;
+	case SubtractBaseline:
+		msg = i18n("%1: subtract baseline from column values", name, value);
+		break;
+	case Multiply:
+		msg = i18n("%1: multiply column values by %2", name, value);
+		break;
+	case Divide:
+		msg = i18n("%1: divide column values by %2", name, value);
+		break;
+	}
+	return msg;
 }

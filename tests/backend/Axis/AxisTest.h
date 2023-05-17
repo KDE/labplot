@@ -32,6 +32,13 @@ private Q_SLOTS:
 	void setMinorTickColor();
 	void setLineColor();
 	void setTickLabelColor();
+
+	void automaticTicNumberUpdateDockMajorTicks();
+	void automaticTicNumberUpdateDockMinorTicks();
+
+	void columnLabelValues();
+
+	void customTextLabels();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

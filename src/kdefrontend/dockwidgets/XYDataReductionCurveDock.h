@@ -38,16 +38,13 @@ private:
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
 	QStatusBar* statusBar; // main status bar to display progress
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYDataReductionCurve* m_dataReductionCurve{nullptr};
 	XYDataReductionCurve::DataReductionData m_dataReductionData;
 	bool m_dateTimeRange{false};
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYDataReductionCurveDock
@@ -59,8 +56,8 @@ private Q_SLOTS:
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
-	void xRangeMinDateTimeChanged(const QDateTime&);
-	void xRangeMaxDateTimeChanged(const QDateTime&);
+	void xRangeMinDateTimeChanged(qint64);
+	void xRangeMaxDateTimeChanged(qint64);
 	void typeChanged(int);
 	void autoToleranceChanged();
 	void toleranceChanged(double);

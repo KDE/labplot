@@ -1047,7 +1047,7 @@ struct GraphLayer
     // bool threeDimensional;
     bool is3D() const
     {
-        for (auto c : curves) {
+        for (auto& c : curves) {
             switch (c.type) {
             case GraphCurve::Scatter3D:
             case GraphCurve::Surface3D:

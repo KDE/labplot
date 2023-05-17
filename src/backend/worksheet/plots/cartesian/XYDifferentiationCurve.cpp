@@ -49,7 +49,6 @@ void XYDifferentiationCurve::recalculate() {
 }
 
 const XYAnalysisCurve::Result& XYDifferentiationCurve::result() const {
-	Q_D(const XYDifferentiationCurve);
 	return differentiationResult();
 }
 
@@ -60,9 +59,9 @@ QIcon XYDifferentiationCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYDifferentiationCurve, XYDifferentiationCurve::DifferentiationData, differentiationData, differentiationData)
 
 const XYDifferentiationCurve::DifferentiationResult& XYDifferentiationCurve::differentiationResult() const {
@@ -70,18 +69,18 @@ const XYDifferentiationCurve::DifferentiationResult& XYDifferentiationCurve::dif
 	return d->differentiationResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYDifferentiationCurve, SetDifferentiationData, XYDifferentiationCurve::DifferentiationData, differentiationData, recalculate)
 void XYDifferentiationCurve::setDifferentiationData(const XYDifferentiationCurve::DifferentiationData& differentiationData) {
 	Q_D(XYDifferentiationCurve);
 	exec(new XYDifferentiationCurveSetDifferentiationDataCmd(d, differentiationData, ki18n("%1: set options and perform the differentiation")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYDifferentiationCurvePrivate::XYDifferentiationCurvePrivate(XYDifferentiationCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -181,9 +180,9 @@ bool XYDifferentiationCurvePrivate::recalculateSpecific(const AbstractColumn* tm
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYDifferentiationCurve);

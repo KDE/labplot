@@ -4,7 +4,7 @@
 	Description          : Excel I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Fabian Kristof (fkristofszabolcs@gmail.com)
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -58,8 +58,8 @@ QString ExcelFilter::fileInfoString(const QString& fileName) {
 	return info;
 #else
 	Q_UNUSED(fileName)
-#endif
 	return {};
+#endif
 }
 
 QStringList ExcelFilter::sheets() const {
@@ -75,8 +75,8 @@ QStringList ExcelFilter::sheets(const QString& fileName, bool* ok) {
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(ok)
-#endif
 	return {};
+#endif
 }
 
 bool ExcelFilter::isValidCellReference(const QString& cellRefString) {
@@ -113,20 +113,23 @@ QVector<QStringList> ExcelFilter::previewForCurrentDataRegion(int lines, bool* o
 #endif
 }
 
-void ExcelFilter::setExportAsNewSheet(const bool exportAsNewSheet) {
-	d->exportDataSourceAsNewSheet = exportAsNewSheet;
-}
-
 void ExcelFilter::setSheetToAppendTo(const QString& sheetName) {
 	d->sheetToAppendSpreadsheetTo = sheetName;
 }
 
-void ExcelFilter::setOverwriteData(const bool overwriteData) {
-	d->overwriteExportData = overwriteData;
+void ExcelFilter::setExportAsNewSheet(const bool b) {
+	d->exportDataSourceAsNewSheet = b;
 }
 
-void ExcelFilter::setFirstRowAsColumnNames(const bool firstRowAsColumnNames) {
-	d->firstRowAsColumnNames = firstRowAsColumnNames;
+void ExcelFilter::setOverwriteData(const bool b) {
+	d->overwriteExportData = b;
+}
+
+void ExcelFilter::setFirstRowAsColumnNames(const bool b) {
+	d->firstRowAsColumnNames = b;
+}
+void ExcelFilter::setColumnNamesAsFirstRow(const bool b) {
+	d->columnNamesAsFirstRow = b;
 }
 
 void ExcelFilter::setDataExportStartPos(const QString& dataStartPos) {
@@ -241,9 +244,9 @@ void ExcelFilter::saveFilterSettings(const QString& filterName) const {
 	Q_UNUSED(filterName)
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.
@@ -256,9 +259,9 @@ bool ExcelFilter::load(XmlStreamReader*) {
 	return true;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 
 ExcelFilterPrivate::ExcelFilterPrivate(ExcelFilter* owner)
 	: q(owner) {
@@ -285,9 +288,9 @@ void ExcelFilterPrivate::write(const QString& fileName, AbstractDataSource* data
 	auto dataSourceName = dataSource->name();
 	if (exportDataSourceAsNewSheet) {
 		const auto& sheets = m_document->sheetNames();
-		if (sheets.contains(dataSourceName)) {
+		if (sheets.contains(dataSourceName))
 			dataSourceName += QLatin1String("_1");
-		}
+
 		m_document->addSheet(dataSourceName);
 	} else {
 		// there is (should be) a selected sheet in the widget
@@ -425,7 +428,7 @@ void ExcelFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 #ifdef HAVE_EXCEL
 void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO << ", col/row range = " << region.firstColumn() << " .. " << region.lastColumn() << ", " << region.firstRow() << " .. "
-					  << region.lastRow())
+					  << region.lastRow() << ". first row as column names = " << firstRowAsColumnNames)
 
 	int columnOffset = 0;
 	const auto rowCount = currentRange.rowCount();
@@ -443,7 +446,6 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 		for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
 			if (firstRowAsColumnNames) {
 				columnNumericTypes.push_back(isColumnNumericInRange(col, regionToRead));
-
 				columnNames.push_back(m_document->read(regionToRead.firstRow() - 1, col).toString());
 			} else {
 				columnNumericTypes.push_back(isColumnNumericInRange(col, regionToRead));
@@ -462,22 +464,20 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 				spreadsheet->setRowCount(rowCount);
 		}
 
-		numericDataPointers.reserve(colCount);
-		stringDataPointers.reserve(colCount);
-
 		for (int n = 0; n < colCount; ++n) {
+			auto* col = spreadsheet->column(columnOffset + n);
 			if (columnNumericTypes.at(n)) {
-				spreadsheet->column(columnOffset + n)->setColumnMode(AbstractColumn::ColumnMode::Double);
-				auto* datap = static_cast<QVector<double>*>(spreadsheet->column(columnOffset + n)->data());
-				numericDataPointers.push_back(datap);
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
+				auto* data = static_cast<QVector<double>*>(col->data());
+				numericDataPointers.push_back(data);
 				if (importMode == AbstractFileFilter::ImportMode::Replace)
-					datap->clear();
+					data->clear();
 			} else {
-				spreadsheet->column(columnOffset + n)->setColumnMode(AbstractColumn::ColumnMode::Text);
-				auto* list = static_cast<QVector<QString>*>(spreadsheet->column(columnOffset + n)->data());
-				stringDataPointers.push_back(list);
+				col->setColumnMode(AbstractColumn::ColumnMode::Text);
+				auto* data = static_cast<QVector<QString>*>(col->data());
+				stringDataPointers.push_back(data);
 				if (importMode == AbstractFileFilter::ImportMode::Replace)
-					list->clear();
+					data->clear();
 			}
 		}
 
@@ -487,9 +487,8 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 			int stringidx = 0;
 			for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
 				if (columnNumericTypes.at(j)) {
-					if (numericixd < numericDataPointers.size()) {
+					if (numericixd < numericDataPointers.size())
 						static_cast<QVector<double>*>(numericDataPointers[numericixd++])->push_back(m_document->read(row, col).toDouble());
-					}
 				} else {
 					if (!stringDataPointers.isEmpty() && stringidx < stringDataPointers.size()) {
 						const auto val = m_document->read(row, col).toString();
@@ -511,9 +510,8 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 		int i = 0;
 		for (int row = region.firstRow(); row <= region.lastRow(); ++row) {
 			int j = 0;
-			for (int col = region.firstColumn(); col <= region.lastColumn(); ++col) {
+			for (int col = region.firstColumn(); col <= region.lastColumn(); ++col)
 				static_cast<QVector<double>*>(dataContainer[j++])->operator[](i) = m_document->read(row, col).toDouble();
-			}
 			++i;
 		}
 	}
@@ -616,25 +614,20 @@ QVector<QStringList> ExcelFilterPrivate::previewForDataRegion(const QString& she
 		m_document = new QXlsx::Document(m_fileName);
 	}
 
-	if (!m_document->selectSheet(sheet)) {
-		// invalid sheet name
-	} else {
-		if (region.isValid()) {
-			if (okToMatrix)
-				if (dataRangeCanBeExportedToMatrix(region)) {
-					*okToMatrix = true;
+	if (m_document->selectSheet(sheet) && region.isValid()) { // valid sheet name and region
+		if (okToMatrix && dataRangeCanBeExportedToMatrix(region))
+			*okToMatrix = true;
+
+		const auto& documentRegion = m_document->dimension();
+		if (region.lastRow() <= documentRegion.lastRow() && region.lastColumn() <= documentRegion.lastColumn()) {
+			const int rows = std::min(lines, region.lastRow());
+			for (int row = region.firstRow(); row <= rows; ++row) {
+				QStringList line;
+				for (int col = region.firstColumn(); col <= region.lastColumn(); ++col) {
+					const auto val = m_document->read(row, col);
+					line << val.toString();
 				}
-			const auto& documentRegion = m_document->dimension();
-			if (region.lastRow() <= documentRegion.lastRow() && region.lastColumn() <= documentRegion.lastColumn()) {
-				const int rows = std::min(lines, region.lastRow());
-				for (int row = region.firstRow(); row <= rows; ++row) {
-					QStringList line;
-					for (int col = region.firstColumn(); col <= region.lastColumn(); ++col) {
-						const auto val = m_document->read(row, col);
-						line << val.toString();
-					}
-					infoString << line;
-				}
+				infoString << line;
 			}
 		}
 	}

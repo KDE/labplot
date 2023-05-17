@@ -15,7 +15,6 @@
 #include <QXmlStreamReader>
 
 class QString;
-class QStringList;
 
 class XmlStreamReader : public QXmlStreamReader {
 public:

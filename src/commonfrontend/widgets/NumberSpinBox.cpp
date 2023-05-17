@@ -18,7 +18,7 @@
 #include <QLineEdit>
 #include <QLocale>
 #include <QString>
-#include <QStringRef>
+#include <QStringView>
 
 #include <cmath>
 #include <limits>
@@ -44,6 +44,7 @@ void NumberSpinBox::init(double initValue, bool feedback) {
 	m_feedback = feedback; // must be after setValue()!
 	setInvalid(Errors::NoError);
 	setDecimals(2);
+	lineEdit()->setValidator(nullptr);
 }
 
 QString NumberSpinBox::errorToString(Errors e) {
@@ -70,9 +71,23 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	case Qt::Key_Up:
 		increaseValue();
 		return;
-	default:
+	default: {
+		if (lineEdit()->selectionLength() > 0) {
+			int selectionStart = qMax(lineEdit()->selectionStart(), prefix().length());
+			selectionStart = qMin(selectionStart, lineEdit()->text().length() - suffix().length());
+
+			int selectionEnd = qMax(lineEdit()->selectionEnd(), prefix().length());
+			selectionEnd = qMin(selectionEnd, lineEdit()->text().length() - suffix().length());
+
+			lineEdit()->setSelection(selectionStart, selectionEnd - selectionStart);
+		} else {
+			int cursorPos = qMax(lineEdit()->cursorPosition(), prefix().length());
+			cursorPos = qMin(cursorPos, lineEdit()->text().length() - suffix().length());
+			lineEdit()->setCursorPosition(cursorPos);
+		}
 		QDoubleSpinBox::keyPressEvent(event);
 		break;
+	}
 	}
 	QString text = lineEdit()->text();
 	double v;
@@ -163,7 +178,6 @@ bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const 
 	}
 
 	if (p.exponentPos > 0) {
-		bool ok;
 		if (v_str.at(p.exponentPos + 1) == QLatin1Char('+') || v_str.at(p.exponentPos + 1) == QLatin1Char('-'))
 			p.exponentSign = v_str.at(p.exponentPos + 1);
 		const QString& e = v_str.mid(p.exponentPos + 1 + !p.exponentSign.isNull(), number_length - (p.exponentPos + 1 + !p.exponentSign.isNull()));
@@ -211,7 +225,7 @@ QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, 
 
 QString NumberSpinBox::strip(const QString& t) const {
 	// Copied from QAbstractSpinBox.cpp
-	QStringRef text(&t);
+	QStringView text(t);
 
 	int size = text.size();
 	const QString p = prefix();
@@ -408,10 +422,7 @@ bool NumberSpinBox::setValue(double v) {
 		return true;
 	}
 
-	if (decimals() == 0 || abs(v) < 1 / (pow(10, decimals())))
-		setText(locale().toString(v, 'g'));
-	else
-		setText(locale().toString(v, 'f', decimals()));
+	setText(locale().toString(v, 'g'));
 	m_value = v;
 	return true;
 }

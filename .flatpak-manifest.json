@@ -2,7 +2,7 @@
     "id": "org.kde.labplot2",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "5.15-21.08",
+    "runtime-version": "5.15-22.08",
     "sdk": "org.kde.Sdk",
     "command": "labplot2",
     "tags": ["nightly"],
@@ -198,7 +198,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/WizardMac/ReadStat.git",
-                    "tag": "v1.1.6",
+                    "tag": "v1.1.9",
                     "x-checker-data": {
                         "type": "git",
                         "tag-pattern": "^v([\\d.]+)$"
@@ -207,9 +207,65 @@
             ]
         },
         {
-            "name": "labplot2",
+            "name": "Qt-Advanced-Docking-System",
             "buildsystem": "cmake-ninja",
-            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt" ],
+            /* This version is two commits ahead the 4.0.3, with important changes needed to get it build! This must be removed once a new ADS version is released! */
+            "config-opts": [
+                "-DADS_VERSION=4.0.3",
+                "-DQT_VERSION_MAJOR=5"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git",
+                    "commit": "a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6"
+                }
+            ]
+        },
+        {
+            "name": "fast_float",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/fastfloat/fast_float.git",
+                    "tag": "1ea4f27b2aeee2859a1354a3c24cff52a116cad1"
+                }
+            ]
+        },
+        {
+            "name": "dbc_parser_cpp",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DENABLE_TESTS=OFF",
+                "-DBUILD_DOCUMENTATION=OFF"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/Murmele/dbc_parser_cpp.git",
+                    "tag": "ca69d0dd08a03fc0210820a4f81bfd217ad25722"
+                }
+            ]
+        },
+        {
+            "name": "vector_blf",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/Murmele/vector_blf.git",
+                    "tag": "b7a419c4d8edbf495ab309b57a380a2444ee2730"
+                }
+            ]
+        },
+        {
+            "name": "labplot",
+            "buildsystem": "cmake-ninja",
+            "build-options": {
+                "build-args": ["--share=network"]
+            },
+            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DLOCAL_DBC_PARSER=OFF", "-DLOCAL_VECTOR_BLF=OFF"],
 	    "sources": [
                 {
                     "type": "dir",

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -28,48 +28,14 @@ class Datapicker;
 class Spreadsheet;
 class Matrix;
 class GuiObserver;
-class AspectDock;
-class AxisDock;
 class CursorDock;
-class InfoElementDock;
-class NoteDock;
-class CartesianPlotDock;
-class HistogramDock;
-class BarPlotDock;
-class BoxPlotDock;
-class CartesianPlotLegendDock;
-class CustomPointDock;
-class ReferenceLineDock;
-class ColumnDock;
-class LiveDataDock;
-class MatrixDock;
-class ProjectDock;
-class SpreadsheetDock;
-class XYCurveDock;
-class XYEquationCurveDock;
-class XYDataReductionCurveDock;
-class XYDifferentiationCurveDock;
-class XYIntegrationCurveDock;
-class XYInterpolationCurveDock;
-class XYSmoothCurveDock;
-class XYFitCurveDock;
-class XYFourierFilterCurveDock;
-class XYFourierTransformCurveDock;
-class XYHilbertTransformCurveDock;
-class XYConvolutionCurveDock;
-class XYCorrelationCurveDock;
-class WorksheetDock;
-class ImageDock;
-class LabelWidget;
-class DatapickerImageWidget;
-class DatapickerCurveWidget;
+class ContentDockWidget;
 class MemoryWidget;
 class CartesianPlot;
 class InfoElementDialog;
 
 #ifdef HAVE_CANTOR_LIBS
 class CantorWorksheet;
-class CantorWorksheetDock;
 #endif
 
 class ImportDatasetWidget;
@@ -90,6 +56,11 @@ class KHamburgerMenu;
 class KRecentFilesAction;
 class KToggleAction;
 class KToggleFullScreenAction;
+
+namespace ads {
+class CDockManager;
+class CDockWidget;
+}
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/Provider>
@@ -122,15 +93,16 @@ public:
 #endif
 
 private:
-	QMdiArea* m_mdiArea{nullptr};
+	ads::CDockManager* m_DockManager{nullptr};
 	KColorSchemeManager* m_schemeManager{nullptr};
-	QMdiSubWindow* m_currentSubWindow{nullptr};
+	ContentDockWidget* m_currentDock{nullptr}; // Currently selected dock
 	Project* m_project{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	ProjectExplorer* m_projectExplorer{nullptr};
-	QDockWidget* m_projectExplorerDock{nullptr};
-	QDockWidget* m_propertiesDock{nullptr};
+	ads::CDockWidget* m_projectExplorerDock{nullptr};
+	ads::CDockWidget* m_propertiesDock{nullptr};
 	AbstractAspect* m_currentAspect{nullptr};
+	ads::CDockWidget* m_currentAspectDock{nullptr};
 	Folder* m_currentFolder{nullptr};
 	QString m_undoViewEmptyLabel;
 	bool m_suppressCurrentSubWindowChangedEvent{false};
@@ -192,8 +164,6 @@ private:
 	QAction* m_redoAction;
 	QAction* m_closeWindowAction;
 	QAction* m_closeAllWindowsAction;
-	QAction* m_tileWindowsAction;
-	QAction* m_cascadeWindowsAction;
 	QAction* m_nextWindowAction;
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
@@ -217,58 +187,20 @@ private:
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
 	// Docks
+	ads::CDockWidget* cursorDock{nullptr};
+
 	QStackedWidget* stackedWidget{nullptr};
-	AspectDock* aspectDock{nullptr};
-	AxisDock* axisDock{nullptr};
-	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};
-	NoteDock* notesDock{nullptr};
-	InfoElementDock* infoElementDock{nullptr};
-	CartesianPlotDock* cartesianPlotDock{nullptr};
-	CartesianPlotLegendDock* cartesianPlotLegendDock{nullptr};
-	ColumnDock* columnDock{nullptr};
-	LiveDataDock* m_liveDataDock{nullptr};
-	MatrixDock* matrixDock{nullptr};
-	SpreadsheetDock* spreadsheetDock{nullptr};
-	ProjectDock* projectDock{nullptr};
-	XYCurveDock* xyCurveDock{nullptr};
-	XYEquationCurveDock* xyEquationCurveDock{nullptr};
-	XYDataReductionCurveDock* xyDataReductionCurveDock{nullptr};
-	XYDifferentiationCurveDock* xyDifferentiationCurveDock{nullptr};
-	XYIntegrationCurveDock* xyIntegrationCurveDock{nullptr};
-	XYInterpolationCurveDock* xyInterpolationCurveDock{nullptr};
-	XYSmoothCurveDock* xySmoothCurveDock{nullptr};
-	XYFitCurveDock* xyFitCurveDock{nullptr};
-	XYFourierFilterCurveDock* xyFourierFilterCurveDock{nullptr};
-	XYFourierTransformCurveDock* xyFourierTransformCurveDock{nullptr};
-	XYHilbertTransformCurveDock* xyHilbertTransformCurveDock{nullptr};
-	XYConvolutionCurveDock* xyConvolutionCurveDock{nullptr};
-	XYCorrelationCurveDock* xyCorrelationCurveDock{nullptr};
-	HistogramDock* histogramDock{nullptr};
-	BarPlotDock* barPlotDock{nullptr};
-	BoxPlotDock* boxPlotDock{nullptr};
-	WorksheetDock* worksheetDock{nullptr};
-	LabelWidget* textLabelDock{nullptr};
-	ImageDock* imageDock{nullptr};
-	CustomPointDock* customPointDock{nullptr};
-	ReferenceLineDock* referenceLineDock{nullptr};
-	DatapickerImageWidget* datapickerImageDock{nullptr};
-	DatapickerCurveWidget* datapickerCurveDock{nullptr};
 
 	void initActions();
 	void initMenus();
 	bool warnModified();
-	void activateSubWindowForAspect(const AbstractAspect*) const;
+	void activateSubWindowForAspect(const AbstractAspect*);
 	bool save(const QString&);
 	// 	void toggleShowWidget(QWidget* widget, bool showToRight);
 	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 
 	Spreadsheet* activeSpreadsheet() const;
-
-	// Cantor
-#ifdef HAVE_CANTOR_LIBS
-	CantorWorksheetDock* cantorWorksheetDock{nullptr};
-#endif
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver{nullptr};
@@ -282,9 +214,16 @@ private Q_SLOTS:
 	void initGUI(const QString&);
 	// 	QQuickWidget* createWelcomeScreen();
 	// 	void resetWelcomeScreen();
-	void createMdiArea();
+	// void createMdiArea();
+	void createADS();
+	void changeVisibleAllDocks(bool);
+	void activateNextDock();
+	void activatePreviousDock();
+	void dockWidgetAboutToBeRemoved(ads::CDockWidget*);
+	void dockWidgetRemoved(ads::CDockWidget*);
+	void dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now);
 	void updateGUI();
-	void updateGUIOnProjectChanges();
+	void updateGUIOnProjectChanges(const QByteArray& windowState = QByteArray());
 	void undo();
 	void redo();
 
@@ -336,13 +275,13 @@ private Q_SLOTS:
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*);
 	void handleCurrentAspectChanged(AbstractAspect*);
-	void handleCurrentSubWindowChanged(QMdiSubWindow*);
+	//	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleShowSubWindowRequested();
 
 	void handleSettingsChanges();
 
-	void setMdiWindowVisibility(QAction*);
-	void updateMdiWindowVisibility() const;
+	void setDockVisibility(QAction*);
+	void updateDockWindowVisibility() const;
 	void toggleDockWidget(QAction*);
 	void toggleStatusBar(bool);
 	void toggleMenuBar(bool);
@@ -352,6 +291,8 @@ private Q_SLOTS:
 	void propertiesDockVisibilityChanged(bool);
 	void cursorDockVisibilityChanged(bool);
 	void propertiesExplorerRequested();
+
+	void focusCursorDock();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 };

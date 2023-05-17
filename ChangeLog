@@ -1,4 +1,18 @@
------2.10.0 () -----
+-----XX.XX.XX () -----
+New features:
+	* [worksheet]
+		* Add possibility to use column labels as axis ticks
+
+-----2.10.1 () -----
+Bug fixes:
+	* Support markdown library discount version 3
+	* Improve Vector BLF dependency (git download must be enabled if needed)
+	* Correctly use system header of system QXlsx (BUG 468651)
+	* Fix group separator problem in formulas (BUG 468098)
+	* Improve auto scale (Issue #536)
+	* Use system liborigin headers if linking against system liborigin (BUG 469367)
+
+-----2.10.0 (21.03.2023) -----
 New features:
 	* [worksheet]
 		* Bar plots
@@ -6,18 +20,18 @@ New features:
 		* Histogram
 			* Error bars (Possion sqrt(N) error or values from custom columns)
 			* Rug plots
-			* Allow to create a data spreadsheet with the positions and values of the histogram bins
 		* Box Plot
 			* Rug plots
-			* Allow to create a data spreadsheet with the box plot metrics (quartiles, median, etc.)
 			* Symbols for whisker end points
 			* Allow to modify box properties (color, etc.) for every data set independently of each other
 			* Draw a legend item for every dataset in the box plot
+		* Reference Range - custom area on the plot to highlight a certain x- or y-range
+		* Show LaTeX error messages in text labels when rendering with LaTeX
 	* [spreadsheet]
 		* Use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns
 		* When generating random numbers, allow to specify the seed number
-		* Column statistics for text columns
+		* Column statistics for text columns including the frequency table, bar and Pareto plots
 		* Column statistics for selected cells only
 		* Dropping and masking of values also for text and datetime columns
 		* Data sampling (random and periodic methods)
@@ -30,16 +44,18 @@ New features:
 		* Zooming in the image view
 	* [import]
 		* Import data from Excel .xlsx files using QXlsx library
+		* Import of Binary Log File (BLF) files from Vektor Informatik
 		* HDF5: support VLEN data import
 		* Live data: support multiple values via TCP
 	* [export]
+		* Export spreadsheet and matrix in Excel .xlsx format using QXlsx library
 		* Use the current working project directory, if available, as the default export path
 	* [analysis]
-		* Maximum Likelyhood estimation for several distributions
+		* Maximum likelihood estimation for several distributions
 		* Guess start values of fit parameter for polynomial models by linear regression
-		* Allow to create a spreadsheet with the data steming from the result of the computation
 		* Implement fourier filtering for datetimes
 	* [general]
+		* Allow to create a spreadsheet with the data steming from an equation curve, an analysis curve, a histogram or a box plot
 		* Add settings option for GUM compliant terms
 
 Performance improvements:

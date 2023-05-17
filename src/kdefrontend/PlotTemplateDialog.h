@@ -55,7 +55,7 @@ private:
 
 class TemplateListModel : public QAbstractListModel {
 public:
-	TemplateListModel(const QString& searchPath, QObject* parent = nullptr);
+	explicit TemplateListModel(const QString& searchPath, QObject* parent = nullptr);
 	void setSearchPath(const QString& searchPath);
 	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;

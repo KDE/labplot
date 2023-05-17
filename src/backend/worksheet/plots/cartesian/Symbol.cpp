@@ -131,9 +131,9 @@ void Symbol::init(const KConfigGroup& group) {
 	d->pen.setWidthF(group.readEntry("SymbolBorderWidth", defaultBorderWidth));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Symbol, Symbol::Style, style, style)
 BASIC_SHARED_D_READER_IMPL(Symbol, qreal, opacity, opacity)
 BASIC_SHARED_D_READER_IMPL(Symbol, qreal, rotationAngle, rotationAngle)
@@ -141,9 +141,9 @@ BASIC_SHARED_D_READER_IMPL(Symbol, qreal, size, size)
 BASIC_SHARED_D_READER_IMPL(Symbol, QBrush, brush, brush)
 BASIC_SHARED_D_READER_IMPL(Symbol, QPen, pen, pen)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(Symbol, SetStyle, Symbol::Style, style, updateSymbols)
 void Symbol::setStyle(Symbol::Style style) {
 	Q_D(Symbol);
@@ -186,9 +186,9 @@ void Symbol::setOpacity(qreal opacity) {
 		exec(new SymbolSetOpacityCmd(d, opacity, ki18n("%1: set symbols opacity")));
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 SymbolPrivate::SymbolPrivate(Symbol* owner)
 	: q(owner) {
 }
@@ -205,9 +205,9 @@ void SymbolPrivate::updatePixmap() {
 	Q_EMIT q->updatePixmapRequested();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Symbol::save(QXmlStreamWriter* writer) const {
 	Q_D(const Symbol);
@@ -247,9 +247,9 @@ bool Symbol::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Symbol::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
 	setOpacity(group.readEntry("SymbolOpacity", 1.0));
 	QBrush brush;

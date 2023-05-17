@@ -564,9 +564,9 @@ void MatrixView::wheelEvent(QWheelEvent* event) {
 		QWidget::wheelEvent(event);
 }
 
-//##############################################################################
-//####################################  SLOTs   ################################
-//##############################################################################
+// ##############################################################################
+// ####################################  SLOTs   ################################
+// ##############################################################################
 /*!
 	Advance current cell after [Return] or [Enter] was pressed
 */
@@ -624,7 +624,7 @@ void MatrixView::fillWithConstValues() {
 	}
 }
 
-//############################ selection related slots #########################
+// ############################ selection related slots #########################
 void MatrixView::cutSelection() {
 	if (firstSelectedRow() < 0)
 		return;
@@ -859,7 +859,7 @@ void MatrixView::updateImage() {
 	RESET_CURSOR;
 }
 
-//############################# matrix related slots ###########################
+// ############################# matrix related slots ###########################
 void MatrixView::switchView(QAction* action) {
 	if (action == action_data_view)
 		m_stackedWidget->setCurrentIndex(0);
@@ -886,7 +886,7 @@ void MatrixView::headerFormatChanged(QAction* action) {
 		m_matrix->setHeaderFormat(Matrix::HeaderFormat::HeaderRowsColumnsValues);
 }
 
-//############################# column related slots ###########################
+// ############################# column related slots ###########################
 /*!
   Append as many columns as are selected.
 */
@@ -945,7 +945,7 @@ void MatrixView::clearSelectedColumns() {
 	RESET_CURSOR;
 }
 
-//############################## rows related slots ############################
+// ############################## rows related slots ############################
 /*!
   Append as many rows as are selected.
 */
@@ -1263,7 +1263,7 @@ void MatrixView::exportToLaTeX(const QString& path,
 
 	for (int col = 0; col < cols; ++col) {
 		int maxSize = -1;
-		for (auto row : toExport) {
+		for (auto& row : toExport) {
 			if (row.at(col).size() > maxSize)
 				maxSize = row.at(col).size();
 		}
@@ -1536,9 +1536,9 @@ void MatrixView::exportToLaTeX(const QString& path,
 		out << QLatin1String("\\end{document} \n");
 }
 
-//##############################################################################
-//############################  Dialogs  ######################################
-//##############################################################################
+// ##############################################################################
+// ############################  Dialogs  ######################################
+// ##############################################################################
 void MatrixView::showColumnStatistics() {
 	if (selectedColumnCount() > 0) {
 		QString dlgTitle(m_matrix->name() + QStringLiteral(" column statistics"));

@@ -396,6 +396,7 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::HDF5:
 	case AbstractFileFilter::FileType::NETCDF:
 	case AbstractFileFilter::FileType::Excel:
+	case AbstractFileFilter::FileType::VECTOR_BLF:
 		break;
 	case AbstractFileFilter::FileType::FITS:
 		icon = QIcon::fromTheme(QStringLiteral("kstars_fitsviewer"));
@@ -440,9 +441,9 @@ QMenu* LiveDataSource::createContextMenu() {
 	return menu;
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
 /*
  * Called when the watch timer times out, i.e. when modifying the file or directory
@@ -591,6 +592,7 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::FileType::Excel:
 		case AbstractFileFilter::FileType::Image:
 		case AbstractFileFilter::FileType::HDF5:
+		case AbstractFileFilter::FileType::VECTOR_BLF:
 		case AbstractFileFilter::FileType::NETCDF:
 		case AbstractFileFilter::FileType::FITS:
 		case AbstractFileFilter::FileType::JSON:
@@ -748,9 +750,9 @@ void LiveDataSource::plotData() {
 	dlg->exec();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
   Saves as XML.
  */

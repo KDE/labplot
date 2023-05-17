@@ -17,6 +17,8 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 #include <KSharedConfig>
+#include <kcoreaddons_version.h>
+
 #include <QContextMenuEvent>
 #include <QFileDialog>
 #include <QMenu>
@@ -372,8 +374,16 @@ void FITSHeaderEditWidget::removeKeyword() {
 		return;
 
 	QString key = ui->twKeywordsTable->item(row, 0)->text();
-	const int rc = KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the keyword '%1'?", key), i18n("Confirm Deletion"));
-	if (rc == KMessageBox::Yes) {
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+	auto status = KMessageBox::questionTwoActions(this,
+												  i18n("Are you sure you want to delete the keyword '%1'?", key),
+												  i18n("Confirm Deletion"),
+												  KStandardGuiItem::del(),
+												  KStandardGuiItem::cancel());
+#else
+	auto status = KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the keyword '%1'?", key), i18n("Confirm Deletion"));
+#endif
+	if (status == KMessageBox::Yes) {
 		bool remove = true;
 		for (const QString& k : mandatoryKeywords()) {
 			if (!k.compare(key)) {

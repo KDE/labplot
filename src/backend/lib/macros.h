@@ -23,19 +23,24 @@
 // C++ style warning (works on Windows)
 #include <iomanip>
 #include <iostream>
-#define WARN(x) std::cout << std::dec << std::boolalpha << std::setprecision(15) << x << std::endl;
+#define WARN(x)                                                                                                                                                \
+	std::cout << std::dec << std::setprecision(std::numeric_limits<double>::digits10 + 1) << std::boolalpha << x                                               \
+			  << std::resetiosflags(std::ios_base::boolalpha) << std::setprecision(-1) << std::endl;
 
 #ifndef NDEBUG
 #include <QDebug>
 #define QDEBUG(x) qDebug() << x;
-// C++ style debugging (works on Windows)
-#define DEBUG(x) std::cout << std::dec << std::boolalpha << std::setprecision(15) << x << std::endl;
+#define DEBUG(x) WARN(x)
 #else
 #define QDEBUG(x)                                                                                                                                              \
 	{ }
 #define DEBUG(x)                                                                                                                                               \
 	{ }
 #endif
+
+#define DEBUG_TEXTLABEL_BOUNDING_RECT 0
+#define DEBUG_TEXTLABEL_GLUEPOINTS 0
+#define DEBUG_AXIS_BOUNDING_RECT 0
 
 struct Lock {
 	inline explicit Lock(bool& variable)
@@ -95,6 +100,8 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 #define ENUM_TO_STRING(class, enum, index)                                                                                                                     \
 	(class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(index)))
 #define ENUM_COUNT(class, enum) (class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
+
+#define DARKMODE (QApplication::palette().color(QPalette::Base).lightness() < 128)
 
 //////////////////////// LineEdit Access ///////////////////////////////
 #define SET_INT_FROM_LE(var, le)                                                                                                                               \
@@ -267,6 +274,20 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 	};
 
+// setter class with finalize() and signal emitting, one field_name signal and one custom signal.
+#define STD_SETTER_CMD_IMPL_F_S_SC(class_name, cmd_name, value_type, field_name, finalize_method, custom_signal)                                               \
+	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
+	public:                                                                                                                                                    \
+		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
+		}                                                                                                                                                      \
+		virtual void finalize() override {                                                                                                                     \
+			m_target->finalize_method();                                                                                                                       \
+			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			emit m_target->q->custom_signal();                                                                                                                 \
+		}                                                                                                                                                      \
+	};
+
 // setter class with finalize() and signal emitting for changing several properties in one single step (embedded in beginMacro/endMacro)
 #define STD_SETTER_CMD_IMPL_M_F_S(class_name, cmd_name, value_type, field_name, finalize_method)                                                               \
 	class class_name##cmd_name##Cmd : public StandardMacroSetterCmd<class_name::Private, value_type> {                                                         \
@@ -350,6 +371,39 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		virtual void finalize() {                                                                                                                              \
 			m_target->finalize_method();                                                                                                                       \
 		}                                                                                                                                                      \
+	};
+
+// setter class for QGraphicsitem settings because
+// there field_name() and setter_method() is used to get and set values
+// with finalize() function and signal emitting.
+#define GRAPHICSITEM_SETTER_CMD_IMPL_F_S(class_name, cmd_name, value_type, field_name, setter_method, finalize_method)                                         \
+	class class_name##cmd_name##Cmd : public QUndoCommand {                                                                                                    \
+	public:                                                                                                                                                    \
+		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
+			: QUndoCommand(parent)                                                                                                                             \
+			, m_target(target)                                                                                                                                 \
+			, m_otherValue(newValue) {                                                                                                                         \
+			setText(description.subs(m_target->name()).toString());                                                                                            \
+		}                                                                                                                                                      \
+		void redo() override {                                                                                                                                 \
+			value_type tmp = m_target->field_name();                                                                                                           \
+			m_target->setter_method(m_otherValue);                                                                                                             \
+			m_otherValue = tmp;                                                                                                                                \
+			QUndoCommand::redo(); /* redo all childs */                                                                                                        \
+			finalize();                                                                                                                                        \
+		}                                                                                                                                                      \
+                                                                                                                                                               \
+		void undo() override {                                                                                                                                 \
+			redo();                                                                                                                                            \
+		}                                                                                                                                                      \
+		void finalize() {                                                                                                                                      \
+			m_target->finalize_method();                                                                                                                       \
+			emit m_target->q->field_name##Changed(m_target->field_name());                                                                                     \
+		}                                                                                                                                                      \
+                                                                                                                                                               \
+	private:                                                                                                                                                   \
+		class_name::Private* m_target;                                                                                                                         \
+		value_type m_otherValue;                                                                                                                               \
 	};
 
 //////////////////////// XML - serialization/deserialization /////
@@ -580,6 +634,15 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 			reader->raiseWarning(attributeWarning.subs(QStringLiteral(name)).toString());                                                                      \
 		else                                                                                                                                                   \
 			d->var = str.toDouble();                                                                                                                           \
+	}
+
+#define QGRAPHICSITEM_READ_DOUBLE_VALUE(name, Var)                                                                                                             \
+	{                                                                                                                                                          \
+		str = attribs.value(QStringLiteral(name)).toString();                                                                                                  \
+		if (str.isEmpty())                                                                                                                                     \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral(name)).toString());                                                                      \
+		else                                                                                                                                                   \
+			d->set##Var(str.toDouble());                                                                                                                       \
 	}
 
 #define READ_STRING_VALUE(name, var)                                                                                                                           \

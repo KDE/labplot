@@ -16,17 +16,18 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
-
-#include <QFileDialog>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QTimer>
+#include <kcoreaddons_version.h>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
+
+#include <QFileDialog>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QTimer>
 
 /*!
    \class DatabaseManagerWidget
@@ -179,9 +180,8 @@ void DatabaseManagerWidget::driverChanged() {
 		if (!m_highlighter) {
 			m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teCustomConnection->document());
 			m_highlighter->setDefinition(m_repository.definitionForName(QStringLiteral("INI Files")));
-			m_highlighter->setTheme((palette().color(QPalette::Base).lightness() < 128)
-										? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-										: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+			m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+											 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 		}
 #endif
 	} else {
@@ -331,7 +331,7 @@ void DatabaseManagerWidget::addConnection() {
 	driverChanged();
 	m_initializing = false;
 
-	// we have now more then one connection, enable widgets
+	// we have now more than one connection, enable widgets
 	ui.tbDelete->setEnabled(true);
 	ui.leName->setEnabled(true);
 	ui.leDatabase->setEnabled(true);
@@ -346,10 +346,19 @@ void DatabaseManagerWidget::addConnection() {
 	removes the current selected connection.
  */
 void DatabaseManagerWidget::deleteConnection() {
-	int ret = KMessageBox::questionYesNo(this,
-										 i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
-										 i18n("Delete Connection"));
-	if (ret != KMessageBox::Yes)
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+	auto status = KMessageBox::questionTwoActions(this,
+												  i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
+												  i18n("Delete Connection"),
+												  KStandardGuiItem::del(),
+												  KStandardGuiItem::cancel());
+#else
+	auto status = KMessageBox::questionYesNo(this,
+											 i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
+											 i18n("Delete Connection"));
+#endif
+
+	if (status != KMessageBox::Yes)
 		return;
 
 	// remove the current selected connection

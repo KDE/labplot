@@ -21,12 +21,23 @@
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-#include "commonfrontend/core/PartMdiView.h"
+#include "backend/worksheet/plots/cartesian/ReferenceRange.h"
+#include "commonfrontend/core/ContentDockWidget.h"
 #include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
+
+#ifdef Q_OS_MAC
+#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
+#endif
+
+#include <KColorScheme>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <kcoreaddons_version.h>
 
 #include <QApplication>
 #include <QClipboard>
@@ -45,14 +56,7 @@
 #include <QWheelEvent>
 #include <QWidgetAction>
 
-#include <KColorScheme>
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <KMessageBox>
-
-#ifdef Q_OS_MAC
-#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
-#endif
+#include <DockManager.h>
 
 #include <limits>
 
@@ -77,10 +81,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	setMinimumSize(16, 16);
 	setFocusPolicy(Qt::StrongFocus);
 
-	if (m_worksheet->useViewSize()) {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	}
+	updateScrollBarPolicy();
 
 	viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
 	viewport()->setAttribute(Qt::WA_NoSystemBackground);
@@ -95,7 +96,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	connect(m_worksheet, &Worksheet::itemDeselected, this, &WorksheetView::deselectItem);
 	connect(m_worksheet, &Worksheet::requestUpdate, this, &WorksheetView::updateBackground);
 	connect(m_worksheet, &Worksheet::aspectAboutToBeRemoved, this, &WorksheetView::aspectAboutToBeRemoved);
-	connect(m_worksheet, &Worksheet::useViewSizeRequested, this, &WorksheetView::useViewSizeRequested);
+	connect(m_worksheet, &Worksheet::useViewSizeChanged, this, &WorksheetView::useViewSizeChanged);
 	connect(m_worksheet, &Worksheet::layoutChanged, this, &WorksheetView::layoutChanged);
 	connect(scene(), &QGraphicsScene::selectionChanged, this, &WorksheetView::selectionChanged);
 
@@ -155,9 +156,24 @@ void WorksheetView::initActions() {
 	zoomActionGroup->addAction(zoomOutViewAction);
 	zoomActionGroup->addAction(zoomOriginAction);
 
-	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18n("Fit to Height"), zoomActionGroup);
-	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18n("Fit to Width"), zoomActionGroup);
-	zoomFitSelectionAction = new QAction(i18n("Fit to Selection"), zoomActionGroup);
+	auto* fitActionGroup = new QActionGroup(zoomActionGroup);
+	fitActionGroup->setExclusive(true);
+	zoomFitNoneAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18n("No fit"), fitActionGroup);
+	zoomFitNoneAction->setCheckable(true);
+	zoomFitNoneAction->setChecked(true);
+	zoomFitNoneAction->setData((int)Worksheet::ZoomFit::None);
+	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18n("Fit to Height"), fitActionGroup);
+	zoomFitPageHeightAction->setCheckable(true);
+	zoomFitPageHeightAction->setData((int)Worksheet::ZoomFit::FitToHeight);
+	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18n("Fit to Width"), fitActionGroup);
+	zoomFitPageWidthAction->setCheckable(true);
+	zoomFitPageWidthAction->setData((int)Worksheet::ZoomFit::FitToWidth);
+	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18n("Fit to Selection"), fitActionGroup);
+	zoomFitSelectionAction->setCheckable(true);
+	zoomFitSelectionAction->setData((int)Worksheet::ZoomFit::FitToSelection);
+	zoomFitAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18n("Fit"), fitActionGroup);
+	zoomFitAction->setCheckable(true);
+	zoomFitAction->setData((int)Worksheet::ZoomFit::Fit);
 
 	// Mouse mode actions
 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), mouseModeActionGroup);
@@ -250,6 +266,7 @@ void WorksheetView::initActions() {
 
 	connect(addNewActionGroup, &QActionGroup::triggered, this, &WorksheetView::addNew);
 	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::mouseModeChanged);
+	connect(fitActionGroup, &QActionGroup::triggered, this, &WorksheetView::fitChanged);
 	connect(zoomActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoom);
 	connect(magnificationActionGroup, &QActionGroup::triggered, this, &WorksheetView::magnificationChanged);
 	connect(layoutActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeLayout);
@@ -485,6 +502,8 @@ void WorksheetView::initMenus() {
 	m_zoomMenu->addAction(zoomInViewAction);
 	m_zoomMenu->addAction(zoomOutViewAction);
 	m_zoomMenu->addAction(zoomOriginAction);
+	m_zoomMenu->addAction(zoomFitNoneAction);
+	m_zoomMenu->addAction(zoomFitAction);
 	m_zoomMenu->addAction(zoomFitPageHeightAction);
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 	m_zoomMenu->addAction(zoomFitSelectionAction);
@@ -1043,21 +1062,29 @@ CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
 	return plot;
 }
 
-//##############################################################################
-//####################################  Events   ###############################
-//##############################################################################
+// ##############################################################################
+// ####################################  Events   ###############################
+// ##############################################################################
 void WorksheetView::resizeEvent(QResizeEvent* event) {
 	if (m_isClosing)
 		return;
 
 	if (m_worksheet->useViewSize())
 		this->processResize();
+	else
+		updateFit();
 
 	QGraphicsView::resizeEvent(event);
 }
 
 void WorksheetView::wheelEvent(QWheelEvent* event) {
 	if (isInteractive() && (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier))) {
+		if (!zoomFitNoneAction)
+			initActions();
+		zoomFitNoneAction->setChecked(true);
+		m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
+		updateScrollBarPolicy();
+
 		// https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 		QPoint numDegrees = event->angleDelta() / 8;
 		int numSteps = numDegrees.y() / 15; // see QWheelEvent documentation
@@ -1313,7 +1340,7 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 
 	// select the worksheet in the project explorer and bring the view to the foreground
 	m_worksheet->setSelectedInView(true);
-	m_worksheet->mdiSubWindow()->mdiArea()->setActiveSubWindow(m_worksheet->mdiSubWindow());
+	m_worksheet->dockWidget()->dockManager()->setDockWidgetFocused(m_worksheet->dockWidget());
 
 	event->setAccepted(true);
 }
@@ -1333,16 +1360,16 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 	plot->processDropEvent(plot->project()->droppedAspects(mimeData));
 }
 
-//##############################################################################
-//####################################  SLOTs   ################################
-//##############################################################################
-void WorksheetView::useViewSizeRequested() {
+// ##############################################################################
+// ####################################  SLOTs   ################################
+// ##############################################################################
+void WorksheetView::useViewSizeChanged(bool useViewSize) {
 	if (!m_actionsInitialized)
 		initActions();
 
-	if (m_worksheet->useViewSize()) {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	updateScrollBarPolicy();
+
+	if (useViewSize) {
 		zoomFitPageHeightAction->setVisible(false);
 		zoomFitPageWidthAction->setVisible(false);
 		currentZoomAction = zoomInViewAction;
@@ -1352,8 +1379,6 @@ void WorksheetView::useViewSizeRequested() {
 		// determine and set the current view size
 		this->processResize();
 	} else {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		zoomFitPageHeightAction->setVisible(true);
 		zoomFitPageWidthAction->setVisible(true);
 	}
@@ -1370,6 +1395,8 @@ void WorksheetView::processResize() {
 }
 
 void WorksheetView::changeZoom(QAction* action) {
+	zoomFitNoneAction->setChecked(true);
+	m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
 	if (action == zoomInViewAction)
 		zoom(1);
 	else if (action == zoomOutViewAction)
@@ -1378,20 +1405,59 @@ void WorksheetView::changeZoom(QAction* action) {
 		static const float hscale = QApplication::desktop()->physicalDpiX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		static const float vscale = QApplication::desktop()->physicalDpiY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
-	} else if (action == zoomFitPageWidthAction) {
-		float scaleFactor = viewport()->width() / scene()->sceneRect().width();
-		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-	} else if (action == zoomFitPageHeightAction) {
-		float scaleFactor = viewport()->height() / scene()->sceneRect().height();
-		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-	} else if (action == zoomFitSelectionAction)
-		fitInView(scene()->selectionArea().boundingRect(), Qt::KeepAspectRatio);
+	}
 
 	currentZoomAction = action;
 	if (tbZoom)
 		tbZoom->setDefaultAction(action);
 
 	updateLabelsZoom();
+}
+
+void WorksheetView::updateFit() {
+	switch (m_worksheet->zoomFit()) {
+	case Worksheet::ZoomFit::None:
+		break;
+	case Worksheet::ZoomFit::FitToWidth: {
+		const float scaleFactor = viewport()->width() / scene()->sceneRect().width();
+		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+		break;
+	}
+	case Worksheet::ZoomFit::FitToHeight: {
+		const float scaleFactor = viewport()->height() / scene()->sceneRect().height();
+		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+		break;
+	}
+	case Worksheet::ZoomFit::FitToSelection: {
+		fitInView(scene()->selectionArea().boundingRect(), Qt::KeepAspectRatio);
+		break;
+	}
+	case Worksheet::ZoomFit::Fit: {
+		const float scaleFactorVertical = viewport()->height() / scene()->sceneRect().height();
+		const float scaleFactorHorizontal = viewport()->width() / scene()->sceneRect().width();
+		if (scaleFactorVertical * scene()->sceneRect().width() < viewport()->width())
+			setTransform(QTransform::fromScale(scaleFactorVertical, scaleFactorVertical));
+		else
+			setTransform(QTransform::fromScale(scaleFactorHorizontal, scaleFactorHorizontal));
+		break;
+	}
+	}
+}
+
+void WorksheetView::updateScrollBarPolicy() {
+	if (m_worksheet->useViewSize() || m_worksheet->zoomFit() != Worksheet::ZoomFit::None) {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	} else {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	}
+}
+
+void WorksheetView::fitChanged(QAction* action) {
+	m_worksheet->setZoomFit(static_cast<Worksheet::ZoomFit>(action->data().toInt()));
+	updateScrollBarPolicy();
+	updateFit();
 }
 
 double WorksheetView::zoomFactor() const {
@@ -1579,12 +1645,21 @@ void WorksheetView::deleteElement() {
 	if (m_selectedItems.isEmpty())
 		return;
 
-	int rc = KMessageBox::warningYesNo(
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+	auto status = KMessageBox::warningTwoActions(
+		this,
+		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
+		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()),
+		KStandardGuiItem::del(),
+		KStandardGuiItem::cancel());
+#else
+	auto status = KMessageBox::warningYesNo(
 		this,
 		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
 		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
+#endif
 
-	if (rc == KMessageBox::No)
+	if (status == KMessageBox::No)
 		return;
 
 	m_suppressSelectionChangedEvent = true;
@@ -1890,7 +1965,19 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot) {
 	cartesianPlotCursorModeAction->setEnabled(true);
 }
 
+void WorksheetView::handleReferenceRangeSelected() {
+	auto l = static_cast<ReferenceRange*>(m_selectedElement);
+	bool vert = (l->orientation() == ReferenceRange::Orientation::Vertical);
+	handleReferences(vert);
+}
+
 void WorksheetView::handleReferenceLineSelected() {
+	auto l = static_cast<ReferenceLine*>(m_selectedElement);
+	bool vert = (l->orientation() == ReferenceLine::Orientation::Vertical);
+	handleReferences(vert);
+}
+
+void WorksheetView::handleReferences(bool vertical) {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
 	 * Action to X: action is applied to all x ranges
@@ -1903,9 +1990,6 @@ void WorksheetView::handleReferenceLineSelected() {
 	 * - x zoom selection: if vertical: zoom only into the range from the reference line
 	 * - y zoom selection: if !vertical:zoom only into the range from the reference line
 	 */
-
-	auto l = static_cast<ReferenceLine*>(m_selectedElement);
-	bool vert = (l->orientation() == ReferenceLine::Orientation::Vertical);
 
 	zoomInAction->setEnabled(false);
 	zoomOutAction->setEnabled(false);
@@ -1924,57 +2008,57 @@ void WorksheetView::handleReferenceLineSelected() {
 		shiftRightXAction->setEnabled(false);
 		shiftUpYAction->setEnabled(false);
 		shiftDownYAction->setEnabled(false);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
-		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
-		zoomInXAction->setEnabled(vert);
-		zoomOutXAction->setEnabled(vert);
-		zoomInYAction->setEnabled(!vert);
-		zoomOutYAction->setEnabled(!vert);
-		shiftLeftXAction->setEnabled(vert);
-		shiftRightXAction->setEnabled(vert);
-		shiftUpYAction->setEnabled(!vert);
-		shiftDownYAction->setEnabled(!vert);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vertical);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vertical);
+		zoomInXAction->setEnabled(vertical);
+		zoomOutXAction->setEnabled(vertical);
+		zoomInYAction->setEnabled(!vertical);
+		zoomOutYAction->setEnabled(!vertical);
+		shiftLeftXAction->setEnabled(vertical);
+		shiftRightXAction->setEnabled(vertical);
+		shiftUpYAction->setEnabled(!vertical);
+		shiftDownYAction->setEnabled(!vertical);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
-		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
-		zoomInXAction->setEnabled(vert);
-		zoomOutXAction->setEnabled(vert);
-		zoomInYAction->setEnabled(!vert);
-		zoomOutYAction->setEnabled(!vert);
-		shiftLeftXAction->setEnabled(vert);
-		shiftRightXAction->setEnabled(vert);
-		shiftUpYAction->setEnabled(!vert);
-		shiftDownYAction->setEnabled(!vert);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vertical);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vertical);
+		zoomInXAction->setEnabled(vertical);
+		zoomOutXAction->setEnabled(vertical);
+		zoomInYAction->setEnabled(!vertical);
+		zoomOutYAction->setEnabled(!vertical);
+		shiftLeftXAction->setEnabled(vertical);
+		shiftRightXAction->setEnabled(vertical);
+		shiftUpYAction->setEnabled(!vertical);
+		shiftDownYAction->setEnabled(!vertical);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
-		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
-		zoomInXAction->setEnabled(vert);
-		zoomOutXAction->setEnabled(vert);
-		zoomInYAction->setEnabled(!vert);
-		zoomOutYAction->setEnabled(!vert);
-		shiftLeftXAction->setEnabled(vert);
-		shiftRightXAction->setEnabled(vert);
-		shiftUpYAction->setEnabled(!vert);
-		shiftDownYAction->setEnabled(!vert);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vertical);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vertical);
+		zoomInXAction->setEnabled(vertical);
+		zoomOutXAction->setEnabled(vertical);
+		zoomInYAction->setEnabled(!vertical);
+		zoomOutYAction->setEnabled(!vertical);
+		shiftLeftXAction->setEnabled(vertical);
+		shiftRightXAction->setEnabled(vertical);
+		shiftUpYAction->setEnabled(!vertical);
+		shiftDownYAction->setEnabled(!vertical);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	}
 	cartesianPlotSelectionModeAction->setEnabled(true);
 	cartesianPlotCursorModeAction->setEnabled(false);
 }
 
-void WorksheetView::handleXYCurveSelected() {
+void WorksheetView::handlePlotSelected() {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
 	 * Action to X: action is applied to all x ranges
@@ -2153,26 +2237,24 @@ void WorksheetView::handleCartesianPlotActions() {
 			m_selectedElement = w;
 			handleCartesianPlotSelected(static_cast<CartesianPlot*>(m_selectedElement));
 			break;
-		} else if (w->inherits(AspectType::XYCurve)) {
-			handled = true;
-			m_selectedElement = w;
-			// XYCurvePrivate does not depend yet on WorksheetElementContainerPrivate
-			// m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
-			handleXYCurveSelected();
-			break;
-		} else if (w->inherits(AspectType::XYAnalysisCurve)) {
-			handled = true;
-			m_selectedElement = w;
-			handleXYCurveSelected();
-			break;
 		} else if (w->type() == AspectType::ReferenceLine) {
 			handled = true;
 			m_selectedElement = w;
 			handleReferenceLineSelected();
+		} else if (w->type() == AspectType::ReferenceRange) {
+			handled = true;
+			m_selectedElement = w;
+			handleReferenceRangeSelected();
 		} else if (w->type() == AspectType::Axis) {
 			handled = true;
 			m_selectedElement = w;
 			handleAxisSelected(static_cast<Axis*>(m_selectedElement));
+			break;
+		} else if (dynamic_cast<Plot*>(w) || w->coordinateBindingEnabled()) {
+			// Plot and other WorksheetElements like custompoint, infoelement, textlabel
+			handled = true;
+			m_selectedElement = w;
+			handlePlotSelected();
 			break;
 		}
 	}
@@ -2487,9 +2569,9 @@ void WorksheetView::unregisterShortcuts() {
 	zoomOriginAction->setShortcut(QKeySequence());
 }
 
-//##############################################################################
-//########################  SLOTs for cartesian plots   ########################
-//##############################################################################
+// ##############################################################################
+// ########################  SLOTs for cartesian plots   ########################
+// ##############################################################################
 void WorksheetView::cartesianPlotActionModeChanged(QAction* action) {
 	if (action == cartesianPlotApplyToSelectionAction)
 		m_worksheet->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);

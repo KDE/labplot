@@ -457,7 +457,7 @@ bool Column::copy(const AbstractColumn* source, int source_start, int dest_start
 }
 
 void Column::invalidateProperties() {
-	d->available.setUnavailable();
+	d->invalidate();
 }
 
 /**
@@ -466,7 +466,6 @@ void Column::invalidateProperties() {
 void Column::handleRowInsertion(int before, int count) {
 	AbstractColumn::handleRowInsertion(before, count);
 	exec(new ColumnInsertRowsCmd(d, before, count));
-	invalidateProperties();
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
 }
@@ -477,7 +476,6 @@ void Column::handleRowInsertion(int before, int count) {
 void Column::handleRowRemoval(int first, int count) {
 	AbstractColumn::handleRowRemoval(first, count);
 	exec(new ColumnRemoveRowsCmd(d, first, count));
-	invalidateProperties();
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
 }
@@ -608,7 +606,6 @@ void Column::clearFormulas() {
  */
 void Column::setTextAt(int row, const QString& new_value) {
 	exec(new ColumnSetCmd<QString>(d, row, textAt(row), new_value));
-	invalidateProperties();
 }
 
 void Column::setText(const QVector<QString>& texts) {
@@ -625,7 +622,6 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 		d->replaceTexts(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<QString>(d, first, new_values));
-	invalidateProperties();
 }
 
 int Column::dictionaryIndex(int row) const {
@@ -647,7 +643,6 @@ void Column::addValueLabel(const QString& value, const QString& label) {
  */
 void Column::setDateAt(int row, QDate new_value) {
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
-	invalidateProperties();
 }
 
 /**
@@ -657,7 +652,6 @@ void Column::setDateAt(int row, QDate new_value) {
  */
 void Column::setTimeAt(int row, QTime new_value) {
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
-	invalidateProperties();
 }
 
 /**
@@ -670,7 +664,6 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
 		d->setValueAt(row, new_value);
 	else
 		exec(new ColumnSetCmd<QDateTime>(d, row, dateTimeAt(row), new_value));
-	invalidateProperties();
 }
 
 void Column::setDateTimes(const QVector<QDateTime>& dateTimes) {
@@ -687,7 +680,6 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 		d->replaceDateTimes(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<QDateTime>(d, first, new_values));
-	invalidateProperties();
 }
 
 void Column::addValueLabel(const QDateTime& value, const QString& label) {
@@ -709,7 +701,6 @@ void Column::setValueAt(int row, const double new_value) {
 		d->setValueAt(row, new_value);
 	else
 		exec(new ColumnSetCmd<double>(d, row, valueAt(row), new_value));
-	invalidateProperties();
 }
 
 /**
@@ -722,7 +713,6 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
 		d->replaceValues(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<double>(d, first, new_values));
-	invalidateProperties();
 }
 
 void Column::addValueLabel(double value, const QString& label) {
@@ -745,7 +735,6 @@ void Column::setIntegerAt(int row, const int new_value) {
 		d->setValueAt(row, new_value);
 	else
 		exec(new ColumnSetCmd<int>(d, row, integerAt(row), new_value));
-	invalidateProperties();
 }
 
 /**
@@ -758,7 +747,6 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
 		d->replaceInteger(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<int>(d, first, new_values));
-	invalidateProperties();
 }
 
 void Column::addValueLabel(int value, const QString& label) {
@@ -780,7 +768,6 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
 		d->setValueAt(row, new_value);
 	else
 		exec(new ColumnSetCmd<qint64>(d, row, bigIntAt(row), new_value));
-	invalidateProperties();
 }
 
 /**
@@ -793,7 +780,6 @@ void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
 		d->replaceBigInt(first, new_values);
 	else
 		exec(new ColumnReplaceCmd<qint64>(d, first, new_values));
-	invalidateProperties();
 }
 
 void Column::addValueLabel(qint64 value, const QString& label) {
@@ -821,6 +807,10 @@ const Column::ColumnStatistics& Column::statistics() const {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
+
+void Column::setData(void* data) {
+	d->setData(data);
+}
 
 void* Column::data() const {
 	return d->data();
@@ -978,8 +968,18 @@ void Column::setChanged() {
 	invalidateProperties();
 }
 
-bool Column::hasValueLabels() const {
-	return d->hasValueLabels();
+bool Column::valueLabelsInitialized() const {
+	return d->valueLabelsInitialized();
+}
+
+void Column::setLabelsMode(ColumnMode mode) {
+	d->setLabelsMode(mode);
+	project()->setChanged(true);
+}
+
+void Column::valueLabelsRemoveAll() {
+	d->valueLabelsRemoveAll();
+	project()->setChanged(true);
 }
 
 void Column::removeValueLabel(const QString& key) {
@@ -987,28 +987,27 @@ void Column::removeValueLabel(const QString& key) {
 	project()->setChanged(true);
 }
 
-void Column::clearValueLabels() {
-	d->clearValueLabels();
-	project()->setChanged(true);
-}
-
-const QMap<QString, QString>& Column::textValueLabels() {
+const QVector<Column::ValueLabel<QString>>* Column::textValueLabels() const {
 	return d->textValueLabels();
 }
 
-const QMap<QDateTime, QString>& Column::dateTimeValueLabels() {
+const QVector<Column::ValueLabel<QDateTime>>* Column::dateTimeValueLabels() const {
 	return d->dateTimeValueLabels();
 }
 
-const QMap<double, QString>& Column::valueLabels() {
+int Column::valueLabelsCount() const {
+	return d->valueLabelsCount();
+}
+
+const QVector<Column::ValueLabel<double>>* Column::valueLabels() const {
 	return d->valueLabels();
 }
 
-const QMap<int, QString>& Column::intValueLabels() {
+const QVector<Column::ValueLabel<int>>* Column::intValueLabels() const {
 	return d->intValueLabels();
 }
 
-const QMap<qint64, QString>& Column::bigIntValueLabels() {
+const QVector<Column::ValueLabel<qint64>>* Column::bigIntValueLabels() const {
 	return d->bigIntValueLabels();
 }
 
@@ -1092,68 +1091,78 @@ void Column::save(QXmlStreamWriter* writer) const {
 	//  	}
 
 	// value labels
-	if (hasValueLabels()) {
+	if (valueLabelsInitialized()) {
 		writer->writeStartElement(QStringLiteral("valueLabels"));
-		switch (columnMode()) {
+		switch (d->m_labels.mode()) {
 		case AbstractColumn::ColumnMode::Double: {
-			const auto& labels = const_cast<Column*>(this)->valueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				writer->writeStartElement(QStringLiteral("valueLabel"));
-				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
-				writer->writeAttribute(QStringLiteral("label"), it.value());
-				writer->writeEndElement();
-				++it;
+			const auto* labels = const_cast<Column*>(this)->valueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			const auto& labels = const_cast<Column*>(this)->intValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				writer->writeStartElement(QStringLiteral("valueLabel"));
-				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
-				writer->writeAttribute(QStringLiteral("label"), it.value());
-				writer->writeEndElement();
-				++it;
+			const auto* labels = const_cast<Column*>(this)->intValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			const auto& labels = const_cast<Column*>(this)->bigIntValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				writer->writeStartElement(QStringLiteral("valueLabel"));
-				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
-				writer->writeAttribute(QStringLiteral("label"), it.value());
-				writer->writeEndElement();
-				++it;
+			const auto* labels = const_cast<Column*>(this)->bigIntValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
-			const auto& labels = const_cast<Column*>(this)->textValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				writer->writeStartElement(QStringLiteral("valueLabel"));
-				writer->writeAttribute(QStringLiteral("value"), it.key());
-				writer->writeAttribute(QStringLiteral("label"), it.value());
-				writer->writeEndElement();
-				++it;
+			const auto* labels = const_cast<Column*>(this)->textValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), it->value);
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			const auto& labels = const_cast<Column*>(this)->dateTimeValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				writer->writeStartElement(QStringLiteral("valueLabel"));
-				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key().toMSecsSinceEpoch()));
-				writer->writeAttribute(QStringLiteral("label"), it.value());
-				writer->writeEndElement();
-				++it;
+			const auto* labels = const_cast<Column*>(this)->dateTimeValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value.toMSecsSinceEpoch()));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
 			}
 			break;
 		}
@@ -1225,10 +1234,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 // TODO: extra header
 class DecodeColumnTask : public QRunnable {
 public:
-	DecodeColumnTask(ColumnPrivate* priv, const QString& content) {
-		m_private = priv;
-		m_content = content;
-	};
+	DecodeColumnTask(ColumnPrivate* priv, const QString& content)
+		: m_private(priv)
+		, m_content(content){};
 	void run() override {
 		QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
 		if (m_private->columnMode() == AbstractColumn::ColumnMode::Double) {
@@ -1364,7 +1372,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::DateTime:
-					addValueLabel(QDateTime::fromMSecsSinceEpoch(attribs.value(QLatin1String("value")).toLongLong()), label);
+					addValueLabel(QDateTime::fromMSecsSinceEpoch(attribs.value(QLatin1String("value")).toLongLong(), Qt::UTC), label);
 					break;
 				}
 			} else if (reader->name() == QLatin1String("row")) {
@@ -2436,4 +2444,8 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	// DEBUG("non-monotonic start/end = " << start << "/" << end)
 
 	return true;
+}
+
+AbstractColumn::ColumnMode Column::labelsMode() const {
+	return d->m_labels.mode();
 }

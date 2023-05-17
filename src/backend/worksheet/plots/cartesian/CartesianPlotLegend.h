@@ -46,19 +46,19 @@ public:
 	CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont)
 	CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor)
 	BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
-	BASIC_D_ACCESSOR_DECL(float, lineSymbolWidth, LineSymbolWidth)
+	BASIC_D_ACCESSOR_DECL(qreal, lineSymbolWidth, LineSymbolWidth)
 
 	Background* background() const;
 
 	Line* borderLine() const;
-	BASIC_D_ACCESSOR_DECL(float, borderCornerRadius, BorderCornerRadius)
+	BASIC_D_ACCESSOR_DECL(qreal, borderCornerRadius, BorderCornerRadius)
 
-	BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutLeftMargin, LayoutLeftMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutRightMargin, LayoutRightMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutHorizontalSpacing, LayoutHorizontalSpacing)
-	BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
+	BASIC_D_ACCESSOR_DECL(qreal, layoutTopMargin, LayoutTopMargin)
+	BASIC_D_ACCESSOR_DECL(qreal, layoutBottomMargin, LayoutBottomMargin)
+	BASIC_D_ACCESSOR_DECL(qreal, layoutLeftMargin, LayoutLeftMargin)
+	BASIC_D_ACCESSOR_DECL(qreal, layoutRightMargin, LayoutRightMargin)
+	BASIC_D_ACCESSOR_DECL(qreal, layoutHorizontalSpacing, LayoutHorizontalSpacing)
+	BASIC_D_ACCESSOR_DECL(qreal, layoutVerticalSpacing, LayoutVerticalSpacing)
 	BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
 	void retransform() override;

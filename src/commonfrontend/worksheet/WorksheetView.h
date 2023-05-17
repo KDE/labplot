@@ -83,10 +83,13 @@ private:
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 	void handleAxisSelected(const Axis*);
 	void handleCartesianPlotSelected(const CartesianPlot*);
-	void handleXYCurveSelected();
+	void handlePlotSelected();
 	void handleReferenceLineSelected();
+	void handleReferenceRangeSelected();
+	void handleReferences(bool vertical);
 	bool eventFilter(QObject* watched, QEvent*) override;
 	void updateLabelsZoom() const;
+	void updateScrollBarPolicy();
 
 	// events
 	void resizeEvent(QResizeEvent*) override;
@@ -158,9 +161,11 @@ private:
 	QAction* zoomInViewAction{nullptr};
 	QAction* zoomOutViewAction{nullptr};
 	QAction* zoomOriginAction{nullptr};
+	QAction* zoomFitNoneAction{nullptr};
 	QAction* zoomFitPageHeightAction{nullptr};
 	QAction* zoomFitPageWidthAction{nullptr};
 	QAction* zoomFitSelectionAction{nullptr};
+	QAction* zoomFitAction{nullptr};
 
 	QAction* navigationModeAction{nullptr};
 	QAction* zoomSelectionModeAction{nullptr};
@@ -284,8 +289,10 @@ private Q_SLOTS:
 	void deleteElement();
 
 	void mouseModeChanged(QAction*);
-	void useViewSizeRequested();
+	void useViewSizeChanged(bool);
 	void changeZoom(QAction*);
+	void fitChanged(QAction*);
+	void updateFit();
 	void magnificationChanged(QAction*);
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);

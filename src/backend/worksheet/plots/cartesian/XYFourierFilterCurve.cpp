@@ -66,9 +66,9 @@ QIcon XYFourierFilterCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, XYFourierFilterCurve::FilterData, filterData, filterData)
 
 const XYFourierFilterCurve::FilterResult& XYFourierFilterCurve::filterResult() const {
@@ -76,18 +76,18 @@ const XYFourierFilterCurve::FilterResult& XYFourierFilterCurve::filterResult() c
 	return d->filterResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYFourierFilterCurve, SetFilterData, XYFourierFilterCurve::FilterData, filterData, recalculate)
 void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData& filterData) {
 	Q_D(XYFourierFilterCurve);
 	exec(new XYFourierFilterCurveSetFilterDataCmd(d, filterData, ki18n("%1: set filter options and perform the Fourier filter")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -245,9 +245,9 @@ bool XYFourierFilterCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFourierFilterCurve);

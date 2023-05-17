@@ -46,7 +46,7 @@ extern "C" {
 		(2D-curves defined by a fit model) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -117,13 +117,6 @@ void XYFitCurveDock::setupGeneral() {
 	l->addWidget(fitParametersWidget);
 	uiGeneralTab.frameParameters->setLayout(l);
 
-	// use white background in the preview label
-	QPalette p;
-	// dark or light mode
-	(palette().color(QPalette::Base).lightness() < 128) ? p.setColor(QPalette::Window, Qt::black) : p.setColor(QPalette::Window, Qt::white);
-	uiGeneralTab.lFuncPic->setAutoFillBackground(true);
-	uiGeneralTab.lFuncPic->setPalette(p);
-
 	uiGeneralTab.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
@@ -190,7 +183,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(1, 0)->setText(uiGeneralTab.twGoodness->item(1, 0)->text() + UTF8_QSTRING(" (χ²/dof)"));
 	uiGeneralTab.twGoodness->item(3, 0)->setText(uiGeneralTab.twGoodness->item(3, 0)->text() + UTF8_QSTRING(" (R²)"));
 	uiGeneralTab.twGoodness->item(4, 0)->setText(uiGeneralTab.twGoodness->item(4, 0)->text() + UTF8_QSTRING(" (R̄²)"));
-	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" ( P > χ²)"));
+	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" (P > χ²)"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -230,7 +223,7 @@ void XYFitCurveDock::setupGeneral() {
  * load curve settings
  */
 void XYFitCurveDock::initGeneralTab() {
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -349,7 +342,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_fitCurve = static_cast<XYFitCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 
-	// we need a second model for data source comboboxe which will be dynamically
+	// we need a second model for data source comboboxes which will be dynamically
 	// updated in the slot depending on the current type (spreadsheet, curve or histogram)
 	// to allow to select the relevant aspects only
 	m_dataSourceModel = new AspectTreeModel(m_curve->project());
@@ -375,8 +368,8 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 		m_messageWidget->close();
 
 	showFitResult();
-	enableRecalculate();
 	m_initializing = false;
+	enableRecalculate();
 
 	updatePlotRanges();
 
@@ -404,8 +397,9 @@ bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
-	DEBUG("SOURCE TYPE: " << index)
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
+	DEBUG(Q_FUNC_INFO << ", source type = " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, type))
 	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.cbCategory->setEnabled(true);
 		uiGeneralTab.lDataSourceCurve->hide();
@@ -478,7 +472,8 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
@@ -1010,14 +1005,33 @@ void XYFitCurveDock::updateModelEquation() {
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
 		QImage image = GuiTools::importPDFFile(file);
-		// invert image if in dark mode
-		if (palette().color(QPalette::Base).lightness() < 128)
+
+		// use system palette for background
+		if (DARKMODE) {
+			// invert image if in dark mode
 			image.invertPixels();
+
+			for (int i = 0; i < image.size().width(); i++)
+				for (int j = 0; j < image.size().height(); j++)
+					if (qGray(image.pixel(i, j)) < 64) // 0-255: 0-64 covers all dark pixel
+						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+		} else {
+			for (int i = 0; i < image.size().width(); i++)
+				for (int j = 0; j < image.size().height(); j++)
+					if (qGray(image.pixel(i, j)) > 192) // 0-255: 224-255 covers all light pixel
+						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+		}
 
 		if (image.isNull()) {
 			uiGeneralTab.lEquation->hide();
 			uiGeneralTab.lFuncPic->hide();
 		} else {
+			// use light/dark background in the preview label
+			QPalette p;
+			p.setColor(QPalette::Window, palette().color(QPalette::Base));
+			uiGeneralTab.lFuncPic->setAutoFillBackground(true);
+			uiGeneralTab.lFuncPic->setPalette(p);
+
 			uiGeneralTab.lFuncPic->setPixmap(QPixmap::fromImage(image));
 			uiGeneralTab.lFuncPic->show();
 		}
@@ -1260,6 +1274,7 @@ void XYFitCurveDock::enableRecalculate() {
 		hasSourceData = (m_fitCurve->dataSourceHistogram() != nullptr);
 	}
 
+	DEBUG(Q_FUNC_INFO << ", hasSourceData = " << hasSourceData << ", m_parametersValid = " << m_parametersValid)
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData && m_parametersValid);
 
 	// PREVIEW as soon as recalculate is enabled (does not need source data)

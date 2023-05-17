@@ -43,6 +43,9 @@ public:
 	void addDatasheet(DatapickerImage::GraphType);
 	void updatePoints();
 	void updatePoint(const DatapickerPoint*);
+	void updateColumns(bool datetime);
+
+	void suppressUpdatePoint(bool);
 
 	Symbol* symbol() const;
 	BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)
@@ -82,6 +85,11 @@ private:
 	Column* appendColumn(const QString&);
 
 	Spreadsheet* m_datasheet{nullptr};
+	bool m_supressResizeDatasheet{false};
+	bool m_datetime{false};
+
+	void childAdded(const AbstractAspect* child);
+	void childRemoved(const AbstractAspect* child);
 
 Q_SIGNALS:
 	void curveErrorTypesChanged(const DatapickerCurve::Errors&);

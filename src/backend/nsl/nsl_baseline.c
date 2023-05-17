@@ -101,7 +101,7 @@ void show_vector(gsl_vector* v, size_t n, char name) {
 }
 
 /* see https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract */
-int nsl_baseline_remove_arpls(double* data, const size_t n, double p, double lambda, int niter) {
+double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double lambda, int niter) {
 	if (p == 0)
 		p = 0.001;
 	if (lambda == 0)
@@ -266,5 +266,5 @@ int nsl_baseline_remove_arpls(double* data, const size_t n, double p, double lam
 	gsl_vector_free(z);
 	gsl_vector_free(d);
 
-	return 0;
+	return crit;
 }

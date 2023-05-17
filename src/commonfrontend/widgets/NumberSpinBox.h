@@ -42,9 +42,9 @@ public:
 	Q_PROPERTY(bool feedback READ feedback WRITE setFeedback NOTIFY feedbackChanged)
 
 public:
-	NumberSpinBox(QWidget* parent = nullptr);
-	NumberSpinBox(double initValue, QWidget* parent = nullptr);
-	NumberSpinBox(double initValue, bool feedback, QWidget* parent = nullptr);
+	explicit NumberSpinBox(QWidget* parent = nullptr);
+	explicit NumberSpinBox(double initValue, QWidget* parent = nullptr);
+	explicit NumberSpinBox(double initValue, bool feedback, QWidget* parent = nullptr);
 	QString errorToString(Errors);
 	bool setValue(double);
 	void setFeedback(bool enable);
@@ -87,7 +87,7 @@ private:
 	QString m_valueStr;
 	// See https://invent.kde.org/education/labplot/-/merge_requests/167
 	// for explanation of the feature
-	bool m_feedback{false}; // defines if the spinbox expects a feedback
+	bool m_feedback{true}; // defines if the spinbox expects a feedback
 	bool m_waitFeedback{false};
 
 	bool m_strongFocus{true};

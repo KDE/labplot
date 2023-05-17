@@ -49,6 +49,7 @@ enum class AspectType : quint64 {
 	TextLabel = 0x0210020,
 	Image = 0x0210030,
 	ReferenceLine = 0x0210040,
+	ReferenceRange = 0x0210060,
 	InfoElement = 0x0210080,
 	BoxPlot = 0x0210100,
 	BarPlot = 0x0210200,
@@ -115,6 +116,12 @@ public:
 	AbstractAspect(const QString& name, AspectType type);
 	~AbstractAspect() override;
 
+	enum class NameHandling {
+		AutoUnique, // Set the name and make it unique (enforce the uniqueness)
+		UniqueNotRequired, // Set the name without making it unique
+		UniqueRequired, // Set the name only if it's already unique
+	};
+
 	// type name for internal use (no translation)
 	static QString typeName(AspectType type) {
 		switch (type) {
@@ -144,6 +151,8 @@ public:
 			return QStringLiteral("Image");
 		case AspectType::ReferenceLine:
 			return QStringLiteral("ReferenceLine");
+		case AspectType::ReferenceRange:
+			return QStringLiteral("ReferenceRange");
 		case AspectType::InfoElement:
 			return QStringLiteral("InfoElement");
 		case AspectType::WorksheetElementContainer:
@@ -232,6 +241,7 @@ public:
 	}
 
 	QString name() const;
+	QUuid uuid() const;
 	QString comment() const;
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
@@ -391,7 +401,7 @@ private:
 	void connectChild(AbstractAspect*);
 
 public Q_SLOTS:
-	bool setName(const QString&, bool autoUnique = true);
+	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique);
 	void setComment(const QString&);
 	void remove();
 	void copy() const;

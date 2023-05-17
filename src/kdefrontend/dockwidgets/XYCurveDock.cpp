@@ -242,7 +242,7 @@ void XYCurveDock::init() {
 	ui.cbLineType->setIconSize(QSize(iconSize, iconSize));
 
 	QPen pen(Qt::SolidPattern, 0);
-	const QColor& color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	const QColor& color = DARKMODE ? Qt::white : Qt::black;
 	pen.setColor(color);
 	pa.setPen(pen);
 
@@ -380,22 +380,26 @@ void XYCurveDock::init() {
 	ui.cbYErrorType->addItem(i18n("Asymmetric"));
 }
 
+QList<AspectType> XYCurveDock::defaultColumnTopLevelClasses() {
+	return {AspectType::Folder,
+			AspectType::Workbook,
+			AspectType::Datapicker,
+			AspectType::DatapickerCurve,
+			AspectType::Spreadsheet,
+			AspectType::LiveDataSource,
+			AspectType::Column,
+			AspectType::Worksheet,
+			AspectType::CartesianPlot,
+			AspectType::CantorWorksheet};
+}
+
 void XYCurveDock::setModel() {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Workbook,
-						   AspectType::Datapicker,
-						   AspectType::DatapickerCurve,
-						   AspectType::Spreadsheet,
-						   AspectType::LiveDataSource,
-						   AspectType::Column,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYFitCurve,
-						   AspectType::XYSmoothCurve,
-						   AspectType::CantorWorksheet};
+	QList<AspectType> list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYFitCurve);
+	list.append(AspectType::XYSmoothCurve);
 
 	if (cbXColumn && cbYColumn) {
 		cbXColumn->setTopLevelClasses(list);
@@ -453,6 +457,10 @@ void XYCurveDock::setModel() {
 	ui.chkLineSkipGaps->setVisible(visible);
 	ui.lLineIncreasingXOnly->setVisible(visible);
 	ui.chkLineIncreasingXOnly->setVisible(visible);
+
+	// if it's not a xy-curve, it's an analysis curve and the line widget is always enables since we always draw the line
+	if (!visible)
+		lineWidget->setEnabled(true);
 
 	// remove the tab "Error bars" for analysis curves
 	if (!visible)

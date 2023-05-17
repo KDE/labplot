@@ -269,10 +269,10 @@ void XYCurve::setHover(bool on) {
 	d->setHover(on);
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
-// general
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
+//  general
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, legendVisible, legendVisible)
 
 // data source
@@ -368,9 +368,9 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 	return d->sourceDataChangedSinceLastRecalc;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 
 // 1) add XYCurveSetXColumnCmd as friend class to XYCurve
 // 2) add XYCURVE_COLUMN_CONNECT(x) as private method to XYCurve
@@ -662,9 +662,9 @@ void XYCurve::setRugOffset(double offset) {
 		exec(new XYCurveSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void XYCurve::retransform() {
 	Q_D(XYCurve);
 	d->retransform();
@@ -854,17 +854,17 @@ void XYCurve::valuesColumnNameChanged() {
 	setValuesColumnPath(d->valuesColumn->path());
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 
 void XYCurve::navigateTo() {
 	project()->navigateTo(navigateToAction->data().toString());
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYCurvePrivate::XYCurvePrivate(XYCurve* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
@@ -1833,7 +1833,7 @@ void XYCurvePrivate::updateValues() {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				value = numberLocale.toString(point.x(), valuesNumericFormat, precision);
 			else
-				value = QDateTime::fromMSecsSinceEpoch(point.x()).toString(valuesDateTimeFormat);
+				value = QDateTime::fromMSecsSinceEpoch(point.x(), Qt::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
@@ -1850,7 +1850,7 @@ void XYCurvePrivate::updateValues() {
 			if (rangeFormat == RangeT::Format::Numeric)
 				value = numberLocale.toString(point.y(), valuesNumericFormat, precision);
 			else
-				value = QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);
+				value = QDateTime::fromMSecsSinceEpoch(point.y(), Qt::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
@@ -1877,12 +1877,12 @@ void XYCurvePrivate::updateValues() {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				value += numberLocale.toString(point.x(), valuesNumericFormat, xPrecision);
 			else
-				value += QDateTime::fromMSecsSinceEpoch(point.x()).toString(valuesDateTimeFormat);
+				value += QDateTime::fromMSecsSinceEpoch(point.x(), Qt::UTC).toString(valuesDateTimeFormat);
 
 			if (yRangeFormat == RangeT::Format::Numeric)
 				value += QLatin1Char(',') + numberLocale.toString(point.y(), valuesNumericFormat, yPrecision);
 			else
-				value += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);
+				value += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y(), Qt::UTC).toString(valuesDateTimeFormat);
 
 			if (valuesType == XYCurve::ValuesType::XYBracketed)
 				value += QLatin1Char(')');
@@ -1928,8 +1928,8 @@ void XYCurvePrivate::updateValues() {
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start())
-					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end()))
+				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC)
+					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end(), Qt::UTC))
 					continue;
 				break;
 			case AbstractColumn::ColumnMode::Text:
@@ -3137,9 +3137,9 @@ void XYCurvePrivate::setHover(bool on) {
 	update();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYCurve);
@@ -3327,9 +3327,9 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 

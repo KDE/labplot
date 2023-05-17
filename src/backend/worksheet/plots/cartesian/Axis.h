@@ -42,7 +42,7 @@ public:
 	};
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
-	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues };
+	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues, ColumnLabels };
 	enum class ArrowType { NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig };
 	enum class ArrowPosition { Left, Right, Both };
 	enum class LabelsPosition { NoLabels, In, Out };
@@ -192,7 +192,7 @@ public:
 
 protected:
 	Axis(const QString&, Orientation, AxisPrivate*);
-	TextLabel* m_title;
+	TextLabel* m_title{nullptr};
 
 private:
 	Q_DECLARE_PRIVATE(Axis)

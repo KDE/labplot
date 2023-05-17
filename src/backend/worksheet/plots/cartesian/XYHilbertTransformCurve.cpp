@@ -24,7 +24,7 @@
 #include "backend/lib/macros.h"
 
 extern "C" {
-//#include "backend/nsl/nsl_sf_poly.h"
+// #include "backend/nsl/nsl_sf_poly.h"
 }
 
 #include <KLocalizedString>
@@ -62,23 +62,23 @@ QIcon XYHilbertTransformCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYHilbertTransformCurve, XYHilbertTransformCurve::TransformData, transformData, transformData)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYHilbertTransformCurve, SetTransformData, XYHilbertTransformCurve::TransformData, transformData, recalculate)
 void XYHilbertTransformCurve::setTransformData(const XYHilbertTransformCurve::TransformData& transformData) {
 	Q_D(XYHilbertTransformCurve);
 	exec(new XYHilbertTransformCurveSetTransformDataCmd(d, transformData, ki18n("%1: set transform options and perform the Hilbert transform")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYHilbertTransformCurvePrivate::XYHilbertTransformCurvePrivate(XYHilbertTransformCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -94,6 +94,9 @@ void XYHilbertTransformCurvePrivate::resetResults() {
 
 bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	DEBUG(Q_FUNC_INFO)
+	if (!tmpXDataColumn || !tmpYDataColumn)
+		return false;
+
 	QElapsedTimer timer;
 	timer.start();
 
@@ -101,7 +104,7 @@ bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	double xmin, xmax;
-	if (tmpXDataColumn && transformData.autoRange) {
+	if (transformData.autoRange) {
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
 	} else {
@@ -175,9 +178,9 @@ bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYHilbertTransformCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYHilbertTransformCurve);

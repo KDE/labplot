@@ -11,6 +11,7 @@
 #include "AxisPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -129,6 +130,7 @@ void Axis::init(Orientation orientation) {
 	d->line->setHidden(true);
 	d->line->setCreateXmlElement(false); // line properties are written out together with arrow properties in Axis::save()
 	addChild(d->line);
+	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -167,6 +169,7 @@ void Axis::init(Orientation orientation) {
 	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
 	d->majorTicksLine->setCreateXmlElement(false);
 	addChild(d->majorTicksLine);
+	d->majorTicksLine->init(group);
 	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -185,6 +188,7 @@ void Axis::init(Orientation orientation) {
 	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
 	d->minorTicksLine->setCreateXmlElement(false);
 	addChild(d->minorTicksLine);
+	d->minorTicksLine->init(group);
 	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -215,6 +219,7 @@ void Axis::init(Orientation orientation) {
 	d->majorGridLine->setPrefix(QLatin1String("MajorGrid"));
 	d->majorGridLine->setHidden(true);
 	addChild(d->majorGridLine);
+	d->majorGridLine->init(group);
 	connect(d->majorGridLine, &Line::updatePixmapRequested, [=] {
 		d->updateGrid();
 	});
@@ -227,6 +232,7 @@ void Axis::init(Orientation orientation) {
 	d->minorGridLine->setPrefix(QLatin1String("MinorGrid"));
 	d->minorGridLine->setHidden(true);
 	addChild(d->minorGridLine);
+	d->minorGridLine->init(group);
 	connect(d->minorGridLine, &Line::updatePixmapRequested, [=] {
 		d->updateGrid();
 	});
@@ -1007,9 +1013,9 @@ void Axis::setLabelsOpacity(qreal opacity) {
 		exec(new AxisSetLabelsOpacityCmd(d, opacity, ki18n("%1: set labels opacity")));
 }
 
-//##############################################################################
-//####################################  SLOTs   ################################
-//##############################################################################
+// ##############################################################################
+// ####################################  SLOTs   ################################
+// ##############################################################################
 void Axis::labelChanged() {
 	Q_D(Axis);
 	d->recalcShapeAndBoundingRect();
@@ -1036,9 +1042,9 @@ void Axis::minorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void Axis::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Axis::Orientation::Horizontal);
@@ -1061,9 +1067,9 @@ void Axis::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 AxisPrivate::AxisPrivate(Axis* owner)
 	: WorksheetElementPrivate(owner)
 	, gridItem(new AxisGrid(this))
@@ -1490,6 +1496,15 @@ void AxisPrivate::retransformTicks() {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
 		}
+		break;
+	case Axis::TicksType::ColumnLabels:
+		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
+		if (c && c->valueLabelsInitialized())
+			tmpMajorTicksNumber = c->valueLabelsCount();
+		else {
+			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
+			return;
+		}
 	}
 
 	// minor ticks
@@ -1504,8 +1519,13 @@ void AxisPrivate::retransformTicks() {
 			tmpMinorTicksNumber /= majorTicksNumber - 1;
 		break;
 	case Axis::TicksType::CustomColumn:
+		// Fall through
 	case Axis::TicksType::CustomValues:
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
+		break;
+	case Axis::TicksType::ColumnLabels:
+		tmpMinorTicksNumber = 0; // not supported
+		break;
 	}
 
 	if (!q->cSystem) {
@@ -1541,7 +1561,41 @@ void AxisPrivate::retransformTicks() {
 		qreal majorTickPos = 0.0;
 		qreal nextMajorTickPos = 0.0;
 		// calculate major tick's position
-		if (majorTicksType != Axis::TicksType::CustomColumn) {
+		if (majorTicksType == Axis::TicksType::CustomColumn) { // custom column
+			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
+				continue;
+			majorTickPos = majorTicksColumn->valueAt(iMajor);
+			// set next major tick pos for minor ticks
+			if (iMajor < tmpMajorTicksNumber - 1) {
+				if (majorTicksColumn->isValid(iMajor + 1) && !majorTicksColumn->isMasked(iMajor + 1))
+					nextMajorTickPos = majorTicksColumn->valueAt(iMajor + 1);
+			} else // last major tick
+				tmpMinorTicksNumber = 0;
+		} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
+			const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
+			if (c) {
+				switch (c->labelsMode()) {
+				case Column::ColumnMode::Double:
+					majorTickPos = c->valueLabels()->at(iMajor).value;
+					break;
+				case Column::ColumnMode::Integer:
+					majorTickPos = c->intValueLabels()->at(iMajor).value;
+					break;
+				case Column::ColumnMode::BigInt:
+					majorTickPos = c->bigIntValueLabels()->at(iMajor).value;
+					break;
+				case Column::ColumnMode::Day:
+				case Column::ColumnMode::Month:
+				case Column::ColumnMode::DateTime:
+					majorTickPos = c->dateTimeValueLabels()->at(iMajor).value.toMSecsSinceEpoch();
+					break;
+				case Column::ColumnMode::Text:
+					// TODO
+					break;
+				}
+			}
+
+		} else {
 			switch (scale) {
 			case RangeT::Scale::Linear:
 				//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
@@ -1575,16 +1629,6 @@ void AxisPrivate::retransformTicks() {
 				nextMajorTickPos = 1. / (1. / start + majorTicksIncrement * (iMajor + 1));
 				break;
 			}
-		} else { // custom column
-			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
-				continue;
-			majorTickPos = majorTicksColumn->valueAt(iMajor);
-			// set next major tick pos for minor ticks
-			if (iMajor < tmpMajorTicksNumber - 1) {
-				if (majorTicksColumn->isValid(iMajor + 1) && !majorTicksColumn->isMasked(iMajor + 1))
-					nextMajorTickPos = majorTicksColumn->valueAt(iMajor + 1);
-			} else // last major tick
-				tmpMinorTicksNumber = 0;
 		}
 
 		qreal xAnchorPoint = 0.0;
@@ -1635,7 +1679,7 @@ void AxisPrivate::retransformTicks() {
 			//			DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
 
 			// if custom column is used, we can have duplicated values in it and we need only unique values
-			if (majorTicksType == Axis::TicksType::CustomColumn && tickLabelValues.indexOf(value) != -1)
+			if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::ColumnLabels) && tickLabelValues.indexOf(value) != -1)
 				valid = false;
 
 			// add major tick's line to the painter path
@@ -1645,26 +1689,64 @@ void AxisPrivate::retransformTicks() {
 					majorTicksPath.lineTo(endPoint);
 				}
 				majorTickPoints << anchorPoint;
-
-				if (labelsTextType == Axis::LabelsTextType::PositionValues)
-					tickLabelValues << value;
-				else {
-					if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
-						switch (labelsTextColumn->columnMode()) {
-						case AbstractColumn::ColumnMode::Double:
-						case AbstractColumn::ColumnMode::Integer:
-						case AbstractColumn::ColumnMode::BigInt:
-							tickLabelValues << labelsTextColumn->valueAt(iMajor);
-							break;
-						case AbstractColumn::ColumnMode::DateTime:
-						case AbstractColumn::ColumnMode::Month:
-						case AbstractColumn::ColumnMode::Day:
-							tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
-							break;
-						case AbstractColumn::ColumnMode::Text:
-							tickLabelValuesString << labelsTextColumn->textAt(iMajor);
+				if (majorTicksType == Axis::TicksType::ColumnLabels) {
+					const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
+					// majorTicksType == Axis::TicksType::ColumnLabels
+					if (c && c->valueLabelsInitialized()) {
+						switch (c->labelsMode()) {
+						case AbstractColumn::ColumnMode::Double: {
+							if (iMajor < c->valueLabelsCount())
+								tickLabelValuesString << c->valueLabels()->at(iMajor).label;
 							break;
 						}
+						case AbstractColumn::ColumnMode::Integer: {
+							if (iMajor < c->valueLabelsCount())
+								tickLabelValuesString << c->intValueLabels()->at(iMajor).label;
+							break;
+						}
+						case AbstractColumn::ColumnMode::BigInt: {
+							if (iMajor < c->valueLabelsCount())
+								tickLabelValuesString << c->bigIntValueLabels()->at(iMajor).label;
+							break;
+						}
+						case AbstractColumn::ColumnMode::DateTime:
+						case AbstractColumn::ColumnMode::Month:
+						case AbstractColumn::ColumnMode::Day: {
+							if (iMajor < c->valueLabelsCount())
+								tickLabelValuesString << c->dateTimeValueLabels()->at(iMajor).label;
+							break;
+						}
+						case AbstractColumn::ColumnMode::Text: {
+							if (iMajor < c->valueLabelsCount())
+								tickLabelValuesString << c->textValueLabels()->at(iMajor).label;
+							break;
+						}
+						}
+					}
+				} else {
+					switch (labelsTextType) {
+					case Axis::LabelsTextType::PositionValues:
+						tickLabelValues << value;
+						break;
+					case Axis::LabelsTextType::CustomValues: {
+						if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
+							switch (labelsTextColumn->columnMode()) {
+							case AbstractColumn::ColumnMode::Double:
+							case AbstractColumn::ColumnMode::Integer:
+							case AbstractColumn::ColumnMode::BigInt:
+								tickLabelValues << labelsTextColumn->valueAt(iMajor);
+								break;
+							case AbstractColumn::ColumnMode::DateTime:
+							case AbstractColumn::ColumnMode::Month:
+							case AbstractColumn::ColumnMode::Day:
+								tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
+								break;
+							case AbstractColumn::ColumnMode::Text:
+								tickLabelValuesString << labelsTextColumn->textAt(iMajor);
+								break;
+							}
+						}
+					}
 					}
 				}
 			}
@@ -1800,7 +1882,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	// category of format
 	bool numeric = false, datetime = false, text = false;
-	if (labelsTextType == Axis::LabelsTextType::PositionValues) {
+	if (majorTicksType == Axis::TicksType::ColumnLabels)
+		text = true;
+	else if (labelsTextType == Axis::LabelsTextType::PositionValues) {
 		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
 		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 		numeric = ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
@@ -1960,7 +2044,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			tickLabelStrings << str;
 		}
 	} else if (text) {
-		for (auto t : tickLabelValuesString) {
+		for (auto& t : tickLabelValuesString) {
 			str = labelsPrefix + t + labelsSuffix;
 			tickLabelStrings << str;
 		}
@@ -2557,12 +2641,12 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			QRectF rect = linePath.boundingRect();
 			qreal offsetX = titleOffsetX, offsetY = titleOffsetY; // the distances to the axis line
 			if (orientation == Axis::Orientation::Horizontal) {
-				offsetY -= titleRect.height() / 2.;
+				offsetY -= titleRect.height() * title->scale() / 2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
 				title->setPosition(QPointF((rect.topLeft().x() + rect.topRight().x()) / 2. + titleOffsetX, rect.bottomLeft().y() - offsetY));
 			} else {
-				offsetX -= titleRect.width() / 2.;
+				offsetX -= titleRect.height() * title->scale() / 2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
@@ -2726,6 +2810,11 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(axisShape);
 	}
+
+#if DEBUG_AXIS_BOUNDING_RECT
+	painter->setPen(QColor(Qt::GlobalColor::blue));
+	painter->drawRect(boundingRect());
+#endif
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -2796,9 +2885,9 @@ QString AxisPrivate::createScientificRepresentation(const QString& mantissa, con
 	return mantissa + QStringLiteral("×10<sup>") + exponent + QStringLiteral("</sup>");
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Axis::save(QXmlStreamWriter* writer) const {
 	Q_D(const Axis);
@@ -3041,9 +3130,9 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Axis::loadThemeConfig(const KConfig& config) {
 	Q_D(Axis);
 	const KConfigGroup& group = config.group("Axis");

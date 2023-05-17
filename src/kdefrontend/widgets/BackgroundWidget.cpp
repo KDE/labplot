@@ -72,7 +72,10 @@ void BackgroundWidget::setBackgrounds(const QList<Background*>& backgrounds) {
 	connect(m_background, &Background::secondColorChanged, this, &BackgroundWidget::backgroundSecondColorChanged);
 	connect(m_background, &Background::fileNameChanged, this, &BackgroundWidget::backgroundFileNameChanged);
 	connect(m_background, &Background::opacityChanged, this, &BackgroundWidget::backgroundOpacityChanged);
+}
 
+void BackgroundWidget::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
 	adjustLayout();
 }
 

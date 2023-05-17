@@ -245,7 +245,7 @@ bool Worksheet::printPreview() const {
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	DEBUG(Q_FUNC_INFO)
-	const auto* addedElement = qobject_cast<const WorksheetElement*>(aspect);
+	const auto* addedElement = dynamic_cast<const WorksheetElement*>(aspect);
 	if (!addedElement)
 		return;
 
@@ -258,6 +258,13 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	d->m_scene->addItem(item);
 
 	connect(aspect, &AbstractAspect::contextMenuRequested, this, &Worksheet::childContextMenuRequested);
+
+	// for containers, connect to visilibity changes and update the layout accordingly
+	if (dynamic_cast<const WorksheetElementContainer*>(addedElement))
+		connect(addedElement, &WorksheetElement::visibleChanged, this, [=]() {
+			if (layout() != Worksheet::Layout::NoLayout)
+				updateLayout();
+		});
 
 	const auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
 	if (plot) {
@@ -592,6 +599,7 @@ void Worksheet::unregisterShortcuts() {
 /* =============================== getter methods for general options ==================================== */
 BASIC_D_READER_IMPL(Worksheet, bool, scaleContent, scaleContent)
 BASIC_D_READER_IMPL(Worksheet, bool, useViewSize, useViewSize)
+BASIC_D_READER_IMPL(Worksheet, Worksheet::ZoomFit, zoomFit, zoomFit)
 
 // background
 Background* Worksheet::background() const {
@@ -614,10 +622,12 @@ BASIC_D_READER_IMPL(Worksheet, QString, theme, theme)
 /* ============================ setter methods and undo commands for general options  ===================== */
 STD_SETTER_CMD_IMPL_S(Worksheet, SetUseViewSize, bool, useViewSize)
 void Worksheet::setUseViewSize(bool useViewSize) {
-	if (useViewSize != d->useViewSize) {
+	if (useViewSize != d->useViewSize)
 		exec(new WorksheetSetUseViewSizeCmd(d, useViewSize, ki18n("%1: change size type")));
-		Q_EMIT useViewSizeRequested();
-	}
+}
+
+void Worksheet::setZoomFit(ZoomFit zoomFit) {
+	d->zoomFit = zoomFit; // No need to undo
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
@@ -1468,9 +1478,9 @@ void Worksheet::updateCompleteCursorTreeModel() {
 	}
 }
 
-//##############################################################################
-//######################  Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ######################  Private implementation ###############################
+// ##############################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet* owner)
 	: q(owner)
 	, m_scene(new QGraphicsScene()) {
@@ -1529,7 +1539,11 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		return;
 
 	const auto& list = q->children<WorksheetElementContainer>();
-	int count = list.count();
+	int count = 0;
+	for (auto* elem : list)
+		if (elem->isVisible())
+			++count;
+
 	if (count == 0)
 		return;
 
@@ -1564,6 +1578,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		w = m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
 		h = (m_scene->sceneRect().height() - layoutTopMargin - layoutBottomMargin - (count - 1) * layoutVerticalSpacing) / count;
 		for (auto* elem : list) {
+			if (!elem->isVisible())
+				continue;
 			setContainerRect(elem, x, y, h, w, undoable);
 			y += h + layoutVerticalSpacing;
 		}
@@ -1571,6 +1587,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		w = (m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin - (count - 1) * layoutHorizontalSpacing) / count;
 		h = m_scene->sceneRect().height() - layoutTopMargin - layoutBottomMargin;
 		for (auto* elem : list) {
+			if (!elem->isVisible())
+				continue;
 			setContainerRect(elem, x, y, h, w, undoable);
 			x += w + layoutHorizontalSpacing;
 		}
@@ -1585,6 +1603,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		h = (m_scene->sceneRect().height() - layoutTopMargin - layoutBottomMargin - (layoutRowCount - 1) * layoutVerticalSpacing) / layoutRowCount;
 		int columnIndex = 0; // counts the columns in a row
 		for (auto* elem : list) {
+			if (!elem->isVisible())
+				continue;
 			setContainerRect(elem, x, y, h, w, undoable);
 			x += w + layoutHorizontalSpacing;
 			columnIndex++;
@@ -1616,9 +1636,9 @@ void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, double 
 	elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void Worksheet::save(QXmlStreamWriter* writer) const {
@@ -1641,6 +1661,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("width"), QString::number(rect.width()));
 	writer->writeAttribute(QStringLiteral("height"), QString::number(rect.height()));
 	writer->writeAttribute(QStringLiteral("useViewSize"), QString::number(d->useViewSize));
+	writer->writeAttribute(QStringLiteral("zoomFit"), QString::number((int)d->zoomFit));
 	writer->writeEndElement();
 
 	// layout
@@ -1727,6 +1748,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				d->pageRect.setHeight(str.toDouble());
 
 			READ_INT_VALUE("useViewSize", useViewSize, int);
+			READ_INT_VALUE("zoomFit", zoomFit, ZoomFit);
 		} else if (!preview && reader->name() == QLatin1String("layout")) {
 			attribs = reader->attributes();
 
@@ -1788,9 +1810,9 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Worksheet::loadTheme(const QString& theme) {
 	KConfigGroup group;
 	KConfig* config = nullptr;

@@ -32,15 +32,13 @@ private:
 	void updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filter_cutoff_unit newUnit, nsl_filter_cutoff_unit oldUnit, double oldValue);
 
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYFourierFilterCurve* m_filterCurve{nullptr};
 	XYFourierFilterCurve::FilterData m_filterData;
+	bool m_dateTimeRange{false};
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYFourierFilterCurveDock
@@ -52,6 +50,8 @@ private Q_SLOTS:
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
+	void xRangeMinDateTimeChanged(qint64);
+	void xRangeMaxDateTimeChanged(qint64);
 	void typeChanged();
 	void formChanged();
 	void orderChanged();

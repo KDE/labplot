@@ -39,8 +39,8 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 	ui.setupUi(this);
 	m_datasetModel = new DatasetModel(datasetMap);
 
-	m_baseColor = (palette().color(QPalette::Base).lightness() < 128) ? QStringLiteral("#5f5f5f") : QStringLiteral("#ffffff");
-	m_textColor = (palette().color(QPalette::Base).lightness() < 128) ? QStringLiteral("#ffffff") : QStringLiteral("#000000");
+	m_baseColor = DARKMODE ? QStringLiteral("#5f5f5f") : QStringLiteral("#ffffff");
+	m_textColor = DARKMODE ? QStringLiteral("#ffffff") : QStringLiteral("#000000");
 
 	ui.cbCollection->addItems(m_datasetModel->collections());
 	ui.cbCategory->addItems(m_datasetModel->categories(ui.cbCollection->currentText()));

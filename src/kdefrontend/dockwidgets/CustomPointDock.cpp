@@ -66,9 +66,9 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 	connect(ui.sbPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::customPositionXChanged);
 	connect(ui.sbPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::customPositionYChanged);
 	connect(ui.sbPositionXLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::positionXLogicalChanged);
-	connect(ui.dtePositionXLogical, &QDateTimeEdit::dateTimeChanged, this, &CustomPointDock::positionXLogicalDateTimeChanged);
+	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &CustomPointDock::positionXLogicalDateTimeChanged);
 	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::positionYLogicalChanged);
-	connect(ui.dtePositionYLogical, &QDateTimeEdit::dateTimeChanged, this, &CustomPointDock::positionYLogicalDateTimeChanged);
+	connect(ui.dtePositionYLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &CustomPointDock::positionYLogicalDateTimeChanged);
 
 	// Template handler
 	auto* frame = new QFrame(this);
@@ -222,12 +222,11 @@ void CustomPointDock::positionXLogicalChanged(double value) {
 		point->setPositionLogical(pos);
 }
 
-void CustomPointDock::positionXLogicalDateTimeChanged(const QDateTime& dateTime) {
+void CustomPointDock::positionXLogicalDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 x = dateTime.toMSecsSinceEpoch();
 	QPointF pos = m_point->positionLogical();
-	pos.setX(x);
+	pos.setX(value);
 	for (auto* point : m_points)
 		point->setPositionLogical(pos);
 }
@@ -241,12 +240,11 @@ void CustomPointDock::positionYLogicalChanged(double value) {
 		point->setPositionLogical(pos);
 }
 
-void CustomPointDock::positionYLogicalDateTimeChanged(const QDateTime& dateTime) {
+void CustomPointDock::positionYLogicalDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 x = dateTime.toMSecsSinceEpoch();
 	QPointF pos = m_point->positionLogical();
-	pos.setY(x);
+	pos.setY(value);
 	for (auto* point : m_points)
 		point->setPositionLogical(pos);
 }
@@ -327,9 +325,9 @@ void CustomPointDock::pointCoordinateBindingEnabledChanged(bool enabled) {
 void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionXLogical->setValue(pos.x());
-	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x(), Qt::UTC));
+	ui.dtePositionXLogical->setMSecsSinceEpochUTC(pos.x());
 	ui.sbPositionYLogical->setValue(pos.y());
-	ui.dtePositionYLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.y(), Qt::UTC));
+	ui.dtePositionYLogical->setMSecsSinceEpochUTC(pos.y());
 }
 
 void CustomPointDock::pointVisibilityChanged(bool on) {
@@ -371,7 +369,7 @@ void CustomPointDock::load() {
 			ui.sbPositionXLogical->setValue(m_point->positionLogical().x());
 		else {
 			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->positionLogical().x(), Qt::UTC));
+			ui.dtePositionXLogical->setMSecsSinceEpochUTC(m_point->positionLogical().x());
 		}
 
 		// y
@@ -384,7 +382,7 @@ void CustomPointDock::load() {
 			ui.sbPositionYLogical->setValue(m_point->positionLogical().y());
 		else {
 			ui.dtePositionYLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
-			ui.dtePositionYLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->positionLogical().y(), Qt::UTC));
+			ui.dtePositionYLogical->setMSecsSinceEpochUTC(m_point->positionLogical().y());
 		}
 
 		bindingChanged(m_point->coordinateBindingEnabled());

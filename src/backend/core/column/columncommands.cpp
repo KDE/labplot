@@ -151,6 +151,7 @@ void ColumnSetModeCmd::redo() {
 		m_old_out_filter = m_col->outputFilter();
 
 		// do the conversion
+		m_col->setLabelsMode(m_mode); // must be done before setColumnMode, because setColumnMode() sends signal to dock
 		m_col->setColumnMode(m_mode);
 
 		// save new values
@@ -171,6 +172,7 @@ void ColumnSetModeCmd::redo() {
 void ColumnSetModeCmd::undo() {
 	// reset to old values
 	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter);
+	// setLabelsMode will be done in replaceModeData()
 
 	m_undone = true;
 }

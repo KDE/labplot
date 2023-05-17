@@ -10,7 +10,7 @@
 */
 
 #include "backend/datasources/projects/OriginProjectParser.h"
-#include "3rdparty/liborigin/OriginFile.h"
+#include "OriginFile.h"
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
@@ -153,9 +153,9 @@ unsigned int OriginProjectParser::findNoteByName(const QString& name) {
 	return 0;
 }
 
-//##############################################################################
-//############## Deserialization from Origin's project tree ####################
-//##############################################################################
+// ##############################################################################
+// ############## Deserialization from Origin's project tree ####################
+// ##############################################################################
 bool OriginProjectParser::load(Project* project, bool preview) {
 	DEBUG(Q_FUNC_INFO);
 
@@ -480,7 +480,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		if (aspect) {
 			folder->addChildFast(aspect);
 			DEBUG("	creation time as reported by liborigin: " << spread.creationDate);
-			aspect->setCreationTime(QDateTime::fromTime_t(spread.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(spread.creationDate));
 		}
 	}
 	// loop over all workbooks to find loose ones
@@ -509,7 +509,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		if (aspect) {
 			folder->addChildFast(aspect);
 			DEBUG("	creation time as reported by liborigin: " << excel.creationDate);
-			aspect->setCreationTime(QDateTime::fromTime_t(excel.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(excel.creationDate));
 		}
 	}
 	// loop over all matrices to find loose ones
@@ -541,7 +541,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			aspect->setCreationTime(QDateTime::fromTime_t(originMatrix.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(originMatrix.creationDate));
 		}
 	}
 	// handle loose graphs (is this even possible?)
@@ -566,7 +566,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			aspect->setCreationTime(QDateTime::fromTime_t(graph.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(graph.creationDate));
 		}
 	}
 	// handle loose notes (is this even possible?)
@@ -591,7 +591,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			aspect->setCreationTime(QDateTime::fromTime_t(originNote.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(originNote.creationDate));
 		}
 	}
 }
@@ -2102,9 +2102,9 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//########################### Helper functions  ################################
-//##############################################################################
+// ##############################################################################
+// ########################### Helper functions  ################################
+// ##############################################################################
 QDateTime OriginProjectParser::creationTime(tree<Origin::ProjectNode>::iterator it) const {
 	// this logic seems to be correct only for the first node (project node). For other nodes the current time is returned.
 	char time_str[21];

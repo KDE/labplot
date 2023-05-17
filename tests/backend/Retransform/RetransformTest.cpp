@@ -361,10 +361,10 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
 
-	CHECK_RANGE(plot, curve1, Dimension::X, 0, 10);
-	CHECK_RANGE(plot, curve1, Dimension::Y, 1000, 1011); // Nice extend applied
-	CHECK_RANGE(plot, curve2, Dimension::X, 0, 10);
-	CHECK_RANGE(plot, curve2, Dimension::Y, -10, 1);
+	CHECK_RANGE(plot, curve1, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 1000., 1011.); // Nice extend applied
+	CHECK_RANGE(plot, curve2, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, curve2, Dimension::Y, -10., 1.);
 
 	plot->enableAutoScale(Dimension::Y, 1, false); // disable autoscale for second y range
 
@@ -373,9 +373,9 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	r.setEnd(0.1);
 	plot->setRange(Dimension::Y, 1, r);
 
-	CHECK_RANGE(plot, curve1, Dimension::X, 0, 10);
-	CHECK_RANGE(plot, curve1, Dimension::Y, 1000, 1011);
-	CHECK_RANGE(plot, curve2, Dimension::X, 0, 10);
+	CHECK_RANGE(plot, curve1, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 1000., 1011.);
+	CHECK_RANGE(plot, curve2, Dimension::X, 0., 10.);
 	CHECK_RANGE(plot, curve2, Dimension::Y, -9.9, 0.1);
 
 	QAction a(nullptr);
@@ -392,9 +392,9 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(3, 100));
 	emit plot->mouseReleaseZoomSelectionModeSignal();
 
-	CHECK_RANGE(plot, curve1, Dimension::X, 2, 3);
+	CHECK_RANGE(plot, curve1, Dimension::X, 2., 3.);
 	CHECK_RANGE(plot, curve1, Dimension::Y, 1002.2, 1003.3); // Nice Extend applied
-	CHECK_RANGE(plot, curve2, Dimension::X, 2, 3);
+	CHECK_RANGE(plot, curve2, Dimension::X, 2., 3.);
 	CHECK_RANGE(plot, curve2, Dimension::Y, -9.9, 0.1); // Not changed, because autoscale is turned off
 }
 
@@ -459,10 +459,10 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
 	QCOMPARE(plot->rangeFormat(Dimension::X, 1), RangeT::Format::Numeric);
 
-	CHECK_RANGE(plot, curve1, Dimension::Y, 0, 10);
-	CHECK_RANGE(plot, curve1, Dimension::X, 1000, 1011); // Nice extend applied
-	CHECK_RANGE(plot, curve2, Dimension::Y, 0, 10);
-	CHECK_RANGE(plot, curve2, Dimension::X, -10, 1);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 0., 10.);
+	CHECK_RANGE(plot, curve1, Dimension::X, 1000., 1011.); // Nice extend applied
+	CHECK_RANGE(plot, curve2, Dimension::Y, 0., 10.);
+	CHECK_RANGE(plot, curve2, Dimension::X, -10., 1.);
 
 	plot->enableAutoScale(Dimension::X, 1, false); // disable autoscale for second y range
 
@@ -471,9 +471,9 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	r.setEnd(0.1);
 	plot->setRange(Dimension::X, 1, r);
 
-	CHECK_RANGE(plot, curve1, Dimension::Y, 0, 10);
-	CHECK_RANGE(plot, curve1, Dimension::X, 1000, 1011);
-	CHECK_RANGE(plot, curve2, Dimension::Y, 0, 10);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 0., 10.);
+	CHECK_RANGE(plot, curve1, Dimension::X, 1000., 1011.);
+	CHECK_RANGE(plot, curve2, Dimension::Y, 0., 10.);
 	CHECK_RANGE(plot, curve2, Dimension::X, -9.9, 0.1);
 
 	QAction a(nullptr);
@@ -490,9 +490,9 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(100, 3));
 	emit plot->mouseReleaseZoomSelectionModeSignal();
 
-	CHECK_RANGE(plot, curve1, Dimension::Y, 2, 3);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 2., 3.);
 	CHECK_RANGE(plot, curve1, Dimension::X, 1002.2, 1003.3); // Nice Extend applied
-	CHECK_RANGE(plot, curve2, Dimension::Y, 2, 3);
+	CHECK_RANGE(plot, curve2, Dimension::Y, 2., 3.);
 	CHECK_RANGE(plot, curve2, Dimension::X, -9.9, 0.1); // Not changed, because autoscale is turned off
 }
 
@@ -873,6 +873,7 @@ void RetransformTest::TestImportCSV() {
 	file.close();
 
 	AsciiFilter filter;
+	filter.setHeaderLine(1);
 	filter.readDataFromFile(file.fileName(), spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet->rowCount(), 3);
@@ -1383,7 +1384,8 @@ void RetransformTest::TestChangePlotRangeElement2() {
 
 	// No update of the scales, because the range did not change
 	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1); // The respective coordinate system must be rescaled
 
 	c.resetRetransformCount();
 
@@ -1590,7 +1592,8 @@ void RetransformTest::TestChangePlotRangeElement3() {
 
 	// No update of the scales, because the range did not change
 	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1); // The respective coordinate system must be rescaled
 
 	c.resetRetransformCount();
 

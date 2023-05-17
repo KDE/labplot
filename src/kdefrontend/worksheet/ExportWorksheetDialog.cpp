@@ -13,6 +13,12 @@
 #include "kdefrontend/GuiTools.h"
 #include "ui_exportworksheetwidget.h"
 
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KSharedConfig>
+#include <KWindowConfig>
+#include <kcoreaddons_version.h>
+
 #include <QCompleter>
 #include <QDesktopWidget>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
@@ -21,14 +27,9 @@
 #else
 #include <QDirModel>
 #endif
+#include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QWindow>
-
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KSharedConfig>
-#include <KWindowConfig>
-#include <QDialogButtonBox>
 
 /*!
 	\class ExportWorksheetDialog
@@ -200,8 +201,16 @@ void ExportWorksheetDialog::slotButtonClicked(QAbstractButton* button) {
 void ExportWorksheetDialog::okClicked() {
 	if (ui->cbExportTo->currentIndex() == 0 /*export to file*/
 		&& m_askOverwrite && QFile::exists(ui->leFileName->text())) {
-		int r = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-		if (r == KMessageBox::No)
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		int status = KMessageBox::questionTwoActions(this,
+													 i18n("The file already exists. Do you really want to overwrite it?"),
+													 i18n("Export"),
+													 KStandardGuiItem::overwrite(),
+													 KStandardGuiItem::cancel());
+#else
+		int status = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
+#endif
+		if (status == KMessageBox::No)
 			return;
 	}
 

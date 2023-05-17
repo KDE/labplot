@@ -164,9 +164,9 @@ bool Matrix::printPreview() const {
 	return dlg->exec();
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 void* Matrix::data() const {
 	return d->data;
 }
@@ -193,9 +193,9 @@ void Matrix::setChanged() {
 		m_model->setChanged();
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 void Matrix::setRowCount(int count) {
 	if (count == d->rowCount)
 		return;
@@ -667,9 +667,9 @@ QVector<AspectType> Matrix::dropableOn() const {
 	return vec;
 }
 
-//##############################################################################
-//#########################  Public slots  #####################################
-//##############################################################################
+// ##############################################################################
+// #########################  Public slots  #####################################
+// ##############################################################################
 //! Clear the whole matrix (i.e. reset all cells)
 void Matrix::clear() {
 	WAIT_CURSOR;
@@ -769,9 +769,9 @@ void Matrix::mirrorVertically() {
 	RESET_CURSOR;
 }
 
-//##############################################################################
-//######################  Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ######################  Private implementation ###############################
+// ##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner, const AbstractColumn::ColumnMode m)
 	: q(owner)
@@ -1020,9 +1020,9 @@ void MatrixPrivate::clearColumn(int col) {
 		Q_EMIT q->dataChanged(0, col, rowCount - 1, col);
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 void Matrix::save(QXmlStreamWriter* writer) const {
 	DEBUG(Q_FUNC_INFO);
 	writer->writeStartElement(QStringLiteral("matrix"));
@@ -1289,15 +1289,16 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//########################  Data Import  #######################################
-//##############################################################################
+// ##############################################################################
+// ########################  Data Import  #######################################
+// ##############################################################################
 int Matrix::prepareImport(std::vector<void*>& dataContainer,
 						  AbstractFileFilter::ImportMode mode,
 						  int actualRows,
 						  int actualCols,
 						  QStringList /*colNameList*/,
-						  QVector<AbstractColumn::ColumnMode> columnMode) {
+						  QVector<AbstractColumn::ColumnMode> columnMode,
+						  bool initializeDataContainer) {
 	auto newColumnMode = columnMode.at(0); // only first column mode used
 	DEBUG(Q_FUNC_INFO << ", rows = " << actualRows << " cols = " << actualCols << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode)
 					  << ", column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, newColumnMode))
@@ -1335,50 +1336,53 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer,
 
 	DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << "/" << actualCols)
 	// data() returns a void* which is a pointer to a matrix of any data type (see ColumnPrivate.cpp)
-	dataContainer.resize(actualCols);
-	switch (newColumnMode) { // prepare all columns
-	case AbstractColumn::ColumnMode::Double:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
+	if (initializeDataContainer) {
+		dataContainer.resize(actualCols);
+
+		switch (newColumnMode) { // prepare all columns
+		case AbstractColumn::ColumnMode::Double:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::Double;
+			break;
+		case AbstractColumn::ColumnMode::Integer:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<int>* vector = &(static_cast<QVector<QVector<int>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::Integer;
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<qint64>* vector = &(static_cast<QVector<QVector<qint64>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::BigInt;
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<QString>* vector = &(static_cast<QVector<QVector<QString>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::Text;
+			break;
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::DateTime:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<QDateTime>* vector = &(static_cast<QVector<QVector<QDateTime>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::DateTime;
+			break;
 		}
-		d->mode = AbstractColumn::ColumnMode::Double;
-		break;
-	case AbstractColumn::ColumnMode::Integer:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<int>* vector = &(static_cast<QVector<QVector<int>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::Integer;
-		break;
-	case AbstractColumn::ColumnMode::BigInt:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<qint64>* vector = &(static_cast<QVector<QVector<qint64>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::BigInt;
-		break;
-	case AbstractColumn::ColumnMode::Text:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<QString>* vector = &(static_cast<QVector<QVector<QString>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::Text;
-		break;
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::DateTime:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<QDateTime>* vector = &(static_cast<QVector<QVector<QDateTime>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::DateTime;
-		break;
 	}
 
 	return columnOffset;

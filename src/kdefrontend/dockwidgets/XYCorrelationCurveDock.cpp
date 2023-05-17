@@ -30,7 +30,7 @@ extern "C" {
 		(2D-curves defined by a correlation) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -108,7 +108,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 
 void XYCorrelationCurveDock::initGeneralTab() {
 	DEBUG("XYCorrelationCurveDock::initGeneralTab()");
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -171,39 +171,11 @@ void XYCorrelationCurveDock::initGeneralTab() {
 
 void XYCorrelationCurveDock::setModel() {
 	DEBUG("XYCorrelationCurveDock::setModel()");
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Datapicker,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYCurve,
-						   AspectType::XYAnalysisCurve};
-	cbDataSourceCurve->setTopLevelClasses(list);
 
-	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
-		hiddenAspects << curve;
-	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
+	auto list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYCorrelationCurve);
 
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYCorrelationCurve};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-	cbY2DataColumn->setTopLevelClasses(list);
-
-	cbDataSourceCurve->setModel(m_aspectTreeModel);
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-	cbY2DataColumn->setModel(m_aspectTreeModel);
-
-	XYCurveDock::setModel();
+	XYAnalysisCurveDock::setModel(list);
 	DEBUG("XYCorrelationCurveDock::setModel() DONE");
 }
 

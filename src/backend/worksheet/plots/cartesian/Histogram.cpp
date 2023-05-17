@@ -280,10 +280,10 @@ void Histogram::setHover(bool on) {
 	d->setHover(on);
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
-// general
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
+//  general
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Normalization, normalization, normalization)
@@ -375,9 +375,9 @@ const AbstractColumn* Histogram::binPDValues() const {
 	return d->binPDValues();
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 
 // General
 CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, Data, data, recalcHistogram)
@@ -558,9 +558,9 @@ void Histogram::setRugOffset(double offset) {
 		exec(new HistogramSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void Histogram::retransform() {
 	d_ptr->retransform();
 }
@@ -631,9 +631,9 @@ void Histogram::errorMinusColumnNameChanged() {
 	setErrorMinusColumnPath(d->errorMinusColumn->path());
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 HistogramPrivate::HistogramPrivate(Histogram* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
@@ -887,7 +887,7 @@ void HistogramPrivate::recalcHistogram() {
 
 		if (binRangesMin >= binRangesMax) {
 			Q_EMIT q->dataChanged();
-			Q_EMIT q->info(i18n("Calculation of the histogram not possible. The max value must be bigger then the min value."));
+			Q_EMIT q->info(i18n("Calculation of the histogram not possible. The max value must be bigger than the min value."));
 			return;
 		}
 
@@ -978,7 +978,7 @@ void HistogramPrivate::recalcHistogram() {
 					m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
 			}
 		} else
-			DEBUG("Number of bins must be positiv integer")
+			DEBUG("Number of bins must be positive integer")
 	}
 
 	// histogram changed because of the actual data changes or because of new bin settings,
@@ -1872,9 +1872,9 @@ void HistogramPrivate::setHover(bool on) {
 	update();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Histogram::save(QXmlStreamWriter* writer) const {
 	Q_D(const Histogram);
@@ -1993,9 +1993,9 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Histogram::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))

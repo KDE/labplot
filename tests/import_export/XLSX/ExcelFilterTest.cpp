@@ -15,10 +15,10 @@
 void ExcelFilterTest::importFile1() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/2col.xlsx"));
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ExcelFilter filter;
-	filter.setCurrentSheet("Sheet1");
-	filter.setCurrentRange("A1:B5");
+	filter.setCurrentSheet(QStringLiteral("Sheet1"));
+	filter.setCurrentRange(QStringLiteral("A1:B5"));
 	filter.readDataFromFile(fileName, &spreadsheet);
 
 	QCOMPARE(spreadsheet.columnCount(), 2);
@@ -40,10 +40,10 @@ void ExcelFilterTest::importFile1() {
 void ExcelFilterTest::importFile2() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/3col.xlsx"));
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ExcelFilter filter;
-	filter.setCurrentSheet("Sheet1");
-	filter.setCurrentRange("A1:C5");
+	filter.setCurrentSheet(QStringLiteral("Sheet1"));
+	filter.setCurrentRange(QStringLiteral("A1:C5"));
 	filter.readDataFromFile(fileName, &spreadsheet);
 
 	QCOMPARE(spreadsheet.columnCount(), 3);

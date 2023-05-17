@@ -29,7 +29,7 @@ public:
 	~ColumnPrivate() override;
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode, void*);
 
-	void initDataContainer();
+	bool initDataContainer(bool resize = true);
 	void initIOFilters();
 
 	AbstractColumn::ColumnMode columnMode() const;
@@ -54,10 +54,13 @@ public:
 	int width() const;
 	void setWidth(int);
 
+	void setData(void*);
 	void* data() const;
-	bool hasValueLabels() const;
+	void deleteData();
+	bool valueLabelsInitialized() const;
 	void removeValueLabel(const QString&);
-	void clearValueLabels();
+	void setLabelsMode(Column::ColumnMode mode);
+	void valueLabelsRemoveAll();
 
 	AbstractSimpleFilter* inputFilter() const;
 	AbstractSimpleFilter* outputFilter() const;
@@ -93,8 +96,6 @@ public:
 	void replaceTexts(int first, const QVector<QString>&);
 	int dictionaryIndex(int row) const;
 	const QMap<QString, int>& frequencies() const;
-	void addValueLabel(const QString&, const QString&);
-	const QMap<QString, QString>& textValueLabels();
 
 	QDate dateAt(int row) const;
 	void setDateAt(int row, QDate);
@@ -105,31 +106,23 @@ public:
 	void setDateTimeAt(int row, const QDateTime&);
 	void replaceValues(int first, const QVector<QDateTime>&);
 	void replaceDateTimes(int first, const QVector<QDateTime>&);
-	void addValueLabel(const QDateTime&, const QString&);
-	const QMap<QDateTime, QString>& dateTimeValueLabels();
 
 	double doubleAt(int row) const;
 	double valueAt(int row) const;
 	void setValueAt(int row, double new_value);
 	void replaceValues(int first, const QVector<double>&);
-	void addValueLabel(double, const QString&);
-	const QMap<double, QString>& valueLabels();
 
 	int integerAt(int row) const;
 	void setValueAt(int row, int new_value);
 	void setIntegerAt(int row, int new_value);
 	void replaceValues(int first, const QVector<int>&);
 	void replaceInteger(int first, const QVector<int>&);
-	void addValueLabel(int, const QString&);
-	const QMap<int, QString>& intValueLabels();
 
 	qint64 bigIntAt(int row) const;
 	void setValueAt(int row, qint64 new_value);
 	void setBigIntAt(int row, qint64 new_value);
 	void replaceValues(int first, const QVector<qint64>&);
 	void replaceBigInt(int first, const QVector<qint64>&);
-	void addValueLabel(qint64, const QString&);
-	const QMap<qint64, QString>& bigIntValueLabels();
 
 	void updateProperties();
 	void calculateStatistics();
@@ -163,13 +156,80 @@ public:
 	AbstractColumn::Properties properties{
 		AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
 
+	struct ValueLabels {
+		void setMode(AbstractColumn::ColumnMode);
+		void migrateLabels(AbstractColumn::ColumnMode newMode);
+		void migrateDoubleTo(AbstractColumn::ColumnMode newMode);
+		void migrateIntTo(AbstractColumn::ColumnMode newMode);
+		void migrateBigIntTo(AbstractColumn::ColumnMode newMode);
+		void migrateTextTo(AbstractColumn::ColumnMode newMode);
+		void migrateDateTimeTo(AbstractColumn::ColumnMode newMode);
+		int count() const;
+		void add(qint64, const QString&);
+		void add(int, const QString&);
+		void add(double, const QString&);
+		void add(const QDateTime&, const QString&);
+		void add(const QString&, const QString&);
+		void removeAll();
+		AbstractColumn::ColumnMode mode() const {
+			return m_mode;
+		}
+		bool initialized() const {
+			return m_labels != nullptr;
+		}
+		void remove(const QString&);
+		template<typename T>
+		inline QVector<Column::ValueLabel<T>>* cast_vector() {
+			return static_cast<QVector<Column::ValueLabel<T>>*>(m_labels);
+		}
+		template<typename T>
+		inline const QVector<Column::ValueLabel<T>>* cast_vector() const {
+			return static_cast<QVector<Column::ValueLabel<T>>*>(m_labels);
+		}
+		const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
+		const QVector<Column::ValueLabel<QDateTime>>* dateTimeValueLabels() const;
+		const QVector<Column::ValueLabel<double>>* valueLabels() const;
+		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
+		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
+
+	private:
+		bool init(AbstractColumn::ColumnMode);
+		void deinit();
+
+		// Do not call manually, because it is not doing a type checking!
+		template<typename T>
+		void remove(const T& value) {
+			auto* v = cast_vector<T>();
+			for (int i = 0; i < v->length(); i++) {
+				if (v->at(i).value == value)
+					v->remove(i);
+			}
+		}
+
+	private:
+		AbstractColumn::ColumnMode m_mode{AbstractColumn::ColumnMode::Integer};
+		void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
+	};
+	ValueLabels m_labels;
+	int valueLabelsCount() const;
+	void addValueLabel(qint64, const QString&);
+	const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
+	void addValueLabel(int, const QString&);
+	const QVector<Column::ValueLabel<int>>* intValueLabels() const;
+	void addValueLabel(double, const QString&);
+	const QVector<Column::ValueLabel<double>>* valueLabels() const;
+	void addValueLabel(const QDateTime&, const QString&);
+	const QVector<Column::ValueLabel<QDateTime>>* dateTimeValueLabels() const;
+	void addValueLabel(const QString&, const QString&);
+	const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
+
 private:
 	AbstractColumn::ColumnMode m_columnMode; // type of column data
 	void* m_data{nullptr}; // pointer to the data container (QVector<T>)
 	int m_rowCount{0};
 	QVector<QString> m_dictionary; // dictionary for string columns
 	QMap<QString, int> m_dictionaryFrequencies; // dictionary for elements frequencies in string columns
-	void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
+
 	AbstractSimpleFilter* m_inputFilter{nullptr}; // input filter for string -> data type conversion
 	AbstractSimpleFilter* m_outputFilter{nullptr}; // output filter for data type -> string conversion
 	QString m_formula;
@@ -181,11 +241,59 @@ private:
 	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 
-	void initLabels();
 	void initDictionary();
 	void calculateTextStatistics();
 	void calculateDateTimeStatistics();
 	void connectFormulaColumn(const AbstractColumn*);
+
+	// Never call this function directly, because it does no
+	// mode checking.
+	template<typename T>
+	void setValueAtPrivate(int row, const T& new_value) {
+		if (!m_data) {
+			if (!initDataContainer())
+				return; // failed to allocate memory
+		}
+
+		invalidate();
+
+		Q_EMIT m_owner->dataAboutToChange(m_owner);
+		if (row >= rowCount())
+			resizeTo(row + 1);
+
+		static_cast<QVector<T>*>(m_data)->replace(row, new_value);
+		if (!m_owner->m_suppressDataChangedSignal)
+			Q_EMIT m_owner->dataChanged(m_owner);
+	}
+
+	// Never call this function directly, because it does no
+	// mode checking.
+	template<typename T>
+	void replaceValuePrivate(int first, const QVector<T>& new_values) {
+		if (!m_data) {
+			const bool resize = (first >= 0);
+			if (!initDataContainer(resize))
+				return; // failed to allocate memory
+		}
+
+		invalidate();
+
+		Q_EMIT m_owner->dataAboutToChange(m_owner);
+
+		if (first < 0)
+			*static_cast<QVector<T>*>(m_data) = new_values;
+		else {
+			const int num_rows = new_values.size();
+			resizeTo(first + num_rows);
+
+			T* ptr = static_cast<QVector<T>*>(m_data)->data();
+			for (int i = 0; i < num_rows; ++i)
+				ptr[first + i] = new_values.at(i);
+		}
+
+		if (!m_owner->m_suppressDataChangedSignal)
+			Q_EMIT m_owner->dataChanged(m_owner);
+	}
 
 private Q_SLOTS:
 	void formulaVariableColumnRemoved(const AbstractAspect*);

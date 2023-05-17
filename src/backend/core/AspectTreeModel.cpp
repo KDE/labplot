@@ -399,7 +399,7 @@ bool AspectTreeModel::setData(const QModelIndex& index, const QVariant& value, i
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	switch (index.column()) {
 	case 0: {
-		if (!aspect->setName(value.toString(), false)) {
+		if (!aspect->setName(value.toString(), AbstractAspect::NameHandling::UniqueRequired)) {
 			Q_EMIT statusInfo(i18n("The name \"%1\" is already in use. Choose another name.", value.toString()));
 			return false;
 		}
@@ -482,9 +482,9 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const {
 	// 	}
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void AspectTreeModel::renameRequestedSlot() {
 	auto* aspect = dynamic_cast<AbstractAspect*>(QObject::sender());
 	if (aspect)

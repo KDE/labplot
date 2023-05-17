@@ -17,8 +17,6 @@
 class AbstractFileFilter;
 class SpreadsheetView;
 class SpreadsheetModel;
-template<class T>
-class QVector;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
@@ -81,7 +79,8 @@ public:
 					  int rows,
 					  int cols,
 					  QStringList colNameList,
-					  QVector<AbstractColumn::ColumnMode>) override;
+					  QVector<AbstractColumn::ColumnMode>,
+					  bool initializeContainer) override;
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 

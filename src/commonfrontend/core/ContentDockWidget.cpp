@@ -8,12 +8,15 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "commonfrontend/core/PartMdiView.h"
+#include "commonfrontend/core/ContentDockWidget.h"
 #include "backend/core/AbstractPart.h"
 #include "backend/worksheet/Worksheet.h"
 
+#include <DockWidget.h>
+
 #include <QCloseEvent>
 #include <QIcon>
+#include <QUuid>
 
 /*!
  * \class PartMdiView
@@ -24,8 +27,8 @@
  * this class automatically updates the window title when AbstractAspect::caption() is changed
  * and holds the connection to the actual data visualized in this window via the pointer to \c AbstractPart.
  */
-PartMdiView::PartMdiView(AbstractPart* part)
-	: QMdiSubWindow(nullptr)
+ContentDockWidget::ContentDockWidget(AbstractPart* part)
+	: ads::CDockWidget(part->name())
 	, m_part(part) {
 	setWindowIcon(m_part->icon());
 	setWidget(m_part->view());
@@ -34,40 +37,43 @@ PartMdiView::PartMdiView(AbstractPart* part)
 
 	// resize the MDI sub window to fit the content of the view
 	resize(m_part->view()->size());
+	// Must be unique and must not be changed after the dock was added to the dockmanager, because
+	// the objectname is used in the content manager map
+	setObjectName(m_part->uuid().toString());
 
-	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &PartMdiView::handleAspectDescriptionChanged);
-	connect(m_part, &AbstractPart::aspectAboutToBeRemoved, this, &PartMdiView::handleAspectAboutToBeRemoved);
-	connect(this, &QMdiSubWindow::windowStateChanged, this, &PartMdiView::slotWindowStateChanged);
+	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &ContentDockWidget::handleAspectDescriptionChanged);
+	connect(m_part, &AbstractPart::aspectAboutToBeRemoved, this, &ContentDockWidget::handleAspectAboutToBeRemoved);
+	// connect(this, &QMdiSubWindow::windowStateChanged, this, &ContentDockWidget::slotWindowStateChanged);
 }
 
-PartMdiView::~PartMdiView() {
+ContentDockWidget::~ContentDockWidget() {
 	m_closing = true;
 }
 
-AbstractPart* PartMdiView::part() const {
+AbstractPart* ContentDockWidget::part() const {
 	return m_part;
 }
 
-void PartMdiView::handleAspectDescriptionChanged(const AbstractAspect* aspect) {
+void ContentDockWidget::handleAspectDescriptionChanged(const AbstractAspect* aspect) {
 	if (aspect != m_part)
 		return;
 
 	setWindowTitle(m_part->name());
 }
 
-void PartMdiView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+void ContentDockWidget::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect != m_part)
 		return;
 
 	close();
 }
 
-void PartMdiView::closeEvent(QCloseEvent* event) {
+void ContentDockWidget::closeEvent(QCloseEvent* event) {
 	m_part->deleteView();
 	event->accept();
 }
 
-void PartMdiView::slotWindowStateChanged(Qt::WindowStates /*oldState*/, Qt::WindowStates newState) {
+void ContentDockWidget::slotWindowStateChanged(Qt::WindowStates /*oldState*/, Qt::WindowStates newState) {
 	if (m_closing)
 		return;
 

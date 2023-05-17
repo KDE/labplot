@@ -564,6 +564,12 @@
        </item>
        <item row="2" column="2">
         <widget class="NumberSpinBox" name="sbTop">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -592,6 +598,12 @@
        </item>
        <item row="8" column="2">
         <widget class="NumberSpinBox" name="sbPaddingHorizontal">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -641,6 +653,12 @@
        </item>
        <item row="3" column="2">
         <widget class="NumberSpinBox" name="sbWidth">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -657,6 +675,12 @@
        </item>
        <item row="9" column="2">
         <widget class="NumberSpinBox" name="sbPaddingVertical">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -673,6 +697,12 @@
        </item>
        <item row="10" column="2">
         <widget class="NumberSpinBox" name="sbPaddingRight">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -784,6 +814,12 @@
        </item>
        <item row="4" column="2">
         <widget class="NumberSpinBox" name="sbHeight">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -800,6 +836,12 @@
        </item>
        <item row="11" column="2">
         <widget class="NumberSpinBox" name="sbPaddingBottom">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -1290,6 +1332,12 @@
        </item>
        <item row="6" column="2">
         <widget class="NumberSpinBox" name="sbBorderCornerRadius">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>

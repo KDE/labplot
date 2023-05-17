@@ -86,8 +86,8 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYDifferentiationCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYDifferentiationCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYDifferentiationCurveDock::xRangeMaxChanged);
-	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYDifferentiationCurveDock::xRangeMinDateTimeChanged);
-	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYDifferentiationCurveDock::xRangeMaxDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYDifferentiationCurveDock::xRangeMinDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYDifferentiationCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.cbDerivOrder, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDifferentiationCurveDock::derivOrderChanged);
 	connect(uiGeneralTab.sbAccOrder, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYDifferentiationCurveDock::accOrderChanged);
 	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDifferentiationCurveDock::plotRangeChanged);
@@ -135,8 +135,8 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_differentiationData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_differentiationData.xRange.last()));
 	} else {
-		uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_differentiationData.xRange.first()));
-		uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_differentiationData.xRange.last()));
+		uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(m_differentiationData.xRange.first());
+		uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(m_differentiationData.xRange.last());
 	}
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
@@ -178,37 +178,10 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 }
 
 void XYDifferentiationCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Datapicker,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYCurve,
-						   AspectType::XYAnalysisCurve};
-	cbDataSourceCurve->setTopLevelClasses(list);
+	auto list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYFitCurve);
 
-	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
-		hiddenAspects << curve;
-	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
-
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-
-	cbDataSourceCurve->setModel(m_aspectTreeModel);
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-
-	XYCurveDock::setModel();
+	XYAnalysisCurveDock::setModel(list);
 }
 
 /*!
@@ -411,8 +384,8 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
-				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
-				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
+				uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(xDataColumn->minimum());
+				uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(xDataColumn->maximum());
 			}
 		}
 	}
@@ -426,17 +399,17 @@ void XYDifferentiationCurveDock::xRangeMaxChanged() {
 	SET_DOUBLE_FROM_LE_REC(m_differentiationData.xRange.last(), uiGeneralTab.leMax);
 }
 
-void XYDifferentiationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
+void XYDifferentiationCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	m_differentiationData.xRange.first() = dateTime.toMSecsSinceEpoch();
+	m_differentiationData.xRange.first() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYDifferentiationCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
+void XYDifferentiationCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	m_differentiationData.xRange.last() = dateTime.toMSecsSinceEpoch();
+	m_differentiationData.xRange.last() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

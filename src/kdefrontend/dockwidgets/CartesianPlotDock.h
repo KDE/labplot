@@ -67,8 +67,8 @@ private Q_SLOTS:
 	void rangePointsChanged(const QString&);
 
 	void autoScaleChanged(const Dimension, const int rangeIndex, bool);
-	void minDateTimeChanged(const QObject* sender, const Dimension, const QDateTime&);
-	void maxDateTimeChanged(const QObject* sender, const Dimension, const QDateTime&);
+	void minDateTimeChanged(const QObject* sender, const Dimension, qint64 value);
+	void maxDateTimeChanged(const QObject* sender, const Dimension, qint64);
 	// void xRangeDateTimeChanged(const Range<quint64>&);
 	void rangeFormatChanged(const QObject* sender, const Dimension, int index);
 	void scaleChanged(const QObject* sender, const Dimension, int);
@@ -171,6 +171,7 @@ Q_SIGNALS:
 	void info(const QString&);
 
 	friend class RetransformTest;
+	friend class WidgetsTest;
 };
 
 #endif

@@ -63,7 +63,7 @@ void Image::init() {
 	d->position.verticalPosition = (WorksheetElement::VerticalPosition)group.readEntry("PositionY", (int)WorksheetElement::VerticalPosition::Center);
 	d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry("HorizontalAlignment", (int)WorksheetElement::HorizontalAlignment::Center);
 	d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry("VerticalAlignment", (int)WorksheetElement::VerticalAlignment::Center);
-	d->rotationAngle = group.readEntry("Rotation", d->rotationAngle);
+	d->setRotation(group.readEntry("Rotation", d->rotation()));
 
 	// border
 	d->borderLine = new Line(QString());
@@ -193,9 +193,9 @@ void Image::setKeepRatio(bool keepRatio) {
 		exec(new ImageSetKeepRatioCmd(d, keepRatio, ki18n("%1: change keep ratio")));
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ImagePrivate::ImagePrivate(Image* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -226,7 +226,7 @@ void ImagePrivate::retransform() {
 	boundingRectangle.setWidth(w);
 	boundingRectangle.setHeight(h);
 
-	updatePosition();
+	updatePosition(); // needed, because CartesianPlot calls retransform if some operations are done
 	updateBorder();
 
 	Q_EMIT q->changed();
@@ -303,7 +303,6 @@ void ImagePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	QMatrix matrix;
-	matrix.rotate(-rotationAngle);
 	imageShape = QPainterPath();
 	if (borderLine->pen().style() != Qt::NoPen) {
 		imageShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderLine->pen()));
@@ -322,7 +321,6 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 	painter->save();
 
 	// draw the image
-	painter->rotate(-rotationAngle);
 	painter->setOpacity(opacity);
 	painter->drawImage(boundingRectangle.topLeft(), imageScaled, imageScaled.rect());
 	painter->restore();
@@ -330,7 +328,6 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 	// draw the border
 	if (borderLine->style() != Qt::NoPen) {
 		painter->save();
-		painter->rotate(-rotationAngle);
 		painter->setPen(borderLine->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(borderLine->opacity());
@@ -376,9 +373,9 @@ void ImagePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Image::save(QXmlStreamWriter* writer) const {
 	Q_D(const Image);
@@ -480,9 +477,9 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Image::loadThemeConfig(const KConfig& config) {
 	Q_D(Image);
 	const auto& group = config.group("CartesianPlot");
