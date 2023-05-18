@@ -392,8 +392,8 @@ void SpreadsheetModel::handleAspectCountChanged() {
 	if (m_suppressSignals)
 		return;
 
-	updateHorizontalHeader();
 	m_columnCount = m_spreadsheet->columnCount();
+	updateHorizontalHeader();
 }
 
 void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {
@@ -454,43 +454,33 @@ void SpreadsheetModel::handleDataChange(const AbstractColumn* col) {
 	Q_EMIT dataChanged(index(0, i), index(m_rowCount - 1, i));
 }
 
-void SpreadsheetModel::handleRowsAboutToBeInserted(int before, int count) {
+void SpreadsheetModel::handleRowsAboutToBeInserted(int before, int last) {
 	if (m_suppressSignals)
 		return;
-	beginInsertRows(QModelIndex(), before, before + count - 1);
+	beginInsertRows(QModelIndex(), before, last);
 }
 
-void SpreadsheetModel::handleRowsAboutToBeRemoved(int first, int count) {
+void SpreadsheetModel::handleRowsAboutToBeRemoved(int first, int last) {
 	if (m_suppressSignals)
 		return;
-	beginRemoveRows(QModelIndex(), first, first + count - 1);
+	beginRemoveRows(QModelIndex(), first, last);
 }
 
-void SpreadsheetModel::handleRowsInserted(const QVector<Column*>& columns, int newRowCount) {
-	handleRowCountChanged(columns, newRowCount, true);
+void SpreadsheetModel::handleRowsInserted(int newRowCount) {
+	handleRowCountChanged(newRowCount);
+	endInsertRows();
 }
 
-void SpreadsheetModel::handleRowsRemoved(const QVector<Column*>& columns, int newRowCount) {
-	handleRowCountChanged(columns, newRowCount, false);
+void SpreadsheetModel::handleRowsRemoved(int newRowCount) {
+	handleRowCountChanged(newRowCount);
+	endRemoveRows();
 }
 
-void SpreadsheetModel::handleRowCountChanged(const QVector<Column*>& columns, int newRowCount, bool inserted) {
+void SpreadsheetModel::handleRowCountChanged(int newRowCount) {
 	if (m_suppressSignals)
 		return;
-
-	updateVerticalHeader();
-
 	m_rowCount = newRowCount;
-	if (inserted)
-		endInsertRows();
-	else
-		endRemoveRows();
-
-	for (const auto* col : columns) {
-		const int i = m_spreadsheet->indexOfChild<Column>(col);
-		Q_EMIT dataChanged(index(0, i), index(m_rowCount - 1, i));
-	}
-	m_spreadsheet->emitRowCountChanged();
+	updateVerticalHeader();
 }
 
 void SpreadsheetModel::updateVerticalHeader() {

@@ -71,12 +71,12 @@ private Q_SLOTS:
 	void handleDigitsChange();
 	void handlePlotDesignationChange(const AbstractColumn*);
 	void handleDataChange(const AbstractColumn*);
-	void handleRowsInserted(const QVector<Column*>&, int newRowCount);
-	void handleRowsRemoved(const QVector<Column*>&, int newRowCount);
-	void handleRowsAboutToBeInserted(int before, int count);
-	void handleRowsAboutToBeRemoved(int first, int count);
+	void handleRowsInserted(int newRowCount);
+	void handleRowsRemoved(int newRowCount);
+	void handleRowsAboutToBeInserted(int before, int last);
+	void handleRowsAboutToBeRemoved(int first, int last);
 
-	void handleRowCountChanged(const QVector<Column*>&, int newRowCount, bool inserted);
+	void handleRowCountChanged(int newRowCount);
 
 protected:
 	void updateVerticalHeader();

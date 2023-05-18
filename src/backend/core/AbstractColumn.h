@@ -141,9 +141,9 @@ public:
 
 	virtual int rowCount() const = 0;
 	virtual int availableRowCount(int max = -1) const = 0;
-	void insertRows(int before, int count);
-	void removeRows(int first, int count);
-	virtual void clear();
+	void insertRows(int before, int count, QUndoCommand* parent = nullptr);
+	void removeRows(int first, int count, QUndoCommand* parent = nullptr);
+	virtual void clear(QUndoCommand*);
 
 	virtual double maximum(int count = 0) const;
 	virtual double maximum(int startIndex, int endIndex) const;
@@ -257,8 +257,8 @@ protected:
 	bool XmlReadMask(XmlStreamReader*);
 	void XmlWriteMask(QXmlStreamWriter*) const;
 
-	virtual void handleRowInsertion(int before, int count);
-	virtual void handleRowRemoval(int first, int count);
+	virtual void handleRowInsertion(int before, int count, QUndoCommand* parent);
+	virtual void handleRowRemoval(int first, int count, QUndoCommand* parent);
 
 private:
 	AbstractColumnPrivate* d;

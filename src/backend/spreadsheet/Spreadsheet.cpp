@@ -17,6 +17,7 @@
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -168,32 +169,94 @@ int Spreadsheet::rowCount() const {
 	return result;
 }
 
-void Spreadsheet::removeRows(int first, int count) {
+class SpreadsheetSetRowsCountCmd : public QUndoCommand {
+public:
+	SpreadsheetSetRowsCountCmd(Spreadsheet* spreadsheet, bool insert, int first, int count, QUndoCommand* parent)
+		: QUndoCommand(parent)
+		, m_spreadsheet(spreadsheet)
+		, m_insert(insert)
+		, m_first(first)
+		, m_last(first + count - 1) {
+		if (insert)
+			setText(i18np("%1: insert 1 row", "%1: insert %2 rows", spreadsheet->name(), count));
+		else
+			setText(i18np("%1: remove 1 row", "%1: remove %2 rows", spreadsheet->name(), count));
+	}
+
+	virtual void redo() override {
+		WAIT_CURSOR;
+		if (m_insert)
+			Q_EMIT m_spreadsheet->rowsAboutToBeInserted(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->rowsAboutToBeRemoved(m_first, m_last);
+
+		QUndoCommand::redo();
+
+		if (m_insert)
+			Q_EMIT m_spreadsheet->rowsInserted(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
+		RESET_CURSOR;
+		m_spreadsheet->emitRowCountChanged();
+	}
+
+	virtual void undo() override {
+		WAIT_CURSOR;
+		if (m_insert)
+			Q_EMIT m_spreadsheet->rowsAboutToBeRemoved(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->rowsAboutToBeInserted(m_first, m_last);
+		QUndoCommand::undo();
+
+		if (m_insert)
+			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
+		else
+			Q_EMIT m_spreadsheet->rowsInserted(m_first, m_last);
+		RESET_CURSOR;
+		m_spreadsheet->emitRowCountChanged();
+	}
+
+private:
+	Spreadsheet* m_spreadsheet;
+	bool m_insert;
+	int m_first;
+	int m_last;
+};
+
+void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;
-	WAIT_CURSOR;
-	Q_EMIT rowsAboutToBeRemoved(first, count);
-	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
-	const auto& columns = children<Column>();
-	for (auto* col : columns)
-		col->removeRows(first, count);
-	endMacro();
-	Q_EMIT rowsRemoved(columns, first + 1);
-	RESET_CURSOR;
+
+	auto* command = new SpreadsheetSetRowsCountCmd(this, false, first, count, parent);
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
+
+	for (auto* col : children<Column>())
+		col->removeRows(first, count, parent);
+
+	if (execute)
+		exec(command);
 }
 
-void Spreadsheet::insertRows(int before, int count) {
+void Spreadsheet::insertRows(int before, int count, QUndoCommand* parent) {
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
-	WAIT_CURSOR;
-	Q_EMIT rowsAboutToBeInserted(before, count);
-	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
-	const auto& columns = children<Column>();
-	for (auto* col : columns)
-		col->insertRows(before, count);
-	endMacro();
-	Q_EMIT rowsInserted(columns, before + count);
-	RESET_CURSOR;
+
+	auto* command = new SpreadsheetSetRowsCountCmd(this, true, before, count, parent);
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
+
+	for (auto* col : children<Column>())
+		col->insertRows(before, count, parent);
+
+	if (execute)
+		exec(command);
 }
 
 void Spreadsheet::appendRows(int count) {
@@ -219,12 +282,12 @@ void Spreadsheet::prependColumns(int count) {
 /*!
   Sets the number of rows of the spreadsheet to \c new_size
 */
-void Spreadsheet::setRowCount(int new_size) {
+void Spreadsheet::setRowCount(int new_size, QUndoCommand* parent) {
 	int current_size = rowCount();
 	if (new_size > current_size)
-		insertRows(current_size, new_size - current_size);
+		insertRows(current_size, new_size - current_size, parent);
 	if (new_size < current_size && new_size >= 0)
-		removeRows(new_size, current_size - new_size);
+		removeRows(new_size, current_size - new_size, parent);
 }
 
 /*!
@@ -263,11 +326,15 @@ int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const {
 class SpreadsheetSetColumnsCountCmd : public QUndoCommand {
 public:
 	SpreadsheetSetColumnsCountCmd(Spreadsheet* spreadsheet, bool insert, int first, int count, QUndoCommand* parent)
-		: QUndoCommand(i18np("%1: remove 1 column", "%1: remove %2 columns", spreadsheet->name(), count), parent)
+		: QUndoCommand(parent)
 		, m_spreadsheet(spreadsheet)
 		, m_insert(insert)
 		, m_first(first)
 		, m_last(first + count - 1) {
+		if (insert)
+			setText(i18np("%1: insert 1 column", "%1: insert %2 columns", spreadsheet->name(), count));
+		else
+			setText(i18np("%1: remove 1 column", "%1: remove %2 columns", spreadsheet->name(), count));
 	}
 
 	virtual void redo() override {
@@ -321,8 +388,8 @@ void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
 		parent = command;
 	}
 
-	for (int i = 0; i < count; i++)
-		child<Column>(first)->remove(parent);
+	for (int i = (first + count - 1); i >= first; i--)
+		child<Column>(i)->remove(parent);
 
 	if (execute)
 		exec(command);
@@ -358,7 +425,7 @@ void Spreadsheet::setColumnCount(int new_size, QUndoCommand* parent) {
 		return;
 
 	if (new_size < old_size)
-		removeColumns(0, new_size, parent);
+		removeColumns(new_size, old_size - new_size, parent);
 	else
 		insertColumns(old_size, new_size - old_size, parent);
 }
@@ -373,6 +440,25 @@ void Spreadsheet::clear() {
 		col->clear();
 	endMacro();
 	RESET_CURSOR;
+}
+
+void Spreadsheet::clear(const QVector<Column*>& columns) {
+	auto* parent = new LongExecutionCmd(i18n("%1: clear selected columns", name()));
+
+	// 	if (formulaModeActive()) {
+	// 		for (auto* col : selectedColumns()) {
+	// 			col->setSuppressDataChangedSignal(true);
+	// 			col->clearFormulas();
+	// 			col->setSuppressDataChangedSignal(false);
+	// 			col->setChanged();
+	// 		}
+	// 	} else {
+	for (auto* col : columns) {
+		col->setSuppressDataChangedSignal(true);
+		col->clear(parent);
+		col->setSuppressDataChangedSignal(false);
+		col->setChanged();
+	}
 }
 
 /*!
