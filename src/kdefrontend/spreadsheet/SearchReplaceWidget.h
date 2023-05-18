@@ -69,8 +69,6 @@ private:
 	void showExtendedContextMenu(bool forPattern, const QPoint&);
 	QVector<QString> capturePatterns(const QString& pattern) const;
 
-	void hideEvent(QHideEvent*) override;
-
 private Q_SLOTS:
 	void dataTypeChanged(int index);
 	void operatorChanged(int) const;
@@ -84,8 +82,6 @@ private Q_SLOTS:
 	void replaceNext();
 	void replaceAll();
 	void cancel();
-	void modeChanged();
-	void matchCaseToggled();
 
 	void findContextMenuRequest(const QPoint&);
 	void replaceContextMenuRequest(const QPoint&);

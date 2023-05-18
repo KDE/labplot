@@ -3413,6 +3413,8 @@ void SpreadsheetView::showSearchReplace(bool replace) {
 		static_cast<QVBoxLayout*>(this->layout())->addWidget(m_searchReplaceWidget);
 	}
 
+	m_searchReplaceWidget->setReplaceEnabled(replace);
+
 	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
 	if (!indexes.isEmpty()) {
 		const auto& firstIndex = indexes.constFirst();
@@ -3421,7 +3423,6 @@ void SpreadsheetView::showSearchReplace(bool replace) {
 		m_searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
 	}
 
-	m_searchReplaceWidget->setReplaceEnabled(replace);
 	m_searchReplaceWidget->show();
 
 	// interrupt the event loop to show/render the widget first and set the focus

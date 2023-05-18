@@ -14,13 +14,13 @@
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/GuiTools.h"
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <QDebug>
 #include <QLineEdit>
 #include <QMenu>
 #include <QRadioButton>
 #include <QStack>
-
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 enum SearchMode {
 	// NOTE: Concrete values are important here to work with the combobox index!
@@ -208,8 +208,16 @@ void SearchReplaceWidget::setFocus() {
 void SearchReplaceWidget::initSearchWidget() {
 	m_searchWidget = new QWidget(this);
 	uiSearch.setupUi(m_searchWidget);
+	uiSearch.cbFind->lineEdit()->setClearButtonEnabled(true);
 	static_cast<QVBoxLayout*>(layout())->insertWidget(0, m_searchWidget);
 
+	// restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
+	uiSearch.cbFind->addItems(conf.readEntry("SimpleValueHistory", QStringList()));
+	uiSearch.cbFind->setCurrentText(QString()); // will be set to the initial search pattern later
+	uiSearch.tbMatchCase->setChecked(conf.readEntry("SimpleMatchCase", false));
+
+	// connections
 	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
 		findNextSimple(true);
 		addCurrentTextToHistory(uiSearch.cbFind);
@@ -227,21 +235,16 @@ void SearchReplaceWidget::initSearchWidget() {
 		findPreviousSimple(true);
 		addCurrentTextToHistory(uiSearch.cbFind);
 	});
-	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
 
+	connect(uiSearch.tbMatchCase, &QToolButton::toggled, this, [=]() {
+		findNextSimple(false);
+	});
 	connect(uiSearch.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
 	connect(uiSearch.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
-
-	// restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
-	uiSearch.cbFind->addItems(conf.readEntry("SimpleValueHistory", QStringList()));
-	uiSearch.tbMatchCase->setChecked(conf.readEntry("SimpleMatchCase", false));
-
-	// set the inital pattern
-	uiSearch.cbFind->setCurrentText(m_initialPattern);
 }
 
 void SearchReplaceWidget::initSearchReplaceWidget() {
+	// init UI
 	m_searchReplaceWidget = new QWidget(this);
 	uiSearchReplace.setupUi(m_searchReplaceWidget);
 	static_cast<QVBoxLayout*>(layout())->insertWidget(1, m_searchReplaceWidget);
@@ -273,8 +276,38 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Less than"), int(Operator::LessThan));
 	uiSearchReplace.cbOperatorDateTime->addItem(i18n("Less than or Equal to"), int(Operator::LessThanEqualTo));
 
+	uiSearchReplace.cbValueText->lineEdit()->setClearButtonEnabled(true);
+	uiSearchReplace.cbValue1->lineEdit()->setClearButtonEnabled(true);
+	uiSearchReplace.cbValue2->lineEdit()->setClearButtonEnabled(true);
+
 	uiSearchReplace.cbValue1->lineEdit()->setValidator(new QDoubleValidator(uiSearchReplace.cbValue1->lineEdit()));
 	uiSearchReplace.cbValue2->lineEdit()->setValidator(new QDoubleValidator(uiSearchReplace.cbValue2->lineEdit()));
+
+	// restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
+	uiSearchReplace.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
+	uiSearchReplace.cbOrder->setCurrentIndex(conf.readEntry("Order", 0));
+	uiSearchReplace.tbMatchCase->setChecked(conf.readEntry("MatchCase", false));
+	uiSearchReplace.tbSelectionOnly->setChecked(conf.readEntry("SelectionOnly", false));
+	uiSearchReplace.cbOperator->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Operator", 0)));
+	uiSearchReplace.cbOperatorText->setCurrentIndex(uiSearchReplace.cbOperatorText->findData(conf.readEntry("OperatorText", 0)));
+	/*
+		qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
+		uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(conf.readEntry("Value1DateTime", now));
+		uiSearchReplace.dteValue2->setMSecsSinceEpochUTC(conf.readEntry("Value2DateTime", now));*/
+	uiSearchReplace.cbOperatorDateTime->setCurrentIndex(uiSearchReplace.cbOperatorDateTime->findData(conf.readEntry("OperatorDateTime", 0)));
+
+	dataTypeChanged(uiSearchReplace.cbDataType->currentIndex());
+	operatorChanged(uiSearchReplace.cbOperator->currentIndex());
+	operatorDateTimeChanged(uiSearchReplace.cbOperatorDateTime->currentIndex());
+
+	// history
+	uiSearchReplace.cbValue1->addItems(conf.readEntry("Value1History", QStringList()));
+	uiSearchReplace.cbValue1->setCurrentText(QString()); // will be set to the initial search pattern later
+	uiSearchReplace.cbValue2->addItems(conf.readEntry("Value2History", QStringList()));
+	uiSearchReplace.cbValue2->setCurrentText(QString());
+	uiSearchReplace.cbValueText->addItems(conf.readEntry("ValueTextHistory", QStringList()));
+	uiSearchReplace.cbValueText->setCurrentText(QString());
 
 	// connections
 	connect(uiSearchReplace.cbDataType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::dataTypeChanged);
@@ -344,7 +377,9 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 
 	connect(uiSearchReplace.bReplaceNext, &QPushButton::clicked, this, &SearchReplaceWidget::replaceNext);
 	connect(uiSearchReplace.bReplaceAll, &QPushButton::clicked, this, &SearchReplaceWidget::replaceAll);
-	connect(uiSearchReplace.tbMatchCase, &QToolButton::toggled, this, &SearchReplaceWidget::matchCaseToggled);
+	connect(uiSearchReplace.tbMatchCase, &QToolButton::toggled, this, [=]() {
+		findNext(false);
+	});
 
 	connect(uiSearchReplace.tbSwitchFindReplace, &QToolButton::clicked, this, &SearchReplaceWidget::switchFindReplace);
 	connect(uiSearchReplace.bCancel, &QPushButton::clicked, this, &SearchReplaceWidget::cancel);
@@ -361,55 +396,6 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 			&QComboBox::customContextMenuRequested,
 			this,
 			QOverload<const QPoint&>::of(&SearchReplaceWidget::replaceContextMenuRequest));
-
-	// restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
-	uiSearchReplace.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
-	uiSearchReplace.cbOrder->setCurrentIndex(conf.readEntry("Order", 0));
-	uiSearchReplace.tbMatchCase->setChecked(conf.readEntry("MatchCase", false));
-	uiSearchReplace.tbSelectionOnly->setChecked(conf.readEntry("SelectionOnly", false));
-	uiSearchReplace.cbOperator->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Operator", 0)));
-	uiSearchReplace.cbOperatorText->setCurrentIndex(uiSearchReplace.cbOperatorText->findData(conf.readEntry("OperatorText", 0)));
-	/*
-		qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
-		uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(conf.readEntry("Value1DateTime", now));
-		uiSearchReplace.dteValue2->setMSecsSinceEpochUTC(conf.readEntry("Value2DateTime", now));*/
-	uiSearchReplace.cbOperatorDateTime->setCurrentIndex(uiSearchReplace.cbOperatorDateTime->findData(conf.readEntry("OperatorDateTime", 0)));
-
-	dataTypeChanged(uiSearchReplace.cbDataType->currentIndex());
-	operatorChanged(uiSearchReplace.cbOperator->currentIndex());
-	operatorDateTimeChanged(uiSearchReplace.cbOperatorDateTime->currentIndex());
-
-	// history
-	uiSearchReplace.cbValue1->addItems(conf.readEntry("Value1History", QStringList()));
-	uiSearchReplace.cbValue2->addItems(conf.readEntry("Value2History", QStringList()));
-	uiSearchReplace.cbValueText->addItems(conf.readEntry("ValueTextHistory", QStringList()));
-
-	// set the inital values
-	switch (m_initialColumnMode) {
-	case AbstractColumn::ColumnMode::Text:
-		uiSearchReplace.cbDataType->setCurrentIndex(0);
-		uiSearchReplace.cbValueText->setCurrentText(m_initialPattern);
-		break;
-	case AbstractColumn::ColumnMode::Double:
-	case AbstractColumn::ColumnMode::Integer:
-	case AbstractColumn::ColumnMode::BigInt:
-		uiSearchReplace.cbDataType->setCurrentIndex(1);
-		uiSearchReplace.cbValue1->setCurrentText(m_initialPattern);
-		break;
-	case AbstractColumn::ColumnMode::DateTime:
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::Month:
-		uiSearchReplace.cbDataType->setCurrentIndex(2);
-		// uiSearchReplace.cbValueText->setCurrentText(m_initialPattern);
-		break;
-	}
-}
-
-void SearchReplaceWidget::hideEvent(QHideEvent* event) {
-	// clear search&replace patterns, will be set when the widget is going to be shown again
-	// TODO: really needed?
-	QWidget::hideEvent(event);
 }
 
 void SearchReplaceWidget::addCurrentTextToHistory(QComboBox* comboBox) const {
@@ -512,14 +498,6 @@ void SearchReplaceWidget::operatorDateTimeChanged(int /* index */) const {
 	uiSearchReplace.dteValue2->setVisible(visible);
 }
 
-void SearchReplaceWidget::modeChanged() {
-	findNext(false);
-}
-
-void SearchReplaceWidget::matchCaseToggled() {
-	findNext(false);
-}
-
 // settings
 void SearchReplaceWidget::switchFindReplace() {
 	m_replaceEnabled = !m_replaceEnabled;
@@ -538,17 +516,24 @@ void SearchReplaceWidget::switchFindReplace() {
 		if (m_searchWidget) {
 			// switching from simple to advanced search, show the current search pattern
 			const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
+			const auto& pattern = uiSearch.cbFind->currentText();
 			switch (type) {
 			case DataType::Text: {
-				uiSearchReplace.cbValueText->setCurrentText(uiSearch.cbFind->currentText());
+				uiSearchReplace.cbValueText->setCurrentText(pattern);
 				break;
 			}
 			case DataType::Numeric: {
-				uiSearchReplace.cbValue1->setCurrentText(uiSearch.cbFind->currentText());
+				const auto numberLocale = QLocale();
+				bool ok;
+				numberLocale.toDouble(pattern, &ok);
+				if (ok)
+					uiSearchReplace.cbValue1->setCurrentText(pattern);
+				else
+					uiSearchReplace.cbValue1->setCurrentText(QString());
 				break;
 			}
 			case DataType::DateTime: {
-				// uiSearchReplace.dteValue1->setCurrentText(uiSearch.cbFind->currentText());
+				// uiSearchReplace.dteValue1->setCurrentText(pattern);
 				break;
 			}
 			}
@@ -607,12 +592,14 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
+	qDebug() << "########################";
+	qDebug() << "cur col/row vor" << curCol << "  " << curRow;
 	if (proceed) {
-		if (curRow < rowCount - 1)
+		if (curRow != rowCount - 1)
 			++curRow; // not the last row yet, navigate to the next row
 		else {
 			// last row
-			if (curCol < colCount - 1) {
+			if (curCol != colCount - 1) {
 				// not the last column yet, navigate to the first row in the next column
 				++curCol;
 				curRow = 0;
@@ -629,19 +616,24 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	bool startCol = true;
 	bool startRow = true;
 
+	qDebug() << "cur col/row nach" << curCol << "  " << curRow;
 	// search in the column-major order ignoring the data type
 	// and iterpreting everything as text
 	for (int col = 0; col < colCount; ++col) {
+		qDebug() << "col " << col;
 		if (startCol && col < curCol)
 			continue;
 
 		auto* column = columns.at(col)->asStringColumn();
 
 		for (int row = 0; row < rowCount; ++row) {
+			qDebug() << "row " << row;
 			if (startRow && row < curRow)
 				continue;
 
+			qDebug() << "checking";
 			if (column->textAt(row).contains(pattern, cs)) {
+				qDebug() << "match";
 				m_patternFound = true;
 				m_view->goToCell(row, col);
 				GuiTools::highlight(uiSearch.cbFind->lineEdit(), false);
@@ -745,7 +737,7 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 		break;
 	case DataType::DateTime:
 		pattern1 = uiSearchReplace.dteValue1->text();
-		pattern1 = uiSearchReplace.dteValue2->text();
+		pattern2 = uiSearchReplace.dteValue2->text();
 		break;
 	}
 
@@ -767,12 +759,14 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
+	qDebug() << "##############";
+	qDebug() << "start col/row: " << curCol << "  " << curRow;
 	if (columnMajor && proceed) {
-		if (curRow < rowCount - 1)
+		if (curRow != rowCount - 1)
 			++curRow; // not the last row yet, navigate to the next row
 		else {
 			// last row
-			if (curCol < colCount - 1) {
+			if (curCol != colCount - 1) {
 				// not the last column yet, navigate to the first row in the next column
 				++curCol;
 				curRow = 0;
@@ -785,11 +779,11 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 	}
 
 	if (!columnMajor && proceed) {
-		if (curCol < colCount - 1)
+		if (curCol != colCount - 1)
 			++curCol; // not the last column yet, navigate to the next column
 		else {
 			// last column
-			if (curRow < rowCount - 1) {
+			if (curRow != rowCount - 1) {
 				// not the last row yet, navigate to the next row in the first column
 				++curRow;
 				curCol = 0;
@@ -808,15 +802,20 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 	bool match = false;
 
 	if (columnMajor) {
+		qDebug() << "for loop start";
 		for (int col = 0; col < colCount; ++col) {
+			qDebug() << "col " << col;
 			if (startCol && col < curCol)
 				continue;
 
 			auto* column = columns.at(col);
-			if (!checkColumnType(column, type))
+			if (!checkColumnType(column, type)) {
+				startRow = false;
 				continue;
+			}
 
 			for (int row = 0; row < rowCount; ++row) {
+				qDebug() << "row " << row;
 				if (startRow && row < curRow)
 					continue;
 
@@ -835,17 +834,23 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 		}
 	} else { // row-major
 		for (int row = 0; row < rowCount; ++row) {
-			if (startRow && row > curRow)
+			qDebug() << "row " << row;
+			if (startRow && row < curRow)
 				continue;
 
 			for (int col = 0; col < colCount; ++col) {
+				qDebug() << "col " << col;
 				if (startCol && col < curCol)
 					continue;
 
 				auto* column = columns.at(col);
-				if (!checkColumnType(column, type))
+				qDebug() << "here1";
+				if (!checkColumnType(column, type)) {
+					startCol = false;
 					continue;
+				}
 
+				qDebug() << "here2";
 				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
 				if (match) {
 					m_patternFound = true;
@@ -902,6 +907,8 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
+	qDebug() << "##############";
+	qDebug() << "start col/row vor: " << curCol << "  " << curRow;
 	if (columnMajor && proceed) {
 		if (curRow > 0)
 			--curRow; // not the first row yet, navigate to the previous cell
@@ -936,6 +943,8 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 		}
 	}
 
+	qDebug() << "start col/row nach: " << curCol << "  " << curRow;
+
 	// all settings are determined -> search the next cell matching the specified pattern(s)
 	const auto& columns = m_spreadsheet->children<Column>();
 	bool startCol = true;
@@ -943,15 +952,19 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 	bool match = false;
 
 	if (columnMajor) {
-		for (int col = colCount; col >= 0; --col) {
+		for (int col = colCount - 1; col >= 0; --col) {
+			qDebug() << "col " << col;
 			if (startCol && col > curCol)
 				continue;
 
 			auto* column = columns.at(col);
-			if (!checkColumnType(column, type))
+			if (!checkColumnType(column, type)) {
+				startCol = false;
 				continue;
+			}
 
-			for (int row = rowCount; row >= 0; --row) {
+			for (int row = rowCount - 1; row >= 0; --row) {
+				qDebug() << "row " << row;
 				if (startRow && row > curRow)
 					continue;
 
@@ -969,17 +982,21 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 			startCol = false;
 		}
 	} else { // row-major
-		for (int row = rowCount; row >= 0; --row) {
+		for (int row = rowCount - 1; row >= 0; --row) {
+			qDebug() << "row " << row;
 			if (startRow && row > curRow)
 				continue;
 
-			for (int col = curCol; col >= 0; --col) {
+			for (int col = colCount - 1; col >= 0; --col) {
+				qDebug() << "col " << col;
 				if (startCol && col > curCol)
 					continue;
 
 				auto* column = columns.at(col);
-				if (!checkColumnType(column, type))
+				if (!checkColumnType(column, type)) {
+					startCol = false;
 					continue;
+				}
 
 				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
 				if (match) {
@@ -1084,18 +1101,29 @@ bool SearchReplaceWidget::checkCellText(const QString& cellText, const QString& 
 }
 
 bool SearchReplaceWidget::checkCellNumeric(double cellValue, const QString& pattern1, const QString& pattern2, Operator op) {
+	if (pattern1.isEmpty())
+		return false;
+
+	if ((op == Operator::BetweenIncl || op == Operator::BetweenExcl) && pattern2.isEmpty())
+		return false;
+
 	bool match = false;
 	bool ok;
 	const auto numberLocale = QLocale();
 
 	const double patternValue1 = numberLocale.toDouble(pattern1, &ok);
+	// qDebug()<<"compare " << cellValue << " with " << pattern1 << "  " << patternValue1 << "  " << ok;
 	if (!ok)
 		return false;
 
-	const double patternValue2 = numberLocale.toDouble(pattern2, &ok);
-	if (!ok)
-		return false;
+	double patternValue2 = 0.;
+	if (op == Operator::BetweenIncl || op == Operator::BetweenExcl) {
+		patternValue2 = numberLocale.toDouble(pattern2, &ok);
+		if (!ok)
+			return false;
+	}
 
+	qDebug() << "pattern values " << patternValue1 << " " << patternValue2;
 	switch (op) {
 	case Operator::EqualTo: {
 		match = (cellValue == patternValue1);
@@ -1131,10 +1159,17 @@ bool SearchReplaceWidget::checkCellNumeric(double cellValue, const QString& patt
 	}
 	}
 
+	qDebug() << "match " << match;
 	return match;
 }
 
 bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime, const QString& pattern1, const QString& pattern2, Operator op) {
+	if (pattern1.isEmpty())
+		return false;
+
+	if ((op == Operator::BetweenIncl || op == Operator::BetweenExcl) && pattern2.isEmpty())
+		return false;
+
 	bool match = false;
 	bool ok;
 	const auto numberLocale = QLocale();
@@ -1143,9 +1178,12 @@ bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime, 
 	if (!ok)
 		return false;
 
-	const double patternValue2 = numberLocale.toDouble(pattern2, &ok);
-	if (!ok)
-		return false;
+	double patternValue2 = 0.;
+	if (op == Operator::BetweenIncl || op == Operator::BetweenExcl) {
+		patternValue2 = numberLocale.toDouble(pattern2, &ok);
+		if (!ok)
+			return false;
+	}
 
 	double cellValue = cellValueDateTime.toMSecsSinceEpoch();
 
