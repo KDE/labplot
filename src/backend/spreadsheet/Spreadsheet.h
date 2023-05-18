@@ -51,8 +51,8 @@ public:
 
 	void removeRows(int first, int count);
 	void insertRows(int before, int count);
-	void removeColumns(int first, int count);
-	void insertColumns(int before, int count);
+	void removeColumns(int first, int count, QUndoCommand* parent = nullptr);
+	void insertColumns(int before, int count, QUndoCommand* parent = nullptr);
 
 	int colX(int col);
 	int colY(int col);
@@ -91,7 +91,7 @@ public Q_SLOTS:
 	void appendColumn();
 	void prependColumns(int);
 
-	void setColumnCount(int);
+	void setColumnCount(int, QUndoCommand* parent = nullptr);
 	void setRowCount(int);
 
 	void clear();
@@ -121,6 +121,18 @@ Q_SIGNALS:
 	void columnCountChanged(int);
 	void aboutToResize();
 	void resizeFinished();
+
+	void aspectsAboutToBeInserted(int first, int last);
+	void aspectsInserted(int first, int last);
+	void aspectsAboutToBeRemoved(int first, int last);
+	void aspectsRemoved();
+
+	void rowsAboutToBeInserted(int before, int count);
+	void rowsInserted(const QVector<Column*>&, int newRowCount);
+	void rowsAboutToBeRemoved(int first, int count);
+	void rowsRemoved(const QVector<Column*>&, int newRowCount);
+
+	friend class SpreadsheetSetColumnCountCommand;
 };
 
 #endif

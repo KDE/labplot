@@ -209,7 +209,7 @@ QUuid AbstractAspect::uuid() const {
  * \param skipAutoUnique - if set to \true, don't check for uniqueness, the caller has to guarantee the uniqueness. default is \false.
  * \return returns, if the new name is valid or not
  */
-bool AbstractAspect::setName(const QString& value, NameHandling handling) {
+bool AbstractAspect::setName(const QString& value, NameHandling handling, QUndoCommand* parent) {
 	if (value.isEmpty())
 		return setName(QLatin1String("1"), handling);
 
@@ -400,7 +400,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	// rename and delete actions:
 	menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, &AbstractAspect::renameRequested);
 	if (m_type != AspectType::Project)
-		menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, &AbstractAspect::remove);
+		menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, QOverload<>::of(&AbstractAspect::remove));
 
 	// move up and down actions:
 	// don't shown them for worksheet elements since they implement their own "Drawing order" menu
@@ -504,18 +504,24 @@ QString AbstractAspect::path() const {
 /**
  * \brief Add the given Aspect to my list of children.
  */
-void AbstractAspect::addChild(AbstractAspect* child) {
+void AbstractAspect::addChild(AbstractAspect* child, QUndoCommand* parent) {
 	Q_CHECK_PTR(child);
 
 	const QString new_name = uniqueNameFor(child->name());
-	beginMacro(i18n("%1: add %2", name(), new_name));
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent = new QUndoCommand(i18n("%1: add %2", name(), new_name));
+	}
 	if (new_name != child->name()) {
 		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
-		child->setName(new_name);
+		child->setName(new_name, NameHandling::AutoUnique, parent);
 	}
 
-	exec(new AspectChildAddCmd(d, child, d->m_children.count()));
-	endMacro();
+	new AspectChildAddCmd(d, child, d->m_children.count(), parent);
+
+	if (execute)
+		exec(parent);
 }
 
 /**
@@ -533,21 +539,31 @@ void AbstractAspect::addChildFast(AbstractAspect* child) {
 /**
  * \brief Insert the given Aspect at a specific position in my list of children.
  */
-void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before) {
+void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent) {
 	Q_CHECK_PTR(child);
 
 	QString new_name = uniqueNameFor(child->name());
-	beginMacro(before ? i18n("%1: insert %2 before %3", name(), new_name, before->name()) : i18n("%1: insert %2 before end", name(), new_name));
-	if (new_name != child->name()) {
-		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
-		child->setName(new_name);
+
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent =
+			new QUndoCommand(before ? i18n("%1: insert %2 before %3", name(), new_name, before->name()) : i18n("%1: insert %2 before end", name(), new_name));
 	}
+
 	int index = d->indexOfChild(before);
 	if (index == -1)
 		index = d->m_children.count();
 
-	exec(new AspectChildAddCmd(d, child, index));
-	endMacro();
+	if (new_name != child->name()) {
+		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
+		child->setName(new_name, NameHandling::AutoUnique, parent);
+	}
+
+	new AspectChildAddCmd(d, child, index, parent);
+
+	if (execute)
+		exec(parent);
 }
 
 /**
@@ -574,12 +590,19 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
  * i.e., the aspect is deleted by the undo command.
  * \sa reparent()
  */
-void AbstractAspect::removeChild(AbstractAspect* child) {
+void AbstractAspect::removeChild(AbstractAspect* child, QUndoCommand* parent) {
 	// QDEBUG(Q_FUNC_INFO << ", CHILD =" << child << ", PARENT =" << child->parentAspect())
 
-	beginMacro(i18n("%1: remove %2", name(), child->name()));
-	exec(new AspectChildRemoveCmd(d, child));
-	endMacro();
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent = new QUndoCommand(i18n("%1: remove %2", name(), child->name()));
+	}
+
+	new AspectChildRemoveCmd(d, child, parent);
+
+	if (execute)
+		exec(parent);
 }
 
 /**
@@ -656,9 +679,13 @@ const QVector<AbstractAspect*>& AbstractAspect::children() const {
 /**
  * \brief Remove me from my parent's list of children.
  */
-void AbstractAspect::remove() {
+void AbstractAspect::remove(QUndoCommand* parent) {
 	if (parentAspect())
-		parentAspect()->removeChild(this);
+		parentAspect()->removeChild(this, parent);
+}
+
+void AbstractAspect::remove() {
+	remove(nullptr);
 }
 
 void AbstractAspect::moveUp() {
@@ -1138,7 +1165,10 @@ QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& na
 void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::aspectDescriptionAboutToChange, this, &AbstractAspect::aspectDescriptionAboutToChange);
 	connect(child, &AbstractAspect::aspectDescriptionChanged, this, &AbstractAspect::aspectDescriptionChanged);
-	connect(child, &AbstractAspect::aspectAboutToBeAdded, this, &AbstractAspect::aspectAboutToBeAdded);
+	connect(child,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeAdded),
+			this,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeAdded));
 	connect(child, &AbstractAspect::aspectAdded, this, &AbstractAspect::aspectAdded);
 	connect(child, &AbstractAspect::aspectAboutToBeRemoved, this, &AbstractAspect::aspectAboutToBeRemoved);
 	connect(child, &AbstractAspect::aspectRemoved, this, &AbstractAspect::aspectRemoved);

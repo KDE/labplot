@@ -219,9 +219,33 @@ Q_SIGNALS:
 	void dataAboutToChange(const AbstractColumn* source);
 	void dataChanged(const AbstractColumn* source);
 	void formatChanged(const AbstractColumn* source);
+	/*!
+	 * \brief rowsAboutToBeInserted
+	 * \param source
+	 * \param before Old number of rows
+	 * \param count Number of rows added
+	 */
 	void rowsAboutToBeInserted(const AbstractColumn* source, int before, int count);
+	/*!
+	 * \brief rowsInserted
+	 * \param source
+	 * \param before Old number of rows
+	 * \param count Number of rows added
+	 */
 	void rowsInserted(const AbstractColumn* source, int before, int count);
+	/*!
+	 * \brief rowsAboutToBeRemoved
+	 * \param source
+	 * \param first Old number of rows
+	 * \param count Number of rows removed
+	 */
 	void rowsAboutToBeRemoved(const AbstractColumn* source, int first, int count);
+	/*!
+	 * \brief rowsRemoved
+	 * \param source
+	 * \param first Old number of rows
+	 * \param count Number of rows removed
+	 */
 	void rowsRemoved(const AbstractColumn* source, int first, int count);
 	void maskingAboutToChange(const AbstractColumn* source);
 	void maskingChanged(const AbstractColumn* source);

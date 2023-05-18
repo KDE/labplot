@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/spreadsheet/SpreadsheetModel.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
 
@@ -1495,6 +1496,70 @@ void SpreadsheetTest::testFlatten03() {
 	QCOMPARE(col2->integerAt(3), 10);
 	QCOMPARE(col2->integerAt(4), 20);
 	QCOMPARE(col2->integerAt(5), 30);
+}
+
+void SpreadsheetTest::testInsertRows() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	new SpreadsheetModel(sheet);
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->setRowCount(101); // No crash shall happen
+	QCOMPARE(sheet->rowCount(), 101);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->rowCount(), 101);
+}
+
+void SpreadsheetTest::testRemoveRows() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	new SpreadsheetModel(sheet);
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->setRowCount(10); // No crash shall happen
+	QCOMPARE(sheet->rowCount(), 10);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->rowCount(), 10);
+}
+
+void SpreadsheetTest::testInsertColumns() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	new SpreadsheetModel(sheet);
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->setColumnCount(5); // No crash shall happen
+	QCOMPARE(sheet->columnCount(), 5);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->columnCount(), 5);
+}
+
+void SpreadsheetTest::testRemoveColumns() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	new SpreadsheetModel(sheet);
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->setColumnCount(1); // No crash shall happen
+	QCOMPARE(sheet->columnCount(), 1);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->columnCount(), 1);
 }
 
 QTEST_MAIN(SpreadsheetTest)

@@ -63,6 +63,12 @@ private Q_SLOTS:
 	void testFlatten01();
 	void testFlatten02();
 	void testFlatten03();
+
+	void testInsertRows();
+	void testRemoveRows();
+	void testInsertColumns();
+	void testRemoveColumns();
+
 };
 
 #endif

@@ -43,16 +43,32 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 	, m_columnCount(spreadsheet->columnCount()) {
 	updateVerticalHeader();
 	updateHorizontalHeader();
+	connect(m_spreadsheet, &Spreadsheet::aspectDescriptionChanged, this, &SpreadsheetModel::handleDescriptionChange);
 
+	// Used when single columns get deleted or added
+	connect(m_spreadsheet,
+			QOverload<const AbstractAspect*, int, const AbstractAspect*>::of(&Spreadsheet::aspectAboutToBeAdded),
+			this,
+			&SpreadsheetModel::handleAspectAboutToBeAdded);
 	connect(m_spreadsheet, &Spreadsheet::aspectAdded, this, &SpreadsheetModel::handleAspectAdded);
 	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeRemoved, this, &SpreadsheetModel::handleAspectAboutToBeRemoved);
 	connect(m_spreadsheet, &Spreadsheet::aspectRemoved, this, &SpreadsheetModel::handleAspectRemoved);
-	connect(m_spreadsheet, &Spreadsheet::aspectDescriptionChanged, this, &SpreadsheetModel::handleDescriptionChange);
 
-	for (int i = 0; i < spreadsheet->columnCount(); ++i) {
-		beginInsertColumns(QModelIndex(), i, i);
-		handleAspectAdded(spreadsheet->column(i));
-	}
+	// Used when changing the column count
+	connect(m_spreadsheet, &Spreadsheet::aspectsAboutToBeInserted, this, &SpreadsheetModel::handleAspectsAboutToBeInserted);
+	connect(m_spreadsheet, &Spreadsheet::aspectsAboutToBeRemoved, this, &SpreadsheetModel::handleAspectsAboutToBeRemoved);
+	connect(m_spreadsheet, &Spreadsheet::aspectsInserted, this, &SpreadsheetModel::handleAspectsInserted);
+	connect(m_spreadsheet, &Spreadsheet::aspectsRemoved, this, &SpreadsheetModel::handleAspectsRemoved);
+
+	connect(m_spreadsheet, &Spreadsheet::rowsAboutToBeInserted, this, &SpreadsheetModel::handleRowsAboutToBeInserted);
+	connect(m_spreadsheet, &Spreadsheet::rowsAboutToBeRemoved, this, &SpreadsheetModel::handleRowsAboutToBeRemoved);
+	connect(m_spreadsheet, &Spreadsheet::rowsInserted, this, &SpreadsheetModel::handleRowsInserted);
+	connect(m_spreadsheet, &Spreadsheet::rowsRemoved, this, &SpreadsheetModel::handleRowsRemoved);
+
+	m_suppressSignals = true;
+	handleAspectsAboutToBeInserted(0, spreadsheet->columnCount() - 1);
+	handleAspectsInserted(0, spreadsheet->columnCount() - 1);
+	m_suppressSignals = false;
 
 	m_spreadsheet->setModel(this);
 }
@@ -62,13 +78,13 @@ void SpreadsheetModel::suppressSignals(bool value) {
 
 	// update the headers after all the data was added to the model
 	// and we start listening to signals again
-	if (!m_suppressSignals) {
+	if (m_suppressSignals)
+		beginResetModel();
+	else {
 		m_rowCount = m_spreadsheet->rowCount();
 		m_columnCount = m_spreadsheet->columnCount();
 		m_spreadsheet->emitColumnCountChanged();
-		updateVerticalHeader();
 		updateHorizontalHeader();
-		beginResetModel();
 		endResetModel();
 	}
 }
@@ -96,6 +112,14 @@ QModelIndex SpreadsheetModel::index(const QString& text) const {
 	}
 
 	return createIndex(-1, -1);
+}
+
+void SpreadsheetModel::beginRemoveRows(const QModelIndex& parent, int first, int last) {
+	const int rc = rowCount(parent);
+	Q_ASSERT(first >= 0);
+	Q_ASSERT(last >= first);
+	Q_ASSERT(last < rc);
+	QAbstractItemModel::beginRemoveRows(parent, first, last);
 }
 
 QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
@@ -279,61 +303,99 @@ bool SpreadsheetModel::hasChildren(const QModelIndex& /*parent*/) const {
 	return false;
 }
 
-void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
-	// PERFTRACE(Q_FUNC_INFO);
-
-	const Column* col = dynamic_cast<const Column*>(aspect);
-	if (!col || aspect->parentAspect() != m_spreadsheet)
+void SpreadsheetModel::handleAspectsAboutToBeInserted(int first, int last) {
+	if (m_suppressSignals)
 		return;
-
-	connect(col, &Column::plotDesignationChanged, this, &SpreadsheetModel::handlePlotDesignationChange);
-	connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleDataChange);
-	connect(col, &Column::dataChanged, this, &SpreadsheetModel::handleDataChange);
-	connect(col, &Column::formatChanged, this, &SpreadsheetModel::handleDataChange);
-	connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleModeChange);
-	connect(col, &Column::rowsInserted, this, &SpreadsheetModel::handleRowCountChanged);
-	connect(col, &Column::rowsRemoved, this, &SpreadsheetModel::handleRowCountChanged);
-	connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
-	connect(col, &Column::formulaChanged, this, &SpreadsheetModel::handlePlotDesignationChange); // we can re-use the same slot to update the header here
-	connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
-
-	if (!m_suppressSignals) {
-		beginResetModel();
-		updateVerticalHeader();
-		updateHorizontalHeader();
-		endResetModel();
-
-		int index = m_spreadsheet->indexOfChild<AbstractAspect>(aspect);
-		m_columnCount = m_spreadsheet->columnCount();
-		m_spreadsheet->emitColumnCountChanged();
-		Q_EMIT headerDataChanged(Qt::Horizontal, index, m_columnCount - 1);
-	}
+	m_spreadsheetColumnCountChanging = true;
+	beginInsertColumns(QModelIndex(), first, last);
 }
 
-void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect*, int index, const AbstractAspect*) {
+	if (m_spreadsheetColumnCountChanging)
+		return;
+	if (!m_suppressSignals)
+		beginInsertColumns(QModelIndex(), index, index);
+}
+
+void SpreadsheetModel::handleAspectsInserted(int first, int last) {
+	const auto& children = m_spreadsheet->children<Column>();
+	if (first < 0 || first >= children.count() || last >= children.count() || first > last)
+		return;
+
+	for (int i = first; i <= last; i++) {
+		const auto* col = children.at(i);
+		connect(col, &Column::plotDesignationChanged, this, &SpreadsheetModel::handlePlotDesignationChange);
+		connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleDataChange);
+		connect(col, &Column::dataChanged, this, &SpreadsheetModel::handleDataChange);
+		connect(col, &Column::formatChanged, this, &SpreadsheetModel::handleDataChange);
+		connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleModeChange);
+		connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
+		connect(col, &Column::formulaChanged, this, &SpreadsheetModel::handlePlotDesignationChange); // we can re-use the same slot to update the header here
+		connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
+	}
+
+	handleAspectCountChanged();
+	if (!m_suppressSignals)
+		endInsertColumns();
+	m_spreadsheetColumnCountChanging = false;
+}
+
+void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
+	// PERFTRACE(Q_FUNC_INFO);
+	if (m_spreadsheetColumnCountChanging)
+		return;
+	int index = m_spreadsheet->indexOfChild<Column>(aspect);
+	handleAspectsInserted(index, index);
+}
+
+void SpreadsheetModel::handleAspectsAboutToBeRemoved(int first, int last) {
 	if (m_suppressSignals)
 		return;
 
+	const auto& children = m_spreadsheet->children<Column>();
+	if (first < 0 || first >= children.count() || last >= children.count() || first > last)
+		return;
+
+	m_spreadsheetColumnCountChanging = true;
+
+	beginRemoveColumns(QModelIndex(), first, last);
+	for (int i = first; i <= last; i++)
+		disconnect(children.at(i), nullptr, this, nullptr);
+}
+
+void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+	if (m_suppressSignals || m_spreadsheetColumnCountChanging)
+		return;
+
 	const Column* col = dynamic_cast<const Column*>(aspect);
 	if (!col || aspect->parentAspect() != m_spreadsheet)
 		return;
 
-	beginResetModel();
+	const int index = m_spreadsheet->indexOfChild<AbstractAspect>(aspect);
+	beginRemoveColumns(QModelIndex(), index, index);
 	disconnect(col, nullptr, this, nullptr);
 }
 
+void SpreadsheetModel::handleAspectsRemoved() {
+	handleAspectCountChanged();
+	endRemoveColumns();
+	m_spreadsheetColumnCountChanging = false;
+}
+
 void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* child) {
-	const Column* col = dynamic_cast<const Column*>(child);
-	if (!col || parent != m_spreadsheet)
+	if (m_spreadsheetColumnCountChanging)
 		return;
 
-	updateVerticalHeader();
-	updateHorizontalHeader();
+	handleAspectsRemoved();
+}
 
+void SpreadsheetModel::handleAspectCountChanged() {
+	if (m_suppressSignals)
+		return;
+
+	updateHorizontalHeader();
 	m_columnCount = m_spreadsheet->columnCount();
 	m_spreadsheet->emitColumnCountChanged();
-
-	endResetModel();
 }
 
 void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {
@@ -394,29 +456,46 @@ void SpreadsheetModel::handleDataChange(const AbstractColumn* col) {
 	Q_EMIT dataChanged(index(0, i), index(m_rowCount - 1, i));
 }
 
-void SpreadsheetModel::handleRowCountChanged(const AbstractColumn* col, int /*before*/, int /*count*/) {
+void SpreadsheetModel::handleRowsAboutToBeInserted(int before, int count) {
+	if (m_suppressSignals)
+		return;
+	beginInsertRows(QModelIndex(), before, before + count - 1);
+}
+
+void SpreadsheetModel::handleRowsAboutToBeRemoved(int first, int count) {
+	if (m_suppressSignals)
+		return;
+	beginRemoveRows(QModelIndex(), first, first + count - 1);
+}
+
+void SpreadsheetModel::handleRowsInserted(const QVector<Column*>& columns, int newRowCount) {
+	handleRowCountChanged(columns, newRowCount, true);
+}
+
+void SpreadsheetModel::handleRowsRemoved(const QVector<Column*>& columns, int newRowCount) {
+	handleRowCountChanged(columns, newRowCount, false);
+}
+
+void SpreadsheetModel::handleRowCountChanged(const QVector<Column*>& columns, int newRowCount, bool inserted) {
 	if (m_suppressSignals)
 		return;
 
-	int i = m_spreadsheet->indexOfChild<Column>(col);
-	m_rowCount = col->rowCount();
-	Q_EMIT dataChanged(index(0, i), index(m_rowCount - 1, i));
 	updateVerticalHeader();
+
+	m_rowCount = newRowCount;
+	if (inserted)
+		endInsertRows();
+	else
+		endRemoveRows();
+
+	for (const auto* col : columns) {
+		const int i = m_spreadsheet->indexOfChild<Column>(col);
+		Q_EMIT dataChanged(index(0, i), index(m_rowCount - 1, i));
+	}
 	m_spreadsheet->emitRowCountChanged();
 }
 
 void SpreadsheetModel::updateVerticalHeader() {
-	int old_rows = m_verticalHeaderCount;
-	int new_rows = m_rowCount;
-
-	if (new_rows > old_rows) {
-		beginInsertRows(QModelIndex(), old_rows, new_rows - 1);
-		endInsertRows();
-	} else if (new_rows < old_rows) {
-		beginRemoveRows(QModelIndex(), new_rows, old_rows - 1);
-		endRemoveRows();
-	}
-
 	m_verticalHeaderCount = m_rowCount;
 }
 
@@ -450,6 +529,8 @@ void SpreadsheetModel::updateHorizontalHeader() {
 
 		m_horizontal_header_data.replace(i, header);
 	}
+
+	Q_EMIT headerDataChanged(Qt::Horizontal, 0, column_count - 1);
 }
 
 Column* SpreadsheetModel::column(int index) {

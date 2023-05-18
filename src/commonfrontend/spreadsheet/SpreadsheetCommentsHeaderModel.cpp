@@ -19,7 +19,6 @@ SpreadsheetCommentsHeaderModel::SpreadsheetCommentsHeaderModel(SpreadsheetModel*
 	: QAbstractTableModel(parent)
 	, m_spreadsheet_model(spreadsheet_model) {
 	connect(m_spreadsheet_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetCommentsHeaderModel::headerDataChanged);
-	connect(m_spreadsheet_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetCommentsHeaderModel::headerDataChanged);
 	connect(m_spreadsheet_model, &SpreadsheetModel::columnsAboutToBeInserted, this, &SpreadsheetCommentsHeaderModel::columnsAboutToBeInserted);
 	connect(m_spreadsheet_model, &SpreadsheetModel::columnsAboutToBeRemoved, this, &SpreadsheetCommentsHeaderModel::columnsAboutToBeRemoved);
 	connect(m_spreadsheet_model, &SpreadsheetModel::columnsInserted, this, &SpreadsheetCommentsHeaderModel::columnsInserted);

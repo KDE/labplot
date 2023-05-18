@@ -23,6 +23,7 @@
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #include <QIcon>
+#include <QUndoCommand>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -171,10 +172,13 @@ void Spreadsheet::removeRows(int first, int count) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;
 	WAIT_CURSOR;
+	Q_EMIT rowsAboutToBeRemoved(first, count);
 	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
-	for (auto* col : children<Column>())
+	const auto& columns = children<Column>();
+	for (auto* col : columns)
 		col->removeRows(first, count);
 	endMacro();
+	Q_EMIT rowsRemoved(columns, first + 1);
 	RESET_CURSOR;
 }
 
@@ -182,10 +186,13 @@ void Spreadsheet::insertRows(int before, int count) {
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
 	WAIT_CURSOR;
+	Q_EMIT rowsAboutToBeInserted(before, count);
 	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
-	for (auto* col : children<Column>())
+	const auto& columns = children<Column>();
+	for (auto* col : columns)
 		col->insertRows(before, count);
 	endMacro();
+	Q_EMIT rowsInserted(columns, before + count);
 	RESET_CURSOR;
 }
 
@@ -253,20 +260,79 @@ int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const {
 	return count;
 }
 
-void Spreadsheet::removeColumns(int first, int count) {
+class SpreadsheetSetColumnsCountCmd : public QUndoCommand {
+public:
+	SpreadsheetSetColumnsCountCmd(Spreadsheet* spreadsheet, bool insert, int first, int count, QUndoCommand* parent)
+		: QUndoCommand(i18np("%1: remove 1 column", "%1: remove %2 columns", spreadsheet->name(), count), parent)
+		, m_spreadsheet(spreadsheet)
+		, m_insert(insert)
+		, m_first(first)
+		, m_last(first + count - 1) {
+	}
+
+	virtual void redo() override {
+		WAIT_CURSOR;
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsAboutToBeInserted(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->aspectsAboutToBeRemoved(m_first, m_last);
+
+		QUndoCommand::redo();
+
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->aspectsRemoved();
+		RESET_CURSOR;
+	}
+
+	virtual void undo() override {
+		WAIT_CURSOR;
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsAboutToBeRemoved(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->aspectsAboutToBeInserted(m_first, m_last);
+		QUndoCommand::undo();
+
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsRemoved();
+		else
+			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
+		RESET_CURSOR;
+	}
+
+private:
+	Spreadsheet* m_spreadsheet;
+	bool m_insert;
+	int m_first;
+	int m_last;
+};
+
+void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
 	if (count < 1 || first < 0 || first + count > columnCount())
 		return;
-	WAIT_CURSOR;
-	beginMacro(i18np("%1: remove 1 column", "%1: remove %2 columns", name(), count));
+
+	auto* command = new SpreadsheetSetColumnsCountCmd(this, false, first, count, parent);
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
+
 	for (int i = 0; i < count; i++)
-		child<Column>(first)->remove();
-	endMacro();
-	RESET_CURSOR;
+		child<Column>(first)->remove(parent);
+
+	if (execute)
+		exec(command);
 }
 
-void Spreadsheet::insertColumns(int before, int count) {
-	WAIT_CURSOR;
-	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
+void Spreadsheet::insertColumns(int before, int count, QUndoCommand* parent) {
+	auto* command = new SpreadsheetSetColumnsCountCmd(this, true, before, count, parent);
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
 	auto* before_col = column(before);
 	const int cols = columnCount();
 	const int rows = rowCount();
@@ -274,34 +340,25 @@ void Spreadsheet::insertColumns(int before, int count) {
 		auto* new_col = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
-		insertChildBefore(new_col, before_col);
+		insertChildBefore(new_col, before_col, parent);
 	}
-	endMacro();
-	RESET_CURSOR;
+
+	if (execute)
+		exec(command);
 }
 
 /*!
   Sets the number of columns to \c new_size
 */
-void Spreadsheet::setColumnCount(int new_size) {
+void Spreadsheet::setColumnCount(int new_size, QUndoCommand* parent) {
 	int old_size = columnCount();
 	if (old_size == new_size || new_size < 0)
 		return;
 
-	// suppress handling of child add and remove signals when adding/removing multiple columns
-	// TODO: undo/redo of this step is still very slow for a big number of columns
-	disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
-	if (m_model)
-		m_model->suppressSignals(true);
-
 	if (new_size < old_size)
-		removeColumns(new_size, old_size - new_size);
+		removeColumns(0, new_size, parent);
 	else
-		insertColumns(old_size, new_size - old_size);
-
-	connect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
-	if (m_model)
-		m_model->suppressSignals(false);
+		insertColumns(old_size, new_size - old_size, parent);
 }
 
 /*!
@@ -1076,7 +1133,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		} else {
 			// create additional columns if needed
 			// disconnect from the handleAspectAdded slot in the view, no need to handle it when adding new columns during the import
-			disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
+			Q_EMIT aspectsAboutToBeInserted(columns, cols - 1);
 			for (int i = columns; i < cols; i++) {
 				newColumn = new Column(uniqueNames.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->resizeTo(rows);
@@ -1084,7 +1141,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 				newColumn->resizeTo(rows);
 				addChildFast(newColumn); // in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
-			connect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
+			Q_EMIT aspectsInserted(columns, cols - 1);
 		}
 
 		// 1. suppressretransform for all WorksheetElements

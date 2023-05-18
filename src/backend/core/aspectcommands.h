@@ -19,8 +19,9 @@
 
 class AspectChildRemoveCmd : public QUndoCommand {
 public:
-	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child)
-		: m_target(target)
+	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_target(target)
 		, m_child(child)
 		, m_moved(child->isMoved()) {
 		setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
@@ -78,6 +79,7 @@ public:
 			m_child->setMoved(true);
 
 		emit m_target->q->aspectAboutToBeAdded(m_target->q, nullptr, m_child);
+		emit m_target->q->aspectAboutToBeAdded(m_target->q, m_index, m_child);
 		m_target->insertChild(m_index, m_child);
 		m_child->finalizeAdd();
 		emit m_target->q->aspectAdded(m_child);
@@ -97,8 +99,8 @@ protected:
 
 class AspectChildAddCmd : public AspectChildRemoveCmd {
 public:
-	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index)
-		: AspectChildRemoveCmd(target, child) {
+	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index, QUndoCommand* parent)
+		: AspectChildRemoveCmd(target, child, parent) {
 		setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
 		m_index = index;
 		// 		m_removed = true;

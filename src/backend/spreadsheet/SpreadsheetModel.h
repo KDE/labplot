@@ -52,10 +52,18 @@ public:
 
 	void setSearchText(const QString&);
 	QModelIndex index(const QString&) const;
+	void beginRemoveRows(const QModelIndex& parent, int first, int last);
 
 private Q_SLOTS:
-	void handleAspectAdded(const AbstractAspect*);
-	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+	void handleAspectsAboutToBeInserted(int first, int last);
+	void handleAspectsInserted(int first, int last);
+	void handleAspectsAboutToBeRemoved(int first, int last);
+	void handleAspectsRemoved();
+	void handleAspectCountChanged();
+
+	void handleAspectAboutToBeAdded(const AbstractAspect*, int index, const AbstractAspect*);
+	void handleAspectAdded(const AbstractAspect* aspect);
+	void handleAspectAboutToBeRemoved(const AbstractAspect* aspect);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
 	void handleDescriptionChange(const AbstractAspect*);
@@ -63,7 +71,12 @@ private Q_SLOTS:
 	void handleDigitsChange();
 	void handlePlotDesignationChange(const AbstractColumn*);
 	void handleDataChange(const AbstractColumn*);
-	void handleRowCountChanged(const AbstractColumn*, int before, int count);
+	void handleRowsInserted(const QVector<Column*>&, int newRowCount);
+	void handleRowsRemoved(const QVector<Column*>&, int newRowCount);
+	void handleRowsAboutToBeInserted(int before, int count);
+	void handleRowsAboutToBeRemoved(int first, int count);
+
+	void handleRowCountChanged(const QVector<Column*>&, int newRowCount, bool inserted);
 
 protected:
 	void updateVerticalHeader();
@@ -74,6 +87,7 @@ private:
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;
 	bool m_suppressSignals{false};
+	bool m_spreadsheetColumnCountChanging{false};
 	int m_rowCount{0};
 	int m_verticalHeaderCount{0};
 	int m_columnCount{0};
