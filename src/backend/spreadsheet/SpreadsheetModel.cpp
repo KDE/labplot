@@ -83,7 +83,6 @@ void SpreadsheetModel::suppressSignals(bool value) {
 	else {
 		m_rowCount = m_spreadsheet->rowCount();
 		m_columnCount = m_spreadsheet->columnCount();
-		m_spreadsheet->emitColumnCountChanged();
 		updateHorizontalHeader();
 		endResetModel();
 	}
@@ -395,7 +394,6 @@ void SpreadsheetModel::handleAspectCountChanged() {
 
 	updateHorizontalHeader();
 	m_columnCount = m_spreadsheet->columnCount();
-	m_spreadsheet->emitColumnCountChanged();
 }
 
 void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {

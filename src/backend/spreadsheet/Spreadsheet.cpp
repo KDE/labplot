@@ -284,6 +284,7 @@ public:
 		else
 			Q_EMIT m_spreadsheet->aspectsRemoved();
 		RESET_CURSOR;
+		m_spreadsheet->emitColumnCountChanged();
 	}
 
 	virtual void undo() override {
@@ -299,6 +300,7 @@ public:
 		else
 			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
 		RESET_CURSOR;
+		m_spreadsheet->emitColumnCountChanged();
 	}
 
 private:
