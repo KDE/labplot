@@ -311,7 +311,8 @@ public:
 		, m_linking(newValue) {
 		setText(description.subs(m_target->name()).toString());
 	}
-	virtual void redo() override {
+
+	void execute() {
 		if (m_target->linking.linkedSpreadsheet)
 			QObject::disconnect(m_target->linking.linkedSpreadsheet, nullptr, m_target->q, nullptr);
 
@@ -323,15 +324,18 @@ public:
 		const Spreadsheet::Linking l = m_target->linking;
 		m_target->linking = m_linking;
 		m_linking = l;
+	}
 
-		if (m_target->linking.linking && m_target->linking.linkedSpreadsheet)
-			m_target->q->setRowCount(m_target->linking.linkedSpreadsheet->rowCount());
-
+	virtual void redo() override {
+		execute();
+		QUndoCommand::redo();
 		finalize();
 	}
 
 	virtual void undo() override {
-		redo();
+		execute();
+		QUndoCommand::undo();
+		finalize();
 	}
 
 	void finalize() const {
@@ -350,7 +354,10 @@ void Spreadsheet::setLinking(bool linking) {
 	if (linking != d->linking.linking) {
 		Linking l = d->linking;
 		l.linking = linking;
-		exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linking")));
+		auto parent = new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linking"));
+		if (linking && d->linking.linkedSpreadsheet)
+			setRowCount(d->linking.linkedSpreadsheet->rowCount(), parent);
+		exec(parent);
 	}
 }
 
@@ -367,7 +374,10 @@ void Spreadsheet::setLinkedSpreadsheet(const Spreadsheet* linkedSpreadsheet, boo
 		} else {
 			Linking l = d->linking;
 			l.linkedSpreadsheet = linkedSpreadsheet;
-			exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linked spreadsheet")));
+			auto* parent = new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linked spreadsheet"));
+			if (d->linking.linking && linkedSpreadsheet)
+				setRowCount(linkedSpreadsheet->rowCount(), parent);
+			exec(parent);
 		}
 	}
 }
