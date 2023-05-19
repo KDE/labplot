@@ -433,15 +433,15 @@ Q_SIGNALS:
 	 * \param index Position of the new aspect
 	 * \param child
 	 */
-	void aspectAboutToBeAdded(const AbstractAspect* parent, int index, const AbstractAspect* child);
+	void childAspectAboutToBeAdded(const AbstractAspect* parent, int index, const AbstractAspect* child);
 	/*!
 	 * \brief aspectAboutToBeAdded
 	 * \param parent
 	 * \param before aspect one position before the child
 	 * \param child
 	 */
-	void aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
-	void aspectAdded(const AbstractAspect*);
+	void childAspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void childAspectAdded(const AbstractAspect*);
 	/*!
 	 * \brief aspectAboutToBeRemoved
 	 * Called from the parent if a child will be removed
@@ -452,7 +452,7 @@ Q_SIGNALS:
 	 * Called by the aspect it self when it will be removed
 	 */
 	void aspectAboutToBeRemoved();
-	void aspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void childAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void aspectHiddenAboutToChange(const AbstractAspect*);
 	void aspectHiddenChanged(const AbstractAspect*);
 	void statusInfo(const QString&);

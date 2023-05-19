@@ -1474,8 +1474,8 @@ bool MainWin::newProject() {
 	m_guiObserver = new GuiObserver(this); // initialize after all docks were createad
 	m_guiObserver->selectedAspectsChanged({static_cast<AbstractAspect*>(m_project)}); // Trigger showing properties
 
-	connect(m_project, &Project::aspectAdded, this, &MainWin::handleAspectAdded);
-	connect(m_project, &Project::aspectRemoved, this, &MainWin::handleAspectRemoved);
+	connect(m_project, &Project::childAspectAdded, this, &MainWin::handleAspectAdded);
+	connect(m_project, &Project::childAspectRemoved, this, &MainWin::handleAspectRemoved);
 	connect(m_project, &Project::childAspectAboutToBeRemoved, this, &MainWin::handleAspectAboutToBeRemoved);
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
 	connect(m_project, &Project::changed, this, &MainWin::projectChanged);

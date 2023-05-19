@@ -303,7 +303,7 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 }
 
 void ProjectExplorer::setProject(Project* project) {
-	connect(project, &Project::aspectAdded, this, &ProjectExplorer::aspectAdded);
+	connect(project, &Project::childAspectAdded, this, &ProjectExplorer::aspectAdded);
 	connect(project, &Project::requestSaveState, this, &ProjectExplorer::save);
 	connect(project, &Project::requestLoadState, this, &ProjectExplorer::load);
 	connect(project, &Project::requestNavigateTo, this, &ProjectExplorer::navigateTo);

@@ -186,7 +186,7 @@ Project::Project()
 	d->changed = false;
 
 	connect(this, &Project::aspectDescriptionChanged, this, &Project::descriptionChanged);
-	connect(this, &Project::aspectAdded, this, &Project::aspectAddedSlot);
+	connect(this, &Project::childAspectAdded, this, &Project::aspectAddedSlot);
 }
 
 Project::~Project() {

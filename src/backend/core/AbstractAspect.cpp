@@ -528,11 +528,11 @@ void AbstractAspect::addChild(AbstractAspect* child, QUndoCommand* parent) {
  * \brief Add the given Aspect to my list of children without any checks and without putting this step onto the undo-stack
  */
 void AbstractAspect::addChildFast(AbstractAspect* child) {
-	Q_EMIT aspectAboutToBeAdded(this, nullptr, child); // TODO: before-pointer is 0 here, also in the commands classes. why?
+	Q_EMIT childAspectAboutToBeAdded(this, nullptr, child); // TODO: before-pointer is 0 here, also in the commands classes. why?
 	d->insertChild(d->m_children.count(), child);
 	child->finalizeAdd();
 	// PERFTRACE(Q_FUNC_INFO);
-	Q_EMIT aspectAdded(child);
+	Q_EMIT childAspectAdded(child);
 	// print_callstack();
 }
 
@@ -577,10 +577,10 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
 	if (index == -1)
 		index = d->m_children.count();
 
-	Q_EMIT aspectAboutToBeAdded(this, nullptr, child);
+	Q_EMIT childAspectAboutToBeAdded(this, nullptr, child);
 	d->insertChild(index, child);
 	child->finalizeAdd();
-	Q_EMIT aspectAdded(child);
+	Q_EMIT childAspectAdded(child);
 }
 
 /**
@@ -623,7 +623,7 @@ void AbstractAspect::removeAllChildren() {
 	while (current) {
 		Q_EMIT childAspectAboutToBeRemoved(current);
 		exec(new AspectChildRemoveCmd(d, current));
-		Q_EMIT aspectRemoved(this, nextSibling, current);
+		Q_EMIT childAspectRemoved(this, nextSibling, current);
 
 		current = nextSibling;
 		if (i != children_list.constEnd() && ++i != children_list.constEnd())

@@ -1699,7 +1699,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 			this,
 			&ColumnPrivate::formulaVariableColumnRemoved);
 	connect(column, &AbstractColumn::reset, this, &ColumnPrivate::formulaVariableColumnRemoved);
-	connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
+	connect(column->parentAspect(), &AbstractAspect::childAspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
 }
 
 /*!

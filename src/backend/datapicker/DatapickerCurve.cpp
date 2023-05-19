@@ -78,7 +78,7 @@ void DatapickerCurve::init() {
 	});
 	d->symbol->init(group);
 
-	connect(this, &AbstractAspect::aspectAdded, this, &DatapickerCurve::childAdded);
+	connect(this, &AbstractAspect::childAspectAdded, this, &DatapickerCurve::childAdded);
 	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, this, &DatapickerCurve::childRemoved);
 }
 
