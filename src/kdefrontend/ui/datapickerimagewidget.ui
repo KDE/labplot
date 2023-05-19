@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>638</width>
     <height>777</height>
    </rect>
   </property>
@@ -386,10 +386,18 @@
        <item row="15" column="6" rowspan="3">
         <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="4">
-          <widget class="UTCDateTimeEdit" name="dtePositionX2"/>
+          <widget class="UTCDateTimeEdit" name="dtePositionX2">
+           <property name="displayFormat">
+            <string>dd.MM.yyyy HH:mm</string>
+           </property>
+          </widget>
          </item>
          <item row="2" column="4">
-          <widget class="UTCDateTimeEdit" name="dtePositionX3"/>
+          <widget class="UTCDateTimeEdit" name="dtePositionX3">
+           <property name="displayFormat">
+            <string>dd.MM.yyyy HH:mm</string>
+           </property>
+          </widget>
          </item>
          <item row="0" column="6">
           <widget class="NumberSpinBox" name="sbPositionY1">
@@ -524,7 +532,11 @@
           </widget>
          </item>
          <item row="0" column="4">
-          <widget class="UTCDateTimeEdit" name="dtePositionX1"/>
+          <widget class="UTCDateTimeEdit" name="dtePositionX1">
+           <property name="displayFormat">
+            <string>dd.MM.yyyy HH:mm</string>
+           </property>
+          </widget>
          </item>
          <item row="0" column="1">
           <widget class="QLabel" name="lRefPoint1">
