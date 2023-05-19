@@ -447,12 +447,12 @@ Q_SIGNALS:
 	 * Called from the parent if a child will be removed
 	 */
 	void childAspectAboutToBeRemoved(const AbstractAspect* child);
+	void childAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	/*!
 	 * \brief aspectAboutToBeRemoved
 	 * Called by the aspect it self when it will be removed
 	 */
-	void aspectAboutToBeRemoved();
-	void childAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void aspectHiddenAboutToChange(const AbstractAspect*);
 	void aspectHiddenChanged(const AbstractAspect*);
 	void statusInfo(const QString&);

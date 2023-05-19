@@ -296,7 +296,7 @@ void Spreadsheet::setRowCount(int new_size, QUndoCommand* parent) {
 }
 
 void Spreadsheet::initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver) {
-	QObject::connect(sender, QOverload<>::of(&Spreadsheet::aspectAboutToBeRemoved), receiver, &Spreadsheet::linkedSpreadsheetDeleted);
+	QObject::connect(sender, &Spreadsheet::aspectAboutToBeRemoved, receiver, &Spreadsheet::linkedSpreadsheetDeleted);
 	QObject::connect(sender, &Spreadsheet::rowCountChanged, receiver, &Spreadsheet::linkedSpreadsheetNewRowCount);
 }
 
