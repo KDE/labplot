@@ -203,6 +203,9 @@ void SpreadsheetView::init() {
 	connect(m_spreadsheet, &Spreadsheet::aspectsInserted, this, &SpreadsheetView::handleAspectsAdded);
 	connect(m_spreadsheet, &Spreadsheet::aspectsAboutToBeRemoved, this, &SpreadsheetView::handleAspectAboutToBeRemoved);
 	connect(m_spreadsheet, &Spreadsheet::requestProjectContextMenu, this, &SpreadsheetView::createContextMenu);
+	connect(m_spreadsheet, &Spreadsheet::manyAspectsAboutToBeInserted, [this] {
+		m_suppressResize = true;
+	});
 
 	// selection related connections
 	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
@@ -1006,6 +1009,10 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 
 // SLOTS
 void SpreadsheetView::handleAspectsAdded(int first, int last) {
+	if (m_suppressResize) {
+		m_suppressResize = false;
+		return;
+	}
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 
 	const auto& children = m_spreadsheet->children<Column>();

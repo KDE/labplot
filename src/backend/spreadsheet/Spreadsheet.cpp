@@ -1220,7 +1220,8 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 				removeChild(child<Column>(0));
 		} else {
 			// create additional columns if needed
-			// disconnect from the handleAspectAdded slot in the view, no need to handle it when adding new columns during the import
+			if (cols - columns > 30)
+				Q_EMIT manyAspectsAboutToBeInserted();
 			Q_EMIT aspectsAboutToBeInserted(columns, cols - 1);
 			for (int i = columns; i < cols; i++) {
 				newColumn = new Column(uniqueNames.at(i), AbstractColumn::ColumnMode::Double);

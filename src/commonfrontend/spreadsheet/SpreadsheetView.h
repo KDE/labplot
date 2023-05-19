@@ -215,6 +215,8 @@ private:
 	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_analyzePlotMenu{nullptr};
 
+	bool m_suppressResize{false};
+
 public Q_SLOTS:
 	void handleAspectsAdded(int first, int last);
 	void createContextMenu(QMenu*);

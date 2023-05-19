@@ -133,6 +133,8 @@ Q_SIGNALS:
 	void rowsAboutToBeRemoved(int first, int count);
 	void rowsRemoved(int newRowCount);
 
+	void manyAspectsAboutToBeInserted();
+
 	friend class SpreadsheetSetColumnCountCommand;
 };
 
