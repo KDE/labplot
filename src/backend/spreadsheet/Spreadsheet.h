@@ -13,10 +13,12 @@
 
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/datasources/AbstractDataSource.h"
+#include "backend/lib/macros.h"
 
 class AbstractFileFilter;
 class SpreadsheetView;
 class SpreadsheetModel;
+class SpreadsheetPrivate;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
@@ -84,6 +86,20 @@ public:
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 
+	struct Linking {
+		bool linking{false};
+		const Spreadsheet* linkedSpreadsheet{nullptr};
+		QString linkedSpreadsheetPath;
+
+		QString spreadsheetPath() const {
+			if (linkedSpreadsheet)
+				return linkedSpreadsheet->path();
+			return linkedSpreadsheetPath;
+		}
+	};
+
+	typedef SpreadsheetPrivate Private;
+
 public Q_SLOTS:
 	void appendRows(int);
 	void appendRow();
@@ -94,6 +110,11 @@ public Q_SLOTS:
 	void setColumnCount(int, QUndoCommand* parent = nullptr);
 	void setRowCount(int, QUndoCommand* parent = nullptr);
 
+	BASIC_D_ACCESSOR_DECL(bool, linking, Linking)
+	const Spreadsheet* linkedSpreadsheet() const;
+	void setLinkedSpreadsheet(const Spreadsheet*, bool skipUndo = false);
+	QString linkedSpreadsheetPath() const;
+
 	void clear();
 	void clear(const QVector<Column*>&);
 	void clearMasks();
@@ -103,6 +124,11 @@ public Q_SLOTS:
 
 private:
 	void init();
+	void updateLinks();
+	void initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver);
+	Q_DECLARE_PRIVATE(Spreadsheet)
+
+	SpreadsheetPrivate* const d_ptr;
 	SpreadsheetModel* m_model{nullptr};
 
 protected:
@@ -111,6 +137,8 @@ protected:
 private Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
+	void linkedSpreadsheetDeleted();
+	void linkedSpreadsheetNewRowCount(int);
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -128,13 +156,16 @@ Q_SIGNALS:
 	void aspectsAboutToBeRemoved(int first, int last);
 	void aspectsRemoved();
 
+	void manyAspectsAboutToBeInserted();
 	void rowsAboutToBeInserted(int before, int last);
 	void rowsInserted(int newRowCount);
 	void rowsAboutToBeRemoved(int first, int count);
 	void rowsRemoved(int newRowCount);
 
-	void manyAspectsAboutToBeInserted();
+	void linkingChanged(bool);
+	void linkedSpreadsheetChanged(const Spreadsheet*);
 
+	friend class SpreadsheetSetLinkingCmd;
 	friend class SpreadsheetSetColumnCountCommand;
 };
 

@@ -71,6 +71,13 @@ private Q_SLOTS:
 
 	void testInsertRowsSuppressUpdate();
 	void testInsertColumnsSuppressUpdate();
+
+	void testLinkSpreadsheetsUndoRedo();
+	void testLinkSpreadsheetDeleteAdd();
+	void testLinkSpreadsheetAddRow();
+	void testLinkSpreadsheetRemoveRow();
+	void testLinkSpreadsheetRecalculate();
+	void testLinkSpreadsheetSaveLoad();
 };
 
 #endif

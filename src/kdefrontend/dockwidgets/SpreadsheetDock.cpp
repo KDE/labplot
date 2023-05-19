@@ -10,6 +10,8 @@
 */
 
 #include "SpreadsheetDock.h"
+#include "backend/core/AspectTreeModel.h"
+#include "backend/core/Project.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -39,6 +41,8 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	connect(ui.sbColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
 	connect(ui.sbRowCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
 	connect(ui.cbShowComments, &QCheckBox::toggled, this, &SpreadsheetDock::commentsShownChanged);
+	connect(ui.cbLinked, &QCheckBox::toggled, this, &SpreadsheetDock::linkingChanged);
+	connect(ui.cbLinkedSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &SpreadsheetDock::linkedSpreadsheetChanged);
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Spreadsheet);
 	ui.gridLayout->addWidget(templateHandler, 11, 0, 1, 4);
@@ -83,6 +87,26 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
 
+	const auto topLevelClasses = {AspectType::Spreadsheet};
+// needed for buggy compiler
+#if __cplusplus < 201103L
+	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
+#else
+	m_aspectTreeModel = std::unique_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
+#endif
+	m_aspectTreeModel->setSelectableAspects(topLevelClasses);
+	m_aspectTreeModel->enableNumericColumnsOnly(true);
+	// m_aspectTreeModel->enableNonEmptyNumericColumnsOnly(true);
+
+	ui.cbLinkedSpreadsheet->setTopLevelClasses(topLevelClasses);
+	ui.cbLinkedSpreadsheet->setModel(m_aspectTreeModel.get());
+
+	// don't allow to select self spreadsheet!
+	QList<const AbstractAspect*> aspects;
+	for (auto* sh : m_spreadsheetList)
+		aspects << sh;
+	ui.cbLinkedSpreadsheet->setHiddenAspects(aspects);
+
 	// show the properties of the first Spreadsheet in the list
 	this->load();
 
@@ -90,6 +114,8 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	connect(m_spreadsheet, &AbstractAspect::aspectDescriptionChanged, this, &SpreadsheetDock::aspectDescriptionChanged);
 	connect(m_spreadsheet, &Spreadsheet::rowCountChanged, this, &SpreadsheetDock::spreadsheetRowCountChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, &SpreadsheetDock::spreadsheetColumnCountChanged);
+	connect(m_spreadsheet, &Spreadsheet::linkingChanged, this, &SpreadsheetDock::spreadsheetLinkingChanged);
+	connect(m_spreadsheet, &Spreadsheet::linkedSpreadsheetChanged, this, &SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged);
 	// TODO: show comments
 
 	ui.lDimensions->setVisible(!nonEditable);
@@ -129,6 +155,28 @@ void SpreadsheetDock::commentsShownChanged(bool state) {
 		static_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
 }
 
+void SpreadsheetDock::linkingChanged(bool linking) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* spreadsheet : m_spreadsheetList)
+		spreadsheet->setLinking(linking);
+}
+void SpreadsheetDock::linkedSpreadsheetChanged(const QModelIndex& index) {
+	// combobox was potentially red-highlighted because of a missing column
+	// remove the highlighting when we have a valid selection now
+	auto* aspect{static_cast<AbstractAspect*>(index.internalPointer())};
+	if (aspect) {
+		auto* cb{dynamic_cast<TreeViewComboBox*>(QObject::sender())};
+		if (cb)
+			cb->setStyleSheet(QString());
+		auto* sh = dynamic_cast<Spreadsheet*>(aspect);
+		if (sh) {
+			for (auto* spreadsheet : m_spreadsheetList)
+				spreadsheet->setLinkedSpreadsheet(sh);
+		}
+	}
+}
+
 //*************************************************************
 //******** SLOTs for changes triggered in Spreadsheet *********
 //*************************************************************
@@ -147,6 +195,25 @@ void SpreadsheetDock::spreadsheetShowCommentsChanged(bool checked) {
 	ui.cbShowComments->setChecked(checked);
 }
 
+void SpreadsheetDock::spreadsheetLinkingChanged(bool linking) {
+	ui.sbRowCount->setEnabled(!linking);
+	ui.cbLinkedSpreadsheet->setEnabled(linking);
+
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbLinked->setChecked(linking);
+}
+
+void SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged(const Spreadsheet*) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* sh : m_spreadsheet->children<Spreadsheet>()) {
+		if (m_spreadsheetList.indexOf(sh) == -1) {
+			ui.cbLinkedSpreadsheet->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(sh));
+			break;
+		}
+	}
+}
+
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
@@ -156,6 +223,12 @@ void SpreadsheetDock::load() {
 
 	auto* view = static_cast<SpreadsheetView*>(m_spreadsheet->view());
 	ui.cbShowComments->setChecked(view->areCommentsShown());
+
+	ui.cbLinkedSpreadsheet->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->linkedSpreadsheet()));
+
+	ui.cbLinked->setChecked(m_spreadsheet->linking());
+	ui.sbRowCount->setEnabled(!m_spreadsheet->linking());
+	ui.cbLinkedSpreadsheet->setEnabled(m_spreadsheet->linking());
 }
 
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {

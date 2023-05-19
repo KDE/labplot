@@ -465,7 +465,10 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
+			connect(column->parentAspect(),
+					QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),
+					this,
+					&BoxPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 		}
 	}

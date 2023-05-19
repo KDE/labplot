@@ -95,7 +95,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	connect(m_worksheet, &Worksheet::itemSelected, this, &WorksheetView::selectItem);
 	connect(m_worksheet, &Worksheet::itemDeselected, this, &WorksheetView::deselectItem);
 	connect(m_worksheet, &Worksheet::requestUpdate, this, &WorksheetView::updateBackground);
-	connect(m_worksheet, &Worksheet::aspectAboutToBeRemoved, this, &WorksheetView::aspectAboutToBeRemoved);
+	connect(m_worksheet, QOverload<const AbstractAspect*>::of(&Worksheet::aspectAboutToBeRemoved), this, &WorksheetView::aspectAboutToBeRemoved);
 	connect(m_worksheet, &Worksheet::useViewSizeChanged, this, &WorksheetView::useViewSizeChanged);
 	connect(m_worksheet, &Worksheet::layoutChanged, this, &WorksheetView::layoutChanged);
 	connect(scene(), &QGraphicsScene::selectionChanged, this, &WorksheetView::selectionChanged);

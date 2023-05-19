@@ -369,6 +369,12 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 				updateColumnDependencies(boxPlots, column);
 		}
 	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
+		// name in a linked spreadsheet, etc. and update the dependencies
+		const auto* newSpreadsheet = static_cast<const Spreadsheet*>(aspect);
+		const auto& spreadsheets = children<Spreadsheet>(ChildIndexFlag::Recursive);
+		updateSpreadsheetDependencies(spreadsheets, newSpreadsheet);
+
 		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
@@ -379,6 +385,17 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			for (auto* we : wes)
 				we->setSuppressRetransform(false);
 		});
+	}
+}
+
+void Project::updateSpreadsheetDependencies(const QVector<Spreadsheet*>& spreadsheets, const Spreadsheet* spreadsheet) const {
+	const QString& spreadsheetPath = spreadsheet->path();
+
+	for (auto* sh : spreadsheets) {
+		sh->setUndoAware(false);
+		if (sh->linkedSpreadsheetPath() == spreadsheetPath)
+			sh->setLinkedSpreadsheet(spreadsheet);
+		sh->setUndoAware(true);
 	}
 }
 
@@ -1047,6 +1064,20 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
 	}
 #endif
+
+	// spreadsheet
+	QVector<Spreadsheet*> spreadsheets;
+	if (hasChildren)
+		spreadsheets = aspect->children<Spreadsheet>(ChildIndexFlag::Recursive);
+	for (auto* linkingSpreadsheet : spreadsheets) {
+		if (!linkingSpreadsheet->linking())
+			continue;
+		for (const auto* toLinkedSpreadsheet : spreadsheets) {
+			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path()) {
+				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
+			}
+		}
+	}
 
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {

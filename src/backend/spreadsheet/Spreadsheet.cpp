@@ -12,6 +12,7 @@
 */
 #include "Spreadsheet.h"
 #include "SpreadsheetModel.h"
+#include "SpreadsheetPrivate.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/column/ColumnStringIO.h"
@@ -23,8 +24,11 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
+#include "backend/lib/commandtemplates.h"
+
 #include <QIcon>
 #include <QUndoCommand>
+#include <QXmlStreamWriter>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -54,7 +58,8 @@
 */
 
 Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
-	: AbstractDataSource(name, type) {
+	: AbstractDataSource(name, type)
+	, d_ptr(new SpreadsheetPrivate(this)) {
 	if (!loading)
 		init();
 }
@@ -288,6 +293,94 @@ void Spreadsheet::setRowCount(int new_size, QUndoCommand* parent) {
 		insertRows(current_size, new_size - current_size, parent);
 	if (new_size < current_size && new_size >= 0)
 		removeRows(new_size, current_size - new_size, parent);
+}
+
+void Spreadsheet::initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver) {
+	QObject::connect(sender, QOverload<>::of(&Spreadsheet::aspectAboutToBeRemoved), receiver, &Spreadsheet::linkedSpreadsheetDeleted);
+	QObject::connect(sender, &Spreadsheet::rowCountChanged, receiver, &Spreadsheet::linkedSpreadsheetNewRowCount);
+}
+
+class SpreadsheetSetLinkingCmd : public QUndoCommand {
+public:
+	SpreadsheetSetLinkingCmd(Spreadsheet::Private* target,
+							 const Spreadsheet::Linking& newValue,
+							 const KLocalizedString& description,
+							 QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_target(target)
+		, m_linking(newValue) {
+		setText(description.subs(m_target->name()).toString());
+	}
+	virtual void redo() override {
+		if (m_target->linking.linkedSpreadsheet)
+			QObject::disconnect(m_target->linking.linkedSpreadsheet, nullptr, m_target->q, nullptr);
+
+		if (m_linking.linkedSpreadsheet) {
+			m_linking.linkedSpreadsheetPath = m_linking.linkedSpreadsheet->path();
+			m_target->q->initConnectionsLinking(m_linking.linkedSpreadsheet, m_target->q);
+		}
+
+		const Spreadsheet::Linking l = m_target->linking;
+		m_target->linking = m_linking;
+		m_linking = l;
+
+		if (m_target->linking.linking && m_target->linking.linkedSpreadsheet)
+			m_target->q->setRowCount(m_target->linking.linkedSpreadsheet->rowCount());
+
+		finalize();
+	}
+
+	virtual void undo() override {
+		redo();
+	}
+
+	void finalize() {
+		m_target->updateLinks();
+		emit m_target->q->linkingChanged(m_target->linking.linking);
+		emit m_target->q->linkedSpreadsheetChanged(m_target->linking.linkedSpreadsheet);
+	}
+
+private:
+	Spreadsheet::Private* m_target;
+	Spreadsheet::Linking m_linking;
+};
+
+BASIC_SHARED_D_READER_IMPL(Spreadsheet, bool, linking, linking.linking)
+void Spreadsheet::setLinking(bool linking) {
+	Q_D(Spreadsheet);
+	if (linking != d->linking.linking) {
+		Linking l = d->linking;
+		l.linking = linking;
+		exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linking")));
+	}
+}
+
+BASIC_SHARED_D_READER_IMPL(Spreadsheet, const Spreadsheet*, linkedSpreadsheet, linking.linkedSpreadsheet)
+void Spreadsheet::setLinkedSpreadsheet(const Spreadsheet* linkedSpreadsheet, bool skipUndo) {
+	Q_D(Spreadsheet);
+	if (!d->linking.linking)
+		return; // Do not allow setting a spreadsheet when linking is disabled
+
+	if (linkedSpreadsheet != d->linking.linkedSpreadsheet) {
+		if (skipUndo) {
+			d->linking.linkedSpreadsheet = linkedSpreadsheet;
+			initConnectionsLinking(linkedSpreadsheet, this);
+		} else {
+			Linking l = d->linking;
+			l.linkedSpreadsheet = linkedSpreadsheet;
+			exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linked spreadsheet")));
+		}
+	}
+}
+
+QString Spreadsheet::linkedSpreadsheetPath() const {
+	Q_D(const Spreadsheet);
+	return d->linking.spreadsheetPath();
+}
+
+void Spreadsheet::updateLinks() {
+	Q_D(Spreadsheet);
+	d->updateLinks();
 }
 
 /*!
@@ -976,6 +1069,17 @@ void Spreadsheet::childDeselected(const AbstractAspect* aspect) {
 	}
 }
 
+void Spreadsheet::linkedSpreadsheetDeleted() {
+	Q_D(Spreadsheet);
+	Linking l = d->linking;
+	l.linkedSpreadsheet = nullptr;
+	exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: linked spreadsheet removed")));
+}
+
+void Spreadsheet::linkedSpreadsheetNewRowCount(int rowCount) {
+	setRowCount(rowCount);
+}
+
 /*!
  *  Emits the signal to select or to deselect the column number \c index in the project explorer,
  *  if \c selected=true or \c selected=false, respectively.
@@ -1016,9 +1120,15 @@ QVector<AspectType> Spreadsheet::dropableOn() const {
   Saves as XML.
  */
 void Spreadsheet::save(QXmlStreamWriter* writer) const {
+	Q_D(const Spreadsheet);
 	writer->writeStartElement(QStringLiteral("spreadsheet"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
+
+	writer->writeStartElement(QLatin1String("Linking"));
+	writer->writeAttribute(QStringLiteral("linking"), QString::number(d->linking.linking));
+	writer->writeAttribute(QStringLiteral("linkedSpreadsheet"), d->linking.spreadsheetPath());
+	writer->writeEndElement();
 
 	// columns
 	const auto& columns = children<Column>(ChildIndexFlag::IncludeHidden);
@@ -1032,20 +1142,35 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
+	Q_D(Spreadsheet);
 	if (!readBasicAttributes(reader))
 		return false;
+
+	const KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
+	QString str;
+	QXmlStreamAttributes attribs;
 
 	// read child elements
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement())
+		if (reader->isEndElement() && reader->name() == QLatin1String("spreadsheet"))
 			break;
 
 		if (reader->isStartElement()) {
 			if (reader->name() == QLatin1String("comment")) {
 				if (!readCommentElement(reader))
 					return false;
+			} else if (reader->name() == QLatin1String("Linking")) {
+				attribs = reader->attributes();
+				str = attribs.value(QStringLiteral("linking")).toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("linking")).toString());
+				else
+					d->linking.linking = static_cast<bool>(str.toInt());
+
+				str = attribs.value(QStringLiteral("linkedSpreadsheet")).toString();
+				d->linking.linkedSpreadsheetPath = str;
 			} else if (reader->name() == QLatin1String("column")) {
 				Column* column = new Column(QString());
 				column->setIsLoading(true);
@@ -1335,7 +1460,31 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 #endif
 	// row count most probably changed after the import, notify the dock widget.
 	// no need to notify about the column count change, this is already done by add/removeChild signals
-	rowCountChanged(rowCount());
+	Q_EMIT rowCountChanged(rowCount());
 
 	// DEBUG(Q_FUNC_INFO << " DONE");
+}
+
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
+SpreadsheetPrivate::SpreadsheetPrivate(Spreadsheet* owner)
+	: q(owner) {
+}
+
+QString SpreadsheetPrivate::name() const {
+	return q->name();
+}
+
+void SpreadsheetPrivate::updateLinks(const AbstractColumn* column) {
+	if (column) {
+		for (int i = 0; i < q->columnCount(); i++) {
+			auto* c = q->column(i);
+			for (const auto& data : c->formulaData()) {
+				if (data.column() == column && c->formulaAutoUpdate()) { }
+			}
+		}
+	} else {
+		// update all
+	}
 }

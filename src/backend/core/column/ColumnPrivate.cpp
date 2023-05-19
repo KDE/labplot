@@ -1694,7 +1694,10 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 
 	DEBUG(Q_FUNC_INFO)
 	m_connectionsUpdateFormula << connect(column, &AbstractColumn::dataChanged, m_owner, &Column::updateFormula);
-	connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
+	connect(column->parentAspect(),
+			QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),
+			this,
+			&ColumnPrivate::formulaVariableColumnRemoved);
 	connect(column, &AbstractColumn::reset, this, &ColumnPrivate::formulaVariableColumnRemoved);
 	connect(column->parentAspect(), &AbstractAspect::aspectAdded, this, &ColumnPrivate::formulaVariableColumnAdded);
 }
@@ -2606,7 +2609,7 @@ void ColumnPrivate::calculateStatistics() {
 		return;
 	}
 
-	//######  location measures  #######
+	// ######  location measures  #######
 	int rowValuesSize = rowCount();
 	double columnSum = 0.0;
 	double columnProduct = 1.0;

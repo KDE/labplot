@@ -55,7 +55,7 @@ Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)
 	, d(new WorksheetPrivate(this)) {
 	connect(this, &Worksheet::aspectAdded, this, &Worksheet::handleAspectAdded);
-	connect(this, &Worksheet::aspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
+	connect(this, QOverload<const AbstractAspect*>::of(&Worksheet::aspectAboutToBeRemoved), this, &Worksheet::handleAspectAboutToBeRemoved);
 	connect(this, &Worksheet::aspectRemoved, this, &Worksheet::handleAspectRemoved);
 
 	d->background = new Background(QString());

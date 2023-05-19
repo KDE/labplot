@@ -51,7 +51,7 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 			this,
 			&SpreadsheetModel::handleAspectAboutToBeAdded);
 	connect(m_spreadsheet, &Spreadsheet::aspectAdded, this, &SpreadsheetModel::handleAspectAdded);
-	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeRemoved, this, &SpreadsheetModel::handleAspectAboutToBeRemoved);
+	connect(m_spreadsheet, QOverload<const AbstractAspect*>::of(&Spreadsheet::aspectAboutToBeRemoved), this, &SpreadsheetModel::handleAspectAboutToBeRemoved);
 	connect(m_spreadsheet, &Spreadsheet::aspectRemoved, this, &SpreadsheetModel::handleAspectRemoved);
 
 	// Used when changing the column count

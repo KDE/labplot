@@ -42,7 +42,7 @@ ContentDockWidget::ContentDockWidget(AbstractPart* part)
 	setObjectName(m_part->uuid().toString());
 
 	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &ContentDockWidget::handleAspectDescriptionChanged);
-	connect(m_part, &AbstractPart::aspectAboutToBeRemoved, this, &ContentDockWidget::handleAspectAboutToBeRemoved);
+	connect(m_part, QOverload<const AbstractAspect*>::of(&AbstractPart::aspectAboutToBeRemoved), this, &ContentDockWidget::handleAspectAboutToBeRemoved);
 	// connect(this, &QMdiSubWindow::windowStateChanged, this, &ContentDockWidget::slotWindowStateChanged);
 }
 

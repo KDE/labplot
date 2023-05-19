@@ -14,10 +14,13 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
+#include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
 
 #include <QClipboard>
+#include <QModelIndex>
 #include <QUndoStack>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 #include <QRandomGenerator>
@@ -1768,6 +1771,317 @@ void SpreadsheetTest::testInsertColumnsSuppressUpdate() {
 	QCOMPARE(columnsAboutToBeRemovedCounter, 0);
 	QCOMPARE(modelResetCounter, 1);
 	QCOMPARE(modelAboutToResetCounter, 1);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(3);
+	sheetData->setRowCount(10);
+
+	auto* sheetData2 = new Spreadsheet(QStringLiteral("data2"), false);
+	project.addChild(sheetData2);
+	sheetData2->setColumnCount(3);
+	sheetData2->setRowCount(100);
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(3);
+	sheetCalculations->setRowCount(2);
+
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	QCOMPARE(dock.ui.cbLinked->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
+	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+	QCOMPARE(dock.m_spreadsheet->linking(), false);
+
+	dock.ui.cbLinked->toggled(true);
+
+	// QCOMPARE(dock.ui.cbLinked->isChecked(), true); // does not work here. Don't know why
+	// QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), true);
+	// QCOMPARE(dock.ui.sbRowCount->isEnabled(), false);
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QStringLiteral(""));
+	QCOMPARE(sheetCalculations->rowCount(), 2);
+
+	const auto index = dock.m_aspectTreeModel->modelIndexOfAspect(sheetData);
+	QCOMPARE(index.isValid(), true);
+	// dock.ui.cbLinkedSpreadsheet->setCurrentModelIndex(index); // Does not trigger the slot
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	sheetCalculations->setLinkedSpreadsheet(sheetData2);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData2);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
+	QCOMPARE(sheetCalculations->rowCount(), 100);
+
+	sheetCalculations->undoStack()->undo();
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	sheetCalculations->undoStack()->redo();
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData2);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
+	QCOMPARE(sheetCalculations->rowCount(), 100);
+
+	sheetCalculations->undoStack()->undo();
+	sheetCalculations->undoStack()->undo();
+
+	QCOMPARE(sheetCalculations->linking(), false);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QStringLiteral(""));
+	QCOMPARE(sheetCalculations->rowCount(), 2);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(3);
+	sheetData->setRowCount(10);
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(3);
+	sheetCalculations->setRowCount(2);
+
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	QCOMPARE(dock.ui.cbLinked->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
+	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+	QCOMPARE(sheetCalculations->linking(), false);
+
+	dock.ui.cbLinked->toggled(true);
+
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	sheetData->remove();
+	sheetData->setRowCount(100);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QStringLiteral("Project/data"));
+	QCOMPARE(sheetCalculations->rowCount(), 10); // does not change
+
+	auto* sheetDataNew = new Spreadsheet(QStringLiteral("data"), false);
+	sheetDataNew->setColumnCount(3);
+	sheetDataNew->setRowCount(12);
+	project.addChild(sheetDataNew);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetDataNew);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetDataNew->path());
+	QCOMPARE(sheetCalculations->rowCount(), 12);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetAddRow() {
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(3);
+	sheetData->setRowCount(10);
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(3);
+	sheetCalculations->setRowCount(2);
+
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	QCOMPARE(dock.ui.cbLinked->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
+	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+	QCOMPARE(sheetCalculations->linking(), false);
+
+	Q_EMIT dock.ui.cbLinked->toggled(true);
+
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+	sheetData->setRowCount(13);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 13);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(3);
+	sheetData->setRowCount(10);
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(3);
+	sheetCalculations->setRowCount(2);
+
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	QCOMPARE(dock.ui.cbLinked->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
+	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+	QCOMPARE(sheetCalculations->linking(), false);
+
+	dock.ui.cbLinked->toggled(true);
+
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+	sheetData->setRowCount(7);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 7);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(2);
+	sheetData->setRowCount(10);
+	auto* sheetDataColumn0 = sheetData->child<Column>(0);
+	sheetDataColumn0->replaceValues(0, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+	QVERIFY(sheetDataColumn0);
+	auto* sheetDataColumn1 = sheetData->child<Column>(1);
+	QVERIFY(sheetDataColumn1);
+	sheetDataColumn1->replaceValues(0, {1, 2, 1, 2, 1, 2, 1, 2, 1, 3});
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(1);
+	sheetCalculations->setRowCount(2);
+	auto* sheetCalculationsColumn0 = sheetCalculations->child<Column>(0);
+	QVERIFY(sheetCalculationsColumn0);
+	sheetCalculationsColumn0->setFormula(QStringLiteral("x + y"), {QStringLiteral("x"), QStringLiteral("y")}, {sheetDataColumn0, sheetDataColumn1}, true);
+	sheetCalculationsColumn0->updateFormula();
+
+	{
+		QVector<double> ref{2, 4, 4, 6, 6, 8, 8, 10, 10, 13};
+		QCOMPARE(sheetCalculationsColumn0->rowCount(), 10); // currently the update() triggers a resize
+		for (int i = 0; i < 10; i++)
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
+	}
+	sheetCalculations->setLinking(true);
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+	sheetData->setRowCount(7);
+	sheetDataColumn0->replaceValues(0, {3, 4, 6, 2, 1, 8, 5});
+	QCOMPARE(sheetDataColumn0->rowCount(), 7);
+
+	{
+		QVector<double> ref{4, 6, 7, 4, 2, 10, 6};
+		QCOMPARE(sheetCalculationsColumn0->rowCount(), ref.count());
+		for (int i = 0; i < ref.count(); i++) {
+			qDebug() << i;
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
+		}
+	}
+}
+
+void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
+	QString savePath;
+	{
+		Project project;
+		auto model = new AspectTreeModel(&project, this);
+		ProjectExplorer pe; // Needed otherwise the state key is missing in the file and then no restorePointers will be called
+		pe.setProject(&project);
+		pe.setModel(model);
+		auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+		project.addChild(sheetData);
+		sheetData->setColumnCount(3);
+		sheetData->setRowCount(10);
+
+		auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+		project.addChild(sheetCalculations);
+		sheetCalculations->setColumnCount(3);
+		sheetCalculations->setRowCount(2);
+
+		SpreadsheetDock dock(nullptr);
+		dock.setSpreadsheets({sheetCalculations});
+
+		QCOMPARE(dock.ui.cbLinked->isChecked(), false);
+		QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
+		QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+		QCOMPARE(sheetCalculations->linking(), false);
+
+		Q_EMIT dock.ui.cbLinked->toggled(true);
+
+		sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+		QCOMPARE(sheetCalculations->linking(), true);
+		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+		QCOMPARE(sheetCalculations->rowCount(), 10);
+
+		SAVE_PROJECT("testLinkSpreadsheetSaveLoad")
+	}
+
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		auto sheetData = project.child<Spreadsheet>(0);
+		QVERIFY(sheetData);
+		auto sheetCalculations = project.child<Spreadsheet>(1);
+		QVERIFY(sheetCalculations);
+
+		QCOMPARE(sheetCalculations->linking(), true);
+		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+		QCOMPARE(sheetCalculations->rowCount(), 10);
+
+		new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+		sheetData->setRowCount(11); // Changing shall also update sheetCalculations also after loading
+
+		QCOMPARE(sheetCalculations->linking(), true);
+		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+		QCOMPARE(sheetCalculations->rowCount(), 11);
+	}
 }
 
 QTEST_MAIN(SpreadsheetTest)

@@ -6,15 +6,61 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>442</height>
+    <width>436</width>
+    <height>472</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="10" column="3">
+    <widget class="QCheckBox" name="cbShowComments">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="text">
       <string>Name:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lRowCount">
+     <property name="text">
+      <string>Rows:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="3">
+    <widget class="ResizableTextEdit" name="teComment">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
      </property>
     </widget>
    </item>
@@ -37,29 +83,13 @@
    <item row="0" column="3">
     <widget class="QLineEdit" name="leName"/>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lComment">
-     <property name="text">
-      <string>Comment:</string>
+   <item row="7" column="3">
+    <widget class="QSpinBox" name="sbColumnCount">
+     <property name="minimum">
+      <number>0</number>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="ResizableTextEdit" name="teComment">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>16777215</height>
-      </size>
+     <property name="maximum">
+      <number>16777215</number>
      </property>
     </widget>
    </item>
@@ -79,54 +109,7 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lDimensions">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Dimensions</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lRowCount">
-     <property name="text">
-      <string>Rows:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="3">
-    <widget class="QSpinBox" name="sbRowCount">
-     <property name="minimum">
-      <number>0</number>
-     </property>
-     <property name="maximum">
-      <number>999999999</number>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lColumnCount">
-     <property name="text">
-      <string>Columns:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="3">
-    <widget class="QSpinBox" name="sbColumnCount">
-     <property name="minimum">
-      <number>0</number>
-     </property>
-     <property name="maximum">
-      <number>16777215</number>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
+   <item row="8" column="0">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -142,11 +125,20 @@
      </property>
     </spacer>
    </item>
-   <item row="7" column="0">
+   <item row="1" column="0">
+    <widget class="QLabel" name="lComment">
+     <property name="text">
+      <string>Comment:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
     <widget class="QLabel" name="lFormat">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -155,35 +147,51 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="0" colspan="2">
+   <item row="10" column="0" colspan="2">
     <widget class="QLabel" name="lShowComments">
      <property name="text">
       <string>Column Comments:</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="3">
-    <widget class="QCheckBox" name="cbShowComments">
+   <item row="7" column="0">
+    <widget class="QLabel" name="lColumnCount">
      <property name="text">
-      <string/>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
+      <string>Columns:</string>
      </property>
     </widget>
    </item>
-   <item row="9" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="6" column="3">
+    <widget class="QSpinBox" name="sbRowCount">
+     <property name="minimum">
+      <number>0</number>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>13</height>
-      </size>
+     <property name="maximum">
+      <number>999999999</number>
      </property>
-    </spacer>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lDimensions">
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Dimensions</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3">
+    <widget class="QCheckBox" name="cbLinked">
+     <property name="text">
+      <string>Linked Spreadsheet</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="TreeViewComboBox" name="cbLinkedSpreadsheet"/>
    </item>
   </layout>
  </widget>
@@ -192,6 +200,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TreeViewComboBox</class>
+   <extends>QComboBox</extends>
+   <header>TreeViewComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -29,7 +29,7 @@ MQTTClient::MQTTClient(const QString& name)
 	, m_client(new QMqttClient(this))
 	, m_willTimer(new QTimer(this)) {
 	// stop reading from the source before removing the child from the project
-	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, &MQTTClient::pauseReading);
+	connect(this, QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved), this, &MQTTClient::pauseReading);
 
 	connect(m_updateTimer, &QTimer::timeout, this, &MQTTClient::read);
 	connect(m_client, &QMqttClient::connected, this, &MQTTClient::onMQTTConnect);

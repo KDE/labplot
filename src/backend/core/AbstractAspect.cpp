@@ -1170,7 +1170,10 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 			this,
 			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeAdded));
 	connect(child, &AbstractAspect::aspectAdded, this, &AbstractAspect::aspectAdded);
-	connect(child, &AbstractAspect::aspectAboutToBeRemoved, this, &AbstractAspect::aspectAboutToBeRemoved);
+	connect(child,
+			QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),
+			this,
+			QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved));
 	connect(child, &AbstractAspect::aspectRemoved, this, &AbstractAspect::aspectRemoved);
 	connect(child, &AbstractAspect::aspectHiddenAboutToChange, this, &AbstractAspect::aspectHiddenAboutToChange);
 	connect(child, &AbstractAspect::aspectHiddenChanged, this, &AbstractAspect::aspectHiddenChanged);
@@ -1216,6 +1219,7 @@ int AbstractAspectPrivate::removeChild(AbstractAspect* child) {
 	// QDEBUG(Q_FUNC_INFO << " CHILD = " << child << ", PARENT =" << child->parentAspect())
 	int index = indexOfChild(child);
 	Q_ASSERT(index != -1);
+	child->aspectAboutToBeRemoved();
 	m_children.removeAll(child);
 	QObject::disconnect(child, nullptr, q, nullptr);
 	child->setParentAspect(nullptr);
