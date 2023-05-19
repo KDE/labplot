@@ -1843,19 +1843,24 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
 	QCOMPARE(sheetCalculations->rowCount(), 100);
 
-	sheetCalculations->undoStack()->undo();
+	sheetCalculations->undoStack()->undo(); // first undo
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
 	sheetCalculations->undoStack()->undo();
 
 	QCOMPARE(sheetCalculations->linking(), true);
-	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr); // No linked spreadsheet anymore
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
-	QCOMPARE(sheetCalculations->rowCount(), 10);
+	QCOMPARE(sheetCalculations->rowCount(), 2); // Go back to original row count
 
 	sheetCalculations->undoStack()->undo();
 	QCOMPARE(sheetCalculations->linking(), false);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
-	QCOMPARE(sheetCalculations->rowCount(), 10);
+	QCOMPARE(sheetCalculations->rowCount(), 2);
 }
 
 void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
