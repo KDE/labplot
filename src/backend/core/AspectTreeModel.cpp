@@ -59,12 +59,12 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	connect(m_root, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 	connect(m_root, &AbstractAspect::aspectDescriptionChanged, this, &AspectTreeModel::aspectDescriptionChanged);
 	connect(m_root,
-			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeAdded),
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
 			this,
 			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AspectTreeModel::aspectAboutToBeAdded));
-	connect(m_root, &AbstractAspect::aspectAboutToBeRemoved, this, &AspectTreeModel::aspectAboutToBeRemoved);
-	connect(m_root, &AbstractAspect::aspectAdded, this, &AspectTreeModel::aspectAdded);
-	connect(m_root, &AbstractAspect::aspectRemoved, this, &AspectTreeModel::aspectRemoved);
+	connect(m_root, &AbstractAspect::childAspectAboutToBeRemoved, this, &AspectTreeModel::aspectAboutToBeRemoved);
+	connect(m_root, &AbstractAspect::childAspectAdded, this, &AspectTreeModel::aspectAdded);
+	connect(m_root, &AbstractAspect::childAspectRemoved, this, &AspectTreeModel::aspectRemoved);
 	connect(m_root, &AbstractAspect::aspectHiddenAboutToChange, this, &AspectTreeModel::aspectHiddenAboutToChange);
 	connect(m_root, &AbstractAspect::aspectHiddenChanged, this, &AspectTreeModel::aspectHiddenChanged);
 }

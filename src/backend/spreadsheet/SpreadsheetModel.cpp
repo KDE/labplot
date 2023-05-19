@@ -47,12 +47,12 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 
 	// Used when single columns get deleted or added
 	connect(m_spreadsheet,
-			QOverload<const AbstractAspect*, int, const AbstractAspect*>::of(&Spreadsheet::aspectAboutToBeAdded),
+			QOverload<const AbstractAspect*, int, const AbstractAspect*>::of(&Spreadsheet::childAspectAboutToBeAdded),
 			this,
 			&SpreadsheetModel::handleAspectAboutToBeAdded);
-	connect(m_spreadsheet, &Spreadsheet::aspectAdded, this, &SpreadsheetModel::handleAspectAdded);
+	connect(m_spreadsheet, &Spreadsheet::childAspectAdded, this, &SpreadsheetModel::handleAspectAdded);
 	connect(m_spreadsheet, &Spreadsheet::childAspectAboutToBeRemoved, this, &SpreadsheetModel::handleAspectAboutToBeRemoved);
-	connect(m_spreadsheet, &Spreadsheet::aspectRemoved, this, &SpreadsheetModel::handleAspectRemoved);
+	connect(m_spreadsheet, &Spreadsheet::childAspectRemoved, this, &SpreadsheetModel::handleAspectRemoved);
 
 	// Used when changing the column count
 	connect(m_spreadsheet, &Spreadsheet::aspectsAboutToBeInserted, this, &SpreadsheetModel::handleAspectsAboutToBeInserted);

@@ -79,9 +79,9 @@ private Q_SLOTS:
 	void testLinkSpreadsheetRecalculate();
 	void testLinkSpreadsheetSaveLoad();
 
-	#ifdef HAVE_VECTOR_BLF
-		void testLinkSpreadSheetImportBLF();
-	#endif // HAVE_VECTOR_BLF
+#ifdef HAVE_VECTOR_BLF
+	void testLinkSpreadSheetImportBLF();
+#endif // HAVE_VECTOR_BLF
 };
 
 #endif

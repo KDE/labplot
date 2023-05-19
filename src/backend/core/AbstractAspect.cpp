@@ -1166,15 +1166,15 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::aspectDescriptionAboutToChange, this, &AbstractAspect::aspectDescriptionAboutToChange);
 	connect(child, &AbstractAspect::aspectDescriptionChanged, this, &AbstractAspect::aspectDescriptionChanged);
 	connect(child,
-			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeAdded),
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
 			this,
-			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeAdded));
-	connect(child, &AbstractAspect::aspectAdded, this, &AbstractAspect::aspectAdded);
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded));
+	connect(child, &AbstractAspect::childAspectAdded, this, &AbstractAspect::childAspectAdded);
 	connect(child,
 			QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved),
 			this,
 			QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved));
-	connect(child, &AbstractAspect::aspectRemoved, this, &AbstractAspect::aspectRemoved);
+	connect(child, &AbstractAspect::childAspectRemoved, this, &AbstractAspect::childAspectRemoved);
 	connect(child, &AbstractAspect::aspectHiddenAboutToChange, this, &AbstractAspect::aspectHiddenAboutToChange);
 	connect(child, &AbstractAspect::aspectHiddenChanged, this, &AbstractAspect::aspectHiddenChanged);
 	connect(child, &AbstractAspect::statusInfo, this, &AbstractAspect::statusInfo);
