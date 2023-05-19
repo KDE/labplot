@@ -52,7 +52,6 @@ public:
 
 	void setSearchText(const QString&);
 	QModelIndex index(const QString&) const;
-	void beginRemoveRows(const QModelIndex& parent, int first, int last);
 
 private Q_SLOTS:
 	void handleAspectsAboutToBeInserted(int first, int last);

@@ -113,14 +113,6 @@ QModelIndex SpreadsheetModel::index(const QString& text) const {
 	return createIndex(-1, -1);
 }
 
-void SpreadsheetModel::beginRemoveRows(const QModelIndex& parent, int first, int last) {
-	const int rc = rowCount(parent);
-	Q_ASSERT(first >= 0);
-	Q_ASSERT(last >= first);
-	Q_ASSERT(last < rc);
-	QAbstractItemModel::beginRemoveRows(parent, first, last);
-}
-
 QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 	if (!index.isValid())
 		return {};
