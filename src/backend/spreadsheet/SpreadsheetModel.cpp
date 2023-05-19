@@ -42,7 +42,7 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 	, m_verticalHeaderCount(spreadsheet->rowCount())
 	, m_columnCount(spreadsheet->columnCount()) {
 	updateVerticalHeader();
-	updateHorizontalHeader();
+	updateHorizontalHeader(false);
 	connect(m_spreadsheet, &Spreadsheet::aspectDescriptionChanged, this, &SpreadsheetModel::handleDescriptionChange);
 
 	// Used when single columns get deleted or added
@@ -67,7 +67,7 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 
 	m_suppressSignals = true;
 	handleAspectsAboutToBeInserted(0, spreadsheet->columnCount() - 1);
-	handleAspectsInserted(0, spreadsheet->columnCount() - 1);
+	handleAspectsInserted(0, spreadsheet->columnCount() - 1); // make connections
 	m_suppressSignals = false;
 
 	m_spreadsheet->setModel(this);
