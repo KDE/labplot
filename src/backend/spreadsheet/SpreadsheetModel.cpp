@@ -83,7 +83,7 @@ void SpreadsheetModel::suppressSignals(bool value) {
 	else {
 		m_rowCount = m_spreadsheet->rowCount();
 		m_columnCount = m_spreadsheet->columnCount();
-		updateHorizontalHeader();
+		updateHorizontalHeader(false);
 		endResetModel();
 	}
 }
@@ -393,7 +393,7 @@ void SpreadsheetModel::handleAspectCountChanged() {
 		return;
 
 	m_columnCount = m_spreadsheet->columnCount();
-	updateHorizontalHeader();
+	updateHorizontalHeader(false);
 }
 
 void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {
@@ -405,7 +405,7 @@ void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {
 		return;
 
 	if (!m_suppressSignals) {
-		updateHorizontalHeader();
+		updateHorizontalHeader(false);
 		int index = m_spreadsheet->indexOfChild<Column>(col);
 		Q_EMIT headerDataChanged(Qt::Horizontal, index, index);
 	}
@@ -415,7 +415,7 @@ void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
 	if (m_suppressSignals)
 		return;
 
-	updateHorizontalHeader();
+	updateHorizontalHeader(false);
 	int index = m_spreadsheet->indexOfChild<Column>(col);
 	Q_EMIT headerDataChanged(Qt::Horizontal, index, index);
 	handleDataChange(col);
@@ -441,7 +441,7 @@ void SpreadsheetModel::handlePlotDesignationChange(const AbstractColumn* col) {
 	if (m_suppressSignals)
 		return;
 
-	updateHorizontalHeader();
+	updateHorizontalHeader(false);
 	int index = m_spreadsheet->indexOfChild<Column>(col);
 	Q_EMIT headerDataChanged(Qt::Horizontal, index, m_columnCount - 1);
 }
@@ -487,7 +487,7 @@ void SpreadsheetModel::updateVerticalHeader() {
 	m_verticalHeaderCount = m_rowCount;
 }
 
-void SpreadsheetModel::updateHorizontalHeader() {
+void SpreadsheetModel::updateHorizontalHeader(bool sendSignal) {
 	int column_count = m_spreadsheet->childCount<Column>();
 
 	while (m_horizontal_header_data.size() < column_count)
@@ -518,7 +518,8 @@ void SpreadsheetModel::updateHorizontalHeader() {
 		m_horizontal_header_data.replace(i, header);
 	}
 
-	Q_EMIT headerDataChanged(Qt::Horizontal, 0, column_count - 1);
+	if (sendSignal)
+		Q_EMIT headerDataChanged(Qt::Horizontal, 0, column_count - 1);
 }
 
 Column* SpreadsheetModel::column(int index) {

@@ -47,7 +47,7 @@ public:
 	void activateFormulaMode(bool on);
 	bool formulaModeActive() const;
 
-	void updateHorizontalHeader();
+	void updateHorizontalHeader(bool sendSignal = true);
 	void suppressSignals(bool);
 
 	void setSearchText(const QString&);
