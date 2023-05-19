@@ -193,7 +193,7 @@ public:
 		QUndoCommand::redo();
 
 		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsInserted(m_first, m_last);
+			Q_EMIT m_spreadsheet->rowsInserted(m_last + 1);
 		else
 			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
 		RESET_CURSOR;
@@ -211,7 +211,7 @@ public:
 		if (m_insert)
 			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
 		else
-			Q_EMIT m_spreadsheet->rowsInserted(m_first, m_last);
+			Q_EMIT m_spreadsheet->rowsInserted(m_last + 1);
 		RESET_CURSOR;
 		m_spreadsheet->emitRowCountChanged();
 	}

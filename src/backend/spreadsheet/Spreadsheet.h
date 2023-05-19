@@ -129,7 +129,7 @@ Q_SIGNALS:
 	void aspectsRemoved();
 
 	void rowsAboutToBeInserted(int before, int last);
-	void rowsInserted(int first, int last);
+	void rowsInserted(int newRowCount);
 	void rowsAboutToBeRemoved(int first, int count);
 	void rowsRemoved(int newRowCount);
 
