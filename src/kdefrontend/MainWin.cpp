@@ -1476,7 +1476,7 @@ bool MainWin::newProject() {
 
 	connect(m_project, &Project::aspectAdded, this, &MainWin::handleAspectAdded);
 	connect(m_project, &Project::aspectRemoved, this, &MainWin::handleAspectRemoved);
-	connect(m_project, QOverload<const AbstractAspect*>::of(&Project::childAspectAboutToBeRemoved), this, &MainWin::handleAspectAboutToBeRemoved);
+	connect(m_project, &Project::childAspectAboutToBeRemoved, this, &MainWin::handleAspectAboutToBeRemoved);
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
 	connect(m_project, &Project::changed, this, &MainWin::projectChanged);
 	connect(m_project, &Project::requestProjectContextMenu, this, &MainWin::createContextMenu);
