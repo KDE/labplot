@@ -446,7 +446,7 @@ Q_SIGNALS:
 	 * \brief aspectAboutToBeRemoved
 	 * Called from the parent if a child will be removed
 	 */
-	void aspectAboutToBeRemoved(const AbstractAspect* child);
+	void childAspectAboutToBeRemoved(const AbstractAspect* child);
 	/*!
 	 * \brief aspectAboutToBeRemoved
 	 * Called by the aspect it self when it will be removed

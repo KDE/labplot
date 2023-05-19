@@ -1695,7 +1695,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 	DEBUG(Q_FUNC_INFO)
 	m_connectionsUpdateFormula << connect(column, &AbstractColumn::dataChanged, m_owner, &Column::updateFormula);
 	connect(column->parentAspect(),
-			QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),
+			QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved),
 			this,
 			&ColumnPrivate::formulaVariableColumnRemoved);
 	connect(column, &AbstractColumn::reset, this, &ColumnPrivate::formulaVariableColumnRemoved);

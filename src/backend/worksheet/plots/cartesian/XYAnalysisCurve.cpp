@@ -212,10 +212,7 @@ void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
 		handleSourceDataChanged();
 		if (column) {
 			setXDataColumnPath(column->path());
-			connect(column->parentAspect(),
-					QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),
-					this,
-					&XYAnalysisCurve::xDataColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &XYAnalysisCurve::xDataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::xDataColumnNameChanged);
 			// TODO disconnect on undo
@@ -233,10 +230,7 @@ void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 		handleSourceDataChanged();
 		if (column) {
 			setYDataColumnPath(column->path());
-			connect(column->parentAspect(),
-					QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),
-					this,
-					&XYAnalysisCurve::yDataColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &XYAnalysisCurve::yDataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::yDataColumnNameChanged);
 			// TODO disconnect on undo
@@ -254,10 +248,7 @@ void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
 		handleSourceDataChanged();
 		if (column) {
 			setY2DataColumnPath(column->path());
-			connect(column->parentAspect(),
-					QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),
-					this,
-					&XYAnalysisCurve::y2DataColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &XYAnalysisCurve::y2DataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::y2DataColumnNameChanged);
 			// TODO disconnect on undo

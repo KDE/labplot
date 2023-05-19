@@ -47,7 +47,7 @@ public:
 		}
 
 		m_aspect = aspects.first();
-		connect(m_aspect, QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved), this, &BaseDock::disconnectAspect);
+		connect(m_aspect, QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved), this, &BaseDock::disconnectAspect);
 		for (auto* aspect : aspects) {
 			if (aspect->inherits(AspectType::AbstractAspect))
 				m_aspects.append(static_cast<AbstractAspect*>(aspect));

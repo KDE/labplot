@@ -48,7 +48,7 @@ public:
 		if (!m_moved) {
 			const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* col : columns)
-				emit col->parentAspect()->aspectAboutToBeRemoved(col);
+				emit col->parentAspect()->childAspectAboutToBeRemoved(col);
 		}
 
 		// no need to emit signals if the aspect is hidden, the only exceptions is it's a datapicker point
@@ -60,7 +60,7 @@ public:
 		// rather accept this "edge case" than having no undo/redo for position changes for datapicker points until
 		// we have a better solution.
 		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
-			emit m_target->q->aspectAboutToBeRemoved(m_child);
+			emit m_target->q->childAspectAboutToBeRemoved(m_child);
 
 		m_index = m_target->removeChild(m_child);
 
@@ -127,7 +127,7 @@ public:
 
 	// calling redo transfers ownership of m_child to the new parent aspect
 	void redo() override {
-		emit m_child->aspectAboutToBeRemoved(m_child);
+		emit m_child->childAspectAboutToBeRemoved(m_child);
 		m_index = m_target->removeChild(m_child);
 		m_new_parent->insertChild(m_new_index, m_child);
 		emit m_child->aspectAdded(m_child);
@@ -136,7 +136,7 @@ public:
 	// calling undo transfers ownership of m_child back to its previous parent aspect
 	void undo() override {
 		Q_ASSERT(m_index != -1);
-		emit m_child->aspectAboutToBeRemoved(m_child);
+		emit m_child->childAspectAboutToBeRemoved(m_child);
 		m_new_parent->removeChild(m_child);
 		m_target->insertChild(m_index, m_child);
 		emit m_child->aspectAdded(m_child);

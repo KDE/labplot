@@ -26,10 +26,7 @@
   */
 #define CURVE_COLUMN_CONNECT(class_name, Prefix, prefix, recalc_func)                                                                                          \
 	void class_name::connect##Prefix##Column(const AbstractColumn* column) {                                                                                   \
-		connect(column->parentAspect(),                                                                                                                        \
-				QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),                                                                 \
-				this,                                                                                                                                          \
-				&class_name::prefix##ColumnAboutToBeRemoved);                                                                                                  \
+		connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &class_name::prefix##ColumnAboutToBeRemoved);                      \
 		/* When the column is reused with different name, the curve should be informed to disconnect */                                                        \
 		connect(column, &AbstractColumn::reset, this, &class_name::prefix##ColumnAboutToBeRemoved);                                                            \
 		connect(column, &AbstractAspect::aspectDescriptionChanged, this, &class_name::prefix##ColumnNameChanged);                                              \

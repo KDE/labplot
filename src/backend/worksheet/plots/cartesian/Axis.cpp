@@ -783,10 +783,7 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
-			connect(column->parentAspect(),
-					QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),
-					this,
-					&Axis::majorTicksColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Axis::majorTicksColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 		}
 	}
@@ -875,10 +872,7 @@ void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
-			connect(column->parentAspect(),
-					QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),
-					this,
-					&Axis::minorTicksColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Axis::minorTicksColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 		}
 	}
@@ -964,7 +958,7 @@ void Axis::setLabelsTextColumn(const AbstractColumn* column) {
 
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
-			connect(column->parentAspect(), QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved), this, &Axis::retransformTicks);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Axis::retransformTicks);
 			// TODO: add disconnect in the undo-function
 		}
 	}

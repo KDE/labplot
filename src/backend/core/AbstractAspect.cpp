@@ -621,7 +621,7 @@ void AbstractAspect::removeAllChildren() {
 	}
 
 	while (current) {
-		Q_EMIT aspectAboutToBeRemoved(current);
+		Q_EMIT childAspectAboutToBeRemoved(current);
 		exec(new AspectChildRemoveCmd(d, current));
 		Q_EMIT aspectRemoved(this, nextSibling, current);
 
@@ -1171,9 +1171,9 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeAdded));
 	connect(child, &AbstractAspect::aspectAdded, this, &AbstractAspect::aspectAdded);
 	connect(child,
-			QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved),
+			QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved),
 			this,
-			QOverload<const AbstractAspect*>::of(&AbstractAspect::aspectAboutToBeRemoved));
+			QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved));
 	connect(child, &AbstractAspect::aspectRemoved, this, &AbstractAspect::aspectRemoved);
 	connect(child, &AbstractAspect::aspectHiddenAboutToChange, this, &AbstractAspect::aspectHiddenAboutToChange);
 	connect(child, &AbstractAspect::aspectHiddenChanged, this, &AbstractAspect::aspectHiddenChanged);
