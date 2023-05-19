@@ -68,6 +68,9 @@ private Q_SLOTS:
 	void testRemoveRows();
 	void testInsertColumns();
 	void testRemoveColumns();
+
+	void testInsertRowsSuppressUpdate();
+	void testInsertColumnsSuppressUpdate();
 };
 
 #endif

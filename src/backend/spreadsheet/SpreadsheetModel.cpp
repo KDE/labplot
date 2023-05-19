@@ -302,10 +302,9 @@ void SpreadsheetModel::handleAspectsAboutToBeInserted(int first, int last) {
 }
 
 void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect*, int index, const AbstractAspect*) {
-	if (m_spreadsheetColumnCountChanging)
+	if (m_spreadsheetColumnCountChanging || m_suppressSignals)
 		return;
-	if (!m_suppressSignals)
-		beginInsertColumns(QModelIndex(), index, index);
+	beginInsertColumns(QModelIndex(), index, index);
 }
 
 void SpreadsheetModel::handleAspectsInserted(int first, int last) {
@@ -368,6 +367,8 @@ void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect
 }
 
 void SpreadsheetModel::handleAspectsRemoved() {
+	if (m_suppressSignals)
+		return;
 	handleAspectCountChanged();
 	endRemoveColumns();
 	m_spreadsheetColumnCountChanging = false;
@@ -460,11 +461,15 @@ void SpreadsheetModel::handleRowsAboutToBeRemoved(int first, int last) {
 
 void SpreadsheetModel::handleRowsInserted(int newRowCount) {
 	handleRowCountChanged(newRowCount);
+	if (m_suppressSignals)
+		return;
 	endInsertRows();
 }
 
 void SpreadsheetModel::handleRowsRemoved(int newRowCount) {
 	handleRowCountChanged(newRowCount);
+	if (m_suppressSignals)
+		return;
 	endRemoveRows();
 }
 

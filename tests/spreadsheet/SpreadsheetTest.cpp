@@ -1652,4 +1652,122 @@ void SpreadsheetTest::testRemoveColumns() {
 	QCOMPARE(columnsAboutToBeRemovedCounter, 2); // set and redo()
 }
 
+/*!
+ * \brief testInsertRowsSuppressUpdate
+ * It shall not crash
+ * Testing if in the model begin and end are used properly
+ */
+void SpreadsheetTest::testInsertRowsSuppressUpdate() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [this, &rowsAboutToBeInsertedCounter]() {
+		rowsAboutToBeInsertedCounter++;
+	});
+	int rowsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsInserted, [this, &rowsInsertedCounter]() {
+		rowsInsertedCounter++;
+	});
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [this, &rowsAboutToBeRemovedCounter]() {
+		rowsAboutToBeRemovedCounter++;
+	});
+	int rowsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsRemoved, [this, &rowsRemovedCounter]() {
+		rowsRemovedCounter++;
+	});
+
+	int modelResetCounter = 0;
+	connect(model, &SpreadsheetModel::modelReset, [this, &modelResetCounter]() {
+		modelResetCounter++;
+	});
+	int modelAboutToResetCounter = 0;
+	connect(model, &SpreadsheetModel::modelAboutToBeReset, [this, &modelAboutToResetCounter]() {
+		modelAboutToResetCounter++;
+	});
+
+	model->suppressSignals(true);
+
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->setRowCount(101); // No crash shall happen
+	QCOMPARE(sheet->rowCount(), 101);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->rowCount(), 101);
+
+	model->suppressSignals(false);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 0);
+	QCOMPARE(rowsInsertedCounter, 0);
+	QCOMPARE(rowsAboutToBeRemovedCounter, 0);
+	QCOMPARE(rowsRemovedCounter, 0);
+	QCOMPARE(modelResetCounter, 1);
+	QCOMPARE(modelAboutToResetCounter, 1);
+}
+
+/*!
+ * \brief testInsertColumnsSuppressUpdate
+ * It shall not crash
+ * Testing if in the model begin and end are used properly
+ */
+void SpreadsheetTest::testInsertColumnsSuppressUpdate() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+
+	int columnsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [this, &columnsAboutToBeInsertedCounter]() {
+		columnsAboutToBeInsertedCounter++;
+	});
+	int columnsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsInserted, [this, &columnsInsertedCounter]() {
+		columnsInsertedCounter++;
+	});
+	int columnsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [this, &columnsAboutToBeRemovedCounter]() {
+		columnsAboutToBeRemovedCounter++;
+	});
+	int columnsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsRemoved, [this, &columnsRemovedCounter]() {
+		columnsRemovedCounter++;
+	});
+
+	int modelResetCounter = 0;
+	connect(model, &SpreadsheetModel::modelReset, [this, &modelResetCounter]() {
+		modelResetCounter++;
+	});
+	int modelAboutToResetCounter = 0;
+	connect(model, &SpreadsheetModel::modelAboutToBeReset, [this, &modelAboutToResetCounter]() {
+		modelAboutToResetCounter++;
+	});
+
+	model->suppressSignals(true);
+
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->setColumnCount(5); // No crash shall happen
+	QCOMPARE(sheet->columnCount(), 5);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->columnCount(), 5);
+
+	model->suppressSignals(false);
+
+	QCOMPARE(columnsAboutToBeInsertedCounter, 0);
+	QCOMPARE(columnsInsertedCounter, 0);
+	QCOMPARE(columnsRemovedCounter, 0);
+	QCOMPARE(columnsAboutToBeRemovedCounter, 0);
+	QCOMPARE(modelResetCounter, 1);
+	QCOMPARE(modelAboutToResetCounter, 1);
+}
+
 QTEST_MAIN(SpreadsheetTest)
