@@ -369,10 +369,16 @@ void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 void AspectTreeModel::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	AbstractAspect* parent = aspect->parentAspect();
 	int index = parent->indexOfChild<AbstractAspect>(aspect);
+	m_aspectAboutToBeRemovedCalled = true;
 	beginRemoveRows(modelIndexOfAspect(parent), index, index);
 }
 
 void AspectTreeModel::aspectRemoved() {
+	// see https://invent.kde.org/education/labplot/-/merge_requests/278 for more information
+	// about this logic
+	if (!m_aspectAboutToBeRemovedCalled)
+		return;
+	m_aspectAboutToBeRemovedCalled = false;
 	endRemoveRows();
 }
 
