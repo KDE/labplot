@@ -252,7 +252,7 @@ public:
 			else
 				niceFraction = 10;
 		}
-		DEBUG(Q_FUNC_INFO << "round = " << round << ", fraction = " << fraction);
+		DEBUG(Q_FUNC_INFO << ", round = " << round << ", fraction = " << fraction);
 		DEBUG(Q_FUNC_INFO << ", nice fraction = " << niceFraction);
 
 		return niceFraction * std::pow(10., exponent);
@@ -263,6 +263,7 @@ public:
 	void niceExtend(bool extend = true) { // extend == false means shrink
 		if (length() == 0)
 			return;
+
 		double oldSize = size();
 		switch (scale()) {
 		case Scale::Linear:
@@ -286,13 +287,13 @@ public:
 			oldSize = 1. / oldSize;
 			break;
 		}
-		// DEBUG("old size = " << oldSize)
+		DEBUG("scale = " << (int)scale() << ", old size = " << oldSize)
 
 		const double newSize = niceSize(oldSize, false);
 		DEBUG(Q_FUNC_INFO << ", new size = " << newSize);
 		const double maxTicks = 10; // TODO: parameter?
 		const double spacing = niceSize(newSize / (maxTicks - 1), true);
-		// DEBUG("spacing = " << spacing)
+		DEBUG("spacing = " << spacing)
 
 		// extend/shrink range
 		double new_start = m_start, new_end = m_end;
@@ -341,7 +342,7 @@ public:
 			new_start = std::ceil(new_start / spacing) * spacing;
 			new_end = std::floor(new_end / spacing) * spacing;
 		}
-		// DEBUG(" tmp new range: " << new_start << " .. " << new_end)
+		DEBUG(" tmp new range: " << new_start << " .. " << new_end)
 
 		switch (scale()) {
 		case Scale::Linear:
