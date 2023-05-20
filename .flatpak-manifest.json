@@ -209,7 +209,6 @@
         {
             "name": "Qt-Advanced-Docking-System",
             "buildsystem": "cmake-ninja",
-            /* This version is two commits ahead the 4.0.3, with important changes needed to get it build! This must be removed once a new ADS version is released! */
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
                 "-DQT_VERSION_MAJOR=5"
@@ -265,7 +264,7 @@
             "build-options": {
                 "build-args": ["--share=network"]
             },
-            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DLOCAL_DBC_PARSER=OFF", "-DLOCAL_VECTOR_BLF=OFF"],
+            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF"],
 	    "sources": [
                 {
                     "type": "dir",
