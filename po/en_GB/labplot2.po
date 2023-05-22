@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-21 00:42+0000\n"
-"PO-Revision-Date: 2023-05-06 15:43+0100\n"
+"PO-Revision-Date: 2023-05-21 15:00+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -2317,10 +2317,9 @@ msgid "Force and Energy"
 msgstr "Force and Energy"
 
 #: src/backend/gsl/constants.cpp:48
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "Unknown Constant"
-msgstr "Constant"
+msgstr "Unknown Constant"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:57
@@ -3030,10 +3029,9 @@ msgid "Standard Mathematical Functions"
 msgstr "Standard Mathematical Functions"
 
 #: src/backend/gsl/functions.cpp:32
-#, fuzzy, kde-format
-#| msgid "Clausen Functions"
+#, kde-format
 msgid "Comparison Functions"
-msgstr "Clausen Functions"
+msgstr "Comparison Functions"
 
 #: src/backend/gsl/functions.cpp:34
 #, kde-format
@@ -3316,10 +3314,9 @@ msgid "Logarithmic Distribution"
 msgstr "Logarithmic Distribution"
 
 #: src/backend/gsl/functions.cpp:156
-#, fuzzy, kde-format
-#| msgid "Power Function"
+#, kde-format
 msgid "Unknown Function"
-msgstr "Power Function"
+msgstr "Unknown Function"
 
 #: src/backend/gsl/functions.cpp:162
 #, kde-format
@@ -3397,31 +3394,29 @@ msgid "Round to the nearest integer"
 msgstr "Round to the nearest integer"
 
 #: src/backend/gsl/functions.cpp:195
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterThen"
-msgstr "Greater than"
+msgstr "greaterThen"
 
 #: src/backend/gsl/functions.cpp:196
 #, kde-format
 msgid "lessThan"
-msgstr ""
+msgstr "lessThan"
 
 #: src/backend/gsl/functions.cpp:197
 #, kde-format
 msgid "greaterEqualThen"
-msgstr ""
+msgstr "greaterEqualThen"
 
 #: src/backend/gsl/functions.cpp:198
 #, kde-format
 msgid "lessEqualThen"
-msgstr ""
+msgstr "lessEqualThen"
 
 #: src/backend/gsl/functions.cpp:199
-#, fuzzy, kde-format
-#| msgid "Equal to"
+#, kde-format
 msgid "equal"
-msgstr "Equal to"
+msgstr "equal"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:202
@@ -4274,10 +4269,9 @@ msgid "Logarithm of the gamma function"
 msgstr "Logarithm of the gamma function"
 
 #: src/backend/gsl/functions.cpp:455
-#, fuzzy, kde-format
-#| msgid "Logarithm of the gamma function"
+#, kde-format
 msgid "Logarithm naturalis of the gamma function"
-msgstr "Logarithm of the gamma function"
+msgstr "Logarithm naturalis of the gamma function"
 
 #: src/backend/gsl/functions.cpp:456
 #, kde-format
@@ -16413,7 +16407,7 @@ msgstr "Datetime"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:537
 #, kde-format
 msgid "dd.MM.yyyy HH:mm"
-msgstr ""
+msgstr "dd.MM.yyyy HH:mm"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX3)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX1)
