@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-21 00:42+0000\n"
-"PO-Revision-Date: 2023-04-29 08:34\n"
+"PO-Revision-Date: 2023-05-22 14:01\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2303,10 +2303,9 @@ msgid "Force and Energy"
 msgstr ""
 
 #: src/backend/gsl/constants.cpp:48
-#, fuzzy, kde-format
-#| msgid "Constants"
+#, kde-format
 msgid "Unknown Constant"
-msgstr "常量"
+msgstr ""
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:57
@@ -3016,10 +3015,9 @@ msgid "Standard Mathematical Functions"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:32
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgid "Comparison Functions"
-msgstr "函数"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:34
 #, kde-format
@@ -3302,10 +3300,9 @@ msgid "Logarithmic Distribution"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:156
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgid "Unknown Function"
-msgstr "函数"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:162
 #, kde-format
@@ -3383,10 +3380,9 @@ msgid "Round to the nearest integer"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:195
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterThen"
-msgstr "大于"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:196
 #, kde-format
@@ -3404,10 +3400,9 @@ msgid "lessEqualThen"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:199
-#, fuzzy, kde-format
-#| msgid "Equal to"
+#, kde-format
 msgid "equal"
-msgstr "等于"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:202
@@ -21223,6 +21218,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "No Data"
-#~ msgstr "无数据"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-21 00:42+0000\n"
-"PO-Revision-Date: 2023-05-11 19:54+0100\n"
+"PO-Revision-Date: 2023-05-22 17:46+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -16528,7 +16528,7 @@ msgstr "Data/Hora"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:537
 #, kde-format
 msgid "dd.MM.yyyy HH:mm"
-msgstr ""
+msgstr "dd.MM.yyyy HH:mm"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX3)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX1)

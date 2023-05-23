@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-21 00:42+0000\n"
-"PO-Revision-Date: 2023-05-10 20:10+0100\n"
+"PO-Revision-Date: 2023-05-22 20:47+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -408,16 +408,16 @@ msgstr "NEDEFINITO"
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: enmeti 1 vicon"
+msgstr[1] "%1: enmeti %2 vicojn"
 
 #: src/backend/core/AbstractColumn.cpp:328
 #: src/backend/spreadsheet/Spreadsheet.cpp:183
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: forigi 1 vicon"
+msgstr[1] "%1: forigi %2 vicojn"
 
 #: src/backend/core/AbstractColumn.cpp:923
 #, kde-format
@@ -1622,8 +1622,8 @@ msgstr "XYRGB"
 #, kde-format
 msgid "numerical data, %1 element"
 msgid_plural "numerical data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "nombraj datenoj, %1 elemento"
+msgstr[1] "nombraj datenoj, %1 elementoj"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:202
 #, kde-format
@@ -3032,10 +3032,9 @@ msgid "Standard Mathematical Functions"
 msgstr "Normaj Matematikaj Funkcioj"
 
 #: src/backend/gsl/functions.cpp:32
-#, fuzzy, kde-format
-#| msgid "Comparsion Functions"
+#, kde-format
 msgid "Comparison Functions"
-msgstr "Kompar-funkcioj"
+msgstr "Komparofunkcioj"
 
 #: src/backend/gsl/functions.cpp:34
 #, kde-format
@@ -5316,15 +5315,15 @@ msgstr "%1: kopiu %2"
 #, kde-format
 msgid "%1: add %2 rows"
 msgid_plural "%1: add %2 rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: aldoni %2 vicon"
+msgstr[1] "%1: add %2 vicojn"
 
 #: src/backend/matrix/Matrix.cpp:562
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: aldoni %2 kolumnon"
+msgstr[1] "%1: aldoni %2 kolumnojn"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
 #: src/backend/spreadsheet/Spreadsheet.cpp:438
@@ -5336,15 +5335,15 @@ msgstr "%1: klara"
 #, kde-format
 msgid "%1: insert %2 column"
 msgid_plural "%1: insert %2 columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: enmeti %2 kolumnon"
+msgstr[1] "%1: enmeti %2 kolumnojn"
 
 #: src/backend/matrix/matrixcommands.cpp:40
 #, kde-format
 msgid "%1: insert %2 row"
 msgid_plural "%1: insert %2 rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: enmeti %2 vicon"
+msgstr[1] "%1: enmeti %2 vicojn"
 
 #: src/backend/matrix/matrixcommands.cpp:61
 #, kde-format
@@ -5355,15 +5354,15 @@ msgstr "%1: agordi matricaj koordinatoj"
 #, kde-format
 msgid "%1: remove %2 column"
 msgid_plural "%1: remove %2 columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: forigi %2 kolumnon"
+msgstr[1] "%1: forigi %2 kolumnojn"
 
 #: src/backend/matrix/matrixcommands.h:93
 #, kde-format
 msgid "%1: remove %2 row"
 msgid_plural "%1: remove %2 rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: forigi %2 vicon"
+msgstr[1] "%1: forigi %2 vicojn"
 
 #: src/backend/matrix/matrixcommands.h:158
 #, kde-format
@@ -6297,15 +6296,15 @@ msgstr "Trikubo"
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: enmeti 1 kolumnon"
+msgstr[1] "%1: enmeti %2 kolumnojn"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:337
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: forigi 1 kolumnon"
+msgstr[1] "%1: forigi %2 kolumnojn"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:446
 #, kde-format
@@ -6331,50 +6330,50 @@ msgstr "%1: ordigi kolumnojn"
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "duoble precizaj datenoj, %1 elemento"
+msgstr[1] "duoble precizaj datenoj, %1 elementoj"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1288
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "entjeraj datenoj, %1 elemento"
+msgstr[1] "entjeraj datenoj, %1 elementoj"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1291
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "entjeregaj datenoj, %1 elemento"
+msgstr[1] "entjeregaj datenoj, %1 elementoj"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1294
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "tekstdatenoj, %1 elemento"
+msgstr[1] "tekstdatenoj, %1 elementoj"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1297
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "monataj datenoj, %1 elemento"
+msgstr[1] "monataj datenoj, %1 elementoj"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1300
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "tagaj datenoj, %1 elemento"
+msgstr[1] "tagaj datenoj, %1 elementoj"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1303
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "dataj kaj horoj datenoj, %1 elemento"
+msgstr[1] "dataj kaj horoj datenoj, %1 elementoj"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:131
 #, kde-format
@@ -9265,8 +9264,8 @@ msgstr "Ĉu vi vere volas forigi %1?"
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Forigi elektitan objekton"
+msgstr[1] "Forigi elektitajn objektojn"
 
 #: src/commonfrontend/ProjectExplorer.cpp:924
 #, kde-format
