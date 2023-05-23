@@ -26,6 +26,7 @@ struct funs {
 	double (*fnct)();
 #endif
 	int argc;
+	QString (*parameterFunction)(int); // can be also a nullptr. Check needed!
 	FunctionGroups group;
 };
 
@@ -35,6 +36,7 @@ extern const int _number_functions;
 enum class FunctionGroups : int {
 	StandardMathematicalFunctions,
 	ComparisonFunctions,
+	LogicalFunctions,
 	ColumnStatistics,
 	MovingStatistics,
 	AiryFunctionsAndDerivatives,
