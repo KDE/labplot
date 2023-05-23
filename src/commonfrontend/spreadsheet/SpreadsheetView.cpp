@@ -1054,6 +1054,14 @@ void SpreadsheetView::goToCell(int row, int col) {
 	m_tableView->setCurrentIndex(index);
 }
 
+void SpreadsheetView::selectCell(int row, int col) {
+	m_tableView->selectionModel()->select(m_model->index(row, col), QItemSelectionModel::Select);
+}
+
+void SpreadsheetView::clearSelection() {
+	m_tableView->selectionModel()->clear();
+}
+
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
 	static bool inside = false;
 	if (inside)

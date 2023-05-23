@@ -234,6 +234,8 @@ public Q_SLOTS:
 	void selectColumn(int);
 	void deselectColumn(int);
 	void goToCell(int row, int col);
+	void selectCell(int row, int col);
+	void clearSelection();
 
 private Q_SLOTS:
 	void searchReplace();

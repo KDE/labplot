@@ -417,26 +417,7 @@ void SearchReplaceWidget::addCurrentTextToHistory(QComboBox* comboBox) const {
 // **********************************************************
 // ************************* SLOTs **************************
 // **********************************************************
-void SearchReplaceWidget::findAll() {
-	QString text;
-	QLineEdit* lineEdit;
-	if (m_replaceEnabled)
-		lineEdit = uiSearchReplace.cbValueText->lineEdit();
-	else
-		lineEdit = uiSearch.cbFind->lineEdit();
 
-	text = lineEdit->text();
-
-	m_spreadsheet->model()->setSearchText(text);
-	m_view->setFocus(); // set the focus so the table gets updated with the highlighted found entries
-	lineEdit->setFocus(); // set the focus back to the line edit so we can continue typing
-}
-
-void SearchReplaceWidget::replaceNext() {
-}
-
-void SearchReplaceWidget::replaceAll() {
-}
 
 void SearchReplaceWidget::cancel() {
 	m_spreadsheet->model()->setSearchText(QString()); // clear the global search text that was potentialy set during "find all"
@@ -1017,6 +998,72 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 	return false;
 }
 
+void SearchReplaceWidget::findAll() {
+	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
+	QString pattern1;
+	QString pattern2;
+	switch (type) {
+	case DataType::Text:
+		pattern1 = uiSearchReplace.cbValueText->currentText();
+		break;
+	case DataType::Numeric:
+		pattern1 = uiSearchReplace.cbValue1->currentText();
+		pattern2 = uiSearchReplace.cbValue2->currentText();
+		break;
+	case DataType::DateTime:
+		pattern1 = uiSearchReplace.dteValue1->text();
+		pattern1 = uiSearchReplace.dteValue2->text();
+		break;
+	}
+
+	if (pattern1.isEmpty()) {
+		highlight(type, false);
+		return;
+	}
+
+	// clear the previous selection
+	m_view->clearSelection();
+
+	// settings
+	const auto opText = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
+	const auto opNumeric = static_cast<Operator>(uiSearchReplace.cbOperator->currentData().toInt());
+	const auto opDateTime = static_cast<Operator>(uiSearchReplace.cbOperatorDateTime->currentData().toInt());
+	const auto cs = uiSearchReplace.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+	const int colCount = m_spreadsheet->columnCount();
+	const int rowCount = m_spreadsheet->rowCount();
+
+	// all settings are determined -> select all cells matching the specified pattern(s)
+	const auto& columns = m_spreadsheet->children<Column>();
+	bool match = false;
+	int matchCount = 0;
+
+	for (int col = 0; col < colCount; ++col) {
+		auto* column = columns.at(col);
+		if (!checkColumnType(column, type))
+			continue;
+
+		for (int row = 0; row < rowCount; ++row) {
+			match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
+			if (match) {
+				m_view->selectCell(row, col);
+				++matchCount;
+			}
+		}
+	}
+
+	// show the number of matches
+	// TODO
+}
+
+void SearchReplaceWidget::replaceNext() {
+}
+
+void SearchReplaceWidget::replaceAll() {
+}
+
+// **********************************************************
+// ************ find/replace helper functions **************
+// **********************************************************
 bool SearchReplaceWidget::checkColumnType(Column* column, DataType type) {
 	bool valid = false;
 
