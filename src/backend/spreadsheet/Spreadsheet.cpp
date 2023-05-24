@@ -499,14 +499,13 @@ void Spreadsheet::insertColumns(int before, int count, QUndoCommand* parent) {
 		execute = true;
 		parent = command;
 	}
-	auto* before_col = column(before);
 	const int cols = columnCount();
 	const int rows = rowCount();
 	for (int i = 0; i < count; i++) {
 		auto* new_col = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
-		insertChildBefore(new_col, before_col, parent);
+		insertChild(new_col, before + i, parent);
 	}
 
 	if (execute)

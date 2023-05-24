@@ -272,6 +272,7 @@ public:
 	void addChildFast(AbstractAspect*);
 	virtual void finalizeAdd(){};
 	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags = {}) const;
+	void insertChild(AbstractAspect* child, int index, QUndoCommand* parent = nullptr);
 	void insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent = nullptr);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);

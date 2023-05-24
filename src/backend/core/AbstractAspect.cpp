@@ -540,20 +540,23 @@ void AbstractAspect::addChildFast(AbstractAspect* child) {
  * \brief Insert the given Aspect at a specific position in my list of children.
  */
 void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent) {
+	insertChild(child, d->indexOfChild(before), parent);
+}
+
+void AbstractAspect::insertChild(AbstractAspect* child, int index, QUndoCommand* parent) {
 	Q_CHECK_PTR(child);
 
-	QString new_name = uniqueNameFor(child->name());
+	if (index == -1)
+		index = d->m_children.count();
 
+	QString new_name = uniqueNameFor(child->name());
 	bool execute = false;
 	if (!parent) {
 		execute = true;
+		const auto* before = this->parent(AspectType::AbstractAspect)->child<AbstractAspect>(index);
 		parent =
 			new QUndoCommand(before ? i18n("%1: insert %2 before %3", name(), new_name, before->name()) : i18n("%1: insert %2 before end", name(), new_name));
 	}
-
-	int index = d->indexOfChild(before);
-	if (index == -1)
-		index = d->m_children.count();
 
 	if (new_name != child->name()) {
 		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
