@@ -1,5 +1,7 @@
 <!-- This is a comment. They are not shown in the final issue and are only informative. You can remove them or ignore them -->
 
+- [ ] I searched through the issues if the issue already exists
+
 Steps to reproduce
 ==================
 1. Step 1
