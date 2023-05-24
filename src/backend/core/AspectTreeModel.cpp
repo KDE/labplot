@@ -374,10 +374,12 @@ void AspectTreeModel::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
 }
 
 void AspectTreeModel::aspectRemoved() {
-	// see https://invent.kde.org/education/labplot/-/merge_requests/278 for more information
-	// about this logic
+	// make sure aspectToBeRemoved(), and with this beginRemoveRows() in the model, was called
+	// prior to calling endRemoveRows() further below.
+	// see https://invent.kde.org/education/labplot/-/merge_requests/278 for more information.
 	if (!m_aspectAboutToBeRemovedCalled)
 		return;
+
 	m_aspectAboutToBeRemovedCalled = false;
 	endRemoveRows();
 }

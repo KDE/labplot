@@ -314,7 +314,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	// when the name of a column is being changed, it can match again the names being used in the curves, etc.
+	// when the name of a column is being changed, it can matches again the names being used in the curves, etc.
 	// and we need to update the dependencies
 	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (column) {

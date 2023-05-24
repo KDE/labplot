@@ -444,13 +444,13 @@ Q_SIGNALS:
 	void childAspectAdded(const AbstractAspect*);
 	/*!
 	 * \brief aspectAboutToBeRemoved
-	 * Called from the parent if a child will be removed
+	 * Called from the parent if a child is being removed
 	 */
 	void childAspectAboutToBeRemoved(const AbstractAspect* child);
 	void childAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	/*!
 	 * \brief aspectAboutToBeRemoved
-	 * Called by the aspect it self when it will be removed
+	 * Called by the aspect itself when it's being removed
 	 */
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void aspectHiddenAboutToChange(const AbstractAspect*);
