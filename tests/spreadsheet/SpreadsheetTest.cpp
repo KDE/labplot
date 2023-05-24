@@ -2280,4 +2280,25 @@ BO_ 541 MSG2: 8 Vector__XXX
 }
 #endif // HAVE_VECTOR_BLF
 
+/*!
+ * Columns are named in the correct number order
+ */
+void SpreadsheetTest::testNaming() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	new SpreadsheetModel(sheet);
+
+	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(sheet->column(0)->name(), QStringLiteral("1"));
+	QCOMPARE(sheet->column(1)->name(), QStringLiteral("2"));
+
+	sheet->setColumnCount(10);
+	QCOMPARE(sheet->columnCount(), 10);
+	for (int i = 0; i < 10; i++) {
+		QCOMPARE(sheet->column(i)->name(), QString::number(i + 1));
+	}
+}
+
 QTEST_MAIN(SpreadsheetTest)

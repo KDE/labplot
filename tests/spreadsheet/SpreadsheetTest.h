@@ -82,6 +82,8 @@ private Q_SLOTS:
 #ifdef HAVE_VECTOR_BLF
 	void testLinkSpreadSheetImportBLF();
 #endif // HAVE_VECTOR_BLF
+
+	void testNaming();
 };
 
 #endif
