@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-21 00:42+0000\n"
+"POT-Creation-Date: 2023-05-25 00:42+0000\n"
 "PO-Revision-Date: 2023-05-21 08:27+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -65,8 +65,8 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:223
-#: src/backend/worksheet/Image.cpp:430
+#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1153
+#: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2995
@@ -108,7 +108,7 @@ msgstr ""
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1409 src/backend/core/Folder.cpp:151
-#: src/backend/core/Project.cpp:761
+#: src/backend/core/Project.cpp:778
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:887
 #: src/backend/datapicker/DatapickerPoint.cpp:579
@@ -116,7 +116,7 @@ msgstr ""
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
-#: src/backend/spreadsheet/Spreadsheet.cpp:1059
+#: src/backend/spreadsheet/Spreadsheet.cpp:1188
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3124
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
@@ -412,7 +412,7 @@ msgid "UNDEFINED"
 msgstr "НЕ ВИЗНАЧЕНО"
 
 #: src/backend/core/AbstractColumn.cpp:326
-#: src/backend/spreadsheet/Spreadsheet.cpp:181
+#: src/backend/spreadsheet/Spreadsheet.cpp:186
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -422,7 +422,7 @@ msgstr[2] "%1: вставити %2 рядків"
 msgstr[3] "%1: вставити один рядок"
 
 #: src/backend/core/AbstractColumn.cpp:328
-#: src/backend/spreadsheet/Spreadsheet.cpp:183
+#: src/backend/spreadsheet/Spreadsheet.cpp:188
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -603,7 +603,7 @@ msgstr "автооновлення: так"
 msgid "auto update: false"
 msgstr "автооновлення: ні"
 
-#: src/backend/core/AspectTreeModel.cpp:406
+#: src/backend/core/AspectTreeModel.cpp:414
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "Назву «%1» вже використано. Будь ласка, виберіть іншу назву."
@@ -792,32 +792,32 @@ msgstr "%1: встановити автора"
 msgid "%1: save calculation changed"
 msgstr "%1: збереження зміненого обчислення"
 
-#: src/backend/core/Project.cpp:601 src/backend/core/Project.cpp:635
+#: src/backend/core/Project.cpp:618 src/backend/core/Project.cpp:652
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Вибачте. Не вдалося відкрити файл для читання."
 
-#: src/backend/core/Project.cpp:612 src/backend/core/Project.cpp:642
+#: src/backend/core/Project.cpp:629 src/backend/core/Project.cpp:659
 #, kde-format
 msgid "The project file is empty."
 msgstr "Файл проєкту є порожнім."
 
-#: src/backend/core/Project.cpp:612 src/backend/core/Project.cpp:642
+#: src/backend/core/Project.cpp:629 src/backend/core/Project.cpp:659
 #, kde-format
 msgid "Error opening project"
 msgstr "Помилка під час відкриття проєкту"
 
-#: src/backend/core/Project.cpp:661
+#: src/backend/core/Project.cpp:678
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Під час спроби відкрити проєкт %1 сталася невідома помилка."
 
-#: src/backend/core/Project.cpp:662
+#: src/backend/core/Project.cpp:679
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Помилка під час відкриття проєкту"
 
-#: src/backend/core/Project.cpp:682
+#: src/backend/core/Project.cpp:699
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -836,27 +836,27 @@ msgstr ""
 "\n"
 "Хочете продовжити обробку?"
 
-#: src/backend/core/Project.cpp:689 src/backend/core/Project.cpp:691
+#: src/backend/core/Project.cpp:706 src/backend/core/Project.cpp:708
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Не вистачає підтримки СКА"
 
-#: src/backend/core/Project.cpp:720
+#: src/backend/core/Project.cpp:737
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Пропущено атрибут «version»."
 
-#: src/backend/core/Project.cpp:768
+#: src/backend/core/Project.cpp:785
 #, kde-format
 msgid "no project element found"
 msgstr "не виявлено елемента проєкту"
 
-#: src/backend/core/Project.cpp:770
+#: src/backend/core/Project.cpp:787
 #, kde-format
 msgid "no valid XML document found"
 msgstr "не знайдено коректного документа XML"
 
-#: src/backend/core/Project.cpp:1067
+#: src/backend/core/Project.cpp:1098
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Некоректний час внесення змін до проєкту. Використовуємо поточний час."
@@ -1729,8 +1729,8 @@ msgid "Number of variables: "
 msgstr "Кількість змінних: "
 
 #: src/backend/datasources/filters/MatioFilter.cpp:349
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:302
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:322
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:303
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:323
 #, kde-format
 msgid "Variables:"
 msgstr "Змінні:"
@@ -1997,7 +1997,7 @@ msgstr "Атрибути"
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
 #: src/backend/datasources/filters/NetCDFFilter.cpp:636
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:85
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:91
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:183
 #, kde-format
 msgid "Dimensions"
 msgstr "Розмірності"
@@ -5362,7 +5362,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: встановити розмір матриці %2⨯%3"
 
 #: src/backend/matrix/Matrix.cpp:487
-#: src/backend/spreadsheet/Spreadsheet.cpp:501
+#: src/backend/spreadsheet/Spreadsheet.cpp:598
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: копіювання %2"
@@ -5386,7 +5386,7 @@ msgstr[2] "%1: додати %2 стовпчиків"
 msgstr[3] "%1: додати %2 стовпчик"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:438
+#: src/backend/spreadsheet/Spreadsheet.cpp:535
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: спорожнити"
@@ -6360,7 +6360,19 @@ msgstr "Тривага"
 msgid "Tricube"
 msgstr "Трикубічна"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:335
+#: src/backend/spreadsheet/Spreadsheet.cpp:357
+#, fuzzy, kde-format
+#| msgid "%1: set line pen"
+msgid "%1: set linking"
+msgstr "%1: встановити перо для лінії"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:377
+#, fuzzy, kde-format
+#| msgid "%1: set line pen"
+msgid "%1: set linked spreadsheet"
+msgstr "%1: встановити перо для лінії"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
@@ -6369,7 +6381,7 @@ msgstr[1] "%1: вставити %2 стовпчики"
 msgstr[2] "%1: вставити %2 стовпчиків"
 msgstr[3] "%1: вставити один стовпчик"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:337
+#: src/backend/spreadsheet/Spreadsheet.cpp:434
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
@@ -6378,27 +6390,32 @@ msgstr[1] "%1: вилучити %2 стовпчики"
 msgstr[2] "%1: вилучити %2 стовпчиків"
 msgstr[3] "%1: вилучити один стовпчик"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:446
+#: src/backend/spreadsheet/Spreadsheet.cpp:543
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: спорожнити позначені стовпчики"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:469
+#: src/backend/spreadsheet/Spreadsheet.cpp:566
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: зняти маскування повністю"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:493
+#: src/backend/spreadsheet/Spreadsheet.cpp:590
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: пересунути стовпчик %2 з позиції %3 на позицію %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:618
+#: src/backend/spreadsheet/Spreadsheet.cpp:715
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: упорядкувати стовпчики"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1285
+#: src/backend/spreadsheet/Spreadsheet.cpp:1080
+#, kde-format
+msgid "%1: linked spreadsheet removed"
+msgstr ""
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:1414
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -6407,7 +6424,7 @@ msgstr[1] "дані подвійної точності, %1 елементи"
 msgstr[2] "дані подвійної точності, %1 елементів"
 msgstr[3] "дані подвійної точності, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1288
+#: src/backend/spreadsheet/Spreadsheet.cpp:1417
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -6416,7 +6433,7 @@ msgstr[1] "цілочисельні дані, %1 елементи"
 msgstr[2] "цілочисельні дані, %1 елементів"
 msgstr[3] "цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1291
+#: src/backend/spreadsheet/Spreadsheet.cpp:1420
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -6425,7 +6442,7 @@ msgstr[1] "великі цілочисельні дані, %1 елементи"
 msgstr[2] "великі цілочисельні дані, %1 елементів"
 msgstr[3] "великі цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1294
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -6434,7 +6451,7 @@ msgstr[1] "текстові дані, %1 елементи"
 msgstr[2] "текстові дані, %1 елементів"
 msgstr[3] "текстові дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1297
+#: src/backend/spreadsheet/Spreadsheet.cpp:1426
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -6443,7 +6460,7 @@ msgstr[1] "дані щодо місяця, %1 елементи"
 msgstr[2] "дані щодо місяця, %1 елементів"
 msgstr[3] "дані щодо місяця, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1300
+#: src/backend/spreadsheet/Spreadsheet.cpp:1429
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -6452,7 +6469,7 @@ msgstr[1] "дані щодо дня, %1 елементи"
 msgstr[2] "дані щодо дня, %1 елементів"
 msgstr[3] "дані щодо дня, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1303
+#: src/backend/spreadsheet/Spreadsheet.cpp:1432
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -10026,6 +10043,7 @@ msgstr ""
 "знову."
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
+#. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/commonfrontend/workbook/WorkbookView.cpp:52
 #: src/commonfrontend/workbook/WorkbookView.cpp:165
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:114
@@ -10040,6 +10058,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:666
 #: src/kdefrontend/MainWin.cpp:2015 src/kdefrontend/SettingsDialog.cpp:66
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, kde-format
 msgid "Spreadsheet"
 msgstr "Електронна таблиця"
@@ -12091,7 +12110,7 @@ msgstr "Вісі %1: завантажено шаблон «%2»"
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:759
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:294
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:265
-#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:250
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:620
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1312
 #, kde-format
@@ -12137,7 +12156,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:410
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:85
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:115
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:197
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:421
 #, kde-format
 msgid "Columns:"
@@ -12760,7 +12779,18 @@ msgstr ""
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr "Лінія відліку %1: завантажено шаблон «%2»"
 
-#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:172
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:55
+#, kde-format
+msgid ""
+"Enable linking to synchronize the number of rows with another spreadsheet"
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
+#, kde-format
+msgid "Spreadsheet to synchronize the number of rows with"
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "Електронні таблиці %1: завантажено шаблон «%2»"
@@ -15390,7 +15420,7 @@ msgstr ""
 "Автоматично оновлювати обчислені значення у відповідь на зміни у стовпчиках "
 "змінних"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:161
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:162
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
@@ -15399,7 +15429,7 @@ msgstr ""
 "Вказану назву змінної вже зарезервовано як назву сталої. Будь ласка, "
 "скористайтеся іншою назвою."
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:164
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:165
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
@@ -15408,19 +15438,19 @@ msgstr ""
 "Вказану назву змінної вже зарезервовано як назву функції. Будь ласка, "
 "скористайтеся іншою назвою."
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:296
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:297
 #, kde-format
 msgid "Delete variable"
 msgstr "Вилучити змінну"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:322
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:323
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:23
 #, kde-format
 msgid "Variable:"
 msgstr "Змінна:"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:368
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:369
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
@@ -16004,7 +16034,7 @@ msgstr "Тип похибки за Y:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:228
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:58
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:118
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:43
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:64
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:151
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:17
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:51
@@ -16051,7 +16081,7 @@ msgstr "Коментар:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:51
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:275
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:117
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
@@ -18264,7 +18294,7 @@ msgstr "список діапазонів за y"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:201
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:475
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:261
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:154
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:210
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:194
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:470
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:733
@@ -18905,7 +18935,7 @@ msgstr "Прочитати увесь файл"
 
 #. i18n: ectx: property (text), widget (QLabel, lRowCount)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:92
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:98
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:190
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:400
 #, kde-format
 msgid "Rows:"
@@ -19026,10 +19056,25 @@ msgid "End x:"
 msgstr "X кінця:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:161
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:50
 #, kde-format
 msgid "Column Comments:"
 msgstr "Коментарі до стовпчика:"
+
+#. i18n: ectx: property (text), widget (QLabel, lLinking)
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
+#, fuzzy, kde-format
+#| msgid "Link"
+msgid "Linking"
+msgstr "Зв'язок"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:230
+#: src/kdefrontend/ui/settingsgeneralpage.ui:105
+#, kde-format
+msgid "Enabled"
+msgstr "Увімкнено"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
@@ -20332,12 +20377,6 @@ msgstr "Смужка заголовка:"
 #, kde-format
 msgid "Units:"
 msgstr "Одиниці:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:105
-#, kde-format
-msgid "Enabled"
-msgstr "Увімкнено"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:161

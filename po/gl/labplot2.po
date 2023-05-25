@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-21 00:42+0000\n"
+"POT-Creation-Date: 2023-05-25 00:42+0000\n"
 "PO-Revision-Date: 2020-01-12 12:23+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -72,8 +72,8 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:223
-#: src/backend/worksheet/Image.cpp:430
+#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1153
+#: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2995
@@ -113,7 +113,7 @@ msgstr "O atributo «%1» falta ou está baleiro, usarase o valor predeterminado
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1409 src/backend/core/Folder.cpp:151
-#: src/backend/core/Project.cpp:761
+#: src/backend/core/Project.cpp:778
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:887
 #: src/backend/datapicker/DatapickerPoint.cpp:579
@@ -121,7 +121,7 @@ msgstr "O atributo «%1» falta ou está baleiro, usarase o valor predeterminado
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
-#: src/backend/spreadsheet/Spreadsheet.cpp:1059
+#: src/backend/spreadsheet/Spreadsheet.cpp:1188
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3124
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
@@ -436,7 +436,7 @@ msgid "UNDEFINED"
 msgstr ""
 
 #: src/backend/core/AbstractColumn.cpp:326
-#: src/backend/spreadsheet/Spreadsheet.cpp:181
+#: src/backend/spreadsheet/Spreadsheet.cpp:186
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -444,7 +444,7 @@ msgstr[0] "%1: inserir unha fila."
 msgstr[1] "%1: inserir %2 filas."
 
 #: src/backend/core/AbstractColumn.cpp:328
-#: src/backend/spreadsheet/Spreadsheet.cpp:183
+#: src/backend/spreadsheet/Spreadsheet.cpp:188
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -632,7 +632,7 @@ msgstr "actualización automática"
 msgid "auto update: false"
 msgstr "actualización automática"
 
-#: src/backend/core/AspectTreeModel.cpp:406
+#: src/backend/core/AspectTreeModel.cpp:414
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "O nome «%1» xa está en uso. Escolla outro."
@@ -827,32 +827,32 @@ msgstr "%1: estabelecer a disposición"
 msgid "%1: save calculation changed"
 msgstr "%1: a precisión cambiou"
 
-#: src/backend/core/Project.cpp:601 src/backend/core/Project.cpp:635
+#: src/backend/core/Project.cpp:618 src/backend/core/Project.cpp:652
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Non se puido abrir o ficheiro para lectura."
 
-#: src/backend/core/Project.cpp:612 src/backend/core/Project.cpp:642
+#: src/backend/core/Project.cpp:629 src/backend/core/Project.cpp:659
 #, kde-format
 msgid "The project file is empty."
 msgstr "O ficheiro de proxecto está baleiro."
 
-#: src/backend/core/Project.cpp:612 src/backend/core/Project.cpp:642
+#: src/backend/core/Project.cpp:629 src/backend/core/Project.cpp:659
 #, kde-format
 msgid "Error opening project"
 msgstr "Erro ao abrir o proxecto"
 
-#: src/backend/core/Project.cpp:661
+#: src/backend/core/Project.cpp:678
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Produciuse un erro descoñecido ao abrir o proxecto %1."
 
-#: src/backend/core/Project.cpp:662
+#: src/backend/core/Project.cpp:679
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Produciuse un erro ao abrir o proxecto"
 
-#: src/backend/core/Project.cpp:682
+#: src/backend/core/Project.cpp:699
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -864,27 +864,27 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: src/backend/core/Project.cpp:689 src/backend/core/Project.cpp:691
+#: src/backend/core/Project.cpp:706 src/backend/core/Project.cpp:708
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr ""
 
-#: src/backend/core/Project.cpp:720
+#: src/backend/core/Project.cpp:737
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Falta o atributo «version»."
 
-#: src/backend/core/Project.cpp:768
+#: src/backend/core/Project.cpp:785
 #, kde-format
 msgid "no project element found"
 msgstr "non se atopou ningún elemento de proxecto"
 
-#: src/backend/core/Project.cpp:770
+#: src/backend/core/Project.cpp:787
 #, kde-format
 msgid "no valid XML document found"
 msgstr "non se atopou ningún documento XML correcto"
 
-#: src/backend/core/Project.cpp:1067
+#: src/backend/core/Project.cpp:1098
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -1768,8 +1768,8 @@ msgid "Number of variables: "
 msgstr "Número de variábeis: %1"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:349
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:302
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:322
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:303
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:323
 #, kde-format
 msgid "Variables:"
 msgstr "Variábeis:"
@@ -2056,7 +2056,7 @@ msgstr "Atributos"
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
 #: src/backend/datasources/filters/NetCDFFilter.cpp:636
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:85
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:91
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:183
 #, kde-format
 msgid "Dimensions"
 msgstr "Dimensións"
@@ -5469,7 +5469,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: definir o tamaño da matriz como %2×%3"
 
 #: src/backend/matrix/Matrix.cpp:487
-#: src/backend/spreadsheet/Spreadsheet.cpp:501
+#: src/backend/spreadsheet/Spreadsheet.cpp:598
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: copiar %2"
@@ -5489,7 +5489,7 @@ msgstr[0] "%1: engadir %2 columna"
 msgstr[1] "%1: engadir %2 columnas"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:438
+#: src/backend/spreadsheet/Spreadsheet.cpp:535
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: limpar"
@@ -6545,41 +6545,59 @@ msgstr "tripeso"
 msgid "Tricube"
 msgstr "tricubo"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:335
+#: src/backend/spreadsheet/Spreadsheet.cpp:357
+#, fuzzy, kde-format
+#| msgid "%1: set line style"
+msgid "%1: set linking"
+msgstr "%1: definir o estilo da liña"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:377
+#, fuzzy, kde-format
+#| msgid "%1: set line style"
+msgid "%1: set linked spreadsheet"
+msgstr "%1: definir o estilo da liña"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: inserir 1 columna"
 msgstr[1] "%1: inserir %2 columna"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:337
+#: src/backend/spreadsheet/Spreadsheet.cpp:434
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: retirar 1 columna"
 msgstr[1] "%1: retirar %2 columna"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:446
+#: src/backend/spreadsheet/Spreadsheet.cpp:543
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: limpar as columnas seleccionadas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:469
+#: src/backend/spreadsheet/Spreadsheet.cpp:566
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: limpar todas as máscaras"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:493
+#: src/backend/spreadsheet/Spreadsheet.cpp:590
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: mover a columna %2 da posición %3 á %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:618
+#: src/backend/spreadsheet/Spreadsheet.cpp:715
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordenar as columnas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1285
+#: src/backend/spreadsheet/Spreadsheet.cpp:1080
+#, fuzzy, kde-format
+#| msgid "no spreadsheet element found"
+msgid "%1: linked spreadsheet removed"
+msgstr "non se atopou ningún elemento de folla de cálculo"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:1414
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6588,14 +6606,14 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "datos numéricos, %1 elemento"
 msgstr[1] "datos numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1288
+#: src/backend/spreadsheet/Spreadsheet.cpp:1417
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "datos enteiros, %1 elemento"
 msgstr[1] "datos enteiros, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1291
+#: src/backend/spreadsheet/Spreadsheet.cpp:1420
 #, fuzzy, kde-format
 #| msgid "integer data, %1 element"
 #| msgid_plural "integer data, %1 elements"
@@ -6604,28 +6622,28 @@ msgid_plural "big integer data, %1 elements"
 msgstr[0] "datos enteiros, %1 elemento"
 msgstr[1] "datos enteiros, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1294
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "datos de texto, %1 elemento"
 msgstr[1] "datos de texto, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1297
+#: src/backend/spreadsheet/Spreadsheet.cpp:1426
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "datos mensuais, %1 elemento"
 msgstr[1] "datos mensuais, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1300
+#: src/backend/spreadsheet/Spreadsheet.cpp:1429
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "datos diarios, %1 elemento"
 msgstr[1] "datos diarios, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1303
+#: src/backend/spreadsheet/Spreadsheet.cpp:1432
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -10371,6 +10389,7 @@ msgstr ""
 "xa non está dispoñíbel. Usarase automaticamente cando se cree de novo."
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
+#. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/commonfrontend/workbook/WorkbookView.cpp:52
 #: src/commonfrontend/workbook/WorkbookView.cpp:165
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:114
@@ -10385,6 +10404,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:666
 #: src/kdefrontend/MainWin.cpp:2015 src/kdefrontend/SettingsDialog.cpp:66
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, kde-format
 msgid "Spreadsheet"
 msgstr "Folla de cálculo"
@@ -12519,7 +12539,7 @@ msgstr "%1 eixos: cargouse o modelo «%2»"
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:759
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:294
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:265
-#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:250
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:620
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1312
 #, kde-format
@@ -12563,7 +12583,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:410
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:85
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:115
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:197
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:421
 #, kde-format
 msgid "Columns:"
@@ -13194,7 +13214,18 @@ msgstr ""
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr "%1 matrices: cargouse o modelo «%2»"
 
-#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:172
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:55
+#, kde-format
+msgid ""
+"Enable linking to synchronize the number of rows with another spreadsheet"
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
+#, kde-format
+msgid "Spreadsheet to synchronize the number of rows with"
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 follas de cálculo: cargouse o modelo «%2»"
@@ -15965,7 +15996,7 @@ msgid ""
 "Automatically update the calculated values on changes in the variable columns"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:161
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:162
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
@@ -15974,7 +16005,7 @@ msgstr ""
 "O nome de variábel fornecido xa está reservado par ao nome dunha constante. "
 "Use outro nome."
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:164
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:165
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
@@ -15983,19 +16014,19 @@ msgstr ""
 "O nome de variábel fornecido xa está reservado par ao nome dunha función. "
 "Use outro nome."
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:296
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:297
 #, kde-format
 msgid "Delete variable"
 msgstr "Eliminar a variábel"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:322
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:323
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:23
 #, kde-format
 msgid "Variable:"
 msgstr "Variábel:"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:368
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:369
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
@@ -16605,7 +16636,7 @@ msgstr "Tipo de erro de Y:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:228
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:58
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:118
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:43
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:64
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:151
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:17
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:51
@@ -16652,7 +16683,7 @@ msgstr "Comentario:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:51
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:275
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:117
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
@@ -18924,7 +18955,7 @@ msgstr "intervalo de axuste:"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:201
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:475
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:261
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:154
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:210
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:194
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:470
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:733
@@ -19604,7 +19635,7 @@ msgstr "Ler o ficheiro enteiro"
 
 #. i18n: ectx: property (text), widget (QLabel, lRowCount)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:92
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:98
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:190
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:400
 #, kde-format
 msgid "Rows:"
@@ -19737,11 +19768,26 @@ msgid "End x:"
 msgstr "Fila final:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:161
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:50
 #, fuzzy, kde-format
 #| msgid "Column comments:"
 msgid "Column Comments:"
 msgstr "Comentarios de columnas:"
+
+#. i18n: ectx: property (text), widget (QLabel, lLinking)
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
+#, fuzzy, kde-format
+#| msgid "Link"
+msgid "Linking"
+msgstr "Ligazón"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:230
+#: src/kdefrontend/ui/settingsgeneralpage.ui:105
+#, kde-format
+msgid "Enabled"
+msgstr "Activado."
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
@@ -21088,12 +21134,6 @@ msgstr "Título"
 #| msgid "Unit:"
 msgid "Units:"
 msgstr "Unidade:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:105
-#, kde-format
-msgid "Enabled"
-msgstr "Activado."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:161
@@ -24243,9 +24283,6 @@ msgstr "Non se puido abrir o dispositivo."
 
 #~ msgid "no matrix element found"
 #~ msgstr "non se atopou ningún elemento de matriz"
-
-#~ msgid "no spreadsheet element found"
-#~ msgstr "non se atopou ningún elemento de folla de cálculo"
 
 #~ msgid "no axis element found"
 #~ msgstr "non se atopou ningún elemento de eixo"

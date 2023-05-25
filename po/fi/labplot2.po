@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-21 00:42+0000\n"
+"POT-Creation-Date: 2023-05-25 00:42+0000\n"
 "PO-Revision-Date: 2022-07-27 16:51+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -57,8 +57,8 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:223
-#: src/backend/worksheet/Image.cpp:430
+#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1153
+#: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2995
@@ -98,7 +98,7 @@ msgstr "Määrite ”%1” puuttuu tai on tyhjä, käytetään oletusarvoa"
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1409 src/backend/core/Folder.cpp:151
-#: src/backend/core/Project.cpp:761
+#: src/backend/core/Project.cpp:778
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:887
 #: src/backend/datapicker/DatapickerPoint.cpp:579
@@ -106,7 +106,7 @@ msgstr "Määrite ”%1” puuttuu tai on tyhjä, käytetään oletusarvoa"
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
-#: src/backend/spreadsheet/Spreadsheet.cpp:1059
+#: src/backend/spreadsheet/Spreadsheet.cpp:1188
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3124
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
@@ -435,7 +435,7 @@ msgid "UNDEFINED"
 msgstr "EI MÄÄRITETTY"
 
 #: src/backend/core/AbstractColumn.cpp:326
-#: src/backend/spreadsheet/Spreadsheet.cpp:181
+#: src/backend/spreadsheet/Spreadsheet.cpp:186
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -443,7 +443,7 @@ msgstr[0] "%1: lisää %2 rivi"
 msgstr[1] "%1: lisää %2 riviä"
 
 #: src/backend/core/AbstractColumn.cpp:328
-#: src/backend/spreadsheet/Spreadsheet.cpp:183
+#: src/backend/spreadsheet/Spreadsheet.cpp:188
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -631,7 +631,7 @@ msgstr "Automaattitallenna"
 msgid "auto update: false"
 msgstr "Automaattitallenna"
 
-#: src/backend/core/AspectTreeModel.cpp:406
+#: src/backend/core/AspectTreeModel.cpp:414
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "Nimi ”%1” on jo käytössä. Valitse toinen."
@@ -830,35 +830,35 @@ msgstr "%1: aseta asettelu"
 msgid "%1: save calculation changed"
 msgstr "%1: aseta luontiaika"
 
-#: src/backend/core/Project.cpp:601 src/backend/core/Project.cpp:635
+#: src/backend/core/Project.cpp:618 src/backend/core/Project.cpp:652
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Ei voitu avata tiedostoa luettavaksi."
 
-#: src/backend/core/Project.cpp:612 src/backend/core/Project.cpp:642
+#: src/backend/core/Project.cpp:629 src/backend/core/Project.cpp:659
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The project file is empty."
 msgstr "Projektitiedosto %1 on jo avattu."
 
-#: src/backend/core/Project.cpp:612 src/backend/core/Project.cpp:642
+#: src/backend/core/Project.cpp:629 src/backend/core/Project.cpp:659
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Error opening project"
 msgstr "Avaa projekti"
 
-#: src/backend/core/Project.cpp:661
+#: src/backend/core/Project.cpp:678
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Unknown error when opening the project %1."
 msgstr "Avaa projekti"
 
-#: src/backend/core/Project.cpp:662
+#: src/backend/core/Project.cpp:679
 #, kde-format
 msgid "Error when opening the project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:682
+#: src/backend/core/Project.cpp:699
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -877,27 +877,27 @@ msgstr ""
 "\n"
 "Haluatko jatkaa?"
 
-#: src/backend/core/Project.cpp:689 src/backend/core/Project.cpp:691
+#: src/backend/core/Project.cpp:706 src/backend/core/Project.cpp:708
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "CAS-tuki puuttuu"
 
-#: src/backend/core/Project.cpp:720
+#: src/backend/core/Project.cpp:737
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Määrite ”version” puuttuu."
 
-#: src/backend/core/Project.cpp:768
+#: src/backend/core/Project.cpp:785
 #, kde-format
 msgid "no project element found"
 msgstr "projektielementtiä ei löytynyt"
 
-#: src/backend/core/Project.cpp:770
+#: src/backend/core/Project.cpp:787
 #, kde-format
 msgid "no valid XML document found"
 msgstr "kelvollista XML-asiakirjaa ei löytynyt"
 
-#: src/backend/core/Project.cpp:1067
+#: src/backend/core/Project.cpp:1098
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Projektin muutosaika on virheellinen. Käytetään nykyistä aikaa."
@@ -1832,8 +1832,8 @@ msgid "Number of variables: "
 msgstr "Rivien määrä: %1"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:349
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:302
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:322
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:303
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:323
 #, kde-format
 msgid "Variables:"
 msgstr "Muuttujat:"
@@ -2123,7 +2123,7 @@ msgstr "Määritteet"
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
 #: src/backend/datasources/filters/NetCDFFilter.cpp:636
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:85
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:91
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:183
 #, fuzzy, kde-format
 #| msgid "Dimensions:"
 msgid "Dimensions"
@@ -5591,7 +5591,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: aseta matriisin kooksi %2×%3"
 
 #: src/backend/matrix/Matrix.cpp:487
-#: src/backend/spreadsheet/Spreadsheet.cpp:501
+#: src/backend/spreadsheet/Spreadsheet.cpp:598
 #, kde-format
 msgid "%1: copy %2"
 msgstr ""
@@ -5611,7 +5611,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:438
+#: src/backend/spreadsheet/Spreadsheet.cpp:535
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: tyhjennä"
@@ -6652,41 +6652,59 @@ msgstr "Korkeus"
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:335
+#: src/backend/spreadsheet/Spreadsheet.cpp:357
+#, fuzzy, kde-format
+#| msgid "%1: set vertical alignment"
+msgid "%1: set linking"
+msgstr "%1: aseta pystytasaus"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:377
+#, fuzzy, kde-format
+#| msgid "%1: set vertical alignment"
+msgid "%1: set linked spreadsheet"
+msgstr "%1: aseta pystytasaus"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:337
+#: src/backend/spreadsheet/Spreadsheet.cpp:434
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:446
+#: src/backend/spreadsheet/Spreadsheet.cpp:543
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: tyhjennä valitut sarakkeet"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:469
+#: src/backend/spreadsheet/Spreadsheet.cpp:566
 #, kde-format
 msgid "%1: clear all masks"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:493
+#: src/backend/spreadsheet/Spreadsheet.cpp:590
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:618
+#: src/backend/spreadsheet/Spreadsheet.cpp:715
 #, kde-format
 msgid "%1: sort columns"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1285
+#: src/backend/spreadsheet/Spreadsheet.cpp:1080
+#, fuzzy, kde-format
+#| msgid "Add new spreadsheet"
+msgid "%1: linked spreadsheet removed"
+msgstr "Lisää uusi laskentataulukko"
+
+#: src/backend/spreadsheet/Spreadsheet.cpp:1414
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6695,7 +6713,7 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1288
+#: src/backend/spreadsheet/Spreadsheet.cpp:1417
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6704,7 +6722,7 @@ msgid_plural "integer data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1291
+#: src/backend/spreadsheet/Spreadsheet.cpp:1420
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6713,7 +6731,7 @@ msgid_plural "big integer data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1294
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6722,7 +6740,7 @@ msgid_plural "text data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1297
+#: src/backend/spreadsheet/Spreadsheet.cpp:1426
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6731,7 +6749,7 @@ msgid_plural "month data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1300
+#: src/backend/spreadsheet/Spreadsheet.cpp:1429
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6740,7 +6758,7 @@ msgid_plural "day data, %1 elements"
 msgstr[0] "numeerista dataa, %1 elementti"
 msgstr[1] "numeerista dataa, %1 elementtiä"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1303
+#: src/backend/spreadsheet/Spreadsheet.cpp:1432
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -10539,6 +10557,7 @@ msgstr ""
 "automaattisesti."
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
+#. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/commonfrontend/workbook/WorkbookView.cpp:52
 #: src/commonfrontend/workbook/WorkbookView.cpp:165
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:114
@@ -10553,6 +10572,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:666
 #: src/kdefrontend/MainWin.cpp:2015 src/kdefrontend/SettingsDialog.cpp:66
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, kde-format
 msgid "Spreadsheet"
 msgstr "Laskentataulukko"
@@ -12570,7 +12590,7 @@ msgstr "%1 akselia: ladattiin mallipohja ”%2”"
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:759
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:294
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:265
-#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:250
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:620
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1312
 #, kde-format
@@ -12614,7 +12634,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:410
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:85
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:115
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:197
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:421
 #, kde-format
 msgid "Columns:"
@@ -13259,7 +13279,18 @@ msgstr ""
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr "%1 matriisia: ladattiin mallipohja ”%2”"
 
-#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:172
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:55
+#, kde-format
+msgid ""
+"Enable linking to synchronize the number of rows with another spreadsheet"
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
+#, kde-format
+msgid "Spreadsheet to synchronize the number of rows with"
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 laskentataulukkoa: ladattiin mallipohja ”%2”"
@@ -16048,33 +16079,33 @@ msgid ""
 "Automatically update the calculated values on changes in the variable columns"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:161
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:162
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
 "use another name."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:164
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:165
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
 "use another name."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:296
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:297
 #, kde-format
 msgid "Delete variable"
 msgstr "Poista muuttuja"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:322
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:323
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:23
 #, kde-format
 msgid "Variable:"
 msgstr "Muuttuja:"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:368
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:369
 #, fuzzy, kde-format
 #| msgid "%1: fill cells with const values"
 msgid "%1: fill column with function values"
@@ -16706,7 +16737,7 @@ msgstr "Y-virhetyyppi:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:228
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:58
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:118
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:43
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:64
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:151
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:17
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:51
@@ -16753,7 +16784,7 @@ msgstr "Kommentti:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:51
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:275
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:117
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
@@ -19037,7 +19068,7 @@ msgstr "oranssi"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:201
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:475
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:261
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:154
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:210
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:194
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:470
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:733
@@ -19716,7 +19747,7 @@ msgstr "Lue koko tiedosto"
 
 #. i18n: ectx: property (text), widget (QLabel, lRowCount)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:92
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:98
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:190
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:400
 #, kde-format
 msgid "Rows:"
@@ -19848,11 +19879,26 @@ msgid "End x:"
 msgstr "Lopettava rivi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
-#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:161
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:50
 #, fuzzy, kde-format
 #| msgid "Column comments:"
 msgid "Column Comments:"
 msgstr "Sarakekommentit:"
+
+#. i18n: ectx: property (text), widget (QLabel, lLinking)
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
+#, fuzzy, kde-format
+#| msgid "Link"
+msgid "Linking"
+msgstr "Linkki"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
+#: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:230
+#: src/kdefrontend/ui/settingsgeneralpage.ui:105
+#, kde-format
+msgid "Enabled"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
@@ -21220,12 +21266,6 @@ msgstr "Otsikko"
 #, kde-format
 msgid "Units:"
 msgstr "Yksiköt:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#: src/kdefrontend/ui/settingsgeneralpage.ui:105
-#, kde-format
-msgid "Enabled"
-msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:161
@@ -25085,9 +25125,6 @@ msgstr "Avaaminen epäonnistui"
 
 #~ msgid "Spreadsheet name:"
 #~ msgstr "Laskentataulukon nimi:"
-
-#~ msgid "Add new spreadsheet"
-#~ msgstr "Lisää uusi laskentataulukko"
 
 #, fuzzy
 #~| msgid "Add new spreadsheet"
