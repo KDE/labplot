@@ -9,6 +9,7 @@
 */
 
 #include "ImportFileDialog.h"
+#include "ImportErrorDialog.h"
 #include "ImportFileWidget.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Workbook.h"
@@ -73,7 +74,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	else
 		setWindowTitle(i18nc("@title:window", "Add New Live Data Source"));
 
-	setWindowIcon(QIcon::fromTheme("document-import-database"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-import-database")));
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
@@ -98,6 +99,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(m_importFileWidget, &ImportFileWidget::hostChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::portChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::error, this, &ImportFileDialog::showErrorMessage);
+	connect(this, &ImportDialog::dataContainerChanged, m_importFileWidget, &ImportFileWidget::dataContainerChanged);
 #ifdef HAVE_MQTT
 	connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
@@ -174,13 +176,20 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		return;
 	}
 
-	if (m_importFileWidget->isFileEmpty()) {
-		KMessageBox::information(nullptr, i18n("No data to import."), i18n("No Data"));
+	auto filter = m_importFileWidget->currentFileFilter();
+	if (m_importFileWidget->importValid()) {
+		auto errors = filter->lastErrors();
+		if (errors.isEmpty()) {
+			// Default message, because not all filters implement lastErrors yet
+			errors.append(i18n("No data to import."));
+		}
+		ImportErrorDialog* d = new ImportErrorDialog(errors);
+		d->setAttribute(Qt::WA_DeleteOnClose);
+		d->show();
 		return;
 	}
 
 	QString fileName = m_importFileWidget->fileName();
-	auto filter = m_importFileWidget->currentFileFilter();
 	auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 
 	// show a progress bar in the status bar
@@ -214,10 +223,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for special types
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
-			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel) {
+			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel
+			|| fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
 			QStringList names;
 			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
+			else if (fileType == AbstractFileFilter::FileType::VECTOR_BLF)
+				names = QStringList({QStringLiteral("TODO")}); // m_importFileWidget->selectedVectorBLFNames();
 			else if (fileType == AbstractFileFilter::FileType::NETCDF)
 				names = m_importFileWidget->selectedNetCDFNames();
 			else if (fileType == AbstractFileFilter::FileType::ROOT)
@@ -252,7 +264,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					// HDF5 variable names contain the whole path, remove it and keep the name only
 					QString sheetName = names.at(i);
 					if (fileType == AbstractFileFilter::FileType::HDF5)
-						sheetName = names.at(i).mid(names.at(i).lastIndexOf("/") + 1);
+						sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
 
 					auto* sheet = sheets.at(i);
 					sheet->setUndoAware(false);
@@ -266,7 +278,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				// HDF5 variable names contain the whole path, remove it and keep the name only
 				QString sheetName = names.at(i);
 				if (fileType == AbstractFileFilter::FileType::HDF5)
-					sheetName = names.at(i).mid(names.at(i).lastIndexOf("/") + 1);
+					sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
 
 				auto* spreadsheet = new Spreadsheet(sheetName);
 				if (mode == AbstractFileFilter::ImportMode::Prepend && !sheets.isEmpty())
@@ -318,6 +330,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	}
 	statusBar->showMessage(i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed() / 1000));
 
+	const auto errors = filter->lastErrors();
+	if (!errors.isEmpty()) {
+		ImportErrorDialog* d = new ImportErrorDialog(errors);
+		d->setAttribute(Qt::WA_DeleteOnClose);
+		d->show();
+	}
+
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 }
@@ -366,12 +385,6 @@ void ImportFileDialog::checkOkButton() {
 		} else {
 			lPosition->setEnabled(true);
 			cbPosition->setEnabled(true);
-
-			// when doing ASCII import to a matrix, hide the options for using the file header (first line)
-			// to name the columns since the column names are fixed in a matrix
-			const auto* matrix = dynamic_cast<const Matrix*>(aspect);
-			m_importFileWidget->showAsciiHeaderOptions(matrix == nullptr);
-			m_importFileWidget->showExcelFirstRowAsColumnOption(matrix == nullptr);
 		}
 	}
 

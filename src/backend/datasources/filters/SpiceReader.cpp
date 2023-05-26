@@ -19,7 +19,7 @@ void SpiceFileReader::init() {
 	bool ok;
 
 	mInitialized = true;
-	mInfoString = "";
+	mInfoString = QString();
 
 	if (!mFile.isOpen() && !open())
 		return;
@@ -29,7 +29,7 @@ void SpiceFileReader::init() {
 	// Determine if ltspice or ngspice or none of both
 	QByteArray l = mFile.readLine();
 	int pos = l.count();
-	if (!QString(l).startsWith(QLatin1String("Title:"))) {
+	if (!QLatin1String(l).startsWith(QLatin1String("Title:"))) {
 		if (!convertLTSpiceBinary(l).startsWith(QLatin1String("Title:")))
 			return;
 		mNgspice = false;
@@ -37,7 +37,7 @@ void SpiceFileReader::init() {
 		stream.setCodec(QTextCodec::codecForMib(1015));
 		pos++;
 	} else // title: removed trailing '\r' and '\n'
-		addInfoStringLine(QString(l).trimmed());
+		addInfoStringLine(QLatin1String(l).trimmed());
 
 	QString line = stream.readLine();
 	if (!line.startsWith(QLatin1String("Date:")))
@@ -116,7 +116,7 @@ void SpiceFileReader::init() {
 	}
 
 	line = stream.readLine();
-	mBinary = line.startsWith("Binary");
+	mBinary = line.startsWith(QStringLiteral("Binary"));
 
 	pos += stream.pos();
 	// mFile must be reset and then seeked, because above the stream is used to read and then QFile fails
@@ -176,7 +176,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 			const int readLines = (int)(length / lineBytes);
 			const int patchesIndexOffset = patchesCount * mNumberLines;
 
-			for (int l = 0; l < qMin(readLines, mNumberLines); l++) {
+			for (int l = 0; l < std::min(readLines, mNumberLines); l++) {
 				// time / frequency real part
 				const int lineNumber = l * lineBytes;
 				double value;
@@ -230,7 +230,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 		QLocale locale(QLocale::C);
 		bool isNumber(false);
 		linesRead = 0; // indexes the position in the vector(column). Because of the continue the loop index cannot be used
-		const int points = maxLines > 0 ? qMin(mNumberPoints - skipLines, maxLines) : mNumberPoints - skipLines;
+		const int points = maxLines > 0 ? std::min(mNumberPoints - skipLines, maxLines) : mNumberPoints - skipLines;
 		for (int l = 0; l < points; l++) {
 			for (int j = 0; j < mVariables.count(); j++) {
 				line = stream.readLine();
@@ -246,16 +246,16 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 					if (realImgTokens.size() == 2) { // sanity check to make sure we really have both parts
 						// real part
 						double value = locale.toDouble(realImgTokens.at(0), &isNumber);
-						static_cast<QVector<double>*>(data[2 * j])->operator[](linesRead) = (isNumber ? value : qQNaN());
+						static_cast<QVector<double>*>(data[2 * j])->operator[](linesRead) = (isNumber ? value : NAN);
 
 						// imaginary part
 						value = locale.toDouble(realImgTokens.at(1), &isNumber);
-						static_cast<QVector<double>*>(data[2 * j + 1])->operator[](linesRead) = (isNumber ? value : qQNaN());
+						static_cast<QVector<double>*>(data[2 * j + 1])->operator[](linesRead) = (isNumber ? value : NAN);
 					}
 				} else {
 					const double value = locale.toDouble(valueString, &isNumber);
 					auto* v = static_cast<QVector<double>*>(data[j]);
-					v->operator[](linesRead) = (isNumber ? value : qQNaN());
+					v->operator[](linesRead) = (isNumber ? value : NAN);
 				}
 			}
 			linesRead++;

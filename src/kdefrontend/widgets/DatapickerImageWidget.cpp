@@ -10,6 +10,7 @@
 */
 
 #include "DatapickerImageWidget.h"
+#include "backend/core/Project.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/ImageEditor.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
@@ -18,7 +19,12 @@
 
 #include <QCompleter>
 #include <QDir>
+// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QFileSystemModel>
+#else
 #include <QDirModel>
+#endif
 #include <QGraphicsScene>
 #include <QPainter>
 
@@ -113,8 +119,12 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 
 	//"General"-tab
 	ui.leFileName->setClearButtonEnabled(true);
-	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
+	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	ui.leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
+#else
 	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
+#endif
 
 	//"Symbol"-tab
 	symbolWidget = new SymbolWidget(ui.tSymbol);
@@ -154,12 +164,16 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	ssForeground->setRange(0, 100);
 	editTabLayout->addWidget(ssForeground, 11, 2);
 
-	ui.cbGraphType->addItem(i18n("Cartesian (x, y)"));
-	ui.cbGraphType->addItem(i18n("Polar (x, y°)"));
-	ui.cbGraphType->addItem(i18n("Polar (x, y(rad))"));
-	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), y)"));
-	ui.cbGraphType->addItem(i18n("Logarithmic (x, ln(y))"));
-	ui.cbGraphType->addItem(i18n("Ternary (x, y, z)"));
+	ui.cbGraphType->addItem(i18n("Cartesian (x, y)"), (int)DatapickerImage::GraphType::Linear);
+	ui.cbGraphType->addItem(i18n("Polar (x, y°)"), (int)DatapickerImage::GraphType::PolarInDegree);
+	ui.cbGraphType->addItem(i18n("Polar (x, y(rad))"), (int)DatapickerImage::GraphType::PolarInRadians);
+	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), ln(y))"), (int)DatapickerImage::GraphType::LnXY);
+	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), y)"), (int)DatapickerImage::GraphType::LnX);
+	ui.cbGraphType->addItem(i18n("Logarithmic (x, ln(y))"), (int)DatapickerImage::GraphType::LnY);
+	ui.cbGraphType->addItem(i18n("Logarithmic (log(x), log(y))"), (int)DatapickerImage::GraphType::Log10XY);
+	ui.cbGraphType->addItem(i18n("Logarithmic (log(x), y)"), (int)DatapickerImage::GraphType::Log10X);
+	ui.cbGraphType->addItem(i18n("Logarithmic (x, log(y))"), (int)DatapickerImage::GraphType::Log10Y);
+	ui.cbGraphType->addItem(i18n("Ternary (x, y, z)"), (int)DatapickerImage::GraphType::Ternary);
 
 	ui.lTernaryScale->setHidden(true);
 	ui.sbTernaryScale->setHidden(true);
@@ -174,9 +188,9 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	ui.cbPlotImageType->addItem(i18n("Original Image"));
 	ui.cbPlotImageType->addItem(i18n("Processed Image"));
 
-	QString valueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_value.xpm");
-	QString hueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_hue.xpm");
-	QString saturationFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_saturation.xpm");
+	QString valueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("pics/colorchooser/colorchooser_value.xpm"));
+	QString hueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("pics/colorchooser/colorchooser_hue.xpm"));
+	QString saturationFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("pics/colorchooser/colorchooser_saturation.xpm"));
 
 	gvHue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Hue));
 	gvHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
@@ -213,10 +227,12 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	connect(ui.bOpen, &QPushButton::clicked, this, &DatapickerImageWidget::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
+	connect(ui.cbFileRelativePath, &QCheckBox::clicked, this, &DatapickerImageWidget::relativeChanged);
+	connect(ui.cbFileEmbedd, &QCheckBox::clicked, this, &DatapickerImageWidget::embeddedChanged);
 
 	// edit image
 	connect(ui.cbPlotImageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::plotImageTypeChanged);
-	connect(ui.sbRotation, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::rotationChanged);
+	connect(ui.sbRotation, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::rotationChanged);
 	connect(ssIntensity, &SpanSlider::spanChanged, this, &DatapickerImageWidget::intensitySpanChanged);
 	connect(ssIntensity, &SpanSlider::spanChanged, gvIntensity, &HistogramView::setSpan);
 	connect(ssForeground, &SpanSlider::spanChanged, this, &DatapickerImageWidget::foregroundSpanChanged);
@@ -232,25 +248,30 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 
 	// axis point
 	connect(ui.cbGraphType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::graphTypeChanged);
-	connect(ui.sbTernaryScale, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::ternaryScaleChanged);
-	connect(ui.sbPositionX1, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY1, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionX2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionX3, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY3, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ1, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ3, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbTernaryScale, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::ternaryScaleChanged);
+	connect(ui.sbPositionX1, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY1, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionX2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionX3, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY3, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ1, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ3, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+
+	connect(ui.cbDatetime, &QCheckBox::clicked, this, &DatapickerImageWidget::dateTimeUsageChanged);
+	connect(ui.dtePositionX1, &QDateTimeEdit::dateTimeChanged, this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.dtePositionX2, &QDateTimeEdit::dateTimeChanged, this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.dtePositionX3, &QDateTimeEdit::dateTimeChanged, this, &DatapickerImageWidget::logicalPositionChanged);
 
 	connect(ui.chbSymbolVisible, &QCheckBox::clicked, this, &DatapickerImageWidget::pointsVisibilityChanged);
 }
 
 void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_imagesList = list;
 	m_image = list.first();
-	m_aspect = list.first()->parentAspect();
+	setAspects(list);
 
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
@@ -278,24 +299,34 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 
 	connect(m_image->parentAspect(), &AbstractAspect::aspectDescriptionChanged, this, &DatapickerImageWidget::aspectDescriptionChanged);
 	connect(m_image, &DatapickerImage::fileNameChanged, this, &DatapickerImageWidget::imageFileNameChanged);
+	connect(m_image, &DatapickerImage::embeddedChanged, this, &DatapickerImageWidget::imageEmbeddedChanged);
 	connect(m_image, &DatapickerImage::rotationAngleChanged, this, &DatapickerImageWidget::imageRotationAngleChanged);
-	connect(m_image, &AbstractAspect::aspectRemoved, this, &DatapickerImageWidget::updateSymbolWidgets);
-	connect(m_image, &AbstractAspect::aspectAdded, this, &DatapickerImageWidget::updateSymbolWidgets);
+	connect(m_image, &AbstractAspect::childAspectRemoved, this, &DatapickerImageWidget::updateSymbolWidgets);
+	connect(m_image, &AbstractAspect::childAspectAdded, this, &DatapickerImageWidget::updateSymbolWidgets);
 	connect(m_image, &DatapickerImage::axisPointsChanged, this, &DatapickerImageWidget::imageAxisPointsChanged);
 	connect(m_image, &DatapickerImage::settingsChanged, this, &DatapickerImageWidget::imageEditorSettingsChanged);
 	connect(m_image, &DatapickerImage::minSegmentLengthChanged, this, &DatapickerImageWidget::imageMinSegmentLengthChanged);
 	connect(m_image, &DatapickerImage::pointVisibilityChanged, this, &DatapickerImageWidget::symbolVisibleChanged);
+	connect(m_image, QOverload<int>::of(&DatapickerImage::referencePointSelected), this, &DatapickerImageWidget::imageReferencePointSelected);
+	connect(m_image, &DatapickerImage::relativeFilePathChanged, this, &DatapickerImageWidget::imageRelativeChanged);
+	if (m_image->project())
+		connect(m_image->project(), &Project::saved, this, &DatapickerImageWidget::updateFileRelativePathCheckBoxEnable);
 
 	handleWidgetActions();
 	updateSymbolWidgets();
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::handleWidgetActions() {
-	QString fileName = ui.leFileName->text().trimmed();
-	bool b = !fileName.isEmpty();
+	const QString fileName = m_image->fileName();
+	const bool embedded = m_image->embedded();
+	const bool valid = !m_image->originalPlotImage.isNull();
+	const bool b = !fileName.isEmpty() || (embedded && valid);
+	ui.leFileName->setEnabled(!embedded);
+	updateFileRelativePathCheckBoxEnable();
 	ui.tEdit->setEnabled(b);
+	ui.cbFileEmbedd->setEnabled(valid);
 	ui.cbGraphType->setEnabled(b);
+	ui.cbDatetime->setEnabled(b);
 	ui.sbRotation->setEnabled(b);
 	ui.sbPositionX1->setEnabled(b);
 	ui.sbPositionX2->setEnabled(b);
@@ -303,8 +334,14 @@ void DatapickerImageWidget::handleWidgetActions() {
 	ui.sbPositionY1->setEnabled(b);
 	ui.sbPositionY2->setEnabled(b);
 	ui.sbPositionY3->setEnabled(b);
+	ui.dtePositionX1->setEnabled(b);
+	ui.dtePositionX2->setEnabled(b);
+	ui.dtePositionX3->setEnabled(b);
 	ui.sbMinSegmentLength->setEnabled(b);
 	ui.sbPointSeparation->setEnabled(b);
+
+	const bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName) && !embedded);
+	GuiTools::highlight(ui.leFileName, invalid);
 
 	if (b) {
 		// upload histogram to view
@@ -316,15 +353,46 @@ void DatapickerImageWidget::handleWidgetActions() {
 	}
 }
 
+void DatapickerImageWidget::updateXPositionWidgets(bool datetime) {
+	ui.sbPositionX1->setVisible(!datetime);
+	ui.sbPositionX2->setVisible(!datetime);
+	ui.sbPositionX3->setVisible(!datetime);
+	ui.dtePositionX1->setVisible(datetime);
+	ui.dtePositionX2->setVisible(datetime);
+	ui.dtePositionX3->setVisible(datetime);
+}
+
 void DatapickerImageWidget::updateLocale() {
-	SET_NUMBER_LOCALE
-	ui.sbRotation->setLocale(numberLocale);
-	ui.sbPositionX1->setLocale(numberLocale);
-	ui.sbPositionX2->setLocale(numberLocale);
-	ui.sbPositionX3->setLocale(numberLocale);
-	ui.sbPositionY1->setLocale(numberLocale);
-	ui.sbPositionY2->setLocale(numberLocale);
-	ui.sbPositionY3->setLocale(numberLocale);
+	const auto locale = QLocale();
+	ui.sbRotation->setLocale(locale);
+	ui.sbPositionX1->setLocale(locale);
+	ui.sbPositionX2->setLocale(locale);
+	ui.sbPositionX3->setLocale(locale);
+	ui.sbPositionY1->setLocale(locale);
+	ui.sbPositionY2->setLocale(locale);
+	ui.sbPositionY3->setLocale(locale);
+	ui.dtePositionX1->setLocale(locale);
+	ui.dtePositionX2->setLocale(locale);
+	ui.dtePositionX3->setLocale(locale);
+}
+
+void DatapickerImageWidget::updateFileRelativePathCheckBoxEnable() {
+	const auto* project = m_image->project();
+	if (!project || project->fileName().isEmpty()) {
+		ui.cbFileRelativePath->setEnabled(false);
+		ui.cbFileRelativePath->setToolTip(i18n("Save project before using this option"));
+	} else if (m_image->embedded()) {
+		ui.cbFileRelativePath->setEnabled(false);
+		ui.cbFileRelativePath->setToolTip(QStringLiteral(""));
+	} else if (!m_image->fileName().isEmpty() && QFile::exists(m_image->fileName())) {
+		ui.cbFileRelativePath->setEnabled(true);
+		ui.cbFileRelativePath->setToolTip(QStringLiteral(""));
+	} else {
+		ui.cbFileRelativePath->setEnabled(false);
+		ui.cbFileRelativePath->setToolTip(i18n("Invalid image"));
+	}
+
+	ui.cbFileRelativePath->setVisible(!m_image->embedded());
 }
 
 //**********************************************************
@@ -336,26 +404,46 @@ void DatapickerImageWidget::selectFile() {
 	if (path.isEmpty())
 		return;
 
+	ui.cbFileRelativePath->setChecked(false);
 	ui.leFileName->setText(path);
 }
 
-void DatapickerImageWidget::fileNameChanged() {
-	if (m_initializing)
-		return;
-
-	handleWidgetActions();
-
-	const QString& fileName = ui.leFileName->text();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
-	GuiTools::highlight(ui.leFileName, invalid);
+void DatapickerImageWidget::embeddedChanged(bool embedded) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
-		image->setFileName(fileName);
+		image->setEmbedded(embedded);
+
+	// embedded property was set, update the file name LineEdit after this
+	if (embedded) {
+		QFileInfo fi(m_image->fileName());
+		ui.leFileName->setText(fi.fileName());
+	} else
+		ui.leFileName->setText(m_image->fileName());
 }
 
-void DatapickerImageWidget::graphTypeChanged() {
+void DatapickerImageWidget::relativeChanged(bool relative) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* image : m_imagesList) {
+		image->setRelativeFilePath(relative);
+	}
+
+	// Load new filename
+	ui.leFileName->setText(m_image->fileName());
+}
+
+void DatapickerImageWidget::fileNameChanged() {
+	CONDITIONAL_LOCK_RETURN;
+
+	const QString fileName = ui.leFileName->text();
+	for (auto* image : m_imagesList)
+		image->setImage(fileName, image->embedded());
+}
+
+void DatapickerImageWidget::graphTypeChanged(int index) {
 	auto points = m_image->axisPoints();
-	points.type = DatapickerImage::GraphType(ui.cbGraphType->currentIndex());
+	points.type = static_cast<DatapickerImage::GraphType>(ui.cbGraphType->itemData(index).toInt());
 
 	const bool ternary = (points.type == DatapickerImage::GraphType::Ternary);
 	ui.lTernaryScale->setVisible(ternary);
@@ -367,17 +455,19 @@ void DatapickerImageWidget::graphTypeChanged() {
 	ui.sbPositionZ2->setVisible(ternary);
 	ui.sbPositionZ3->setVisible(ternary);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
-	if (ui.cbGraphType->currentIndex() == 3) { //"Logarithmic (ln(x), y)"
+	if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnX || points.type == DatapickerImage::GraphType::Log10XY
+		|| points.type == DatapickerImage::GraphType::Log10X) {
 		if (points.logicalPos[0].x() == 0.0f)
 			points.logicalPos[0].setX(0.01f);
 		if (points.logicalPos[1].x() == 0.0f)
 			points.logicalPos[1].setX(0.01f);
 		if (points.logicalPos[2].x() == 0.0f)
 			points.logicalPos[2].setX(0.01f);
-	} else if (ui.cbGraphType->currentIndex() == 4) { //"Logarithmic (x, ln(y))"
+	}
+	if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnY || points.type == DatapickerImage::GraphType::Log10XY
+		|| points.type == DatapickerImage::GraphType::Log10Y) {
 		if (points.logicalPos[0].y() == 0.0f)
 			points.logicalPos[0].setY(0.01f);
 		if (points.logicalPos[1].y() == 0.0f)
@@ -391,8 +481,7 @@ void DatapickerImageWidget::graphTypeChanged() {
 }
 
 void DatapickerImageWidget::ternaryScaleChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	DatapickerImage::ReferencePoints points = m_image->axisPoints();
 	points.ternaryScale = value;
@@ -401,37 +490,52 @@ void DatapickerImageWidget::ternaryScaleChanged(double value) {
 		image->setAxisPoints(points);
 }
 
-void DatapickerImageWidget::logicalPositionChanged() {
-	if (m_initializing)
-		return;
+void DatapickerImageWidget::dateTimeUsageChanged(bool datetime) {
+	updateXPositionWidgets(datetime);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	auto points = m_image->axisPoints();
-	points.logicalPos[0].setX(ui.sbPositionX1->value());
+	points.datetime = datetime;
+	for (auto* image : m_imagesList)
+		image->setAxisPoints(points);
+}
+
+void DatapickerImageWidget::logicalPositionChanged() {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	auto points = m_image->axisPoints();
+	if (points.datetime) {
+		points.logicalPos[0].setX(ui.dtePositionX1->dateTime().toMSecsSinceEpoch());
+		points.logicalPos[1].setX(ui.dtePositionX2->dateTime().toMSecsSinceEpoch());
+		points.logicalPos[2].setX(ui.dtePositionX3->dateTime().toMSecsSinceEpoch());
+	} else {
+		points.logicalPos[0].setX(ui.sbPositionX1->value());
+		points.logicalPos[1].setX(ui.sbPositionX2->value());
+		points.logicalPos[2].setX(ui.sbPositionX3->value());
+	}
+
 	points.logicalPos[0].setY(ui.sbPositionY1->value());
-	points.logicalPos[1].setX(ui.sbPositionX2->value());
 	points.logicalPos[1].setY(ui.sbPositionY2->value());
-	points.logicalPos[2].setX(ui.sbPositionX3->value());
 	points.logicalPos[2].setY(ui.sbPositionY3->value());
+
 	points.logicalPos[0].setZ(ui.sbPositionZ1->value());
 	points.logicalPos[1].setZ(ui.sbPositionZ2->value());
 	points.logicalPos[2].setZ(ui.sbPositionZ3->value());
 
-	const Lock lock(m_initializing);
 	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
 }
 
 void DatapickerImageWidget::pointsVisibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setPointVisibility(state);
 }
 
 void DatapickerImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.intensityThresholdHigh = upperLimit;
@@ -441,8 +545,7 @@ void DatapickerImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit)
 }
 
 void DatapickerImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.foregroundThresholdHigh = upperLimit;
@@ -452,8 +555,7 @@ void DatapickerImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit
 }
 
 void DatapickerImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.hueThresholdHigh = upperLimit;
@@ -463,8 +565,7 @@ void DatapickerImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
 }
 
 void DatapickerImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.saturationThresholdHigh = upperLimit;
@@ -474,8 +575,7 @@ void DatapickerImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit
 }
 
 void DatapickerImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.valueThresholdHigh = upperLimit;
@@ -485,32 +585,28 @@ void DatapickerImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
 }
 
 void DatapickerImageWidget::plotImageTypeChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setPlotImageType(DatapickerImage::PlotImageType(index));
 }
 
 void DatapickerImageWidget::rotationChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* image : m_imagesList)
 		image->setRotationAngle(value);
 }
 
 void DatapickerImageWidget::minSegmentLengthChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setminSegmentLength(value);
 }
 
 void DatapickerImageWidget::pointSeparationChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setPointSeparation(value);
@@ -520,23 +616,22 @@ void DatapickerImageWidget::pointSeparationChanged(int value) {
 //******** SLOTs for changes triggered in DatapickerImage ***********
 //*******************************************************************
 void DatapickerImageWidget::imageFileNameChanged(const QString& name) {
-	m_initializing = true;
+	handleWidgetActions();
+
+	CONDITIONAL_LOCK_RETURN;
+
 	ui.leFileName->setText(name);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
-	m_initializing = true;
-	ui.cbGraphType->setCurrentIndex((int)axisPoints.type);
+	CONDITIONAL_LOCK_RETURN;
+	int index = ui.cbGraphType->findData((int)axisPoints.type);
+	ui.cbGraphType->setCurrentIndex(index);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
 	ui.sbPositionX1->setValue(axisPoints.logicalPos[0].x());
 	ui.sbPositionY1->setValue(axisPoints.logicalPos[0].y());
@@ -547,11 +642,10 @@ void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::Refere
 	ui.sbPositionZ1->setValue(axisPoints.logicalPos[0].z());
 	ui.sbPositionZ2->setValue(axisPoints.logicalPos[1].z());
 	ui.sbPositionZ3->setValue(axisPoints.logicalPos[2].z());
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettings& settings) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ssIntensity->setSpan(settings.intensityThresholdLow, settings.intensityThresholdHigh);
 	ssForeground->setSpan(settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
 	ssHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
@@ -562,13 +656,23 @@ void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::Ed
 	gvHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
 	gvSaturation->setSpan(settings.saturationThresholdLow, settings.saturationThresholdHigh);
 	gvValue->setSpan(settings.valueThresholdLow, settings.valueThresholdHigh);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbMinSegmentLength->setValue(value);
-	m_initializing = false;
+}
+
+void DatapickerImageWidget::imageEmbeddedChanged(bool embedded) {
+	handleWidgetActions();
+
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbFileEmbedd->setChecked(embedded);
+}
+
+void DatapickerImageWidget::imageRelativeChanged(bool relative) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbFileRelativePath->setChecked(relative);
 }
 
 void DatapickerImageWidget::updateSymbolWidgets() {
@@ -580,9 +684,14 @@ void DatapickerImageWidget::updateSymbolWidgets() {
 }
 
 void DatapickerImageWidget::symbolVisibleChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chbSymbolVisible->setChecked(on);
-	m_initializing = false;
+}
+
+void DatapickerImageWidget::imageReferencePointSelected(int index) {
+	ui.rbRefPoint1->setChecked(index == 0);
+	ui.rbRefPoint2->setChecked(index == 1);
+	ui.rbRefPoint3->setChecked(index == 2);
 }
 
 //**********************************************************
@@ -592,21 +701,39 @@ void DatapickerImageWidget::load() {
 	if (!m_image)
 		return;
 
-	m_initializing = true;
+	// No lock, because it is done already in the caller function
+	ui.cbFileEmbedd->setChecked(m_image->embedded());
+	embeddedChanged(m_image->embedded());
+	ui.cbFileRelativePath->setChecked(m_image->isRelativeFilePath());
+	updateFileRelativePathCheckBoxEnable();
 	ui.leFileName->setText(m_image->fileName());
 
 	// highlight the text field for the background image red if an image is used and cannot be found
 	const QString& fileName = m_image->fileName();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	bool invalid = (!m_image->embedded() && !fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);
 
-	ui.cbGraphType->setCurrentIndex((int)m_image->axisPoints().type);
+	imageReferencePointSelected(m_image->currentSelectedReferencePoint());
+
+	ui.cbGraphType->setCurrentIndex(ui.cbGraphType->findData((int)m_image->axisPoints().type));
 	ui.sbTernaryScale->setValue(m_image->axisPoints().ternaryScale);
-	ui.sbPositionX1->setValue(m_image->axisPoints().logicalPos[0].x());
+	const bool datetime = m_image->axisPoints().datetime;
+	ui.cbDatetime->setChecked(datetime);
+	updateXPositionWidgets(datetime);
+
+	const double x1 = m_image->axisPoints().logicalPos[0].x();
+	const double x2 = m_image->axisPoints().logicalPos[1].x();
+	const double x3 = m_image->axisPoints().logicalPos[2].x();
+
+	ui.dtePositionX1->setMSecsSinceEpochUTC(x1);
+	ui.dtePositionX2->setMSecsSinceEpochUTC(x2);
+	ui.dtePositionX3->setMSecsSinceEpochUTC(x3);
+
+	ui.sbPositionX1->setValue(x1);
 	ui.sbPositionY1->setValue(m_image->axisPoints().logicalPos[0].y());
-	ui.sbPositionX2->setValue(m_image->axisPoints().logicalPos[1].x());
+	ui.sbPositionX2->setValue(x2);
 	ui.sbPositionY2->setValue(m_image->axisPoints().logicalPos[1].y());
-	ui.sbPositionX3->setValue(m_image->axisPoints().logicalPos[2].x());
+	ui.sbPositionX3->setValue(x3);
 	ui.sbPositionY3->setValue(m_image->axisPoints().logicalPos[2].y());
 	ui.sbPositionZ1->setValue(m_image->axisPoints().logicalPos[0].z());
 	ui.sbPositionZ2->setValue(m_image->axisPoints().logicalPos[1].z());
@@ -625,5 +752,4 @@ void DatapickerImageWidget::load() {
 	ui.sbPointSeparation->setValue(m_image->pointSeparation());
 	ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
 	ui.chbSymbolVisible->setChecked(m_image->pointVisibility());
-	m_initializing = false;
 }

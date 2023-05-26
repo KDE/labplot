@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>469</width>
-    <height>627</height>
+    <width>474</width>
+    <height>640</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -188,28 +188,28 @@
        <widget class="QLineEdit" name="leEvalMin"/>
       </item>
       <item row="6" column="0">
-       <widget class="QDateTimeEdit" name="dateTimeEditMin">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditMin">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="6" column="3">
-       <widget class="QDateTimeEdit" name="dateTimeEditMax">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditMax">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="9" column="0">
-       <widget class="QDateTimeEdit" name="dateTimeEditEvalMin">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditEvalMin">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="9" column="3">
-       <widget class="QDateTimeEdit" name="dateTimeEditEvalMax">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditEvalMax">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
@@ -240,21 +240,15 @@
        <widget class="KSeparator" name="kseparator"/>
       </item>
       <item row="14" column="3">
-       <widget class="QDoubleSpinBox" name="sbConfidenceInterval">
-        <property name="suffix">
-         <string>%</string>
+       <widget class="NumberSpinBox" name="sbConfidenceInterval">
+        <property name="toolTip">
+         <string/>
         </property>
-        <property name="decimals">
-         <number>5</number>
+        <property name="whatsThis">
+         <string>Spinbox for numbers.</string>
         </property>
-        <property name="minimum">
-         <double>0.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>99.999949999999998</double>
-        </property>
-        <property name="value">
-         <double>95.000000000000000</double>
+        <property name="feedback" stdset="0">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -265,9 +259,20 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KSeparator</class>
    <extends>QFrame</extends>
    <header>kseparator.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -28,6 +28,7 @@ class CartesianCoordinateSystem;
 class CartesianPlotDock;
 class Histogram;
 class InfoElementDialog;
+class Line;
 class XYCurve;
 class KConfig;
 
@@ -95,6 +96,8 @@ public:
 	void setType(Type type);
 	Type type() const;
 
+	static int cSystemIndex(WorksheetElement* e);
+
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QMenu* analysisMenu();
@@ -108,7 +111,6 @@ public:
 	MouseMode mouseMode() const;
 	BASIC_D_ACCESSOR_DECL(bool, isLocked, Locked)
 	void navigate(int cSystemIndex, NavigationOperation);
-	void setSuppressRetransform(bool);
 	const QList<QColor>& themeColorPalette() const;
 	const QColor themeColorPalette(int index) const;
 	void processDropEvent(const QVector<quintptr>&) override;
@@ -128,6 +130,7 @@ public:
 	void finalizeLoad();
 	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
+	void wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void mouseMoveZoomSelectionMode(QPointF logicPos, int cSystemIndex);
@@ -149,7 +152,7 @@ public:
 
 	int rangeCount(const Dimension) const;
 	const Range<double>& range(const Dimension, int index = -1) const; // get range of (default) plot range
-	void setRange(const Dimension, const Range<double>); // set range of default plot range
+	void setRangeDefault(const Dimension, const Range<double>); // set range of default plot range
 	void setRange(const Dimension, const int index, const Range<double>& range);
 	void setXRange(int index, const Range<double>&);
 	void setYRange(int index, const Range<double>&);
@@ -161,17 +164,17 @@ public:
 	void addXRange(const Range<double>&); // add x range
 	void addYRange(const Range<double>&); // add y range
 	void removeRange(const Dimension, int index); // remove selected range
-	// convenience methods
 
+	// convenience methods
 	void setMin(const Dimension, int index, double); // set x min of range index
 	void setMax(const Dimension, int index, double); // set x max of range index
 	void setRangeFormat(const Dimension, const RangeT::Format);
 	void setRangeFormat(const Dimension, const int, const RangeT::Format);
 	RangeT::Format rangeFormat(const Dimension, const int) const;
 	RangeT::Scale rangeScale(const Dimension, const int index) const;
-	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // x range format of default cSystem
+	RangeT::Format xRangeFormatDefault() const; // range format of default cSystem
+	RangeT::Format yRangeFormatDefault() const; // range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // range format of x range index
-	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // y range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // range format of x range index
 	void setRangeScale(const Dimension, const int index, const RangeT::Scale scale);
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // x range scale of default cSystem
@@ -179,11 +182,14 @@ public:
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // y range scale of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // range scale of x range index
 
+	// range breaks
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks)
-	CLASS_D_ACCESSOR_DECL(QPen, cursorPen, CursorPen)
+
+	// cursor
+	Line* cursorLine() const;
 	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable)
 	CLASS_D_ACCESSOR_DECL(bool, cursor1Enable, Cursor1Enable)
 
@@ -194,8 +200,10 @@ public:
 	void addCoordinateSystem(CartesianCoordinateSystem* cSystem); // add a coordinate system
 	void removeCoordinateSystem(int index); // remove coordinate system index
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystemIndex, DefaultCoordinateSystemIndex)
+	void setCoordinateSystemRangeIndex(int cSystemIndex, Dimension, int rangeIndex);
 
 	void retransformScales();
+	void retransformScale(Dimension, int index);
 
 	QString theme() const;
 
@@ -211,9 +219,8 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
-	void shift(int index, const Dimension, bool leftOrDown);
 	void zoom(int index, const Dimension, bool in);
-	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
+	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, Axis::Orientation);
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
 	int curveTotalCount() const;
 
@@ -222,35 +229,36 @@ private:
 	QList<QColor> m_themeColorPalette;
 	bool m_menusInitialized{false};
 
-	QAction* visibilityAction;
+	QAction* visibilityAction{nullptr};
 
 	//"add new" actions
-	QAction* addCurveAction;
-	QAction* addEquationCurveAction;
-	QAction* addHistogramAction;
-	QAction* addBarPlotAction;
-	QAction* addBoxPlotAction;
-	QAction* addDataReductionCurveAction;
-	QAction* addDifferentiationCurveAction;
-	QAction* addIntegrationCurveAction;
-	QAction* addInterpolationCurveAction;
-	QAction* addSmoothCurveAction;
-	QAction* addFitCurveAction;
-	QAction* addFourierFilterCurveAction;
-	QAction* addFourierTransformCurveAction;
-	QAction* addHilbertTransformCurveAction;
-	QAction* addConvolutionCurveAction;
-	QAction* addCorrelationCurveAction;
+	QAction* addCurveAction{nullptr};
+	QAction* addEquationCurveAction{nullptr};
+	QAction* addHistogramAction{nullptr};
+	QAction* addBarPlotAction{nullptr};
+	QAction* addBoxPlotAction{nullptr};
+	QAction* addDataReductionCurveAction{nullptr};
+	QAction* addDifferentiationCurveAction{nullptr};
+	QAction* addIntegrationCurveAction{nullptr};
+	QAction* addInterpolationCurveAction{nullptr};
+	QAction* addSmoothCurveAction{nullptr};
+	QAction* addFitCurveAction{nullptr};
+	QAction* addFourierFilterCurveAction{nullptr};
+	QAction* addFourierTransformCurveAction{nullptr};
+	QAction* addHilbertTransformCurveAction{nullptr};
+	QAction* addConvolutionCurveAction{nullptr};
+	QAction* addCorrelationCurveAction{nullptr};
 
-	QAction* addHorizontalAxisAction;
-	QAction* addVerticalAxisAction;
-	QAction* addLegendAction;
-	QAction* addTextLabelAction;
-	QAction* addImageAction;
-	QAction* addInfoElementAction;
-	QAction* addCustomPointAction;
-	QAction* addReferenceLineAction;
-	QAction* addInsetPlotAction;
+	QAction* addHorizontalAxisAction{nullptr};
+	QAction* addVerticalAxisAction{nullptr};
+	QAction* addLegendAction{nullptr};
+	QAction* addTextLabelAction{nullptr};
+	QAction* addImageAction{nullptr};
+	QAction* addInfoElementAction{nullptr};
+	QAction* addCustomPointAction{nullptr};
+	QAction* addReferenceLineAction{nullptr};
+	QAction* addReferenceRangeAction{nullptr};
+	QAction* addInsetPlotAction{nullptr};
 
 	// scaling, zooming, navigation actions
 	QAction* scaleAutoXAction;
@@ -268,22 +276,21 @@ private:
 	QAction* shiftDownYAction;
 
 	// analysis menu actions
-	QAction* addDataOperationAction;
-	QAction* addDataReductionAction;
-	QAction* addDifferentiationAction;
-	QAction* addIntegrationAction;
-	QAction* addInterpolationAction;
-	QAction* addSmoothAction;
+	QAction* addDataOperationAction{nullptr};
+	QAction* addDataReductionAction{nullptr};
+	QAction* addDifferentiationAction{nullptr};
+	QAction* addIntegrationAction{nullptr};
+	QAction* addInterpolationAction{nullptr};
+	QAction* addSmoothAction{nullptr};
 	QVector<QAction*> addFitActions;
-	QAction* addFourierFilterAction;
-	QAction* addFourierTransformAction;
-	QAction* addHilbertTransformAction;
-	QAction* addConvolutionAction;
-	QAction* addCorrelationAction;
+	QAction* addFourierFilterAction{nullptr};
+	QAction* addFourierTransformAction{nullptr};
+	QAction* addHilbertTransformAction{nullptr};
+	QAction* addConvolutionAction{nullptr};
+	QAction* addCorrelationAction{nullptr};
 
 	QMenu* addNewMenu{nullptr};
 	QMenu* addNewAnalysisMenu{nullptr};
-	QMenu* zoomMenu{nullptr};
 	QMenu* dataAnalysisMenu{nullptr};
 	QMenu* themeMenu{nullptr};
 
@@ -293,6 +300,10 @@ private:
 	InfoElementDialog* m_infoElementDialog{nullptr};
 
 	Q_DECLARE_PRIVATE(CartesianPlot)
+
+	friend CartesianPlotDock;
+	friend class CartesianPlotTest;
+	friend class MultiRangeTest;
 
 public Q_SLOTS:
 	void addHorizontalAxis();
@@ -320,10 +331,10 @@ public Q_SLOTS:
 	void addImage();
 	void addCustomPoint();
 	void addReferenceLine();
+	void addReferenceRange();
 	void addInfoElement();
 	void addInsetPlot();
 
-	void scaleAutoTriggered();
 	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true, bool suppressRetransformScale = false);
 	bool scaleAuto(const Dimension, int index = -1, bool fullRange = true, bool suppressRetransformScale = false);
 
@@ -333,11 +344,13 @@ public Q_SLOTS:
 	void zoomOutX(int index = -1);
 	void zoomInY(int index = -1);
 	void zoomOutY(int index = -1);
+	void zoomInOut(const int index, const Dimension dim, const bool zoomIn);
 
 	void shiftLeftX(int index = -1);
 	void shiftRightX(int index = -1);
 	void shiftUpY(int index = -1);
 	void shiftDownY(int index = -1);
+	void shift(int index, const Dimension, bool leftOrDown);
 
 	void cursor();
 
@@ -349,6 +362,7 @@ private Q_SLOTS:
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 
+	void dataChanged(WorksheetElement*);
 	void dataChanged(XYCurve*, const Dimension);
 	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
@@ -370,10 +384,8 @@ Q_SIGNALS:
 	void autoScaleChanged(const Dimension, int xRangeIndex, bool);
 	void rangeChanged(const Dimension, int, Range<double>);
 	void yRangeChanged(int yRangeIndex, Range<double>);
-	void xMinChanged(int xRangeIndex, double);
-	void xMaxChanged(int xRangeIndex, double);
-	void yMinChanged(int yRangeIndex, double);
-	void yMaxChanged(int yRangeIndex, double);
+	void minChanged(const Dimension, int rangeIndex, double);
+	void maxChanged(const Dimension, int rangeIndex, double);
 	void scaleChanged(const Dimension, int rangeIndex, RangeT::Scale);
 	void defaultCoordinateSystemIndexChanged(int);
 	void xRangeBreakingEnabledChanged(bool);
@@ -381,6 +393,7 @@ Q_SIGNALS:
 	void yRangeBreakingEnabledChanged(bool);
 	void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void themeChanged(const QString&);
+	void axisShiftSignal(int delta, Dimension dim, int index);
 	void mousePressZoomSelectionModeSignal(QPointF logicPos);
 	void mousePressCursorModeSignal(int cursorNumber, QPointF logicPos);
 	void mouseMoveSelectionModeSignal(QPointF logicalStart, QPointF logicalEnd);
@@ -390,6 +403,7 @@ Q_SIGNALS:
 	void mouseReleaseZoomSelectionModeSignal();
 	void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
 	void mouseHoverOutsideDataRectSignal();
+	void wheelEventSignal(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void curveNameChanged(const AbstractAspect* curve);
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);
@@ -402,10 +416,7 @@ Q_SIGNALS:
 	void cursor0EnableChanged(bool enable);
 	void cursor1EnableChanged(bool enable);
 
-Q_SIGNALS:
-	void retransformScaleCalled(const CartesianPlot* plot, const Dimension dim, int index);
-
-	friend CartesianPlotDock;
+	void scaleRetransformed(const CartesianPlot* plot, const Dimension dim, int index);
 };
 
 #endif

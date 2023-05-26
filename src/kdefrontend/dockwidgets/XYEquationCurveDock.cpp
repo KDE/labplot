@@ -29,7 +29,7 @@
 		(2D-curves defined by a mathematical equation) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -64,18 +64,18 @@ void XYEquationCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	uiGeneralTab.tbConstants1->setIcon(QIcon::fromTheme("labplot-format-text-symbol"));
-	uiGeneralTab.tbFunctions1->setIcon(QIcon::fromTheme("preferences-desktop-font"));
+	uiGeneralTab.tbConstants1->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
+	uiGeneralTab.tbFunctions1->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
-	uiGeneralTab.tbConstants2->setIcon(QIcon::fromTheme("labplot-format-text-symbol"));
-	uiGeneralTab.tbFunctions2->setIcon(QIcon::fromTheme("preferences-desktop-font"));
+	uiGeneralTab.tbConstants2->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
+	uiGeneralTab.tbFunctions2->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
 	uiGeneralTab.cbType->addItem(i18n("Cartesian"));
 	uiGeneralTab.cbType->addItem(i18n("Polar"));
 	uiGeneralTab.cbType->addItem(i18n("Parametric"));
 	// 	uiGeneralTab.cbType->addItem(i18n("Implicit"));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::EquationType::Parametric);
 
@@ -103,7 +103,7 @@ void XYEquationCurveDock::setupGeneral() {
 }
 
 void XYEquationCurveDock::initGeneralTab() {
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -146,10 +146,10 @@ void XYEquationCurveDock::initGeneralTab() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
-	m_aspect = m_curve;
+	setAspects(list);
 	m_equationCurve = static_cast<XYEquationCurve*>(m_curve);
 	Q_ASSERT(m_equationCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
@@ -157,7 +157,6 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-	m_initializing = false;
 
 	updatePlotRanges();
 
@@ -174,7 +173,7 @@ void XYEquationCurveDock::updatePlotRanges() {
 void XYEquationCurveDock::typeChanged(int index) {
 	const auto type{XYEquationCurve::EquationType(index)};
 	if (type == XYEquationCurve::EquationType::Cartesian) {
-		uiGeneralTab.lEquation1->setText("y=f(x)");
+		uiGeneralTab.lEquation1->setText(QStringLiteral("y=f(x)"));
 		uiGeneralTab.lEquation2->hide();
 		uiGeneralTab.teEquation2->hide();
 		uiGeneralTab.tbFunctions2->hide();
@@ -198,8 +197,8 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.lMin->setText(i18n("φ, min"));
 		uiGeneralTab.lMax->setText(i18n("φ, max"));
 	} else if (type == XYEquationCurve::EquationType::Parametric) {
-		uiGeneralTab.lEquation1->setText("x=f(t)");
-		uiGeneralTab.lEquation2->setText("y=f(t)");
+		uiGeneralTab.lEquation1->setText(QStringLiteral("x=f(t)"));
+		uiGeneralTab.lEquation2->setText(QStringLiteral("y=f(t)"));
 		uiGeneralTab.lEquation2->show();
 		uiGeneralTab.teEquation2->show();
 		uiGeneralTab.tbFunctions2->show();
@@ -211,7 +210,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.lMin->setText(i18n("t, min"));
 		uiGeneralTab.lMax->setText(i18n("t, max"));
 	} else if (type == XYEquationCurve::EquationType::Implicit) {
-		uiGeneralTab.lEquation1->setText("f(x,y)");
+		uiGeneralTab.lEquation1->setText(QStringLiteral("f(x,y)"));
 		uiGeneralTab.lEquation2->hide();
 		uiGeneralTab.teEquation2->hide();
 		uiGeneralTab.tbFunctions2->hide();
@@ -310,8 +309,7 @@ void XYEquationCurveDock::insertConstant2(const QString& constantsName) {
 }
 
 void XYEquationCurveDock::enableRecalculate() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// check whether the formula expressions are correct
 	bool valid = false;
@@ -332,7 +330,7 @@ void XYEquationCurveDock::enableRecalculate() {
 //*************************************************************
 // General-Tab
 void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& data) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbType->setCurrentIndex(static_cast<int>(data.type));
 	uiGeneralTab.teEquation1->setText(data.expression1);
 	uiGeneralTab.teEquation2->setText(data.expression2);

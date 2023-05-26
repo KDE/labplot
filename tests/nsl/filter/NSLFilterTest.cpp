@@ -15,13 +15,13 @@ extern "C" {
 }
 
 void NSLFilterTest::initTestCase() {
-	const QString currentDir = __FILE__;
+	const QString currentDir = QLatin1String(__FILE__);
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
 }
 
-//##############################################################################
-//#################  form test
-//##############################################################################
+// ##############################################################################
+// #################  form test
+// ##############################################################################
 
 void NSLFilterTest::testForm() {
 	const int N = 1000;
@@ -64,8 +64,8 @@ void NSLFilterTest::testForm() {
 	nsl_filter_fourier(data, N, nsl_filter_type_band_pass, nsl_filter_form_butterworth, 2, 2, 2);
 }
 
-//##############################################################################
-//#################  performance
-//##############################################################################
+// ##############################################################################
+// #################  performance
+// ##############################################################################
 
 QTEST_MAIN(NSLFilterTest)

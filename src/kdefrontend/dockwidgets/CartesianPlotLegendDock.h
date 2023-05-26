@@ -17,6 +17,7 @@
 
 class BackgroundWidget;
 class LabelWidget;
+class LineWidget;
 class KConfig;
 
 class CartesianPlotLegendDock : public BaseDock {
@@ -33,6 +34,7 @@ public:
 private:
 	Ui::CartesianPlotLegendDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};
+	LineWidget* borderLineWidget{nullptr};
 	LabelWidget* labelWidget{nullptr};
 	QList<CartesianPlotLegend*> m_legendList;
 	CartesianPlotLegend* m_legend{nullptr};
@@ -61,11 +63,7 @@ private Q_SLOTS:
 	void bindingChanged(bool checked);
 
 	// "Background"-tab
-	void borderStyleChanged(int);
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
 	void borderCornerRadiusChanged(double);
-	void borderOpacityChanged(int);
 
 	//"Layout"-tab
 	void layoutTopMarginChanged(double);
@@ -88,9 +86,7 @@ private Q_SLOTS:
 	void legendHorizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment);
 	void legendVerticalAlignmentChanged(const WorksheetElement::VerticalAlignment);
 
-	void legendBorderPenChanged(QPen&);
 	void legendBorderCornerRadiusChanged(float);
-	void legendBorderOpacityChanged(float);
 
 	void legendLayoutTopMarginChanged(float);
 	void legendLayoutBottomMarginChanged(float);

@@ -40,16 +40,16 @@ NoteDock::NoteDock(QWidget* parent)
 void NoteDock::setNotesList(QList<Note*> list) {
 	m_notesList = list;
 	m_notes = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
+
 	ui.leName->setText(m_notes->name());
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 	ui.kcbBgColor->setColor(m_notes->backgroundColor());
 	ui.kcbTextColor->setColor(m_notes->textColor());
 	ui.kfrTextFont->setFont(m_notes->textFont());
-	m_initializing = false;
 
 	connect(m_notes, &Note::aspectDescriptionChanged, this, &NoteDock::aspectDescriptionChanged);
 }
@@ -58,24 +58,21 @@ void NoteDock::setNotesList(QList<Note*> list) {
 //********** SLOTs for changes triggered in NoteDock **********
 //*************************************************************
 void NoteDock::backgroundColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* note : m_notesList)
 		note->setBackgroundColor(color);
 }
 
 void NoteDock::textColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* note : m_notesList)
 		note->setTextColor(color);
 }
 
 void NoteDock::textFontChanged(const QFont& font) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* note : m_notesList)
 		note->setTextFont(font);
@@ -85,13 +82,6 @@ void NoteDock::textFontChanged(const QFont& font) {
 //************************* Settings **************************
 //*************************************************************
 void NoteDock::loadConfigFromTemplate(KConfig& config) {
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
 	KConfigGroup group = config.group("Notes");
 	ui.kcbBgColor->setColor(group.readEntry("BackgroundColor", m_notes->backgroundColor()));
 	ui.kcbTextColor->setColor(group.readEntry("TextColor", m_notes->textColor()));

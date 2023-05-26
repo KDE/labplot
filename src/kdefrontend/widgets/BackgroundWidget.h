@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : background settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,6 +12,8 @@
 
 #include "backend/worksheet/Background.h"
 #include "ui_backgroundwidget.h"
+
+class QShowEvent;
 #include <KConfigGroup>
 
 class BackgroundWidget : public QWidget {
@@ -20,9 +22,9 @@ class BackgroundWidget : public QWidget {
 public:
 	explicit BackgroundWidget(QWidget*);
 
-	void setBackgrounds(QList<Background*>);
-	void setPrefix(const QString&);
+	void setBackgrounds(const QList<Background*>&);
 	void adjustLayout();
+	void setEnabled(bool);
 
 	void load();
 	void loadConfig(const KConfigGroup&);
@@ -33,16 +35,17 @@ private:
 	Background* m_background{nullptr};
 	QList<Background*> m_backgrounds;
 	bool m_initializing{false};
-	QString m_prefix{QLatin1String("Background")};
+	QString m_prefix;
 
 	void retranslateUi();
+	void showEvent(QShowEvent*) override;
 
 Q_SIGNALS:
 	void dataChanged(bool);
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in BackgroundWidget
-	void enabledChanged(bool) const;
+	void enabledChanged(bool);
 	void positionChanged(int);
 	void typeChanged(int);
 	void colorStyleChanged(int);

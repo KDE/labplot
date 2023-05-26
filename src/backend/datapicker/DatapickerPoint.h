@@ -91,6 +91,9 @@ Q_SIGNALS:
 	void minusDeltaXPosChanged(QPointF);
 	void plusDeltaYPosChanged(QPointF);
 	void minusDeltaYPosChanged(QPointF);
+	void pointSelected(const DatapickerPoint*);
+
+	friend class DatapickerTest;
 };
 
 #endif

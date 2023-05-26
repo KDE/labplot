@@ -13,10 +13,10 @@
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QFont>
-#include <QPen>
 
 class Background;
 class CartesianPlotLegend;
+class Line;
 class XYCurve;
 
 class QBrush;
@@ -40,15 +40,14 @@ public:
 
 	bool m_hovered{false};
 
-	QList<WorksheetElement*> curvesList; // list containing all visible curves
 	QRectF rect;
 	QFont labelFont;
 	QColor labelColor;
-	bool labelColumnMajor;
-	float lineSymbolWidth; // the width of line+symbol
+	bool labelColumnMajor{true};
+	qreal lineSymbolWidth{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)}; // the width of line+symbol
 	QList<float> maxColumnTextWidths; // the maximal width of the text within each column
-	int columnCount; // the actual number of columns, can be smaller then the specified layoutColumnCount
-	int rowCount; // the number of rows in the legend, depends on the number of curves and on columnCount
+	int columnCount{0}; // the actual number of columns, can be smaller than the specified layoutColumnCount
+	int rowCount{0}; // the number of rows in the legend, depends on the number of curves and on columnCount
 
 	const CartesianPlot* plot{nullptr};
 
@@ -56,20 +55,24 @@ public:
 	Background* background{nullptr};
 
 	// Border
-	QPen borderPen;
-	qreal borderCornerRadius;
-	qreal borderOpacity;
+	Line* borderLine{nullptr};
+	qreal borderCornerRadius{0.0};
 
 	// Layout
-	float layoutTopMargin;
-	float layoutBottomMargin;
-	float layoutLeftMargin;
-	float layoutRightMargin;
-	float layoutVerticalSpacing;
-	float layoutHorizontalSpacing;
-	int layoutColumnCount;
+	qreal layoutTopMargin{Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter)};
+	qreal layoutBottomMargin{Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter)};
+	qreal layoutLeftMargin{Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter)};
+	qreal layoutRightMargin{Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter)};
+	qreal layoutVerticalSpacing{Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter)};
+	qreal layoutHorizontalSpacing{Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter)};
+	int layoutColumnCount{1};
 
 private:
+	QList<WorksheetElement*> m_curves; // list containing all visible curves
+	QStringList m_names;
+
+	bool translatePainter(QPainter*, int& row, int& col, int height);
+
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;

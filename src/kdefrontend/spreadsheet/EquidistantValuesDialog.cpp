@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for generating equidistant numbers
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,6 +13,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QDialogButtonBox>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QWindow>
 
@@ -29,6 +30,7 @@
 EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent)
 	: QDialog(parent)
 	, m_spreadsheet(s) {
+	Q_ASSERT(m_spreadsheet);
 	setWindowTitle(i18nc("@title:window", "Equidistant Values"));
 
 	auto* mainWidget = new QWidget(this);
@@ -85,8 +87,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	ui.cbType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.leFrom->setText(QString::number(conf.readEntry("From", 1)));
 	ui.leTo->setText(QString::number(conf.readEntry("To", 100)));
-	SET_NUMBER_LOCALE
-	ui.leIncrement->setText(numberLocale.toString(conf.readEntry("Increment", 1.)));
+	ui.leIncrement->setText(QLocale().toString(conf.readEntry("Increment", 1.)));
 }
 
 EquidistantValuesDialog::~EquidistantValuesDialog() {
@@ -95,7 +96,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	conf.writeEntry("Type", ui.cbType->currentIndex());
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	conf.writeEntry("From", numberLocale.toInt(ui.leFrom->text()));
 	conf.writeEntry("To", numberLocale.toInt(ui.leTo->text()));
 	conf.writeEntry("Increment", numberLocale.toDouble(ui.leIncrement->text()));
@@ -103,8 +104,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
-	SET_NUMBER_LOCALE
-	ui.leNumber->setText(numberLocale.toString(m_columns.first()->rowCount()));
+	ui.leNumber->setText(QLocale().toString(m_columns.first()->rowCount()));
 }
 
 void EquidistantValuesDialog::typeChanged(int index) {
@@ -127,7 +127,7 @@ void EquidistantValuesDialog::checkValues() {
 		return;
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (ui.cbType->currentIndex() == 0) { // INT
 		if (ui.leNumber->text().simplified().isEmpty() || numberLocale.toInt(ui.leNumber->text().simplified()) == 0) {
 			m_okButton->setEnabled(false);
@@ -144,49 +144,52 @@ void EquidistantValuesDialog::checkValues() {
 }
 
 void EquidistantValuesDialog::generate() {
-	Q_ASSERT(m_spreadsheet);
-
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(
-		i18np("%1: fill column with equidistant numbers", "%1: fill columns with equidistant numbers", m_spreadsheet->name(), m_columns.size()));
-
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	bool ok;
 	double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
 	if (!ok) {
 		DEBUG("Double value start invalid!")
-		m_spreadsheet->endMacro();
-		RESET_CURSOR;
 		return;
 	}
 	double end = numberLocale.toDouble(ui.leTo->text(), &ok);
 	if (!ok) {
 		DEBUG("Double value end invalid!")
-		m_spreadsheet->endMacro();
-		RESET_CURSOR;
 		return;
 	}
+
 	int number{0};
 	double dist{0};
 	if (ui.cbType->currentIndex() == 0) { // fixed number
-		number = numberLocale.toInt(ui.leNumber->text(), &ok);
+		number = QLocale().toInt(ui.leNumber->text(), &ok);
 		if (ok && number != 1)
 			dist = (end - start) / (number - 1);
 	} else { // fixed increment
-		dist = numberLocale.toDouble(ui.leIncrement->text(), &ok);
+		dist = QLocale().toDouble(ui.leIncrement->text(), &ok);
 		if (ok)
 			number = (end - start) / dist + 1;
 	}
 
+	WAIT_CURSOR;
+	QVector<double> newData;
+	try {
+		newData.resize(number);
+	} catch (std::bad_alloc&) {
+		RESET_CURSOR;
+		QMessageBox::critical(this, i18n("Failed to allocate memory"), i18n("Not enough memory to perform this operation."));
+		return;
+	}
+
+	m_spreadsheet->beginMacro(
+		i18np("%1: fill column with equidistant numbers", "%1: fill columns with equidistant numbers", m_spreadsheet->name(), m_columns.size()));
+
 	if (m_spreadsheet->rowCount() < number)
 		m_spreadsheet->setRowCount(number);
 
-	QVector<double> newData;
 	for (int i = 0; i < number; ++i)
-		newData.push_back(start + dist * i);
+		newData[i] = start + dist * i;
 
 	for (auto* col : m_columns)
-		col->replaceValues(0, newData);
+		col->setValues(newData);
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;

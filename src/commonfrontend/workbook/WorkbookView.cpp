@@ -49,15 +49,15 @@ WorkbookView::WorkbookView(Workbook* workbook)
 	m_initializing = false;
 
 	// Actions
-	action_add_spreadsheet = new QAction(QIcon::fromTheme("labplot-spreadsheet"), i18n("Spreadsheet"), this);
-	action_add_matrix = new QAction(QIcon::fromTheme("labplot-matrix"), i18n("Matrix"), this);
+	action_add_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("labplot-spreadsheet")), i18n("Spreadsheet"), this);
+	action_add_matrix = new QAction(QIcon::fromTheme(QStringLiteral("labplot-matrix")), i18n("Matrix"), this);
 	connect(action_add_spreadsheet, &QAction::triggered, this, &WorkbookView::addSpreadsheet);
 	connect(action_add_matrix, &QAction::triggered, this, &WorkbookView::addMatrix);
 
 	// SIGNALs/SLOTs
 	connect(m_workbook, &Workbook::aspectDescriptionChanged, this, &WorkbookView::handleDescriptionChanged);
-	connect(m_workbook, &Workbook::aspectAdded, this, &WorkbookView::handleAspectAdded);
-	connect(m_workbook, &Workbook::aspectAboutToBeRemoved, this, &WorkbookView::handleAspectAboutToBeRemoved);
+	connect(m_workbook, &Workbook::childAspectAdded, this, &WorkbookView::handleAspectAdded);
+	connect(m_workbook, &Workbook::childAspectAboutToBeRemoved, this, &WorkbookView::handleAspectAboutToBeRemoved);
 	connect(m_workbook, &Workbook::requestProjectContextMenu, this, &WorkbookView::createContextMenu);
 	connect(m_workbook, &Workbook::workbookItemSelected, this, &WorkbookView::itemSelected);
 
@@ -79,16 +79,15 @@ int WorkbookView::currentIndex() const {
 	return m_tabWidget->currentIndex();
 }
 
-//##############################################################################
-//#########################  Private slots  ####################################
-//##############################################################################
+// ##############################################################################
+// #########################  Private slots  ####################################
+// ##############################################################################
 /*!
   called when the current tab was changed. Propagates the selection of \c Spreadsheet
   or of a \c Matrix object to \c Workbook.
 */
 void WorkbookView::tabChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (index == -1)
 		return;
@@ -133,8 +132,8 @@ void WorkbookView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
-	auto* addNewMenu = new QMenu(i18n("Add New"));
-	addNewMenu->setIcon(QIcon::fromTheme("list-add"));
+	auto* addNewMenu = new QMenu(i18n("Add New"), const_cast<WorkbookView*>(this));
+	addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	addNewMenu->addAction(action_add_spreadsheet);
 	addNewMenu->addAction(action_add_matrix);
 	menu->insertMenu(firstAction, addNewMenu);

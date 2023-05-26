@@ -56,31 +56,31 @@ void XYInterpolationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYInterpolationCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-interpolation-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, XYInterpolationCurve::InterpolationData, interpolationData, interpolationData)
 
-const XYInterpolationCurve::InterpolationResult& XYInterpolationCurve::interpolationResult() const {
+const XYAnalysisCurve::Result& XYInterpolationCurve::result() const {
 	Q_D(const XYInterpolationCurve);
 	return d->interpolationResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYInterpolationCurve, SetInterpolationData, XYInterpolationCurve::InterpolationData, interpolationData, recalculate)
 void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::InterpolationData& interpolationData) {
 	Q_D(XYInterpolationCurve);
 	exec(new XYInterpolationCurveSetInterpolationDataCmd(d, interpolationData, ki18n("%1: set options and perform the interpolation")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -90,61 +90,20 @@ XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* o
 // when the parent aspect is removed
 XYInterpolationCurvePrivate::~XYInterpolationCurvePrivate() = default;
 
-void XYInterpolationCurvePrivate::recalculate() {
+void XYInterpolationCurvePrivate::resetResults() {
+	interpolationResult = XYInterpolationCurve::InterpolationResult();
+}
+
+bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create interpolation result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	interpolationResult = XYInterpolationCurve::InterpolationResult();
-
-	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
-	} else { // curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
 
 	// check column sizes
 	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Number of x and y data points must be equal.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	// copy all valid data point for the interpolation to temporary vectors
@@ -169,8 +128,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 		xmin = validXMin;
 		xmax = validXMax;
 	} else {
-		xmin = qMax(xmin, validXMin);
-		xmax = qMin(xmax, validXMax);
+		xmin = std::max(xmin, validXMin);
+		xmax = std::min(xmax, validXMax);
 	}
 	DEBUG(Q_FUNC_INFO << ", x range = " << xmin << " .. " << xmax)
 
@@ -180,10 +139,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -194,7 +150,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 			DEBUG("ERROR: x data not strictly increasing: x_{i-1} >= x_i @ i = " << i << ": " << xdata[i - 1] << " >= " << xdata[i])
 			interpolationResult.status = i18n("interpolation failed since x data is not strictly monotonic increasing!");
 			interpolationResult.available = true;
-			return;
+			return false;
 		}
 	}
 
@@ -414,50 +370,47 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	// write the result
 	interpolationResult.available = true;
-	interpolationResult.valid = true;
+	interpolationResult.valid = (status == GSL_SUCCESS);
 	interpolationResult.status = gslErrorToString(status);
 	interpolationResult.elapsedTime = timer.elapsed();
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYInterpolationCurve);
 
-	writer->writeStartElement("xyInterpolationCurve");
+	writer->writeStartElement(QStringLiteral("xyInterpolationCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
 
 	// write xy-interpolation-curve specific information
 	//  interpolation data
-	writer->writeStartElement("interpolationData");
-	writer->writeAttribute("autoRange", QString::number(d->interpolationData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->interpolationData.xRange.first()));
-	writer->writeAttribute("xRangeMax", QString::number(d->interpolationData.xRange.last()));
-	writer->writeAttribute("type", QString::number(d->interpolationData.type));
-	writer->writeAttribute("variant", QString::number(d->interpolationData.variant));
-	writer->writeAttribute("tension", QString::number(d->interpolationData.tension));
-	writer->writeAttribute("continuity", QString::number(d->interpolationData.continuity));
-	writer->writeAttribute("bias", QString::number(d->interpolationData.bias));
-	writer->writeAttribute("npoints", QString::number(d->interpolationData.npoints));
-	writer->writeAttribute("pointsMode", QString::number(static_cast<int>(d->interpolationData.pointsMode)));
-	writer->writeAttribute("evaluate", QString::number(d->interpolationData.evaluate));
+	writer->writeStartElement(QStringLiteral("interpolationData"));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->interpolationData.autoRange));
+	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->interpolationData.xRange.first()));
+	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->interpolationData.xRange.last()));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->interpolationData.type));
+	writer->writeAttribute(QStringLiteral("variant"), QString::number(d->interpolationData.variant));
+	writer->writeAttribute(QStringLiteral("tension"), QString::number(d->interpolationData.tension));
+	writer->writeAttribute(QStringLiteral("continuity"), QString::number(d->interpolationData.continuity));
+	writer->writeAttribute(QStringLiteral("bias"), QString::number(d->interpolationData.bias));
+	writer->writeAttribute(QStringLiteral("npoints"), QString::number(d->interpolationData.npoints));
+	writer->writeAttribute(QStringLiteral("pointsMode"), QString::number(static_cast<int>(d->interpolationData.pointsMode)));
+	writer->writeAttribute(QStringLiteral("evaluate"), QString::number(d->interpolationData.evaluate));
 	writer->writeEndElement(); // interpolationData
 
 	// interpolation results (generated columns)
-	writer->writeStartElement("interpolationResult");
-	writer->writeAttribute("available", QString::number(d->interpolationResult.available));
-	writer->writeAttribute("valid", QString::number(d->interpolationResult.valid));
-	writer->writeAttribute("status", d->interpolationResult.status);
-	writer->writeAttribute("time", QString::number(d->interpolationResult.elapsedTime));
+	writer->writeStartElement(QStringLiteral("interpolationResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->interpolationResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->interpolationResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->interpolationResult.status);
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->interpolationResult.elapsedTime));
 
 	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
@@ -479,16 +432,16 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyInterpolationCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyInterpolationCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "interpolationData") {
+		} else if (!preview && reader->name() == QLatin1String("interpolationData")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("autoRange", interpolationData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", interpolationData.xRange.first());
@@ -501,21 +454,21 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("npoints", interpolationData.npoints, size_t);
 			READ_INT_VALUE("pointsMode", interpolationData.pointsMode, XYInterpolationCurve::PointsMode);
 			READ_INT_VALUE("evaluate", interpolationData.evaluate, nsl_interp_evaluate);
-		} else if (!preview && reader->name() == "interpolationResult") {
+		} else if (!preview && reader->name() == QLatin1String("interpolationResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", interpolationResult.available, int);
 			READ_INT_VALUE("valid", interpolationResult.valid, int);
 			READ_STRING_VALUE("status", interpolationResult.status);
 			READ_INT_VALUE("time", interpolationResult.elapsedTime, int);
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 		}
 	}

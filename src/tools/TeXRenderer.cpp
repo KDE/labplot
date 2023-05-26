@@ -48,9 +48,9 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	QString tempPath;
 #ifdef Q_OS_LINUX
 	// on linux try to use shared memory device first if available
-	static bool useShm = QDir("/dev/shm/").exists();
+	static bool useShm = QDir(QStringLiteral("/dev/shm/")).exists();
 	if (useShm)
-		tempPath = "/dev/shm/";
+		tempPath = QStringLiteral("/dev/shm/");
 	else
 		tempPath = QDir::tempPath();
 #else
@@ -71,13 +71,13 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	}
 
 	// create a temporary file
-	QTemporaryFile file(tempPath + QLatin1String("/") + "labplot_XXXXXX.tex");
+	QTemporaryFile file(tempPath + QStringLiteral("/") + QStringLiteral("labplot_XXXXXX.tex"));
 	// FOR DEBUG: file.setAutoRemove(false);
 	// DEBUG("temp file path = " << file.fileName().toUtf8().constData());
 	if (file.open()) {
 		QDir::setCurrent(tempPath);
 	} else {
-		QString err = i18n("Couldn't open the file") + " " + file.fileName();
+		QString err = i18n("Couldn't open the file") + QStringLiteral(" ") + file.fileName();
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
@@ -90,19 +90,19 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 
 	// create latex code
 	QTextStream out(&file);
-	int headerIndex = teXString.indexOf("\\begin{document}");
+	int headerIndex = teXString.indexOf(QLatin1String("\\begin{document}"));
 	QString body;
 	if (headerIndex != -1) {
 		// user provided a complete latex document -> extract the document header and body
 		QString header = teXString.left(headerIndex);
-		int footerIndex = teXString.indexOf("\\end{document}");
+		int footerIndex = teXString.indexOf(QLatin1String("\\end{document}"));
 		body = teXString.mid(headerIndex + 16, footerIndex - headerIndex - 16);
 		out << header;
 	} else {
 		// user simply provided a document body (assume it's a math. expression) -> add a minimal header
 		out << "\\documentclass{minimal}";
-		if (teXString.indexOf('$') == -1)
-			body = '$' + teXString + '$';
+		if (teXString.indexOf(QLatin1Char('$')) == -1)
+			body = QLatin1Char('$') + teXString + QLatin1Char('$');
 		else
 			body = teXString;
 
@@ -110,7 +110,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 		body = body.replace(QLatin1String("\n"), QLatin1String("\\\\"));
 	}
 
-	if (engine == "xelatex" || engine == "lualatex") {
+	if (engine == QLatin1String("xelatex") || engine == QLatin1String("lualatex")) {
 		out << "\\usepackage{fontspec}";
 		out << "\\defaultfontfeatures{Ligatures=TeX}";
 		if (!fontFamily.isEmpty())
@@ -124,7 +124,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	// out << "\\usepackage{mathtools}";
 	out << "\\begin{document}";
 	out << "\\begin{preview}";
-	out << "\\setlength{\\fboxsep}{0.2pt}";
+	out << "\\setlength{\\fboxsep}{1.0pt}";
 	out << "\\colorbox[rgb]{" << backgroundColor.redF() << ',' << backgroundColor.greenF() << ',' << backgroundColor.blueF() << "}{";
 	out << "\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
 	out << "\\color[rgb]{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
@@ -134,75 +134,106 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	out << "\\end{document}";
 	out.flush();
 
-	if (engine == "latex")
+	if (engine == QLatin1String("latex"))
 		return imageFromDVI(file, dpi, res);
 	else
-		return imageFromPDF(file, dpi, engine, res);
+		return imageFromPDF(file, engine, res);
 }
 
-// TEX -> PDF -> QImage
-QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, Result* res) {
-	Q_UNUSED(dpi)
-	// DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine) << ", dpi = " << dpi)
-	QFileInfo fi(file.fileName());
-	const QString& baseName = fi.completeBaseName();
-
-	// produce the PDF file with 'engine'
+bool TeXRenderer::executeLatexProcess(const QString engine,
+									  const QString& baseName,
+									  const QTemporaryFile& file,
+									  const QString& resultFileExtension,
+									  Result* res) {
+	// latex: produce the DVI file
 	const QString engineFullPath = QStandardPaths::findExecutable(engine);
 	if (engineFullPath.isEmpty()) {
-		WARN("engine " << STDSTRING(engine) << " not found");
+		res->successful = false;
+		res->errorMessage = i18n("%1 not found").arg(engine);
+		WARN(QStringLiteral("%1 not found").arg(engine).toStdString());
 		return {};
 	}
 
-	QProcess latexProcess;
-#if defined(HAVE_WINDOWS)
-	latexProcess.setNativeArguments("-interaction=batchmode " + file.fileName());
-	latexProcess.start(engineFullPath, QStringList() << QString());
-#else
-	latexProcess.start(engineFullPath, QStringList() << "-interaction=batchmode" << file.fileName());
-#endif
+	WARN(QStringLiteral("Engine fullpath: %1").arg(engineFullPath).toStdString());
 
-	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
-		QFile logFile(baseName + ".log");
+	QProcess latexProcess;
+	latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
+
+	WARN(QStringLiteral("Workdir: %1").arg(QDir::currentPath()).toStdString());
+
+	bool finished = latexProcess.waitForFinished();
+	if (!finished || latexProcess.exitCode() != 0) {
+		QFile logFile(baseName + QStringLiteral(".log"));
 		QString errorLogs;
+		WARN(QStringLiteral("executeLatexProcess: logfile: %1").arg(QFileInfo(logFile).absoluteFilePath()).toStdString());
 		if (logFile.open(QIODevice::ReadOnly)) {
 			// really slow, but texrenderer is running asynchronous so it is not a problem
 			while (!logFile.atEnd()) {
 				const auto line = logFile.readLine();
-				// ! as first character means error
 				if (line.count() > 0 && line.at(0) == '!') {
-					errorLogs += line;
+					errorLogs += QLatin1String(line);
 					break; // only first error message is enough
 				}
 			}
 			logFile.close();
+		} else
+			WARN(QStringLiteral("Unable to open logfile").toStdString());
+
+		WARN(latexProcess.readAllStandardOutput().toStdString());
+		WARN(latexProcess.readAllStandardError().toStdString());
+
+		QString err;
+		if (errorLogs.isEmpty()) {
+			if (!finished) {
+				err = i18n("Timeout: Unable to generate latex file");
+				WARN(QStringLiteral("Timeout: Unable to generate latex file").toStdString());
+			} else {
+				err = QStringLiteral("latex ") + i18n("process failed, exit code =") + QStringLiteral(" ") + QString::number(latexProcess.exitCode())
+					+ QStringLiteral("\n");
+				WARN(QStringLiteral("latex process failed, exit code = %1").arg(latexProcess.exitCode()).toStdString());
+			}
+		} else {
+			err = errorLogs;
+			WARN(err.toStdString());
 		}
-		QString err =
-			errorLogs.isEmpty() ? engine + " " + i18n("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" : errorLogs;
-		WARN(err.toStdString());
+
 		res->successful = false;
 		res->errorMessage = err;
-		QFile::remove(baseName + ".aux");
+		QFile::remove(baseName + QStringLiteral(".aux"));
 		QFile::remove(logFile.fileName());
-		QFile::remove(baseName + ".pdf"); // in some cases the pdf was also created
-		return {};
+		QFile::remove(baseName + QStringLiteral(".%1").arg(resultFileExtension)); // in some cases the file was also created
+		return false;
 	}
+	res->successful = true;
+	res->errorMessage = QStringLiteral("");
+	return true;
+}
 
-	QFile::remove(baseName + ".aux");
-	QFile::remove(baseName + ".log");
+// TEX -> PDF -> QImage
+QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const QString& engine, Result* res) {
+	// DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine))
+	QFileInfo fi(file.fileName());
+	const QString& baseName = fi.completeBaseName();
+
+	if (!executeLatexProcess(engine, baseName, file, QStringLiteral("pdf"), res))
+		return {};
+
+	// Can we move this into executeLatexProcess?
+	QFile::remove(baseName + QStringLiteral(".aux"));
+	QFile::remove(baseName + QStringLiteral(".log"));
 
 	// read PDF file
-	QFile pdfFile(baseName + QLatin1String(".pdf"));
+	QFile pdfFile(baseName + QStringLiteral(".pdf"));
 	if (!pdfFile.open(QIODevice::ReadOnly)) {
-		QFile::remove(baseName + ".pdf");
+		QFile::remove(baseName + QStringLiteral(".pdf"));
 		return {};
 	}
 
 	QByteArray ba = pdfFile.readAll();
 	pdfFile.close();
-	QFile::remove(baseName + ".pdf");
+	QFile::remove(baseName + QStringLiteral(".pdf"));
 	res->successful = true;
-	res->errorMessage = "";
+	res->errorMessage = QString();
 
 	return ba;
 }
@@ -212,39 +243,8 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
-	// latex: produce the DVI file
-	const QString latexFullPath = QStandardPaths::findExecutable(QLatin1String("latex"));
-	if (latexFullPath.isEmpty()) {
-		res->successful = false;
-		res->errorMessage = i18n("latex not found");
-		WARN("latex not found");
+	if (!executeLatexProcess(QLatin1String("latex"), baseName, file, QStringLiteral("dvi"), res))
 		return {};
-	}
-	QProcess latexProcess;
-	latexProcess.start(latexFullPath, QStringList() << "-interaction=batchmode" << file.fileName());
-	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
-		QFile logFile(baseName + ".log");
-		QString errorLogs;
-		if (logFile.open(QIODevice::ReadOnly)) {
-			// really slow, but texrenderer is running asynchronous so it is not a problem
-			while (!logFile.atEnd()) {
-				const auto line = logFile.readLine();
-				if (line.count() > 0 && line.at(0) == '!') {
-					errorLogs += line;
-					break; // only first error message is enough
-				}
-			}
-			logFile.close();
-		}
-		QString err = errorLogs.isEmpty() ? "latex " + i18n("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" : errorLogs;
-		WARN(err.toStdString());
-		res->successful = false;
-		res->errorMessage = err;
-		QFile::remove(baseName + ".aux");
-		QFile::remove(logFile.fileName());
-		QFile::remove(baseName + ".dvi"); // in some cases the dvi was also created
-		return {};
-	}
 
 	// dvips: DVI -> PS
 	const QString dvipsFullPath = QStandardPaths::findExecutable(QLatin1String("dvips"));
@@ -255,15 +255,15 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		return {};
 	}
 	QProcess dvipsProcess;
-	dvipsProcess.start(dvipsFullPath, QStringList() << "-E" << baseName);
+	dvipsProcess.start(dvipsFullPath, QStringList() << QStringLiteral("-E") << baseName);
 	if (!dvipsProcess.waitForFinished() || dvipsProcess.exitCode() != 0) {
-		QString err = i18n("dvips process failed, exit code =") + " " + QString::number(dvipsProcess.exitCode());
+		QString err = i18n("dvips process failed, exit code =") + QStringLiteral(" ") + QString::number(dvipsProcess.exitCode());
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
-		QFile::remove(baseName + ".aux");
-		QFile::remove(baseName + ".log");
-		QFile::remove(baseName + ".dvi");
+		QFile::remove(baseName + QStringLiteral(".aux"));
+		QFile::remove(baseName + QStringLiteral(".log"));
+		QFile::remove(baseName + QStringLiteral(".dvi"));
 		return {};
 	}
 
@@ -272,7 +272,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 #if defined(HAVE_WINDOWS)
 	// need to set path to magick coder modules (which are in the labplot2 directory)
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(qgetenv("PROGRAMFILES") + QString("\\labplot2")));
+	env.insert(QStringLiteral("MAGICK_CODER_MODULE_PATH"), QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("\\labplot2"));
 	convertProcess.setProcessEnvironment(env);
 #endif
 	const QString convertFullPath = QStandardPaths::findExecutable(QLatin1String("convert"));
@@ -283,40 +283,40 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		return {};
 	}
 
-	const QStringList params{"-density", QString::number(dpi), baseName + ".ps", baseName + ".pdf"};
+	const QStringList params{QStringLiteral("-density"), QString::number(dpi), baseName + QStringLiteral(".ps"), baseName + QStringLiteral(".pdf")};
 	convertProcess.start(convertFullPath, params);
 
 	if (!convertProcess.waitForFinished() || convertProcess.exitCode() != 0) {
-		QString err = i18n("convert process failed, exit code =") + " " + QString::number(convertProcess.exitCode());
+		QString err = i18n("convert process failed, exit code =") + QStringLiteral(" ") + QString::number(convertProcess.exitCode());
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
-		QFile::remove(baseName + ".aux");
-		QFile::remove(baseName + ".log");
-		QFile::remove(baseName + ".dvi");
-		QFile::remove(baseName + ".ps");
+		QFile::remove(baseName + QStringLiteral(".aux"));
+		QFile::remove(baseName + QStringLiteral(".log"));
+		QFile::remove(baseName + QStringLiteral(".dvi"));
+		QFile::remove(baseName + QStringLiteral(".ps"));
 		return {};
 	}
 
 	// final clean up
-	QFile::remove(baseName + ".aux");
-	QFile::remove(baseName + ".log");
-	QFile::remove(baseName + ".dvi");
-	QFile::remove(baseName + ".ps");
+	QFile::remove(baseName + QStringLiteral(".aux"));
+	QFile::remove(baseName + QStringLiteral(".log"));
+	QFile::remove(baseName + QStringLiteral(".dvi"));
+	QFile::remove(baseName + QStringLiteral(".ps"));
 
 	// read PDF file
 	QFile pdfFile(baseName + QLatin1String(".pdf"));
 	if (!pdfFile.open(QIODevice::ReadOnly)) {
-		QFile::remove(baseName + ".pdf");
+		QFile::remove(baseName + QStringLiteral(".pdf"));
 		res->successful = false;
 		res->errorMessage = i18n("Unable to open file:") + pdfFile.fileName();
 		return {};
 	}
 
 	QByteArray ba = pdfFile.readAll();
-	QFile::remove(baseName + ".pdf");
+	QFile::remove(baseName + QStringLiteral(".pdf"));
 	res->successful = true;
-	res->errorMessage = "";
+	res->errorMessage = QString();
 
 	return ba;
 }
@@ -348,7 +348,7 @@ bool TeXRenderer::enabled() {
 	}
 
 	// Tools needed to convert generated  DVI files to PS and PDF
-	if (engine == "latex") {
+	if (engine == QLatin1String("latex")) {
 		if (!executableExists(QLatin1String("convert"))) {
 			WARN("program \"convert\" does not exist");
 			return false;
@@ -359,13 +359,13 @@ bool TeXRenderer::enabled() {
 		}
 
 #if defined(_WIN64)
-		if (!executableExists(QLatin1String("gswin64c")) && !QDir(qgetenv("PROGRAMFILES") + QString("/gs")).exists()
-			&& !QDir(qgetenv("PROGRAMFILES(X86)") + QString("/gs")).exists()) {
+		if (!executableExists(QLatin1String("gswin64c")) && !QDir(QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("/gs")).exists()
+			&& !QDir(QString::fromLocal8Bit(qgetenv("PROGRAMFILES(X86)")) + QStringLiteral("/gs")).exists()) {
 			WARN("ghostscript (64bit) does not exist");
 			return false;
 		}
 #elif defined(HAVE_WINDOWS)
-		if (!executableExists(QLatin1String("gswin32c")) && !QDir(qgetenv("PROGRAMFILES") + QString("/gs")).exists()) {
+		if (!executableExists(QLatin1String("gswin32c")) && !QDir(QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("/gs")).exists()) {
 			WARN("ghostscript (32bit) does not exist");
 			return false;
 		}

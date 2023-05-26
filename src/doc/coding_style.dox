@@ -99,6 +99,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 	https://marcmutz.wordpress.com/effective-qt/containers/
 	See also "Hands-On High Performance Programming with Qt5"
 * QVector: size() instead of count(),  resize() for simple types (bool, int, double) and reserve() else, use at() for ro access, to release memory use squeeze()
+* QString: https://wiki.qt.io/Using_QString_Effectively, https://forum.qt.io/topic/78540/qstringliteral-vs-qlatin1string/3, https://www.qt.io/blog/2014/06/13/qt-weekly-13-qstringliteral, https://woboq.com/blog/qstringliteral.html
 * Use range-based loops instead of foreach/Q_FOREACH (but avoid detach: https://www.kdab.com/goodbye-q_foreach/ - "Avoid Detach")
 	https://www.kdab.com/goodbye-q_foreach/
 * The 'auto' keyword should be used in range-based loops and for variables initialized by casting or with the 'new' operator but only for non-basic types (int,double,Spreadsheet). Do not omit '*', '&' and 'const' to keep readability.
@@ -120,8 +121,8 @@ Very short classes can be bundled in one file which then is named using all lowe
 	DEBUG(" string : " << STDSTRING(string))
 @endcode
 * Use Qt functions for user messages: qDebug(), qWarning(), qCritical(), qFatal(). Check conditions with Q_ASSERT(cond) or Q_ASSERT_X(cond, where, what) and pointers with Q_CHECK_PTR(ptr).
-* Numeric limits should be using Qt +/-qInf() and qQNaN() for floating point types and C++ +/-std::numeric_limits<T>::min() & +/-std::numeric_limits<T>::max() for all types
-* Import C header (from GSL etc.) with extern statement. We use "std::" prefix (C++11) and try to avoid C header like cmath, cfloat etc. by using corresponding C++ or Qt constructs (fabs() -> qAbs(), DBL_MAX -> std::numeric_limits<double>::max(), round() -> qRound(), max() -> qMax()). Example:
+* Numeric limits should be using cmath +/-INFINITY and NAN for floating point types and C++ +/-std::numeric_limits<T>::min() & +/-std::numeric_limits<T>::max() for all types
+* Import C header (from GSL etc.) with extern statement. We use "std::" prefix (C++11) and try to use c-header <cmath> (std::abs(), DBL_MAX -> std::numeric_limits<double>::max(), std::round(), max() -> std::max(), std::isfinite(), std::isnan(), std::isinf()). Example:
 @code
     extern "C" {
     #include <gsl/gsl_version.h>

@@ -25,11 +25,14 @@ public:
 		MarkGaps = 0x02,
 		Limit = 0x04, // set limits, when point crosses the limits
 		SuppressPageClippingY = 0x08,
+		SuppressPageClippingVisible = 0x10, // Do not clip mapping, but set visible flag to false if outside of the plot
 	};
 	Q_DECLARE_FLAGS(MappingFlags, MappingFlag)
 
 	explicit AbstractCoordinateSystem(AbstractPlot*);
 	virtual ~AbstractCoordinateSystem();
+
+	virtual bool isValid() const = 0;
 
 	virtual Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
 	virtual QPointF mapLogicalToScene(QPointF, bool& visible, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
@@ -38,7 +41,7 @@ public:
 	virtual QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
 
 	virtual QString info() const {
-		return QString();
+		return {};
 	};
 
 	class LineClipResult {

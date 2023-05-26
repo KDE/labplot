@@ -11,6 +11,8 @@
 
 #include "AsciiFilterTest.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/lib/macros.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {
@@ -18,11 +20,11 @@ extern "C" {
 #include <gsl/gsl_rng.h>
 }
 
-//##############################################################################
-//#################  handling of empty and sparse files ########################
-//##############################################################################
+// ##############################################################################
+// #################  handling of empty and sparse files ########################
+// ##############################################################################
 void AsciiFilterTest::testEmptyFileAppend() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 
 	const int rowCount = spreadsheet.rowCount();
@@ -36,7 +38,7 @@ void AsciiFilterTest::testEmptyFileAppend() {
 }
 
 void AsciiFilterTest::testEmptyFilePrepend() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 
 	const int rowCount = spreadsheet.rowCount();
@@ -50,7 +52,7 @@ void AsciiFilterTest::testEmptyFilePrepend() {
 }
 
 void AsciiFilterTest::testEmptyFileReplace() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 
 	const int rowCount = spreadsheet.rowCount();
@@ -63,12 +65,13 @@ void AsciiFilterTest::testEmptyFileReplace() {
 }
 
 void AsciiFilterTest::testEmptyLines01() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_lines_01.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -94,12 +97,13 @@ void AsciiFilterTest::testEmptyLines01() {
 }
 
 void AsciiFilterTest::testSparseFile01() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sparse_file_01.txt"));
 
-	filter.setSeparatingCharacter(",");
+	filter.setSeparatingCharacter(QStringLiteral(","));
 	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
 	filter.setSimplifyWhitespacesEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -128,15 +132,16 @@ void AsciiFilterTest::testSparseFile01() {
 }
 
 void AsciiFilterTest::testSparseFile02() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sparse_file_02.txt"));
 
-	filter.setSeparatingCharacter(",");
+	filter.setSeparatingCharacter(QStringLiteral(","));
 	filter.setNaNValueToZero(false);
 	filter.setSimplifyWhitespacesEnabled(true);
 	filter.setSkipEmptyParts(false);
 	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -164,15 +169,16 @@ void AsciiFilterTest::testSparseFile02() {
 }
 
 void AsciiFilterTest::testSparseFile03() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sparse_file_03.txt"));
 
-	filter.setSeparatingCharacter(",");
+	filter.setSeparatingCharacter(QStringLiteral(","));
 	filter.setNaNValueToZero(true);
 	filter.setSimplifyWhitespacesEnabled(true);
 	filter.setSkipEmptyParts(false);
 	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 4);
@@ -202,15 +208,15 @@ void AsciiFilterTest::testSparseFile03() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 3.);
 }
 
-//##############################################################################
-//################################  header handling ############################
-//##############################################################################
+// ##############################################################################
+// ################################  header handling ############################
+// ##############################################################################
 void AsciiFilterTest::testHeader01() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
-	filter.setSeparatingCharacter(";");
+	filter.setSeparatingCharacter(QStringLiteral(";"));
 	filter.setHeaderEnabled(false);
 	filter.setVectorNames(QString());
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -220,32 +226,30 @@ void AsciiFilterTest::testHeader01() {
 }
 
 void AsciiFilterTest::testHeader02() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
-	filter.setSeparatingCharacter(";");
+	filter.setSeparatingCharacter(QStringLiteral(";"));
 	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
 	filter.setVectorNames(QString());
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 2); // out of 3 rows one row is used for the column names (header)
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("1"));
-
-	// TODO: we start with the names "1" and "2" in the spreadsheet and try to rename them to "1" and "1" (names coming from the file)
-	//-> the second column with the name "2" will be renamed to "3" because of the current logic in AbstractAspect::uniqueNameFor().
-	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("3"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("2"));
 }
 
 void AsciiFilterTest::testHeader03() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
-	filter.setSeparatingCharacter(";");
-	filter.setHeaderEnabled(false);
-	filter.setVectorNames("x");
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	// filter.setHeaderEnabled(false);
+	filter.setVectorNames(QStringLiteral("x"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -254,13 +258,13 @@ void AsciiFilterTest::testHeader03() {
 }
 
 void AsciiFilterTest::testHeader04() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
-	filter.setSeparatingCharacter(";");
+	filter.setSeparatingCharacter(QStringLiteral(";"));
 	filter.setHeaderEnabled(false);
-	filter.setVectorNames("x");
+	filter.setVectorNames(QStringLiteral("x"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -269,13 +273,13 @@ void AsciiFilterTest::testHeader04() {
 }
 
 void AsciiFilterTest::testHeader05() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
-	filter.setSeparatingCharacter(";");
+	filter.setSeparatingCharacter(QStringLiteral(";"));
 	filter.setHeaderEnabled(false);
-	filter.setVectorNames("x y");
+	filter.setVectorNames(QStringLiteral("x y"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -285,13 +289,13 @@ void AsciiFilterTest::testHeader05() {
 }
 
 void AsciiFilterTest::testHeader06() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
-	filter.setSeparatingCharacter(";");
+	filter.setSeparatingCharacter(QStringLiteral(";"));
 	filter.setHeaderEnabled(false);
-	filter.setVectorNames("x y z");
+	filter.setVectorNames(QStringLiteral("x y z"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -306,11 +310,11 @@ void AsciiFilterTest::testHeader06() {
  * this line shouldn't disturb the detection of numeric column modes.
  */
 void AsciiFilterTest::testHeader07() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/comment_header_comment.txt"));
 
-	filter.setSeparatingCharacter("TAB");
+	filter.setSeparatingCharacter(QStringLiteral("TAB"));
 	filter.setHeaderLine(2);
 	// filter.setHeaderEnabled(true);
 	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
@@ -353,11 +357,11 @@ void AsciiFilterTest::testHeader07() {
  * with a subsequent comment line ignored by using startRow.
  */
 void AsciiFilterTest::testHeader07a() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/comment_header_comment.txt"));
 
-	filter.setSeparatingCharacter("TAB");
+	filter.setSeparatingCharacter(QStringLiteral("TAB"));
 	filter.setHeaderLine(2);
 	// filter.setHeaderEnabled(true);
 	filter.setStartRow(4);
@@ -398,11 +402,12 @@ void AsciiFilterTest::testHeader07a() {
  * be properly recognized and used.
  */
 void AsciiFilterTest::testHeader08() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_tab_with_header_with_spaces.txt"));
 
 	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// spreadsheet size
@@ -425,15 +430,111 @@ void AsciiFilterTest::testHeader08() {
 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 4);
 }
 
-//##############################################################################
-//#####################  handling of different read ranges #####################
-//##############################################################################
+/*!
+ * test the handling of duplicated columns names provided by the user.
+ */
+void AsciiFilterTest::testHeader09() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
+
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(false);
+	filter.setVectorNames(QStringList{QStringLiteral("x"), QStringLiteral("x")});
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("x 1")); // the duplicated name was renamed
+}
+
+/*!
+ * test the handling of duplicated columns in the file to be imported.
+ */
+void AsciiFilterTest::testHeader10() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header_duplicated_names.txt"));
+
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("x 1")); // the duplicated name was renamed
+}
+
+/*!
+ * test the handling of duplicated columns in the file to be imported.
+ */
+void AsciiFilterTest::testHeader11() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/column_names.txt"));
+
+	filter.setSeparatingCharacter(QStringLiteral(" "));
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("A"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("B"));
+
+	// import the second file with reversed column names into the same spreadsheet
+	AsciiFilter filter2; // create a new filter so we go through the prepare logic from scratch for the 2nd file
+	const QString& fileName2 = QFINDTESTDATA(QLatin1String("data/column_names_reversed.txt"));
+	filter2.setSeparatingCharacter(QStringLiteral(" "));
+	filter2.setHeaderLine(1);
+	filter2.readDataFromFile(fileName2, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("B"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("A"));
+}
+
+/*!
+ * test the handling of column names with and without header
+ */
+void AsciiFilterTest::testHeader11a() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/column_names.txt"));
+
+	filter.setSeparatingCharacter(QStringLiteral(" "));
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("A"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("B"));
+
+	AsciiFilter filter2;
+
+	filter2.setSeparatingCharacter(QStringLiteral(" "));
+	filter2.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 2);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
+}
+
+// ##############################################################################
+// #####################  handling of different read ranges #####################
+// ##############################################################################
 void AsciiFilterTest::testColumnRange00() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setHeaderEnabled(false);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -452,11 +553,11 @@ void AsciiFilterTest::testColumnRange00() {
 }
 
 void AsciiFilterTest::testColumnRange01() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setHeaderEnabled(false);
 	filter.setCreateIndexEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -478,11 +579,11 @@ void AsciiFilterTest::testColumnRange01() {
 }
 
 void AsciiFilterTest::testColumnRange02() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setHeaderEnabled(false);
 	filter.setStartColumn(2);
 	filter.setEndColumn(3);
@@ -501,11 +602,11 @@ void AsciiFilterTest::testColumnRange02() {
 }
 
 void AsciiFilterTest::testColumnRange03() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setHeaderEnabled(false);
 	filter.setCreateIndexEnabled(true);
 	filter.setStartColumn(2);
@@ -527,11 +628,11 @@ void AsciiFilterTest::testColumnRange03() {
 }
 
 void AsciiFilterTest::testColumnRange04() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setHeaderEnabled(false);
 	filter.setStartColumn(3);
 	filter.setEndColumn(3);
@@ -548,11 +649,11 @@ void AsciiFilterTest::testColumnRange04() {
 }
 
 void AsciiFilterTest::testColumnRange05() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setHeaderEnabled(false);
 	filter.setStartColumn(3);
 	filter.setEndColumn(2);
@@ -565,11 +666,11 @@ void AsciiFilterTest::testColumnRange05() {
 }
 
 void AsciiFilterTest::testColumnRange06() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setHeaderEnabled(false);
 	filter.setCreateIndexEnabled(true);
 	filter.setStartColumn(3);
@@ -585,12 +686,11 @@ void AsciiFilterTest::testColumnRange06() {
 }
 
 void AsciiFilterTest::testRowRange00() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
-	filter.setHeaderEnabled(false);
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setStartRow(3);
 	filter.setEndRow(5);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -614,11 +714,11 @@ void AsciiFilterTest::testRowRange00() {
 }
 
 void AsciiFilterTest::testRowRange01() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setHeaderEnabled(false);
 	filter.setStartRow(3);
 	filter.setEndRow(10);
@@ -643,11 +743,11 @@ void AsciiFilterTest::testRowRange01() {
 }
 
 void AsciiFilterTest::testRowRange02() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setHeaderEnabled(false);
 	filter.setStartRow(3);
 	filter.setEndRow(1);
@@ -662,11 +762,11 @@ void AsciiFilterTest::testRowRange02() {
 }
 
 void AsciiFilterTest::testRowColumnRange00() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter("auto");
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
 	filter.setHeaderEnabled(false);
 	filter.setStartRow(3);
 	filter.setEndRow(5);
@@ -689,19 +789,19 @@ void AsciiFilterTest::testRowColumnRange00() {
 	QCOMPARE(spreadsheet.column(1)->valueAt(2), -0.284112);
 }
 
-//##############################################################################
-//#####################  handling of different separators ######################
-//##############################################################################
+// ##############################################################################
+// #####################  handling of different separators ######################
+// ##############################################################################
 
-//##############################################################################
-//#####################################  quoted strings ########################
-//##############################################################################
+// ##############################################################################
+// #####################################  quoted strings ########################
+// ##############################################################################
 void AsciiFilterTest::testQuotedStrings00() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings.txt"));
 
-	filter.setSeparatingCharacter(",");
+	filter.setSeparatingCharacter(QStringLiteral(","));
 	filter.setHeaderEnabled(false);
 	filter.setRemoveQuotesEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -732,12 +832,13 @@ void AsciiFilterTest::testQuotedStrings00() {
 }
 
 void AsciiFilterTest::testQuotedStrings01() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings_with_header.txt"));
 
-	filter.setSeparatingCharacter(",");
+	filter.setSeparatingCharacter(QStringLiteral(","));
 	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
 	filter.setSimplifyWhitespacesEnabled(true);
 	filter.setRemoveQuotesEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -776,14 +877,14 @@ void AsciiFilterTest::testQuotedStrings01() {
 }
 
 void AsciiFilterTest::testQuotedStrings02() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings_one_line.txt"));
 
 	QCOMPARE(QFile::exists(fileName), true);
 
-	filter.setSeparatingCharacter(",");
-	filter.setHeaderEnabled(false);
+	filter.setSeparatingCharacter(QStringLiteral(","));
+	// filter.setHeaderEnabled(false);
 	filter.setRemoveQuotesEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -803,12 +904,13 @@ void AsciiFilterTest::testQuotedStrings02() {
 }
 
 void AsciiFilterTest::testQuotedStrings03() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings_one_line_with_header.txt"));
 
-	filter.setSeparatingCharacter(",");
+	filter.setSeparatingCharacter(QStringLiteral(","));
 	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
 	filter.setSimplifyWhitespacesEnabled(true);
 	filter.setRemoveQuotesEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -840,10 +942,11 @@ void AsciiFilterTest::testQuotedStrings03() {
  * test quoted text having separators inside - the text between quotes shouldn't be splitted into separate columns.
  */
 void AsciiFilterTest::testQuotedStrings04() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings_with_separator_inside.csv"));
 
+	filter.setHeaderLine(1);
 	filter.setSimplifyWhitespacesEnabled(true); // TODO: this shouldn't be required, but QString::split() seems to introduce blanks...
 	filter.setRemoveQuotesEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -872,15 +975,33 @@ void AsciiFilterTest::testQuotedStrings04() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 2.0);
 }
 
-//##############################################################################
-//###############################  skip comments ###############################
-//##############################################################################
+/*!
+ * test quoted text having separators inside - a JSON file has a similar structure and we should't crash because of this "wrong" data.
+ */
+void AsciiFilterTest::testQuotedStrings05() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
+
+	filter.setSimplifyWhitespacesEnabled(true); // TODO: this shouldn't be required, but QString::split() seems to introduce blanks...
+	filter.setRemoveQuotesEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// everything should be read into one single text column.
+	// the actuall content is irrelevant, we just need to make sure we don't crash because of such wrong content
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+}
+
+// ##############################################################################
+// ###############################  skip comments ###############################
+// ##############################################################################
 void AsciiFilterTest::testComments00() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/multi_line_comment.txt"));
 
-	filter.setSeparatingCharacter(",");
+	filter.setSeparatingCharacter(QStringLiteral(","));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 2);
@@ -898,11 +1019,11 @@ void AsciiFilterTest::testComments00() {
 }
 
 void AsciiFilterTest::testComments01() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/multi_line_comment_with_empty_lines.txt"));
 
-	filter.setSeparatingCharacter(",");
+	filter.setSeparatingCharacter(QStringLiteral(","));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 2);
@@ -923,13 +1044,14 @@ void AsciiFilterTest::testComments01() {
  * test with an empty comment character
  */
 void AsciiFilterTest::testComments02() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
 
-	filter.setCommentCharacter("");
-	filter.setSeparatingCharacter(";");
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
 	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// spreadsheet size
@@ -955,21 +1077,22 @@ void AsciiFilterTest::testComments02() {
 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 3);
 }
 
-//##############################################################################
-//#########################  handling of datetime data #########################
-//##############################################################################
+// ##############################################################################
+// #########################  handling of datetime data #########################
+// ##############################################################################
 /*!
  * read data containing only two characters for the year - 'yy'. The default year in
  * QDateTime is 1900 . When reading such two-characters DateTime values we want
  * to have the current centure after the import.
  */
 void AsciiFilterTest::testDateTime00() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datetime_01.csv"));
 
-	filter.setSeparatingCharacter(",");
+	filter.setSeparatingCharacter(QStringLiteral(","));
 	// filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
 	filter.setDateTimeFormat(QLatin1String("dd/MM/yy hh:mm:ss"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -987,11 +1110,13 @@ void AsciiFilterTest::testDateTime00() {
 
 	// values
 	auto value = QDateTime::fromString(QLatin1String("01/01/2019 00:00:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
 	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 14.7982);
 
-	value = QDateTime::fromString(QLatin1String("01/01/2019 00:00:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
-	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
+	value = QDateTime::fromString(QLatin1String("01/01/2019 00:30:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1), value);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);
 }
 
@@ -999,12 +1124,12 @@ void AsciiFilterTest::testDateTime00() {
  *  TODO: handle hex value
  */
 void AsciiFilterTest::testDateTimeHex() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datetime-hex.dat"));
 
 	filter.setHeaderEnabled(false);
-	filter.setSeparatingCharacter("|");
+	filter.setSeparatingCharacter(QStringLiteral("|"));
 	filter.setDateTimeFormat(QLatin1String("yyyyMMddhhmmss"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -1032,6 +1157,7 @@ void AsciiFilterTest::testDateTimeHex() {
 	QCOMPARE(spreadsheet.column(16)->columnMode(), AbstractColumn::ColumnMode::Text);
 
 	auto value = QDateTime::fromString(QLatin1String("18/12/2019 02:36:08"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
 	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
 	QCOMPARE(spreadsheet.column(1)->textAt(0), QLatin1String("F"));
 	QCOMPARE(spreadsheet.column(2)->integerAt(0), 1000);
@@ -1051,6 +1177,37 @@ void AsciiFilterTest::testDateTimeHex() {
 	QCOMPARE(spreadsheet.column(16)->textAt(0), QLatin1String("5AD17"));
 }
 
+void AsciiFilterTest::testMatrixHeader() {
+	Matrix matrix(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
+
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
+	filter.readDataFromFile(fileName, &matrix, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(matrix.rowCount(), 5);
+	QCOMPARE(matrix.columnCount(), 3);
+
+	QCOMPARE(matrix.mode(), AbstractColumn::ColumnMode::Double);
+
+	// check all values
+	QCOMPARE(matrix.cell<double>(0, 0), 1.716299);
+	QCOMPARE(matrix.cell<double>(0, 1), -0.485527);
+	QCOMPARE(matrix.cell<double>(0, 2), -0.288690);
+	QCOMPARE(matrix.cell<double>(1, 0), 1.716299);
+	QCOMPARE(matrix.cell<double>(1, 1), -0.476371);
+	QCOMPARE(matrix.cell<double>(1, 2), -0.274957);
+	QCOMPARE(matrix.cell<double>(2, 0), 1.711721);
+	QCOMPARE(matrix.cell<double>(2, 1), -0.485527);
+	QCOMPARE(matrix.cell<double>(2, 2), -0.293267);
+	QCOMPARE(matrix.cell<double>(3, 0), 1.711721);
+	QCOMPARE(matrix.cell<double>(3, 1), -0.480949);
+	QCOMPARE(matrix.cell<double>(3, 2), -0.293267);
+	QCOMPARE(matrix.cell<double>(4, 0), 1.716299);
+	QCOMPARE(matrix.cell<double>(4, 1), -0.494682);
+	QCOMPARE(matrix.cell<double>(4, 2), -0.284112);
+}
+
 // BENCHMARKS
 
 void AsciiFilterTest::benchDoubleImport_data() {
@@ -1066,7 +1223,7 @@ void AsciiFilterTest::benchDoubleImport_data() {
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
-	QTest::newRow(testName.toLatin1()) << lines;
+	QTest::newRow(qPrintable(testName)) << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	gsl_rng_env_setup();
@@ -1093,14 +1250,14 @@ void AsciiFilterTest::benchDoubleImport_data() {
 			if (p < paths - 1)
 				out << ' ';
 		}
-		out << "\n";
+		out << QStringLiteral("\n");
 	}
 
 	DEBUG(Q_FUNC_INFO << ", DONE")
 }
 
 void AsciiFilterTest::benchDoubleImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 	filter.setHeaderEnabled(false);
 

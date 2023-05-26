@@ -18,15 +18,18 @@
 #include "Histogram.h"
 #include "HistogramPrivate.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Folder.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
 #include <QGraphicsSceneContextMenuEvent>
@@ -44,17 +47,23 @@ extern "C" {
 #include <gsl/gsl_spline.h>
 }
 
+CURVE_COLUMN_CONNECT(Histogram, Data, data, recalcHistogram)
+CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)
+CURVE_COLUMN_CONNECT(Histogram, ErrorMinus, errorMinus, updateErrorBars)
+
 Histogram::Histogram(const QString& name)
-	: WorksheetElement(name, new HistogramPrivate(this), AspectType::Histogram)
-	, Curve() {
+	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
 	init();
 }
 
 Histogram::Histogram(const QString& name, HistogramPrivate* dd)
-	: WorksheetElement(name, dd, AspectType::Histogram)
-	, Curve() {
+	: Plot(name, dd, AspectType::Histogram) {
 	init();
 }
+
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
+Histogram::~Histogram() = default;
 
 void Histogram::init() {
 	Q_D(Histogram);
@@ -62,25 +71,33 @@ void Histogram::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Histogram");
 
-	d->dataColumn = nullptr;
-
-	d->type = (Histogram::HistogramType)group.readEntry("Type", (int)Histogram::Ordinary);
-	d->orientation = (Histogram::HistogramOrientation)group.readEntry("Orientation", (int)Histogram::Vertical);
-	d->normalization = (Histogram::HistogramNormalization)group.readEntry("Normalization", (int)Histogram::Count);
+	d->type = (Histogram::Type)group.readEntry("Type", (int)Histogram::Ordinary);
+	d->orientation = (Histogram::Orientation)group.readEntry("Orientation", (int)Histogram::Vertical);
+	d->normalization = (Histogram::Normalization)group.readEntry("Normalization", (int)Histogram::Count);
 	d->binningMethod = (Histogram::BinningMethod)group.readEntry("BinningMethod", (int)Histogram::SquareRoot);
 	d->binCount = group.readEntry("BinCount", 10);
-	d->binWidth = group.readEntry("BinWidth", 1.0f);
+	d->binWidth = group.readEntry("BinWidth", 1.0);
 	d->autoBinRanges = group.readEntry("AutoBinRanges", true);
 	d->binRangesMin = 0.0;
 	d->binRangesMax = 1.0;
 
-	d->lineType = (Histogram::LineType)group.readEntry("LineType", (int)Histogram::Bars);
-	d->linePen.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	d->linePen.setColor(group.readEntry("LineColor", QColor(Qt::black)));
-	d->linePen.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
+	// line
+	d->line = new Line(QString());
+	d->line->setHistogramLineTypeAvailable(true);
+	d->line->setHidden(true);
+	addChild(d->line);
+	d->line->init(group);
+	connect(d->line, &Line::histogramLineTypeChanged, [=] {
+		d->updateLines();
+	});
+	connect(d->line, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->line, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
-	// initialize the symbol
+	// symbol
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
@@ -92,20 +109,17 @@ void Histogram::init() {
 		d->updatePixmap();
 	});
 
-	d->valuesType = (Histogram::ValuesType)group.readEntry("ValuesType", (int)Histogram::NoValues);
-	d->valuesColumn = nullptr;
-	d->valuesPosition = (Histogram::ValuesPosition)group.readEntry("ValuesPosition", (int)Histogram::ValuesAbove);
-	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
-	d->valuesOpacity = group.readEntry("ValuesOpacity", 1.0);
-	d->valuesNumericFormat = group.readEntry("ValuesNumericFormat", "f").at(0).toLatin1();
-	d->valuesPrecision = group.readEntry("ValuesPrecision", 2);
-	d->valuesDateTimeFormat = group.readEntry("ValuesDateTimeFormat", "yyyy-MM-dd");
-	d->valuesPrefix = group.readEntry("ValuesPrefix", "");
-	d->valuesSuffix = group.readEntry("ValuesSuffix", "");
-	d->valuesFont = group.readEntry("ValuesFont", QFont());
-	d->valuesFont.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
-	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
+	// values
+	d->value = new Value(QString());
+	addChild(d->value);
+	d->value->setHidden(true);
+	d->value->init(group);
+	connect(d->value, &Value::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->value, &Value::updateRequested, [=] {
+		d->updateValues();
+	});
 
 	// Background/Filling
 	d->background = new Background(QString());
@@ -121,21 +135,69 @@ void Histogram::init() {
 		d->updateFilling();
 	});
 
+	// error bars
 	d->errorType = (Histogram::ErrorType)group.readEntry("ErrorType", (int)Histogram::NoError);
-	d->errorBarsType = (XYCurve::ErrorBarsType)group.readEntry("ErrorBarsType", static_cast<int>(XYCurve::ErrorBarsType::Simple));
-	d->errorBarsCapSize = group.readEntry("ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
-	d->errorBarsPen.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine));
-	d->errorBarsPen.setColor(group.readEntry("ErrorBarsColor", QColor(Qt::black)));
-	d->errorBarsPen.setWidthF(group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
+	d->errorBarsLine = new Line(QString());
+	d->errorBarsLine->setPrefix(QLatin1String("ErrorBars"));
+	d->errorBarsLine->setCreateXmlElement(false); // errorBars element is created in Histogram::save()
+	d->errorBarsLine->setErrorBarsTypeAvailable(true);
+	d->errorBarsLine->setHidden(true);
+	addChild(d->errorBarsLine);
+	d->errorBarsLine->init(group);
+	connect(d->errorBarsLine, &Line::errorBarsTypeChanged, [=] {
+		d->updateErrorBars();
+	});
+	connect(d->errorBarsLine, &Line::errorBarsCapSizeChanged, [=] {
+		d->updateErrorBars();
+	});
+	connect(d->errorBarsLine, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->errorBarsLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
+	// marginal plots (rug, histogram, boxplot)
+	d->rugEnabled = group.readEntry("RugEnabled", false);
+	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry("RugWidth", 0.0);
+	d->rugOffset = group.readEntry("RugOffset", 0.0);
 
 	this->initActions();
 }
 
 void Histogram::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &Histogram::changeVisibility);
+}
+
+/*!
+ * creates a new spreadsheet having the data with the positions and the values of the bins.
+ * the new spreadsheet is added to the current folder.
+ */
+void Histogram::createDataSpreadsheet() {
+	if (!bins() || !binValues())
+		return;
+
+	auto* spreadsheet = new Spreadsheet(i18n("%1 - Data", name()));
+	spreadsheet->removeColumns(0, spreadsheet->columnCount()); // remove default columns
+	spreadsheet->setRowCount(bins()->rowCount());
+
+	// bin positions
+	auto* data = static_cast<const Column*>(bins())->data();
+	auto* xColumn = new Column(i18n("bin positions"), *static_cast<QVector<double>*>(data));
+	xColumn->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+	spreadsheet->addChild(xColumn);
+
+	// y values
+	data = static_cast<const Column*>(binValues())->data();
+	auto* yColumn = new Column(i18n("bin values"), *static_cast<QVector<double>*>(data));
+	yColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+	spreadsheet->addChild(yColumn);
+
+	// add the new spreadsheet to the current folder
+	folder()->addChild(spreadsheet);
 }
 
 QMenu* Histogram::createContextMenu() {
@@ -148,43 +210,43 @@ QMenu* Histogram::createContextMenu() {
 	auto* analysisMenu = new QMenu(i18n("Analysis"));
 
 	// TODO: if there are more actions, add a group for all fit types
-	auto* fitGaussianAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Gaussian (Normal) Distribution"));
+	auto* fitGaussianAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Gaussian (Normal) Distribution"));
 	analysisMenu->addAction(fitGaussianAction);
 	connect(fitGaussianAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_gaussian);
 	});
 
-	auto* fitExponentialAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Exponential Distribution"));
-	analysisMenu->addAction(fitGaussianAction);
+	auto* fitExponentialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Exponential Distribution"));
+	analysisMenu->addAction(fitExponentialAction);
 	connect(fitExponentialAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_exponential);
 	});
 
-	auto* fitLaplaceAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Laplace Distribution"));
+	auto* fitLaplaceAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Laplace Distribution"));
 	analysisMenu->addAction(fitLaplaceAction);
 	connect(fitLaplaceAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_laplace);
 	});
 
-	auto* fitCauchyAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Cauchy-Lorentz Distribution"));
+	auto* fitCauchyAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Cauchy-Lorentz Distribution"));
 	analysisMenu->addAction(fitCauchyAction);
 	connect(fitCauchyAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_cauchy_lorentz);
 	});
 
-	auto* fitLognormalAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Log-normal Distribution"));
+	auto* fitLognormalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Log-normal Distribution"));
 	analysisMenu->addAction(fitLognormalAction);
 	connect(fitLognormalAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_lognormal);
 	});
 
-	auto* fitPoissonAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Poisson Distribution"));
+	auto* fitPoissonAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Poisson Distribution"));
 	analysisMenu->addAction(fitPoissonAction);
 	connect(fitPoissonAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_poisson);
 	});
 
-	auto* fitBinomialAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Binomial Distribution"));
+	auto* fitBinomialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Binomial Distribution"));
 	analysisMenu->addAction(fitBinomialAction);
 	connect(fitBinomialAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_binomial);
@@ -201,16 +263,16 @@ QMenu* Histogram::createContextMenu() {
   Returns an icon to be used in the project explorer.
   */
 QIcon Histogram::icon() const {
-	return QIcon::fromTheme("view-object-histogram-linear");
+	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
 }
 
 QGraphicsItem* Histogram::graphicsItem() const {
 	return d_ptr;
 }
 
-bool Histogram::activateCurve(QPointF mouseScenePos, double maxDist) {
+bool Histogram::activatePlot(QPointF mouseScenePos, double maxDist) {
 	Q_D(Histogram);
-	return d->activateCurve(mouseScenePos, maxDist);
+	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 void Histogram::setHover(bool on) {
@@ -218,30 +280,27 @@ void Histogram::setHover(bool on) {
 	d->setHover(on);
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
-// general
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramType, type, type)
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, orientation, orientation)
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramNormalization, normalization, normalization)
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
+//  general
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Type, type, type)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Orientation, orientation, orientation)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Normalization, normalization, normalization)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::BinningMethod, binningMethod, binningMethod)
 BASIC_SHARED_D_READER_IMPL(Histogram, int, binCount, binCount)
-BASIC_SHARED_D_READER_IMPL(Histogram, float, binWidth, binWidth)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, binWidth, binWidth)
 BASIC_SHARED_D_READER_IMPL(Histogram, bool, autoBinRanges, autoBinRanges)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMin, binRangesMin)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMax, binRangesMax)
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, dataColumn, dataColumn)
-
-QString& Histogram::dataColumnPath() const {
-	D(Histogram);
-	return d->dataColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, dataColumnPath, dataColumnPath)
 
 // line
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::LineType, lineType, lineType)
-BASIC_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, lineOpacity, lineOpacity)
+Line* Histogram::line() const {
+	Q_D(const Histogram);
+	return d->line;
+}
 
 // symbols
 Symbol* Histogram::symbol() const {
@@ -250,23 +309,10 @@ Symbol* Histogram::symbol() const {
 }
 
 // values
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
-BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, valuesColumn, valuesColumn)
-QString& Histogram::valuesColumnPath() const {
-	D(Histogram);
-	return d->valuesColumnPath;
+Value* Histogram::value() const {
+	Q_D(const Histogram);
+	return d->value;
 }
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesPosition, valuesPosition, valuesPosition)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesDistance, valuesDistance)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesRotationAngle, valuesRotationAngle)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesOpacity, valuesOpacity)
-BASIC_SHARED_D_READER_IMPL(Histogram, char, valuesNumericFormat, valuesNumericFormat)
-BASIC_SHARED_D_READER_IMPL(Histogram, int, valuesPrecision, valuesPrecision)
-BASIC_SHARED_D_READER_IMPL(Histogram, QString, valuesDateTimeFormat, valuesDateTimeFormat)
-BASIC_SHARED_D_READER_IMPL(Histogram, QString, valuesPrefix, valuesPrefix)
-BASIC_SHARED_D_READER_IMPL(Histogram, QString, valuesSuffix, valuesSuffix)
-BASIC_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
-BASIC_SHARED_D_READER_IMPL(Histogram, QFont, valuesFont, valuesFont)
 
 // filling
 Background* Histogram::background() const {
@@ -276,10 +322,21 @@ Background* Histogram::background() const {
 
 // error bars
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ErrorType, errorType, errorType)
-BASIC_SHARED_D_READER_IMPL(Histogram, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsCapSize, errorBarsCapSize)
-BASIC_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsOpacity, errorBarsOpacity)
+BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, errorPlusColumn, errorPlusColumn)
+BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, errorMinusColumn, errorMinusColumn)
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, errorPlusColumnPath, errorPlusColumnPath)
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, errorMinusColumnPath, errorMinusColumnPath)
+
+Line* Histogram::errorBarsLine() const {
+	Q_D(const Histogram);
+	return d->errorBarsLine;
+}
+
+// margin plots
+BASIC_SHARED_D_READER_IMPL(Histogram, bool, rugEnabled, rugEnabled)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, rugLength, rugLength)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, rugWidth, rugWidth)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, rugOffset, rugOffset)
 
 double Histogram::minimum(const Dimension dim) const {
 	Q_D(const Histogram);
@@ -313,47 +370,47 @@ const AbstractColumn* Histogram::binValues() const {
 	return d->binValues();
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+const AbstractColumn* Histogram::binPDValues() const {
+	D(Histogram);
+	return d->binPDValues();
+}
+
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 
 // General
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetDataColumn, const AbstractColumn*, dataColumn, recalcHistogram)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, Data, data, recalcHistogram)
 void Histogram::setDataColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
-	if (column != d->dataColumn) {
+	if (column != d->dataColumn)
 		exec(new HistogramSetDataColumnCmd(d, column, ki18n("%1: set data column")));
-
-		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::dataChanged);
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::recalcHistogram);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Histogram::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-		}
-	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, type, updateType)
-void Histogram::setType(Histogram::HistogramType type) {
+void Histogram::setDataColumnPath(const QString& path) {
+	Q_D(Histogram);
+	d->dataColumnPath = path;
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetType, Histogram::Type, type, updateType)
+void Histogram::setType(Histogram::Type type) {
 	Q_D(Histogram);
 	if (type != d->type)
-		exec(new HistogramSetHistogramTypeCmd(d, type, ki18n("%1: set histogram type")));
+		exec(new HistogramSetTypeCmd(d, type, ki18n("%1: set histogram type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, orientation, updateOrientation)
-void Histogram::setOrientation(Histogram::HistogramOrientation orientation) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetOrientation, Histogram::Orientation, orientation, updateOrientation)
+void Histogram::setOrientation(Histogram::Orientation orientation) {
 	Q_D(Histogram);
 	if (orientation != d->orientation)
-		exec(new HistogramSetHistogramOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
+		exec(new HistogramSetOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramNormalization, Histogram::HistogramNormalization, normalization, updateOrientation)
-void Histogram::setNormalization(Histogram::HistogramNormalization normalization) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetNormalization, Histogram::Normalization, normalization, updateOrientation)
+void Histogram::setNormalization(Histogram::Normalization normalization) {
 	Q_D(Histogram);
 	if (normalization != d->normalization)
-		exec(new HistogramSetHistogramNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
+		exec(new HistogramSetNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, recalcHistogram)
@@ -370,8 +427,8 @@ void Histogram::setBinCount(int count) {
 		exec(new HistogramSetBinCountCmd(d, count, ki18n("%1: set bin count")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, float, binWidth, recalcHistogram)
-void Histogram::setBinWidth(float width) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, double, binWidth, recalcHistogram)
+void Histogram::setBinWidth(double width) {
 	Q_D(Histogram);
 	if (width != d->binWidth)
 		exec(new HistogramSetBinWidthCmd(d, width, ki18n("%1: set bin width")));
@@ -383,7 +440,7 @@ public:
 		: m_private(private_obj)
 		, m_autoBinRanges(autoBinRanges) {
 		setText(i18n("%1: change auto bin ranges", m_private->name()));
-	};
+	}
 
 	void redo() override {
 		m_autoBinRangesOld = m_private->autoBinRanges;
@@ -394,7 +451,7 @@ public:
 			m_private->q->recalcHistogram();
 		}
 		Q_EMIT m_private->q->autoBinRangesChanged(m_autoBinRanges);
-	};
+	}
 
 	void undo() override {
 		m_private->autoBinRanges = m_autoBinRangesOld;
@@ -414,10 +471,10 @@ public:
 
 private:
 	HistogramPrivate* m_private;
-	bool m_autoBinRanges;
-	bool m_autoBinRangesOld{false};
 	double m_binRangesMinOld{0.0};
 	double m_binRangesMaxOld{0.0};
+	bool m_autoBinRanges;
+	bool m_autoBinRangesOld{false};
 };
 
 void Histogram::setAutoBinRanges(bool autoBinRanges) {
@@ -440,125 +497,6 @@ void Histogram::setBinRangesMax(double binRangesMax) {
 		exec(new HistogramSetBinRangesMaxCmd(d, binRangesMax, ki18n("%1: set bin ranges end")));
 }
 
-// Line
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetLineType, Histogram::LineType, lineType, updateLines)
-void Histogram::setLineType(LineType type) {
-	Q_D(Histogram);
-	if (type != d->lineType)
-		exec(new HistogramSetLineTypeCmd(d, type, ki18n("%1: line type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
-void Histogram::setLinePen(const QPen& pen) {
-	Q_D(Histogram);
-	if (pen != d->linePen)
-		exec(new HistogramSetLinePenCmd(d, pen, ki18n("%1: set line style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetLineOpacity, qreal, lineOpacity, updatePixmap)
-void Histogram::setLineOpacity(qreal opacity) {
-	Q_D(Histogram);
-	if (opacity != d->lineOpacity)
-		exec(new HistogramSetLineOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
-}
-
-// Values
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesType, Histogram::ValuesType, valuesType, updateValues)
-void Histogram::setValuesType(Histogram::ValuesType type) {
-	Q_D(Histogram);
-	if (type != d->valuesType)
-		exec(new HistogramSetValuesTypeCmd(d, type, ki18n("%1: set values type")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesColumn, const AbstractColumn*, valuesColumn, updateValues)
-void Histogram::setValuesColumn(const AbstractColumn* column) {
-	Q_D(Histogram);
-	if (column != d->valuesColumn) {
-		exec(new HistogramSetValuesColumnCmd(d, column, ki18n("%1: set values column")));
-		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateValues);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Histogram::valuesColumnAboutToBeRemoved);
-		}
-	}
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesPosition, Histogram::ValuesPosition, valuesPosition, updateValues)
-void Histogram::setValuesPosition(ValuesPosition position) {
-	Q_D(Histogram);
-	if (position != d->valuesPosition)
-		exec(new HistogramSetValuesPositionCmd(d, position, ki18n("%1: set values position")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesDistance, qreal, valuesDistance, updateValues)
-void Histogram::setValuesDistance(qreal distance) {
-	Q_D(Histogram);
-	if (distance != d->valuesDistance)
-		exec(new HistogramSetValuesDistanceCmd(d, distance, ki18n("%1: set values distance")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesRotationAngle, qreal, valuesRotationAngle, updateValues)
-void Histogram::setValuesRotationAngle(qreal angle) {
-	Q_D(Histogram);
-	if (!qFuzzyCompare(1 + angle, 1 + d->valuesRotationAngle))
-		exec(new HistogramSetValuesRotationAngleCmd(d, angle, ki18n("%1: rotate values")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesOpacity, qreal, valuesOpacity, updatePixmap)
-void Histogram::setValuesOpacity(qreal opacity) {
-	Q_D(Histogram);
-	if (opacity != d->valuesOpacity)
-		exec(new HistogramSetValuesOpacityCmd(d, opacity, ki18n("%1: set values opacity")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesNumericFormat, char, valuesNumericFormat, updateValues)
-void Histogram::setValuesNumericFormat(char format) {
-	Q_D(Histogram);
-	if (format != d->valuesNumericFormat)
-		exec(new HistogramSetValuesNumericFormatCmd(d, format, ki18n("%1: set values numeric format")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesPrecision, int, valuesPrecision, updateValues)
-void Histogram::setValuesPrecision(int precision) {
-	Q_D(Histogram);
-	if (precision != d->valuesPrecision)
-		exec(new HistogramSetValuesPrecisionCmd(d, precision, ki18n("%1: set values precision")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesDateTimeFormat, QString, valuesDateTimeFormat, updateValues)
-void Histogram::setValuesDateTimeFormat(const QString& format) {
-	Q_D(Histogram);
-	if (format != d->valuesDateTimeFormat)
-		exec(new HistogramSetValuesDateTimeFormatCmd(d, format, ki18n("%1: set values datetime format")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesPrefix, QString, valuesPrefix, updateValues)
-void Histogram::setValuesPrefix(const QString& prefix) {
-	Q_D(Histogram);
-	if (prefix != d->valuesPrefix)
-		exec(new HistogramSetValuesPrefixCmd(d, prefix, ki18n("%1: set values prefix")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesSuffix, QString, valuesSuffix, updateValues)
-void Histogram::setValuesSuffix(const QString& suffix) {
-	Q_D(Histogram);
-	if (suffix != d->valuesSuffix)
-		exec(new HistogramSetValuesSuffixCmd(d, suffix, ki18n("%1: set values suffix")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesFont, QFont, valuesFont, updateValues)
-void Histogram::setValuesFont(const QFont& font) {
-	Q_D(Histogram);
-	if (font != d->valuesFont)
-		exec(new HistogramSetValuesFontCmd(d, font, ki18n("%1: set values font")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesColor, QColor, valuesColor, updatePixmap)
-void Histogram::setValuesColor(const QColor& color) {
-	Q_D(Histogram);
-	if (color != d->valuesColor)
-		exec(new HistogramSetValuesColorCmd(d, color, ki18n("%1: set values color")));
-}
-
 // Error bars
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorType, Histogram::ErrorType, errorType, updateErrorBars)
 void Histogram::setErrorType(ErrorType type) {
@@ -567,37 +505,62 @@ void Histogram::setErrorType(ErrorType type) {
 		exec(new HistogramSetErrorTypeCmd(d, type, ki18n("%1: x-error type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsCapSize, qreal, errorBarsCapSize, updateErrorBars)
-void Histogram::setErrorBarsCapSize(qreal size) {
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, ErrorPlus, errorPlus, updateErrorBars)
+void Histogram::setErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
-	if (size != d->errorBarsCapSize)
-		exec(new HistogramSetErrorBarsCapSizeCmd(d, size, ki18n("%1: set error bar cap size")));
+	if (column != d->errorPlusColumn)
+		exec(new HistogramSetErrorPlusColumnCmd(d, column, ki18n("%1: set error column")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType, updateErrorBars)
-void Histogram::setErrorBarsType(XYCurve::ErrorBarsType type) {
+void Histogram::setErrorPlusColumnPath(const QString& path) {
 	Q_D(Histogram);
-	if (type != d->errorBarsType)
-		exec(new HistogramSetErrorBarsTypeCmd(d, type, ki18n("%1: error bar type changed")));
+	d->errorPlusColumnPath = path;
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsPen, QPen, errorBarsPen, recalcShapeAndBoundingRect)
-void Histogram::setErrorBarsPen(const QPen& pen) {
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, ErrorMinus, errorMinus, updateErrorBars)
+void Histogram::setErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
-	if (pen != d->errorBarsPen)
-		exec(new HistogramSetErrorBarsPenCmd(d, pen, ki18n("%1: set error bar style")));
+	if (column != d->errorMinusColumn)
+		exec(new HistogramSetErrorMinusColumnCmd(d, column, ki18n("%1: set error column")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsOpacity, qreal, errorBarsOpacity, updatePixmap)
-void Histogram::setErrorBarsOpacity(qreal opacity) {
+void Histogram::setErrorMinusColumnPath(const QString& path) {
 	Q_D(Histogram);
-	if (opacity != d->errorBarsOpacity)
-		exec(new HistogramSetErrorBarsOpacityCmd(d, opacity, ki18n("%1: set error bar opacity")));
+	d->errorMinusColumnPath = path;
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// margin plots
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugEnabled, bool, rugEnabled, updateRug)
+void Histogram::setRugEnabled(bool enabled) {
+	Q_D(Histogram);
+	if (enabled != d->rugEnabled)
+		exec(new HistogramSetRugEnabledCmd(d, enabled, ki18n("%1: change rug enabled")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugWidth, double, rugWidth, updatePixmap)
+void Histogram::setRugWidth(double width) {
+	Q_D(Histogram);
+	if (width != d->rugWidth)
+		exec(new HistogramSetRugWidthCmd(d, width, ki18n("%1: change rug width")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugLength, double, rugLength, updateRug)
+void Histogram::setRugLength(double length) {
+	Q_D(Histogram);
+	if (length != d->rugLength)
+		exec(new HistogramSetRugLengthCmd(d, length, ki18n("%1: change rug length")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugOffset, double, rugOffset, updateRug)
+void Histogram::setRugOffset(double offset) {
+	Q_D(Histogram);
+	if (offset != d->rugOffset)
+		exec(new HistogramSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
+}
+
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void Histogram::retransform() {
 	d_ptr->retransform();
 }
@@ -612,9 +575,9 @@ void Histogram::handleResize(double horizontalRatio, double /*verticalRatio*/, b
 	Q_D(const Histogram);
 
 	// setValuesDistance(d->distance*);
-	QFont font = d->valuesFont;
+	QFont font = d->value->font();
 	font.setPointSizeF(font.pointSizeF() * horizontalRatio);
-	setValuesFont(font);
+	d->value->setFont(font);
 
 	retransform();
 }
@@ -632,19 +595,47 @@ void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-void Histogram::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+void Histogram::dataColumnNameChanged() {
 	Q_D(Histogram);
-	if (aspect == d->valuesColumn) {
-		d->valuesColumn = nullptr;
-		d->updateValues();
+	setDataColumnPath(d->dataColumn->path());
+}
+
+void Histogram::updateErrorBars() {
+	Q_D(Histogram);
+	d->updateErrorBars();
+}
+
+void Histogram::errorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(Histogram);
+	if (aspect == d->errorPlusColumn) {
+		d->errorPlusColumn = nullptr;
+		d->updateErrorBars();
 	}
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+void Histogram::errorPlusColumnNameChanged() {
+	Q_D(Histogram);
+	setErrorPlusColumnPath(d->errorPlusColumn->path());
+}
+
+void Histogram::errorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(Histogram);
+	if (aspect == d->errorMinusColumn) {
+		d->errorMinusColumn = nullptr;
+		d->updateErrorBars();
+	}
+}
+
+void Histogram::errorMinusColumnNameChanged() {
+	Q_D(Histogram);
+	setErrorMinusColumnPath(d->errorMinusColumn->path());
+}
+
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 HistogramPrivate::HistogramPrivate(Histogram* owner)
-	: WorksheetElementPrivate(owner)
+	: PlotPrivate(owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
@@ -661,7 +652,7 @@ QRectF HistogramPrivate::boundingRect() const {
 
 double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 	if (m_histogram) {
-		double yMaxRange = -qInf();
+		double yMaxRange = -INFINITY;
 		switch (type) {
 		case Histogram::Ordinary: {
 			size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
@@ -707,7 +698,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 		return yMaxRange;
 	}
 
-	return -qInf();
+	return -INFINITY;
 }
 
 double HistogramPrivate::xMinimum() const {
@@ -717,7 +708,7 @@ double HistogramPrivate::xMinimum() const {
 	case Histogram::Horizontal:
 		return 0;
 	}
-	return qInf();
+	return INFINITY;
 }
 
 double HistogramPrivate::xMaximum() const {
@@ -727,7 +718,7 @@ double HistogramPrivate::xMaximum() const {
 	case Histogram::Horizontal:
 		return getMaximumOccuranceofHistogram();
 	}
-	return -qInf();
+	return -INFINITY;
 }
 
 double HistogramPrivate::yMinimum() const {
@@ -737,7 +728,7 @@ double HistogramPrivate::yMinimum() const {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 	}
-	return qInf();
+	return INFINITY;
 }
 
 double HistogramPrivate::yMaximum() const {
@@ -747,12 +738,12 @@ double HistogramPrivate::yMaximum() const {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 	}
-	return qInf();
+	return -INFINITY;
 }
 
 const AbstractColumn* HistogramPrivate::bins() {
 	if (!m_binsColumn) {
-		m_binsColumn = new Column("bins");
+		m_binsColumn = new Column(QStringLiteral("bins"));
 
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		m_binsColumn->resizeTo(m_bins);
@@ -767,15 +758,34 @@ const AbstractColumn* HistogramPrivate::bins() {
 
 const AbstractColumn* HistogramPrivate::binValues() {
 	if (!m_binValuesColumn) {
-		m_binValuesColumn = new Column("values");
+		m_binValuesColumn = new Column(QStringLiteral("values"));
 
 		m_binValuesColumn->resizeTo(m_bins);
-		const double width = (binRangesMax - binRangesMin) / m_bins;
-		for (size_t i = 0; i < m_bins; ++i)
-			m_binValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
+		double value = 0.;
+		for (size_t i = 0; i < m_bins; ++i) {
+			histogramValue(value, i);
+			m_binValuesColumn->setValueAt(i, value);
+		}
 	}
 
 	return m_binValuesColumn;
+}
+
+/*!
+ * returns a column with the bin values in the probability density normalization
+ * \return
+ */
+const AbstractColumn* HistogramPrivate::binPDValues() {
+	if (!m_binPDValuesColumn) {
+		m_binPDValuesColumn = new Column(QStringLiteral("values"));
+
+		m_binPDValuesColumn->resizeTo(m_bins);
+		const double width = (binRangesMax - binRangesMin) / m_bins;
+		for (size_t i = 0; i < m_bins; ++i)
+			m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
+	}
+
+	return m_binPDValuesColumn;
 }
 
 /*!
@@ -795,18 +805,22 @@ void HistogramPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void HistogramPrivate::retransform() {
-	if (m_suppressRetransform || q->isLoading())
+	const bool suppressed = suppressRetransform || q->isLoading();
+	trackRetransformCalled(suppressed);
+	if (suppressed)
 		return;
 
 	if (!isVisible())
 		return;
 
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	if (!dataColumn) {
 		linePath = QPainterPath();
 		symbolsPath = QPainterPath();
 		valuesPath = QPainterPath();
+		errorBarsPath = QPainterPath();
+		rugPath = QPainterPath();
 		curveShape = QPainterPath();
 		lines.clear();
 		linesUnclipped.clear();
@@ -823,6 +837,8 @@ void HistogramPrivate::retransform() {
 	m_suppressRecalc = true;
 	updateLines();
 	updateSymbols();
+	updateErrorBars();
+	updateRug();
 	m_suppressRecalc = false;
 	updateValues();
 }
@@ -831,7 +847,7 @@ void HistogramPrivate::retransform() {
  * called when the data was changed. recalculates the histogram.
  */
 void HistogramPrivate::recalcHistogram() {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	if (m_histogram) {
 		gsl_histogram_free(m_histogram);
@@ -840,6 +856,13 @@ void HistogramPrivate::recalcHistogram() {
 
 	if (!dataColumn)
 		return;
+
+	// in case wrong bin range was specified, call retransform() to reset
+	// all internal containers and paths and exit this function
+	if (binRangesMax <= binRangesMin) {
+		retransform();
+		return;
+	}
 
 	// calculate the number of valid data points
 	int count = 0;
@@ -864,7 +887,7 @@ void HistogramPrivate::recalcHistogram() {
 
 		if (binRangesMin >= binRangesMax) {
 			Q_EMIT q->dataChanged();
-			Q_EMIT q->info(i18n("Calculation of the histogram not possible. The max value must be bigger then the min value."));
+			Q_EMIT q->info(i18n("Calculation of the histogram not possible. The max value must be bigger than the min value."));
 			return;
 		}
 
@@ -941,12 +964,21 @@ void HistogramPrivate::recalcHistogram() {
 
 			if (m_binValuesColumn) {
 				m_binValuesColumn->resizeTo(m_bins);
+				double value = 0.;
+				for (size_t i = 0; i < m_bins; ++i) {
+					histogramValue(value, i);
+					m_binValuesColumn->setValueAt(i, value);
+				}
+			}
+
+			if (m_binPDValuesColumn) {
+				m_binPDValuesColumn->resizeTo(m_bins);
 				const double width = (binRangesMax - binRangesMin) / m_bins;
 				for (size_t i = 0; i < m_bins; ++i)
-					m_binValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
+					m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
 			}
 		} else
-			DEBUG("Number of bins must be positiv integer")
+			DEBUG("Number of bins must be positive integer")
 	}
 
 	// histogram changed because of the actual data changes or because of new bin settings,
@@ -971,7 +1003,7 @@ void HistogramPrivate::updateOrientation() {
   Called each time when the type of this connection is changed.
   */
 void HistogramPrivate::updateLines() {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	linePath = QPainterPath();
 	lines.clear();
@@ -985,12 +1017,10 @@ void HistogramPrivate::updateLines() {
 		horizontalHistogram();
 
 	// map the lines and the symbol positions to the scene coordinates
-	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	const auto* cSystem{plot->defaultCoordinateSystem()};
-	linesUnclipped = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	lines = cSystem->mapLogicalToScene(lines);
+	linesUnclipped = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	lines = q->cSystem->mapLogicalToScene(lines);
 	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
-	cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
+	q->cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
 
 	// new line path
 	for (const auto& line : lines) {
@@ -1002,22 +1032,20 @@ void HistogramPrivate::updateLines() {
 	recalcShapeAndBoundingRect();
 }
 
-void HistogramPrivate::histogramValue(double& value, int bin) {
+void HistogramPrivate::histogramValue(double& value, int bin) const {
 	switch (normalization) {
-	case Histogram::Count: {
+	case Histogram::Count:
 		if (type == Histogram::Ordinary)
 			value = gsl_histogram_get(m_histogram, bin);
 		else
 			value += gsl_histogram_get(m_histogram, bin);
 		break;
-	}
-	case Histogram::Probability: {
+	case Histogram::Probability:
 		if (type == Histogram::Ordinary)
 			value = gsl_histogram_get(m_histogram, bin) / totalCount;
 		else
 			value += gsl_histogram_get(m_histogram, bin) / totalCount;
 		break;
-	}
 	case Histogram::CountDensity: {
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		if (type == Histogram::Ordinary)
@@ -1043,6 +1071,7 @@ void HistogramPrivate::verticalHistogram() {
 
 	const double width = (binRangesMax - binRangesMin) / m_bins;
 	double value = 0.;
+	const auto lineType = line->histogramLineType();
 	switch (lineType) {
 	case Histogram::Bars: {
 		for (size_t i = 0; i < m_bins; ++i) {
@@ -1103,6 +1132,7 @@ void HistogramPrivate::horizontalHistogram() {
 
 	const double width = (binRangesMax - binRangesMin) / m_bins;
 	double value = 0.;
+	const auto lineType = line->histogramLineType();
 	switch (lineType) {
 	case Histogram::Bars: {
 		for (size_t i = 0; i < m_bins; ++i) {
@@ -1190,13 +1220,15 @@ void HistogramPrivate::updateValues() {
 	valuesPoints.clear();
 	valuesStrings.clear();
 
-	if (valuesType == Histogram::NoValues || !m_histogram) {
+	if (value->type() == Value::NoValues || !m_histogram) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
 	// determine the value string for all points that are currently visible in the plot
-	if (valuesType == Histogram::ValuesBinEntries) {
+	const auto& valuesPrefix = value->prefix();
+	const auto& valuesSuffix = value->suffix();
+	if (value->type() == Value::BinEntries) {
 		switch (type) {
 		case Histogram::Ordinary:
 			for (size_t i = 0; i < m_bins; ++i) {
@@ -1206,7 +1238,7 @@ void HistogramPrivate::updateValues() {
 			}
 			break;
 		case Histogram::Cumulative: {
-			value = 0;
+			int value = 0;
 			for (size_t i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i])
 					continue;
@@ -1218,16 +1250,17 @@ void HistogramPrivate::updateValues() {
 		case Histogram::AvgShift:
 			break;
 		}
-	} else if (valuesType == Histogram::ValuesCustomColumn) {
+	} else if (value->type() == Value::CustomColumn) {
+		const auto* valuesColumn = value->column();
 		if (!valuesColumn) {
 			recalcShapeAndBoundingRect();
 			return;
 		}
 
-		const int endRow = qMin(pointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(pointsLogical.size(), valuesColumn->rowCount());
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
-			if (!visiblePoints[i])
+			if (!visiblePoints.at(i))
 				continue;
 
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))
@@ -1235,7 +1268,7 @@ void HistogramPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
+				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
@@ -1247,7 +1280,7 @@ void HistogramPrivate::updateValues() {
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-				valuesStrings << valuesPrefix + valuesColumn->dateTimeAt(i).toString(valuesDateTimeFormat) + valuesSuffix;
+				valuesStrings << valuesPrefix + valuesColumn->dateTimeAt(i).toString(value->dateTimeFormat()) + valuesSuffix;
 				break;
 			}
 		}
@@ -1256,11 +1289,12 @@ void HistogramPrivate::updateValues() {
 	// Calculate the coordinates where to paint the value strings.
 	// The coordinates depend on the actual size of the string.
 	QPointF tempPoint;
-	QFontMetrics fm(valuesFont);
+	QFontMetrics fm(value->font());
 	qreal w;
 	const qreal h = fm.ascent();
-	switch (valuesPosition) {
-	case Histogram::ValuesAbove:
+	int valuesDistance = value->distance();
+	switch (value->position()) {
+	case Value::Above:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			w = fm.boundingRect(valuesStrings.at(i)).width();
 			tempPoint.setX(pointsScene.at(i).x() - w / 2);
@@ -1268,7 +1302,7 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
-	case Histogram::ValuesUnder:
+	case Value::Under:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			w = fm.boundingRect(valuesStrings.at(i)).width();
 			tempPoint.setX(pointsScene.at(i).x() - w / 2);
@@ -1276,7 +1310,7 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
-	case Histogram::ValuesLeft:
+	case Value::Left:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			w = fm.boundingRect(valuesStrings.at(i)).width();
 			tempPoint.setX(pointsScene.at(i).x() - valuesDistance - w - 1);
@@ -1284,7 +1318,7 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
-	case Histogram::ValuesRight:
+	case Value::Right:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			tempPoint.setX(pointsScene.at(i).x() + valuesDistance - 1);
 			tempPoint.setY(pointsScene.at(i).y());
@@ -1295,9 +1329,10 @@ void HistogramPrivate::updateValues() {
 
 	QTransform trafo;
 	QPainterPath path;
+	double valuesRotationAngle = value->rotationAngle();
 	for (int i = 0; i < valuesPoints.size(); i++) {
 		path = QPainterPath();
-		path.addText(QPoint(0, 0), valuesFont, valuesStrings.at(i));
+		path.addText(QPoint(0, 0), value->font(), valuesStrings.at(i));
 
 		trafo.reset();
 		trafo.translate(valuesPoints.at(i).x(), valuesPoints.at(i).y());
@@ -1313,6 +1348,7 @@ void HistogramPrivate::updateValues() {
 void HistogramPrivate::updateFilling() {
 	fillPolygon.clear();
 
+	const auto lineType = line->histogramLineType();
 	if (!background->enabled() || lineType == Histogram::DropLines || lineType == Histogram::HalfBars) {
 		recalcShapeAndBoundingRect();
 		return;
@@ -1372,6 +1408,172 @@ void HistogramPrivate::updateFilling() {
 }
 
 void HistogramPrivate::updateErrorBars() {
+	errorBarsPath = QPainterPath();
+
+	QVector<QLineF> elines;
+
+	switch (errorType) {
+	case Histogram::ErrorType::NoError:
+		break;
+	case Histogram::ErrorType::Poisson: {
+		if (orientation == Histogram::Vertical) {
+			for (auto& point : pointsLogical) {
+				double error = sqrt(point.y());
+				if (error != 0.)
+					elines << QLineF(point.x(), point.y() + error, point.x(), point.y() - error);
+			}
+		} else {
+			for (auto& point : pointsLogical) {
+				double error = sqrt(point.x());
+				if (error != 0.)
+					elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
+			}
+		}
+		break;
+	}
+	case Histogram::ErrorType::CustomSymmetric: {
+		int index = 0;
+		if (orientation == Histogram::Vertical) {
+			for (auto& point : pointsLogical) {
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index)) {
+					double error = errorPlusColumn->valueAt(index);
+					if (error != 0.)
+						elines << QLineF(point.x(), point.y() + error, point.x(), point.y() - error);
+				}
+				++index;
+			}
+		} else {
+			for (auto& point : pointsLogical) {
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index)) {
+					double error = errorPlusColumn->valueAt(index);
+					if (error != 0.)
+						elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
+				}
+				++index;
+			}
+		}
+		break;
+	}
+	case Histogram::ErrorType::CustomAsymmetric: {
+		int index = 0;
+		if (orientation == Histogram::Vertical) {
+			for (auto& point : pointsLogical) {
+				double errorPlus = 0.;
+				double errorMinus = 0.;
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
+					errorPlus = errorPlusColumn->valueAt(index);
+
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
+					errorMinus = errorMinusColumn->valueAt(index);
+
+				if (errorPlus != 0. || errorMinus != 0.)
+					elines << QLineF(point.x(), point.y() - errorMinus, point.x(), point.y() + errorPlus);
+
+				++index;
+			}
+		} else {
+			for (auto& point : pointsLogical) {
+				double errorPlus = 0.;
+				double errorMinus = 0.;
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
+					errorPlus = errorPlusColumn->valueAt(index);
+
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
+					errorMinus = errorMinusColumn->valueAt(index);
+
+				if (errorPlus != 0. || errorMinus != 0.)
+					elines << QLineF(point.x() - errorMinus, point.y(), point.x() + errorPlus, point.y());
+
+				++index;
+			}
+		}
+		break;
+	}
+	}
+
+	// map the error bars to scene coordinates
+	elines = q->cSystem->mapLogicalToScene(elines);
+
+	// new painter path for the error bars
+	for (const auto& line : qAsConst(elines)) {
+		errorBarsPath.moveTo(line.p1());
+		errorBarsPath.lineTo(line.p2());
+	}
+
+	// add caps for error bars
+	const auto errorBarsType = errorBarsLine->errorBarsType();
+	const auto errorBarsCapSize = errorBarsLine->errorBarsCapSize();
+	if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
+		if (orientation == Histogram::Vertical) {
+			for (const auto& line : qAsConst(elines)) {
+				const auto& p1 = line.p1();
+				errorBarsPath.moveTo(QPointF(p1.x() - errorBarsCapSize / 2., p1.y()));
+				errorBarsPath.lineTo(QPointF(p1.x() + errorBarsCapSize / 2., p1.y()));
+
+				const auto& p2 = line.p2();
+				errorBarsPath.moveTo(QPointF(p2.x() - errorBarsCapSize / 2., p2.y()));
+				errorBarsPath.lineTo(QPointF(p2.x() + errorBarsCapSize / 2., p2.y()));
+			}
+		} else {
+			for (const auto& line : qAsConst(elines)) {
+				const auto& p1 = line.p1();
+				errorBarsPath.moveTo(QPointF(p1.x(), p1.y() - errorBarsCapSize / 2.));
+				errorBarsPath.lineTo(QPointF(p1.x(), p1.y() + errorBarsCapSize / 2.));
+
+				const auto& p2 = line.p2();
+				errorBarsPath.moveTo(QPointF(p2.x(), p2.y() - errorBarsCapSize / 2.));
+				errorBarsPath.lineTo(QPointF(p2.x(), p2.y() + errorBarsCapSize / 2.));
+			}
+		}
+	}
+
+	recalcShapeAndBoundingRect();
+}
+
+void HistogramPrivate::updateRug() {
+	rugPath = QPainterPath();
+
+	if (!rugEnabled || !q->plot()) {
+		recalcShapeAndBoundingRect();
+		return;
+	}
+
+	QVector<QPointF> points;
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	const double xMin = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double yMin = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
+
+	if (orientation == Histogram::Vertical) {
+		for (int row = 0; row < dataColumn->rowCount(); ++row) {
+			if (dataColumn->isValid(row) && !dataColumn->isMasked(row))
+				points << QPointF(dataColumn->valueAt(row), yMin);
+		}
+
+		// map the points to scene coordinates
+		points = q->cSystem->mapLogicalToScene(points);
+
+		// path for the vertical rug lines
+		for (const auto& point : qAsConst(points)) {
+			rugPath.moveTo(point.x(), point.y() - rugOffset);
+			rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
+		}
+	} else {
+		for (int row = 0; row < dataColumn->rowCount(); ++row) {
+			if (dataColumn->isValid(row) && !dataColumn->isMasked(row))
+				points << QPointF(xMin, dataColumn->valueAt(row));
+		}
+
+		// map the points to scene coordinates
+		points = q->cSystem->mapLogicalToScene(points);
+
+		// path for the horizontal rug lines
+		for (const auto& point : qAsConst(points)) {
+			rugPath.moveTo(point.x() + rugOffset, point.y());
+			rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
+		}
+	}
+
+	recalcShapeAndBoundingRect();
 }
 
 /*!
@@ -1383,17 +1585,22 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 
 	prepareGeometryChange();
 	curveShape = QPainterPath();
-	if (lineType != Histogram::NoLine)
-		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
+	if (line->histogramLineType() != Histogram::NoLine)
+		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
 
 	if (symbol->style() != Symbol::Style::NoSymbols)
 		curveShape.addPath(symbolsPath);
 
-	if (valuesType != Histogram::NoValues)
+	if (value->type() != Value::NoValues)
 		curveShape.addPath(valuesPath);
 
-	boundingRectangle = curveShape.boundingRect();
+	if (errorType != Histogram::ErrorType::NoError)
+		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
 
+	curveShape.addPath(rugPath);
+	curveShape.addPolygon(fillPolygon);
+
+	boundingRectangle = curveShape.boundingRect();
 	boundingRectangle = boundingRectangle.united(fillPolygon.boundingRect());
 
 	// TODO: when the selection is painted, line intersections are visible.
@@ -1405,12 +1612,12 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 }
 
 void HistogramPrivate::draw(QPainter* painter) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	// drawing line
-	if (lineType != Histogram::NoLine) {
-		painter->setOpacity(lineOpacity);
-		painter->setPen(linePen);
+	if (line->histogramLineType() != Histogram::NoLine) {
+		painter->setOpacity(line->opacity());
+		painter->setPen(line->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(linePath);
 	}
@@ -1418,30 +1625,38 @@ void HistogramPrivate::draw(QPainter* painter) {
 	// draw filling
 	if (background->enabled()) {
 		painter->setOpacity(background->opacity());
-		painter->setPen(Qt::SolidLine);
+		painter->setPen(Qt::NoPen);
 		drawFilling(painter);
 	}
 
 	// draw symbols
-	if (symbol->style() != Symbol::Style::NoSymbols) {
-		painter->setOpacity(symbol->opacity());
-		painter->setPen(symbol->pen());
-		painter->setBrush(symbol->brush());
-		drawSymbols(painter);
-	}
+	symbol->draw(painter, pointsScene);
 
 	// draw values
-	if (valuesType != Histogram::NoValues) {
-		painter->setOpacity(valuesOpacity);
-		painter->setPen(QPen(valuesColor));
-		painter->setFont(valuesFont);
-		drawValues(painter);
+	value->draw(painter, valuesPoints, valuesStrings);
+
+	// draw error bars
+	if (errorType != Histogram::ErrorType::NoError) {
+		painter->setOpacity(errorBarsLine->opacity());
+		painter->setPen(errorBarsLine->pen());
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(errorBarsPath);
+	}
+
+	// draw rug
+	if (rugEnabled) {
+		QPen pen;
+		pen.setColor(line->pen().color());
+		pen.setWidthF(rugWidth);
+		painter->setPen(pen);
+		painter->setOpacity(line->opacity());
+		painter->drawPath(rugPath);
 	}
 }
 
 void HistogramPrivate::updatePixmap() {
 	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
-	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
+	if (boundingRectangle.width() == 0. || boundingRectangle.height() == 0.) {
 		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
@@ -1508,38 +1723,6 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
-	}
-}
-
-void HistogramPrivate::drawSymbols(QPainter* painter) {
-	QPainterPath path = Symbol::stylePath(symbol->style());
-
-	QTransform trafo;
-	trafo.scale(symbol->size(), symbol->size());
-	if (symbol->rotationAngle() != 0.)
-		trafo.rotate(-symbol->rotationAngle());
-
-	path = trafo.map(path);
-
-	for (const auto& point : pointsScene) {
-		trafo.reset();
-		trafo.translate(point.x(), point.y());
-		painter->drawPath(trafo.map(path));
-	}
-}
-
-void HistogramPrivate::drawValues(QPainter* painter) {
-	int i = 0;
-	for (const auto& point : qAsConst(valuesPoints)) {
-		painter->translate(point);
-		if (valuesRotationAngle != 0.)
-			painter->rotate(-valuesRotationAngle);
-
-		painter->drawText(QPoint(0, 0), valuesStrings.at(i++));
-
-		if (valuesRotationAngle != 0.)
-			painter->rotate(valuesRotationAngle);
-		painter->translate(-point);
 	}
 }
 
@@ -1648,7 +1831,7 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-bool HistogramPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
+bool HistogramPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
 	if (!isVisible())
 		return false;
 
@@ -1666,7 +1849,7 @@ void HistogramPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		return QGraphicsItem::mousePressEvent(event);
 	}
 
-	if (q->activateCurve(event->pos())) {
+	if (q->activatePlot(event->pos())) {
 		setSelected(true);
 		return;
 	}
@@ -1689,62 +1872,53 @@ void HistogramPrivate::setHover(bool on) {
 	update();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Histogram::save(QXmlStreamWriter* writer) const {
 	Q_D(const Histogram);
 
-	writer->writeStartElement("Histogram");
+	writer->writeStartElement(QStringLiteral("Histogram"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
+	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->dataColumn, dataColumn);
-	writer->writeAttribute("type", QString::number(d->type));
-	writer->writeAttribute("orientation", QString::number(d->orientation));
-	writer->writeAttribute("normalization", QString::number(d->normalization));
-	writer->writeAttribute("binningMethod", QString::number(d->binningMethod));
-	writer->writeAttribute("binCount", QString::number(d->binCount));
-	writer->writeAttribute("binWidth", QString::number(d->binWidth));
-	writer->writeAttribute("autoBinRanges", QString::number(d->autoBinRanges));
-	writer->writeAttribute("binRangesMin", QString::number(d->binRangesMin));
-	writer->writeAttribute("binRangesMax", QString::number(d->binRangesMax));
-	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
-	writer->writeAttribute("visible", QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->type));
+	writer->writeAttribute(QStringLiteral("orientation"), QString::number(d->orientation));
+	writer->writeAttribute(QStringLiteral("normalization"), QString::number(d->normalization));
+	writer->writeAttribute(QStringLiteral("binningMethod"), QString::number(d->binningMethod));
+	writer->writeAttribute(QStringLiteral("binCount"), QString::number(d->binCount));
+	writer->writeAttribute(QStringLiteral("binWidth"), QString::number(d->binWidth));
+	writer->writeAttribute(QStringLiteral("autoBinRanges"), QString::number(d->autoBinRanges));
+	writer->writeAttribute(QStringLiteral("binRangesMin"), QString::number(d->binRangesMin));
+	writer->writeAttribute(QStringLiteral("binRangesMax"), QString::number(d->binRangesMax));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
-	// Line
-	writer->writeStartElement("line");
-	writer->writeAttribute("type", QString::number(d->lineType));
-	WRITE_QPEN(d->linePen);
-	writer->writeAttribute("opacity", QString::number(d->lineOpacity));
-	writer->writeEndElement();
-
-	// Symbols
-	d->symbol->save(writer);
-
-	// Values
-	writer->writeStartElement("values");
-	writer->writeAttribute("type", QString::number(d->valuesType));
-	WRITE_COLUMN(d->valuesColumn, valuesColumn);
-	writer->writeAttribute("position", QString::number(d->valuesPosition));
-	writer->writeAttribute("distance", QString::number(d->valuesDistance));
-	writer->writeAttribute("rotation", QString::number(d->valuesRotationAngle));
-	writer->writeAttribute("opacity", QString::number(d->valuesOpacity));
-	writer->writeAttribute("numericFormat", QString(d->valuesNumericFormat));
-	writer->writeAttribute("dateTimeFormat", d->valuesDateTimeFormat);
-	writer->writeAttribute("precision", QString::number(d->valuesPrecision));
-	writer->writeAttribute("prefix", d->valuesPrefix);
-	writer->writeAttribute("suffix", d->valuesSuffix);
-	WRITE_QCOLOR(d->valuesColor);
-	WRITE_QFONT(d->valuesFont);
-	writer->writeEndElement();
-
-	// Filling
 	d->background->save(writer);
+	d->line->save(writer);
+	d->symbol->save(writer);
+	d->value->save(writer);
+
+	// Error bars
+	writer->writeStartElement(QStringLiteral("errorBars"));
+	writer->writeAttribute(QStringLiteral("errorType"), QString::number(static_cast<int>(d->errorType)));
+	WRITE_COLUMN(d->errorPlusColumn, errorPlusColumn);
+	WRITE_COLUMN(d->errorMinusColumn, errorMinusColumn);
+	d->errorBarsLine->save(writer);
+	writer->writeEndElement();
+
+	// margin plots
+	writer->writeStartElement(QStringLiteral("margins"));
+	writer->writeAttribute(QStringLiteral("rugEnabled"), QString::number(d->rugEnabled));
+	writer->writeAttribute(QStringLiteral("rugLength"), QString::number(d->rugLength));
+	writer->writeAttribute(QStringLiteral("rugWidth"), QString::number(d->rugWidth));
+	writer->writeAttribute(QStringLiteral("rugOffset"), QString::number(d->rugOffset));
+	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "Histogram" section
 }
@@ -1762,22 +1936,22 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "Histogram")
+		if (reader->isEndElement() && reader->name() == QLatin1String("Histogram"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
 			READ_COLUMN(dataColumn);
-			READ_INT_VALUE("type", type, Histogram::HistogramType);
-			READ_INT_VALUE("orientation", orientation, Histogram::HistogramOrientation);
-			READ_INT_VALUE("normalization", normalization, Histogram::HistogramNormalization);
+			READ_INT_VALUE("type", type, Histogram::Type);
+			READ_INT_VALUE("orientation", orientation, Histogram::Orientation);
+			READ_INT_VALUE("normalization", normalization, Histogram::Normalization);
 			READ_INT_VALUE("binningMethod", binningMethod, Histogram::BinningMethod);
 			READ_INT_VALUE("binCount", binCount, int);
 			READ_DOUBLE_VALUE("binWidth", binWidth);
@@ -1787,54 +1961,41 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
-			str = attribs.value("visible").toString();
+			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("visible").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
 			else
 				d->setVisible(str.toInt());
-		} else if (!preview && reader->name() == "line") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("type", lineType, Histogram::LineType);
-			READ_QPEN(d->linePen);
-			READ_DOUBLE_VALUE("opacity", lineOpacity);
-		} else if (!preview && reader->name() == "symbols") {
+		} else if (!preview && reader->name() == QLatin1String("line")) {
+			d->line->load(reader, preview);
+		} else if (!preview && reader->name() == QLatin1String("symbols"))
 			d->symbol->load(reader, preview);
-		} else if (!preview && reader->name() == "values") {
+		else if (!preview && reader->name() == QLatin1String("values"))
+			d->value->load(reader, preview);
+		else if (!preview && reader->name() == QLatin1String("filling"))
+			d->background->load(reader, preview);
+		else if (!preview && reader->name() == QLatin1String("errorBars")) {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("type", valuesType, Histogram::ValuesType);
-			READ_COLUMN(valuesColumn);
-			READ_INT_VALUE("position", valuesPosition, Histogram::ValuesPosition);
-			READ_DOUBLE_VALUE("distance", valuesRotationAngle);
-			READ_DOUBLE_VALUE("rotation", valuesRotationAngle);
-			READ_DOUBLE_VALUE("opacity", valuesOpacity);
+			READ_INT_VALUE("errorType", errorType, ErrorType);
+			READ_COLUMN(errorPlusColumn);
+			READ_COLUMN(errorMinusColumn);
+			d->errorBarsLine->load(reader, preview);
+		} else if (!preview && reader->name() == QLatin1String("margins")) {
+			attribs = reader->attributes();
 
-			str = attribs.value("numericFormat").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("numericFormat").toString());
-			else
-				d->valuesNumericFormat = *(str.toLatin1().data());
-
-			READ_STRING_VALUE("dateTimeFormat", valuesDateTimeFormat);
-			READ_INT_VALUE("precision", valuesPrecision, int);
-
-			// don't produce any warning if no prefix or suffix is set (empty string is allowed here in xml)
-			d->valuesPrefix = attribs.value("prefix").toString();
-			d->valuesSuffix = attribs.value("suffix").toString();
-
-			READ_QCOLOR(d->valuesColor);
-			READ_QFONT(d->valuesFont);
-		} else if (!preview && reader->name() == "filling") {
-			d->background->load(reader, preview);
+			READ_INT_VALUE("rugEnabled", rugEnabled, bool);
+			READ_DOUBLE_VALUE("rugLength", rugLength);
+			READ_DOUBLE_VALUE("rugWidth", rugWidth);
+			READ_DOUBLE_VALUE("rugOffset", rugOffset);
 		}
 	}
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Histogram::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))
@@ -1851,72 +2012,39 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	Q_D(Histogram);
 	d->m_suppressRecalc = true;
 
-	// Line
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
-	p.setColor(themeColor);
-	this->setLinePen(p);
-	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
-
-	// Symbol
+	d->line->loadThemeConfig(group, themeColor);
 	d->symbol->loadThemeConfig(group, themeColor);
+	d->value->loadThemeConfig(group, themeColor);
+	d->background->loadThemeConfig(group, themeColor);
+	d->errorBarsLine->loadThemeConfig(group, themeColor);
 
-	// Values
-	this->setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
-	this->setValuesColor(group.readEntry("ValuesColor", themeColor));
-
-	// Filling
-	d->background->loadThemeConfig(group);
-
-	// Error Bars
-	// TODO:
-	// 	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle",(int) this->errorBarsPen().style()));
-	// 	p.setWidthF(group.readEntry("ErrorBarsWidth", this->errorBarsPen().widthF()));
-	// 	p.setColor(themeColor);
-	// 	this->setErrorBarsPen(p);
-	// 	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
-
-	if (plot->theme() == QLatin1String("Tufte"))
-		setLineType(Histogram::LineType::HalfBars);
+	if (plot->theme() == QLatin1String("Tufte")) {
+		d->line->setHistogramLineType(Histogram::LineType::HalfBars);
+		if (d->dataColumn && d->dataColumn->rowCount() < 100)
+			setRugEnabled(true);
+	} else
+		setRugEnabled(false);
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 
 void Histogram::saveThemeConfig(const KConfig& config) {
+	Q_D(const Histogram);
 	KConfigGroup group = config.group("Histogram");
 
-	// Line
-	group.writeEntry("LineOpacity", this->lineOpacity());
-	group.writeEntry("LineStyle", (int)this->linePen().style());
-	group.writeEntry("LineWidth", this->linePen().widthF());
-
-	// Error Bars
-	// 	group.writeEntry("ErrorBarsCapSize",this->errorBarsCapSize());
-	// 	group.writeEntry("ErrorBarsOpacity",this->errorBarsOpacity());
-	// 	group.writeEntry("ErrorBarsColor",(QColor) this->errorBarsPen().color());
-	// 	group.writeEntry("ErrorBarsStyle",(int) this->errorBarsPen().style());
-	// 	group.writeEntry("ErrorBarsWidth", this->errorBarsPen().widthF());
-
-	// Symbol
-	Q_D(const Histogram);
+	d->line->saveThemeConfig(group);
 	d->symbol->saveThemeConfig(group);
-
-	// Values
-	group.writeEntry("ValuesOpacity", this->valuesOpacity());
-	group.writeEntry("ValuesColor", (QColor)this->valuesColor());
-	group.writeEntry("ValuesFont", this->valuesFont());
-
-	// Filling
+	d->value->saveThemeConfig(group);
 	d->background->saveThemeConfig(group);
+	d->errorBarsLine->saveThemeConfig(group);
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	if (index < 5) {
 		KConfigGroup themeGroup = config.group("Theme");
 		for (int i = index; i < 5; i++) {
-			QString s = "ThemePaletteColor" + QString::number(i + 1);
-			themeGroup.writeEntry(s, (QColor)this->linePen().color());
+			QString s = QStringLiteral("ThemePaletteColor") + QString::number(i + 1);
+			themeGroup.writeEntry(s, d->line->pen().color());
 		}
 	}
 }

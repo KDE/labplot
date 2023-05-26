@@ -18,7 +18,6 @@
 
 #include <QMenu>
 #include <QProgressBar>
-#include <QStandardItemModel>
 #include <QStatusBar>
 #include <QWidgetAction>
 
@@ -28,7 +27,7 @@
 		(2D-curves defined by an data reduction) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -37,7 +36,7 @@
 */
 
 XYDataReductionCurveDock::XYDataReductionCurveDock(QWidget* parent, QStatusBar* sb)
-	: XYCurveDock(parent)
+	: XYAnalysisCurveDock(parent)
 	, statusBar(sb) {
 }
 
@@ -75,7 +74,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 	uiGeneralTab.sbTolerance->setRange(0.0, std::numeric_limits<double>::max());
 	uiGeneralTab.sbTolerance2->setRange(0.0, std::numeric_limits<double>::max());
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -87,12 +86,12 @@ void XYDataReductionCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYDataReductionCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYDataReductionCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYDataReductionCurveDock::xRangeMaxChanged);
-	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYDataReductionCurveDock::xRangeMinDateTimeChanged);
-	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYDataReductionCurveDock::xRangeMaxDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYDataReductionCurveDock::xRangeMinDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYDataReductionCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.chkAuto, &QCheckBox::clicked, this, &XYDataReductionCurveDock::autoToleranceChanged);
-	connect(uiGeneralTab.sbTolerance, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYDataReductionCurveDock::toleranceChanged);
+	connect(uiGeneralTab.sbTolerance, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYDataReductionCurveDock::toleranceChanged);
 	connect(uiGeneralTab.chkAuto2, &QCheckBox::clicked, this, &XYDataReductionCurveDock::autoTolerance2Changed);
-	connect(uiGeneralTab.sbTolerance2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYDataReductionCurveDock::tolerance2Changed);
+	connect(uiGeneralTab.sbTolerance2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYDataReductionCurveDock::tolerance2Changed);
 	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDataReductionCurveDock::plotRangeChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYDataReductionCurveDock::recalculateClicked);
 
@@ -102,7 +101,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 }
 
 void XYDataReductionCurveDock::initGeneralTab() {
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -134,12 +133,12 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_dataReductionData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_dataReductionData.xRange.last()));
 	} else {
-		uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_dataReductionData.xRange.first()));
-		uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_dataReductionData.xRange.last()));
+		uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(m_dataReductionData.xRange.first());
+		uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(m_dataReductionData.xRange.last());
 	}
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
@@ -189,37 +188,10 @@ void XYDataReductionCurveDock::initGeneralTab() {
 }
 
 void XYDataReductionCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Datapicker,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYCurve,
-						   AspectType::XYAnalysisCurve};
-	cbDataSourceCurve->setTopLevelClasses(list);
+	auto list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYFitCurve);
 
-	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
-		hiddenAspects << curve;
-	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
-
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-
-	cbDataSourceCurve->setModel(m_aspectTreeModel);
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-
-	XYCurveDock::setModel();
+	XYAnalysisCurveDock::setModel(list);
 }
 
 /*!
@@ -229,13 +201,13 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
-	m_aspect = m_curve;
+	setAspects(list);
 	m_dataReductionCurve = static_cast<XYDataReductionCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_dataReductionData = m_dataReductionCurve->dataReductionData();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.sbTolerance->setLocale(numberLocale);
 	uiGeneralTab.sbTolerance2->setLocale(numberLocale);
 
@@ -276,16 +248,14 @@ void XYDataReductionCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->hide();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDataReductionCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYDataReductionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
@@ -294,8 +264,7 @@ void XYDataReductionCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 }
 
 void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -303,7 +272,7 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
@@ -316,8 +285,7 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -413,12 +381,12 @@ void XYDataReductionCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				SET_NUMBER_LOCALE
+				const auto numberLocale = QLocale();
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
-				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
-				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
+				uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(xDataColumn->minimum());
+				uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(xDataColumn->maximum());
 			}
 		}
 	}
@@ -432,19 +400,17 @@ void XYDataReductionCurveDock::xRangeMaxChanged() {
 	SET_DOUBLE_FROM_LE_REC(m_dataReductionData.xRange.last(), uiGeneralTab.leMax);
 }
 
-void XYDataReductionCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+void XYDataReductionCurveDock::xRangeMinDateTimeChanged(qint64 value) {
+	CONDITIONAL_LOCK_RETURN;
 
-	m_dataReductionData.xRange.first() = dateTime.toMSecsSinceEpoch();
+	m_dataReductionData.xRange.first() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYDataReductionCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+void XYDataReductionCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
+	CONDITIONAL_LOCK_RETURN;
 
-	m_dataReductionData.xRange.last() = dateTime.toMSecsSinceEpoch();
+	m_dataReductionData.xRange.last() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
@@ -608,8 +574,7 @@ void XYDataReductionCurveDock::recalculateClicked() {
 }
 
 void XYDataReductionCurveDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// no dataReductioning possible without the x- and y-data
 	bool hasSourceData = false;
@@ -636,32 +601,19 @@ void XYDataReductionCurveDock::enableRecalculate() const {
  * show the result and details of the dataReduction
  */
 void XYDataReductionCurveDock::showDataReductionResult() {
-	const XYDataReductionCurve::DataReductionResult& dataReductionResult = m_dataReductionCurve->dataReductionResult();
-	if (!dataReductionResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
+	showResult(m_dataReductionCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+}
 
-	QString str = i18n("status: %1", dataReductionResult.status) + "<br>";
+QString XYDataReductionCurveDock::customText() const {
+	const auto& result = m_dataReductionCurve->dataReductionResult();
+	const auto numberLocale = QLocale();
+	QString str = QStringLiteral("<br>");
 
-	if (!dataReductionResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
+	str += i18n("number of points: %1", numberLocale.toString(static_cast<qulonglong>(result.npoints))) + QStringLiteral("<br>");
+	str += i18n("positional squared error: %1", numberLocale.toString(result.posError)) + QStringLiteral("<br>");
+	str += i18n("area error: %1", numberLocale.toString(result.areaError)) + QStringLiteral("<br>");
 
-	SET_NUMBER_LOCALE
-	if (dataReductionResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(dataReductionResult.elapsedTime / 1000)) + "<br>";
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(dataReductionResult.elapsedTime)) + "<br>";
-
-	str += "<br>";
-
-	str += i18n("number of points: %1", numberLocale.toString(static_cast<qulonglong>(dataReductionResult.npoints))) + "<br>";
-	str += i18n("positional squared error: %1", numberLocale.toString(dataReductionResult.posError)) + "<br>";
-	str += i18n("area error: %1", numberLocale.toString(dataReductionResult.areaError)) + "<br>";
-
-	uiGeneralTab.teResult->setText(str);
+	return str;
 }
 
 //*************************************************************
@@ -669,37 +621,32 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 //*************************************************************
 // General-Tab
 void XYDataReductionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_dataReductionCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_dataReductionCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData& dataReductionData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_dataReductionData = dataReductionData;
 	// uiGeneralTab.cbType->setCurrentIndex(m_dataReductionData.type);
 	// this->typeChanged();
 
 	this->showDataReductionResult();
-	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::dataChanged() {
@@ -707,7 +654,6 @@ void XYDataReductionCurveDock::dataChanged() {
 }
 
 void XYDataReductionCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

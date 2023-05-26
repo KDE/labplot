@@ -11,10 +11,13 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/lib/macros.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/LineWidget.h"
+#include "kdefrontend/widgets/ValueWidget.h"
 
 #include <QPushButton>
 
@@ -35,11 +38,11 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	cbXColumn->setSizePolicy(sizePolicy);
 	static_cast<QVBoxLayout*>(ui.frameXColumn->layout())->insertWidget(0, cbXColumn);
-	ui.bRemoveXColumn->setIcon(QIcon::fromTheme("edit-clear"));
+	ui.bRemoveXColumn->setIcon(QIcon::fromTheme(QStringLiteral("edit-clear")));
 
 	// y-data
 	m_buttonNew = new QPushButton();
-	m_buttonNew->setIcon(QIcon::fromTheme("list-add"));
+	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
 	m_gridLayout = new QGridLayout(ui.frameDataColumns);
 	m_gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -49,16 +52,17 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	ui.cbType->addItem(i18n("Grouped"));
 	ui.cbType->addItem(i18n("Stacked"));
+	ui.cbType->addItem(i18n("Stacked 100%"));
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
 	// Tab "Bars"
-	QString msg = i18n("Specify bar number which properties should be shown and edited");
+	QString msg = i18n("Select the data column for which the properties should be shown and edited");
 	ui.lNumber->setToolTip(msg);
 	ui.cbNumber->setToolTip(msg);
 
-	msg = i18n("Specify the factor in percent to control the width of the bar relative to its default value");
+	msg = i18n("Specify the factor in percent to control the width of the bar relative to its default value, applying to all bars");
 	ui.lWidthFactor->setToolTip(msg);
 	ui.sbWidthFactor->setToolTip(msg);
 
@@ -66,6 +70,22 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBars->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBars);
 	gridLayout->addWidget(backgroundWidget, 5, 0, 1, 3);
+	auto* spacer = new QSpacerItem(72, 18, QSizePolicy::Minimum, QSizePolicy::Fixed);
+	gridLayout->addItem(spacer, 6, 0, 1, 1);
+
+	// border lines
+	gridLayout->addWidget(ui.lBorder, 7, 0, 1, 1);
+	lineWidget = new LineWidget(ui.tabBars);
+	gridLayout->addWidget(lineWidget, 8, 0, 1, 3);
+	spacer = new QSpacerItem(18, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	gridLayout->addItem(spacer, 9, 0, 1, 1);
+
+	// Tab "Values"
+	auto* hboxLayout = new QHBoxLayout(ui.tabValues);
+	valueWidget = new ValueWidget(ui.tabValues);
+	hboxLayout->addWidget(valueWidget);
+	hboxLayout->setContentsMargins(2, 2, 2, 2);
+	hboxLayout->setSpacing(2);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -80,7 +100,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
-	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarChanged);
 	connect(ui.leName, &QLineEdit::textChanged, this, &BarPlotDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &BarPlotDock::commentChanged);
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::xColumnChanged);
@@ -89,15 +108,11 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::typeChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::orientationChanged);
 	connect(ui.chkVisible, &QCheckBox::toggled, this, &BarPlotDock::visibilityChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::plotRangeChanged);
 
 	// Tab "Bars"
+	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarChanged);
 	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::widthFactorChanged);
-
-	// box border
-	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::borderStyleChanged);
-	connect(ui.kcbBorderColor, &KColorButton::changed, this, &BarPlotDock::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BarPlotDock::borderWidthChanged);
-	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::borderOpacityChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -114,15 +129,15 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 }
 
 void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	m_barPlots = list;
 	m_barPlot = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 	Q_ASSERT(m_barPlot);
 	m_aspectTreeModel = new AspectTreeModel(m_barPlot->project());
 	setModel();
 
-	// if there is more then one point in the list, disable the comment and name widgets in "general"
+	// if there is more than one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -142,15 +157,22 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 		ui.lDataColumn->setEnabled(false);
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 
 	// backgrounds
 	QList<Background*> backgrounds;
-	for (auto* plot : m_barPlots)
+	QList<Line*> lines;
+	QList<Value*> values;
+	for (auto* plot : m_barPlots) {
 		backgrounds << plot->backgroundAt(0);
+		lines << plot->lineAt(0);
+		values << plot->value();
+	}
 
 	backgroundWidget->setBackgrounds(backgrounds);
+	lineWidget->setLines(lines);
+	valueWidget->setValues(values);
 
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_barPlot->isVisible());
@@ -158,6 +180,8 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	loadConfig(config);
 	cbXColumn->setColumn(m_barPlot->xColumn(), m_barPlot->xColumnPath());
 	loadDataColumns();
+
+	updatePlotRanges();
 
 	// set the current locale
 	updateLocale();
@@ -172,10 +196,6 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	connect(m_barPlot, &BarPlot::dataColumnsChanged, this, &BarPlotDock::plotDataColumnsChanged);
 
 	connect(m_barPlot, &BarPlot::widthFactorChanged, this, &BarPlotDock::plotWidthFactorChanged);
-
-	// box border
-	connect(m_barPlot, &BarPlot::borderPenChanged, this, &BarPlotDock::plotBorderPenChanged);
-	connect(m_barPlot, &BarPlot::borderOpacityChanged, this, &BarPlotDock::plotBorderOpacityChanged);
 }
 
 void BarPlotDock::setModel() {
@@ -206,8 +226,7 @@ void BarPlotDock::setModel() {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void BarPlotDock::updateLocale() {
-	SET_NUMBER_LOCALE
-	ui.sbBorderWidth->setLocale(numberLocale);
+	lineWidget->updateLocale();
 }
 
 void BarPlotDock::updatePlotRanges() {
@@ -220,7 +239,6 @@ void BarPlotDock::loadDataColumns() {
 		addDataColumn();
 
 	int count = m_barPlot->dataColumns().count();
-	const int currentBarIndex = ui.cbNumber->currentIndex();
 	ui.cbNumber->clear();
 
 	if (count != 0) {
@@ -238,15 +256,15 @@ void BarPlotDock::loadDataColumns() {
 		for (int i = 0; i < count; ++i)
 			m_dataComboBoxes.at(i)->setAspect(m_barPlot->dataColumns().at(i));
 
+		// show columns names in the combobox for the selection of the bar to be modified
 		for (int i = 0; i < count; ++i)
-			ui.cbNumber->addItem(QString::number(i + 1));
+			if (m_barPlot->dataColumns().at(i))
+				ui.cbNumber->addItem(m_barPlot->dataColumns().at(i)->name());
 	} else {
 		// no data columns set in the box plot yet, we show the first combo box only
 		m_dataComboBoxes.first()->setAspect(nullptr);
 		for (int i = 0; i < m_dataComboBoxes.count(); ++i)
 			removeDataColumn();
-
-		ui.cbNumber->addItem("1");
 	}
 
 	// disable data column widgets if we're modifying more than one box plot at the same time
@@ -257,10 +275,8 @@ void BarPlotDock::loadDataColumns() {
 	for (auto* b : m_removeButtons)
 		b->setVisible(enabled);
 
-	if (currentBarIndex != -1)
-		ui.cbNumber->setCurrentIndex(currentBarIndex);
-	else
-		ui.cbNumber->setCurrentIndex(0);
+	// select the first column after all of them were added to the combobox
+	ui.cbNumber->setCurrentIndex(0);
 }
 
 void BarPlotDock::setDataColumns() const {
@@ -299,8 +315,7 @@ void BarPlotDock::xColumnChanged(const QModelIndex& index) {
 
 	ui.bRemoveXColumn->setEnabled(column != nullptr);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* barPlot : m_barPlots)
 		barPlot->setXColumn(column);
@@ -342,7 +357,7 @@ void BarPlotDock::addDataColumn() {
 		cb->setSizePolicy(sizePolicy1);
 	} else {
 		auto* button = new QPushButton();
-		button->setIcon(QIcon::fromTheme("list-remove"));
+		button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 		connect(button, &QPushButton::clicked, this, &BarPlotDock::removeDataColumn);
 		m_gridLayout->addWidget(button, index, 1, 1, 1);
 		m_removeButtons << button;
@@ -387,34 +402,30 @@ void BarPlotDock::removeDataColumn() {
 		setDataColumns();
 }
 
-void BarPlotDock::dataColumnChanged(const QModelIndex&) const {
-	if (m_initializing)
-		return;
+void BarPlotDock::dataColumnChanged(const QModelIndex&) {
+	CONDITIONAL_LOCK_RETURN;
 
 	setDataColumns();
 }
 
-void BarPlotDock::typeChanged(int index) const {
-	if (m_initializing)
-		return;
+void BarPlotDock::typeChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto type = static_cast<BarPlot::Type>(index);
 	for (auto* barPlot : m_barPlots)
 		barPlot->setType(type);
 }
 
-void BarPlotDock::orientationChanged(int index) const {
-	if (m_initializing)
-		return;
+void BarPlotDock::orientationChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto orientation = BarPlot::Orientation(index);
 	for (auto* barPlot : m_barPlots)
 		barPlot->setOrientation(orientation);
 }
 
-void BarPlotDock::visibilityChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BarPlotDock::visibilityChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* barPlot : m_barPlots)
 		barPlot->setVisible(state);
@@ -424,78 +435,34 @@ void BarPlotDock::visibilityChanged(bool state) const {
 /*!
  * called when the current bar number was changed, shows the bar properties for the selected bar.
  */
-void BarPlotDock::currentBarChanged(int index) const {
+void BarPlotDock::currentBarChanged(int index) {
 	if (index == -1)
 		return;
 
+	CONDITIONAL_LOCK_RETURN;
+
 	QList<Background*> backgrounds;
+	QList<Line*> lines;
 	for (auto* plot : m_barPlots) {
 		auto* background = plot->backgroundAt(index);
 		if (background)
 			backgrounds << background;
+
+		auto* line = plot->lineAt(index);
+		if (line)
+			lines << line;
 	}
 
 	backgroundWidget->setBackgrounds(backgrounds);
+	lineWidget->setLines(lines);
 }
 
-void BarPlotDock::widthFactorChanged(int value) const {
-	if (m_initializing)
-		return;
+void BarPlotDock::widthFactorChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
 
 	double factor = (double)value / 100.;
 	for (auto* barPlot : m_barPlots)
 		barPlot->setWidthFactor(factor);
-}
-
-// box border
-void BarPlotDock::borderStyleChanged(int index) const {
-	if (m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* barPlot : m_barPlots) {
-		pen = barPlot->borderPen();
-		pen.setStyle(penStyle);
-		barPlot->setBorderPen(pen);
-	}
-}
-
-void BarPlotDock::borderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* barPlot : m_barPlots) {
-		pen = barPlot->borderPen();
-		pen.setColor(color);
-		barPlot->setBorderPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing = false;
-}
-
-void BarPlotDock::borderWidthChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* barPlot : m_barPlots) {
-		pen = barPlot->borderPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		barPlot->setBorderPen(pen);
-	}
-}
-
-void BarPlotDock::borderOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* barPlot : m_barPlots)
-		barPlot->setBorderOpacity(opacity);
 }
 
 //*************************************************************
@@ -503,47 +470,30 @@ void BarPlotDock::borderOpacityChanged(int value) const {
 //*************************************************************
 // general
 void BarPlotDock::plotXColumnChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	cbXColumn->setColumn(column, m_barPlot->xColumnPath());
 }
 void BarPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	loadDataColumns();
 }
 void BarPlotDock::plotTypeChanged(BarPlot::Type type) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)type);
 }
 void BarPlotDock::plotOrientationChanged(BarPlot::Orientation orientation) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
 void BarPlotDock::plotVisibilityChanged(bool on) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
 // box
 void BarPlotDock::plotWidthFactorChanged(double factor) {
-	Lock lock(m_initializing);
-	// 	float v = (float)value*100.;
-	ui.sbWidthFactor->setValue(factor * 100);
-}
-
-// box border
-void BarPlotDock::plotBorderPenChanged(QPen& pen) {
-	Lock lock(m_initializing);
-	if (ui.cbBorderStyle->currentIndex() != pen.style())
-		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if (ui.kcbBorderColor->color() != pen.color())
-		ui.kcbBorderColor->setColor(pen.color());
-	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-}
-void BarPlotDock::plotBorderOpacityChanged(float value) {
-	Lock lock(m_initializing);
-	float v = (float)value * 100.;
-	ui.sbBorderOpacity->setValue(v);
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbWidthFactor->setValue(round(factor * 100));
 }
 
 //**********************************************************
@@ -558,19 +508,11 @@ void BarPlotDock::loadConfig(KConfig& config) {
 
 	// box
 	ui.sbWidthFactor->setValue(round(group.readEntry("WidthFactor", m_barPlot->widthFactor()) * 100));
-
-	// box filling
 	backgroundWidget->loadConfig(group);
+	lineWidget->loadConfig(group);
 
-	// box border
-	const QPen& penBorder = m_barPlot->borderPen();
-	ui.cbBorderStyle->setCurrentIndex(group.readEntry("BorderStyle", (int)penBorder.style()));
-	ui.kcbBorderColor->setColor(group.readEntry("BorderColor", penBorder.color()));
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", penBorder.widthF()), Worksheet::Unit::Point));
-	ui.sbBorderOpacity->setValue(group.readEntry("BorderOpacity", m_barPlot->borderOpacity()) * 100);
-
-	Lock lock(m_initializing);
-	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	// values
+	valueWidget->loadConfig(group);
 }
 
 void BarPlotDock::loadConfigFromTemplate(KConfig& config) {
@@ -602,15 +544,11 @@ void BarPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	// box
 	group.writeEntry("WidthFactor", ui.sbWidthFactor->value() / 100.0);
-
-	// box filling
 	backgroundWidget->saveConfig(group);
+	lineWidget->saveConfig(group);
 
-	// box border
-	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
-	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value() / 100.0);
+	// values
+	valueWidget->saveConfig(group);
 
 	config.sync();
 }

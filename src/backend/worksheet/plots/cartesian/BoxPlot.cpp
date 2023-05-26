@@ -11,11 +11,14 @@
 #include "BoxPlot.h"
 #include "BoxPlotPrivate.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Folder.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -38,12 +41,12 @@
  */
 
 BoxPlot::BoxPlot(const QString& name)
-	: WorksheetElement(name, new BoxPlotPrivate(this), AspectType::BoxPlot) {
+	: Plot(name, new BoxPlotPrivate(this), AspectType::BoxPlot) {
 	init();
 }
 
 BoxPlot::BoxPlot(const QString& name, BoxPlotPrivate* dd)
-	: WorksheetElement(name, dd, AspectType::BoxPlot) {
+	: Plot(name, dd, AspectType::BoxPlot) {
 	init();
 }
 
@@ -66,31 +69,13 @@ void BoxPlot::init() {
 	d->widthFactor = group.readEntry("WidthFactor", 1.0);
 	d->notchesEnabled = group.readEntry("NotchesEnabled", false);
 
-	// box filling
-	d->background = new Background(QString());
-	d->background->setPrefix(QLatin1String("Filling"));
-	d->background->setEnabledAvailable(true);
-	addChild(d->background);
-	d->background->setHidden(true);
-	d->background->init(group);
-	connect(d->background, &Background::updateRequested, [=] {
-		d->updatePixmap();
-	});
-
-	// median line
-	d->medianLinePen = QPen(group.readEntry("MedianLineColor", QColor(Qt::black)),
-							group.readEntry("MedianLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-							(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
-	d->medianLineOpacity = group.readEntry("BorderOpacity", 1.0);
-
-	// box border
-	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-						(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
-	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
+	// box
+	d->addBackground(group);
+	d->addBorderLine(group);
+	d->addMedianLine(group);
 
 	// markers
-	d->symbolMean = new Symbol("symbolMean");
+	d->symbolMean = new Symbol(QStringLiteral("symbolMean"));
 	addChild(d->symbolMean);
 	d->symbolMean->setHidden(true);
 	d->symbolMean->init(group);
@@ -102,7 +87,7 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->symbolMedian = new Symbol("symbolMedian");
+	d->symbolMedian = new Symbol(QStringLiteral("symbolMedian"));
 	addChild(d->symbolMedian);
 	d->symbolMedian->setHidden(true);
 	d->symbolMedian->init(group);
@@ -114,7 +99,7 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->symbolOutlier = new Symbol("symbolOutlier");
+	d->symbolOutlier = new Symbol(QStringLiteral("symbolOutlier"));
 	addChild(d->symbolOutlier);
 	d->symbolOutlier->setHidden(true);
 	d->symbolOutlier->init(group);
@@ -125,7 +110,7 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->symbolFarOut = new Symbol("symbolFarOut");
+	d->symbolFarOut = new Symbol(QStringLiteral("symbolFarOut"));
 	addChild(d->symbolFarOut);
 	d->symbolFarOut->setHidden(true);
 	d->symbolFarOut->init(group);
@@ -137,7 +122,7 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->symbolData = new Symbol("symbolData");
+	d->symbolData = new Symbol(QStringLiteral("symbolData"));
 	addChild(d->symbolData);
 	d->symbolData->setHidden(true);
 	d->symbolData->init(group);
@@ -150,18 +135,53 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
+	d->symbolWhiskerEnd = new Symbol(QStringLiteral("symbolWhiskerEnd"));
+	addChild(d->symbolWhiskerEnd);
+	d->symbolWhiskerEnd->setHidden(true);
+	d->symbolWhiskerEnd->init(group);
+	d->symbolWhiskerEnd->setStyle(Symbol::Style::NoSymbols);
+	connect(d->symbolWhiskerEnd, &Symbol::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+	connect(d->symbolWhiskerEnd, &Symbol::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+
 	d->jitteringEnabled = group.readEntry("JitteringEnabled", true);
 
 	// whiskers
-	d->whiskersPen = QPen(group.readEntry("WhiskersColor", QColor(Qt::black)),
-						  group.readEntry("WhiskersWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-						  (Qt::PenStyle)group.readEntry("WhiskersStyle", (int)Qt::SolidLine));
-	d->whiskersOpacity = group.readEntry("WhiskersOpacity", 1.0);
+	d->whiskersLine = new Line(QString());
+	d->whiskersLine->setPrefix(QLatin1String("Whiskers"));
+	d->whiskersLine->setCreateXmlElement(false); // whiskers element is created in BoxPlot::save()
+	d->whiskersLine->setHidden(true);
+	addChild(d->whiskersLine);
+	d->whiskersLine->init(group);
+	connect(d->whiskersLine, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->whiskersLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
 	d->whiskersCapSize = group.readEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
-	d->whiskersCapPen = QPen(group.readEntry("WhiskersCapColor", QColor(Qt::black)),
-							 group.readEntry("WhiskersCapWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-							 (Qt::PenStyle)group.readEntry("WhiskersCapStyle", (int)Qt::SolidLine));
-	d->whiskersCapOpacity = group.readEntry("WhiskersCapOpacity", 1.0);
+	d->whiskersCapLine = new Line(QString());
+	d->whiskersCapLine->setPrefix(QLatin1String("WhiskersCap"));
+	d->whiskersCapLine->setCreateXmlElement(false); // whiskers cap element is created in BoxPlot::save()
+	d->whiskersCapLine->setHidden(true);
+	addChild(d->whiskersCapLine);
+	d->whiskersCapLine->init(group);
+	connect(d->whiskersCapLine, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->whiskersCapLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
+	// marginal plots (rug, BoxPlot, boxplot)
+	d->rugEnabled = group.readEntry("RugEnabled", false);
+	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry("RugWidth", 0.0);
+	d->rugOffset = group.readEntry("RugOffset", 0.0);
 }
 
 /*!
@@ -179,8 +199,7 @@ QIcon BoxPlot::staticIcon() {
 	QPixmap pm(iconSize, iconSize);
 
 	QPen pen(Qt::SolidLine);
-	const QColor& color = (QApplication::palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
-	pen.setColor(color);
+	pen.setColor(DARKMODE ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
 
 	pm.fill(Qt::transparent);
@@ -195,7 +214,7 @@ QIcon BoxPlot::staticIcon() {
 }
 
 void BoxPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &BoxPlot::visibilityChangedSlot);
 
@@ -261,14 +280,55 @@ void BoxPlot::recalc() {
 void BoxPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
-bool BoxPlot::activateCurve(QPointF mouseScenePos, double maxDist) {
+bool BoxPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	Q_D(BoxPlot);
-	return d->activateCurve(mouseScenePos, maxDist);
+	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 void BoxPlot::setHover(bool on) {
 	Q_D(BoxPlot);
 	d->setHover(on);
+}
+
+/*!
+ * creates a new spreadsheet having the data with the positions and the values of the bins.
+ * the new spreadsheet is added to the current folder.
+ */
+void BoxPlot::createDataSpreadsheet() {
+	if (dataColumns().isEmpty())
+		return;
+
+	// create a new spreadsheet for the following 9 metrics:
+	// index
+	// 1st quartile
+	// 3rd quartile
+	// median
+	// whiskers min
+	// whiskers max
+	// data points count
+	// outliers count
+	// far out points count
+
+	auto* spreadsheet = new Spreadsheet(i18n("%1 - Data", name()));
+	spreadsheet->setColumnCount(9);
+	spreadsheet->setRowCount(dataColumns().count());
+	spreadsheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	spreadsheet->column(0)->setName(i18n("index"));
+	spreadsheet->column(1)->setName(i18n("1st quartile"));
+	spreadsheet->column(2)->setName(i18n("3rd quartile"));
+	spreadsheet->column(3)->setName(i18n("median"));
+	spreadsheet->column(4)->setName(i18n("whiskers min"));
+	spreadsheet->column(5)->setName(i18n("whiskers max"));
+	spreadsheet->column(6)->setName(i18n("data points count"));
+	spreadsheet->column(7)->setName(i18n("outliers count"));
+	spreadsheet->column(8)->setName(i18n("far out points count"));
+
+	Q_D(const BoxPlot);
+	d->fillDataSpreadsheet(spreadsheet);
+
+	// add the new spreadsheet to the current folder
+	folder()->addChild(spreadsheet);
 }
 
 /* ============================ getter methods ================= */
@@ -281,18 +341,31 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, double, widthFactor, widthFactor)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, notchesEnabled, notchesEnabled)
 
 // box filling
-Background* BoxPlot::background() const {
+Background* BoxPlot::backgroundAt(int index) const {
 	Q_D(const BoxPlot);
-	return d->background;
+	if (index < d->backgrounds.size())
+		return d->backgrounds.at(index);
+	else
+		return nullptr;
 }
 
-// border
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, borderPen, borderPen)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, borderOpacity, borderOpacity)
+// box border line
+Line* BoxPlot::borderLineAt(int index) const {
+	Q_D(const BoxPlot);
+	if (index < d->borderLines.size())
+		return d->borderLines.at(index);
+	else
+		return nullptr;
+}
 
 // median line
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, medianLinePen, medianLinePen)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, medianLineOpacity, medianLineOpacity)
+Line* BoxPlot::medianLineAt(int index) const {
+	Q_D(const BoxPlot);
+	if (index < d->medianLines.size())
+		return d->medianLines.at(index);
+	else
+		return nullptr;
+}
 
 // markers
 Symbol* BoxPlot::symbolMean() const {
@@ -322,14 +395,31 @@ Symbol* BoxPlot::symbolData() const {
 	return d->symbolData;
 }
 
+Symbol* BoxPlot::symbolWhiskerEnd() const {
+	Q_D(const BoxPlot);
+	return d->symbolWhiskerEnd;
+}
+
 // whiskers
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersRangeParameter, whiskersRangeParameter)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersOpacity, whiskersOpacity)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersCapSize, whiskersCapSize)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersCapPen, whiskersCapPen)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersCapOpacity, whiskersCapOpacity)
+
+Line* BoxPlot::whiskersLine() const {
+	Q_D(const BoxPlot);
+	return d->whiskersLine;
+}
+
+Line* BoxPlot::whiskersCapLine() const {
+	Q_D(const BoxPlot);
+	return d->whiskersCapLine;
+}
+
+// margin plots
+BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, rugEnabled, rugEnabled)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugLength, rugLength)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugWidth, rugWidth)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugOffset, rugOffset)
 
 QVector<QString>& BoxPlot::dataColumnPaths() const {
 	D(BoxPlot);
@@ -375,7 +465,7 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 		}
 	}
@@ -416,36 +506,6 @@ void BoxPlot::setNotchesEnabled(bool notchesEnabled) {
 		exec(new BoxPlotSetNotchesEnabledCmd(d, notchesEnabled, ki18n("%1: changed notches")));
 }
 
-// box border
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetBorderPen, QPen, borderPen, recalcShapeAndBoundingRect)
-void BoxPlot::setBorderPen(const QPen& pen) {
-	Q_D(BoxPlot);
-	if (pen != d->borderPen)
-		exec(new BoxPlotSetBorderPenCmd(d, pen, ki18n("%1: set border pen")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetBorderOpacity, qreal, borderOpacity, updatePixmap)
-void BoxPlot::setBorderOpacity(qreal opacity) {
-	Q_D(BoxPlot);
-	if (opacity != d->borderOpacity)
-		exec(new BoxPlotSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
-}
-
-// median line
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetMedianLinePen, QPen, medianLinePen, updatePixmap)
-void BoxPlot::setMedianLinePen(const QPen& pen) {
-	Q_D(BoxPlot);
-	if (pen != d->medianLinePen)
-		exec(new BoxPlotSetMedianLinePenCmd(d, pen, ki18n("%1: set median line pen")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetMedianLineOpacity, qreal, medianLineOpacity, updatePixmap)
-void BoxPlot::setMedianLineOpacity(qreal opacity) {
-	Q_D(BoxPlot);
-	if (opacity != d->medianLineOpacity)
-		exec(new BoxPlotSetMedianLineOpacityCmd(d, opacity, ki18n("%1: set median line opacity")));
-}
-
 // whiskers
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersType, BoxPlot::WhiskersType, whiskersType, recalc)
 void BoxPlot::setWhiskersType(BoxPlot::WhiskersType type) {
@@ -461,39 +521,11 @@ void BoxPlot::setWhiskersRangeParameter(double k) {
 		exec(new BoxPlotSetWhiskersRangeParameterCmd(d, k, ki18n("%1: set whiskers range parameter")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersPen, QPen, whiskersPen, recalcShapeAndBoundingRect)
-void BoxPlot::setWhiskersPen(const QPen& pen) {
-	Q_D(BoxPlot);
-	if (pen != d->whiskersPen)
-		exec(new BoxPlotSetWhiskersPenCmd(d, pen, ki18n("%1: set whiskers pen")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersOpacity, qreal, whiskersOpacity, updatePixmap)
-void BoxPlot::setWhiskersOpacity(qreal opacity) {
-	Q_D(BoxPlot);
-	if (opacity != d->whiskersOpacity)
-		exec(new BoxPlotSetWhiskersOpacityCmd(d, opacity, ki18n("%1: set whiskers opacity")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapSize, double, whiskersCapSize, recalc)
 void BoxPlot::setWhiskersCapSize(double size) {
 	Q_D(BoxPlot);
 	if (size != d->whiskersCapSize)
 		exec(new BoxPlotSetWhiskersCapSizeCmd(d, size, ki18n("%1: set whiskers cap size")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapPen, QPen, whiskersCapPen, recalcShapeAndBoundingRect)
-void BoxPlot::setWhiskersCapPen(const QPen& pen) {
-	Q_D(BoxPlot);
-	if (pen != d->whiskersCapPen)
-		exec(new BoxPlotSetWhiskersCapPenCmd(d, pen, ki18n("%1: set whiskers cap pen")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapOpacity, qreal, whiskersCapOpacity, updatePixmap)
-void BoxPlot::setWhiskersCapOpacity(qreal opacity) {
-	Q_D(BoxPlot);
-	if (opacity != d->whiskersCapOpacity)
-		exec(new BoxPlotSetWhiskersCapOpacityCmd(d, opacity, ki18n("%1: set whiskers cap opacity")));
 }
 
 // Symbols
@@ -504,9 +536,38 @@ void BoxPlot::setJitteringEnabled(bool enabled) {
 		exec(new BoxPlotSetJitteringEnabledCmd(d, enabled, ki18n("%1: jitterring changed")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// margin plots
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetRugEnabled, bool, rugEnabled, updateRug)
+void BoxPlot::setRugEnabled(bool enabled) {
+	Q_D(BoxPlot);
+	if (enabled != d->rugEnabled)
+		exec(new BoxPlotSetRugEnabledCmd(d, enabled, ki18n("%1: change rug enabled")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetRugWidth, double, rugWidth, updatePixmap)
+void BoxPlot::setRugWidth(double width) {
+	Q_D(BoxPlot);
+	if (width != d->rugWidth)
+		exec(new BoxPlotSetRugWidthCmd(d, width, ki18n("%1: change rug width")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetRugLength, double, rugLength, updateRug)
+void BoxPlot::setRugLength(double length) {
+	Q_D(BoxPlot);
+	if (length != d->rugLength)
+		exec(new BoxPlotSetRugLengthCmd(d, length, ki18n("%1: change rug length")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetRugOffset, double, rugOffset, updateRug)
+void BoxPlot::setRugOffset(double offset) {
+	Q_D(BoxPlot);
+	if (offset != d->rugOffset)
+		exec(new BoxPlotSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
+}
+
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
 void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(BoxPlot);
@@ -519,9 +580,9 @@ void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void BoxPlot::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Axis::Orientation::Horizontal);
@@ -534,17 +595,17 @@ void BoxPlot::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner)
-	: WorksheetElementPrivate(owner)
+	: PlotPrivate(owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
 }
 
-bool BoxPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
+bool BoxPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
 	if (!isVisible())
 		return false;
 
@@ -560,32 +621,156 @@ void BoxPlotPrivate::setHover(bool on) {
 	update();
 }
 
+Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
+	auto* background = new Background(QString());
+	background->setPrefix(QLatin1String("Filling"));
+	background->setEnabledAvailable(true);
+	background->setHidden(true);
+	q->addChild(background);
+
+	if (!q->isLoading())
+		background->init(group);
+
+	q->connect(background, &Background::updateRequested, [=] {
+		updatePixmap();
+		// TODO: Q_EMIT q->updateLegendRequested();
+	});
+
+	backgrounds << background;
+
+	return background;
+}
+
+Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
+	auto* line = new Line(QString());
+	line->setPrefix(QLatin1String("Border"));
+	line->setHidden(true);
+	q->addChild(line);
+	if (!q->isLoading())
+		line->init(group);
+
+	q->connect(line, &Line::updatePixmapRequested, [=] {
+		updatePixmap();
+		// Q_EMIT q->updateLegendRequested();
+	});
+
+	q->connect(line, &Line::updateRequested, [=] {
+		recalcShapeAndBoundingRect();
+		// Q_EMIT q->updateLegendRequested();
+	});
+
+	borderLines << line;
+
+	return line;
+}
+
+Line* BoxPlotPrivate::addMedianLine(const KConfigGroup& group) {
+	auto* line = new Line(QString());
+	line->setPrefix(QLatin1String("MedianLine"));
+	line->setHidden(true);
+	q->addChild(line);
+	if (!q->isLoading())
+		line->init(group);
+
+	q->connect(line, &Line::updatePixmapRequested, [=] {
+		updatePixmap();
+		// Q_EMIT q->updateLegendRequested();
+	});
+
+	q->connect(line, &Line::updateRequested, [=] {
+		recalcShapeAndBoundingRect();
+		// Q_EMIT q->updateLegendRequested();
+	});
+
+	medianLines << line;
+
+	return line;
+}
+
+void BoxPlotPrivate::fillDataSpreadsheet(Spreadsheet* spreadsheet) const {
+	// index
+	// 1st quartile
+	// 3rd quartile
+	// median
+	// whiskers min
+	// whiskers max
+	// data points count
+	// outliers count
+	// far out points count
+
+	for (int i = 0; i < q->dataColumns().count(); ++i) {
+		const auto* column = static_cast<const Column*>(q->dataColumns().at(i));
+		const auto& statistics = column->statistics();
+
+		spreadsheet->column(0)->setIntegerAt(i, i + 1);
+		spreadsheet->column(1)->setValueAt(i, statistics.firstQuartile);
+		spreadsheet->column(2)->setValueAt(i, statistics.thirdQuartile);
+		spreadsheet->column(3)->setValueAt(i, statistics.median);
+		spreadsheet->column(4)->setValueAt(i, m_whiskerMin.at(i));
+		spreadsheet->column(5)->setValueAt(i, m_whiskerMax.at(i));
+		spreadsheet->column(6)->setValueAt(i, m_dataPointsLogical.at(i).count());
+		spreadsheet->column(7)->setValueAt(i, m_outlierPointsLogical.at(i).count());
+		spreadsheet->column(8)->setValueAt(i, m_farOutPointsLogical.at(i).count());
+	}
+}
+
+/*!
+ * adds additional elements for background and line properties according to the current
+ * number of data columns to be plotted.
+ */
+void BoxPlotPrivate::adjustPropertiesContainers() {
+	int diff = dataColumns.size() - backgrounds.size();
+	if (diff > 0) {
+		// one more box needs to be added
+		KConfig config;
+		KConfigGroup group = config.group(QLatin1String("XYCurve"));
+		const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
+
+		for (int i = 0; i < diff; ++i) {
+			// box filling and border line
+			auto* background = addBackground(group);
+			auto* borderLine = addBorderLine(group);
+			auto* medianLine = addMedianLine(group);
+
+			if (plot) {
+				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
+				background->setFirstColor(themeColor);
+				borderLine->setColor(themeColor);
+				medianLine->setColor(themeColor);
+			}
+		}
+	}
+}
+
 /*!
   called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
   recalculates the position of the scene points to be drawn.
   triggers the update of lines, drop lines, symbols etc.
 */
 void BoxPlotPrivate::retransform() {
-	if (m_suppressRetransform || !isVisible() || q->isLoading())
+	if (suppressRetransform || !isVisible() || q->isLoading())
 		return;
 
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const int count = dataColumns.size();
 	if (!count || m_boxRect.size() != count) {
-		// no columns or relacl() was not called yet, nothing to do
+		// no columns or recalc() was not called yet, nothing to do
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
+	// clear the containers holding the information in scene coordinates
 	for (int i = 0; i < count; ++i) {
 		m_boxRect[i].clear();
 		m_medianLine[i] = QLineF();
 		m_whiskersPath[i] = QPainterPath();
 		m_whiskersCapPath[i] = QPainterPath();
+		m_rugPath[i] = QPainterPath();
 		m_outlierPoints[i].clear();
 		m_dataPoints[i].clear();
 		m_farOutPoints[i].clear();
+		m_whiskerEndPoints[i].clear();
 	}
 
 	if (count) {
@@ -600,13 +785,15 @@ void BoxPlotPrivate::retransform() {
 					horizontalBoxPlot(i);
 			}
 		}
+
+		updateRug();
 	}
 
 	recalcShapeAndBoundingRect();
 }
 
 void BoxPlotPrivate::recalc() {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	// resize the internal containers
 	const int count = dataColumns.size();
@@ -620,6 +807,7 @@ void BoxPlotPrivate::recalc() {
 	m_medianLine.resize(count);
 	m_whiskersPath.resize(count);
 	m_whiskersCapPath.resize(count);
+	m_rugPath.resize(count);
 	m_whiskerMin.resize(count);
 	m_whiskerMax.resize(count);
 	m_outlierPointsLogical.resize(count);
@@ -628,11 +816,24 @@ void BoxPlotPrivate::recalc() {
 	m_dataPoints.resize(count);
 	m_farOutPointsLogical.resize(count);
 	m_farOutPoints.resize(count);
+	m_whiskerEndPointsLogical.resize(count);
+	m_whiskerEndPoints.resize(count);
 	m_mean.resize(count);
-	m_meanSymbolPoint.resize(count);
-	m_meanSymbolPointVisible.resize(count);
-	m_medianSymbolPoint.resize(count);
-	m_medianSymbolPointVisible.resize(count);
+	m_meanPointLogical.resize(count);
+	m_meanPoint.resize(count);
+	m_meanPointVisible.resize(count);
+	m_medianPointLogical.resize(count);
+	m_medianPoint.resize(count);
+	m_medianPointVisible.resize(count);
+
+	// box properties
+	int diff = count - backgrounds.size();
+	if (diff > 0)
+		adjustPropertiesContainers();
+	else if (diff < 0) {
+		// the last box was deleted
+		// TODO:
+	}
 
 	// calculate the new min and max values of the box plot
 	// for the current sizes of the box and of the whiskers
@@ -649,7 +850,7 @@ void BoxPlotPrivate::recalc() {
 	}
 
 	if (variableWidth) {
-		m_widthScaleFactor = -qInf();
+		m_widthScaleFactor = -INFINITY;
 		for (const auto* col : dataColumns) {
 			auto* column = static_cast<const Column*>(col);
 			if (column->statistics().size > m_widthScaleFactor)
@@ -721,12 +922,12 @@ QPointF BoxPlotPrivate::setOutlierPoint(double pos, double value) {
 }
 
 void BoxPlotPrivate::recalc(int index) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	auto* column = static_cast<const Column*>(dataColumnsOrdered.at(index));
 	if (!column)
 		return;
 
-	// clear the containers for outliers, etc. since the their number
+	// clear the containers for outliers, etc. since their number
 	// can be changed because of the new settings for whiskers, etc.
 	m_outlierPointsLogical[index].clear();
 	m_outlierPoints[index].clear();
@@ -734,6 +935,8 @@ void BoxPlotPrivate::recalc(int index) {
 	m_dataPoints[index].clear();
 	m_farOutPointsLogical[index].clear();
 	m_farOutPoints[index].clear();
+	m_whiskerEndPointsLogical[index].clear();
+	m_whiskerEndPoints[index].clear();
 
 	const auto& statistics = column->statistics();
 	double width = 0.5 * widthFactor;
@@ -811,8 +1014,8 @@ void BoxPlotPrivate::recalc(int index) {
 			xMin = m_whiskerMin[index];
 	}
 
-	double whiskerMax = -qInf(); // upper adjacent value
-	double whiskerMin = qInf(); // lower adjacent value
+	double whiskerMax = -INFINITY; // upper adjacent value
+	double whiskerMin = INFINITY; // lower adjacent value
 	const double outerFenceMax = statistics.thirdQuartile + 3.0 * statistics.iqr;
 	const double outerFenceMin = statistics.firstQuartile - 3.0 * statistics.iqr;
 
@@ -864,15 +1067,15 @@ void BoxPlotPrivate::recalc(int index) {
 
 	// set the whisker ends at the upper and lower adjacent values
 	if (whiskersType == BoxPlot::WhiskersType::IQR) {
-		if (whiskerMax != -qInf())
+		if (whiskerMax != -INFINITY)
 			m_whiskerMax[index] = whiskerMax;
-		if (whiskerMin != qInf())
+		if (whiskerMin != INFINITY)
 			m_whiskerMin[index] = whiskerMin;
 	}
 }
 
 void BoxPlotPrivate::verticalBoxPlot(int index) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	QVector<QLineF> lines;
 	const double x = index + 1.0;
@@ -943,61 +1146,25 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize / 2., maxPoint.y()));
 			m_whiskersCapPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize / 2., maxPoint.y()));
+			m_whiskerEndPointsLogical[index] << QPointF(x, m_whiskerMax.at(index));
 		}
 
 		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)), visible);
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(minPoint.x() - whiskersCapSize / 2., minPoint.y()));
 			m_whiskersCapPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize / 2., minPoint.y()));
+			m_whiskerEndPointsLogical[index] << QPointF(x, m_whiskerMin.at(index));
 		}
 	}
 
-	// outliers symbols
-	mapOutliersToScene(index);
-
-	// jitter values
-	int size = m_dataPointsLogical[index].size();
-	if (size > 0) {
-		const int startIndex = 0;
-		const int endIndex = m_dataPointsLogical[index].size() - 1;
-		std::vector<bool> m_pointVisible;
-		m_pointVisible.resize(size);
-
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_dataPointsLogical[index], m_dataPoints[index], m_pointVisible);
-	}
-
-	// far out values
-	size = m_farOutPointsLogical[index].size();
-	if (size > 0) {
-		const int startIndex = 0;
-		const int endIndex = m_farOutPointsLogical[index].size() - 1;
-		std::vector<bool> m_pointVisible;
-		m_pointVisible.resize(size);
-
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_farOutPointsLogical[index], m_farOutPoints[index], m_pointVisible);
-	}
-
-	// mean symbol
-	QVector<QPointF> points = {QPointF(x, m_mean.at(index))};
-	points = q->cSystem->mapLogicalToScene(points);
-	if (points.count() == 1) {
-		m_meanSymbolPoint[index] = points.at(0);
-		m_meanSymbolPointVisible[index] = true;
-	} else
-		m_meanSymbolPointVisible[index] = false;
-
-	// median symbol
-	points = {QPointF(x, median)};
-	points = q->cSystem->mapLogicalToScene(points);
-	if (points.count() == 1) {
-		m_medianSymbolPoint[index] = points.at(0);
-		m_medianSymbolPointVisible[index] = true;
-	} else
-		m_medianSymbolPointVisible[index] = false;
+	// map the logical points of symbols to scene coordinates
+	m_meanPointLogical[index] = QPointF(x, m_mean.at(index));
+	m_medianPointLogical[index] = QPointF(x, m_median.at(index));
+	mapSymbolsToScene(index);
 }
 
 void BoxPlotPrivate::horizontalBoxPlot(int index) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	QVector<QLineF> lines;
 	const double y = index + 1.0;
@@ -1067,55 +1234,79 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(maxPoint.x(), maxPoint.y() - whiskersCapSize / 2));
 			m_whiskersCapPath[index].lineTo(QPointF(maxPoint.x(), maxPoint.y() + whiskersCapSize / 2));
+			m_whiskerEndPointsLogical[index] << QPointF(m_whiskerMax.at(index), y);
 		}
 
 		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMin.at(index), y), visible);
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(minPoint.x(), minPoint.y() - whiskersCapSize / 2));
 			m_whiskersCapPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize / 2));
+			m_whiskerEndPointsLogical[index] << QPointF(m_whiskerMin.at(index), y);
 		}
 	}
 
 	// outliers symbols
-	mapOutliersToScene(index);
+	m_meanPointLogical[index] = QPointF(m_mean.at(index), y);
+	m_medianPointLogical[index] = QPointF(m_median.at(index), y);
+	mapSymbolsToScene(index);
+}
 
-	int size = m_dataPointsLogical[index].size();
-	if (size > 0) {
-		const int startIndex = 0;
-		const int endIndex = m_dataPointsLogical[index].size() - 1;
-		std::vector<bool> m_pointVisible;
-		m_pointVisible.resize(size);
-
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_dataPointsLogical[index], m_dataPoints[index], m_pointVisible);
+void BoxPlotPrivate::updateRug() {
+	if (!rugEnabled || !q->plot()) {
+		recalcShapeAndBoundingRect();
+		return;
 	}
 
-	size = m_farOutPointsLogical[index].size();
-	if (size > 0) {
-		const int startIndex = 0;
-		const int endIndex = m_farOutPointsLogical[index].size() - 1;
-		std::vector<bool> m_pointVisible;
-		m_pointVisible.resize(size);
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	const double xMin = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double yMin = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_farOutPointsLogical[index], m_farOutPoints[index], m_pointVisible);
+	QPainterPath rugPath;
+	QVector<QPointF> points;
+
+	for (int i = 0; i < q->dataColumns().count(); ++i) {
+		const auto* column = static_cast<const Column*>(q->dataColumns().at(i));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+		rugPath.clear();
+#else
+		rugPath = QPainterPath();
+#endif
+		points.clear();
+
+		if (orientation == BoxPlot::Orientation::Horizontal) {
+			for (int row = 0; row < column->rowCount(); ++row) {
+				if (column->isValid(row) && !column->isMasked(row))
+					points << QPointF(column->valueAt(row), yMin);
+			}
+
+			// map the points to scene coordinates
+			points = q->cSystem->mapLogicalToScene(points);
+
+			// path for the vertical rug lines
+			for (const auto& point : qAsConst(points)) {
+				rugPath.moveTo(point.x(), point.y() - rugOffset);
+				rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
+			}
+		} else { // horizontal
+			for (int row = 0; row < column->rowCount(); ++row) {
+				if (column->isValid(row) && !column->isMasked(row))
+					points << QPointF(xMin, column->valueAt(row));
+			}
+
+			// map the points to scene coordinates
+			points = q->cSystem->mapLogicalToScene(points);
+
+			// path for the horizontal rug lines
+			for (const auto& point : qAsConst(points)) {
+				rugPath.moveTo(point.x() + rugOffset, point.y());
+				rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
+			}
+		}
+
+		m_rugPath[i] = rugPath;
 	}
 
-	// mean symbol
-	QVector<QPointF> points = {QPointF(m_mean.at(index), y)};
-	points = q->cSystem->mapLogicalToScene(points);
-	if (points.count() == 1) {
-		m_meanSymbolPoint[index] = points.at(0);
-		m_meanSymbolPointVisible[index] = true;
-	} else
-		m_meanSymbolPointVisible[index] = false;
-
-	// median symbol
-	points = {QPointF(m_mean.at(index), y)};
-	points = q->cSystem->mapLogicalToScene(points);
-	if (points.count() == 1) {
-		m_medianSymbolPoint[index] = points.at(0);
-		m_medianSymbolPointVisible[index] = true;
-	} else
-		m_medianSymbolPointVisible[index] = false;
+	recalcShapeAndBoundingRect();
 }
 
 void BoxPlotPrivate::updateFillingRect(int index, const QVector<QLineF>& lines) {
@@ -1176,16 +1367,59 @@ void BoxPlotPrivate::updateFillingRect(int index, const QVector<QLineF>& lines) 
  * avoid drawing overlapping points, logic similar to
  * //XYCurvePrivate::retransform()
  */
-void BoxPlotPrivate::mapOutliersToScene(int index) {
-	const int numberOfPoints = m_outlierPointsLogical[index].size();
-	if (numberOfPoints > 0) {
+void BoxPlotPrivate::mapSymbolsToScene(int index) {
+	// outliers
+	int size = m_outlierPointsLogical[index].size();
+	if (size > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_outlierPointsLogical[index].size() - 1;
 		std::vector<bool> m_pointVisible;
-		m_pointVisible.resize(numberOfPoints);
+		m_pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_outlierPointsLogical[index], m_outlierPoints[index], m_pointVisible);
 	}
+
+	// data points
+	size = m_dataPointsLogical[index].size();
+	if (size > 0) {
+		const int startIndex = 0;
+		const int endIndex = m_dataPointsLogical[index].size() - 1;
+		std::vector<bool> pointVisible;
+		pointVisible.resize(size);
+
+		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_dataPointsLogical[index], m_dataPoints[index], pointVisible);
+	}
+
+	// far out points
+	size = m_farOutPointsLogical[index].size();
+	if (size > 0) {
+		const int startIndex = 0;
+		const int endIndex = m_farOutPointsLogical[index].size() - 1;
+		std::vector<bool> pointVisible;
+		pointVisible.resize(size);
+
+		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_farOutPointsLogical[index], m_farOutPoints[index], pointVisible);
+	}
+
+	// whisker ends
+	size = m_whiskerEndPointsLogical[index].size();
+	if (size > 0) {
+		const int startIndex = 0;
+		const int endIndex = m_whiskerEndPointsLogical[index].size() - 1;
+		std::vector<bool> pointVisible;
+		pointVisible.resize(size);
+
+		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_whiskerEndPointsLogical[index], m_whiskerEndPoints[index], pointVisible);
+	}
+
+	// mean
+	bool visible;
+	m_meanPoint[index] = q->cSystem->mapLogicalToScene(m_meanPointLogical[index], visible);
+	m_meanPointVisible[index] = visible;
+
+	// median
+	m_medianPoint[index] = q->cSystem->mapLogicalToScene(m_medianPointLogical[index], visible);
+	m_medianPointVisible[index] = visible;
 }
 
 /*!
@@ -1218,10 +1452,12 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			boxPath.moveTo(line.p1());
 			boxPath.lineTo(line.p2());
 		}
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderPen));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLines.at(i)->pen()));
 
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersPen));
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapPen));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersLine->pen()));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapLine->pen()));
+
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLines.at(i)->pen()));
 
 		// add symbols outlier, jitter and far out values
 		QPainterPath symbolsPath = QPainterPath();
@@ -1234,7 +1470,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 			trafo.reset();
 
-			if (symbolOutlier->rotationAngle() != 0) {
+			if (symbolOutlier->rotationAngle() != 0.) {
 				trafo.rotate(symbolOutlier->rotationAngle());
 				path = trafo.map(path);
 			}
@@ -1254,7 +1490,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 			trafo.reset();
 
-			if (symbolData->rotationAngle() != 0) {
+			if (symbolData->rotationAngle() != 0.) {
 				trafo.rotate(symbolData->rotationAngle());
 				path = trafo.map(path);
 			}
@@ -1274,12 +1510,32 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 			trafo.reset();
 
-			if (symbolFarOut->rotationAngle() != 0) {
+			if (symbolFarOut->rotationAngle() != 0.) {
 				trafo.rotate(symbolFarOut->rotationAngle());
 				path = trafo.map(path);
 			}
 
 			for (const auto& point : qAsConst(m_farOutPoints.at(i))) {
+				trafo.reset();
+				trafo.translate(point.x(), point.y());
+				symbolsPath.addPath(trafo.map(path));
+			}
+		}
+
+		// whisker ends
+		if (symbolWhiskerEnd->style() != Symbol::Style::NoSymbols && !m_whiskerEndPoints.at(i).isEmpty()) {
+			QPainterPath path = Symbol::stylePath(symbolWhiskerEnd->style());
+			QTransform trafo;
+			trafo.scale(symbolWhiskerEnd->size(), symbolWhiskerEnd->size());
+			path = trafo.map(path);
+			trafo.reset();
+
+			if (symbolWhiskerEnd->rotationAngle() != 0.) {
+				trafo.rotate(symbolWhiskerEnd->rotationAngle());
+				path = trafo.map(path);
+			}
+
+			for (const auto& point : qAsConst(m_whiskerEndPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1294,9 +1550,9 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 }
 
 void BoxPlotPrivate::updatePixmap() {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
-	if (m_boundingRectangle.width() == 0 || m_boundingRectangle.height() == 0) {
+	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
 		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
@@ -1317,7 +1573,7 @@ void BoxPlotPrivate::updatePixmap() {
 }
 
 void BoxPlotPrivate::draw(QPainter* painter) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	for (int i = 0; i < dataColumnsOrdered.size(); ++i) {
 		if (!dataColumnsOrdered.at(i))
@@ -1329,44 +1585,56 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 
 		if (!m_boxRect.at(i).isEmpty()) {
 			// draw the box filling
-			if (background->enabled()) {
-				painter->setOpacity(background->opacity());
-				painter->setPen(Qt::SolidLine);
+			if (backgrounds.at(i)->enabled()) {
+				painter->setOpacity(backgrounds.at(i)->opacity());
+				painter->setPen(Qt::NoPen);
 				drawFilling(painter, i);
 			}
 
 			// draw the border
-			if (borderPen.style() != Qt::NoPen) {
-				painter->setPen(borderPen);
+			const auto* borderLine = borderLines.at(i);
+			if (borderLine->pen().style() != Qt::NoPen) {
+				painter->setPen(borderLine->pen());
 				painter->setBrush(Qt::NoBrush);
-				painter->setOpacity(borderOpacity);
+				painter->setOpacity(borderLine->opacity());
 				for (const auto& line : m_boxRect.at(i))
 					painter->drawLine(line);
 			}
 
 			// draw the median line
-			if (medianLinePen.style() != Qt::NoPen) {
-				painter->setPen(medianLinePen);
+			const auto* medianLine = medianLines.at(i);
+			if (medianLine->pen().style() != Qt::NoPen) {
+				painter->setPen(medianLine->pen());
 				painter->setBrush(Qt::NoBrush);
-				painter->setOpacity(medianLineOpacity);
+				painter->setOpacity(medianLine->opacity());
 				painter->drawLine(m_medianLine.at(i));
 			}
 		}
 
 		// draw the whiskers
-		if (whiskersPen.style() != Qt::NoPen && !m_whiskersPath.at(i).isEmpty()) {
-			painter->setPen(whiskersPen);
+		if (whiskersLine->pen().style() != Qt::NoPen && !m_whiskersPath.at(i).isEmpty()) {
+			painter->setPen(whiskersLine->pen());
 			painter->setBrush(Qt::NoBrush);
-			painter->setOpacity(whiskersOpacity);
+			painter->setOpacity(whiskersLine->opacity());
 			painter->drawPath(m_whiskersPath.at(i));
 		}
 
 		// draw the whiskers cap
-		if (whiskersCapPen.style() != Qt::NoPen && !m_whiskersCapPath.at(i).isEmpty()) {
-			painter->setPen(whiskersCapPen);
+		if (whiskersCapLine->pen().style() != Qt::NoPen && !m_whiskersCapPath.at(i).isEmpty()) {
+			painter->setPen(whiskersCapLine->pen());
 			painter->setBrush(Qt::NoBrush);
-			painter->setOpacity(whiskersCapOpacity);
+			painter->setOpacity(whiskersCapLine->opacity());
 			painter->drawPath(m_whiskersCapPath.at(i));
+		}
+
+		// draw rug
+		if (rugEnabled && !m_rugPath.at(i).isEmpty()) {
+			QPen pen;
+			pen.setColor(borderLines.at(i)->pen().color());
+			pen.setWidthF(rugWidth);
+			painter->setPen(pen);
+			painter->setOpacity(borderLines.at(i)->opacity());
+			painter->drawPath(m_rugPath.at(i));
 		}
 
 		// draw the symbols
@@ -1376,108 +1644,33 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 
 void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 	// outlier values
-	if (symbolOutlier->style() != Symbol::Style::NoSymbols && !m_outlierPoints.at(index).isEmpty()) {
-		painter->setOpacity(symbolOutlier->opacity());
-		painter->setPen(symbolOutlier->pen());
-		painter->setBrush(symbolOutlier->brush());
-		QPainterPath path = Symbol::stylePath(symbolOutlier->style());
-		QTransform trafo;
-		trafo.scale(symbolOutlier->size(), symbolOutlier->size());
-		if (symbolOutlier->rotationAngle() != 0)
-			trafo.rotate(-symbolOutlier->rotationAngle());
-
-		path = trafo.map(path);
-
-		for (const auto& point : qAsConst(m_outlierPoints.at(index))) {
-			trafo.reset();
-			trafo.translate(point.x(), point.y());
-			painter->drawPath(trafo.map(path));
-		}
-	}
+	symbolOutlier->draw(painter, m_outlierPoints.at(index));
 
 	// mean value
-	if (symbolMean->style() != Symbol::Style::NoSymbols && m_meanSymbolPointVisible.at(index)) {
-		painter->setOpacity(symbolMean->opacity());
-		painter->setPen(symbolMean->pen());
-		painter->setBrush(symbolMean->brush());
-		QTransform trafo;
-		trafo.scale(symbolMean->size(), symbolMean->size());
-		QPainterPath path = Symbol::stylePath(symbolMean->style());
-		if (symbolMean->rotationAngle() != 0)
-			trafo.rotate(-symbolMean->rotationAngle());
-
-		path = trafo.map(path);
-
-		trafo.reset();
-		trafo.translate(m_meanSymbolPoint.at(index).x(), m_meanSymbolPoint.at(index).y());
-		painter->drawPath(trafo.map(path));
-	}
+	if (m_meanPointVisible.at(index))
+		symbolMean->draw(painter, m_meanPoint.at(index));
 
 	// median value
-	if (symbolMedian->style() != Symbol::Style::NoSymbols && m_medianSymbolPointVisible.at(index)) {
-		painter->setOpacity(symbolMedian->opacity());
-		painter->setPen(symbolMedian->pen());
-		painter->setBrush(symbolMedian->brush());
-		QTransform trafo;
-		trafo.scale(symbolMedian->size(), symbolMedian->size());
-		QPainterPath path = Symbol::stylePath(symbolMedian->style());
-		if (symbolMedian->rotationAngle() != 0)
-			trafo.rotate(-symbolMedian->rotationAngle());
-
-		path = trafo.map(path);
-
-		trafo.reset();
-		trafo.translate(m_medianSymbolPoint.at(index).x(), m_medianSymbolPoint.at(index).y());
-		painter->drawPath(trafo.map(path));
-	}
+	if (m_medianPointVisible.at(index))
+		symbolMedian->draw(painter, m_medianPoint.at(index));
 
 	// jitter values
-	if (symbolData->style() != Symbol::Style::NoSymbols && !m_dataPoints.at(index).isEmpty()) {
-		painter->setOpacity(symbolData->opacity());
-		painter->setPen(symbolData->pen());
-		painter->setBrush(symbolData->brush());
-		QPainterPath path = Symbol::stylePath(symbolData->style());
-		QTransform trafo;
-		trafo.scale(symbolData->size(), symbolData->size());
-		if (symbolData->rotationAngle() != 0)
-			trafo.rotate(-symbolData->rotationAngle());
-
-		path = trafo.map(path);
-
-		for (const auto& point : qAsConst(m_dataPoints.at(index))) {
-			trafo.reset();
-			trafo.translate(point.x(), point.y());
-			painter->drawPath(trafo.map(path));
-		}
-	}
+	symbolData->draw(painter, m_dataPoints.at(index));
 
 	// far out values
-	if (symbolFarOut->style() != Symbol::Style::NoSymbols && !m_farOutPoints.at(index).isEmpty()) {
-		painter->setOpacity(symbolFarOut->opacity());
-		painter->setPen(symbolFarOut->pen());
-		painter->setBrush(symbolFarOut->brush());
-		QPainterPath path = Symbol::stylePath(symbolFarOut->style());
-		QTransform trafo;
-		trafo.scale(symbolFarOut->size(), symbolFarOut->size());
-		if (symbolFarOut->rotationAngle() != 0)
-			trafo.rotate(-symbolFarOut->rotationAngle());
+	symbolFarOut->draw(painter, m_farOutPoints.at(index));
 
-		path = trafo.map(path);
-
-		for (const auto& point : qAsConst(m_farOutPoints.at(index))) {
-			trafo.reset();
-			trafo.translate(point.x(), point.y());
-			painter->drawPath(trafo.map(path));
-		}
-	}
+	// whisker end points
+	symbolWhiskerEnd->draw(painter, m_whiskerEndPoints.at(index));
 }
 
 void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const QPolygonF& polygon = m_fillPolygon.at(index);
 	const QRectF& rect = polygon.boundingRect();
 
+	const auto* background = backgrounds.at(index);
 	if (background->type() == Background::Type::Color) {
 		switch (background->colorStyle()) {
 		case Background::ColorStyle::SingleColor: {
@@ -1629,51 +1822,46 @@ void BoxPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void BoxPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const BoxPlot);
 
-	writer->writeStartElement("boxPlot");
+	writer->writeStartElement(QStringLiteral("boxPlot"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
-	writer->writeAttribute("ordering", QString::number(static_cast<int>(d->ordering)));
-	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
-	writer->writeAttribute("variableWidth", QString::number(d->variableWidth));
-	writer->writeAttribute("widthFactor", QString::number(d->widthFactor));
-	writer->writeAttribute("notches", QString::number(d->notchesEnabled));
-	writer->writeAttribute("jitteringEnabled", QString::number(d->jitteringEnabled));
-	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
-	writer->writeAttribute("xMin", QString::number(d->xMin));
-	writer->writeAttribute("xMax", QString::number(d->xMax));
-	writer->writeAttribute("yMin", QString::number(d->yMin));
-	writer->writeAttribute("yMax", QString::number(d->yMax));
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("ordering"), QString::number(static_cast<int>(d->ordering)));
+	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
+	writer->writeAttribute(QStringLiteral("variableWidth"), QString::number(d->variableWidth));
+	writer->writeAttribute(QStringLiteral("widthFactor"), QString::number(d->widthFactor));
+	writer->writeAttribute(QStringLiteral("notches"), QString::number(d->notchesEnabled));
+	writer->writeAttribute(QStringLiteral("jitteringEnabled"), QString::number(d->jitteringEnabled));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("xMin"), QString::number(d->xMin));
+	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
+	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
+	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	for (auto* column : d->dataColumns) {
-		writer->writeStartElement("column");
-		writer->writeAttribute("path", column->path());
+		writer->writeStartElement(QStringLiteral("column"));
+		writer->writeAttribute(QStringLiteral("path"), column->path());
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
 
-	// box filling
-	d->background->save(writer);
+	// box
+	for (auto* background : d->backgrounds)
+		background->save(writer);
 
-	// box border
-	writer->writeStartElement("border");
-	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute("opacity", QString::number(d->borderOpacity));
-	writer->writeEndElement();
+	for (auto* line : d->borderLines)
+		line->save(writer);
 
-	// median line
-	writer->writeStartElement("medianLine");
-	WRITE_QPEN(d->medianLinePen);
-	writer->writeAttribute("opacity", QString::number(d->medianLineOpacity));
-	writer->writeEndElement();
+	for (auto* line : d->medianLines)
+		line->save(writer);
 
 	// symbols for the outliers, mean, far out and jitter values
 	d->symbolMean->save(writer);
@@ -1681,19 +1869,26 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	d->symbolOutlier->save(writer);
 	d->symbolFarOut->save(writer);
 	d->symbolData->save(writer);
+	d->symbolWhiskerEnd->save(writer);
 
 	// whiskers
-	writer->writeStartElement("whiskers");
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->whiskersType)));
-	writer->writeAttribute("rangeParameter", QString::number(d->whiskersRangeParameter));
-	WRITE_QPEN(d->whiskersPen);
-	writer->writeAttribute("opacity", QString::number(d->whiskersOpacity));
+	writer->writeStartElement(QStringLiteral("whiskers"));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->whiskersType)));
+	writer->writeAttribute(QStringLiteral("rangeParameter"), QString::number(d->whiskersRangeParameter));
+	d->whiskersLine->save(writer);
 	writer->writeEndElement();
 
-	writer->writeStartElement("whiskersCap");
-	writer->writeAttribute("size", QString::number(d->whiskersCapSize));
-	WRITE_QPEN(d->whiskersCapPen);
-	writer->writeAttribute("opacity", QString::number(d->whiskersCapOpacity));
+	writer->writeStartElement(QStringLiteral("whiskersCap"));
+	writer->writeAttribute(QStringLiteral("size"), QString::number(d->whiskersCapSize));
+	d->whiskersCapLine->save(writer);
+	writer->writeEndElement();
+
+	// margin plots
+	writer->writeStartElement(QStringLiteral("margins"));
+	writer->writeAttribute(QStringLiteral("rugEnabled"), QString::number(d->rugEnabled));
+	writer->writeAttribute(QStringLiteral("rugLength"), QString::number(d->rugLength));
+	writer->writeAttribute(QStringLiteral("rugWidth"), QString::number(d->rugWidth));
+	writer->writeAttribute(QStringLiteral("rugOffset"), QString::number(d->rugOffset));
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "BoxPlot" section
@@ -1709,19 +1904,22 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
+	bool firstBackgroundRead = false;
+	bool firstBorderLineRead = false;
+	bool firstMedianLineRead = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "boxPlot")
+		if (reader->isEndElement() && reader->name() == QLatin1String("boxPlot"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("ordering", ordering, BoxPlot::Ordering);
@@ -1736,49 +1934,70 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xMax", xMax);
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("path").toString();
+			str = attribs.value(QStringLiteral("path")).toString();
 			if (!str.isEmpty())
 				d->dataColumnPaths << str;
 			// 			READ_COLUMN(dataColumn);
-		} else if (!preview && reader->name() == "filling")
-			d->background->load(reader, preview);
-		else if (!preview && reader->name() == "border") {
-			attribs = reader->attributes();
-
-			READ_QPEN(d->borderPen);
-			READ_DOUBLE_VALUE("opacity", borderOpacity);
-		} else if (!preview && reader->name() == "medianLine") {
-			attribs = reader->attributes();
-
-			READ_QPEN(d->medianLinePen);
-			READ_DOUBLE_VALUE("opacity", medianLineOpacity);
-		} else if (!preview && reader->name() == "symbolMean")
+		} else if (!preview && reader->name() == QLatin1String("filling"))
+			if (!firstBackgroundRead) {
+				auto* background = d->backgrounds.at(0);
+				background->load(reader, preview);
+				firstBackgroundRead = true;
+			} else {
+				auto* background = d->addBackground(KConfigGroup());
+				background->load(reader, preview);
+			}
+		else if (!preview && reader->name() == QLatin1String("border")) {
+			if (!firstBorderLineRead) {
+				auto* line = d->borderLines.at(0);
+				line->load(reader, preview);
+				firstBorderLineRead = true;
+			} else {
+				auto* line = d->addBorderLine(KConfigGroup());
+				line->load(reader, preview);
+			}
+		} else if (!preview && reader->name() == QLatin1String("medianLine")) {
+			if (!firstMedianLineRead) {
+				auto* line = d->medianLines.at(0);
+				line->load(reader, preview);
+				firstMedianLineRead = true;
+			} else {
+				auto* line = d->addMedianLine(KConfigGroup());
+				line->load(reader, preview);
+			}
+		} else if (!preview && reader->name() == QLatin1String("symbolMean"))
 			d->symbolMean->load(reader, preview);
-		else if (!preview && reader->name() == "symbolMedian")
+		else if (!preview && reader->name() == QLatin1String("symbolMedian"))
 			d->symbolMedian->load(reader, preview);
-		else if (!preview && reader->name() == "symbolOutlier")
+		else if (!preview && reader->name() == QLatin1String("symbolOutlier"))
 			d->symbolOutlier->load(reader, preview);
-		else if (!preview && reader->name() == "symbolFarOut")
+		else if (!preview && reader->name() == QLatin1String("symbolFarOut"))
 			d->symbolFarOut->load(reader, preview);
-		else if (!preview && reader->name() == "symbolData")
+		else if (!preview && reader->name() == QLatin1String("symbolData"))
 			d->symbolData->load(reader, preview);
-		else if (!preview && reader->name() == "whiskers") {
+		else if (!preview && reader->name() == QLatin1String("symbolWhiskerEnd"))
+			d->symbolWhiskerEnd->load(reader, preview);
+		else if (!preview && reader->name() == QLatin1String("whiskers")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", whiskersType, BoxPlot::WhiskersType);
 			READ_DOUBLE_VALUE("rangeParameter", whiskersRangeParameter);
-			READ_QPEN(d->whiskersPen);
-			READ_DOUBLE_VALUE("opacity", whiskersOpacity);
-			READ_DOUBLE_VALUE("capSize", whiskersCapSize);
-		} else if (!preview && reader->name() == "whiskersCap") {
+			d->whiskersLine->load(reader, preview);
+		} else if (!preview && reader->name() == QLatin1String("whiskersCap")) {
 			attribs = reader->attributes();
 
 			READ_DOUBLE_VALUE("size", whiskersCapSize);
-			READ_QPEN(d->whiskersCapPen);
-			READ_DOUBLE_VALUE("opacity", whiskersCapOpacity);
+			d->whiskersCapLine->load(reader, preview);
+		} else if (!preview && reader->name() == QLatin1String("margins")) {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("rugEnabled", rugEnabled, bool);
+			READ_DOUBLE_VALUE("rugLength", rugLength);
+			READ_DOUBLE_VALUE("rugWidth", rugWidth);
+			READ_DOUBLE_VALUE("rugOffset", rugOffset);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())
@@ -1788,12 +2007,50 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 
 	d->dataColumns.resize(d->dataColumnPaths.size());
 
+	// in case we're loading an older project where it was not possible to change the properties
+	// for each data column independently of each other and there was only one single Background, etc.
+	// add here additional elements to fit the current number of data columns after the project load
+	// and set the saved properties for all newly added objects.
+	int diff = d->dataColumns.size() - d->backgrounds.size();
+	if (diff > 0) {
+		KConfig config;
+		KConfigGroup group = config.group(QLatin1String("XYCurve"));
+
+		const auto* background = d->backgrounds.constFirst();
+		const auto* borderLine = d->borderLines.constFirst();
+		const auto* medianLine = d->medianLines.constFirst();
+		for (int i = 0; i < diff; ++i) {
+			auto* newBackground = d->addBackground(group);
+			newBackground->setEnabled(background->enabled());
+			newBackground->setType(background->type());
+			newBackground->setColorStyle(background->colorStyle());
+			newBackground->setImageStyle(background->imageStyle());
+			newBackground->setBrushStyle(background->brushStyle());
+			newBackground->setFirstColor(background->firstColor());
+			newBackground->setSecondColor(background->secondColor());
+			newBackground->setFileName(background->fileName());
+			newBackground->setOpacity(background->opacity());
+
+			auto* newBorderLine = d->addBorderLine(group);
+			newBorderLine->setStyle(borderLine->style());
+			newBorderLine->setColor(borderLine->color());
+			newBorderLine->setWidth(borderLine->width());
+			newBorderLine->setOpacity(borderLine->opacity());
+
+			auto* newMedianLine = d->addMedianLine(group);
+			newMedianLine->setStyle(medianLine->style());
+			newMedianLine->setColor(medianLine->color());
+			newMedianLine->setWidth(medianLine->width());
+			newMedianLine->setOpacity(medianLine->opacity());
+		}
+	}
+
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void BoxPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))
@@ -1805,30 +2062,30 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	QPen p;
-
 	Q_D(BoxPlot);
-	d->m_suppressRecalc = false;
+	d->m_suppressRecalc = true;
 
-	// box border
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setColor(themeColor);
-	setBorderPen(p);
-	setBorderOpacity(group.readEntry("LineOpacity", 1.0));
+	// box fillings
+	for (int i = 0; i < d->backgrounds.count(); ++i) {
+		auto* background = d->backgrounds.at(i);
+		background->loadThemeConfig(group, plot->themeColorPalette(i));
+	}
 
-	// box filling
-	d->background->loadThemeConfig(group);
+	// box border lines
+	for (int i = 0; i < d->borderLines.count(); ++i) {
+		auto* line = d->borderLines.at(i);
+		line->loadThemeConfig(group, plot->themeColorPalette(i));
+	}
 
-	// median line
-	setMedianLinePen(p);
-	setMedianLineOpacity(group.readEntry("LineOpacity", 1.0));
+	// median lines
+	for (int i = 0; i < d->medianLines.count(); ++i) {
+		auto* line = d->medianLines.at(i);
+		line->loadThemeConfig(group, plot->themeColorPalette(i));
+	}
 
 	// whiskers
-	setWhiskersPen(p);
-	setWhiskersOpacity(group.readEntry("LineOpacity", 1.0));
-	setWhiskersCapPen(p);
-	setWhiskersCapOpacity(group.readEntry("LineOpacity", 1.0));
+	d->whiskersLine->loadThemeConfig(group, themeColor);
+	d->whiskersCapLine->loadThemeConfig(group, themeColor);
 
 	// symbols
 	d->symbolMean->loadThemeConfig(group, themeColor);
@@ -1841,10 +2098,15 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	// So, instead of introducing a dedicated section for BoxPlot, which would be a big overkill
 	// for all other themes, we add here a special handling for "Tufte".
 	if (plot->theme() == QLatin1String("Tufte")) {
-		p.setStyle(Qt::NoPen);
-		setBorderPen(p);
-		setMedianLinePen(p);
-		d->background->setEnabled(false);
+		for (auto* background : d->backgrounds)
+			background->setEnabled(false);
+
+		for (auto* line : d->borderLines)
+			line->setStyle(Qt::NoPen);
+
+		for (auto* line : d->medianLines)
+			line->setStyle(Qt::NoPen);
+
 		d->symbolMean->setStyle(Symbol::Style::NoSymbols);
 		d->symbolMedian->setStyle(Symbol::Style::Circle);
 		d->symbolOutlier->setStyle(Symbol::Style::NoSymbols);

@@ -10,7 +10,7 @@
 */
 
 #include "backend/datasources/projects/OriginProjectParser.h"
-#include "3rdparty/liborigin/OriginFile.h"
+#include "OriginFile.h"
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
@@ -19,6 +19,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElement.h"
@@ -60,7 +61,7 @@ void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
 }
 
 bool OriginProjectParser::hasUnusedObjects() {
-	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
+	m_originFile = new OriginFile(qPrintable(m_projectFileName));
 	if (!m_originFile->parse()) {
 		delete m_originFile;
 		m_originFile = nullptr;
@@ -90,7 +91,7 @@ bool OriginProjectParser::hasUnusedObjects() {
 
 QString OriginProjectParser::supportedExtensions() {
 	// TODO add opju later when liborigin supports it
-	static const QString extensions = "*.opj *.OPJ";
+	static const QString extensions = QStringLiteral("*.opj *.OPJ");
 	return extensions;
 }
 
@@ -152,14 +153,14 @@ unsigned int OriginProjectParser::findNoteByName(const QString& name) {
 	return 0;
 }
 
-//##############################################################################
-//############## Deserialization from Origin's project tree ####################
-//##############################################################################
+// ##############################################################################
+// ############## Deserialization from Origin's project tree ####################
+// ##############################################################################
 bool OriginProjectParser::load(Project* project, bool preview) {
 	DEBUG(Q_FUNC_INFO);
 
 	// read and parse the m_originFile-file
-	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
+	m_originFile = new OriginFile(qPrintable(m_projectFileName));
 	if (!m_originFile->parse()) {
 		delete m_originFile;
 		m_originFile = nullptr;
@@ -186,8 +187,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		loadFolder(project, projectIt, preview);
 	} else { // for older versions put all windows on rootfolder
 		DEBUG(Q_FUNC_INFO << ", no project tree");
-		int pos = m_projectFileName.lastIndexOf(QLatin1String("/")) + 1;
-		project->setName((const char*)m_projectFileName.mid(pos).toLocal8Bit());
+		int pos = m_projectFileName.lastIndexOf(QLatin1Char('/')) + 1;
+		project->setName(m_projectFileName.mid(pos));
 	}
 	// imports all loose windows (like prior version 6 which has no project tree)
 	handleLooseWindows(project, preview);
@@ -201,7 +202,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 					  << "/" << spreadsheets.count() << "/" << columns.count())
 	for (auto* curve : project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive)) {
 		DEBUG(Q_FUNC_INFO << ", RESTORE CURVE with x/y column path " << STDSTRING(curve->xColumnPath()) << " " << STDSTRING(curve->yColumnPath()))
-		curve->suppressRetransform(true);
+		curve->setSuppressRetransform(true);
 
 		// x-column
 		QString spreadsheetName = curve->xColumnPath();
@@ -209,9 +210,9 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		// DEBUG(Q_FUNC_INFO << ", SPREADSHEET name from column: " << STDSTRING(spreadsheetName))
 		for (const auto* spreadsheet : spreadsheets) {
 			QString container, containerPath = spreadsheet->parentAspect()->path();
-			if (spreadsheetName.contains('/')) { // part of a workbook
-				container = containerPath.mid(containerPath.lastIndexOf('/') + 1) + '/';
-				containerPath = containerPath.left(containerPath.lastIndexOf('/'));
+			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
+				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
+				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
 			// DEBUG("CONTAINER = " << STDSTRING(container))
 			// DEBUG("CONTAINER PATH = " << STDSTRING(containerPath))
@@ -219,8 +220,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 			//	STDSTRING(spreadsheet->name()) << "\", path = " << STDSTRING(spreadsheetName))
 			// DEBUG("SPREADSHEET parent path = " << STDSTRING(spreadsheet->parentAspect()->path()))
 			if (container + spreadsheet->name() == spreadsheetName) {
-				const QString& newPath = containerPath + '/' + curve->xColumnPath();
-				// const QString& newPath = QLatin1String("Project") + '/' + curve->xColumnPath();
+				const QString& newPath = containerPath + QLatin1Char('/') + curve->xColumnPath();
+				// const QString& newPath = QLatin1String("Project") + QLatin1Char('/') + curve->xColumnPath();
 				DEBUG(Q_FUNC_INFO << ", SET COLUMN PATH to \"" << STDSTRING(newPath) << "\"")
 				curve->setXColumnPath(newPath);
 
@@ -242,12 +243,12 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		spreadsheetName.truncate(curve->yColumnPath().lastIndexOf(QLatin1Char('/')));
 		for (const auto* spreadsheet : spreadsheets) {
 			QString container, containerPath = spreadsheet->parentAspect()->path();
-			if (spreadsheetName.contains('/')) { // part of a workbook
-				container = containerPath.mid(containerPath.lastIndexOf('/') + 1) + '/';
-				containerPath = containerPath.left(containerPath.lastIndexOf('/'));
+			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
+				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
+				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
 			}
 			if (container + spreadsheet->name() == spreadsheetName) {
-				const QString& newPath = containerPath + '/' + curve->yColumnPath();
+				const QString& newPath = containerPath + QLatin1Char('/') + curve->yColumnPath();
 				curve->setYColumnPath(newPath);
 
 				for (auto* column : columns) {
@@ -267,7 +268,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 
 		// TODO: error columns
 
-		curve->suppressRetransform(false);
+		curve->setSuppressRetransform(false);
 	}
 
 	if (!preview) {
@@ -304,7 +305,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 		// check whether we need to skip the loading of the current child
 		if (!folder->pathesToLoad().isEmpty()) {
 			// child's path is not available yet (child not added yet) -> construct the path manually
-			const QString childPath = folder->path() + '/' + name;
+			const QString childPath = folder->path() + QLatin1Char('/') + name;
 			DEBUG("		path = " << STDSTRING(childPath))
 
 			// skip the current child aspect it is not in the list of aspects to be loaded
@@ -339,7 +340,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 				// With this the logic above where it is determined whether to import the child aspect or not works out.
 
 				// manually construct the path of the child folder to be read
-				const QString& curFolderPath = folder->path() + '/' + name;
+				const QString& curFolderPath = folder->path() + QLatin1Char('/') + name;
 
 				// remove the path of the current child folder
 				QStringList pathesToLoadNew;
@@ -422,13 +423,13 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 	QString resultsLog = QString::fromLatin1(m_originFile->resultsLogString().c_str());
 	if (resultsLog.length() > 0) {
 		DEBUG("Results log:\t\tyes");
-		Note* note = new Note("ResultsLog");
+		Note* note = new Note(QStringLiteral("ResultsLog"));
 
 		if (preview)
 			folder->addChildFast(note);
 		else {
 			// only import the log if it is in the list of aspects to be loaded
-			const QString childPath = folder->path() + '/' + note->name();
+			const QString childPath = folder->path() + QLatin1Char('/') + note->name();
 			if (folder->pathesToLoad().indexOf(childPath) != -1) {
 				note->setText(resultsLog);
 				folder->addChildFast(note);
@@ -467,7 +468,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			continue;
 		}
 
-		const QString childPath = folder->path() + '/' + name;
+		const QString childPath = folder->path() + QLatin1Char('/') + name;
 		// we could also use spread.loose
 		if (!m_spreadsheetNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose spread: " << STDSTRING(name));
@@ -479,7 +480,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		if (aspect) {
 			folder->addChildFast(aspect);
 			DEBUG("	creation time as reported by liborigin: " << spread.creationDate);
-			aspect->setCreationTime(QDateTime::fromTime_t(spread.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(spread.creationDate));
 		}
 	}
 	// loop over all workbooks to find loose ones
@@ -495,7 +496,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			continue;
 		}
 
-		const QString childPath = folder->path() + '/' + name;
+		const QString childPath = folder->path() + QLatin1Char('/') + name;
 		// we could also use excel.loose
 		if (!m_workbookNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose excel: " << STDSTRING(name));
@@ -508,7 +509,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		if (aspect) {
 			folder->addChildFast(aspect);
 			DEBUG("	creation time as reported by liborigin: " << excel.creationDate);
-			aspect->setCreationTime(QDateTime::fromTime_t(excel.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(excel.creationDate));
 		}
 	}
 	// loop over all matrices to find loose ones
@@ -524,7 +525,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			continue;
 		}
 
-		const QString childPath = folder->path() + '/' + name;
+		const QString childPath = folder->path() + QLatin1Char('/') + name;
 		if (!m_matrixNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose matrix: " << STDSTRING(name));
 			DEBUG("	containing number of sheets = " << originMatrix.sheets.size());
@@ -540,7 +541,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			aspect->setCreationTime(QDateTime::fromTime_t(originMatrix.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(originMatrix.creationDate));
 		}
 	}
 	// handle loose graphs (is this even possible?)
@@ -556,7 +557,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			continue;
 		}
 
-		const QString childPath = folder->path() + '/' + name;
+		const QString childPath = folder->path() + QLatin1Char('/') + name;
 		if (!m_worksheetNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose graph: " << STDSTRING(name));
 			auto* worksheet = new Worksheet(name);
@@ -565,7 +566,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			aspect->setCreationTime(QDateTime::fromTime_t(graph.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(graph.creationDate));
 		}
 	}
 	// handle loose notes (is this even possible?)
@@ -581,7 +582,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			continue;
 		}
 
-		const QString childPath = folder->path() + '/' + name;
+		const QString childPath = folder->path() + QLatin1Char('/') + name;
 		if (!m_noteNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose note: " << STDSTRING(name));
 			Note* note = new Note(name);
@@ -590,7 +591,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 		if (aspect) {
 			folder->addChildFast(aspect);
-			aspect->setCreationTime(QDateTime::fromTime_t(originNote.creationDate));
+			aspect->setCreationTime(QDateTime::fromSecsSinceEpoch(originNote.creationDate));
 		}
 	}
 }
@@ -653,8 +654,8 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		Column* col = spreadsheet->column((int)j);
 
 		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name.c_str())
-		QString name(column.name.c_str());
-		col->setName(name.replace(QRegExp(".*_"), QString()));
+		QString name(QLatin1String(column.name.c_str()));
+		col->setName(name.replace(QRegExp(QStringLiteral(".*_")), QString()));
 
 		if (preview)
 			continue;
@@ -729,7 +730,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 					const Origin::variant value(column.data.at(i));
 					if (value.type() == Origin::Variant::V_STRING) {
 						if (value.as_string() != nullptr)
-							col->setTextAt(i, value.as_string());
+							col->setTextAt(i, QLatin1String(value.as_string()));
 					} else {
 						if (value.as_double() != _ONAN)
 							col->setTextAt(i, QString::number(value.as_double()));
@@ -740,47 +741,47 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		}
 		case Origin::Text:
 			col->setColumnMode(AbstractColumn::ColumnMode::Text);
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
-				col->setTextAt(i, column.data[i].as_string());
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
+				col->setTextAt(i, QLatin1String(column.data[i].as_string()));
 			break;
 		case Origin::Time: {
 			switch (column.valueTypeSpecification + 128) {
 			case Origin::TIME_HH_MM:
-				format = "hh:mm";
+				format = QStringLiteral("hh:mm");
 				break;
 			case Origin::TIME_HH:
-				format = "hh";
+				format = QStringLiteral("hh");
 				break;
 			case Origin::TIME_HH_MM_SS:
-				format = "hh:mm:ss";
+				format = QStringLiteral("hh:mm:ss");
 				break;
 			case Origin::TIME_HH_MM_SS_ZZ:
-				format = "hh:mm:ss.zzz";
+				format = QStringLiteral("hh:mm:ss.zzz");
 				break;
 			case Origin::TIME_HH_AP:
-				format = "hh ap";
+				format = QStringLiteral("hh ap");
 				break;
 			case Origin::TIME_HH_MM_AP:
-				format = "hh:mm ap";
+				format = QStringLiteral("hh:mm ap");
 				break;
 			case Origin::TIME_MM_SS:
-				format = "mm:ss";
+				format = QStringLiteral("mm:ss");
 				break;
 			case Origin::TIME_MM_SS_ZZ:
-				format = "mm:ss.zzz";
+				format = QStringLiteral("mm:ss.zzz");
 				break;
 			case Origin::TIME_HHMM:
-				format = "hhmm";
+				format = QStringLiteral("hhmm");
 				break;
 			case Origin::TIME_HHMMSS:
-				format = "hhmmss";
+				format = QStringLiteral("hhmmss");
 				break;
 			case Origin::TIME_HH_MM_SS_ZZZ:
-				format = "hh:mm:ss.zzz";
+				format = QStringLiteral("hh:mm:ss.zzz");
 				break;
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
@@ -791,57 +792,57 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		case Origin::Date: {
 			switch (column.valueTypeSpecification) {
 			case Origin::DATE_DD_MM_YYYY:
-				format = "dd/MM/yyyy";
+				format = QStringLiteral("dd/MM/yyyy");
 				break;
 			case Origin::DATE_DD_MM_YYYY_HH_MM:
-				format = "dd/MM/yyyy HH:mm";
+				format = QStringLiteral("dd/MM/yyyy HH:mm");
 				break;
 			case Origin::DATE_DD_MM_YYYY_HH_MM_SS:
-				format = "dd/MM/yyyy HH:mm:ss";
+				format = QStringLiteral("dd/MM/yyyy HH:mm:ss");
 				break;
 			case Origin::DATE_DDMMYYYY:
 			case Origin::DATE_DDMMYYYY_HH_MM:
 			case Origin::DATE_DDMMYYYY_HH_MM_SS:
-				format = "dd.MM.yyyy";
+				format = QStringLiteral("dd.MM.yyyy");
 				break;
 			case Origin::DATE_MMM_D:
-				format = "MMM d";
+				format = QStringLiteral("MMM d");
 				break;
 			case Origin::DATE_M_D:
-				format = "M/d";
+				format = QStringLiteral("M/d");
 				break;
 			case Origin::DATE_D:
-				format = 'd';
+				format = QLatin1Char('d');
 				break;
 			case Origin::DATE_DDD:
 			case Origin::DATE_DAY_LETTER:
-				format = "ddd";
+				format = QStringLiteral("ddd");
 				break;
 			case Origin::DATE_YYYY:
-				format = "yyyy";
+				format = QStringLiteral("yyyy");
 				break;
 			case Origin::DATE_YY:
-				format = "yy";
+				format = QStringLiteral("yy");
 				break;
 			case Origin::DATE_YYMMDD:
 			case Origin::DATE_YYMMDD_HH_MM:
 			case Origin::DATE_YYMMDD_HH_MM_SS:
 			case Origin::DATE_YYMMDD_HHMM:
 			case Origin::DATE_YYMMDD_HHMMSS:
-				format = "yyMMdd";
+				format = QStringLiteral("yyMMdd");
 				break;
 			case Origin::DATE_MMM:
 			case Origin::DATE_MONTH_LETTER:
-				format = "MMM";
+				format = QStringLiteral("MMM");
 				break;
 			case Origin::DATE_M_D_YYYY:
-				format = "M-d-yyyy";
+				format = QStringLiteral("M-d-yyyy");
 				break;
 			default:
-				format = "dd.MM.yyyy";
+				format = QStringLiteral("dd.MM.yyyy");
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
@@ -852,17 +853,17 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		case Origin::Month: {
 			switch (column.valueTypeSpecification) {
 			case Origin::MONTH_MMM:
-				format = "MMM";
+				format = QStringLiteral("MMM");
 				break;
 			case Origin::MONTH_MMMM:
-				format = "MMMM";
+				format = QStringLiteral("MMMM");
 				break;
 			case Origin::MONTH_LETTER:
-				format = 'M';
+				format = QLatin1Char('M');
 				break;
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::Month);
 
@@ -873,17 +874,17 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		case Origin::Day: {
 			switch (column.valueTypeSpecification) {
 			case Origin::DAY_DDD:
-				format = "ddd";
+				format = QStringLiteral("ddd");
 				break;
 			case Origin::DAY_DDDD:
-				format = "dddd";
+				format = QStringLiteral("dddd");
 				break;
 			case Origin::DAY_LETTER:
-				format = 'd';
+				format = QLatin1Char('d');
 				break;
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::Day);
 
@@ -959,7 +960,7 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 
 	matrix->setRowCount(rowCount);
 	matrix->setColumnCount(colCount);
-	matrix->setFormula(layer.command.c_str());
+	matrix->setFormula(QLatin1String(layer.command.c_str()));
 
 	// TODO: how to handle different widths for different columns?
 	for (int j = 0; j < colCount; j++)
@@ -1003,7 +1004,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// load worksheet data
 	const Origin::Graph& graph = m_originFile->graph(findWorksheetByName(worksheet->name()));
 	DEBUG(Q_FUNC_INFO << ", worksheet name = " << graph.name);
-	worksheet->setComment(graph.label.c_str());
+	worksheet->setComment(QLatin1String(graph.label.c_str()));
 
 	// TODO: width, height, view mode (print view, page view, window view, draft view)
 	// Origin allows to freely resize the window and ajusts the size of the plot (layer) automatically
@@ -1070,9 +1071,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			// border
 			if (layer.borderType == Origin::BorderType::None)
-				plot->plotArea()->setBorderPen(QPen(Qt::NoPen));
+				plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
 			else
-				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
+				plot->plotArea()->borderLine()->setStyle(Qt::SolidLine);
 
 			// ranges
 			const Origin::GraphAxis& originXAxis = layer.xAxis;
@@ -1082,8 +1083,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			Range<double> yRange(originYAxis.min, originYAxis.max);
 			xRange.setAutoScale(false);
 			yRange.setAutoScale(false);
-			plot->setRange(Dimension::X, xRange);
-			plot->setRange(Dimension::Y, yRange);
+			plot->setRangeDefault(Dimension::X, xRange);
+			plot->setRangeDefault(Dimension::Y, yRange);
 
 			// scales
 			switch (originXAxis.scale) {
@@ -1149,7 +1150,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				// x bottom
 				if (!originXAxis.formatAxis[0].hidden) {
-					Axis* axis = new Axis("x", Axis::Orientation::Horizontal);
+					Axis* axis = new Axis(QStringLiteral("x"), Axis::Orientation::Horizontal);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::Position::Bottom);
 					plot->addChildFast(axis);
@@ -1159,7 +1160,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				// x top
 				if (!originXAxis.formatAxis[1].hidden) {
-					Axis* axis = new Axis("x top", Axis::Orientation::Horizontal);
+					Axis* axis = new Axis(QStringLiteral("x top"), Axis::Orientation::Horizontal);
 					axis->setPosition(Axis::Position::Top);
 					axis->setSuppressRetransform(true);
 					plot->addChildFast(axis);
@@ -1169,7 +1170,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				// y left
 				if (!originYAxis.formatAxis[0].hidden) {
-					Axis* axis = new Axis("y", Axis::Orientation::Vertical);
+					Axis* axis = new Axis(QStringLiteral("y"), Axis::Orientation::Vertical);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::Position::Left);
 					plot->addChildFast(axis);
@@ -1179,7 +1180,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				// y right
 				if (!originYAxis.formatAxis[1].hidden) {
-					Axis* axis = new Axis("y right", Axis::Orientation::Vertical);
+					Axis* axis = new Axis(QStringLiteral("y right"), Axis::Orientation::Vertical);
 					axis->setSuppressRetransform(true);
 					axis->setPosition(Axis::Position::Right);
 					plot->addChildFast(axis);
@@ -1246,9 +1247,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				// border line
 				if (originLegend.borderType == Origin::BorderType::None)
-					legend->setBorderPen(QPen(Qt::NoPen));
+					legend->borderLine()->setStyle(Qt::NoPen);
 				else
-					legend->setBorderPen(QPen(Qt::SolidLine));
+					legend->borderLine()->setStyle(Qt::SolidLine);
 
 				// background color, determine it with the help of the border type
 				if (originLegend.borderType == Origin::BorderType::DarkMarble)
@@ -1262,7 +1263,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			// texts
 			for (const auto& t : layer.texts) {
 				DEBUG("EXTRA TEXT = " << t.text.c_str());
-				auto* label = new TextLabel("text label");
+				auto* label = new TextLabel(QStringLiteral("text label"));
 				QTextEdit te(parseOriginText(QString::fromLatin1(t.text.c_str())));
 				// label settings (with resonable font size scaling)
 				te.selectAll();
@@ -1293,7 +1294,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			// curves
 			int curveIndex = 1;
 			for (const auto& originCurve : layer.curves) {
-				QString data(originCurve.dataName.c_str());
+				QString data(QLatin1String(originCurve.dataName.c_str()));
 				DEBUG(Q_FUNC_INFO << ", NEW CURVE " << STDSTRING(data))
 				switch (data.at(0).toLatin1()) {
 				case 'T': // Spreadsheet
@@ -1303,11 +1304,11 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						|| originCurve.type == Origin::GraphCurve::XErrorBar) {
 						// parse and use legend text
 						// find substring between %c{curveIndex} and %c{curveIndex+1}
-						int pos1 = legendText.indexOf(QString("\\c{%1}").arg(curveIndex)) + 5;
-						int pos2 = legendText.indexOf(QString("\\c{%1}").arg(curveIndex + 1));
+						int pos1 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex)) + 5;
+						int pos2 = legendText.indexOf(QStringLiteral("\\c{%1}").arg(curveIndex + 1));
 						QString curveText = legendText.mid(pos1, pos2 - pos1);
 						// replace %(1), %(2), etc. with curve name
-						curveText.replace(QString("%(%1)").arg(curveIndex), QString::fromLatin1(originCurve.yColumnName.c_str()));
+						curveText.replace(QStringLiteral("%(%1)").arg(curveIndex), QLatin1String(originCurve.yColumnName.c_str()));
 						curveText = curveText.trimmed();
 						DEBUG(" curve " << curveIndex << " text = \"" << STDSTRING(curveText) << "\"");
 
@@ -1318,7 +1319,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						// DEBUG("CURVE path = " << STDSTRING(data))
 						QString containerName = data.right(data.length() - 2); // strip "E_" or "T_"
 						int sheetIndex = 0; // which sheet? "@..."
-						const int atIndex = containerName.indexOf('@');
+						const int atIndex = containerName.indexOf(QLatin1Char('@'));
 						if (atIndex != -1) {
 							sheetIndex = containerName.mid(atIndex + 1).toInt() - 1;
 							containerName.truncate(atIndex);
@@ -1331,17 +1332,17 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						// DEBUG("WORKBOOK  index = " << workbookIndex)
 						QString tableName = containerName;
 						if (workbookIndex != -1) // container is a workbook
-							tableName = containerName + '/' + QLatin1String(m_originFile->excel(workbookIndex).sheets[sheetIndex].name.c_str());
+							tableName = containerName + QLatin1Char('/') + QLatin1String(m_originFile->excel(workbookIndex).sheets[sheetIndex].name.c_str());
 						// DEBUG("SPREADSHEET name = " << STDSTRING(tableName))
-						curve->setXColumnPath(tableName + '/' + originCurve.xColumnName.c_str());
-						curve->setYColumnPath(tableName + '/' + originCurve.yColumnName.c_str());
+						curve->setXColumnPath(tableName + QLatin1Char('/') + QLatin1String(originCurve.xColumnName.c_str()));
+						curve->setYColumnPath(tableName + QLatin1Char('/') + QLatin1String(originCurve.yColumnName.c_str()));
 						DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(curve->xColumnPath()) << "\" \"" << STDSTRING(curve->yColumnPath()) << "\"")
 
-						curve->suppressRetransform(true);
+						curve->setSuppressRetransform(true);
 						if (!preview)
 							loadCurve(originCurve, curve);
 						plot->addChildFast(curve);
-						curve->suppressRetransform(false);
+						curve->setSuppressRetransform(false);
 					} else if (originCurve.type == Origin::GraphCurve::Column) {
 						// vertical bars
 
@@ -1362,33 +1363,33 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 					function = m_originFile->function(funcIndex);
 
-					auto* xyEqCurve = new XYEquationCurve(function.name.c_str());
+					auto* xyEqCurve = new XYEquationCurve(QLatin1String(function.name.c_str()));
 					XYEquationCurve::EquationData eqData;
 
 					eqData.count = function.totalPoints;
-					eqData.expression1 = QString(function.formula.c_str());
+					eqData.expression1 = QLatin1String(function.formula.c_str());
 
 					if (function.type == Origin::Function::Polar) {
 						eqData.type = XYEquationCurve::EquationType::Polar;
 
 						// replace 'x' by 'phi'
-						eqData.expression1 = eqData.expression1.replace('x', "phi");
+						eqData.expression1 = eqData.expression1.replace(QLatin1Char('x'), QLatin1String("phi"));
 
 						// convert from degrees to radians
 						eqData.min = QString::number(function.begin / 180) + QLatin1String("*pi");
 						eqData.max = QString::number(function.end / 180) + QLatin1String("*pi");
 					} else {
-						eqData.expression1 = QString(function.formula.c_str());
+						eqData.expression1 = QLatin1String(function.formula.c_str());
 						eqData.min = QString::number(function.begin);
 						eqData.max = QString::number(function.end);
 					}
 
-					xyEqCurve->suppressRetransform(true);
+					xyEqCurve->setSuppressRetransform(true);
 					xyEqCurve->setEquationData(eqData);
 					if (!preview)
 						loadCurve(originCurve, xyEqCurve);
 					plot->addChildFast(xyEqCurve);
-					xyEqCurve->suppressRetransform(false);
+					xyEqCurve->setSuppressRetransform(false);
 				}
 					// TODO case 'M': Matrix
 				}
@@ -1483,7 +1484,6 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// major grid
 	const Origin::GraphGrid& majorGrid = originAxis.majorGrid;
-	QPen gridPen = axis->majorGridPen();
 	Qt::PenStyle penStyle(Qt::NoPen);
 	if (!majorGrid.hidden) {
 		switch (majorGrid.style) {
@@ -1507,18 +1507,16 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 			break;
 		}
 	}
-	gridPen.setStyle(penStyle);
+	axis->majorGridLine()->setStyle(penStyle);
 
 	Origin::Color gridColor;
 	gridColor.type = Origin::Color::ColorType::Regular;
 	gridColor.regular = majorGrid.color;
-	gridPen.setColor(OriginProjectParser::color(gridColor));
-	gridPen.setWidthF(Worksheet::convertToSceneUnits(majorGrid.width, Worksheet::Unit::Point));
-	axis->setMajorGridPen(gridPen);
+	axis->majorGridLine()->setColor(OriginProjectParser::color(gridColor));
+	axis->majorGridLine()->setWidth(Worksheet::convertToSceneUnits(majorGrid.width, Worksheet::Unit::Point));
 
 	// minor grid
 	const Origin::GraphGrid& minorGrid = originAxis.minorGrid;
-	gridPen = axis->minorGridPen();
 	penStyle = Qt::NoPen;
 	if (!minorGrid.hidden) {
 		switch (minorGrid.style) {
@@ -1542,30 +1540,31 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 			break;
 		}
 	}
-	gridPen.setStyle(penStyle);
+	axis->minorGridLine()->setStyle(penStyle);
 
 	gridColor.regular = minorGrid.color;
-	gridPen.setColor(OriginProjectParser::color(gridColor));
-	gridPen.setWidthF(Worksheet::convertToSceneUnits(minorGrid.width, Worksheet::Unit::Point));
-	axis->setMinorGridPen(gridPen);
+	axis->minorGridLine()->setColor(OriginProjectParser::color(gridColor));
+	axis->minorGridLine()->setWidth(Worksheet::convertToSceneUnits(minorGrid.width, Worksheet::Unit::Point));
 
 	// process Origin::GraphAxisFormat
 	const Origin::GraphAxisFormat& axisFormat = originAxis.formatAxis[index];
 
-	QPen pen;
 	Origin::Color color;
 	color.type = Origin::Color::ColorType::Regular;
 	color.regular = axisFormat.color;
-	pen.setColor(OriginProjectParser::color(color));
-	pen.setWidthF(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Unit::Point));
-	axis->setLinePen(pen);
+	axis->line()->setColor(OriginProjectParser::color(color));
+	axis->line()->setWidth(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Unit::Point));
 
 	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Unit::Point));
 	axis->setMajorTicksDirection((Axis::TicksFlags)axisFormat.majorTicksType);
-	axis->setMajorTicksPen(pen);
+	axis->majorTicksLine()->setStyle(axis->line()->style());
+	axis->majorTicksLine()->setColor(axis->line()->color());
+	axis->majorTicksLine()->setWidth(axis->line()->width());
 	axis->setMinorTicksLength(axis->majorTicksLength() / 2); // minorTicksLength is half of majorTicksLength
 	axis->setMinorTicksDirection((Axis::TicksFlags)axisFormat.minorTicksType);
-	axis->setMinorTicksPen(pen);
+	axis->minorTicksLine()->setStyle(axis->line()->style());
+	axis->minorTicksLine()->setColor(axis->line()->color());
+	axis->minorTicksLine()->setWidth(axis->line()->width());
 
 	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
 	DEBUG("	axis title text = " << STDSTRING(titleText));
@@ -1573,14 +1572,14 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	// TODO: use axisFormat.fontSize to override the global font size for the hmtl string?
 	// TODO: convert special character here too
 	DEBUG("	curve name = " << STDSTRING(axisTitle));
-	titleText.replace("%(?X)", axisTitle);
-	titleText.replace("%(?Y)", axisTitle);
+	titleText.replace(QLatin1String("%(?X)"), axisTitle);
+	titleText.replace(QLatin1String("%(?Y)"), axisTitle);
 	DEBUG(" axis title = " << STDSTRING(titleText));
 	axis->title()->setText(titleText);
 	axis->title()->setRotationAngle(axisFormat.label.rotation);
 
-	axis->setLabelsPrefix(axisFormat.prefix.c_str());
-	axis->setLabelsSuffix(axisFormat.suffix.c_str());
+	axis->setLabelsPrefix(QLatin1String(axisFormat.prefix.c_str()));
+	axis->setLabelsSuffix(QLatin1String(axisFormat.suffix.c_str()));
 	// TODO: handle string factor member in GraphAxisFormat
 
 	// process Origin::GraphAxisTick
@@ -1619,7 +1618,6 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCurve* curve) const {
 	DEBUG(Q_FUNC_INFO)
 	// line properties
-	QPen pen = curve->linePen();
 	Qt::PenStyle penStyle(Qt::NoPen);
 	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		switch (originCurve.lineConnect) {
@@ -1675,15 +1673,14 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			break;
 		}
 
-		pen.setStyle(penStyle);
-		pen.setWidthF(Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Unit::Point));
-		pen.setColor(color(originCurve.lineColor));
-		curve->setLineOpacity(1 - originCurve.lineTransparency / 255);
+		curve->line()->setStyle(penStyle);
+		curve->line()->setWidth(Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Unit::Point));
+		curve->line()->setColor(color(originCurve.lineColor));
+		curve->line()->setOpacity(1 - originCurve.lineTransparency / 255);
 
 		// TODO: handle unsigned char boxWidth of Origin::GraphCurve
-	}
-	pen.setStyle(penStyle);
-	curve->setLinePen(pen);
+	} else
+		curve->line()->setStyle(penStyle);
 
 	// symbol properties
 	auto* symbol = curve->symbol();
@@ -1985,7 +1982,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			// DEBUG(Q_FUNC_INFO << ", AUTOMATIC fill color")
 			//"automatic" color -> the color of the line, if available, is used, and black otherwise
 			if (curve->lineType() != XYCurve::LineType::NoLine)
-				brush.setColor(curve->linePen().color());
+				brush.setColor(curve->line()->pen().color());
 			else
 				brush.setColor(Qt::black);
 		} else
@@ -1999,7 +1996,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
 			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
 			if (curve->lineType() != XYCurve::LineType::NoLine)
-				pen.setColor(curve->linePen().color());
+				pen.setColor(curve->line()->pen().color());
 			else
 				pen.setColor(Qt::black);
 		} else
@@ -2099,29 +2096,29 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) {
 	if (preview)
 		return true;
 
-	note->setComment(originNote.label.c_str());
-	note->setNote(QString::fromLatin1(originNote.text.c_str()));
+	note->setComment(QLatin1String(originNote.label.c_str()));
+	note->setNote(QLatin1String(originNote.text.c_str()));
 
 	return true;
 }
 
-//##############################################################################
-//########################### Helper functions  ################################
-//##############################################################################
+// ##############################################################################
+// ########################### Helper functions  ################################
+// ##############################################################################
 QDateTime OriginProjectParser::creationTime(tree<Origin::ProjectNode>::iterator it) const {
 	// this logic seems to be correct only for the first node (project node). For other nodes the current time is returned.
 	char time_str[21];
 	strftime(time_str, sizeof(time_str), "%F %T", gmtime(&(*it).creationDate));
-	return QDateTime::fromString(QString(time_str), Qt::ISODate);
+	return QDateTime::fromString(QLatin1String(time_str), Qt::ISODate);
 }
 
 QString OriginProjectParser::parseOriginText(const QString& str) const {
 	DEBUG(Q_FUNC_INFO);
-	QStringList lines = str.split('\n');
+	QStringList lines = str.split(QLatin1Char('\n'));
 	QString text;
 	for (int i = 0; i < lines.size(); ++i) {
 		if (i > 0)
-			text.append("<br>");
+			text.append(QLatin1String("<br>"));
 		text.append(parseOriginTags(lines[i]));
 	}
 
@@ -2231,115 +2228,115 @@ QString strreverse(const QString& str) { // QString reversing
 	QByteArray ba = str.toLocal8Bit();
 	std::reverse(ba.begin(), ba.end());
 
-	return {ba};
+	return QLatin1String(ba);
 }
 
 QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const {
 	QList<QPair<QString, QString>> replacements;
 
 	// TODO: probably missed some. Is there any generic method?
-	replacements << qMakePair(QString("ä"), QString("&auml;"));
-	replacements << qMakePair(QString("ö"), QString("&ouml;"));
-	replacements << qMakePair(QString("ü"), QString("&uuml;"));
-	replacements << qMakePair(QString("Ä"), QString("&Auml;"));
-	replacements << qMakePair(QString("Ö"), QString("&Ouml;"));
-	replacements << qMakePair(QString("Ü"), QString("&Uuml;"));
-	replacements << qMakePair(QString("ß"), QString("&szlig;"));
-	replacements << qMakePair(QString("€"), QString("&euro;"));
-	replacements << qMakePair(QString("£"), QString("&pound;"));
-	replacements << qMakePair(QString("¥"), QString("&yen;"));
-	replacements << qMakePair(QString("¤"), QString("&curren;")); // krazy:exclude=spelling
-	replacements << qMakePair(QString("¦"), QString("&brvbar;"));
-	replacements << qMakePair(QString("§"), QString("&sect;"));
-	replacements << qMakePair(QString("µ"), QString("&micro;"));
-	replacements << qMakePair(QString("¹"), QString("&sup1;"));
-	replacements << qMakePair(QString("²"), QString("&sup2;"));
-	replacements << qMakePair(QString("³"), QString("&sup3;"));
-	replacements << qMakePair(QString("¶"), QString("&para;"));
-	replacements << qMakePair(QString("ø"), QString("&oslash;"));
-	replacements << qMakePair(QString("æ"), QString("&aelig;"));
-	replacements << qMakePair(QString("ð"), QString("&eth;"));
-	replacements << qMakePair(QString("ħ"), QString("&hbar;"));
-	replacements << qMakePair(QString("ĸ"), QString("&kappa;"));
-	replacements << qMakePair(QString("¢"), QString("&cent;"));
-	replacements << qMakePair(QString("¼"), QString("&frac14;"));
-	replacements << qMakePair(QString("½"), QString("&frac12;"));
-	replacements << qMakePair(QString("¾"), QString("&frac34;"));
-	replacements << qMakePair(QString("¬"), QString("&not;"));
-	replacements << qMakePair(QString("©"), QString("&copy;"));
-	replacements << qMakePair(QString("®"), QString("&reg;"));
-	replacements << qMakePair(QString("ª"), QString("&ordf;"));
-	replacements << qMakePair(QString("º"), QString("&ordm;"));
-	replacements << qMakePair(QString("±"), QString("&plusmn;"));
-	replacements << qMakePair(QString("¿"), QString("&iquest;"));
-	replacements << qMakePair(QString("×"), QString("&times;"));
-	replacements << qMakePair(QString("°"), QString("&deg;"));
-	replacements << qMakePair(QString("«"), QString("&laquo;"));
-	replacements << qMakePair(QString("»"), QString("&raquo;"));
-	replacements << qMakePair(QString("¯"), QString("&macr;"));
-	replacements << qMakePair(QString("¸"), QString("&cedil;"));
-	replacements << qMakePair(QString("À"), QString("&Agrave;"));
-	replacements << qMakePair(QString("Á"), QString("&Aacute;"));
-	replacements << qMakePair(QString("Â"), QString("&Acirc;"));
-	replacements << qMakePair(QString("Ã"), QString("&Atilde;"));
-	replacements << qMakePair(QString("Å"), QString("&Aring;"));
-	replacements << qMakePair(QString("Æ"), QString("&AElig;"));
-	replacements << qMakePair(QString("Ç"), QString("&Ccedil;"));
-	replacements << qMakePair(QString("È"), QString("&Egrave;"));
-	replacements << qMakePair(QString("É"), QString("&Eacute;"));
-	replacements << qMakePair(QString("Ê"), QString("&Ecirc;"));
-	replacements << qMakePair(QString("Ë"), QString("&Euml;"));
-	replacements << qMakePair(QString("Ì"), QString("&Igrave;"));
-	replacements << qMakePair(QString("Í"), QString("&Iacute;"));
-	replacements << qMakePair(QString("Î"), QString("&Icirc;"));
-	replacements << qMakePair(QString("Ï"), QString("&Iuml;"));
-	replacements << qMakePair(QString("Ð"), QString("&ETH;"));
-	replacements << qMakePair(QString("Ñ"), QString("&Ntilde;"));
-	replacements << qMakePair(QString("Ò"), QString("&Ograve;"));
-	replacements << qMakePair(QString("Ó"), QString("&Oacute;"));
-	replacements << qMakePair(QString("Ô"), QString("&Ocirc;"));
-	replacements << qMakePair(QString("Õ"), QString("&Otilde;"));
-	replacements << qMakePair(QString("Ù"), QString("&Ugrave;"));
-	replacements << qMakePair(QString("Ú"), QString("&Uacute;"));
-	replacements << qMakePair(QString("Û"), QString("&Ucirc;"));
-	replacements << qMakePair(QString("Ý"), QString("&Yacute;"));
-	replacements << qMakePair(QString("Þ"), QString("&THORN;"));
-	replacements << qMakePair(QString("à"), QString("&agrave;"));
-	replacements << qMakePair(QString("á"), QString("&aacute;"));
-	replacements << qMakePair(QString("â"), QString("&acirc;"));
-	replacements << qMakePair(QString("ã"), QString("&atilde;"));
-	replacements << qMakePair(QString("å"), QString("&aring;"));
-	replacements << qMakePair(QString("ç"), QString("&ccedil;"));
-	replacements << qMakePair(QString("è"), QString("&egrave;"));
-	replacements << qMakePair(QString("é"), QString("&eacute;"));
-	replacements << qMakePair(QString("ê"), QString("&ecirc;"));
-	replacements << qMakePair(QString("ë"), QString("&euml;"));
-	replacements << qMakePair(QString("ì"), QString("&igrave;"));
-	replacements << qMakePair(QString("í"), QString("&iacute;"));
-	replacements << qMakePair(QString("î"), QString("&icirc;"));
-	replacements << qMakePair(QString("ï"), QString("&iuml;"));
-	replacements << qMakePair(QString("ñ"), QString("&ntilde;"));
-	replacements << qMakePair(QString("ò"), QString("&ograve;"));
-	replacements << qMakePair(QString("ó"), QString("&oacute;"));
-	replacements << qMakePair(QString("ô"), QString("&ocirc;"));
-	replacements << qMakePair(QString("õ"), QString("&otilde;"));
-	replacements << qMakePair(QString("÷"), QString("&divide;"));
-	replacements << qMakePair(QString("ù"), QString("&ugrave;"));
-	replacements << qMakePair(QString("ú"), QString("&uacute;"));
-	replacements << qMakePair(QString("û"), QString("&ucirc;"));
-	replacements << qMakePair(QString("ý"), QString("&yacute;"));
-	replacements << qMakePair(QString("þ"), QString("&thorn;"));
-	replacements << qMakePair(QString("ÿ"), QString("&yuml;"));
-	replacements << qMakePair(QString("Œ"), QString("&#338;"));
-	replacements << qMakePair(QString("œ"), QString("&#339;"));
-	replacements << qMakePair(QString("Š"), QString("&#352;"));
-	replacements << qMakePair(QString("š"), QString("&#353;"));
-	replacements << qMakePair(QString("Ÿ"), QString("&#376;"));
-	replacements << qMakePair(QString("†"), QString("&#8224;"));
-	replacements << qMakePair(QString("‡"), QString("&#8225;"));
-	replacements << qMakePair(QString("…"), QString("&#8230;"));
-	replacements << qMakePair(QString("‰"), QString("&#8240;"));
-	replacements << qMakePair(QString("™"), QString("&#8482;"));
+	replacements << qMakePair(QStringLiteral("ä"), QStringLiteral("&auml;"));
+	replacements << qMakePair(QStringLiteral("ö"), QStringLiteral("&ouml;"));
+	replacements << qMakePair(QStringLiteral("ü"), QStringLiteral("&uuml;"));
+	replacements << qMakePair(QStringLiteral("Ä"), QStringLiteral("&Auml;"));
+	replacements << qMakePair(QStringLiteral("Ö"), QStringLiteral("&Ouml;"));
+	replacements << qMakePair(QStringLiteral("Ü"), QStringLiteral("&Uuml;"));
+	replacements << qMakePair(QStringLiteral("ß"), QStringLiteral("&szlig;"));
+	replacements << qMakePair(QStringLiteral("€"), QStringLiteral("&euro;"));
+	replacements << qMakePair(QStringLiteral("£"), QStringLiteral("&pound;"));
+	replacements << qMakePair(QStringLiteral("¥"), QStringLiteral("&yen;"));
+	replacements << qMakePair(QStringLiteral("¤"), QStringLiteral("&curren;")); // krazy:exclude=spelling
+	replacements << qMakePair(QStringLiteral("¦"), QStringLiteral("&brvbar;"));
+	replacements << qMakePair(QStringLiteral("§"), QStringLiteral("&sect;"));
+	replacements << qMakePair(QStringLiteral("µ"), QStringLiteral("&micro;"));
+	replacements << qMakePair(QStringLiteral("¹"), QStringLiteral("&sup1;"));
+	replacements << qMakePair(QStringLiteral("²"), QStringLiteral("&sup2;"));
+	replacements << qMakePair(QStringLiteral("³"), QStringLiteral("&sup3;"));
+	replacements << qMakePair(QStringLiteral("¶"), QStringLiteral("&para;"));
+	replacements << qMakePair(QStringLiteral("ø"), QStringLiteral("&oslash;"));
+	replacements << qMakePair(QStringLiteral("æ"), QStringLiteral("&aelig;"));
+	replacements << qMakePair(QStringLiteral("ð"), QStringLiteral("&eth;"));
+	replacements << qMakePair(QStringLiteral("ħ"), QStringLiteral("&hbar;"));
+	replacements << qMakePair(QStringLiteral("ĸ"), QStringLiteral("&kappa;"));
+	replacements << qMakePair(QStringLiteral("¢"), QStringLiteral("&cent;"));
+	replacements << qMakePair(QStringLiteral("¼"), QStringLiteral("&frac14;"));
+	replacements << qMakePair(QStringLiteral("½"), QStringLiteral("&frac12;"));
+	replacements << qMakePair(QStringLiteral("¾"), QStringLiteral("&frac34;"));
+	replacements << qMakePair(QStringLiteral("¬"), QStringLiteral("&not;"));
+	replacements << qMakePair(QStringLiteral("©"), QStringLiteral("&copy;"));
+	replacements << qMakePair(QStringLiteral("®"), QStringLiteral("&reg;"));
+	replacements << qMakePair(QStringLiteral("ª"), QStringLiteral("&ordf;"));
+	replacements << qMakePair(QStringLiteral("º"), QStringLiteral("&ordm;"));
+	replacements << qMakePair(QStringLiteral("±"), QStringLiteral("&plusmn;"));
+	replacements << qMakePair(QStringLiteral("¿"), QStringLiteral("&iquest;"));
+	replacements << qMakePair(QStringLiteral("×"), QStringLiteral("&times;"));
+	replacements << qMakePair(QStringLiteral("°"), QStringLiteral("&deg;"));
+	replacements << qMakePair(QStringLiteral("«"), QStringLiteral("&laquo;"));
+	replacements << qMakePair(QStringLiteral("»"), QStringLiteral("&raquo;"));
+	replacements << qMakePair(QStringLiteral("¯"), QStringLiteral("&macr;"));
+	replacements << qMakePair(QStringLiteral("¸"), QStringLiteral("&cedil;"));
+	replacements << qMakePair(QStringLiteral("À"), QStringLiteral("&Agrave;"));
+	replacements << qMakePair(QStringLiteral("Á"), QStringLiteral("&Aacute;"));
+	replacements << qMakePair(QStringLiteral("Â"), QStringLiteral("&Acirc;"));
+	replacements << qMakePair(QStringLiteral("Ã"), QStringLiteral("&Atilde;"));
+	replacements << qMakePair(QStringLiteral("Å"), QStringLiteral("&Aring;"));
+	replacements << qMakePair(QStringLiteral("Æ"), QStringLiteral("&AElig;"));
+	replacements << qMakePair(QStringLiteral("Ç"), QStringLiteral("&Ccedil;"));
+	replacements << qMakePair(QStringLiteral("È"), QStringLiteral("&Egrave;"));
+	replacements << qMakePair(QStringLiteral("É"), QStringLiteral("&Eacute;"));
+	replacements << qMakePair(QStringLiteral("Ê"), QStringLiteral("&Ecirc;"));
+	replacements << qMakePair(QStringLiteral("Ë"), QStringLiteral("&Euml;"));
+	replacements << qMakePair(QStringLiteral("Ì"), QStringLiteral("&Igrave;"));
+	replacements << qMakePair(QStringLiteral("Í"), QStringLiteral("&Iacute;"));
+	replacements << qMakePair(QStringLiteral("Î"), QStringLiteral("&Icirc;"));
+	replacements << qMakePair(QStringLiteral("Ï"), QStringLiteral("&Iuml;"));
+	replacements << qMakePair(QStringLiteral("Ð"), QStringLiteral("&ETH;"));
+	replacements << qMakePair(QStringLiteral("Ñ"), QStringLiteral("&Ntilde;"));
+	replacements << qMakePair(QStringLiteral("Ò"), QStringLiteral("&Ograve;"));
+	replacements << qMakePair(QStringLiteral("Ó"), QStringLiteral("&Oacute;"));
+	replacements << qMakePair(QStringLiteral("Ô"), QStringLiteral("&Ocirc;"));
+	replacements << qMakePair(QStringLiteral("Õ"), QStringLiteral("&Otilde;"));
+	replacements << qMakePair(QStringLiteral("Ù"), QStringLiteral("&Ugrave;"));
+	replacements << qMakePair(QStringLiteral("Ú"), QStringLiteral("&Uacute;"));
+	replacements << qMakePair(QStringLiteral("Û"), QStringLiteral("&Ucirc;"));
+	replacements << qMakePair(QStringLiteral("Ý"), QStringLiteral("&Yacute;"));
+	replacements << qMakePair(QStringLiteral("Þ"), QStringLiteral("&THORN;"));
+	replacements << qMakePair(QStringLiteral("à"), QStringLiteral("&agrave;"));
+	replacements << qMakePair(QStringLiteral("á"), QStringLiteral("&aacute;"));
+	replacements << qMakePair(QStringLiteral("â"), QStringLiteral("&acirc;"));
+	replacements << qMakePair(QStringLiteral("ã"), QStringLiteral("&atilde;"));
+	replacements << qMakePair(QStringLiteral("å"), QStringLiteral("&aring;"));
+	replacements << qMakePair(QStringLiteral("ç"), QStringLiteral("&ccedil;"));
+	replacements << qMakePair(QStringLiteral("è"), QStringLiteral("&egrave;"));
+	replacements << qMakePair(QStringLiteral("é"), QStringLiteral("&eacute;"));
+	replacements << qMakePair(QStringLiteral("ê"), QStringLiteral("&ecirc;"));
+	replacements << qMakePair(QStringLiteral("ë"), QStringLiteral("&euml;"));
+	replacements << qMakePair(QStringLiteral("ì"), QStringLiteral("&igrave;"));
+	replacements << qMakePair(QStringLiteral("í"), QStringLiteral("&iacute;"));
+	replacements << qMakePair(QStringLiteral("î"), QStringLiteral("&icirc;"));
+	replacements << qMakePair(QStringLiteral("ï"), QStringLiteral("&iuml;"));
+	replacements << qMakePair(QStringLiteral("ñ"), QStringLiteral("&ntilde;"));
+	replacements << qMakePair(QStringLiteral("ò"), QStringLiteral("&ograve;"));
+	replacements << qMakePair(QStringLiteral("ó"), QStringLiteral("&oacute;"));
+	replacements << qMakePair(QStringLiteral("ô"), QStringLiteral("&ocirc;"));
+	replacements << qMakePair(QStringLiteral("õ"), QStringLiteral("&otilde;"));
+	replacements << qMakePair(QStringLiteral("÷"), QStringLiteral("&divide;"));
+	replacements << qMakePair(QStringLiteral("ù"), QStringLiteral("&ugrave;"));
+	replacements << qMakePair(QStringLiteral("ú"), QStringLiteral("&uacute;"));
+	replacements << qMakePair(QStringLiteral("û"), QStringLiteral("&ucirc;"));
+	replacements << qMakePair(QStringLiteral("ý"), QStringLiteral("&yacute;"));
+	replacements << qMakePair(QStringLiteral("þ"), QStringLiteral("&thorn;"));
+	replacements << qMakePair(QStringLiteral("ÿ"), QStringLiteral("&yuml;"));
+	replacements << qMakePair(QStringLiteral("Œ"), QStringLiteral("&#338;"));
+	replacements << qMakePair(QStringLiteral("œ"), QStringLiteral("&#339;"));
+	replacements << qMakePair(QStringLiteral("Š"), QStringLiteral("&#352;"));
+	replacements << qMakePair(QStringLiteral("š"), QStringLiteral("&#353;"));
+	replacements << qMakePair(QStringLiteral("Ÿ"), QStringLiteral("&#376;"));
+	replacements << qMakePair(QStringLiteral("†"), QStringLiteral("&#8224;"));
+	replacements << qMakePair(QStringLiteral("‡"), QStringLiteral("&#8225;"));
+	replacements << qMakePair(QStringLiteral("…"), QStringLiteral("&#8230;"));
+	replacements << qMakePair(QStringLiteral("‰"), QStringLiteral("&#8240;"));
+	replacements << qMakePair(QStringLiteral("™"), QStringLiteral("&#8482;"));
 
 	return replacements;
 }
@@ -2374,7 +2371,7 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	line = replaceSpecialChars(line);
 
 	// replace tabs	(not really supported)
-	line.replace('\t', "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+	line.replace(QLatin1Char('\t'), QLatin1String("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
 
 	// In PCRE2 (which is what QRegularExpression uses) variable-length lookbehind is supposed to be
 	// exprimental in Perl 5.30; which means it doesn't work at the moment, i.e. using a variable-length
@@ -2383,10 +2380,10 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	// The goal is to temporatily replace '(' and ')' that don't denote tags; this is so that we
 	// can handle parenthesis that are inside the tag, e.g. '\b(bold (cf))', we want the '(cf)' part
 	// to remain as is.
-	const QRegularExpression nonTagsRe(R"(\)([^)(]*)\((?!\s*([buigs\+\-]|\d{1,3}\s*[pc]|[\w ]+\s*:\s*f)\s*\\))");
+	const QRegularExpression nonTagsRe(QLatin1String(R"(\)([^)(]*)\((?!\s*([buigs\+\-]|\d{1,3}\s*[pc]|[\w ]+\s*:\s*f)\s*\\))"));
 	QString linerev = strreverse(line);
-	const QString lBracket = strreverse("&lbracket;");
-	const QString rBracket = strreverse("&rbracket;");
+	const QString lBracket = strreverse(QStringLiteral("&lbracket;"));
+	const QString rBracket = strreverse(QStringLiteral("&rbracket;"));
 	linerev.replace(nonTagsRe, rBracket + QStringLiteral("\\1") + lBracket);
 
 	// change the line back to normal
@@ -2432,11 +2429,11 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	}
 
 	// put non-tag '(' and ')' back in their places
-	line.replace("&lbracket;", "(");
-	line.replace("&rbracket;", ")");
+	line.replace(QLatin1String("&lbracket;"), QLatin1String("("));
+	line.replace(QLatin1String("&rbracket;"), QLatin1String(")"));
 
 	// special characters
-	line.replace(QRegularExpression(QStringLiteral("\\\\\\((\\d+)\\)")), "&#\\1;");
+	line.replace(QRegularExpression(QStringLiteral("\\\\\\((\\d+)\\)")), QLatin1String("&#\\1;"));
 
 	DEBUG("	result: " << STDSTRING(line));
 

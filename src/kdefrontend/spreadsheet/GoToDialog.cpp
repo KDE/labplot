@@ -41,7 +41,7 @@ GoToDialog::GoToDialog(QWidget* parent)
 
 	leRow = new QLineEdit(this);
 	leRow->setValidator(new QIntValidator(leRow));
-	leRow->setText("1");
+	leRow->setText(QStringLiteral("1"));
 	layout->addWidget(leRow, 0, 1);
 
 	// column
@@ -50,7 +50,7 @@ GoToDialog::GoToDialog(QWidget* parent)
 
 	leColumn = new QLineEdit(this);
 	leColumn->setValidator(new QIntValidator(leColumn));
-	leColumn->setText("1");
+	leColumn->setText(QStringLiteral("1"));
 	layout->addWidget(leColumn, 1, 1);
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -76,16 +76,14 @@ GoToDialog::~GoToDialog() {
 }
 
 int GoToDialog::row() {
-	SET_NUMBER_LOCALE
 	bool ok;
-	int row = numberLocale.toInt(leRow->text(), &ok);
+	int row = QLocale().toInt(leRow->text(), &ok);
 
 	return ok ? row : 0;
 }
 
 int GoToDialog::column() {
-	SET_NUMBER_LOCALE
 	bool ok;
-	int col = numberLocale.toInt(leColumn->text(), &ok);
+	int col = QLocale().toInt(leColumn->text(), &ok);
 	return ok ? col : 0;
 }

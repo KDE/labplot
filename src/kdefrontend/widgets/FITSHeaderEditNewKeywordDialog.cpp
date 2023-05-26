@@ -9,15 +9,16 @@
 */
 #include "FITSHeaderEditNewKeywordDialog.h"
 
+#include <KMessageBox>
+#include <KSharedConfig>
+#include <KWindowConfig>
+#include <kcoreaddons_version.h>
+
 #include <QCompleter>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QWindow>
-
-#include <KMessageBox>
-#include <KSharedConfig>
-#include <KWindowConfig>
 
 #define FLEN_KEYWORD 75 /* max length of a keyword (HIERARCH convention) */
 #define FLEN_VALUE 71 /* max length of a keyword value string */
@@ -43,7 +44,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::clicked, this, &FITSHeaderEditNewKeywordDialog::slotButtonClicked);
 
 	setWindowTitle(i18nc("@title:window", "Specify the New Keyword"));
-	setWindowIcon(QIcon::fromTheme("document-new"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-new")));
 
 	auto* keyCompleter = new QCompleter(FITSFilter::standardKeywords(), this);
 	keyCompleter->setCaseSensitivity(Qt::CaseInsensitive);
@@ -81,11 +82,18 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
 		m_newKeyword = FITSFilter::Keyword(ui.leKey->text(), ui.leValue->text(), ui.leComment->text());
 		return QMessageBox::Ok;
 	} else {
-		const int yesNo =
-			KMessageBox::warningYesNo(this, i18n("Cannot add new keyword without key, would you like to try again?"), i18n("Cannot add empty key"));
-		if (yesNo == KMessageBox::No)
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		auto status = KMessageBox::warningTwoActions(this,
+													 i18n("Cannot add new keyword without key, would you like to try again?"),
+													 i18n("Cannot add empty key"),
+													 KStandardGuiItem::ok(),
+													 KStandardGuiItem::cancel());
+#else
+		auto status = KMessageBox::warningYesNo(this, i18n("Cannot add new keyword without key, would you like to try again?"), i18n("Cannot add empty key"));
+#endif
+		if (status == KMessageBox::No)
 			return QMessageBox::Cancel;
-		return yesNo;
+		return status;
 	}
 }
 

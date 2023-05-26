@@ -1,7 +1,7 @@
 /*
 	File                 : BatchEditValueLabelsDialog.h
 	Project              : LabPlot
-	Description          : Dialog to modify multiply value labels in a batch mode
+	Description          : Dialog to modify multiple value labels in a batch mode
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -22,7 +22,7 @@ public:
 	explicit BatchEditValueLabelsDialog(QWidget* parent = nullptr);
 	~BatchEditValueLabelsDialog() override;
 
-	void setColumns(QList<Column*>);
+	void setColumns(const QList<Column*>&);
 
 private:
 	QTextEdit* teValueLabels;

@@ -108,23 +108,23 @@ void MQTTSubscription::setMQTTClient(MQTTClient* client) {
  *\brief Returns the icon of MQTTSubscription
  */
 QIcon MQTTSubscription::icon() const {
-	return QIcon::fromTheme("mail-signed-full");
+	return QIcon::fromTheme(QStringLiteral("mail-signed-full"));
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
   Saves as XML.
  */
 void MQTTSubscription::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("MQTTSubscription");
+	writer->writeStartElement(QStringLiteral("MQTTSubscription"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
-	writer->writeAttribute("subscriptionName", m_subscriptionName);
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("subscriptionName"), m_subscriptionName);
 	writer->writeEndElement();
 
 	// MQTTTopics
@@ -145,18 +145,18 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "MQTTSubscription")
+		if (reader->isEndElement() && reader->name() == QLatin1String("MQTTSubscription"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "general") {
+		} else if (reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
-			m_subscriptionName = attribs.value("subscriptionName").toString();
+			m_subscriptionName = attribs.value(QStringLiteral("subscriptionName")).toString();
 		} else if (reader->name() == QLatin1String("MQTTTopic")) {
 			auto* topic = new MQTTTopic(QString(), this, false);
 			if (!topic->load(reader, preview)) {

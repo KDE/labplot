@@ -19,6 +19,26 @@ class AxisTest : public CommonTest {
 private Q_SLOTS:
 	void majorTicksAutoNumberEnableDisable();
 	void minorTicksAutoNumberEnableDisable();
+	void majorTicksStartValue();
+	void TestSetCoordinateSystem();
+	void TestSetRange();
+	void TestAddingHorizontalAxis();
+	void TestAddingVerticalAxis();
+	void tickLabelRepresentationAutomatic();
+	void tickLabelRepresentationManual();
+	void setAxisColor(); // Set color of all elements
+	void setTitleColor();
+	void setMajorTickColor();
+	void setMinorTickColor();
+	void setLineColor();
+	void setTickLabelColor();
+
+	void automaticTicNumberUpdateDockMajorTicks();
+	void automaticTicNumberUpdateDockMinorTicks();
+
+	void columnLabelValues();
+
+	void customTextLabels();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

@@ -24,39 +24,28 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="11" column="2">
-        <widget class="QCheckBox" name="chkNotches">
-         <property name="text">
-          <string/>
+       <item row="4" column="2">
+        <widget class="QFrame" name="frameDataColumns">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lDataColumn">
+       <item row="6" column="2">
+        <widget class="QComboBox" name="cbOrdering"/>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lWhiskersRangeParameter">
          <property name="text">
-          <string>Column:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          <string>k:</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
-        <widget class="QCheckBox" name="chkVisible">
-         <property name="text">
-          <string>Visible</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lComment">
-         <property name="text">
-          <string>Comment:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-        </widget>
+       <item row="0" column="2">
+        <widget class="QLineEdit" name="leName"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lData">
@@ -71,6 +60,13 @@
          </property>
         </widget>
        </item>
+       <item row="11" column="2">
+        <widget class="QCheckBox" name="chkNotches">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="1">
         <spacer name="horizontalSpacer_8">
          <property name="orientation">
@@ -81,14 +77,64 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>13</width>
+           <width>10</width>
            <height>23</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="9" column="2">
-        <widget class="KComboBox" name="cbOrientation"/>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lDataColumn">
+         <property name="text">
+          <string>Column:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <spacer name="verticalSpacer_8">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>72</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="15" column="0">
+        <widget class="QCheckBox" name="chkVisible">
+         <property name="text">
+          <string>Visible</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="ResizableTextEdit" name="teComment"/>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="lNotches">
+         <property name="text">
+          <string>Notches</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lComment">
+         <property name="text">
+          <string>Comment:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="lName">
@@ -97,6 +143,19 @@
          </property>
         </widget>
        </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="lPlotRange">
+         <property name="text">
+          <string>Plot Range:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="KComboBox" name="cbOrientation"/>
+       </item>
+       <item row="7" column="2">
+        <widget class="KComboBox" name="cbWhiskersType"/>
+       </item>
        <item row="6" column="0">
         <widget class="QLabel" name="lOrdering">
          <property name="text">
@@ -104,10 +163,16 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lWhiskersType">
+       <item row="8" column="2">
+        <widget class="QLineEdit" name="leWhiskersRangeParameter"/>
+       </item>
+       <item row="13" column="2">
+        <widget class="QComboBox" name="cbPlotRanges"/>
+       </item>
+       <item row="10" column="2">
+        <widget class="QCheckBox" name="chkVariableWidth">
          <property name="text">
-          <string>Whiskers:</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -127,7 +192,21 @@
          </property>
         </spacer>
        </item>
-       <item row="12" column="0">
+       <item row="10" column="0">
+        <widget class="QLabel" name="lVariableWidth">
+         <property name="text">
+          <string>Variable Width:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="lOrientation">
+         <property name="text">
+          <string>Direction:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -140,42 +219,15 @@
          </property>
         </spacer>
        </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lOrientation">
+       <item row="7" column="0">
+        <widget class="QLabel" name="lWhiskersType">
          <property name="text">
-          <string>Direction:</string>
+          <string>Whiskers:</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="lNotches">
-         <property name="text">
-          <string>Notches</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="2">
-        <widget class="QCheckBox" name="chkVariableWidth">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QComboBox" name="cbOrdering"/>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="lVariableWidth">
-         <property name="text">
-          <string>Variable Width:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="KComboBox" name="cbWhiskersType"/>
-       </item>
-       <item row="5" column="0">
-        <spacer name="verticalSpacer_8">
+       <item row="12" column="0">
+        <spacer name="verticalSpacer_19">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -184,37 +236,11 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>72</width>
+           <width>20</width>
            <height>18</height>
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="leName"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="ResizableTextEdit" name="teComment"/>
-       </item>
-       <item row="4" column="2">
-        <widget class="QFrame" name="frameDataColumns">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lWhiskersRangeParameter">
-         <property name="text">
-          <string>k:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="QLineEdit" name="leWhiskersRangeParameter"/>
        </item>
       </layout>
      </widget>
@@ -223,24 +249,8 @@
        <string>Box</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="2">
-        <spacer name="horizontalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>13</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="10" column="0" colspan="2">
-        <spacer name="verticalSpacer_6">
+       <item row="5" column="0">
+        <spacer name="verticalSpacer_10">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -249,67 +259,140 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>72</width>
+           <width>20</width>
            <height>18</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="6" column="4">
-        <widget class="KComboBox" name="cbBorderStyle"/>
+       <item row="9" column="0">
+        <spacer name="verticalSpacer_15">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item row="9" column="4">
-        <widget class="QSpinBox" name="sbBorderOpacity">
+       <item row="3" column="0">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="6" column="0">
+        <spacer name="verticalSpacer_11">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="11" column="0">
+        <spacer name="verticalSpacer_16">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lMedianLine">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Median Line</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QComboBox" name="cbNumber">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="toolTip">
-          <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <property name="suffix">
-          <string> %</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
          </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>100</number>
+        </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lNumber">
+         <property name="text">
+          <string>Column</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="4">
-        <widget class="KColorButton" name="kcbBorderColor">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lFilling">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Filling</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="4">
-        <widget class="QDoubleSpinBox" name="sbBorderWidth">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lWidthFactor">
+         <property name="text">
+          <string>Width</string>
          </property>
         </widget>
        </item>
-       <item row="12" column="4">
-        <widget class="KComboBox" name="cbMedianLineStyle"/>
-       </item>
-       <item row="0" column="4">
+       <item row="2" column="2">
         <widget class="QSpinBox" name="sbWidthFactor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -331,92 +414,8 @@
          </property>
         </widget>
        </item>
-       <item row="14" column="4">
-        <widget class="QDoubleSpinBox" name="sbMedianLineWidth">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="4">
-        <widget class="KColorButton" name="kcbMedianLineColor">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="4">
-        <widget class="QSpinBox" name="sbMedianLineOpacity">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
-         </property>
-         <property name="suffix">
-          <string> %</string>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QLabel" name="lFilling">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Filling</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="lWidthFactor">
-         <property name="text">
-          <string>Width</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="2">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>72</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <spacer name="verticalSpacer_3">
+       <item row="8" column="0">
+        <spacer name="verticalSpacer_13">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -431,89 +430,7 @@
          </property>
         </spacer>
        </item>
-       <item row="16" column="0" colspan="2">
-        <spacer name="verticalSpacer_13">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>24</width>
-           <height>136</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="11" column="0" colspan="2">
-        <widget class="QLabel" name="lReferenceLine">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Median Line</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="0" colspan="2">
-        <widget class="QLabel" name="lMedianLineWidth">
-         <property name="text">
-          <string>Width:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="0" colspan="2">
-        <widget class="QLabel" name="lMedianLineOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="0" colspan="2">
-        <widget class="QLabel" name="lMedianLineColor">
-         <property name="text">
-          <string>Color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0" colspan="2">
-        <widget class="QLabel" name="lMedianLineStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0" colspan="2">
-        <widget class="QLabel" name="lBorderOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="2">
-        <widget class="QLabel" name="lBorderWidth">
-         <property name="text">
-          <string>Width:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0" colspan="2">
-        <widget class="QLabel" name="lBorderColor">
-         <property name="text">
-          <string>Color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="2">
-        <widget class="QLabel" name="lBorderStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
+       <item row="7" column="0">
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
@@ -525,6 +442,38 @@
           <string>Border</string>
          </property>
         </widget>
+       </item>
+       <item row="1" column="0">
+        <spacer name="verticalSpacer_18">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -603,6 +552,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QRadioButton" name="rbWhiskerEnd">
+            <property name="text">
+             <string>Whisker End</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer_4">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -662,259 +618,12 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabErrorBars">
+     <widget class="QWidget" name="tabWhiskers">
       <attribute name="title">
        <string>Whiskers</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="lWhiskersFormat">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Line</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lWhiskersStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <spacer name="horizontalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>13</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="2">
-        <widget class="KComboBox" name="cbWhiskersStyle">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lWhiskersColor">
-         <property name="text">
-          <string>Color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="KColorButton" name="kcbWhiskersColor">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lWhiskersWidth">
-         <property name="text">
-          <string>Width:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QDoubleSpinBox" name="sbWhiskersWidth">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lWhiskersOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QSpinBox" name="sbWhiskersOpacity">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
-         </property>
-         <property name="suffix">
-          <string> %</string>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <spacer name="verticalSpacer_9">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>38</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="lWhiskersCap">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Cap</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lWhiskersCapSize">
-         <property name="text">
-          <string>Size:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="QDoubleSpinBox" name="sbWhiskersCapSize">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lWhiskersCapStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="KComboBox" name="cbWhiskersCapStyle">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lWhiskersCapColor">
-         <property name="text">
-          <string>Color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="2">
-        <widget class="KColorButton" name="kcbWhiskersCapColor">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="lWhiskersCapWidth">
-         <property name="text">
-          <string>Width:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="2">
-        <widget class="QDoubleSpinBox" name="sbWhiskersCapWidth">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="lWhiskersCapOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="2">
-        <widget class="QSpinBox" name="sbWhiskersCapOpacity">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
-         </property>
-         <property name="suffix">
-          <string> %</string>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0">
         <spacer name="verticalSpacer_12">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -930,6 +639,290 @@
          </property>
         </spacer>
        </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lWhiskersCap">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Cap</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lWhiskersFormat">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Line</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lWhiskersCapSize">
+         <property name="text">
+          <string>Size:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="NumberSpinBox" name="sbWhiskersCapSize">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <spacer name="verticalSpacer_9">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>38</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="5" column="0">
+        <spacer name="verticalSpacer_17">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabMargins">
+      <attribute name="title">
+       <string>Margins</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lRug">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Rug Plot</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lRugEnabled">
+         <property name="text">
+          <string>Enabled:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="2">
+        <widget class="QCheckBox" name="chkRugEnabled">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lRugLength">
+         <property name="text">
+          <string>Length:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lRugWidth">
+         <property name="text">
+          <string>Width:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lRugOffset">
+         <property name="text">
+          <string>Offset:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <spacer name="verticalSpacer_14">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>18</width>
+           <height>494</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="2">
+        <widget class="NumberSpinBox" name="sbRugOffset">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="NumberSpinBox" name="sbRugWidth">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="NumberSpinBox" name="sbRugLength">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -943,14 +936,14 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of Axis.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,6 +20,7 @@
 class QGraphicsSceneHoverEvent;
 
 class AxisGrid;
+class Line;
 class TextLabel;
 
 class AxisPrivate : public WorksheetElementPrivate {
@@ -42,17 +43,20 @@ public:
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect() override;
 	bool isHovered() const;
+	static QString createScientificRepresentation(const QString& mantissa, const QString& exponent);
 
 	bool isDefault{false};
 
 	// general
-	Axis::RangeType rangeType;
-	Axis::Orientation orientation; //!< horizontal or vertical
-	Axis::Position position; //!< left, right, bottom, top or custom (usually not changed after creation)
-	RangeT::Scale scale;
+	Axis::RangeType rangeType{Axis::RangeType::Auto};
+	Axis::Orientation orientation{Axis::Orientation::Horizontal}; //!< horizontal or vertical
+	Axis::Position position{Axis::Position::Centered}; //!< left, right, bottom, top or custom (usually not changed after creation)
+	RangeT::Scale scale{RangeT::Scale::Linear};
 	double offset{0}; //!< offset from zero in the direction perpendicular to the axis
 	Range<double> range; //!< coordinate range of the axis line
+	Axis::TicksStartType majorTicksStartType{Axis::TicksStartType::Offset};
 	qreal majorTickStartOffset{0};
+	qreal majorTickStartValue{0};
 	qreal scalingFactor{1};
 	qreal zeroOffset{0};
 	bool showScaleOffset{true};
@@ -60,73 +64,69 @@ public:
 
 	// line
 	QVector<QLineF> lines;
-	QPen linePen;
-	qreal lineOpacity;
-	Axis::ArrowType arrowType;
-	Axis::ArrowPosition arrowPosition;
-	qreal arrowSize;
+	Line* line{nullptr};
+	Axis::ArrowType arrowType{Axis::ArrowType::NoArrow};
+	Axis::ArrowPosition arrowPosition{Axis::ArrowPosition::Right};
+	qreal arrowSize{Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point)};
 
 	// Title
 	TextLabel* title{nullptr};
-	qreal titleOffsetX; // distance to the axis line
-	qreal titleOffsetY; // distance to the axis line
+	qreal titleOffsetX{Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point)}; // distance to the axis line
+	qreal titleOffsetY{Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point)}; // distance to the axis line
 
 	// Ticks
-	Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
-	Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
+	Axis::TicksDirection majorTicksDirection{Axis::ticksOut}; //!< major ticks direction: inwards, outwards, both, or none
+	Axis::TicksType majorTicksType{
+		Axis::TicksType::TotalNumber}; //!< the way how the number of major ticks is specified  - either as a total number or an increment
 	bool majorTicksAutoNumber{true}; //!< If the number of ticks should be adjusted automatically or not
-	int majorTicksNumber; //!< number of major ticks
-	qreal majorTicksSpacing; //!< spacing (step) for the major ticks
+	int majorTicksNumber{11}; //!< number of major ticks
+	qreal majorTicksSpacing{0.0}; //!< spacing (step) for the major ticks
 	const AbstractColumn* majorTicksColumn{nullptr}; //!< column containing values for major ticks' positions
 	QString majorTicksColumnPath;
-	qreal majorTicksLength; //!< major tick length (in page units!)
-	QPen majorTicksPen;
-	qreal majorTicksOpacity;
+	qreal majorTicksLength{Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point)}; //!< major tick length (in page units!)
+	Line* majorTicksLine{nullptr};
 
-	Axis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
-	Axis::TicksType minorTicksType; //!< the way how the number of minor ticks is specified  - either as a total number or an increment
+	Axis::TicksDirection minorTicksDirection{Axis::ticksOut}; //!< minor ticks direction: inwards, outwards, both, or none
+	Axis::TicksType minorTicksType{
+		Axis::TicksType::TotalNumber}; //!< the way how the number of minor ticks is specified  - either as a total number or an increment
 	bool minorTicksAutoNumber{true}; //!< If the number of ticks should be adjusted automatically or not
-	int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
-	qreal minorTicksIncrement; //!< spacing (step) for the minor ticks
+	int minorTicksNumber{1}; //!< number of minor ticks (between each two major ticks)
+	qreal minorTicksIncrement{0.0}; //!< spacing (step) for the minor ticks
 	const AbstractColumn* minorTicksColumn{nullptr}; //!< column containing values for minor ticks' positions
 	QString minorTicksColumnPath;
-	qreal minorTicksLength; //!< minor tick length (in page units!)
-	QPen minorTicksPen;
-	qreal minorTicksOpacity;
+	qreal minorTicksLength{Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point)}; //!< minor tick length (in page units!)
+	Line* minorTicksLine{nullptr};
 
 	// Tick Label
-	Axis::LabelsFormat labelsFormat;
-	int labelsPrecision;
-	bool labelsAutoPrecision;
+	Axis::LabelsFormat labelsFormat{Axis::LabelsFormat::Decimal};
+	bool labelsFormatAuto{true};
+	int labelsPrecision{1};
+	bool labelsAutoPrecision{true};
 	QString labelsDateTimeFormat;
-	Axis::LabelsPosition labelsPosition;
-	Axis::LabelsTextType labelsTextType;
+	Axis::LabelsPosition labelsPosition{Axis::LabelsPosition::Out};
+	Axis::LabelsTextType labelsTextType{Axis::LabelsTextType::PositionValues};
 	const AbstractColumn* labelsTextColumn{nullptr};
 	QString labelsTextColumnPath;
-	qreal labelsRotationAngle;
+	qreal labelsRotationAngle{0};
 	QColor labelsColor;
 	QFont labelsFont;
-	Axis::LabelsBackgroundType labelsBackgroundType;
+	Axis::LabelsBackgroundType labelsBackgroundType{Axis::LabelsBackgroundType::Transparent};
 	QColor labelsBackgroundColor;
-	qreal labelsOffset; //!< offset, distance to the end of the tick line (in page units)
-	qreal labelsOpacity;
+	qreal labelsOffset{Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point)}; //!< offset, distance to the end of the tick line (in page units)
+	qreal labelsOpacity{1.0};
 	QString labelsPrefix;
 	QString labelsSuffix;
 
 	// Grid
 	AxisGrid* gridItem{nullptr};
-	QPen majorGridPen;
-	qreal majorGridOpacity;
-	QPen minorGridPen;
-	qreal minorGridOpacity;
+	Line* majorGridLine{nullptr};
+	Line* minorGridLine{nullptr};
 
 	Axis* const q{nullptr};
 
 	QPainterPath linePath;
 	QPainterPath majorGridPath;
 	QPainterPath minorGridPath;
-	bool labelsFormatOverruled{false};
-	bool labelsFormatAutoChanged{false};
 
 	QVector<QPointF> majorTickPoints; //!< position of the major ticks  on the axis.
 	QVector<QPointF> minorTickPoints; //!< position of the major ticks  on the axis.

@@ -17,21 +17,21 @@
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_psi.h>
 
-const char* nsl_fit_model_category_name[] = {i18n("Basic functions"),
-											 i18n("Peak functions"),
-											 i18n("Growth (sigmoidal)"),
-											 i18n("Statistics (distributions)"),
+const char* nsl_fit_model_category_name[] = {i18n("Basic Functions"),
+											 i18n("Peak Functions"),
+											 i18n("Growth (Sigmoidal)"),
+											 i18n("Statistics (Distributions)"),
 											 i18n("Custom")};
 
-const char* nsl_fit_model_basic_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exponential"), i18n("Inverse exponential"), i18n("Fourier")};
+const char* nsl_fit_model_basic_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exponential"), i18n("Inverse Exponential"), i18n("Fourier")};
 const char* nsl_fit_model_basic_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))"};
 const char* nsl_fit_model_basic_pic_name[] = {"polynom", "power", "exponential", "inv_exponential", "fourier"};
 
 const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"),
 										 i18n("Cauchy-Lorentz"),
-										 i18n("Hyperbolic secant (sech)"),
+										 i18n("Hyperbolic Secant (sech)"),
 										 i18n("Logistic (sech squared)"),
-										 i18n("Voigt profile"),
+										 i18n("Voigt Profile"),
 										 i18n("Pseudo-Voigt (same width)")};
 const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)",
 											 "a/pi * g/(g^2+(x-mu)^2)",
@@ -41,11 +41,11 @@ const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2
 											 "a*pseudovoigt1(x - mu, et, w)"}; // eta is already used as function
 const char* nsl_fit_model_peak_pic_name[] = {"gaussian", "cauchy_lorentz", "sech", "logistic", "voigt", "pseudovoigt1"};
 
-const char* nsl_fit_model_growth_name[] = {i18n("Inverse tangent"),
-										   i18n("Hyperbolic tangent"),
-										   i18n("Algebraic sigmoid"),
-										   i18n("Logistic function"),
-										   i18n("Error function (erf)"),
+const char* nsl_fit_model_growth_name[] = {i18n("Inverse Tangent"),
+										   i18n("Hyperbolic Tangent"),
+										   i18n("Algebraic Sigmoid"),
+										   i18n("Logistic Function"),
+										   i18n("Error Function (erf)"),
 										   i18n("Hill"),
 										   i18n("Gompertz"),
 										   i18n("Gudermann (gd)")};
@@ -61,6 +61,8 @@ const char* nsl_fit_model_growth_pic_name[] = {"atan", "tanh", "alg_sigmoid", "l
 
 const char* nsl_fit_weight_type_name[] =
 	{"No", "Instrumental (1/col^2)", "Direct (col)", "Inverse (1/col)", "Statistical (1/data)", "Statistical (Fit)", "Relative (1/data^2)", "Relative (Fit)"};
+
+const char* nsl_fit_algorithm_name[] = {"Levenberg-Marquardt", "Maximum Likelihood"};
 
 /*
 	see https://seal.web.cern.ch/seal/documents/minuit/mnusersguide.pdf
@@ -144,7 +146,7 @@ double nsl_fit_model_power2_param_deriv(unsigned int param, double x, double b, 
 
 	return 0;
 }
-double nsl_fit_model_exponentialn_param_deriv(unsigned int param, double x, double* p, double weight) {
+double nsl_fit_model_exponentialn_param_deriv(unsigned int param, double x, const double* p, double weight) {
 	if (param % 2 == 0)
 		return sqrt(weight) * exp(p[param + 1] * x);
 	else

@@ -37,14 +37,6 @@ public:
 		// TODO: use Range
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
-	struct SmoothResult {
-		SmoothResult(){};
-
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
-	};
 
 	explicit XYSmoothCurve(const QString& name);
 	~XYSmoothCurve() override;
@@ -54,8 +46,11 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+	const AbstractColumn* roughsColumn() const;
 	CLASS_D_ACCESSOR_DECL(SmoothData, smoothData, SmoothData)
-	const SmoothResult& smoothResult() const;
+
+	typedef XYAnalysisCurve::Result SmoothResult;
+	virtual const XYAnalysisCurve::Result& result() const override;
 
 	typedef XYSmoothCurvePrivate Private;
 

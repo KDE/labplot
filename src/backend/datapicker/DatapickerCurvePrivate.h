@@ -11,6 +11,8 @@
 #ifndef DATAPICKERCURVEPRIVATE_H
 #define DATAPICKERCURVEPRIVATE_H
 
+#include "backend/worksheet/Worksheet.h"
+
 class Symbol;
 class QBrush;
 class QPen;
@@ -24,12 +26,12 @@ public:
 	DatapickerCurve* const q;
 	void retransform();
 
-	Symbol* symbol;
-	DatapickerCurve::Errors curveErrorTypes;
+	Symbol* symbol{nullptr};
+	DatapickerCurve::Errors curveErrorTypes{DatapickerCurve::ErrorType::NoError, DatapickerCurve::ErrorType::NoError};
 	QBrush pointErrorBarBrush;
 	QPen pointErrorBarPen;
-	qreal pointErrorBarSize;
-	bool pointVisibility;
+	qreal pointErrorBarSize{Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point)};
+	bool pointVisibility{true};
 
 	AbstractColumn* posXColumn{nullptr};
 	QString posXColumnPath;
@@ -45,6 +47,8 @@ public:
 	QString plusDeltaYColumnPath;
 	AbstractColumn* minusDeltaYColumn{nullptr};
 	QString minusDeltaYColumnPath;
+
+	friend class DatapickerTest;
 };
 
 #endif

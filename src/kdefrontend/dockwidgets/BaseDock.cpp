@@ -13,6 +13,7 @@
 #include "AxisDock.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
+#include "backend/lib/macros.h"
 
 extern "C" {
 #include "backend/nsl/nsl_math.h"
@@ -26,7 +27,7 @@ extern "C" {
 
 BaseDock::BaseDock(QWidget* parent)
 	: QWidget(parent) {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
 	m_units = (Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 
 	if (m_units == Units::Imperial)
@@ -59,9 +60,9 @@ void BaseDock::updatePlotRangeList(QComboBox* cb) {
 	m_suppressPlotRetransform = true;
 	cb->clear();
 	for (int i{0}; i < cSystemCount; i++)
-		cb->addItem(QString::number(i + 1) + QLatin1String(" : ") + element->coordinateSystemInfo(i));
-	m_suppressPlotRetransform = false;
+		cb->addItem(QString::number(i + 1) + QStringLiteral(" : ") + element->coordinateSystemInfo(i));
 	cb->setCurrentIndex(cSystemIndex);
+	m_suppressPlotRetransform = false;
 	// disable when there is only on plot range
 	cb->setEnabled(cSystemCount == 1 ? false : true);
 }
@@ -72,11 +73,11 @@ void BaseDock::plotRangeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 
 	auto* element{static_cast<WorksheetElement*>(m_aspect)};
-	const CartesianPlot* plot;
+	CartesianPlot* plot;
 	if (element->plot()) {
 		plot = element->plot();
 	} else {
-		plot = dynamic_cast<const CartesianPlot*>(m_aspect->parentAspect());
+		plot = dynamic_cast<CartesianPlot*>(m_aspect->parentAspect());
 	}
 
 	if (!plot)
@@ -87,26 +88,70 @@ void BaseDock::plotRangeChanged(int index) {
 		DEBUG(Q_FUNC_INFO << ", using default index " << index)
 	}
 
-	if (index != element->coordinateSystemIndex()) {
-		element->setCoordinateSystemIndex(index);
-		if (dynamic_cast<Axis*>(element))
-			dynamic_cast<AxisDock*>(this)->updateAutoScale();
-		updateLocale(); // update line edits
-		element->retransform(); // redraw
-		element->project()->setChanged(true);
+	const int xIndexNew = plot->coordinateSystem(index)->index(Dimension::X);
+	const int yIndexNew = plot->coordinateSystem(index)->index(Dimension::Y);
+
+	bool xIndexNewDifferent = false;
+	bool yIndexNewDifferent = false;
+	QVector<int> xRangesChanged;
+	QVector<int> yRangesChanged;
+	for (auto aspect : m_aspects) {
+		auto* e{static_cast<WorksheetElement*>(aspect)};
+		if (index != e->coordinateSystemIndex()) {
+			const auto* elementOldCSystem = plot->coordinateSystem(e->coordinateSystemIndex());
+			const auto xIndexOld = elementOldCSystem->index(Dimension::X);
+			const auto yIndexOld = elementOldCSystem->index(Dimension::Y);
+			// If indices are same, the range will not change, so do not track those
+			if (xIndexOld != xIndexNew) {
+				xIndexNewDifferent = true;
+				if (!xRangesChanged.contains(xIndexOld))
+					xRangesChanged.append(xIndexOld);
+			}
+			if (yIndexOld != yIndexNew) {
+				yIndexNewDifferent = true;
+				if (!yRangesChanged.contains(yIndexOld))
+					yRangesChanged.append(yIndexOld);
+			}
+			e->setSuppressRetransform(true);
+			e->setCoordinateSystemIndex(index);
+			e->setSuppressRetransform(false);
+			if (dynamic_cast<Axis*>(e) && dynamic_cast<AxisDock*>(this))
+				dynamic_cast<AxisDock*>(this)->updateAutoScale();
+			updateLocale(); // update line edits
+		}
 	}
+
+	// Retransform all changed indices and the new indices
+	if (!xRangesChanged.contains(xIndexNew) && xIndexNewDifferent)
+		xRangesChanged.append(xIndexNew);
+	for (const int index : xRangesChanged) {
+		plot->setRangeDirty(Dimension::X, index, true);
+		if (plot->autoScale(Dimension::X, index))
+			plot->scaleAuto(Dimension::X, index);
+	}
+
+	if (!yRangesChanged.contains(yIndexNew) && yIndexNewDifferent)
+		yRangesChanged.append(yIndexNew);
+	for (const int index : yRangesChanged) {
+		plot->setRangeDirty(Dimension::Y, index, true);
+		if (plot->autoScale(Dimension::Y, index))
+			plot->scaleAuto(Dimension::Y, index);
+	}
+
+	plot->WorksheetElementContainer::retransform();
+	plot->project()->setChanged(true);
 }
 
 void BaseDock::nameChanged() {
 	if (m_initializing || !m_aspect)
 		return;
 
-	if (!m_aspect->setName(m_leName->text(), false)) {
+	if (!m_aspect->setName(m_leName->text(), AbstractAspect::NameHandling::UniqueRequired)) {
 		SET_WARNING_STYLE(m_leName)
 		m_leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 	} else {
-		m_leName->setStyleSheet("");
-		m_leName->setToolTip("");
+		m_leName->setStyleSheet(QString());
+		m_leName->setToolTip(QString());
 	}
 }
 
@@ -121,7 +166,7 @@ void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_aspect != aspect)
 		return;
 
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	if (aspect->name() != m_leName->text())
 		m_leName->setText(aspect->name());
 	else if (aspect->comment() != m_teComment->text())

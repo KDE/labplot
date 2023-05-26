@@ -64,7 +64,7 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 	if (!m_examples.contains(collectionName)) {
 		// example projects of the currently selected collection not loaded yet -> load them
 		QStringList names;
-		QDirIterator it(m_jsonDir + QLatin1Char('/') + collectionName, QStringList() << "*.lml", QDir::Files, QDirIterator::Subdirectories);
+		QDirIterator it(m_jsonDir + QLatin1Char('/') + collectionName, QStringList() << QLatin1String("*.lml"), QDir::Files, QDirIterator::Subdirectories);
 		while (it.hasNext()) {
 			const auto& fileName = it.next();
 			const auto& name = QFileInfo(fileName).baseName();
@@ -108,13 +108,13 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 					break;
 
 				if (reader.isStartElement()) {
-					if (reader.name() == "project") {
-						QString content = reader.attributes().value("thumbnail").toString();
+					if (reader.name() == QLatin1String("project")) {
+						QString content = reader.attributes().value(QLatin1String("thumbnail")).toString();
 						QByteArray ba = QByteArray::fromBase64(content.toLatin1());
 						QPixmap pixmap;
 						pixmap.loadFromData(ba);
 						m_pixmaps[name] = pixmap;
-					} else if (reader.name() == "comment") {
+					} else if (reader.name() == QLatin1String("comment")) {
 						m_descriptions[name] = reader.readElementText();
 						break;
 					}
@@ -160,7 +160,7 @@ void ExamplesManager::loadCollections() {
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 		file.close();
 		if (!document.isArray()) {
-			QDEBUG("Invalid definition of " + fileName)
+			QDEBUG("Invalid definition of " << fileName)
 			return;
 		}
 

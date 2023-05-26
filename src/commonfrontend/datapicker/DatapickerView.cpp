@@ -60,8 +60,8 @@ DatapickerView::DatapickerView(Datapicker* datapicker)
 
 	// SIGNALs/SLOTs
 	connect(m_datapicker, &Datapicker::aspectDescriptionChanged, this, &DatapickerView::handleDescriptionChanged);
-	connect(m_datapicker, &Datapicker::aspectAdded, this, &DatapickerView::handleAspectAdded);
-	connect(m_datapicker, &Datapicker::aspectAboutToBeRemoved, this, &DatapickerView::handleAspectAboutToBeRemoved);
+	connect(m_datapicker, &Datapicker::childAspectAdded, this, &DatapickerView::handleAspectAdded);
+	connect(m_datapicker, &Datapicker::childAspectAboutToBeRemoved, this, &DatapickerView::handleAspectAboutToBeRemoved);
 	connect(m_datapicker, &Datapicker::datapickerItemSelected, this, &DatapickerView::itemSelected);
 
 	connect(m_tabWidget, &QTabWidget::currentChanged, this, &DatapickerView::tabChanged);
@@ -97,9 +97,9 @@ int DatapickerView::currentIndex() const {
 	return m_tabWidget->currentIndex();
 }
 
-//##############################################################################
-//#########################  Private slots  ####################################
-//##############################################################################
+// ##############################################################################
+// #########################  Private slots  ####################################
+// ##############################################################################
 /*!
   called when the current tab was changed. Propagates the selection of \c Spreadsheet
   or of a \c DatapickerImage object to \c Datapicker.
@@ -149,8 +149,12 @@ void DatapickerView::showTabContextMenu(QPoint point) {
 		menu->exec(m_tabWidget->mapToGlobal(point));
 }
 
+/*!
+ * handle the renames of child aspects to adjust the names of the tabs accordingly.
+ */
 void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
-	if (aspect == m_datapicker)
+	// nothing to do if the parent itself was renamed, we only need to handle curves and data spreadsheets.
+	if (aspect == m_datapicker || aspect == m_datapicker->image())
 		return;
 
 	// determine the child that was changed and adjust the name of the corresponding tab widget
@@ -160,12 +164,12 @@ void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
 		// datapicker curve was renamed
 		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::ChildIndexFlag::IncludeHidden);
 		if (index != -1)
-			name = aspect->name() + ": " + aspect->children<Spreadsheet>().constFirst()->name();
+			name = aspect->name() + QStringLiteral(": ") + aspect->children<Spreadsheet>().constFirst()->name();
 	} else {
 		// data spreadsheet was renamed or one of its columns, which is not relevant here
 		index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect(), AbstractAspect::ChildIndexFlag::IncludeHidden);
 		if (index != -1)
-			name = aspect->parentAspect()->name() + ": " + aspect->name();
+			name = aspect->parentAspect()->name() + QStringLiteral(": ") + aspect->name();
 	}
 
 	if (index != -1)
@@ -182,7 +186,7 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::ChildIndexFlag::IncludeHidden);
 		const auto* spreadsheet = static_cast<const Spreadsheet*>(aspect->child<AbstractAspect>(0));
 		part = spreadsheet;
-		name = aspect->name() + ": " + spreadsheet->name();
+		name = aspect->name() + QStringLiteral(": ") + spreadsheet->name();
 	} else
 		return;
 

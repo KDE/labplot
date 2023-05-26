@@ -12,12 +12,12 @@
 #define XYFOURIERFILTERCURVEDOCK_H
 
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyfourierfiltercurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYFourierFilterCurveDock : public XYCurveDock {
+class XYFourierFilterCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
@@ -29,17 +29,16 @@ private:
 	void initGeneralTab() override;
 	void updatePlotRanges() override;
 	void showFilterResult();
+	void updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filter_cutoff_unit newUnit, nsl_filter_cutoff_unit oldUnit, double oldValue);
 
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYFourierFilterCurve* m_filterCurve{nullptr};
 	XYFourierFilterCurve::FilterData m_filterData;
+	bool m_dateTimeRange{false};
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYFourierFilterCurveDock
@@ -51,6 +50,8 @@ private Q_SLOTS:
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
+	void xRangeMinDateTimeChanged(qint64);
+	void xRangeMaxDateTimeChanged(qint64);
 	void typeChanged();
 	void formChanged();
 	void orderChanged();

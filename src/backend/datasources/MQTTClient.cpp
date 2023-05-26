@@ -29,7 +29,7 @@ MQTTClient::MQTTClient(const QString& name)
 	, m_client(new QMqttClient(this))
 	, m_willTimer(new QTimer(this)) {
 	// stop reading from the source before removing the child from the project
-	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, &MQTTClient::pauseReading);
+	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, this, &MQTTClient::pauseReading);
 
 	connect(m_updateTimer, &QTimer::timeout, this, &MQTTClient::read);
 	connect(m_client, &QMqttClient::connected, this, &MQTTClient::onMQTTConnect);
@@ -198,7 +198,7 @@ MQTTClient::UpdateType MQTTClient::updateType() const {
  * \brief Returns the MQTTClient's icon
  */
 QIcon MQTTClient::icon() const {
-	return QIcon::fromTheme("network-server-database");
+	return QIcon::fromTheme(QStringLiteral("network-server-database"));
 }
 
 /*!
@@ -561,11 +561,11 @@ bool MQTTClient::checkTopicContains(const QString& superior, const QString& infe
 	else {
 		if (superior.contains(QLatin1String("/"))) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-			QStringList superiorList = superior.split('/', Qt::SkipEmptyParts);
-			QStringList inferiorList = inferior.split('/', Qt::SkipEmptyParts);
+			QStringList superiorList = superior.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+			QStringList inferiorList = inferior.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-			QStringList superiorList = superior.split('/', QString::SkipEmptyParts);
-			QStringList inferiorList = inferior.split('/', QString::SkipEmptyParts);
+			QStringList superiorList = superior.split(QLatin1Char('/'), QString::SkipEmptyParts);
+			QStringList inferiorList = inferior.split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 
 			// a longer topic can't contain a shorter one
@@ -575,12 +575,12 @@ bool MQTTClient::checkTopicContains(const QString& superior, const QString& infe
 			bool ok = true;
 			for (int i = 0; i < superiorList.size(); ++i) {
 				if (superiorList.at(i) != inferiorList.at(i)) {
-					if ((superiorList.at(i) != '+') && !(superiorList.at(i) == '#' && i == superiorList.size() - 1)) {
+					if ((superiorList.at(i) != QLatin1Char('+')) && !(superiorList.at(i) == QLatin1Char('#') && i == superiorList.size() - 1)) {
 						// if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
 						// then superior can't contain inferior
 						ok = false;
 						break;
-					} else if (i == superiorList.size() - 1 && (superiorList.at(i) == '+' && inferiorList.at(i) == '#')) {
+					} else if (i == superiorList.size() - 1 && (superiorList.at(i) == QLatin1Char('+') && inferiorList.at(i) == QLatin1Char('#'))) {
 						// if the two topics differ at the last level
 						// and the superior's current level is + while the inferior's is #(which can be only in the last position)
 						// then superior can't contain inferior
@@ -604,11 +604,11 @@ bool MQTTClient::checkTopicContains(const QString& superior, const QString& infe
  */
 QString MQTTClient::checkCommonLevel(const QString& first, const QString& second) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	QStringList firstList = first.split('/', Qt::SkipEmptyParts);
-	QStringList secondtList = second.split('/', Qt::SkipEmptyParts);
+	QStringList firstList = first.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+	QStringList secondtList = second.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-	QStringList firstList = first.split('/', QString::SkipEmptyParts);
-	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
+	QStringList firstList = first.split(QLatin1Char('/'), QString::SkipEmptyParts);
+	QStringList secondtList = second.split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 	QString commonTopic;
 
@@ -642,11 +642,11 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 						commonTopic.append(firstList.at(i));
 					} else {
 						// we put '+' wildcard at the level where they differ
-						commonTopic.append('+');
+						commonTopic.append(QStringLiteral("+"));
 					}
 
 					if (i != firstList.size() - 1)
-						commonTopic.append("/");
+						commonTopic.append(QStringLiteral("/"));
 				}
 			}
 		}
@@ -844,49 +844,50 @@ QString MQTTClient::statistics(const MQTTTopic* topic) const {
 		if (willStatistics[i]) {
 			switch (static_cast<MQTTClient::WillStatisticsType>(i)) {
 			case MQTTClient::WillStatisticsType::ArithmeticMean:
-				statistics += QLatin1String("Arithmetic mean: ") + QString::number(col->statistics().arithmeticMean) + "\n";
+				statistics += QStringLiteral("Arithmetic mean: ") + QString::number(col->statistics().arithmeticMean) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::ContraharmonicMean:
-				statistics += QLatin1String("Contraharmonic mean: ") + QString::number(col->statistics().contraharmonicMean) + "\n";
+				statistics += QStringLiteral("Contraharmonic mean: ") + QString::number(col->statistics().contraharmonicMean) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::Entropy:
-				statistics += QLatin1String("Entropy: ") + QString::number(col->statistics().entropy) + "\n";
+				statistics += QStringLiteral("Entropy: ") + QString::number(col->statistics().entropy) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::GeometricMean:
-				statistics += QLatin1String("Geometric mean: ") + QString::number(col->statistics().geometricMean) + "\n";
+				statistics += QStringLiteral("Geometric mean: ") + QString::number(col->statistics().geometricMean) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::HarmonicMean:
-				statistics += QLatin1String("Harmonic mean: ") + QString::number(col->statistics().harmonicMean) + "\n";
+				statistics += QStringLiteral("Harmonic mean: ") + QString::number(col->statistics().harmonicMean) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::Kurtosis:
-				statistics += QLatin1String("Kurtosis: ") + QString::number(col->statistics().kurtosis) + "\n";
+				statistics += QStringLiteral("Kurtosis: ") + QString::number(col->statistics().kurtosis) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::Maximum:
-				statistics += QLatin1String("Maximum: ") + QString::number(col->statistics().maximum) + "\n";
+				statistics += QStringLiteral("Maximum: ") + QString::number(col->statistics().maximum) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::MeanDeviation:
-				statistics += QLatin1String("Mean deviation: ") + QString::number(col->statistics().meanDeviation) + "\n";
+				statistics += QStringLiteral("Mean deviation: ") + QString::number(col->statistics().meanDeviation) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::MeanDeviationAroundMedian:
-				statistics += QLatin1String("Mean deviation around median: ") + QString::number(col->statistics().meanDeviationAroundMedian) + "\n";
+				statistics +=
+					QStringLiteral("Mean deviation around median: ") + QString::number(col->statistics().meanDeviationAroundMedian) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::Median:
-				statistics += QLatin1String("Median: ") + QString::number(col->statistics().median) + "\n";
+				statistics += QStringLiteral("Median: ") + QString::number(col->statistics().median) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::MedianDeviation:
-				statistics += QLatin1String("Median deviation: ") + QString::number(col->statistics().medianDeviation) + "\n";
+				statistics += QStringLiteral("Median deviation: ") + QString::number(col->statistics().medianDeviation) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::Minimum:
-				statistics += QLatin1String("Minimum: ") + QString::number(col->statistics().minimum) + "\n";
+				statistics += QStringLiteral("Minimum: ") + QString::number(col->statistics().minimum) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::Skewness:
-				statistics += QLatin1String("Skewness: ") + QString::number(col->statistics().skewness) + "\n";
+				statistics += QStringLiteral("Skewness: ") + QString::number(col->statistics().skewness) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::StandardDeviation:
-				statistics += QLatin1String("Standard deviation: ") + QString::number(col->statistics().standardDeviation) + "\n";
+				statistics += QStringLiteral("Standard deviation: ") + QString::number(col->statistics().standardDeviation) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::Variance:
-				statistics += QLatin1String("Variance: ") + QString::number(col->statistics().variance) + "\n";
+				statistics += QStringLiteral("Variance: ") + QString::number(col->statistics().variance) + QStringLiteral("\n");
 				break;
 			case MQTTClient::WillStatisticsType::NoStatistics:
 			default:
@@ -980,9 +981,9 @@ void MQTTClient::stopWillTimer() const {
 	m_willTimer->stop();
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
 /*!
  *\brief called periodically when update type is TimeInterval
@@ -1073,14 +1074,14 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 		// Pass the message and the topic name to the MQTTSubscription which contains the topic
 		for (auto* subscription : m_MQTTSubscriptions) {
 			if (checkTopicContains(subscription->subscriptionName(), msg.topic().name())) {
-				subscription->messageArrived(msg.payload(), msg.topic().name());
+				subscription->messageArrived(QLatin1String(msg.payload()), msg.topic().name());
 				break;
 			}
 		}
 
 		// if the message was received by the will topic, update the last message received by it
 		if (msg.topic().name() == m_MQTTWill.willTopic) {
-			m_MQTTWill.willLastMessage = QString(msg.payload());
+			m_MQTTWill.willLastMessage = QLatin1String(msg.payload());
 
 			Q_EMIT MQTTTopicsChanged();
 		}
@@ -1133,49 +1134,49 @@ void MQTTClient::subscriptionLoaded(const QString& name) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
   Saves as XML.
  */
 void MQTTClient::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("MQTTClient");
+	writer->writeStartElement(QStringLiteral("MQTTClient"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
-	writer->writeAttribute("subscriptionCount", QString::number(m_MQTTSubscriptions.size()));
-	writer->writeAttribute("updateType", QString::number(static_cast<int>(m_updateType)));
-	writer->writeAttribute("readingType", QString::number(static_cast<int>(m_readingType)));
-	writer->writeAttribute("keepValues", QString::number(m_keepNValues));
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("subscriptionCount"), QString::number(m_MQTTSubscriptions.size()));
+	writer->writeAttribute(QStringLiteral("updateType"), QString::number(static_cast<int>(m_updateType)));
+	writer->writeAttribute(QStringLiteral("readingType"), QString::number(static_cast<int>(m_readingType)));
+	writer->writeAttribute(QStringLiteral("keepValues"), QString::number(m_keepNValues));
 
 	if (m_updateType == UpdateType::TimeInterval)
-		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
+		writer->writeAttribute(QStringLiteral("updateInterval"), QString::number(m_updateInterval));
 
 	if (m_readingType != ReadingType::TillEnd)
-		writer->writeAttribute("sampleSize", QString::number(m_sampleSize));
+		writer->writeAttribute(QStringLiteral("sampleSize"), QString::number(m_sampleSize));
 
-	writer->writeAttribute("host", m_client->hostname());
-	writer->writeAttribute("port", QString::number(m_client->port()));
-	writer->writeAttribute("username", m_client->username());
-	writer->writeAttribute("password", m_client->password());
-	writer->writeAttribute("clientId", m_client->clientId());
-	writer->writeAttribute("useRetain", QString::number(m_MQTTRetain));
-	writer->writeAttribute("useWill", QString::number(m_MQTTWill.enabled));
-	writer->writeAttribute("willTopic", m_MQTTWill.willTopic);
-	writer->writeAttribute("willOwnMessage", m_MQTTWill.willOwnMessage);
-	writer->writeAttribute("willQoS", QString::number(m_MQTTWill.willQoS));
-	writer->writeAttribute("willRetain", QString::number(m_MQTTWill.willRetain));
-	writer->writeAttribute("willMessageType", QString::number(static_cast<int>(m_MQTTWill.willMessageType)));
-	writer->writeAttribute("willUpdateType", QString::number(static_cast<int>(m_MQTTWill.willUpdateType)));
-	writer->writeAttribute("willTimeInterval", QString::number(m_MQTTWill.willTimeInterval));
+	writer->writeAttribute(QStringLiteral("host"), m_client->hostname());
+	writer->writeAttribute(QStringLiteral("port"), QString::number(m_client->port()));
+	writer->writeAttribute(QStringLiteral("username"), m_client->username());
+	writer->writeAttribute(QStringLiteral("password"), m_client->password());
+	writer->writeAttribute(QStringLiteral("clientId"), m_client->clientId());
+	writer->writeAttribute(QStringLiteral("useRetain"), QString::number(m_MQTTRetain));
+	writer->writeAttribute(QStringLiteral("useWill"), QString::number(m_MQTTWill.enabled));
+	writer->writeAttribute(QStringLiteral("willTopic"), m_MQTTWill.willTopic);
+	writer->writeAttribute(QStringLiteral("willOwnMessage"), m_MQTTWill.willOwnMessage);
+	writer->writeAttribute(QStringLiteral("willQoS"), QString::number(m_MQTTWill.willQoS));
+	writer->writeAttribute(QStringLiteral("willRetain"), QString::number(m_MQTTWill.willRetain));
+	writer->writeAttribute(QStringLiteral("willMessageType"), QString::number(static_cast<int>(m_MQTTWill.willMessageType)));
+	writer->writeAttribute(QStringLiteral("willUpdateType"), QString::number(static_cast<int>(m_MQTTWill.willUpdateType)));
+	writer->writeAttribute(QStringLiteral("willTimeInterval"), QString::number(m_MQTTWill.willTimeInterval));
 
 	for (int i = 0; i < m_MQTTWill.willStatistics.count(); ++i)
-		writer->writeAttribute("willStatistics" + QString::number(i), QString::number(m_MQTTWill.willStatistics[i]));
-	writer->writeAttribute("useID", QString::number(m_MQTTUseID));
-	writer->writeAttribute("useAuthentication", QString::number(m_MQTTUseAuthentication));
+		writer->writeAttribute(QStringLiteral("willStatistics") + QString::number(i), QString::number(m_MQTTWill.willStatistics[i]));
+	writer->writeAttribute(QStringLiteral("useID"), QString::number(m_MQTTUseID));
+	writer->writeAttribute(QStringLiteral("useAuthentication"), QString::number(m_MQTTUseAuthentication));
 
 	writer->writeEndElement();
 
@@ -1202,166 +1203,166 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "MQTTClient")
+		if (reader->isEndElement() && reader->name() == QLatin1String("MQTTClient"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "general") {
+		} else if (reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("subscriptionCount").toString();
+			str = attribs.value(QStringLiteral("subscriptionCount")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'subscriptionCount'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'subscriptionCount'")));
 			else
 				m_subscriptionCountToLoad = str.toInt();
 
-			str = attribs.value("keepValues").toString();
+			str = attribs.value(QStringLiteral("keepValues")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'keepValues'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'keepValues'")));
 			else
 				m_keepNValues = str.toInt();
 
-			str = attribs.value("updateType").toString();
+			str = attribs.value(QStringLiteral("updateType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'updateType'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'updateType'")));
 			else
 				m_updateType = static_cast<UpdateType>(str.toInt());
 
-			str = attribs.value("readingType").toString();
+			str = attribs.value(QStringLiteral("readingType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'readingType'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'readingType'")));
 			else
 				m_readingType = static_cast<ReadingType>(str.toInt());
 
 			if (m_updateType == UpdateType::TimeInterval) {
-				str = attribs.value("updateInterval").toString();
+				str = attribs.value(QStringLiteral("updateInterval")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'updateInterval'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'updateInterval'")));
 				else
 					m_updateInterval = str.toInt();
 			}
 
 			if (m_readingType != ReadingType::TillEnd) {
-				str = attribs.value("sampleSize").toString();
+				str = attribs.value(QStringLiteral("sampleSize")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'sampleSize'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'sampleSize'")));
 				else
 					m_sampleSize = str.toInt();
 			}
 
-			str = attribs.value("host").toString();
+			str = attribs.value(QStringLiteral("host")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'host'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'host'")));
 			else
 				m_client->setHostname(str);
 
-			str = attribs.value("port").toString();
+			str = attribs.value(QStringLiteral("port")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'port'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'port'")));
 			else
 				m_client->setPort(str.toUInt());
 
-			str = attribs.value("useAuthentication").toString();
+			str = attribs.value(QStringLiteral("useAuthentication")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'useAuthentication'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'useAuthentication'")));
 			else
 				m_MQTTUseAuthentication = str.toInt();
 
 			if (m_MQTTUseAuthentication) {
-				str = attribs.value("username").toString();
+				str = attribs.value(QStringLiteral("username")).toString();
 				if (!str.isEmpty())
 					m_client->setUsername(str);
 
-				str = attribs.value("password").toString();
+				str = attribs.value(QStringLiteral("password")).toString();
 				if (!str.isEmpty())
 					m_client->setPassword(str);
 			}
 
-			str = attribs.value("useID").toString();
+			str = attribs.value(QStringLiteral("useID")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'useID'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'useID'")));
 			else
 				m_MQTTUseID = str.toInt();
 
 			if (m_MQTTUseID) {
-				str = attribs.value("clientId").toString();
+				str = attribs.value(QStringLiteral("clientId")).toString();
 				if (!str.isEmpty())
 					m_client->setClientId(str);
 			}
 
-			str = attribs.value("useRetain").toString();
+			str = attribs.value(QStringLiteral("useRetain")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'useRetain'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'useRetain'")));
 			else
 				m_MQTTRetain = str.toInt();
 
-			str = attribs.value("useWill").toString();
+			str = attribs.value(QStringLiteral("useWill")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'useWill'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'useWill'")));
 			else
 				m_MQTTWill.enabled = str.toInt();
 
 			if (m_MQTTWill.enabled) {
-				str = attribs.value("willTopic").toString();
+				str = attribs.value(QStringLiteral("willTopic")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willTopic'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willTopic'")));
 				else
 					m_MQTTWill.willTopic = str;
 
-				str = attribs.value("willOwnMessage").toString();
+				str = attribs.value(QStringLiteral("willOwnMessage")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willOwnMessage'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willOwnMessage'")));
 				else
 					m_MQTTWill.willOwnMessage = str;
 
-				str = attribs.value("willQoS").toString();
+				str = attribs.value(QStringLiteral("willQoS")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willQoS'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willQoS'")));
 				else
 					m_MQTTWill.willQoS = str.toUInt();
 
-				str = attribs.value("willRetain").toString();
+				str = attribs.value(QStringLiteral("willRetain")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willRetain'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willRetain'")));
 				else
 					m_MQTTWill.willRetain = str.toInt();
 
-				str = attribs.value("willMessageType").toString();
+				str = attribs.value(QStringLiteral("willMessageType")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willMessageType'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willMessageType'")));
 				else
 					m_MQTTWill.willMessageType = static_cast<MQTTClient::WillMessageType>(str.toInt());
 
-				str = attribs.value("willUpdateType").toString();
+				str = attribs.value(QStringLiteral("willUpdateType")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willUpdateType'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willUpdateType'")));
 				else
 					m_MQTTWill.willUpdateType = static_cast<MQTTClient::WillUpdateType>(str.toInt());
 
-				str = attribs.value("willTimeInterval").toString();
+				str = attribs.value(QStringLiteral("willTimeInterval")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willTimeInterval'")));
 				else
 					m_MQTTWill.willTimeInterval = str.toInt();
 
 				for (int i = 0; i < m_MQTTWill.willStatistics.count(); ++i) {
-					str = attribs.value("willStatistics" + QString::number(i)).toString();
+					str = attribs.value(QStringLiteral("willStatistics") + QString::number(i)).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
+						reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willTimeInterval'")));
 					else
 						m_MQTTWill.willStatistics[i] = str.toInt();
 				}
 			}
-		} else if (reader->name() == "asciiFilter") {
+		} else if (reader->name() == QLatin1String("asciiFilter")) {
 			setFilter(new AsciiFilter);
 			if (!m_filter->load(reader))
 				return false;
-		} else if (reader->name() == "MQTTSubscription") {
+		} else if (reader->name() == QLatin1String("MQTTSubscription")) {
 			auto* subscription = new MQTTSubscription(QString());
 			subscription->setMQTTClient(this);
 			m_MQTTSubscriptions.push_back(subscription);

@@ -16,19 +16,19 @@
 #endif
 #include "backend/nsl/nsl_stats.h"
 
-const char* nsl_conv_direction_name[] = {i18n("forward (convolution)"), i18n("backward (deconvolution)")};
-const char* nsl_conv_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
-const char* nsl_conv_method_name[] = {i18n("auto"), i18n("direct"), i18n("FFT")};
-const char* nsl_conv_norm_name[] = {i18n("none"), i18n("sum"), i18n("Euclidean")};
-const char* nsl_conv_wrap_name[] = {i18n("none"), i18n("maximum"), i18n("center (acausal)")};
-const char* nsl_conv_kernel_name[] = {i18n("sliding average"),
-									  i18n("triangular smooth"),
-									  i18n("pseudo-Gaussian smooth"),
-									  i18n("first derivative"),
-									  i18n("smooth first derivative"),
-									  i18n("second derivative"),
-									  i18n("third derivative"),
-									  i18n("fourth derivative"),
+const char* nsl_conv_direction_name[] = {i18n("Forward (Convolution)"), i18n("Backward (Deconvolution)")};
+const char* nsl_conv_type_name[] = {i18n("Linear (Zero-padded)"), i18n("Circular")};
+const char* nsl_conv_method_name[] = {i18n("Auto"), i18n("Direct"), i18n("FFT")};
+const char* nsl_conv_norm_name[] = {i18n("None"), i18n("Sum"), i18n("Euclidean")};
+const char* nsl_conv_wrap_name[] = {i18n("None"), i18n("Maximum"), i18n("Center (Acausal)")};
+const char* nsl_conv_kernel_name[] = {i18n("Sliding Average"),
+									  i18n("Triangular Smooth"),
+									  i18n("Pseudo-Gaussian Smooth"),
+									  i18n("First Derivative"),
+									  i18n("Smooth First Derivative"),
+									  i18n("Second Derivative"),
+									  i18n("Third Derivative"),
+									  i18n("Fourth Derivative"),
 									  i18n("Gaussian"),
 									  i18n("Lorentzian")};
 
@@ -202,7 +202,7 @@ int nsl_conv_deconvolution(double s[],
 	return nsl_conv_fft_type(s, n, r, m, nsl_conv_direction_backward, type, normalize, wrap, out);
 }
 
-int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
+int nsl_conv_linear_direct(const double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
 	size_t i, j, size = n + m - 1, wi = 0;
 	double norm = 1;
 	if (normalize == nsl_conv_norm_euclidean) {
@@ -235,7 +235,7 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_
 	return 0;
 }
 
-int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
+int nsl_conv_circular_direct(const double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
 	size_t i, j, size = GSL_MAX(n, m), wi = 0;
 	double norm = 1;
 	if (normalize == nsl_conv_norm_euclidean) {
@@ -270,7 +270,7 @@ int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, nsl_con
 	return 0;
 }
 
-int nsl_conv_fft_type(double s[],
+int nsl_conv_fft_type(const double s[],
 					  size_t n,
 					  double r[],
 					  size_t m,

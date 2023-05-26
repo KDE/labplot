@@ -34,7 +34,7 @@ Note::Note(const QString& name)
 }
 
 QIcon Note::icon() const {
-	return QIcon::fromTheme("document-new");
+	return QIcon::fromTheme(QStringLiteral("document-new"));
 }
 
 bool Note::printView() {
@@ -103,30 +103,30 @@ QWidget* Note::view() const {
 	return m_partView;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Note::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("note");
+	writer->writeStartElement(QStringLiteral("note"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	writer->writeStartElement("background");
+	writer->writeStartElement(QStringLiteral("background"));
 	WRITE_QCOLOR(m_backgroundColor);
 	writer->writeEndElement();
 
-	writer->writeStartElement("text");
+	writer->writeStartElement(QStringLiteral("text"));
 	WRITE_QCOLOR(m_textColor);
 	WRITE_QFONT(m_textFont);
-	writer->writeAttribute("text", m_note);
+	writer->writeAttribute(QStringLiteral("text"), m_note);
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "note" section
 }
 
 bool Note::load(XmlStreamReader* reader, bool preview) {
-	if (!reader->isStartElement() || reader->name() != "note") {
+	if (!reader->isStartElement() || reader->name() != QLatin1String("note")) {
 		reader->raiseError(i18n("no note element found"));
 		return false;
 	}
@@ -140,23 +140,23 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "note")
+		if (reader->isEndElement() && reader->name() == QLatin1String("note"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "background") {
+		} else if (!preview && reader->name() == QLatin1String("background")) {
 			attribs = reader->attributes();
 			READ_QCOLOR(m_backgroundColor);
-		} else if (!preview && reader->name() == "text") {
+		} else if (!preview && reader->name() == QLatin1String("text")) {
 			attribs = reader->attributes();
 			READ_QCOLOR(m_textColor);
 			READ_QFONT(m_textFont);
-			m_note = attribs.value("text").toString();
+			m_note = attribs.value(QStringLiteral("text")).toString();
 		}
 	}
 

@@ -49,18 +49,18 @@ void SettingsDatasetsPage::loadSettings() {
 
 			// calculate the size
 			int size = 0;
-			for (auto file : dir.entryList()) {
+			for (auto& file : dir.entryList()) {
 				if (file == QLatin1Char('.') || file == QLatin1String(".."))
 					continue;
 
 				size += QFileInfo(dir, file).size();
 			}
 
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			QString sizeStr;
 			if (size > 1024 * 1024)
 				sizeStr = numberLocale.toString(size / 1024 / 1024) + QLatin1String("MB");
-			if (size > 1024)
+			else if (size > 1024)
 				sizeStr = numberLocale.toString(size / 1024) + QLatin1String("kB");
 			else
 				sizeStr = numberLocale.toString(size) + QLatin1String("B");
@@ -74,7 +74,7 @@ void SettingsDatasetsPage::loadSettings() {
 void SettingsDatasetsPage::clearCache() {
 	QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
 	if (dir.exists()) {
-		for (auto fileName : dir.entryList()) {
+		for (auto& fileName : dir.entryList()) {
 			if (fileName == QLatin1Char('.') || fileName == QLatin1String(".."))
 				continue;
 

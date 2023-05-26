@@ -39,6 +39,10 @@ private Q_SLOTS:
 	void testHeader07();
 	void testHeader07a();
 	void testHeader08();
+	void testHeader09();
+	void testHeader10();
+	void testHeader11();
+	void testHeader11a();
 
 	// read ranges
 	void testColumnRange00();
@@ -63,6 +67,7 @@ private Q_SLOTS:
 	void testQuotedStrings02();
 	void testQuotedStrings03();
 	void testQuotedStrings04();
+	void testQuotedStrings05();
 
 	// different locales
 
@@ -76,6 +81,9 @@ private Q_SLOTS:
 	// datetime data
 	void testDateTime00();
 	void testDateTimeHex();
+
+	// matrix import
+	void testMatrixHeader();
 
 	// benchmarks
 

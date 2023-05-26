@@ -14,6 +14,7 @@
 
 #include <QDateTime>
 #include <QList>
+#include <QUuid>
 
 class AbstractAspect;
 
@@ -39,6 +40,7 @@ public:
 	bool m_undoAware{true};
 	bool m_isLoading{false};
 	bool m_pasted{false};
+	QUuid m_uuid{QUuid::createUuid()};
 };
 
 #endif // ifndef ASPECT_PRIVATE_H

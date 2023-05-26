@@ -25,7 +25,7 @@ public:
 	static void handleError(int err, const QString& function, const QString& arg = QString());
 #endif
 
-	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
+	int parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	QVector<QStringList> readCurrentDataSet(const QString& fileName,
 											AbstractDataSource*,

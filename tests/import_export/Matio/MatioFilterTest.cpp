@@ -15,7 +15,7 @@
 #include <KLocalizedString>
 
 void MatioFilterTest::testImportDouble() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testdouble_4.2c_SOL2.mat"));
@@ -46,7 +46,7 @@ void MatioFilterTest::testImportDouble() {
 }
 
 void MatioFilterTest::testImportSpreadsheet() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testmatrix_7.4_GLNX86.mat"));
@@ -95,7 +95,7 @@ void MatioFilterTest::testImportSpreadsheet() {
 
 // same test but with start/end row/col
 void MatioFilterTest::testImportSpreadsheetPortion() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testmatrix_7.4_GLNX86.mat"));
@@ -128,7 +128,7 @@ void MatioFilterTest::testImportSpreadsheetPortion() {
 }
 
 void MatioFilterTest::testImportMatrix() {
-	Matrix matrix("test", false);
+	Matrix matrix(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testmatrix_7.4_GLNX86.mat"));
@@ -164,7 +164,7 @@ void MatioFilterTest::testImportMatrix() {
 }
 
 void MatioFilterTest::testImportSparse() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testsparse_6.5.1_GLNX86.mat"));
@@ -212,7 +212,7 @@ void MatioFilterTest::testImportSparse() {
 }
 
 void MatioFilterTest::testImportLogicalSparse() {
-	Matrix matrix("test", false);
+	Matrix matrix(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/logical_sparse.mat"));
@@ -246,7 +246,7 @@ void MatioFilterTest::testImportLogicalSparse() {
 }
 
 void MatioFilterTest::testImportLogicalSparsePortion() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/logical_sparse.mat"));
@@ -277,7 +277,7 @@ void MatioFilterTest::testImportLogicalSparsePortion() {
 }
 
 void MatioFilterTest::testImportSparseComplex() {
-	Matrix matrix("test", false);
+	Matrix matrix(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testsparsecomplex_7.4_GLNX86.mat"));
@@ -306,7 +306,7 @@ void MatioFilterTest::testImportSparseComplex() {
 }
 
 void MatioFilterTest::testImportStruct() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/teststruct_7.4_GLNX86.mat"));
@@ -340,7 +340,7 @@ void MatioFilterTest::testImportStruct() {
 }
 
 void MatioFilterTest::testImportStructPortion() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/teststruct_7.4_GLNX86.mat"));
@@ -374,7 +374,7 @@ void MatioFilterTest::testImportStructPortion() {
 }
 
 void MatioFilterTest::testImportCell() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testcell_6.1_SOL2.mat"));
@@ -403,18 +403,18 @@ void MatioFilterTest::testImportCell() {
 	QCOMPARE(spreadsheet.column(0)->textAt(2), QLatin1String());
 	QCOMPARE(spreadsheet.column(0)->textAt(3), QLatin1String());
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.);
-	QCOMPARE(spreadsheet.column(1)->valueAt(1), qQNaN());
-	QCOMPARE(spreadsheet.column(1)->valueAt(2), qQNaN());
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), NAN);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), NAN);
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 1.);
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 2.);
-	QCOMPARE(spreadsheet.column(2)->valueAt(2), qQNaN());
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), NAN);
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.);
 	QCOMPARE(spreadsheet.column(3)->valueAt(1), 2.);
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), 3.);
 }
 
 void MatioFilterTest::testImportCellPortion() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testcell_6.1_SOL2.mat"));
@@ -439,13 +439,13 @@ void MatioFilterTest::testImportCellPortion() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
 
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.);
-	QCOMPARE(spreadsheet.column(0)->valueAt(1), qQNaN());
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), NAN);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 2.);
 }
 
 void MatioFilterTest::testImportEmptyCell() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testemptycell_7.4_GLNX86.mat"));
@@ -475,13 +475,13 @@ void MatioFilterTest::testImportEmptyCell() {
 
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2);
-	QCOMPARE(spreadsheet.column(2)->valueAt(0), qQNaN());
-	QCOMPARE(spreadsheet.column(3)->valueAt(0), qQNaN());
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), NAN);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), NAN);
 	QCOMPARE(spreadsheet.column(4)->valueAt(0), 3);
 }
 
 void MatioFilterTest::testImportMultipleVars() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	MatioFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testmulti_7.4_GLNX86.mat"));

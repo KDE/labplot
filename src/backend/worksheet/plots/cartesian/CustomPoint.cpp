@@ -15,6 +15,7 @@
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
@@ -57,11 +58,15 @@ void CustomPoint::init() {
 	Q_D(CustomPoint);
 
 	// default position
-	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-	const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-	const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-	d->positionLogical = QPointF(x, y);
+	if (plot()) {
+		d->coordinateBindingEnabled = true; // By default on
+		auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
+		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+		DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
+		d->positionLogical = QPointF(x, y);
+	} else
+		d->position.point = QPointF(0, 0);
 	d->updatePosition(); // To update also scene coordinates
 
 	// initialize the symbol
@@ -90,7 +95,7 @@ void CustomPoint::initActions() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon CustomPoint::icon() const {
-	return QIcon::fromTheme("draw-cross");
+	return QIcon::fromTheme(QStringLiteral("draw-cross"));
 }
 
 QMenu* CustomPoint::createContextMenu() {
@@ -131,9 +136,9 @@ void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
 	d->setParentItem(item);
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 CustomPointPrivate::CustomPointPrivate(CustomPoint* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -156,7 +161,7 @@ void CustomPointPrivate::retransform() {
 	if (suppressRetransform || q->isLoading())
 		return;
 
-	updatePosition();
+	updatePosition(); // needed, because CartesianPlot calls retransform if some operations are done
 	recalcShapeAndBoundingRect();
 }
 
@@ -174,7 +179,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	pointShape = QPainterPath();
-	if (m_visible && symbol->style() != Symbol::Style::NoSymbols) {
+	if (insidePlot && symbol->style() != Symbol::Style::NoSymbols) {
 		QPainterPath path = Symbol::stylePath(symbol->style());
 
 		QTransform trafo;
@@ -193,7 +198,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 }
 
 void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
-	if (!m_visible)
+	if (!insidePlot)
 		return;
 
 	if (symbol->style() != Symbol::Style::NoSymbols) {
@@ -243,19 +248,19 @@ void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void CustomPoint::save(QXmlStreamWriter* writer) const {
 	Q_D(const CustomPoint);
 
-	writer->writeStartElement("customPoint");
+	writer->writeStartElement(QStringLiteral("customPoint"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// geometry
-	writer->writeStartElement("geometry");
+	writer->writeStartElement(QStringLiteral("geometry"));
 	WorksheetElement::save(writer);
 	writer->writeEndElement();
 
@@ -277,16 +282,16 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "customPoint")
+		if (reader->isEndElement() && reader->name() == QLatin1String("customPoint"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "geometry") {
+		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			WorksheetElement::load(reader, preview);
 			if (project()->xmlVersion() < 6) {
 				// Before version 6 the position in the file was always a logical position
@@ -294,7 +299,7 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 				d->position.point = QPointF(0, 0);
 				d->coordinateBindingEnabled = true;
 			}
-		} else if (!preview && reader->name() == "symbol") {
+		} else if (!preview && reader->name() == QLatin1String("symbol")) {
 			d->symbol->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

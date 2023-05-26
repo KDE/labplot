@@ -17,6 +17,8 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 #include <KSharedConfig>
+#include <kcoreaddons_version.h>
+
 #include <QContextMenuEvent>
 #include <QFileDialog>
 #include <QMenu>
@@ -37,21 +39,21 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent)
 	connectActions();
 	initContextMenus();
 
-	ui->bOpen->setIcon(QIcon::fromTheme("document-open"));
+	ui->bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 
-	ui->bAddKey->setIcon(QIcon::fromTheme("list-add"));
+	ui->bAddKey->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	ui->bAddKey->setEnabled(false);
 	ui->bAddKey->setToolTip(i18n("Add new keyword"));
 
-	ui->bRemoveKey->setIcon(QIcon::fromTheme("list-remove"));
+	ui->bRemoveKey->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 	ui->bRemoveKey->setEnabled(false);
 	ui->bRemoveKey->setToolTip(i18n("Remove selected keyword"));
 
-	ui->bAddUnit->setIcon(QIcon::fromTheme("document-new"));
+	ui->bAddUnit->setIcon(QIcon::fromTheme(QStringLiteral("document-new")));
 	ui->bAddUnit->setEnabled(false);
 	ui->bAddUnit->setToolTip(i18n("Add unit to keyword"));
 
-	ui->bClose->setIcon(QIcon::fromTheme("document-close"));
+	ui->bClose->setIcon(QIcon::fromTheme(QStringLiteral("document-close")));
 	ui->bClose->setEnabled(false);
 	ui->bClose->setToolTip(i18n("Close file"));
 
@@ -135,14 +137,14 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
 	if (extType == 0) {
 		if (item->parent() != nullptr) {
 			if (item->parent()->parent() != nullptr)
-				selectedExtension = item->parent()->parent()->text(0) + '[' + item->text(col) + ']';
+				selectedExtension = item->parent()->parent()->text(0) + QStringLiteral("[") + item->text(col) + QStringLiteral("]");
 		}
 	} else if (extType == 1) {
 		if (item->parent() != nullptr) {
 			if (item->parent()->parent() != nullptr) {
 				bool ok;
 				int hduNum = itemText.rightRef(1).toInt(&ok);
-				selectedExtension = item->parent()->parent()->text(0) + '[' + QString::number(hduNum - 1) + ']';
+				selectedExtension = item->parent()->parent()->text(0) + QStringLiteral("[") + QString::number(hduNum - 1) + QStringLiteral("]");
 			}
 		}
 	} else {
@@ -264,8 +266,8 @@ bool FITSHeaderEditWidget::save() {
  * \brief Initializes the context menu's actions.
  */
 void FITSHeaderEditWidget::initActions() {
-	m_actionAddKeyword = new QAction(QIcon::fromTheme("list-add"), i18n("Add New Keyword"), this);
-	m_actionRemoveKeyword = new QAction(QIcon::fromTheme("list-remove"), i18n("Remove Keyword"), this);
+	m_actionAddKeyword = new QAction(QIcon::fromTheme(QStringLiteral("list-add")), i18n("Add New Keyword"), this);
+	m_actionRemoveKeyword = new QAction(QIcon::fromTheme(QStringLiteral("list-remove")), i18n("Remove Keyword"), this);
 	m_actionRemoveExtension = new QAction(i18n("Delete"), this);
 	m_actionAddmodifyUnit = new QAction(i18n("Add Unit"), this);
 }
@@ -372,8 +374,16 @@ void FITSHeaderEditWidget::removeKeyword() {
 		return;
 
 	QString key = ui->twKeywordsTable->item(row, 0)->text();
-	const int rc = KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the keyword '%1'?", key), i18n("Confirm Deletion"));
-	if (rc == KMessageBox::Yes) {
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+	auto status = KMessageBox::questionTwoActions(this,
+												  i18n("Are you sure you want to delete the keyword '%1'?", key),
+												  i18n("Confirm Deletion"),
+												  KStandardGuiItem::del(),
+												  KStandardGuiItem::cancel());
+#else
+	auto status = KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the keyword '%1'?", key), i18n("Confirm Deletion"));
+#endif
+	if (status == KMessageBox::Yes) {
 		bool remove = true;
 		for (const QString& k : mandatoryKeywords()) {
 			if (!k.compare(key)) {

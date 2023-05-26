@@ -9,6 +9,7 @@
 
 #include "HDF5FilterTest.h"
 #include "backend/datasources/filters/HDF5Filter.h"
+#include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
@@ -21,7 +22,7 @@ extern "C" {
 }
 
 void HDF5FilterTest::testImportDouble() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	HDF5Filter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/hdf5_test.h5"));
@@ -62,7 +63,7 @@ void HDF5FilterTest::testImportDouble() {
 }
 
 void HDF5FilterTest::testImportDoublePortion() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	HDF5Filter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/hdf5_test.h5"));
@@ -95,7 +96,7 @@ void HDF5FilterTest::testImportDoublePortion() {
 }
 
 void HDF5FilterTest::testImportInt() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	HDF5Filter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/hdf5_test.h5"));
@@ -132,7 +133,7 @@ void HDF5FilterTest::testImportInt() {
 }
 
 void HDF5FilterTest::testImportIntPortion() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	HDF5Filter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/hdf5_test.h5"));
@@ -161,7 +162,7 @@ void HDF5FilterTest::testImportIntPortion() {
 }
 
 void HDF5FilterTest::testImportVLEN() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	HDF5Filter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/h5ex_t_vlen.h5"));
@@ -195,7 +196,7 @@ void HDF5FilterTest::testImportVLEN() {
 	QCOMPARE(spreadsheet.column(1)->valueAt(11), 144);
 }
 void HDF5FilterTest::testImportVLENPortion() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	HDF5Filter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/h5ex_t_vlen.h5"));
@@ -275,11 +276,11 @@ void HDF5FilterTest::benchDoubleImport_data() {
 	file.close(); // only file name is used
 
 	benchDataFileName = file.fileName();
-	benchDataFileName.append(".h5");
+	benchDataFileName.append(QStringLiteral(".h5"));
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
-	QTest::newRow(testName.toLatin1()) << lines;
+	QTest::newRow(qPrintable(testName)) << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	gsl_rng_env_setup();
@@ -288,7 +289,7 @@ void HDF5FilterTest::benchDoubleImport_data() {
 
 	// create file
 	// see https://support.hdfgroup.org/HDF5/Tutor/introductory.html
-	hid_t file_id = H5Fcreate(benchDataFileName.toLatin1(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+	hid_t file_id = H5Fcreate(qPrintable(benchDataFileName), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
 	/* Create the data space for the dataset. */
 	hsize_t dims[2];
@@ -328,7 +329,7 @@ void HDF5FilterTest::benchDoubleImport_data() {
 }
 
 void HDF5FilterTest::benchDoubleImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	HDF5Filter filter;
 	filter.setCurrentDataSetName(QLatin1String("/data"));
 

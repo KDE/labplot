@@ -58,10 +58,13 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	, m_root(root) {
 	connect(m_root, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 	connect(m_root, &AbstractAspect::aspectDescriptionChanged, this, &AspectTreeModel::aspectDescriptionChanged);
-	connect(m_root, &AbstractAspect::aspectAboutToBeAdded, this, &AspectTreeModel::aspectAboutToBeAdded);
-	connect(m_root, &AbstractAspect::aspectAboutToBeRemoved, this, &AspectTreeModel::aspectAboutToBeRemoved);
-	connect(m_root, &AbstractAspect::aspectAdded, this, &AspectTreeModel::aspectAdded);
-	connect(m_root, &AbstractAspect::aspectRemoved, this, &AspectTreeModel::aspectRemoved);
+	connect(m_root,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
+			this,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AspectTreeModel::aspectAboutToBeAdded));
+	connect(m_root, &AbstractAspect::childAspectAboutToBeRemoved, this, &AspectTreeModel::aspectAboutToBeRemoved);
+	connect(m_root, &AbstractAspect::childAspectAdded, this, &AspectTreeModel::aspectAdded);
+	connect(m_root, &AbstractAspect::childAspectRemoved, this, &AspectTreeModel::aspectRemoved);
 	connect(m_root, &AbstractAspect::aspectHiddenAboutToChange, this, &AspectTreeModel::aspectHiddenAboutToChange);
 	connect(m_root, &AbstractAspect::aspectHiddenChanged, this, &AspectTreeModel::aspectHiddenChanged);
 }
@@ -194,15 +197,18 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 				return {};
 		}
 		case 1:
-			if (aspect->metaObject()->className() == QLatin1String("CantorWorksheet"))
+			if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("CantorWorksheet"))
 				return QLatin1String("Notebook");
-			if (aspect->metaObject()->className() == QLatin1String("Datapicker"))
+			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("Datapicker"))
 				return QLatin1String("DataExtractor");
-			return aspect->metaObject()->className();
+			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("CartesianPlot"))
+				return QLatin1String("Plot Area");
+			else
+				return QLatin1String(aspect->metaObject()->className());
 		case 2:
 			return QLocale::system().toString(aspect->creationTime(), QLocale::ShortFormat);
 		case 3:
-			return aspect->comment().replace('\n', ' ').simplified();
+			return aspect->comment().replace(QLatin1Char('\n'), QLatin1Char(' ')).simplified();
 		default:
 			return {};
 		}
@@ -227,7 +233,7 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 			// about the formula and parameters
 			if (!col->formula().isEmpty()) {
 				toolTip += QLatin1String("<br><br>") + i18n("Formula:");
-				QString f("f(");
+				QString f(QStringLiteral("f("));
 				QString parameters;
 				for (int i = 0; i < col->formulaData().size(); ++i) {
 					auto& data = col->formulaData().at(i);
@@ -235,22 +241,22 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 					// string for the function definition like f(x,y), etc.
 					f += data.variableName();
 					if (i != col->formulaData().size() - 1)
-						f += QLatin1String(", ");
+						f += QStringLiteral(", ");
 
 					// string for the parameters and the references to the used columns for them
 					if (!parameters.isEmpty())
 						parameters += QLatin1String("<br>");
 					parameters += data.variableName();
 					if (data.column())
-						parameters += " = " + data.column()->path();
+						parameters += QStringLiteral(" = ") + data.column()->path();
 				}
 
-				toolTip += QLatin1String("<br>") + f + QLatin1String(") = ") + col->formula();
-				toolTip += QLatin1String("<br>") + parameters;
+				toolTip += QStringLiteral("<br>") + f + QStringLiteral(") = ") + col->formula();
+				toolTip += QStringLiteral("<br>") + parameters;
 				if (col->formulaAutoUpdate())
-					toolTip += QLatin1String("<br>") + i18n("auto update: true");
+					toolTip += QStringLiteral("<br>") + i18n("auto update: true");
 				else
-					toolTip += QLatin1String("<br>") + i18n("auto update: false");
+					toolTip += QStringLiteral("<br>") + i18n("auto update: false");
 			}
 		}
 
@@ -363,10 +369,18 @@ void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 void AspectTreeModel::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	AbstractAspect* parent = aspect->parentAspect();
 	int index = parent->indexOfChild<AbstractAspect>(aspect);
+	m_aspectAboutToBeRemovedCalled = true;
 	beginRemoveRows(modelIndexOfAspect(parent), index, index);
 }
 
 void AspectTreeModel::aspectRemoved() {
+	// make sure aspectToBeRemoved(), and with this beginRemoveRows() in the model, was called
+	// prior to calling endRemoveRows() further below.
+	// see https://invent.kde.org/education/labplot/-/merge_requests/278 for more information.
+	if (!m_aspectAboutToBeRemovedCalled)
+		return;
+
+	m_aspectAboutToBeRemovedCalled = false;
 	endRemoveRows();
 }
 
@@ -396,7 +410,7 @@ bool AspectTreeModel::setData(const QModelIndex& index, const QVariant& value, i
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	switch (index.column()) {
 	case 0: {
-		if (!aspect->setName(value.toString(), false)) {
+		if (!aspect->setName(value.toString(), AbstractAspect::NameHandling::UniqueRequired)) {
 			Q_EMIT statusInfo(i18n("The name \"%1\" is already in use. Choose another name.", value.toString()));
 			return false;
 		}
@@ -413,6 +427,8 @@ bool AspectTreeModel::setData(const QModelIndex& index, const QVariant& value, i
 }
 
 QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, int column) const {
+	if (!aspect)
+		return QModelIndex();
 	AbstractAspect* parent = aspect->parentAspect();
 	return createIndex(parent ? parent->indexOfChild<AbstractAspect>(aspect) : 0, column, const_cast<AbstractAspect*>(aspect));
 }
@@ -479,9 +495,9 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const {
 	// 	}
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void AspectTreeModel::renameRequestedSlot() {
 	auto* aspect = dynamic_cast<AbstractAspect*>(QObject::sender());
 	if (aspect)

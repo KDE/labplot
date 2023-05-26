@@ -21,6 +21,7 @@
 
 class AspectTreeModel;
 class BackgroundWidget;
+class LineWidget;
 class Column;
 class SymbolWidget;
 class TreeViewComboBox;
@@ -56,12 +57,16 @@ private:
 
 protected:
 	void initTabs();
-	virtual void setModel();
+	static QList<AspectType> defaultColumnTopLevelClasses();
+	void setModel();
 	void setSymbols(QList<XYCurve*>);
 
 	Ui::XYCurveDock ui;
+	LineWidget* lineWidget{nullptr};
+	LineWidget* dropLineWidget{nullptr};
 	BackgroundWidget* backgroundWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
+	LineWidget* errorBarsLineWidget{nullptr};
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
@@ -83,16 +88,6 @@ private Q_SLOTS:
 	void lineSkipGapsChanged(bool);
 	void lineIncreasingXOnlyChanged(bool);
 	void lineInterpolationPointsCountChanged(int);
-	void lineStyleChanged(int);
-	void lineColorChanged(const QColor&);
-	void lineWidthChanged(double);
-	void lineOpacityChanged(int);
-
-	void dropLineTypeChanged(int);
-	void dropLineStyleChanged(int);
-	void dropLineColorChanged(const QColor&);
-	void dropLineWidthChanged(double);
-	void dropLineOpacityChanged(int);
 
 	// Values-Tab
 	void valuesTypeChanged(int);
@@ -110,25 +105,19 @@ private Q_SLOTS:
 	void valuesColorChanged(const QColor&);
 
 	//"Error bars"-Tab
-	void xErrorTypeChanged(int) const;
-	void yErrorTypeChanged(int) const;
-	void xErrorPlusColumnChanged(const QModelIndex&) const;
-	void xErrorMinusColumnChanged(const QModelIndex&) const;
-	void yErrorPlusColumnChanged(const QModelIndex&) const;
-	void yErrorMinusColumnChanged(const QModelIndex&) const;
-	void errorBarsTypeChanged(int) const;
-	void errorBarsCapSizeChanged(double) const;
-	void errorBarsStyleChanged(int) const;
-	void errorBarsColorChanged(const QColor&);
-	void errorBarsWidthChanged(double) const;
-	void errorBarsOpacityChanged(int) const;
+	void xErrorTypeChanged(int);
+	void yErrorTypeChanged(int);
+	void xErrorPlusColumnChanged(const QModelIndex&);
+	void xErrorMinusColumnChanged(const QModelIndex&);
+	void yErrorPlusColumnChanged(const QModelIndex&);
+	void yErrorMinusColumnChanged(const QModelIndex&);
 
 	//"Margin Plots"-Tab
-	void rugEnabledChanged(bool) const;
-	void rugOrientationChanged(int) const;
-	void rugLengthChanged(double) const;
-	void rugWidthChanged(double) const;
-	void rugOffsetChanged(double) const;
+	void rugEnabledChanged(bool);
+	void rugOrientationChanged(int);
+	void rugLengthChanged(double);
+	void rugWidthChanged(double);
+	void rugOffsetChanged(double);
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
@@ -143,11 +132,6 @@ private Q_SLOTS:
 	void curveLineSkipGapsChanged(bool);
 	void curveLineIncreasingXOnlyChanged(bool);
 	void curveLineInterpolationPointsCountChanged(int);
-	void curveLinePenChanged(const QPen&);
-	void curveLineOpacityChanged(qreal);
-	void curveDropLineTypeChanged(XYCurve::DropLineType);
-	void curveDropLinePenChanged(const QPen&);
-	void curveDropLineOpacityChanged(qreal);
 
 	// Values-Tab
 	void curveValuesTypeChanged(XYCurve::ValuesType);
@@ -171,10 +155,6 @@ private Q_SLOTS:
 	void curveYErrorTypeChanged(XYCurve::ErrorType);
 	void curveYErrorPlusColumnChanged(const AbstractColumn*);
 	void curveYErrorMinusColumnChanged(const AbstractColumn*);
-	void curveErrorBarsCapSizeChanged(qreal);
-	void curveErrorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void curveErrorBarsPenChanged(const QPen&);
-	void curveErrorBarsOpacityChanged(qreal);
 
 	//"Margin Plots"-Tab
 	void curveRugEnabledChanged(bool);
@@ -189,6 +169,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void info(const QString&);
+
+	friend class MultiRangeTest;
 };
 
 #endif

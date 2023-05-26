@@ -31,7 +31,7 @@ SymbolWidget::SymbolWidget(QWidget* parent)
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, Qt::black);
 
 	connect(ui.cbStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::styleChanged);
-	connect(ui.sbSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &SymbolWidget::sizeChanged);
+	connect(ui.sbSize, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &SymbolWidget::sizeChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &SymbolWidget::rotationChanged);
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &SymbolWidget::opacityChanged);
 
@@ -40,13 +40,14 @@ SymbolWidget::SymbolWidget(QWidget* parent)
 
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &SymbolWidget::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &SymbolWidget::borderWidthChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &SymbolWidget::borderWidthChanged);
 }
 
-void SymbolWidget::setSymbols(QList<Symbol*> symbols) {
+void SymbolWidget::setSymbols(const QList<Symbol*>& symbols) {
 	m_symbols = symbols;
 	m_symbol = m_symbols.first();
 
+	CONDITIONAL_LOCK_RETURN;
 	load();
 
 	// Symbol-Tab
@@ -62,7 +63,7 @@ void SymbolWidget::setSymbols(QList<Symbol*> symbols) {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void SymbolWidget::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbSize->setLocale(numberLocale);
 	ui.sbBorderWidth->setLocale(numberLocale);
 }
@@ -90,14 +91,22 @@ void SymbolWidget::styleChanged(int index) {
 		ui.sbOpacity->setEnabled(true);
 
 		// enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-		if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
-			ui.cbFillingStyle->setEnabled(true);
+		bool hasFilling = (style != Symbol::Style::Line && style != Symbol::Style::Cross && style != Symbol::Style::X && style != Symbol::Style::Asterisk
+						   && style != Symbol::Style::Tri && style != Symbol::Style::XPlus && style != Symbol::Style::TallPlus
+						   && style != Symbol::Style::LatinCross && style != Symbol::Style::DotPlus && style != Symbol::Style::Hash);
+
+		ui.lFilling->setEnabled(hasFilling);
+		ui.lFillingStyle->setEnabled(hasFilling);
+		ui.cbFillingStyle->setEnabled(hasFilling);
+		ui.lFillingColor->setEnabled(hasFilling);
+		ui.kcbFillingColor->setEnabled(hasFilling);
+
+		if (hasFilling) {
+			ui.lBorder->setText(i18n("Border"));
 			bool noBrush = (Qt::BrushStyle(ui.cbFillingStyle->currentIndex()) == Qt::NoBrush);
 			ui.kcbFillingColor->setEnabled(!noBrush);
-		} else {
-			ui.kcbFillingColor->setEnabled(false);
-			ui.cbFillingStyle->setEnabled(false);
-		}
+		} else
+			ui.lBorder->setText(i18n("Line"));
 
 		ui.cbBorderStyle->setEnabled(true);
 		bool noLine = (Qt::PenStyle(ui.cbBorderStyle->currentIndex()) == Qt::NoPen);
@@ -105,32 +114,28 @@ void SymbolWidget::styleChanged(int index) {
 		ui.sbBorderWidth->setEnabled(!noLine);
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* symbol : m_symbols)
 		symbol->setStyle(style);
 }
 
 void SymbolWidget::sizeChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* symbol : m_symbols)
 		symbol->setSize(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 }
 
 void SymbolWidget::rotationChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* symbol : m_symbols)
 		symbol->setRotationAngle(value);
 }
 
 void SymbolWidget::opacityChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	qreal opacity = (float)value / 100.;
 	for (auto* symbol : m_symbols)
@@ -144,8 +149,7 @@ void SymbolWidget::fillingStyleChanged(int index) {
 	const auto brushStyle = Qt::BrushStyle(index);
 	ui.kcbFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QBrush brush;
 	for (auto* symbol : m_symbols) {
@@ -156,8 +160,7 @@ void SymbolWidget::fillingStyleChanged(int index) {
 }
 
 void SymbolWidget::fillingColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QBrush brush;
 	for (auto* symbol : m_symbols) {
@@ -166,9 +169,7 @@ void SymbolWidget::fillingColorChanged(const QColor& color) {
 		symbol->setBrush(brush);
 	}
 
-	m_initializing = true;
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, color);
-	m_initializing = false;
 }
 
 void SymbolWidget::borderStyleChanged(int index) {
@@ -184,8 +185,7 @@ void SymbolWidget::borderStyleChanged(int index) {
 		ui.sbBorderWidth->setEnabled(true);
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QPen pen;
 	for (auto* symbol : m_symbols) {
@@ -196,8 +196,7 @@ void SymbolWidget::borderStyleChanged(int index) {
 }
 
 void SymbolWidget::borderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QPen pen;
 	for (auto* symbol : m_symbols) {
@@ -205,15 +204,11 @@ void SymbolWidget::borderColorChanged(const QColor& color) {
 		pen.setColor(color);
 		symbol->setPen(pen);
 	}
-
-	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing = false;
 }
 
 void SymbolWidget::borderWidthChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPen pen;
 	for (auto* symbol : m_symbols) {
@@ -227,35 +222,35 @@ void SymbolWidget::borderWidthChanged(double value) {
 //*********** SLOTs for changes triggered in Symbol ***********
 //*************************************************************
 void SymbolWidget::symbolStyleChanged(Symbol::Style style) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	int index = ui.cbStyle->findData((int)style);
 	ui.cbStyle->setCurrentIndex(index);
 }
 
 void SymbolWidget::symbolSizeChanged(qreal size) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 }
 
 void SymbolWidget::symbolRotationAngleChanged(qreal angle) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
 }
 
 void SymbolWidget::symbolOpacityChanged(qreal opacity) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbOpacity->setValue(round(opacity * 100.0));
 }
 
 void SymbolWidget::symbolBrushChanged(const QBrush& brush) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbFillingStyle->setCurrentIndex((int)brush.style());
 	ui.kcbFillingColor->setColor(brush.color());
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, brush.color());
 }
 
 void SymbolWidget::symbolPenChanged(const QPen& pen) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbBorderStyle->setCurrentIndex((int)pen.style());
 	ui.kcbBorderColor->setColor(pen.color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, pen.color());
@@ -266,8 +261,6 @@ void SymbolWidget::symbolPenChanged(const QPen& pen) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void SymbolWidget::load() {
-	const Lock lock(m_initializing);
-
 	int index = ui.cbStyle->findData((int)m_symbol->style());
 	ui.cbStyle->setCurrentIndex(index);
 	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(m_symbol->size(), Worksheet::Unit::Point));
@@ -285,7 +278,7 @@ void SymbolWidget::load() {
 }
 
 void SymbolWidget::loadConfig(const KConfigGroup& group) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN; // need to lock here since this function is also called from outside
 
 	int index = ui.cbStyle->findData((int)m_symbol->style());
 	ui.cbStyle->setCurrentIndex(group.readEntry("SymbolStyle", index));

@@ -46,7 +46,9 @@ public:
 protected:
 	CartesianScale(const Range<double>& range, double a, double b, double c);
 	Range<double> m_range;
-	// TODO: what are these?
+	/// Those parameters define the scaling
+	/// They will be set by the linear, log, sqrt, ... scales
+	/// See the definition of the different scales for their meaning
 	double m_a;
 	double m_b;
 	double m_c;

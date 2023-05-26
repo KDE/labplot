@@ -16,8 +16,10 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 
+#include <QUndoStack>
+
 void ColumnTest::doubleMinimum() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 2.0, 5.0});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicIncreasing);
 	QCOMPARE(c.minimum(0, 2), -1.0);
@@ -35,7 +37,7 @@ void ColumnTest::doubleMinimum() {
 }
 
 void ColumnTest::doubleMaximum() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 2.0, 5.0});
 	QCOMPARE(c.maximum(0, 2), 5.0);
 	QCOMPARE(c.maximum(1, 1), 2.0);
@@ -50,7 +52,7 @@ void ColumnTest::doubleMaximum() {
 }
 
 void ColumnTest::integerMinimum() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-1, 2, 5});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicIncreasing);
 	QCOMPARE(c.minimum(0, 2), -1);
@@ -68,7 +70,7 @@ void ColumnTest::integerMinimum() {
 }
 
 void ColumnTest::integerMaximum() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-1, 2, 5});
 	QCOMPARE(c.maximum(0, 2), 5);
 	QCOMPARE(c.maximum(1, 1), 2);
@@ -83,7 +85,7 @@ void ColumnTest::integerMaximum() {
 }
 
 void ColumnTest::bigIntMinimum() {
-	Column c("BigInt column", Column::ColumnMode::BigInt);
+	Column c(QStringLiteral("BigInt column"), Column::ColumnMode::BigInt);
 	c.setBigInts({-1, 2, 5});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicIncreasing);
 	QCOMPARE(c.minimum(0, 2), -1);
@@ -101,7 +103,7 @@ void ColumnTest::bigIntMinimum() {
 }
 
 void ColumnTest::bigIntMaximum() {
-	Column c("BigInt column", Column::ColumnMode::BigInt);
+	Column c(QStringLiteral("BigInt column"), Column::ColumnMode::BigInt);
 	c.setBigInts({-1, 2, 5});
 	QCOMPARE(c.maximum(0, 2), 5);
 	QCOMPARE(c.maximum(0, 1), 2);
@@ -118,7 +120,7 @@ void ColumnTest::bigIntMaximum() {
 /////////////////////////////////////////////////////
 
 void ColumnTest::statisticsDouble() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({1.0, 1.0, 2.0, 5.0});
 
 	auto& stats = c.statistics();
@@ -153,7 +155,7 @@ void ColumnTest::statisticsDouble() {
 	QCOMPARE(stats.entropy, 1.5);
 }
 void ColumnTest::statisticsDoubleNegative() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 0.0, 2.0, 5.0});
 
 	auto& stats = c.statistics();
@@ -166,7 +168,7 @@ void ColumnTest::statisticsDoubleNegative() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 5.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -.25);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -188,7 +190,7 @@ void ColumnTest::statisticsDoubleNegative() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsDoubleBigNegative() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-100.0, 0.0, 2.0, 5.0});
 
 	auto& stats = c.statistics();
@@ -197,11 +199,11 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	QCOMPARE(stats.minimum, -100.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, -23.25);
-	QCOMPARE(stats.geometricMean, qQNaN()); // special case
+	QCOMPARE(stats.geometricMean, NAN); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, -3343. / 31.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -25.);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -223,7 +225,7 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsDoubleZero() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({1.0, 0.0, 2.0, 5.0});
 
 	auto& stats = c.statistics();
@@ -236,7 +238,7 @@ void ColumnTest::statisticsDoubleZero() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 3.75);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, 0.75);
 	QCOMPARE(stats.median, 1.5);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -259,7 +261,7 @@ void ColumnTest::statisticsDoubleZero() {
 }
 
 void ColumnTest::statisticsInt() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1, 1, 2, 5});
 
 	auto& stats = c.statistics();
@@ -294,7 +296,7 @@ void ColumnTest::statisticsInt() {
 	QCOMPARE(stats.entropy, 1.5);
 }
 void ColumnTest::statisticsIntNegative() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-1, 0, 2, 5});
 
 	auto& stats = c.statistics();
@@ -307,7 +309,7 @@ void ColumnTest::statisticsIntNegative() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 5.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -.25);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -329,7 +331,7 @@ void ColumnTest::statisticsIntNegative() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntBigNegative() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-100, 0, 2, 5});
 
 	auto& stats = c.statistics();
@@ -338,11 +340,11 @@ void ColumnTest::statisticsIntBigNegative() {
 	QCOMPARE(stats.minimum, -100.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, -23.25);
-	QCOMPARE(stats.geometricMean, qQNaN()); // special case
+	QCOMPARE(stats.geometricMean, NAN); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, -3343. / 31.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -25.);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -364,7 +366,7 @@ void ColumnTest::statisticsIntBigNegative() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntZero() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1, 0, 2, 5});
 
 	auto& stats = c.statistics();
@@ -377,7 +379,7 @@ void ColumnTest::statisticsIntZero() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 3.75);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, 0.75);
 	QCOMPARE(stats.median, 1.5);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -399,7 +401,7 @@ void ColumnTest::statisticsIntZero() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntOverflow() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1000000000, 1100000000, 1200000000, 1300000000});
 
 	auto& stats = c.statistics();
@@ -412,7 +414,7 @@ void ColumnTest::statisticsIntOverflow() {
 	QCOMPARE(stats.harmonicMean, 1139064055.75838);
 	QCOMPARE(stats.contraharmonicMean, 1160869565.21739);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, 1075000000);
 	QCOMPARE(stats.median, 1150000000);
 	QCOMPARE(stats.thirdQuartile, 1225000000);
@@ -434,7 +436,7 @@ void ColumnTest::statisticsIntOverflow() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsBigInt() {
-	Column c("BigInt column", Column::ColumnMode::BigInt);
+	Column c(QStringLiteral("BigInt column"), Column::ColumnMode::BigInt);
 	c.setBigInts({-10000000000, 0, 1000000000, 10000000000});
 
 	auto& stats = c.statistics();
@@ -443,11 +445,11 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.minimum, -10000000000);
 	QCOMPARE(stats.maximum, 10000000000);
 	QCOMPARE(stats.arithmeticMean, 250000000);
-	QCOMPARE(stats.geometricMean, qQNaN());
+	QCOMPARE(stats.geometricMean, NAN);
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 201000000000);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 // Windows CI fails here
 #ifndef HAVE_WINDOWS
 	QCOMPARE(stats.firstQuartile, -2500000000);
@@ -472,17 +474,70 @@ void ColumnTest::statisticsBigInt() {
 #endif
 }
 
+void ColumnTest::statisticsText() {
+	Column c(QStringLiteral("Text column"), Column::ColumnMode::Text);
+	c.setTextAt(0, QStringLiteral("yes"));
+	c.setTextAt(1, QStringLiteral("no"));
+	c.setTextAt(2, QStringLiteral("no"));
+	c.setTextAt(3, QStringLiteral("yes"));
+	c.setTextAt(4, QStringLiteral("yes"));
+
+	const auto& stats = c.statistics();
+
+	QCOMPARE(stats.size, 5);
+	QCOMPARE(stats.unique, 2);
+}
+
+void ColumnTest::testDictionaryIndex() {
+	Column c(QStringLiteral("Text column"), Column::ColumnMode::Text);
+	c.setTextAt(0, QStringLiteral("yes"));
+	c.setTextAt(1, QStringLiteral("no"));
+	c.setTextAt(2, QStringLiteral("no"));
+	c.setTextAt(3, QStringLiteral("yes"));
+	c.setTextAt(4, QStringLiteral("yes"));
+
+	// check the position of the distinct values in the dictionary
+	QCOMPARE(c.dictionaryIndex(0), 0);
+	QCOMPARE(c.dictionaryIndex(1), 1);
+	QCOMPARE(c.dictionaryIndex(2), 1);
+	QCOMPARE(c.dictionaryIndex(3), 0);
+	QCOMPARE(c.dictionaryIndex(4), 0);
+
+	// modify a value which will invalidate the dictionary and verify it again
+	c.setTextAt(1, QStringLiteral("yes"));
+
+	QCOMPARE(c.dictionaryIndex(0), 0);
+	QCOMPARE(c.dictionaryIndex(1), 0);
+	QCOMPARE(c.dictionaryIndex(2), 1);
+	QCOMPARE(c.dictionaryIndex(3), 0);
+	QCOMPARE(c.dictionaryIndex(4), 0);
+}
+
+void ColumnTest::testTextFrequencies() {
+	Column c(QStringLiteral("Text column"), Column::ColumnMode::Text);
+	c.setTextAt(0, QStringLiteral("yes"));
+	c.setTextAt(1, QStringLiteral("no"));
+	c.setTextAt(2, QStringLiteral("no"));
+	c.setTextAt(3, QStringLiteral("yes"));
+	c.setTextAt(4, QStringLiteral("yes"));
+
+	const auto& frequencies = c.frequencies();
+
+	QCOMPARE(frequencies[QStringLiteral("yes")], 3);
+	QCOMPARE(frequencies[QStringLiteral("no")], 2);
+}
+
 //////////////////////////////////////////////////
 
 void ColumnTest::saveLoadDateTime() {
-	Column c("Datetime column", Column::ColumnMode::DateTime);
+	Column c(QStringLiteral("Datetime column"), Column::ColumnMode::DateTime);
 	c.setDateTimes({
 		QDateTime::fromString(
-			"2017-03-26T02:14:34.000Z",
+			QStringLiteral("2017-03-26T02:14:34.000Z"),
 			Qt::DateFormat::ISODateWithMs), // without the timezone declaration it would be invalid (in some regions), because of the daylight time
-		QDateTime::fromString("2018-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs),
-		QDateTime::fromString("2019-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs),
-		QDateTime::fromString("2019-26-03 02:14:34:000", "yyyy-dd-MM hh:mm:ss:zzz"),
+		QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+		QDateTime::fromString(QStringLiteral("2019-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+		QDateTime::fromString(QStringLiteral("2019-26-03 02:14:34:000"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")),
 	});
 
 	QByteArray array;
@@ -491,12 +546,12 @@ void ColumnTest::saveLoadDateTime() {
 
 	QDEBUG(array);
 
-	Column c2("Datetime 2 column", Column::ColumnMode::DateTime);
+	Column c2(QStringLiteral("Datetime 2 column"), Column::ColumnMode::DateTime);
 	XmlStreamReader reader(array);
 	bool found = false;
 	while (!reader.atEnd()) {
 		reader.readNext();
-		if (reader.isStartElement() && reader.name() == "column") {
+		if (reader.isStartElement() && reader.name() == QLatin1String("column")) {
 			found = true;
 			break;
 		}
@@ -506,13 +561,13 @@ void ColumnTest::saveLoadDateTime() {
 
 	QCOMPARE(c2.rowCount(), 4);
 	QCOMPARE(c2.dateTimeAt(0).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(0), QDateTime::fromString("2017-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
+	QCOMPARE(c2.dateTimeAt(0), QDateTime::fromString(QStringLiteral("2017-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
 	QCOMPARE(c2.dateTimeAt(1).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(1), QDateTime::fromString("2018-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
+	QCOMPARE(c2.dateTimeAt(1), QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
 	QCOMPARE(c2.dateTimeAt(2).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(2), QDateTime::fromString("2019-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
+	QCOMPARE(c2.dateTimeAt(2), QDateTime::fromString(QStringLiteral("2019-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
 	QCOMPARE(c2.dateTimeAt(3).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(3), QDateTime::fromString("2019-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
+	QCOMPARE(c2.dateTimeAt(3), QDateTime::fromString(QStringLiteral("2019-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
 }
 
 void ColumnTest::loadDoubleFromProject() {
@@ -529,106 +584,106 @@ void ColumnTest::loadDoubleFromProject() {
 	auto* doubleColumn = static_cast<Column*>(childs.at(0));
 	QCOMPARE(doubleColumn->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(doubleColumn->rowCount(), 100);
-	double doubleValues[] = {0.625,
-							 1,
-							 1,
-							 4,
-							 1.125,
-							 1.66666666666667,
-							 11,
-							 6,
-							 2.16666666666667,
-							 14,
-							 1.5,
-							 2.28571428571429,
-							 2.125,
-							 2,
-							 1.9,
-							 2,
-							 3.5,
-							 22,
-							 2.3,
-							 2.66666666666667,
-							 5,
-							 26,
-							 3,
-							 4,
-							 4.14285714285714,
-							 3.33333333333333,
-							 10.3333333333333,
-							 32,
-							 8.25,
-							 3.4,
-							 8.75,
-							 5.14285714285714,
-							 9.25,
-							 6.33333333333333,
-							 4.33333333333333,
-							 4.44444444444444,
-							 4.55555555555556,
-							 4.2,
-							 6.14285714285714,
-							 5.5,
-							 7.5,
-							 46,
-							 4.7,
-							 12,
-							 7,
-							 7.14285714285714,
-							 6.375,
-							 5.2,
-							 26.5,
-							 18,
-							 27.5,
-							 14,
-							 11.4,
-							 8.28571428571429,
-							 29.5,
-							 10,
-							 15.25,
-							 12.4,
-							 12.6,
-							 64,
-							 65,
-							 33,
-							 8.375,
-							 13.6,
-							 17.25,
-							 14,
-							 23.6666666666667,
-							 8,
-							 8.11111111111111,
-							 10.5714285714286,
-							 12.5,
-							 8.44444444444444,
-							 19.25,
-							 8.66666666666667,
-							 11.2857142857143,
-							 8,
-							 20.25,
-							 27.3333333333333,
-							 20.75,
-							 16.8,
-							 42.5,
-							 9.55555555555556,
-							 9.66666666666667,
-							 17.6,
-							 44.5,
-							 90,
-							 18.2,
-							 46,
-							 31,
-							 47,
-							 23.75,
-							 96,
-							 12.125,
-							 19.6,
-							 16.5,
-							 11.1111111111111,
-							 33.6666666666667,
-							 12.75,
-							 25.75,
-							 13};
+	const double doubleValues[] = {0.625,
+								   1,
+								   1,
+								   4,
+								   1.125,
+								   1.66666666666667,
+								   11,
+								   6,
+								   2.16666666666667,
+								   14,
+								   1.5,
+								   2.28571428571429,
+								   2.125,
+								   2,
+								   1.9,
+								   2,
+								   3.5,
+								   22,
+								   2.3,
+								   2.66666666666667,
+								   5,
+								   26,
+								   3,
+								   4,
+								   4.14285714285714,
+								   3.33333333333333,
+								   10.3333333333333,
+								   32,
+								   8.25,
+								   3.4,
+								   8.75,
+								   5.14285714285714,
+								   9.25,
+								   6.33333333333333,
+								   4.33333333333333,
+								   4.44444444444444,
+								   4.55555555555556,
+								   4.2,
+								   6.14285714285714,
+								   5.5,
+								   7.5,
+								   46,
+								   4.7,
+								   12,
+								   7,
+								   7.14285714285714,
+								   6.375,
+								   5.2,
+								   26.5,
+								   18,
+								   27.5,
+								   14,
+								   11.4,
+								   8.28571428571429,
+								   29.5,
+								   10,
+								   15.25,
+								   12.4,
+								   12.6,
+								   64,
+								   65,
+								   33,
+								   8.375,
+								   13.6,
+								   17.25,
+								   14,
+								   23.6666666666667,
+								   8,
+								   8.11111111111111,
+								   10.5714285714286,
+								   12.5,
+								   8.44444444444444,
+								   19.25,
+								   8.66666666666667,
+								   11.2857142857143,
+								   8,
+								   20.25,
+								   27.3333333333333,
+								   20.75,
+								   16.8,
+								   42.5,
+								   9.55555555555556,
+								   9.66666666666667,
+								   17.6,
+								   44.5,
+								   90,
+								   18.2,
+								   46,
+								   31,
+								   47,
+								   23.75,
+								   96,
+								   12.125,
+								   19.6,
+								   16.5,
+								   11.1111111111111,
+								   33.6666666666667,
+								   12.75,
+								   25.75,
+								   13};
 	for (int i = 0; i < 100; i++)
 		QCOMPARE(doubleColumn->valueAt(i), doubleValues[i]);
 }
@@ -647,12 +702,12 @@ void ColumnTest::loadIntegerFromProject() {
 	auto* integerColumn = static_cast<Column*>(childs.at(0));
 	QCOMPARE(integerColumn->columnMode(), AbstractColumn::ColumnMode::Integer);
 	QCOMPARE(integerColumn->rowCount(), 133);
-	int integerValues[133] = {291, 75,	21,	 627, 163, 677, 712, 66,  733, 653, 502, 515, 379, 70,	762, 261, 304, 541, 298, 462, 623, 382, 94,
-							  232, 679, 132, 124, 212, 122, 118, 486, 126, 107, 677, 386, 118, 731, 484, 638, 127, 779, 109, 708, 298, 680, 249,
-							  591, 155, 351, 178, 70,  768, 2,	 504, 179, 747, 789, 213, 144, 143, 61,	 761, 113, 766, 18,	 617, 406, 489, 299,
-							  658, 326, 181, 773, 228, 653, 242, 382, 11,  267, 29,	 283, 30,  251, 453, 699, 286, 739, 406, 729, 159, 506, 20,
-							  766, 443, 646, 161, 545, 400, 160, 693, 722, 463, 121, 350, 194, 558, 503, 72,  516, 509, 118, 340, 342, 495, 50,
-							  549, 643, 241, 248, 483, 408, 768, 634, 589, 159, 518, 475, 403, 165, 122, 268, 537, 33};
+	const int integerValues[133] = {291, 75,  21,  627, 163, 677, 712, 66,	733, 653, 502, 515, 379, 70,  762, 261, 304, 541, 298, 462, 623, 382, 94,
+									232, 679, 132, 124, 212, 122, 118, 486, 126, 107, 677, 386, 118, 731, 484, 638, 127, 779, 109, 708, 298, 680, 249,
+									591, 155, 351, 178, 70,	 768, 2,   504, 179, 747, 789, 213, 144, 143, 61,  761, 113, 766, 18,  617, 406, 489, 299,
+									658, 326, 181, 773, 228, 653, 242, 382, 11,	 267, 29,  283, 30,	 251, 453, 699, 286, 739, 406, 729, 159, 506, 20,
+									766, 443, 646, 161, 545, 400, 160, 693, 722, 463, 121, 350, 194, 558, 503, 72,	516, 509, 118, 340, 342, 495, 50,
+									549, 643, 241, 248, 483, 408, 768, 634, 589, 159, 518, 475, 403, 165, 122, 268, 537, 33};
 	for (int i = 0; i < 133; i++)
 		QCOMPARE(integerColumn->integerAt(i), integerValues[i]);
 }
@@ -671,7 +726,7 @@ void ColumnTest::loadBigIntegerFromProject() {
 	auto* bigIntegerColumn = static_cast<Column*>(childs.at(0));
 	QCOMPARE(bigIntegerColumn->columnMode(), AbstractColumn::ColumnMode::BigInt);
 	QCOMPARE(bigIntegerColumn->rowCount(), 98);
-	qint64 bigIntegerValues[] = {
+	const qint64 bigIntegerValues[] = {
 		423448954198, 5641410204,  30408827812, 28654888657, 49080407041, 49609860873, 3687941775,	19532027992, 35894087224, 5820636581,  28739047077,
 		13946526866,  36153607843, 3240340694,	2375891120,	 3014999117,  17758738424, 31303772749, 36400461519, 29813286102, 14068980943, 24595715523,
 		390096547,	  27927541822, 35442936843, 33577242277, 34966078315, 45550480998, 11834545810, 25714661808, 6979002160,  35138449350, 3597002515,
@@ -699,16 +754,16 @@ void ColumnTest::loadTextFromProject() {
 	auto* textColumn = static_cast<Column*>(childs.at(0));
 	QCOMPARE(textColumn->columnMode(), AbstractColumn::ColumnMode::Text);
 	QCOMPARE(textColumn->rowCount(), 10);
-	QStringList texts = {"first value",
-						 "second value",
-						 "third value",
-						 "fourth value",
-						 "fifth value",
-						 "sixt value",
-						 "sevent value",
-						 "eigth value",
-						 "ninth value",
-						 "tenth value"};
+	QStringList texts = {QStringLiteral("first value"),
+						 QStringLiteral("second value"),
+						 QStringLiteral("third value"),
+						 QStringLiteral("fourth value"),
+						 QStringLiteral("fifth value"),
+						 QStringLiteral("sixt value"),
+						 QStringLiteral("sevent value"),
+						 QStringLiteral("eigth value"),
+						 QStringLiteral("ninth value"),
+						 QStringLiteral("tenth value")};
 	for (int i = 0; i < 10; i++) {
 		QCOMPARE(textColumn->textAt(i), texts.at(i));
 	}
@@ -737,26 +792,252 @@ void ColumnTest::loadDateTimeFromProject() {
 	//	}
 }
 
-void ColumnTest::testDictionaryIndex() {
-	Column c("Text column", Column::ColumnMode::Text);
-	c.setTextAt(0, "yes");
-	c.setTextAt(1, "no");
-	c.setTextAt(2, "no");
-	c.setTextAt(3, "yes");
+void ColumnTest::testIndexForValue() {
+	{
+		const double value = 5;
+		QVector<QPointF> points{};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), -1);
+	}
 
-	// check the position of the distinct values in the dictionary
-	QCOMPARE(c.dictionaryIndex(0), 0);
-	QCOMPARE(c.dictionaryIndex(1), 1);
-	QCOMPARE(c.dictionaryIndex(2), 1);
-	QCOMPARE(c.dictionaryIndex(3), 0);
+	{
+		const double value = 5;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 0);
+	}
 
-	// modify a value which will invalidate the dictionary and verify it again
-	c.setTextAt(1, "yes");
+	{
+		const double value = 60;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 4);
+	}
 
-	QCOMPARE(c.dictionaryIndex(0), 0);
-	QCOMPARE(c.dictionaryIndex(1), 0);
-	QCOMPARE(c.dictionaryIndex(2), 1);
-	QCOMPARE(c.dictionaryIndex(3), 0);
+	{
+		const double value = 16;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+
+	{
+		const double value = 20;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+}
+
+void ColumnTest::testIndexForValueDoubleVector() {
+	{
+		const double value = 5;
+		QVector<double> points{};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), -1);
+	}
+
+	{
+		const double value = 5;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 0);
+	}
+
+	{
+		const double value = 60;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 4);
+	}
+
+	{
+		const double value = 16;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+
+	{
+		const double value = 20;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+}
+
+void ColumnTest::testInsertRow() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Test"), Column::ColumnMode::Double);
+	project.addChild(c);
+	c->resizeTo(100);
+	QCOMPARE(c->rowCount(), 100);
+
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(c, &Column::rowsAboutToBeInserted, [this, &rowsAboutToBeInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+		QCOMPARE(source, c);
+		switch (rowsAboutToBeInsertedCounter) {
+		case 0:
+			QCOMPARE(before, 100);
+			QCOMPARE(count, 2);
+			break;
+		case 1:
+			QCOMPARE(before, 102);
+			QCOMPARE(count, 3);
+			break;
+		case 3: // redo()
+			QCOMPARE(before, 102);
+			QCOMPARE(count, 3);
+			break;
+		}
+		rowsAboutToBeInsertedCounter++;
+	});
+
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(c, &Column::rowsAboutToBeRemoved, [this, &rowsAboutToBeRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+		QCOMPARE(source, c);
+		switch (rowsAboutToBeRemovedCounter) {
+		case 0:
+			QCOMPARE(first, 102);
+			QCOMPARE(count, 3);
+			break;
+		}
+		rowsAboutToBeRemovedCounter++;
+	});
+
+	int rowsInsertedCounter = 0;
+	connect(c, &Column::rowsInserted, [this, &rowsInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+		QCOMPARE(source, c);
+
+		switch (rowsInsertedCounter) {
+		case 0:
+			QCOMPARE(before, 100);
+			QCOMPARE(count, 2);
+			break;
+		case 1:
+			QCOMPARE(before, 102);
+			QCOMPARE(count, 3);
+			break;
+		case 3: // redo()
+			QCOMPARE(before, 102);
+			QCOMPARE(count, 3);
+			break;
+		}
+
+		rowsInsertedCounter++;
+	});
+
+	int rowsRemovedCounter = 0;
+	connect(c, &Column::rowsRemoved, [this, &rowsRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+		QCOMPARE(source, c);
+
+		switch (rowsRemovedCounter) {
+		case 0:
+			QCOMPARE(first, 102);
+			QCOMPARE(count, 3);
+			break;
+		}
+
+		rowsRemovedCounter++;
+	});
+
+	c->insertRows(c->rowCount(), 2);
+	QCOMPARE(c->rowCount(), 102);
+	c->insertRows(c->rowCount(), 3);
+	QCOMPARE(c->rowCount(), 105);
+
+	c->undoStack()->undo();
+	QCOMPARE(c->rowCount(), 102);
+	c->undoStack()->redo();
+	QCOMPARE(c->rowCount(), 105);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 3);
+	QCOMPARE(rowsAboutToBeRemovedCounter, 1);
+	QCOMPARE(rowsInsertedCounter, 3);
+	QCOMPARE(rowsRemovedCounter, 1);
+}
+
+void ColumnTest::testRemoveRow() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Test"), Column::ColumnMode::Double);
+	project.addChild(c);
+	c->resizeTo(100);
+	QCOMPARE(c->rowCount(), 100);
+
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(c, &Column::rowsAboutToBeInserted, [this, &rowsAboutToBeInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+		QCOMPARE(source, c);
+		QCOMPARE(before, 96);
+		QCOMPARE(count, 3);
+		rowsAboutToBeInsertedCounter++;
+	});
+
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(c, &Column::rowsAboutToBeRemoved, [this, &rowsAboutToBeRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+		QCOMPARE(source, c);
+		switch (rowsAboutToBeRemovedCounter) {
+		case 0:
+			QCOMPARE(first, 99);
+			QCOMPARE(count, 1);
+			break;
+		case 1:
+			QCOMPARE(first, 96);
+			QCOMPARE(count, 3);
+			break;
+		case 2: // redo()
+			QCOMPARE(first, 96);
+			QCOMPARE(count, 3);
+			break;
+		}
+		rowsAboutToBeRemovedCounter++;
+	});
+
+	int rowsInsertedCounter = 0;
+	connect(c, &Column::rowsInserted, [this, &rowsInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+		QCOMPARE(source, c);
+
+		QCOMPARE(before, 96);
+		QCOMPARE(count, 3);
+
+		rowsInsertedCounter++;
+	});
+
+	int rowsRemovedCounter = 0;
+	connect(c, &Column::rowsRemoved, [this, &rowsRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+		QCOMPARE(source, c);
+
+		switch (rowsRemovedCounter) {
+		case 0:
+			QCOMPARE(first, 99);
+			QCOMPARE(count, 1);
+			break;
+		case 1:
+			QCOMPARE(first, 96);
+			QCOMPARE(count, 3);
+			break;
+		case 2: // redo()
+			QCOMPARE(first, 96);
+			QCOMPARE(count, 3);
+			break;
+		}
+
+		rowsRemovedCounter++;
+	});
+
+	c->removeRows(c->rowCount() - 1, 1);
+	QCOMPARE(c->rowCount(), 99);
+	c->removeRows(c->rowCount() - 3, 3);
+	QCOMPARE(c->rowCount(), 96);
+
+	c->undoStack()->undo();
+	QCOMPARE(c->rowCount(), 99);
+	c->undoStack()->redo();
+	QCOMPARE(c->rowCount(), 96);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 1);
+	QCOMPARE(rowsAboutToBeRemovedCounter, 3);
+	QCOMPARE(rowsInsertedCounter, 1);
+	QCOMPARE(rowsRemovedCounter, 3);
 }
 
 QTEST_MAIN(ColumnTest)

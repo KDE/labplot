@@ -46,7 +46,7 @@ extern "C" {
 		(2D-curves defined by a fit model) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -100,14 +100,14 @@ void XYFitCurveDock::setupGeneral() {
 
 	// X/Y-Weight
 	for (int i = 0; i < NSL_FIT_WEIGHT_TYPE_COUNT; i++) {
-		uiGeneralTab.cbXWeight->addItem(nsl_fit_weight_type_name[i]);
-		uiGeneralTab.cbYWeight->addItem(nsl_fit_weight_type_name[i]);
+		uiGeneralTab.cbXWeight->addItem(QLatin1String(nsl_fit_weight_type_name[i]));
+		uiGeneralTab.cbYWeight->addItem(QLatin1String(nsl_fit_weight_type_name[i]));
 	}
 	uiGeneralTab.cbXWeight->setCurrentIndex(nsl_fit_weight_no);
 	uiGeneralTab.cbYWeight->setCurrentIndex(nsl_fit_weight_no);
 
 	for (int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
-		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
+		uiGeneralTab.cbCategory->addItem(QLatin1String(nsl_fit_model_category_name[i]));
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
@@ -117,15 +117,18 @@ void XYFitCurveDock::setupGeneral() {
 	l->addWidget(fitParametersWidget);
 	uiGeneralTab.frameParameters->setLayout(l);
 
-	// use white background in the preview label
-	QPalette p;
-	p.setColor(QPalette::Window, Qt::white);
-	uiGeneralTab.lFuncPic->setAutoFillBackground(true);
-	uiGeneralTab.lFuncPic->setPalette(p);
+	uiGeneralTab.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
+	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
-	uiGeneralTab.tbConstants->setIcon(QIcon::fromTheme("labplot-format-text-symbol"));
-	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme("preferences-desktop-font"));
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	for (int i = 0; i < NSL_FIT_ALGORITHM_COUNT; i++)
+		uiGeneralTab.cbAlgorithm->addItem(QLatin1String(nsl_fit_algorithm_name[i]));
+
+	if (m_fitData.modelCategory != nsl_fit_model_distribution) { // disable ML
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
+		auto* item = model->item(nsl_fit_algorithm_ml);
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+	}
 
 	// TODO: setting checked background color to unchecked color
 	//	p = uiGeneralTab.lData->palette();
@@ -135,7 +138,7 @@ void XYFitCurveDock::setupGeneral() {
 	//	uiGeneralTab.lData->setPalette(p);
 	// see https://forum.qt.io/topic/41325/solved-background-of-checked-qpushbutton-with-stylesheet/2
 	// Styles not usable (here: text color not theme dependent). see https://forum.qt.io/topic/60546/qpushbutton-default-windows-style-sheet/9
-	//	uiGeneralTab.lData->setStyleSheet("QToolButton:checked{background-color: transparent;border: 3px transparent;padding: 3px;}");
+	//	uiGeneralTab.lData->setStyleSheet(QStringLiteral("QToolButton:checked{background-color: transparent;border: 3px transparent;padding: 3px;}"));
 
 	//	uiGeneralTab.lData->setAutoFillBackground(true);
 
@@ -180,7 +183,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(1, 0)->setText(uiGeneralTab.twGoodness->item(1, 0)->text() + UTF8_QSTRING(" (χ²/dof)"));
 	uiGeneralTab.twGoodness->item(3, 0)->setText(uiGeneralTab.twGoodness->item(3, 0)->text() + UTF8_QSTRING(" (R²)"));
 	uiGeneralTab.twGoodness->item(4, 0)->setText(uiGeneralTab.twGoodness->item(4, 0)->text() + UTF8_QSTRING(" (R̄²)"));
-	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" ( P > χ²)"));
+	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" (P > χ²)"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -201,6 +204,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.tbConstants, &QToolButton::clicked, this, &XYFitCurveDock::showConstants);
 	connect(uiGeneralTab.tbFunctions, &QToolButton::clicked, this, &XYFitCurveDock::showFunctions);
 	connect(uiGeneralTab.pbOptions, &QPushButton::clicked, this, &XYFitCurveDock::showOptions);
+	connect(uiGeneralTab.cbAlgorithm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::algorithmChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFitCurveDock::recalculateClicked);
 	connect(uiGeneralTab.lData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
 	connect(uiGeneralTab.lFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
@@ -219,7 +223,7 @@ void XYFitCurveDock::setupGeneral() {
  * load curve settings
  */
 void XYFitCurveDock::initGeneralTab() {
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -241,12 +245,16 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_fitCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 
-	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Curve)
+	switch (m_fitCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Curve:
 		cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());
-	else if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Histogram)
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
 		cbDataSourceCurve->setAspect(m_fitCurve->dataSourceHistogram());
-	else
+		break;
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
 		cbDataSourceCurve->setAspect(nullptr);
+	}
 
 	cbXDataColumn->setColumn(m_fitCurve->xDataColumn(), m_fitCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
@@ -267,11 +275,12 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.xWeightsType);
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
+	DEBUG(Q_FUNC_INFO << ", model degree = " << m_fitData.degree);
 
 	if (m_fitData.paramStartValues.size() > 0)
 		DEBUG(Q_FUNC_INFO << ", start value 1 = " << m_fitData.paramStartValues.at(0));
 
-	DEBUG(Q_FUNC_INFO << ", model degree = " << m_fitData.degree);
+	uiGeneralTab.cbAlgorithm->setCurrentIndex(m_fitData.algorithm);
 
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
@@ -329,11 +338,11 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
-	m_aspect = m_curve;
+	setAspects(list);
 	m_fitCurve = static_cast<XYFitCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 
-	// we need a second model for data source comboboxe which will be dynamically
+	// we need a second model for data source comboboxes which will be dynamically
 	// updated in the slot depending on the current type (spreadsheet, curve or histogram)
 	// to allow to select the relevant aspects only
 	m_dataSourceModel = new AspectTreeModel(m_curve->project());
@@ -359,8 +368,8 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 		m_messageWidget->close();
 
 	showFitResult();
-	enableRecalculate();
 	m_initializing = false;
+	enableRecalculate();
 
 	updatePlotRanges();
 
@@ -388,7 +397,9 @@ bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
+	DEBUG(Q_FUNC_INFO << ", source type = " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, type))
 	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.cbCategory->setEnabled(true);
 		uiGeneralTab.lDataSourceCurve->hide();
@@ -410,7 +421,7 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 			// TODO: why do we need to reset the model here and below again to get the combobox updated?
 			cbDataSourceCurve->setModel(m_dataSourceModel);
 		}
-	} else {
+	} else { // curve or histogram
 		uiGeneralTab.lDataSourceCurve->show();
 		cbDataSourceCurve->show();
 		uiGeneralTab.lXColumn->hide();
@@ -454,16 +465,15 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		}
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYFitCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
@@ -480,8 +490,7 @@ void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -505,8 +514,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -527,8 +535,7 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -541,8 +548,7 @@ void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -558,13 +564,13 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 
 void XYFitCurveDock::showDataOptions(bool checked) {
 	if (checked) {
-		uiGeneralTab.lData->setIcon(QIcon::fromTheme("arrow-down"));
+		uiGeneralTab.lData->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.lDataSourceType->show();
 		uiGeneralTab.cbDataSourceType->show();
 		// select options for current source type
 		dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	} else {
-		uiGeneralTab.lData->setIcon(QIcon::fromTheme("arrow-right"));
+		uiGeneralTab.lData->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.lDataSourceType->hide();
 		uiGeneralTab.cbDataSourceType->hide();
 		uiGeneralTab.lXColumn->hide();
@@ -578,7 +584,7 @@ void XYFitCurveDock::showDataOptions(bool checked) {
 
 void XYFitCurveDock::showWeightsOptions(bool checked) {
 	if (checked) {
-		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme("arrow-down"));
+		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.lXWeight->show();
 		uiGeneralTab.cbXWeight->show();
 		uiGeneralTab.lXErrorCol->show();
@@ -588,7 +594,7 @@ void XYFitCurveDock::showWeightsOptions(bool checked) {
 		uiGeneralTab.lYErrorCol->show();
 		cbYErrorColumn->show();
 	} else {
-		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme("arrow-right"));
+		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.lXWeight->hide();
 		uiGeneralTab.cbXWeight->hide();
 		uiGeneralTab.lXErrorCol->hide();
@@ -602,18 +608,17 @@ void XYFitCurveDock::showWeightsOptions(bool checked) {
 
 void XYFitCurveDock::showFitOptions(bool checked) {
 	if (checked) {
-		uiGeneralTab.lFit->setIcon(QIcon::fromTheme("arrow-down"));
+		uiGeneralTab.lFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.lCategory->show();
 		uiGeneralTab.cbCategory->show();
 		uiGeneralTab.lModel->show();
 		uiGeneralTab.cbModel->show();
 		uiGeneralTab.lEquation->show();
 
-		m_initializing = true; // do not change start parameter
+		CONDITIONAL_LOCK_RETURN; // do not change start parameter
 		modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
-		m_initializing = false;
 	} else {
-		uiGeneralTab.lFit->setIcon(QIcon::fromTheme("arrow-right"));
+		uiGeneralTab.lFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.lCategory->hide();
 		uiGeneralTab.cbCategory->hide();
 		uiGeneralTab.lModel->hide();
@@ -630,20 +635,20 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 
 void XYFitCurveDock::showParameters(bool checked) {
 	if (checked) {
-		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme("arrow-down"));
+		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.frameParameters->show();
 	} else {
-		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme("arrow-right"));
+		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.frameParameters->hide();
 	}
 }
 
 void XYFitCurveDock::showResults(bool checked) {
 	if (checked) {
-		uiGeneralTab.lResults->setIcon(QIcon::fromTheme("arrow-down"));
+		uiGeneralTab.lResults->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.twResults->show();
 	} else {
-		uiGeneralTab.lResults->setIcon(QIcon::fromTheme("arrow-right"));
+		uiGeneralTab.lResults->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.twResults->hide();
 	}
 }
@@ -717,48 +722,64 @@ void XYFitCurveDock::categoryChanged(int index) {
 	if (m_fitData.modelCategory == (nsl_fit_model_category)index
 		|| (m_fitData.modelCategory == nsl_fit_model_custom && index == uiGeneralTab.cbCategory->count() - 1))
 		hasChanged = false;
+	DEBUG("HAS CHANGED: " << hasChanged)
 
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
 	else
 		m_fitData.modelCategory = (nsl_fit_model_category)index;
-
 	uiGeneralTab.cbModel->clear();
 	uiGeneralTab.cbModel->show();
 	uiGeneralTab.lModel->show();
 
+	// enable algorithm selection only for distributions
+	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+		uiGeneralTab.lAlgorithm->show();
+		uiGeneralTab.cbAlgorithm->show();
+	} else {
+		uiGeneralTab.lAlgorithm->hide();
+		uiGeneralTab.cbAlgorithm->hide();
+	}
+
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
 		for (int i = 0; i < NSL_FIT_MODEL_BASIC_COUNT; i++)
-			uiGeneralTab.cbModel->addItem(nsl_fit_model_basic_name[i]);
+			uiGeneralTab.cbModel->addItem(QLatin1String(nsl_fit_model_basic_name[i]));
 		break;
 	case nsl_fit_model_peak: {
 		for (int i = 0; i < NSL_FIT_MODEL_PEAK_COUNT; i++)
-			uiGeneralTab.cbModel->addItem(nsl_fit_model_peak_name[i]);
+			uiGeneralTab.cbModel->addItem(QLatin1String(nsl_fit_model_peak_name[i]));
 #if defined(_MSC_VER)
 		// disable voigt model
-		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
-		QStandardItem* item = model->item(nsl_fit_model_voigt);
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
+		auto* item = model->item(nsl_fit_model_voigt);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 		break;
 	}
 	case nsl_fit_model_growth:
 		for (int i = 0; i < NSL_FIT_MODEL_GROWTH_COUNT; i++)
-			uiGeneralTab.cbModel->addItem(nsl_fit_model_growth_name[i]);
+			uiGeneralTab.cbModel->addItem(QLatin1String(nsl_fit_model_growth_name[i]));
 		break;
 	case nsl_fit_model_distribution: {
 		for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++)
-			uiGeneralTab.cbModel->addItem(nsl_sf_stats_distribution_name[i]);
+			uiGeneralTab.cbModel->addItem(QLatin1String(nsl_sf_stats_distribution_name[i]));
 
 		// not-used items are disabled here
 		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
 
 		for (int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
-			// unused distributions
-			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_bernoulli) {
-				QStandardItem* item = model->item(i);
-				item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+			if (m_fitData.algorithm == nsl_fit_algorithm_ml) {
+				if (!nsl_sf_stats_distribution_supports_ML((nsl_sf_stats_distribution)i)) {
+					auto* item = model->item(i);
+					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+				}
+			} else { // LM
+				// unused distributions
+				if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_bernoulli) {
+					auto* item = model->item(i);
+					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+				}
 			}
 		}
 		break;
@@ -770,11 +791,23 @@ void XYFitCurveDock::categoryChanged(int index) {
 	}
 
 	if (hasChanged) {
+		DEBUG("HAS CHANGED! Resetting MODEL")
 		// show the fit-model for the currently selected default (first) fit-model
 		uiGeneralTab.cbModel->setCurrentIndex(0);
 		uiGeneralTab.sbDegree->setValue(1);
 		// when model type does not change, call it here
 		updateModelEquation();
+	}
+
+	// update algorithm list
+	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
+	auto* item = model->item(nsl_fit_algorithm_ml);
+	// enable ML item only for distributions
+	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	} else {
+		uiGeneralTab.cbAlgorithm->setCurrentIndex(nsl_fit_algorithm_lm);
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 
 	enableRecalculate();
@@ -811,7 +844,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		// xColumn = dynamic_cast<AbstractColumn*>(aspect);
 		xColumn = m_fitCurve->xDataColumn();
 	} else {
-		DEBUG("	data source: Curve")
+		DEBUG("	data source: Curve or Histogram")
 		if (m_fitCurve->dataSourceCurve())
 			xColumn = m_fitCurve->dataSourceCurve()->xColumn();
 	}
@@ -826,7 +859,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		case nsl_fit_model_polynomial:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setMaximum(qMin(availableRowCount - 1, 10));
+			uiGeneralTab.sbDegree->setMaximum(std::min(availableRowCount - 1, 10));
 			break;
 		case nsl_fit_model_fourier:
 			if (availableRowCount < 4) { // too few data points
@@ -836,7 +869,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 			} else {
 				uiGeneralTab.lDegree->setVisible(true);
 				uiGeneralTab.sbDegree->setVisible(true);
-				uiGeneralTab.sbDegree->setMaximum(qMin(availableRowCount / 2 - 1, 10));
+				uiGeneralTab.sbDegree->setMaximum(std::min(availableRowCount / 2 - 1, 10));
 			}
 			break;
 		case nsl_fit_model_power:
@@ -869,7 +902,21 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
 
-	m_fitData.modelType = index;
+	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+		// enable ML only for supported distros
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
+		auto* item = model->item(nsl_fit_algorithm_ml);
+
+		if (nsl_sf_stats_distribution_supports_ML((nsl_sf_stats_distribution)index))
+			item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+		else { // switch to LM
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+			uiGeneralTab.cbAlgorithm->setCurrentIndex(nsl_fit_algorithm_lm);
+		}
+	}
+
+	if (!m_initializing)
+		m_fitData.modelType = index;
 
 	updateModelEquation();
 
@@ -905,46 +952,50 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	// variables/parameter that are known
-	QStringList vars = {"x"};
+	QStringList vars = {QStringLiteral("x")};
 	vars << m_fitData.paramNames;
 	uiGeneralTab.teEquation->setVariables(vars);
 
 	// set formula picture
-	uiGeneralTab.lEquation->setText(QLatin1String("f(x) ="));
+	uiGeneralTab.lEquation->setText(QStringLiteral("f(x) ="));
 	QString file;
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic: {
 		// formula pic depends on degree
 		QString numSuffix = QString::number(degree);
 		if (degree > 4)
-			numSuffix = '4';
+			numSuffix = QLatin1Char('4');
 		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && degree > 2)
-			numSuffix = '2';
+			numSuffix = QLatin1Char('2');
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation,
-									  "pics/fit_models/" + QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".pdf");
+									  QStringLiteral("pics/fit_models/") + QLatin1String(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix
+										  + QStringLiteral(".pdf"));
 		break;
 	}
 	case nsl_fit_model_peak: {
 		// formula pic depends on number of peaks
 		QString numSuffix = QString::number(degree);
 		if (degree > 4)
-			numSuffix = '4';
+			numSuffix = QLatin1Char('4');
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation,
-									  "pics/fit_models/" + QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".pdf");
+									  QStringLiteral("pics/fit_models/") + QLatin1String(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix
+										  + QStringLiteral(".pdf"));
 		break;
 	}
 	case nsl_fit_model_growth:
-		file =
-			QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/" + QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".pdf");
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation,
+									  QStringLiteral("pics/fit_models/") + QLatin1String(nsl_fit_model_growth_pic_name[m_fitData.modelType])
+										  + QStringLiteral(".pdf"));
 		break;
 	case nsl_fit_model_distribution:
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation,
-									  "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".pdf");
+									  QStringLiteral("pics/gsl_distributions/") + QLatin1String(nsl_sf_stats_distribution_pic_name[m_fitData.modelType])
+										  + QStringLiteral(".pdf"));
 		// change label
 		if (m_fitData.modelType == nsl_sf_stats_poisson)
-			uiGeneralTab.lEquation->setText(QLatin1String("f(k)/A ="));
+			uiGeneralTab.lEquation->setText(QStringLiteral("f(k)/A ="));
 		else
-			uiGeneralTab.lEquation->setText(QLatin1String("f(x)/A ="));
+			uiGeneralTab.lEquation->setText(QStringLiteral("f(x)/A ="));
 		break;
 	case nsl_fit_model_custom:
 		uiGeneralTab.lFuncPic->hide();
@@ -955,10 +1006,32 @@ void XYFitCurveDock::updateModelEquation() {
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
 		QImage image = GuiTools::importPDFFile(file);
 
+		// use system palette for background
+		if (DARKMODE) {
+			// invert image if in dark mode
+			image.invertPixels();
+
+			for (int i = 0; i < image.size().width(); i++)
+				for (int j = 0; j < image.size().height(); j++)
+					if (qGray(image.pixel(i, j)) < 64) // 0-255: 0-64 covers all dark pixel
+						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+		} else {
+			for (int i = 0; i < image.size().width(); i++)
+				for (int j = 0; j < image.size().height(); j++)
+					if (qGray(image.pixel(i, j)) > 192) // 0-255: 224-255 covers all light pixel
+						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+		}
+
 		if (image.isNull()) {
 			uiGeneralTab.lEquation->hide();
 			uiGeneralTab.lFuncPic->hide();
 		} else {
+			// use light/dark background in the preview label
+			QPalette p;
+			p.setColor(QPalette::Window, palette().color(QPalette::Base));
+			uiGeneralTab.lFuncPic->setAutoFillBackground(true);
+			uiGeneralTab.lFuncPic->setPalette(p);
+
 			uiGeneralTab.lFuncPic->setPixmap(QPixmap::fromImage(image));
 			uiGeneralTab.lFuncPic->show();
 		}
@@ -999,6 +1072,12 @@ void XYFitCurveDock::showFunctions() {
 	menu.exec(uiGeneralTab.tbFunctions->mapToGlobal(pos));
 }
 
+void XYFitCurveDock::algorithmChanged(int index) {
+	m_fitData.algorithm = (nsl_fit_algorithm)index;
+
+	enableRecalculate();
+}
+
 /*!
  * Update parameter by parsing expression
  * Only called for custom fit model
@@ -1010,7 +1089,7 @@ void XYFitCurveDock::updateParameterList() {
 
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	QStringList vars; // variables that are known
-	vars << "x"; // TODO: generalize when we support other XYEquationCurve::EquationType
+	vars << QStringLiteral("x"); // TODO: generalize when we support other XYEquationCurve::EquationType
 	m_fitData.paramNames = m_fitData.paramNamesUtf8 = parser->getParameter(m_fitData.model, vars);
 
 	// if number of parameter changed
@@ -1040,15 +1119,14 @@ void XYFitCurveDock::updateParameterList() {
  * also called from parameter widget
  */
 void XYFitCurveDock::parametersChanged(bool updateParameterWidget) {
-	DEBUG("XYFitCurveDock::parametersChanged() m_initializing = " << m_initializing);
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing);
 
 	// parameter names were (probably) changed -> set the new vars in ExpressionTextEdit teEquation
 	QStringList vars{m_fitData.paramNames};
-	vars << "x"; // TODO: generalize when we support other XYEquationCurve::EquationType
+	vars << QStringLiteral("x"); // TODO: generalize when we support other XYEquationCurve::EquationType
 	uiGeneralTab.teEquation->setVariables(vars);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK
 
 	if (updateParameterWidget)
 		fitParametersWidget->setFitData(&m_fitData);
@@ -1056,7 +1134,7 @@ void XYFitCurveDock::parametersChanged(bool updateParameterWidget) {
 	enableRecalculate();
 }
 void XYFitCurveDock::parametersValid(bool valid) {
-	DEBUG("XYFitCurveDock::parametersValid() valid = " << valid);
+	DEBUG(Q_FUNC_INFO << ", valid = " << valid);
 	m_parametersValid = valid;
 }
 
@@ -1157,8 +1235,7 @@ void XYFitCurveDock::recalculateClicked() {
 
 void XYFitCurveDock::expressionChanged() {
 	DEBUG(Q_FUNC_INFO);
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// update parameter list for custom model
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
@@ -1168,14 +1245,15 @@ void XYFitCurveDock::expressionChanged() {
 }
 
 void XYFitCurveDock::enableRecalculate() {
-	DEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing);
 	if (m_initializing || !m_fitCurve)
 		return;
 
 	// no fitting possible without the x- and y-data
 	bool hasSourceData = false;
-	auto type = m_fitCurve->dataSourceType();
-	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+	//	auto type = m_fitCurve->dataSourceType();
+	switch (m_fitCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet: {
 		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX && aspectY);
@@ -1187,11 +1265,16 @@ void XYFitCurveDock::enableRecalculate() {
 			cbYDataColumn->useCurrentIndexText(true);
 			cbYDataColumn->setInvalid(false);
 		}
-	} else if (type == XYAnalysisCurve::DataSourceType::Curve)
+		break;
+	}
+	case XYAnalysisCurve::DataSourceType::Curve:
 		hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
-	else
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
 		hasSourceData = (m_fitCurve->dataSourceHistogram() != nullptr);
+	}
 
+	DEBUG(Q_FUNC_INFO << ", hasSourceData = " << hasSourceData << ", m_parametersValid = " << m_parametersValid)
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData && m_parametersValid);
 
 	// PREVIEW as soon as recalculate is enabled (does not need source data)
@@ -1259,19 +1342,19 @@ void XYFitCurveDock::resultCopyAll() {
 }
 
 void XYFitCurveDock::resultParametersContextMenuRequest(QPoint pos) {
-	auto* contextMenu = new QMenu;
+	auto* contextMenu = new QMenu(this);
 	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twParameters->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultGoodnessContextMenuRequest(QPoint pos) {
-	auto* contextMenu = new QMenu;
+	auto* contextMenu = new QMenu(this);
 	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twGoodness->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
-	auto* contextMenu = new QMenu;
+	auto* contextMenu = new QMenu(this);
 	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twLog->mapToGlobal(pos));
@@ -1304,7 +1387,7 @@ void XYFitCurveDock::showFitResult() {
 		return;
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	// used confidence interval
 	double confidenceInterval{m_fitData.confidenceInterval};
 	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1 % lower confidence level", numberLocale.toString(confidenceInterval, 'g', 7)));
@@ -1314,9 +1397,9 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twLog->item(1, 1)->setText(numberLocale.toString(fitResult.iterations));
 	uiGeneralTab.twLog->item(2, 1)->setText(numberLocale.toString(m_fitData.eps));
 	if (fitResult.elapsedTime > 1000)
-		uiGeneralTab.twLog->item(3, 1)->setText(numberLocale.toString(fitResult.elapsedTime / 1000) + " s");
+		uiGeneralTab.twLog->item(3, 1)->setText(numberLocale.toString(fitResult.elapsedTime / 1000) + QStringLiteral(" s"));
 	else
-		uiGeneralTab.twLog->item(3, 1)->setText(numberLocale.toString(fitResult.elapsedTime) + " ms");
+		uiGeneralTab.twLog->item(3, 1)->setText(numberLocale.toString(fitResult.elapsedTime) + QStringLiteral(" ms"));
 
 	uiGeneralTab.twLog->item(4, 1)->setText(numberLocale.toString(fitResult.dof));
 	uiGeneralTab.twLog->item(5, 1)->setText(numberLocale.toString(fitResult.paramValues.size()));
@@ -1327,29 +1410,29 @@ void XYFitCurveDock::showFitResult() {
 	// correlation matrix
 	QString sCorr;
 	for (const auto& s : m_fitData.paramNamesUtf8)
-		sCorr += '\t' + s;
+		sCorr += QLatin1Char('\t') + s;
 	DEBUG(Q_FUNC_INFO << ", correlation matrix size = " << fitResult.correlationMatrix.size())
 	if (fitResult.correlationMatrix.size() < np * (np + 1) / 2)
 		return;
 
 	int index = 0;
 	for (int i = 0; i < np; i++) {
-		sCorr += '\n' + m_fitData.paramNamesUtf8.at(i);
+		sCorr += QLatin1Char('\n') + m_fitData.paramNamesUtf8.at(i);
 		for (int j = 0; j <= i; j++)
-			sCorr += '\t' + numberLocale.toString(fitResult.correlationMatrix.at(index++), 'f');
+			sCorr += QLatin1Char('\t') + numberLocale.toString(fitResult.correlationMatrix.at(index++), 'f');
 	}
 	uiGeneralTab.twLog->item(7, 1)->setText(sCorr);
 
 	// iterations
 	QString sIter;
 	for (const auto& s : m_fitData.paramNamesUtf8)
-		sIter += s + '\t';
+		sIter += s + QLatin1Char('\t');
 	sIter += UTF8_QSTRING("χ²");
 
-	const QStringList iterations = fitResult.solverOutput.split(';');
+	const QStringList iterations = fitResult.solverOutput.split(QLatin1Char(';'));
 	for (const auto& s : iterations)
 		if (!s.isEmpty())
-			sIter += '\n' + s;
+			sIter += QLatin1Char('\n') + s;
 	uiGeneralTab.twLog->item(8, 1)->setText(sIter);
 	uiGeneralTab.twLog->resizeRowsToContents();
 
@@ -1406,13 +1489,16 @@ void XYFitCurveDock::showFitResult() {
 
 			// Conf. interval
 			if (!std::isnan(errorValue)) {
-				const double margin = fitResult.tdist_marginValues.at(i);
+				const double marginLow = fitResult.marginValues.at(i);
 				// TODO: if (fitResult.tdist_tValues.at(i) > 1.e6)
 				//	item = new QTableWidgetItem(i18n("too small"));
+				double marginHigh = marginLow;
+				if (fitResult.marginValues.size() >= i && fitResult.marginValues.at(i) != 0.)
+					marginHigh = fitResult.marginValues.at(i);
 
-				item = new QTableWidgetItem(numberLocale.toString(paramValue - margin));
+				item = new QTableWidgetItem(numberLocale.toString(paramValue - marginLow));
 				uiGeneralTab.twParameters->setItem(i, 6, item);
-				item = new QTableWidgetItem(numberLocale.toString(paramValue + margin));
+				item = new QTableWidgetItem(numberLocale.toString(paramValue + marginHigh));
 				uiGeneralTab.twParameters->setItem(i, 7, item);
 			}
 		}
@@ -1454,59 +1540,51 @@ void XYFitCurveDock::showFitResult() {
 //*************************************************************
 // General-Tab
 void XYFitCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveDataSourceHistogramChanged(const Histogram* hist) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(hist);
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_fitCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_fitCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveXErrorColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXErrorColumn->setColumn(column, m_fitCurve->xErrorColumnPath());
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYErrorColumn->setColumn(column, m_fitCurve->yErrorColumnPath());
-	m_initializing = false;
 }
 
 /*!
  * called when fit data of fit curve changes
  */
 void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_fitData = fitData;
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
-	m_initializing = false;
 }
 
 void XYFitCurveDock::dataChanged() {
@@ -1514,7 +1592,6 @@ void XYFitCurveDock::dataChanged() {
 }
 
 void XYFitCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

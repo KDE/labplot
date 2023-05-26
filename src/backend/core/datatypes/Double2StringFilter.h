@@ -61,12 +61,12 @@ public:
 	QString textAt(int row) const override {
 		// DEBUG("Double2String::textAt()");
 		if (!m_inputs.value(0))
-			return QString();
+			return {};
 		if (m_inputs.value(0)->rowCount() <= row)
-			return QString();
+			return {};
 		double inputValue = m_inputs.value(0)->valueAt(row);
 		if (std::isnan(inputValue))
-			return QString();
+			return {};
 		if (m_useDefaultLocale)
 			return QLocale().toString(inputValue, m_format, m_digits);
 		else

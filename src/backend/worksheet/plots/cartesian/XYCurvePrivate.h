@@ -12,7 +12,8 @@
 #ifndef XYCURVEPRIVATE_H
 #define XYCURVEPRIVATE_H
 
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include <vector>
 
 class Background;
@@ -21,7 +22,7 @@ class CartesianCoordinateSystem;
 class Symbol;
 class XYCurve;
 
-class XYCurvePrivate : public WorksheetElementPrivate {
+class XYCurvePrivate : public PlotPrivate {
 public:
 	explicit XYCurvePrivate(XYCurve*);
 
@@ -56,10 +57,9 @@ public:
 	void updateErrorBars();
 	void recalcShapeAndBoundingRect() override;
 	void updatePixmap();
-	void suppressRetransform(bool);
 
+	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
 	bool pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const;
 	bool
 	pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
@@ -72,20 +72,15 @@ public:
 	QString yColumnPath;
 	bool sourceDataChangedSinceLastRecalc{false};
 
-	bool legendVisible;
+	bool legendVisible{true};
 
 	// line
-	XYCurve::LineType lineType;
-	bool lineSkipGaps;
-	bool lineIncreasingXOnly;
-	int lineInterpolationPointsCount;
-	QPen linePen;
-	qreal lineOpacity;
-
-	// drop lines
-	XYCurve::DropLineType dropLineType;
-	QPen dropLinePen;
-	qreal dropLineOpacity;
+	XYCurve::LineType lineType{XYCurve::LineType::Line};
+	bool lineSkipGaps{false};
+	bool lineIncreasingXOnly{false};
+	int lineInterpolationPointsCount{1};
+	Line* line{nullptr};
+	Line* dropLine{nullptr};
 
 	// symbols
 	Symbol* symbol{nullptr};
@@ -93,21 +88,21 @@ public:
 	// rug
 	bool rugEnabled{false};
 	WorksheetElement::Orientation rugOrientation{WorksheetElement::Orientation::Vertical};
-	double rugOffset;
-	double rugLength;
-	double rugWidth;
+	double rugOffset{0.0};
+	double rugLength{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
+	double rugWidth{0.0};
 	QPainterPath rugPath;
 
 	// values
-	XYCurve::ValuesType valuesType;
+	XYCurve::ValuesType valuesType{XYCurve::ValuesType::NoValues};
 	const AbstractColumn* valuesColumn{nullptr};
 	QString valuesColumnPath;
-	XYCurve::ValuesPosition valuesPosition;
-	qreal valuesDistance;
-	qreal valuesRotationAngle;
-	qreal valuesOpacity;
-	char valuesNumericFormat; //'g', 'e', 'E', etc. for numeric values
-	int valuesPrecision; // number of digits for numeric values
+	XYCurve::ValuesPosition valuesPosition{XYCurve::ValuesPosition::Above};
+	qreal valuesDistance{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
+	qreal valuesRotationAngle{0.0};
+	qreal valuesOpacity{1.0};
+	char valuesNumericFormat{'f'}; //'g', 'e', 'E', etc. for numeric values
+	int valuesPrecision{2}; // number of digits for numeric values
 	QString valuesDateTimeFormat;
 	QString valuesPrefix;
 	QString valuesSuffix;
@@ -118,22 +113,19 @@ public:
 	Background* background{nullptr};
 
 	// error bars
-	XYCurve::ErrorType xErrorType;
+	XYCurve::ErrorType xErrorType{XYCurve::ErrorType::NoError};
 	const AbstractColumn* xErrorPlusColumn{nullptr};
 	QString xErrorPlusColumnPath;
 	const AbstractColumn* xErrorMinusColumn{nullptr};
 	QString xErrorMinusColumnPath;
 
-	XYCurve::ErrorType yErrorType;
+	XYCurve::ErrorType yErrorType{XYCurve::ErrorType::NoError};
 	const AbstractColumn* yErrorPlusColumn{nullptr};
 	QString yErrorPlusColumnPath;
 	const AbstractColumn* yErrorMinusColumn{nullptr};
 	QString yErrorMinusColumnPath;
 
-	XYCurve::ErrorBarsType errorBarsType;
-	double errorBarsCapSize;
-	QPen errorBarsPen;
-	qreal errorBarsOpacity;
+	Line* errorBarsLine{nullptr};
 
 	XYCurve* const q;
 	friend class XYCurve;
@@ -150,10 +142,10 @@ private:
 	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
-	void drawSymbols(QPainter*);
 	void drawValues(QPainter*);
 	void drawFilling(QPainter*);
 	void draw(QPainter*);
+	void calculateScenePoints();
 
 	// TODO: add m_
 	QPainterPath linePath;
@@ -165,6 +157,7 @@ private:
 	QVector<QLineF> m_lines;
 	QVector<QPointF> m_logicalPoints; // points in logical coordinates
 	QVector<QPointF> m_scenePoints; // points in scene coordinates
+	bool m_scenePointsDirty{true}; // true whenever the scenepoints have to be recalculated before using
 	std::vector<bool> m_pointVisible; // if point is currently visible in plot (size of m_logicalPoints)
 	QVector<QPointF> m_valuePoints; // points for showing value
 	QVector<QString> m_valueStrings; // strings for showing value
@@ -180,8 +173,10 @@ private:
 	bool m_selectionEffectImageIsDirty{false};
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};
-	bool m_suppressRetransform{false};
 	QPointF mousePos;
+
+	friend class RetransformTest;
+	friend class XYCurveTest;
 };
 
 #endif

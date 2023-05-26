@@ -30,10 +30,10 @@ private:
 
 	void clearSegments();
 	void loadSegment(Segment**, int);
-	int adjacentRuns(bool*, int, int, int);
+	int adjacentRuns(const bool*, int, int, int);
 	Segment* adjacentSegment(Segment**, int, int, int);
 	int adjacentSegments(Segment**, int, int, int);
-	void matchRunsToSegments(int, int, bool*, Segment**, bool*, Segment**, bool*);
+	void matchRunsToSegments(int, int, bool*, Segment**, const bool*, Segment**, bool*);
 	void finishRun(bool*, bool*, Segment**, Segment**, int, int, int, int);
 	void scrollSegment(Segment**, Segment**, int);
 	void removeUnneededLines(Segment**, Segment**, int);

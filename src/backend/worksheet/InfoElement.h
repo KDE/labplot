@@ -5,6 +5,7 @@
 						   show their values
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,14 +16,14 @@
 #include "WorksheetElement.h"
 #include "backend/worksheet/TextLabel.h"
 
-class TextLabel;
-class CustomPoint;
 class CartesianPlot;
+class CustomPoint;
 class InfoElementPrivate;
-class QGraphicsItem;
-class XYCurve;
+class Line;
 class QAction;
+class QGraphicsItem;
 class QMenu;
+class XYCurve;
 
 class InfoElement : public WorksheetElement {
 	Q_OBJECT
@@ -76,13 +77,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, positionLogical, PositionLogical)
 	BASIC_D_ACCESSOR_DECL(int, gluePointIndex, GluePointIndex)
 	CLASS_D_ACCESSOR_DECL(QString, connectionLineCurveName, ConnectionLineCurveName)
-	CLASS_D_ACCESSOR_DECL(QPen, verticalLinePen, VerticalLinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, verticalLineOpacity, VerticalLineOpacity)
-	CLASS_D_ACCESSOR_DECL(QPen, connectionLinePen, ConnectionLinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, connectionLineOpacity, ConnectionLineOpacity)
+	Line* verticalLine() const;
+	Line* connectionLine() const;
 
-	void setVisible(bool on) override;
-	bool isVisible() const override;
+	virtual void setVisible(bool on) override;
 
 	typedef InfoElementPrivate Private;
 
@@ -97,6 +95,7 @@ public Q_SLOTS:
 	void moveElementBegin();
 	void moveElementEnd();
 	void curveVisibilityChanged();
+	void curveDataChanged();
 	void curveCoordinateSystemIndexChanged(int);
 
 private:
@@ -128,10 +127,6 @@ Q_SIGNALS:
 	void positionLogicalChanged(const double);
 	void labelBorderShapeChangedSignal();
 	void curveRemoved(const QString&);
-	void verticalLinePenChanged(const QPen&);
-	void verticalLineOpacityChanged(qreal);
-	void connectionLinePenChanged(const QPen&);
-	void connectionLineOpacityChanged(qreal);
 };
 
 #endif // INFOELEMENT_H

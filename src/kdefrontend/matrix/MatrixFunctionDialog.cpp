@@ -47,22 +47,21 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent)
 
 	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
-	ui.tbConstants->setIcon(QIcon::fromTheme("labplot-format-text-symbol"));
-	ui.tbFunctions->setIcon(QIcon::fromTheme("preferences-desktop-font"));
+	ui.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
+	ui.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
 	QStringList vars;
-	vars << "x"
-		 << "y";
+	vars << QStringLiteral("x") << QStringLiteral("y");
 	ui.teEquation->setVariables(vars);
 	ui.teEquation->setFocus();
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height() * 2);
 
-	SET_NUMBER_LOCALE
-	QString info = '[' + numberLocale.toString(m_matrix->xStart()) + ", " + numberLocale.toString(m_matrix->xEnd()) + "], "
-		+ i18np("%1 value", "%1 values", m_matrix->columnCount());
+	const auto numberLocale = QLocale();
+	QString info = QStringLiteral("[") + numberLocale.toString(m_matrix->xStart()) + QStringLiteral(", ") + numberLocale.toString(m_matrix->xEnd())
+		+ QStringLiteral("], ") + i18np("%1 value", "%1 values", m_matrix->columnCount());
 	ui.lXInfo->setText(info);
-	info = '[' + numberLocale.toString(m_matrix->yStart()) + ", " + numberLocale.toString(m_matrix->yEnd()) + "], "
-		+ i18np("%1 value", "%1 values", m_matrix->rowCount());
+	info = QStringLiteral("[") + numberLocale.toString(m_matrix->yStart()) + QStringLiteral(", ") + numberLocale.toString(m_matrix->yEnd())
+		+ QStringLiteral("], ") + i18np("%1 value", "%1 values", m_matrix->rowCount());
 	ui.lYInfo->setText(info);
 
 	ui.teEquation->setPlainText(m_matrix->formula());
@@ -156,22 +155,22 @@ public:
 		, m_yStart(yStart)
 		, m_xStep(xStep)
 		, m_yStep(yStep)
-		, m_func(func){};
+		, m_func(func) {
+	}
 
 	void run() override {
 		const int rows = m_matrixData[m_startCol].size();
 		double x = m_xStart;
 		double y = m_yStart;
-		DEBUG("FILL col" << m_startCol << "-" << m_endCol << " x/y =" << x << '/' << y << " steps =" << m_xStep << '/' << m_yStep << " rows =" << rows);
+		DEBUG("FILL col" << m_startCol << "-" << m_endCol << " x/y =" << x << '/' << y << " steps =" << m_xStep << '/' << m_yStep << " rows =" << rows)
 
 		parser_var vars[] = {{"x", x}, {"y", y}};
-		SET_NUMBER_LOCALE
 		for (int col = m_startCol; col < m_endCol; ++col) {
 			vars[0].value = x;
 			for (int row = 0; row < rows; ++row) {
 				vars[1].value = y;
-				double z = parse_with_vars(m_func, vars, 2, qPrintable(numberLocale.name()));
-				// qDebug()<<" z ="<<z;
+				double z = parse_with_vars(m_func, vars, 2, qPrintable(QLocale().name()));
+				// DEBUG(" z =" << z);
 				m_matrixData[col][row] = z;
 				y += m_yStep;
 			}
@@ -237,14 +236,14 @@ void MatrixFunctionDialog::generate() {
 		}
 		pool->waitForDone();
 	*/
-	double x = 0, y = 0;
+	double x = m_matrix->xStart();
+	double y = m_matrix->yStart();
 	parser_var vars[] = {{"x", x}, {"y", y}};
-	SET_NUMBER_LOCALE
 	for (int col = 0; col < m_matrix->columnCount(); ++col) {
 		vars[0].value = x;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			vars[1].value = y;
-			(new_data->operator[](col))[row] = parse_with_vars(qPrintable(ui.teEquation->toPlainText()), vars, 2, qPrintable(numberLocale.name()));
+			(*new_data)[col][row] = parse_with_vars(qPrintable(ui.teEquation->toPlainText()), vars, 2, qPrintable(QLocale().name()));
 			y += yStep;
 		}
 		y = m_matrix->yStart();
@@ -253,7 +252,7 @@ void MatrixFunctionDialog::generate() {
 
 	// Timing
 #ifndef NDEBUG
-	DEBUG("elapsed time =" << timer.elapsed() << "ms");
+	DEBUG("elapsed time =" << timer.elapsed() << "ms")
 #endif
 
 	m_matrix->setFormula(ui.teEquation->toPlainText());

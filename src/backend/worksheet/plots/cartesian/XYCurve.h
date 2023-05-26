@@ -11,10 +11,9 @@
 #ifndef XYCURVE_H
 #define XYCURVE_H
 
-#include "Curve.h"
+#include "Plot.h"
 #include "backend/lib/Range.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 #include <QFont>
@@ -22,14 +21,15 @@
 
 class AbstractColumn;
 class Background;
+class Line;
 class Symbol;
 class XYCurvePrivate;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT XYCurve : public WorksheetElement, public Curve {
+class LABPLOT_EXPORT XYCurve : public Plot {
 #else
-class XYCurve : public WorksheetElement, public Curve {
+class XYCurve : public Plot {
 #endif
 	Q_OBJECT
 
@@ -83,7 +83,7 @@ public:
 				bool includeErrorBars) const;
 	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 
-	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 
 	const AbstractColumn* column(CartesianCoordinateSystem::Dimension dim) const;
@@ -97,14 +97,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, lineSkipGaps, LineSkipGaps)
 	BASIC_D_ACCESSOR_DECL(bool, lineIncreasingXOnly, LineIncreasingXOnly)
 	BASIC_D_ACCESSOR_DECL(int, lineInterpolationPointsCount, LineInterpolationPointsCount)
-	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
+	Line* line() const;
+	Line* dropLine() const;
 
 	Symbol* symbol() const;
-
-	BASIC_D_ACCESSOR_DECL(DropLineType, dropLineType, DropLineType)
-	CLASS_D_ACCESSOR_DECL(QPen, dropLinePen, DropLinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, dropLineOpacity, DropLineOpacity)
+	Background* background() const;
 
 	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
@@ -121,8 +118,6 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
-	Background* background() const;
-
 	BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorMinusColumn, XErrorMinusColumn)
@@ -133,11 +128,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, xErrorMinusColumnPath, XErrorMinusColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, yErrorPlusColumnPath, YErrorPlusColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, yErrorMinusColumnPath, YErrorMinusColumnPath)
-
-	BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
-	BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
-	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
-	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
+	Line* errorBarsLine() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -146,7 +137,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
 	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
-	void suppressRetransform(bool);
 	bool isSourceDataChangedSinceLastRecalc() const;
 
 	typedef XYCurvePrivate Private;
@@ -184,13 +174,13 @@ private:
 	Q_DECLARE_PRIVATE(XYCurve)
 	void init();
 	void initActions();
-	void connectxColumn(const AbstractColumn*);
-	void connectyColumn(const AbstractColumn*);
-	void connectxErrorPlusColumn(const AbstractColumn*);
-	void connectxErrorMinusColumn(const AbstractColumn*);
-	void connectyErrorPlusColumn(const AbstractColumn*);
-	void connectyErrorMinusColumn(const AbstractColumn*);
-	void connectvaluesColumn(const AbstractColumn*);
+	void connectXColumn(const AbstractColumn*);
+	void connectYColumn(const AbstractColumn*);
+	void connectXErrorPlusColumn(const AbstractColumn*);
+	void connectXErrorMinusColumn(const AbstractColumn*);
+	void connectYErrorPlusColumn(const AbstractColumn*);
+	void connectYErrorMinusColumn(const AbstractColumn*);
+	void connectValuesColumn(const AbstractColumn*);
 
 	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};
@@ -199,9 +189,7 @@ private:
 Q_SIGNALS:
 	void linesUpdated(const XYCurve*, const QVector<QLineF>&);
 
-Q_SIGNALS:
 	// General-Tab
-	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void xDataChanged();
 	void yDataChanged();
 	void xErrorPlusDataChanged();
@@ -220,11 +208,7 @@ Q_SIGNALS:
 	void lineSkipGapsChanged(bool);
 	void lineIncreasingXOnlyChanged(bool);
 	void lineInterpolationPointsCountChanged(int);
-	void linePenChanged(const QPen&);
-	void lineOpacityChanged(qreal);
 	void dropLineTypeChanged(XYCurve::DropLineType);
-	void dropLinePenChanged(const QPen&);
-	void dropLineOpacityChanged(qreal);
 
 	// Values-Tab
 	void valuesTypeChanged(XYCurve::ValuesType);
@@ -248,10 +232,6 @@ Q_SIGNALS:
 	void yErrorTypeChanged(XYCurve::ErrorType);
 	void yErrorPlusColumnChanged(const AbstractColumn*);
 	void yErrorMinusColumnChanged(const AbstractColumn*);
-	void errorBarsCapSizeChanged(qreal);
-	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void errorBarsPenChanged(QPen);
-	void errorBarsOpacityChanged(qreal);
 
 	// Margin Plots
 	void rugEnabledChanged(bool);
@@ -259,6 +239,9 @@ Q_SIGNALS:
 	void rugLengthChanged(double);
 	void rugWidthChanged(double);
 	void rugOffsetChanged(double);
+
+	friend class RetransformTest;
+	friend class XYCurveTest;
 };
 
 #endif

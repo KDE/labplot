@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -49,6 +49,7 @@ enum class AspectType : quint64 {
 	TextLabel = 0x0210020,
 	Image = 0x0210030,
 	ReferenceLine = 0x0210040,
+	ReferenceRange = 0x0210060,
 	InfoElement = 0x0210080,
 	BoxPlot = 0x0210100,
 	BarPlot = 0x0210200,
@@ -115,6 +116,12 @@ public:
 	AbstractAspect(const QString& name, AspectType type);
 	~AbstractAspect() override;
 
+	enum class NameHandling {
+		AutoUnique, // Set the name and make it unique (enforce the uniqueness)
+		UniqueNotRequired, // Set the name without making it unique
+		UniqueRequired, // Set the name only if it's already unique
+	};
+
 	// type name for internal use (no translation)
 	static QString typeName(AspectType type) {
 		switch (type) {
@@ -144,6 +151,8 @@ public:
 			return QStringLiteral("Image");
 		case AspectType::ReferenceLine:
 			return QStringLiteral("ReferenceLine");
+		case AspectType::ReferenceRange:
+			return QStringLiteral("ReferenceRange");
 		case AspectType::InfoElement:
 			return QStringLiteral("InfoElement");
 		case AspectType::WorksheetElementContainer:
@@ -228,10 +237,11 @@ public:
 			return QStringLiteral("MQTTSubscription");
 		}
 
-		return QString();
+		return {};
 	}
 
 	QString name() const;
+	QUuid uuid() const;
 	QString comment() const;
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
@@ -258,14 +268,21 @@ public:
 	void setParentAspect(AbstractAspect*);
 	Folder* folder();
 	bool isDescendantOf(AbstractAspect* other);
-	void addChild(AbstractAspect*);
+	void addChild(AbstractAspect*, QUndoCommand* parent = nullptr);
 	void addChildFast(AbstractAspect*);
 	virtual void finalizeAdd(){};
 	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags = {}) const;
-	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
+	void insertChild(AbstractAspect* child, int index, QUndoCommand* parent = nullptr);
+	void insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent = nullptr);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
-	void removeChild(AbstractAspect*);
+	/*!
+	 * \brief removeChild
+	 * Removing child aspect using an undo command
+	 * \param parent If parent is not nullptr the command will not be executed, but the parent must be executed
+	 * to indirectly execute the created undocommand
+	 */
+	void removeChild(AbstractAspect*, QUndoCommand* parent = nullptr);
 	void removeAllChildren();
 	virtual QVector<AbstractAspect*> dependsOn() const;
 
@@ -368,6 +385,7 @@ public:
 	bool pasted() const;
 
 	static AspectType clipboardAspectType(QString&);
+	static QString uniqueNameFor(const QString& name, const QStringList& names);
 
 protected:
 	void info(const QString& text) {
@@ -390,9 +408,10 @@ private:
 	void connectChild(AbstractAspect*);
 
 public Q_SLOTS:
-	bool setName(const QString&, bool autoUnique = true);
+	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique, QUndoCommand* parent = nullptr);
 	void setComment(const QString&);
 	void remove();
+	void remove(QUndoCommand* parent);
 	void copy() const;
 	void duplicate();
 	void paste(bool duplicate = false);
@@ -408,14 +427,38 @@ protected Q_SLOTS:
 Q_SIGNALS:
 	void aspectDescriptionAboutToChange(const AbstractAspect*);
 	void aspectDescriptionChanged(const AbstractAspect*);
-	void aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
-	void aspectAdded(const AbstractAspect*);
+	/*!
+	 * \brief aspectAboutToBeAdded
+	 * Signal indicating a new child was added at position \p index. Do not connect to both variants of aspectAboutToBeAdded!
+	 * \param parent
+	 * \param index Position of the new aspect
+	 * \param child
+	 */
+	void childAspectAboutToBeAdded(const AbstractAspect* parent, int index, const AbstractAspect* child);
+	/*!
+	 * \brief aspectAboutToBeAdded
+	 * \param parent
+	 * \param before aspect one position before the child
+	 * \param child
+	 */
+	void childAspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void childAspectAdded(const AbstractAspect*);
+	/*!
+	 * \brief aspectAboutToBeRemoved
+	 * Called from the parent if a child is being removed
+	 */
+	void childAspectAboutToBeRemoved(const AbstractAspect* child);
+	void childAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	/*!
+	 * \brief aspectAboutToBeRemoved
+	 * Called by the aspect itself when it's being removed
+	 */
 	void aspectAboutToBeRemoved(const AbstractAspect*);
-	void aspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void aspectHiddenAboutToChange(const AbstractAspect*);
 	void aspectHiddenChanged(const AbstractAspect*);
 	void statusInfo(const QString&);
 	void renameRequested();
+	void contextMenuRequested(AspectType, QMenu*);
 
 	// selection/deselection in model (project explorer)
 	void selected(const AbstractAspect*);

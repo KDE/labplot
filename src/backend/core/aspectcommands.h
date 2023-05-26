@@ -19,8 +19,9 @@
 
 class AspectChildRemoveCmd : public QUndoCommand {
 public:
-	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child)
-		: m_target(target)
+	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_target(target)
 		, m_child(child)
 		, m_moved(child->isMoved()) {
 		setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
@@ -47,14 +48,25 @@ public:
 		if (!m_moved) {
 			const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* col : columns)
-				emit col->parentAspect()->aspectAboutToBeRemoved(col);
+				emit col->parentAspect()->childAspectAboutToBeRemoved(col);
 		}
 
-		if (!m_child->hidden())
-			emit m_target->q->aspectAboutToBeRemoved(m_child);
+		// no need to emit signals if the aspect is hidden, the only exceptions is it's a datapicker point
+		// and we need to react on its removal in order to update the data spreadsheet.
+		// TODO: the check for hidden was added originally to avoid crashes in the debug build of Qt because
+		// of asserts for negative values in the model. It also helps wrt. the performance since we don't need
+		// to react on such events in the model for hidden aspects. Adding here the exception for the datapicker
+		// will most probably trigger again crashes in the debug build of Qt if the datapicker is involved but we
+		// rather accept this "edge case" than having no undo/redo for position changes for datapicker points until
+		// we have a better solution.
+		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
+			emit m_target->q->childAspectAboutToBeRemoved(m_child);
+
 		m_index = m_target->removeChild(m_child);
-		if (!m_child->hidden())
-			emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
+
+		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
+			emit m_target->q->childAspectRemoved(m_target->q, nextSibling, m_child);
+
 		// QDEBUG(Q_FUNC_INFO << ", DONE. CHILD = " << m_child)
 		//		m_removed = true;
 	}
@@ -66,10 +78,11 @@ public:
 		if (m_moved)
 			m_child->setMoved(true);
 
-		emit m_target->q->aspectAboutToBeAdded(m_target->q, nullptr, m_child);
+		emit m_target->q->childAspectAboutToBeAdded(m_target->q, nullptr, m_child);
+		emit m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
 		m_target->insertChild(m_index, m_child);
 		m_child->finalizeAdd();
-		emit m_target->q->aspectAdded(m_child);
+		emit m_target->q->childAspectAdded(m_child);
 
 		if (m_moved)
 			m_child->setMoved(false);
@@ -86,8 +99,8 @@ protected:
 
 class AspectChildAddCmd : public AspectChildRemoveCmd {
 public:
-	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index)
-		: AspectChildRemoveCmd(target, child) {
+	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index, QUndoCommand* parent)
+		: AspectChildRemoveCmd(target, child, parent) {
 		setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
 		m_index = index;
 		// 		m_removed = true;
@@ -114,19 +127,19 @@ public:
 
 	// calling redo transfers ownership of m_child to the new parent aspect
 	void redo() override {
-		emit m_child->aspectAboutToBeRemoved(m_child);
+		emit m_child->childAspectAboutToBeRemoved(m_child);
 		m_index = m_target->removeChild(m_child);
 		m_new_parent->insertChild(m_new_index, m_child);
-		emit m_child->aspectAdded(m_child);
+		emit m_child->childAspectAdded(m_child);
 	}
 
 	// calling undo transfers ownership of m_child back to its previous parent aspect
 	void undo() override {
 		Q_ASSERT(m_index != -1);
-		emit m_child->aspectAboutToBeRemoved(m_child);
+		emit m_child->childAspectAboutToBeRemoved(m_child);
 		m_new_parent->removeChild(m_child);
 		m_target->insertChild(m_index, m_child);
-		emit m_child->aspectAdded(m_child);
+		emit m_child->childAspectAdded(m_child);
 	}
 
 protected:

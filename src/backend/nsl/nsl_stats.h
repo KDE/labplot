@@ -63,11 +63,14 @@ double nsl_stats_rsquareAdj(double rsquare, size_t np, size_t dof, int version);
 double nsl_stats_tdist_t(double parameter, double error);
 /* p value */
 double nsl_stats_tdist_p(double t, double dof);
-/* margin (half of confidence interval) */
+/* margin (half of confidence interval) using z value */
+double nsl_stats_tdist_z(double alpha, double dof);
 double nsl_stats_tdist_margin(double alpha, double dof, double error);
 
 /* chi^2 distribution */
 double nsl_stats_chisq_p(double t, double dof);
+double nsl_stats_chisq_low(double alpha, double n);
+double nsl_stats_chisq_high(double alpha, double n);
 
 /* F distribution */
 double nsl_stats_fdist_F(double rsquare, size_t np, size_t dof);

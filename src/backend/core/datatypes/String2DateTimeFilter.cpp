@@ -44,6 +44,7 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 
 	// first try the selected format string m_format
 	QDateTime result = QDateTime::fromString(input_value, m_format);
+	result.setTimeSpec(Qt::UTC);
 	if (result.isValid())
 		return result;
 
@@ -51,13 +52,13 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 		// try other format strings built from date_formats and time_formats
 		// comma and space are valid separators between date and time
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	QStringList strings = input_value.simplified().split(',', Qt::SkipEmptyParts);
+	QStringList strings = input_value.simplified().split(QLatin1Char(','), Qt::SkipEmptyParts);
 	if (strings.size() == 1)
-		strings = strings.at(0).split(' ', Qt::SkipEmptyParts);
+		strings = strings.at(0).split(QLatin1Char(' '), Qt::SkipEmptyParts);
 #else
-	QStringList strings = input_value.simplified().split(',', QString::SkipEmptyParts);
+	QStringList strings = input_value.simplified().split(QLatin1Char(','), QString::SkipEmptyParts);
 	if (strings.size() == 1)
-		strings = strings.at(0).split(' ', QString::SkipEmptyParts);
+		strings = strings.at(0).split(QLatin1Char(' '), QString::SkipEmptyParts);
 #endif
 
 	if (strings.size() < 1)
@@ -107,7 +108,7 @@ bool String2DateTimeFilter::inputAcceptable(int, const AbstractColumn* source) {
 }
 
 void String2DateTimeFilter::writeExtraAttributes(QXmlStreamWriter* writer) const {
-	writer->writeAttribute("format", format());
+	writer->writeAttribute(QStringLiteral("format"), format());
 }
 
 bool String2DateTimeFilter::load(XmlStreamReader* reader, bool preview) {
@@ -115,7 +116,7 @@ bool String2DateTimeFilter::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	QXmlStreamAttributes attribs = reader->attributes();
-	QString str = attribs.value(reader->namespaceUri().toString(), "format").toString();
+	QString str = attribs.value(reader->namespaceUri().toString(), QStringLiteral("format")).toString();
 
 	if (AbstractSimpleFilter::load(reader, preview))
 		setFormat(str);

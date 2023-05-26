@@ -12,7 +12,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 
-//##############################################################################
+// ##############################################################################
 
 void IntegrationTest::testLinear() {
 	// data
@@ -20,13 +20,13 @@ void IntegrationTest::testLinear() {
 	QVector<double> yData = {1., 2., 3., 4.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYIntegrationCurve integrationCurve("integration");
+	XYIntegrationCurve integrationCurve(QStringLiteral("integration"));
 	integrationCurve.setXDataColumn(&xDataColumn);
 	integrationCurve.setYDataColumn(&yDataColumn);
 

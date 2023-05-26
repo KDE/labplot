@@ -11,6 +11,7 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"
+#include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
@@ -20,7 +21,12 @@
 #include <QProcess>
 
 bool AbstractFileFilter::isNan(const QString& s) {
-	const static QStringList nanStrings{"NA", "NAN", "N/A", "-NA", "-NAN", "NULL"};
+	const static QStringList nanStrings{QStringLiteral("NA"),
+										QStringLiteral("NAN"),
+										QStringLiteral("N/A"),
+										QStringLiteral("-NA"),
+										QStringLiteral("-NAN"),
+										QStringLiteral("NULL")};
 	if (nanStrings.contains(s, Qt::CaseInsensitive))
 		return true;
 
@@ -109,6 +115,15 @@ QStringList AbstractFileFilter::numberFormats() {
 	return formats;
 }
 
+/*!
+ * \brief AbstractFileFilter::lastErrors
+ * Errors occured during last parse
+ * \return
+ */
+QStringList AbstractFileFilter::lastErrors() {
+	return QStringList();
+}
+
 AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO)
 	QString fileInfo;
@@ -117,15 +132,13 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	const QString fileFullPath = QStandardPaths::findExecutable(QLatin1String("file"));
 	if (!fileFullPath.isEmpty()) {
 		QProcess proc;
-		proc.start(fileFullPath,
-				   QStringList() << "-b"
-								 << "-z" << fileName);
+		proc.start(fileFullPath, QStringList() << QStringLiteral("-b") << QStringLiteral("-z") << fileName);
 		if (!proc.waitForFinished(1000)) {
 			proc.kill();
 			DEBUG("ERROR: reading file type of file" << STDSTRING(fileName));
 			return FileType::Binary;
 		}
-		fileInfo = proc.readLine();
+		fileInfo = QLatin1String(proc.readLine());
 	}
 #endif
 
@@ -142,7 +155,7 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	} else if (SpiceFilter::isSpiceFile(fileName))
 		fileType = FileType::Spice;
 #ifdef HAVE_EXCEL // before ASCII, because XLSX is XML and XML is ASCII
-	else if (fileInfo.contains("Microsoft Excel") || fileName.endsWith(QLatin1String("xlsx"), Qt::CaseInsensitive))
+	else if (fileInfo.contains(QLatin1String("Microsoft Excel")) || fileName.endsWith(QLatin1String("xlsx"), Qt::CaseInsensitive))
 		fileType = FileType::Excel;
 #endif
 	else if (fileInfo.contains(QLatin1String("ASCII")) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
@@ -157,16 +170,20 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	else if (fileInfo.contains(QLatin1String("Matlab")) || fileName.endsWith(QLatin1String("mat"), Qt::CaseInsensitive))
 		fileType = FileType::MATIO;
 #endif
-#ifdef HAVE_HDF5 // before NETCDF to treat NetCDF 4 files with .nc ending as HDF5 when fileInfo detects it
-	else if (fileInfo.contains(QLatin1String("Hierarchical Data Format")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
-			 || fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive)
-			 || fileName.endsWith(QLatin1String("nc4"), Qt::CaseInsensitive))
+#ifdef HAVE_HDF5 // before NETCDF to treat NetCDF 4 files with .nc ending as HDF5 when fileInfo detects it (HDF4 not supported)
+	else if (fileInfo.contains(QLatin1String("Hierarchical Data Format (version 5)")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
+			 || (fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) && !fileInfo.contains(QLatin1String("(version 4)")))
+			 || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("nc4"), Qt::CaseInsensitive))
 		fileType = FileType::HDF5;
 #endif
 #ifdef HAVE_NETCDF
 	else if (fileInfo.contains(QLatin1String("NetCDF Data Format")) || fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive)
 			 || fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive))
 		fileType = FileType::NETCDF;
+#endif
+#ifdef HAVE_VECTOR_BLF
+	else if (fileName.endsWith(QLatin1String("blf")) && VectorBLFFilter::isValid(fileName))
+		fileType = FileType::VECTOR_BLF;
 #endif
 #ifdef HAVE_FITS
 	else if (fileInfo.contains(QLatin1String("FITS image data")) || fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive)
@@ -186,7 +203,7 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 			 || fileName.endsWith(QLatin1String(".xpt5"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".xpt8"), Qt::CaseInsensitive))
 		fileType = FileType::READSTAT;
 #endif
-	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
+	else if (fileInfo.contains(QLatin1String("image")) || fileInfo.contains(QLatin1String("bitmap")) || !imageFormat.isEmpty())
 		fileType = FileType::Image;
 	else
 		fileType = FileType::Binary;

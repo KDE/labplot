@@ -29,8 +29,6 @@
 #include <KSharedConfig>
 #include <KWindowConfig>
 
-#include <cmath>
-
 /*!
 	\class FunctionValuesDialog
 	\brief Dialog for generating values from a mathematical function.
@@ -40,13 +38,13 @@
 FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	: QDialog(parent)
 	, m_spreadsheet(s) {
-	Q_ASSERT(s != nullptr);
+	Q_ASSERT(s);
 	setWindowTitle(i18nc("@title:window", "Function Values"));
 
 	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
-	ui.tbConstants->setIcon(QIcon::fromTheme("format-text-symbol"));
-	ui.tbFunctions->setIcon(QIcon::fromTheme("preferences-desktop-font"));
+	ui.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("format-text-symbol")));
+	ui.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height() * 2);
 	ui.teEquation->setFocus();
@@ -64,7 +62,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	m_aspectTreeModel->enableNumericColumnsOnly(true);
 	m_aspectTreeModel->enableNonEmptyNumericColumnsOnly(true);
 
-	ui.bAddVariable->setIcon(QIcon::fromTheme("list-add"));
+	ui.bAddVariable->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
 
 	ui.chkAutoUpdate->setToolTip(i18n("Automatically update the calculated values on changes in the variable columns"));
@@ -110,9 +108,8 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	const auto& formulaData = firstColumn->formulaData();
 	if (formulaData.isEmpty()) { // no formula was used for this column -> add the first variable "x"
 		addVariable();
-		m_variableLineEdits[0]->setText("x");
+		m_variableLineEdits[0]->setText(QStringLiteral("x"));
 	} else { // formula and variables are available
-
 		// add all available variables and select the corresponding columns
 		const auto& cols = m_spreadsheet->project()->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (int i = 0; i < formulaData.size(); ++i) {
@@ -146,13 +143,14 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 					true,
 					i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.",
 						 formulaData.at(i).columnName()));
-				m_variableDataColumns[i]->setText(formulaData.at(i).columnName().split('/').last());
+				m_variableDataColumns[i]->setText(formulaData.at(i).columnName().split(QLatin1Char('/')).last());
 			}
 		}
 	}
 
 	// auto update
-	ui.chkAutoUpdate->setChecked(firstColumn->formulaAutoUpdate());
+	// Enable if linking is turned on, so the user has to explicit disable recalculation, so it cannot be forgotten
+	ui.chkAutoUpdate->setChecked(firstColumn->formulaAutoUpdate() || m_spreadsheet->linking());
 
 	checkValues();
 }
@@ -167,7 +165,7 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
 	} else {
 		le->setStyleSheet(QString());
-		le->setToolTip("");
+		le->setToolTip(QString());
 		isValid = true;
 	}
 
@@ -176,17 +174,21 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 
 void FunctionValuesDialog::checkValues() {
 	if (!ui.teEquation->isValid()) { // check whether the formula syntax is correct
+		DEBUG(Q_FUNC_INFO << ", syntax incorrect")
 		m_okButton->setEnabled(false);
 		return;
 	}
 
 	// check whether for the variables where a name was provided also a column was selected
 	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
-		if (m_variableLineEdits.at(i)->text().simplified().isEmpty())
+		auto varName = m_variableLineEdits.at(i)->text().simplified();
+		DEBUG(Q_FUNC_INFO << ", variable " << i + 1)
+		// ignore empty or not used variables
+		if (varName.isEmpty() || !ui.teEquation->toPlainText().contains(varName))
 			continue;
 
-		TreeViewComboBox* cb = m_variableDataColumns.at(i);
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
+		auto* cb = m_variableDataColumns.at(i);
+		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
 			m_okButton->setEnabled(false);
 			return;
@@ -256,7 +258,7 @@ void FunctionValuesDialog::addVariable() {
 	layout->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;
 
-	auto* l{new QLabel("=")};
+	auto* l{new QLabel(QStringLiteral("="))};
 	layout->addWidget(l, row, 1, 1, 1);
 	m_variableLabels << l;
 
@@ -291,7 +293,7 @@ void FunctionValuesDialog::addVariable() {
 	// add delete-button for the just added variable
 	if (row != 0) {
 		auto* b{new QToolButton()};
-		b->setIcon(QIcon::fromTheme("list-remove"));
+		b->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 		b->setToolTip(i18n("Delete variable"));
 		layout->addWidget(b, row, 3, 1, 1);
 		m_variableDeleteButtons << b;
@@ -334,13 +336,13 @@ void FunctionValuesDialog::variableNameChanged() {
 			if (argText.isEmpty())
 				argText += name;
 			else
-				argText += ", " + name;
+				argText += QStringLiteral(", ") + name;
 		}
 	}
 
-	QString funText{"f = "};
+	QString funText = QStringLiteral("f = ");
 	if (!argText.isEmpty())
-		funText = "f(" + argText + ") = ";
+		funText = QStringLiteral("f(") + argText + QStringLiteral(") = ");
 
 	ui.lFunction->setText(funText);
 	ui.teEquation->setVariables(vars);
@@ -354,7 +356,7 @@ void FunctionValuesDialog::variableColumnChanged(const QModelIndex& index) {
 	if (aspect) {
 		auto* cb{dynamic_cast<TreeViewComboBox*>(QObject::sender())};
 		if (cb)
-			cb->setStyleSheet("");
+			cb->setStyleSheet(QString());
 	}
 
 	checkValues();
@@ -372,11 +374,12 @@ void FunctionValuesDialog::generate() {
 	for (int i = 0; i < m_variableLineEdits.size(); ++i) {
 		variableNames << m_variableLineEdits.at(i)->text().simplified();
 
-		AbstractAspect* aspect{static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer())};
-		Q_ASSERT(aspect);
-		auto* column{dynamic_cast<Column*>(aspect)};
-		Q_ASSERT(column);
-		variableColumns << column;
+		auto* aspect{static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer())};
+		if (aspect) {
+			auto* column{dynamic_cast<Column*>(aspect)};
+			if (column)
+				variableColumns << column;
+		}
 	}
 
 	// set the new values and store the expression, variable names and used data columns

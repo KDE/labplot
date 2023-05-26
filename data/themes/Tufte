@@ -18,7 +18,7 @@ MajorGridOpacity=0.5
 MajorGridStyle=0
 MajorGridWidth=0
 MajorTicksColor=104,104,104
-MajorTicksLineStyle=0
+MajorTicksStyle=0
 MajorTicksOpacity=1
 MajorTicksWidth=0
 MinorGridColor=160,160,160
@@ -26,7 +26,7 @@ MinorGridOpacity=0.5
 MinorGridStyle=0
 MinorGridWidth=0
 MinorTicksColor=104,104,104
-MinorTicksLineStyle=0
+MinorTicksStyle=0
 MinorTicksOpacity=1
 MinorTicksWidth=0
 

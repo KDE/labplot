@@ -30,6 +30,12 @@ public:
 	void updateLocale() override;
 	void updateUnits() override;
 
+	enum class SizeType {
+		ViewSize = 0,
+		StandardPage,
+		Custom,
+	};
+
 private:
 	Ui::WorksheetDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};
@@ -71,12 +77,12 @@ private Q_SLOTS:
 	void worksheetPageRectChanged(const QRectF&);
 
 	void worksheetLayoutChanged(Worksheet::Layout);
-	void worksheetLayoutTopMarginChanged(float);
-	void worksheetLayoutBottomMarginChanged(float);
-	void worksheetLayoutLeftMarginChanged(float);
-	void worksheetLayoutRightMarginChanged(float);
-	void worksheetLayoutVerticalSpacingChanged(float);
-	void worksheetLayoutHorizontalSpacingChanged(float);
+	void worksheetLayoutTopMarginChanged(double);
+	void worksheetLayoutBottomMarginChanged(double);
+	void worksheetLayoutLeftMarginChanged(double);
+	void worksheetLayoutRightMarginChanged(double);
+	void worksheetLayoutVerticalSpacingChanged(double);
+	void worksheetLayoutHorizontalSpacingChanged(double);
 	void worksheetLayoutRowCountChanged(int);
 	void worksheetLayoutColumnCountChanged(int);
 

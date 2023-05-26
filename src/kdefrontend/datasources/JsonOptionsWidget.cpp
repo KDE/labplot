@@ -76,7 +76,7 @@ void JsonOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
 
 	const QChar decimalSeparator = QLocale().decimalPoint();
-	int index = (decimalSeparator == '.') ? 0 : 1;
+	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
 
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
@@ -96,7 +96,7 @@ void JsonOptionsWidget::saveSettings() {
 }
 
 void JsonOptionsWidget::loadDocument(const QString& filename) {
-	PERFTRACE("JsonOptionsWidget::loadDocument");
+	PERFTRACE(QStringLiteral("JsonOptionsWidget::loadDocument"));
 	if (m_filename == filename)
 		return;
 	else
@@ -115,7 +115,7 @@ QAbstractItemModel* JsonOptionsWidget::model() {
 
 void JsonOptionsWidget::setTooltips() {
 	const QString textNumberFormatShort = i18n("This option determines how the imported strings have to be converted to numbers.");
-	const QString textNumberFormat = textNumberFormatShort + "<br><br>"
+	const QString textNumberFormat = textNumberFormatShort + QStringLiteral("<br><br>")
 		+ i18n("For 'C Format', a period is used for the decimal point character and comma is used for the thousands group separator. "
 			   "Valid number representations are:"
 			   "<ul>"
@@ -139,7 +139,7 @@ void JsonOptionsWidget::setTooltips() {
 	const QString textDateTimeFormatShort = i18n(
 		"This option determines how the imported strings have to be converted to calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
 		"and to time.");
-	const QString textDateTimeFormat = textDateTimeFormatShort + "<br><br>"
+	const QString textDateTimeFormat = textDateTimeFormatShort + QStringLiteral("<br><br>")
 		+ i18n("Expressions that may be used for the date part of format string:"
 			   "<table>"
 			   "<tr><td>d</td><td>the day as number without a leading zero (1 to 31).</td></tr>"

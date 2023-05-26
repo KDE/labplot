@@ -24,6 +24,7 @@
 #include <KLocalizedString>
 
 #include <QFont>
+#include <QPainter>
 
 extern "C" {
 #include <gsl/gsl_math.h>
@@ -130,9 +131,9 @@ void Symbol::init(const KConfigGroup& group) {
 	d->pen.setWidthF(group.readEntry("SymbolBorderWidth", defaultBorderWidth));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Symbol, Symbol::Style, style, style)
 BASIC_SHARED_D_READER_IMPL(Symbol, qreal, opacity, opacity)
 BASIC_SHARED_D_READER_IMPL(Symbol, qreal, rotationAngle, rotationAngle)
@@ -140,9 +141,9 @@ BASIC_SHARED_D_READER_IMPL(Symbol, qreal, size, size)
 BASIC_SHARED_D_READER_IMPL(Symbol, QBrush, brush, brush)
 BASIC_SHARED_D_READER_IMPL(Symbol, QPen, pen, pen)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(Symbol, SetStyle, Symbol::Style, style, updateSymbols)
 void Symbol::setStyle(Symbol::Style style) {
 	Q_D(Symbol);
@@ -185,9 +186,9 @@ void Symbol::setOpacity(qreal opacity) {
 		exec(new SymbolSetOpacityCmd(d, opacity, ki18n("%1: set symbols opacity")));
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 SymbolPrivate::SymbolPrivate(Symbol* owner)
 	: q(owner) {
 }
@@ -204,24 +205,24 @@ void SymbolPrivate::updatePixmap() {
 	Q_EMIT q->updatePixmapRequested();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Symbol::save(QXmlStreamWriter* writer) const {
 	Q_D(const Symbol);
 
 	if (parentAspect()->type() == AspectType::CustomPoint)
-		writer->writeStartElement("symbol");
+		writer->writeStartElement(QStringLiteral("symbol"));
 	else if (parentAspect()->type() == AspectType::BoxPlot)
 		writer->writeStartElement(name()); // BoxPlot has multiple symbols, differentiated by their names
 	else
-		writer->writeStartElement("symbols"); // keep the backward compatibility for "symbols" used in XYCurve and Histogram
+		writer->writeStartElement(QStringLiteral("symbols")); // keep the backward compatibility for "symbols" used in XYCurve and Histogram
 
-	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->style)));
-	writer->writeAttribute("opacity", QString::number(d->opacity));
-	writer->writeAttribute("rotation", QString::number(d->rotationAngle));
-	writer->writeAttribute("size", QString::number(d->size));
+	writer->writeAttribute(QStringLiteral("symbolsStyle"), QString::number(static_cast<int>(d->style)));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->opacity));
+	writer->writeAttribute(QStringLiteral("rotation"), QString::number(d->rotationAngle));
+	writer->writeAttribute(QStringLiteral("size"), QString::number(d->size));
 	WRITE_QBRUSH(d->brush);
 	WRITE_QPEN(d->pen);
 	writer->writeEndElement(); // close "Symbol" section
@@ -246,9 +247,9 @@ bool Symbol::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Symbol::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
 	setOpacity(group.readEntry("SymbolOpacity", 1.0));
 	QBrush brush;
@@ -874,15 +875,59 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.lineTo(.5, -.35);
 		break;
 	case Style::Spade: {
-		QFont font("Times", 1);
+		QFont font(QStringLiteral("Times"), 1);
 		path.addText(-.3, .3, font, UTF8_QSTRING("♠"));
 		break;
 	}
 	case Style::Club:
-		QFont font("Times", 1);
+		QFont font(QStringLiteral("Times"), 1);
 		path.addText(-.3, .3, font, UTF8_QSTRING("♣"));
 		break;
 	}
 
 	return path;
+}
+
+void Symbol::draw(QPainter* painter, QPointF point) {
+	Q_D(const Symbol);
+	if (d->style == Symbol::Style::NoSymbols)
+		return;
+
+	painter->setOpacity(d->opacity);
+	painter->setPen(d->pen);
+	painter->setBrush(d->brush);
+	QTransform trafo;
+	trafo.scale(d->size, d->size);
+	QPainterPath path = Symbol::stylePath(d->style);
+	if (d->rotationAngle != 0)
+		trafo.rotate(-d->rotationAngle);
+
+	path = trafo.map(path);
+
+	trafo.reset();
+	trafo.translate(point.x(), point.y());
+	painter->drawPath(trafo.map(path));
+}
+
+void Symbol::draw(QPainter* painter, const QVector<QPointF>& points) {
+	Q_D(const Symbol);
+	if (d->style == Symbol::Style::NoSymbols || points.isEmpty())
+		return;
+
+	painter->setOpacity(d->opacity);
+	painter->setPen(d->pen);
+	painter->setBrush(d->brush);
+	QPainterPath path = Symbol::stylePath(d->style);
+	QTransform trafo;
+	trafo.scale(d->size, d->size);
+	if (d->rotationAngle != 0)
+		trafo.rotate(-d->rotationAngle);
+
+	path = trafo.map(path);
+
+	for (const auto& point : points) {
+		trafo.reset();
+		trafo.translate(point.x(), point.y());
+		painter->drawPath(trafo.map(path));
+	}
 }

@@ -12,16 +12,23 @@
 */
 #include "Spreadsheet.h"
 #include "SpreadsheetModel.h"
+#include "SpreadsheetPrivate.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
+#include "backend/lib/commandtemplates.h"
+
 #include <QIcon>
+#include <QUndoCommand>
+#include <QXmlStreamWriter>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -51,7 +58,8 @@
 */
 
 Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
-	: AbstractDataSource(name, type) {
+	: AbstractDataSource(name, type)
+	, d_ptr(new SpreadsheetPrivate(this)) {
 	if (!loading)
 		init();
 }
@@ -166,26 +174,94 @@ int Spreadsheet::rowCount() const {
 	return result;
 }
 
-void Spreadsheet::removeRows(int first, int count) {
+class SpreadsheetSetRowsCountCmd : public QUndoCommand {
+public:
+	SpreadsheetSetRowsCountCmd(Spreadsheet* spreadsheet, bool insert, int first, int count, QUndoCommand* parent)
+		: QUndoCommand(parent)
+		, m_spreadsheet(spreadsheet)
+		, m_insert(insert)
+		, m_first(first)
+		, m_last(first + count - 1) {
+		if (insert)
+			setText(i18np("%1: insert 1 row", "%1: insert %2 rows", spreadsheet->name(), count));
+		else
+			setText(i18np("%1: remove 1 row", "%1: remove %2 rows", spreadsheet->name(), count));
+	}
+
+	virtual void redo() override {
+		WAIT_CURSOR;
+		if (m_insert)
+			Q_EMIT m_spreadsheet->rowsAboutToBeInserted(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->rowsAboutToBeRemoved(m_first, m_last);
+
+		QUndoCommand::redo();
+
+		if (m_insert)
+			Q_EMIT m_spreadsheet->rowsInserted(m_last + 1);
+		else
+			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
+		RESET_CURSOR;
+		m_spreadsheet->emitRowCountChanged();
+	}
+
+	virtual void undo() override {
+		WAIT_CURSOR;
+		if (m_insert)
+			Q_EMIT m_spreadsheet->rowsAboutToBeRemoved(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->rowsAboutToBeInserted(m_first, m_last);
+		QUndoCommand::undo();
+
+		if (m_insert)
+			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
+		else
+			Q_EMIT m_spreadsheet->rowsInserted(m_last + 1);
+		RESET_CURSOR;
+		m_spreadsheet->emitRowCountChanged();
+	}
+
+private:
+	Spreadsheet* m_spreadsheet;
+	bool m_insert;
+	int m_first;
+	int m_last;
+};
+
+void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;
-	WAIT_CURSOR;
-	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
+
+	auto* command = new SpreadsheetSetRowsCountCmd(this, false, first, count, parent);
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
+
 	for (auto* col : children<Column>())
-		col->removeRows(first, count);
-	endMacro();
-	RESET_CURSOR;
+		col->removeRows(first, count, parent);
+
+	if (execute)
+		exec(command);
 }
 
-void Spreadsheet::insertRows(int before, int count) {
+void Spreadsheet::insertRows(int before, int count, QUndoCommand* parent) {
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
-	WAIT_CURSOR;
-	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
+
+	auto* command = new SpreadsheetSetRowsCountCmd(this, true, before, count, parent);
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
+
 	for (auto* col : children<Column>())
-		col->insertRows(before, count);
-	endMacro();
-	RESET_CURSOR;
+		col->insertRows(before, count, parent);
+
+	if (execute)
+		exec(command);
 }
 
 void Spreadsheet::appendRows(int count) {
@@ -211,12 +287,104 @@ void Spreadsheet::prependColumns(int count) {
 /*!
   Sets the number of rows of the spreadsheet to \c new_size
 */
-void Spreadsheet::setRowCount(int new_size) {
+void Spreadsheet::setRowCount(int new_size, QUndoCommand* parent) {
 	int current_size = rowCount();
 	if (new_size > current_size)
-		insertRows(current_size, new_size - current_size);
+		insertRows(current_size, new_size - current_size, parent);
 	if (new_size < current_size && new_size >= 0)
-		removeRows(new_size, current_size - new_size);
+		removeRows(new_size, current_size - new_size, parent);
+}
+
+void Spreadsheet::initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver) {
+	QObject::connect(sender, &Spreadsheet::aspectAboutToBeRemoved, receiver, &Spreadsheet::linkedSpreadsheetDeleted);
+	QObject::connect(sender, &Spreadsheet::rowCountChanged, receiver, &Spreadsheet::linkedSpreadsheetNewRowCount);
+}
+
+class SpreadsheetSetLinkingCmd : public QUndoCommand {
+public:
+	SpreadsheetSetLinkingCmd(Spreadsheet::Private* target,
+							 const Spreadsheet::Linking& newValue,
+							 const KLocalizedString& description,
+							 QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_target(target)
+		, m_linking(newValue) {
+		setText(description.subs(m_target->name()).toString());
+	}
+
+	void execute() {
+		if (m_target->linking.linkedSpreadsheet)
+			QObject::disconnect(m_target->linking.linkedSpreadsheet, nullptr, m_target->q, nullptr);
+
+		if (m_linking.linkedSpreadsheet) {
+			m_linking.linkedSpreadsheetPath = m_linking.linkedSpreadsheet->path();
+			m_target->q->initConnectionsLinking(m_linking.linkedSpreadsheet, m_target->q);
+		}
+
+		const Spreadsheet::Linking l = m_target->linking;
+		m_target->linking = m_linking;
+		m_linking = l;
+	}
+
+	virtual void redo() override {
+		execute();
+		QUndoCommand::redo();
+		finalize();
+	}
+
+	virtual void undo() override {
+		execute();
+		QUndoCommand::undo();
+		finalize();
+	}
+
+	void finalize() const {
+		emit m_target->q->linkingChanged(m_target->linking.linking);
+		emit m_target->q->linkedSpreadsheetChanged(m_target->linking.linkedSpreadsheet);
+	}
+
+private:
+	Spreadsheet::Private* m_target;
+	Spreadsheet::Linking m_linking;
+};
+
+BASIC_SHARED_D_READER_IMPL(Spreadsheet, bool, linking, linking.linking)
+void Spreadsheet::setLinking(bool linking) {
+	Q_D(Spreadsheet);
+	if (linking != d->linking.linking) {
+		Linking l = d->linking;
+		l.linking = linking;
+		auto parent = new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linking"));
+		if (linking && d->linking.linkedSpreadsheet)
+			setRowCount(d->linking.linkedSpreadsheet->rowCount(), parent);
+		exec(parent);
+	}
+}
+
+BASIC_SHARED_D_READER_IMPL(Spreadsheet, const Spreadsheet*, linkedSpreadsheet, linking.linkedSpreadsheet)
+void Spreadsheet::setLinkedSpreadsheet(const Spreadsheet* linkedSpreadsheet, bool skipUndo) {
+	Q_D(Spreadsheet);
+	if (!d->linking.linking)
+		return; // Do not allow setting a spreadsheet when linking is disabled
+
+	if (linkedSpreadsheet != d->linking.linkedSpreadsheet) {
+		if (skipUndo) {
+			d->linking.linkedSpreadsheet = linkedSpreadsheet;
+			initConnectionsLinking(linkedSpreadsheet, this);
+		} else {
+			Linking l = d->linking;
+			l.linkedSpreadsheet = linkedSpreadsheet;
+			auto* parent = new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linked spreadsheet"));
+			if (d->linking.linking && linkedSpreadsheet)
+				setRowCount(linkedSpreadsheet->rowCount(), parent);
+			exec(parent);
+		}
+	}
+}
+
+QString Spreadsheet::linkedSpreadsheetPath() const {
+	Q_D(const Spreadsheet);
+	return d->linking.spreadsheetPath();
 }
 
 /*!
@@ -252,55 +420,110 @@ int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const {
 	return count;
 }
 
-void Spreadsheet::removeColumns(int first, int count) {
+class SpreadsheetSetColumnsCountCmd : public QUndoCommand {
+public:
+	SpreadsheetSetColumnsCountCmd(Spreadsheet* spreadsheet, bool insert, int first, int count, QUndoCommand* parent)
+		: QUndoCommand(parent)
+		, m_spreadsheet(spreadsheet)
+		, m_insert(insert)
+		, m_first(first)
+		, m_last(first + count - 1) {
+		if (insert)
+			setText(i18np("%1: insert 1 column", "%1: insert %2 columns", spreadsheet->name(), count));
+		else
+			setText(i18np("%1: remove 1 column", "%1: remove %2 columns", spreadsheet->name(), count));
+	}
+
+	virtual void redo() override {
+		WAIT_CURSOR;
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsAboutToBeInserted(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->aspectsAboutToBeRemoved(m_first, m_last);
+
+		QUndoCommand::redo();
+
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->aspectsRemoved();
+		RESET_CURSOR;
+		m_spreadsheet->emitColumnCountChanged();
+	}
+
+	virtual void undo() override {
+		WAIT_CURSOR;
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsAboutToBeRemoved(m_first, m_last);
+		else
+			Q_EMIT m_spreadsheet->aspectsAboutToBeInserted(m_first, m_last);
+		QUndoCommand::undo();
+
+		if (m_insert)
+			Q_EMIT m_spreadsheet->aspectsRemoved();
+		else
+			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
+		RESET_CURSOR;
+		m_spreadsheet->emitColumnCountChanged();
+	}
+
+private:
+	Spreadsheet* m_spreadsheet;
+	bool m_insert;
+	int m_first;
+	int m_last;
+};
+
+void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
 	if (count < 1 || first < 0 || first + count > columnCount())
 		return;
-	WAIT_CURSOR;
-	beginMacro(i18np("%1: remove 1 column", "%1: remove %2 columns", name(), count));
-	for (int i = 0; i < count; i++)
-		child<Column>(first)->remove();
-	endMacro();
-	RESET_CURSOR;
+
+	auto* command = new SpreadsheetSetColumnsCountCmd(this, false, first, count, parent);
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
+
+	for (int i = (first + count - 1); i >= first; i--)
+		child<Column>(i)->remove(parent);
+
+	if (execute)
+		exec(command);
 }
 
-void Spreadsheet::insertColumns(int before, int count) {
-	WAIT_CURSOR;
-	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
-	auto* before_col = column(before);
+void Spreadsheet::insertColumns(int before, int count, QUndoCommand* parent) {
+	auto* command = new SpreadsheetSetColumnsCountCmd(this, true, before, count, parent);
+	bool execute = false;
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
 	const int cols = columnCount();
 	const int rows = rowCount();
 	for (int i = 0; i < count; i++) {
 		auto* new_col = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
-		insertChildBefore(new_col, before_col);
+		insertChild(new_col, before + i, parent);
 	}
-	endMacro();
-	RESET_CURSOR;
+
+	if (execute)
+		exec(command);
 }
 
 /*!
   Sets the number of columns to \c new_size
 */
-void Spreadsheet::setColumnCount(int new_size) {
+void Spreadsheet::setColumnCount(int new_size, QUndoCommand* parent) {
 	int old_size = columnCount();
 	if (old_size == new_size || new_size < 0)
 		return;
 
-	// suppress handling of child add and remove signals when adding/removing multiple columns
-	// TODO: undo/redo of this step is still very slow for a big number of columns
-	disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
-	if (m_model)
-		m_model->suppressSignals(true);
-
 	if (new_size < old_size)
-		removeColumns(new_size, old_size - new_size);
+		removeColumns(new_size, old_size - new_size, parent);
 	else
-		insertColumns(old_size, new_size - old_size);
-
-	connect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
-	if (m_model)
-		m_model->suppressSignals(false);
+		insertColumns(old_size, new_size - old_size, parent);
 }
 
 /*!
@@ -313,6 +536,25 @@ void Spreadsheet::clear() {
 		col->clear();
 	endMacro();
 	RESET_CURSOR;
+}
+
+void Spreadsheet::clear(const QVector<Column*>& columns) {
+	auto* parent = new LongExecutionCmd(i18n("%1: clear selected columns", name()));
+
+	// 	if (formulaModeActive()) {
+	// 		for (auto* col : selectedColumns()) {
+	// 			col->setSuppressDataChangedSignal(true);
+	// 			col->clearFormulas();
+	// 			col->setSuppressDataChangedSignal(false);
+	// 			col->setChanged();
+	// 		}
+	// 	} else {
+	for (auto* col : columns) {
+		col->setSuppressDataChangedSignal(true);
+		col->clear(parent);
+		col->setSuppressDataChangedSignal(false);
+		col->setChanged();
+	}
 }
 
 /*!
@@ -475,7 +717,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		DEBUG("	sort separately")
 		for (auto* col : cols) {
 			int rows = col->rowCount();
-			std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+			std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), col->columnMode()));
 
 			switch (col->columnMode()) {
 			case AbstractColumn::ColumnMode::Double: {
@@ -614,7 +856,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 			for (auto* col : cols) {
 				auto columnMode = col->columnMode();
-				std::unique_ptr<Column> tempCol(new Column("temp", columnMode));
+				std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), columnMode));
 				// put the values in correct order into tempCol
 				for (int i = 0; i < filledRows; i++) {
 					int idx = map.at(i).second;
@@ -627,7 +869,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				if (col == leading) // update all rows
 					col->copy(tempCol.get(), 0, 0, rows);
 				else { // do not overwrite unused cols
-					std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
+					std::unique_ptr<Column> tempInvalidCol(new Column(QStringLiteral("temp2"), col->columnMode()));
 					for (int i = 0; i < invalidRows; i++) {
 						const int idx = invalidIndex.at(i);
 						// too slow: tempInvalidCol->copy(col, idx, i, 1);
@@ -653,7 +895,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 
 			for (auto* col : cols) {
-				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), col->columnMode()));
 				// put the values in the right order into tempCol
 				for (int i = 0; i < rows; i++) {
 					int idx = map.at(i).second;
@@ -678,7 +920,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
 
 			for (auto* col : cols) {
-				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), col->columnMode()));
 				// put the values in the right order into tempCol
 				for (int i = 0; i < rows; i++) {
 					int idx = map.at(i).second;
@@ -710,7 +952,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 
 			for (auto* col : cols) {
-				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), col->columnMode()));
 				// put the values in the right order into tempCol
 				for (int i = 0; i < filledRows; i++) {
 					int idx = map.at(i).second;
@@ -723,7 +965,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				if (col == leading) // update all rows
 					col->copy(tempCol.get(), 0, 0, rows);
 				else { // do not overwrite unused cols
-					std::unique_ptr<Column> tempEmptyCol(new Column("temp2", col->columnMode()));
+					std::unique_ptr<Column> tempEmptyCol(new Column(QStringLiteral("temp2"), col->columnMode()));
 					for (int i = 0; i < emptyRows; i++) {
 						const int idx = emptyIndex.at(i);
 						// too slow: tempEmptyCol->copy(col, idx, i, 1);
@@ -756,7 +998,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 
 			for (auto* col : cols) {
-				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), col->columnMode()));
 				// put the values in the right order into tempCol
 				for (int i = 0; i < filledRows; i++) {
 					int idx = map.at(i).second;
@@ -768,7 +1010,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				if (col == leading) // update all rows
 					col->copy(tempCol.get(), 0, 0, rows);
 				else { // do not overwrite unused cols
-					std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
+					std::unique_ptr<Column> tempInvalidCol(new Column(QStringLiteral("temp2"), col->columnMode()));
 					for (int i = 0; i < invalidRows; i++) {
 						const int idx = invalidIndex.at(i);
 						// too slow: tempInvalidCol->copy(col, idx, i, 1);
@@ -792,7 +1034,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
   Returns an icon to be used for decorating my views.
   */
 QIcon Spreadsheet::icon() const {
-	return QIcon::fromTheme("labplot-spreadsheet");
+	return QIcon::fromTheme(QStringLiteral("labplot-spreadsheet"));
 }
 
 /*!
@@ -830,6 +1072,17 @@ void Spreadsheet::childDeselected(const AbstractAspect* aspect) {
 	}
 }
 
+void Spreadsheet::linkedSpreadsheetDeleted() {
+	Q_D(Spreadsheet);
+	Linking l = d->linking;
+	l.linkedSpreadsheet = nullptr;
+	exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: linked spreadsheet removed")));
+}
+
+void Spreadsheet::linkedSpreadsheetNewRowCount(int rowCount) {
+	setRowCount(rowCount);
+}
+
 /*!
  *  Emits the signal to select or to deselect the column number \c index in the project explorer,
  *  if \c selected=true or \c selected=false, respectively.
@@ -863,16 +1116,22 @@ QVector<AspectType> Spreadsheet::dropableOn() const {
 	return vec;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
   Saves as XML.
  */
 void Spreadsheet::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("spreadsheet");
+	Q_D(const Spreadsheet);
+	writer->writeStartElement(QStringLiteral("spreadsheet"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
+
+	writer->writeStartElement(QLatin1String("linking"));
+	writer->writeAttribute(QStringLiteral("enabled"), QString::number(d->linking.linking));
+	writer->writeAttribute(QStringLiteral("spreadsheet"), d->linking.spreadsheetPath());
+	writer->writeEndElement();
 
 	// columns
 	const auto& columns = children<Column>(ChildIndexFlag::IncludeHidden);
@@ -886,21 +1145,36 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
+	Q_D(Spreadsheet);
 	if (!readBasicAttributes(reader))
 		return false;
+
+	const KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
+	QString str;
+	QXmlStreamAttributes attribs;
 
 	// read child elements
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement())
+		if (reader->isEndElement() && reader->name() == QLatin1String("spreadsheet"))
 			break;
 
 		if (reader->isStartElement()) {
-			if (reader->name() == "comment") {
+			if (reader->name() == QLatin1String("comment")) {
 				if (!readCommentElement(reader))
 					return false;
-			} else if (reader->name() == "column") {
+			} else if (reader->name() == QLatin1String("linking")) {
+				attribs = reader->attributes();
+				str = attribs.value(QStringLiteral("enabled")).toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("enabled")).toString());
+				else
+					d->linking.linking = static_cast<bool>(str.toInt());
+
+				str = attribs.value(QStringLiteral("spreadsheet")).toString();
+				d->linking.linkedSpreadsheetPath = str;
+			} else if (reader->name() == QLatin1String("column")) {
 				Column* column = new Column(QString());
 				column->setIsLoading(true);
 				if (!column->load(reader, preview)) {
@@ -920,16 +1194,17 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
-//##############################################################################
-//########################  Data Import  #######################################
-//##############################################################################
+// ##############################################################################
+// ########################  Data Import  #######################################
+// ##############################################################################
 int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 							   AbstractFileFilter::ImportMode importMode,
 							   int actualRows,
 							   int actualCols,
 							   QStringList colNameList,
-							   QVector<AbstractColumn::ColumnMode> columnMode) {
-	PERFTRACE(Q_FUNC_INFO);
+							   QVector<AbstractColumn::ColumnMode> columnMode,
+							   bool initializeContainer) {
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
 	int columnOffset = 0;
@@ -958,11 +1233,12 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 		return -1;
 	}
 
-	dataContainer.resize(actualCols);
+	if (initializeContainer)
+		dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		Column* column = this->child<Column>(columnOffset + n);
-		DEBUG(" column " << n << " columnMode = " << static_cast<int>(columnMode[n]));
+		DEBUG(" column " << n << " columnMode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode[n]));
 		column->setColumnModeFast(columnMode[n]);
 
 		// in most cases the first imported column is meant to be used as x-data.
@@ -974,34 +1250,38 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 		else
 			column->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 
-		switch (columnMode[n]) {
-		case AbstractColumn::ColumnMode::Double: {
-			auto* vector = static_cast<QVector<double>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::Integer: {
-			auto* vector = static_cast<QVector<int>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::BigInt: {
-			auto* vector = static_cast<QVector<qint64>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::Text: {
-			auto* vector = static_cast<QVector<QString>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::DateTime: {
-			auto* vector = static_cast<QVector<QDateTime>*>(column->data());
-			dataContainer[n] = static_cast<void*>(vector);
-			break;
-		}
+		if (initializeContainer) {
+			switch (columnMode[n]) {
+			case AbstractColumn::ColumnMode::Double: {
+				auto* vector = static_cast<QVector<double>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::Integer: {
+				auto* vector = static_cast<QVector<int>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::BigInt: {
+				auto* vector = static_cast<QVector<qint64>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::Text: {
+				auto* vector = static_cast<QVector<QString>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime: {
+				auto* vector = static_cast<QVector<QDateTime>*>(column->data());
+				dataContainer[n] = static_cast<void*>(vector);
+				break;
+			}
+			}
+		} else {
+			column->setData(dataContainer[n]);
 		}
 	}
 	//	QDEBUG("dataPointers =" << dataPointers);
@@ -1015,13 +1295,26 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	resize data source to cols columns
 	returns column offset depending on import mode
 */
-int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols) {
+int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, int cols) {
 	//	PERFTRACE(Q_FUNC_INFO);
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
 	// QDEBUG("	column name list = " << colNameList)
 	//  name additional columns
-	for (int k = colNameList.size(); k < cols; k++)
-		colNameList.append("Column " + QString::number(k + 1));
+	emit aboutToResize();
+
+	// make sure the column names provided by the user don't have any duplicates
+	QStringList uniqueNames;
+	if (names.count() > 1) {
+		uniqueNames << names.at(0);
+		for (int i = 1; i < names.count(); ++i)
+			uniqueNames << AbstractAspect::uniqueNameFor(names.at(i), uniqueNames);
+	} else
+		uniqueNames = names;
+
+	// if the number of provided column names is smaller than the number of columns to be created,
+	// create standard names
+	for (int k = uniqueNames.size(); k < cols; k++)
+		uniqueNames.append(QStringLiteral("Column ") + QString::number(k + 1));
 
 	int columnOffset = 0; // indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 
@@ -1030,7 +1323,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	if (mode == AbstractFileFilter::ImportMode::Append) {
 		columnOffset = childCount<Column>();
 		for (int n = 0; n < cols; n++) {
-			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
+			newColumn = new Column(uniqueNames.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->resizeTo(rows);
 			newColumn->setUndoAware(false);
 			newColumn->resizeTo(rows);
@@ -1039,7 +1332,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
 		Column* firstColumn = child<Column>(0);
 		for (int n = 0; n < cols; n++) {
-			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
+			newColumn = new Column(uniqueNames.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->resizeTo(rows);
 			newColumn->setUndoAware(false);
 			newColumn->resizeTo(rows);
@@ -1050,35 +1343,38 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		int columns = childCount<Column>();
 
 		if (columns > cols) {
-			// there're more columns in the data source then required -> remove the superfluous columns
+			// there are more columns in the data source than required -> remove the superfluous columns
 			for (int i = 0; i < columns - cols; i++)
 				removeChild(child<Column>(0));
 		} else {
 			// create additional columns if needed
-			// disconnect from the handleAspectAdded slot in the view, no need to handle it when adding new columns during the import
-			disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
+			if (cols - columns > 30)
+				Q_EMIT manyAspectsAboutToBeInserted();
+			Q_EMIT aspectsAboutToBeInserted(columns, cols - 1);
 			for (int i = columns; i < cols; i++) {
-				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Double);
+				newColumn = new Column(uniqueNames.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->resizeTo(rows);
 				newColumn->setUndoAware(false);
 				newColumn->resizeTo(rows);
 				addChildFast(newColumn); // in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
-			connect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
+			Q_EMIT aspectsInserted(columns, cols - 1);
 		}
 
-		// 1. rename the columns that were already available
-		// 2. suppress the dataChanged signal for all columns
-		// 3. send aspectDescriptionChanged because otherwise the column
+		// 1. suppressretransform for all WorksheetElements
+		// 2. rename the columns that were already available
+		// 3. suppress the dataChanged signal for all columns
+		// 4. send aspectDescriptionChanged because otherwise the column
 		//    will not be connected again to the curves (project.cpp, descriptionChanged)
+		// 5. Enable retransform for all WorksheetElements
 		for (int i = 0; i < childCount<Column>(); i++) {
 			child<Column>(i)->setSuppressDataChangedSignal(true);
 			Q_EMIT child<Column>(i)->reset(child<Column>(i));
-			child<Column>(i)->setName(colNameList.at(i));
+			child<Column>(i)->setName(uniqueNames.at(i), AbstractAspect::NameHandling::UniqueNotRequired);
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}
 	}
-
+	emit resizeFinished();
 	return columnOffset;
 }
 
@@ -1087,7 +1383,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 								 size_t endColumn,
 								 const QString& dateTimeFormat,
 								 AbstractFileFilter::ImportMode importMode) {
-	PERFTRACE(Q_FUNC_INFO);
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
 	// determine the dependent plots
@@ -1167,7 +1463,18 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 #endif
 	// row count most probably changed after the import, notify the dock widget.
 	// no need to notify about the column count change, this is already done by add/removeChild signals
-	rowCountChanged(rowCount());
+	Q_EMIT rowCountChanged(rowCount());
 
 	// DEBUG(Q_FUNC_INFO << " DONE");
+}
+
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
+SpreadsheetPrivate::SpreadsheetPrivate(Spreadsheet* owner)
+	: q(owner) {
+}
+
+QString SpreadsheetPrivate::name() const {
+	return q->name();
 }

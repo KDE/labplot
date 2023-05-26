@@ -21,13 +21,23 @@
 FunctionsWidget::FunctionsWidget(QWidget* parent)
 	: QWidget(parent) {
 	ui.setupUi(this);
-	ui.bInsert->setIcon(QIcon::fromTheme("edit-paste"));
-	ui.bCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
+	ui.bInsert->setIcon(QIcon::fromTheme(QStringLiteral("edit-paste")));
+	ui.bCancel->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
 	m_expressionParser = ExpressionParser::getInstance();
-	ui.cbGroup->addItems(m_expressionParser->functionsGroups());
-	ui.cbGroup->insertSeparator(1); // functions
-	ui.cbGroup->insertSeparator(29); // random number generator
-	ui.cbGroup->insertSeparator(31); // distributions
+
+	QVector<int> separators;
+	for (int i = 0; i < (int)FunctionGroups::END; i++) {
+		const auto group = static_cast<FunctionGroups>(i);
+		ui.cbGroup->addItem(FunctionGroupsToString(group), (int)i);
+
+		// Add separator before those groups
+		if (group == FunctionGroups::ColumnStatistics || group == FunctionGroups::AiryFunctionsAndDerivatives || group == FunctionGroups::RandomNumberGenerator
+			|| group == FunctionGroups::GaussianDistribution)
+			separators.append(i);
+	}
+
+	for (int i = 0; i < separators.count(); i++)
+		ui.cbGroup->insertSeparator(separators.at(i) + i); // + i because of previous added separator
 
 	// SLOTS
 	connect(ui.leFilter, &QLineEdit::textChanged, this, &FunctionsWidget::filterChanged);
@@ -47,14 +57,25 @@ FunctionsWidget::FunctionsWidget(QWidget* parent)
  * shows all functions of the selected group and selects the first one in the QStringList
  */
 void FunctionsWidget::groupChanged(int index) {
+	const auto d = ui.cbGroup->itemData(index);
+	if (d.isNull())
+		return; // separator selected
+
+	bool ok;
+	const auto groupIndex = static_cast<FunctionGroups>(d.toInt(&ok));
+	if (!ok)
+		return;
+
 	static const QStringList& functions = m_expressionParser->functions();
-	static const QStringList& names = m_expressionParser->functionsNames();
-	static const QVector<int>& indices = m_expressionParser->functionsGroupIndices();
+	static const QStringList& names = m_expressionParser->functionsDescriptions();
+	static const QVector<FunctionGroups>& indices = m_expressionParser->functionsGroupIndices();
+
+	QDEBUG("Index: " << FunctionGroupsToString(groupIndex));
 
 	ui.lwFunctions->clear();
 	for (int i = 0; i < names.size(); ++i) {
-		if (indices.at(i) == index)
-			ui.lwFunctions->addItem(names.at(i) + " (" + functions.at(i) + ')');
+		if (indices.at(i) == groupIndex)
+			ui.lwFunctions->addItem(names.at(i) + QStringLiteral(" (") + functions.at(i) + QStringLiteral(")"));
 	}
 	ui.lwFunctions->setCurrentRow(0);
 }
@@ -63,12 +84,12 @@ void FunctionsWidget::filterChanged(const QString& filter) {
 	if (!filter.isEmpty()) {
 		ui.cbGroup->setEnabled(false);
 
-		static const QStringList& names = m_expressionParser->functionsNames();
+		static const QStringList& names = m_expressionParser->functionsDescriptions();
 		static const QStringList& functions = m_expressionParser->functions();
 		ui.lwFunctions->clear();
 		for (int i = 0; i < names.size(); ++i) {
 			if (names.at(i).contains(filter, Qt::CaseInsensitive) || functions.at(i).contains(filter, Qt::CaseInsensitive))
-				ui.lwFunctions->addItem(names.at(i) + " (" + functions.at(i) + ')');
+				ui.lwFunctions->addItem(names.at(i) + QStringLiteral(" (") + functions.at(i) + QStringLiteral(")"));
 		}
 
 		if (ui.lwFunctions->count()) {
@@ -85,11 +106,11 @@ void FunctionsWidget::filterChanged(const QString& filter) {
 
 void FunctionsWidget::insertClicked() {
 	static const QStringList& functions = m_expressionParser->functions();
-	static const QStringList& names = m_expressionParser->functionsNames();
+	static const QStringList& names = m_expressionParser->functionsDescriptions();
 
 	// determine the currently selected constant
 	const QString& text = ui.lwFunctions->currentItem()->text();
-	const QString& name = text.left(text.indexOf(" ("));
+	const QString& name = text.left(text.indexOf(QStringLiteral(" (")));
 	int index = names.indexOf(name);
 
 	Q_EMIT functionSelected(functions.at(index));

@@ -31,11 +31,11 @@ public:
 	bool positionInvalid{false};
 	bool coordinateBindingEnabled{false};
 	QPointF positionLogical;
-	qreal rotationAngle{0.0};
 	QRectF boundingRectangle; // bounding rectangle of the text
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
 	WorksheetElement* const q{nullptr};
+	bool insidePlot{true}; // point inside the plot (visible) or not
 
 	bool swapVisible(bool on);
 	QString name() const;

@@ -12,7 +12,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 
-//##############################################################################
+// ##############################################################################
 
 void ConvolutionTest::testLinear() {
 	// data
@@ -21,16 +21,16 @@ void ConvolutionTest::testLinear() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
@@ -72,16 +72,16 @@ void ConvolutionTest::testLinear2() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
@@ -120,13 +120,13 @@ void ConvolutionTest::testLinear_noX() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -167,16 +167,16 @@ void ConvolutionTest::testLinear_swapped() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
@@ -217,13 +217,13 @@ void ConvolutionTest::testLinear_swapped_noX() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -263,13 +263,13 @@ void ConvolutionTest::testLinear_norm() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -315,13 +315,13 @@ void ConvolutionTest::testLinear_swapped_norm() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -367,13 +367,13 @@ void ConvolutionTest::testLinear_wrapMax() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -419,13 +419,13 @@ void ConvolutionTest::testLinear_swapped_wrapMax() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -471,13 +471,13 @@ void ConvolutionTest::testLinear_wrapCenter() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -523,13 +523,13 @@ void ConvolutionTest::testLinear_swapped_wrapCenter() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -578,16 +578,16 @@ void ConvolutionTest::testCircular() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
@@ -627,16 +627,16 @@ void ConvolutionTest::testCircular2() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
@@ -674,13 +674,13 @@ void ConvolutionTest::testCircular_noX() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -719,16 +719,16 @@ void ConvolutionTest::testCircular_swapped() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
@@ -767,13 +767,13 @@ void ConvolutionTest::testCircular_swapped_noX() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -811,13 +811,13 @@ void ConvolutionTest::testCircular_norm() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -860,13 +860,13 @@ void ConvolutionTest::testCircular_swapped_norm() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -909,13 +909,13 @@ void ConvolutionTest::testCircular_wrapMax() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -958,13 +958,13 @@ void ConvolutionTest::testCircular_swapped_wrapMax() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1007,13 +1007,13 @@ void ConvolutionTest::testCircular_wrapCenter() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1056,13 +1056,13 @@ void ConvolutionTest::testCircular_swapped_wrapCenter() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1107,13 +1107,13 @@ void ConvolutionTest::testLinearDeconv() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1155,13 +1155,13 @@ void ConvolutionTest::testLinearDeconv2() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1201,13 +1201,13 @@ void ConvolutionTest::testLinearDeconv_swapped() {
 	QVector<double> y2Data = {1, 2, 3, 4};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1247,13 +1247,13 @@ void ConvolutionTest::testLinearDeconv2_swapped() {
 	QVector<double> y2Data = {1, 2, 3};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1293,13 +1293,13 @@ void ConvolutionTest::testLinearDeconv_norm() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1342,13 +1342,13 @@ void ConvolutionTest::testCircularDeconv() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1391,13 +1391,13 @@ void ConvolutionTest::testCircularDeconv2() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1438,13 +1438,13 @@ void ConvolutionTest::testCircularDeconv_norm() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 
@@ -1495,13 +1495,13 @@ void ConvolutionTest::testPerformance() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve curve("convolution");
+	XYConvolutionCurve curve(QStringLiteral("convolution"));
 	curve.setYDataColumn(&yDataColumn);
 	curve.setY2DataColumn(&y2DataColumn);
 

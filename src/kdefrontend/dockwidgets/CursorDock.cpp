@@ -20,6 +20,8 @@
 #include <QKeyEvent>
 #include <QMenu>
 
+struct Lock;
+
 CursorDock::CursorDock(QWidget* parent)
 	: QWidget(parent)
 	, ui(new Ui::CursorDock) {
@@ -46,7 +48,7 @@ CursorDock::CursorDock(QWidget* parent)
 }
 
 void CursorDock::setWorksheet(Worksheet* worksheet) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 
 	ui->tvCursorData->setModel(worksheet->cursorModel());
 	ui->tvCursorData->resizeColumnToContents(0);
@@ -71,14 +73,14 @@ void CursorDock::setWorksheet(Worksheet* worksheet) {
 	ui->tvCursorData->expandAll();
 
 	// connect all plots as a workaround to not be able to know which plot is selected
-	for (auto connection : selectedPlotsConnection)
+	for (auto& connection : selectedPlotsConnection)
 		disconnect(connection);
-	for (auto* plot : m_plotList) {
+	for (const auto* plot : m_plotList) {
 		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor0EnableChanged, this, &CursorDock::plotCursor0EnableChanged);
 		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor1EnableChanged, this, &CursorDock::plotCursor1EnableChanged);
+		selectedPlotsConnection << connect(plot, &CartesianPlot::mousePressCursorModeSignal, this, &CursorDock::cursorUsed);
+		selectedPlotsConnection << connect(plot, &CartesianPlot::mousePressCursorModeSignal, this, &CursorDock::cursorUsed);
 	}
-
-	m_initializing = false;
 }
 
 CursorDock::~CursorDock() {
@@ -94,16 +96,14 @@ void CursorDock::expandAll() {
 }
 
 void CursorDock::cursor0EnableChanged(bool enable) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setCursor0Enable(enable);
 }
 
 void CursorDock::cursor1EnableChanged(bool enable) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setCursor1Enable(enable);
@@ -113,29 +113,25 @@ void CursorDock::cursor1EnableChanged(bool enable) {
 // back from plot
 // #############################################################
 void CursorDock::plotCursor0EnableChanged(bool enable) {
-	m_initializing = true;
-
-	ui->cbCursor0en->setChecked(enable);
 	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), !enable);
 	if (enable && ui->cbCursor1en->isChecked())
 		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), false);
 	else
 		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), true);
 
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	ui->cbCursor0en->setChecked(enable);
 }
 
 void CursorDock::plotCursor1EnableChanged(bool enable) {
-	m_initializing = true;
-
-	ui->cbCursor1en->setChecked(enable);
 	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), !enable);
 	if (enable && ui->cbCursor0en->isChecked())
 		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), false);
 	else
 		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), true);
 
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	ui->cbCursor1en->setChecked(enable);
 }
 
 bool CursorDock::eventFilter(QObject* obj, QEvent* event) {
@@ -150,7 +146,7 @@ bool CursorDock::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void CursorDock::contextMenuRequested(QPoint pos) {
-	auto* menu = new QMenu;
+	auto* menu = new QMenu(this);
 	menu->addAction(i18n("Copy Selection"), this, &CursorDock::resultCopy, QKeySequence::Copy);
 	menu->addAction(i18n("Copy All"), this, &CursorDock::resultCopyAll);
 	menu->exec(ui->tvCursorData->mapToGlobal(pos));
@@ -161,7 +157,7 @@ void CursorDock::resultCopy() {
 	auto* model = ui->tvCursorData->model();
 	auto* selection = ui->tvCursorData->selectionModel();
 	const auto& indices = selection->selectedRows();
-	for (auto index : indices) {
+	for (auto& index : indices) {
 		int row = index.row();
 		auto parent = index.parent();
 		for (int col = 0; col < model->columnCount(); ++col) {

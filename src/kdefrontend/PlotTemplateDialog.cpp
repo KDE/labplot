@@ -28,20 +28,6 @@
 
 namespace {
 const QLatin1String lastDirConfigEntry = QLatin1String("LastPlotTemplateDir");
-
-// Copied from BaseDock
-struct Lock {
-	inline explicit Lock(bool& variable)
-		: variable(variable = true) {
-	}
-
-	inline ~Lock() {
-		variable = false;
-	}
-
-private:
-	bool& variable;
-};
 }
 
 const QString PlotTemplateDialog::format = QLatin1String(".labplot_template");
@@ -52,7 +38,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	ui->setupUi(this);
 
 	setWindowTitle(i18nc("@title:window", "Plot Templates"));
-	setWindowIcon(QIcon::fromTheme("document-new-from-template"));
+	setWindowIcon(QIcon::fromTheme(QLatin1String("document-new-from-template")));
 
 	ui->cbLocation->addItem(i18n("Default"));
 	ui->cbLocation->addItem(i18n("Custom Folder"));
@@ -85,7 +71,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	m_worksheetView->hide();
 
 	mTemplateListModelDefault = new TemplateListModel(defaultTemplateInstallPath(), this);
-	mTemplateListModelCustom = new TemplateListModel(conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation)), this);
+	mTemplateListModelCustom = new TemplateListModel(conf.readEntry(lastDirConfigEntry, defaultTemplateInstallPath()), this);
 	ui->leCustomFolder->setText(mTemplateListModelCustom->searchPath());
 
 	connect(ui->pbCustomFolder, &QPushButton::pressed, this, &PlotTemplateDialog::chooseTemplateSearchPath);
@@ -107,13 +93,13 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 }
 
 PlotTemplateDialog::~PlotTemplateDialog() {
-	delete ui;
-	delete m_project;
-
 	// save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 	conf.writeEntry(QLatin1String("Location"), ui->cbLocation->currentIndex());
+
+	delete ui;
+	delete m_project;
 }
 
 void PlotTemplateDialog::customTemplatePathChanged(const QString& path) {
@@ -187,14 +173,14 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 	}
 
 	reader.readNext();
-	if (!reader.isStartElement() || reader.name() != "PlotTemplate") {
+	if (!reader.isStartElement() || reader.name() != QLatin1String("PlotTemplate")) {
 		DEBUG("XML error: No PlotTemplate found");
 		updateErrorMessage(i18n("Failed to load the selected plot template"));
 		return nullptr;
 	}
 
 	bool ok;
-	int xmlVersion = reader.readAttributeInt("xmlVersion", &ok);
+	int xmlVersion = reader.readAttributeInt(QLatin1String("xmlVersion"), &ok);
 	if (!ok) {
 		DEBUG("XML error: xmlVersion found");
 		updateErrorMessage(i18n("Failed to load the selected plot template"));
@@ -203,7 +189,7 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 	Project::setXmlVersion(xmlVersion);
 	reader.readNext();
 
-	while (!((reader.isStartElement() && reader.name() == "cartesianPlot") || reader.atEnd()))
+	while (!((reader.isStartElement() && reader.name() == QLatin1String("cartesianPlot")) || reader.atEnd()))
 		reader.readNext();
 
 	if (reader.atEnd()) {
@@ -240,7 +226,7 @@ void PlotTemplateDialog::showPreview() {
 	auto* plot = generatePlot();
 	if (plot) {
 		m_worksheet->addChild(plot);
-		updateErrorMessage(""); // hide error text edit
+		updateErrorMessage(QLatin1String("")); // hide error text edit
 	}
 }
 
@@ -299,9 +285,9 @@ void PlotTemplateDialog::changePreviewSource(int row) {
 		showPreview();
 }
 
-//##########################################################################################################
-// Listmodel
-//##########################################################################################################
+// ##########################################################################################################
+//  Listmodel
+// ##########################################################################################################
 TemplateListModel::TemplateListModel(const QString& searchPath, QObject* parent)
 	: QAbstractListModel(parent) {
 	setSearchPath(searchPath);
@@ -311,7 +297,7 @@ void TemplateListModel::setSearchPath(const QString& searchPath) {
 	beginResetModel();
 	mSearchPath = searchPath;
 	mFiles.clear();
-	QStringList filter("*" + PlotTemplateDialog::format);
+	QStringList filter(QLatin1String("*") % PlotTemplateDialog::format);
 	QDirIterator it(searchPath, filter, QDir::AllEntries | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
 	QDir sPath(searchPath);
 	while (it.hasNext()) {

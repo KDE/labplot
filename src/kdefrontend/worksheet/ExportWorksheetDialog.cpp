@@ -13,17 +13,23 @@
 #include "kdefrontend/GuiTools.h"
 #include "ui_exportworksheetwidget.h"
 
-#include <QCompleter>
-#include <QDesktopWidget>
-#include <QDirModel>
-#include <QFileDialog>
-#include <QWindow>
-
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
 #include <KWindowConfig>
+#include <kcoreaddons_version.h>
+
+#include <QCompleter>
+#include <QDesktopWidget>
+// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QFileSystemModel>
+#else
+#include <QDirModel>
+#endif
 #include <QDialogButtonBox>
+#include <QFileDialog>
+#include <QWindow>
 
 /*!
 	\class ExportWorksheetDialog
@@ -50,7 +56,11 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 
 	m_cancelButton->setToolTip(i18n("Close this dialog without exporting."));
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	ui->leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
+#else
 	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
+#endif
 
 	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
 
@@ -191,8 +201,16 @@ void ExportWorksheetDialog::slotButtonClicked(QAbstractButton* button) {
 void ExportWorksheetDialog::okClicked() {
 	if (ui->cbExportTo->currentIndex() == 0 /*export to file*/
 		&& m_askOverwrite && QFile::exists(ui->leFileName->text())) {
-		int r = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-		if (r == KMessageBox::No)
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		int status = KMessageBox::questionTwoActions(this,
+													 i18n("The file already exists. Do you really want to overwrite it?"),
+													 i18n("Export"),
+													 KStandardGuiItem::overwrite(),
+													 KStandardGuiItem::cancel());
+#else
+		int status = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
+#endif
+		if (status == KMessageBox::No)
 			return;
 	}
 
@@ -330,8 +348,7 @@ void ExportWorksheetDialog::exportToChanged(int index) {
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	if (name.simplified().isEmpty()) {
 		m_okButton->setEnabled(false);

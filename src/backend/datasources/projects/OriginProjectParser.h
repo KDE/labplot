@@ -11,7 +11,7 @@
 #ifndef ORIGINPROJECTPARSER_H
 #define ORIGINPROJECTPARSER_H
 
-#include "3rdparty/liborigin/OriginFile.h"
+#include "OriginFile.h"
 #include "backend/datasources/projects/ProjectParser.h"
 #include "backend/worksheet/Background.h"
 
@@ -35,6 +35,9 @@ public:
 	static QString supportedExtensions();
 	void setImportUnusedObjects(bool);
 	bool hasUnusedObjects();
+
+protected:
+	bool load(Project*, bool) override;
 
 private:
 	bool loadFolder(Folder*, tree<Origin::ProjectNode>::iterator, bool preview);
@@ -72,9 +75,6 @@ private:
 	bool m_importUnusedObjects{false};
 
 	friend class ProjectImportTest;
-
-protected:
-	bool load(Project*, bool) override;
 };
 
 #endif // ORIGINPROJECTPARSER_H

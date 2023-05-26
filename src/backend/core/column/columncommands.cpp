@@ -14,7 +14,10 @@
 #include "columncommands.h"
 #include "ColumnPrivate.h"
 #include "backend/lib/macros.h"
+
 #include <KLocalizedString>
+
+#include <cmath>
 
 /** ***************************************************************************
  * \class ColumnSetModeCmd
@@ -139,6 +142,7 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
  * \brief Execute the command
  */
 void ColumnSetModeCmd::redo() {
+	DEBUG(Q_FUNC_INFO)
 	if (!m_executed) {
 		// save old values
 		m_old_mode = m_col->columnMode();
@@ -147,6 +151,7 @@ void ColumnSetModeCmd::redo() {
 		m_old_out_filter = m_col->outputFilter();
 
 		// do the conversion
+		m_col->setLabelsMode(m_mode); // must be done before setColumnMode, because setColumnMode() sends signal to dock
 		m_col->setColumnMode(m_mode);
 
 		// save new values
@@ -167,6 +172,7 @@ void ColumnSetModeCmd::redo() {
 void ColumnSetModeCmd::undo() {
 	// reset to old values
 	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter);
+	// setLabelsMode will be done in replaceModeData()
 
 	m_undone = true;
 }
@@ -223,7 +229,7 @@ ColumnFullCopyCmd::~ColumnFullCopyCmd() {
  */
 void ColumnFullCopyCmd::redo() {
 	if (m_backup == nullptr) {
-		m_backup_owner = new Column("temp", m_src->columnMode());
+		m_backup_owner = new Column(QStringLiteral("temp"), m_src->columnMode());
 		m_backup = new ColumnPrivate(m_backup_owner, m_src->columnMode());
 		m_backup->copy(m_col);
 		m_col->copy(m_src);
@@ -337,10 +343,10 @@ ColumnPartialCopyCmd::~ColumnPartialCopyCmd() {
 void ColumnPartialCopyCmd::redo() {
 	if (m_src_backup == nullptr) {
 		// copy the relevant rows of source and destination column into backup columns
-		m_src_backup_owner = new Column("temp", m_col->columnMode());
+		m_src_backup_owner = new Column(QStringLiteral("temp"), m_col->columnMode());
 		m_src_backup = new ColumnPrivate(m_src_backup_owner, m_col->columnMode());
 		m_src_backup->copy(m_src, m_src_start, 0, m_num_rows);
-		m_col_backup_owner = new Column("temp", m_col->columnMode());
+		m_col_backup_owner = new Column(QStringLiteral("temp"), m_col->columnMode());
 		m_col_backup = new ColumnPrivate(m_col_backup_owner, m_col->columnMode());
 		m_col_backup->copy(m_col, m_dest_start, 0, m_num_rows);
 		m_old_row_count = m_col->rowCount();
@@ -462,7 +468,7 @@ void ColumnRemoveRowsCmd::redo() {
 			m_data_row_count = m_count;
 
 		m_old_size = m_col->rowCount();
-		m_backup_owner = new Column("temp", m_col->columnMode());
+		m_backup_owner = new Column(QStringLiteral("temp"), m_col->columnMode());
 		m_backup = new ColumnPrivate(m_backup_owner, m_col->columnMode());
 		m_backup->copy(m_col, m_first, 0, m_data_row_count);
 		m_formulas = m_col->formulaAttribute();
@@ -673,8 +679,9 @@ ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
 													 QString formula,
 													 QStringList variableNames,
 													 QVector<Column*> variableColumns,
-													 bool autoUpdate)
-	: QUndoCommand()
+													 bool autoUpdate,
+													 QUndoCommand* parent)
+	: QUndoCommand(parent)
 	, m_col(col)
 	, m_newFormula(std::move(formula))
 	, m_newVariableNames(std::move(variableNames))
@@ -696,7 +703,8 @@ void ColumnSetGlobalFormulaCmd::redo() {
 
 	QVector<Column::FormulaData> formulaData;
 	for (int i = 0; i < m_newVariableNames.count(); i++)
-		formulaData << Column::FormulaData(m_newVariableNames.at(i), m_newVariableColumns.at(i));
+		if (i < m_newVariableColumns.size()) // names may be defined but without column
+			formulaData << Column::FormulaData(m_newVariableNames.at(i), m_newVariableColumns.at(i));
 
 	m_col->setFormula(m_newFormula, formulaData, m_newAutoUpdate);
 }

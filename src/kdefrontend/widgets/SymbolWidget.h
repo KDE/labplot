@@ -20,7 +20,7 @@ class SymbolWidget : public QWidget {
 public:
 	explicit SymbolWidget(QWidget*);
 
-	void setSymbols(QList<Symbol*>);
+	void setSymbols(const QList<Symbol*>&);
 	void updateLocale();
 
 	void load();

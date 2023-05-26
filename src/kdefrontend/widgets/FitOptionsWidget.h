@@ -37,12 +37,12 @@ private Q_SLOTS:
 	void autoEvalRangeChanged();
 	void fitRangeMinChanged();
 	void fitRangeMaxChanged();
-	void fitRangeMinDateTimeChanged(const QDateTime&);
-	void fitRangeMaxDateTimeChanged(const QDateTime&);
+	void fitRangeMinDateTimeChanged(qint64);
+	void fitRangeMaxDateTimeChanged(qint64);
 	void evalRangeMinChanged();
 	void evalRangeMaxChanged();
-	void evalRangeMinDateTimeChanged(const QDateTime&);
-	void evalRangeMaxDateTimeChanged(const QDateTime&);
+	void evalRangeMinDateTimeChanged(qint64);
+	void evalRangeMaxDateTimeChanged(qint64);
 	void applyClicked();
 	void changed();
 };

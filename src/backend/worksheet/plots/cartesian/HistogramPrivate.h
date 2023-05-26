@@ -11,19 +11,19 @@
 #ifndef HISTOGRAMPRIVATE_H
 #define HISTOGRAMPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
-
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <vector>
 
 class Column;
 class Background;
+class Line;
+class Value;
 
 extern "C" {
 #include <gsl/gsl_histogram.h>
 }
 
-class HistogramPrivate : public WorksheetElementPrivate {
+class HistogramPrivate : public PlotPrivate {
 public:
 	explicit HistogramPrivate(Histogram* owner);
 	~HistogramPrivate() override;
@@ -42,18 +42,22 @@ public:
 	void updateValues();
 	void updateFilling();
 	void updateErrorBars();
+	void updateRug();
 	void updatePixmap();
 	void recalcShapeAndBoundingRect() override;
 
+	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
 
 	double xMinimum() const;
 	double xMaximum() const;
 	double yMinimum() const;
 	double yMaximum() const;
+
 	const AbstractColumn* bins();
 	const AbstractColumn* binValues();
+	const AbstractColumn* binPDValues();
+
 	double getMaximumOccuranceofHistogram() const;
 
 	bool m_suppressRecalc{false};
@@ -61,55 +65,41 @@ public:
 	// General
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
-	Histogram::HistogramType type{Histogram::Ordinary};
-	Histogram::HistogramOrientation orientation{Histogram::Vertical};
-	Histogram::HistogramNormalization normalization{Histogram::Count};
+	Histogram::Type type{Histogram::Ordinary};
+	Histogram::Orientation orientation{Histogram::Vertical};
+	Histogram::Normalization normalization{Histogram::Count};
 	Histogram::BinningMethod binningMethod{Histogram::SquareRoot};
 	int totalCount{0};
 	int binCount{10};
-	float binWidth{1.0f};
+	double binWidth{1.0};
 	bool autoBinRanges{true};
 	double binRangesMin{0.0};
 	double binRangesMax{1.0};
 
-	// line
-	Histogram::LineType lineType{Histogram::Bars};
-	QPen linePen;
-	qreal lineOpacity;
-
-	// symbols
+	Line* line{nullptr};
 	Symbol* symbol{nullptr};
-
-	// values
-	int value{0};
-	Histogram::ValuesType valuesType{Histogram::NoValues};
-	const AbstractColumn* valuesColumn{nullptr};
-	QString valuesColumnPath;
-	Histogram::ValuesPosition valuesPosition{Histogram::ValuesAbove};
-	qreal valuesDistance;
-	qreal valuesRotationAngle;
-	qreal valuesOpacity;
-	char valuesNumericFormat{'f'}; // 'f', 'g', 'e', 'E', etc. for numeric values
-	int valuesPrecision{2}; // number of digits for numeric values
-	QString valuesDateTimeFormat;
-	QString valuesPrefix;
-	QString valuesSuffix;
-	QFont valuesFont;
-	QColor valuesColor;
-
-	// filling
 	Background* background{nullptr};
+	Value* value{nullptr};
 
 	// error bars
 	Histogram::ErrorType errorType{Histogram::NoError};
-	XYCurve::ErrorBarsType errorBarsType;
-	double errorBarsCapSize{1};
-	QPen errorBarsPen;
-	qreal errorBarsOpacity;
+	const AbstractColumn* errorPlusColumn{nullptr};
+	QString errorPlusColumnPath;
+	const AbstractColumn* errorMinusColumn{nullptr};
+	QString errorMinusColumnPath;
+	Line* errorBarsLine{nullptr};
+
+	// rug
+	bool rugEnabled{false};
+	double rugOffset{0.0};
+	double rugLength{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
+	double rugWidth{0.0};
+	QPainterPath rugPath;
 
 	QPainterPath linePath;
 	QPainterPath symbolsPath;
 	QPainterPath valuesPath;
+	QPainterPath errorBarsPath;
 	QRectF boundingRectangle;
 	QPainterPath curveShape;
 	// TODO: use Qt container
@@ -128,17 +118,15 @@ public:
 private:
 	gsl_histogram* m_histogram{nullptr};
 	size_t m_bins{0};
-
-	//	bool m_printing{false};
 	bool m_hovered{false};
-	bool m_suppressRetransform{false};
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
 	QImage m_selectionEffectImage;
 	bool m_hoverEffectImageIsDirty{false};
 	bool m_selectionEffectImageIsDirty{false};
-	Column* m_binsColumn{nullptr};
-	Column* m_binValuesColumn{nullptr};
+	Column* m_binsColumn{nullptr}; // bin positions/edges
+	Column* m_binValuesColumn{nullptr}; // bin values
+	Column* m_binPDValuesColumn{nullptr}; // bin values in the probability density normalization
 
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
@@ -146,9 +134,7 @@ private:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
-	void histogramValue(double& value, int bin);
-	void drawSymbols(QPainter*);
-	void drawValues(QPainter*);
+	void histogramValue(double& value, int bin) const;
 	void drawFilling(QPainter*);
 	void draw(QPainter*);
 };

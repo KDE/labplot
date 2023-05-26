@@ -42,12 +42,12 @@ ThemeHandler::ThemeHandler(QWidget* parent)
 	: QWidget(parent) {
 	auto* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
-	horizontalLayout->setMargin(0);
+	horizontalLayout->setContentsMargins(0, 0, 0, 0);
 
 	m_pbLoadTheme = new QPushButton(this);
 	horizontalLayout->addWidget(m_pbLoadTheme);
 	m_pbLoadTheme->setText(i18n("Theme"));
-	m_pbLoadTheme->setIcon(QIcon::fromTheme("color-management"));
+	m_pbLoadTheme->setIcon(QIcon::fromTheme(QLatin1String("color-management")));
 
 	// 	pbSaveTheme = new QPushButton(this);
 	// 	horizontalLayout->addWidget(pbSaveTheme);
@@ -75,9 +75,9 @@ ThemeHandler::ThemeHandler(QWidget* parent)
  * get list of all theme files (full path)
  */
 QStringList ThemeHandler::themeList() {
-	DEBUG("ThemeHandler::themeList()");
+	DEBUG(Q_FUNC_INFO);
 	// find all available themes files (system wide and user specific local files)
-	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, QLatin1String("themes"), QStandardPaths::LocateDirectory);
 
 	QStringList themes;
 	for (const auto& dir : dirs) {
@@ -102,7 +102,7 @@ QStringList ThemeHandler::themes() {
 	QStringList themes;
 	for (int i = 0; i < themePaths.size(); ++i) {
 		QFileInfo fileinfo(themePaths.at(i));
-		themes.append(fileinfo.fileName().split('.').at(0));
+		themes.append(fileinfo.fileName().split(QLatin1Char('.')).at(0));
 	}
 
 	if (!themes.isEmpty()) {
@@ -131,7 +131,7 @@ const QString ThemeHandler::themeFilePath(const QString& name) {
 		}
 	}
 
-	return QString();
+	return {};
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -212,7 +212,7 @@ void ThemeHandler::showPanel() {
 // }
 
 // void ThemeHandler::saveNewSelected(const QString& filename) {
-// 	KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
+// 	KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
 // 	Q_EMIT saveThemeRequested(config);
 // 	Q_EMIT info( i18n("New theme \"%1\" was saved.", filename) );
 //
@@ -237,7 +237,7 @@ void ThemeHandler::showPanel() {
 //
 // 	// creating upload dialog
 // 	KNS3::UploadDialog dialog("labplot2_themes.knsrc", this);
-// 	dialog.setUploadFile(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + m_currentLocalTheme);
+// 	dialog.setUploadFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/' + "themes" + '/' + m_currentLocalTheme);
 // 	dialog.setUploadName(m_currentLocalTheme);
 // 	//dialog.setDescription(); TODO: allow the user to provide a short description for the theme to be uploaded
 // 	dialog.exec();

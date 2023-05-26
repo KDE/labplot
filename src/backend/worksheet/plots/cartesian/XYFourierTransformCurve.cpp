@@ -55,31 +55,31 @@ void XYFourierTransformCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFourierTransformCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-fourier-transform-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFourierTransformCurve, XYFourierTransformCurve::TransformData, transformData, transformData)
 
-const XYFourierTransformCurve::TransformResult& XYFourierTransformCurve::transformResult() const {
+const XYAnalysisCurve::Result& XYFourierTransformCurve::result() const {
 	Q_D(const XYFourierTransformCurve);
 	return d->transformResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYFourierTransformCurve, SetTransformData, XYFourierTransformCurve::TransformData, transformData, recalculate)
 void XYFourierTransformCurve::setTransformData(const XYFourierTransformCurve::TransformData& transformData) {
 	Q_D(XYFourierTransformCurve);
 	exec(new XYFourierTransformCurveSetTransformDataCmd(d, transformData, ki18n("%1: set transform options and perform the Fourier transform")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransformCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -89,40 +89,13 @@ XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransfor
 // when the parent aspect is removed
 XYFourierTransformCurvePrivate::~XYFourierTransformCurvePrivate() = default;
 
-void XYFourierTransformCurvePrivate::recalculate() {
+void XYFourierTransformCurvePrivate::resetResults() {
+	transformResult = XYFourierTransformCurve::TransformResult();
+}
+
+bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create transform result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	transformResult = XYFourierTransformCurve::TransformResult();
-
-	if (!xDataColumn || !yDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
 
 	// copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
@@ -130,16 +103,17 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	const double xmin = transformData.xRange.first();
 	const double xmax = transformData.xRange.last();
 
-	int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
 		// only copy those data where _all_ values (for x and y, if given) are valid
-		if (std::isnan(xDataColumn->valueAt(row)) || std::isnan(yDataColumn->valueAt(row)) || xDataColumn->isMasked(row) || yDataColumn->isMasked(row))
+		if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row)) || tmpXDataColumn->isMasked(row)
+			|| tmpYDataColumn->isMasked(row))
 			continue;
 
 		// only when inside given range
-		if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+		if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+			xdataVector.append(tmpXDataColumn->valueAt(row));
+			ydataVector.append(tmpYDataColumn->valueAt(row));
 		}
 	}
 
@@ -149,10 +123,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -232,47 +203,44 @@ void XYFourierTransformCurvePrivate::recalculate() {
 
 	// write the result
 	transformResult.available = true;
-	transformResult.valid = true;
+	transformResult.valid = (status == GSL_SUCCESS);
 	transformResult.status = gslErrorToString(status);
 	transformResult.elapsedTime = timer.elapsed();
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFourierTransformCurve);
 
-	writer->writeStartElement("xyFourierTransformCurve");
+	writer->writeStartElement(QStringLiteral("xyFourierTransformCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
 
 	// write xy-fourier_transform-curve specific information
 	// transform data
-	writer->writeStartElement("transformData");
-	writer->writeAttribute("autoRange", QString::number(d->transformData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->transformData.xRange.first()));
-	writer->writeAttribute("xRangeMax", QString::number(d->transformData.xRange.last()));
-	writer->writeAttribute("type", QString::number(d->transformData.type));
-	writer->writeAttribute("twoSided", QString::number(d->transformData.twoSided));
-	writer->writeAttribute("shifted", QString::number(d->transformData.shifted));
-	writer->writeAttribute("xScale", QString::number(d->transformData.xScale));
-	writer->writeAttribute("windowType", QString::number(d->transformData.windowType));
+	writer->writeStartElement(QStringLiteral("transformData"));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->transformData.autoRange));
+	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->transformData.xRange.first()));
+	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->transformData.xRange.last()));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->transformData.type));
+	writer->writeAttribute(QStringLiteral("twoSided"), QString::number(d->transformData.twoSided));
+	writer->writeAttribute(QStringLiteral("shifted"), QString::number(d->transformData.shifted));
+	writer->writeAttribute(QStringLiteral("xScale"), QString::number(d->transformData.xScale));
+	writer->writeAttribute(QStringLiteral("windowType"), QString::number(d->transformData.windowType));
 	writer->writeEndElement(); // transformData
 
 	// transform results (generated columns)
-	writer->writeStartElement("transformResult");
-	writer->writeAttribute("available", QString::number(d->transformResult.available));
-	writer->writeAttribute("valid", QString::number(d->transformResult.valid));
-	writer->writeAttribute("status", d->transformResult.status);
-	writer->writeAttribute("time", QString::number(d->transformResult.elapsedTime));
+	writer->writeStartElement(QStringLiteral("transformResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->transformResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->transformResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->transformResult.status);
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->transformResult.elapsedTime));
 
 	// save calculated columns if available
 	if (saveCalculations() && d->xColumn && d->yColumn) {
@@ -293,16 +261,16 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyFourierTransformCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyFourierTransformCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "transformData") {
+		} else if (!preview && reader->name() == QLatin1String("transformData")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("autoRange", transformData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", transformData.xRange.first());
@@ -312,22 +280,22 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("shifted", transformData.shifted, bool);
 			READ_INT_VALUE("xScale", transformData.xScale, nsl_dft_xscale);
 			READ_INT_VALUE("windowType", transformData.windowType, nsl_sf_window_type);
-		} else if (!preview && reader->name() == "transformResult") {
+		} else if (!preview && reader->name() == QLatin1String("transformResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", transformResult.available, int);
 			READ_INT_VALUE("valid", transformResult.valid, int);
 			READ_STRING_VALUE("status", transformResult.status);
 			READ_INT_VALUE("time", transformResult.elapsedTime, int);
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
 
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 		}
 	}

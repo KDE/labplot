@@ -58,6 +58,10 @@ protected Q_SLOTS:
 private Q_SLOTS:
 	void newDataContainerMenu();
 	void newDataContainer(QAction*);
+	void currentModelIndexChanged(const QModelIndex&);
+
+Q_SIGNALS:
+	void dataContainerChanged(AbstractAspect*);
 };
 
 #endif // IMPORTDIALOG_H

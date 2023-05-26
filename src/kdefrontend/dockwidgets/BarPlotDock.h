@@ -17,6 +17,8 @@
 class AbstractAspect;
 class AspectTreeModel;
 class BackgroundWidget;
+class LineWidget;
+class ValueWidget;
 class BarPlot;
 class TreeViewComboBox;
 class KConfig;
@@ -32,6 +34,8 @@ public:
 private:
 	Ui::BarPlotDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};
+	LineWidget* lineWidget{nullptr};
+	ValueWidget* valueWidget{nullptr};
 	QList<BarPlot*> m_barPlots;
 	BarPlot* m_barPlot{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
@@ -55,20 +59,14 @@ private Q_SLOTS:
 	void removeXColumn();
 	void addDataColumn();
 	void removeDataColumn();
-	void dataColumnChanged(const QModelIndex&) const;
-	void typeChanged(int) const;
-	void orientationChanged(int) const;
-	void visibilityChanged(bool) const;
+	void dataColumnChanged(const QModelIndex&);
+	void typeChanged(int);
+	void orientationChanged(int);
+	void visibilityChanged(bool);
 
 	//"Box"-tab
-	void currentBarChanged(int) const;
-	void widthFactorChanged(int) const;
-
-	// box border
-	void borderStyleChanged(int) const;
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double) const;
-	void borderOpacityChanged(int) const;
+	void currentBarChanged(int);
+	void widthFactorChanged(int);
 
 	// SLOTs for changes triggered in BarPlot
 	// general
@@ -79,10 +77,6 @@ private Q_SLOTS:
 	void plotOrientationChanged(BarPlot::Orientation);
 	void plotWidthFactorChanged(double);
 	void plotVisibilityChanged(bool);
-
-	// box border
-	void plotBorderPenChanged(QPen&);
-	void plotBorderOpacityChanged(float);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

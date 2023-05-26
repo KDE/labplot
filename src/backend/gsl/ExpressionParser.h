@@ -22,6 +22,8 @@ public:
 	static ExpressionParser* getInstance();
 	static int functionArgumentCount(const QString& functionName);
 	static QString functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType);
+	QString functionDescription(const QString& function);
+	QString constantDescription(const QString& constant);
 
 	bool isValid(const QString& expr, const QStringList& vars);
 	QStringList getParameter(const QString& expr, const QStringList& vars);
@@ -43,7 +45,7 @@ public:
 	bool evaluateCartesian(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
 	bool evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector);
 	bool evaluateCartesian(const QString& expr,
-						   QVector<double>* xVector,
+						   const QVector<double>* xVector,
 						   QVector<double>* yVector,
 						   const QStringList& paramNames,
 						   const QVector<double>& paramValues);
@@ -59,15 +61,15 @@ public:
 
 	const QStringList& functions();
 	const QStringList& functionsGroups();
-	const QStringList& functionsNames();
-	const QVector<int>& functionsGroupIndices();
+	const QStringList& functionsDescriptions();
+	const QVector<FunctionGroups>& functionsGroupIndices();
 
 	const QStringList& constants();
 	const QStringList& constantsGroups();
 	const QStringList& constantsNames();
 	const QStringList& constantsValues();
 	const QStringList& constantsUnits();
-	const QVector<int>& constantsGroupIndices();
+	const QVector<ConstantGroups>& constantsGroupIndices();
 
 private:
 	ExpressionParser();
@@ -80,14 +82,14 @@ private:
 
 	QStringList m_functions;
 	QStringList m_functionsGroups;
-	QStringList m_functionsNames;
-	QVector<int> m_functionsGroupIndex;
+	QStringList m_functionsDescription;
+	QVector<FunctionGroups> m_functionsGroupIndex;
 
 	QStringList m_constants;
 	QStringList m_constantsGroups;
-	QStringList m_constantsNames;
+	QStringList m_constantsDescription;
 	QStringList m_constantsValues;
 	QStringList m_constantsUnits;
-	QVector<int> m_constantsGroupIndex;
+	QVector<ConstantGroups> m_constantsGroupIndex;
 };
 #endif

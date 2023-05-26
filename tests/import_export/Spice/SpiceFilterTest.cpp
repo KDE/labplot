@@ -26,13 +26,13 @@
 
 #include <QFile>
 
-const QString ngspicePath = "data/ngspice"; // relative path
-const QString ltspicePath = "data/ltspice"; // relative path
+const QString ngspicePath = QStringLiteral("data/ngspice"); // relative path
+const QString ltspicePath = QStringLiteral("data/ltspice"); // relative path
 
-#define NGSpiceFile QFINDTESTDATA(ngspicePath + "/" + filename) // filename comes from the namespace
-#define LTSpiceFile QFINDTESTDATA(ltspicePath + "/" + filename) // filename comes from the namespace
-#define NGSpiceRefDataFile QFINDTESTDATA(ngspicePath + "/" + filename + ".refdata") // filename comes from the namespace
-#define LTSpiceRefDataFile QFINDTESTDATA(ltspicePath + "/" + filename + ".refdata") // filename comes from the namespace
+#define NGSpiceFile QFINDTESTDATA(ngspicePath + QStringLiteral("/") + filename) // filename comes from the namespace
+#define LTSpiceFile QFINDTESTDATA(ltspicePath + QStringLiteral("/") + filename) // filename comes from the namespace
+#define NGSpiceRefDataFile QFINDTESTDATA(ngspicePath + QStringLiteral("/") + filename + QStringLiteral(".refdata")) // filename comes from the namespace
+#define LTSpiceRefDataFile QFINDTESTDATA(ltspicePath + QStringLiteral("/") + filename + QStringLiteral(".refdata")) // filename comes from the namespace
 
 #define READ_REFDATA(filename)                                                                                                                                 \
 	auto filepath = QFINDTESTDATA(filename);                                                                                                                   \
@@ -40,8 +40,8 @@ const QString ltspicePath = "data/ltspice"; // relative path
 	QCOMPARE(f.open(QIODevice::ReadOnly), true);                                                                                                               \
 	QVector<QStringList> refData;                                                                                                                              \
 	while (!f.atEnd()) {                                                                                                                                       \
-		QString line = f.readLine().simplified();                                                                                                              \
-		refData.append(line.split(","));                                                                                                                       \
+		QString line = QLatin1String(f.readLine().simplified());                                                                                               \
+		refData.append(line.split(QLatin1Char(',')));                                                                                                          \
 	}                                                                                                                                                          \
 	QVERIFY(refData.count() > 0);
 
@@ -133,7 +133,7 @@ void SpiceFilterTest::NgSpiceDCAscii() {
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -162,7 +162,7 @@ void SpiceFilterTest::NgSpiceDCBinary() {
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -191,7 +191,7 @@ void SpiceFilterTest::NgSpiceACAscii() {
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -220,7 +220,7 @@ void SpiceFilterTest::NgSpiceACBinary() {
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -256,7 +256,7 @@ void SpiceFilterTest::NgSpiceDCAsciiStartRowNotZero() {
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -289,7 +289,7 @@ void SpiceFilterTest::NgSpiceDCBinaryStartRowNotZero() {
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -322,7 +322,7 @@ void SpiceFilterTest::NgSpiceACAsciiStartRowNotZero() {
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -355,7 +355,7 @@ void SpiceFilterTest::NgSpiceACBinaryStartRowNotZero() {
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -363,9 +363,9 @@ void SpiceFilterTest::NgSpiceACBinaryStartRowNotZero() {
 	COMPARE_ROW_VALUES_START_END_ROW(sheet, refData, refDataRowCount, refColumnCount, startRow, endRow);
 }
 
-//########################################################################################################
+// ########################################################################################################
 //
-//########################################################################################################
+// ########################################################################################################
 
 void SpiceFilterTest::NgSpiceDCBinaryBulkReadNumberLines() {
 	using namespace dc_binary;
@@ -394,7 +394,7 @@ void SpiceFilterTest::NgSpiceDCBinaryBulkReadNumberLines() {
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -428,7 +428,7 @@ void SpiceFilterTest::NgSpiceACBinaryBulkReadNumberLines() {
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -461,7 +461,7 @@ void SpiceFilterTest::LtSpiceACBinary() {
 	QString resFileInfoString = filter.fileInfoString(file);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(file, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -492,7 +492,7 @@ void SpiceFilterTest::LtSpiceTranBinary() {
 	QString resFileInfoString = filter.fileInfoString(file);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(file, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -523,7 +523,7 @@ void SpiceFilterTest::LtSpiceTranDoubleBinary() {
 	QString resFileInfoString = filter.fileInfoString(file);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(file, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -561,7 +561,7 @@ void SpiceFilterTest::LtSpiceWakeup() {
 	//	}
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(file, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -596,7 +596,7 @@ void SpiceFilterTest::DCTransfer() {
 	QString resFileInfoString = filter.fileInfoString(file);
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(file, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
@@ -636,7 +636,7 @@ void SpiceFilterTest::FFT_From_TransientAnalysis() {
 	}
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
-	Spreadsheet sheet("Test", false);
+	Spreadsheet sheet(QStringLiteral("Test"), false);
 	filter.readDataFromFile(file, &sheet, AbstractFileFilter::ImportMode::Replace);
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);

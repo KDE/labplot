@@ -11,8 +11,8 @@
 #ifndef TEXTLABELPRIVATE_H
 #define TEXTLABELPRIVATE_H
 
+#include "src/backend/worksheet/TextLabel.h"
 #include "src/backend/worksheet/WorksheetElementPrivate.h"
-#include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "tools/TeXRenderer.h"
 #include <QDesktopWidget>
 #include <QFutureWatcher>
@@ -33,17 +33,12 @@ class TextLabelPrivate : public WorksheetElementPrivate {
 public:
 	explicit TextLabelPrivate(TextLabel*);
 
-	double zoomFactor{1.0};
-	// scaling:
-	// we need to scale from the font size specified in points to scene units.
-	// furhermore, we create the tex-image in a higher resolution then usual desktop resolution
-	//  -> take this into account
-	double scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
+	double zoomFactor{-1.0};
 	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
 	double teXImageScaleFactor{Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
-	QFont teXFont{"Computer Modern", 12}; // reasonable default font and size
+	QFont teXFont{QStringLiteral("Computer Modern"), 12}; // reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
 	QColor backgroundColor{Qt::white}; // same as fontColor
 	QImage teXImage;
@@ -84,6 +79,7 @@ public:
 
 	// used in the InfoElement (Marker) to attach the line to the label
 	QVector<TextLabel::GluePoint> m_gluePoints;
+	QVector<TextLabel::GluePoint> m_gluePointsTransformed;
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;

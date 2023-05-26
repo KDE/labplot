@@ -37,14 +37,8 @@ public:
 		// TODO: use Range
 		QVector<double> xRange{0., 0.}; // x range for convolution
 	};
-	struct ConvolutionResult {
-		ConvolutionResult(){};
-
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
-	};
+	typedef XYAnalysisCurve::Result ConvolutionResult;
+	virtual const XYAnalysisCurve::Result& result() const override;
 
 	explicit XYConvolutionCurve(const QString& name);
 	~XYConvolutionCurve() override;

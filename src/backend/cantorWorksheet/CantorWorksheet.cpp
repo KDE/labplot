@@ -4,7 +4,8 @@
 	Description          : Aspect providing a Cantor Worksheets for Multiple backends
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -28,12 +29,15 @@
 #include "3rdparty/cantor/panelpluginhandler.h"
 #endif
 
+#include <KLocalizedString>
+#include <KParts/ReadWritePart>
+#include <KPluginFactory>
+#include <KPluginMetaData>
+#include <kcoreaddons_version.h>
+
 #include <QAction>
 #include <QFileInfo>
 #include <QModelIndex>
-
-#include <KLocalizedString>
-#include <KParts/ReadWritePart>
 
 CantorWorksheet::CantorWorksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::CantorWorksheet)
@@ -47,6 +51,8 @@ CantorWorksheet::CantorWorksheet(const QString& name, bool loading)
 */
 bool CantorWorksheet::init(QByteArray* content) {
 	DEBUG(Q_FUNC_INFO)
+
+#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 86, 0)
 	KPluginLoader loader(QLatin1String("kf5/parts/cantorpart"));
 	KPluginLoader oldLoader(QLatin1String("cantorpart")); // old path
 	KPluginFactory* factory = loader.factory();
@@ -56,7 +62,6 @@ bool CantorWorksheet::init(QByteArray* content) {
 		WARN("Error message: " << STDSTRING(loader.errorString()))
 		factory = oldLoader.factory();
 	}
-
 	if (!factory) {
 		// we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
 		// return false here, a proper error message will be created in load() and propagated further.
@@ -66,11 +71,24 @@ bool CantorWorksheet::init(QByteArray* content) {
 		return false;
 	} else {
 		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));
+
+#else
+	const auto result = KPluginFactory::instantiatePlugin<KParts::ReadWritePart>(KPluginMetaData(QStringLiteral("kf5/parts/cantorpart")),
+																				 this,
+																				 QVariantList() << m_backendName << QLatin1String("--noprogress"));
+
+	if (!result) {
+		WARN("Could not find cantorpart part");
+		return false;
+	} else {
+		m_part = result.plugin;
+#endif
 		if (!m_part) {
 			WARN("Could not create the Cantor Part for backend " << STDSTRING(m_backendName))
 			m_error = i18n("Couldn't find the plugin for %1. Please check your installation.", m_backendName);
 			return false;
 		}
+
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
 		if (!m_worksheetAccess)
 			return false;
@@ -143,120 +161,90 @@ const QString& CantorWorksheet::error() const {
 
 // SLots
 void CantorWorksheet::dataChanged(const QModelIndex& index) {
-	const QString& name = m_variableModel->data(m_variableModel->index(index.row(), 0)).toString();
-	Column* col = child<Column>(name);
-	if (!col)
-		return;
-
-	QVariant dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1), 257); // Cantor::DefaultVariableModel::DataRole == 257
-	if (dataValue.isNull())
-		dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1));
-
-	const QString& value = dataValue.toString();
-	VariableParser parser(m_backendName, value);
-	if (parser.isParsed()) {
-		switch (parser.dataType()) {
-		case AbstractColumn::ColumnMode::Integer:
-			col->setColumnMode(AbstractColumn::ColumnMode::Integer);
-			col->replaceInteger(0, parser.integers());
-			break;
-		case AbstractColumn::ColumnMode::BigInt:
-			col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
-			col->replaceBigInt(0, parser.bigInt());
-			break;
-		case AbstractColumn::ColumnMode::Double:
-			col->setColumnMode(AbstractColumn::ColumnMode::Double);
-			col->replaceValues(0, parser.doublePrecision());
-			break;
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::DateTime:
-			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
-			col->replaceDateTimes(0, parser.dateTime());
-			break;
-		case AbstractColumn::ColumnMode::Text:
-			col->setColumnMode(AbstractColumn::ColumnMode::Text);
-			col->replaceTexts(0, parser.text());
-			break;
-		}
-	}
+	parseData(index.row());
 }
 
 void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int last) {
-	for (int i = first; i <= last; ++i) {
-		const QString& name = m_variableModel->data(m_variableModel->index(i, 0)).toString();
-		QVariant dataValue = m_variableModel->data(m_variableModel->index(i, 1), 257);
-		if (dataValue.isNull())
-			dataValue = m_variableModel->data(m_variableModel->index(i, 1));
-
-		const QString& value = dataValue.toString();
-		VariableParser parser(m_backendName, value);
-
-		if (parser.isParsed()) {
-			Column* col = child<Column>(name);
-			if (col) {
-				switch (parser.dataType()) {
-				case AbstractColumn::ColumnMode::Integer:
-					col->setColumnMode(AbstractColumn::ColumnMode::Integer);
-					col->replaceInteger(0, parser.integers());
-					break;
-				case AbstractColumn::ColumnMode::BigInt:
-					col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
-					col->replaceBigInt(0, parser.bigInt());
-					break;
-				case AbstractColumn::ColumnMode::Double:
-					col->setColumnMode(AbstractColumn::ColumnMode::Double);
-					col->replaceValues(0, parser.doublePrecision());
-					break;
-				case AbstractColumn::ColumnMode::Month:
-				case AbstractColumn::ColumnMode::Day:
-				case AbstractColumn::ColumnMode::DateTime:
-					col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
-					col->replaceDateTimes(0, parser.dateTime());
-					break;
-				case AbstractColumn::ColumnMode::Text:
-					col->setColumnMode(AbstractColumn::ColumnMode::Text);
-					col->replaceTexts(0, parser.text());
-					break;
-				}
-			} else {
-				switch (parser.dataType()) {
-				case AbstractColumn::ColumnMode::Integer:
-					col = new Column(name, parser.integers());
-					break;
-				case AbstractColumn::ColumnMode::BigInt:
-					col = new Column(name, parser.bigInt());
-					break;
-				case AbstractColumn::ColumnMode::Double:
-					col = new Column(name, parser.doublePrecision());
-					break;
-				case AbstractColumn::ColumnMode::Month:
-				case AbstractColumn::ColumnMode::Day:
-				case AbstractColumn::ColumnMode::DateTime:
-					col = new Column(name, parser.dateTime(), parser.dataType());
-					break;
-				case AbstractColumn::ColumnMode::Text:
-					col = new Column(name, parser.text());
-					break;
-				}
-				col->setUndoAware(false);
-				col->setFixed(true);
-				addChild(col);
-
-				// TODO: Cantor currently ignores the order of variables in the worksheets
-				// and adds new variables at the last position in the model.
-				// Fix this in Cantor and switch to insertChildBefore here later.
-				// insertChildBefore(col, child<Column>(i));
-			}
-		} else {
-			// the already existing variable doesn't contain any numerical values -> remove it
-			Column* col = child<Column>(name);
-			if (col)
-				removeChild(col);
-		}
-	}
+	for (int i = first; i <= last; ++i)
+		parseData(i);
 
 	project()->setChanged(true);
+}
+
+void CantorWorksheet::parseData(int row) {
+	const QString& name = m_variableModel->data(m_variableModel->index(row, 0)).toString();
+	QVariant dataValue = m_variableModel->data(m_variableModel->index(row, 1), 257);
+	if (dataValue.isNull())
+		dataValue = m_variableModel->data(m_variableModel->index(row, 1));
+
+	const QString& value = dataValue.toString();
+	VariableParser parser(m_backendName, value);
+
+	if (parser.isParsed()) {
+		auto* col = child<Column>(name);
+		if (col) {
+			switch (parser.dataType()) {
+			case AbstractColumn::ColumnMode::Integer:
+				col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+				col->setIntegers(parser.integers());
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+				col->setBigInts(parser.bigInt());
+				break;
+			case AbstractColumn::ColumnMode::Double:
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
+				col->setValues(parser.doublePrecision());
+				break;
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+				col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+				col->setDateTimes(parser.dateTime());
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				col->setColumnMode(AbstractColumn::ColumnMode::Text);
+				col->setText(parser.text());
+				break;
+			}
+		} else {
+			// Column doesn't exist for this variable yet either because it was not defined yet or
+			// because its values was changed now to an array-like structure after the initial definition.
+			// -> create a new column for the current variable
+			switch (parser.dataType()) {
+			case AbstractColumn::ColumnMode::Integer:
+				col = new Column(name, parser.integers());
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				col = new Column(name, parser.bigInt());
+				break;
+			case AbstractColumn::ColumnMode::Double:
+				col = new Column(name, parser.doublePrecision());
+				break;
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+				col = new Column(name, parser.dateTime(), parser.dataType());
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				col = new Column(name, parser.text());
+				break;
+			}
+			col->setUndoAware(false);
+			col->setFixed(true);
+			addChild(col);
+
+			// TODO: Cantor currently ignores the order of variables in the worksheets
+			// and adds new variables at the last position in the model.
+			// Fix this in Cantor and switch to insertChildBefore here later.
+			// insertChildBefore(col, child<Column>(i));
+		}
+	} else {
+		// the already existing variable doesn't contain any numerical values -> remove it
+		Column* col = child<Column>(name);
+		if (col)
+			removeChild(col);
+	}
 }
 
 void CantorWorksheet::modified() {
@@ -368,26 +356,26 @@ void CantorWorksheet::restart() {
 	m_part->action("restart_backend")->trigger();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void CantorWorksheet::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("cantorWorksheet");
+	writer->writeStartElement(QStringLiteral("cantorWorksheet"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
-	writer->writeAttribute("backend_name", m_backendName);
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("backend_name"), m_backendName);
 	// TODO: save worksheet settings
 	writer->writeEndElement();
 
 	// save the content of Cantor's worksheet
 	QByteArray content = m_worksheetAccess->saveWorksheetToByteArray();
-	writer->writeStartElement("worksheet");
-	writer->writeAttribute("content", content.toBase64());
+	writer->writeStartElement(QStringLiteral("worksheet"));
+	writer->writeAttribute(QStringLiteral("content"), QLatin1String(content.toBase64()));
 	writer->writeEndElement();
 
 	// save columns(variables)
@@ -412,27 +400,27 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "cantorWorksheet")
+		if (reader->isEndElement() && reader->name() == QLatin1String("cantorWorksheet"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
-			m_backendName = attribs.value("backend_name").toString().trimmed();
+			m_backendName = attribs.value(QStringLiteral("backend_name")).toString().trimmed();
 			if (m_backendName.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("backend_name").toString());
-		} else if (!preview && reader->name() == "worksheet") {
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("backend_name")).toString());
+		} else if (!preview && reader->name() == QLatin1String("worksheet")) {
 			attribs = reader->attributes();
 
-			QString str = attribs.value("content").toString().trimmed();
+			QString str = attribs.value(QStringLiteral("content")).toString().trimmed();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("content").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("content")).toString());
 
 			QByteArray content = QByteArray::fromBase64(str.toLatin1());
 			rc = init(&content);
@@ -447,7 +435,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 				reader->setFailedCASMissing(true);
 				return false;
 			}
-		} else if (!preview && reader->name() == "column") {
+		} else if (!preview && reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString());
 			column->setUndoAware(false);
 			if (!column->load(reader, preview)) {

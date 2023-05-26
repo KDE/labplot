@@ -1,6 +1,7 @@
 project(labplot2)
+set(LABPLOT_VERSION 2.10.0)
 
-cmake_minimum_required (VERSION 3.16.0 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.17.0 FATAL_ERROR)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
@@ -8,12 +9,13 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(QT_MINIMUM_VERSION 5.6.0)
-set(KF5_MIN_VERSION "5.16.0")
+# see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
+set(QT_MIN_VERSION "5.10.0")
+set(KF_MIN_VERSION "5.16.0")
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
-find_package(ECM REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
@@ -28,7 +30,19 @@ include(FeatureSummary)
 
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
-find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
+
+# Qt6 not supported yet
+set(QT_VERSION_MAJOR "5")
+set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
+#if (QT_MAJOR_VERSION STREQUAL "6")
+#    set(QT_MIN_VERSION "6.4.0")
+#    set(KF_MIN_VERSION "5.240.0")
+#    set(KF_MAJOR_VERSION "6")
+#else()
+    set(KF_MAJOR_VERSION "5")
+#endif()
+
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
 	Gui
 # 	Qml
@@ -41,7 +55,10 @@ find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Test
 )
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
+# building QADS or Xlsx require Qt5GuiPrivate (QADS is required, Xlsx is optional)
+find_package(Qt5Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
+
+find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
 	Completion
 	Config
@@ -62,24 +79,25 @@ OPTIONAL_COMPONENTS
 	Parts
 	SyntaxHighlighting
 )
+
 # TODO: make NewStuff optional?
-IF (KF5NewStuff_FOUND)
+IF (KF${KF_MAJOR_VERSION}NewStuff_FOUND)
 	add_definitions (-DHAVE_KF5_NEW_STUFF)
 ELSE ()
-        MESSAGE (STATUS "KF5 new stuff not found")
+	MESSAGE (STATUS "KF NewStuff not found")
 ENDIF ()
 # TODO: service not used?
-IF (NOT KF5Service_FOUND)
-	MESSAGE (STATUS "KF5 service not found")
+IF (NOT KF${KF_MAJOR_VERSION}Service_FOUND)
+	MESSAGE (STATUS "KF Service not found")
 ENDIF ()
 # TODO: parts not used?
-IF (NOT KF5Parts_FOUND)
-	MESSAGE (STATUS "KF5 parts not found")
+IF (NOT KF${KF_MAJOR_VERSION}Parts_FOUND)
+	MESSAGE (STATUS "KF Parts not found")
 ENDIF ()
-IF (KF5SyntaxHighlighting_FOUND)
+IF (KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
 	add_definitions (-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
 ELSE ()
-	MESSAGE (STATUS "KF5 syntax highlighting not found")
+	MESSAGE (STATUS "KF SyntaxHighlighting not found")
 ENDIF ()
 
 find_package(KUserFeedback)
@@ -93,8 +111,14 @@ ENDIF ()
 find_package(BISON REQUIRED)
 
 ### compiler flags ######################################
+option (ENABLE_COMPILER_OPTIMIZATION "Optimization: -OX" true)
+if (${ENABLE_COMPILER_OPTIMIZATION})
+    set(COMPILER_OPTIMIZATION_FLAG "-O2")
+else()
+    set(COMPILER_OPTIMIZATION_FLAG "-O0")
+endif()
 set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector")
-set (GENERIC_GNU_FLAGS "-O2 -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
+set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
 set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++11")
@@ -160,12 +184,14 @@ endif ()
 
 ##########################################################
 
-add_definitions(
+# see also https://wiki.qt.io/Using_QString_Effectively
+set(LABPLOT_COMPILE_DEFINITIONS
     -DQT_NO_CAST_TO_ASCII
-# TODO: enable and fix problems
-#    -DQT_NO_CAST_FROM_ASCII
-#    -DQT_NO_CAST_FROM_BYTEARRAY
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_FROM_BYTEARRAY
     -DQT_NO_URL_CAST_FROM_STRING
+    -DQT_USE_FAST_CONCATENATION
+    -DQT_USE_FAST_OPERATOR_PLUS
     -DQT_USE_QSTRINGBUILDER
     -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
@@ -182,7 +208,7 @@ endif()
 
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.9.0\")
+add_definitions (-DLVERSION=\"${LABPLOT_VERSION}\")
 add_definitions (-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions (-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
 set(BUILD_SHARED_LIBS true)
@@ -239,6 +265,7 @@ option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_EXCEL "Build with Excel (xlsx) support" ON)
+option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" ON)
 IF (APPLE)
 	option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
 ENDIF ()
@@ -259,6 +286,8 @@ IF (Poppler_FOUND)
 	# MESSAGE (STATUS "Poppler libraries: ${Poppler_LIBRARIES}")
 	add_definitions (-DHAVE_POPPLER)
 ENDIF ()
+
+
 
 ### liborigin (included) ###############################
 IF (ENABLE_LIBORIGIN)
@@ -489,9 +518,9 @@ IF (ENABLE_EXCEL)
 
 			MESSAGE (STATUS "QXlsx library NOT FOUND. Building own version.")
 			add_definitions (-DHAVE_EXCEL)
-		ELSE ()
+		else ()
 			MESSAGE (STATUS "Missing Qt5::GuiPrivate to build own QXlsx.")
-		ENDIF ()
+		endif ()
         ENDIF ()
 
 ELSE ()
@@ -519,6 +548,10 @@ IF (ENABLE_DISCOUNT)
 		TYPE OPTIONAL)
 	IF (Discount_FOUND)
 		add_definitions (-DHAVE_DISCOUNT)
+		MESSAGE (STATUS "Found Markdown Library Discount ${Discount_VERSION}")
+		IF (${Discount_VERSION} AND ${Discount_VERSION} VERSION_GREATER "2.99")
+			add_definitions (-DHAVE_DISCOUNT3)
+		ENDIF ()
 	ELSE ()
 		MESSAGE (STATUS "Discount library NOT FOUND.")
 	ENDIF ()
@@ -572,7 +605,11 @@ install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
-find_package(KF5I18n CONFIG REQUIRED)
-ki18n_install(po)
-find_package(KF5DocTools CONFIG REQUIRED)
-kdoctools_install(po)
+find_package(KF${KF_MAJOR_VERSION}I18n CONFIG REQUIRED)
+
+IF (KF${KF_MAJOR_VERSION}I18n_FOUND)
+	ki18n_install(po)
+ENDIF()
+if (KF${KF_MAJOR_VERSION}DocTools_FOUND)
+	kdoctools_install(po)
+ENDIF()

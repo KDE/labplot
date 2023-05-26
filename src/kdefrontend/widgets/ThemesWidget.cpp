@@ -46,22 +46,21 @@ ThemesWidget::ThemesWidget(QWidget* parent)
 
 	// show preview pixmaps
 	auto* mContentItemModel = new QStandardItemModel(this);
-	QStringList themeList = ThemeHandler::themes();
-	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots/", QStandardPaths::LocateDirectory);
+	auto themeList = ThemeHandler::themes();
+	auto themeImgPathList = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, QStringLiteral("themes/screenshots/"), QStandardPaths::LocateDirectory);
 	if (themeImgPathList.isEmpty()) {
 		delete mContentItemModel;
 		return;
 	}
 
 	const QString& themeImgPath = themeImgPathList.first();
-	QString tempPath;
 
 	for (int i = 0; i < themeList.size(); ++i) {
 		auto* listItem = new QStandardItem();
 
-		tempPath = themeImgPath + themeList.at(i) + ".png";
+		QString tempPath = themeImgPath + themeList.at(i) + QStringLiteral(".png");
 		if (!QFile::exists(tempPath))
-			tempPath = themeImgPath + "Unavailable.png";
+			tempPath = themeImgPath + QStringLiteral("Unavailable.png");
 
 		listItem->setIcon(QIcon(QPixmap(tempPath)));
 		if (themeList.at(i) == QLatin1String("Default")) {
@@ -75,7 +74,7 @@ ThemesWidget::ThemesWidget(QWidget* parent)
 
 	// adding download themes option
 	// TODO: activate this later
-	// 	QStandardItem* listItem = new QStandardItem();
+	// 	auto* listItem = new QStandardItem();
 	// 	listItem->setIcon(QIcon::fromTheme("get-hot-new-stuff"));
 	// 	listItem->setText("Download Themes");
 	// 	listItem->setData("file_download_theme", Qt::UserRole);

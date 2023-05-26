@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>498</width>
-    <height>1003</height>
+    <width>507</width>
+    <height>953</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -44,7 +44,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>13</width>
+       <width>10</width>
        <height>23</height>
       </size>
      </property>
@@ -77,7 +77,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>10</height>
+       <height>18</height>
       </size>
      </property>
     </spacer>
@@ -112,31 +112,21 @@
    <item row="6" column="0">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
-      <string>x-Data:</string>
+      <string>X-Data:</string>
      </property>
     </widget>
    </item>
    <item row="7" column="0">
     <widget class="QLabel" name="lYColumn">
      <property name="text">
-      <string>y-Data:</string>
+      <string>Y-Data:</string>
      </property>
     </widget>
    </item>
    <item row="8" column="0">
     <widget class="QLabel" name="lXRange">
      <property name="text">
-      <string>x-Range:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="2">
-    <widget class="QCheckBox" name="cbAutoRange">
-     <property name="text">
-      <string>Auto</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
+      <string>X-Range:</string>
      </property>
     </widget>
    </item>
@@ -235,14 +225,14 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QDateTimeEdit" name="dateTimeEditMin">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditMin">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QDateTimeEdit" name="dateTimeEditMax">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditMax">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
@@ -317,18 +307,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbTension">
-       <property name="minimum">
-        <double>-1.000000000000000</double>
+      <widget class="NumberSpinBox" name="sbTension">
+       <property name="toolTip">
+        <string/>
        </property>
-       <property name="maximum">
-        <double>1.000000000000000</double>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
        </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="value">
-        <double>0.000000000000000</double>
+       <property name="feedback" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -343,15 +330,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbContinuity">
-       <property name="minimum">
-        <double>-1.000000000000000</double>
+      <widget class="NumberSpinBox" name="sbContinuity">
+       <property name="toolTip">
+        <string/>
        </property>
-       <property name="maximum">
-        <double>1.000000000000000</double>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
        </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
+       <property name="feedback" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -366,35 +353,19 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbBias">
-       <property name="minimum">
-        <double>-1.000000000000000</double>
+      <widget class="NumberSpinBox" name="sbBias">
+       <property name="toolTip">
+        <string/>
        </property>
-       <property name="maximum">
-        <double>1.000000000000000</double>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
        </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
+       <property name="feedback" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="14" column="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="15" column="0">
     <widget class="QLabel" name="lEval">
@@ -448,22 +419,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="17" column="2">
-    <spacer name="verticalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>214</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="18" column="0">
     <widget class="QLabel" name="lResults">
@@ -538,15 +493,57 @@
      </property>
     </widget>
    </item>
-   <item row="21" column="2">
-    <widget class="QComboBox" name="cbPlotRanges"/>
-   </item>
    <item row="21" column="0">
     <widget class="QLabel" name="lPlotRange">
      <property name="text">
-      <string>Plot ranges:</string>
+      <string>Plot Range:</string>
      </property>
     </widget>
+   </item>
+   <item row="21" column="2" colspan="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
+   </item>
+   <item row="8" column="2" colspan="2">
+    <widget class="QCheckBox" name="cbAutoRange">
+     <property name="text">
+      <string>Auto</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="2" colspan="2">
+    <spacer name="verticalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>214</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="14" column="2" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -557,9 +554,19 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

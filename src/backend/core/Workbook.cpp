@@ -28,7 +28,7 @@ Workbook::Workbook(const QString& name)
 }
 
 QIcon Workbook::icon() const {
-	return QIcon::fromTheme("labplot-workbook");
+	return QIcon::fromTheme(QLatin1String("labplot-workbook"));
 }
 
 /*!
@@ -161,13 +161,13 @@ void Workbook::processDropEvent(const QVector<quintptr>& vec) {
 		aspect->reparent(this);
 	}
 }
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void Workbook::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("workbook");
+	writer->writeStartElement(QLatin1String("workbook"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -185,23 +185,23 @@ bool Workbook::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "workbook")
+		if (reader->isEndElement() && reader->name() == QLatin1String("workbook"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "spreadsheet") {
-			auto* spreadsheet = new Spreadsheet("spreadsheet", true);
+		} else if (reader->name() == QLatin1String("spreadsheet")) {
+			auto* spreadsheet = new Spreadsheet(QStringLiteral("spreadsheet"), true);
 			if (!spreadsheet->load(reader, preview)) {
 				delete spreadsheet;
 				return false;
 			} else
 				addChild(spreadsheet);
-		} else if (reader->name() == "matrix") {
+		} else if (reader->name() == QLatin1String("matrix")) {
 			auto* matrix = new Matrix(i18n("matrix"), true);
 			if (!matrix->load(reader, preview)) {
 				delete matrix;

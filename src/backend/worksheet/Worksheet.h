@@ -13,6 +13,7 @@
 #define WORKSHEET_H
 
 #include "backend/core/AbstractPart.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 class QGraphicsItem;
@@ -40,6 +41,7 @@ public:
 	enum class Unit { Millimeter, Centimeter, Inch, Point };
 	enum class Layout { NoLayout, VerticalLayout, HorizontalLayout, GridLayout };
 	enum class CartesianPlotActionMode { ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY };
+	enum class ZoomFit { None, Fit, FitToHeight, FitToWidth, FitToSelection };
 
 	static double convertToSceneUnits(const double value, const Worksheet::Unit unit);
 	static double convertFromSceneUnits(const double value, const Worksheet::Unit unit);
@@ -62,6 +64,7 @@ public:
 	QRectF pageRect() const;
 	void setPageRect(const QRectF&);
 	QGraphicsScene* scene() const;
+	double zoomFactor() const;
 	void update();
 	void setPrinting(bool) const;
 	void setThemeName(const QString&);
@@ -89,6 +92,7 @@ public:
 	Background* background() const;
 	BASIC_D_ACCESSOR_DECL(bool, scaleContent, ScaleContent)
 	BASIC_D_ACCESSOR_DECL(bool, useViewSize, UseViewSize)
+	BASIC_D_ACCESSOR_DECL(ZoomFit, zoomFit, ZoomFit)
 	BASIC_D_ACCESSOR_DECL(Worksheet::Layout, layout, Layout)
 	BASIC_D_ACCESSOR_DECL(double, layoutTopMargin, LayoutTopMargin)
 	BASIC_D_ACCESSOR_DECL(double, layoutBottomMargin, LayoutBottomMargin)
@@ -107,12 +111,12 @@ public:
 	void registerShortcuts() override;
 	void unregisterShortcuts() override;
 
-	static int cSystemIndex(WorksheetElement* e);
-
 	typedef WorksheetPrivate Private;
 
 public Q_SLOTS:
 	void setTheme(const QString&);
+	void cartesianPlotAxisShift(int delta, Dimension dim, int index);
+	void cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
 	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos);
@@ -153,22 +157,22 @@ Q_SIGNALS:
 	void itemSelected(QGraphicsItem*);
 	void itemDeselected(QGraphicsItem*);
 	void requestUpdate();
-	void useViewSizeRequested();
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
 	void propertiesExplorerRequested();
+	void childContextMenuRequested(AspectType, QMenu*);
 
 	void scaleContentChanged(bool);
 	void useViewSizeChanged(bool);
 	void pageRectChanged(const QRectF&);
 
 	void layoutChanged(Worksheet::Layout);
-	void layoutTopMarginChanged(float);
-	void layoutBottomMarginChanged(float);
-	void layoutLeftMarginChanged(float);
-	void layoutRightMarginChanged(float);
-	void layoutVerticalSpacingChanged(float);
-	void layoutHorizontalSpacingChanged(float);
+	void layoutTopMarginChanged(double);
+	void layoutBottomMarginChanged(double);
+	void layoutLeftMarginChanged(double);
+	void layoutRightMarginChanged(double);
+	void layoutVerticalSpacingChanged(double);
+	void layoutHorizontalSpacingChanged(double);
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 

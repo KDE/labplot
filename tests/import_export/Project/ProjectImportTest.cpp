@@ -17,23 +17,24 @@
 #include "backend/core/Workbook.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-//##############################################################################
-//#####################  import of LabPlot projects ############################
-//##############################################################################
+// ##############################################################################
+// #####################  import of LabPlot projects ############################
+// ##############################################################################
 
 // TODO
 
 #ifdef HAVE_LIBORIGIN
-//##############################################################################
-//######################  import of Origin projects ############################
-//##############################################################################
-// project tree of the file "origin8_test_tree_import.opj"
+// ##############################################################################
+// ######################  import of Origin projects ############################
+// ##############################################################################
+//  project tree of the file "origin8_test_tree_import.opj"
 /*
 test_tree_import\
 					\Book3
@@ -434,21 +435,21 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 
 	auto* xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
-	QCOMPARE(xAxis->name(), "x");
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 	auto* yAxis = dynamic_cast<Axis*>(plot->child<Axis>(1));
 	QVERIFY(yAxis != nullptr);
-	QCOMPARE(yAxis->name(), "y");
+	QCOMPARE(yAxis->name(), QStringLiteral("y"));
 
 	auto* legend = dynamic_cast<CartesianPlotLegend*>(plot->child<CartesianPlotLegend>(0));
 	QVERIFY(legend != nullptr);
-	QCOMPARE(legend->name(), "legend");
+	QCOMPARE(legend->name(), QStringLiteral("legend"));
 
 	auto* curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
-	QCOMPARE(curve->name(), "B"); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
 
-	CHECK_RANGE(plot, curve, Dimension::X, 0, 9);
-	CHECK_RANGE(plot, curve, Dimension::Y, 0, 9);
+	CHECK_RANGE(plot, curve, Dimension::X, 0., 9.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 9.);
 
 	QCOMPARE(curve->xColumnPath(), QLatin1String("2folder-with-graphs/Folder1/Book1/A"));
 	QCOMPARE(curve->yColumnPath(), QLatin1String("2folder-with-graphs/Folder1/Book1/B"));
@@ -456,8 +457,8 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->legendVisible(), true);
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
-	QCOMPARE(curve->lineOpacity(), 1);
-	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->line()->opacity(), 1);
+	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: check more curve properties
 
@@ -490,18 +491,18 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 
 	xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
-	QCOMPARE(xAxis->name(), "x");
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 	yAxis = dynamic_cast<Axis*>(plot->child<Axis>(1));
 	QVERIFY(yAxis != nullptr);
-	QCOMPARE(yAxis->name(), "y");
+	QCOMPARE(yAxis->name(), QStringLiteral("y"));
 
 	legend = dynamic_cast<CartesianPlotLegend*>(plot->child<CartesianPlotLegend>(0));
 	QVERIFY(legend != nullptr);
-	QCOMPARE(legend->name(), "legend");
+	QCOMPARE(legend->name(), QStringLiteral("legend"));
 
 	curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
-	QCOMPARE(curve->name(), "B");
+	QCOMPARE(curve->name(), QStringLiteral("B"));
 
 	CHECK_RANGE(plot, curve, Dimension::X, .5, 5.5);
 	CHECK_RANGE(plot, curve, Dimension::Y, .5, 5.5);
@@ -512,8 +513,8 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->legendVisible(), true);
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
-	QCOMPARE(curve->lineOpacity(), 1);
-	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->line()->opacity(), 1);
+	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: check more curve properties
 
@@ -558,18 +559,18 @@ void ProjectImportTest::testOrigin_2graphs() {
 
 	auto* xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
-	QCOMPARE(xAxis->name(), "x");
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 	auto* yAxis = dynamic_cast<Axis*>(plot->child<Axis>(1));
 	QVERIFY(yAxis != nullptr);
-	QCOMPARE(yAxis->name(), "y");
+	QCOMPARE(yAxis->name(), QStringLiteral("y"));
 
 	auto* legend = dynamic_cast<CartesianPlotLegend*>(plot->child<CartesianPlotLegend>(0));
 	QVERIFY(legend != nullptr);
-	QCOMPARE(legend->name(), "legend");
+	QCOMPARE(legend->name(), QStringLiteral("legend"));
 
 	auto* curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
-	QCOMPARE(curve->name(), "B"); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
 
 	CHECK_RANGE(plot, curve, Dimension::X, .5, 5.5);
 	CHECK_RANGE(plot, curve, Dimension::Y, .5, 5.5);
@@ -580,8 +581,8 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->legendVisible(), true);
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
-	QCOMPARE(curve->lineOpacity(), 1);
-	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->line()->opacity(), 1);
+	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: more curve properties
 
@@ -603,29 +604,29 @@ void ProjectImportTest::testOrigin_2graphs() {
 
 	xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
-	QCOMPARE(xAxis->name(), "x");
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 	yAxis = dynamic_cast<Axis*>(plot->child<Axis>(1));
 	QVERIFY(yAxis != nullptr);
-	QCOMPARE(yAxis->name(), "y");
+	QCOMPARE(yAxis->name(), QStringLiteral("y"));
 
 	legend = dynamic_cast<CartesianPlotLegend*>(plot->child<CartesianPlotLegend>(0));
 	QVERIFY(legend != nullptr);
-	QCOMPARE(legend->name(), "legend");
+	QCOMPARE(legend->name(), QStringLiteral("legend"));
 
 	curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
-	QCOMPARE(curve->name(), "B"); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
 
-	CHECK_RANGE(plot, curve, Dimension::X, 0, 9);
-	CHECK_RANGE(plot, curve, Dimension::Y, 0, 9);
+	CHECK_RANGE(plot, curve, Dimension::X, 0., 9.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 9.);
 
 	QCOMPARE(curve->xColumnPath(), QLatin1String("2graphs/Book1/A"));
 	QCOMPARE(curve->yColumnPath(), QLatin1String("2graphs/Book1/B"));
 	QCOMPARE(curve->legendVisible(), true);
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
-	QCOMPARE(curve->lineOpacity(), 1);
-	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->line()->opacity(), 1);
+	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: more curve properties
 

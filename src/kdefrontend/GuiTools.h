@@ -32,7 +32,7 @@ public:
 	static void selectColorAction(QActionGroup*, const QColor&);
 	static QColor& colorFromAction(QActionGroup*, QAction*);
 
-	static void highlight(QLineEdit*, bool);
+	static void highlight(QWidget*, bool);
 
 	static QString openImageFile(const QString&);
 	static QImage importPDFFile(const QString&);

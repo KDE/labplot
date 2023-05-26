@@ -31,13 +31,9 @@ public:
 		// TODO: use Range
 		QVector<double> xRange{0, 0}; // x range for integration
 	};
-	struct IntegrationResult {
+	struct IntegrationResult : public XYAnalysisCurve::Result {
 		IntegrationResult(){};
 
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
 		double value{0.0}; // final result of integration
 	};
 
@@ -45,6 +41,7 @@ public:
 	~XYIntegrationCurve() override;
 
 	void recalculate() override;
+	virtual const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

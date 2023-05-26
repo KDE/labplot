@@ -4,7 +4,7 @@
 	Description          : Interface definition for data with column logic
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,9 +14,13 @@
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/XmlStreamReader.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
+#include <KSharedConfig>
 #include <QDateTime>
 #include <QIcon>
+
+#include <cmath>
 
 /**
  * \class AbstractColumn
@@ -71,31 +75,39 @@ AbstractColumn::~AbstractColumn() {
 }
 
 QStringList AbstractColumn::dateFormats() {
-	static const QStringList dates{"yyyy-MM-dd",
-								   "yyyy.MM.dd",
-								   "yyyy/MM/dd",
-								   "yyyyMMdd",
-								   "dd-MM-yyyy",
-								   "dd.MM.yyyy",
-								   "dd/MM/yyyy",
-								   "ddMMyyyy",
-								   "dd-MM-yy",
-								   "dd.MM.yy",
-								   "dd/MM/yy",
-								   "ddMMyy",
-								   "MM-yyyy",
-								   "MM.yyyy",
-								   "MM/yyyy",
-								   "dd-MM",
-								   "dd.MM",
-								   "dd/MM",
-								   "ddMM"};
+	static const QStringList dates{QStringLiteral("yyyy-MM-dd"),
+								   QStringLiteral("yyyy.MM.dd"),
+								   QStringLiteral("yyyy/MM/dd"),
+								   QStringLiteral("yyyyMMdd"),
+								   QStringLiteral("dd-MM-yyyy"),
+								   QStringLiteral("dd.MM.yyyy"),
+								   QStringLiteral("dd/MM/yyyy"),
+								   QStringLiteral("ddMMyyyy"),
+								   QStringLiteral("dd-MM-yy"),
+								   QStringLiteral("dd.MM.yy"),
+								   QStringLiteral("dd/MM/yy"),
+								   QStringLiteral("ddMMyy"),
+								   QStringLiteral("MM-yyyy"),
+								   QStringLiteral("MM.yyyy"),
+								   QStringLiteral("MM/yyyy"),
+								   QStringLiteral("dd-MM"),
+								   QStringLiteral("dd.MM"),
+								   QStringLiteral("dd/MM"),
+								   QStringLiteral("ddMM")};
 
 	return dates;
 }
 
 QStringList AbstractColumn::timeFormats() {
-	static const QStringList times{"hh", "hh ap", "hh:mm", "hh:mm ap", "hh:mm:ss", "hh:mm:ss.zzz", "hh:mm:ss:zzz", "mm:ss.zzz", "hhmmss"};
+	static const QStringList times{QStringLiteral("hh"),
+								   QStringLiteral("hh ap"),
+								   QStringLiteral("hh:mm"),
+								   QStringLiteral("hh:mm ap"),
+								   QStringLiteral("hh:mm:ss"),
+								   QStringLiteral("hh:mm:ss.zzz"),
+								   QStringLiteral("hh:mm:ss:zzz"),
+								   QStringLiteral("mm:ss.zzz"),
+								   QStringLiteral("hhmmss")};
 
 	return times;
 }
@@ -106,9 +118,30 @@ QStringList AbstractColumn::dateTimeFormats() {
 	// any combination of date and times
 	for (const auto& d : dateFormats())
 		for (const auto& t : timeFormats())
-			dateTimes << d + ' ' + t;
+			dateTimes << d + QLatin1Char(' ') + t;
 
 	return dateTimes;
+}
+
+/**
+ * \brief Convenience method for getting time unit string
+ * translated since used in UI
+ */
+QString AbstractColumn::timeUnitString(TimeUnit unit) {
+	switch (unit) {
+	case TimeUnit::Milliseconds:
+		return i18n("Milliseconds");
+	case TimeUnit::Seconds:
+		return i18n("Seconds");
+	case TimeUnit::Minutes:
+		return i18n("Minutes");
+	case TimeUnit::Hours:
+		return i18n("Hours");
+	case TimeUnit::Days:
+		return i18n("Days");
+	}
+
+	return {};
 }
 
 /**
@@ -118,43 +151,62 @@ QStringList AbstractColumn::dateTimeFormats() {
 QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBrackets) {
 	QString s;
 
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
 	switch (d) {
 	case PlotDesignation::NoDesignation:
 		s = i18n("None");
 		break;
 	case PlotDesignation::X:
-		s = QLatin1String("X");
+		s = QStringLiteral("X");
 		break;
 	case PlotDesignation::Y:
-		s = QLatin1String("Y");
+		s = QStringLiteral("Y");
 		break;
 	case PlotDesignation::Z:
-		s = QLatin1String("Z");
+		s = QStringLiteral("Z");
 		break;
 	case PlotDesignation::XError:
-		s = i18n("X-error");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("X-Uncertainty");
+		else
+			s = i18n("X-Error");
 		break;
 	case PlotDesignation::XErrorPlus:
-		s = i18n("X-error +");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("X-Uncertainty +");
+		else
+			s = i18n("X-Error +");
 		break;
 	case PlotDesignation::XErrorMinus:
-		s = i18n("X-error -");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("X-Uncertainty -");
+		else
+			s = i18n("X-Error -");
 		break;
 	case PlotDesignation::YError:
-		s = i18n("Y-error");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("Y-Uncertainty");
+		else
+			s = i18n("Y-Error");
 		break;
 	case PlotDesignation::YErrorPlus:
-		s = i18n("Y-error +");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("Y-Uncertainty +");
+		else
+			s = i18n("Y-Error +");
 		break;
 	case PlotDesignation::YErrorMinus:
-		s = i18n("Y-error -");
+		if (group.readEntry("GUMTerms", false))
+			s = i18n("Y-Uncertainty -");
+		else
+			s = i18n("Y-Error -");
 		break;
 	default:
 		return {};
 	}
 
 	if (withBrackets)
-		s = QLatin1String("[") + s + QLatin1Char(']');
+		s = QStringLiteral("[") + s + QLatin1Char(']');
 
 	return s;
 }
@@ -194,14 +246,14 @@ QIcon AbstractColumn::modeIcon(ColumnMode mode) {
 	case ColumnMode::BigInt:
 		break;
 	case ColumnMode::Text:
-		return QIcon::fromTheme("draw-text");
+		return QIcon::fromTheme(QStringLiteral("draw-text"));
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
 	case ColumnMode::Day:
-		return QIcon::fromTheme("chronometer");
+		return QIcon::fromTheme(QStringLiteral("chronometer"));
 	}
 
-	return QIcon::fromTheme("x-shape-text");
+	return QIcon::fromTheme(QStringLiteral("x-shape-text"));
 }
 
 /**
@@ -262,62 +314,94 @@ bool AbstractColumn::copy(const AbstractColumn* /*source*/, int /*source_start*/
  * \brief Return the number of available data rows
  */
 
+class ColumnSetRowsCountCmd : public QUndoCommand {
+public:
+	ColumnSetRowsCountCmd(AbstractColumn* column, bool insert, int first, int count, QUndoCommand* parent)
+		: QUndoCommand(parent)
+		, m_column(column)
+		, m_insert(insert)
+		, m_first(first)
+		, m_count(count) {
+		if (insert)
+			setText(i18np("%1: insert 1 row", "%1: insert %2 rows", m_column->name(), count));
+		else
+			setText(i18np("%1: remove 1 row", "%1: remove %2 rows", m_column->name(), count));
+	}
+
+	virtual void redo() override {
+		if (m_insert)
+			Q_EMIT m_column->rowsAboutToBeInserted(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsAboutToBeRemoved(m_column, m_first, m_count);
+
+		QUndoCommand::redo();
+
+		if (m_insert)
+			Q_EMIT m_column->rowsInserted(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsRemoved(m_column, m_first, m_count);
+	}
+
+	virtual void undo() override {
+		if (m_insert)
+			Q_EMIT m_column->rowsAboutToBeRemoved(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsAboutToBeInserted(m_column, m_first, m_count);
+		QUndoCommand::undo();
+
+		if (m_insert)
+			Q_EMIT m_column->rowsRemoved(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsInserted(m_column, m_first, m_count);
+	}
+
+private:
+	AbstractColumn* m_column;
+	bool m_insert;
+	int m_first;
+	int m_count;
+};
+
 /**
  * \brief Insert some empty (or initialized with invalid values) rows
  */
-void AbstractColumn::insertRows(int before, int count) {
-	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
-	exec(new SignallingUndoCommand("pre-signal",
-								   this,
-								   "rowsAboutToBeInserted",
-								   "rowsRemoved",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, before),
-								   Q_ARG(int, count)));
+void AbstractColumn::insertRows(int before, int count, QUndoCommand* parent) {
+	bool execute = false;
+	auto* command = new ColumnSetRowsCountCmd(this, true, before, count, parent);
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
 
-	handleRowInsertion(before, count);
+	handleRowInsertion(before, count, parent);
 
-	exec(new SignallingUndoCommand("post-signal",
-								   this,
-								   "rowsInserted",
-								   "rowsAboutToBeRemoved",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, before),
-								   Q_ARG(int, count)));
-	endMacro();
+	if (execute)
+		exec(parent);
 }
 
-void AbstractColumn::handleRowInsertion(int before, int count) {
-	exec(new AbstractColumnInsertRowsCmd(this, before, count));
+void AbstractColumn::handleRowInsertion(int before, int count, QUndoCommand* parent) {
+	new AbstractColumnInsertRowsCmd(this, before, count, parent);
 }
 
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
-void AbstractColumn::removeRows(int first, int count) {
-	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
-	exec(new SignallingUndoCommand("change signal",
-								   this,
-								   "rowsAboutToBeRemoved",
-								   "rowsInserted",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, first),
-								   Q_ARG(int, count)));
+void AbstractColumn::removeRows(int first, int count, QUndoCommand* parent) {
+	bool execute = false;
+	auto* command = new ColumnSetRowsCountCmd(this, false, first, count, parent);
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
 
-	handleRowRemoval(first, count);
+	handleRowRemoval(first, count, parent);
 
-	exec(new SignallingUndoCommand("change signal",
-								   this,
-								   "rowsRemoved",
-								   "rowsAboutToBeInserted",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, first),
-								   Q_ARG(int, count)));
-	endMacro();
+	if (execute)
+		exec(parent);
 }
 
-void AbstractColumn::handleRowRemoval(int first, int count) {
-	exec(new AbstractColumnRemoveRowsCmd(this, first, count));
+void AbstractColumn::handleRowRemoval(int first, int count, QUndoCommand* parent) {
+	new AbstractColumnRemoveRowsCmd(this, first, count, parent);
 }
 
 /**
@@ -338,13 +422,13 @@ bool AbstractColumn::isNumeric() const {
 
 bool AbstractColumn::isPlottable() const {
 	const auto mode = columnMode();
-	return (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::DateTime);
+	return (isNumeric() || mode == ColumnMode::DateTime);
 }
 
 /**
  * \brief Clear the whole column
  */
-void AbstractColumn::clear() {
+void AbstractColumn::clear(QUndoCommand*) {
 }
 
 /**
@@ -352,8 +436,10 @@ void AbstractColumn::clear() {
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-	case ColumnMode::Double:
-		return !(std::isnan(valueAt(row)) || std::isinf(valueAt(row)));
+	case ColumnMode::Double: {
+		double value = valueAt(row);
+		return std::isfinite(value);
+	}
 	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
 		return true;
@@ -595,6 +681,15 @@ void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) 
  *
  * Use this only when columnMode() is Numeric
  */
+double AbstractColumn::doubleAt(int /*row*/) const {
+	return NAN;
+}
+
+/**
+ * \brief Return the double value in row 'row' independent of the column mode.
+ *
+ * Integer and big integer values are converted to double, NAN is returned for other modes.
+ */
 double AbstractColumn::valueAt(int /*row*/) const {
 	return NAN;
 }
@@ -675,19 +770,19 @@ AbstractColumn::Properties AbstractColumn::properties() const {
 
 /**********************************************************************/
 double AbstractColumn::minimum(int /*count*/) const {
-	return -INFINITY;
+	return INFINITY;
 }
 
 double AbstractColumn::minimum(int /*startIndex*/, int /*endIndex*/) const {
-	return -INFINITY;
+	return INFINITY;
 }
 
 double AbstractColumn::maximum(int /*count*/) const {
-	return INFINITY;
+	return -INFINITY;
 }
 
 double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
-	return INFINITY;
+	return -INFINITY;
 }
 
 bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/, int& /*end*/) const {
@@ -818,12 +913,12 @@ int AbstractColumn::indexForValue(double /*x*/) const {
  * \brief Read XML mask element
  */
 bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() && reader->name() == "mask");
+	Q_ASSERT(reader->isStartElement() && reader->name() == QLatin1String("mask"));
 
 	bool ok1, ok2;
 	int start, end;
-	start = reader->readAttributeInt("start_row", &ok1);
-	end = reader->readAttributeInt("end_row", &ok2);
+	start = reader->readAttributeInt(QStringLiteral("start_row"), &ok1);
+	end = reader->readAttributeInt(QStringLiteral("end_row"), &ok2);
 	if (!ok1 || !ok2) {
 		reader->raiseError(i18n("invalid or missing start or end row"));
 		return false;
@@ -840,9 +935,9 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
  */
 void AbstractColumn::XmlWriteMask(QXmlStreamWriter* writer) const {
 	for (const auto& interval : maskedIntervals()) {
-		writer->writeStartElement("mask");
-		writer->writeAttribute("start_row", QString::number(interval.start()));
-		writer->writeAttribute("end_row", QString::number(interval.end()));
+		writer->writeStartElement(QStringLiteral("mask"));
+		writer->writeAttribute(QStringLiteral("start_row"), QString::number(interval.start()));
+		writer->writeAttribute(QStringLiteral("end_row"), QString::number(interval.end()));
 		writer->writeEndElement();
 	}
 }

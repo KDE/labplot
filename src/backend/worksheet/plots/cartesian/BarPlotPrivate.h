@@ -11,22 +11,29 @@
 #ifndef BARPLOTPRIVATE_H
 #define BARPLOTPRIVATE_H
 
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <QPen>
 
 class Background;
+class Line;
 class CartesianCoordinateSystem;
+class Value;
 
 typedef QVector<QPointF> Points;
 
-class BarPlotPrivate : public WorksheetElementPrivate {
+class BarPlotPrivate : public PlotPrivate {
 public:
 	explicit BarPlotPrivate(BarPlot*);
 
 	void retransform() override;
 	void recalc();
 	virtual void recalcShapeAndBoundingRect() override;
+	void updateValues();
 	void updatePixmap();
+
+	Background* addBackground(const KConfigGroup&);
+	Line* addBorderLine(const KConfigGroup&);
+	void addValue(const KConfigGroup&);
 
 	bool m_suppressRecalc{false};
 
@@ -34,7 +41,7 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
+	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
 
 	BarPlot* const q;
@@ -49,18 +56,17 @@ public:
 	double widthFactor{1.0};
 	qreal opacity{1.0};
 
-	double xMin;
-	double xMax;
-	double yMin;
-	double yMax;
+	double xMin{0.};
+	double xMax{1.};
+	double yMin{0.};
+	double yMax{1.};
 
 	// bar properties
 	QVector<Background*> backgrounds;
-	QVector<double> widthFactors;
+	QVector<Line*> borderLines;
 
-	// box border
-	QPen borderPen;
-	qreal borderOpacity;
+	// values
+	Value* value{nullptr};
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
@@ -77,15 +83,20 @@ private:
 	void drawFilling(QPainter*, int columnIndex, int valueIndex);
 
 	bool m_hovered{false};
-	bool m_suppressRetransform{false};
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_barPlotShape;
+
+	QVector<QPointF> m_valuesPoints;
+	QVector<QPointF> m_valuesPointsLogical;
+	QVector<QString> m_valuesStrings;
+	QPainterPath m_valuesPath;
 
 	QVector<QVector<QVector<QLineF>>> m_barLines; // QVector<QLineF> contains four lines that are clipped on the plot rectangle
 	QVector<QVector<QPolygonF>> m_fillPolygons; // polygons used for the filling (clipped versions of the boxes)
 	QVector<double> m_stackedBarPositiveOffsets; // offsets for the y-positions for stacked bar plots, positive direction
 	QVector<double> m_stackedBarNegativeOffsets; // offsets for the y-positions for stacked bar plots, negative direction
+	QVector<double> m_stackedBar100PercentValues; // total sum of values in a stacked bar group defining the 100% value
 	double m_widthScaleFactor{1.0};
 	double m_groupWidth{1.0}; // width of a bar group
 	double m_groupGap{0.0}; // gap around a group of bars

@@ -3,7 +3,8 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -51,10 +52,10 @@ public:
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
 
-	int selectedColumnCount(bool full = false) const;
+	int selectedColumnCount(bool full = true) const;
 	int selectedColumnCount(AbstractColumn::PlotDesignation) const;
 	bool isColumnSelected(int col, bool full = false) const;
-	QVector<Column*> selectedColumns(bool full = false) const;
+	QVector<Column*> selectedColumns(bool full = true) const;
 	int firstSelectedColumn(bool full = false) const;
 	int lastSelectedColumn(bool full = false) const;
 
@@ -81,15 +82,10 @@ private:
 	void initMenus();
 	void connectActions();
 	bool formulaModeActive() const;
-	void exportToFile(const QString&, const bool, const QString&, QLocale::Language) const;
-	void exportToLaTeX(const QString&,
-					   const bool exportHeaders,
-					   const bool gridLines,
-					   const bool captions,
-					   const bool latexHeaders,
-					   const bool skipEmptyRows,
-					   const bool exportEntire) const;
-	void exportToFits(const QString& path, const int exportTo, const bool commentsAsUnits) const;
+	void exportToFile(const QString&, bool, const QString&, QLocale::Language) const;
+	void exportToLaTeX(const QString&, bool exportHeaders, bool gridLines, bool captions, bool latexHeaders, bool skipEmptyRows, bool exportEntire) const;
+	void exportToFits(const QString& path, int exportTo, bool commentsAsUnits) const;
+	void exportToExcel(const QString& path, bool exportHeaders) const;
 	void exportToSQLite(const QString& path) const;
 	int maxRowToExport() const;
 
@@ -114,92 +110,95 @@ private:
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
 	void checkSpreadsheetSelectionMenu();
-	void checkColumnMenus(bool numeric, bool datetime, bool hasValues);
+	void checkColumnMenus(bool numeric, bool datetime, bool text, bool hasValues);
 
 	// selection related actions
-	QAction* action_cut_selection;
-	QAction* action_copy_selection;
-	QAction* action_paste_into_selection;
-	QAction* action_mask_selection;
-	QAction* action_unmask_selection;
-	QAction* action_clear_selection;
+	QAction* action_cut_selection{nullptr};
+	QAction* action_copy_selection{nullptr};
+	QAction* action_paste_into_selection{nullptr};
+	QAction* action_mask_selection{nullptr};
+	QAction* action_unmask_selection{nullptr};
+	QAction* action_clear_selection{nullptr};
 	// 		QAction* action_set_formula;
 	// 		QAction* action_recalculate;
-	QAction* action_fill_row_numbers;
-	QAction* action_fill_random;
-	QAction* action_fill_equidistant;
-	QAction* action_fill_random_nonuniform;
-	QAction* action_fill_const;
-	QAction* action_fill_function;
+	QAction* action_fill_row_numbers{nullptr};
+	QAction* action_fill_random{nullptr};
+	QAction* action_fill_equidistant{nullptr};
+	QAction* action_fill_random_nonuniform{nullptr};
+	QAction* action_fill_const{nullptr};
+	QAction* action_fill_function{nullptr};
 
 	// spreadsheet related actions
-	QAction* action_toggle_comments;
-	QAction* action_select_all;
-	QAction* action_clear_spreadsheet;
-	QAction* action_clear_masks;
-	QAction* action_sort_spreadsheet;
-	QAction* action_formatting_heatmap;
-	QAction* action_formatting_remove;
-	QAction* action_go_to_cell;
-	QAction* action_search;
-	QAction* action_statistics_all_columns;
+	QAction* action_toggle_comments{nullptr};
+	QAction* action_select_all{nullptr};
+	QAction* action_clear_spreadsheet{nullptr};
+	QAction* action_clear_masks{nullptr};
+	QAction* action_sort_spreadsheet{nullptr};
+	QAction* action_formatting_heatmap{nullptr};
+	QAction* action_formatting_remove{nullptr};
+	QAction* action_go_to_cell{nullptr};
+	QAction* action_search{nullptr};
+	QAction* action_statistics_all_columns{nullptr};
 
 	// column related actions
-	QAction* action_insert_column_left;
-	QAction* action_insert_column_right;
-	QAction* action_insert_columns_left;
-	QAction* action_insert_columns_right;
-	QAction* action_remove_columns;
-	QAction* action_clear_columns;
-	QAction* action_add_columns;
-	QAction* action_set_as_none;
-	QAction* action_set_as_x;
-	QAction* action_set_as_y;
-	QAction* action_set_as_z;
-	QAction* action_set_as_xerr;
-	QAction* action_set_as_xerr_plus;
-	QAction* action_set_as_xerr_minus;
-	QAction* action_set_as_yerr;
-	QAction* action_set_as_yerr_plus;
-	QAction* action_set_as_yerr_minus;
-	QAction* action_reverse_columns;
-	QAction* action_add_value;
-	QAction* action_subtract_value;
-	QAction* action_multiply_value;
-	QAction* action_divide_value;
-	QAction* action_drop_values;
-	QAction* action_mask_values;
-	QAction* action_join_columns;
-	QActionGroup* normalizeColumnActionGroup;
-	QActionGroup* ladderOfPowersActionGroup;
-	QAction* action_sort_columns;
-	QAction* action_sort_asc_column;
-	QAction* action_sort_desc_column;
-	QAction* action_statistics_columns;
-	QAction* action_freeze_columns;
+	QAction* action_insert_column_left{nullptr};
+	QAction* action_insert_column_right{nullptr};
+	QAction* action_insert_columns_left{nullptr};
+	QAction* action_insert_columns_right{nullptr};
+	QAction* action_remove_columns{nullptr};
+	QAction* action_clear_columns{nullptr};
+	QAction* action_add_columns{nullptr};
+	QAction* action_set_as_none{nullptr};
+	QAction* action_set_as_x{nullptr};
+	QAction* action_set_as_y{nullptr};
+	QAction* action_set_as_z{nullptr};
+	QAction* action_set_as_xerr{nullptr};
+	QAction* action_set_as_xerr_plus{nullptr};
+	QAction* action_set_as_xerr_minus{nullptr};
+	QAction* action_set_as_yerr{nullptr};
+	QAction* action_set_as_yerr_plus{nullptr};
+	QAction* action_set_as_yerr_minus{nullptr};
+	QAction* action_reverse_columns{nullptr};
+	QAction* action_add_value{nullptr};
+	QAction* action_subtract_value{nullptr};
+	QAction* action_subtract_baseline{nullptr};
+	QAction* action_multiply_value{nullptr};
+	QAction* action_divide_value{nullptr};
+	QAction* action_drop_values{nullptr};
+	QAction* action_mask_values{nullptr};
+	QAction* action_sample_values{nullptr};
+	QAction* action_flatten_columns{nullptr};
+	QAction* action_join_columns{nullptr};
+	QActionGroup* normalizeColumnActionGroup{nullptr};
+	QActionGroup* ladderOfPowersActionGroup{nullptr};
+	QAction* action_sort_columns{nullptr};
+	QAction* action_sort_asc_column{nullptr};
+	QAction* action_sort_desc_column{nullptr};
+	QAction* action_statistics_columns{nullptr};
+	QAction* action_freeze_columns{nullptr};
 
 	// row related actions
-	QAction* action_insert_row_above;
-	QAction* action_insert_row_below;
-	QAction* action_insert_rows_above;
-	QAction* action_insert_rows_below;
-	QAction* action_remove_rows;
-	QAction* action_clear_rows;
-	QAction* action_statistics_rows;
+	QAction* action_insert_row_above{nullptr};
+	QAction* action_insert_row_below{nullptr};
+	QAction* action_insert_rows_above{nullptr};
+	QAction* action_insert_rows_below{nullptr};
+	QAction* action_remove_rows{nullptr};
+	QAction* action_clear_rows{nullptr};
+	QAction* action_statistics_rows{nullptr};
 
 	// analysis and plot data menu actions
-	QAction* action_plot_data_xycurve;
-	QAction* action_plot_data_histogram;
-	QAction* action_plot_data_boxplot;
-	QAction* action_plot_data_barplot;
-	QAction* addDataOperationAction;
-	QAction* addDataReductionAction;
-	QAction* addDifferentiationAction;
-	QAction* addIntegrationAction;
-	QAction* addInterpolationAction;
-	QAction* addSmoothAction;
+	QAction* action_plot_data_xycurve{nullptr};
+	QAction* action_plot_data_histogram{nullptr};
+	QAction* action_plot_data_boxplot{nullptr};
+	QAction* action_plot_data_barplot{nullptr};
+	QAction* addDataOperationAction{nullptr};
+	QAction* addDataReductionAction{nullptr};
+	QAction* addDifferentiationAction{nullptr};
+	QAction* addIntegrationAction{nullptr};
+	QAction* addInterpolationAction{nullptr};
+	QAction* addSmoothAction{nullptr};
 	QVector<QAction*> addFitAction;
-	QAction* addFourierFilterAction;
+	QAction* addFourierFilterAction{nullptr};
 
 	// Menus
 	QMenu* m_selectionMenu{nullptr};
@@ -207,7 +206,7 @@ private:
 	QMenu* m_columnMenu{nullptr};
 	QMenu* m_columnSetAsMenu{nullptr};
 	QMenu* m_columnGenerateDataMenu{nullptr};
-	QMenu* m_columnManipulateDataMenu;
+	QMenu* m_columnManipulateDataMenu{nullptr};
 	QMenu* m_columnNormalizeMenu{nullptr};
 	QMenu* m_columnLadderOfPowersMenu{nullptr};
 	QMenu* m_columnSortMenu{nullptr};
@@ -216,8 +215,10 @@ private:
 	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_analyzePlotMenu{nullptr};
 
+	bool m_suppressResize{false};
+
 public Q_SLOTS:
-	void handleAspectAdded(const AbstractAspect*);
+	void handleAspectsAdded(int first, int last);
 	void createContextMenu(QMenu*);
 	void fillColumnContextMenu(QMenu*, Column*);
 	void fillToolBar(QToolBar*);
@@ -225,7 +226,12 @@ public Q_SLOTS:
 	void fillTouchBar(KDMacTouchBar*);
 #endif
 	void print(QPrinter*) const;
+
 	void pasteIntoSelection();
+
+	void fillWithRowNumbers();
+	void selectColumn(int);
+	void deselectColumn(int);
 
 private Q_SLOTS:
 	void goToCell(int row, int col);
@@ -252,7 +258,6 @@ private Q_SLOTS:
 	void plotAnalysisData();
 
 	void fillSelectedCellsWithRowNumbers();
-	void fillWithRowNumbers();
 	void fillSelectedCellsWithRandomNumbers();
 	void fillWithRandomValues();
 	void fillWithEquidistantValues();
@@ -278,6 +283,8 @@ private Q_SLOTS:
 	void reverseColumns();
 	void dropColumnValues();
 	void maskColumnValues();
+	void sampleColumnValues();
+	void flattenColumns();
 	// 	void joinColumns();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
@@ -298,12 +305,9 @@ private Q_SLOTS:
 	void handleHorizontalSectionMoved(int index, int from, int to);
 	void handleHorizontalHeaderDoubleClicked(int index);
 	void handleHeaderDataChanged(Qt::Orientation, int first, int last);
-	void currentColumnChanged(const QModelIndex& current, const QModelIndex& previous);
-	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+	void handleAspectAboutToBeRemoved(int first, int last);
 	void updateHeaderGeometry(Qt::Orientation, int first, int last);
 
-	void selectColumn(int);
-	void deselectColumn(int);
 	void columnClicked(int);
 	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 	void advanceCell();

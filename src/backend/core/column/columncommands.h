@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -142,7 +142,12 @@ private:
 
 class ColumnSetGlobalFormulaCmd : public QUndoCommand {
 public:
-	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames, QVector<Column*> columns, bool autoUpdate);
+	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
+									   QString formula,
+									   QStringList variableNames,
+									   QVector<Column*> columns,
+									   bool autoUpdate,
+									   QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -281,18 +286,28 @@ public:
 	}
 
 	void redo() override {
+		auto* data = m_col->data();
+		if (!data)
+			return;
+
 		if (m_first < 0)
-			m_old_values = *static_cast<QVector<T>*>(m_col->data());
+			m_old_values = *static_cast<QVector<T>*>(data);
 		else
-			m_old_values = static_cast<QVector<T>*>(m_col->data())->mid(m_first, m_new_values.count());
+			m_old_values = static_cast<QVector<T>*>(data)->mid(m_first, m_new_values.count());
+
 		m_col->replaceValues(m_first, m_new_values);
 		m_new_values.clear(); // delete values, because otherwise we use a lot of ram even if we don't need it
 	}
 	void undo() override {
+		auto* data = m_col->data();
+		if (!data)
+			return;
+
 		if (m_first < 0)
-			m_new_values = *static_cast<QVector<T>*>(m_col->data());
+			m_new_values = *static_cast<QVector<T>*>(data);
 		else
-			m_new_values = static_cast<QVector<T>*>(m_col->data())->mid(m_first, m_old_values.count());
+			m_new_values = static_cast<QVector<T>*>(data)->mid(m_first, m_old_values.count());
+
 		m_col->replaceValues(m_first, m_old_values);
 		m_old_values.clear();
 	}

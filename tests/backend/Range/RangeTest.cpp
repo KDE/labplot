@@ -10,6 +10,7 @@
 
 #include "RangeTest.h"
 #include "backend/lib/Range.h"
+#include "backend/lib/macros.h"
 
 //**********************************************************
 //****************** Function tests ************************
@@ -26,23 +27,24 @@ void RangeTest::testNiceExtend() {
 													   {{0., .41}, {0., .45}},
 													   {{0, .36}, {0., .4}},
 													   {{0, .19}, {0., .2}},
-													   {{0., .17}, {0., .2}},
+													   {{0., .17}, {0., .18}},
 													   {{0, 995.}, {0, 1000.}},
-													   {{0.75, 2.25}, {0.5, 2.5}},
-													   {{0, .21}, {0., .25}}};
+													   {{0, .21}, {0., .25}},
+													   {{0.7, 104.9}, {0, 120}}};
 	QVector<QPair<Range<double>, Range<double>>> tests2{// QCOMPARE is too strict
-														{{0., .13}, {0., .15}},
-														{{0, .15}, {0., .15}},
+														{{0., .13}, {0., .14}},
+														{{0, .15}, {0., .16}},
 														{{0., .61}, {0., .7}},
 														{{0, .51}, {0., .6}},
 														{{0, .31}, {0., .35}},
+														{{0.75, 2.25}, {0.6, 2.4}},
 														{{0., .26}, {0., .3}}};
 
 	for (auto& test : tests) {
 		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
-		// WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
-		// WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
 		QCOMPARE(test.first, test.second);
 	}
 	for (auto& test : tests2) {

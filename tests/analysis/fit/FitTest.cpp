@@ -12,6 +12,8 @@
 #include "FitTest.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
@@ -21,9 +23,9 @@ extern "C" {
 #include "backend/nsl/nsl_stats.h"
 }
 
-//##############################################################################
-//#################  linear regression with NIST datasets ######################
-//##############################################################################
+// ##############################################################################
+// #################  linear regression with NIST datasets ######################
+// ##############################################################################
 void FitTest::testLinearNorris() {
 	// NIST data for Norris dataset
 	QVector<double> xData = {0.2,	337.4, 118.2, 884.6, 10.1,	226.5, 666.3, 996.3, 448.6, 777.0, 558.2, 0.4,	 0.6,  775.5, 666.9, 338.0, 447.5, 11.6,
@@ -32,13 +34,13 @@ void FitTest::testLinearNorris() {
 							 557.7, 228.3, 998.0, 888.8, 119.6, 0.3,   0.6,	  557.6, 339.3, 888.0, 998.5, 778.9, 10.2, 117.6, 228.9, 668.4, 449.2, 0.2};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -84,13 +86,13 @@ void FitTest::testLinearPontius() {
 							 .98300,  1.09150, 1.20004, 1.30818, 1.41613, 1.52408, 1.63159, 1.73965, 1.84696, 1.95445, 2.06177, 2.16829};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -134,13 +136,13 @@ void FitTest::testLinearNoInt1() {
 	QVector<int> yData = {130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Integer);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Integer);
 	yDataColumn.replaceInteger(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -148,8 +150,8 @@ void FitTest::testLinearNoInt1() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*x";
-	fitData.paramNames << "b1";
+	fitData.model = QStringLiteral("b1*x");
+	fitData.paramNames << QStringLiteral("b1");
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 1.;
 	fitData.paramLowerLimits << -std::numeric_limits<double>::max();
@@ -186,13 +188,13 @@ void FitTest::testLinearNoInt1_2() {
 	QVector<int> yData = {130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Integer);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Integer);
 	yDataColumn.replaceInteger(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -235,13 +237,13 @@ void FitTest::testLinearNoInt2() {
 	QVector<int> yData = {3, 4, 4};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Integer);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Integer);
 	yDataColumn.replaceInteger(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -249,8 +251,8 @@ void FitTest::testLinearNoInt2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "c * x";
-	fitData.paramNames << "c";
+	fitData.model = QStringLiteral("c * x");
+	fitData.paramNames << QStringLiteral("c");
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 1.;
 	fitData.paramLowerLimits << -std::numeric_limits<double>::max();
@@ -289,13 +291,13 @@ void FitTest::testLinearNoInt2_2() {
 	QVector<int> yData = {3, 4, 4};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Integer);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Integer);
 	yDataColumn.replaceInteger(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -352,13 +354,13 @@ void FitTest::testLinearFilip() {
 							 0.8253, 0.8602, 0.8809, 0.8301, 0.8664, 0.8834, 0.8898, 0.8964, 0.8963, 0.9074, 0.9119, 0.9228};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -446,13 +448,13 @@ void FitTest::testLinearWampler1() {
 						  177156, 271453, 402234, 579195, 813616, 1118481, 1508598, 2000719, 2613660, 3368421};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Integer);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Integer);
 	yDataColumn.replaceInteger(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -496,13 +498,13 @@ void FitTest::testLinearWampler2() {
 							 7.71561, 9.92992, 12.75603, 16.32384, 20.78125, 26.29536, 33.05367, 41.26528, 51.16209, 63.00000};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -559,13 +561,13 @@ void FitTest::testLinearWampler3() {
 							 175108., 273291., 400186., 581243., 811568., 1121004., 1506550., 2002767., 2611612., 3369180.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -614,13 +616,13 @@ void FitTest::testLinearWampler4() {
 						  -27644, 455253,  197434, 783995,	608816, 1370781, 1303798, 2205519, 2408860, 3444321};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Integer);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Integer);
 	yDataColumn.replaceInteger(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -672,13 +674,13 @@ void FitTest::testLinearWampler5() {
 						  -20302844, 18651453,	-20077766, 21059195,  -19666384, 26348481,	-18971402, 22480719,  -17866340, 10958421};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Integer);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Integer);
 	yDataColumn.replaceInteger(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -728,13 +730,13 @@ void FitTest::testLinearWP_OLS() {
 	QVector<double> yData = {52.21, 53.12, 54.48, 55.84, 57.20, 58.57, 59.93, 61.29, 63.11, 64.47, 66.28, 68.10, 69.92, 72.19, 74.46};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -815,13 +817,13 @@ void FitTest::testLinearR_lm2() {
 						  54, 32, 40, 32, 40, 50, 42, 56, 76, 84, 36, 46, 68, 32, 48, 52, 56, 64, 66, 54, 70, 92, 93, 120, 85};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Integer);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Integer);
 	yDataColumn.replaceInteger(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -897,9 +899,9 @@ void FitTest::testLinearR_lm2() {
 	FuzzyCompare(fitResult.bic, 426.4202, 1.e-7);
 }
 
-//##############################################################################
-//#############  non-linear regression with NIST datasets  #####################
-//##############################################################################
+// ##############################################################################
+// #############  non-linear regression with NIST datasets  #####################
+// ##############################################################################
 
 void FitTest::testNonLinearMisra1a() {
 	// NIST data for Misra1a dataset
@@ -907,13 +909,13 @@ void FitTest::testNonLinearMisra1a() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -921,9 +923,8 @@ void FitTest::testNonLinearMisra1a() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1-exp(-b2*x))";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*(1-exp(-b2*x))");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 500. << 0.0001;
@@ -962,13 +963,13 @@ void FitTest::testNonLinearMisra1a_2() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -976,9 +977,8 @@ void FitTest::testNonLinearMisra1a_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1-exp(-b2*x))";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*(1-exp(-b2*x))");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 250. << 5.e-4;
@@ -1017,13 +1017,13 @@ void FitTest::testNonLinearMisra1a_3() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1031,9 +1031,8 @@ void FitTest::testNonLinearMisra1a_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1-exp(-b2*x))";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*(1-exp(-b2*x))");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 2.3894212918E+02 << 5.5015643181E-04;
@@ -1072,13 +1071,13 @@ void FitTest::testNonLinearMisra1b() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1086,9 +1085,8 @@ void FitTest::testNonLinearMisra1b() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1-1/(1+b2*x/2)^2)";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*(1-1/(1+b2*x/2)^2)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 500. << 0.0001;
@@ -1127,13 +1125,13 @@ void FitTest::testNonLinearMisra1b_2() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1141,9 +1139,8 @@ void FitTest::testNonLinearMisra1b_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1-1/(1+b2*x/2)^2)";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*(1-1/(1+b2*x/2)^2)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 300. << 2.e-4;
@@ -1182,13 +1179,13 @@ void FitTest::testNonLinearMisra1b_3() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1196,9 +1193,8 @@ void FitTest::testNonLinearMisra1b_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1-1/(1+b2*x/2)^2)";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*(1-1/(1+b2*x/2)^2)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 3.3799746163E+02 << 3.9039091287E-04;
@@ -1237,13 +1233,13 @@ void FitTest::testNonLinearMisra1c() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1251,9 +1247,8 @@ void FitTest::testNonLinearMisra1c() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1-1/sqrt(1+2*b2*x))";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*(1-1/sqrt(1+2*b2*x))");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 500. << 0.0001;
@@ -1292,13 +1287,13 @@ void FitTest::testNonLinearMisra1c_2() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1306,9 +1301,8 @@ void FitTest::testNonLinearMisra1c_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1-1/sqrt(1+2*b2*x))";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*(1-1/sqrt(1+2*b2*x))");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 600. << 2.e-4;
@@ -1347,13 +1341,13 @@ void FitTest::testNonLinearMisra1c_3() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1361,9 +1355,8 @@ void FitTest::testNonLinearMisra1c_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1-1/sqrt(1+2*b2*x))";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*(1-1/sqrt(1+2*b2*x))");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 6.3642725809E+02 << 2.0813627256E-04;
@@ -1402,13 +1395,13 @@ void FitTest::testNonLinearMisra1d() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1416,9 +1409,8 @@ void FitTest::testNonLinearMisra1d() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*b2*x/(1+b2*x)";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*b2*x/(1+b2*x)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 500. << 0.0001;
@@ -1457,13 +1449,13 @@ void FitTest::testNonLinearMisra1d_2() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1471,9 +1463,8 @@ void FitTest::testNonLinearMisra1d_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*b2*x/(1+b2*x)";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*b2*x/(1+b2*x)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 450. << 3.e-4;
@@ -1512,13 +1503,13 @@ void FitTest::testNonLinearMisra1d_3() {
 	QVector<double> yData = {10.07E0, 14.73E0, 17.94E0, 23.93E0, 29.61E0, 35.18E0, 40.02E0, 44.82E0, 50.76E0, 55.05E0, 61.01E0, 66.40E0, 75.47E0, 81.78E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1526,9 +1517,8 @@ void FitTest::testNonLinearMisra1d_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*b2*x/(1+b2*x)";
-	fitData.paramNames << "b1"
-					   << "b2";
+	fitData.model = QStringLiteral("b1*b2*x/(1+b2*x)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 4.3736970754E+02 << 3.0227324449E-04;
@@ -1587,13 +1577,13 @@ void FitTest::testNonLinearMGH09() {
 							 2.460000E-02};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1601,11 +1591,8 @@ void FitTest::testNonLinearMGH09() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(x^2 + b2*x)/(x^2 + x*b3 + b4)";
-	fitData.paramNames << "b1"
-					   << "b2"
-					   << "b3"
-					   << "b4";
+	fitData.model = QStringLiteral("b1*(x^2 + b2*x)/(x^2 + x*b3 + b4)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	// fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 2.5000000000E+01 << 3.9000000000E+01 << 4.1500000000E+01 << 3.9000000000E+01;
@@ -1676,13 +1663,13 @@ void FitTest::testNonLinearMGH09_2() {
 							 2.460000E-02};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1690,11 +1677,8 @@ void FitTest::testNonLinearMGH09_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(x^2 + b2*x)/(x^2 + x*b3 + b4)";
-	fitData.paramNames << "b1"
-					   << "b2"
-					   << "b3"
-					   << "b4";
+	fitData.model = QStringLiteral("b1*(x^2 + b2*x)/(x^2 + x*b3 + b4)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	// fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 2.5000000000E-01 << 3.9000000000E-01 << 4.1500000000E-01 << 3.9000000000E-01;
@@ -1763,13 +1747,13 @@ void FitTest::testNonLinearMGH09_3() {
 							 2.460000E-02};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1777,11 +1761,8 @@ void FitTest::testNonLinearMGH09_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(x^2 + b2*x)/(x^2 + x*b3 + b4)";
-	fitData.paramNames << "b1"
-					   << "b2"
-					   << "b3"
-					   << "b4";
+	fitData.model = QStringLiteral("b1*(x^2 + b2*x)/(x^2 + x*b3 + b4)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	// fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 1.9280693458E-01 << 1.9128232873E-01 << 1.2305650693E-01 << 1.3606233068E-01;
@@ -1860,13 +1841,13 @@ void FitTest::testNonLinearMGH10() {
 							 2.872000E+03};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1874,10 +1855,8 @@ void FitTest::testNonLinearMGH10() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*exp(b2/(x+b3))";
-	fitData.paramNames << "b1"
-					   << "b2"
-					   << "b3";
+	fitData.model = QStringLiteral("b1*exp(b2/(x+b3))");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3");
 	// fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 2.0000000000E+00 << 4.0000000000E+05 << 2.5000000000E+04;
@@ -1950,13 +1929,13 @@ void FitTest::testNonLinearMGH10_2() {
 							 2.872000E+03};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -1964,10 +1943,8 @@ void FitTest::testNonLinearMGH10_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*exp(b2/(x+b3))";
-	fitData.paramNames << "b1"
-					   << "b2"
-					   << "b3";
+	fitData.model = QStringLiteral("b1*exp(b2/(x+b3))");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3");
 	// fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 2.0000000000E-02 << 4.0000000000E+03 << 2.5000000000E+02;
@@ -2040,13 +2017,13 @@ void FitTest::testNonLinearMGH10_3() {
 							 2.872000E+03};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -2054,10 +2031,8 @@ void FitTest::testNonLinearMGH10_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*exp(b2/(x+b3))";
-	fitData.paramNames << "b1"
-					   << "b2"
-					   << "b3";
+	fitData.model = QStringLiteral("b1*exp(b2/(x+b3))");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3");
 	// fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 5.6096364710E-03 << 6.1813463463E+03 << 3.4522363462E+02;
@@ -2101,13 +2076,13 @@ void FitTest::testNonLinearRat43() {
 		{16.08E0, 33.83E0, 65.80E0, 97.20E0, 191.55E0, 326.20E0, 386.87E0, 520.53E0, 590.03E0, 651.92E0, 724.93E0, 699.56E0, 689.96E0, 637.56E0, 717.41E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -2115,11 +2090,8 @@ void FitTest::testNonLinearRat43() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1/pow(1 + exp(b2-b3*x), 1/b4)";
-	fitData.paramNames << "b1"
-					   << "b2"
-					   << "b3"
-					   << "b4";
+	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x), 1/b4)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	fitData.eps = 1.e-9;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 1.0000000000E+02 << 1.0000000000E+01 << 1.0000000000E+00 << 1.0000000000E+00;
@@ -2169,13 +2141,13 @@ void FitTest::testNonLinearRat43_2() {
 		{16.08E0, 33.83E0, 65.80E0, 97.20E0, 191.55E0, 326.20E0, 386.87E0, 520.53E0, 590.03E0, 651.92E0, 724.93E0, 699.56E0, 689.96E0, 637.56E0, 717.41E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -2183,11 +2155,8 @@ void FitTest::testNonLinearRat43_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1/pow(1 + exp(b2-b3*x), 1/b4)";
-	fitData.paramNames << "b1"
-					   << "b2"
-					   << "b3"
-					   << "b4";
+	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x), 1/b4)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	fitData.eps = 1.e-10;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 7.0000000000E+02 << 5.0000000000E+00 << 7.5000000000E-01 << 1.3000000000E+00;
@@ -2237,13 +2206,13 @@ void FitTest::testNonLinearRat43_3() {
 		{16.08E0, 33.83E0, 65.80E0, 97.20E0, 191.55E0, 326.20E0, 386.87E0, 520.53E0, 590.03E0, 651.92E0, 724.93E0, 699.56E0, 689.96E0, 637.56E0, 717.41E0};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -2251,11 +2220,8 @@ void FitTest::testNonLinearRat43_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1/pow(1 + exp(b2-b3*x), 1/b4)";
-	fitData.paramNames << "b1"
-					   << "b2"
-					   << "b3"
-					   << "b4";
+	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x), 1/b4)");
+	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	// fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 6.9964151270E+02 << 5.2771253025E+00 << 7.5962938329E-01 << 1.2792483859E+00;
@@ -2305,13 +2271,13 @@ void FitTest::testNonLinearMichaelis_Menten() {
 	QVector<double> yData = {0.0, 0.6, 0.65, 0.7, 0.75, 0.75, 0.8, 0.9, 0.85, 0.95, 0.9};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 
@@ -2319,9 +2285,8 @@ void FitTest::testNonLinearMichaelis_Menten() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "Vm * x/(Km + x)";
-	fitData.paramNames << "Vm"
-					   << "Km";
+	fitData.model = QStringLiteral("Vm * x/(Km + x)");
+	fitData.paramNames << QStringLiteral("Vm") << QStringLiteral("Km");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 1.0 << 1.0;
@@ -2357,9 +2322,9 @@ void FitTest::testNonLinearMichaelis_Menten() {
 	DEBUG(std::setprecision(15) << fitResult.sse); // result: 0.0252438073757174
 	FuzzyCompare(fitResult.sse, 0.0252438073989537, 1.e-9);
 }
-//##############################################################################
-//#########################  Fits with weights #################################
-//##############################################################################
+// ##############################################################################
+// #########################  Fits with weights #################################
+// ##############################################################################
 
 // see http://gnuplot.sourceforge.net/demo_5.2/fit.html
 void FitTest::testNonLinearGP_lcdemo() {
@@ -2375,16 +2340,16 @@ void FitTest::testNonLinearGP_lcdemo() {
 							  0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
+	Column yErrorColumn(QStringLiteral("yerr"), AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 	fitCurve.setYErrorColumn(&yErrorColumn);
@@ -2395,13 +2360,9 @@ void FitTest::testNonLinearGP_lcdemo() {
 	XYFitCurve::initFitData(fitData);
 	// x > Tc : d + mh(x-Tc)
 	// x < Tc : d + ml(x-Tc) + b tanh(g(Tc-x))
-	fitData.model = "d + theta(x-Tc)*mh*(x-Tc) + theta(Tc-x)*(ml*(x-Tc)+b*tanh(g*(Tc-x)))";
-	fitData.paramNames << "d"
-					   << "Tc"
-					   << "mh"
-					   << "ml"
-					   << "b"
-					   << "g";
+	fitData.model = QStringLiteral("d + theta(x-Tc)*mh*(x-Tc) + theta(Tc-x)*(ml*(x-Tc)+b*tanh(g*(Tc-x)))");
+	fitData.paramNames << QStringLiteral("d") << QStringLiteral("Tc") << QStringLiteral("mh") << QStringLiteral("ml") << QStringLiteral("b")
+					   << QStringLiteral("g");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 1.02 << 45. << -0.0005 << -0.0005 << 0.01002 << 1.0;
@@ -2464,16 +2425,16 @@ void FitTest::testLinearGP_PY_noerror() {
 	//	QVector<double> yError = {1.0,1.8,4.,8.,20.,20.,70.,70.,100.,500.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	//	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
+	//	Column yErrorColumn(QStringLiteral("yerr"), AbstractColumn::ColumnMode::Double);
 	//	yErrorColumn.replaceValues(0, yError);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 	//	fitCurve.setYErrorColumn(&yErrorColumn);
@@ -2482,9 +2443,8 @@ void FitTest::testLinearGP_PY_noerror() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "a1 + a2 * x";
-	fitData.paramNames << "a1"
-					   << "a2";
+	fitData.model = QStringLiteral("a1 + a2 * x");
+	fitData.paramNames << QStringLiteral("a1") << QStringLiteral("a2");
 	fitData.eps = 1.e-9;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 5. << -0.5;
@@ -2531,16 +2491,16 @@ void FitTest::testLinearGP_PY_yerror_polynomial() {
 	QVector<double> yError = {1.0, 1.8, 4., 8., 20., 20., 70., 70., 100., 500.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
+	Column yErrorColumn(QStringLiteral("yerr"), AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 	fitCurve.setYErrorColumn(&yErrorColumn);
@@ -2592,16 +2552,16 @@ void FitTest::testLinearGP_PY_yerror_custom() {
 	QVector<double> yError = {1.0, 1.8, 4., 8., 20., 20., 70., 70., 100., 500.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
+	Column yErrorColumn(QStringLiteral("yerr"), AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 	fitCurve.setYErrorColumn(&yErrorColumn);
@@ -2610,9 +2570,8 @@ void FitTest::testLinearGP_PY_yerror_custom() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "a1 + a2 * x";
-	fitData.paramNames << "a1"
-					   << "a2";
+	fitData.model = QStringLiteral("a1 + a2 * x");
+	fitData.paramNames << QStringLiteral("a1") << QStringLiteral("a2");
 	fitData.eps = 1.e-9;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 5. << -0.5;
@@ -2659,19 +2618,19 @@ void FitTest::testLinearGP_PY_xyerror_polynomial() {
 	QVector<double> yError = {1.0, 1.8, 4., 8., 20., 20., 70., 70., 100., 500.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Double);
+	Column xErrorColumn(QStringLiteral("xerr"), AbstractColumn::ColumnMode::Double);
 	xErrorColumn.replaceValues(0, xError);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
+	Column yErrorColumn(QStringLiteral("yerr"), AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 	fitCurve.setXErrorColumn(&xErrorColumn);
@@ -2728,19 +2687,19 @@ void FitTest::testLinearGP_PY_xyerror_custom() {
 	QVector<double> yError = {1.0, 1.8, 4., 8., 20., 20., 70., 70., 100., 500.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Double);
+	Column xErrorColumn(QStringLiteral("xerr"), AbstractColumn::ColumnMode::Double);
 	xErrorColumn.replaceValues(0, xError);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
+	Column yErrorColumn(QStringLiteral("yerr"), AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 	fitCurve.setXErrorColumn(&xErrorColumn);
@@ -2750,9 +2709,8 @@ void FitTest::testLinearGP_PY_xyerror_custom() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "a1 + a2 * x";
-	fitData.paramNames << "a1"
-					   << "a2";
+	fitData.model = QStringLiteral("a1 + a2 * x");
+	fitData.paramNames << QStringLiteral("a1") << QStringLiteral("a2");
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 5. << -0.5;
@@ -2809,19 +2767,19 @@ void FitTest::testLinearGP_PY_xyerror_custom_instrumental_weight() {
 	}
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Double);
+	Column xErrorColumn(QStringLiteral("xerr"), AbstractColumn::ColumnMode::Double);
 	xErrorColumn.replaceValues(0, xError);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
+	Column yErrorColumn(QStringLiteral("yerr"), AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 	fitCurve.setXErrorColumn(&xErrorColumn);
@@ -2831,9 +2789,8 @@ void FitTest::testLinearGP_PY_xyerror_custom_instrumental_weight() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "a1 + a2 * x";
-	fitData.paramNames << "a1"
-					   << "a2";
+	fitData.model = QStringLiteral("a1 + a2 * x");
+	fitData.paramNames << QStringLiteral("a1") << QStringLiteral("a2");
 	//	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 5. << -0.5;
@@ -2890,19 +2847,19 @@ void FitTest::testLinearGP_PY_xyerror_custom_inverse_weight() {
 	}
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Double);
+	Column xErrorColumn(QStringLiteral("xerr"), AbstractColumn::ColumnMode::Double);
 	xErrorColumn.replaceValues(0, xError);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
+	Column yErrorColumn(QStringLiteral("yerr"), AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 	fitCurve.setXErrorColumn(&xErrorColumn);
@@ -2912,9 +2869,8 @@ void FitTest::testLinearGP_PY_xyerror_custom_inverse_weight() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "a1 + a2 * x";
-	fitData.paramNames << "a1"
-					   << "a2";
+	fitData.model = QStringLiteral("a1 + a2 * x");
+	fitData.paramNames << QStringLiteral("a1") << QStringLiteral("a2");
 	//	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 5. << -0.5;
@@ -2966,16 +2922,16 @@ void FitTest::testNonLinear_yerror_zero_bug408535() {
 							  15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15., 15.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
+	Column yErrorColumn(QStringLiteral("yerr"), AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
-	XYFitCurve fitCurve("fit");
+	XYFitCurve fitCurve(QStringLiteral("fit"));
 	fitCurve.setXDataColumn(&xDataColumn);
 	fitCurve.setYDataColumn(&yDataColumn);
 	fitCurve.setYErrorColumn(&yErrorColumn);
@@ -2984,9 +2940,8 @@ void FitTest::testNonLinear_yerror_zero_bug408535() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "A*exp(-B/x)";
-	fitData.paramNames << "A"
-					   << "B";
+	fitData.model = QStringLiteral("A*exp(-B/x)");
+	fitData.paramNames << QStringLiteral("A") << QStringLiteral("B");
 	//	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
 	fitData.paramStartValues << 100. << 100.;
@@ -3035,13 +2990,12 @@ void FitTest::testHistogramFit() {
 
 	auto* aspect = project.child<AbstractAspect>(0);
 	QVERIFY(aspect != nullptr);
-	if (aspect)
-		QCOMPARE(aspect->name(), QLatin1String("Spreadsheet"));
+	QCOMPARE(aspect->name(), QLatin1String("Spreadsheet"));
 	QVERIFY(aspect->type() == AspectType::Spreadsheet);
 	aspect = project.child<AbstractAspect>(1);
 	QVERIFY(aspect != nullptr);
-	if (aspect)
-		QCOMPARE(aspect->name(), QLatin1String("Worksheet - Spreadsheet"));
+
+	QCOMPARE(aspect->name(), QLatin1String("Worksheet - Spreadsheet"));
 	QVERIFY(aspect->type() == AspectType::Worksheet);
 	auto w = dynamic_cast<Worksheet*>(aspect);
 	if (!w)
@@ -3049,28 +3003,34 @@ void FitTest::testHistogramFit() {
 
 	auto plot = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0));
 	QVERIFY(plot != nullptr);
-	if (plot)
-		QCOMPARE(plot->name(), QLatin1String("Plot - Spreadsheet"));
 
+	QCOMPARE(plot->name(), QLatin1String("Plot - Spreadsheet"));
 	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
 	QVERIFY(hist != nullptr);
-	if (hist)
-		QCOMPARE(hist->name(), QLatin1String("2"));
 
+	QCOMPARE(hist->name(), QLatin1String("2"));
 	// Do the fit
 	plot->addHistogramFit(hist, nsl_sf_stats_gaussian);
 
 	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
 	QVERIFY(fit != nullptr);
-	if (fit)
-		QCOMPARE(fit->name(), QLatin1String("Distribution Fit to '2'"));
 
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to '2'"));
 	// get results
 	const XYFitCurve::FitResult& fitResult = fit->fitResult();
 
 	QCOMPARE(fitResult.available, true);
 	QCOMPARE(fitResult.valid, true);
 
+	// ML results
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 1.);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 0.999776858937);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), -0.0294045302042);
+
+	/* LM results
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));
 	QCOMPARE(fitResult.paramValues.at(0), 0.999829585605626);
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));
@@ -3094,6 +3054,330 @@ void FitTest::testHistogramFit() {
 	QCOMPARE(fitResult.rsquare, 0.961753741845289);
 	DEBUG(std::setprecision(15) << fitResult.rsquareAdj); // result:
 	QCOMPARE(fitResult.rsquareAdj, 0.957504157605876);
+	*/
+}
+
+void FitTest::testHistogramGaussianML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Gaussian.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1000);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	plot->addHistogram();
+	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(hist != nullptr);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_gaussian);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 210.380459328);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 0.999776858937);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.0223507017166885);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 0.955917043549699);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.marginValues.at(1), 1.0436366743251);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), -0.0294045302042);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(2));
+	QCOMPARE(fitResult.errorValues.at(2), 0.0316157202617);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2) - fitResult.marginValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2) - fitResult.marginValues.at(2), -0.0914455198610062);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2) + fitResult.marginValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2) + fitResult.marginValues.at(2), 0.0326364594526431);
+}
+
+void FitTest::testHistogramExponentialML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Exponential.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	plot->addHistogram();
+	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(hist != nullptr);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_exponential);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 41.6543778722);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 1.93906050400681);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.195884683568035);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 1.5740096363284);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 2.34119114746796);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), 5.01032231564491);
+}
+
+void FitTest::testHistogramLaplaceML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Laplace.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	plot->addHistogram();
+	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(hist != nullptr);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_laplace);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 145.64147805241);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 1.99538835213796);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), 4.95890340967321);
+}
+
+void FitTest::testHistogramCauchyML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Cauchy.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1000);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	plot->addHistogram();
+	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(hist != nullptr);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_cauchy_lorentz);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 34973.659700564);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 1.87876026823743);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), 5.09155507540282);
+}
+
+void FitTest::testHistogramLognormalML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Lognormal.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1000);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	plot->addHistogram();
+	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(hist != nullptr);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_lognormal);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 4714813.91602);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 2.07876791650682);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), 5.01070949852617);
+}
+
+void FitTest::testHistogramPoissonML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Poisson.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	plot->addHistogram();
+	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(hist != nullptr);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_poisson);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 150.);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 9.55);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.309030742807249);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 8.95383732390823);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 10.1754213697868);
+}
+
+void FitTest::testHistogramBinomialML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Binomial.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	plot->addHistogram();
+	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(hist != nullptr);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_binomial);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 270.);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 0.4931);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.0499952387733072);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 0.482953993308348);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 0.503287947118723);
+
+	QCOMPARE(fitResult.paramValues.at(2), spreadsheet.rowCount());
 }
 
 QTEST_MAIN(FitTest)

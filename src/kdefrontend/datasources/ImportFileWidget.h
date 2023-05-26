@@ -4,7 +4,7 @@
 	Description          : import file data widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-	SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -27,6 +27,7 @@ class MQTTSubscriptionWidget;
 class AbstractFileFilter;
 class AsciiOptionsWidget;
 class BinaryOptionsWidget;
+class CANOptionsWidget;
 class HDF5OptionsWidget;
 class ImageOptionsWidget;
 class MatioOptionsWidget;
@@ -58,25 +59,25 @@ public:
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
 	QString fileName() const;
+	QString dbcFileName() const;
 	QString selectedObject() const;
-	bool isFileEmpty() const;
+	bool importValid() const;
 	bool excelUseFirstRowAsColNames() const;
 	const QStringList selectedHDF5Names() const;
+	//	const QStringList selectedVectorBLFNames() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedMatioNames() const;
 	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
 	const QStringList selectedExcelRegionNames() const;
 
-	void showAsciiHeaderOptions(bool);
-	void showExcelFirstRowAsColumnOption(bool);
-	void showJsonModel(bool);
-	void enableExcelFirstRowAsColNames(bool enable);
-
 	QString host() const;
 	QString port() const;
 	QString serialPort() const;
 	int baudRate() const;
+
+public Q_SLOTS:
+	void dataContainerChanged(AbstractAspect*);
 
 private:
 	Ui::ImportFileWidget ui;
@@ -85,6 +86,9 @@ private:
 	void initOptionsWidget();
 	void initSlots();
 	QString fileInfoString(const QString&) const;
+	void showJsonModel(bool);
+	void enableExcelFirstRowAsColNames(bool enable);
+	void updateHeaderOptions();
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
@@ -92,6 +96,7 @@ private:
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
 	std::unique_ptr<ExcelOptionsWidget> m_excelOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
+	std::unique_ptr<CANOptionsWidget> m_canOptionsWidget;
 	std::unique_ptr<MatioOptionsWidget> m_matioOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
@@ -99,10 +104,13 @@ private:
 
 	mutable std::unique_ptr<AbstractFileFilter> m_currentFilter;
 
+	AbstractAspect* m_targetContainer{nullptr};
 	QTableWidget* m_twPreview{nullptr};
 	KUrlComboBox* m_cbFileName{nullptr};
+	KUrlComboBox* m_cbDBCFileName{nullptr};
 	const QString& m_fileName;
-	bool m_fileEmpty{false};
+	const QString m_dbcFileName;
+	bool m_importValid{false};
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 
@@ -125,8 +133,10 @@ private Q_SLOTS:
 
 	void saveFilter();
 	void manageFilters();
+	void hidePropertyWidgets();
 	void filterChanged(int);
 	void selectFile();
+	void selectDBCFile();
 	void showFileInfo();
 	void refreshPreview();
 	void updateStartRow(int);

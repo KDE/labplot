@@ -36,9 +36,8 @@ public:
 	Background* background{nullptr};
 
 	PlotArea::BorderType borderType;
-	QPen borderPen;
-	qreal borderOpacity;
-	qreal borderCornerRadius;
+	Line* borderLine{nullptr};
+	qreal borderCornerRadius{0.0};
 
 	PlotArea* const q;
 };

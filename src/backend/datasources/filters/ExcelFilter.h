@@ -4,7 +4,7 @@
 	Description          : Excel I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Fabian Kristof (fkristofszabolcs@gmail.com)
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,9 +16,9 @@
 #include <QObject>
 
 #ifdef HAVE_EXCEL
-#include "3rdparty/QXlsx/header/xlsxcellrange.h"
-#include "3rdparty/QXlsx/header/xlsxcellreference.h"
-#include "3rdparty/QXlsx/header/xlsxdocument.h"
+#include "xlsxcellrange.h"
+#include "xlsxcellreference.h"
+#include "xlsxdocument.h"
 #endif
 
 class ExcelFilterPrivate;
@@ -39,11 +39,12 @@ public:
 	QVector<QStringList> previewForCurrentDataRegion(int lines, bool* okToMatrix);
 	QStringList sheets() const;
 
-	void setExportAsNewSheet(const bool);
+	void setExportAsNewSheet(bool);
 	void setSheetToAppendTo(const QString& sheetName);
-	void setOverwriteData(const bool);
+	void setOverwriteData(bool);
 	void setDataExportStartPos(const QString&);
-	void setFirstRowAsColumnNames(const bool);
+	void setFirstRowAsColumnNames(bool);
+	void setColumnNamesAsFirstRow(bool);
 
 	void parse(const QString& fileName, QTreeWidgetItem* root);
 	static QString convertFromNumberToExcelColumn(int n);

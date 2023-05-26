@@ -17,6 +17,7 @@ class XYAnalysisCurvePrivate;
 
 class XYAnalysisCurve : public XYCurve {
 	Q_OBJECT
+	Q_ENUMS(DataSourceType)
 
 public:
 	enum class DataSourceType { Spreadsheet, Curve, Histogram };
@@ -40,7 +41,15 @@ public:
 		FourierFilter
 	};
 
-	XYAnalysisCurve(const QString&, AspectType type);
+	struct Result {
+		Result(){};
+
+		bool available{false};
+		bool valid{false};
+		QString status;
+		qint64 elapsedTime{0};
+	};
+
 	~XYAnalysisCurve() override;
 
 	static void copyData(QVector<double>& xData,
@@ -52,6 +61,9 @@ public:
 						 bool avgUniqueX = false);
 
 	virtual void recalculate() = 0;
+	bool resultAvailable() const;
+	virtual const Result& result() const = 0;
+
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
@@ -71,7 +83,7 @@ public:
 	typedef XYAnalysisCurvePrivate Private;
 
 protected:
-	XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type);
+	XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate*, AspectType);
 
 private:
 	Q_DECLARE_PRIVATE(XYAnalysisCurve)
@@ -79,6 +91,8 @@ private:
 
 public Q_SLOTS:
 	void handleSourceDataChanged();
+	void createDataSpreadsheet();
+
 private Q_SLOTS:
 	void xDataColumnAboutToBeRemoved(const AbstractAspect*);
 	void yDataColumnAboutToBeRemoved(const AbstractAspect*);

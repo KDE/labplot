@@ -49,16 +49,21 @@ void XYIntegrationCurve::recalculate() {
 	d->recalculate();
 }
 
+const XYAnalysisCurve::Result& XYIntegrationCurve::result() const {
+	Q_D(const XYIntegrationCurve);
+	return d->integrationResult;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYIntegrationCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYIntegrationCurve, XYIntegrationCurve::IntegrationData, integrationData, integrationData)
 
 const XYIntegrationCurve::IntegrationResult& XYIntegrationCurve::integrationResult() const {
@@ -66,74 +71,34 @@ const XYIntegrationCurve::IntegrationResult& XYIntegrationCurve::integrationResu
 	return d->integrationResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYIntegrationCurve, SetIntegrationData, XYIntegrationCurve::IntegrationData, integrationData, recalculate)
 void XYIntegrationCurve::setIntegrationData(const XYIntegrationCurve::IntegrationData& integrationData) {
 	Q_D(XYIntegrationCurve);
 	exec(new XYIntegrationCurveSetIntegrationDataCmd(d, integrationData, ki18n("%1: set options and perform the integration")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
+}
+
+void XYIntegrationCurvePrivate::resetResults() {
+	integrationResult = XYIntegrationCurve::IntegrationResult();
 }
 
 // no need to delete xColumn and yColumn, they are deleted
 // when the parent aspect is removed
 XYIntegrationCurvePrivate::~XYIntegrationCurvePrivate() = default;
 
-void XYIntegrationCurvePrivate::recalculate() {
+bool XYIntegrationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create integration result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	integrationResult = XYIntegrationCurve::IntegrationResult();
-
-	// determine the data source columns
-	const AbstractColumn* tmpXDataColumn = nullptr;
-	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		// spreadsheet columns as data source
-		tmpXDataColumn = xDataColumn;
-		tmpYDataColumn = yDataColumn;
-	} else {
-		// curve columns as data source
-		tmpXDataColumn = dataSourceCurve->xColumn();
-		tmpYDataColumn = dataSourceCurve->yColumn();
-	}
-
-	if (!tmpXDataColumn || !tmpYDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
 
 	// copy all valid data point for the integration to temporary vectors
 	QVector<double> xdataVector;
@@ -156,10 +121,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 		integrationResult.available = true;
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Not enough data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -199,46 +161,43 @@ void XYIntegrationCurvePrivate::recalculate() {
 
 	// write the result
 	integrationResult.available = true;
-	integrationResult.valid = true;
+	integrationResult.valid = (status == 0);
 	integrationResult.status = QString::number(status);
 	integrationResult.elapsedTime = timer.elapsed();
 	integrationResult.value = ydata[np - 1];
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYIntegrationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYIntegrationCurve);
 
-	writer->writeStartElement("xyIntegrationCurve");
+	writer->writeStartElement(QStringLiteral("xyIntegrationCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
 
 	// write xy-integration-curve specific information
 	//  integration data
-	writer->writeStartElement("integrationData");
-	writer->writeAttribute("autoRange", QString::number(d->integrationData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->integrationData.xRange.first()));
-	writer->writeAttribute("xRangeMax", QString::number(d->integrationData.xRange.last()));
-	writer->writeAttribute("method", QString::number(d->integrationData.method));
-	writer->writeAttribute("absolute", QString::number(d->integrationData.absolute));
+	writer->writeStartElement(QStringLiteral("integrationData"));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->integrationData.autoRange));
+	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->integrationData.xRange.first()));
+	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->integrationData.xRange.last()));
+	writer->writeAttribute(QStringLiteral("method"), QString::number(d->integrationData.method));
+	writer->writeAttribute(QStringLiteral("absolute"), QString::number(d->integrationData.absolute));
 	writer->writeEndElement(); // integrationData
 
 	// integration results (generated columns)
-	writer->writeStartElement("integrationResult");
-	writer->writeAttribute("available", QString::number(d->integrationResult.available));
-	writer->writeAttribute("valid", QString::number(d->integrationResult.valid));
-	writer->writeAttribute("status", d->integrationResult.status);
-	writer->writeAttribute("time", QString::number(d->integrationResult.elapsedTime));
-	writer->writeAttribute("value", QString::number(d->integrationResult.value));
+	writer->writeStartElement(QStringLiteral("integrationResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->integrationResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->integrationResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->integrationResult.status);
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->integrationResult.elapsedTime));
+	writer->writeAttribute(QStringLiteral("value"), QString::number(d->integrationResult.value));
 
 	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
@@ -260,38 +219,38 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyIntegrationCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyIntegrationCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "integrationData") {
+		} else if (!preview && reader->name() == QLatin1String("integrationData")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("autoRange", integrationData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", integrationData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", integrationData.xRange.last());
 			READ_INT_VALUE("method", integrationData.method, nsl_int_method_type);
 			READ_INT_VALUE("absolute", integrationData.absolute, bool);
-		} else if (!preview && reader->name() == "integrationResult") {
+		} else if (!preview && reader->name() == QLatin1String("integrationResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", integrationResult.available, int);
 			READ_INT_VALUE("valid", integrationResult.valid, int);
 			READ_STRING_VALUE("status", integrationResult.status);
 			READ_INT_VALUE("time", integrationResult.elapsedTime, int);
 			READ_DOUBLE_VALUE("value", integrationResult.value);
-		} else if (!preview && reader->name() == "column") {
+		} else if (!preview && reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 		}
 	}

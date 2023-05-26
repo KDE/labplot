@@ -21,18 +21,16 @@ public:
 
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
-	void updateData();
+	void updateOrientation();
 
 	bool m_hovered{false};
-	bool m_visible{true}; // point inside the plot (visible) or not
 
 	QRectF boundingRectangle;
 	QPainterPath lineShape;
 
 	ReferenceLine::Orientation orientation{ReferenceLine::Orientation::Horizontal};
 	double length{0.0}; // length of the line in graphic item's coordinates
-	QPen pen;
-	qreal opacity{1.0};
+	Line* line{nullptr};
 
 	// reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;

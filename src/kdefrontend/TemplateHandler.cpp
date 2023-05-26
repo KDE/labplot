@@ -77,11 +77,11 @@ TemplateHandler::TemplateHandler(QWidget* parent, ClassName name)
 	// 	m_tbPaste->setEnabled(false);
 	// 	horizontalLayout->addWidget(m_tbPaste);
 
-	m_tbLoad->setIcon(QIcon::fromTheme("document-open"));
-	m_tbSave->setIcon(QIcon::fromTheme("document-save"));
-	m_tbSaveDefault->setIcon(QIcon::fromTheme("document-save-as"));
-	// 	m_tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
-	// 	m_tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
+	m_tbLoad->setIcon(QIcon::fromTheme(QLatin1String("document-new-from-template")));
+	m_tbSave->setIcon(QIcon::fromTheme(QLatin1String("document-save-as-template")));
+	m_tbSaveDefault->setIcon(QIcon::fromTheme(QLatin1String("document-save-as")));
+	// 	m_tbCopy->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
+	// 	m_tbPaste->setIcon(QIcon::fromTheme(QLatin1String("edit-paste")));
 
 	connect(m_tbLoad, &QToolButton::clicked, this, &TemplateHandler::loadMenu);
 	connect(m_tbSave, &QToolButton::clicked, this, &TemplateHandler::saveMenu);
@@ -108,15 +108,9 @@ TemplateHandler::TemplateHandler(QWidget* parent, ClassName name)
 
 	// synchronize this with the ordering in TemplateHandler::ClassName
 	enum ClassName { Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint };
-	m_subDirNames << "spreadsheet"
-				  << "matrix"
-				  << "worksheet"
-				  << "cartesianplot"
-				  << "cartesianplotlegend"
-				  << "histogram"
-				  << "xycurve"
-				  << "axis"
-				  << "custompoint";
+	m_subDirNames << QLatin1String("spreadsheet") << QLatin1String("matrix") << QLatin1String("worksheet") << QLatin1String("cartesianplot")
+				  << QLatin1String("cartesianplotlegend") << QLatin1String("histogram") << QLatin1String("xycurve") << QLatin1String("axis")
+				  << QLatin1String("custompoint") << QLatin1String("referenceline");
 
 	this->retranslateUi();
 
@@ -203,7 +197,7 @@ void TemplateHandler::updateTextPosition(QAction* action) {
 	// save the current style
 	KConfig config;
 	KConfigGroup group = config.group(QLatin1String("TemplateHandler"));
-	group.writeEntry(QLatin1String("TextPosition"), (int)style);
+	group.writeEntry(QLatin1String("TextPosition"), static_cast<int>(style));
 
 	// update all available template handlers
 	for (auto* handler : templateHandlers)
@@ -216,19 +210,19 @@ void TemplateHandler::setToolButtonStyle(Qt::ToolButtonStyle style) {
 	m_tbSaveDefault->setToolButtonStyle(style);
 }
 
-//##############################################################################
-//##################################  Slots ####################################
-//##############################################################################
+// ##############################################################################
+// ##################################  Slots ####################################
+// ##############################################################################
 void TemplateHandler::loadMenu() {
-	QMenu menu;
+	QMenu menu(this);
 	menu.addSection(i18n("Load From Template"));
 
-	QStringList list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
+	auto list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
 	list.removeAll(QLatin1String("."));
 	list.removeAll(QLatin1String(".."));
 	for (int i = 0; i < list.size(); ++i) {
 		QFileInfo fileinfo(list.at(i));
-		QAction* action = menu.addAction(QIcon::fromTheme(QLatin1String("document-edit")), fileinfo.fileName());
+		auto* action = menu.addAction(QIcon::fromTheme(QLatin1String("document-edit")), fileinfo.fileName());
 		action->setData(fileinfo.fileName());
 	}
 	connect(&menu, &QMenu::triggered, this, &TemplateHandler::loadMenuSelected);
@@ -238,24 +232,23 @@ void TemplateHandler::loadMenu() {
 }
 
 void TemplateHandler::loadMenuSelected(QAction* action) {
-	QString configFile = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + '/' + action->data().toString();
+	QString configFile = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + QLatin1Char('/') + action->data().toString();
 	KConfig config(configFile, KConfig::SimpleConfig);
 	Q_EMIT loadConfigRequested(config);
-	Q_EMIT info(i18n("Template \"%1\" was loaded.", action->text().remove('&')));
+	Q_EMIT info(i18n("Template \"%1\" was loaded.", action->text().remove(QLatin1Char('&'))));
 }
 
 void TemplateHandler::saveMenu() {
-	QMenu menu;
+	QMenu menu(this);
 	menu.addSection(i18n("Save As Template"));
 
-	QStringList list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
+	auto list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
 	list.removeAll(QLatin1String("."));
 	list.removeAll(QLatin1String(".."));
 	for (int i = 0; i < list.size(); ++i) {
 		QFileInfo fileinfo(list.at(i));
-		QAction* action = menu.addAction(QIcon::fromTheme(QLatin1String("document-edit")), fileinfo.fileName());
-		menu.addAction(action);
-		action->setShortcut(QKeySequence());
+		auto* action = menu.addAction(QIcon::fromTheme(QLatin1String("document-edit")), fileinfo.fileName());
+		action->setData(fileinfo.fileName());
 	}
 	connect(&menu, &QMenu::triggered, this, &TemplateHandler::saveMenuSelected);
 
@@ -264,7 +257,7 @@ void TemplateHandler::saveMenu() {
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
 
-	QLabel* label = new QLabel(i18n("New:"), frame);
+	auto* label = new QLabel(i18n("New:"), frame);
 	layout->addWidget(label);
 
 	auto* leFilename = new QLineEdit(QString(), frame);
@@ -289,7 +282,7 @@ void TemplateHandler::saveMenu() {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveNewSelected(const QString& filename) {
-	QString path = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + '/' + filename;
+	QString path = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + QLatin1Char('/') + filename;
 	KConfig config(path, KConfig::SimpleConfig);
 	Q_EMIT saveConfigRequested(config);
 	Q_EMIT info(i18n("New template \"%1\" was saved.", filename));
@@ -303,7 +296,8 @@ void TemplateHandler::saveNewSelected(const QString& filename) {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveMenuSelected(QAction* action) {
-	KConfig config(action->data().toString() + '/' + action->text(), KConfig::SimpleConfig);
+	QString path = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + QLatin1Char('/') + action->data().toString();
+	KConfig config(path, KConfig::SimpleConfig);
 	Q_EMIT saveConfigRequested(config);
 	Q_EMIT info(i18n("Template \"%1\" was saved.", action->text()));
 }

@@ -16,12 +16,12 @@
 #include <QApplication>
 #include <QColor>
 #include <QComboBox>
-#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QImageReader>
 #include <QLineEdit>
 #include <QMenu>
 #include <QPainter>
+#include <QScreen>
 
 #ifdef HAVE_POPPLER
 #include <poppler-qt5.h>
@@ -157,7 +157,7 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 										   i18n("Backward Diag. Lines"),
 										   i18n("Forward Diag. Lines"),
 										   i18n("Crossing Diag. Lines")};
-	const QColor& borderColor = (qApp->palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	const QColor& borderColor = DARKMODE ? Qt::white : Qt::black;
 	for (int i = 0; i < 15; i++) {
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
@@ -227,17 +227,17 @@ QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
 // 	p.fillRect(rect, Qt::red);
 // 	comboBox->setItemData(0, QPixmap::fromImage(img), Qt::DecorationRole);
 
-void GuiTools::highlight(QLineEdit* le, bool invalid) {
+void GuiTools::highlight(QWidget* widget, bool invalid) {
 	if (invalid)
-		SET_WARNING_STYLE(le)
+		SET_WARNING_STYLE(widget)
 	else
-		le->setStyleSheet(QString());
+		widget->setStyleSheet(QString());
 }
 
 void GuiTools::addSymbolStyles(QComboBox* cb) {
 	QPainter pa;
 	QPen pen(Qt::SolidPattern, 0);
-	const QColor& color = (QApplication::palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	const QColor& color = DARKMODE ? Qt::white : Qt::black;
 	pen.setColor(color);
 	pa.setPen(pen);
 
@@ -310,7 +310,7 @@ QImage GuiTools::importPDFFile(const QString& fileName) {
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
-	const static int dpi = QApplication::desktop()->logicalDpiX();
+	const static int dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
 	QImage image = page->renderToImage(dpi, dpi);
 
 	delete page;
@@ -344,7 +344,7 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
-	const static int dpi = QApplication::desktop()->logicalDpiX();
+	const static int dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
 	QImage image = page->renderToImage(zoomFactor * dpi, zoomFactor * dpi);
 
 	delete page;

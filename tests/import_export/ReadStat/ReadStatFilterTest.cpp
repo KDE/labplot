@@ -9,12 +9,13 @@
 
 #include "ReadStatFilterTest.h"
 #include "backend/datasources/filters/ReadStatFilter.h"
+#include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
 
 void ReadStatFilterTest::testDTAImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ReadStatFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/iris.dta"));
@@ -62,7 +63,7 @@ void ReadStatFilterTest::testDTAImport() {
 }
 
 void ReadStatFilterTest::testSASImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ReadStatFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/iris.sas7bdat"));
@@ -106,7 +107,7 @@ void ReadStatFilterTest::testSASImport() {
 }
 
 void ReadStatFilterTest::testSAVImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ReadStatFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/iris.sav"));
@@ -149,13 +150,20 @@ void ReadStatFilterTest::testSAVImport() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(149), 3);
 
 	// check value label
-	QCOMPARE(spreadsheet.column(4)->valueLabels().value(1), QLatin1String("setosa"));
-	QCOMPARE(spreadsheet.column(4)->valueLabels().value(2), QLatin1String("versicolor"));
-	QCOMPARE(spreadsheet.column(4)->valueLabels().value(3), QLatin1String("virginica"));
+	QVERIFY(spreadsheet.column(4)->valueLabels() != nullptr);
+	QCOMPARE(spreadsheet.column(4)->valueLabels()->count(), 3);
+	for (const auto& vl : *spreadsheet.column(4)->valueLabels()) {
+		if (vl.value == 1)
+			QCOMPARE(vl.label, QLatin1String("setosa"));
+		if (vl.value == 2)
+			QCOMPARE(vl.label, QLatin1String("versicolor"));
+		if (vl.value == 3)
+			QCOMPARE(vl.label, QLatin1String("virginica"));
+	}
 }
 
 void ReadStatFilterTest::testPORImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ReadStatFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sample.por"));
@@ -204,13 +212,13 @@ void ReadStatFilterTest::testPORImport() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 9.3901248e9);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 1.190376e10);
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 6.8256e6);
-	QCOMPARE(spreadsheet.column(2)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(2)->valueAt(4), NAN);
 
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.374498061e10);
 	QCOMPARE(spreadsheet.column(3)->valueAt(1), 9.39016141e9);
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), 1.190376e10);
 	QCOMPARE(spreadsheet.column(3)->valueAt(3), 6.8256e6);
-	QCOMPARE(spreadsheet.column(3)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(3)->valueAt(4), NAN);
 
 	QCOMPARE(spreadsheet.column(4)->valueAt(0), 1);
 	QCOMPARE(spreadsheet.column(4)->valueAt(1), 2);
@@ -228,18 +236,32 @@ void ReadStatFilterTest::testPORImport() {
 	QCOMPARE(spreadsheet.column(6)->valueAt(1), 83410);
 	QCOMPARE(spreadsheet.column(6)->valueAt(2), 0);
 	QCOMPARE(spreadsheet.column(6)->valueAt(3), 58210);
-	QCOMPARE(spreadsheet.column(6)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(6)->valueAt(4), NAN);
 
 	// check value label
-	QCOMPARE(spreadsheet.column(4)->valueLabels().value(1), QLatin1String("Male"));
-	QCOMPARE(spreadsheet.column(4)->valueLabels().value(2), QLatin1String("Female"));
-	QCOMPARE(spreadsheet.column(5)->valueLabels().value(1), QLatin1String("low"));
-	QCOMPARE(spreadsheet.column(5)->valueLabels().value(2), QLatin1String("medium"));
-	QCOMPARE(spreadsheet.column(5)->valueLabels().value(3), QLatin1String("high"));
+	QVERIFY(spreadsheet.column(4)->valueLabels() != nullptr);
+	QCOMPARE(spreadsheet.column(4)->valueLabels()->count(), 2);
+	for (const auto& vl : *spreadsheet.column(4)->valueLabels()) {
+		if (vl.value == 1)
+			QCOMPARE(vl.label, QLatin1String("Male"));
+		if (vl.value == 2)
+			QCOMPARE(vl.label, QLatin1String("Female"));
+	}
+
+	QVERIFY(spreadsheet.column(5)->valueLabels() != nullptr);
+	QCOMPARE(spreadsheet.column(5)->valueLabels()->count(), 3);
+	for (const auto& vl : *spreadsheet.column(5)->valueLabels()) {
+		if (vl.value == 1)
+			QCOMPARE(vl.label, QLatin1String("low"));
+		if (vl.value == 2)
+			QCOMPARE(vl.label, QLatin1String("medium"));
+		if (vl.value == 3)
+			QCOMPARE(vl.label, QLatin1String("high"));
+	}
 }
 
 void ReadStatFilterTest::testXPTImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ReadStatFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sample.xpt"));
@@ -288,13 +310,13 @@ void ReadStatFilterTest::testXPTImport() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), -29093);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0);
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), -137696);
-	QCOMPARE(spreadsheet.column(2)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(2)->valueAt(4), NAN);
 
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.84122061e9);
 	QCOMPARE(spreadsheet.column(3)->valueAt(1), -2.51359859e9);
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), 0);
 	QCOMPARE(spreadsheet.column(3)->valueAt(3), -1.18969344e10);
-	QCOMPARE(spreadsheet.column(3)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(3)->valueAt(4), NAN);
 
 	QCOMPARE(spreadsheet.column(4)->valueAt(0), 1);
 	QCOMPARE(spreadsheet.column(4)->valueAt(1), 2);
@@ -312,7 +334,7 @@ void ReadStatFilterTest::testXPTImport() {
 	QCOMPARE(spreadsheet.column(6)->valueAt(1), 83410);
 	QCOMPARE(spreadsheet.column(6)->valueAt(2), 0);
 	QCOMPARE(spreadsheet.column(6)->valueAt(3), 58210);
-	QCOMPARE(spreadsheet.column(6)->valueAt(4), qQNaN());
+	QCOMPARE(spreadsheet.column(6)->valueAt(4), NAN);
 
 	// no value label
 }

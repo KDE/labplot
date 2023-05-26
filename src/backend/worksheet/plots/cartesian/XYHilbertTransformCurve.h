@@ -29,25 +29,19 @@ public:
 		// TODO: use Range
 		QVector<double> xRange{0, 0}; // x range for transform
 	};
-	struct TransformResult {
-		TransformResult(){};
-
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
-	};
 
 	explicit XYHilbertTransformCurve(const QString& name);
 	~XYHilbertTransformCurve() override;
 
 	void recalculate() override;
+	virtual const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
 	CLASS_D_ACCESSOR_DECL(TransformData, transformData, TransformData)
-	const TransformResult& transformResult() const;
+
+	typedef XYAnalysisCurve::Result TransformResult;
 
 	typedef XYHilbertTransformCurvePrivate Private;
 

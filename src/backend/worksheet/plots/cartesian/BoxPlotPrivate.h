@@ -11,22 +11,30 @@
 #ifndef BOXPLOTPRIVATE_H
 #define BOXPLOTPRIVATE_H
 
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <QPen>
 
 class Background;
 class CartesianCoordinateSystem;
+class Spreadsheet;
 
 typedef QVector<QPointF> Points;
 
-class BoxPlotPrivate : public WorksheetElementPrivate {
+class BoxPlotPrivate : public PlotPrivate {
 public:
 	explicit BoxPlotPrivate(BoxPlot*);
 
 	void retransform() override;
 	void recalc();
 	virtual void recalcShapeAndBoundingRect() override;
+	void updateRug();
 	void updatePixmap();
+	void fillDataSpreadsheet(Spreadsheet*) const;
+
+	Background* addBackground(const KConfigGroup&);
+	Line* addBorderLine(const KConfigGroup&);
+	Line* addMedianLine(const KConfigGroup&);
+	void adjustPropertiesContainers();
 
 	bool m_suppressRecalc{false};
 
@@ -34,7 +42,7 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
+	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
 
 	BoxPlot* const q;
@@ -50,21 +58,15 @@ public:
 	bool notchesEnabled{false};
 	qreal opacity{1.0};
 
-	double xMin;
-	double xMax;
-	double yMin;
-	double yMax;
+	double xMin{0.5};
+	double xMax{1.5};
+	double yMin{0.5};
+	double yMax{1.5};
 
-	// box filling
-	Background* background{nullptr};
-
-	// box border
-	QPen borderPen;
-	qreal borderOpacity;
-
-	// median line
-	QPen medianLinePen;
-	qreal medianLineOpacity;
+	// box
+	QVector<Background*> backgrounds;
+	QVector<Line*> borderLines;
+	QVector<Line*> medianLines;
 
 	// markers
 	Symbol* symbolMean{nullptr};
@@ -72,16 +74,22 @@ public:
 	Symbol* symbolOutlier{nullptr};
 	Symbol* symbolFarOut{nullptr};
 	Symbol* symbolData{nullptr};
+	Symbol* symbolWhiskerEnd{nullptr};
 	bool jitteringEnabled{true};
 
 	// whiskers
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
-	double whiskersRangeParameter; // Tukey's parameter k controlling the range of the whiskers, usually k=1.5
-	QPen whiskersPen;
-	qreal whiskersOpacity;
-	double whiskersCapSize;
-	QPen whiskersCapPen;
-	qreal whiskersCapOpacity;
+	double whiskersRangeParameter{1.5}; // Tukey's parameter k controlling the range of the whiskers, usually k=1.5
+	Line* whiskersLine{nullptr};
+	double whiskersCapSize{Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point)};
+	Line* whiskersCapLine{nullptr};
+
+	// rug
+	bool rugEnabled{false};
+	double rugOffset{0.0};
+	double rugLength{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
+	double rugWidth{0.0};
+	QPainterPath rugPath;
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
@@ -93,7 +101,7 @@ private:
 	void verticalBoxPlot(int);
 	void horizontalBoxPlot(int);
 	QPointF setOutlierPoint(double pos, double value);
-	void mapOutliersToScene(int index);
+	void mapSymbolsToScene(int index);
 	void updateFillingRect(int index, const QVector<QLineF>&);
 
 	void draw(QPainter*);
@@ -101,7 +109,6 @@ private:
 	void drawSymbols(QPainter*, int);
 
 	bool m_hovered{false};
-	bool m_suppressRetransform{false};
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_boxPlotShape;
@@ -118,14 +125,21 @@ private:
 	QVector<double> m_mean;
 	QVector<QPainterPath> m_whiskersPath;
 	QVector<QPainterPath> m_whiskersCapPath;
+	QVector<QPainterPath> m_rugPath;
 	QVector<double> m_whiskerMin;
 	QVector<double> m_whiskerMax;
+
+	// vectors to store the information required to draw the different symbols
+	QVector<Points> m_whiskerEndPointsLogical; // positions of the whisker end values in logical coordinates
+	QVector<Points> m_whiskerEndPoints; // positions of the whisker end values in scene coordinates
 	QVector<Points> m_outlierPointsLogical; // positions of the outlier symbols in logical coordinates
 	QVector<Points> m_outlierPoints; // positions of the outlier symbols in scene coordinates
-	Points m_meanSymbolPoint; // position of the mean symbol in scene coordinates
-	QVector<bool> m_meanSymbolPointVisible; // true/false if the mean point is visible in the plot or not
-	Points m_medianSymbolPoint; // position of the median symbol in scene coordinates
-	QVector<bool> m_medianSymbolPointVisible; // true/false if the median point is visible in the plot or not
+	Points m_meanPointLogical; // position of the mean symbol in logical coordinates
+	Points m_meanPoint; // position of the mean symbol in scene coordinates
+	QVector<bool> m_meanPointVisible; // true/false if the mean point is visible in the plot or not
+	Points m_medianPointLogical; // position of the median symbol in logical coordinates
+	Points m_medianPoint; // position of the median symbol in scene coordinates
+	QVector<bool> m_medianPointVisible; // true/false if the median point is visible in the plot or not
 	QVector<Points> m_dataPointsLogical; // positions of the data points in logical coordinates
 	QVector<Points> m_dataPoints; // positions of the data points in scene coordinates
 	QVector<Points> m_farOutPointsLogical; // positions of the far out values in logical coordinates

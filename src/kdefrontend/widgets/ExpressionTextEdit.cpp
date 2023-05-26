@@ -6,6 +6,7 @@
 	SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
 	modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
 	SPDX-FileCopyrightText: 2013 Digia Plc and /or its subsidiary(-ies) <http://www.qt-project.org/legal>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later AND BSD-3-Clause
 */
@@ -32,14 +33,22 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget* parent)
 	: KTextEdit(parent)
 	, m_highlighter(new EquationHighlighter(this)) {
 	QStringList list = ExpressionParser::getInstance()->functions();
-	list.append(ExpressionParser::getInstance()->constants());
+	// append description
+	for (auto& s : list)
+		s.append(ExpressionParser::functionArgumentString(s, XYEquationCurve::EquationType::Cartesian) + QStringLiteral(" - ")
+				 + ExpressionParser::getInstance()->functionDescription(s));
+	QStringList constants = ExpressionParser::getInstance()->constants();
+	for (auto& s : constants) {
+		if (s != QLatin1String("..."))
+			s.append(QStringLiteral(" - ") + ExpressionParser::getInstance()->constantDescription(s));
+	}
+	list.append(constants);
 
 	setTabChangesFocus(true);
 
 	m_completer = new QCompleter(list, this);
 	m_completer->setWidget(this);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
-	m_completer->setCaseSensitivity(Qt::CaseInsensitive);
 
 	connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &ExpressionTextEdit::insertCompletion);
 	connect(this, &ExpressionTextEdit::textChanged, this, [=]() {
@@ -60,14 +69,13 @@ void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 	m_expressionType = type;
 	m_variables.clear();
 	if (type == XYEquationCurve::EquationType::Cartesian)
-		m_variables << "x";
+		m_variables << QStringLiteral("x");
 	else if (type == XYEquationCurve::EquationType::Polar)
-		m_variables << "phi";
+		m_variables << QStringLiteral("phi");
 	else if (type == XYEquationCurve::EquationType::Parametric)
-		m_variables << "t";
+		m_variables << QStringLiteral("t");
 	else if (type == XYEquationCurve::EquationType::Implicit)
-		m_variables << "x"
-					<< "y";
+		m_variables << QStringLiteral("x") << QStringLiteral("y");
 
 	m_highlighter->setVariables(m_variables);
 }
@@ -80,10 +88,16 @@ void ExpressionTextEdit::setVariables(const QStringList& vars) {
 
 void ExpressionTextEdit::insertCompletion(const QString& completion) {
 	QTextCursor tc{textCursor()};
-	int extra{completion.length() - m_completer->completionPrefix().length()};
+
+	// remove description
+	int nameLength = completion.indexOf(QLatin1String(" - "));
+	QString name = completion;
+	name.truncate(nameLength);
+
+	int extra = name.length() - m_completer->completionPrefix().length();
 	tc.movePosition(QTextCursor::Left);
 	tc.movePosition(QTextCursor::EndOfWord);
-	tc.insertText(completion.right(extra));
+	tc.insertText(name.right(extra));
 	setTextCursor(tc);
 }
 
@@ -109,9 +123,9 @@ void ExpressionTextEdit::validateExpression(bool force) {
 		Q_EMIT expressionChanged();
 }
 
-//##############################################################################
-//####################################  Events   ###############################
-//##############################################################################
+// ##############################################################################
+// ####################################  Events   ###############################
+// ##############################################################################
 void ExpressionTextEdit::focusInEvent(QFocusEvent* e) {
 	m_completer->setWidget(this);
 	QTextEdit::focusInEvent(e);
@@ -141,7 +155,7 @@ void ExpressionTextEdit::keyPressEvent(QKeyEvent* e) {
 	if ((ctrlOrShift && e->text().isEmpty()))
 		return;
 
-	static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+	static QString eow(QStringLiteral("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-=")); // end of word
 	const bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
 	QTextCursor tc = textCursor();
 	tc.select(QTextCursor::WordUnderCursor);
@@ -179,14 +193,15 @@ void ExpressionTextEdit::mouseMoveEvent(QMouseEvent* e) {
 		static const QStringList& names = ExpressionParser::getInstance()->constantsNames();
 		static const QStringList& values = ExpressionParser::getInstance()->constantsValues();
 		static const QStringList& units = ExpressionParser::getInstance()->constantsUnits();
-		setToolTip(names.at(index) + ": " + constants.at(index) + " = " + values.at(index) + ' ' + units.at(index));
+		setToolTip(names.at(index) + QStringLiteral(": ") + constants.at(index) + QStringLiteral(" = ") + values.at(index) + QStringLiteral(" ")
+				   + units.at(index));
 	} else {
 		// text token was not found in the list of constants -> check functions as next
 		static const QStringList& functions = ExpressionParser::getInstance()->functions();
 		index = functions.indexOf(token);
 		if (index != -1) {
-			static const QStringList& names = ExpressionParser::getInstance()->functionsNames();
-			setToolTip(functions.at(index) + " - " + names.at(index));
+			static const QStringList& names = ExpressionParser::getInstance()->functionsDescriptions();
+			setToolTip(functions.at(index) + QStringLiteral(" - ") + names.at(index));
 		} else
 			setToolTip(QString());
 	}

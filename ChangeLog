@@ -1,25 +1,70 @@
------2.10.0 () -----
+-----XX.XX.XX () -----
+New features:
+	* [worksheet]
+		* Add possibility to use column labels as axis ticks
+	* [spreadsheet]
+		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
+
+-----2.10.1 () -----
+Bug fixes:
+	* Support markdown library discount version 3
+	* Improve Vector BLF dependency (git download must be enabled if needed)
+	* Correctly use system header of system QXlsx (BUG 468651)
+	* Fix group separator problem in formulas (BUG 468098)
+	* Improve auto scale (Issue #536)
+	* Use system liborigin headers if linking against system liborigin (BUG 469367)
+
+-----2.10.0 (21.03.2023) -----
 New features:
 	* [worksheet]
 		* Bar plots
 		* Plot templates - allow to save and re-use custom plot configurations
+		* Histogram
+			* Error bars (Possion sqrt(N) error or values from custom columns)
+			* Rug plots
+		* Box Plot
+			* Rug plots
+			* Symbols for whisker end points
+			* Allow to modify box properties (color, etc.) for every data set independently of each other
+			* Draw a legend item for every dataset in the box plot
+		* Reference Range - custom area on the plot to highlight a certain x- or y-range
+		* Show LaTeX error messages in text labels when rendering with LaTeX
 	* [spreadsheet]
-		* use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
+		* Use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns
+		* When generating random numbers, allow to specify the seed number
+		* Column statistics for text columns including the frequency table, bar and Pareto plots
+		* Column statistics for selected cells only
+		* Dropping and masking of values also for text and datetime columns
+		* Data sampling (random and periodic methods)
+		* Data 'flattening' - convert pivoted data to column base format
+		* Column statistics (size, mean, stddev, etc.) are available in the function dialog
+		* Function values dialog supports accessing arbitrary cells of columns with cell(f(index), g(column,..)) and other moving functions
+		* Allow to subtract and add a value by providing a difference between two values
+		* Allow to subtract a baseline
+	* [matrix]
+		* Zooming in the image view
 	* [import]
 		* Import data from Excel .xlsx files using QXlsx library
+		* Import of Binary Log File (BLF) files from Vektor Informatik
 		* HDF5: support VLEN data import
 		* Live data: support multiple values via TCP
 	* [export]
+		* Export spreadsheet and matrix in Excel .xlsx format using QXlsx library
 		* Use the current working project directory, if available, as the default export path
 	* [analysis]
-		* guess start vaues of fit parameter for polynomial models by linear regression
+		* Maximum likelihood estimation for several distributions
+		* Guess start values of fit parameter for polynomial models by linear regression
+		* Implement fourier filtering for datetimes
+	* [general]
+		* Allow to create a spreadsheet with the data steming from an equation curve, an analysis curve, a histogram or a box plot
+		* Add settings option for GUM compliant terms
 
 Performance improvements:
-	* reduce the memory consumption during the spreadsheet export to Sqlite
-	* reduce the memory consumption when importing from a database table into the spreadsheet
-	* faster import of files with a big number of columns
-	* faster creation of a big number of columns in the spreadsheet
+	* Reduce the memory consumption during the spreadsheet export to Sqlite
+	* Reduce the memory consumption when importing from a database table into the spreadsheet
+	* Faster import of files with a big number of columns
+	* Faster creation of a big number of columns in the spreadsheet
 
 Bug fixes:
 	* [worksheet]
@@ -31,10 +76,11 @@ Bug fixes:
 		* fix using custom value label with invalid data points in xy-curve (BUG 455214)
 		* don't crash when deleting a text label that was added after worksheet objects (plots and curves) were created via the plot data dialog (BUG 455096)
 		* fix displayed end value of date time plot range
-		* fix shifts in date time values due to locale settings (BUG 455579)
+		* fix shifts in date time values due to locale settings (BUG 455579 & 462370)
 	* [spreadsheet] properly paste the data in the format 'yyyy-MM-dd hh:mm:ss' and similar
 	* [fit] fix locale usage in evaluation range
 	* [fit] correctly invalidate fit result when model changes
+	* [i18n] fix switch language option
 
 
 -----2.9.0 (03.05.2022) -----

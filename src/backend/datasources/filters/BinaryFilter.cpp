@@ -24,7 +24,7 @@
 	{                                                                                                                                                          \
 		DATATYPE value;                                                                                                                                        \
 		for (int n = startColumn; n < m_actualCols; ++n) {                                                                                                     \
-			for (size_t l = 0; l < qMin(readLines, mNumberLines); l++) {                                                                                       \
+			for (size_t l = 0; l < std::min(readLines, mNumberLines); l++) {                                                                                   \
 				const size_t lineNumber = l * lineBytes;                                                                                                       \
 				const size_t index = lineNumber + (n - startColumn) * typeSize;                                                                                \
 				if (byteOrder == QDataStream::BigEndian)                                                                                                       \
@@ -80,16 +80,11 @@ void BinaryFilter::write(const QString& fileName, AbstractDataSource* dataSource
 returns the list of all predefined data formats.
 */
 QStringList BinaryFilter::dataTypes() {
-	return (QStringList() << "int8 (8 bit signed integer)"
-						  << "int16 (16 bit signed integer)"
-						  << "int32 (32 bit signed integer)"
-						  << "int64 (64 bit signed integer)"
-						  << "uint8 (8 bit unsigned integer)"
-						  << "uint16 (16 bit unsigned integer)"
-						  << "uint32 (32 bit unsigned integer)"
-						  << "uint64 (64 bit unsigned integer)"
-						  << "real32 (single precision floats)"
-						  << "real64 (double precision floats)");
+	return (QStringList() << QStringLiteral("int8 (8 bit signed integer)") << QStringLiteral("int16 (16 bit signed integer)")
+						  << QStringLiteral("int32 (32 bit signed integer)") << QStringLiteral("int64 (64 bit signed integer)")
+						  << QStringLiteral("uint8 (8 bit unsigned integer)") << QStringLiteral("uint16 (16 bit unsigned integer)")
+						  << QStringLiteral("uint32 (32 bit unsigned integer)") << QStringLiteral("uint64 (64 bit unsigned integer)")
+						  << QStringLiteral("real32 (single precision floats)") << QStringLiteral("real64 (double precision floats)"));
 }
 
 /*!
@@ -212,9 +207,9 @@ QString BinaryFilter::fileInfoString(const QString& /*fileName*/) {
 	return info;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 
 BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner)
 	: q(owner) {
@@ -311,7 +306,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 		lines = m_actualRows;
 
 	// read data
-	lines = qMin(lines, m_actualRows);
+	lines = std::min(lines, m_actualRows);
 	DEBUG(Q_FUNC_INFO << ", generating preview for " << lines << " lines")
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; // update on every 1% only
@@ -464,7 +459,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 		startColumn++;
 
 	// read data
-	lines = qMin(lines, m_actualRows);
+	lines = std::min(lines, m_actualRows);
 	DEBUG(Q_FUNC_INFO << ", Reading " << lines << " lines");
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; // update on every 1% only
@@ -539,24 +534,24 @@ void BinaryFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource*
 	// TODO: writing binary files not supported yet
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.
  */
 void BinaryFilter::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("binaryFilter");
-	writer->writeAttribute("vectors", QString::number(d->vectors));
-	writer->writeAttribute("dataType", QString::number(static_cast<int>(d->dataType)));
-	writer->writeAttribute("byteOrder", QString::number(d->byteOrder));
-	writer->writeAttribute("autoMode", QString::number(d->autoModeEnabled));
-	writer->writeAttribute("startRow", QString::number(d->startRow));
-	writer->writeAttribute("endRow", QString::number(d->endRow));
-	writer->writeAttribute("skipStartBytes", QString::number(d->skipStartBytes));
-	writer->writeAttribute("skipBytes", QString::number(d->skipBytes));
-	writer->writeAttribute("createIndex", QString::number(d->createIndexEnabled));
+	writer->writeStartElement(QStringLiteral("binaryFilter"));
+	writer->writeAttribute(QStringLiteral("vectors"), QString::number(d->vectors));
+	writer->writeAttribute(QStringLiteral("dataType"), QString::number(static_cast<int>(d->dataType)));
+	writer->writeAttribute(QStringLiteral("byteOrder"), QString::number(d->byteOrder));
+	writer->writeAttribute(QStringLiteral("autoMode"), QString::number(d->autoModeEnabled));
+	writer->writeAttribute(QStringLiteral("startRow"), QString::number(d->startRow));
+	writer->writeAttribute(QStringLiteral("endRow"), QString::number(d->endRow));
+	writer->writeAttribute(QStringLiteral("skipStartBytes"), QString::number(d->skipStartBytes));
+	writer->writeAttribute(QStringLiteral("skipBytes"), QString::number(d->skipBytes));
+	writer->writeAttribute(QStringLiteral("createIndex"), QString::number(d->createIndexEnabled));
 	writer->writeEndElement();
 }
 
@@ -568,57 +563,57 @@ bool BinaryFilter::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	// read attributes
-	QString str = attribs.value("vectors").toString();
+	QString str = attribs.value(QStringLiteral("vectors")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("vectors").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("vectors")).toString());
 	else
 		d->vectors = (size_t)str.toULong();
 
-	str = attribs.value("dataType").toString();
+	str = attribs.value(QStringLiteral("dataType")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("dataType").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("dataType")).toString());
 	else
 		d->dataType = (BinaryFilter::DataType)str.toInt();
 
-	str = attribs.value("byteOrder").toString();
+	str = attribs.value(QStringLiteral("byteOrder")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("byteOrder").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("byteOrder")).toString());
 	else
 		d->byteOrder = (QDataStream::ByteOrder)str.toInt();
 
-	str = attribs.value("autoMode").toString();
+	str = attribs.value(QStringLiteral("autoMode")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("autoMode").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoMode")).toString());
 	else
 		d->autoModeEnabled = str.toInt();
 
-	str = attribs.value("startRow").toString();
+	str = attribs.value(QStringLiteral("startRow")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("startRow").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("startRow")).toString());
 	else
 		d->startRow = str.toInt();
 
-	str = attribs.value("endRow").toString();
+	str = attribs.value(QStringLiteral("endRow")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("endRow").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("endRow")).toString());
 	else
 		d->endRow = str.toInt();
 
-	str = attribs.value("skipStartBytes").toString();
+	str = attribs.value(QStringLiteral("skipStartBytes")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("skipStartBytes").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("skipStartBytes")).toString());
 	else
 		d->skipStartBytes = (size_t)str.toULong();
 
-	str = attribs.value("skipBytes").toString();
+	str = attribs.value(QStringLiteral("skipBytes")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("skipBytes").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("skipBytes")).toString());
 	else
 		d->skipBytes = (size_t)str.toULong();
 
-	str = attribs.value("createIndex").toString();
+	str = attribs.value(QStringLiteral("createIndex")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("createIndex").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("createIndex")).toString());
 	else
 		d->createIndexEnabled = str.toInt();
 

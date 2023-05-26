@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Widget showing statistics for column values
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -29,10 +29,14 @@ public:
 
 private:
 	void showOverview();
+	void showOverviewPlot();
 	void showHistogram();
 	void showKDEPlot();
 	void showQQPlot();
 	void showBoxPlot();
+	void showBarPlot();
+	void showParetoPlot();
+
 	CartesianPlot* addPlot(QWidget*);
 
 	const QString isNanValue(const double) const;
@@ -43,18 +47,24 @@ private:
 	Project* m_project;
 	QTabWidget* m_tabWidget;
 	QTextEdit* m_teOverview;
+	QWidget m_overviewWidget;
+	QWidget m_overviewPlotWidget;
 	QWidget m_histogramWidget;
 	QWidget m_kdePlotWidget;
 	QWidget m_qqPlotWidget;
 	QWidget m_boxPlotWidget;
+	QWidget m_barPlotWidget;
+	QWidget m_paretoPlotWidget;
 
-	QString m_htmlText;
+	QString m_htmlOverview;
 
 	bool m_overviewInitialized{false};
 	bool m_histogramInitialized{false};
 	bool m_kdePlotInitialized{false};
 	bool m_qqPlotInitialized{false};
 	bool m_boxPlotInitialized{false};
+	bool m_barPlotInitialized{false};
+	bool m_paretoPlotInitialized{false};
 
 private Q_SLOTS:
 	void currentTabChanged(int);

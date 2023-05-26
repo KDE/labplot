@@ -4,7 +4,7 @@
 	Description          : widget for editing advanced fit options
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2020 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,6 +12,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 
 /*!
 	\class FitOptionsWidget
@@ -24,8 +25,8 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	, m_fitData(fitData)
 	, m_fitCurve(fitCurve) {
 	ui.setupUi(this);
-	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
-	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
+	ui.pbApply->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
+	ui.pbCancel->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
 
 	// TODO: show "robust" option when robust fitting is possible
 	// 	ui.cbRobust->addItem(i18n("on"));
@@ -37,7 +38,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.leEps->setValidator(new QDoubleValidator(ui.leEps));
 	ui.leEvaluatedPoints->setValidator(new QIntValidator(ui.leEvaluatedPoints));
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.leMaxIterations->setText(numberLocale.toString(m_fitData->maxIterations));
 	ui.leEps->setText(numberLocale.toString(m_fitData->eps));
 	ui.leEvaluatedPoints->setText(numberLocale.toString(static_cast<qulonglong>(m_fitData->evaluatedPoints)));
@@ -53,11 +54,14 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 		ui.leEvalMin->setText(numberLocale.toString(m_fitData->evalRange.start()));
 		ui.leEvalMax->setText(numberLocale.toString(m_fitData->evalRange.end()));
 	} else {
-		ui.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.start()));
-		ui.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.end()));
-		ui.dateTimeEditEvalMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.start()));
-		ui.dateTimeEditEvalMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.end()));
+		ui.dateTimeEditMin->setMSecsSinceEpochUTC(m_fitData->fitRange.start());
+		ui.dateTimeEditMax->setMSecsSinceEpochUTC(m_fitData->fitRange.end());
+		ui.dateTimeEditEvalMin->setMSecsSinceEpochUTC(m_fitData->evalRange.start());
+		ui.dateTimeEditEvalMax->setMSecsSinceEpochUTC(m_fitData->evalRange.end());
 	}
+	// changing data range not supported by ML
+	if (fitData->algorithm == nsl_fit_algorithm_ml)
+		ui.cbAutoRange->setEnabled(false);
 
 	ui.leMin->setVisible(!m_dateTimeRange);
 	ui.leMax->setVisible(!m_dateTimeRange);
@@ -90,19 +94,19 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	connect(ui.cbUseDataErrors, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.cbPreview, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
-	connect(ui.sbConfidenceInterval, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::changed);
+	connect(ui.sbConfidenceInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &FitOptionsWidget::changed);
 	connect(ui.pbApply, &QPushButton::clicked, this, &FitOptionsWidget::applyClicked);
 	connect(ui.pbCancel, &QPushButton::clicked, this, &FitOptionsWidget::finished);
 	connect(ui.cbAutoRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoRangeChanged);
 	connect(ui.cbAutoEvalRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoEvalRangeChanged);
 	connect(ui.leMin, &QLineEdit::textChanged, this, &FitOptionsWidget::fitRangeMinChanged);
 	connect(ui.leMax, &QLineEdit::textChanged, this, &FitOptionsWidget::fitRangeMaxChanged);
-	connect(ui.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &FitOptionsWidget::fitRangeMinDateTimeChanged);
-	connect(ui.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &FitOptionsWidget::fitRangeMaxDateTimeChanged);
+	connect(ui.dateTimeEditMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &FitOptionsWidget::fitRangeMinDateTimeChanged);
+	connect(ui.dateTimeEditMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &FitOptionsWidget::fitRangeMaxDateTimeChanged);
 	connect(ui.leEvalMin, &QLineEdit::textChanged, this, &FitOptionsWidget::evalRangeMinChanged);
 	connect(ui.leEvalMax, &QLineEdit::textChanged, this, &FitOptionsWidget::evalRangeMaxChanged);
-	connect(ui.dateTimeEditEvalMin, &QDateTimeEdit::dateTimeChanged, this, &FitOptionsWidget::evalRangeMinDateTimeChanged);
-	connect(ui.dateTimeEditEvalMax, &QDateTimeEdit::dateTimeChanged, this, &FitOptionsWidget::evalRangeMaxDateTimeChanged);
+	connect(ui.dateTimeEditEvalMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &FitOptionsWidget::evalRangeMinDateTimeChanged);
+	connect(ui.dateTimeEditEvalMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &FitOptionsWidget::evalRangeMaxDateTimeChanged);
 }
 
 void FitOptionsWidget::autoRangeChanged() {
@@ -130,13 +134,13 @@ void FitOptionsWidget::autoRangeChanged() {
 			const double xMax = xDataColumn->maximum();
 			m_fitData->fitRange.setRange(xMin, xMax);
 
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (!m_dateTimeRange) {
 				ui.leMin->setText(numberLocale.toString(xMin));
 				ui.leMax->setText(numberLocale.toString(xMax));
 			} else {
-				ui.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xMin));
-				ui.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xMax));
+				ui.dateTimeEditMin->setMSecsSinceEpochUTC(xMin);
+				ui.dateTimeEditMax->setMSecsSinceEpochUTC(xMax);
 			}
 		}
 	}
@@ -155,11 +159,17 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 
 	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
+		switch (m_fitCurve->dataSourceType()) {
+		case XYAnalysisCurve::DataSourceType::Spreadsheet:
 			xDataColumn = m_fitCurve->xDataColumn();
-		else {
+			break;
+		case XYAnalysisCurve::DataSourceType::Curve:
 			if (m_fitCurve->dataSourceCurve())
 				xDataColumn = m_fitCurve->dataSourceCurve()->xColumn();
+			break;
+		case XYAnalysisCurve::DataSourceType::Histogram:
+			if (m_fitCurve->dataSourceHistogram())
+				xDataColumn = m_fitCurve->dataSourceHistogram()->bins();
 		}
 
 		if (xDataColumn) {
@@ -167,13 +177,13 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 			const double xMax = xDataColumn->maximum();
 			m_fitData->evalRange.setRange(xMin, xMax);
 
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (!m_dateTimeRange) {
 				ui.leEvalMin->setText(numberLocale.toString(xMin));
 				ui.leEvalMax->setText(numberLocale.toString(xMax));
 			} else {
-				ui.dateTimeEditEvalMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xMin));
-				ui.dateTimeEditEvalMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xMax));
+				ui.dateTimeEditEvalMin->setMSecsSinceEpochUTC(xMin);
+				ui.dateTimeEditEvalMax->setMSecsSinceEpochUTC(xMax);
 			}
 		}
 	}
@@ -188,13 +198,13 @@ void FitOptionsWidget::fitRangeMaxChanged() {
 	changed();
 }
 
-void FitOptionsWidget::fitRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->fitRange.setStart(dateTime.toMSecsSinceEpoch());
+void FitOptionsWidget::fitRangeMinDateTimeChanged(qint64 value) {
+	m_fitData->fitRange.setStart(value);
 	changed();
 }
 
-void FitOptionsWidget::fitRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->fitRange.setEnd(dateTime.toMSecsSinceEpoch());
+void FitOptionsWidget::fitRangeMaxDateTimeChanged(qint64 value) {
+	m_fitData->fitRange.setEnd(value);
 	changed();
 }
 
@@ -207,13 +217,13 @@ void FitOptionsWidget::evalRangeMaxChanged() {
 	changed();
 }
 
-void FitOptionsWidget::evalRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->evalRange.setStart(dateTime.toMSecsSinceEpoch());
+void FitOptionsWidget::evalRangeMinDateTimeChanged(qint64 value) {
+	m_fitData->evalRange.setStart(value);
 	changed();
 }
 
-void FitOptionsWidget::evalRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->evalRange.setEnd(dateTime.toMSecsSinceEpoch());
+void FitOptionsWidget::evalRangeMaxDateTimeChanged(qint64 value) {
+	m_fitData->evalRange.setEnd(value);
 	changed();
 }
 

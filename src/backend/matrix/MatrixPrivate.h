@@ -136,12 +136,12 @@ public:
 	int columnCount;
 	QVector<int> rowHeights; //!< Row widths
 	QVector<int> columnWidths; //!< Columns widths
-	Matrix::HeaderFormat headerFormat;
+	Matrix::HeaderFormat headerFormat{Matrix::HeaderFormat::HeaderRowsColumns};
 
-	char numericFormat; //!< Format code for displaying numbers
-	int precision; //!< Number of significant digits
-	double xStart, xEnd;
-	double yStart, yEnd;
+	char numericFormat{'f'}; //!< Format code for displaying numbers
+	int precision{3}; //!< Number of significant digits
+	double xStart{0.0}, xEnd{1.0};
+	double yStart{0.0}, yEnd{1.0};
 	QString formula; //!< formula used to calculate the cells
 	bool suppressDataChange;
 };

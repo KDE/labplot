@@ -86,7 +86,7 @@ void Matrix::init() {
   Returns an icon to be used for decorating my views.
   */
 QIcon Matrix::icon() const {
-	return QIcon::fromTheme("labplot-matrix");
+	return QIcon::fromTheme(QStringLiteral("labplot-matrix"));
 }
 
 /*!
@@ -114,9 +114,8 @@ bool Matrix::exportView() const {
 
 	// TODO FITS filter to decide if it can be exported to both
 	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
-	if (m_view->selectedColumnCount() == 0) {
+	if (m_view->selectedColumnCount() == 0)
 		dlg->setExportSelection(false);
-	}
 
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted))) {
@@ -165,9 +164,9 @@ bool Matrix::printPreview() const {
 	return dlg->exec();
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 void* Matrix::data() const {
 	return d->data;
 }
@@ -194,9 +193,9 @@ void Matrix::setChanged() {
 		m_model->setChanged();
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 void Matrix::setRowCount(int count) {
 	if (count == d->rowCount)
 		return;
@@ -409,13 +408,11 @@ template QString Matrix::cell<QString>(int row, int col) const;
 //! Return the text displayed in the given cell (needs explicit instantiation)
 template<typename T>
 QString Matrix::text(int row, int col) {
-	SET_NUMBER_LOCALE
-	return numberLocale.toString(cell<T>(row, col));
+	return QLocale().toString(cell<T>(row, col));
 }
 template<>
 QString Matrix::text<double>(int row, int col) {
-	SET_NUMBER_LOCALE
-	return numberLocale.toString(cell<double>(row, col), d->numericFormat, d->precision);
+	return QLocale().toString(cell<double>(row, col), d->numericFormat, d->precision);
 }
 template<>
 QString Matrix::text<QString>(int row, int col) {
@@ -670,9 +667,9 @@ QVector<AspectType> Matrix::dropableOn() const {
 	return vec;
 }
 
-//##############################################################################
-//#########################  Public slots  #####################################
-//##############################################################################
+// ##############################################################################
+// #########################  Public slots  #####################################
+// ##############################################################################
 //! Clear the whole matrix (i.e. reset all cells)
 void Matrix::clear() {
 	WAIT_CURSOR;
@@ -772,9 +769,9 @@ void Matrix::mirrorVertically() {
 	RESET_CURSOR;
 }
 
-//##############################################################################
-//######################  Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ######################  Private implementation ###############################
+// ##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner, const AbstractColumn::ColumnMode m)
 	: q(owner)
@@ -1023,50 +1020,50 @@ void MatrixPrivate::clearColumn(int col) {
 		Q_EMIT q->dataChanged(0, col, rowCount - 1, col);
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 void Matrix::save(QXmlStreamWriter* writer) const {
-	DEBUG("Matrix::save()");
-	writer->writeStartElement("matrix");
+	DEBUG(Q_FUNC_INFO);
+	writer->writeStartElement(QStringLiteral("matrix"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// formula
-	writer->writeStartElement("formula");
+	writer->writeStartElement(QStringLiteral("formula"));
 	writer->writeCharacters(d->formula);
 	writer->writeEndElement();
 
 	// format
-	writer->writeStartElement("format");
-	writer->writeAttribute("mode", QString::number(static_cast<int>(d->mode)));
-	writer->writeAttribute("headerFormat", QString::number(static_cast<int>(d->headerFormat)));
-	writer->writeAttribute("numericFormat", QString(QChar(d->numericFormat)));
-	writer->writeAttribute("precision", QString::number(d->precision));
+	writer->writeStartElement(QStringLiteral("format"));
+	writer->writeAttribute(QStringLiteral("mode"), QString::number(static_cast<int>(d->mode)));
+	writer->writeAttribute(QStringLiteral("headerFormat"), QString::number(static_cast<int>(d->headerFormat)));
+	writer->writeAttribute(QStringLiteral("numericFormat"), QChar::fromLatin1(d->numericFormat));
+	writer->writeAttribute(QStringLiteral("precision"), QString::number(d->precision));
 	writer->writeEndElement();
 
 	// dimensions
-	writer->writeStartElement("dimension");
-	writer->writeAttribute("columns", QString::number(d->columnCount));
-	writer->writeAttribute("rows", QString::number(d->rowCount));
-	writer->writeAttribute("x_start", QString::number(d->xStart));
-	writer->writeAttribute("x_end", QString::number(d->xEnd));
-	writer->writeAttribute("y_start", QString::number(d->yStart));
-	writer->writeAttribute("y_end", QString::number(d->yEnd));
+	writer->writeStartElement(QStringLiteral("dimension"));
+	writer->writeAttribute(QStringLiteral("columns"), QString::number(d->columnCount));
+	writer->writeAttribute(QStringLiteral("rows"), QString::number(d->rowCount));
+	writer->writeAttribute(QStringLiteral("x_start"), QString::number(d->xStart));
+	writer->writeAttribute(QStringLiteral("x_end"), QString::number(d->xEnd));
+	writer->writeAttribute(QStringLiteral("y_start"), QString::number(d->yStart));
+	writer->writeAttribute(QStringLiteral("y_end"), QString::number(d->yEnd));
 	writer->writeEndElement();
 
 	// vector with row heights
-	writer->writeStartElement("row_heights");
+	writer->writeStartElement(QStringLiteral("row_heights"));
 	const char* data = reinterpret_cast<const char*>(d->rowHeights.constData());
 	int size = d->rowHeights.size() * sizeof(int);
-	writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+	writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
 	writer->writeEndElement();
 
 	// vector with column widths
-	writer->writeStartElement("column_widths");
+	writer->writeStartElement(QStringLiteral("column_widths"));
 	data = reinterpret_cast<const char*>(d->columnWidths.constData());
 	size = d->columnWidths.size() * sizeof(int);
-	writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+	writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
 	writer->writeEndElement();
 
 	// columns
@@ -1076,8 +1073,8 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 		size = d->rowCount * sizeof(double);
 		for (int i = 0; i < d->columnCount; ++i) {
 			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<double>>*>(d->data)->at(i).constData());
-			writer->writeStartElement("column");
-			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			writer->writeStartElement(QStringLiteral("column"));
+			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
 			writer->writeEndElement();
 		}
 		break;
@@ -1086,8 +1083,8 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 		for (int i = 0; i < d->columnCount; ++i) {
 			QDEBUG("	string: " << static_cast<QVector<QVector<QString>>*>(d->data)->at(i));
 			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<QString>>*>(d->data)->at(i).constData());
-			writer->writeStartElement("column");
-			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			writer->writeStartElement(QStringLiteral("column"));
+			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
 			writer->writeEndElement();
 		}
 		break;
@@ -1095,8 +1092,8 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 		size = d->rowCount * sizeof(int);
 		for (int i = 0; i < d->columnCount; ++i) {
 			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<int>>*>(d->data)->at(i).constData());
-			writer->writeStartElement("column");
-			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			writer->writeStartElement(QStringLiteral("column"));
+			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
 			writer->writeEndElement();
 		}
 		break;
@@ -1104,8 +1101,8 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 		size = d->rowCount * sizeof(qint64);
 		for (int i = 0; i < d->columnCount; ++i) {
 			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<qint64>>*>(d->data)->at(i).constData());
-			writer->writeStartElement("column");
-			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			writer->writeStartElement(QStringLiteral("column"));
+			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
 			writer->writeEndElement();
 		}
 		break;
@@ -1115,8 +1112,8 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 		size = d->rowCount * sizeof(QDateTime);
 		for (int i = 0; i < d->columnCount; ++i) {
 			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<QDateTime>>*>(d->data)->at(i).constData());
-			writer->writeStartElement("column");
-			writer->writeCharacters(QByteArray::fromRawData(data, size).toBase64());
+			writer->writeStartElement(QStringLiteral("column"));
+			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, size).toBase64()));
 			writer->writeEndElement();
 		}
 		break;
@@ -1126,7 +1123,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 }
 
 bool Matrix::load(XmlStreamReader* reader, bool preview) {
-	DEBUG("Matrix::load()")
+	DEBUG(Q_FUNC_INFO)
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -1138,99 +1135,99 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement() && reader->name() == "matrix")
+		if (reader->isEndElement() && reader->name() == QStringLiteral("matrix"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "formula") {
+		} else if (!preview && reader->name() == QLatin1String("formula")) {
 			d->formula = reader->text().toString().trimmed();
-		} else if (!preview && reader->name() == "format") {
+		} else if (!preview && reader->name() == QLatin1String("format")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("mode").toString();
+			str = attribs.value(QStringLiteral("mode")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("mode").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("mode")).toString());
 			else
 				d->mode = AbstractColumn::ColumnMode(str.toInt());
 
-			str = attribs.value("headerFormat").toString();
+			str = attribs.value(QStringLiteral("headerFormat")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("headerFormat").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("headerFormat")).toString());
 			else
 				d->headerFormat = Matrix::HeaderFormat(str.toInt());
 
-			str = attribs.value("numericFormat").toString();
+			str = attribs.value(QStringLiteral("numericFormat")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("numericFormat").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("numericFormat")).toString());
 			else {
 				QByteArray formatba = str.toLatin1();
 				d->numericFormat = *formatba.data();
 			}
 
-			str = attribs.value("precision").toString();
+			str = attribs.value(QStringLiteral("precision")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("precision").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("precision")).toString());
 			else
 				d->precision = str.toInt();
 
-		} else if (!preview && reader->name() == "dimension") {
+		} else if (!preview && reader->name() == QLatin1String("dimension")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("columns").toString();
+			str = attribs.value(QStringLiteral("columns")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("columns").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("columns")).toString());
 			else
 				d->columnCount = str.toInt();
 
-			str = attribs.value("rows").toString();
+			str = attribs.value(QStringLiteral("rows")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("rows").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("rows")).toString());
 			else
 				d->rowCount = str.toInt();
 
-			str = attribs.value("x_start").toString();
+			str = attribs.value(QStringLiteral("x_start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x_start").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x_start")).toString());
 			else
 				d->xStart = str.toDouble();
 
-			str = attribs.value("x_end").toString();
+			str = attribs.value(QStringLiteral("x_end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x_end").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x_end")).toString());
 			else
 				d->xEnd = str.toDouble();
 
-			str = attribs.value("y_start").toString();
+			str = attribs.value(QStringLiteral("y_start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("y_start").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y_start")).toString());
 			else
 				d->yStart = str.toDouble();
 
-			str = attribs.value("y_end").toString();
+			str = attribs.value(QStringLiteral("y_end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("y_end").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y_end")).toString());
 			else
 				d->yEnd = str.toDouble();
-		} else if (!preview && reader->name() == "row_heights") {
+		} else if (!preview && reader->name() == QLatin1String("row_heights")) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
 			int count = bytes.size() / sizeof(int);
 			d->rowHeights.resize(count);
 			memcpy(d->rowHeights.data(), bytes.data(), count * sizeof(int));
-		} else if (!preview && reader->name() == "column_widths") {
+		} else if (!preview && reader->name() == QLatin1String("column_widths")) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
 			int count = bytes.size() / sizeof(int);
 			d->columnWidths.resize(count);
 			memcpy(d->columnWidths.data(), bytes.data(), count * sizeof(int));
-		} else if (!preview && reader->name() == "column") {
+		} else if (!preview && reader->name() == QLatin1String("column")) {
 			// TODO: parallelize reading of columns?
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
@@ -1292,15 +1289,16 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//########################  Data Import  #######################################
-//##############################################################################
+// ##############################################################################
+// ########################  Data Import  #######################################
+// ##############################################################################
 int Matrix::prepareImport(std::vector<void*>& dataContainer,
 						  AbstractFileFilter::ImportMode mode,
 						  int actualRows,
 						  int actualCols,
 						  QStringList /*colNameList*/,
-						  QVector<AbstractColumn::ColumnMode> columnMode) {
+						  QVector<AbstractColumn::ColumnMode> columnMode,
+						  bool initializeDataContainer) {
 	auto newColumnMode = columnMode.at(0); // only first column mode used
 	DEBUG(Q_FUNC_INFO << ", rows = " << actualRows << " cols = " << actualCols << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode)
 					  << ", column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, newColumnMode))
@@ -1338,50 +1336,53 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer,
 
 	DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << "/" << actualCols)
 	// data() returns a void* which is a pointer to a matrix of any data type (see ColumnPrivate.cpp)
-	dataContainer.resize(actualCols);
-	switch (newColumnMode) { // prepare all columns
-	case AbstractColumn::ColumnMode::Double:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
+	if (initializeDataContainer) {
+		dataContainer.resize(actualCols);
+
+		switch (newColumnMode) { // prepare all columns
+		case AbstractColumn::ColumnMode::Double:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::Double;
+			break;
+		case AbstractColumn::ColumnMode::Integer:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<int>* vector = &(static_cast<QVector<QVector<int>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::Integer;
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<qint64>* vector = &(static_cast<QVector<QVector<qint64>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::BigInt;
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<QString>* vector = &(static_cast<QVector<QVector<QString>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::Text;
+			break;
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::DateTime:
+			for (int n = 0; n < actualCols; n++) {
+				QVector<QDateTime>* vector = &(static_cast<QVector<QVector<QDateTime>>*>(data())->operator[](n));
+				vector->resize(actualRows);
+				dataContainer[n] = static_cast<void*>(vector);
+			}
+			d->mode = AbstractColumn::ColumnMode::DateTime;
+			break;
 		}
-		d->mode = AbstractColumn::ColumnMode::Double;
-		break;
-	case AbstractColumn::ColumnMode::Integer:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<int>* vector = &(static_cast<QVector<QVector<int>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::Integer;
-		break;
-	case AbstractColumn::ColumnMode::BigInt:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<qint64>* vector = &(static_cast<QVector<QVector<qint64>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::BigInt;
-		break;
-	case AbstractColumn::ColumnMode::Text:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<QString>* vector = &(static_cast<QVector<QVector<QString>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::Text;
-		break;
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::DateTime:
-		for (int n = 0; n < actualCols; n++) {
-			QVector<QDateTime>* vector = &(static_cast<QVector<QVector<QDateTime>>*>(data())->operator[](n));
-			vector->resize(actualRows);
-			dataContainer[n] = static_cast<void*>(vector);
-		}
-		d->mode = AbstractColumn::ColumnMode::DateTime;
-		break;
 	}
 
 	return columnOffset;

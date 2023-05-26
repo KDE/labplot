@@ -32,7 +32,7 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet)
 		connect(m_worksheet, &CantorWorksheet::requestProjectContextMenu, this, &CantorWorksheetView::createContextMenu);
 		connect(m_worksheet, &CantorWorksheet::statusChanged, this, &CantorWorksheetView::statusChanged);
 	} else {
-		QString msg = "<b>" + i18n("Failed to initialize %1.", m_worksheet->backendName()) + "</b><br>";
+		QString msg = QStringLiteral("<b>") + i18n("Failed to initialize %1.", m_worksheet->backendName()) + QStringLiteral("</b><br>");
 		msg += worksheet->error();
 		QLabel* label = new QLabel(msg);
 		label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -46,26 +46,26 @@ void CantorWorksheetView::initActions() {
 
 	// general notebook specific actions
 	m_zoomIn = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), m_actionGroup);
-	m_zoomIn->setData("view_zoom_in");
+	m_zoomIn->setData(QStringLiteral("view_zoom_in"));
 	m_zoomIn->setShortcut(Qt::CTRL + Qt::Key_Plus);
 
 	m_zoomOut = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), m_actionGroup);
-	m_zoomOut->setData("view_zoom_out");
+	m_zoomOut->setData(QStringLiteral("view_zoom_out"));
 	m_zoomOut->setShortcut(Qt::CTRL + Qt::Key_Minus);
 
 	m_find = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), m_actionGroup);
-	m_find->setData("edit_find");
+	m_find->setData(QStringLiteral("edit_find"));
 	m_find->setShortcut(Qt::CTRL + Qt::Key_F);
 
 	m_replace = new QAction(QIcon::fromTheme(QLatin1String("edit-find-replace")), i18n("Replace"), m_actionGroup);
-	m_replace->setData("edit_replace");
+	m_replace->setData(QStringLiteral("edit_replace"));
 	m_replace->setShortcut(Qt::CTRL + Qt::Key_R);
 
-	m_restartBackendAction = new QAction(QIcon::fromTheme("system-reboot"), i18n("Restart Backend"), m_actionGroup);
-	m_restartBackendAction->setData("restart_backend");
+	m_restartBackendAction = new QAction(QIcon::fromTheme(QLatin1String("system-reboot")), i18n("Restart Backend"), m_actionGroup);
+	m_restartBackendAction->setData(QStringLiteral("restart_backend"));
 
-	m_evaluateWorsheetAction = new QAction(QIcon::fromTheme("system-run"), i18n("Evaluate Notebook"), m_actionGroup);
-	m_evaluateWorsheetAction->setData("evaluate_worksheet");
+	m_evaluateWorsheetAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), m_actionGroup);
+	m_evaluateWorsheetAction->setData(QStringLiteral("evaluate_worksheet"));
 
 	// all other actions are initialized in initMenus() since they are only required for the main and context menu
 
@@ -78,82 +78,82 @@ void CantorWorksheetView::initMenus() {
 	// entry specific actions
 	m_evaluateEntryAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18n("Evaluate Entry"), m_actionGroup);
 	m_evaluateEntryAction->setShortcut(Qt::SHIFT + Qt::Key_Return);
-	m_evaluateEntryAction->setData("evaluate_current");
+	m_evaluateEntryAction->setData(QStringLiteral("evaluate_current"));
 
 	m_removeCurrentEntryAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Remove Current Entry"), m_actionGroup);
-	m_removeCurrentEntryAction->setData("remove_current");
+	m_removeCurrentEntryAction->setData(QStringLiteral("remove_current"));
 
 	// actions for the "Add New" menu
 	auto* insertCommandEntryAction = new QAction(QIcon::fromTheme(QLatin1String("run-build")), i18n("Command"), m_actionGroup);
-	insertCommandEntryAction->setData("insert_command_entry");
+	insertCommandEntryAction->setData(QStringLiteral("insert_command_entry"));
 	insertCommandEntryAction->setShortcut(Qt::CTRL + Qt::Key_Return);
 
 	auto* insertTextEntryAction = new QAction(QIcon::fromTheme(QLatin1String("draw-text")), i18n("Text"), m_actionGroup);
-	insertTextEntryAction->setData("insert_text_entry");
+	insertTextEntryAction->setData(QStringLiteral("insert_text_entry"));
 
 	// markdown entry is only available if cantor was compiled with libdiscovery (cantor 18.12 and later)
 	QAction* insertMarkdownEntryAction = nullptr;
 	if (m_part->action("insert_markdown_entry")) {
 		insertMarkdownEntryAction = new QAction(QIcon::fromTheme(QLatin1String("text-x-markdown")), i18n("Markdown"), m_actionGroup);
-		insertMarkdownEntryAction->setData("insert_markdown_entry");
+		insertMarkdownEntryAction->setData(QStringLiteral("insert_markdown_entry"));
 	}
 
 	auto* insertLatexEntryAction = new QAction(QIcon::fromTheme(QLatin1String("text-x-tex")), i18n("LaTeX"), m_actionGroup);
-	insertLatexEntryAction->setData("insert_latex_entry");
+	insertLatexEntryAction->setData(QStringLiteral("insert_latex_entry"));
 
 	auto* insertImageEntryAction = new QAction(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("Image"), m_actionGroup);
-	insertImageEntryAction->setData("insert_image_entry");
+	insertImageEntryAction->setData(QStringLiteral("insert_image_entry"));
 
 	auto* insertPageBreakAction = new QAction(QIcon::fromTheme(QLatin1String("go-next-view-page")), i18n("Page Break"), m_actionGroup);
-	insertPageBreakAction->setData("insert_page_break_entry");
+	insertPageBreakAction->setData(QStringLiteral("insert_page_break_entry"));
 
 	// 	auto* insertHorizLineAction = new QAction(QIcon::fromTheme(QLatin1String("newline")), i18n("Horizontal Line"), m_actionGroup);
-	// 	insertHorizLineAction->setData("insert_horizontal_line_entry");
+	// 	insertHorizLineAction->setData(QStringLiteral("insert_horizontal_line_entry"));
 
 	// 	auto* insertHierarchyEntryAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Hierarchy"), m_actionGroup);
-	// 	insertHierarchyEntryAction->setData("insert_hierarchy_entry");
+	// 	insertHierarchyEntryAction->setData(QStringLiteral("insert_hierarchy_entry"));
 
 	// actions for "assistants", that are backend specific and not always available
 	QAction* computeEigenvectorsAction = nullptr;
 	if (m_part->action("eigenvectors_assistant")) {
 		computeEigenvectorsAction = new QAction(i18n("Compute Eigenvectors"), m_actionGroup);
-		computeEigenvectorsAction->setData("eigenvectors_assistant");
+		computeEigenvectorsAction->setData(QStringLiteral("eigenvectors_assistant"));
 	}
 
 	QAction* createMatrixAction = nullptr;
 	if (m_part->action("creatematrix_assistant")) {
 		createMatrixAction = new QAction(i18n("Create Matrix"), m_actionGroup);
-		createMatrixAction->setData("creatematrix_assistant");
+		createMatrixAction->setData(QStringLiteral("creatematrix_assistant"));
 	}
 
 	QAction* computeEigenvaluesAction = nullptr;
 	if (m_part->action("eigenvalues_assistant")) {
 		computeEigenvaluesAction = new QAction(i18n("Compute Eigenvalues"), m_actionGroup);
-		computeEigenvaluesAction->setData("eigenvalues_assistant");
+		computeEigenvaluesAction->setData(QStringLiteral("eigenvalues_assistant"));
 	}
 
 	QAction* invertMatrixAction = nullptr;
 	if (m_part->action("invertmatrix_assistant")) {
 		invertMatrixAction = new QAction(i18n("Invert Matrix"), m_actionGroup);
-		invertMatrixAction->setData("invertmatrix_assistant");
+		invertMatrixAction->setData(QStringLiteral("invertmatrix_assistant"));
 	}
 
 	QAction* differentiationAction = nullptr;
 	if (m_part->action("differentiate_assistant")) {
 		differentiationAction = new QAction(i18n("Differentiation"), m_actionGroup);
-		differentiationAction->setData("differentiate_assistant");
+		differentiationAction->setData(QStringLiteral("differentiate_assistant"));
 	}
 
 	QAction* integrationAction = nullptr;
 	if (m_part->action("integrate_assistant")) {
 		integrationAction = new QAction(i18n("Integration"), m_actionGroup);
-		integrationAction->setData("integrate_assistant");
+		integrationAction->setData(QStringLiteral("integrate_assistant"));
 	}
 
 	QAction* solveEquationsAction = nullptr;
 	if (m_part->action("solve_assistant")) {
 		solveEquationsAction = new QAction(i18n("Solve Equations"), m_actionGroup);
-		solveEquationsAction->setData("solve_assistant");
+		solveEquationsAction->setData(QStringLiteral("solve_assistant"));
 	}
 
 	// menus
@@ -246,7 +246,7 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 	// assistants, if available
 	if (m_linearAlgebraMenu || m_calculateMenu) {
 		menu->insertSeparator(firstAction);
-		auto* menuAssistants = new QMenu(i18n("Assistants"));
+		auto* menuAssistants = new QMenu(i18n("Assistants"), m_part->widget());
 		menuAssistants->setIcon(QIcon::fromTheme(QLatin1String("quickwizard")));
 		if (m_linearAlgebraMenu)
 			menuAssistants->addMenu(m_linearAlgebraMenu);

@@ -4,6 +4,7 @@
 	Description          : Private members of XYFitCurve
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -26,8 +27,12 @@ public:
 	explicit XYFitCurvePrivate(XYFitCurve*);
 	~XYFitCurvePrivate() override;
 
-	void recalculate();
-	void evaluate(bool preview = false);
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
+	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) override;
+	virtual void resetResults() override;
+	void runLevenbergMarquardt(const AbstractColumn* xcol, const AbstractColumn* ycol, Range<double> xRange);
+	void runMaximumLikelihood(const AbstractColumn* xcol, double normalization);
+	bool evaluate(bool preview = false);
 
 	const Histogram* dataSourceHistogram{nullptr};
 	QString dataSourceHistogramPath;

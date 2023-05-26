@@ -113,9 +113,9 @@ QString ImageFilter::fileInfoString(const QString& /*fileName*/) {
 	return info;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 
 ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner)
 	: q(owner) {
@@ -249,15 +249,15 @@ void ImageFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* 
 	// TODO
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.
  */
 void ImageFilter::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("imageFilter");
+	writer->writeStartElement(QStringLiteral("imageFilter"));
 	writer->writeEndElement();
 }
 

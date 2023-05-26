@@ -12,15 +12,16 @@
 #ifndef DATAPICKERIMAGE_H
 #define DATAPICKERIMAGE_H
 
+#include "Vector3D.h"
 #include "backend/core/AbstractPart.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <QPen>
-#include <QVector3D>
 
 class DatapickerImagePrivate;
 class DatapickerImageView;
+class DatapickerPoint;
 class Segments;
 
 class QGraphicsScene;
@@ -33,29 +34,30 @@ public:
 	explicit DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
 
-	enum class GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary };
+	enum class GraphType { Linear, PolarInDegree, PolarInRadians, LnX, LnY, Ternary, LnXY, Log10XY, Log10X, Log10Y };
 	enum class ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
 	enum class PlotImageType { NoImage, OriginalImage, ProcessedImage };
 	enum class PointsType { AxisPoints, CurvePoints, SegmentPoints };
 
 	struct ReferencePoints {
-		GraphType type{GraphType::Cartesian};
+		GraphType type{GraphType::Linear};
 		QPointF scenePos[3];
-		QVector3D logicalPos[3];
+		Vector3D logicalPos[3];
 		double ternaryScale{1.0};
+		bool datetime{false}; // Datetime for the x axis
 	};
 
 	struct EditorSettings {
-		int intensityThresholdLow{20};
-		int intensityThresholdHigh{100};
-		int foregroundThresholdLow{30};
-		int foregroundThresholdHigh{90};
 		int hueThresholdLow{0};
 		int hueThresholdHigh{360};
-		int saturationThresholdLow{30};
+		int saturationThresholdLow{0};
 		int saturationThresholdHigh{100};
-		int valueThresholdLow{30};
-		int valueThresholdHigh{90};
+		int valueThresholdLow{0};
+		int valueThresholdHigh{100};
+		int intensityThresholdLow{0};
+		int intensityThresholdHigh{100};
+		int foregroundThresholdLow{20};
+		int foregroundThresholdHigh{100};
 	};
 
 	QIcon icon() const override;
@@ -76,9 +78,15 @@ public:
 	void setPrinting(bool) const;
 	void setSelectedInView(const bool);
 	void setSegmentsHoverEvent(const bool);
+	int currentSelectedReferencePoint();
 
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();
+	void setImage(const QImage&, const QString& filename, bool embedded);
+	void setImage(const QString&, bool embedded);
+
+	static QString graphTypeToString(const GraphType);
+	static GraphType stringToGraphType(const QString&);
 
 	bool isLoaded{false};
 	QImage originalPlotImage;
@@ -93,6 +101,8 @@ public:
 	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
+	BASIC_D_ACCESSOR_DECL(bool, isRelativeFilePath, RelativeFilePath)
+	BASIC_D_ACCESSOR_DECL(bool, embedded, Embedded)
 	CLASS_D_ACCESSOR_DECL(DatapickerImage::ReferencePoints, axisPoints, AxisPoints)
 	CLASS_D_ACCESSOR_DECL(DatapickerImage::EditorSettings, settings, Settings)
 	BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
@@ -105,6 +115,9 @@ public:
 
 	typedef DatapickerImagePrivate Private;
 
+public Q_SLOTS:
+	void referencePointSelected(const DatapickerPoint*);
+
 private:
 	void init();
 
@@ -112,13 +125,16 @@ private:
 	mutable DatapickerImageView* m_view{nullptr};
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;
+	int m_currentRefPoint{-1};
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void requestUpdate();
 	void requestUpdateActions();
 
+	void relativeFilePathChanged(bool);
 	void fileNameChanged(const QString&);
+	void embeddedChanged(bool);
 	void rotationAngleChanged(float);
 	void axisPointsChanged(const DatapickerImage::ReferencePoints&);
 	void settingsChanged(const DatapickerImage::EditorSettings&);
@@ -130,5 +146,6 @@ Q_SIGNALS:
 	void pointBrushChanged(QBrush);
 	void pointPenChanged(const QPen&);
 	void pointVisibilityChanged(bool);
+	void referencePointSelected(int index);
 };
 #endif

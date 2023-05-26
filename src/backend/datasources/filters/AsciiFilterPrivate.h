@@ -58,17 +58,17 @@ public:
 
 	const AsciiFilter* q;
 
-	QString commentCharacter{'#'};
+	QString commentCharacter{QStringLiteral("#")};
 	QString separatingCharacter{QStringLiteral("auto")};
 	QString dateTimeFormat;
 	QLocale::Language numberFormat{QLocale::C};
 	QLocale locale{QLocale::C};
 	bool autoModeEnabled{true};
 	bool headerEnabled{true}; // read header from file
-	int headerLine{0}; // 0: no header line
+	int headerLine{0}; // line to read header from. 0: no header line
 	bool skipEmptyParts{false};
 	bool simplifyWhitespacesEnabled{false};
-	double nanValue{NAN};
+	double nanValue{qQNaN()};
 	bool removeQuotesEnabled{false};
 	bool createIndexEnabled{false};
 	bool createTimestampEnabled{false};

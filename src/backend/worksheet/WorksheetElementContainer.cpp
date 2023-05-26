@@ -35,12 +35,12 @@
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)
 	: WorksheetElement(name, new WorksheetElementContainerPrivate(this), type) {
-	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
+	connect(this, &WorksheetElementContainer::childAspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd, AspectType type)
 	: WorksheetElement(name, dd, type) {
-	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
+	connect(this, &WorksheetElementContainer::childAspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -76,9 +76,9 @@ void WorksheetElementContainer::setVisible(bool on) {
 		if (curve) {
 			// making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
 			// this should be avoided by supressing the retransformation in the curves.
-			curve->suppressRetransform(true);
+			curve->setSuppressRetransform(true);
 			elem->setVisible(on);
-			curve->suppressRetransform(false);
+			curve->setSuppressRetransform(false);
 		} else if (elem)
 			elem->setVisible(on);
 	}
@@ -119,7 +119,7 @@ void WorksheetElementContainer::retransform() {
 	if (isLoading())
 		return;
 
-	PERFTRACE("WorksheetElementContainer::retransform()");
+	PERFTRACE(QStringLiteral("WorksheetElementContainer::retransform()"));
 	Q_D(WorksheetElementContainer);
 
 	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
@@ -193,9 +193,9 @@ void WorksheetElementContainer::prepareGeometryChange() {
 	d->prepareGeometryChangeRequested();
 }
 
-//################################################################
-//################### Private implementation ##########################
-//################################################################
+// ################################################################
+// ################### Private implementation ##########################
+// ################################################################
 WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -250,7 +250,7 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	QPainterPath path;
 	path.addRect(boundingRectangle);
 
-	// make the shape somewhat thicker then the hoveredPen to make the selection/hovering box more visible
+	// make the shape somewhat thicker than the hoveredPen to make the selection/hovering box more visible
 	containerShape = QPainterPath();
 	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
 }

@@ -19,11 +19,22 @@ class RetransformTest : public CommonTest {
 	// Tests
 private Q_SLOTS:
 	void TestLoadProject();
+	void TestLoadProject2();
 	void TestResizeWindows();
 	void TestZoomSelectionAutoscale();
+	void TestZoomAutoscaleSingleYRange();
+	void TestZoomAutoscaleSingleXRange();
 	void TestPadding();
 	void TestCopyPastePlot();
 	void TestAddCurve();
+	void TestBarPlotOrientation();
+	void TestZoom();
+	void TestImportCSV();
+	void TestSetScale();
+	void TestChangePlotRange();
+	void TestChangePlotRangeElement();
+	void TestChangePlotRangeElement2();
+	void TestChangePlotRangeElement3();
 };
 
 /*!

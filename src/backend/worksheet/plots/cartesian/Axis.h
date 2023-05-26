@@ -4,7 +4,7 @@
 	Description          : Axis for cartesian coordinate systems.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -15,12 +15,16 @@
 
 #include "backend/lib/Range.h"
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 class CartesianPlot;
+class Line;
 class TextLabel;
 class AxisPrivate;
 class AbstractColumn;
 class QActionGroup;
+
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 class Axis : public WorksheetElement {
 	Q_OBJECT
@@ -38,12 +42,14 @@ public:
 	};
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
-	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues };
+	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues, ColumnLabels };
 	enum class ArrowType { NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig };
 	enum class ArrowPosition { Left, Right, Both };
 	enum class LabelsPosition { NoLabels, In, Out };
 	enum class LabelsTextType { PositionValues, CustomValues };
 	enum class LabelsBackgroundType { Transparent, Color };
+
+	enum class TicksStartType { Absolute, Offset };
 
 	// LabelsFormat <-> index, see AxisDock::init()
 	static int labelsFormatToIndex(LabelsFormat format) {
@@ -120,8 +126,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetX, TitleOffsetX)
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetY, TitleOffsetY)
 
-	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
+	Line* line() const;
 	BASIC_D_ACCESSOR_DECL(ArrowType, arrowType, ArrowType)
 	BASIC_D_ACCESSOR_DECL(ArrowPosition, arrowPosition, ArrowPosition)
 	BASIC_D_ACCESSOR_DECL(double, arrowSize, ArrowSize)
@@ -132,12 +137,13 @@ public:
 	int majorTicksNumber() const;
 	void setMajorTicksNumber(const int number, bool automatic = false);
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
+	BASIC_D_ACCESSOR_DECL(TicksStartType, majorTicksStartType, MajorTicksStartType)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
+	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartValue, MajorTickStartValue)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
 	QString& majorTicksColumnPath() const;
-	CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
+	Line* majorTicksLine() const;
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength)
-	BASIC_D_ACCESSOR_DECL(qreal, majorTicksOpacity, MajorTicksOpacity)
 
 	BASIC_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection)
 	BASIC_D_ACCESSOR_DECL(TicksType, minorTicksType, MinorTicksType)
@@ -146,11 +152,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksSpacing, MinorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
 	QString& minorTicksColumnPath() const;
-	CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen)
+	Line* minorTicksLine() const;
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength)
-	BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity)
 
 	BASIC_D_ACCESSOR_DECL(LabelsFormat, labelsFormat, LabelsFormat)
+	BASIC_D_ACCESSOR_DECL(bool, labelsFormatAuto, LabelsFormatAuto)
 	BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
 	BASIC_D_ACCESSOR_DECL(int, labelsPrecision, LabelsPrecision)
 	CLASS_D_ACCESSOR_DECL(QString, labelsDateTimeFormat, LabelsDateTimeFormat)
@@ -161,6 +167,7 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, labelsTextColumn, LabelsTextColumn)
 	QString& labelsTextColumnPath() const;
 	QVector<double> tickLabelValues() const;
+	QVector<QString> tickLabelStrings() const;
 	CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor)
 	CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont)
 	BASIC_D_ACCESSOR_DECL(LabelsBackgroundType, labelsBackgroundType, LabelsBackgroundType)
@@ -169,10 +176,8 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
 
-	CLASS_D_ACCESSOR_DECL(QPen, majorGridPen, MajorGridPen)
-	BASIC_D_ACCESSOR_DECL(qreal, majorGridOpacity, MajorGridOpacity)
-	CLASS_D_ACCESSOR_DECL(QPen, minorGridPen, MinorGridPen)
-	BASIC_D_ACCESSOR_DECL(qreal, minorGridOpacity, MinorGridOpacity)
+	Line* majorGridLine() const;
+	Line* minorGridLine() const;
 
 	bool isNumeric() const;
 
@@ -187,7 +192,7 @@ public:
 
 protected:
 	Axis(const QString&, Orientation, AxisPrivate*);
-	TextLabel* m_title;
+	TextLabel* m_title{nullptr};
 
 private:
 	Q_DECLARE_PRIVATE(Axis)
@@ -233,14 +238,13 @@ Q_SIGNALS:
 	void scalingFactorChanged(qreal);
 	void showScaleOffsetChanged(bool);
 	void logicalPositionChanged(double);
+	void shiftSignal(int delta, Dimension dim, int index);
 
 	// title
 	void titleOffsetXChanged(qreal);
 	void titleOffsetYChanged(qreal);
 
 	// line
-	void linePenChanged(const QPen&);
-	void lineOpacityChanged(qreal);
 	void arrowTypeChanged(ArrowType);
 	void arrowPositionChanged(ArrowPosition);
 	void arrowSizeChanged(qreal);
@@ -252,10 +256,10 @@ Q_SIGNALS:
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged(qreal);
 	void majorTicksColumnChanged(const AbstractColumn*);
+	void majorTicksStartTypeChanged(TicksStartType);
 	void majorTickStartOffsetChanged(qreal);
-	void majorTicksPenChanged(QPen);
+	void majorTickStartValueChanged(qreal);
 	void majorTicksLengthChanged(qreal);
-	void majorTicksOpacityChanged(qreal);
 
 	// minor ticks
 	void minorTicksDirectionChanged(TicksDirection);
@@ -264,12 +268,11 @@ Q_SIGNALS:
 	void minorTicksNumberChanged(int);
 	void minorTicksIncrementChanged(qreal);
 	void minorTicksColumnChanged(const AbstractColumn*);
-	void minorTicksPenChanged(QPen);
 	void minorTicksLengthChanged(qreal);
-	void minorTicksOpacityChanged(qreal);
 
 	// labels
 	void labelsFormatChanged(LabelsFormat);
+	void labelsFormatAutoChanged(bool);
 	void labelsAutoPrecisionChanged(bool);
 	void labelsPrecisionChanged(int);
 	void labelsDateTimeFormatChanged(const QString&);
@@ -286,10 +289,7 @@ Q_SIGNALS:
 	void labelsSuffixChanged(QString);
 	void labelsOpacityChanged(qreal);
 
-	void majorGridPenChanged(QPen);
-	void majorGridOpacityChanged(qreal);
-	void minorGridPenChanged(QPen);
-	void minorGridOpacityChanged(qreal);
+	friend class RetransformTest;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)
