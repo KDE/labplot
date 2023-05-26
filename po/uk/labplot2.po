@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-25 00:42+0000\n"
-"PO-Revision-Date: 2023-05-21 08:27+0300\n"
+"POT-Creation-Date: 2023-05-26 00:42+0000\n"
+"PO-Revision-Date: 2023-05-25 09:05+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -65,7 +65,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1153
+#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1152
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -116,7 +116,7 @@ msgstr ""
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
-#: src/backend/spreadsheet/Spreadsheet.cpp:1188
+#: src/backend/spreadsheet/Spreadsheet.cpp:1187
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3124
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
@@ -199,62 +199,62 @@ msgid "%1: add %2"
 msgstr "%1: додати %2"
 
 #: src/backend/core/AbstractAspect.cpp:517
-#: src/backend/core/AbstractAspect.cpp:559
+#: src/backend/core/AbstractAspect.cpp:562
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "Перейменовуємо «%1» на «%2» з метою уникнення конфлікту назв."
 
-#: src/backend/core/AbstractAspect.cpp:551
+#: src/backend/core/AbstractAspect.cpp:558
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: вставити %2 перед %3"
 
-#: src/backend/core/AbstractAspect.cpp:551
+#: src/backend/core/AbstractAspect.cpp:558
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1: вставити %2 перед кінцем"
 
-#: src/backend/core/AbstractAspect.cpp:599 src/backend/core/aspectcommands.h:27
+#: src/backend/core/AbstractAspect.cpp:602 src/backend/core/aspectcommands.h:27
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: вилучити %2"
 
-#: src/backend/core/AbstractAspect.cpp:612
+#: src/backend/core/AbstractAspect.cpp:615
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: вилучити усі дочірні об'єкти"
 
-#: src/backend/core/AbstractAspect.cpp:695
+#: src/backend/core/AbstractAspect.cpp:698
 #, kde-format
 msgid "%1: move up"
 msgstr "%1: пересунути вище"
 
-#: src/backend/core/AbstractAspect.cpp:707
+#: src/backend/core/AbstractAspect.cpp:710
 #, kde-format
 msgid "%1: move down"
 msgstr "%1: пересунути нижче"
 
-#: src/backend/core/AbstractAspect.cpp:814
+#: src/backend/core/AbstractAspect.cpp:817
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: вставлено «%2»"
 
-#: src/backend/core/AbstractAspect.cpp:816
+#: src/backend/core/AbstractAspect.cpp:819
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: дубльовано «%2»"
 
-#: src/backend/core/AbstractAspect.cpp:817
+#: src/backend/core/AbstractAspect.cpp:820
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Копія «%1»"
 
-#: src/backend/core/AbstractAspect.cpp:948
+#: src/backend/core/AbstractAspect.cpp:951
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "Пропущено атрибут «name» або вказано порожнє значення атрибута."
 
-#: src/backend/core/AbstractAspect.cpp:955
+#: src/backend/core/AbstractAspect.cpp:958
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -5362,7 +5362,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: встановити розмір матриці %2⨯%3"
 
 #: src/backend/matrix/Matrix.cpp:487
-#: src/backend/spreadsheet/Spreadsheet.cpp:598
+#: src/backend/spreadsheet/Spreadsheet.cpp:597
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: копіювання %2"
@@ -5386,7 +5386,7 @@ msgstr[2] "%1: додати %2 стовпчиків"
 msgstr[3] "%1: додати %2 стовпчик"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:535
+#: src/backend/spreadsheet/Spreadsheet.cpp:534
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: спорожнити"
@@ -6361,16 +6361,14 @@ msgid "Tricube"
 msgstr "Трикубічна"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:357
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linking"
-msgstr "%1: встановити перо для лінії"
+msgstr "%1: встановлення зв'язку"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr "%1: встановити перо для лінії"
+msgstr "%1: встановлення пов'язаної електронної таблиці"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
@@ -6390,32 +6388,32 @@ msgstr[1] "%1: вилучити %2 стовпчики"
 msgstr[2] "%1: вилучити %2 стовпчиків"
 msgstr[3] "%1: вилучити один стовпчик"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:543
+#: src/backend/spreadsheet/Spreadsheet.cpp:542
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: спорожнити позначені стовпчики"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:566
+#: src/backend/spreadsheet/Spreadsheet.cpp:565
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: зняти маскування повністю"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:590
+#: src/backend/spreadsheet/Spreadsheet.cpp:589
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: пересунути стовпчик %2 з позиції %3 на позицію %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:715
+#: src/backend/spreadsheet/Spreadsheet.cpp:714
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: упорядкувати стовпчики"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1080
+#: src/backend/spreadsheet/Spreadsheet.cpp:1079
 #, kde-format
 msgid "%1: linked spreadsheet removed"
-msgstr ""
+msgstr "%1: вилучено пов'язану електронну таблицю"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1414
+#: src/backend/spreadsheet/Spreadsheet.cpp:1413
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -6424,7 +6422,7 @@ msgstr[1] "дані подвійної точності, %1 елементи"
 msgstr[2] "дані подвійної точності, %1 елементів"
 msgstr[3] "дані подвійної точності, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1417
+#: src/backend/spreadsheet/Spreadsheet.cpp:1416
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -6433,7 +6431,7 @@ msgstr[1] "цілочисельні дані, %1 елементи"
 msgstr[2] "цілочисельні дані, %1 елементів"
 msgstr[3] "цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1420
+#: src/backend/spreadsheet/Spreadsheet.cpp:1419
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -6442,7 +6440,7 @@ msgstr[1] "великі цілочисельні дані, %1 елементи"
 msgstr[2] "великі цілочисельні дані, %1 елементів"
 msgstr[3] "великі цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1423
+#: src/backend/spreadsheet/Spreadsheet.cpp:1422
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -6451,7 +6449,7 @@ msgstr[1] "текстові дані, %1 елементи"
 msgstr[2] "текстові дані, %1 елементів"
 msgstr[3] "текстові дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1426
+#: src/backend/spreadsheet/Spreadsheet.cpp:1425
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -6460,7 +6458,7 @@ msgstr[1] "дані щодо місяця, %1 елементи"
 msgstr[2] "дані щодо місяця, %1 елементів"
 msgstr[3] "дані щодо місяця, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1429
+#: src/backend/spreadsheet/Spreadsheet.cpp:1428
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -6469,7 +6467,7 @@ msgstr[1] "дані щодо дня, %1 елементи"
 msgstr[2] "дані щодо дня, %1 елементів"
 msgstr[3] "дані щодо дня, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1432
+#: src/backend/spreadsheet/Spreadsheet.cpp:1431
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -12784,11 +12782,13 @@ msgstr "Лінія відліку %1: завантажено шаблон «%2»
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
+"Увімкнути зв'язок для синхронізації кількості рядків із іншою електронною "
+"таблицею"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "Електронна таблиця, з якою слід синхронізувати кількість рядків"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
@@ -19063,8 +19063,7 @@ msgstr "Коментарі до стовпчика:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Linking"
 msgstr "Зв'язок"
 

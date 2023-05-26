@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-25 00:42+0000\n"
-"PO-Revision-Date: 2023-05-22 20:47+0100\n"
+"POT-Creation-Date: 2023-05-26 00:42+0000\n"
+"PO-Revision-Date: 2023-05-25 20:33+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -61,7 +61,7 @@ msgstr "Ne eblis trovi panelajn kromaĵojn. Bonvolu kontroli vian instaladon."
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1153
+#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1152
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -110,7 +110,7 @@ msgstr "Atributo '%1' mankas aŭ malplena, defaŭlta valoro estas uzata"
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
-#: src/backend/spreadsheet/Spreadsheet.cpp:1188
+#: src/backend/spreadsheet/Spreadsheet.cpp:1187
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3124
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
@@ -192,62 +192,62 @@ msgid "%1: add %2"
 msgstr "%1: aldonu %2"
 
 #: src/backend/core/AbstractAspect.cpp:517
-#: src/backend/core/AbstractAspect.cpp:559
+#: src/backend/core/AbstractAspect.cpp:562
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "Alinomante \"%1\" al \"%2\" por eviti nomkolizion."
 
-#: src/backend/core/AbstractAspect.cpp:551
+#: src/backend/core/AbstractAspect.cpp:558
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: enigu %2 antaŭ %3"
 
-#: src/backend/core/AbstractAspect.cpp:551
+#: src/backend/core/AbstractAspect.cpp:558
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1: enigu %2 antaŭ fino"
 
-#: src/backend/core/AbstractAspect.cpp:599 src/backend/core/aspectcommands.h:27
+#: src/backend/core/AbstractAspect.cpp:602 src/backend/core/aspectcommands.h:27
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: forigi %2"
 
-#: src/backend/core/AbstractAspect.cpp:612
+#: src/backend/core/AbstractAspect.cpp:615
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: forigu ĉiujn infanojn"
 
-#: src/backend/core/AbstractAspect.cpp:695
+#: src/backend/core/AbstractAspect.cpp:698
 #, kde-format
 msgid "%1: move up"
 msgstr "%1: movi supren"
 
-#: src/backend/core/AbstractAspect.cpp:707
+#: src/backend/core/AbstractAspect.cpp:710
 #, kde-format
 msgid "%1: move down"
 msgstr "%1: movi malsupren"
 
-#: src/backend/core/AbstractAspect.cpp:814
+#: src/backend/core/AbstractAspect.cpp:817
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: algluita '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:816
+#: src/backend/core/AbstractAspect.cpp:819
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: duobligita '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:817
+#: src/backend/core/AbstractAspect.cpp:820
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Kopio de '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:948
+#: src/backend/core/AbstractAspect.cpp:951
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "Atributo 'nomo' mankas aŭ estas malplena."
 
-#: src/backend/core/AbstractAspect.cpp:955
+#: src/backend/core/AbstractAspect.cpp:958
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "Nevalida krea tempo por '%1'. Uzante aktualan tempon."
@@ -5306,7 +5306,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: agordi matrican grandecon al %2x%3"
 
 #: src/backend/matrix/Matrix.cpp:487
-#: src/backend/spreadsheet/Spreadsheet.cpp:598
+#: src/backend/spreadsheet/Spreadsheet.cpp:597
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: kopiu %2"
@@ -5326,7 +5326,7 @@ msgstr[0] "%1: aldoni %2 kolumnon"
 msgstr[1] "%1: aldoni %2 kolumnojn"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:535
+#: src/backend/spreadsheet/Spreadsheet.cpp:534
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: klara"
@@ -6293,16 +6293,14 @@ msgid "Tricube"
 msgstr "Trikubo"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:357
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linking"
-msgstr "%1: starigis linioplumon"
+msgstr "%1: meti ligadon"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr "%1: starigis linioplumon"
+msgstr "%1: meti ligitan kalkultabelon"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
@@ -6318,74 +6316,74 @@ msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: forigi 1 kolumnon"
 msgstr[1] "%1: forigi %2 kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:543
+#: src/backend/spreadsheet/Spreadsheet.cpp:542
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: forigi elektitajn kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:566
+#: src/backend/spreadsheet/Spreadsheet.cpp:565
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: forigi ĉiujn maskojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:590
+#: src/backend/spreadsheet/Spreadsheet.cpp:589
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: movu kolumnon %2 de pozicio %3 al %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:715
+#: src/backend/spreadsheet/Spreadsheet.cpp:714
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordigi kolumnojn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1080
+#: src/backend/spreadsheet/Spreadsheet.cpp:1079
 #, kde-format
 msgid "%1: linked spreadsheet removed"
-msgstr ""
+msgstr "%1: forigis ligitan kalkultabelon"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1414
+#: src/backend/spreadsheet/Spreadsheet.cpp:1413
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "duoble precizaj datenoj, %1 elemento"
 msgstr[1] "duoble precizaj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1417
+#: src/backend/spreadsheet/Spreadsheet.cpp:1416
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "entjeraj datenoj, %1 elemento"
 msgstr[1] "entjeraj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1420
+#: src/backend/spreadsheet/Spreadsheet.cpp:1419
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "entjeregaj datenoj, %1 elemento"
 msgstr[1] "entjeregaj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1423
+#: src/backend/spreadsheet/Spreadsheet.cpp:1422
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "tekstdatenoj, %1 elemento"
 msgstr[1] "tekstdatenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1426
+#: src/backend/spreadsheet/Spreadsheet.cpp:1425
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "monataj datenoj, %1 elemento"
 msgstr[1] "monataj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1429
+#: src/backend/spreadsheet/Spreadsheet.cpp:1428
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "tagaj datenoj, %1 elemento"
 msgstr[1] "tagaj datenoj, %1 elementoj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1432
+#: src/backend/spreadsheet/Spreadsheet.cpp:1431
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -9288,8 +9286,8 @@ msgstr[1] "Forigi elektitajn objektojn"
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Projektesploranto: forigi %1 elektitan objekton"
+msgstr[1] "Projektesploranto: forigi %1 elektitajn objektojn"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:269
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:73
@@ -9651,24 +9649,24 @@ msgstr "%1: malmaskigi elektitajn ĉelojn"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2070
 #, kde-format
 msgid "%1: fill cells with row numbers"
-msgstr "%1: plenigu ĉelojn per vicaj nombroj"
+msgstr "%1: plenigi ĉelojn per vicaj nombroj"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2135
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: plenigi kolumnon per viconombroj"
+msgstr[1] "%1: plenigi kolumnojn per viconombroj"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2177
 #, kde-format
 msgid "%1: fill cells with random values"
-msgstr "%1: plenigu ĉelojn per hazardaj valoroj"
+msgstr "%1: plenigi ĉelojn per hazardaj valoroj"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2297
 #, kde-format
 msgid "%1: fill cells with const values"
-msgstr "%1: plenigu ĉelojn kun konst-valoroj"
+msgstr "%1: plenigi ĉelojn kun konst-valoroj"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2305
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2327
@@ -9676,26 +9674,26 @@ msgstr "%1: plenigu ĉelojn kun konst-valoroj"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2362
 #, kde-format
 msgid "Fill the selection with constant value"
-msgstr "Plenigu la elekton per konstanta valoro"
+msgstr "Plenigi la elekton per konstanta valoro"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2447
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2481
 #, kde-format
 msgid "Insert empty columns"
-msgstr "Enmetu malplenajn kolumnojn"
+msgstr "Enmeti malplenajn kolumnojn"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2448
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2482
 #, kde-format
 msgid "Enter the number of columns to insert"
-msgstr "Enigu la nombron da kolumnoj por enmeti"
+msgstr "Enigi la nombron da kolumnoj por enmeti"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2500
 #, kde-format
 msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: enmeti malplenan kolumnon"
+msgstr[1] "%1: enmeti malplenajn kolumnojn"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2561
 #, kde-format
@@ -9838,8 +9836,8 @@ msgstr "Enigu la nombron da vicoj por enmeti"
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: enmeti malplenan vicon"
+msgstr[1] "%1: enmeti malplenajn vicojn"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3287
 #, kde-format
@@ -10272,8 +10270,8 @@ msgstr "Manipulado de Datumoj"
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ĉu vi vere volas forigi la elektitan objekton?"
+msgstr[1] "Ĉu vi vere volas forigi la elektitajn %1 objektojn?"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1666
 #, kde-format
@@ -16414,7 +16412,7 @@ msgstr "Referencaj Punktoj"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:382
 #, kde-format
 msgid "Datetime"
-msgstr "Dato Tempo"
+msgstr "Datohoro"
 
 #. i18n: ectx: property (displayFormat), widget (UTCDateTimeEdit, dtePositionX2)
 #. i18n: ectx: property (displayFormat), widget (UTCDateTimeEdit, dtePositionX3)
@@ -16424,7 +16422,7 @@ msgstr "Dato Tempo"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:537
 #, kde-format
 msgid "dd.MM.yyyy HH:mm"
-msgstr ""
+msgstr "tt.MM.jjjj HH:mm"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX3)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX1)
@@ -18911,10 +18909,9 @@ msgstr "Kolumnaj Komentoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Linking"
-msgstr "Ligo"
+msgstr "Ligado"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
