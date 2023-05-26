@@ -376,16 +376,16 @@ void CartesianPlot::initActions() {
 	Q_D(CartesianPlot);
 	switch (d->type) {
 	case Type::FourAxes:
-		icon = QIcon::fromTheme("labplot-xy-plot-four-axes");
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes"));
 		break;
 	case Type::TwoAxes:
-		icon = QIcon::fromTheme("labplot-xy-plot-two-axes");
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes"));
 		break;
 	case Type::TwoAxesCentered:
-		icon = QIcon::fromTheme("labplot-xy-plot-two-axes-centered");
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered"));
 		break;
 	case Type::TwoAxesCenteredZero:
-		icon = QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin");
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin"));
 		break;
 	}
 	addInsetPlotAction = new QAction(icon, i18n("Inset Plot"), this);
@@ -541,27 +541,6 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addReferenceRangeAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addInsetPlotAction);
-
-	zoomMenu = new QMenu(i18n("Zoom/Navigate"));
-	zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
-	zoomMenu->addAction(scaleAutoAction);
-	zoomMenu->addAction(scaleAutoXAction);
-	zoomMenu->addAction(scaleAutoYAction);
-	zoomMenu->addSeparator();
-	zoomMenu->addAction(zoomInAction);
-	zoomMenu->addAction(zoomOutAction);
-	zoomMenu->addSeparator();
-	zoomMenu->addAction(zoomInXAction);
-	zoomMenu->addAction(zoomOutXAction);
-	zoomMenu->addSeparator();
-	zoomMenu->addAction(zoomInYAction);
-	zoomMenu->addAction(zoomOutYAction);
-	zoomMenu->addSeparator();
-	zoomMenu->addAction(shiftLeftXAction);
-	zoomMenu->addAction(shiftRightXAction);
-	zoomMenu->addSeparator();
-	zoomMenu->addAction(shiftUpYAction);
-	zoomMenu->addAction(shiftDownYAction);
 
 	// Data manipulation menu
 	// 	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
