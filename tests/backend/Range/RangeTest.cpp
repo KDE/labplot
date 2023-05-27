@@ -106,6 +106,16 @@ void RangeTest::testNiceExtendLog10() {
 		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);
 	}
 }
+void RangeTest::testTickCountLog10() {
+	QVector<QPair<Range<double>, int>> tests{{{1., 1000.}, 4}, {{0.1, 100.}, 4}, {{100., 100000.}, 4}, {{0.001, 10000.}, 8}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Log10);
+		DEBUG(test.second);
+		QCOMPARE(test.first.autoTickCount(), test.second);
+	}
+}
+
 void RangeTest::testNiceExtendLog2() {
 	QVector<QPair<Range<double>, Range<double>>> tests{{{1.5, 7.2}, {1., 8.}}};
 	QVector<QPair<Range<double>, Range<double>>> tests2{{{1.5, 7.2}, {1., 8.}}};
@@ -128,6 +138,15 @@ void RangeTest::testNiceExtendLog2() {
 		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);
 	}
 }
+void RangeTest::testTickCountLog2() {
+	QVector<QPair<Range<double>, int>> tests{{{1., 8.}, 4}, {{.5, 4.}, 4}, {{4., 32.}, 4}, {{.25, 32.}, 8}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Log2);
+		DEBUG(test.second);
+		QCOMPARE(test.first.autoTickCount(), test.second);
+	}
+}
 void RangeTest::testNiceExtendLn() {
 	QVector<QPair<Range<double>, Range<double>>> tests{{{4., 32.}, {M_E, pow(M_E, 4.)}}};
 	QVector<QPair<Range<double>, Range<double>>> tests2{{{4., 32.}, {M_E, pow(M_E, 4.)}}};
@@ -148,6 +167,18 @@ void RangeTest::testNiceExtendLn() {
 		// WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
 		FuzzyCompare(test.first.start(), test.second.start(), DBL_EPSILON);
 		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);
+	}
+}
+void RangeTest::testTickCountLn() {
+	QVector<QPair<Range<double>, int>> tests{{{1., pow(M_E, 3)}, 4},
+											 {{1. / M_E, pow(M_E, 2)}, 4},
+											 {{pow(M_E, 2), pow(M_E, 5)}, 4},
+											 {{pow(M_E, -2.), pow(M_E, 5)}, 8}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Ln);
+		DEBUG(test.second);
+		QCOMPARE(test.first.autoTickCount(), test.second);
 	}
 }
 ///////////// Performance ////////////////////////////////

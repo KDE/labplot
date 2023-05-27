@@ -365,6 +365,31 @@ public:
 		if (length() == 0)
 			return 0;
 
+		if (scale() == Scale::Log10) {
+			const int order = log10(m_end) - log10(m_start);
+			DEBUG(Q_FUNC_INFO << ", order = " << order)
+			if (order >= 0)
+				return order + 1;
+			else // reverse range
+				return -order + 1;
+		}
+		if (scale() == Scale::Log2) {
+			const int order = log2(m_end) - log2(m_start);
+			DEBUG(Q_FUNC_INFO << ", order = " << order)
+			if (order >= 0)
+				return order + 1;
+			else // reverse range
+				return -order + 1;
+		}
+		if (scale() == Scale::Ln) {
+			const int order = log(m_end) - log(m_start);
+			DEBUG(Q_FUNC_INFO << ", order = " << order)
+			if (order >= 0)
+				return order + 1;
+			else // reverse range
+				return -order + 1;
+		}
+
 		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", length() = " << length())
 		const double order = pow(10.0, std::floor(log10(length())));
 		;
