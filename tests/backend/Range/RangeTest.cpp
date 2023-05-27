@@ -84,6 +84,28 @@ void RangeTest::testTickCount() {
 	}
 }
 
+void RangeTest::testNiceExtendLog10() {
+	QVector<QPair<Range<double>, Range<double>>> tests{{{0.2, 201.}, {0.1, 1000.}}};
+	QVector<QPair<Range<double>, Range<double>>> tests2{{{0.005, 56789.}, {0.001, 100000.}}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Log10);
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		QCOMPARE(test.first, test.second);
+	}
+	for (auto& test : tests2) {
+		test.first.setScale(RangeT::Scale::Log10);
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		// WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		// WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		FuzzyCompare(test.first.start(), test.second.start(), DBL_EPSILON);
+		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);
+	}
+}
 ///////////// Performance ////////////////////////////////
 /*
 void ParserTest::testPerformance1() {
