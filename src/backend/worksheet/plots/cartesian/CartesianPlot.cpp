@@ -2582,7 +2582,7 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 			}
 		}
 	}
-	auto dataRange = d->dataRange(dim, index);	// dataRange used for nice extend
+	auto dataRange = d->dataRange(dim, index); // dataRange used for nice extend
 	if (dataRange.finite() && d->niceExtend)
 		dataRange.niceExtend(); // auto scale to nice range
 
