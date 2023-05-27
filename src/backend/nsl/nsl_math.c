@@ -125,7 +125,7 @@ double nsl_math_places(double value, int n, int method) {
 	}
 }
 
-double nsl_math_round_precision(double value, unsigned int p) {
+double nsl_math_round_precision(double value, int p) {
 	/*	printf("nsl_math_round_precision(%g, %d)\n", value, p); */
 
 	// no need to round
@@ -143,9 +143,8 @@ double nsl_math_round_precision(double value, unsigned int p) {
 	}
 	double order_of_magnitude = gsl_pow_int(10., e);
 
-	/*if (p < 0)
+	if (p < 0)
 		return order_of_magnitude;
-	*/
 
 	double scale = gsl_pow_uint(10., p);
 	double scaled_value = value * scale;

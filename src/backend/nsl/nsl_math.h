@@ -60,6 +60,6 @@ double nsl_math_places(double value, int n, int method);
  * 1234.5 & p = 2 -> 1230 (1.23e3), 0.012345 & p = 2 -> 0.0123 (1.23e-2)
  * p <= 0 : order of magnitude
  */
-double nsl_math_round_precision(double value, unsigned int p);
+double nsl_math_round_precision(double value, int p);
 
 #endif /* NSL_MATH_H */
