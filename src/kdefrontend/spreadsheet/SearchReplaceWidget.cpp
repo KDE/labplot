@@ -418,7 +418,6 @@ void SearchReplaceWidget::addCurrentTextToHistory(QComboBox* comboBox) const {
 // ************************* SLOTs **************************
 // **********************************************************
 
-
 void SearchReplaceWidget::cancel() {
 	m_spreadsheet->model()->setSearchText(QString()); // clear the global search text that was potentialy set during "find all"
 	close();
@@ -573,8 +572,6 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
-	qDebug() << "########################";
-	qDebug() << "cur col/row vor" << curCol << "  " << curRow;
 	if (proceed) {
 		if (curRow != rowCount - 1)
 			++curRow; // not the last row yet, navigate to the next row
@@ -597,24 +594,19 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	bool startCol = true;
 	bool startRow = true;
 
-	qDebug() << "cur col/row nach" << curCol << "  " << curRow;
 	// search in the column-major order ignoring the data type
 	// and iterpreting everything as text
 	for (int col = 0; col < colCount; ++col) {
-		qDebug() << "col " << col;
 		if (startCol && col < curCol)
 			continue;
 
 		auto* column = columns.at(col)->asStringColumn();
 
 		for (int row = 0; row < rowCount; ++row) {
-			qDebug() << "row " << row;
 			if (startRow && row < curRow)
 				continue;
 
-			qDebug() << "checking";
 			if (column->textAt(row).contains(pattern, cs)) {
-				qDebug() << "match";
 				m_patternFound = true;
 				m_view->goToCell(row, col);
 				GuiTools::highlight(uiSearch.cbFind->lineEdit(), false);
@@ -703,7 +695,7 @@ bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 // **********************************************************
 // ****  advanced and data type specific find functions  ****
 // **********************************************************
-bool SearchReplaceWidget::findNext(bool proceed) {
+bool SearchReplaceWidget::findNext(bool proceed, bool findAndReplace) {
 	// search pattern(s)
 	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
 	QString pattern1;
@@ -727,6 +719,10 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 		return true;
 	}
 
+	QString replaceValue = uiSearchReplace.cbReplace->currentText();
+	if (findAndReplace && replaceValue.isEmpty())
+		return false;
+
 	// settings
 	const auto opText = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
 	const auto opNumeric = static_cast<Operator>(uiSearchReplace.cbOperator->currentData().toInt());
@@ -740,8 +736,6 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
-	qDebug() << "##############";
-	qDebug() << "start col/row: " << curCol << "  " << curRow;
 	if (columnMajor && proceed) {
 		if (curRow != rowCount - 1)
 			++curRow; // not the last row yet, navigate to the next row
@@ -783,9 +777,7 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 	bool match = false;
 
 	if (columnMajor) {
-		qDebug() << "for loop start";
 		for (int col = 0; col < colCount; ++col) {
-			qDebug() << "col " << col;
 			if (startCol && col < curCol)
 				continue;
 
@@ -796,7 +788,6 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 			}
 
 			for (int row = 0; row < rowCount; ++row) {
-				qDebug() << "row " << row;
 				if (startRow && row < curRow)
 					continue;
 
@@ -804,6 +795,8 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 				if (match) {
 					m_patternFound = true;
 					m_view->goToCell(row, col);
+					if (findAndReplace)
+						setValue(column, type, row, replaceValue);
 					highlight(type, false);
 					return true;
 				}
@@ -815,27 +808,25 @@ bool SearchReplaceWidget::findNext(bool proceed) {
 		}
 	} else { // row-major
 		for (int row = 0; row < rowCount; ++row) {
-			qDebug() << "row " << row;
 			if (startRow && row < curRow)
 				continue;
 
 			for (int col = 0; col < colCount; ++col) {
-				qDebug() << "col " << col;
 				if (startCol && col < curCol)
 					continue;
 
 				auto* column = columns.at(col);
-				qDebug() << "here1";
 				if (!checkColumnType(column, type)) {
 					startCol = false;
 					continue;
 				}
 
-				qDebug() << "here2";
 				match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
 				if (match) {
 					m_patternFound = true;
 					m_view->goToCell(row, col);
+					if (findAndReplace)
+						setValue(column, type, row, replaceValue);
 					highlight(type, false);
 					return true;
 				}
@@ -888,8 +879,6 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 	int curRow = m_view->firstSelectedRow();
 	int curCol = m_view->firstSelectedColumn();
 
-	qDebug() << "##############";
-	qDebug() << "start col/row vor: " << curCol << "  " << curRow;
 	if (columnMajor && proceed) {
 		if (curRow > 0)
 			--curRow; // not the first row yet, navigate to the previous cell
@@ -924,8 +913,6 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 		}
 	}
 
-	qDebug() << "start col/row nach: " << curCol << "  " << curRow;
-
 	// all settings are determined -> search the next cell matching the specified pattern(s)
 	const auto& columns = m_spreadsheet->children<Column>();
 	bool startCol = true;
@@ -934,7 +921,6 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 
 	if (columnMajor) {
 		for (int col = colCount - 1; col >= 0; --col) {
-			qDebug() << "col " << col;
 			if (startCol && col > curCol)
 				continue;
 
@@ -945,7 +931,6 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 			}
 
 			for (int row = rowCount - 1; row >= 0; --row) {
-				qDebug() << "row " << row;
 				if (startRow && row > curRow)
 					continue;
 
@@ -964,12 +949,10 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 		}
 	} else { // row-major
 		for (int row = rowCount - 1; row >= 0; --row) {
-			qDebug() << "row " << row;
 			if (startRow && row > curRow)
 				continue;
 
 			for (int col = colCount - 1; col >= 0; --col) {
-				qDebug() << "col " << col;
 				if (startCol && col > curCol)
 					continue;
 
@@ -1056,9 +1039,71 @@ void SearchReplaceWidget::findAll() {
 }
 
 void SearchReplaceWidget::replaceNext() {
+	findNext(true /* proceed */, true /* find and replace */);
 }
 
 void SearchReplaceWidget::replaceAll() {
+	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
+	QString pattern1;
+	QString pattern2;
+	switch (type) {
+	case DataType::Text:
+		pattern1 = uiSearchReplace.cbValueText->currentText();
+		break;
+	case DataType::Numeric:
+		pattern1 = uiSearchReplace.cbValue1->currentText();
+		pattern2 = uiSearchReplace.cbValue2->currentText();
+		break;
+	case DataType::DateTime:
+		pattern1 = uiSearchReplace.dteValue1->text();
+		pattern1 = uiSearchReplace.dteValue2->text();
+		break;
+	}
+
+	if (pattern1.isEmpty()) {
+		highlight(type, false);
+		return;
+	}
+
+	QString replaceValue = uiSearchReplace.cbReplace->currentText();
+	if (replaceValue.isEmpty())
+		return;
+
+	// clear the previous selection
+	m_view->clearSelection();
+
+	// settings
+	const auto opText = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
+	const auto opNumeric = static_cast<Operator>(uiSearchReplace.cbOperator->currentData().toInt());
+	const auto opDateTime = static_cast<Operator>(uiSearchReplace.cbOperatorDateTime->currentData().toInt());
+	const auto cs = uiSearchReplace.tbMatchCase->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+	const int colCount = m_spreadsheet->columnCount();
+	const int rowCount = m_spreadsheet->rowCount();
+
+	// all settings are determined -> select all cells matching the specified pattern(s)
+	const auto& columns = m_spreadsheet->children<Column>();
+	bool match = false;
+	int matchCount = 0;
+	m_spreadsheet->beginMacro(i18n("%1: replace values", m_spreadsheet->name()));
+
+	for (int col = 0; col < colCount; ++col) {
+		auto* column = columns.at(col);
+		if (!checkColumnType(column, type))
+			continue;
+
+		for (int row = 0; row < rowCount; ++row) {
+			match = checkColumnRow(column, type, row, opText, opNumeric, opDateTime, pattern1, pattern2, cs);
+			if (match) {
+				setValue(column, type, row, replaceValue);
+				++matchCount;
+			}
+		}
+	}
+
+	m_spreadsheet->endMacro();
+
+	// show the number of matches
+	// TODO
 }
 
 // **********************************************************
@@ -1159,7 +1204,6 @@ bool SearchReplaceWidget::checkCellNumeric(double cellValue, const QString& patt
 	const auto numberLocale = QLocale();
 
 	const double patternValue1 = numberLocale.toDouble(pattern1, &ok);
-	// qDebug()<<"compare " << cellValue << " with " << pattern1 << "  " << patternValue1 << "  " << ok;
 	if (!ok)
 		return false;
 
@@ -1170,7 +1214,6 @@ bool SearchReplaceWidget::checkCellNumeric(double cellValue, const QString& patt
 			return false;
 	}
 
-	qDebug() << "pattern values " << patternValue1 << " " << patternValue2;
 	switch (op) {
 	case Operator::EqualTo: {
 		match = (cellValue == patternValue1);
@@ -1206,7 +1249,6 @@ bool SearchReplaceWidget::checkCellNumeric(double cellValue, const QString& patt
 	}
 	}
 
-	qDebug() << "match " << match;
 	return match;
 }
 
@@ -1270,6 +1312,36 @@ bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime, 
 	}
 
 	return match;
+}
+
+void SearchReplaceWidget::setValue(Column* column, DataType type, int row, const QString& replaceValue) {
+	switch (type) {
+	case DataType::Text:
+		column->setTextAt(row, replaceValue);
+		break;
+	case DataType::Numeric: {
+		bool ok;
+		const auto numberLocale = QLocale();
+		const auto mode = column->columnMode();
+		if (mode == AbstractColumn::ColumnMode::Double) {
+			const double value = numberLocale.toDouble(replaceValue, &ok);
+			if (ok)
+				column->setValueAt(row, value);
+		} else if (mode == AbstractColumn::ColumnMode::Integer) {
+			const int value = numberLocale.toInt(replaceValue, &ok);
+			if (ok)
+				column->setIntegerAt(row, value);
+		} else if (mode == AbstractColumn::ColumnMode::BigInt) {
+			const qint64 value = numberLocale.toLongLong(replaceValue, &ok);
+			if (ok)
+				column->setBigIntAt(row, value);
+		}
+		break;
+	}
+	case DataType::DateTime:
+		// TODO
+		break;
+	}
 }
 
 void SearchReplaceWidget::highlight(DataType type, bool invalid) const {
