@@ -2,6 +2,7 @@
 
 UTCDateTimeEdit::UTCDateTimeEdit(QWidget* parent)
 	: QDateTimeEdit(parent) {
+	setMinimumDate(QDate(100, 1, 1));
 	connect(this, &QDateTimeEdit::dateTimeChanged, this, &UTCDateTimeEdit::dateTimeChanged);
 }
 

@@ -74,6 +74,7 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QToolBar>
+#include <QUndoCommand>
 
 #include <algorithm> //for std::reverse
 
@@ -199,9 +200,12 @@ void SpreadsheetView::init() {
 
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::updateHeaderGeometry);
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::handleHeaderDataChanged);
-	connect(m_spreadsheet, &Spreadsheet::aspectAdded, this, &SpreadsheetView::handleAspectAdded);
-	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeRemoved, this, &SpreadsheetView::handleAspectAboutToBeRemoved);
+	connect(m_spreadsheet, &Spreadsheet::aspectsInserted, this, &SpreadsheetView::handleAspectsAdded);
+	connect(m_spreadsheet, &Spreadsheet::aspectsAboutToBeRemoved, this, &SpreadsheetView::handleAspectAboutToBeRemoved);
 	connect(m_spreadsheet, &Spreadsheet::requestProjectContextMenu, this, &SpreadsheetView::createContextMenu);
+	connect(m_spreadsheet, &Spreadsheet::manyAspectsAboutToBeInserted, [this] {
+		m_suppressResize = true;
+	});
 
 	// selection related connections
 	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
@@ -802,7 +806,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_fill_function, &QAction::triggered, this, &SpreadsheetView::fillWithFunctionValues);
 	connect(action_fill_const, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithConstValues);
 	connect(action_select_all, &QAction::triggered, m_tableView, &QTableView::selectAll);
-	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, &Spreadsheet::clear);
+	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, QOverload<>::of(&Spreadsheet::clear));
 	connect(action_clear_masks, &QAction::triggered, m_spreadsheet, &Spreadsheet::clearMasks);
 	connect(action_sort_spreadsheet, &QAction::triggered, this, &SpreadsheetView::sortSpreadsheet);
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
@@ -1004,31 +1008,37 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 }
 
 // SLOTS
-void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
-	const Column* col = dynamic_cast<const Column*>(aspect);
-	if (!col || col->parentAspect() != m_spreadsheet)
+void SpreadsheetView::handleAspectsAdded(int first, int last) {
+	if (m_suppressResize) {
+		m_suppressResize = false;
 		return;
-
+	}
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	const int index = m_spreadsheet->indexOfChild<Column>(col);
-	// TODO: this makes it slow!
-	if (col->width() == 0)
-		m_tableView->resizeColumnToContents(index);
-	else
-		m_tableView->setColumnWidth(index, col->width());
 
-	goToCell(0, index);
+	const auto& children = m_spreadsheet->children<Column>();
+
+	for (int i = first; i <= last; i++) {
+		const auto* col = children.at(i);
+		// TODO: this makes it slow!
+		if (col->width() == 0)
+			m_tableView->resizeColumnToContents(i);
+		else
+			m_tableView->setColumnWidth(i, col->width());
+	}
+
+	goToCell(0, last);
 }
 
-void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const Column* col = dynamic_cast<const Column*>(aspect);
-	if (!col || col->parentAspect() != m_spreadsheet)
+void SpreadsheetView::handleAspectAboutToBeRemoved(int first, int last) {
+	const auto& children = m_spreadsheet->children<Column>();
+	if (first < 0 || first >= children.count() || last >= children.count() || first > last)
 		return;
 
-	disconnect(col, nullptr, this, nullptr);
+	for (int i = first; i <= last; i++)
+		disconnect(children.at(i), nullptr, this, nullptr);
 }
 
-void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /*oldSize*/, int newSize) {
+void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize) {
 	// save the new size in the column
 	Column* col = m_spreadsheet->child<Column>(logicalIndex);
 	col->setWidth(newSize);
@@ -2558,26 +2568,7 @@ void SpreadsheetView::removeSelectedColumns() {
 }
 
 void SpreadsheetView::clearSelectedColumns() {
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: clear selected columns", m_spreadsheet->name()));
-
-	// 	if (formulaModeActive()) {
-	// 		for (auto* col : selectedColumns()) {
-	// 			col->setSuppressDataChangedSignal(true);
-	// 			col->clearFormulas();
-	// 			col->setSuppressDataChangedSignal(false);
-	// 			col->setChanged();
-	// 		}
-	// 	} else {
-	for (auto* col : selectedColumns()) {
-		col->setSuppressDataChangedSignal(true);
-		col->clear();
-		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
-	}
-
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
+	m_spreadsheet->clear(selectedColumns());
 }
 
 void SpreadsheetView::toggleFreezeColumn() {
@@ -3306,7 +3297,7 @@ void SpreadsheetView::clearSelectedRows() {
 		return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: clear selected rows", m_spreadsheet->name()));
+	auto* parent = new QUndoCommand(i18n("%1: clear selected rows", m_spreadsheet->name()));
 	for (auto* col : selectedColumns()) {
 		col->setSuppressDataChangedSignal(true);
 		// 		if (formulaModeActive()) {
@@ -3315,7 +3306,7 @@ void SpreadsheetView::clearSelectedRows() {
 		// 		} else {
 		for (const auto& i : selectedRows().intervals()) {
 			if (i.end() == col->rowCount() - 1)
-				col->removeRows(i.start(), i.size());
+				col->removeRows(i.start(), i.size(), parent);
 			else {
 				QVector<QString> empties;
 				for (int j = 0; j < i.size(); j++)
@@ -3327,7 +3318,6 @@ void SpreadsheetView::clearSelectedRows() {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
-	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 
 	// selected rows were deleted but the view selection is still in place -> reset the selection in the view
@@ -3489,9 +3479,9 @@ void SpreadsheetView::sortColumnDescending() {
 /*!
   Cause a repaint of the header.
 */
-void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int /*first*/, int /*last*/) {
+void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int last) {
 	// TODO
-	if (o != Qt::Horizontal)
+	if (o != Qt::Horizontal || last < first)
 		return;
 	m_tableView->horizontalHeader()->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
 	m_tableView->horizontalHeader()->updateGeometry();

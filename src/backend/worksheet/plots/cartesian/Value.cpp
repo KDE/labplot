@@ -113,7 +113,7 @@ void Value::setColumn(const AbstractColumn* column) {
 		exec(new ValueSetColumnCmd(d, column, ki18n("%1: set values column")));
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Value::updateRequested);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Value::columnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Value::columnAboutToBeRemoved);
 		}
 	}
 }

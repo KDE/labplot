@@ -126,8 +126,8 @@ void InfoElement::init() {
 	initActions();
 	initMenus();
 
-	connect(this, &InfoElement::aspectRemoved, this, &InfoElement::childRemoved);
-	connect(this, &InfoElement::aspectAdded, this, &InfoElement::childAdded);
+	connect(this, &InfoElement::childAspectRemoved, this, &InfoElement::childRemoved);
+	connect(this, &InfoElement::childAspectAdded, this, &InfoElement::childAdded);
 
 	m_title = new TextLabel(i18n("Label"), m_plot);
 	m_title->setHidden(true);

@@ -268,14 +268,21 @@ public:
 	void setParentAspect(AbstractAspect*);
 	Folder* folder();
 	bool isDescendantOf(AbstractAspect* other);
-	void addChild(AbstractAspect*);
+	void addChild(AbstractAspect*, QUndoCommand* parent = nullptr);
 	void addChildFast(AbstractAspect*);
 	virtual void finalizeAdd(){};
 	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags = {}) const;
-	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
+	void insertChild(AbstractAspect* child, int index, QUndoCommand* parent = nullptr);
+	void insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent = nullptr);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
-	void removeChild(AbstractAspect*);
+	/*!
+	 * \brief removeChild
+	 * Removing child aspect using an undo command
+	 * \param parent If parent is not nullptr the command will not be executed, but the parent must be executed
+	 * to indirectly execute the created undocommand
+	 */
+	void removeChild(AbstractAspect*, QUndoCommand* parent = nullptr);
 	void removeAllChildren();
 	virtual QVector<AbstractAspect*> dependsOn() const;
 
@@ -401,9 +408,10 @@ private:
 	void connectChild(AbstractAspect*);
 
 public Q_SLOTS:
-	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique);
+	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique, QUndoCommand* parent = nullptr);
 	void setComment(const QString&);
 	void remove();
+	void remove(QUndoCommand* parent);
 	void copy() const;
 	void duplicate();
 	void paste(bool duplicate = false);
@@ -419,10 +427,33 @@ protected Q_SLOTS:
 Q_SIGNALS:
 	void aspectDescriptionAboutToChange(const AbstractAspect*);
 	void aspectDescriptionChanged(const AbstractAspect*);
-	void aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
-	void aspectAdded(const AbstractAspect*);
+	/*!
+	 * \brief aspectAboutToBeAdded
+	 * Signal indicating a new child was added at position \p index. Do not connect to both variants of aspectAboutToBeAdded!
+	 * \param parent
+	 * \param index Position of the new aspect
+	 * \param child
+	 */
+	void childAspectAboutToBeAdded(const AbstractAspect* parent, int index, const AbstractAspect* child);
+	/*!
+	 * \brief aspectAboutToBeAdded
+	 * \param parent
+	 * \param before aspect one position before the child
+	 * \param child
+	 */
+	void childAspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void childAspectAdded(const AbstractAspect*);
+	/*!
+	 * \brief aspectAboutToBeRemoved
+	 * Called from the parent if a child is being removed
+	 */
+	void childAspectAboutToBeRemoved(const AbstractAspect* child);
+	void childAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	/*!
+	 * \brief aspectAboutToBeRemoved
+	 * Called by the aspect itself when it's being removed
+	 */
 	void aspectAboutToBeRemoved(const AbstractAspect*);
-	void aspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void aspectHiddenAboutToChange(const AbstractAspect*);
 	void aspectHiddenChanged(const AbstractAspect*);
 	void statusInfo(const QString&);

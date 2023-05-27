@@ -21,6 +21,7 @@ class Histogram;
 class XYCurve;
 class QMimeData;
 class QString;
+class Spreadsheet;
 
 class Project : public Folder {
 	Q_OBJECT
@@ -100,6 +101,7 @@ private:
 	void updateColumnDependencies(const QVector<XYCurve*>&, const AbstractColumn*) const;
 	void updateColumnDependencies(const QVector<Histogram*>&, const AbstractColumn*) const;
 	void updateColumnDependencies(const QVector<BoxPlot*>& boxPlots, const AbstractColumn* column) const;
+	void updateSpreadsheetDependencies(const QVector<Spreadsheet*>&, const Spreadsheet*) const;
 	bool readProjectAttributes(XmlStreamReader*);
 	void save(QXmlStreamWriter*) const override;
 };

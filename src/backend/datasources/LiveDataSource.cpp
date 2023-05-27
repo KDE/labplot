@@ -52,7 +52,7 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading)
 	m_watchTimer->setInterval(100);
 
 	// stop reading from the source before removing the child from the project
-	connect(this, &AbstractAspect::aspectAboutToBeRemoved, [this](const AbstractAspect* aspect) {
+	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, [this](const AbstractAspect* aspect) {
 		if (aspect == this)
 			pauseReading();
 	});

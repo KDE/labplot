@@ -128,8 +128,8 @@ void CartesianPlot::init() {
 		d->update();
 	});
 
-	connect(this, &AbstractAspect::aspectAdded, this, &CartesianPlot::childAdded);
-	connect(this, &AbstractAspect::aspectRemoved, this, &CartesianPlot::childRemoved);
+	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
+	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);

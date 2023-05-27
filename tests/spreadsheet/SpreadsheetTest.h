@@ -63,6 +63,27 @@ private Q_SLOTS:
 	void testFlatten01();
 	void testFlatten02();
 	void testFlatten03();
+
+	void testInsertRows();
+	void testRemoveRows();
+	void testInsertColumns();
+	void testRemoveColumns();
+
+	void testInsertRowsSuppressUpdate();
+	void testInsertColumnsSuppressUpdate();
+
+	void testLinkSpreadsheetsUndoRedo();
+	void testLinkSpreadsheetDeleteAdd();
+	void testLinkSpreadsheetAddRow();
+	void testLinkSpreadsheetRemoveRow();
+	void testLinkSpreadsheetRecalculate();
+	void testLinkSpreadsheetSaveLoad();
+
+#ifdef HAVE_VECTOR_BLF
+	void testLinkSpreadSheetImportBLF();
+#endif // HAVE_VECTOR_BLF
+
+	void testNaming();
 };
 
 #endif

@@ -215,8 +215,10 @@ private:
 	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_analyzePlotMenu{nullptr};
 
+	bool m_suppressResize{false};
+
 public Q_SLOTS:
-	void handleAspectAdded(const AbstractAspect*);
+	void handleAspectsAdded(int first, int last);
 	void createContextMenu(QMenu*);
 	void fillColumnContextMenu(QMenu*, Column*);
 	void fillToolBar(QToolBar*);
@@ -303,7 +305,7 @@ private Q_SLOTS:
 	void handleHorizontalSectionMoved(int index, int from, int to);
 	void handleHorizontalHeaderDoubleClicked(int index);
 	void handleHeaderDataChanged(Qt::Orientation, int first, int last);
-	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+	void handleAspectAboutToBeRemoved(int first, int last);
 	void updateHeaderGeometry(Qt::Orientation, int first, int last);
 
 	void columnClicked(int);
