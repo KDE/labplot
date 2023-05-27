@@ -106,6 +106,50 @@ void RangeTest::testNiceExtendLog10() {
 		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);
 	}
 }
+void RangeTest::testNiceExtendLog2() {
+	QVector<QPair<Range<double>, Range<double>>> tests{{{1.5, 7.2}, {1., 8.}}};
+	QVector<QPair<Range<double>, Range<double>>> tests2{{{1.5, 7.2}, {1., 8.}}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Log2);
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		QCOMPARE(test.first, test.second);
+	}
+	for (auto& test : tests2) {
+		test.first.setScale(RangeT::Scale::Log2);
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		// WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		// WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		FuzzyCompare(test.first.start(), test.second.start(), DBL_EPSILON);
+		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);
+	}
+}
+void RangeTest::testNiceExtendLn() {
+	QVector<QPair<Range<double>, Range<double>>> tests{{{4., 32.}, {M_E, pow(M_E, 4.)}}};
+	QVector<QPair<Range<double>, Range<double>>> tests2{{{4., 32.}, {M_E, pow(M_E, 4.)}}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Ln);
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		QCOMPARE(test.first, test.second);
+	}
+	for (auto& test : tests2) {
+		test.first.setScale(RangeT::Scale::Ln);
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		// WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		// WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		FuzzyCompare(test.first.start(), test.second.start(), DBL_EPSILON);
+		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);
+	}
+}
 ///////////// Performance ////////////////////////////////
 /*
 void ParserTest::testPerformance1() {
