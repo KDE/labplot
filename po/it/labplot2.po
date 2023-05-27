@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-26 00:42+0000\n"
-"PO-Revision-Date: 2023-04-28 10:33+0200\n"
+"PO-Revision-Date: 2023-05-13 21:53+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -2335,10 +2335,9 @@ msgid "Force and Energy"
 msgstr "Forza ed energia"
 
 #: src/backend/gsl/constants.cpp:48
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "Unknown Constant"
-msgstr "Costante"
+msgstr "Costante sconosciuta"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:57
@@ -3048,10 +3047,9 @@ msgid "Standard Mathematical Functions"
 msgstr "Funzioni matematiche standard"
 
 #: src/backend/gsl/functions.cpp:32
-#, fuzzy, kde-format
-#| msgid "Clausen Functions"
+#, kde-format
 msgid "Comparison Functions"
-msgstr "Funzioni di Clausen"
+msgstr "Funzioni di confronto"
 
 #: src/backend/gsl/functions.cpp:34
 #, kde-format
@@ -3335,10 +3333,9 @@ msgid "Logarithmic Distribution"
 msgstr "Distribuzione logaritmica"
 
 #: src/backend/gsl/functions.cpp:156
-#, fuzzy, kde-format
-#| msgid "Power Function"
+#, kde-format
 msgid "Unknown Function"
-msgstr "Funzione potenza"
+msgstr "Funzione sconosciuta"
 
 #: src/backend/gsl/functions.cpp:162
 #, kde-format
@@ -3419,20 +3416,19 @@ msgid "Round to the nearest integer"
 msgstr "Arrotonda all'intero più vicino"
 
 #: src/backend/gsl/functions.cpp:195
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterThen"
-msgstr "Maggiore di"
+msgstr "maggiore di"
 
 #: src/backend/gsl/functions.cpp:196
 #, kde-format
 msgid "lessThan"
-msgstr ""
+msgstr "minore di"
 
 #: src/backend/gsl/functions.cpp:197
 #, kde-format
 msgid "greaterEqualThen"
-msgstr ""
+msgstr "maggiore uguale a"
 
 #: src/backend/gsl/functions.cpp:198
 #, kde-format
@@ -3440,10 +3436,9 @@ msgid "lessEqualThen"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:199
-#, fuzzy, kde-format
-#| msgid "Equal to"
+#, kde-format
 msgid "equal"
-msgstr "Uguale a"
+msgstr "uguale"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:202
@@ -4309,10 +4304,9 @@ msgid "Logarithm of the gamma function"
 msgstr "Logaritmo della funzione Gamma"
 
 #: src/backend/gsl/functions.cpp:455
-#, fuzzy, kde-format
-#| msgid "Logarithm of the gamma function"
+#, kde-format
 msgid "Logarithm naturalis of the gamma function"
-msgstr "Logaritmo della funzione Gamma"
+msgstr "Logaritmo naturale della funzione Gamma"
 
 #: src/backend/gsl/functions.cpp:456
 #, kde-format
@@ -21100,10 +21094,9 @@ msgid "Save project before using this option"
 msgstr "Salva il progetto prima di usare questa opzione"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:392
-#, fuzzy, kde-format
-#| msgid "Invalid pointer"
+#, kde-format
 msgid "Invalid image"
-msgstr "Puntatore non valido"
+msgstr "Immagine non valida"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format

@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-26 00:42+0000\n"
-"PO-Revision-Date: 2023-05-21 23:41+0200\n"
+"PO-Revision-Date: 2023-05-26 06:35+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6329,16 +6329,14 @@ msgid "Tricube"
 msgstr "Trikubično"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:357
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linking"
-msgstr "%1: nastavite slog črte"
+msgstr "%1: nastavi povezovanje"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr "%1: nastavite slog črte"
+msgstr "%1: nastavi povezano preglednico"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
@@ -6381,7 +6379,7 @@ msgstr "%1: razvrščanje stolpcev"
 #: src/backend/spreadsheet/Spreadsheet.cpp:1079
 #, kde-format
 msgid "%1: linked spreadsheet removed"
-msgstr ""
+msgstr "%1: povezana preglednica odstranjena"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1413
 #, kde-format
@@ -12740,11 +12738,12 @@ msgstr "%1 referenčne vrstice: naložena predloga \"%2\""
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
+"Omogoči povezovanje za sinhronizacijo števila vrstic z drugo preglednico"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "Preglednica za sinhronizacijo števila vrstic"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
@@ -19002,10 +19001,9 @@ msgstr "Komentarji stolpca:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Linking"
-msgstr "Povezava"
+msgstr "Povezovanje"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)

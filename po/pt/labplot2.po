@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-26 00:42+0000\n"
-"PO-Revision-Date: 2023-05-22 17:46+0100\n"
+"PO-Revision-Date: 2023-05-26 22:56+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -6385,16 +6385,14 @@ msgid "Tricube"
 msgstr "Tri-Cúbico"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:357
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linking"
-msgstr "%1: mudar o desenho da linha"
+msgstr "%1: mudar a ligação"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr "%1: mudar o desenho da linha"
+msgstr "%1: mudar a folha de cálculo ligada"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
@@ -6433,7 +6431,7 @@ msgstr "%1: ordenar as colunas"
 #: src/backend/spreadsheet/Spreadsheet.cpp:1079
 #, kde-format
 msgid "%1: linked spreadsheet removed"
-msgstr ""
+msgstr "%1: folha de cálculo ligada removida"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1413
 #, kde-format
@@ -12776,11 +12774,13 @@ msgstr "%1 linhas de referência: foi carregado o modelo \"%2\""
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
+"Active a ligação para sincronizar o número de linhas com outra folha de "
+"cálculo"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "Folha de cálculo com a qual sincronizar o número de linhas"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
@@ -19049,8 +19049,7 @@ msgstr "Comentários da Coluna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Linking"
 msgstr "Ligação"
 

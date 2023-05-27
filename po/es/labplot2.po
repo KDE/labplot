@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-26 00:42+0000\n"
-"PO-Revision-Date: 2023-05-21 12:35+0200\n"
+"PO-Revision-Date: 2023-05-26 03:52+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -6312,16 +6312,14 @@ msgid "Tricube"
 msgstr "Tricubo"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:357
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linking"
-msgstr "%1: definir trazo de la línea"
+msgstr "%1: definir enlace"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr "%1: definir trazo de la línea"
+msgstr "%1: definir hoja de cálculo enlazada"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
@@ -6358,10 +6356,9 @@ msgid "%1: sort columns"
 msgstr "%1: ordenar columnas"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1079
-#, fuzzy, kde-format
-#| msgid "no spreadsheet element found"
+#, kde-format
 msgid "%1: linked spreadsheet removed"
-msgstr "no se ha encontrado ningún elemento de la hoja de cálculo"
+msgstr "%1: hoja de cálculo enlazada eliminada"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1413
 #, kde-format
@@ -12715,11 +12712,12 @@ msgstr "%1 líneas de referencia: plantilla «%2» cargada"
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
+"Activar enlace para sincronizar el número de filas con otra hoja de cálculo"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "Hoja de cálculo con la que se debe sincronizar el número de filas"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
@@ -18992,8 +18990,7 @@ msgstr "Comentarios de columnas:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Linking"
 msgstr "Enlace"
 
