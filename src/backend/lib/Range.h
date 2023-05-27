@@ -284,20 +284,14 @@ public:
 			return;
 		}
 
-		// TODO: other non-linear scales
-
 		double oldSize = size();
-		switch (scale()) {
-		case Scale::Sqrt:
+		if (scale() == Scale::Sqrt)
 			oldSize = sqrt(oldSize);
-			break;
-		case Scale::Square:
+		else if (scale() == Scale::Square)
 			oldSize *= oldSize;
-			break;
-		case Scale::Inverse:
+		else if (scale() == Scale::Inverse)
 			oldSize = 1. / oldSize;
-			break;
-		}
+
 		DEBUG("scale = " << (int)scale() << ", old size = " << oldSize)
 
 		const double newSize = niceSize(oldSize, false);
@@ -308,24 +302,21 @@ public:
 
 		// extend/shrink range
 		double new_start = m_start, new_end = m_end;
-		switch (scale()) {
-		case Scale::Sqrt:
+		if (scale() == Scale::Sqrt) {
 			if (m_start < 0 || m_end < 0)
 				return;
 			new_start = sqrt(m_start);
 			new_end = sqrt(m_end);
-			break;
-		case Scale::Square:
+		} else if (scale() == Scale::Square) {
 			new_start = m_start * m_start;
 			new_end = m_end * m_end;
-			break;
-		case Scale::Inverse:
+		} else if (scale() == Scale::Inverse) {
 			if (m_start == 0 || m_end == 0)
 				return;
 			new_start = 1. / m_start;
 			new_end = 1. / m_end;
-			break;
 		}
+
 		if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
 			new_start = std::floor(new_start / spacing) * spacing;
 			new_end = std::ceil(new_end / spacing) * spacing;
@@ -335,23 +326,19 @@ public:
 		}
 		DEBUG(" tmp new range: " << new_start << " .. " << new_end)
 
-		switch (scale()) {
-		case Scale::Sqrt:
+		if (scale() == Scale::Sqrt) {
 			new_start *= new_start;
 			new_end *= new_end;
-			break;
-		case Scale::Square:
+		} else if (scale() == Scale::Square) {
 			if (new_start < 0 || new_end < 0)
 				return;
 			new_start = sqrt(new_start);
 			new_end = sqrt(new_end);
-			break;
-		case Scale::Inverse:
+		} else if (scale() == Scale::Inverse) {
 			if (new_start == 0 || new_end == 0)
 				return;
 			new_start = 1. / new_start;
 			new_end = 1. / new_end;
-			break;
 		}
 
 		if (std::abs(new_end - new_start) == 0) // avoid empty range
@@ -362,6 +349,8 @@ public:
 		DEBUG(Q_FUNC_INFO << ", new range: " << toStdString())
 	}
 	int autoTickCount() const {
+		DEBUG(Q_FUNC_INFO << ", scale = " << (int)scale())
+
 		if (length() == 0)
 			return 0;
 
