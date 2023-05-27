@@ -269,8 +269,13 @@ public:
 			if (m_start <= 0 || m_end <= 0)
 				return;
 
-			m_start = nsl_math_round_precision(m_start, -1);
-			m_end = nsl_math_round_precision(m_end, -1) * 10;
+			if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
+				m_start = nsl_math_round_precision(m_start, -1);
+				m_end = nsl_math_round_precision(m_end, -1) * 10;
+			} else {
+				m_start = nsl_math_round_precision(m_start, -1) * 10;
+				m_end = nsl_math_round_precision(m_end, -1);
+			}
 			return;
 		}
 
