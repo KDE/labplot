@@ -264,13 +264,18 @@ public:
 		if (length() == 0)
 			return;
 
+		// TODO: all non-linear scales
+		if (scale() == Scale::Log10) {
+			if (m_start <= 0 || m_end <= 0)
+				return;
+
+			m_start = nsl_math_round_precision(m_start, -1);
+			m_end = nsl_math_round_precision(m_end, -1) * 10;
+			return;
+		}
+
 		double oldSize = size();
 		switch (scale()) {
-		case Scale::Linear:
-			break;
-		case Scale::Log10:
-			oldSize = log10(oldSize);
-			break;
 		case Scale::Log2:
 			oldSize = log2(oldSize);
 			break;
@@ -298,14 +303,6 @@ public:
 		// extend/shrink range
 		double new_start = m_start, new_end = m_end;
 		switch (scale()) {
-		case Scale::Linear:
-			break;
-		case Scale::Log10:
-			if (m_start <= 0 || m_end <= 0)
-				return;
-			new_start = log10(m_start);
-			new_end = log10(m_end);
-			break;
 		case Scale::Log2:
 			if (m_start <= 0 || m_end <= 0)
 				return;
@@ -345,12 +342,6 @@ public:
 		DEBUG(" tmp new range: " << new_start << " .. " << new_end)
 
 		switch (scale()) {
-		case Scale::Linear:
-			break;
-		case Scale::Log10:
-			new_start = pow(10, new_start);
-			new_end = pow(10, new_end);
-			break;
 		case Scale::Log2:
 			new_start = exp2(new_start);
 			new_end = exp2(new_end);
