@@ -16,89 +16,13 @@
 
 #include <KConfigGroup>
 #include <KSharedConfig>
-#include <QDebug>
 #include <QLineEdit>
 #include <QMenu>
 #include <QRadioButton>
 #include <QStack>
 
-enum SearchMode {
-	// NOTE: Concrete values are important here to work with the combobox index!
-	MODE_PLAIN_TEXT = 0,
-	MODE_WHOLE_WORDS = 1,
-	MODE_ESCAPE_SEQUENCES = 2,
-	MODE_REGEX = 3
-};
-
-class AddMenuManager {
-private:
-	QVector<QString> m_insertBefore;
-	QVector<QString> m_insertAfter;
-	QSet<QAction*> m_actionPointers;
-	uint m_indexWalker{0};
-	QMenu* m_menu{nullptr};
-
-public:
-	AddMenuManager(QMenu* parent, int expectedItemCount)
-		: m_insertBefore(QVector<QString>(expectedItemCount))
-		, m_insertAfter(QVector<QString>(expectedItemCount)) {
-		Q_ASSERT(parent != nullptr);
-
-		m_menu = parent->addMenu(i18n("Add..."));
-		if (!m_menu)
-			return;
-
-		m_menu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	}
-
-	void enableMenu(bool enabled) {
-		if (m_menu == nullptr)
-			return;
-
-		m_menu->setEnabled(enabled);
-	}
-
-	void addEntry(const QString& before,
-				  const QString& after,
-				  const QString& description,
-				  const QString& realBefore = QString(),
-				  const QString& realAfter = QString()) {
-		if (!m_menu)
-			return;
-
-		auto* const action = m_menu->addAction(before + after + QLatin1Char('\t') + description);
-		m_insertBefore[m_indexWalker] = QString(realBefore.isEmpty() ? before : realBefore);
-		m_insertAfter[m_indexWalker] = QString(realAfter.isEmpty() ? after : realAfter);
-		action->setData(QVariant(m_indexWalker++));
-		m_actionPointers.insert(action);
-	}
-
-	void addSeparator() {
-		if (!m_menu)
-			return;
-
-		m_menu->addSeparator();
-	}
-
-	void handle(QAction* action, QLineEdit* lineEdit) {
-		if (!m_actionPointers.contains(action))
-			return;
-
-		const int cursorPos = lineEdit->cursorPosition();
-		const int index = action->data().toUInt();
-		const QString& before = m_insertBefore[index];
-		const QString& after = m_insertAfter[index];
-		lineEdit->insert(before + after);
-		lineEdit->setCursorPosition(cursorPos + before.count());
-		lineEdit->setFocus();
-	}
-};
-
-struct ParInfo {
-	int openIndex;
-	bool capturing;
-	int captureNumber; // 1..9
-};
+// TODO: use the current default datetime format or always enforce the same format/behavior?
+static const QString defaultDateTimeFormat = QStringLiteral("yyyy-MM-dd hh:mm:ss.zzz");
 
 SearchReplaceWidget::SearchReplaceWidget(Spreadsheet* spreadsheet, QWidget* parent)
 	: QWidget(parent)
@@ -162,6 +86,8 @@ SearchReplaceWidget::~SearchReplaceWidget() {
 
 		if (!items.empty())
 			conf.writeEntry("ValueTextHistory", items);
+
+		// TODO: history for replace values?
 	}
 }
 
@@ -186,13 +112,22 @@ void SearchReplaceWidget::setInitialPattern(AbstractColumn::ColumnMode mode, con
 		case AbstractColumn::ColumnMode::Integer:
 		case AbstractColumn::ColumnMode::BigInt:
 			uiSearchReplace.cbDataType->setCurrentIndex(1);
-			uiSearchReplace.cbValue1->setCurrentText(m_initialPattern);
+			bool ok;
+			QLocale().toDouble(pattern, &ok);
+			if (ok)
+				uiSearchReplace.cbValue1->setCurrentText(m_initialPattern);
+			else
+				uiSearchReplace.cbValue1->setCurrentText(QString());
 			break;
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::Month:
 			uiSearchReplace.cbDataType->setCurrentIndex(2);
-			// uiSearchReplace.cbValueText->setCurrentText(m_initialPattern);
+			QDateTime value = QDateTime::fromString(m_initialPattern, defaultDateTimeFormat);
+			if (value.isValid())
+				uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(value.toMSecsSinceEpoch());
+			else
+				uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(QDateTime::currentDateTime().toMSecsSinceEpoch());
 			break;
 		}
 	}
@@ -283,6 +218,15 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.cbValue1->lineEdit()->setValidator(new QDoubleValidator(uiSearchReplace.cbValue1->lineEdit()));
 	uiSearchReplace.cbValue2->lineEdit()->setValidator(new QDoubleValidator(uiSearchReplace.cbValue2->lineEdit()));
 
+	// set meaninungful non-empty initial value for DateTime so the user doesn't need to type
+	// everything from scratch when switching to DateTime type
+	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(now);
+	uiSearchReplace.dteValue2->setMSecsSinceEpochUTC(now);
+
+	uiSearchReplace.dteValue1->setDisplayFormat(defaultDateTimeFormat);
+	uiSearchReplace.dteValue2->setDisplayFormat(defaultDateTimeFormat);
+
 	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
 	uiSearchReplace.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
@@ -291,10 +235,6 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.tbSelectionOnly->setChecked(conf.readEntry("SelectionOnly", false));
 	uiSearchReplace.cbOperator->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Operator", 0)));
 	uiSearchReplace.cbOperatorText->setCurrentIndex(uiSearchReplace.cbOperatorText->findData(conf.readEntry("OperatorText", 0)));
-	/*
-		qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
-		uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(conf.readEntry("Value1DateTime", now));
-		uiSearchReplace.dteValue2->setMSecsSinceEpochUTC(conf.readEntry("Value2DateTime", now));*/
 	uiSearchReplace.cbOperatorDateTime->setCurrentIndex(uiSearchReplace.cbOperatorDateTime->findData(conf.readEntry("OperatorDateTime", 0)));
 
 	dataTypeChanged(uiSearchReplace.cbDataType->currentIndex());
@@ -417,7 +357,6 @@ void SearchReplaceWidget::addCurrentTextToHistory(QComboBox* comboBox) const {
 // **********************************************************
 // ************************* SLOTs **************************
 // **********************************************************
-
 void SearchReplaceWidget::cancel() {
 	m_spreadsheet->model()->setSearchText(QString()); // clear the global search text that was potentialy set during "find all"
 	close();
@@ -446,6 +385,14 @@ void SearchReplaceWidget::dataTypeChanged(int index) {
 		uiSearchReplace.frameText->hide();
 		uiSearchReplace.frameDateTime->hide();
 		uiSearchReplace.tbMatchCase->hide();
+
+		// clear the replace pattern if it doesn't represent a numeric value
+		const auto& pattern = uiSearchReplace.cbReplace->currentText();
+		bool ok;
+		QLocale().toDouble(pattern, &ok);
+		if (!ok)
+			uiSearchReplace.cbReplace->setCurrentText(QString());
+		uiSearchReplace.cbReplace->lineEdit()->setValidator(new QDoubleValidator(uiSearchReplace.cbReplace->lineEdit()));
 		break;
 	}
 	case DataType::DateTime: {
@@ -453,6 +400,13 @@ void SearchReplaceWidget::dataTypeChanged(int index) {
 		uiSearchReplace.frameText->hide();
 		uiSearchReplace.frameDateTime->show();
 		uiSearchReplace.tbMatchCase->hide();
+
+		// clear the replace pattern if it doesn't represent a datetime value
+		const auto& pattern = uiSearchReplace.cbReplace->currentText();
+		QDateTime value = QDateTime::fromString(pattern, defaultDateTimeFormat);
+		if (!value.isValid())
+			uiSearchReplace.cbReplace->setCurrentText(QString());
+
 		break;
 	}
 	}
@@ -494,7 +448,8 @@ void SearchReplaceWidget::switchFindReplace() {
 		uiSearchReplace.cbOperatorDateTime->setMinimumWidth(uiSearchReplace.cbOperator->width());
 
 		if (m_searchWidget) {
-			// switching from simple to advanced search, show the current search pattern
+			// switching from simple to advanced search,
+			// take over the current search pattern it it's valid for the current data type
 			const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
 			const auto& pattern = uiSearch.cbFind->currentText();
 			switch (type) {
@@ -503,9 +458,8 @@ void SearchReplaceWidget::switchFindReplace() {
 				break;
 			}
 			case DataType::Numeric: {
-				const auto numberLocale = QLocale();
 				bool ok;
-				numberLocale.toDouble(pattern, &ok);
+				QLocale().toDouble(pattern, &ok);
 				if (ok)
 					uiSearchReplace.cbValue1->setCurrentText(pattern);
 				else
@@ -513,7 +467,11 @@ void SearchReplaceWidget::switchFindReplace() {
 				break;
 			}
 			case DataType::DateTime: {
-				// uiSearchReplace.dteValue1->setCurrentText(pattern);
+				QDateTime value = QDateTime::fromString(pattern, defaultDateTimeFormat);
+				if (value.isValid())
+					uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(value.toMSecsSinceEpoch());
+				else
+					uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(QDateTime::currentDateTime().toMSecsSinceEpoch());
 				break;
 			}
 			}
@@ -1199,7 +1157,6 @@ bool SearchReplaceWidget::checkCellNumeric(double cellValue, const QString& patt
 	if ((op == Operator::BetweenIncl || op == Operator::BetweenExcl) && pattern2.isEmpty())
 		return false;
 
-	bool match = false;
 	bool ok;
 	const auto numberLocale = QLocale();
 
@@ -1213,6 +1170,8 @@ bool SearchReplaceWidget::checkCellNumeric(double cellValue, const QString& patt
 		if (!ok)
 			return false;
 	}
+
+	bool match = false;
 
 	switch (op) {
 	case Operator::EqualTo: {
@@ -1259,22 +1218,21 @@ bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime, 
 	if ((op == Operator::BetweenIncl || op == Operator::BetweenExcl) && pattern2.isEmpty())
 		return false;
 
-	bool match = false;
-	bool ok;
-	const auto numberLocale = QLocale();
-
-	const double patternValue1 = numberLocale.toDouble(pattern1, &ok);
-	if (!ok)
+	QDateTime patternDateTimeValue1 = QDateTime::fromString(pattern1, defaultDateTimeFormat);
+	if (!patternDateTimeValue1.isValid())
 		return false;
 
-	double patternValue2 = 0.;
+	QDateTime patternDateTimeValue2;
 	if (op == Operator::BetweenIncl || op == Operator::BetweenExcl) {
-		patternValue2 = numberLocale.toDouble(pattern2, &ok);
-		if (!ok)
+		patternDateTimeValue2 = QDateTime::fromString(pattern2, defaultDateTimeFormat);
+		if (!patternDateTimeValue2.isValid())
 			return false;
 	}
 
-	double cellValue = cellValueDateTime.toMSecsSinceEpoch();
+	const double cellValue = cellValueDateTime.toMSecsSinceEpoch();
+	const double patternValue1 = patternDateTimeValue1.toMSecsSinceEpoch();
+	const double patternValue2 = patternDateTimeValue1.toMSecsSinceEpoch();
+	bool match = false;
 
 	switch (op) {
 	case Operator::EqualTo: {
@@ -1321,25 +1279,26 @@ void SearchReplaceWidget::setValue(Column* column, DataType type, int row, const
 		break;
 	case DataType::Numeric: {
 		bool ok;
-		const auto numberLocale = QLocale();
 		const auto mode = column->columnMode();
 		if (mode == AbstractColumn::ColumnMode::Double) {
-			const double value = numberLocale.toDouble(replaceValue, &ok);
+			const double value = QLocale().toDouble(replaceValue, &ok);
 			if (ok)
 				column->setValueAt(row, value);
 		} else if (mode == AbstractColumn::ColumnMode::Integer) {
-			const int value = numberLocale.toInt(replaceValue, &ok);
+			const int value = QLocale().toInt(replaceValue, &ok);
 			if (ok)
 				column->setIntegerAt(row, value);
 		} else if (mode == AbstractColumn::ColumnMode::BigInt) {
-			const qint64 value = numberLocale.toLongLong(replaceValue, &ok);
+			const qint64 value = QLocale().toLongLong(replaceValue, &ok);
 			if (ok)
 				column->setBigIntAt(row, value);
 		}
 		break;
 	}
 	case DataType::DateTime:
-		// TODO
+		const auto value = QDateTime::fromString(replaceValue, defaultDateTimeFormat);
+		if (!value.isValid())
+			column->setDateTimeAt(row, value);
 		break;
 	}
 }
@@ -1347,11 +1306,11 @@ void SearchReplaceWidget::setValue(Column* column, DataType type, int row, const
 void SearchReplaceWidget::highlight(DataType type, bool invalid) const {
 	switch (type) {
 	case DataType::Text:
-		GuiTools::highlight(uiSearchReplace.cbValueText->lineEdit(), invalid);
+		GuiTools::highlight(uiSearchReplace.cbValueText, invalid);
 		break;
 	case DataType::Numeric:
-		GuiTools::highlight(uiSearchReplace.cbValue1->lineEdit(), invalid);
-		GuiTools::highlight(uiSearchReplace.cbValue2->lineEdit(), invalid);
+		GuiTools::highlight(uiSearchReplace.cbValue1, invalid);
+		GuiTools::highlight(uiSearchReplace.cbValue2, invalid);
 		break;
 	case DataType::DateTime:
 		GuiTools::highlight(uiSearchReplace.dteValue1, invalid);
@@ -1361,8 +1320,86 @@ void SearchReplaceWidget::highlight(DataType type, bool invalid) const {
 }
 
 // **********************************************************
-// ******** context menu related helper functions ***********
+// **** context menu related helper classes and functions ***
 // **********************************************************
+enum SearchMode {
+	// NOTE: Concrete values are important here to work with the combobox index!
+	MODE_PLAIN_TEXT = 0,
+	MODE_WHOLE_WORDS = 1,
+	MODE_ESCAPE_SEQUENCES = 2,
+	MODE_REGEX = 3
+};
+
+class AddMenuManager {
+private:
+	QVector<QString> m_insertBefore;
+	QVector<QString> m_insertAfter;
+	QSet<QAction*> m_actionPointers;
+	uint m_indexWalker{0};
+	QMenu* m_menu{nullptr};
+
+public:
+	AddMenuManager(QMenu* parent, int expectedItemCount)
+		: m_insertBefore(QVector<QString>(expectedItemCount))
+		, m_insertAfter(QVector<QString>(expectedItemCount)) {
+		Q_ASSERT(parent != nullptr);
+
+		m_menu = parent->addMenu(i18n("Add..."));
+		if (!m_menu)
+			return;
+
+		m_menu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+	}
+
+	void enableMenu(bool enabled) {
+		if (m_menu == nullptr)
+			return;
+
+		m_menu->setEnabled(enabled);
+	}
+
+	void addEntry(const QString& before,
+				  const QString& after,
+				  const QString& description,
+				  const QString& realBefore = QString(),
+				  const QString& realAfter = QString()) {
+		if (!m_menu)
+			return;
+
+		auto* const action = m_menu->addAction(before + after + QLatin1Char('\t') + description);
+		m_insertBefore[m_indexWalker] = QString(realBefore.isEmpty() ? before : realBefore);
+		m_insertAfter[m_indexWalker] = QString(realAfter.isEmpty() ? after : realAfter);
+		action->setData(QVariant(m_indexWalker++));
+		m_actionPointers.insert(action);
+	}
+
+	void addSeparator() {
+		if (!m_menu)
+			return;
+
+		m_menu->addSeparator();
+	}
+
+	void handle(QAction* action, QLineEdit* lineEdit) {
+		if (!m_actionPointers.contains(action))
+			return;
+
+		const int cursorPos = lineEdit->cursorPosition();
+		const int index = action->data().toUInt();
+		const QString& before = m_insertBefore[index];
+		const QString& after = m_insertAfter[index];
+		lineEdit->insert(before + after);
+		lineEdit->setCursorPosition(cursorPos + before.count());
+		lineEdit->setFocus();
+	}
+};
+
+struct ParInfo {
+	int openIndex;
+	bool capturing;
+	int captureNumber; // 1..9
+};
+
 void SearchReplaceWidget::showExtendedContextMenu(bool replace, const QPoint& pos) {
 	// Make original menu
 	QLineEdit* lineEdit;
