@@ -594,8 +594,7 @@ void Axis::setStart(double min) {
 	Q_D(Axis);
 	Range<double> range = d->range;
 	const auto scale = range.scale();
-	if (!(((scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) && min <= 0)
-		  || (scale == RangeT::Scale::Sqrt && min < 0))) {
+	if (!(((RangeT::isLogScale(scale)) && min <= 0) || (scale == RangeT::Scale::Sqrt && min < 0))) {
 		range.setStart(min);
 		setRange(range);
 	}
@@ -604,9 +603,9 @@ void Axis::setStart(double min) {
 void Axis::setEnd(double max) {
 	Q_D(Axis);
 	Range<double> range = d->range;
+	QDEBUG("scale = " << range.scale() << " " << d->range.scale())
 	const auto scale = range.scale();
-	if (!(((scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) && max <= 0)
-		  || (scale == RangeT::Scale::Sqrt && max < 0))) {
+	if (!((RangeT::isLogScale(scale) && max <= 0) || (scale == RangeT::Scale::Sqrt && max < 0))) {
 		range.setEnd(max);
 		setRange(range);
 	}
@@ -616,6 +615,7 @@ void Axis::setRange(double min, double max) {
 	Q_D(Axis);
 	Range<double> range = d->range;
 	range.setStart(min);
+	QDEBUG("scale = " << range.scale() << d->scale)
 	range.setEnd(max);
 	setRange(range);
 }
