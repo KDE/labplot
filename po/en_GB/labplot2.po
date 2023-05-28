@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-26 00:42+0000\n"
-"PO-Revision-Date: 2023-05-21 15:00+0100\n"
+"PO-Revision-Date: 2023-05-27 13:08+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -6301,16 +6301,14 @@ msgid "Tricube"
 msgstr "Tricube"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:357
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linking"
-msgstr "%1: set line pen"
+msgstr "%1: set linking"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr "%1: set line pen"
+msgstr "%1: set linked spreadsheet"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
@@ -6347,10 +6345,9 @@ msgid "%1: sort columns"
 msgstr "%1: sort columns"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1079
-#, fuzzy, kde-format
-#| msgid "no spreadsheet element found"
+#, kde-format
 msgid "%1: linked spreadsheet removed"
-msgstr "no spreadsheet element found"
+msgstr "%1: linked spreadsheet removed"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1413
 #, kde-format
@@ -12673,11 +12670,12 @@ msgstr "%1 reference lines: template \"%2\" loaded"
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
+"Enable linking to synchronise the number of rows with another spreadsheet"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "Spreadsheet to synchronise the number of rows with"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
@@ -18926,10 +18924,9 @@ msgstr "Column Comments:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Linking"
-msgstr "Link"
+msgstr "Linking"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
