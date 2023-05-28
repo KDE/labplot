@@ -15,7 +15,9 @@
 #include "kdefrontend/GuiTools.h"
 
 #include <KConfigGroup>
+#include <KMessageWidget>
 #include <KSharedConfig>
+
 #include <QLineEdit>
 #include <QMenu>
 #include <QRadioButton>
@@ -359,6 +361,7 @@ void SearchReplaceWidget::addCurrentTextToHistory(QComboBox* comboBox) const {
 // **********************************************************
 void SearchReplaceWidget::cancel() {
 	m_spreadsheet->model()->setSearchText(QString()); // clear the global search text that was potentialy set during "find all"
+	showMessage(QString());
 	close();
 }
 
@@ -505,6 +508,8 @@ void SearchReplaceWidget::switchFindReplace() {
 			m_searchReplaceWidget->hide();
 		}
 	}
+
+	showMessage(QString());
 }
 
 // **********************************************************
@@ -578,6 +583,7 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	}
 
 	GuiTools::highlight(uiSearch.cbFind->lineEdit(), !m_patternFound);
+	showMessage(QString());
 	return false;
 }
 
@@ -590,6 +596,7 @@ bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 	const QString& pattern = uiSearch.cbFind->currentText();
 	if (pattern.isEmpty()) {
 		GuiTools::highlight(uiSearch.cbFind->lineEdit(), false);
+		showMessage(QString());
 		return true;
 	}
 
@@ -647,6 +654,7 @@ bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 	}
 
 	GuiTools::highlight(uiSearch.cbFind->lineEdit(), !m_patternFound);
+	showMessage(QString());
 	return false;
 }
 
@@ -992,8 +1000,10 @@ void SearchReplaceWidget::findAll() {
 		}
 	}
 
-	// show the number of matches
-	// TODO
+	if (matchCount > 0)
+		showMessage(i18np("%1 match found", "%1 matches found", matchCount));
+	else
+		showMessage(QString());
 }
 
 void SearchReplaceWidget::replaceNext() {
@@ -1060,8 +1070,10 @@ void SearchReplaceWidget::replaceAll() {
 
 	m_spreadsheet->endMacro();
 
-	// show the number of matches
-	// TODO
+	if (matchCount > 0)
+		showMessage(i18np("%1 replacement made", "%1 replacements made", matchCount));
+	else
+		showMessage(QString());
 }
 
 // **********************************************************
@@ -1303,7 +1315,7 @@ void SearchReplaceWidget::setValue(Column* column, DataType type, int row, const
 	}
 }
 
-void SearchReplaceWidget::highlight(DataType type, bool invalid) const {
+void SearchReplaceWidget::highlight(DataType type, bool invalid) {
 	switch (type) {
 	case DataType::Text:
 		GuiTools::highlight(uiSearchReplace.cbValueText, invalid);
@@ -1316,6 +1328,26 @@ void SearchReplaceWidget::highlight(DataType type, bool invalid) const {
 		GuiTools::highlight(uiSearchReplace.dteValue1, invalid);
 		GuiTools::highlight(uiSearchReplace.dteValue2, invalid);
 		break;
+	}
+
+	showMessage(QString());
+}
+
+void SearchReplaceWidget::showMessage(const QString& message) {
+	if (message.isEmpty()) {
+		if (m_messageWidget && m_messageWidget->isVisible())
+			m_messageWidget->close();
+	} else {
+		if (!m_messageWidget) {
+			m_messageWidget = new KMessageWidget(this);
+			// m_messageWidget->setCloseButtonVisible(false);
+			m_messageWidget->setMessageType(KMessageWidget::Information);
+			auto* vBoxLayout = static_cast<QVBoxLayout*>(layout());
+			vBoxLayout->insertWidget(0, m_messageWidget);
+		}
+		m_messageWidget->setText(message);
+		// m_messageWidget->move(300, 500);
+		m_messageWidget->animatedShow();
 	}
 }
 

@@ -18,6 +18,7 @@
 class Column;
 class Spreadsheet;
 class SpreadsheetView;
+class KMessageWidget;
 class QRadioButton;
 
 class SearchReplaceWidget : public QWidget {
@@ -46,6 +47,7 @@ private:
 	bool m_replaceEnabled{false};
 	Spreadsheet* m_spreadsheet{nullptr};
 	SpreadsheetView* m_view{nullptr};
+	KMessageWidget* m_messageWidget{nullptr};
 
 	void initSearchWidget();
 	void initSearchReplaceWidget();
@@ -64,7 +66,8 @@ private:
 	bool checkCellNumeric(double value, const QString& pattern1, const QString& pattern2, Operator);
 	bool checkCellDateTime(const QDateTime& value, const QString& pattern1, const QString& pattern2, Operator);
 	void setValue(Column*, DataType, int row, const QString& value);
-	void highlight(DataType, bool invalid) const;
+	void highlight(DataType, bool invalid);
+	void showMessage(const QString&);
 
 	void addCurrentTextToHistory(QComboBox*) const;
 	void showExtendedContextMenu(bool forPattern, const QPoint&);
