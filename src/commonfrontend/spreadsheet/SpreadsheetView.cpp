@@ -1038,7 +1038,7 @@ void SpreadsheetView::handleAspectAboutToBeRemoved(int first, int last) {
 		disconnect(children.at(i), nullptr, this, nullptr);
 }
 
-void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize) {
+void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* oldSize */, int newSize) {
 	// save the new size in the column
 	Column* col = m_spreadsheet->child<Column>(logicalIndex);
 	col->setWidth(newSize);
@@ -1488,17 +1488,26 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	if (!m_plotDataMenu)
 		initMenus();
 
+	const auto& columns = m_spreadsheet->children<Column>();
+
 	const bool cellsAvail = m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0;
-	m_plotDataMenu->setEnabled(cellsAvail);
-	m_selectionMenu->setEnabled(cellsAvail);
-	action_select_all->setEnabled(cellsAvail);
-	action_clear_spreadsheet->setEnabled(cellsAvail);
-	action_sort_spreadsheet->setEnabled(cellsAvail);
+	bool hasValues = false;
+	for (const auto* col : columns) {
+		if (col->hasValues()) {
+			hasValues = true;
+			break;
+		}
+	}
+	m_plotDataMenu->setEnabled(hasValues);
+	m_selectionMenu->setEnabled(hasValues);
+	action_select_all->setEnabled(hasValues);
+	action_clear_spreadsheet->setEnabled(hasValues);
+	action_sort_spreadsheet->setEnabled(hasValues);
+	action_statistics_all_columns->setEnabled(hasValues);
 	action_go_to_cell->setEnabled(cellsAvail);
 
 	// deactivate the "Clear masks" action if there are no masked cells
 	bool hasMasked = false;
-	const auto& columns = m_spreadsheet->children<Column>();
 	for (auto* column : columns) {
 		if (column->maskedIntervals().size() > 0) {
 			hasMasked = true;
