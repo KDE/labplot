@@ -557,7 +557,7 @@ void AbstractAspect::insertChild(AbstractAspect* child, int index, QUndoCommand*
 	bool execute = false;
 	if (!parent) {
 		execute = true;
-		const auto* before = this->parent(AspectType::AbstractAspect)->child<AbstractAspect>(index);
+		const auto* before = this->child<AbstractAspect>(index);
 		parent =
 			new QUndoCommand(before ? i18n("%1: insert %2 before %3", name(), new_name, before->name()) : i18n("%1: insert %2 before end", name(), new_name));
 	}
