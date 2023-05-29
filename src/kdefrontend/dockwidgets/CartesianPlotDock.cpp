@@ -226,7 +226,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
 	tbExportTemplate->setIconSize(QSize(size, size));
 	tbExportTemplate->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as-template")));
-	tbExportTemplate->setToolTip(i18n("Save current plot definition as template"));
+	tbExportTemplate->setToolTip(i18n("Save current plot area definition as template"));
 	connect(tbExportTemplate, &QToolButton::pressed, this, &CartesianPlotDock::exportPlotTemplate);
 	layout->addWidget(tbExportTemplate);
 
