@@ -336,6 +336,41 @@ void WorksheetElementTest::referenceRangeYKeyPressUp() {
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.65, 1., 0.55);
 }
 
+void WorksheetElementTest::referenceRangeSaveLoad() {
+	QString savePath;
+	{
+		SETUP_PROJECT
+
+		auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
+		referenceRange->setOrientation(ReferenceRange::Orientation::Horizontal);
+		p->addChild(referenceRange);
+		referenceRange->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+		auto pp = referenceRange->position();
+		pp.point = QPointF(0, 0);
+		referenceRange->setPosition(pp);
+		referenceRange->setCoordinateBindingEnabled(true);
+		SAVE_PROJECT("testReferenceRangeSaveLoad")
+	}
+
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true); // shall not crash
+
+		const auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		const auto* p = ws->child<CartesianPlot>(0);
+		QVERIFY(p);
+		const auto* referenceRange = p->child<ReferenceRange>(0);
+		QVERIFY(referenceRange);
+
+		QCOMPARE(referenceRange->positionLogical().x(), 0.5);
+		QCOMPARE(referenceRange->positionLogical().y(), 0.5);
+		QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
+		QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
+		CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
+	}
+}
+
 // TODO: create test with reference range with nonlinear ranges!
 // Zooming in cartesianplot leads to move the worksheetelement
 // Testing without setCoordinateBindingEnabled
