@@ -41,6 +41,7 @@ public:
 	bool m_isLoading{false};
 	bool m_pasted{false};
 	QUuid m_uuid{QUuid::createUuid()};
+	bool m_suppressWriteUuid{false};
 };
 
 #endif // ifndef ASPECT_PRIVATE_H

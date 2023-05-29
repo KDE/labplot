@@ -201,6 +201,10 @@ QUuid AbstractAspect::uuid() const {
 	return d->m_uuid;
 }
 
+void AbstractAspect::setSuppressWriteUuid(bool suppress) {
+	d->m_suppressWriteUuid = suppress;
+}
+
 /*!
  * \brief AbstractAspect::setName
  * sets the name of the abstract aspect
@@ -747,7 +751,7 @@ bool AbstractAspect::pasted() const {
  * copies the aspect to the clipboard. The standard XML-serialization
  * via AbstractAspect::load() is used.
  */
-void AbstractAspect::copy() const {
+void AbstractAspect::copy() {
 	QString output;
 	QXmlStreamWriter writer(&output);
 	writer.writeStartDocument();
@@ -761,8 +765,17 @@ void AbstractAspect::copy() const {
 	writer.writeAttribute(QStringLiteral("value"), QString::number(static_cast<int>(m_type)));
 	writer.writeEndElement();
 
+	setSuppressWriteUuid(true);
+	const auto& children = this->children(AspectType::AbstractAspect, {ChildIndexFlag::IncludeHidden, ChildIndexFlag::Recursive});
+	for (const auto& child : children)
+		child->setSuppressWriteUuid(true);
+
 	// write the aspect itself
 	save(&writer);
+
+	for (const auto& child : children)
+		child->setSuppressWriteUuid(false);
+	setSuppressWriteUuid(false);
 
 	writer.writeEndElement(); // end the root-element
 	writer.writeEndDocument();
@@ -934,7 +947,8 @@ bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
 void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QLatin1String("creation_time"), creationTime().toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QLatin1String("name"), name());
-	writer->writeAttribute(QLatin1String("uuid"), uuid().toString());
+	if (!d->m_suppressWriteUuid)
+		writer->writeAttribute(QLatin1String("uuid"), uuid().toString());
 }
 
 /**
