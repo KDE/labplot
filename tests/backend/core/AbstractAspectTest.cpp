@@ -53,12 +53,15 @@ void AbstractAspectTest::copyPaste() {
 	QCOMPARE(childrenWorksheet1.count(), childrenWorksheet2.count());
 
 	for (int i = 0; i < childrenWorksheet1.count(); i++) {
-		//		qDebug() << "i: " << i;
-		//		qDebug() << childrenWorksheet1.at(i)->name() << ", type: " << AbstractAspect::typeName(childrenWorksheet1.at(i)->type())
-		//				 << ", path: " << childrenWorksheet1.at(i)->path();
-		//		qDebug() << childrenWorksheet2.at(i)->name() << ", type: " << AbstractAspect::typeName(childrenWorksheet2.at(i)->type())
-		//				 << ", path: " << childrenWorksheet2.at(i)->path();
+		//				qDebug() << "i: " << i;
+		//				qDebug() << childrenWorksheet1.at(i)->name() << ", type: " << AbstractAspect::typeName(childrenWorksheet1.at(i)->type())
+		//						 << ", path: " << childrenWorksheet1.at(i)->path();
+		//				qDebug() << childrenWorksheet2.at(i)->name() << ", type: " << AbstractAspect::typeName(childrenWorksheet2.at(i)->type())
+		//						 << ", path: " << childrenWorksheet2.at(i)->path();
 		QVERIFY(childrenWorksheet1.at(i)->type() == childrenWorksheet2.at(i)->type());
+		if (childrenWorksheet1.at(i)->type() == AspectType::AbstractAspect)
+			continue; // unique will change the triggered for those aspects, and therefore when changing for the second from "1" to "2" it happens that "2"
+					  // already exists and therefore it receives "3"
 		QVERIFY(childrenWorksheet1.at(i)->name() == childrenWorksheet2.at(i)->name());
 		QVERIFY(childrenWorksheet1.at(i)->uuid() != childrenWorksheet2.at(i)->uuid());
 	}
@@ -101,15 +104,16 @@ void AbstractAspectTest::saveLoad() {
 	QCOMPARE(childrenProject1.count(), childrenProject2.count());
 
 	for (int i = 0; i < childrenProject1.count(); i++) {
-		//		qDebug() << "i: " << i;
-		//		qDebug() << childrenProject1.at(i)->name() << ", type: " << AbstractAspect::typeName(childrenProject1.at(i)->type())
-		//				 << ", path: " << childrenProject1.at(i)->path() << ", UUid: " << childrenProject1.at(i)->uuid();
-		//		qDebug() << childrenProject2.at(i)->name() << ", type: " << AbstractAspect::typeName(childrenProject2.at(i)->type())
-		//				 << ", path: " << childrenProject2.at(i)->path() << ", UUid: " << childrenProject2.at(i)->uuid();
+		//				qDebug() << "i: " << i;
+		//				qDebug() << childrenProject1.at(i)->name() << ", type: " << AbstractAspect::typeName(childrenProject1.at(i)->type())
+		//						 << ", path: " << childrenProject1.at(i)->path() << ", UUid: " << childrenProject1.at(i)->uuid();
+		//				qDebug() << childrenProject2.at(i)->name() << ", type: " << AbstractAspect::typeName(childrenProject2.at(i)->type())
+		//						 << ", path: " << childrenProject2.at(i)->path() << ", UUid: " << childrenProject2.at(i)->uuid();
 		QVERIFY(childrenProject1.at(i)->type() == childrenProject2.at(i)->type());
-		QVERIFY(childrenProject1.at(i)->name() == childrenProject2.at(i)->name());
 		if (childrenProject1.at(i)->type() == AspectType::AbstractAspect)
 			continue; // Usually they don't implement the write basic function and therefore they cannot have the same uuid
+
+		QVERIFY(childrenProject1.at(i)->name() == childrenProject2.at(i)->name());
 
 		if (childrenProject1.at(i)->path().contains(QStringLiteral("Project/Worksheet/plot/f(x)/x"))
 			|| childrenProject1.at(i)->path().contains(QStringLiteral("Project/Worksheet/plot/f(x)/y")))
