@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -15,6 +15,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
+#include "kdefrontend/spreadsheet/SearchReplaceWidget.h"
 
 #include <QClipboard>
 #include <QUndoStack>
@@ -438,7 +439,9 @@ void SpreadsheetTest::testCopyPasteSizeChange01() {
 	QCOMPARE(sheet.column(2)->valueAt(2), 4.4);
 }
 
-/////////////////////////////// Sorting tests ////////////////////////////
+// **********************************************************
+// *********************** sorting  *************************
+// **********************************************************
 // single column
 
 /*
@@ -1159,6 +1162,9 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 	QBENCHMARK { sheet.sortColumns(col0, {col0, col1}, true); }
 }
 
+// **********************************************************
+// ********************* flattening  ************************
+// **********************************************************
 void SpreadsheetTest::testFlatten00() {
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
@@ -1495,6 +1501,143 @@ void SpreadsheetTest::testFlatten03() {
 	QCOMPARE(col2->integerAt(3), 10);
 	QCOMPARE(col2->integerAt(4), 20);
 	QCOMPARE(col2->integerAt(5), 30);
+}
+
+// **********************************************************
+// ******************** search&replace  *********************
+// **********************************************************
+Spreadsheet* SpreadsheetTest::createSearchReplaceSpreadsheet() {
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+
+	sheet->setColumnCount(4);
+	sheet->setRowCount(4);
+
+	// first text column
+	auto* col1 = sheet->column(0);
+	col1->setName(QStringLiteral("text"));
+	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col1->setTextAt(0, QStringLiteral("A"));
+	col1->setTextAt(1, QStringLiteral("B"));
+	col1->setTextAt(2, QStringLiteral("A"));
+	col1->setTextAt(3, QStringLiteral("C"));
+
+	// first numeric (integer) column
+	auto* col2 = sheet->column(1);
+	col2->setName(QStringLiteral("integer"));
+	col2->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col2->setIntegerAt(0, 1);
+	col2->setIntegerAt(1, 2);
+	col2->setIntegerAt(2, 3);
+	col2->setIntegerAt(3, 4);
+
+	// second text column
+	auto* col3 = sheet->column(2);
+	col3->setName(QStringLiteral("text2"));
+	col3->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col3->setTextAt(0, QStringLiteral("B1"));
+	col3->setTextAt(1, QStringLiteral("A"));
+	col3->setTextAt(2, QStringLiteral("C2"));
+	col3->setTextAt(3, QStringLiteral("A2"));
+
+	// second numeric (double) column
+	auto* col4 = sheet->column(3);
+	col4->setName(QStringLiteral("double"));
+	col4->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col4->setValueAt(0, 4);
+	col4->setValueAt(1, 3);
+	col4->setValueAt(2, 2);
+	col4->setValueAt(3, 1);
+
+	return sheet;
+}
+
+void SpreadsheetTest::testSearchSimple00() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// navigate to the (0,0) cell and initialize the search&replace widget
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	view->goToCell(0, 0);
+
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
+	searchReplaceWidget->setReplaceEnabled(false);
+
+	auto indexes = view->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = sheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	// checks:
+	// the initial cell text is "A", we navigate with 'next' and then back with 'prev'
+	// in the column-major order looking for "A"
+
+	// initial
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	auto curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next
+	searchReplaceWidget->findNextSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next
+	searchReplaceWidget->findNextSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// next
+	searchReplaceWidget->findNextSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 2);
+
+	// previous
+	searchReplaceWidget->findPreviousSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// previous
+	searchReplaceWidget->findPreviousSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous
+	searchReplaceWidget->findPreviousSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+}
+
+void SpreadsheetTest::testSearchExtended00() {
+
+
+}
+
+void SpreadsheetTest::testSearchReplace00() {
+
 }
 
 QTEST_MAIN(SpreadsheetTest)

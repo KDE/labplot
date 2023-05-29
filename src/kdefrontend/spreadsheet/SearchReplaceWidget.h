@@ -24,6 +24,8 @@ class QRadioButton;
 class SearchReplaceWidget : public QWidget {
 	Q_OBJECT
 
+	friend class SpreadsheetTest;
+
 public:
 	explicit SearchReplaceWidget(Spreadsheet*, QWidget* parent = nullptr);
 	~SearchReplaceWidget() override;

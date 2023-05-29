@@ -27,6 +27,7 @@ class SpreadsheetModel;
 class QActionGroup;
 class QFrame;
 class QItemSelection;
+class QItemSelectionModel;
 class QLineEdit;
 class QMenu;
 class QPrinter;
@@ -65,7 +66,6 @@ public:
 	int firstSelectedRow(bool full = false) const;
 	int lastSelectedRow(bool full = false) const;
 	IntervalAttribute<bool> selectedRows(bool full = false) const;
-
 	bool isCellSelected(int row, int col) const;
 	void setCellSelected(int row, int col, bool select = true);
 	void setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select = true);
@@ -98,6 +98,8 @@ private:
 	void insertRowsBelow(int);
 
 	void updateFrozenTableGeometry();
+
+	QItemSelectionModel* selectionModel();
 
 	QTableView* m_tableView{nullptr};
 	QTableView* m_frozenTableView{nullptr};

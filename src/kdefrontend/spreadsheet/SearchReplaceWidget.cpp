@@ -1354,13 +1354,7 @@ void SearchReplaceWidget::showMessage(const QString& message) {
 // **********************************************************
 // **** context menu related helper classes and functions ***
 // **********************************************************
-enum SearchMode {
-	// NOTE: Concrete values are important here to work with the combobox index!
-	MODE_PLAIN_TEXT = 0,
-	MODE_WHOLE_WORDS = 1,
-	MODE_ESCAPE_SEQUENCES = 2,
-	MODE_REGEX = 3
-};
+// katesearchbar.cpp
 
 class AddMenuManager {
 private:
@@ -1433,7 +1427,7 @@ struct ParInfo {
 };
 
 void SearchReplaceWidget::showExtendedContextMenu(bool replace, const QPoint& pos) {
-	// Make original menu
+	// create the original menu
 	QLineEdit* lineEdit;
 	if (replace)
 		lineEdit = uiSearchReplace.cbReplace->lineEdit();
@@ -1444,23 +1438,15 @@ void SearchReplaceWidget::showExtendedContextMenu(bool replace, const QPoint& po
 	if (!contextMenu)
 		return;
 
-	bool extendMenu = false;
-	bool regexMode = false;
-	if (uiSearchReplace.cbDataType->currentIndex() == 0) {
-		// TODO
-		extendMenu = true;
-		regexMode = true;
-		// switch (uiSearchReplace.cbMode->currentIndex()) {
-		// case MODE_REGEX:
-		// 	regexMode = true;
-		// 	// FALLTHROUGH
-		// case MODE_ESCAPE_SEQUENCES:
-		// 	extendMenu = true;
-		// 	break;
-		// default:
-		// 	break;
-		// }
+	// the extension should only be available for regex
+	const auto opText = static_cast<OperatorText>(uiSearchReplace.cbOperatorText->currentData().toInt());
+	if (opText != OperatorText::RegEx) {
+		contextMenu->exec(lineEdit->mapToGlobal(pos));
+		return;
 	}
+
+	bool extendMenu = true;
+	bool regexMode = true;
 
 	AddMenuManager addMenuManager(contextMenu, 37);
 	if (!extendMenu)

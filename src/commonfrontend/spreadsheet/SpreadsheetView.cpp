@@ -1112,6 +1112,14 @@ void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int f
 }
 
 /*!
+ * return the selection model of the tree view, private function wrapper to be able
+ * to unit-test the selection without exposing the whole internal table view.
+ */
+QItemSelectionModel* SpreadsheetView::selectionModel() {
+	return m_tableView->selectionModel();
+}
+
+/*!
   Returns the number of selected columns.
   If \c full is \c true, this function only returns the number of fully selected columns.
 */
