@@ -113,7 +113,7 @@ void AbstractAspectTest::saveLoad() {
 	}
 }
 
-void AbstractAspectTest::moveSpreadsheet() {
+void AbstractAspectTest::moveUp() {
 	Project project;
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
@@ -122,7 +122,33 @@ void AbstractAspectTest::moveSpreadsheet() {
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	project.addChild(spreadsheet);
 
-	spreadsheet->moveUp(); // should not crash
+	// check the order of children
+	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
+	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet);
+
+	// move the spreadsheet in front of the worksheet and check the order again
+	spreadsheet->moveUp();
+	QCOMPARE(project.child<AbstractAspect>(0), spreadsheet);
+	QCOMPARE(project.child<AbstractAspect>(1), worksheet);
+}
+
+void AbstractAspectTest::moveDown() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	// check the order of children
+	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
+	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet);
+
+	// move the worksheet behing the speadsheet and check the order again
+	worksheet->moveDown();
+	QCOMPARE(project.child<AbstractAspect>(0), spreadsheet);
+	QCOMPARE(project.child<AbstractAspect>(1), worksheet);
 }
 
 QTEST_MAIN(AbstractAspectTest)
