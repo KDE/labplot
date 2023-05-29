@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2006-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2006-2009 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -485,8 +485,9 @@ void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
 		parent = command;
 	}
 
+	const auto& columns = children<Column>();
 	for (int i = (first + count - 1); i >= first; i--)
-		child<Column>(i)->remove(parent);
+		columns.at(i)->remove(parent);
 
 	if (execute)
 		exec(command);
@@ -585,10 +586,11 @@ void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 }
 
 void Spreadsheet::moveColumn(int from, int to) {
-	Column* col = child<Column>(from);
+	const auto& columns = children<Column>();
+	auto* col = columns.at(from);
 	beginMacro(i18n("%1: move column %2 from position %3 to %4.", name(), col->name(), from + 1, to + 1));
 	col->remove();
-	insertChildBefore(col, child<Column>(to));
+	insertChildBefore(col, columns.at(to));
 	endMacro();
 }
 
@@ -1214,8 +1216,9 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 
 	// make the available columns undo unaware before we resize and rename them below,
 	// the same will be done for new columns in this->resize().
-	for (int i = 0; i < childCount<Column>(); i++)
-		child<Column>(i)->setUndoAware(false);
+	const auto& columns = children<Column>();
+	for (auto* column : columns)
+		column->setUndoAware(false);
 
 	columnOffset = this->resize(importMode, colNameList, actualCols);
 
@@ -1237,7 +1240,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 		dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
-		Column* column = this->child<Column>(columnOffset + n);
+		auto* column = columns.at(columnOffset + n);
 		DEBUG(" column " << n << " columnMode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode[n]));
 		column->setColumnModeFast(columnMode[n]);
 
@@ -1340,25 +1343,25 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
 		// replace completely the previous content of the data source with the content to be imported.
-		int columns = childCount<Column>();
+		int columnsCount = childCount<Column>();
 
-		if (columns > cols) {
+		if (columnsCount > cols) {
 			// there are more columns in the data source than required -> remove the superfluous columns
-			for (int i = 0; i < columns - cols; i++)
+			for (int i = 0; i < columnsCount - cols; i++)
 				removeChild(child<Column>(0));
 		} else {
 			// create additional columns if needed
-			if (cols - columns > 30)
+			if (cols - columnsCount > 30)
 				Q_EMIT manyAspectsAboutToBeInserted();
-			Q_EMIT aspectsAboutToBeInserted(columns, cols - 1);
-			for (int i = columns; i < cols; i++) {
+			Q_EMIT aspectsAboutToBeInserted(columnsCount, cols - 1);
+			for (int i = columnsCount; i < cols; i++) {
 				newColumn = new Column(uniqueNames.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->resizeTo(rows);
 				newColumn->setUndoAware(false);
 				newColumn->resizeTo(rows);
 				addChildFast(newColumn); // in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
-			Q_EMIT aspectsInserted(columns, cols - 1);
+			Q_EMIT aspectsInserted(columnsCount, cols - 1);
 		}
 
 		// 1. suppressretransform for all WorksheetElements
@@ -1367,13 +1370,17 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		// 4. send aspectDescriptionChanged because otherwise the column
 		//    will not be connected again to the curves (project.cpp, descriptionChanged)
 		// 5. Enable retransform for all WorksheetElements
-		for (int i = 0; i < childCount<Column>(); i++) {
-			child<Column>(i)->setSuppressDataChangedSignal(true);
-			Q_EMIT child<Column>(i)->reset(child<Column>(i));
-			child<Column>(i)->setName(uniqueNames.at(i), AbstractAspect::NameHandling::UniqueNotRequired);
-			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
+		const auto& columns = children<Column>();
+		int index = 0;
+		for (auto* column : columns) {
+			column->setSuppressDataChangedSignal(true);
+			Q_EMIT column->reset(column);
+			column->setName(uniqueNames.at(index), AbstractAspect::NameHandling::UniqueNotRequired);
+			column->aspectDescriptionChanged(column);
+			++index;
 		}
 	}
+
 	emit resizeFinished();
 	return columnOffset;
 }
