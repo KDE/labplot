@@ -10,6 +10,7 @@
 
 #include "AbstractAspectTest.h"
 #include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
@@ -110,6 +111,18 @@ void AbstractAspectTest::saveLoad() {
 			continue; // The columns of the quation curve are not saved
 		QVERIFY(childrenProject1.at(i)->uuid() == childrenProject2.at(i)->uuid());
 	}
+}
+
+void AbstractAspectTest::moveSpreadsheet() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	project.addChild(spreadsheet);
+
+	spreadsheet->moveUp(); // should not crash
 }
 
 QTEST_MAIN(AbstractAspectTest)

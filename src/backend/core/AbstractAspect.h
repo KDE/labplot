@@ -486,6 +486,8 @@ public:
 	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
 	if (!suppressed)                                                                                                                                           \
 		q->mRetransformCalled += 1;
+
+	friend class AbstractAspectTest;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)

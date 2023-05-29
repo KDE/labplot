@@ -19,6 +19,7 @@ class AbstractAspectTest : public CommonTest {
 private Q_SLOTS:
 	void copyPaste();
 	void saveLoad();
+	void moveSpreadsheet();
 };
 
 #endif // ABSTRACTASPECTTEST_H
