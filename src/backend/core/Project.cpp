@@ -727,6 +727,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	while (!(reader->isStartDocument() || reader->atEnd()))
 		reader->readNext();
 
+	bool stateAttributeFound = false;
 	if (!(reader->atEnd())) {
 		if (!reader->skipToNextTag())
 			return false;
@@ -770,6 +771,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 						// Restore pointers and retransform elements before loading the state,
 						// otherwise curves don't have column pointers assigned and therefore calculations
 						// in the docks might be wrong
+						stateAttributeFound = true;
 						restorePointers(this, preview);
 						retransformElements(this);
 						Q_EMIT requestLoadState(reader);
@@ -785,6 +787,12 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 			reader->raiseError(i18n("no project element found"));
 	} else // no start document
 		reader->raiseError(i18n("no valid XML document found"));
+
+	if (!stateAttributeFound) {
+		// No state attribute available, means no project explorer reacted on the signal
+		restorePointers(this, preview);
+		retransformElements(this);
+	}
 
 	return !reader->hasError();
 }
