@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for AbstractAspect
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2023 Martin Marmsoler <martin.marmsoler@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
