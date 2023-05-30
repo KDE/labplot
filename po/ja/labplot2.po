@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
@@ -331,7 +331,6 @@ msgstr ""
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/core/AbstractColumn.cpp:274
 #: src/backend/spreadsheet/Spreadsheet.cpp:173
@@ -339,7 +338,6 @@ msgstr[1] ""
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/core/AbstractColumn.cpp:787
 #, kde-format
@@ -1497,7 +1495,6 @@ msgstr ""
 msgid "numerical data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/datasources/filters/JsonFilter.cpp:201
 #, kde-format
@@ -4851,14 +4848,12 @@ msgstr ""
 msgid "%1: add %2 rows"
 msgid_plural "%1: add %2 rows"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/matrix/Matrix.cpp:558
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/matrix/Matrix.cpp:672 src/backend/matrix/matrixcommands.h:120
 #: src/backend/spreadsheet/Spreadsheet.cpp:297
@@ -4871,14 +4866,12 @@ msgstr ""
 msgid "%1: insert %2 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/matrix/matrixcommands.cpp:35
 #, kde-format
 msgid "%1: insert %2 row"
 msgid_plural "%1: insert %2 rows"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/matrix/matrixcommands.cpp:51
 #, kde-format
@@ -4890,14 +4883,12 @@ msgstr ""
 msgid "%1: remove %2 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/matrix/matrixcommands.h:88
 #, kde-format
 msgid "%1: remove %2 row"
 msgid_plural "%1: remove %2 rows"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/matrix/matrixcommands.h:150
 #, kde-format
@@ -5827,14 +5818,12 @@ msgstr ""
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:266
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:309
 #, kde-format
@@ -5856,49 +5845,42 @@ msgstr ""
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1088
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1091
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1094
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1097
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1100
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1103
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:117
 #, kde-format
@@ -8875,14 +8857,12 @@ msgstr ""
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/commonfrontend/ProjectExplorer.cpp:875
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:239
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:60
@@ -9218,7 +9198,6 @@ msgstr ""
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2042
 #, kde-format
@@ -9256,7 +9235,6 @@ msgstr ""
 msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2469
 #, kde-format
@@ -9273,7 +9251,6 @@ msgstr ""
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2660
 #, kde-format
@@ -9323,7 +9300,6 @@ msgstr ""
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3121
 #, kde-format
@@ -9661,7 +9637,6 @@ msgstr ""
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1510
 #, kde-format
@@ -10453,7 +10428,6 @@ msgstr ""
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1217
 #, kde-format
@@ -10575,7 +10549,6 @@ msgid_plural ""
 "The objects listed below already exist in target folder and will be "
 "overwritten:"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:235
 #, kde-format
@@ -13912,7 +13885,6 @@ msgstr ""
 msgid "%1 value"
 msgid_plural "%1 values"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:73
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:39
@@ -14435,7 +14407,6 @@ msgstr ""
 msgid "%1: fill column with equidistant numbers"
 msgid_plural "%1: fill columns with equidistant numbers"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:73
 #, kde-format
@@ -14587,7 +14558,6 @@ msgstr ""
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:33
 #, kde-format
@@ -14767,7 +14737,6 @@ msgstr ""
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
 msgstr[0] ""
-msgstr[1] ""
 
 #: src/kdefrontend/spreadsheet/RescaleDialog.cpp:30
 #, kde-format
