@@ -110,8 +110,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
-	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
-	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range) // range contains scale, so why a separate scale?
+	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range) // range contains scale
+	void setScale(RangeT::Scale scale);
+	RangeT::Scale scale() {
+		return range().scale();
+	}
 	void setStart(const double);
 	void setEnd(const double);
 	void setRange(const double, const double);
