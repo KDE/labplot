@@ -37,22 +37,22 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	, ui(new Ui::PlotTemplateDialog) {
 	ui->setupUi(this);
 
-	setWindowTitle(i18nc("@title:window", "Plot Templates"));
+	setWindowTitle(i18nc("@title:window", "Plot Area Templates"));
 	setWindowIcon(QIcon::fromTheme(QLatin1String("document-new-from-template")));
 
 	ui->cbLocation->addItem(i18n("Default"));
 	ui->cbLocation->addItem(i18n("Custom Folder"));
 	ui->pbCustomFolder->setIcon(QIcon::fromTheme(QLatin1String("document-open-folder")));
 
-	QString info = i18n("Location of plot templates");
+	QString info = i18n("Location of plot area templates");
 	ui->lLocation->setToolTip(info);
 	ui->cbLocation->setToolTip(info);
 
-	info = i18n("Custom folder for the location of plot templates");
+	info = i18n("Custom folder for the location of plot area templates");
 	ui->lCustomFolder->setToolTip(info);
 	ui->leCustomFolder->setToolTip(info);
 
-	ui->pbCustomFolder->setToolTip(i18n("Open the folder for the location of plot templates"));
+	ui->pbCustomFolder->setToolTip(i18n("Open the folder for the location of plot area templates"));
 
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
 

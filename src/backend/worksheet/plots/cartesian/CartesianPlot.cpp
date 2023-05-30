@@ -100,7 +100,7 @@ void CartesianPlot::init() {
 	addChildFast(m_plotArea);
 
 	// title
-	m_title = new TextLabel(this->name() + QLatin1String("- ") + i18n("Title"), TextLabel::Type::PlotTitle);
+	m_title = new TextLabel(this->name() + QLatin1String(" - ") + i18n("Title"), TextLabel::Type::PlotTitle);
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
