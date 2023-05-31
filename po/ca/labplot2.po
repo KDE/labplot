@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-30 00:42+0000\n"
-"PO-Revision-Date: 2023-05-25 09:21+0200\n"
+"PO-Revision-Date: 2023-05-30 09:22+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -5403,9 +5403,7 @@ msgid "%1: copy %2"
 msgstr "%1: copia %2"
 
 #: src/backend/matrix/Matrix.cpp:551
-#, fuzzy, kde-format
-#| msgid "%1: add %2 rows"
-#| msgid_plural "%1: add %2 rows"
+#, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
 msgstr[0] "%1: afegeix %2 fila"
@@ -12295,10 +12293,9 @@ msgid "File Browser"
 msgstr "Navegador de fitxers"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:229
-#, fuzzy, kde-format
-#| msgid "Save current plot definition as template"
+#, kde-format
 msgid "Save current plot area definition as template"
-msgstr "Desa la definició de diagrama actual com una plantilla"
+msgstr "Desa la definició de l'àrea del diagrama actual com una plantilla"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:628
 #, kde-format
@@ -14628,12 +14625,10 @@ msgid "%1: fill matrix with function values"
 msgstr "%1: omple la matriu amb els valors de la funció"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Templates"
+#, kde-format
 msgctxt "@title:window"
 msgid "Plot Area Templates"
-msgstr "Plantilles de diagrames"
+msgstr "Plantilles d'àrea de diagrames"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:43
@@ -14652,23 +14647,22 @@ msgid "Custom Folder"
 msgstr "Carpeta personalitzada"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Location of plot templates"
+#, kde-format
 msgid "Location of plot area templates"
-msgstr "Ubicació de les plantilles de diagrames"
+msgstr "Ubicació de les plantilles d'àrea de diagrames"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:51
-#, fuzzy, kde-format
-#| msgid "Custom folder for the location of plot templates"
+#, kde-format
 msgid "Custom folder for the location of plot area templates"
 msgstr ""
-"Carpeta personalitzada per a la ubicació de les plantilles de diagrames"
+"Carpeta personalitzada per a la ubicació de les plantilles d'àrea de "
+"diagrames"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:55
-#, fuzzy, kde-format
-#| msgid "Open the folder for the location of plot templates"
+#, kde-format
 msgid "Open the folder for the location of plot area templates"
-msgstr "Obre la carpeta per a la ubicació de les plantilles de diagrames"
+msgstr ""
+"Obre la carpeta per a la ubicació de les plantilles d'àrea de diagrames"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:134
 #, kde-format

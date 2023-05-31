@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-30 00:42+0000\n"
-"PO-Revision-Date: 2023-05-25 09:05+0300\n"
+"PO-Revision-Date: 2023-05-30 09:42+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -5368,9 +5368,7 @@ msgid "%1: copy %2"
 msgstr "%1: копіювання %2"
 
 #: src/backend/matrix/Matrix.cpp:551
-#, fuzzy, kde-format
-#| msgid "%1: add %2 rows"
-#| msgid_plural "%1: add %2 rows"
+#, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
 msgstr[0] "%1: додати %2 рядок"
@@ -12267,10 +12265,9 @@ msgid "File Browser"
 msgstr "Навігатор файловою системою"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:229
-#, fuzzy, kde-format
-#| msgid "Save current plot definition as template"
+#, kde-format
 msgid "Save current plot area definition as template"
-msgstr "Зберегти поточне визначення креслення як шаблон"
+msgstr "Зберегти поточне визначення області креслення як шаблон"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:628
 #, kde-format
@@ -14592,12 +14589,10 @@ msgid "%1: fill matrix with function values"
 msgstr "%1: заповнити матрицю значеннями функції"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Templates"
+#, kde-format
 msgctxt "@title:window"
 msgid "Plot Area Templates"
-msgstr "Шаблони креслень"
+msgstr "Шаблони області креслень"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:43
@@ -14616,22 +14611,19 @@ msgid "Custom Folder"
 msgstr "Нетипова тека"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Location of plot templates"
+#, kde-format
 msgid "Location of plot area templates"
-msgstr "Розташування шаблонів креслень"
+msgstr "Розташування шаблонів області креслень"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:51
-#, fuzzy, kde-format
-#| msgid "Custom folder for the location of plot templates"
+#, kde-format
 msgid "Custom folder for the location of plot area templates"
-msgstr "Нетипова тека для шаблонів креслень"
+msgstr "Нетипова тека для шаблонів області креслень"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:55
-#, fuzzy, kde-format
-#| msgid "Open the folder for the location of plot templates"
+#, kde-format
 msgid "Open the folder for the location of plot area templates"
-msgstr "Відкрити теку для шаблонів креслень"
+msgstr "Відкрити теку для шаблонів області креслень"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:134
 #, kde-format
