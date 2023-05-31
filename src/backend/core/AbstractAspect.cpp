@@ -213,7 +213,7 @@ void AbstractAspect::setSuppressWriteUuid(bool suppress) {
  * \param skipAutoUnique - if set to \true, don't check for uniqueness, the caller has to guarantee the uniqueness. default is \false.
  * \return returns, if the new name is valid or not
  */
-bool AbstractAspect::setName(const QString& value, NameHandling handling, QUndoCommand* parent) {
+bool AbstractAspect::setName(const QString& value, NameHandling handling, QUndoCommand* /*parent*/) {
 	if (value.isEmpty())
 		return setName(QLatin1String("1"), handling);
 
