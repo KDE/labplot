@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-30 00:42+0000\n"
-"PO-Revision-Date: 2023-05-25 20:33+0100\n"
+"PO-Revision-Date: 2023-05-30 22:35+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -5312,13 +5312,11 @@ msgid "%1: copy %2"
 msgstr "%1: kopiu %2"
 
 #: src/backend/matrix/Matrix.cpp:551
-#, fuzzy, kde-format
-#| msgid "%1: add %2 rows"
-#| msgid_plural "%1: add %2 rows"
+#, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
 msgstr[0] "%1: aldoni %2 vicon"
-msgstr[1] "%1: add %2 vicojn"
+msgstr[1] "%1: aldoni %2 vicojn"
 
 #: src/backend/matrix/Matrix.cpp:562
 #, kde-format
@@ -9706,8 +9704,8 @@ msgstr "%1: forigi elektitajn kolumnojn"
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: renversa kolumno"
+msgstr[1] "%1: renversaj kolumnoj"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2740
 #, kde-format
@@ -11317,7 +11315,11 @@ msgid_plural ""
 "The objects listed below already exist in target folder and will be "
 "overwritten:"
 msgstr[0] ""
+"La objekto listigita sube jam ekzistas en celdosierujo kaj estos "
+"superskribata: "
 msgstr[1] ""
+"La objektoj listigitaj sube jam ekzistas en celdosierujo kaj estos "
+"superskribataj: "
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:236
 #, kde-format
@@ -12143,10 +12145,9 @@ msgid "File Browser"
 msgstr "Dosiera Retumilo"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:229
-#, fuzzy, kde-format
-#| msgid "Save current plot definition as template"
+#, kde-format
 msgid "Save current plot area definition as template"
-msgstr "Konservu nunan difinon kiel ŝablonon"
+msgstr "Konservi nunan diagramarean difinon kiel ŝablono"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:628
 #, kde-format
@@ -12659,11 +12660,12 @@ msgstr "%1 referenclinioj: ŝablono \"%2\" ŝargita"
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
+"Ebligi ligadon por sinkronigi la nombron da vicoj kun alia kalkultabelo"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "Kalkultabelo kun kiu sinkronigi la nombron da vicoj"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
@@ -14436,8 +14438,8 @@ msgstr "Funkciaj Valoroj"
 #, kde-format
 msgid "%1 value"
 msgid_plural "%1 values"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 valoro"
+msgstr[1] "%1 valoroj"
 
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:77
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:43
@@ -14459,12 +14461,10 @@ msgid "%1: fill matrix with function values"
 msgstr "%1: plenigu matricon per funkciovaloroj"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Templates"
+#, kde-format
 msgctxt "@title:window"
 msgid "Plot Area Templates"
-msgstr "Diagramigaj Ŝablonoj"
+msgstr "Diagramareaj Ŝablonoj"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:43
@@ -14483,22 +14483,19 @@ msgid "Custom Folder"
 msgstr "Propra Dosierujo"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Location of plot templates"
+#, kde-format
 msgid "Location of plot area templates"
-msgstr "Loko de diagramigaj ŝablonoj"
+msgstr "Loko de diagramareaj ŝablonoj"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:51
-#, fuzzy, kde-format
-#| msgid "Custom folder for the location of plot templates"
+#, kde-format
 msgid "Custom folder for the location of plot area templates"
-msgstr "Propra dosierujo por la loko de diagramigaj ŝablonoj"
+msgstr "Propra dosierujo por la loko de diagramareaj ŝablonoj"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:55
-#, fuzzy, kde-format
-#| msgid "Open the folder for the location of plot templates"
+#, kde-format
 msgid "Open the folder for the location of plot area templates"
-msgstr "Malfermu la dosierujon por la loko de diagramigaj ŝablonoj"
+msgstr "Malfermi la dosierujon por la loko de diagramareaj ŝablonoj"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:134
 #, kde-format
@@ -15320,8 +15317,8 @@ msgstr "Variablo:"
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: plenigi kolumnon per funkciovaloroj"
+msgstr[1] "%1: plenigi kolumnojn per funkciovaloroj"
 
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:34
 #, kde-format
@@ -15520,8 +15517,8 @@ msgstr ""
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: plenigi kolumnon per neuniformaj hazardciferoj"
+msgstr[1] "%1: plenigi kolumnojn per neuniformaj hazardciferoj"
 
 #: src/kdefrontend/spreadsheet/RescaleDialog.cpp:31
 #, kde-format

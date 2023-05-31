@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-30 00:42+0000\n"
-"PO-Revision-Date: 2023-05-25 10:15+0200\n"
+"PO-Revision-Date: 2023-05-30 12:56+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -5327,9 +5327,7 @@ msgid "%1: copy %2"
 msgstr "%1: kopie %2"
 
 #: src/backend/matrix/Matrix.cpp:551
-#, fuzzy, kde-format
-#| msgid "%1: add %2 rows"
-#| msgid_plural "%1: add %2 rows"
+#, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
 msgstr[0] "%1: %2 rij toevoegen"
@@ -12167,10 +12165,9 @@ msgid "File Browser"
 msgstr "Browser voor bestanden"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:229
-#, fuzzy, kde-format
-#| msgid "Save current plot definition as template"
+#, kde-format
 msgid "Save current plot area definition as template"
-msgstr "Huidige plotbeschrijving opslaan als een sjabloon"
+msgstr "Huidige definitie van plotgebied opslaan als sjabloon"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:628
 #, kde-format
@@ -14490,12 +14487,10 @@ msgid "%1: fill matrix with function values"
 msgstr "%1: matrix vullen met functiewaarden"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Templates"
+#, kde-format
 msgctxt "@title:window"
 msgid "Plot Area Templates"
-msgstr "Plotsjablonen"
+msgstr "Plotgebiedsjablonen"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:43
@@ -14514,22 +14509,19 @@ msgid "Custom Folder"
 msgstr "Aangepaste map"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Location of plot templates"
+#, kde-format
 msgid "Location of plot area templates"
-msgstr "Locatie van plotsjablonen"
+msgstr "Locatie van plotgebiedsjablonen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:51
-#, fuzzy, kde-format
-#| msgid "Custom folder for the location of plot templates"
+#, kde-format
 msgid "Custom folder for the location of plot area templates"
-msgstr "Map voor de locatie van plotsjablonen"
+msgstr "Aangepaste map voor de locatie van plotgebiedsjablonen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:55
-#, fuzzy, kde-format
-#| msgid "Open the folder for the location of plot templates"
+#, kde-format
 msgid "Open the folder for the location of plot area templates"
-msgstr "De map openen voor de locatie van plotsjablonen"
+msgstr "De map openen voor de locatie van plotgebiedsjablonen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:134
 #, kde-format
