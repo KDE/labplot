@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-30 00:42+0000\n"
+"POT-Creation-Date: 2023-06-01 00:42+0000\n"
 "PO-Revision-Date: 2020-01-12 12:23+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -1783,7 +1783,7 @@ msgstr "Ficheiro baleiro"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:386
 #: src/backend/datasources/filters/MatioFilter.cpp:460
-#: src/backend/gsl/functions.cpp:233
+#: src/backend/gsl/functions.cpp:266
 #, kde-format
 msgid "Cell"
 msgstr ""
@@ -3121,411 +3121,445 @@ msgstr "Non pode acadarse a tolerancia indicada en gradiente"
 msgid "End of file"
 msgstr "Fin de ficheiro"
 
-#: src/backend/gsl/functions.cpp:30
+#: src/backend/gsl/functions.cpp:40
 #, fuzzy, kde-format
 #| msgid "Standard Mathematical functions"
 msgid "Standard Mathematical Functions"
 msgstr "Funcións matemáticas estándar"
 
-#: src/backend/gsl/functions.cpp:32
+#: src/backend/gsl/functions.cpp:42
 #, fuzzy, kde-format
 #| msgid "Clausen Functions"
 msgid "Comparison Functions"
 msgstr "Funcións de Clausen"
 
-#: src/backend/gsl/functions.cpp:34
+#: src/backend/gsl/functions.cpp:44
+#, fuzzy, kde-format
+#| msgid "Connection:"
+msgid "Conditions"
+msgstr "Conexión:"
+
+#: src/backend/gsl/functions.cpp:46
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "Column Statistics"
 msgstr "Estatística&s da columna"
 
-#: src/backend/gsl/functions.cpp:36
+#: src/backend/gsl/functions.cpp:48
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Moving Statistics"
 msgstr "Estatísticas"
 
-#: src/backend/gsl/functions.cpp:38
+#: src/backend/gsl/functions.cpp:50
 #, kde-format
 msgid "Airy Functions and Derivatives"
 msgstr "Funcións e derivadas de Airy"
 
-#: src/backend/gsl/functions.cpp:40
+#: src/backend/gsl/functions.cpp:52
 #, kde-format
 msgid "Bessel Functions"
 msgstr "Funcións de Bessel"
 
-#: src/backend/gsl/functions.cpp:42
+#: src/backend/gsl/functions.cpp:54
 #, kde-format
 msgid "Clausen Functions"
 msgstr "Funcións de Clausen"
 
-#: src/backend/gsl/functions.cpp:44
+#: src/backend/gsl/functions.cpp:56
 #, kde-format
 msgid "Coulomb Functions"
 msgstr "Funcións de Coulomb"
 
-#: src/backend/gsl/functions.cpp:46
+#: src/backend/gsl/functions.cpp:58
 #, kde-format
 msgid "Dawson Function"
 msgstr "Funcións de Dawson"
 
-#: src/backend/gsl/functions.cpp:48
+#: src/backend/gsl/functions.cpp:60
 #, kde-format
 msgid "Debye Functions"
 msgstr "Funcións d Debye"
 
-#: src/backend/gsl/functions.cpp:50
+#: src/backend/gsl/functions.cpp:62
 #, kde-format
 msgid "Dilogarithm"
 msgstr "Función de Spence"
 
-#: src/backend/gsl/functions.cpp:52
+#: src/backend/gsl/functions.cpp:64
 #, kde-format
 msgid "Elliptic Integrals"
 msgstr "Integrais elípticas"
 
-#: src/backend/gsl/functions.cpp:56
+#: src/backend/gsl/functions.cpp:68
 #, kde-format
 msgid "Error Functions and Related Functions"
 msgstr "Funcións de erro e funcións relacionadas"
 
-#: src/backend/gsl/functions.cpp:59
+#: src/backend/gsl/functions.cpp:71
 #, kde-format
 msgid "Error Functions"
 msgstr "Funcións de erro"
 
-#: src/backend/gsl/functions.cpp:62
+#: src/backend/gsl/functions.cpp:74
 #, kde-format
 msgid "Exponential Functions"
 msgstr "Funcións exponenciais"
 
-#: src/backend/gsl/functions.cpp:64
+#: src/backend/gsl/functions.cpp:76
 #, kde-format
 msgid "Exponential Integrals"
 msgstr "Integrais exponenciais"
 
-#: src/backend/gsl/functions.cpp:66
+#: src/backend/gsl/functions.cpp:78
 #, kde-format
 msgid "Fermi-Dirac Function"
 msgstr "Función de Fermi-Dirac"
 
-#: src/backend/gsl/functions.cpp:68
+#: src/backend/gsl/functions.cpp:80
 #, kde-format
 msgid "Gamma and Beta Functions"
 msgstr "Funcións de gamma e beta"
 
-#: src/backend/gsl/functions.cpp:70
+#: src/backend/gsl/functions.cpp:82
 #, kde-format
 msgid "Gegenbauer Functions"
 msgstr "Funcións de Gegenbauer"
 
-#: src/backend/gsl/functions.cpp:73
+#: src/backend/gsl/functions.cpp:85
 #, kde-format
 msgid "Hermite Polynomials and Functions"
 msgstr "Polinómicos e funcións de Hermite"
 
-#: src/backend/gsl/functions.cpp:76
+#: src/backend/gsl/functions.cpp:88
 #, kde-format
 msgid "Hypergeometric Functions"
 msgstr "Funcións hiperxeométricas"
 
-#: src/backend/gsl/functions.cpp:78
+#: src/backend/gsl/functions.cpp:90
 #, kde-format
 msgid "Laguerre Functions"
 msgstr "Funcións de Laguerre"
 
-#: src/backend/gsl/functions.cpp:80
+#: src/backend/gsl/functions.cpp:92
 #, kde-format
 msgid "Lambert W Functions"
 msgstr "Funcións de Lambert W"
 
-#: src/backend/gsl/functions.cpp:82
+#: src/backend/gsl/functions.cpp:94
 #, kde-format
 msgid "Legendre Functions and Spherical Harmonics"
 msgstr "Funcións de Legendre e harmónicos esféricos"
 
-#: src/backend/gsl/functions.cpp:84
+#: src/backend/gsl/functions.cpp:96
 #, kde-format
 msgid "Logarithm and Related Functions"
 msgstr "Logaritmo e funcións relacionadas"
 
-#: src/backend/gsl/functions.cpp:87
+#: src/backend/gsl/functions.cpp:99
 #, fuzzy, kde-format
 #| msgid "Zeta Functions"
 msgid "Mathieu Functions"
 msgstr "Funcións zeta"
 
-#: src/backend/gsl/functions.cpp:90
+#: src/backend/gsl/functions.cpp:102
 #, kde-format
 msgid "Power Function"
 msgstr "Funcións de potencias"
 
-#: src/backend/gsl/functions.cpp:92
+#: src/backend/gsl/functions.cpp:104
 #, kde-format
 msgid "Psi (Digamma) Function"
 msgstr "Función de Psi (digamma)"
 
-#: src/backend/gsl/functions.cpp:94
+#: src/backend/gsl/functions.cpp:106
 #, kde-format
 msgid "Synchrotron Functions"
 msgstr "Funcións de sincrotrón"
 
-#: src/backend/gsl/functions.cpp:96
+#: src/backend/gsl/functions.cpp:108
 #, kde-format
 msgid "Transport Functions"
 msgstr "Funcións de transporte"
 
-#: src/backend/gsl/functions.cpp:98
+#: src/backend/gsl/functions.cpp:110
 #, kde-format
 msgid "Trigonometric Functions"
 msgstr "Funcións trigonométricas"
 
-#: src/backend/gsl/functions.cpp:100
+#: src/backend/gsl/functions.cpp:112
 #, kde-format
 msgid "Zeta Functions"
 msgstr "Funcións zeta"
 
-#: src/backend/gsl/functions.cpp:102
+#: src/backend/gsl/functions.cpp:114
 #, kde-format
 msgid "Random number generator"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:104
+#: src/backend/gsl/functions.cpp:116
 #, kde-format
 msgid "Gaussian Distribution"
 msgstr "Distribución de Gauss"
 
-#: src/backend/gsl/functions.cpp:106
+#: src/backend/gsl/functions.cpp:118
 #, kde-format
 msgid "Exponential Distribution"
 msgstr "Distribución exponencial"
 
-#: src/backend/gsl/functions.cpp:108
+#: src/backend/gsl/functions.cpp:120
 #, kde-format
 msgid "Laplace Distribution"
 msgstr "Distribución de Laplace"
 
-#: src/backend/gsl/functions.cpp:110
+#: src/backend/gsl/functions.cpp:122
 #, kde-format
 msgid "Exponential Power Distribution"
 msgstr "Distribución de potencias exponenciais"
 
-#: src/backend/gsl/functions.cpp:112
+#: src/backend/gsl/functions.cpp:124
 #, kde-format
 msgid "Cauchy Distribution"
 msgstr "Distribución de Cauchy"
 
-#: src/backend/gsl/functions.cpp:114
+#: src/backend/gsl/functions.cpp:126
 #, kde-format
 msgid "Rayleigh Distribution"
 msgstr "Distribución de Rayleigh"
 
-#: src/backend/gsl/functions.cpp:116
+#: src/backend/gsl/functions.cpp:128
 #, kde-format
 msgid "Landau Distribution"
 msgstr "Distribución de Landau"
 
-#: src/backend/gsl/functions.cpp:118
+#: src/backend/gsl/functions.cpp:130
 #, kde-format
 msgid "Gamma Distribution"
 msgstr "Distribución gamma"
 
-#: src/backend/gsl/functions.cpp:120
+#: src/backend/gsl/functions.cpp:132
 #, kde-format
 msgid "Flat (Uniform) Distribution"
 msgstr "Distribución plana (uniforme)"
 
-#: src/backend/gsl/functions.cpp:122
+#: src/backend/gsl/functions.cpp:134
 #, kde-format
 msgid "Lognormal Distribution"
 msgstr "Distribución lognormal"
 
-#: src/backend/gsl/functions.cpp:124
+#: src/backend/gsl/functions.cpp:136
 #, kde-format
 msgid "Chi-squared Distribution"
 msgstr "Distribución χ²"
 
-#: src/backend/gsl/functions.cpp:126
+#: src/backend/gsl/functions.cpp:138
 #, kde-format
 msgid "F-distribution"
 msgstr "Distribución F"
 
-#: src/backend/gsl/functions.cpp:128
+#: src/backend/gsl/functions.cpp:140
 #, kde-format
 msgid "t-distribution"
 msgstr "Distribución t"
 
-#: src/backend/gsl/functions.cpp:130
+#: src/backend/gsl/functions.cpp:142
 #, kde-format
 msgid "Beta Distribution"
 msgstr "Distribución beta"
 
-#: src/backend/gsl/functions.cpp:132
+#: src/backend/gsl/functions.cpp:144
 #, kde-format
 msgid "Logistic Distribution"
 msgstr "Distribución loxística"
 
-#: src/backend/gsl/functions.cpp:134
+#: src/backend/gsl/functions.cpp:146
 #, kde-format
 msgid "Pareto Distribution"
 msgstr "Distribución de Pareto"
 
-#: src/backend/gsl/functions.cpp:136
+#: src/backend/gsl/functions.cpp:148
 #, kde-format
 msgid "Weibull Distribution"
 msgstr "Distribución de Weibull"
 
-#: src/backend/gsl/functions.cpp:138
+#: src/backend/gsl/functions.cpp:150
 #, kde-format
 msgid "Gumbel Distribution"
 msgstr "Distribución de Gumbel"
 
-#: src/backend/gsl/functions.cpp:140
+#: src/backend/gsl/functions.cpp:152
 #, kde-format
 msgid "Poisson Distribution"
 msgstr "Distribución de Poisson"
 
-#: src/backend/gsl/functions.cpp:142
+#: src/backend/gsl/functions.cpp:154
 #, kde-format
 msgid "Bernoulli Distribution"
 msgstr "Distribución de Bernoulli"
 
-#: src/backend/gsl/functions.cpp:144
+#: src/backend/gsl/functions.cpp:156
 #, kde-format
 msgid "Binomial Distribution"
 msgstr "Distribución binomial"
 
-#: src/backend/gsl/functions.cpp:146
+#: src/backend/gsl/functions.cpp:158
 #, kde-format
 msgid "Pascal Distribution"
 msgstr "Distribución de Pascal"
 
-#: src/backend/gsl/functions.cpp:148
+#: src/backend/gsl/functions.cpp:160
 #, kde-format
 msgid "Geometric Distribution"
 msgstr "Distribución xeométrica"
 
-#: src/backend/gsl/functions.cpp:150
+#: src/backend/gsl/functions.cpp:162
 #, kde-format
 msgid "Hypergeometric Distribution"
 msgstr "Distribución hiperxeométrica"
 
-#: src/backend/gsl/functions.cpp:152
+#: src/backend/gsl/functions.cpp:164
 #, kde-format
 msgid "Logarithmic Distribution"
 msgstr "Distribución logarítmica"
 
-#: src/backend/gsl/functions.cpp:156
+#: src/backend/gsl/functions.cpp:168
 #, fuzzy, kde-format
 #| msgid "Power Function"
 msgid "Unknown Function"
 msgstr "Funcións de potencias"
 
-#: src/backend/gsl/functions.cpp:162
+#: src/backend/gsl/functions.cpp:174
 #, kde-format
 msgid "pseudo-random integer [0,RAND_MAX]"
 msgstr "enteiro pseudo-aleatorio [0,MÁX_ALEA]"
 
-#: src/backend/gsl/functions.cpp:163
+#: src/backend/gsl/functions.cpp:175
 #, kde-format
 msgid "nonlinear additive feedback rng [0,RAND_MAX]"
 msgstr "pseudo-anel non lineal de retroacción activa [0,MÁX_ALEA]"
 
-#: src/backend/gsl/functions.cpp:164
+#: src/backend/gsl/functions.cpp:176
 #, kde-format
 msgid "nonlinear additive feedback rng [0,1]"
 msgstr "pseudo-anel non lineal de retroacción activa [0,1]"
 
-#: src/backend/gsl/functions.cpp:165
+#: src/backend/gsl/functions.cpp:177
 #, kde-format
 msgid "Smallest integral value not less"
 msgstr "Menor valor integral superior a"
 
-#: src/backend/gsl/functions.cpp:166
+#: src/backend/gsl/functions.cpp:183
 #, kde-format
 msgid "Absolute value"
 msgstr "Valor absoluto"
 
-#: src/backend/gsl/functions.cpp:168
+#: src/backend/gsl/functions.cpp:185
 #, kde-format
 msgid "Base 10 logarithm"
 msgstr "Logaritmo decimal"
 
-#: src/backend/gsl/functions.cpp:169
+#: src/backend/gsl/functions.cpp:186
 #, kde-format
 msgid "Power function [x^y]"
 msgstr "Función de potencia [x^y]"
 
-#: src/backend/gsl/functions.cpp:170
+#: src/backend/gsl/functions.cpp:187
 #, kde-format
 msgid "Nonnegative square root"
 msgstr "Raíz cadrada non negativa"
 
-#: src/backend/gsl/functions.cpp:171
+#: src/backend/gsl/functions.cpp:188
 #, kde-format
 msgid "Sign function"
 msgstr "Funcións de signo"
 
-#: src/backend/gsl/functions.cpp:172
+#: src/backend/gsl/functions.cpp:189
 #, kde-format
 msgid "Heavyside theta function"
 msgstr "Función zeta de Heaviside"
 
-#: src/backend/gsl/functions.cpp:173
+#: src/backend/gsl/functions.cpp:190
 #, kde-format
 msgid "Harmonic number function"
 msgstr "Función de números harmónicos"
 
-#: src/backend/gsl/functions.cpp:176
+#: src/backend/gsl/functions.cpp:193
 #, kde-format
 msgid "Cube root"
 msgstr "Raíz cadrada."
 
-#: src/backend/gsl/functions.cpp:177
+#: src/backend/gsl/functions.cpp:194
 #, kde-format
 msgid "Extract the exponent"
 msgstr "Extraer o expoñente"
 
-#: src/backend/gsl/functions.cpp:178
+#: src/backend/gsl/functions.cpp:195
 #, kde-format
 msgid "Round to an integer value"
 msgstr "Redondear a un valor enteiro"
 
-#: src/backend/gsl/functions.cpp:179 src/backend/gsl/functions.cpp:180
+#: src/backend/gsl/functions.cpp:196 src/backend/gsl/functions.cpp:202
 #, kde-format
 msgid "Round to the nearest integer"
 msgstr "Redondear ao enteiro máis próximo"
 
-#: src/backend/gsl/functions.cpp:195
+#: src/backend/gsl/functions.cpp:222
 #, fuzzy, kde-format
 #| msgid "Greater than"
 msgid "greaterThen"
 msgstr "Maior que"
 
-#: src/backend/gsl/functions.cpp:196
+#: src/backend/gsl/functions.cpp:223
 #, kde-format
-msgid "lessThan"
+msgid "lessThen"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:197
+#: src/backend/gsl/functions.cpp:224
 #, kde-format
 msgid "greaterEqualThen"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:198
+#: src/backend/gsl/functions.cpp:225
 #, kde-format
 msgid "lessEqualThen"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:199
+#: src/backend/gsl/functions.cpp:226
 #, fuzzy, kde-format
 #| msgid "Equal to"
 msgid "equal"
 msgstr "Igual a"
 
+#: src/backend/gsl/functions.cpp:229
+#, kde-format
+msgid "if(condition, ifTrue, ifFalse)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lAnd)
+#. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
+#: src/backend/gsl/functions.cpp:230 src/backend/lib/XmlStreamReader.cpp:58
+#: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:74
+#: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:220
+#, kde-format
+msgid "and"
+msgstr "e"
+
+#. i18n: ectx: property (text), widget (QLabel, l2SamplingInterval)
+#: src/backend/gsl/functions.cpp:231
+#: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:263
+#: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:117
+#, kde-format
+msgid "or"
+msgstr "ou"
+
+#: src/backend/gsl/functions.cpp:232
+#, fuzzy, kde-format
+#| msgid "or"
+msgid "xor"
+msgstr "ou"
+
 #. i18n: ectx: property (text), widget (QLabel, lSize)
-#: src/backend/gsl/functions.cpp:202
+#: src/backend/gsl/functions.cpp:235
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:466
 #, fuzzy, kde-format
 #| msgid "Size:"
@@ -3533,7 +3567,7 @@ msgid "Size"
 msgstr "Tamaño:"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:203
+#: src/backend/gsl/functions.cpp:236
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:62
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:99
@@ -3543,7 +3577,7 @@ msgid "Minimum"
 msgstr "Mínimo"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:204 src/backend/nsl/nsl_conv.c:23
+#: src/backend/gsl/functions.cpp:237 src/backend/nsl/nsl_conv.c:23
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:100
@@ -3553,7 +3587,7 @@ msgid "Maximum"
 msgstr "Máximo"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:205
+#: src/backend/gsl/functions.cpp:238
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:64
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:53
 #, kde-format
@@ -3562,7 +3596,7 @@ msgstr "Media aritmética"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
-#: src/backend/gsl/functions.cpp:206
+#: src/backend/gsl/functions.cpp:239
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:529
@@ -3572,7 +3606,7 @@ msgid "Median"
 msgstr "Mediana"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:207
+#: src/backend/gsl/functions.cpp:240
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:77
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:119
 #, kde-format
@@ -3580,7 +3614,7 @@ msgid "Standard deviation"
 msgstr "Desviación estándar"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:208
+#: src/backend/gsl/functions.cpp:241
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:76
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:108
 #, kde-format
@@ -3588,7 +3622,7 @@ msgid "Variance"
 msgstr "Varianza"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:209
+#: src/backend/gsl/functions.cpp:242
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:65
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:64
 #, kde-format
@@ -3596,7 +3630,7 @@ msgid "Geometric mean"
 msgstr "Media xeométrica"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:210
+#: src/backend/gsl/functions.cpp:243
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:75
 #, kde-format
@@ -3604,101 +3638,101 @@ msgid "Harmonic mean"
 msgstr "Media harmónica"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:211
+#: src/backend/gsl/functions.cpp:244
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:67
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:86
 #, kde-format
 msgid "Contraharmonic mean"
 msgstr "Media contraharmónica"
 
-#: src/backend/gsl/functions.cpp:212
+#: src/backend/gsl/functions.cpp:245
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:68
 #, fuzzy, kde-format
 #| msgid "Model:"
 msgid "Mode"
 msgstr "Modelo:"
 
-#: src/backend/gsl/functions.cpp:213
+#: src/backend/gsl/functions.cpp:246
 #, fuzzy, kde-format
 #| msgid "first derivative"
 msgid "First quartile"
 msgstr "primeira derivada"
 
-#: src/backend/gsl/functions.cpp:214
+#: src/backend/gsl/functions.cpp:247
 #, fuzzy, kde-format
 #| msgid "third derivative"
 msgid "Third quartile"
 msgstr "terceira derivada"
 
-#: src/backend/gsl/functions.cpp:215
+#: src/backend/gsl/functions.cpp:248
 #, fuzzy, kde-format
 #| msgid "Interactive"
 msgid "Interquartile range"
 msgstr "Interactivo"
 
-#: src/backend/gsl/functions.cpp:216
+#: src/backend/gsl/functions.cpp:249
 #, fuzzy, kde-format
 #| msgid "percentile"
 msgid "1st percentile"
 msgstr "porcentaxe"
 
-#: src/backend/gsl/functions.cpp:217
+#: src/backend/gsl/functions.cpp:250
 #, fuzzy, kde-format
 #| msgid "percentile"
 msgid "5th percentile"
 msgstr "porcentaxe"
 
-#: src/backend/gsl/functions.cpp:218
+#: src/backend/gsl/functions.cpp:251
 #, fuzzy, kde-format
 #| msgid "percentile"
 msgid "10th percentile"
 msgstr "porcentaxe"
 
-#: src/backend/gsl/functions.cpp:219
+#: src/backend/gsl/functions.cpp:252
 #, fuzzy, kde-format
 #| msgid "percentile"
 msgid "90th percentile"
 msgstr "porcentaxe"
 
-#: src/backend/gsl/functions.cpp:220
+#: src/backend/gsl/functions.cpp:253
 #, fuzzy, kde-format
 #| msgid "percentile"
 msgid "95th percentile"
 msgstr "porcentaxe"
 
-#: src/backend/gsl/functions.cpp:221
+#: src/backend/gsl/functions.cpp:254
 #, fuzzy, kde-format
 #| msgid "percentile"
 msgid "99th percentile"
 msgstr "porcentaxe"
 
-#: src/backend/gsl/functions.cpp:222
+#: src/backend/gsl/functions.cpp:255
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #, fuzzy, kde-format
 #| msgid "Harmonic mean"
 msgid "Trimean"
 msgstr "Media harmónica"
 
-#: src/backend/gsl/functions.cpp:223
+#: src/backend/gsl/functions.cpp:256
 #, fuzzy, kde-format
 #| msgid "Median absolute deviation"
 msgid "Mean absolute deviation"
 msgstr "Desviación absoluta da mediana"
 
-#: src/backend/gsl/functions.cpp:224
+#: src/backend/gsl/functions.cpp:257
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #, kde-format
 msgid "Mean absolute deviation around median"
 msgstr "Desviación absoluta da media con respecto á mediana"
 
-#: src/backend/gsl/functions.cpp:225
+#: src/backend/gsl/functions.cpp:258
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #, kde-format
 msgid "Median absolute deviation"
 msgstr "Desviación absoluta da mediana"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:226
+#: src/backend/gsl/functions.cpp:259
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:163
 #, kde-format
@@ -3706,7 +3740,7 @@ msgid "Skewness"
 msgstr "Asimetría"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:227
+#: src/backend/gsl/functions.cpp:260
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:86
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:174
 #, kde-format
@@ -3714,166 +3748,166 @@ msgid "Kurtosis"
 msgstr "Curtose"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/functions.cpp:228
+#: src/backend/gsl/functions.cpp:261
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:87
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:185
 #, kde-format
 msgid "Entropy"
 msgstr "Entropía"
 
-#: src/backend/gsl/functions.cpp:229
+#: src/backend/gsl/functions.cpp:262
 #, fuzzy, kde-format
 msgid "Quantile"
 msgstr "Taxa de mostraxe"
 
-#: src/backend/gsl/functions.cpp:230 src/backend/nsl/nsl_smooth.c:21
+#: src/backend/gsl/functions.cpp:263 src/backend/nsl/nsl_smooth.c:21
 #, fuzzy, kde-format
 #| msgid "Percentile:"
 msgid "Percentile"
 msgstr "Percentil:"
 
-#: src/backend/gsl/functions.cpp:234
+#: src/backend/gsl/functions.cpp:267
 #, fuzzy, kde-format
 #| msgid "sliding average"
 msgid "Moving Average"
 msgstr "media móbil"
 
-#: src/backend/gsl/functions.cpp:235
+#: src/backend/gsl/functions.cpp:268
 #, fuzzy, kde-format
 #| msgid "Bin Ranges"
 msgid "Moving Range"
 msgstr "Intervalos de arcas"
 
-#: src/backend/gsl/functions.cpp:236
+#: src/backend/gsl/functions.cpp:269
 #, fuzzy, kde-format
 #| msgid "sliding average"
 msgid "Simple Moving Minimum"
 msgstr "media móbil"
 
-#: src/backend/gsl/functions.cpp:237
+#: src/backend/gsl/functions.cpp:270
 #, fuzzy, kde-format
 #| msgid "sliding average"
 msgid "Simple Moving Maximum"
 msgstr "media móbil"
 
-#: src/backend/gsl/functions.cpp:238
+#: src/backend/gsl/functions.cpp:271
 #, fuzzy, kde-format
 #| msgid "sliding average"
 msgid "Simple Moving Average"
 msgstr "media móbil"
 
-#: src/backend/gsl/functions.cpp:239
+#: src/backend/gsl/functions.cpp:272
 #, fuzzy, kde-format
 #| msgid "sliding average"
 msgid "Simple Moving Range"
 msgstr "media móbil"
 
-#: src/backend/gsl/functions.cpp:243
+#: src/backend/gsl/functions.cpp:276
 #, kde-format
 msgid "Airy function of the first kind"
 msgstr "Función de Airy do primeiro tipo"
 
-#: src/backend/gsl/functions.cpp:244
+#: src/backend/gsl/functions.cpp:277
 #, kde-format
 msgid "Airy function of the second kind"
 msgstr "Función de Airy do segundo tipo"
 
-#: src/backend/gsl/functions.cpp:245
+#: src/backend/gsl/functions.cpp:278
 #, kde-format
 msgid "Scaled Airy function of the first kind"
 msgstr "Función de Airy cambiada de escala do primeiro tipo"
 
-#: src/backend/gsl/functions.cpp:246
+#: src/backend/gsl/functions.cpp:279
 #, kde-format
 msgid "Scaled Airy function of the second kind"
 msgstr "Función de Airy cambiada de escala do segundo tipo"
 
-#: src/backend/gsl/functions.cpp:247
+#: src/backend/gsl/functions.cpp:280
 #, kde-format
 msgid "Airy function derivative of the first kind"
 msgstr "Derivada da función de Airy do primeiro tipo"
 
-#: src/backend/gsl/functions.cpp:248
+#: src/backend/gsl/functions.cpp:281
 #, kde-format
 msgid "Airy function derivative of the second kind"
 msgstr "Derivada da función de Airy do segundo tipo"
 
-#: src/backend/gsl/functions.cpp:249
+#: src/backend/gsl/functions.cpp:282
 #, kde-format
 msgid "Scaled Airy function derivative of the first kind"
 msgstr "Derivada da función de Airy cambiada de escala do primeiro tipo"
 
-#: src/backend/gsl/functions.cpp:250
+#: src/backend/gsl/functions.cpp:283
 #, kde-format
 msgid "Scaled Airy function derivative of the second kind"
 msgstr "Derivada da función de Airy cambiada de escala do segundo tipo"
 
-#: src/backend/gsl/functions.cpp:251
+#: src/backend/gsl/functions.cpp:284
 #, kde-format
 msgid "n-th zero of the Airy function of the first kind"
 msgstr "Cero n da función de Airy do primeiro tipo"
 
-#: src/backend/gsl/functions.cpp:252
+#: src/backend/gsl/functions.cpp:285
 #, kde-format
 msgid "n-th zero of the Airy function of the second kind"
 msgstr "Cero n da función de Airy do segundo tipo"
 
-#: src/backend/gsl/functions.cpp:253
+#: src/backend/gsl/functions.cpp:286
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the first kind"
 msgstr "Cero n da derivada da función de Airy do primeiro tipo"
 
-#: src/backend/gsl/functions.cpp:254
+#: src/backend/gsl/functions.cpp:292
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the second kind"
 msgstr "Cero n da derivada da función de Airy do segundo tipo"
 
-#: src/backend/gsl/functions.cpp:257
+#: src/backend/gsl/functions.cpp:300
 #, kde-format
 msgid "Regular cylindrical Bessel function of zeroth order"
 msgstr "Función de Bessel cilíndrica regular de orde cero"
 
-#: src/backend/gsl/functions.cpp:258
+#: src/backend/gsl/functions.cpp:301
 #, kde-format
 msgid "Regular cylindrical Bessel function of first order"
 msgstr "Función de Bessel cilíndrica regular de orde un"
 
-#: src/backend/gsl/functions.cpp:259
+#: src/backend/gsl/functions.cpp:302
 #, kde-format
 msgid "Regular cylindrical Bessel function of order n"
 msgstr "Función de Bessel cilíndrica regular de orde n"
 
-#: src/backend/gsl/functions.cpp:260
+#: src/backend/gsl/functions.cpp:303
 #, kde-format
 msgid "Irregular cylindrical Bessel function of zeroth order"
 msgstr "Función de Bessel cilíndrica irregular de orde cero"
 
-#: src/backend/gsl/functions.cpp:261
+#: src/backend/gsl/functions.cpp:304
 #, kde-format
 msgid "Irregular cylindrical Bessel function of first order"
 msgstr "Función de Bessel cilíndrica irregular de orde un"
 
-#: src/backend/gsl/functions.cpp:262
+#: src/backend/gsl/functions.cpp:305
 #, kde-format
 msgid "Irregular cylindrical Bessel function of order n"
 msgstr "Función de Bessel cilíndrica irregular de orde n"
 
-#: src/backend/gsl/functions.cpp:263
+#: src/backend/gsl/functions.cpp:306
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of zeroth order"
 msgstr "Función de Bessel cilíndrica modificada regular de orde cero"
 
-#: src/backend/gsl/functions.cpp:264
+#: src/backend/gsl/functions.cpp:307
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of first order"
 msgstr "Función de Bessel cilíndrica modificada regular de orde un"
 
-#: src/backend/gsl/functions.cpp:265
+#: src/backend/gsl/functions.cpp:308
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of order n"
 msgstr "Función de Bessel cilíndrica modificada regular de orde n"
 
-#: src/backend/gsl/functions.cpp:266
+#: src/backend/gsl/functions.cpp:309
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of zeroth order exp(-|"
@@ -3882,7 +3916,7 @@ msgstr ""
 "Función de Bessel cilíndrica modificada regular cambiada de escala de orde "
 "cero, exp(-|x|) I0(x)"
 
-#: src/backend/gsl/functions.cpp:272
+#: src/backend/gsl/functions.cpp:316
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of first order exp(-|x|) "
@@ -3891,7 +3925,7 @@ msgstr ""
 "Función de Bessel cilíndrica modificada regular cambiada de escala de orde "
 "un, exp(-|x|) I1(x)"
 
-#: src/backend/gsl/functions.cpp:277
+#: src/backend/gsl/functions.cpp:322
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of order n exp(-|x|) "
@@ -3900,22 +3934,22 @@ msgstr ""
 "Función de Bessel cilíndrica modificada regular cambiada de escala de orde "
 "n, exp(-|x|) In(x)"
 
-#: src/backend/gsl/functions.cpp:282
+#: src/backend/gsl/functions.cpp:328
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of zeroth order"
 msgstr "Función de Bessel cilíndrica modificada irregular de orde cero"
 
-#: src/backend/gsl/functions.cpp:283
+#: src/backend/gsl/functions.cpp:329
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of first order"
 msgstr "Función de Bessel cilíndrica modificada irregular de orde un"
 
-#: src/backend/gsl/functions.cpp:284
+#: src/backend/gsl/functions.cpp:330
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of order n"
 msgstr "Función de Bessel cilíndrica modificada irregular de orde n"
 
-#: src/backend/gsl/functions.cpp:285
+#: src/backend/gsl/functions.cpp:331
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of zeroth order exp(x) "
@@ -3924,7 +3958,7 @@ msgstr ""
 "Función de Bessel cilíndrica modificada irregular cambiada de escala de orde "
 "cero, exp(x) K0(x)"
 
-#: src/backend/gsl/functions.cpp:290
+#: src/backend/gsl/functions.cpp:337
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of first order exp(x) "
@@ -3933,7 +3967,7 @@ msgstr ""
 "Función de Bessel cilíndrica modificada irregular cambiada de escala de orde "
 "un, exp(x) K1(x)"
 
-#: src/backend/gsl/functions.cpp:295
+#: src/backend/gsl/functions.cpp:343
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of order n exp(x) Kn(x)"
@@ -3941,47 +3975,47 @@ msgstr ""
 "Función de Bessel cilíndrica modificada irregular cambiada de escala de orde "
 "n, exp(x) Kn(x)"
 
-#: src/backend/gsl/functions.cpp:300
+#: src/backend/gsl/functions.cpp:349
 #, kde-format
 msgid "Regular spherical Bessel function of zeroth order"
 msgstr "Función de Bessel esférica regular de orde cero"
 
-#: src/backend/gsl/functions.cpp:301
+#: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "Regular spherical Bessel function of first order"
 msgstr "Función de Bessel esférica regular de orde un"
 
-#: src/backend/gsl/functions.cpp:303
+#: src/backend/gsl/functions.cpp:352
 #, kde-format
 msgid "Regular spherical Bessel function of second order"
 msgstr "Función de Bessel esférica regular de orde dous"
 
-#: src/backend/gsl/functions.cpp:304
+#: src/backend/gsl/functions.cpp:353
 #, kde-format
 msgid "Regular spherical Bessel function of order l"
 msgstr "Función de Bessel esférica regular de orde l"
 
-#: src/backend/gsl/functions.cpp:305
+#: src/backend/gsl/functions.cpp:354
 #, kde-format
 msgid "Irregular spherical Bessel function of zeroth order"
 msgstr "Función de Bessel esférica irregular de orde cero"
 
-#: src/backend/gsl/functions.cpp:306
+#: src/backend/gsl/functions.cpp:355
 #, kde-format
 msgid "Irregular spherical Bessel function of first order"
 msgstr "Función de Bessel esférica irregular de orde un"
 
-#: src/backend/gsl/functions.cpp:307
+#: src/backend/gsl/functions.cpp:356
 #, kde-format
 msgid "Irregular spherical Bessel function of second order"
 msgstr "Función de Bessel esférica irregular de orde dous"
 
-#: src/backend/gsl/functions.cpp:308
+#: src/backend/gsl/functions.cpp:357
 #, kde-format
 msgid "Irregular spherical Bessel function of order l"
 msgstr "Función de Bessel esférica irregular de orde l"
 
-#: src/backend/gsl/functions.cpp:309
+#: src/backend/gsl/functions.cpp:358
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) "
@@ -3990,7 +4024,7 @@ msgstr ""
 "Función de Bessel esférica modificada regular cambiada de escala de orde "
 "cero, exp(-|x|) i0(x)"
 
-#: src/backend/gsl/functions.cpp:314
+#: src/backend/gsl/functions.cpp:364
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of first order, exp(-|x|) "
@@ -3999,7 +4033,7 @@ msgstr ""
 "Función de Bessel esférica modificada regular cambiada de escala de orde un, "
 "exp(-|x|) i1(x)"
 
-#: src/backend/gsl/functions.cpp:319
+#: src/backend/gsl/functions.cpp:370
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of second order, exp(-|x|) "
@@ -4008,7 +4042,7 @@ msgstr ""
 "Función de Bessel esférica modificada regular cambiada de escala de orde "
 "dous, exp(-|x|) i2(x)"
 
-#: src/backend/gsl/functions.cpp:324
+#: src/backend/gsl/functions.cpp:376
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)"
@@ -4016,7 +4050,7 @@ msgstr ""
 "Función de Bessel esférica modificada regular cambiada de escala de orde l, "
 "exp(-|x|) il(x)"
 
-#: src/backend/gsl/functions.cpp:330
+#: src/backend/gsl/functions.cpp:383
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of zeroth order, exp(x) "
@@ -4025,7 +4059,7 @@ msgstr ""
 "Función de Bessel esférica modificada irregular cambiada de escala de orde "
 "cero, exp(x) k0(x)"
 
-#: src/backend/gsl/functions.cpp:335
+#: src/backend/gsl/functions.cpp:389
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of first order, exp(-|"
@@ -4034,7 +4068,7 @@ msgstr ""
 "Función de Bessel esférica modificada irregular cambiada de escala de orde "
 "un, exp(-|x|) k1(x)"
 
-#: src/backend/gsl/functions.cpp:340
+#: src/backend/gsl/functions.cpp:395
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of second order, exp(-|"
@@ -4043,7 +4077,7 @@ msgstr ""
 "Función de Bessel esférica modificada irregular cambiada de escala de orde "
 "dous, exp(-|x|) k2(x)"
 
-#: src/backend/gsl/functions.cpp:345
+#: src/backend/gsl/functions.cpp:401
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of order l, exp(-|x|) "
@@ -4052,214 +4086,214 @@ msgstr ""
 "Función de Bessel esférica modificada irregular cambiada de escala de orde "
 "l, exp(-|x|) kl(x)"
 
-#: src/backend/gsl/functions.cpp:350
+#: src/backend/gsl/functions.cpp:407
 #, kde-format
 msgid "Regular cylindrical Bessel function of fractional order"
 msgstr "Función de Bessel cilíndrica regular de orde fraccionaria"
 
-#: src/backend/gsl/functions.cpp:351
+#: src/backend/gsl/functions.cpp:408
 #, kde-format
 msgid "Irregular cylindrical Bessel function of fractional order"
 msgstr "Función de Bessel cilíndrica irregular de orde fraccionaria"
 
-#: src/backend/gsl/functions.cpp:352
+#: src/backend/gsl/functions.cpp:409
 #, kde-format
 msgid "Regular modified Bessel function of fractional order"
 msgstr "Función de Bessel modificada regular de orde fraccionaria"
 
-#: src/backend/gsl/functions.cpp:353
+#: src/backend/gsl/functions.cpp:410
 #, kde-format
 msgid "Scaled regular modified Bessel function of fractional order"
 msgstr ""
 "Función de Bessel modificada regular cambiada de escala de orde fraccionaria"
 
-#: src/backend/gsl/functions.cpp:354
+#: src/backend/gsl/functions.cpp:416
 #, kde-format
 msgid "Irregular modified Bessel function of fractional order"
 msgstr "Función de Bessel modificada irregular de orde fraccionaria"
 
-#: src/backend/gsl/functions.cpp:355
+#: src/backend/gsl/functions.cpp:417
 #, kde-format
 msgid "Logarithm of irregular modified Bessel function of fractional order"
 msgstr ""
 "Logaritmo da función de Bessel modificada irregular de orde fraccionaria"
 
-#: src/backend/gsl/functions.cpp:357
+#: src/backend/gsl/functions.cpp:424
 #, kde-format
 msgid "Scaled irregular modified Bessel function of fractional order"
 msgstr ""
 "Función de Bessel modificada irregular cambiada de escala de orde "
 "fraccionaria"
 
-#: src/backend/gsl/functions.cpp:358
+#: src/backend/gsl/functions.cpp:430
 #, kde-format
 msgid "n-th positive zero of the Bessel function J0"
 msgstr "Cero positivo n da función de Bessel J0"
 
-#: src/backend/gsl/functions.cpp:359
+#: src/backend/gsl/functions.cpp:431
 #, kde-format
 msgid "n-th positive zero of the Bessel function J1"
 msgstr "Cero positivo n da función de Bessel J1"
 
-#: src/backend/gsl/functions.cpp:360
+#: src/backend/gsl/functions.cpp:432
 #, kde-format
 msgid "n-th positive zero of the Bessel function Jnu"
 msgstr "Cero positivo n da función de Bessel Jnu"
 
-#: src/backend/gsl/functions.cpp:363
+#: src/backend/gsl/functions.cpp:435
 #, kde-format
 msgid "Clausen function"
 msgstr "Función de Clausen"
 
-#: src/backend/gsl/functions.cpp:366
+#: src/backend/gsl/functions.cpp:438
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
 msgstr ""
 "Función de onda radial de estado asociado hidroxénico normalizado da orde "
 "máis baixa"
 
-#: src/backend/gsl/functions.cpp:371
+#: src/backend/gsl/functions.cpp:444
 #, kde-format
 msgid "n-th normalized hydrogenic bound state radial wavefunction"
 msgstr "Función de onda radial de estado asociado hidroxénico normalizado n"
 
-#: src/backend/gsl/functions.cpp:374
+#: src/backend/gsl/functions.cpp:452
 #, kde-format
 msgid "Dawson integral"
 msgstr "Integral de Dawson"
 
-#: src/backend/gsl/functions.cpp:377
+#: src/backend/gsl/functions.cpp:455
 #, kde-format
 msgid "First-order Debye function"
 msgstr "Función de Debye de primeira orde"
 
-#: src/backend/gsl/functions.cpp:378
+#: src/backend/gsl/functions.cpp:456
 #, kde-format
 msgid "Second-order Debye function"
 msgstr "Función de Debye de segunda orde"
 
-#: src/backend/gsl/functions.cpp:379
+#: src/backend/gsl/functions.cpp:457
 #, kde-format
 msgid "Third-order Debye function"
 msgstr "Función de Debye de terceira orde"
 
-#: src/backend/gsl/functions.cpp:380
+#: src/backend/gsl/functions.cpp:458
 #, kde-format
 msgid "Fourth-order Debye function"
 msgstr "Función de Debye de cuarta orde"
 
-#: src/backend/gsl/functions.cpp:381
+#: src/backend/gsl/functions.cpp:459
 #, kde-format
 msgid "Fifth-order Debye function"
 msgstr "Función de Debye de quinta orde"
 
-#: src/backend/gsl/functions.cpp:382
+#: src/backend/gsl/functions.cpp:460
 #, kde-format
 msgid "Sixth-order Debye function"
 msgstr "Función de Debye de sexta orde"
 
-#: src/backend/gsl/functions.cpp:385
+#: src/backend/gsl/functions.cpp:463
 #, kde-format
 msgid "Dilogarithm for a real argument"
 msgstr "Función de Spence para un argumento real"
 
-#: src/backend/gsl/functions.cpp:388
+#: src/backend/gsl/functions.cpp:466
 #, kde-format
 msgid "Legendre form of complete elliptic integral K"
 msgstr "Forma de Legendre da integral elíptica completa K"
 
-#: src/backend/gsl/functions.cpp:389
+#: src/backend/gsl/functions.cpp:467
 #, kde-format
 msgid "Legendre form of complete elliptic integral E"
 msgstr "Forma de Legendre da integral elíptica completa E"
 
-#: src/backend/gsl/functions.cpp:390
+#: src/backend/gsl/functions.cpp:468
 #, kde-format
 msgid "Legendre form of complete elliptic integral Pi"
 msgstr "Forma de Legendre da integral elíptica completa Pi"
 
-#: src/backend/gsl/functions.cpp:391
+#: src/backend/gsl/functions.cpp:469
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral F"
 msgstr "Forma de Legendre da integral elíptica incompleta F"
 
-#: src/backend/gsl/functions.cpp:392
+#: src/backend/gsl/functions.cpp:470
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral E"
 msgstr "Forma de Legendre da integral elíptica incompleta E"
 
-#: src/backend/gsl/functions.cpp:393
+#: src/backend/gsl/functions.cpp:471
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral P"
 msgstr "Forma de Legendre da integral elíptica incompleta P"
 
-#: src/backend/gsl/functions.cpp:394
+#: src/backend/gsl/functions.cpp:472
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral D"
 msgstr "Forma de Legendre da integral elíptica incompleta D"
 
-#: src/backend/gsl/functions.cpp:395
+#: src/backend/gsl/functions.cpp:473
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RC"
 msgstr "Forma de Carlson da integral elíptica incompleta RC"
 
-#: src/backend/gsl/functions.cpp:396
+#: src/backend/gsl/functions.cpp:474
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RD"
 msgstr "Forma de Carlson da integral elíptica incompleta RD"
 
-#: src/backend/gsl/functions.cpp:397
+#: src/backend/gsl/functions.cpp:475
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RF"
 msgstr "Forma de Carlson da integral elíptica incompleta RF"
 
-#: src/backend/gsl/functions.cpp:398
+#: src/backend/gsl/functions.cpp:476
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RJ"
 msgstr "Forma de Carlson da integral elíptica incompleta RJ"
 
-#: src/backend/gsl/functions.cpp:401
+#: src/backend/gsl/functions.cpp:479
 #, kde-format
 msgid "Error function"
 msgstr "Función de erro"
 
-#: src/backend/gsl/functions.cpp:402
+#: src/backend/gsl/functions.cpp:480
 #, kde-format
 msgid "Complementary error function"
 msgstr "Función de erro complementaria"
 
-#: src/backend/gsl/functions.cpp:403
+#: src/backend/gsl/functions.cpp:481
 #, kde-format
 msgid "Logarithm of complementary error function"
 msgstr "Logaritmo de función de erro complementaria"
 
-#: src/backend/gsl/functions.cpp:404
+#: src/backend/gsl/functions.cpp:482
 #, kde-format
 msgid "Gaussian probability density function Z"
 msgstr "Función Z de densidade de probabilidade de Gauss"
 
-#: src/backend/gsl/functions.cpp:405
+#: src/backend/gsl/functions.cpp:483
 #, kde-format
 msgid "Upper tail of the Gaussian probability function Q"
 msgstr "Extremo superior da función de probabilidade de Gauss Q"
 
-#: src/backend/gsl/functions.cpp:406
+#: src/backend/gsl/functions.cpp:484
 #, kde-format
 msgid "Hazard function for the normal distribution Z/Q"
 msgstr "Función de risco para a distribución normal Z/Q"
 
-#: src/backend/gsl/functions.cpp:408
+#: src/backend/gsl/functions.cpp:486
 #, kde-format
 msgid "Underflow-compensating function exp(x^2) erfc(x) for real x"
 msgstr ""
 "A función de compensación de esgotamento exp(x^2) erfc(x) para o x real"
 
-#: src/backend/gsl/functions.cpp:409
+#: src/backend/gsl/functions.cpp:487
 #, kde-format
 msgid "Imaginary error function erfi(x) = -i erf(ix) for real x"
 msgstr "Función de erro imaxinario erfi(x) = -i erf(ix) para o x real"
 
-#: src/backend/gsl/functions.cpp:410
+#: src/backend/gsl/functions.cpp:488
 #, kde-format
 msgid ""
 "Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) "
@@ -4268,451 +4302,451 @@ msgstr ""
 "Parte imaxinaria da función de erro complexo escalado de Faddeeva w(x) = "
 "exp(-x^2) erfc(-ix) para o x real"
 
-#: src/backend/gsl/functions.cpp:415
+#: src/backend/gsl/functions.cpp:494
 #, kde-format
 msgid "Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 msgstr "Integral de Dawson D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 
-#: src/backend/gsl/functions.cpp:416
+#: src/backend/gsl/functions.cpp:495
 #, kde-format
 msgid "Voigt profile"
 msgstr "Perfil de Voigt"
 
-#: src/backend/gsl/functions.cpp:418
+#: src/backend/gsl/functions.cpp:497
 #, kde-format
 msgid "Pseudo-Voigt profile (same width)"
 msgstr "Perfil de pseudo-Voigt (mesma anchura)"
 
-#: src/backend/gsl/functions.cpp:421
+#: src/backend/gsl/functions.cpp:500
 #, kde-format
 msgid "Exponential function"
 msgstr "Función exponencial."
 
-#: src/backend/gsl/functions.cpp:422
+#: src/backend/gsl/functions.cpp:501
 #, kde-format
 msgid "exponentiate x and multiply by y"
 msgstr "elevar a x e multiplicar por y"
 
-#: src/backend/gsl/functions.cpp:426
+#: src/backend/gsl/functions.cpp:505
 #, kde-format
 msgid "n-relative exponential"
 msgstr "Exponencial relativo a n"
 
-#: src/backend/gsl/functions.cpp:429
+#: src/backend/gsl/functions.cpp:508
 #, kde-format
 msgid "Exponential integral"
 msgstr "Integral exponencial"
 
-#: src/backend/gsl/functions.cpp:430
+#: src/backend/gsl/functions.cpp:509
 #, kde-format
 msgid "Second order exponential integral"
 msgstr "Integral exponencial de segunda orde"
 
-#: src/backend/gsl/functions.cpp:431
+#: src/backend/gsl/functions.cpp:510
 #, kde-format
 msgid "Exponential integral of order n"
 msgstr "Integral exponencial de orde n"
 
-#: src/backend/gsl/functions.cpp:432
+#: src/backend/gsl/functions.cpp:511
 #, kde-format
 msgid "Exponential integral Ei"
 msgstr "Distribución exponencial Ei"
 
-#: src/backend/gsl/functions.cpp:433
+#: src/backend/gsl/functions.cpp:512
 #, kde-format
 msgid "Hyperbolic integral Shi"
 msgstr "Integral hiperbólica Shi"
 
-#: src/backend/gsl/functions.cpp:434
+#: src/backend/gsl/functions.cpp:513
 #, kde-format
 msgid "Hyperbolic integral Chi"
 msgstr "Integral hiperbólica Chi"
 
-#: src/backend/gsl/functions.cpp:435
+#: src/backend/gsl/functions.cpp:514
 #, kde-format
 msgid "Third-order exponential integral"
 msgstr "Integral exponencial de terceira orde"
 
-#: src/backend/gsl/functions.cpp:436
+#: src/backend/gsl/functions.cpp:515
 #, kde-format
 msgid "Sine integral"
 msgstr "Integral do seno"
 
-#: src/backend/gsl/functions.cpp:437
+#: src/backend/gsl/functions.cpp:516
 #, kde-format
 msgid "Cosine integral"
 msgstr "Integral do coseno"
 
-#: src/backend/gsl/functions.cpp:438
+#: src/backend/gsl/functions.cpp:517
 #, kde-format
 msgid "Arctangent integral"
 msgstr "Integral da arcotanxente"
 
-#: src/backend/gsl/functions.cpp:441
+#: src/backend/gsl/functions.cpp:520
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1"
 msgstr "Integral de Fermi-Dirac completa con índice -1"
 
-#: src/backend/gsl/functions.cpp:442
+#: src/backend/gsl/functions.cpp:521
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 0"
 msgstr "Integral de Fermi-Dirac completa con índice 0"
 
-#: src/backend/gsl/functions.cpp:443
+#: src/backend/gsl/functions.cpp:522
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1"
 msgstr "Integral de Fermi-Dirac completa con índice 1"
 
-#: src/backend/gsl/functions.cpp:444
+#: src/backend/gsl/functions.cpp:523
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 2"
 msgstr "Integral de Fermi-Dirac completa con índice 2"
 
-#: src/backend/gsl/functions.cpp:445
+#: src/backend/gsl/functions.cpp:524
 #, kde-format
 msgid "Complete Fermi-Dirac integral with integer index j"
 msgstr "Integral de Fermi-Dirac completa con índice enteiro j"
 
-#: src/backend/gsl/functions.cpp:446
+#: src/backend/gsl/functions.cpp:525
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1/2"
 msgstr "Integral de Fermi-Dirac completa con índice -1/2"
 
-#: src/backend/gsl/functions.cpp:447
+#: src/backend/gsl/functions.cpp:526
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1/2"
 msgstr "Integral de Fermi-Dirac completa con índice 1/2"
 
-#: src/backend/gsl/functions.cpp:448
+#: src/backend/gsl/functions.cpp:527
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 3/2"
 msgstr "Integral de Fermi-Dirac completa con índice 3/2"
 
-#: src/backend/gsl/functions.cpp:449
+#: src/backend/gsl/functions.cpp:528
 #, kde-format
 msgid "Incomplete Fermi-Dirac integral with index zero"
 msgstr "Integral de Fermi-Dirac completa con índice cero"
 
-#: src/backend/gsl/functions.cpp:452 src/backend/gsl/functions.cpp:453
+#: src/backend/gsl/functions.cpp:531 src/backend/gsl/functions.cpp:532
 #, kde-format
 msgid "Gamma function"
 msgstr "Función gamma"
 
-#: src/backend/gsl/functions.cpp:454
+#: src/backend/gsl/functions.cpp:533
 #, kde-format
 msgid "Logarithm of the gamma function"
 msgstr "Logaritmo da función gamma"
 
-#: src/backend/gsl/functions.cpp:455
+#: src/backend/gsl/functions.cpp:534
 #, fuzzy, kde-format
 #| msgid "Logarithm of the gamma function"
 msgid "Logarithm naturalis of the gamma function"
 msgstr "Logaritmo da función gamma"
 
-#: src/backend/gsl/functions.cpp:456
+#: src/backend/gsl/functions.cpp:535
 #, kde-format
 msgid "Regulated gamma function"
 msgstr "Función gamma regulada"
 
-#: src/backend/gsl/functions.cpp:457
+#: src/backend/gsl/functions.cpp:536
 #, kde-format
 msgid "Reciprocal of the gamma function"
 msgstr "Recíproco da función gamma"
 
-#: src/backend/gsl/functions.cpp:458
+#: src/backend/gsl/functions.cpp:537
 #, kde-format
 msgid "Factorial n!"
 msgstr "Factorial n!"
 
-#: src/backend/gsl/functions.cpp:459
+#: src/backend/gsl/functions.cpp:538
 #, kde-format
 msgid "Double factorial n!!"
 msgstr "Factorial dobre n!!"
 
-#: src/backend/gsl/functions.cpp:460
+#: src/backend/gsl/functions.cpp:539
 #, kde-format
 msgid "Logarithm of the factorial"
 msgstr "Logaritmo do factorial"
 
-#: src/backend/gsl/functions.cpp:461
+#: src/backend/gsl/functions.cpp:540
 #, kde-format
 msgid "Logarithm of the double factorial"
 msgstr "Logaritmo do factorial dobre"
 
-#: src/backend/gsl/functions.cpp:463
+#: src/backend/gsl/functions.cpp:542
 #, kde-format
 msgid "Combinatorial factor"
 msgstr "Factor combinacional"
 
-#: src/backend/gsl/functions.cpp:464
+#: src/backend/gsl/functions.cpp:543
 #, kde-format
 msgid "Logarithm of the combinatorial factor"
 msgstr "Logaritmo do factor combinacional"
 
-#: src/backend/gsl/functions.cpp:465
+#: src/backend/gsl/functions.cpp:544
 #, kde-format
 msgid "Taylor coefficient"
 msgstr "Coeficiente de Taylor"
 
-#: src/backend/gsl/functions.cpp:466
+#: src/backend/gsl/functions.cpp:545
 #, kde-format
 msgid "Pochhammer symbol"
 msgstr "Símbolo de Pochhammer"
 
-#: src/backend/gsl/functions.cpp:467
+#: src/backend/gsl/functions.cpp:546
 #, kde-format
 msgid "Logarithm of the Pochhammer symbol"
 msgstr "Logaritmo do símbolo de Pochhammer"
 
-#: src/backend/gsl/functions.cpp:468
+#: src/backend/gsl/functions.cpp:547
 #, kde-format
 msgid "Relative Pochhammer symbol"
 msgstr "Símbolo de Pochhammer relativo"
 
-#: src/backend/gsl/functions.cpp:469
+#: src/backend/gsl/functions.cpp:548
 #, kde-format
 msgid "Unnormalized incomplete gamma function"
 msgstr "Función gamma incompleta sen normalizar"
 
-#: src/backend/gsl/functions.cpp:470
+#: src/backend/gsl/functions.cpp:549
 #, kde-format
 msgid "Normalized incomplete gamma function"
 msgstr "Función gamma incompleta normalizada"
 
-#: src/backend/gsl/functions.cpp:471
+#: src/backend/gsl/functions.cpp:550
 #, kde-format
 msgid "Complementary normalized incomplete gamma function"
 msgstr "Función gamma incompleta normalizada complementaria"
 
-#: src/backend/gsl/functions.cpp:472
+#: src/backend/gsl/functions.cpp:551
 #, kde-format
 msgid "Beta function"
 msgstr "Función beta"
 
-#: src/backend/gsl/functions.cpp:474
+#: src/backend/gsl/functions.cpp:553
 #, kde-format
 msgid "Logarithm of the beta function"
 msgstr "Logaritmo da función beta"
 
-#: src/backend/gsl/functions.cpp:475
+#: src/backend/gsl/functions.cpp:554
 #, kde-format
 msgid "Normalized incomplete beta function"
 msgstr "Función beta incompleta normalizada"
 
-#: src/backend/gsl/functions.cpp:478
+#: src/backend/gsl/functions.cpp:557
 #, kde-format
 msgid "Gegenbauer polynomial C_1"
 msgstr "Polinómica C_1 de Gegenbauer"
 
-#: src/backend/gsl/functions.cpp:479
+#: src/backend/gsl/functions.cpp:558
 #, kde-format
 msgid "Gegenbauer polynomial C_2"
 msgstr "Polinómica C_2 de Gegenbauer"
 
-#: src/backend/gsl/functions.cpp:480
+#: src/backend/gsl/functions.cpp:559
 #, kde-format
 msgid "Gegenbauer polynomial C_3"
 msgstr "Polinómica C_3 de Gegenbauer"
 
-#: src/backend/gsl/functions.cpp:481
+#: src/backend/gsl/functions.cpp:560
 #, kde-format
 msgid "Gegenbauer polynomial C_n"
 msgstr "Polinómica C_n de Gegenbauer"
 
-#: src/backend/gsl/functions.cpp:485
+#: src/backend/gsl/functions.cpp:564
 #, kde-format
 msgid "Hermite polynomials physicists version"
 msgstr "Versión física de polinómicos de Hermite"
 
-#: src/backend/gsl/functions.cpp:486
+#: src/backend/gsl/functions.cpp:565
 #, kde-format
 msgid "Hermite polynomials probabilists version"
 msgstr "Versión probabilística de polinómicos de Hermite"
 
-#: src/backend/gsl/functions.cpp:487
+#: src/backend/gsl/functions.cpp:566
 #, kde-format
 msgid "Hermite functions"
 msgstr "Funcións de Hermite"
 
-#: src/backend/gsl/functions.cpp:489
+#: src/backend/gsl/functions.cpp:568
 #, fuzzy, kde-format
 #| msgid "Hermite functions"
 msgid "Hermite functions (fast version)"
 msgstr "Funcións de Hermite"
 
-#: src/backend/gsl/functions.cpp:491
+#: src/backend/gsl/functions.cpp:570
 #, kde-format
 msgid "Derivatives of Hermite polynomials physicists version"
 msgstr "Derivadas da versión física de polinómicos de Hermite"
 
-#: src/backend/gsl/functions.cpp:492
+#: src/backend/gsl/functions.cpp:576
 #, kde-format
 msgid "Derivatives of Hermite polynomials probabilists version"
 msgstr "Derivadas da versión probabilística de polinómicos de Hermite"
 
-#: src/backend/gsl/functions.cpp:497
+#: src/backend/gsl/functions.cpp:582
 #, kde-format
 msgid "Derivatives of Hermite functions"
 msgstr "Derivadas das funcións de Hermite"
 
-#: src/backend/gsl/functions.cpp:501
+#: src/backend/gsl/functions.cpp:586
 #, kde-format
 msgid "Hypergeometric function 0F1"
 msgstr "Función hiperxeométrica 0F1"
 
-#: src/backend/gsl/functions.cpp:502
+#: src/backend/gsl/functions.cpp:587
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for integer parameters"
 msgstr "Función hiperxeométrica confluente 1F1 para parámetros enteiros"
 
-#: src/backend/gsl/functions.cpp:507
+#: src/backend/gsl/functions.cpp:593
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for general parameters"
 msgstr "Función hiperxeométrica confluente 1F1 para parámetros xerais"
 
-#: src/backend/gsl/functions.cpp:508
+#: src/backend/gsl/functions.cpp:599
 #, kde-format
 msgid "Confluent hypergeometric function U for integer parameters"
 msgstr "Función hiperxeométrica confluente U para parámetros enteiros"
 
-#: src/backend/gsl/functions.cpp:509
+#: src/backend/gsl/functions.cpp:605
 #, kde-format
 msgid "Confluent hypergeometric function U"
 msgstr "Función hiperxeométrica confluente U"
 
-#: src/backend/gsl/functions.cpp:510
+#: src/backend/gsl/functions.cpp:606
 #, kde-format
 msgid "Gauss hypergeometric function 2F1"
 msgstr "Función hiperxeométrica de Gauss 2F1"
 
-#: src/backend/gsl/functions.cpp:511
+#: src/backend/gsl/functions.cpp:607
 #, kde-format
 msgid "Gauss hypergeometric function 2F1 with complex parameters"
 msgstr "Función hiperxeométrica de Gauss 2F1 con parámetros complexos"
 
-#: src/backend/gsl/functions.cpp:516
+#: src/backend/gsl/functions.cpp:613
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1"
 msgstr "Función hiperxeométrica de Gauss renormalizada 2F1"
 
-#: src/backend/gsl/functions.cpp:517
+#: src/backend/gsl/functions.cpp:619
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1 with complex parameters"
 msgstr ""
 "Función hiperxeométrica de Gauss renormalizada 2F1 con parámetros complexos"
 
-#: src/backend/gsl/functions.cpp:522
+#: src/backend/gsl/functions.cpp:625
 #, kde-format
 msgid "Hypergeometric function 2F0"
 msgstr "Función hiperxeométrica 2F0"
 
-#: src/backend/gsl/functions.cpp:525
+#: src/backend/gsl/functions.cpp:628
 #, kde-format
 msgid "generalized Laguerre polynomials L_1"
 msgstr "Polinómica xeralizada de Laguerre L_1"
 
-#: src/backend/gsl/functions.cpp:526
+#: src/backend/gsl/functions.cpp:629
 #, kde-format
 msgid "generalized Laguerre polynomials L_2"
 msgstr "Polinómica xeralizada de Laguerre L_2"
 
-#: src/backend/gsl/functions.cpp:527
+#: src/backend/gsl/functions.cpp:630
 #, kde-format
 msgid "generalized Laguerre polynomials L_3"
 msgstr "Polinómica xeralizada de Laguerre L_3"
 
-#: src/backend/gsl/functions.cpp:528
+#: src/backend/gsl/functions.cpp:631
 #, fuzzy, kde-format
 #| msgid "generalized Laguerre polynomials L_1"
 msgid "generalized Laguerre polynomials L_n"
 msgstr "Polinómica xeralizada de Laguerre L_1"
 
-#: src/backend/gsl/functions.cpp:531
+#: src/backend/gsl/functions.cpp:634
 #, kde-format
 msgid "Principal branch of the Lambert W function"
 msgstr "Rama principal da función W de Lambert"
 
-#: src/backend/gsl/functions.cpp:532
+#: src/backend/gsl/functions.cpp:635
 #, kde-format
 msgid "Secondary real-valued branch of the Lambert W function"
 msgstr "Rama secundaria de valores reais da función W de Lambert"
 
-#: src/backend/gsl/functions.cpp:535
+#: src/backend/gsl/functions.cpp:638
 #, kde-format
 msgid "Legendre polynomial P_1"
 msgstr "Polinómica de Legendre P_1"
 
-#: src/backend/gsl/functions.cpp:536
+#: src/backend/gsl/functions.cpp:639
 #, kde-format
 msgid "Legendre polynomial P_2"
 msgstr "Polinómica de Legendre P_2"
 
-#: src/backend/gsl/functions.cpp:537
+#: src/backend/gsl/functions.cpp:640
 #, kde-format
 msgid "Legendre polynomial P_3"
 msgstr "Polinómica de Legendre P_3"
 
-#: src/backend/gsl/functions.cpp:538
+#: src/backend/gsl/functions.cpp:641
 #, kde-format
 msgid "Legendre polynomial P_l"
 msgstr "Polinómica de Legendre P_l"
 
-#: src/backend/gsl/functions.cpp:539
+#: src/backend/gsl/functions.cpp:642
 #, kde-format
 msgid "Legendre function Q_0"
 msgstr "Función de Legendre Q_0"
 
-#: src/backend/gsl/functions.cpp:540
+#: src/backend/gsl/functions.cpp:643
 #, kde-format
 msgid "Legendre function Q_1"
 msgstr "Función de Legendre Q_1"
 
-#: src/backend/gsl/functions.cpp:541
+#: src/backend/gsl/functions.cpp:644
 #, kde-format
 msgid "Legendre function Q_l"
 msgstr "Función de Legendre Q_l"
 
-#: src/backend/gsl/functions.cpp:542
+#: src/backend/gsl/functions.cpp:645
 #, kde-format
 msgid "Associated Legendre polynomial"
 msgstr "Polinómica de Legendre asociada"
 
-#: src/backend/gsl/functions.cpp:543
+#: src/backend/gsl/functions.cpp:646
 #, kde-format
 msgid "Normalized associated Legendre polynomial"
 msgstr "Polinómica de Legendre asociada normalizada"
 
-#: src/backend/gsl/functions.cpp:544
+#: src/backend/gsl/functions.cpp:652
 #, kde-format
 msgid "Irregular spherical conical function P^1/2"
 msgstr "Función cónica esférica irregular P^1/2"
 
-#: src/backend/gsl/functions.cpp:546
+#: src/backend/gsl/functions.cpp:659
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2)"
 msgstr "Función cónica esférica regular P^(-1/2)"
 
-#: src/backend/gsl/functions.cpp:547
+#: src/backend/gsl/functions.cpp:665
 #, kde-format
 msgid "Conical function P^0"
 msgstr "Función cónica P^0"
 
-#: src/backend/gsl/functions.cpp:548
+#: src/backend/gsl/functions.cpp:666
 #, kde-format
 msgid "Conical function P^1"
 msgstr "Función cónica P^1"
 
-#: src/backend/gsl/functions.cpp:549
+#: src/backend/gsl/functions.cpp:667
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2-l)"
 msgstr "Función cónica esférica regular P^(-1/2-l)"
 
-#: src/backend/gsl/functions.cpp:550
+#: src/backend/gsl/functions.cpp:673
 #, kde-format
 msgid "Regular cylindrical conical function P^(-m)"
 msgstr "Función cónica cilíndrica regular P^(-m)"
 
-#: src/backend/gsl/functions.cpp:551
+#: src/backend/gsl/functions.cpp:679
 #, kde-format
 msgid ""
 "Zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -4721,7 +4755,7 @@ msgstr ""
 "Autofunción radial cero do operador de Laplace no espazo hiperbólico "
 "tridimensional"
 
-#: src/backend/gsl/functions.cpp:556
+#: src/backend/gsl/functions.cpp:685
 #, kde-format
 msgid ""
 "First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -4730,7 +4764,7 @@ msgstr ""
 "Autofunción radial un do operador de Laplace no espazo hiperbólico "
 "tridimensional"
 
-#: src/backend/gsl/functions.cpp:561
+#: src/backend/gsl/functions.cpp:691
 #, kde-format
 msgid ""
 "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -4739,618 +4773,664 @@ msgstr ""
 "Autofunción radial l do operador de Laplace no espazo hiperbólico "
 "tridimensional"
 
-#: src/backend/gsl/functions.cpp:568
+#: src/backend/gsl/functions.cpp:699
 #, kde-format
 msgid "Logarithm"
 msgstr "Logaritmo"
 
-#: src/backend/gsl/functions.cpp:569
+#: src/backend/gsl/functions.cpp:700
 #, kde-format
 msgid "Logarithm of the magnitude"
 msgstr "Logaritmo da magnitude"
 
-#: src/backend/gsl/functions.cpp:575
+#: src/backend/gsl/functions.cpp:706
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:576
+#: src/backend/gsl/functions.cpp:707
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:577
+#: src/backend/gsl/functions.cpp:708
 #, kde-format
 msgid "Angular Mathieu functions ce_n(q,x)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:578
+#: src/backend/gsl/functions.cpp:709
 #, kde-format
 msgid "Angular Mathieu functions se_n(q,x)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:579
+#: src/backend/gsl/functions.cpp:710
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:580
+#: src/backend/gsl/functions.cpp:716
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:584
+#: src/backend/gsl/functions.cpp:725
 #, kde-format
 msgid "x^n for integer n with an error estimate"
 msgstr "x^n para o enteiro n cunha estimación de erro"
 
-#: src/backend/gsl/functions.cpp:587
+#: src/backend/gsl/functions.cpp:728
 #, kde-format
 msgid "Digamma function for positive integer n"
 msgstr "Función digamma para un enteiro positivo n"
 
-#: src/backend/gsl/functions.cpp:588
+#: src/backend/gsl/functions.cpp:729
 #, kde-format
 msgid "Digamma function"
 msgstr "Función digamma"
 
-#: src/backend/gsl/functions.cpp:589
+#: src/backend/gsl/functions.cpp:730
 #, kde-format
 msgid "Real part of the digamma function on the line 1+i y"
 msgstr "Parte real da función digamma na liña 1+i y"
 
-#: src/backend/gsl/functions.cpp:590
+#: src/backend/gsl/functions.cpp:731
 #, kde-format
 msgid "Trigamma function psi' for positive integer n"
 msgstr "Función trigamma psi' para un enteiro positivo n"
 
-#: src/backend/gsl/functions.cpp:591
+#: src/backend/gsl/functions.cpp:732
 #, kde-format
 msgid "Trigamma function psi'"
 msgstr "Función trigamma psi'"
 
-#: src/backend/gsl/functions.cpp:592
+#: src/backend/gsl/functions.cpp:733
 #, kde-format
 msgid "Polygamma function psi^(n)"
 msgstr "Función poligamma psi^(n)"
 
-#: src/backend/gsl/functions.cpp:595
+#: src/backend/gsl/functions.cpp:736
 #, kde-format
 msgid "First synchrotron function"
 msgstr "Primeira función de sincrotrón"
 
-#: src/backend/gsl/functions.cpp:596
+#: src/backend/gsl/functions.cpp:737
 #, kde-format
 msgid "Second synchrotron function"
 msgstr "Primeira función de sincrotrón"
 
-#: src/backend/gsl/functions.cpp:599 src/backend/gsl/functions.cpp:600
-#: src/backend/gsl/functions.cpp:601 src/backend/gsl/functions.cpp:602
+#: src/backend/gsl/functions.cpp:740 src/backend/gsl/functions.cpp:741
+#: src/backend/gsl/functions.cpp:742 src/backend/gsl/functions.cpp:743
 #, kde-format
 msgid "Transport function"
 msgstr "Función de transporte"
 
-#: src/backend/gsl/functions.cpp:605
+#: src/backend/gsl/functions.cpp:746
 #, kde-format
 msgid "Sine"
 msgstr "Seno"
 
-#: src/backend/gsl/functions.cpp:606 src/backend/nsl/nsl_interp.c:21
+#: src/backend/gsl/functions.cpp:747 src/backend/nsl/nsl_interp.c:21
 #: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:30
 #, kde-format
 msgid "Cosine"
 msgstr "Coseno."
 
-#: src/backend/gsl/functions.cpp:607
+#: src/backend/gsl/functions.cpp:748
 #, kde-format
 msgid "Tangent"
 msgstr "Tanxente"
 
-#: src/backend/gsl/functions.cpp:608
+#: src/backend/gsl/functions.cpp:749
 #, kde-format
 msgid "Inverse sine"
 msgstr "Seno inverso"
 
-#: src/backend/gsl/functions.cpp:609
+#: src/backend/gsl/functions.cpp:750
 #, kde-format
 msgid "Inverse cosine"
 msgstr "Coseno inverso"
 
-#: src/backend/gsl/functions.cpp:610
+#: src/backend/gsl/functions.cpp:751
 #, kde-format
 msgid "Inverse tangent"
 msgstr "Tanxente inversa"
 
-#: src/backend/gsl/functions.cpp:611
+#: src/backend/gsl/functions.cpp:752
 #, kde-format
 msgid "Inverse tangent using sign"
 msgstr "Tanxente inversa usando signo"
 
-#: src/backend/gsl/functions.cpp:612
+#: src/backend/gsl/functions.cpp:753
 #, kde-format
 msgid "Hyperbolic sine"
 msgstr "Seno hiperbólico"
 
-#: src/backend/gsl/functions.cpp:613
+#: src/backend/gsl/functions.cpp:754
 #, kde-format
 msgid "Hyperbolic cosine"
 msgstr "Coseno hiperbólico"
 
-#: src/backend/gsl/functions.cpp:614
+#: src/backend/gsl/functions.cpp:755
 #, kde-format
 msgid "Hyperbolic tangent"
 msgstr "Tanxente hiperbólica"
 
-#: src/backend/gsl/functions.cpp:615
+#: src/backend/gsl/functions.cpp:756
 #, kde-format
 msgid "Inverse hyperbolic cosine"
 msgstr "Coseno hiperbólico inverso."
 
-#: src/backend/gsl/functions.cpp:616
+#: src/backend/gsl/functions.cpp:757
 #, kde-format
 msgid "Inverse hyperbolic sine"
 msgstr "Seno hiperbólico inverso."
 
-#: src/backend/gsl/functions.cpp:617
+#: src/backend/gsl/functions.cpp:758
 #, kde-format
 msgid "Inverse hyperbolic tangent"
 msgstr "Tanxente hiperbólica inversa."
 
-#: src/backend/gsl/functions.cpp:618
+#: src/backend/gsl/functions.cpp:759
 #, kde-format
 msgid "Secant"
 msgstr "Secante"
 
-#: src/backend/gsl/functions.cpp:619
+#: src/backend/gsl/functions.cpp:760
 #, kde-format
 msgid "Cosecant"
 msgstr "Cosecante"
 
-#: src/backend/gsl/functions.cpp:620
+#: src/backend/gsl/functions.cpp:761
 #, kde-format
 msgid "Cotangent"
 msgstr "Cotanxente"
 
-#: src/backend/gsl/functions.cpp:621
+#: src/backend/gsl/functions.cpp:762
 #, kde-format
 msgid "Inverse secant"
 msgstr "Secante inversa"
 
-#: src/backend/gsl/functions.cpp:622
+#: src/backend/gsl/functions.cpp:763
 #, kde-format
 msgid "Inverse cosecant"
 msgstr "Cosecante inversa"
 
-#: src/backend/gsl/functions.cpp:623
+#: src/backend/gsl/functions.cpp:764
 #, kde-format
 msgid "Inverse cotangent"
 msgstr "Cotanxente inversa"
 
-#: src/backend/gsl/functions.cpp:624
+#: src/backend/gsl/functions.cpp:765
 #, kde-format
 msgid "Hyperbolic secant"
 msgstr "Secante hiperbólica"
 
-#: src/backend/gsl/functions.cpp:625
+#: src/backend/gsl/functions.cpp:766
 #, kde-format
 msgid "Hyperbolic cosecant"
 msgstr "Cosecante hiperbólica"
 
-#: src/backend/gsl/functions.cpp:626
+#: src/backend/gsl/functions.cpp:767
 #, kde-format
 msgid "Hyperbolic cotangent"
 msgstr "Cotanxente hiperbólica"
 
-#: src/backend/gsl/functions.cpp:627
+#: src/backend/gsl/functions.cpp:768
 #, kde-format
 msgid "Inverse hyperbolic secant"
 msgstr "Secante hiperbólica inversa"
 
-#: src/backend/gsl/functions.cpp:628
+#: src/backend/gsl/functions.cpp:769
 #, kde-format
 msgid "Inverse hyperbolic cosecant"
 msgstr "Cosecante hiperbólica inversa"
 
-#: src/backend/gsl/functions.cpp:629
+#: src/backend/gsl/functions.cpp:770
 #, kde-format
 msgid "Inverse hyperbolic cotangent"
 msgstr "Cotanxente hiperbólica inversa"
 
-#: src/backend/gsl/functions.cpp:630
+#: src/backend/gsl/functions.cpp:771
 #, kde-format
 msgid "Sinc function sin(x)/x"
 msgstr "Función de sinc sin(x)/x"
 
-#: src/backend/gsl/functions.cpp:633
+#: src/backend/gsl/functions.cpp:774
 #, kde-format
 msgid "Hypotenuse function"
 msgstr "Función da hipotenusa"
 
-#: src/backend/gsl/functions.cpp:634
+#: src/backend/gsl/functions.cpp:775
 #, kde-format
 msgid "Three component hypotenuse function"
 msgstr "Función da hipotenusa de tres compoñentes"
 
-#: src/backend/gsl/functions.cpp:635
+#: src/backend/gsl/functions.cpp:776
 #, kde-format
 msgid "restrict to [-pi,pi]"
 msgstr "limitar a [-pi,pi]"
 
-#: src/backend/gsl/functions.cpp:636
+#: src/backend/gsl/functions.cpp:777
 #, kde-format
 msgid "restrict to [0,2 pi]"
 msgstr "limitar a [0,2 pi]"
 
-#: src/backend/gsl/functions.cpp:639
+#: src/backend/gsl/functions.cpp:780
 #, kde-format
 msgid "Riemann zeta function for integer n"
 msgstr "Función zeta de Riemann para un enteiro n"
 
-#: src/backend/gsl/functions.cpp:640
+#: src/backend/gsl/functions.cpp:781
 #, kde-format
 msgid "Riemann zeta function"
 msgstr "Función zeta de Riemann"
 
-#: src/backend/gsl/functions.cpp:641
+#: src/backend/gsl/functions.cpp:782
 #, kde-format
 msgid "zeta(n)-1 for integer n"
 msgstr "zeta(n)-1 para un enteiro n"
 
-#: src/backend/gsl/functions.cpp:642
+#: src/backend/gsl/functions.cpp:783
 #, kde-format
 msgid "zeta(x)-1"
 msgstr "zeta(x)-1"
 
-#: src/backend/gsl/functions.cpp:643
+#: src/backend/gsl/functions.cpp:784
 #, kde-format
 msgid "Hurwitz zeta function"
 msgstr "Función zeta de Hurwitz"
 
-#: src/backend/gsl/functions.cpp:644
+#: src/backend/gsl/functions.cpp:785
 #, kde-format
 msgid "Eta function for integer n"
 msgstr "Función eta para un enteiro n"
 
-#: src/backend/gsl/functions.cpp:645
+#: src/backend/gsl/functions.cpp:786
 #, kde-format
 msgid "Eta function"
 msgstr "Función eta"
 
-#: src/backend/gsl/functions.cpp:649
+#: src/backend/gsl/functions.cpp:790
 #, fuzzy, kde-format
 #| msgid "Gaussian (normal)"
 msgid "Gaussian random numbers"
 msgstr "de Gauss (normal)"
 
-#: src/backend/gsl/functions.cpp:650
+#: src/backend/gsl/functions.cpp:791
 #, fuzzy, kde-format
 #| msgid "Exponential Power"
 msgid "Exponential random numbers"
 msgstr "Potencia exponencial"
 
-#: src/backend/gsl/functions.cpp:651
+#: src/backend/gsl/functions.cpp:792
 #, kde-format
 msgid "Laplacian random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:652
+#: src/backend/gsl/functions.cpp:793
 #, fuzzy, kde-format
 #| msgid "Cauchy-Lorentz (Breit-Wigner)"
 msgid "Cauchy/Lorentz random numbers"
 msgstr "Cauchy-Lorentz (Breit-Wigner)"
 
-#: src/backend/gsl/functions.cpp:653
+#: src/backend/gsl/functions.cpp:794
 #, kde-format
 msgid "Rayleigh random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:654
+#: src/backend/gsl/functions.cpp:795
 #, kde-format
 msgid "Landau random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:655
+#: src/backend/gsl/functions.cpp:796
 #, fuzzy, kde-format
 #| msgid "Levy alpha-stable"
 msgid "Levy alpha-stable random numbers"
 msgstr "Alfa-estábel de Lévy"
 
-#: src/backend/gsl/functions.cpp:656
+#: src/backend/gsl/functions.cpp:797
 #, kde-format
 msgid "Gamma random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:657
+#: src/backend/gsl/functions.cpp:798
 #, kde-format
 msgid "Flat random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:658
+#: src/backend/gsl/functions.cpp:799
 #, fuzzy, kde-format
 #| msgid "Uniform Random Values"
 msgid "Lognormal random numbers"
 msgstr "Valores aleatorios uniformes"
 
-#: src/backend/gsl/functions.cpp:660
+#: src/backend/gsl/functions.cpp:801
 #, fuzzy, kde-format
 #| msgid "Chi-squared Distribution"
 msgid "Chi-squared random numbers"
 msgstr "Distribución χ²"
 
-#: src/backend/gsl/functions.cpp:661
+#: src/backend/gsl/functions.cpp:802
 #, fuzzy, kde-format
 #| msgid "t-distribution"
 msgid "t-distributed random numbers"
 msgstr "Distribución t"
 
-#: src/backend/gsl/functions.cpp:662
+#: src/backend/gsl/functions.cpp:803
 #, fuzzy, kde-format
 #| msgid "Logistic function"
 msgid "Logistic random numbers"
 msgstr "Función loxística"
 
-#: src/backend/gsl/functions.cpp:663
+#: src/backend/gsl/functions.cpp:804
 #, kde-format
 msgid "Poisson random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:664
+#: src/backend/gsl/functions.cpp:805
 #, kde-format
 msgid "Bernoulli random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:665
+#: src/backend/gsl/functions.cpp:806
 #, kde-format
 msgid "Binomial random numbers"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:669
+#: src/backend/gsl/functions.cpp:810
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
 msgstr "Densidade de probabilidade para unha distribución de Gauss"
 
-#: src/backend/gsl/functions.cpp:670
+#: src/backend/gsl/functions.cpp:811
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
 msgstr "Densidade de probabilidade para unha distribución de Gauss de unidades"
 
-#: src/backend/gsl/functions.cpp:671 src/backend/gsl/functions.cpp:694
-#: src/backend/gsl/functions.cpp:701 src/backend/gsl/functions.cpp:713
-#: src/backend/gsl/functions.cpp:720 src/backend/gsl/functions.cpp:731
-#: src/backend/gsl/functions.cpp:738 src/backend/gsl/functions.cpp:745
-#: src/backend/gsl/functions.cpp:752 src/backend/gsl/functions.cpp:759
-#: src/backend/gsl/functions.cpp:766 src/backend/gsl/functions.cpp:773
-#: src/backend/gsl/functions.cpp:780 src/backend/gsl/functions.cpp:787
-#: src/backend/gsl/functions.cpp:794 src/backend/gsl/functions.cpp:801
-#: src/backend/gsl/functions.cpp:806 src/backend/gsl/functions.cpp:813
-#: src/backend/gsl/functions.cpp:821 src/backend/gsl/functions.cpp:828
-#: src/backend/gsl/functions.cpp:833 src/backend/gsl/functions.cpp:838
-#: src/backend/gsl/functions.cpp:847
+#: src/backend/gsl/functions.cpp:817 src/backend/gsl/functions.cpp:862
+#: src/backend/gsl/functions.cpp:879 src/backend/gsl/functions.cpp:896
+#: src/backend/gsl/functions.cpp:903 src/backend/gsl/functions.cpp:919
+#: src/backend/gsl/functions.cpp:926 src/backend/gsl/functions.cpp:933
+#: src/backend/gsl/functions.cpp:940 src/backend/gsl/functions.cpp:947
+#: src/backend/gsl/functions.cpp:954 src/backend/gsl/functions.cpp:961
+#: src/backend/gsl/functions.cpp:968 src/backend/gsl/functions.cpp:975
+#: src/backend/gsl/functions.cpp:982 src/backend/gsl/functions.cpp:989
+#: src/backend/gsl/functions.cpp:994 src/backend/gsl/functions.cpp:1001
+#: src/backend/gsl/functions.cpp:1009 src/backend/gsl/functions.cpp:1017
+#: src/backend/gsl/functions.cpp:1022 src/backend/gsl/functions.cpp:1027
+#: src/backend/gsl/functions.cpp:1037
 #, kde-format
 msgid "Cumulative distribution function P"
 msgstr "Función de distribución acumulativa P"
 
-#: src/backend/gsl/functions.cpp:672 src/backend/gsl/functions.cpp:695
-#: src/backend/gsl/functions.cpp:702 src/backend/gsl/functions.cpp:709
-#: src/backend/gsl/functions.cpp:714 src/backend/gsl/functions.cpp:721
-#: src/backend/gsl/functions.cpp:732 src/backend/gsl/functions.cpp:739
-#: src/backend/gsl/functions.cpp:746 src/backend/gsl/functions.cpp:753
-#: src/backend/gsl/functions.cpp:760 src/backend/gsl/functions.cpp:767
-#: src/backend/gsl/functions.cpp:774 src/backend/gsl/functions.cpp:781
-#: src/backend/gsl/functions.cpp:788 src/backend/gsl/functions.cpp:795
-#: src/backend/gsl/functions.cpp:802 src/backend/gsl/functions.cpp:807
-#: src/backend/gsl/functions.cpp:814 src/backend/gsl/functions.cpp:822
-#: src/backend/gsl/functions.cpp:829 src/backend/gsl/functions.cpp:834
-#: src/backend/gsl/functions.cpp:839 src/backend/gsl/functions.cpp:848
+#: src/backend/gsl/functions.cpp:818 src/backend/gsl/functions.cpp:863
+#: src/backend/gsl/functions.cpp:880 src/backend/gsl/functions.cpp:892
+#: src/backend/gsl/functions.cpp:897 src/backend/gsl/functions.cpp:904
+#: src/backend/gsl/functions.cpp:920 src/backend/gsl/functions.cpp:927
+#: src/backend/gsl/functions.cpp:934 src/backend/gsl/functions.cpp:941
+#: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:955
+#: src/backend/gsl/functions.cpp:962 src/backend/gsl/functions.cpp:969
+#: src/backend/gsl/functions.cpp:976 src/backend/gsl/functions.cpp:983
+#: src/backend/gsl/functions.cpp:990 src/backend/gsl/functions.cpp:995
+#: src/backend/gsl/functions.cpp:1002 src/backend/gsl/functions.cpp:1010
+#: src/backend/gsl/functions.cpp:1018 src/backend/gsl/functions.cpp:1023
+#: src/backend/gsl/functions.cpp:1028 src/backend/gsl/functions.cpp:1038
 #, kde-format
 msgid "Cumulative distribution function Q"
 msgstr "Función de distribución acumulativa Q"
 
-#: src/backend/gsl/functions.cpp:673 src/backend/gsl/functions.cpp:696
-#: src/backend/gsl/functions.cpp:703 src/backend/gsl/functions.cpp:715
-#: src/backend/gsl/functions.cpp:722 src/backend/gsl/functions.cpp:733
-#: src/backend/gsl/functions.cpp:740 src/backend/gsl/functions.cpp:747
-#: src/backend/gsl/functions.cpp:754 src/backend/gsl/functions.cpp:761
-#: src/backend/gsl/functions.cpp:768 src/backend/gsl/functions.cpp:775
-#: src/backend/gsl/functions.cpp:782 src/backend/gsl/functions.cpp:789
-#: src/backend/gsl/functions.cpp:796 src/backend/gsl/functions.cpp:803
-#: src/backend/gsl/functions.cpp:808
+#: src/backend/gsl/functions.cpp:819 src/backend/gsl/functions.cpp:864
+#: src/backend/gsl/functions.cpp:881 src/backend/gsl/functions.cpp:898
+#: src/backend/gsl/functions.cpp:905 src/backend/gsl/functions.cpp:921
+#: src/backend/gsl/functions.cpp:928 src/backend/gsl/functions.cpp:935
+#: src/backend/gsl/functions.cpp:942 src/backend/gsl/functions.cpp:949
+#: src/backend/gsl/functions.cpp:956 src/backend/gsl/functions.cpp:963
+#: src/backend/gsl/functions.cpp:970 src/backend/gsl/functions.cpp:977
+#: src/backend/gsl/functions.cpp:984 src/backend/gsl/functions.cpp:991
+#: src/backend/gsl/functions.cpp:996
 #, kde-format
 msgid "Inverse cumulative distribution function P"
 msgstr "Función de distribución acumulativa inversa P"
 
-#: src/backend/gsl/functions.cpp:674 src/backend/gsl/functions.cpp:697
-#: src/backend/gsl/functions.cpp:704 src/backend/gsl/functions.cpp:716
-#: src/backend/gsl/functions.cpp:723 src/backend/gsl/functions.cpp:734
-#: src/backend/gsl/functions.cpp:741 src/backend/gsl/functions.cpp:748
-#: src/backend/gsl/functions.cpp:755 src/backend/gsl/functions.cpp:762
-#: src/backend/gsl/functions.cpp:769 src/backend/gsl/functions.cpp:776
-#: src/backend/gsl/functions.cpp:783 src/backend/gsl/functions.cpp:790
-#: src/backend/gsl/functions.cpp:797 src/backend/gsl/functions.cpp:804
-#: src/backend/gsl/functions.cpp:809
+#: src/backend/gsl/functions.cpp:820 src/backend/gsl/functions.cpp:870
+#: src/backend/gsl/functions.cpp:882 src/backend/gsl/functions.cpp:899
+#: src/backend/gsl/functions.cpp:906 src/backend/gsl/functions.cpp:922
+#: src/backend/gsl/functions.cpp:929 src/backend/gsl/functions.cpp:936
+#: src/backend/gsl/functions.cpp:943 src/backend/gsl/functions.cpp:950
+#: src/backend/gsl/functions.cpp:957 src/backend/gsl/functions.cpp:964
+#: src/backend/gsl/functions.cpp:971 src/backend/gsl/functions.cpp:978
+#: src/backend/gsl/functions.cpp:985 src/backend/gsl/functions.cpp:992
+#: src/backend/gsl/functions.cpp:997
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
 msgstr "Función de distribución acumulativa inversa Q"
 
-#: src/backend/gsl/functions.cpp:675
+#: src/backend/gsl/functions.cpp:821
 #, kde-format
 msgid "Cumulative unit distribution function P"
 msgstr "Función de distribución de unidades acumulativa P"
 
-#: src/backend/gsl/functions.cpp:676
+#: src/backend/gsl/functions.cpp:822
 #, kde-format
 msgid "Cumulative unit distribution function Q"
 msgstr "Función de distribución de unidades acumulativa Q"
 
-#: src/backend/gsl/functions.cpp:677
+#: src/backend/gsl/functions.cpp:823
 #, kde-format
 msgid "Inverse cumulative unit distribution function P"
 msgstr "Función de distribución de unidades acumulativa inversa P"
 
-#: src/backend/gsl/functions.cpp:678
+#: src/backend/gsl/functions.cpp:829
 #, kde-format
 msgid "Inverse cumulative unit distribution function Q"
 msgstr "Función de distribución de unidades acumulativa inversa Q"
 
-#: src/backend/gsl/functions.cpp:680
+#: src/backend/gsl/functions.cpp:836
 #, kde-format
 msgid "Probability density for Gaussian tail distribution"
 msgstr "Densidade de probabilidade para unha distribución de extremos de Gauss"
 
-#: src/backend/gsl/functions.cpp:681
+#: src/backend/gsl/functions.cpp:842
 #, kde-format
 msgid "Probability density for unit Gaussian tail distribution"
 msgstr ""
 "Densidade de probabilidade para unha distribución de extremos de Gauss de "
 "unidades"
 
-#: src/backend/gsl/functions.cpp:686
+#: src/backend/gsl/functions.cpp:848
 #, kde-format
 msgid "Probability density for a bivariate Gaussian distribution"
 msgstr ""
 "Densidade de probabilidade para unha distribución de Gauss de dúas variábeis"
 
-#: src/backend/gsl/functions.cpp:693
+#: src/backend/gsl/functions.cpp:856
 #, kde-format
 msgid "Probability density for an exponential distribution"
 msgstr "Densidade de probabilidade para unha distribución exponencial"
 
-#: src/backend/gsl/functions.cpp:700
+#: src/backend/gsl/functions.cpp:878
 #, kde-format
 msgid "Probability density for a Laplace distribution"
 msgstr "Densidade de probabilidade para unha distribución de Laplace"
 
-#: src/backend/gsl/functions.cpp:707
+#: src/backend/gsl/functions.cpp:885
 #, kde-format
 msgid "Probability density for an exponential power distribution"
 msgstr ""
 "Densidade de probabilidade para unha distribución de potencia exponencial"
 
-#: src/backend/gsl/functions.cpp:708
+#: src/backend/gsl/functions.cpp:891
 #, kde-format
 msgid "cumulative distribution function P"
 msgstr "función de distribución acumulativa P"
 
-#: src/backend/gsl/functions.cpp:712
+#: src/backend/gsl/functions.cpp:895
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
 msgstr "Densidade de probabilidade para unha distribución de Cauchy"
 
-#: src/backend/gsl/functions.cpp:719
+#: src/backend/gsl/functions.cpp:902
 #, kde-format
 msgid "Probability density for a Rayleigh distribution"
 msgstr "Densidade de probabilidade para unha distribución de Rayleigh"
 
-#: src/backend/gsl/functions.cpp:724
+#: src/backend/gsl/functions.cpp:907
 #, kde-format
 msgid "Probability density for a Rayleigh tail distribution"
 msgstr ""
 "Densidade de probabilidade para unha distribución de extremos de Rayleigh"
 
-#: src/backend/gsl/functions.cpp:727
+#: src/backend/gsl/functions.cpp:915
 #, kde-format
 msgid "Probability density for a Landau distribution"
 msgstr "Densidade de probabilidade para unha distribución de Landau"
 
-#: src/backend/gsl/functions.cpp:730
+#: src/backend/gsl/functions.cpp:918
 #, kde-format
 msgid "Probability density for a gamma distribution"
 msgstr "Densidade de probabilidade para unha distribución gamma"
 
-#: src/backend/gsl/functions.cpp:737
+#: src/backend/gsl/functions.cpp:925
 #, kde-format
 msgid "Probability density for a uniform distribution"
 msgstr "Densidade de probabilidade para unha distribución uniforme"
 
-#: src/backend/gsl/functions.cpp:744
+#: src/backend/gsl/functions.cpp:932
 #, kde-format
 msgid "Probability density for a lognormal distribution"
 msgstr "Densidade de probabilidade para unha distribución log-normal"
 
-#: src/backend/gsl/functions.cpp:751
+#: src/backend/gsl/functions.cpp:939
 #, kde-format
 msgid "Probability density for a chi squared distribution"
 msgstr "Densidade de probabilidade para unha distribución de chi ao cadrado"
 
-#: src/backend/gsl/functions.cpp:758
+#: src/backend/gsl/functions.cpp:946
 #, kde-format
 msgid "Probability density for a F-distribution"
 msgstr "Densidade de probabilidade para unha distribución F"
 
-#: src/backend/gsl/functions.cpp:765
+#: src/backend/gsl/functions.cpp:953
 #, kde-format
 msgid "Probability density for a t-distribution"
 msgstr "Densidade de probabilidade para unha distribución t"
 
-#: src/backend/gsl/functions.cpp:772
+#: src/backend/gsl/functions.cpp:960
 #, kde-format
 msgid "Probability density for a beta distribution"
 msgstr "Densidade de probabilidade para unha distribución beta"
 
-#: src/backend/gsl/functions.cpp:779
+#: src/backend/gsl/functions.cpp:967
 #, kde-format
 msgid "Probability density for a logistic distribution"
 msgstr "Densidade de probabilidade para unha distribución loxística"
 
-#: src/backend/gsl/functions.cpp:786
+#: src/backend/gsl/functions.cpp:974
 #, kde-format
 msgid "Probability density for a Pareto distribution"
 msgstr "Densidade de probabilidade para unha distribución de Pareto"
 
-#: src/backend/gsl/functions.cpp:793
+#: src/backend/gsl/functions.cpp:981
 #, kde-format
 msgid "Probability density for a Weibull distribution"
 msgstr "Densidade de probabilidade para unha distribución de Weibull"
 
-#: src/backend/gsl/functions.cpp:800
+#: src/backend/gsl/functions.cpp:988
 #, kde-format
 msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Densidade de probabilidade para unha distribución de Gumbel de tipo 1"
 
-#: src/backend/gsl/functions.cpp:805
+#: src/backend/gsl/functions.cpp:993
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Densidade de probabilidade para unha distribución de Gumbel de tipo 2"
 
-#: src/backend/gsl/functions.cpp:812
+#: src/backend/gsl/functions.cpp:1000
 #, kde-format
 msgid "Probability density for a Poisson distribution"
 msgstr "Densidade de probabilidade para unha distribución de Poisson"
 
-#: src/backend/gsl/functions.cpp:817
+#: src/backend/gsl/functions.cpp:1005
 #, kde-format
 msgid "Probability density for a Bernoulli distribution"
 msgstr "Densidade de probabilidade para unha distribución de Bernoulli"
 
-#: src/backend/gsl/functions.cpp:820
+#: src/backend/gsl/functions.cpp:1008
 #, kde-format
 msgid "Probability density for a binomial distribution"
 msgstr "Densidade de probabilidade para unha distribución binomial"
 
-#: src/backend/gsl/functions.cpp:823
+#: src/backend/gsl/functions.cpp:1011
 #, kde-format
 msgid "Probability density for a negative binomial distribution"
 msgstr "Densidade de probabilidade para unha distribución binomial negativa"
 
-#: src/backend/gsl/functions.cpp:832
+#: src/backend/gsl/functions.cpp:1021
 #, kde-format
 msgid "Probability density for a Pascal distribution"
 msgstr "Densidade de probabilidade para unha distribución de Pascal"
 
-#: src/backend/gsl/functions.cpp:837
+#: src/backend/gsl/functions.cpp:1026
 #, kde-format
 msgid "Probability density for a geometric distribution"
 msgstr "Densidade de probabilidade para unha distribución xeométrica"
 
-#: src/backend/gsl/functions.cpp:842
+#: src/backend/gsl/functions.cpp:1031
 #, kde-format
 msgid "Probability density for a hypergeometric distribution"
 msgstr "Densidade de probabilidade para unha distribución hiperxeométrica"
 
-#: src/backend/gsl/functions.cpp:851
+#: src/backend/gsl/functions.cpp:1041
 #, kde-format
 msgid "Probability density for a logarithmic distribution"
 msgstr "Densidade de probabilidade para unha distribución logarítmica"
+
+#: src/backend/gsl/functions.cpp:1110 src/backend/gsl/functions.cpp:1122
+#: src/backend/gsl/functions.cpp:1136
+#, fuzzy, kde-format
+#| msgid "Invalid pointer"
+msgid "Invalid"
+msgstr "Punteiro incorrecto"
+
+#: src/backend/gsl/functions.cpp:1116
+#, fuzzy, kde-format
+#| msgid "Connection:"
+msgid "condition"
+msgstr "Conexión:"
+
+#: src/backend/gsl/functions.cpp:1118
+#, fuzzy, kde-format
+#| msgid "Value"
+msgid "trueValue"
+msgstr "Valor"
+
+#: src/backend/gsl/functions.cpp:1120
+#, fuzzy, kde-format
+msgid "falseValue"
+msgstr "Taxa de mostraxe"
+
+#: src/backend/gsl/functions.cpp:1128
+#, fuzzy, kde-format
+#| msgid "Lang"
+msgid "n"
+msgstr "Lang"
+
+#: src/backend/gsl/functions.cpp:1130
+#, kde-format
+msgid "j"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:1132
+#, kde-format
+msgid "q"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:1134
+#, fuzzy, kde-format
+#| msgid "x="
+msgid "x"
+msgstr "x="
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
@@ -5391,15 +5471,6 @@ msgstr "cadrado"
 #| msgid "Inverse sine"
 msgid "Inverse"
 msgstr "Seno inverso"
-
-#. i18n: ectx: property (text), widget (QLabel, lAnd)
-#. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
-#: src/backend/lib/XmlStreamReader.cpp:58
-#: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:74
-#: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:220
-#, kde-format
-msgid "and"
-msgstr "e"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
@@ -19908,13 +19979,6 @@ msgstr "Recalcular"
 #, kde-format
 msgid "Results:"
 msgstr "Resultados:"
-
-#. i18n: ectx: property (text), widget (QLabel, l2SamplingInterval)
-#: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:263
-#: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:117
-#, kde-format
-msgid "or"
-msgstr "ou"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:335
