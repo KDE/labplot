@@ -19,10 +19,10 @@ extern "C" {
 #endif
 
 // Function definitions
-double greaterThen(const double v1, const double v2);
-double greaterEqualThen(const double v1, const double v2);
-double lessThen(const double v1, const double v2);
-double lessEqualThen(const double v1, const double v2);
+double greaterThan(const double v1, const double v2);
+double greaterEqualThan(const double v1, const double v2);
+double lessThan(const double v1, const double v2);
+double lessEqualThan(const double v1, const double v2);
 double equal(const double v1, const double v2);
 double ifCondition(const double condition, const double valueIfTrue, const double valueIfFalse);
 double andFunction(const double v1, const double v2);
@@ -219,10 +219,10 @@ struct funs _functions[] = {
 	{QStringLiteral("x^9"), "pow9", (func_t)gsl_pow_9, 1, nullptr, FunctionGroups::StandardMathematicalFunctions},
 
 	// Comparison Functions
-	{i18n("greaterThen"), "greaterThen", (func_t)greaterThen, 2, nullptr, FunctionGroups::ComparisonFunctions},
-	{i18n("lessThen"), "lessThen", (func_t)lessThen, 2, nullptr, FunctionGroups::ComparisonFunctions},
-	{i18n("greaterEqualThen"), "greaterEqualThen", (func_t)greaterEqualThen, 2, nullptr, FunctionGroups::ComparisonFunctions},
-	{i18n("lessEqualThen"), "lessEqualThen", (func_t)lessEqualThen, 2, nullptr, FunctionGroups::ComparisonFunctions},
+	{i18n("greaterThan"), "greaterThan", (func_t)greaterThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
+	{i18n("lessThan"), "lessThan", (func_t)lessThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
+	{i18n("greaterEqualThan"), "greaterEqualThan", (func_t)greaterEqualThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
+	{i18n("lessEqualThan"), "lessEqualThan", (func_t)lessEqualThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
 	{i18n("equal"), "equal", (func_t)equal, 2, nullptr, FunctionGroups::ComparisonFunctions},
 
 	// Logical
@@ -1052,19 +1052,19 @@ const int _number_functions = sizeof(_functions) / sizeof(funs);
 //#### Function declarations ############################################
 //########################################################################
 
-double greaterThen(const double v1, const double v2) {
+double greaterThan(const double v1, const double v2) {
 	return v1 > v2;
 }
 
-double greaterEqualThen(const double v1, const double v2) {
+double greaterEqualThan(const double v1, const double v2) {
 	return v1 >= v2;
 }
 
-double lessThen(const double v1, const double v2) {
+double lessThan(const double v1, const double v2) {
 	return v1 < v2;
 }
 
-double lessEqualThen(const double v1, const double v2) {
+double lessEqualThan(const double v1, const double v2) {
 	return v1 <= v2;
 }
 
