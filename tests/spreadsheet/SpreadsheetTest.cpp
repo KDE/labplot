@@ -1513,19 +1513,19 @@ void SpreadsheetTest::testInsertRows() {
 
 	auto* model = new SpreadsheetModel(sheet);
 	int rowsAboutToBeInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [this, &rowsAboutToBeInsertedCounter]() {
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter]() {
 		rowsAboutToBeInsertedCounter++;
 	});
 	int rowsInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsInserted, [this, &rowsInsertedCounter]() {
+	connect(model, &SpreadsheetModel::rowsInserted, [&rowsInsertedCounter]() {
 		rowsInsertedCounter++;
 	});
 	int rowsAboutToBeRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [this, &rowsAboutToBeRemovedCounter]() {
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter]() {
 		rowsAboutToBeRemovedCounter++;
 	});
 	int rowsRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsRemoved, [this, &rowsRemovedCounter]() {
+	connect(model, &SpreadsheetModel::rowsRemoved, [&rowsRemovedCounter]() {
 		rowsRemovedCounter++;
 	});
 
@@ -1551,19 +1551,19 @@ void SpreadsheetTest::testRemoveRows() {
 
 	auto* model = new SpreadsheetModel(sheet);
 	int rowsAboutToBeInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [this, &rowsAboutToBeInsertedCounter]() {
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter]() {
 		rowsAboutToBeInsertedCounter++;
 	});
 	int rowsInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsInserted, [this, &rowsInsertedCounter]() {
+	connect(model, &SpreadsheetModel::rowsInserted, [&rowsInsertedCounter]() {
 		rowsInsertedCounter++;
 	});
 	int rowsAboutToBeRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [this, &rowsAboutToBeRemovedCounter]() {
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter]() {
 		rowsAboutToBeRemovedCounter++;
 	});
 	int rowsRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsRemoved, [this, &rowsRemovedCounter]() {
+	connect(model, &SpreadsheetModel::rowsRemoved, [&rowsRemovedCounter]() {
 		rowsRemovedCounter++;
 	});
 
@@ -1590,19 +1590,19 @@ void SpreadsheetTest::testInsertColumns() {
 	auto* model = new SpreadsheetModel(sheet);
 
 	int columnsAboutToBeInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [this, &columnsAboutToBeInsertedCounter]() {
+	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [&columnsAboutToBeInsertedCounter]() {
 		columnsAboutToBeInsertedCounter++;
 	});
 	int columnsInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsInserted, [this, &columnsInsertedCounter]() {
+	connect(model, &SpreadsheetModel::columnsInserted, [&columnsInsertedCounter]() {
 		columnsInsertedCounter++;
 	});
 	int columnsAboutToBeRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [this, &columnsAboutToBeRemovedCounter]() {
+	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [&columnsAboutToBeRemovedCounter]() {
 		columnsAboutToBeRemovedCounter++;
 	});
 	int columnsRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsRemoved, [this, &columnsRemovedCounter]() {
+	connect(model, &SpreadsheetModel::columnsRemoved, [&columnsRemovedCounter]() {
 		columnsRemovedCounter++;
 	});
 
@@ -1629,19 +1629,19 @@ void SpreadsheetTest::testRemoveColumns() {
 	auto* model = new SpreadsheetModel(sheet);
 
 	int columnsAboutToBeInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [this, &columnsAboutToBeInsertedCounter]() {
+	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [&columnsAboutToBeInsertedCounter]() {
 		columnsAboutToBeInsertedCounter++;
 	});
 	int columnsInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsInserted, [this, &columnsInsertedCounter]() {
+	connect(model, &SpreadsheetModel::columnsInserted, [&columnsInsertedCounter]() {
 		columnsInsertedCounter++;
 	});
 	int columnsAboutToBeRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [this, &columnsAboutToBeRemovedCounter]() {
+	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [&columnsAboutToBeRemovedCounter]() {
 		columnsAboutToBeRemovedCounter++;
 	});
 	int columnsRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsRemoved, [this, &columnsRemovedCounter]() {
+	connect(model, &SpreadsheetModel::columnsRemoved, [&columnsRemovedCounter]() {
 		columnsRemovedCounter++;
 	});
 
@@ -1673,28 +1673,28 @@ void SpreadsheetTest::testInsertRowsSuppressUpdate() {
 	auto* model = new SpreadsheetModel(sheet);
 
 	int rowsAboutToBeInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [this, &rowsAboutToBeInsertedCounter]() {
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter]() {
 		rowsAboutToBeInsertedCounter++;
 	});
 	int rowsInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsInserted, [this, &rowsInsertedCounter]() {
+	connect(model, &SpreadsheetModel::rowsInserted, [&rowsInsertedCounter]() {
 		rowsInsertedCounter++;
 	});
 	int rowsAboutToBeRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [this, &rowsAboutToBeRemovedCounter]() {
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter]() {
 		rowsAboutToBeRemovedCounter++;
 	});
 	int rowsRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::rowsRemoved, [this, &rowsRemovedCounter]() {
+	connect(model, &SpreadsheetModel::rowsRemoved, [&rowsRemovedCounter]() {
 		rowsRemovedCounter++;
 	});
 
 	int modelResetCounter = 0;
-	connect(model, &SpreadsheetModel::modelReset, [this, &modelResetCounter]() {
+	connect(model, &SpreadsheetModel::modelReset, [&modelResetCounter]() {
 		modelResetCounter++;
 	});
 	int modelAboutToResetCounter = 0;
-	connect(model, &SpreadsheetModel::modelAboutToBeReset, [this, &modelAboutToResetCounter]() {
+	connect(model, &SpreadsheetModel::modelAboutToBeReset, [&modelAboutToResetCounter]() {
 		modelAboutToResetCounter++;
 	});
 
@@ -1732,28 +1732,28 @@ void SpreadsheetTest::testInsertColumnsSuppressUpdate() {
 	auto* model = new SpreadsheetModel(sheet);
 
 	int columnsAboutToBeInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [this, &columnsAboutToBeInsertedCounter]() {
+	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [&columnsAboutToBeInsertedCounter]() {
 		columnsAboutToBeInsertedCounter++;
 	});
 	int columnsInsertedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsInserted, [this, &columnsInsertedCounter]() {
+	connect(model, &SpreadsheetModel::columnsInserted, [&columnsInsertedCounter]() {
 		columnsInsertedCounter++;
 	});
 	int columnsAboutToBeRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [this, &columnsAboutToBeRemovedCounter]() {
+	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [&columnsAboutToBeRemovedCounter]() {
 		columnsAboutToBeRemovedCounter++;
 	});
 	int columnsRemovedCounter = 0;
-	connect(model, &SpreadsheetModel::columnsRemoved, [this, &columnsRemovedCounter]() {
+	connect(model, &SpreadsheetModel::columnsRemoved, [&columnsRemovedCounter]() {
 		columnsRemovedCounter++;
 	});
 
 	int modelResetCounter = 0;
-	connect(model, &SpreadsheetModel::modelReset, [this, &modelResetCounter]() {
+	connect(model, &SpreadsheetModel::modelReset, [&modelResetCounter]() {
 		modelResetCounter++;
 	});
 	int modelAboutToResetCounter = 0;
-	connect(model, &SpreadsheetModel::modelAboutToBeReset, [this, &modelAboutToResetCounter]() {
+	connect(model, &SpreadsheetModel::modelAboutToBeReset, [&modelAboutToResetCounter]() {
 		modelAboutToResetCounter++;
 	});
 
