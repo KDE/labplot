@@ -2419,9 +2419,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 						if (m_actualRows > keepNValues) {
 							for (int i = 0; i < keepNValues; i++) {
 								static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](i) =
-									static_cast<QVector<QDateTime>*>(m_dataContainer[n])
-										->
-										operator[](m_actualRows - keepNValues + i);
+									static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](m_actualRows - keepNValues + i);
 							}
 						}
 
