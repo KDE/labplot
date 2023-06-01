@@ -264,16 +264,32 @@ public:
 		if (length() == 0)
 			return;
 
+		if (isLogScale(scale()) && (m_start <= 0 || m_end <= 0))
+			return;
+
+		double base = 10.;
+		double oldSize = size();
+		switch (scale()) {
+		case Scale::Linear:
+		case Scale::Log10:
+			break; // default base
+		case Scale::Log2:
+			base = 2.;
+			break;
+		case Scale::Ln:
+			base = M_E;
+			break;
+		case Scale::Sqrt:
+			oldSize = sqrt(oldSize);
+			break;
+		case Scale::Square:
+			oldSize *= oldSize;
+			break;
+		case Scale::Inverse:
+			oldSize = 1. / oldSize;
+		}
+
 		if (isLogScale(scale())) {
-			if (m_start <= 0 || m_end <= 0)
-				return;
-
-			double base = 10.;
-			if (scale() == Scale::Log2)
-				base = 2.;
-			if (scale() == Scale::Ln)
-				base = M_E;
-
 			if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
 				m_start = nsl_math_round_basex(m_start, -1, base);
 				m_end = nsl_math_round_basex(m_end, -1, base) * base;
@@ -281,16 +297,8 @@ public:
 				m_start = nsl_math_round_basex(m_start, -1, base) * base;
 				m_end = nsl_math_round_basex(m_end, -1, base);
 			}
-			return;
+			return; // log scales end here
 		}
-
-		double oldSize = size();
-		if (scale() == Scale::Sqrt)
-			oldSize = sqrt(oldSize);
-		else if (scale() == Scale::Square)
-			oldSize *= oldSize;
-		else if (scale() == Scale::Inverse)
-			oldSize = 1. / oldSize;
 
 		DEBUG("scale = " << (int)scale() << ", old size = " << oldSize)
 
@@ -302,15 +310,23 @@ public:
 
 		// extend/shrink range
 		double new_start = m_start, new_end = m_end;
-		if (scale() == Scale::Sqrt) {
+		switch (scale()) {
+		case Scale::Linear:
+		case Scale::Log10: // log-scales already done
+		case Scale::Log2:
+		case Scale::Ln:
+			break;
+		case Scale::Sqrt:
 			if (m_start < 0 || m_end < 0)
 				return;
 			new_start = sqrt(m_start);
 			new_end = sqrt(m_end);
-		} else if (scale() == Scale::Square) {
+			break;
+		case Scale::Square:
 			new_start = m_start * m_start;
 			new_end = m_end * m_end;
-		} else if (scale() == Scale::Inverse) {
+			break;
+		case Scale::Inverse:
 			if (m_start == 0 || m_end == 0)
 				return;
 			new_start = 1. / m_start;
@@ -326,15 +342,23 @@ public:
 		}
 		DEBUG(" tmp new range: " << new_start << " .. " << new_end)
 
-		if (scale() == Scale::Sqrt) {
+		switch (scale()) {
+		case Scale::Linear:
+		case Scale::Log10: // log-scales already done
+		case Scale::Log2:
+		case Scale::Ln:
+			break;
+		case Scale::Sqrt:
 			new_start *= new_start;
 			new_end *= new_end;
-		} else if (scale() == Scale::Square) {
+			break;
+		case Scale::Square:
 			if (new_start < 0 || new_end < 0)
 				return;
 			new_start = sqrt(new_start);
 			new_end = sqrt(new_end);
-		} else if (scale() == Scale::Inverse) {
+			break;
+		case Scale::Inverse:
 			if (new_start == 0 || new_end == 0)
 				return;
 			new_start = 1. / new_start;
@@ -354,30 +378,40 @@ public:
 		if (length() == 0)
 			return 0;
 
+		if (isLogScale(scale()) && (m_start <= 0 || m_end <= 0))
+			return 1; // datetime test expects value > 0
+
+		int order = 0;
+		switch (scale()) {
+		case Scale::Linear:
+		case Scale::Sqrt:
+		case Scale::Square:
+		case Scale::Inverse:
+			break;
+		case Scale::Log10:
+			order = log10(m_end) - log10(m_start);
+			break;
+		case Scale::Log2:
+			order = log2(m_end) - log2(m_start);
+			break;
+		case Scale::Ln:
+			order = log(m_end) - log(m_start);
+			break;
+		}
+
 		if (isLogScale(scale())) {
-			if (m_start <= 0 || m_end <= 0)
-				return 1; // datetime test expects value > 0
-
-			int order = 0;
-			if (scale() == Scale::Log10)
-				order = log10(m_end) - log10(m_start);
-			else if (scale() == Scale::Log2)
-				order = log2(m_end) - log2(m_start);
-			else if (scale() == Scale::Ln)
-				order = log(m_end) - log(m_start);
-
 			DEBUG(Q_FUNC_INFO << ", order = " << order)
 			if (order >= 0)
 				return order + 1;
 			else // reverse range
 				return -order + 1;
-		}
+		} // log scales end here
 
 		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", length() = " << length())
-		const double order = pow(10.0, std::floor(log10(length())));
+		const double order_of_magnitude = pow(10.0, std::floor(log10(length())));
 
-		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order)
-		const int factor = qRound(100 * length() / order);
+		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order_of_magnitude)
+		const int factor = qRound(100 * length() / order_of_magnitude);
 		DEBUG(Q_FUNC_INFO << ", factor = " << factor)
 
 		// set number of ticks for certain multiple of small numbers

@@ -2559,7 +2559,6 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 	auto& r{d->range(dim, index)};
 	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range dirty = " << rangeDirty(dim, index))
 	if (rangeDirty(dim, index)) {
-		DEBUG(Q_FUNC_INFO << ", CALL calculateDataRange()")
 		calculateDataRange(dim, index, fullRange);
 		setRangeDirty(dim, index, false);
 
@@ -3281,13 +3280,6 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 				|| (dim == Dimension::X && axis->orientation() != Axis::Orientation::Horizontal))
 				continue;
 
-			/*if (!qFuzzyIsNull(deltaMax) || !qFuzzyIsNull(deltaMin)) {
-				axis->setUndoAware(false);
-				axis->setSuppressRetransform(true);
-				axis->setScale(rangep.range.scale());
-				axis->setUndoAware(true);
-				axis->setSuppressRetransform(false);
-			}*/
 			if (!qFuzzyIsNull(deltaMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
