@@ -373,7 +373,7 @@ public:
 		DEBUG(Q_FUNC_INFO << ", new range: " << toStdString())
 	}
 	int autoTickCount() const {
-		DEBUG(Q_FUNC_INFO << ", scale = " << (int)scale())
+		QDEBUG(Q_FUNC_INFO << ", scale = " << scale())
 
 		if (length() == 0)
 			return 0;
@@ -381,7 +381,7 @@ public:
 		if (isLogScale(scale()) && (m_start <= 0 || m_end <= 0))
 			return 1; // datetime test expects value > 0
 
-		int order = 0;
+		double order = 0.;
 		switch (scale()) {
 		case Scale::Linear:
 		case Scale::Sqrt:
@@ -400,18 +400,18 @@ public:
 		}
 
 		if (isLogScale(scale())) {
-			DEBUG(Q_FUNC_INFO << ", order = " << order)
+			DEBUG(Q_FUNC_INFO << ", order = " << std::round(order))
 			if (order >= 0)
-				return order + 1;
+				return std::round(order) + 1;
 			else // reverse range
-				return -order + 1;
+				return -std::round(order) + 1;
 		} // log scales end here
 
 		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", length() = " << length())
-		const double order_of_magnitude = pow(10.0, std::floor(log10(length())));
+		order = pow(10.0, std::floor(log10(length())));
 
-		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order_of_magnitude)
-		const int factor = qRound(100 * length() / order_of_magnitude);
+		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order)
+		const int factor = qRound(100 * length() / order);
 		DEBUG(Q_FUNC_INFO << ", factor = " << factor)
 
 		// set number of ticks for certain multiple of small numbers
