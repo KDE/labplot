@@ -1553,30 +1553,6 @@ void AxisPrivate::retransformTicks() {
 					nextMajorTickPos = majorTicksColumn->valueAt(iMajor + 1);
 			} else // last major tick
 				tmpMinorTicksNumber = 0;
-		} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
-			const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
-			if (c) {
-				switch (c->labelsMode()) {
-				case Column::ColumnMode::Double:
-					majorTickPos = c->valueLabels()->at(iMajor).value;
-					break;
-				case Column::ColumnMode::Integer:
-					majorTickPos = c->intValueLabels()->at(iMajor).value;
-					break;
-				case Column::ColumnMode::BigInt:
-					majorTickPos = c->bigIntValueLabels()->at(iMajor).value;
-					break;
-				case Column::ColumnMode::Day:
-				case Column::ColumnMode::Month:
-				case Column::ColumnMode::DateTime:
-					majorTickPos = c->dateTimeValueLabels()->at(iMajor).value.toMSecsSinceEpoch();
-					break;
-				case Column::ColumnMode::Text:
-					// TODO
-					break;
-				}
-			}
-
 		} else {
 			switch (range.scale()) {
 			case RangeT::Scale::Linear:
@@ -1611,16 +1587,6 @@ void AxisPrivate::retransformTicks() {
 				nextMajorTickPos = 1. / (1. / start + majorTicksIncrement * (iMajor + 1));
 				break;
 			}
-		} else { // custom column
-			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
-				continue;
-			majorTickPos = majorTicksColumn->valueAt(iMajor);
-			// set next major tick pos for minor ticks
-			if (iMajor < tmpMajorTicksNumber - 1) {
-				if (majorTicksColumn->isValid(iMajor + 1) && !majorTicksColumn->isMasked(iMajor + 1))
-					nextMajorTickPos = majorTicksColumn->valueAt(iMajor + 1);
-			} else // last major tick
-				tmpMinorTicksNumber = 0;
 		}
 
 		qreal xAnchorPoint = 0.0;
