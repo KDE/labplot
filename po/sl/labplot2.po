@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-02 00:43+0000\n"
-"PO-Revision-Date: 2023-06-01 08:18+0200\n"
+"POT-Creation-Date: 2023-06-03 00:43+0000\n"
+"PO-Revision-Date: 2023-06-02 07:49+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -56,14 +56,14 @@ msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:639
 #: src/backend/datapicker/DatapickerPoint.cpp:502
-#: src/backend/datasources/filters/AsciiFilter.cpp:2003
+#: src/backend/datasources/filters/AsciiFilter.cpp:2005
 #: src/backend/datasources/filters/BinaryFilter.cpp:562
 #: src/backend/datasources/filters/JsonFilter.cpp:776
 #: src/backend/datasources/filters/ROOTFilter.cpp:119
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1152
+#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1154
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -112,7 +112,7 @@ msgstr "Atribut '%1' manjka ali je prazen, uporabljena je privzeta vrednost"
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
-#: src/backend/spreadsheet/Spreadsheet.cpp:1187
+#: src/backend/spreadsheet/Spreadsheet.cpp:1189
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3126
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
@@ -1189,8 +1189,8 @@ msgstr "Število vrstic: %1"
 #: src/backend/datasources/filters/AsciiFilter.cpp:549
 #: src/backend/datasources/filters/AsciiFilter.cpp:751
 #: src/backend/datasources/filters/AsciiFilter.cpp:958
-#: src/backend/datasources/filters/AsciiFilter.cpp:1523
-#: src/backend/datasources/filters/AsciiFilter.cpp:2083
+#: src/backend/datasources/filters/AsciiFilter.cpp:1524
+#: src/backend/datasources/filters/AsciiFilter.cpp:2085
 #, kde-format
 msgid "Timestamp"
 msgstr "Časovni žig"
@@ -1198,8 +1198,8 @@ msgstr "Časovni žig"
 #: src/backend/datasources/filters/AsciiFilter.cpp:553
 #: src/backend/datasources/filters/AsciiFilter.cpp:745
 #: src/backend/datasources/filters/AsciiFilter.cpp:956
-#: src/backend/datasources/filters/AsciiFilter.cpp:1518
-#: src/backend/datasources/filters/AsciiFilter.cpp:2077
+#: src/backend/datasources/filters/AsciiFilter.cpp:1519
+#: src/backend/datasources/filters/AsciiFilter.cpp:2079
 #: src/backend/datasources/filters/BinaryFilter.cpp:303
 #: src/backend/datasources/filters/BinaryFilter.cpp:447
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1210,8 +1210,8 @@ msgstr "Kazalo"
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:757
 #: src/backend/datasources/filters/AsciiFilter.cpp:963
-#: src/backend/datasources/filters/AsciiFilter.cpp:1542
-#: src/backend/datasources/filters/AsciiFilter.cpp:2096
+#: src/backend/datasources/filters/AsciiFilter.cpp:1543
+#: src/backend/datasources/filters/AsciiFilter.cpp:2098
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:614
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2315
@@ -1227,8 +1227,8 @@ msgid "Value"
 msgstr "Vrednost"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:965
-#: src/backend/datasources/filters/AsciiFilter.cpp:1544
-#: src/backend/datasources/filters/AsciiFilter.cpp:2098
+#: src/backend/datasources/filters/AsciiFilter.cpp:1545
+#: src/backend/datasources/filters/AsciiFilter.cpp:2100
 #, kde-format
 msgid "Value %1"
 msgstr "Vrednost %1"
@@ -3409,28 +3409,24 @@ msgid "Round to the nearest integer"
 msgstr "Zaokroži na najbližje celo število"
 
 #: src/backend/gsl/functions.cpp:222
-#, fuzzy, kde-format
-#| msgid "greaterThen"
+#, kde-format
 msgid "greaterThan"
-msgstr "večje kot"
+msgstr "večjeKot"
 
 #: src/backend/gsl/functions.cpp:223
-#, fuzzy, kde-format
-#| msgid "lessThen"
+#, kde-format
 msgid "lessThan"
 msgstr "manjšeKot"
 
 #: src/backend/gsl/functions.cpp:224
-#, fuzzy, kde-format
-#| msgid "greaterEqualThen"
+#, kde-format
 msgid "greaterEqualThan"
-msgstr "večje ali enako kot"
+msgstr "večjeAliEnakoKot"
 
 #: src/backend/gsl/functions.cpp:225
-#, fuzzy, kde-format
-#| msgid "lessEqualThen"
+#, kde-format
 msgid "lessEqualThan"
-msgstr "manjše ali enako kot"
+msgstr "manjšeAliEnakoKot"
 
 #: src/backend/gsl/functions.cpp:226
 #, kde-format
@@ -5398,7 +5394,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: določitev velikosti matrike na %2x%3"
 
 #: src/backend/matrix/Matrix.cpp:487
-#: src/backend/spreadsheet/Spreadsheet.cpp:597
+#: src/backend/spreadsheet/Spreadsheet.cpp:599
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: kopiranje %2"
@@ -5422,7 +5418,7 @@ msgstr[2] "%1: dodaj %2 stolpce"
 msgstr[3] "%1: dodaj %2 stolpcev"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:534
+#: src/backend/spreadsheet/Spreadsheet.cpp:535
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: počisti"
@@ -6424,32 +6420,32 @@ msgstr[1] "%1: odstrani %2 stolpca"
 msgstr[2] "%1: odstrani %2 stolpce"
 msgstr[3] "%1: odstrani %2 stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:542
+#: src/backend/spreadsheet/Spreadsheet.cpp:543
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: počisti izbrane stolpce"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:565
+#: src/backend/spreadsheet/Spreadsheet.cpp:566
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: počisti vse maske"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:589
+#: src/backend/spreadsheet/Spreadsheet.cpp:591
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: premaknite stolpec %2 iz položaja %3 na %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:714
+#: src/backend/spreadsheet/Spreadsheet.cpp:716
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: razvrščanje stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1079
+#: src/backend/spreadsheet/Spreadsheet.cpp:1081
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: povezana preglednica odstranjena"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1413
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -6458,7 +6454,7 @@ msgstr[1] "dvojni številski podatki, %1 elementa"
 msgstr[2] "dvojni številski podatki, %1 elementi"
 msgstr[3] "dvojni številski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1416
+#: src/backend/spreadsheet/Spreadsheet.cpp:1426
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -6467,7 +6463,7 @@ msgstr[1] "celoštevilska podatka, %1 elementa"
 msgstr[2] "celoštevilski podatki, %1 elementi"
 msgstr[3] "celoštevilski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1419
+#: src/backend/spreadsheet/Spreadsheet.cpp:1429
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -6476,7 +6472,7 @@ msgstr[1] "dolga celoštevilska podatka, %1 elementa"
 msgstr[2] "dolgi celoštevilski podatki, %1 elementi"
 msgstr[3] "dolgi celoštevilski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1422
+#: src/backend/spreadsheet/Spreadsheet.cpp:1432
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -6485,7 +6481,7 @@ msgstr[1] "tekstovna podatka, %1 elementa"
 msgstr[2] "tekstovni podatki, %1 elementi"
 msgstr[3] "tekstovni podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1425
+#: src/backend/spreadsheet/Spreadsheet.cpp:1435
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -6494,7 +6490,7 @@ msgstr[1] "podatka o mesecu, %1 elementa"
 msgstr[2] "podatki o mesecu, %1 elementi"
 msgstr[3] "podatki o mesecu, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1428
+#: src/backend/spreadsheet/Spreadsheet.cpp:1438
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -6503,7 +6499,7 @@ msgstr[1] "podatka o dnevu, %1 elementa"
 msgstr[2] "podatki o dnevu, %1 elementi"
 msgstr[3] "podatki o dnevu, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1431
+#: src/backend/spreadsheet/Spreadsheet.cpp:1441
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"

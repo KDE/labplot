@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-02 00:43+0000\n"
-"PO-Revision-Date: 2023-05-31 06:13+0200\n"
+"POT-Creation-Date: 2023-06-03 00:43+0000\n"
+"PO-Revision-Date: 2023-06-02 05:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -53,14 +53,14 @@ msgstr "პანელის დამატებები ვერ ვიპ
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:639
 #: src/backend/datapicker/DatapickerPoint.cpp:502
-#: src/backend/datasources/filters/AsciiFilter.cpp:2003
+#: src/backend/datasources/filters/AsciiFilter.cpp:2005
 #: src/backend/datasources/filters/BinaryFilter.cpp:562
 #: src/backend/datasources/filters/JsonFilter.cpp:776
 #: src/backend/datasources/filters/ROOTFilter.cpp:119
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1152
+#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1154
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -109,7 +109,7 @@ msgstr "ატრიბუტი '%1' აკლია ან ცარიელ�
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
-#: src/backend/spreadsheet/Spreadsheet.cpp:1187
+#: src/backend/spreadsheet/Spreadsheet.cpp:1189
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3126
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
@@ -1175,8 +1175,8 @@ msgstr "ხაზების რაოდენობა: %1"
 #: src/backend/datasources/filters/AsciiFilter.cpp:549
 #: src/backend/datasources/filters/AsciiFilter.cpp:751
 #: src/backend/datasources/filters/AsciiFilter.cpp:958
-#: src/backend/datasources/filters/AsciiFilter.cpp:1523
-#: src/backend/datasources/filters/AsciiFilter.cpp:2083
+#: src/backend/datasources/filters/AsciiFilter.cpp:1524
+#: src/backend/datasources/filters/AsciiFilter.cpp:2085
 #, kde-format
 msgid "Timestamp"
 msgstr "დროის შტამპი"
@@ -1184,8 +1184,8 @@ msgstr "დროის შტამპი"
 #: src/backend/datasources/filters/AsciiFilter.cpp:553
 #: src/backend/datasources/filters/AsciiFilter.cpp:745
 #: src/backend/datasources/filters/AsciiFilter.cpp:956
-#: src/backend/datasources/filters/AsciiFilter.cpp:1518
-#: src/backend/datasources/filters/AsciiFilter.cpp:2077
+#: src/backend/datasources/filters/AsciiFilter.cpp:1519
+#: src/backend/datasources/filters/AsciiFilter.cpp:2079
 #: src/backend/datasources/filters/BinaryFilter.cpp:303
 #: src/backend/datasources/filters/BinaryFilter.cpp:447
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1196,8 +1196,8 @@ msgstr "ინდექსი"
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:757
 #: src/backend/datasources/filters/AsciiFilter.cpp:963
-#: src/backend/datasources/filters/AsciiFilter.cpp:1542
-#: src/backend/datasources/filters/AsciiFilter.cpp:2096
+#: src/backend/datasources/filters/AsciiFilter.cpp:1543
+#: src/backend/datasources/filters/AsciiFilter.cpp:2098
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:614
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2315
@@ -1213,8 +1213,8 @@ msgid "Value"
 msgstr "მნიშვნელობა"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:965
-#: src/backend/datasources/filters/AsciiFilter.cpp:1544
-#: src/backend/datasources/filters/AsciiFilter.cpp:2098
+#: src/backend/datasources/filters/AsciiFilter.cpp:1545
+#: src/backend/datasources/filters/AsciiFilter.cpp:2100
 #, kde-format
 msgid "Value %1"
 msgstr "მნიშვნელობა %1"
@@ -3028,10 +3028,9 @@ msgid "Comparison Functions"
 msgstr "შედარების ფუნქციები"
 
 #: src/backend/gsl/functions.cpp:44
-#, fuzzy, kde-format
-#| msgid "Condition:"
+#, kde-format
 msgid "Conditions"
-msgstr "მდგომარეობა:"
+msgstr "პირობები"
 
 #: src/backend/gsl/functions.cpp:46
 #, kde-format
@@ -3394,26 +3393,22 @@ msgid "Round to the nearest integer"
 msgstr "უახლოეს მთელ რიცხვამდე დამრგვალება"
 
 #: src/backend/gsl/functions.cpp:222
-#, fuzzy, kde-format
-#| msgid "greaterThen"
+#, kde-format
 msgid "greaterThan"
 msgstr "მეტივიდრე"
 
 #: src/backend/gsl/functions.cpp:223
-#, fuzzy, kde-format
-#| msgid "lessThan"
+#, kde-format
 msgid "lessThan"
 msgstr "ნაკლებიციდრე"
 
 #: src/backend/gsl/functions.cpp:224
-#, fuzzy, kde-format
-#| msgid "greaterEqualThen"
+#, kde-format
 msgid "greaterEqualThan"
 msgstr "მეტიანტოლივიდრე"
 
 #: src/backend/gsl/functions.cpp:225
-#, fuzzy, kde-format
-#| msgid "lessEqualThen"
+#, kde-format
 msgid "lessEqualThan"
 msgstr "ნაკლებიანტოლივიდრე"
 
@@ -3445,10 +3440,9 @@ msgid "or"
 msgstr "ან"
 
 #: src/backend/gsl/functions.cpp:232
-#, fuzzy, kde-format
-#| msgid "or"
+#, kde-format
 msgid "xor"
-msgstr "ან"
+msgstr "არ-ან"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:235
@@ -5200,34 +5194,29 @@ msgstr ""
 
 #: src/backend/gsl/functions.cpp:1110 src/backend/gsl/functions.cpp:1122
 #: src/backend/gsl/functions.cpp:1136
-#, fuzzy, kde-format
-#| msgid "Invalid image"
+#, kde-format
 msgid "Invalid"
-msgstr "არასწორი გამოსახულება"
+msgstr "არასწორი"
 
 #: src/backend/gsl/functions.cpp:1116
-#, fuzzy, kde-format
-#| msgid "Condition:"
+#, kde-format
 msgid "condition"
-msgstr "მდგომარეობა:"
+msgstr "მდგომარეობა"
 
 #: src/backend/gsl/functions.cpp:1118
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "trueValue"
-msgstr "მნიშვნელობა"
+msgstr "ჭეშმარიტიმნიშვნელობა"
 
 #: src/backend/gsl/functions.cpp:1120
-#, fuzzy, kde-format
-#| msgid "Sample Values"
+#, kde-format
 msgid "falseValue"
-msgstr "მაგალითი მნიშვნელობები"
+msgstr "არაჭეშმარიტიმნიშვნელობა"
 
 #: src/backend/gsl/functions.cpp:1128
-#, fuzzy, kde-format
-#| msgid "Ln"
+#, kde-format
 msgid "n"
-msgstr "Ln"
+msgstr "n"
 
 #: src/backend/gsl/functions.cpp:1130
 #, kde-format
@@ -5237,13 +5226,12 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:1132
 #, kde-format
 msgid "q"
-msgstr ""
+msgstr "q"
 
 #: src/backend/gsl/functions.cpp:1134
-#, fuzzy, kde-format
-#| msgid "x="
+#, kde-format
 msgid "x"
-msgstr "x="
+msgstr "x"
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
@@ -5350,7 +5338,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:487
-#: src/backend/spreadsheet/Spreadsheet.cpp:597
+#: src/backend/spreadsheet/Spreadsheet.cpp:599
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: %2-ის კოპირება"
@@ -5370,7 +5358,7 @@ msgstr[0] "%1 %2 სვეტის დამატება"
 msgstr[1] "%1 %2 სვეტის დამატება"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:534
+#: src/backend/spreadsheet/Spreadsheet.cpp:535
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: გასუფთავება"
@@ -6360,74 +6348,74 @@ msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: 1 სვეტის წაშლა"
 msgstr[1] "%1: %2 სვეტის წაშლა"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:542
+#: src/backend/spreadsheet/Spreadsheet.cpp:543
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:565
+#: src/backend/spreadsheet/Spreadsheet.cpp:566
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: ყველა ნიღბის გასუფთავება"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:589
+#: src/backend/spreadsheet/Spreadsheet.cpp:591
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: %2 სვეტის %3-დან %4 მდებარეობაზე გადატანა."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:714
+#: src/backend/spreadsheet/Spreadsheet.cpp:716
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: სვეტების დალაგება"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1079
+#: src/backend/spreadsheet/Spreadsheet.cpp:1081
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1413
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "ორმაგი სიზუსტის მონაცემები, %1 ელემენტი"
 msgstr[1] "რიცხვითი მონაცემები, %1 ელემენტი"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1416
+#: src/backend/spreadsheet/Spreadsheet.cpp:1426
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1419
+#: src/backend/spreadsheet/Spreadsheet.cpp:1429
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1422
+#: src/backend/spreadsheet/Spreadsheet.cpp:1432
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1425
+#: src/backend/spreadsheet/Spreadsheet.cpp:1435
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1428
+#: src/backend/spreadsheet/Spreadsheet.cpp:1438
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1431
+#: src/backend/spreadsheet/Spreadsheet.cpp:1441
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"

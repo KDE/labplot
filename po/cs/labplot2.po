@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-02 00:43+0000\n"
+"POT-Creation-Date: 2023-06-03 00:43+0000\n"
 "PO-Revision-Date: 2023-04-11 18:04+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -52,14 +52,14 @@ msgstr "Nelze najít moduly panelu. Prosím, zkontrolujte svou instalaci."
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:639
 #: src/backend/datapicker/DatapickerPoint.cpp:502
-#: src/backend/datasources/filters/AsciiFilter.cpp:2003
+#: src/backend/datasources/filters/AsciiFilter.cpp:2005
 #: src/backend/datasources/filters/BinaryFilter.cpp:562
 #: src/backend/datasources/filters/JsonFilter.cpp:776
 #: src/backend/datasources/filters/ROOTFilter.cpp:119
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1152
+#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1154
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -108,7 +108,7 @@ msgstr ""
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
-#: src/backend/spreadsheet/Spreadsheet.cpp:1187
+#: src/backend/spreadsheet/Spreadsheet.cpp:1189
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3126
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
@@ -1176,8 +1176,8 @@ msgstr "Počet řádků: %1"
 #: src/backend/datasources/filters/AsciiFilter.cpp:549
 #: src/backend/datasources/filters/AsciiFilter.cpp:751
 #: src/backend/datasources/filters/AsciiFilter.cpp:958
-#: src/backend/datasources/filters/AsciiFilter.cpp:1523
-#: src/backend/datasources/filters/AsciiFilter.cpp:2083
+#: src/backend/datasources/filters/AsciiFilter.cpp:1524
+#: src/backend/datasources/filters/AsciiFilter.cpp:2085
 #, kde-format
 msgid "Timestamp"
 msgstr "Časové razítko"
@@ -1185,8 +1185,8 @@ msgstr "Časové razítko"
 #: src/backend/datasources/filters/AsciiFilter.cpp:553
 #: src/backend/datasources/filters/AsciiFilter.cpp:745
 #: src/backend/datasources/filters/AsciiFilter.cpp:956
-#: src/backend/datasources/filters/AsciiFilter.cpp:1518
-#: src/backend/datasources/filters/AsciiFilter.cpp:2077
+#: src/backend/datasources/filters/AsciiFilter.cpp:1519
+#: src/backend/datasources/filters/AsciiFilter.cpp:2079
 #: src/backend/datasources/filters/BinaryFilter.cpp:303
 #: src/backend/datasources/filters/BinaryFilter.cpp:447
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1197,8 +1197,8 @@ msgstr "Rejstřík"
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:757
 #: src/backend/datasources/filters/AsciiFilter.cpp:963
-#: src/backend/datasources/filters/AsciiFilter.cpp:1542
-#: src/backend/datasources/filters/AsciiFilter.cpp:2096
+#: src/backend/datasources/filters/AsciiFilter.cpp:1543
+#: src/backend/datasources/filters/AsciiFilter.cpp:2098
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:614
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2315
@@ -1214,8 +1214,8 @@ msgid "Value"
 msgstr "Hodnota"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:965
-#: src/backend/datasources/filters/AsciiFilter.cpp:1544
-#: src/backend/datasources/filters/AsciiFilter.cpp:2098
+#: src/backend/datasources/filters/AsciiFilter.cpp:1545
+#: src/backend/datasources/filters/AsciiFilter.cpp:2100
 #, kde-format
 msgid "Value %1"
 msgstr "Hodnota %1"
@@ -5353,7 +5353,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:487
-#: src/backend/spreadsheet/Spreadsheet.cpp:597
+#: src/backend/spreadsheet/Spreadsheet.cpp:599
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: kopírovat %2"
@@ -5376,7 +5376,7 @@ msgstr[1] "%1: přidat %2 sloupce"
 msgstr[2] "%1: přidat %2 sloupců"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:534
+#: src/backend/spreadsheet/Spreadsheet.cpp:535
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: vyprázdnit"
@@ -6375,32 +6375,32 @@ msgstr[0] "%1: odstranit 1 sloupec"
 msgstr[1] "%1: odstranit %2 sloupce"
 msgstr[2] "%1: odstranit %2 sloupců"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:542
+#: src/backend/spreadsheet/Spreadsheet.cpp:543
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:565
+#: src/backend/spreadsheet/Spreadsheet.cpp:566
 #, kde-format
 msgid "%1: clear all masks"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:589
+#: src/backend/spreadsheet/Spreadsheet.cpp:591
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:714
+#: src/backend/spreadsheet/Spreadsheet.cpp:716
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: seřadit sloupce"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1079
+#: src/backend/spreadsheet/Spreadsheet.cpp:1081
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1413
+#: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -6408,7 +6408,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1416
+#: src/backend/spreadsheet/Spreadsheet.cpp:1426
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -6416,7 +6416,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1419
+#: src/backend/spreadsheet/Spreadsheet.cpp:1429
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -6424,7 +6424,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1422
+#: src/backend/spreadsheet/Spreadsheet.cpp:1432
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -6432,7 +6432,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1425
+#: src/backend/spreadsheet/Spreadsheet.cpp:1435
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -6440,7 +6440,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1428
+#: src/backend/spreadsheet/Spreadsheet.cpp:1438
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -6448,7 +6448,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1431
+#: src/backend/spreadsheet/Spreadsheet.cpp:1441
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
