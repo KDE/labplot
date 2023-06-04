@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-03 00:43+0000\n"
-"PO-Revision-Date: 2023-05-22 17:28+0200\n"
+"PO-Revision-Date: 2023-06-03 18:05+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -2352,10 +2352,9 @@ msgid "Force and Energy"
 msgstr "Force et énergie"
 
 #: src/backend/gsl/constants.cpp:48
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "Unknown Constant"
-msgstr "Constant"
+msgstr "Constante inconnue"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:57
@@ -3066,16 +3065,14 @@ msgid "Standard Mathematical Functions"
 msgstr "Fonctions mathématiques standards"
 
 #: src/backend/gsl/functions.cpp:42
-#, fuzzy, kde-format
-#| msgid "Clausen Functions"
+#, kde-format
 msgid "Comparison Functions"
-msgstr "Fonctions de Clausen"
+msgstr "Fonctions de comparaison"
 
 #: src/backend/gsl/functions.cpp:44
-#, fuzzy, kde-format
-#| msgid "Condition:"
+#, kde-format
 msgid "Conditions"
-msgstr "Condition :"
+msgstr "Conditions"
 
 #: src/backend/gsl/functions.cpp:46
 #, kde-format
@@ -3358,10 +3355,9 @@ msgid "Logarithmic Distribution"
 msgstr "Distribution logarithmique"
 
 #: src/backend/gsl/functions.cpp:168
-#, fuzzy, kde-format
-#| msgid "Power Function"
+#, kde-format
 msgid "Unknown Function"
-msgstr "Fonction Puissance"
+msgstr "Fonction inconnue"
 
 #: src/backend/gsl/functions.cpp:174
 #, kde-format
@@ -3439,26 +3435,24 @@ msgid "Round to the nearest integer"
 msgstr "Arrondir à l'entier le plus proche"
 
 #: src/backend/gsl/functions.cpp:222
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterThan"
-msgstr "Plus grand que"
+msgstr "supérieur à"
 
 #: src/backend/gsl/functions.cpp:223
 #, kde-format
 msgid "lessThan"
-msgstr ""
+msgstr "inférieur  à"
 
 #: src/backend/gsl/functions.cpp:224
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterEqualThan"
-msgstr "Plus grand que"
+msgstr "supérieur ou égal à"
 
 #: src/backend/gsl/functions.cpp:225
 #, kde-format
 msgid "lessEqualThan"
-msgstr ""
+msgstr "inférieur  à"
 
 #: src/backend/gsl/functions.cpp:226
 #, kde-format
@@ -3468,7 +3462,7 @@ msgstr "égal à"
 #: src/backend/gsl/functions.cpp:229
 #, kde-format
 msgid "if(condition, ifTrue, ifFalse)"
-msgstr ""
+msgstr "if(condition, ifTrue, ifFalse)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -3488,10 +3482,9 @@ msgid "or"
 msgstr "ou"
 
 #: src/backend/gsl/functions.cpp:232
-#, fuzzy, kde-format
-#| msgid "or"
+#, kde-format
 msgid "xor"
-msgstr "ou"
+msgstr "ou exclusif"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:235
@@ -4354,10 +4347,9 @@ msgid "Logarithm of the gamma function"
 msgstr "Logarithme de la fonction Gamma"
 
 #: src/backend/gsl/functions.cpp:534
-#, fuzzy, kde-format
-#| msgid "Logarithm of the gamma function"
+#, kde-format
 msgid "Logarithm naturalis of the gamma function"
-msgstr "Logarithme de la fonction Gamma"
+msgstr "Logarithme naturel de la fonction gamma"
 
 #: src/backend/gsl/functions.cpp:535
 #, kde-format
@@ -5297,44 +5289,39 @@ msgstr "Densité de probabilité pour une distribution logarithmique"
 
 #: src/backend/gsl/functions.cpp:1110 src/backend/gsl/functions.cpp:1122
 #: src/backend/gsl/functions.cpp:1136
-#, fuzzy, kde-format
-#| msgid "Invalid pointer"
+#, kde-format
 msgid "Invalid"
-msgstr "Pointeur non valable"
+msgstr "Non valable"
 
 #: src/backend/gsl/functions.cpp:1116
-#, fuzzy, kde-format
-#| msgid "Condition:"
+#, kde-format
 msgid "condition"
-msgstr "Condition :"
+msgstr "condition"
 
 #: src/backend/gsl/functions.cpp:1118
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "trueValue"
-msgstr "Valeur"
+msgstr "trueValue"
 
 #: src/backend/gsl/functions.cpp:1120
-#, fuzzy, kde-format
-#| msgid "Sample Values"
+#, kde-format
 msgid "falseValue"
-msgstr "Échantillonner les valeurs"
+msgstr "falseValue"
 
 #: src/backend/gsl/functions.cpp:1128
-#, fuzzy, kde-format
-#| msgid "Ln"
+#, kde-format
 msgid "n"
-msgstr "Ln"
+msgstr "n"
 
 #: src/backend/gsl/functions.cpp:1130
 #, kde-format
 msgid "j"
-msgstr ""
+msgstr "j"
 
 #: src/backend/gsl/functions.cpp:1132
 #, kde-format
 msgid "q"
-msgstr ""
+msgstr "q"
 
 #: src/backend/gsl/functions.cpp:1134
 #, kde-format
@@ -5452,12 +5439,10 @@ msgid "%1: copy %2"
 msgstr "%1 : copier %2"
 
 #: src/backend/matrix/Matrix.cpp:551
-#, fuzzy, kde-format
-#| msgid "%1: add %2 rows"
-#| msgid_plural "%1: add %2 rows"
+#, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
-msgstr[0] "%1 : ajouter %2 ligne"
+msgstr[0] "%1 : ajouter la ligne %2"
 msgstr[1] "%1 : ajouter %2 lignes"
 
 #: src/backend/matrix/Matrix.cpp:562
@@ -6435,10 +6420,9 @@ msgid "Tricube"
 msgstr "Tricubique"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:357
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linking"
-msgstr "%1 : définir le crayon en ligne pleine"
+msgstr "%1 : définir les liaisons"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:377
 #, fuzzy, kde-format
@@ -12856,11 +12840,13 @@ msgstr "%1 lignes de référence : modèle « %2 » chargé"
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
+"Activer les liaisons pour synchroniser le nombre de lignes avec une autre "
+"feuille de calcul"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "Feuille de calcul avec laquelle synchroniser le nombre de lignes"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
@@ -13379,25 +13365,22 @@ msgid "%1 Worksheet"
 msgstr "Feuille de travail %1"
 
 #: src/kdefrontend/GuiObserver.cpp:235
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "Propriétés"
+msgstr "Propriétés : colonne"
 
 #: src/kdefrontend/GuiObserver.cpp:242
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr "Propriétés"
+msgstr "Propriétés : matrice"
 
 #: src/kdefrontend/GuiObserver.cpp:247
-#, fuzzy, kde-format
-#| msgid "Complete Worksheet"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "Feuille de travail complète"
+msgstr "Propriétés : feuille de travail"
 
 #: src/kdefrontend/GuiObserver.cpp:253
 #, fuzzy, kde-format
@@ -13407,25 +13390,22 @@ msgid "Properties: Plot Area"
 msgstr "Explorateur de propriétés"
 
 #: src/kdefrontend/GuiObserver.cpp:259
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "Propriétés"
+msgstr "Propriétés : légende"
 
 #: src/kdefrontend/GuiObserver.cpp:264
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr "Propriétés"
+msgstr "Propriétés : axe"
 
 #: src/kdefrontend/GuiObserver.cpp:269
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
-msgstr "Propriétés"
+msgstr "Propriétés : courbe en XY"
 
 #: src/kdefrontend/GuiObserver.cpp:274
 #, fuzzy, kde-format
@@ -13471,11 +13451,10 @@ msgid "Properties: Smoothing"
 msgstr "Propriétés"
 
 #: src/kdefrontend/GuiObserver.cpp:315
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr "Propriétés"
+msgstr "Propriétés : ajusté"
 
 #: src/kdefrontend/GuiObserver.cpp:320
 #, fuzzy, kde-format
@@ -13520,18 +13499,16 @@ msgid "Properties: Histogram"
 msgstr "Explorateur de propriétés"
 
 #: src/kdefrontend/GuiObserver.cpp:350
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr "Propriétés"
+msgstr "Propriétés : tracé en barres"
 
 #: src/kdefrontend/GuiObserver.cpp:355
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr "Explorateur de propriétés"
+msgstr "Propriétés : tracé en boîte"
 
 #: src/kdefrontend/GuiObserver.cpp:360
 #, fuzzy, kde-format
@@ -13541,11 +13518,10 @@ msgid "Properties: Text Label"
 msgstr "Explorateur de propriétés"
 
 #: src/kdefrontend/GuiObserver.cpp:365
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
-msgstr "Propriétés"
+msgstr "Propriétés : image"
 
 #: src/kdefrontend/GuiObserver.cpp:370
 #, fuzzy, kde-format
@@ -13584,11 +13560,10 @@ msgid "Properties: Data Extractor"
 msgstr "Extracteur de données"
 
 #: src/kdefrontend/GuiObserver.cpp:400
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
-msgstr "Propriétés"
+msgstr "Propriétés : projet"
 
 #: src/kdefrontend/GuiObserver.cpp:410
 #, kde-format
@@ -13604,11 +13579,10 @@ msgid "Properties: Notebook"
 msgstr "Propriétés"
 
 #: src/kdefrontend/GuiObserver.cpp:418
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
-msgstr "Propriétés"
+msgstr "Propriétés : notes"
 
 #: src/kdefrontend/GuiObserver.cpp:423
 #, fuzzy, kde-format
@@ -13635,11 +13609,10 @@ msgid "Properties: Live Data Source"
 msgstr "Source de données en temps réel"
 
 #: src/kdefrontend/GuiObserver.cpp:464
-#, fuzzy, kde-format
-#| msgid "Properties Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr "Explorateur de propriétés"
+msgstr "Propriétés : dossier "
 
 #: src/kdefrontend/GuiObserver.cpp:471
 #, fuzzy, kde-format
@@ -14712,12 +14685,10 @@ msgid "%1: fill matrix with function values"
 msgstr "%1 : remplir la matrice avec les valeurs de la fonction"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Templates"
+#, kde-format
 msgctxt "@title:window"
 msgid "Plot Area Templates"
-msgstr "Modèles de tracé"
+msgstr "Modèles de zones de tracé"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:43
@@ -15778,7 +15749,7 @@ msgstr ""
 "Numéro de flux pour initialiser le générateur de nombres aléatoires. \n"
 "Si le générateur est initialisé avec la même valeur, le même flux de nombres "
 "aléatoires sera généré par des appels successifs. \n"
-"Si aucune valeur n’est spécifiée, l’horodatage courant sera utilisé pour "
+"Si aucune valeur n'est spécifiée, l'horodatage courant sera utilisé pour "
 "initialiser le générateur."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:459
@@ -16699,7 +16670,7 @@ msgstr "Date / heure"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:537
 #, kde-format
 msgid "dd.MM.yyyy HH:mm"
-msgstr ""
+msgstr "dd.MM.yyyy HH:mm"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX3)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX1)
@@ -19193,10 +19164,9 @@ msgstr "Commentaires de colonne :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Linking"
-msgstr "Lien"
+msgstr "Liaison"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
@@ -21270,10 +21240,9 @@ msgid "Save project before using this option"
 msgstr "Enregistrer le projet avant l'utilisation de cette option"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:392
-#, fuzzy, kde-format
-#| msgid "Invalid pointer"
+#, kde-format
 msgid "Invalid image"
-msgstr "Pointeur non valable"
+msgstr "Image non valable"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
