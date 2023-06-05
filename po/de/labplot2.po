@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-03 00:43+0000\n"
-"PO-Revision-Date: 2023-05-23 02:43+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2023-06-03 23:37+0200\n"
+"Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3419,8 +3419,7 @@ msgid "greaterThan"
 msgstr "größerAls"
 
 #: src/backend/gsl/functions.cpp:223
-#, fuzzy, kde-format
-#| msgid "lessThan"
+#, kde-format
 msgid "lessThan"
 msgstr "kleinerAls"
 
@@ -5423,9 +5422,7 @@ msgid "%1: copy %2"
 msgstr "%1: %2 Kopieren"
 
 #: src/backend/matrix/Matrix.cpp:551
-#, fuzzy, kde-format
-#| msgid "%1: add %2 rows"
-#| msgid_plural "%1: add %2 rows"
+#, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
 msgstr[0] "%1: %2 Zeile hinzufügen"
@@ -6406,16 +6403,14 @@ msgid "Tricube"
 msgstr "Tricube"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:357
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linking"
-msgstr "%1: Linienstil festlegen"
+msgstr "%1: Verknüpfung festlegen"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr "%1: Linienstil festlegen"
+msgstr "%1: Tabellenverknüpfung festlegen"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
@@ -6452,10 +6447,9 @@ msgid "%1: sort columns"
 msgstr "%1: Spalten sortieren"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1081
-#, fuzzy, kde-format
-#| msgid "no spreadsheet element found"
+#, kde-format
 msgid "%1: linked spreadsheet removed"
-msgstr "Kein Tabellenelement gefunden"
+msgstr "%1: verknüpfte Tabellen entfernt"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
@@ -12220,10 +12214,9 @@ msgid "File Browser"
 msgstr "Dateibrowser"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:229
-#, fuzzy, kde-format
-#| msgid "Save current plot definition as template"
+#, kde-format
 msgid "Save current plot area definition as template"
-msgstr "Aktuelle Ploteinstellungen als Vorlage speichern"
+msgstr "Aktuelle Plotbereichseinstellungen als Vorlage speichern"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:628
 #, kde-format
@@ -12739,11 +12732,13 @@ msgstr "%1 Referenzlinie: Vorlage \"%2\" geladen"
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
+"Aktiviere Verknüpfung zur Synchronisation der Reihen mit einer anderen "
+"Tabelle"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "Tabelle zur Synchronisation der Reihen"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
@@ -14542,12 +14537,10 @@ msgid "%1: fill matrix with function values"
 msgstr "%1: Matrix mit Funktionswerten füllen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Templates"
+#, kde-format
 msgctxt "@title:window"
 msgid "Plot Area Templates"
-msgstr "Plotvorlagen"
+msgstr "Plotbereichsvorlagen"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:43
@@ -14566,22 +14559,19 @@ msgid "Custom Folder"
 msgstr "Benutzerdefiniertes Verzeichnis"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Location of plot templates"
+#, kde-format
 msgid "Location of plot area templates"
-msgstr "Ort der Plotvorlagen"
+msgstr "Ort der Plotbereichsvorlagen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:51
-#, fuzzy, kde-format
-#| msgid "Custom folder for the location of plot templates"
+#, kde-format
 msgid "Custom folder for the location of plot area templates"
-msgstr "Eigenes Verzeichnis für Plotvorlagen"
+msgstr "Eigenes Verzeichnis für Plotbereichsvorlagen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:55
-#, fuzzy, kde-format
-#| msgid "Open the folder for the location of plot templates"
+#, kde-format
 msgid "Open the folder for the location of plot area templates"
-msgstr "Verzeichnis für Plotvorlagen öffnen"
+msgstr "Verzeichnis für Plotbereichsvorlagen öffnen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:134
 #, kde-format
@@ -19003,8 +18993,7 @@ msgstr "Spaltenkommentare:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Linking"
 msgstr "Verknüpfung"
 
