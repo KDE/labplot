@@ -788,7 +788,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	} else // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
-	if (!stateAttributeFound) {
+	if (!preview && !stateAttributeFound) {
 		// No state attribute available, means no project explorer reacted on the signal
 		restorePointers(this, preview);
 		retransformElements(this);
