@@ -855,18 +855,18 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			if (readingType != LiveDataSource::ReadingType::TillEnd) {
 				switch (spreadsheet->sourceType()) { // different sources need different read methods
 				case LiveDataSource::SourceType::LocalSocket:
-					newData[newDataIdx++] = QLatin1String(device.readAll());
+					newData[newDataIdx++] = QString::fromUtf8(device.readAll());
 					break;
 				case LiveDataSource::SourceType::NetworkUDPSocket:
-					newData[newDataIdx++] = QLatin1String(device.read(device.bytesAvailable()));
+					newData[newDataIdx++] = QString::fromUtf8(device.read(device.bytesAvailable()));
 					break;
 				case LiveDataSource::SourceType::FileOrPipe:
-					newData.push_back(QLatin1String(device.readLine()));
+					newData.push_back(QString::fromUtf8(device.readLine()));
 					break;
 				case LiveDataSource::SourceType::NetworkTCPSocket:
 				// TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
-					newData[newDataIdx++] = QLatin1String(device.read(device.bytesAvailable()));
+					newData[newDataIdx++] = QString::fromUtf8(device.read(device.bytesAvailable()));
 					break;
 				case LiveDataSource::SourceType::MQTT:
 					break;
@@ -874,18 +874,18 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			} else { // ReadingType::TillEnd
 				switch (spreadsheet->sourceType()) { // different sources need different read methods
 				case LiveDataSource::SourceType::LocalSocket:
-					newData.push_back(QLatin1String(device.readAll()));
+					newData.push_back(QString::fromUtf8(device.readAll()));
 					break;
 				case LiveDataSource::SourceType::NetworkUDPSocket:
-					newData.push_back(QLatin1String(device.read(device.bytesAvailable())));
+					newData.push_back(QString::fromUtf8(device.read(device.bytesAvailable())));
 					break;
 				case LiveDataSource::SourceType::FileOrPipe:
-					newData.push_back(QLatin1String(device.readLine()));
+					newData.push_back(QString::fromUtf8(device.readLine()));
 					break;
 				case LiveDataSource::SourceType::NetworkTCPSocket:
 				// TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
-					newData.push_back(QLatin1String(device.read(device.bytesAvailable())));
+					newData.push_back(QString::fromUtf8(device.read(device.bytesAvailable())));
 					break;
 				case LiveDataSource::SourceType::MQTT:
 					break;
@@ -1338,7 +1338,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	// are not relevant and we can provide a more faster version that avoids many of string allocations, etc.
 	if (!removeQuotesEnabled && !simplifyWhitespacesEnabled && !skipEmptyParts) {
 		for (int i = 0; i < lines; ++i) {
-			line = QLatin1String(device.readLine());
+			line = QString::fromUtf8(device.readLine());
 
 			// remove any newline
 			line.remove(QLatin1Char('\n'));
@@ -1396,7 +1396,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 #endif
 		QString valueString;
 		for (int i = 0; i < lines; ++i) {
-			line = QLatin1String(device.readLine());
+			line = QString::fromUtf8(device.readLine());
 
 			// remove any newline
 			line.remove(QLatin1Char('\n'));
@@ -1501,9 +1501,9 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device) {
 	// TODO: serial port "read(nBytes)"?
 	while (!device.atEnd()) {
 		if (device.canReadLine())
-			newData.push_back(QLatin1String(device.readLine()));
+			newData.push_back(QString::fromUtf8(device.readLine()));
 		else // UDP fails otherwise
-			newData.push_back(QLatin1String(device.readAll()));
+			newData.push_back(QString::fromUtf8(device.readAll()));
 		linesToRead++;
 	}
 	QDEBUG("	data = " << newData);
@@ -1653,7 +1653,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 
 	// loop over the preview lines in the file and parse the available columns
 	for (int i = 0; i < lines; ++i) {
-		line = QLatin1String(device.readLine());
+		line = QString::fromUtf8(device.readLine());
 
 		// remove any newline
 		line = line.remove(QLatin1Char('\n'));
@@ -1867,7 +1867,7 @@ QString AsciiFilterPrivate::getLine(QIODevice& device) {
 		return {};
 	}
 
-	QString line = QLatin1String(device.readLine());
+	QString line = QString::fromUtf8(device.readLine());
 	// DEBUG(Q_FUNC_INFO << ", line = " << STDSTRING(line));
 
 	return line;
@@ -1882,7 +1882,7 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 		if (!device.canReadLine())
 			DEBUG("WARNING in AsciiFilterPrivate::getLineString(): device cannot 'readLine()' but using it anyway.");
 		//			line = device.readAll();
-		line = QLatin1String(device.readLine());
+		line = QString::fromUtf8(device.readLine());
 		QDEBUG("LINE:" << line)
 	} while (!commentCharacter.isEmpty() && line.startsWith(commentCharacter));
 
