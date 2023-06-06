@@ -70,6 +70,7 @@ private Q_SLOTS:
 	void testQuotedStrings05();
 
 	// different locales
+	void testUtf8Cyrillic();
 
 	// handling of NANs
 

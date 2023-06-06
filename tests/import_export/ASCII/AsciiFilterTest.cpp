@@ -993,9 +993,37 @@ void AsciiFilterTest::testQuotedStrings05() {
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
 }
 
-//##############################################################################
-//###############################  skip comments ###############################
-//##############################################################################
+// ##############################################################################
+// ################################## locales ###################################
+// ##############################################################################
+void AsciiFilterTest::testUtf8Cyrillic() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/utf8_cyrillic.txt"));
+
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// column names
+	QCOMPARE(spreadsheet.column(0)->name(), QString::fromUtf8("перший_стовпець"));
+	QCOMPARE(spreadsheet.column(1)->name(), QString::fromUtf8("другий_стовпець"));
+
+	// data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	// values
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QString::fromUtf8("тест1"));
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(1), QString::fromUtf8("тест2"));
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 2);
+}
+
+// ##############################################################################
+// ###############################  skip comments ###############################
+// ##############################################################################
 void AsciiFilterTest::testComments00() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
