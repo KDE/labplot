@@ -1542,8 +1542,6 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	if (!m_label)
 		return;
 
-	CONDITIONAL_LOCK_RETURN;
-
 	// Text
 	ui.cbMode->setCurrentIndex(group.readEntry("Mode", static_cast<int>(m_label->text().mode)));
 	this->modeChanged(ui.cbMode->currentIndex());
