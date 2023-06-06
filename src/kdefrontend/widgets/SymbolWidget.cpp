@@ -278,8 +278,6 @@ void SymbolWidget::load() {
 }
 
 void SymbolWidget::loadConfig(const KConfigGroup& group) {
-	CONDITIONAL_LOCK_RETURN; // need to lock here since this function is also called from outside
-
 	int index = ui.cbStyle->findData((int)m_symbol->style());
 	ui.cbStyle->setCurrentIndex(group.readEntry("SymbolStyle", index));
 	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_symbol->size()), Worksheet::Unit::Point));

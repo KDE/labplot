@@ -221,8 +221,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_boxPlot->isVisible());
-	KConfig config(QString(), KConfig::SimpleConfig);
-	loadConfig(config);
+	load();
 	loadDataColumns();
 
 	updatePlotRanges();
@@ -690,6 +689,34 @@ void BoxPlotDock::plotRugOffsetChanged(double value) {
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
+void BoxPlotDock::load() {
+	// general
+	ui.cbOrdering->setCurrentIndex((int)m_boxPlot->ordering());
+	ui.cbOrientation->setCurrentIndex((int)m_boxPlot->orientation());
+	ui.chkVariableWidth->setChecked(m_boxPlot->variableWidth());
+	ui.chkNotches->setChecked(m_boxPlot->notchesEnabled());
+
+	// box
+	ui.sbWidthFactor->setValue(round(m_boxPlot->widthFactor()) * 100);
+
+	// symbols
+	symbolCategoryChanged();
+	ui.chkJitteringEnabled->setChecked(m_boxPlot->jitteringEnabled());
+
+	// whiskers
+	ui.cbWhiskersType->setCurrentIndex((int)m_boxPlot->whiskersType());
+	ui.leWhiskersRangeParameter->setText(QLocale().toString(m_boxPlot->whiskersRangeParameter()));
+
+	// whiskers cap
+	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->whiskersCapSize(), Worksheet::Unit::Point));
+
+	// Margin plots
+	ui.chkRugEnabled->setChecked(m_boxPlot->rugEnabled());
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugWidth(), Worksheet::Unit::Point));
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugLength(), Worksheet::Unit::Point));
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugOffset(), Worksheet::Unit::Point));
+}
+
 void BoxPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("BoxPlot"));
 

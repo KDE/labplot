@@ -176,8 +176,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_barPlot->isVisible());
-	KConfig config(QString(), KConfig::SimpleConfig);
-	loadConfig(config);
+	load();
 	cbXColumn->setColumn(m_barPlot->xColumn(), m_barPlot->xColumnPath());
 	loadDataColumns();
 
@@ -499,6 +498,15 @@ void BarPlotDock::plotWidthFactorChanged(double factor) {
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
+void BarPlotDock::load() {
+	// general
+	ui.cbType->setCurrentIndex((int)m_barPlot->type());
+	ui.cbOrientation->setCurrentIndex((int)m_barPlot->orientation());
+
+	// box
+	ui.sbWidthFactor->setValue(round(m_barPlot->widthFactor()) * 100);
+}
+
 void BarPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QLatin1String("BarPlot"));
 

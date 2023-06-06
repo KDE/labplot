@@ -50,8 +50,9 @@ private:
 	QVector<TreeViewComboBox*> m_dataComboBoxes;
 	QVector<QPushButton*> m_removeButtons;
 
-	void setModel();
+	void load();
 	void loadConfig(KConfig&);
+	void setModel();
 	void setDataColumns() const;
 	void loadDataColumns();
 	void updateSymbolWidgets();
