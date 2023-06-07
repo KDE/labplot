@@ -16,7 +16,7 @@
 #include <QScreen>
 #include <QTimeLine>
 
-DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, QWidget* parent)
+DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, bool interactive, QWidget* parent)
 	: QWidget(parent)
 	, m_view(new WorksheetView(worksheet))
 	, m_timeLine(new QTimeLine(600)) {
@@ -24,6 +24,7 @@ DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, QWidget* pa
 	setFocus();
 
 	m_view->setParent(this);
+	m_view->setInteractive(interactive);
 	m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_view->setContextMenuPolicy(Qt::NoContextMenu);

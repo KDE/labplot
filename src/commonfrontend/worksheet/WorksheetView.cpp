@@ -27,7 +27,6 @@
 #include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
-#include "kdefrontend/worksheet/PresenterWidget.h"
 
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
@@ -2807,41 +2806,9 @@ Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode() {
 
 void WorksheetView::presenterMode() {
 #ifndef SDK
-	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
-
-	// show dynamic presenter widget, if enabled
-	if (group.readEntry("PresenterModeInteractive", false)) {
-		auto* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet);
-		dynamicPresenterWidget->showFullScreen();
-		return;
-	}
-
-	// show static presenter widget (default)
-	QRectF sourceRect(scene()->sceneRect());
-
-	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
-	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-	w *= QApplication::desktop()->physicalDpiX() / 25.4;
-	h *= QApplication::desktop()->physicalDpiY() / 25.4;
-
-	QRectF targetRect(0, 0, w, h);
-	const QRectF& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
-
-	if (targetRect.width() > screenSize.width() || ((targetRect.height() > screenSize.height()))) {
-		const double ratio = std::min(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
-		targetRect.setWidth(targetRect.width() * ratio);
-		targetRect.setHeight(targetRect.height() * ratio);
-	}
-
-	QImage image(QSize(targetRect.width(), targetRect.height()), QImage::Format_ARGB32_Premultiplied);
-	image.fill(Qt::transparent);
-	QPainter painter;
-	painter.begin(&image);
-	painter.setRenderHint(QPainter::Antialiasing);
-	exportPaint(&painter, targetRect, sourceRect, true);
-	painter.end();
-
-	auto* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
-	presenterWidget->showFullScreen();
+	const auto& group = KSharedConfig::openConfig()->group("Settings_Worksheet");
+	const bool interactive = group.readEntry("PresenterModeInteractive", false);
+	auto* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet, interactive);
+	dynamicPresenterWidget->showFullScreen();
 #endif
 }
