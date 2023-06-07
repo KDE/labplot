@@ -7,14 +7,14 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "DynamicPresenterWidget.h"
+#include "PresenterWidget.h"
 #include <AppKit/AppKit.h>
 
 //After closing a widget/window where showFullScreen() was called before, we are left on macOS
 //with a black screen (https://bugreports.qt.io/browse/QTBUG-46701).
 //Explicitly close the native window to workaround this problem.
 
-void DynamicPresenterWidget::closeEvent(QCloseEvent* event) {
+void PresenterWidget::closeEvent(QCloseEvent* event) {
 	QWidget::closeEvent(event);
 
 	NSView* view = reinterpret_cast<NSView*>(winId());
