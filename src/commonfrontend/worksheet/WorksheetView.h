@@ -64,6 +64,7 @@ public:
 	WorksheetElement* selectedElement() const;
 	QList<QGraphicsItem*> selectedItems() const;
 	double zoomFactor() const;
+	void processResize();
 
 	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
 	void registerShortcuts();
@@ -73,7 +74,6 @@ public:
 private:
 	void initBasicActions();
 	void initMenus();
-	void processResize();
 	void drawForeground(QPainter*, const QRectF&) override;
 	void drawBackground(QPainter*, const QRectF&) override;
 	void drawBackgroundItems(QPainter*, const QRectF&);
