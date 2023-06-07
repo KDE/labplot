@@ -1,5 +1,5 @@
 /*
-    File                 : PresenterWidget_mac.mm
+    File                 : DynamicPresenterWidget_mac.mm
     Project              : LabPlot
     Description          : Reimplementation of QWidget::closeEvent() to workaround QTBUG-46701
     --------------------------------------------------------------------
