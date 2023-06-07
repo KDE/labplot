@@ -31,7 +31,7 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, bool interactive, QWidget
 	m_view->setContextMenuPolicy(Qt::NoContextMenu);
 	m_view->initActions(); // init the actions so we can also navigate in the plots
 
-	const QRect& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
+	const QRect& screenSize = screen()->geometry();
 	m_view->setGeometry(screenSize); // use the full screen size for the view
 	m_view->show();
 	m_view->setFocus();
