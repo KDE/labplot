@@ -25,7 +25,7 @@
 #include "commonfrontend/core/ContentDockWidget.h"
 #include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
-#include "kdefrontend/worksheet/DynamicPresenterWidget.h"
+#include "kdefrontend/worksheet/PresenterWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 
 #ifdef Q_OS_MAC
@@ -1292,7 +1292,7 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 		aspect->copy();
 		aspect->parentAspect()->paste(true);
 
-		/* zooming related key events, handle them here so we can also use them in DynamicPresenterWidget without registering shortcuts */
+		/* zooming related key events, handle them here so we can also use them in PresenterWidget without registering shortcuts */
 	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Plus)) {
 		changeZoom(zoomInViewAction);
 	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Minus)) {
@@ -2808,7 +2808,7 @@ void WorksheetView::presenterMode() {
 #ifndef SDK
 	const auto& group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 	const bool interactive = group.readEntry("PresenterModeInteractive", false);
-	auto* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet, interactive);
-	dynamicPresenterWidget->showFullScreen();
+	auto* presenterWidget = new PresenterWidget(m_worksheet, interactive);
+	presenterWidget->showFullScreen();
 #endif
 }

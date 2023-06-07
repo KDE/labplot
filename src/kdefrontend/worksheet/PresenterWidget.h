@@ -1,13 +1,13 @@
 /*
-	File                 : DynamicPresenterWidget.h
+	File                 : PresenterWidget.h
 	Project              : LabPlot
 	Description          : Widget for dynamic presenting of worksheets
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-#ifndef DYNAMICPRESENTERWIDGET_H
-#define DYNAMICPRESENTERWIDGET_H
+#ifndef PRESENTERWIDGET_H
+#define PRESENTERWIDGET_H
 
 #include <QWidget>
 
@@ -18,12 +18,12 @@ class SlidingPanel;
 class WorksheetView;
 class Worksheet;
 
-class DynamicPresenterWidget : public QWidget {
+class PresenterWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit DynamicPresenterWidget(Worksheet* worksheet, bool interactive = false, QWidget* parent = nullptr);
-	~DynamicPresenterWidget() override;
+	explicit PresenterWidget(Worksheet* worksheet, bool interactive = false, QWidget* parent = nullptr);
+	~PresenterWidget() override;
 
 private:
 	WorksheetView* m_view;
@@ -44,4 +44,4 @@ private Q_SLOTS:
 	void slideUp();
 };
 
-#endif // DYNAMICPRESENTERWIDGET_H
+#endif // PRESENTERWIDGET_H
