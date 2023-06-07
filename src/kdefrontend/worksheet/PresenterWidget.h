@@ -4,6 +4,7 @@
 	Description          : Widget for dynamic presenting of worksheets
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef PRESENTERWIDGET_H
@@ -26,6 +27,7 @@ public:
 	~PresenterWidget() override;
 
 private:
+	Worksheet* m_worksheet;
 	WorksheetView* m_view;
 	QTimeLine* m_timeLine;
 	SlidingPanel* m_panel;

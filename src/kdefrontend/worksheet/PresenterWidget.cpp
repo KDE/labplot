@@ -4,7 +4,7 @@
 	Description          : Widget for dynamic presenting of worksheets
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "PresenterWidget.h"
@@ -18,6 +18,7 @@
 
 PresenterWidget::PresenterWidget(Worksheet* worksheet, bool interactive, QWidget* parent)
 	: QWidget(parent)
+	, m_worksheet(worksheet)
 	, m_view(new WorksheetView(worksheet))
 	, m_timeLine(new QTimeLine(600)) {
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -46,6 +47,12 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, bool interactive, QWidget
 PresenterWidget::~PresenterWidget() {
 	delete m_timeLine;
 	delete m_view;
+
+	// since the temporary view created in the presenter widget is using the same scene underneath,
+	// the original view was also resized in the full screen mode if "view size" is used.
+	// resize the original view once more to make sure it has the proper scaling after the presenter was closed.
+	if (m_worksheet->useViewSize())
+		static_cast<WorksheetView*>(m_worksheet->view())->processResize();
 }
 
 bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
