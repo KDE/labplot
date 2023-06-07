@@ -25,8 +25,8 @@
 #include "commonfrontend/core/ContentDockWidget.h"
 #include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
-#include "kdefrontend/worksheet/PresenterWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
+#include "kdefrontend/worksheet/PresenterWidget.h"
 
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
