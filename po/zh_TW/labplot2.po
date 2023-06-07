@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-03 00:43+0000\n"
+"POT-Creation-Date: 2023-06-07 00:42+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -68,7 +68,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1933
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:414
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:677
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:680
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:237
 #: src/backend/worksheet/plots/cartesian/Value.cpp:255
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
@@ -97,7 +97,7 @@ msgstr ""
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1409 src/backend/core/Folder.cpp:151
-#: src/backend/core/Project.cpp:778
+#: src/backend/core/Project.cpp:780
 #: src/backend/datapicker/DatapickerCurve.cpp:711
 #: src/backend/datapicker/DatapickerImage.cpp:887
 #: src/backend/datapicker/DatapickerPoint.cpp:579
@@ -112,7 +112,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:725
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:728
 #: src/backend/worksheet/plots/PlotArea.cpp:405
 #: src/backend/worksheet/TextLabel.cpp:1188
 #: src/backend/worksheet/Worksheet.cpp:1798
@@ -834,22 +834,22 @@ msgstr ""
 msgid "Missing Support for CAS"
 msgstr ""
 
-#: src/backend/core/Project.cpp:737
+#: src/backend/core/Project.cpp:738
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr ""
 
-#: src/backend/core/Project.cpp:785
+#: src/backend/core/Project.cpp:787
 #, kde-format
 msgid "no project element found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:787
+#: src/backend/core/Project.cpp:789
 #, kde-format
 msgid "no valid XML document found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:1098
+#: src/backend/core/Project.cpp:1106
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -6755,7 +6755,7 @@ msgstr "標籤"
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:323
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:356
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:220
-#: src/kdefrontend/ui/symbolwidget.ui:37
+#: src/kdefrontend/ui/symbolwidget.ui:38
 #, kde-format
 msgid "Symbol"
 msgstr "符號"
@@ -12227,12 +12227,12 @@ msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:531
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:741
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1812
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:722
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:415
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:759
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:774
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:294
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:265
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:250
@@ -12273,10 +12273,10 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:370
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:396
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:385
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:410
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:369
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:395
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:384
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:409
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:85
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:197
@@ -12290,8 +12290,8 @@ msgstr "欄位"
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:398
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:414
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:397
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:413
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:48
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:854
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1048
@@ -12303,9 +12303,9 @@ msgstr "欄位"
 msgid "Column:"
 msgstr "欄"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:529
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:739
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:757
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:537
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:766
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:772
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1310
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
@@ -12542,19 +12542,19 @@ msgstr "左"
 msgid "Top:"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1627
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1628
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1629
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1630
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Labplot Plot Templates (*%1)"
 msgstr "關閉專案"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1809
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1810
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr ""
@@ -12802,7 +12802,7 @@ msgstr ""
 msgid "Custom Error Values, asymmetric"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:552
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:551
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:960
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1015
 #, fuzzy, kde-format
@@ -12812,7 +12812,7 @@ msgstr "資料"
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:559
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:558
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:967
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1022
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:404
@@ -16316,9 +16316,9 @@ msgstr "錯誤"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1006
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1131
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:61
-#: src/kdefrontend/ui/labelwidget.ui:569 src/kdefrontend/ui/symbolwidget.ui:44
-#: src/kdefrontend/ui/symbolwidget.ui:182
-#: src/kdefrontend/ui/symbolwidget.ui:237
+#: src/kdefrontend/ui/labelwidget.ui:569 src/kdefrontend/ui/symbolwidget.ui:45
+#: src/kdefrontend/ui/symbolwidget.ui:184
+#: src/kdefrontend/ui/symbolwidget.ui:240
 #: src/kdefrontend/worksheet/GridDialog.cpp:40
 #, fuzzy, kde-format
 msgid "Style:"
@@ -16339,8 +16339,8 @@ msgstr "樣式"
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:120
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:320
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:401
-#: src/kdefrontend/ui/labelwidget.ui:152 src/kdefrontend/ui/symbolwidget.ui:192
-#: src/kdefrontend/ui/symbolwidget.ui:247
+#: src/kdefrontend/ui/labelwidget.ui:152 src/kdefrontend/ui/symbolwidget.ui:194
+#: src/kdefrontend/ui/symbolwidget.ui:250
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:212
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:236
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:264
@@ -16359,7 +16359,7 @@ msgstr "顏色"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:518
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:687
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:181
-#: src/kdefrontend/ui/labelwidget.ui:212 src/kdefrontend/ui/symbolwidget.ui:77
+#: src/kdefrontend/ui/labelwidget.ui:212 src/kdefrontend/ui/symbolwidget.ui:78
 #, fuzzy, kde-format
 #| msgid "Size"
 msgid "Size:"
@@ -16533,8 +16533,8 @@ msgstr "大小"
 #: src/kdefrontend/ui/labelwidget.ui:62 src/kdefrontend/ui/labelwidget.ui:99
 #: src/kdefrontend/ui/labelwidget.ui:250 src/kdefrontend/ui/labelwidget.ui:265
 #: src/kdefrontend/ui/labelwidget.ui:366 src/kdefrontend/ui/labelwidget.ui:661
-#: src/kdefrontend/ui/labelwidget.ui:677 src/kdefrontend/ui/symbolwidget.ui:290
-#: src/kdefrontend/ui/symbolwidget.ui:306
+#: src/kdefrontend/ui/labelwidget.ui:677 src/kdefrontend/ui/symbolwidget.ui:293
+#: src/kdefrontend/ui/symbolwidget.ui:309
 #, kde-format
 msgid "Spinbox for numbers."
 msgstr ""
@@ -16573,8 +16573,8 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:356
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:552
 #: src/kdefrontend/ui/labelwidget.ui:65 src/kdefrontend/ui/labelwidget.ui:369
-#: src/kdefrontend/ui/labelwidget.ui:664 src/kdefrontend/ui/symbolwidget.ui:293
-#: src/kdefrontend/ui/symbolwidget.ui:309
+#: src/kdefrontend/ui/labelwidget.ui:664 src/kdefrontend/ui/symbolwidget.ui:296
+#: src/kdefrontend/ui/symbolwidget.ui:312
 #, kde-format
 msgid " pt"
 msgstr " 點 "
@@ -16654,7 +16654,7 @@ msgstr "片段"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:27
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:121
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:483
-#: src/kdefrontend/ui/labelwidget.ui:129 src/kdefrontend/ui/symbolwidget.ui:100
+#: src/kdefrontend/ui/labelwidget.ui:129 src/kdefrontend/ui/symbolwidget.ui:101
 #, kde-format
 msgid "°"
 msgstr ""
@@ -16689,7 +16689,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:421
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:421
-#: src/kdefrontend/ui/labelwidget.ui:709 src/kdefrontend/ui/symbolwidget.ui:84
+#: src/kdefrontend/ui/labelwidget.ui:709 src/kdefrontend/ui/symbolwidget.ui:85
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Rotation:"
@@ -17915,7 +17915,7 @@ msgstr "開始列："
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:84
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:150
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:340
-#: src/kdefrontend/ui/labelwidget.ui:527 src/kdefrontend/ui/symbolwidget.ui:132
+#: src/kdefrontend/ui/labelwidget.ui:527 src/kdefrontend/ui/symbolwidget.ui:133
 #, kde-format
 msgid ""
 "The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is "
@@ -18136,7 +18136,7 @@ msgstr "位移"
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:137
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:137
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:294
-#: src/kdefrontend/ui/labelwidget.ui:219 src/kdefrontend/ui/symbolwidget.ui:119
+#: src/kdefrontend/ui/labelwidget.ui:219 src/kdefrontend/ui/symbolwidget.ui:120
 #: src/kdefrontend/worksheet/GridDialog.cpp:72
 #, fuzzy, kde-format
 msgid "Opacity:"
@@ -18168,7 +18168,7 @@ msgstr "格式："
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:87
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:153
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:343
-#: src/kdefrontend/ui/labelwidget.ui:530 src/kdefrontend/ui/symbolwidget.ui:135
+#: src/kdefrontend/ui/labelwidget.ui:530 src/kdefrontend/ui/symbolwidget.ui:136
 #: src/kdefrontend/worksheet/GridDialog.cpp:80
 #, no-c-format, kde-format
 msgid " %"
@@ -18304,7 +18304,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:575
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:548
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:161
-#: src/kdefrontend/ui/labelwidget.ui:695 src/kdefrontend/ui/symbolwidget.ui:230
+#: src/kdefrontend/ui/labelwidget.ui:695 src/kdefrontend/ui/symbolwidget.ui:233
 #: src/kdefrontend/widgets/SymbolWidget.cpp:105
 #, fuzzy, kde-format
 msgid "Border"
@@ -18331,7 +18331,7 @@ msgstr "欄"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:384
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:366
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:566
-#: src/kdefrontend/ui/symbolwidget.ui:175
+#: src/kdefrontend/ui/symbolwidget.ui:177
 #, kde-format
 msgid "Filling"
 msgstr ""
@@ -18463,7 +18463,7 @@ msgstr "LabPlot2"
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:113
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:820
-#: src/kdefrontend/ui/labelwidget.ui:159 src/kdefrontend/ui/symbolwidget.ui:264
+#: src/kdefrontend/ui/labelwidget.ui:159 src/kdefrontend/ui/symbolwidget.ui:267
 #, fuzzy, kde-format
 #| msgid "Width"
 msgid "Width:"
