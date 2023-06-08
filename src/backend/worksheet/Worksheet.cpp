@@ -540,6 +540,50 @@ void Worksheet::updateLayout() {
 	d->updateLayout();
 }
 
+void Worksheet::cartesianPlotNavigationChanged(CartesianPlot::NavigationOperation op,
+											   WorksheetElement* selectedElement,
+											   const QList<QGraphicsItem*> selectedItems) {
+	auto plotActionMode = cartesianPlotActionMode();
+	if (plotActionMode == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
+		int cSystemIndex = CartesianPlot::cSystemIndex(selectedElement);
+		const auto& plots = children<CartesianPlot>();
+		for (auto* plot : plots) {
+			if (selectedItems.indexOf(plot->graphicsItem()) != -1)
+				plot->navigate(cSystemIndex, op);
+			else {
+				// check if one of the plots childrend is selected. Do the operation there too.
+				for (auto* child : plot->children<WorksheetElement>()) {
+					if (selectedItems.indexOf(child->graphicsItem()) != -1) {
+						plot->navigate(cSystemIndex, op);
+						break;
+					}
+				}
+			}
+		}
+	} else if ((plotActionMode == Worksheet::CartesianPlotActionMode::ApplyActionToAllY
+				&& (op == CartesianPlot::NavigationOperation::ScaleAutoX || op == CartesianPlot::NavigationOperation::ShiftLeftX
+					|| op == CartesianPlot::NavigationOperation::ShiftRightX || op == CartesianPlot::NavigationOperation::ZoomInX
+					|| op == CartesianPlot::NavigationOperation::ZoomOutX))
+			   || (plotActionMode == Worksheet::CartesianPlotActionMode::ApplyActionToAllX
+				   && (op == CartesianPlot::NavigationOperation::ScaleAutoY || op == CartesianPlot::NavigationOperation::ShiftUpY
+					   || op == CartesianPlot::NavigationOperation::ShiftDownY || op == CartesianPlot::NavigationOperation::ZoomInY
+					   || op == CartesianPlot::NavigationOperation::ZoomOutY))) {
+		int cSystemIndex = CartesianPlot::cSystemIndex(selectedElement);
+		if (selectedElement->type() == AspectType::CartesianPlot)
+			static_cast<CartesianPlot*>(selectedElement)->navigate(-1, op);
+		else {
+			auto parentPlot = static_cast<CartesianPlot*>(selectedElement->parent(AspectType::CartesianPlot));
+			if (parentPlot) // really needed?
+				parentPlot->navigate(cSystemIndex, op);
+		}
+	} else {
+		const auto& plots = children<CartesianPlot>();
+		for (auto* plot : plots)
+			plot->navigate(-1, op);
+	}
+}
+
+
 Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotActionMode() const {
 	Q_D(const Worksheet);
 	return d->cartesianPlotActionMode;

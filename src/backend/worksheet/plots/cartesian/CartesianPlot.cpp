@@ -738,14 +738,14 @@ QMenu* CartesianPlot::analysisMenu() {
 	return dataAnalysisMenu;
 }
 
-int CartesianPlot::cSystemIndex(WorksheetElement* e) {
+int CartesianPlot::cSystemIndex(const WorksheetElement* e) {
 	if (!e)
 		return -1;
 
 	auto type = e->type();
 	if (type == AspectType::CartesianPlot)
 		return -1;
-	else if (dynamic_cast<Plot*>(e) || e->coordinateBindingEnabled() || type == AspectType::Axis)
+	else if (dynamic_cast<const Plot*>(e) || e->coordinateBindingEnabled() || type == AspectType::Axis)
 		return e->coordinateSystemIndex();
 	return -1;
 }

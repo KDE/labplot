@@ -94,7 +94,7 @@ public:
 	void setType(Type type);
 	Type type() const;
 
-	static int cSystemIndex(WorksheetElement* e);
+	static int cSystemIndex(const WorksheetElement* e);
 
 	QIcon icon() const override;
 	virtual QMenu* createContextMenu() override;
