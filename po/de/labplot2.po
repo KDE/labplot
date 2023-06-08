@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-07 00:42+0000\n"
-"PO-Revision-Date: 2023-06-03 23:37+0200\n"
-"Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
+"PO-Revision-Date: 2023-06-07 19:57+0200\n"
+"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3047,10 +3047,9 @@ msgid "Comparison Functions"
 msgstr "Vergleich-Funktionen"
 
 #: src/backend/gsl/functions.cpp:44
-#, fuzzy, kde-format
-#| msgid "Condition:"
+#, kde-format
 msgid "Conditions"
-msgstr "Bedingung:"
+msgstr "Bedingungen"
 
 #: src/backend/gsl/functions.cpp:46
 #, kde-format
@@ -3413,8 +3412,7 @@ msgid "Round to the nearest integer"
 msgstr "Runden zum nächsten ganzzahligen Wert"
 
 #: src/backend/gsl/functions.cpp:222
-#, fuzzy, kde-format
-#| msgid "greaterThen"
+#, kde-format
 msgid "greaterThan"
 msgstr "größerAls"
 
@@ -3424,14 +3422,12 @@ msgid "lessThan"
 msgstr "kleinerAls"
 
 #: src/backend/gsl/functions.cpp:224
-#, fuzzy, kde-format
-#| msgid "greaterEqualThen"
+#, kde-format
 msgid "greaterEqualThan"
 msgstr "größerGleichAls"
 
 #: src/backend/gsl/functions.cpp:225
-#, fuzzy, kde-format
-#| msgid "lessEqualThen"
+#, kde-format
 msgid "lessEqualThan"
 msgstr "kleinerGleichAls"
 
@@ -3463,10 +3459,9 @@ msgid "or"
 msgstr "oder"
 
 #: src/backend/gsl/functions.cpp:232
-#, fuzzy, kde-format
-#| msgid "or"
+#, kde-format
 msgid "xor"
-msgstr "oder"
+msgstr "exklusiv oder"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:235
@@ -5266,50 +5261,44 @@ msgstr "Wahrscheinlichkeitsdichte einer logarithmischen Verteilung"
 
 #: src/backend/gsl/functions.cpp:1110 src/backend/gsl/functions.cpp:1122
 #: src/backend/gsl/functions.cpp:1136
-#, fuzzy, kde-format
-#| msgid "Invalid image"
+#, kde-format
 msgid "Invalid"
-msgstr "Ungültiges Bild"
+msgstr "Ungültig"
 
 #: src/backend/gsl/functions.cpp:1116
-#, fuzzy, kde-format
-#| msgid "Condition:"
+#, kde-format
 msgid "condition"
-msgstr "Bedingung:"
+msgstr "Bedingung"
 
 #: src/backend/gsl/functions.cpp:1118
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "trueValue"
-msgstr "Wert"
+msgstr "wahrWert"
 
 #: src/backend/gsl/functions.cpp:1120
-#, fuzzy, kde-format
-#| msgid "Sample Values"
+#, kde-format
 msgid "falseValue"
-msgstr "Stichprobenwerte"
+msgstr "falschWert"
 
 #: src/backend/gsl/functions.cpp:1128
-#, fuzzy, kde-format
-#| msgid "Ln"
+#, kde-format
 msgid "n"
-msgstr "Ln"
+msgstr "n"
 
 #: src/backend/gsl/functions.cpp:1130
 #, kde-format
 msgid "j"
-msgstr ""
+msgstr "j"
 
 #: src/backend/gsl/functions.cpp:1132
 #, kde-format
 msgid "q"
-msgstr ""
+msgstr "q"
 
 #: src/backend/gsl/functions.cpp:1134
-#, fuzzy, kde-format
-#| msgid "x="
+#, kde-format
 msgid "x"
-msgstr "x="
+msgstr "x"
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
