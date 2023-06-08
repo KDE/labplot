@@ -77,13 +77,6 @@ public:
 	void suppressSelectionChangedEvent(bool);
 
 	CartesianPlotActionMode cartesianPlotActionMode() const;
-	/*!
-	 * \brief cartesianPlotNavigationChanged
-	 * \param op
-	 * \param selectedElement The current selected WorksheeetElement
-	 * \param selectedItems All selected items. If unknown provide the graphicsItem of the selectedElement
-	 */
-	void cartesianPlotNavigationChanged(CartesianPlot::NavigationOperation op, WorksheetElement* selectedElement, const QList<QGraphicsItem*> selectedItems);
 	void setCartesianPlotActionMode(CartesianPlotActionMode mode);
 	CartesianPlotActionMode cartesianPlotCursorMode() const;
 	void setCartesianPlotCursorMode(CartesianPlotActionMode mode);
