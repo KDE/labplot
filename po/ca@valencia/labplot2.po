@@ -212,12 +212,12 @@ msgstr "%1: elimina tots els fills"
 #: src/backend/core/AbstractAspect.cpp:626
 #, kde-format
 msgid "%1: move up"
-msgstr "%1: mou amunt"
+msgstr "%1: mou cap amunt"
 
 #: src/backend/core/AbstractAspect.cpp:638
 #, kde-format
 msgid "%1: move down"
-msgstr "%1: mou avall"
+msgstr "%1: mou cap avall"
 
 #: src/backend/core/AbstractAspect.cpp:745
 #, kde-format
