@@ -175,9 +175,6 @@ MainWin::~MainWin() {
 	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
 	if (m_project) {
-		// 		if (dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
-		// 			m_mdiArea->closeAllSubWindows();
-
 		delete m_guiObserver;
 		delete m_aspectTreeModel;
 		disconnect(m_project, nullptr, this, nullptr);
@@ -587,7 +584,9 @@ void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
 	} else if (w == m_propertiesDock) {
 		delete m_propertiesDock;
 		m_propertiesDock = nullptr;
-	} else if (w == m_currentAspectDock)
+	}
+
+	if (w == m_currentAspectDock)
 		m_currentAspectDock = nullptr;
 }
 

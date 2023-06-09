@@ -32,7 +32,7 @@ ContentDockWidget::ContentDockWidget(AbstractPart* part)
 	, m_part(part) {
 	setWindowIcon(m_part->icon());
 	setWidget(m_part->view());
-	setAttribute(Qt::WA_DeleteOnClose);
+	setFeature(DockWidgetDeleteOnClose, true);
 	handleAspectDescriptionChanged(m_part);
 
 	// resize the MDI sub window to fit the content of the view
@@ -43,7 +43,7 @@ ContentDockWidget::ContentDockWidget(AbstractPart* part)
 
 	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &ContentDockWidget::handleAspectDescriptionChanged);
 	connect(m_part, QOverload<const AbstractAspect*>::of(&AbstractPart::childAspectAboutToBeRemoved), this, &ContentDockWidget::handleAspectAboutToBeRemoved);
-	// connect(this, &QMdiSubWindow::windowStateChanged, this, &ContentDockWidget::slotWindowStateChanged);
+	connect(this, &ads::CDockWidget::closed, this, &ContentDockWidget::closeEvent);
 }
 
 ContentDockWidget::~ContentDockWidget() {
@@ -68,9 +68,8 @@ void ContentDockWidget::handleAspectAboutToBeRemoved(const AbstractAspect* aspec
 	close();
 }
 
-void ContentDockWidget::closeEvent(QCloseEvent* event) {
+void ContentDockWidget::closeEvent() {
 	m_part->deleteView();
-	event->accept();
 }
 
 void ContentDockWidget::slotWindowStateChanged(Qt::WindowStates /*oldState*/, Qt::WindowStates newState) {

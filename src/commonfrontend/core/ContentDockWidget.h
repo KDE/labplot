@@ -26,7 +26,7 @@ public:
 	AbstractPart* part() const;
 
 private:
-	void closeEvent(QCloseEvent*) override;
+	void closeEvent();
 	AbstractPart* m_part;
 	bool m_closing{false};
 
