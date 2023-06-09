@@ -58,8 +58,12 @@ double nsl_math_places(double value, int n, int method);
 
 /* round double value to precision p in scientific notation
  * 1234.5 & p = 2 -> 1230 (1.23e3), 0.012345 & p = 2 -> 0.0123 (1.23e-2)
- * p <= 0 : order of magnitude
+ * p <= 0 : order of magnitude (power of 10)
  */
-double nsl_math_round_precision(double value, unsigned int p);
+double nsl_math_round_precision(double value, int p);
+/* same as above but for any base x
+ * p <= 0 : power of x
+ */
+double nsl_math_round_basex(double value, int p, double base);
 
 #endif /* NSL_MATH_H */

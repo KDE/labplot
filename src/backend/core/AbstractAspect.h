@@ -242,6 +242,7 @@ public:
 
 	QString name() const;
 	QUuid uuid() const;
+	void setSuppressWriteUuid(bool);
 	QString comment() const;
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
@@ -412,7 +413,7 @@ public Q_SLOTS:
 	void setComment(const QString&);
 	void remove();
 	void remove(QUndoCommand* parent);
-	void copy() const;
+	void copy();
 	void duplicate();
 	void paste(bool duplicate = false);
 
@@ -485,6 +486,8 @@ public:
 	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
 	if (!suppressed)                                                                                                                                           \
 		q->mRetransformCalled += 1;
+
+	friend class AbstractAspectTest;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)

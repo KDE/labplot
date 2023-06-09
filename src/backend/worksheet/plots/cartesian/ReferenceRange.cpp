@@ -281,9 +281,12 @@ ReferenceRangePrivate::ReferenceRangePrivate(ReferenceRange* owner)
 }
 
 QPointF ReferenceRangePrivate::recalculateRect() {
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	if (!cs->isValid())
+		return QPointF();
+
 	// calculate rect in logical coordinates
 	QPointF p1, p2;
-	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	switch (orientation) {
 	case ReferenceRange::Orientation::Vertical: {
 		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};

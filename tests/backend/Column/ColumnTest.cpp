@@ -874,7 +874,7 @@ void ColumnTest::testInsertRow() {
 	QCOMPARE(c->rowCount(), 100);
 
 	int rowsAboutToBeInsertedCounter = 0;
-	connect(c, &Column::rowsAboutToBeInserted, [this, &rowsAboutToBeInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+	connect(c, &Column::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter, c](const AbstractColumn* source, int before, int count) {
 		QCOMPARE(source, c);
 		switch (rowsAboutToBeInsertedCounter) {
 		case 0:
@@ -894,7 +894,7 @@ void ColumnTest::testInsertRow() {
 	});
 
 	int rowsAboutToBeRemovedCounter = 0;
-	connect(c, &Column::rowsAboutToBeRemoved, [this, &rowsAboutToBeRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+	connect(c, &Column::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter, c](const AbstractColumn* source, int first, int count) {
 		QCOMPARE(source, c);
 		switch (rowsAboutToBeRemovedCounter) {
 		case 0:
@@ -906,7 +906,7 @@ void ColumnTest::testInsertRow() {
 	});
 
 	int rowsInsertedCounter = 0;
-	connect(c, &Column::rowsInserted, [this, &rowsInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+	connect(c, &Column::rowsInserted, [&rowsInsertedCounter, c](const AbstractColumn* source, int before, int count) {
 		QCOMPARE(source, c);
 
 		switch (rowsInsertedCounter) {
@@ -928,7 +928,7 @@ void ColumnTest::testInsertRow() {
 	});
 
 	int rowsRemovedCounter = 0;
-	connect(c, &Column::rowsRemoved, [this, &rowsRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+	connect(c, &Column::rowsRemoved, [&rowsRemovedCounter, c](const AbstractColumn* source, int first, int count) {
 		QCOMPARE(source, c);
 
 		switch (rowsRemovedCounter) {
@@ -965,7 +965,7 @@ void ColumnTest::testRemoveRow() {
 	QCOMPARE(c->rowCount(), 100);
 
 	int rowsAboutToBeInsertedCounter = 0;
-	connect(c, &Column::rowsAboutToBeInserted, [this, &rowsAboutToBeInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+	connect(c, &Column::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter, c](const AbstractColumn* source, int before, int count) {
 		QCOMPARE(source, c);
 		QCOMPARE(before, 96);
 		QCOMPARE(count, 3);
@@ -973,7 +973,7 @@ void ColumnTest::testRemoveRow() {
 	});
 
 	int rowsAboutToBeRemovedCounter = 0;
-	connect(c, &Column::rowsAboutToBeRemoved, [this, &rowsAboutToBeRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+	connect(c, &Column::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter, c](const AbstractColumn* source, int first, int count) {
 		QCOMPARE(source, c);
 		switch (rowsAboutToBeRemovedCounter) {
 		case 0:
@@ -993,7 +993,7 @@ void ColumnTest::testRemoveRow() {
 	});
 
 	int rowsInsertedCounter = 0;
-	connect(c, &Column::rowsInserted, [this, &rowsInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+	connect(c, &Column::rowsInserted, [&rowsInsertedCounter, c](const AbstractColumn* source, int before, int count) {
 		QCOMPARE(source, c);
 
 		QCOMPARE(before, 96);
@@ -1003,7 +1003,7 @@ void ColumnTest::testRemoveRow() {
 	});
 
 	int rowsRemovedCounter = 0;
-	connect(c, &Column::rowsRemoved, [this, &rowsRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+	connect(c, &Column::rowsRemoved, [&rowsRemovedCounter, c](const AbstractColumn* source, int first, int count) {
 		QCOMPARE(source, c);
 
 		switch (rowsRemovedCounter) {

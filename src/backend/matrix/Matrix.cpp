@@ -548,7 +548,7 @@ void Matrix::addRows() {
 		return;
 	WAIT_CURSOR;
 	int count = m_view->selectedRowCount(false);
-	beginMacro(i18np("%1: add %2 rows", "%1: add %2 rows", name(), count));
+	beginMacro(i18np("%1: add %2 row", "%1: add %2 rows", name(), count));
 	exec(new MatrixInsertRowsCmd(d, rowCount(), count));
 	endMacro();
 	RESET_CURSOR;

@@ -3,7 +3,7 @@
 	Project			: LabPlot
 	Description		: Abstract interface for data sources
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2015 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -24,13 +24,13 @@ AbstractDataSource::AbstractDataSource(const QString& name, AspectType type)
 }
 
 void AbstractDataSource::clear() {
-	int columns = childCount<Column>();
-	for (int i = 0; i < columns; ++i) {
-		child<Column>(i)->setUndoAware(false);
-		child<Column>(i)->setSuppressDataChangedSignal(true);
-		child<Column>(i)->clear();
-		child<Column>(i)->setUndoAware(true);
-		child<Column>(i)->setSuppressDataChangedSignal(false);
-		child<Column>(i)->setChanged();
+	const auto& columns = children<Column>();
+	for (auto* column : columns) {
+		column->setUndoAware(false);
+		column->setSuppressDataChangedSignal(true);
+		column->clear();
+		column->setUndoAware(true);
+		column->setSuppressDataChangedSignal(false);
+		column->setChanged();
 	}
 }
