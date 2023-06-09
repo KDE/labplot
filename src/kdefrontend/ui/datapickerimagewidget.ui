@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>638</width>
+    <width>664</width>
     <height>777</height>
    </rect>
   </property>
@@ -387,6 +387,12 @@
         <layout class="QGridLayout" name="gridLayout">
          <item row="1" column="4">
           <widget class="UTCDateTimeEdit" name="dtePositionX2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="displayFormat">
             <string>dd.MM.yyyy HH:mm</string>
            </property>
@@ -394,6 +400,12 @@
          </item>
          <item row="2" column="4">
           <widget class="UTCDateTimeEdit" name="dtePositionX3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="displayFormat">
             <string>dd.MM.yyyy HH:mm</string>
            </property>
@@ -402,7 +414,7 @@
          <item row="0" column="6">
           <widget class="NumberSpinBox" name="sbPositionY1">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -421,7 +433,7 @@
          <item row="2" column="8">
           <widget class="NumberSpinBox" name="sbPositionZ3">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -440,7 +452,7 @@
          <item row="0" column="3">
           <widget class="NumberSpinBox" name="sbPositionX1">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -490,6 +502,12 @@
          </item>
          <item row="2" column="1">
           <widget class="QLabel" name="lRefPoint3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>3.</string>
            </property>
@@ -533,6 +551,12 @@
          </item>
          <item row="0" column="4">
           <widget class="UTCDateTimeEdit" name="dtePositionX1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="displayFormat">
             <string>dd.MM.yyyy HH:mm</string>
            </property>
@@ -540,6 +564,12 @@
          </item>
          <item row="0" column="1">
           <widget class="QLabel" name="lRefPoint1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>1.</string>
            </property>
@@ -548,7 +578,7 @@
          <item row="2" column="3">
           <widget class="NumberSpinBox" name="sbPositionX3">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -566,6 +596,12 @@
          </item>
          <item row="1" column="1">
           <widget class="QLabel" name="lRefPoint2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>2.</string>
            </property>
@@ -574,7 +610,7 @@
          <item row="1" column="8">
           <widget class="NumberSpinBox" name="sbPositionZ2">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -609,7 +645,7 @@
          <item row="1" column="6">
           <widget class="NumberSpinBox" name="sbPositionY2">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -628,7 +664,7 @@
          <item row="1" column="3">
           <widget class="NumberSpinBox" name="sbPositionX2">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -663,7 +699,7 @@
          <item row="2" column="6">
           <widget class="NumberSpinBox" name="sbPositionY3">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -708,7 +744,7 @@
          <item row="0" column="8">
           <widget class="NumberSpinBox" name="sbPositionZ1">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -748,6 +784,12 @@
           <widget class="QRadioButton" name="rbRefPoint1">
            <property name="enabled">
             <bool>false</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
            <property name="text">
             <string/>
