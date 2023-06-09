@@ -9,6 +9,7 @@ Bug fixes:
 	* Fix limits when changing scale (Issue #446)
 	* Use system liborigin headers if linking against system liborigin (BUG 469367)
 	* Don't clear the undo history when saving the project (BUG 470727)
+	* In the collections of example projects, color maps and data sets allow also to search for sub-strings and do the search case-insensitive
 
 -----2.10.0 (21.03.2023) -----
 New features:
