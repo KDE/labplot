@@ -8,6 +8,7 @@ Bug fixes:
 	* Improve auto scale (Issue #536)
 	* Fix limits when changing scale (Issue #446)
 	* Use system liborigin headers if linking against system liborigin (BUG 469367)
+	* Don't clear the undo history when saving the project (BUG 470727)
 
 -----2.10.0 (21.03.2023) -----
 New features:

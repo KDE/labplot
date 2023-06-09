@@ -1267,6 +1267,7 @@ bool MainWin::newProject() {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	m_project = new Project();
+	undoStackIndexLastSave = 0;
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
 
@@ -1730,8 +1731,8 @@ bool MainWin::save(const QString& fileName) {
 		QXmlStreamWriter writer(file);
 		m_project->setFileName(fileName);
 		m_project->save(thumbnail, &writer);
-		m_project->undoStack()->clear();
 		m_project->setChanged(false);
+		undoStackIndexLastSave = m_project->undoStack()->index();
 		file->close();
 
 		// target file must not exist
@@ -2179,23 +2180,32 @@ void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 void MainWin::undo() {
 	WAIT_CURSOR;
 	m_project->undoStack()->undo();
-	if (m_project->undoStack()->index() == 0) {
-		m_saveAction->setEnabled(false);
-		m_undoAction->setEnabled(false);
-		m_project->setChanged(false);
-		updateTitleBar();
-	}
 	m_redoAction->setEnabled(true);
+
+	const int index = m_project->undoStack()->index();
+	if (index == 0)
+		m_undoAction->setEnabled(false);
+
+	const bool changed = (index != undoStackIndexLastSave);
+	m_saveAction->setEnabled(changed);
+	m_project->setChanged(changed);
+	updateTitleBar();
 	RESET_CURSOR;
 }
 
 void MainWin::redo() {
 	WAIT_CURSOR;
 	m_project->undoStack()->redo();
-	m_project->setChanged(true);
-	projectChanged();
-	if (m_project->undoStack()->index() == m_project->undoStack()->count())
+	m_undoAction->setEnabled(true);
+
+	const int index = m_project->undoStack()->index();
+	if (index == m_project->undoStack()->count())
 		m_redoAction->setEnabled(false);
+
+	const bool changed = (index != undoStackIndexLastSave);
+	m_saveAction->setEnabled(changed);
+	m_project->setChanged(changed);
+	updateTitleBar();
 	RESET_CURSOR;
 }
 
