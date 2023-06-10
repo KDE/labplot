@@ -4,3 +4,9 @@
 #target_link_libraries(GSLTest labplot2lib labplot2test)
 
 #add_test(NAME GSLTest COMMAND GSLTest)
+
+add_executable (ExpressionParserTest ExpressionParserTest.cpp)
+
+target_link_libraries(ExpressionParserTest labplot2lib labplot2test)
+
+add_test(NAME ExpressionParserTest COMMAND ExpressionParserTest)

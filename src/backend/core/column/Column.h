@@ -69,7 +69,7 @@ public:
 	int availableRowCount(int max = -1) const override;
 	int width() const;
 	void setWidth(const int);
-	void clear() override;
+	void clear(QUndoCommand* parent = nullptr) override;
 	AbstractSimpleFilter* outputFilter() const;
 	ColumnStringIO* asStringColumn() const;
 
@@ -225,8 +225,8 @@ private:
 	bool XmlReadFormula(XmlStreamReader*);
 	bool XmlReadRow(XmlStreamReader*);
 
-	void handleRowInsertion(int before, int count) override;
-	void handleRowRemoval(int first, int count) override;
+	void handleRowInsertion(int before, int count, QUndoCommand* parent) override;
+	void handleRowRemoval(int first, int count, QUndoCommand* parent) override;
 
 	bool m_suppressDataChangedSignal{false};
 	QAction* m_copyDataAction{nullptr};

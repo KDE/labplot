@@ -30,8 +30,8 @@
 Datapicker::Datapicker(const QString& name, const bool loading)
 	: AbstractPart(name, AspectType::Datapicker)
 	, m_transform(new Transform()) {
-	connect(this, &Datapicker::aspectAdded, this, &Datapicker::handleAspectAdded);
-	connect(this, &Datapicker::aspectAboutToBeRemoved, this, &Datapicker::handleAspectAboutToBeRemoved);
+	connect(this, &Datapicker::childAspectAdded, this, &Datapicker::handleAspectAdded);
+	connect(this, &Datapicker::childAspectAboutToBeRemoved, this, &Datapicker::handleAspectAboutToBeRemoved);
 
 	if (!loading)
 		init();

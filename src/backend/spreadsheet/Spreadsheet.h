@@ -13,10 +13,12 @@
 
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/datasources/AbstractDataSource.h"
+#include "backend/lib/macros.h"
 
 class AbstractFileFilter;
 class SpreadsheetView;
 class SpreadsheetModel;
+class SpreadsheetPrivate;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
@@ -49,10 +51,10 @@ public:
 	Column* column(const QString&) const;
 	int rowCount() const; // TODO: should be size_t?
 
-	void removeRows(int first, int count);
-	void insertRows(int before, int count);
-	void removeColumns(int first, int count);
-	void insertColumns(int before, int count);
+	void removeRows(int first, int count, QUndoCommand* parent = nullptr);
+	void insertRows(int before, int count, QUndoCommand* parent = nullptr);
+	void removeColumns(int first, int count, QUndoCommand* parent = nullptr);
+	void insertColumns(int before, int count, QUndoCommand* parent = nullptr);
 
 	int colX(int col);
 	int colY(int col);
@@ -84,6 +86,20 @@ public:
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 
+	struct Linking {
+		bool linking{false};
+		const Spreadsheet* linkedSpreadsheet{nullptr};
+		QString linkedSpreadsheetPath;
+
+		QString spreadsheetPath() const {
+			if (linkedSpreadsheet)
+				return linkedSpreadsheet->path();
+			return linkedSpreadsheetPath;
+		}
+	};
+
+	typedef SpreadsheetPrivate Private;
+
 public Q_SLOTS:
 	void appendRows(int);
 	void appendRow();
@@ -91,10 +107,16 @@ public Q_SLOTS:
 	void appendColumn();
 	void prependColumns(int);
 
-	void setColumnCount(int);
-	void setRowCount(int);
+	void setColumnCount(int, QUndoCommand* parent = nullptr);
+	void setRowCount(int, QUndoCommand* parent = nullptr);
+
+	BASIC_D_ACCESSOR_DECL(bool, linking, Linking)
+	const Spreadsheet* linkedSpreadsheet() const;
+	void setLinkedSpreadsheet(const Spreadsheet*, bool skipUndo = false);
+	QString linkedSpreadsheetPath() const;
 
 	void clear();
+	void clear(const QVector<Column*>&);
 	void clearMasks();
 
 	void moveColumn(int from, int to);
@@ -102,6 +124,10 @@ public Q_SLOTS:
 
 private:
 	void init();
+	void initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver);
+	Q_DECLARE_PRIVATE(Spreadsheet)
+
+	SpreadsheetPrivate* const d_ptr;
 	SpreadsheetModel* m_model{nullptr};
 
 protected:
@@ -110,6 +136,8 @@ protected:
 private Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
+	void linkedSpreadsheetDeleted();
+	void linkedSpreadsheetNewRowCount(int);
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -121,6 +149,23 @@ Q_SIGNALS:
 	void columnCountChanged(int);
 	void aboutToResize();
 	void resizeFinished();
+
+	void aspectsAboutToBeInserted(int first, int last);
+	void aspectsInserted(int first, int last);
+	void aspectsAboutToBeRemoved(int first, int last);
+	void aspectsRemoved();
+
+	void manyAspectsAboutToBeInserted();
+	void rowsAboutToBeInserted(int before, int last);
+	void rowsInserted(int newRowCount);
+	void rowsAboutToBeRemoved(int first, int count);
+	void rowsRemoved(int newRowCount);
+
+	void linkingChanged(bool);
+	void linkedSpreadsheetChanged(const Spreadsheet*);
+
+	friend class SpreadsheetSetLinkingCmd;
+	friend class SpreadsheetSetColumnCountCommand;
 };
 
 #endif

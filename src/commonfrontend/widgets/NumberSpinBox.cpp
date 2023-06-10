@@ -424,6 +424,7 @@ bool NumberSpinBox::setValue(double v) {
 
 	setText(locale().toString(v, 'g'));
 	m_value = v;
+	valueChanged();
 	return true;
 }
 

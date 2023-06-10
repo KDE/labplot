@@ -314,62 +314,94 @@ bool AbstractColumn::copy(const AbstractColumn* /*source*/, int /*source_start*/
  * \brief Return the number of available data rows
  */
 
+class ColumnSetRowsCountCmd : public QUndoCommand {
+public:
+	ColumnSetRowsCountCmd(AbstractColumn* column, bool insert, int first, int count, QUndoCommand* parent)
+		: QUndoCommand(parent)
+		, m_column(column)
+		, m_insert(insert)
+		, m_first(first)
+		, m_count(count) {
+		if (insert)
+			setText(i18np("%1: insert 1 row", "%1: insert %2 rows", m_column->name(), count));
+		else
+			setText(i18np("%1: remove 1 row", "%1: remove %2 rows", m_column->name(), count));
+	}
+
+	virtual void redo() override {
+		if (m_insert)
+			Q_EMIT m_column->rowsAboutToBeInserted(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsAboutToBeRemoved(m_column, m_first, m_count);
+
+		QUndoCommand::redo();
+
+		if (m_insert)
+			Q_EMIT m_column->rowsInserted(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsRemoved(m_column, m_first, m_count);
+	}
+
+	virtual void undo() override {
+		if (m_insert)
+			Q_EMIT m_column->rowsAboutToBeRemoved(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsAboutToBeInserted(m_column, m_first, m_count);
+		QUndoCommand::undo();
+
+		if (m_insert)
+			Q_EMIT m_column->rowsRemoved(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsInserted(m_column, m_first, m_count);
+	}
+
+private:
+	AbstractColumn* m_column;
+	bool m_insert;
+	int m_first;
+	int m_count;
+};
+
 /**
  * \brief Insert some empty (or initialized with invalid values) rows
  */
-void AbstractColumn::insertRows(int before, int count) {
-	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
-	exec(new SignallingUndoCommand(QStringLiteral("pre-signal"),
-								   this,
-								   "rowsAboutToBeInserted",
-								   "rowsRemoved",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, before),
-								   Q_ARG(int, count)));
+void AbstractColumn::insertRows(int before, int count, QUndoCommand* parent) {
+	bool execute = false;
+	auto* command = new ColumnSetRowsCountCmd(this, true, before, count, parent);
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
 
-	handleRowInsertion(before, count);
+	handleRowInsertion(before, count, parent);
 
-	exec(new SignallingUndoCommand(QStringLiteral("post-signal"),
-								   this,
-								   "rowsInserted",
-								   "rowsAboutToBeRemoved",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, before),
-								   Q_ARG(int, count)));
-	endMacro();
+	if (execute)
+		exec(parent);
 }
 
-void AbstractColumn::handleRowInsertion(int before, int count) {
-	exec(new AbstractColumnInsertRowsCmd(this, before, count));
+void AbstractColumn::handleRowInsertion(int before, int count, QUndoCommand* parent) {
+	new AbstractColumnInsertRowsCmd(this, before, count, parent);
 }
 
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
-void AbstractColumn::removeRows(int first, int count) {
-	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
-	exec(new SignallingUndoCommand(QStringLiteral("change signal"),
-								   this,
-								   "rowsAboutToBeRemoved",
-								   "rowsInserted",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, first),
-								   Q_ARG(int, count)));
+void AbstractColumn::removeRows(int first, int count, QUndoCommand* parent) {
+	bool execute = false;
+	auto* command = new ColumnSetRowsCountCmd(this, false, first, count, parent);
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
 
-	handleRowRemoval(first, count);
+	handleRowRemoval(first, count, parent);
 
-	exec(new SignallingUndoCommand(QStringLiteral("change signal"),
-								   this,
-								   "rowsRemoved",
-								   "rowsAboutToBeInserted",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, first),
-								   Q_ARG(int, count)));
-	endMacro();
+	if (execute)
+		exec(parent);
 }
 
-void AbstractColumn::handleRowRemoval(int first, int count) {
-	exec(new AbstractColumnRemoveRowsCmd(this, first, count));
+void AbstractColumn::handleRowRemoval(int first, int count, QUndoCommand* parent) {
+	new AbstractColumnRemoveRowsCmd(this, first, count, parent);
 }
 
 /**
@@ -396,7 +428,7 @@ bool AbstractColumn::isPlottable() const {
 /**
  * \brief Clear the whole column
  */
-void AbstractColumn::clear() {
+void AbstractColumn::clear(QUndoCommand*) {
 }
 
 /**

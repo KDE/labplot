@@ -149,7 +149,8 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	}
 
 	// auto update
-	ui.chkAutoUpdate->setChecked(firstColumn->formulaAutoUpdate());
+	// Enable if linking is turned on, so the user has to explicit disable recalculation, so it cannot be forgotten
+	ui.chkAutoUpdate->setChecked(firstColumn->formulaAutoUpdate() || m_spreadsheet->linking());
 
 	checkValues();
 }

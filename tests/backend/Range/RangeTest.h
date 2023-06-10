@@ -20,6 +20,13 @@ private Q_SLOTS:
 	void testNiceExtend();
 	void testTickCount();
 
+	void testNiceExtendLog10();
+	void testTickCountLog10();
+	void testNiceExtendLog2();
+	void testTickCountLog2();
+	void testNiceExtendLn();
+	void testTickCountLn();
+
 	//	void testPerformance();
 };
 

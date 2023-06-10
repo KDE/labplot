@@ -100,7 +100,7 @@ void CartesianPlot::init() {
 	addChildFast(m_plotArea);
 
 	// title
-	m_title = new TextLabel(this->name() + QLatin1String("- ") + i18n("Title"), TextLabel::Type::PlotTitle);
+	m_title = new TextLabel(this->name() + QLatin1String(" - ") + i18n("Title"), TextLabel::Type::PlotTitle);
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
@@ -128,8 +128,8 @@ void CartesianPlot::init() {
 		d->update();
 	});
 
-	connect(this, &AbstractAspect::aspectAdded, this, &CartesianPlot::childAdded);
-	connect(this, &AbstractAspect::aspectRemoved, this, &CartesianPlot::childRemoved);
+	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
+	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
@@ -2581,9 +2581,9 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 			}
 		}
 	}
-	auto dataRange = d->dataRange(dim, index);
+	auto dataRange = d->dataRange(dim, index); // dataRange used for nice extend
 	if (dataRange.finite() && d->niceExtend)
-		dataRange.niceExtend(); // auto scale to nice data range
+		dataRange.niceExtend(); // auto scale to nice range
 
 	// if no curve: do not reset to [0, 1]
 
@@ -2610,7 +2610,7 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 		}
 		// in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
 		if (r.isZero()) {
-			const double value{r.start()};
+			const double value = r.start();
 			if (!qFuzzyIsNull(value))
 				r.setRange(value * 0.9, value * 1.1);
 			else
@@ -2767,6 +2767,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		if (max > d->dataRange(dim, index).end())
 			d->dataRange(dim, index).end() = max;
 	}
+
+	// data range is used to nice extend, so set correct scale
+	d->dataRange(dim, index).setScale(range.scale());
 
 	// check ranges for nonlinear scales
 	if (d->dataRange(dim, index).scale() != RangeT::Scale::Linear)
@@ -3268,7 +3271,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		rangep.prev = rangep.range;
 
 		for (auto* axis : q->children<Axis>()) {
-			DEBUG(Q_FUNC_INFO << ", auto-scale axis \"" << STDSTRING(axis->name()) << "\"")
+			QDEBUG(Q_FUNC_INFO << ", auto-scale axis" << axis->name() << "of scale" << axis->scale())
 			// use ranges of axis
 			int axisIndex = q->coordinateSystem(axis->coordinateSystemIndex())->index(dim);
 			if (axis->rangeType() != Axis::RangeType::Auto || axisIndex != i)

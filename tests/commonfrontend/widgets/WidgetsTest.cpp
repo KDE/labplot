@@ -646,23 +646,24 @@ void WidgetsTest::numberSpinBoxLimit() {
 	QCOMPARE(valueChangedCounter, 2);
 
 	sb.setValue(4);
+	QCOMPARE(valueChangedCounter, 3);
 	sb.lineEdit()->setCursorPosition(1);
 	VALUES_EQUAL(sb.value(), 4.);
-	QCOMPARE(valueChangedCounter, 2);
+	QCOMPARE(valueChangedCounter, 3);
 	sb.decreaseValue();
 	VALUES_EQUAL(sb.value(), 3.);
-	QCOMPARE(valueChangedCounter, 3);
+	QCOMPARE(valueChangedCounter, 4);
 	QCOMPARE(lastValue, 3);
 	sb.decreaseValue();
 	VALUES_EQUAL(sb.value(), 3.);
-	QCOMPARE(valueChangedCounter, 3);
+	QCOMPARE(valueChangedCounter, 4);
 
 	// Try to insert a number
 	sb.lineEdit()->setCursorPosition(1);
 	// Important: the event text is used by the lineedit. So it has to be filled!
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
 	sb.keyPressEvent(&event);
-	QCOMPARE(valueChangedCounter, 3);
+	QCOMPARE(valueChangedCounter, 4);
 	VALUES_EQUAL(sb.value(), 3.);
 }
 

@@ -220,6 +220,14 @@
    <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbType</tabstop>
+  <tabstop>sbErrorBarsCapSize</tabstop>
+  <tabstop>cbStyle</tabstop>
+  <tabstop>kcbColor</tabstop>
+  <tabstop>sbWidth</tabstop>
+  <tabstop>sbOpacity</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

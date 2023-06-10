@@ -116,8 +116,8 @@ void Axis::init(Orientation orientation) {
 	d->rangeType = (Axis::RangeType)group.readEntry("RangeType", static_cast<int>(RangeType::Auto));
 	d->position = Axis::Position::Centered;
 	d->offset = group.readEntry("PositionOffset", 0);
-	d->scale = (RangeT::Scale)group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
 	d->range = Range<double>(group.readEntry("Start", 0.), group.readEntry("End", 10.)); // not auto ticked if already set to 1 here!
+	d->range.scale() = (RangeT::Scale)group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
 	d->majorTicksStartType = static_cast<Axis::TicksStartType>(group.readEntry("MajorTicksStartType", static_cast<bool>(Axis::TicksStartType::Offset)));
 	d->majorTickStartOffset = group.readEntry("MajorTickStartOffset", 0.0);
 	d->majorTickStartValue = group.readEntry("MajorTickStartValue", 0.0);
@@ -412,7 +412,6 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::RangeType, rangeType, rangeType)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Position, position, position)
-BASIC_SHARED_D_READER_IMPL(Axis, RangeT::Scale, scale, scale)
 BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, Range<double>, range, range)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksStartType, majorTicksStartType, majorTicksStartType)
@@ -558,13 +557,6 @@ void Axis::setPosition(Position position) {
 		exec(new AxisSetPositionCmd(d, position, ki18n("%1: set axis position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, RangeT::Scale, scale, retransformTicks)
-void Axis::setScale(RangeT::Scale scale) {
-	Q_D(Axis);
-	if (scale != d->scale)
-		exec(new AxisSetScalingCmd(d, scale, ki18n("%1: set axis scale")));
-}
-
 STD_SETTER_CMD_IMPL_F(Axis, SetOffset, double, offset, retransform)
 void Axis::setOffset(double offset, bool undo) {
 	Q_D(Axis);
@@ -595,8 +587,7 @@ void Axis::setStart(double min) {
 	Q_D(Axis);
 	Range<double> range = d->range;
 	const auto scale = range.scale();
-	if (!(((scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) && min <= 0)
-		  || (scale == RangeT::Scale::Sqrt && min < 0))) {
+	if (!(((RangeT::isLogScale(scale)) && min <= 0) || (scale == RangeT::Scale::Sqrt && min < 0))) {
 		range.setStart(min);
 		setRange(range);
 	}
@@ -606,8 +597,7 @@ void Axis::setEnd(double max) {
 	Q_D(Axis);
 	Range<double> range = d->range;
 	const auto scale = range.scale();
-	if (!(((scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) && max <= 0)
-		  || (scale == RangeT::Scale::Sqrt && max < 0))) {
+	if (!((RangeT::isLogScale(scale) && max <= 0) || (scale == RangeT::Scale::Sqrt && max < 0))) {
 		range.setEnd(max);
 		setRange(range);
 	}
@@ -617,8 +607,15 @@ void Axis::setRange(double min, double max) {
 	Q_D(Axis);
 	Range<double> range = d->range;
 	range.setStart(min);
+	QDEBUG("scale = " << range.scale())
 	range.setEnd(max);
 	setRange(range);
+}
+void Axis::setScale(RangeT::Scale scale) {
+	QDEBUG(Q_FUNC_INFO << ", scale = " << scale)
+	Q_D(Axis);
+	d->range.scale() = scale;
+	retransformTicks();
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksStartType, Axis::TicksStartType, majorTicksStartType, retransform)
@@ -783,7 +780,7 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Axis::majorTicksColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Axis::majorTicksColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 		}
 	}
@@ -872,7 +869,7 @@ void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Axis::minorTicksColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Axis::minorTicksColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 		}
 	}
@@ -958,7 +955,7 @@ void Axis::setLabelsTextColumn(const AbstractColumn* column) {
 
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Axis::retransformTicks);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Axis::retransformTicks);
 			// TODO: add disconnect in the undo-function
 		}
 	}
@@ -1423,7 +1420,7 @@ void AxisPrivate::retransformTicks() {
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber: // total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
-		switch (scale) {
+		switch (range.scale()) {
 		case RangeT::Scale::Linear:
 			majorTicksIncrement = range.size();
 			break;
@@ -1459,7 +1456,7 @@ void AxisPrivate::retransformTicks() {
 		// the increment of the major ticks is given -> determine the number
 		// TODO: majorTicksSpacing == 0?
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end - start);
-		switch (scale) {
+		switch (range.scale()) {
 		case RangeT::Scale::Linear:
 			tmpMajorTicksNumber = std::round(range.size() / majorTicksIncrement + 1);
 			break;
@@ -1596,7 +1593,7 @@ void AxisPrivate::retransformTicks() {
 			}
 
 		} else {
-			switch (scale) {
+			switch (range.scale()) {
 			case RangeT::Scale::Linear:
 				//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 				majorTickPos = start + majorTicksIncrement * iMajor;
@@ -1920,7 +1917,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : qAsConst(tickLabelValues)) {
 				// toString() does not round: use NSL function
-				if (RangeT::isLogScale(scale)) // don't use same precision for all label on log scales
+				if (RangeT::isLogScale(range.scale())) // don't use same precision for all label on log scales
 					str = numberLocale.toString(value, 'f', std::max(labelsPrecision, nsl_math_decimal_places(value) + 1));
 				else
 					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
@@ -2124,8 +2121,8 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 	}
 	// QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
 
-	const double scale = std::abs(tickLabelValues.last() - tickLabelValues.first());
-	DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+	const double scaling = std::abs(tickLabelValues.last() - tickLabelValues.first());
+	DEBUG(Q_FUNC_INFO << ", scaling = " << scaling)
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// check if rounded value differs too much
 		double relDiff = 0;
@@ -2134,19 +2131,19 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 		case Axis::LabelsFormat::Decimal:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
-			relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scaling;
 			break;
 		case Axis::LabelsFormat::MultipliesPi:
-			relDiff = std::abs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scaling;
 			break;
 		case Axis::LabelsFormat::Powers10:
-			relDiff = std::abs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scaling;
 			break;
 		case Axis::LabelsFormat::Powers2:
-			relDiff = std::abs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scaling;
 			break;
 		case Axis::LabelsFormat::PowersE:
-			relDiff = std::abs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scaling;
 		}
 		// DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -2901,7 +2898,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("rangeType"), QString::number(static_cast<int>(d->rangeType)));
 	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
 	writer->writeAttribute(QStringLiteral("position"), QString::number(static_cast<int>(d->position)));
-	writer->writeAttribute(QStringLiteral("scale"), QString::number(static_cast<int>(d->scale)));
+	writer->writeAttribute(QStringLiteral("scale"), QString::number(static_cast<int>(d->range.scale())));
 	writer->writeAttribute(QStringLiteral("offset"), QString::number(d->offset));
 	writer->writeAttribute(QStringLiteral("logicalPosition"), QString::number(d->logicalPosition));
 	writer->writeAttribute(QStringLiteral("start"), QString::number(d->range.start(), 'g', 12));
@@ -3020,7 +3017,12 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("orientation", orientation, Orientation);
 			READ_INT_VALUE("position", position, Axis::Position);
-			READ_INT_VALUE("scale", scale, RangeT::Scale);
+			// scale
+			str = attribs.value(QStringLiteral("scale")).toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("scale")).toString());
+			else
+				d->range.scale() = static_cast<RangeT::Scale>(str.toInt());
 			READ_DOUBLE_VALUE("offset", offset);
 			READ_DOUBLE_VALUE("logicalPosition", logicalPosition);
 			READ_DOUBLE_VALUE("start", range.start());

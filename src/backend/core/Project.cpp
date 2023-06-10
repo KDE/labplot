@@ -186,7 +186,7 @@ Project::Project()
 	d->changed = false;
 
 	connect(this, &Project::aspectDescriptionChanged, this, &Project::descriptionChanged);
-	connect(this, &Project::aspectAdded, this, &Project::aspectAddedSlot);
+	connect(this, &Project::childAspectAdded, this, &Project::aspectAddedSlot);
 }
 
 Project::~Project() {
@@ -314,7 +314,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	// when the name of a column is being changed, it can match again the names being used in the curves, etc.
+	// when the name of a column is being changed, it can matches again the names being used in the curves, etc.
 	// and we need to update the dependencies
 	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (column) {
@@ -369,6 +369,12 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 				updateColumnDependencies(boxPlots, column);
 		}
 	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
+		// name in a linked spreadsheet, etc. and update the dependencies
+		const auto* newSpreadsheet = static_cast<const Spreadsheet*>(aspect);
+		const auto& spreadsheets = children<Spreadsheet>(ChildIndexFlag::Recursive);
+		updateSpreadsheetDependencies(spreadsheets, newSpreadsheet);
+
 		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
@@ -379,6 +385,17 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			for (auto* we : wes)
 				we->setSuppressRetransform(false);
 		});
+	}
+}
+
+void Project::updateSpreadsheetDependencies(const QVector<Spreadsheet*>& spreadsheets, const Spreadsheet* spreadsheet) const {
+	const QString& spreadsheetPath = spreadsheet->path();
+
+	for (auto* sh : spreadsheets) {
+		sh->setUndoAware(false);
+		if (sh->linkedSpreadsheetPath() == spreadsheetPath)
+			sh->setLinkedSpreadsheet(spreadsheet);
+		sh->setUndoAware(true);
 	}
 }
 
@@ -710,6 +727,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	while (!(reader->isStartDocument() || reader->atEnd()))
 		reader->readNext();
 
+	bool stateAttributeFound = false;
 	if (!(reader->atEnd())) {
 		if (!reader->skipToNextTag())
 			return false;
@@ -753,6 +771,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 						// Restore pointers and retransform elements before loading the state,
 						// otherwise curves don't have column pointers assigned and therefore calculations
 						// in the docks might be wrong
+						stateAttributeFound = true;
 						restorePointers(this, preview);
 						retransformElements(this);
 						Q_EMIT requestLoadState(reader);
@@ -768,6 +787,12 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 			reader->raiseError(i18n("no project element found"));
 	} else // no start document
 		reader->raiseError(i18n("no valid XML document found"));
+
+	if (!preview && !stateAttributeFound) {
+		// No state attribute available, means no project explorer reacted on the signal
+		restorePointers(this, preview);
+		retransformElements(this);
+	}
 
 	return !reader->hasError();
 }
@@ -1047,6 +1072,20 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
 	}
 #endif
+
+	// spreadsheet
+	QVector<Spreadsheet*> spreadsheets;
+	if (hasChildren)
+		spreadsheets = aspect->children<Spreadsheet>(ChildIndexFlag::Recursive);
+	for (auto* linkingSpreadsheet : spreadsheets) {
+		if (!linkingSpreadsheet->linking())
+			continue;
+		for (const auto* toLinkedSpreadsheet : spreadsheets) {
+			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path()) {
+				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
+			}
+		}
+	}
 
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {
