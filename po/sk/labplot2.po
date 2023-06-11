@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-10 00:44+0000\n"
+"POT-Creation-Date: 2023-06-11 00:43+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -903,7 +903,7 @@ msgstr "neznámy prvok '%1'"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
 #: src/backend/datapicker/Datapicker.cpp:353
-#: src/kdefrontend/ui/datapickerimagewidget.ui:317
+#: src/kdefrontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
 msgstr "Kresliť"
@@ -6912,7 +6912,7 @@ msgstr "%1: nastaviť obrázok pozadia"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:192
 #: src/backend/worksheet/TextLabel.cpp:253
 #: src/kdefrontend/ui/datapickercurvewidget.ui:178
-#: src/kdefrontend/ui/datapickerimagewidget.ui:769
+#: src/kdefrontend/ui/datapickerimagewidget.ui:826
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:58
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:535
@@ -15805,7 +15805,7 @@ msgstr "Pridať hodnotu"
 #. i18n: ectx: property (text), widget (QLabel, lTimeValue)
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:42
 #: src/kdefrontend/ui/constantswidget.ui:57
-#: src/kdefrontend/ui/datapickerimagewidget.ui:853
+#: src/kdefrontend/ui/datapickerimagewidget.ui:910
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:26
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:55
@@ -16804,7 +16804,7 @@ msgstr "Formát:"
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:49
-#: src/kdefrontend/ui/datapickerimagewidget.ui:343
+#: src/kdefrontend/ui/datapickerimagewidget.ui:689
 #: src/kdefrontend/ui/dockwidgets/aspectdock.ui:37
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:184
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:172
@@ -16847,7 +16847,7 @@ msgstr "Komentár:"
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:88
-#: src/kdefrontend/ui/datapickerimagewidget.ui:260
+#: src/kdefrontend/ui/datapickerimagewidget.ui:81
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:56
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:259
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:116
@@ -17042,8 +17042,8 @@ msgstr "Veľkosť:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRightValue)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLeftValue)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPercentile)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRotation)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTernaryScale)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRotation)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY1)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionZ3)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionX1)
@@ -17054,17 +17054,17 @@ msgstr "Veľkosť:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY3)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionZ1)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:269
-#: src/kdefrontend/ui/datapickerimagewidget.ui:75
-#: src/kdefrontend/ui/datapickerimagewidget.ui:136
-#: src/kdefrontend/ui/datapickerimagewidget.ui:414
-#: src/kdefrontend/ui/datapickerimagewidget.ui:433
-#: src/kdefrontend/ui/datapickerimagewidget.ui:452
-#: src/kdefrontend/ui/datapickerimagewidget.ui:560
-#: src/kdefrontend/ui/datapickerimagewidget.ui:586
-#: src/kdefrontend/ui/datapickerimagewidget.ui:621
-#: src/kdefrontend/ui/datapickerimagewidget.ui:640
-#: src/kdefrontend/ui/datapickerimagewidget.ui:675
-#: src/kdefrontend/ui/datapickerimagewidget.ui:720
+#: src/kdefrontend/ui/datapickerimagewidget.ui:42
+#: src/kdefrontend/ui/datapickerimagewidget.ui:216
+#: src/kdefrontend/ui/datapickerimagewidget.ui:327
+#: src/kdefrontend/ui/datapickerimagewidget.ui:346
+#: src/kdefrontend/ui/datapickerimagewidget.ui:365
+#: src/kdefrontend/ui/datapickerimagewidget.ui:465
+#: src/kdefrontend/ui/datapickerimagewidget.ui:484
+#: src/kdefrontend/ui/datapickerimagewidget.ui:519
+#: src/kdefrontend/ui/datapickerimagewidget.ui:538
+#: src/kdefrontend/ui/datapickerimagewidget.ui:573
+#: src/kdefrontend/ui/datapickerimagewidget.ui:618
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:119
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:215
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:234
@@ -17197,17 +17197,182 @@ msgstr ""
 msgid " pt"
 msgstr " bd"
 
+#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:103
+#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:99
+#, kde-format
+msgid "Specify the name of the image file."
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:119
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:61
+#, fuzzy, kde-format
+#| msgid "Select all"
+msgid " Select the image file"
+msgstr "Vybrať všetko"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, sbPointSeparation)
+#. i18n: ectx: property (toolTip), widget (QLabel, lPointSeparation)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:137
+#: src/kdefrontend/ui/datapickerimagewidget.ui:779
+#, kde-format
+msgid "Number of pixels between two neighbor data points"
+msgstr ""
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:140
+#: src/kdefrontend/ui/datapickerimagewidget.ui:238
+#, fuzzy, kde-format
+#| msgid "x"
+msgid " px"
+msgstr "px"
+
+#. i18n: ectx: property (text), widget (QLabel, lRefPoint)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:155
+#, fuzzy, kde-format
+#| msgid "Preferences"
+msgid "References"
+msgstr "Nastavenia"
+
+#. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:171
+#, fuzzy, kde-format
+#| msgid "2"
+msgid "2."
+msgstr "2"
+
+#. i18n: ectx: property (text), widget (QLabel, lTernaryScale)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:181
+#, kde-format
+msgid "x+y+z="
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lRotation)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
+#. i18n: ectx: property (text), widget (QLabel, lValuesRotation)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:188
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1250
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:325
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:421
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:421
+#: src/kdefrontend/ui/labelwidget.ui:709 src/kdefrontend/ui/symbolwidget.ui:85
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgid "Rotation:"
+msgstr "Otočenie: "
+
+#. i18n: ectx: property (text), widget (QLabel, lSegments)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:200
+#, kde-format
+msgid "Segments"
+msgstr "Segmenty"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbRotation)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsRotation)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesRotation)
+#. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRotation)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:219
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1224
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:108
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:27
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:121
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:483
+#: src/kdefrontend/ui/labelwidget.ui:129 src/kdefrontend/ui/symbolwidget.ui:101
+#, kde-format
+msgid "°"
+msgstr "°"
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, sbMinSegmentLength)
+#. i18n: ectx: property (toolTip), widget (QLabel, lMinSegmentLength)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:235
+#: src/kdefrontend/ui/datapickerimagewidget.ui:245
+#, kde-format
+msgid "Minimum segment length detection"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:248
+#, fuzzy, kde-format
+#| msgid "Length:"
+msgid "Min. Length:"
+msgstr "Dĺžka:"
+
+#. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:280
+#, fuzzy, kde-format
+#| msgid "1"
+msgid "1."
+msgstr "1"
+
+#. i18n: ectx: property (displayFormat), widget (UTCDateTimeEdit, dtePositionX2)
+#. i18n: ectx: property (displayFormat), widget (UTCDateTimeEdit, dtePositionX3)
+#. i18n: ectx: property (displayFormat), widget (UTCDateTimeEdit, dtePositionX1)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:298
+#: src/kdefrontend/ui/datapickerimagewidget.ui:311
+#: src/kdefrontend/ui/datapickerimagewidget.ui:449
+#, kde-format
+msgid "dd.MM.yyyy HH:mm"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionX3)
+#. i18n: ectx: property (text), widget (QLabel, lPositionX1)
+#. i18n: ectx: property (text), widget (QLabel, lPositionX2)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:381
+#: src/kdefrontend/ui/datapickerimagewidget.ui:407
+#: src/kdefrontend/ui/datapickerimagewidget.ui:500
+#, fuzzy, kde-format
+#| msgid "x"
+msgid "x="
+msgstr "X"
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionY1)
+#. i18n: ectx: property (text), widget (QLabel, lPositionY3)
+#. i18n: ectx: property (text), widget (QLabel, lPositionY2)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:397
+#: src/kdefrontend/ui/datapickerimagewidget.ui:433
+#: src/kdefrontend/ui/datapickerimagewidget.ui:554
+#, fuzzy, kde-format
+#| msgid "y"
+msgid "y="
+msgstr "Y"
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionZ2)
+#. i18n: ectx: property (text), widget (QLabel, lPositionZ1)
+#. i18n: ectx: property (text), widget (QLabel, lPositionZ3)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:417
+#: src/kdefrontend/ui/datapickerimagewidget.ui:583
+#: src/kdefrontend/ui/datapickerimagewidget.ui:599
+#, fuzzy, kde-format
+msgid "z="
+msgstr "Z"
+
+#. i18n: ectx: property (text), widget (QLabel, lRefPoint3)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:672
+#, fuzzy, kde-format
+#| msgid "3"
+msgid "3."
+msgstr "3"
+
 #. i18n: ectx: property (text), widget (QLabel, lPlot)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:33
+#: src/kdefrontend/ui/datapickerimagewidget.ui:682
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "Image:"
 msgstr "Obrázok:"
 
-#. i18n: ectx: property (text), widget (QLabel, lTernaryScale)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:40
+#. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:701
 #, kde-format
-msgid "x+y+z="
+msgid "Embedd"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:708
+#, kde-format
+msgid "Relative Path"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
@@ -17225,7 +17390,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lLayout)
 #. i18n: ectx: property (text), widget (QLabel, lFileType)
 #. i18n: ectx: property (text), widget (QLabel, lPlotType)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:47
+#: src/kdefrontend/ui/datapickerimagewidget.ui:746
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:165
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:572
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:682
@@ -17257,190 +17422,34 @@ msgstr ""
 msgid "Type:"
 msgstr "Typ:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSegments)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:59
-#, kde-format
-msgid "Segments"
-msgstr "Segmenty"
-
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbRotation)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsRotation)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesRotation)
-#. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRotation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:78
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1224
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:108
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:27
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:121
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:483
-#: src/kdefrontend/ui/labelwidget.ui:129 src/kdefrontend/ui/symbolwidget.ui:101
-#, kde-format
-msgid "°"
-msgstr "°"
-
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:117
-#: src/kdefrontend/ui/datapickerimagewidget.ui:273
-#, fuzzy, kde-format
-#| msgid "x"
-msgid " px"
-msgstr "px"
-
-#. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:158
-#, kde-format
-msgid "Embedd"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:165
-#, kde-format
-msgid "Relative Path"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lRotation)
-#. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
-#. i18n: ectx: property (text), widget (QLabel, lValuesRotation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:187
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1250
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:325
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:421
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:421
-#: src/kdefrontend/ui/labelwidget.ui:709 src/kdefrontend/ui/symbolwidget.ui:85
-#, fuzzy, kde-format
-#| msgid "Rotation"
-msgid "Rotation:"
-msgstr "Otočenie: "
-
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:207
+#: src/kdefrontend/ui/datapickerimagewidget.ui:782
 #, fuzzy, kde-format
-#| msgid "iterations"
-msgid "Point Separation:"
-msgstr "iterácie"
+#| msgid "Saturation:"
+msgid "Separation:"
+msgstr "Sýtosť:"
 
-#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:216
-#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:99
-#, kde-format
-msgid "Specify the name of the image file."
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:232
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:61
-#, fuzzy, kde-format
-#| msgid "Select all"
-msgid " Select the image file"
-msgstr "Vybrať všetko"
-
-#. i18n: ectx: property (text), widget (QLabel, lRugLength)
-#. i18n: ectx: property (text), widget (QLabel, lMajorTicksLength)
-#. i18n: ectx: property (text), widget (QLabel, lMinorTicksLength)
-#. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:324
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:894
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1071
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:823
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:515
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:806
-#, kde-format
-msgid "Length:"
-msgstr "Dĺžka:"
-
-#. i18n: ectx: property (text), widget (QLabel, lRefPoint)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:336
-#, fuzzy, kde-format
-#| msgid "Preferences"
-msgid "Reference Points"
-msgstr "Nastavenia"
-
-#. i18n: ectx: property (text), widget (QCheckBox, cbDatetime)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:382
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:812
 #, fuzzy, kde-format
 #| msgid "Date and time"
 msgid "Datetime"
 msgstr "DátumČas"
 
-#. i18n: ectx: property (displayFormat), widget (UTCDateTimeEdit, dtePositionX2)
-#. i18n: ectx: property (displayFormat), widget (UTCDateTimeEdit, dtePositionX3)
-#. i18n: ectx: property (displayFormat), widget (UTCDateTimeEdit, dtePositionX1)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:391
-#: src/kdefrontend/ui/datapickerimagewidget.ui:398
-#: src/kdefrontend/ui/datapickerimagewidget.ui:537
-#, kde-format
-msgid "dd.MM.yyyy HH:mm"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionX3)
-#. i18n: ectx: property (text), widget (QLabel, lPositionX1)
-#. i18n: ectx: property (text), widget (QLabel, lPositionX2)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:468
-#: src/kdefrontend/ui/datapickerimagewidget.ui:501
-#: src/kdefrontend/ui/datapickerimagewidget.ui:602
-#, fuzzy, kde-format
-#| msgid "x"
-msgid "x="
-msgstr "X"
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionY1)
-#. i18n: ectx: property (text), widget (QLabel, lPositionY3)
-#. i18n: ectx: property (text), widget (QLabel, lPositionY2)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:484
-#: src/kdefrontend/ui/datapickerimagewidget.ui:527
-#: src/kdefrontend/ui/datapickerimagewidget.ui:656
-#, fuzzy, kde-format
-#| msgid "y"
-msgid "y="
-msgstr "Y"
-
-#. i18n: ectx: property (text), widget (QLabel, lRefPoint3)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:494
-#, fuzzy, kde-format
-#| msgid "3"
-msgid "3."
-msgstr "3"
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionZ2)
-#. i18n: ectx: property (text), widget (QLabel, lPositionZ1)
-#. i18n: ectx: property (text), widget (QLabel, lPositionZ3)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:511
-#: src/kdefrontend/ui/datapickerimagewidget.ui:685
-#: src/kdefrontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-msgid "z="
-msgstr "Z"
-
-#. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:544
-#, fuzzy, kde-format
-#| msgid "1"
-msgid "1."
-msgstr "1"
-
-#. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:570
-#, fuzzy, kde-format
-#| msgid "2"
-msgid "2."
-msgstr "2"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tSymbol)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:763
+#: src/kdefrontend/ui/datapickerimagewidget.ui:820
 #, kde-format
 msgid "Ref. Points Symbol"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tEdit)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:790
+#: src/kdefrontend/ui/datapickerimagewidget.ui:847
 #, kde-format
 msgid "Edit Image"
 msgstr "Upraviť obrázok"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntensity)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:805
+#: src/kdefrontend/ui/datapickerimagewidget.ui:862
 #, kde-format
 msgid "Intensity:"
 msgstr "Intenzita:"
@@ -17449,7 +17458,7 @@ msgstr "Intenzita:"
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionY)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionY)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPlotImageType)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:827
+#: src/kdefrontend/ui/datapickerimagewidget.ui:884
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:312
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:167
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:481
@@ -17459,26 +17468,26 @@ msgid "Vertical position relative to label's parent"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lHue)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:860
+#: src/kdefrontend/ui/datapickerimagewidget.ui:917
 #, kde-format
 msgid "Hue:"
 msgstr "Odtieň:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotImageType)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:880
+#: src/kdefrontend/ui/datapickerimagewidget.ui:937
 #, fuzzy, kde-format
 #| msgid "Current image:"
 msgid "Current Image:"
 msgstr "Aktuálny obrázok:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaturation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:893
+#: src/kdefrontend/ui/datapickerimagewidget.ui:950
 #, kde-format
 msgid "Saturation:"
 msgstr "Sýtosť:"
 
 #. i18n: ectx: property (text), widget (QLabel, lForeground)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:900
+#: src/kdefrontend/ui/datapickerimagewidget.ui:957
 #, kde-format
 msgid "Foreground:"
 msgstr "Popredie:"
@@ -18694,6 +18703,18 @@ msgstr "Číslo"
 #| msgid "Column:"
 msgid "Label Column:"
 msgstr "Stĺpec:"
+
+#. i18n: ectx: property (text), widget (QLabel, lRugLength)
+#. i18n: ectx: property (text), widget (QLabel, lMajorTicksLength)
+#. i18n: ectx: property (text), widget (QLabel, lMinorTicksLength)
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:894
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1071
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:823
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:515
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:806
+#, kde-format
+msgid "Length:"
+msgstr "Dĺžka:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicks)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:960
@@ -22834,6 +22855,16 @@ msgstr ""
 msgid "Unable to open file:"
 msgstr "Nepodarilo sa otvoriť"
 
+#, fuzzy
+#~| msgid "iterations"
+#~ msgid "Point Separation:"
+#~ msgstr "iterácie"
+
+#, fuzzy
+#~| msgid "Preferences"
+#~ msgid "Reference Points"
+#~ msgstr "Nastavenia"
+
 #~ msgid "No Data"
 #~ msgstr "Žiadne dáta"
 
@@ -23821,11 +23852,6 @@ msgstr "Nepodarilo sa otvoriť"
 #~| msgid "Scaling"
 #~ msgid "Scaling:"
 #~ msgstr "Škálovanie"
-
-#, fuzzy
-#~| msgid "Preferences"
-#~ msgid "Reference"
-#~ msgstr "Nastavenia"
 
 #~ msgctxt "@title:window %1 is a Cantor backend"
 #~ msgid "%1 Properties"
