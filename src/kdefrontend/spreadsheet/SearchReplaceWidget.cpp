@@ -55,8 +55,8 @@ SearchReplaceWidget::~SearchReplaceWidget() {
 	}
 
 	if (m_searchReplaceWidget) {
-		conf.writeEntry("DataType", uiSearchReplace.cbDataType->currentIndex());
-		conf.writeEntry("Order", uiSearchReplace.cbOrder->currentIndex());
+		conf.writeEntry("DataType", uiSearchReplace.cbDataType->currentData().toInt());
+		conf.writeEntry("Order", uiSearchReplace.cbOrder->currentData().toInt());
 		conf.writeEntry("MatchCase", uiSearchReplace.tbMatchCase->isChecked());
 		conf.writeEntry("SelectionOnly", uiSearchReplace.tbSelectionOnly->isChecked());
 		conf.writeEntry("Operator", uiSearchReplace.cbOperator->currentData().toInt());
@@ -86,10 +86,19 @@ SearchReplaceWidget::~SearchReplaceWidget() {
 		for (int i = 0; i < uiSearchReplace.cbValueText->count(); ++i)
 			items << uiSearchReplace.cbValueText->itemText(i);
 
-		if (!items.empty())
+		if (!items.empty()) {
 			conf.writeEntry("ValueTextHistory", items);
+			items.clear();
+		}
 
-		// TODO: history for replace values?
+		// history for replace values
+		for (int i = 0; i < uiSearchReplace.cbReplace->count(); ++i)
+			items << uiSearchReplace.cbReplace->itemText(i);
+
+		if (!items.empty()) {
+			conf.writeEntry("ReplaceHistory", items);
+			items.clear();
+		}
 	}
 }
 
@@ -107,13 +116,14 @@ void SearchReplaceWidget::setInitialPattern(AbstractColumn::ColumnMode mode, con
 	else if (m_searchReplaceWidget) {
 		switch (m_initialColumnMode) {
 		case AbstractColumn::ColumnMode::Text:
-			uiSearchReplace.cbDataType->setCurrentIndex(0);
+			uiSearchReplace.cbDataType->setCurrentIndex(uiSearchReplace.cbDataType->findData((int)DataType::Text));
 			uiSearchReplace.cbValueText->setCurrentText(m_initialPattern);
 			break;
 		case AbstractColumn::ColumnMode::Double:
 		case AbstractColumn::ColumnMode::Integer:
 		case AbstractColumn::ColumnMode::BigInt:
-			uiSearchReplace.cbDataType->setCurrentIndex(1);
+			uiSearchReplace.cbDataType->setCurrentIndex(uiSearchReplace.cbDataType->findData((int)DataType::Numeric));
+			;
 			bool ok;
 			QLocale().toDouble(pattern, &ok);
 			if (ok)
@@ -124,7 +134,8 @@ void SearchReplaceWidget::setInitialPattern(AbstractColumn::ColumnMode mode, con
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::Month:
-			uiSearchReplace.cbDataType->setCurrentIndex(2);
+			uiSearchReplace.cbDataType->setCurrentIndex(uiSearchReplace.cbDataType->findData((int)DataType::DateTime));
+			;
 			QDateTime value = QDateTime::fromString(m_initialPattern, defaultDateTimeFormat);
 			if (value.isValid())
 				uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(value.toMSecsSinceEpoch());
@@ -150,9 +161,9 @@ void SearchReplaceWidget::initSearchWidget() {
 
 	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
-	uiSearch.cbFind->addItems(conf.readEntry("SimpleValueHistory", QStringList()));
+	uiSearch.cbFind->addItems(conf.readEntry(QLatin1String("SimpleValueHistory"), QStringList()));
 	uiSearch.cbFind->setCurrentText(QString()); // will be set to the initial search pattern later
-	uiSearch.tbMatchCase->setChecked(conf.readEntry("SimpleMatchCase", false));
+	uiSearch.tbMatchCase->setChecked(conf.readEntry(QLatin1String("SimpleMatchCase"), false));
 
 	// connections
 	connect(uiSearch.cbFind->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
@@ -185,6 +196,10 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	m_searchReplaceWidget = new QWidget(this);
 	uiSearchReplace.setupUi(m_searchReplaceWidget);
 	static_cast<QVBoxLayout*>(layout())->insertWidget(1, m_searchReplaceWidget);
+
+	uiSearchReplace.cbDataType->addItem(i18n("Text"), int(DataType::Text));
+	uiSearchReplace.cbDataType->addItem(i18n("Numeric"), int(DataType::Numeric));
+	uiSearchReplace.cbDataType->addItem(i18n("DateTime"), int(DataType::DateTime));
 
 	uiSearchReplace.cbOperatorText->addItem(i18n("Equal To"), int(OperatorText::EqualTo));
 	uiSearchReplace.cbOperatorText->addItem(i18n("Not Equal To"), int(OperatorText::NotEqualTo));
@@ -220,6 +235,9 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.cbValue1->lineEdit()->setValidator(new QDoubleValidator(uiSearchReplace.cbValue1->lineEdit()));
 	uiSearchReplace.cbValue2->lineEdit()->setValidator(new QDoubleValidator(uiSearchReplace.cbValue2->lineEdit()));
 
+	uiSearchReplace.cbOrder->addItem(i18n("Column Major"), int(Order::ColumnMajor));
+	uiSearchReplace.cbOrder->addItem(i18n("Row Major"), int(Order::RowMajor));
+
 	// set meaninungful non-empty initial value for DateTime so the user doesn't need to type
 	// everything from scratch when switching to DateTime type
 	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
@@ -231,8 +249,8 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 
 	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
-	uiSearchReplace.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
-	uiSearchReplace.cbOrder->setCurrentIndex(conf.readEntry("Order", 0));
+	uiSearchReplace.cbDataType->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("DataType", 0)));
+	uiSearchReplace.cbOrder->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Order", 0)));
 	uiSearchReplace.tbMatchCase->setChecked(conf.readEntry("MatchCase", false));
 	uiSearchReplace.tbSelectionOnly->setChecked(conf.readEntry("SelectionOnly", false));
 	uiSearchReplace.cbOperator->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Operator", 0)));
@@ -250,6 +268,8 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.cbValue2->setCurrentText(QString());
 	uiSearchReplace.cbValueText->addItems(conf.readEntry("ValueTextHistory", QStringList()));
 	uiSearchReplace.cbValueText->setCurrentText(QString());
+	uiSearchReplace.cbReplace->addItems(conf.readEntry("ReplaceHistory", QStringList()));
+	uiSearchReplace.cbReplace->setCurrentText(QString());
 
 	// connections
 	connect(uiSearchReplace.cbDataType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::dataTypeChanged);
@@ -317,8 +337,18 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	});
 	connect(uiSearchReplace.bFindAll, &QPushButton::clicked, this, &SearchReplaceWidget::findAll);
 
-	connect(uiSearchReplace.bReplaceNext, &QPushButton::clicked, this, &SearchReplaceWidget::replaceNext);
-	connect(uiSearchReplace.bReplaceAll, &QPushButton::clicked, this, &SearchReplaceWidget::replaceAll);
+	connect(uiSearchReplace.cbReplace->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
+		replaceNext();
+		addCurrentTextToHistory(uiSearchReplace.cbReplace);
+	});
+	connect(uiSearchReplace.bReplaceNext, &QPushButton::clicked, this, [=]() {
+		replaceNext();
+		addCurrentTextToHistory(uiSearchReplace.cbReplace);
+	});
+	connect(uiSearchReplace.bReplaceAll, &QPushButton::clicked, this, [=]() {
+		replaceAll();
+		addCurrentTextToHistory(uiSearchReplace.cbReplace);
+	});
 	connect(uiSearchReplace.tbMatchCase, &QToolButton::toggled, this, [=]() {
 		findNext(false);
 	});
@@ -354,6 +384,14 @@ void SearchReplaceWidget::addCurrentTextToHistory(QComboBox* comboBox) const {
 		comboBox->insertItem(0, text);
 		comboBox->setCurrentIndex(0);
 	}
+}
+
+void SearchReplaceWidget::setDataType(DataType dataType) {
+	uiSearchReplace.cbDataType->setCurrentIndex(uiSearchReplace.cbDataType->findData((int)dataType));
+}
+
+void SearchReplaceWidget::setOrder(Order order) {
+	uiSearchReplace.cbOrder->setCurrentIndex(uiSearchReplace.cbOrder->findData((int)order));
 }
 
 // **********************************************************
@@ -444,7 +482,8 @@ void SearchReplaceWidget::switchFindReplace() {
 
 		m_searchReplaceWidget->show();
 
-		// TODO
+		// make the first column in the different QFrames having the same width
+		// TODO: doesn't work on first open
 		uiSearchReplace.cbDataType->setMinimumWidth(uiSearchReplace.cbOperator->width());
 		uiSearchReplace.cbOrder->setMinimumWidth(uiSearchReplace.cbOperator->width());
 		uiSearchReplace.cbOperatorText->setMinimumWidth(uiSearchReplace.cbOperator->width());

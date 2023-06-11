@@ -73,6 +73,9 @@ private Q_SLOTS:
 	void testSearchSimple00();
 
 	void testSearchExtended00();
+	void testSearchExtended01();
+	void testSearchExtended02();
+	void testSearchExtended03();
 
 	void testSearchReplace00();
 

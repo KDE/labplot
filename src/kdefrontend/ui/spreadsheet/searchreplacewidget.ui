@@ -53,21 +53,6 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <item>
-         <property name="text">
-          <string>Text</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Numeric</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>DateTime</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item>
@@ -417,16 +402,6 @@
         <property name="frame">
          <bool>true</bool>
         </property>
-        <item>
-         <property name="text">
-          <string>Column Major</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Row Major</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item>

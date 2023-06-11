@@ -1138,7 +1138,9 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
 	col->replaceValues(0, xData);
 
 	// sort
-	QBENCHMARK { sheet.sortColumns(nullptr, {col}, true); }
+	QBENCHMARK {
+		sheet.sortColumns(nullptr, {col}, true);
+	}
 }
 
 /*
@@ -1168,7 +1170,9 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 	col1->replaceInteger(0, yData);
 
 	// sort
-	QBENCHMARK { sheet.sortColumns(col0, {col0, col1}, true); }
+	QBENCHMARK {
+		sheet.sortColumns(col0, {col0, col1}, true);
+	}
 }
 
 // **********************************************************
@@ -1536,8 +1540,8 @@ Spreadsheet* SpreadsheetTest::createSearchReplaceSpreadsheet() {
 	col2->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col2->setIntegerAt(0, 1);
 	col2->setIntegerAt(1, 2);
-	col2->setIntegerAt(2, 3);
-	col2->setIntegerAt(3, 4);
+	col2->setIntegerAt(2, 4);
+	col2->setIntegerAt(3, 2);
 
 	// second text column
 	auto* col3 = sheet->column(2);
@@ -1560,15 +1564,19 @@ Spreadsheet* SpreadsheetTest::createSearchReplaceSpreadsheet() {
 	return sheet;
 }
 
+/*!
+ * simple search ignoring data types, column-major order
+ */
 void SpreadsheetTest::testSearchSimple00() {
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
 	project.addChild(sheet);
 
-	// navigate to the (0,0) cell and initialize the search&replace widget
+	// navigate to the (0,0) cell having the text value "A"
 	auto* view = static_cast<SpreadsheetView*>(sheet->view());
 	view->goToCell(0, 0);
 
+	// initialize the search&replace widget
 	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
 	searchReplaceWidget->setReplaceEnabled(false);
 
@@ -1580,9 +1588,8 @@ void SpreadsheetTest::testSearchSimple00() {
 		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
 	}
 
-	// checks:
-	// the initial cell text is "A", we navigate with 'next' and then back with 'prev'
-	// in the column-major order looking for "A"
+	// checks: the initial cell text is "A", we navigate with 'next'
+	// and then back with 'prev' in the column-major order looking for "A"
 
 	// initial
 	indexes = view->selectionModel()->selectedIndexes();
@@ -1615,6 +1622,14 @@ void SpreadsheetTest::testSearchSimple00() {
 	QCOMPARE(curIndex.row(), 3);
 	QCOMPARE(curIndex.column(), 2);
 
+	// next, last matching cell reached
+	searchReplaceWidget->findNextSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 2);
+
 	// previous
 	searchReplaceWidget->findPreviousSimple(true);
 	indexes = view->selectionModel()->selectedIndexes();
@@ -1638,14 +1653,357 @@ void SpreadsheetTest::testSearchSimple00() {
 	curIndex = indexes.constFirst();
 	QCOMPARE(curIndex.row(), 0);
 	QCOMPARE(curIndex.column(), 0);
+
+	// previous, last matching cell reached
+	searchReplaceWidget->findPreviousSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
 }
 
+/*!
+ * extended search for Text, column-major order
+ */
 void SpreadsheetTest::testSearchExtended00() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
 
+	// navigate to the (0,0) cell having the text value "A"
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	view->goToCell(0, 0);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Text);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::ColumnMajor);
+
+	auto indexes = view->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = sheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	// checks: the initial cell text is "A", we navigate with 'next'
+	// and then back with 'prev' in the column-major order looking for "A"
+
+	// initial
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	auto curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// next, last matching cell reached
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous, last matching cell reached
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+}
+
+/*!
+ * extended search for Text, row-major order
+ */
+void SpreadsheetTest::testSearchExtended01() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// navigate to the (0,0) cell having the text value "A"
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	view->goToCell(0, 0);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Text);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::RowMajor);
+
+	auto indexes = view->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = sheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	// checks: the initial cell text is "A", we navigate with 'next'
+	// and then back with 'prev' in the row-major order looking for "A"
+
+	// initial
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	auto curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next, last matching cell reached
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous, last matching cell reached
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+}
+
+/*!
+ * search for Numeric, column-major order
+ */
+void SpreadsheetTest::testSearchExtended02() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// navigate to the (1,1) cell having the numeric value "2"
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	view->goToCell(1, 1);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Numeric);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::ColumnMajor);
+
+	auto indexes = view->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = sheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	// checks: the initial cell text is "2", we navigate with 'next'
+	// and then back with 'prev' in the column-major order looking for "2"
+
+	// initial
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	auto curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 1);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 3);
+
+	// next, last matching cell reached
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 3);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 1);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+
+	// previous, last matching cell reached
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+}
+
+/*!
+ * search for Numeric, row major
+ */
+void SpreadsheetTest::testSearchExtended03() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// navigate to the (1,1) cell having the numeric value "2"
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	view->goToCell(1, 1);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Numeric);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::RowMajor);
+
+	auto indexes = view->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = sheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	// checks: the initial cell text is "2", we navigate with 'next'
+	// and then back with 'prev' in the column-major order looking for "2"
+
+	// initial
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	auto curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 3);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 1);
+
+	// next, last matching cell reached
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 1);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 3);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+
+	// previous, last matching cell reached
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
 }
 
 void SpreadsheetTest::testSearchReplace00() {
-
 }
 
 // **********************************************************

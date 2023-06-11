@@ -24,8 +24,6 @@ class QRadioButton;
 class SearchReplaceWidget : public QWidget {
 	Q_OBJECT
 
-	friend class SpreadsheetTest;
-
 public:
 	explicit SearchReplaceWidget(Spreadsheet*, QWidget* parent = nullptr);
 	~SearchReplaceWidget() override;
@@ -33,6 +31,7 @@ public:
 	enum class DataType { Text, Numeric, DateTime };
 	enum class Operator { EqualTo, NotEqualTo, BetweenIncl, BetweenExcl, GreaterThan, GreaterThanEqualTo, LessThan, LessThanEqualTo };
 	enum class OperatorText { EqualTo, NotEqualTo, StartsWith, EndsWith, Contain, NotContain, RegEx };
+	enum class Order { ColumnMajor, RowMajor };
 
 	void setReplaceEnabled(bool enabled);
 	void setInitialPattern(AbstractColumn::ColumnMode, const QString&);
@@ -74,6 +73,10 @@ private:
 	void addCurrentTextToHistory(QComboBox*) const;
 	void showExtendedContextMenu(bool forPattern, const QPoint&);
 	QVector<QString> capturePatterns(const QString& pattern) const;
+
+	friend class SpreadsheetTest;
+	void setDataType(DataType);
+	void setOrder(Order);
 
 private Q_SLOTS:
 	void dataTypeChanged(int index);
