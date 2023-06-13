@@ -77,6 +77,8 @@ private:
 	friend class SpreadsheetTest;
 	void setDataType(DataType);
 	void setOrder(Order);
+	void setTextOperator(OperatorText);
+	void setReplaceText(const QString&);
 
 private Q_SLOTS:
 	void dataTypeChanged(int index);

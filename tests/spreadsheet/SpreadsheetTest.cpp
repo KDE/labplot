@@ -1138,9 +1138,7 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
 	col->replaceValues(0, xData);
 
 	// sort
-	QBENCHMARK {
-		sheet.sortColumns(nullptr, {col}, true);
-	}
+	QBENCHMARK { sheet.sortColumns(nullptr, {col}, true); }
 }
 
 /*
@@ -1170,9 +1168,7 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 	col1->replaceInteger(0, yData);
 
 	// sort
-	QBENCHMARK {
-		sheet.sortColumns(col0, {col0, col1}, true);
-	}
+	QBENCHMARK { sheet.sortColumns(col0, {col0, col1}, true); }
 }
 
 // **********************************************************
@@ -2003,7 +1999,55 @@ void SpreadsheetTest::testSearchExtended03() {
 	QCOMPARE(curIndex.column(), 1);
 }
 
-void SpreadsheetTest::testSearchReplace00() {
+void SpreadsheetTest::testSearchFindAll() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, nullptr);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Text);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::ColumnMajor);
+	searchReplaceWidget->setTextOperator(SearchReplaceWidget::OperatorText::StartsWith);
+
+	// search for cells starting with "B" and highlight them ("find")
+	searchReplaceWidget->setInitialPattern(AbstractColumn::ColumnMode::Text, QLatin1String("B"));
+	searchReplaceWidget->findAll();
+
+	// checks
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.size(), 2);
+	QCOMPARE(indexes.at(0).row(), 1);
+	QCOMPARE(indexes.at(0).column(), 0);
+	QCOMPARE(indexes.at(1).row(), 0);
+	QCOMPARE(indexes.at(1).column(), 2);
+}
+
+void SpreadsheetTest::testSearchReplaceAll() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, nullptr);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Text);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::ColumnMajor);
+	searchReplaceWidget->setTextOperator(SearchReplaceWidget::OperatorText::RegEx);
+
+	// search for "A" or "C" and replace with "test"
+	searchReplaceWidget->setInitialPattern(AbstractColumn::ColumnMode::Text, QLatin1String("[A.C]"));
+	searchReplaceWidget->setReplaceText(QLatin1String("test"));
+	searchReplaceWidget->replaceAll();
+
+	// checks
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.at(0)->textAt(0), QLatin1String("test"));
+	QCOMPARE(columns.at(0)->textAt(2), QLatin1String("test"));
+	QCOMPARE(columns.at(2)->textAt(1), QLatin1String("test"));
+	QCOMPARE(columns.at(2)->textAt(2), QLatin1String("test"));
 }
 
 // **********************************************************
