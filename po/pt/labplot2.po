@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-12 00:42+0000\n"
-"PO-Revision-Date: 2023-06-02 09:46+0100\n"
+"PO-Revision-Date: 2023-06-12 19:24+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -16470,10 +16470,9 @@ msgstr " Seleccionar o ficheiro da imagem"
 #. i18n: ectx: property (toolTip), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:137
 #: src/kdefrontend/ui/datapickerimagewidget.ui:779
-#, fuzzy, kde-format
-#| msgid "Number of digits after the decimal point"
+#, kde-format
 msgid "Number of pixels between two neighbor data points"
-msgstr "Número de casas decimais"
+msgstr "Número de pixels entre dois pontos de dados vizinhos"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
@@ -16485,11 +16484,9 @@ msgstr " pontos"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:155
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgid "References"
-msgstr "Preferências"
+msgstr "Referências"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:171
@@ -16542,17 +16539,15 @@ msgstr "°"
 #. i18n: ectx: property (toolTip), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:235
 #: src/kdefrontend/ui/datapickerimagewidget.ui:245
-#, fuzzy, kde-format
-#| msgid "%1: set minimum segment length"
+#, kde-format
 msgid "Minimum segment length detection"
-msgstr "%1: mudar o tamanho mínimo do segmento"
+msgstr "Detecção do tamanho mínimo do segmento"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:248
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Min. Length:"
-msgstr "Tamanho:"
+msgstr "Tamanho Mín.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:280
@@ -16672,10 +16667,9 @@ msgstr "Tipo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:782
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Separation:"
-msgstr "Saturação:"
+msgstr "Separação:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:812
@@ -21810,9 +21804,3 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
-
-#~ msgid "Point Separation:"
-#~ msgstr "Separação dos Pontos:"
-
-#~ msgid "Reference Points"
-#~ msgstr "Pontos de Referência"

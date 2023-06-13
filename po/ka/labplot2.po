@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-12 00:42+0000\n"
-"PO-Revision-Date: 2023-06-02 05:55+0200\n"
+"PO-Revision-Date: 2023-06-12 05:50+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16102,11 +16102,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:155
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgid "References"
-msgstr "მორგება"
+msgstr "მიმართვები"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:171
@@ -16159,17 +16157,15 @@ msgstr "°"
 #. i18n: ectx: property (toolTip), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:235
 #: src/kdefrontend/ui/datapickerimagewidget.ui:245
-#, fuzzy, kde-format
-#| msgid "%1: set minimum segment length"
+#, kde-format
 msgid "Minimum segment length detection"
-msgstr "%1: დააყენეთ სეგმენტის მინიმალური სგრძე"
+msgstr "მინიმალური სეგმენტის სიგრძის განსაზღვრა"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:248
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Min. Length:"
-msgstr "ხანგრძლივობა:"
+msgstr "მინ. სიგრძე:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:280
@@ -16289,10 +16285,9 @@ msgstr "ტიპი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:782
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Separation:"
-msgstr "ჯერადობა:"
+msgstr "გაცალკევება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:812

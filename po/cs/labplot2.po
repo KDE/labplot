@@ -16128,11 +16128,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:155
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgid "References"
-msgstr "Předvolby"
+msgstr "Odkazy"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:171
@@ -16191,10 +16189,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:248
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Min. Length:"
-msgstr "Délka:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:280
@@ -16314,10 +16311,9 @@ msgstr "Typ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:782
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Separation:"
-msgstr "Nasycení:"
+msgstr "Oddělení:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:812
