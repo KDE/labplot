@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-12 00:42+0000\n"
-"PO-Revision-Date: 2023-06-11 15:14+0100\n"
+"PO-Revision-Date: 2023-06-15 21:48+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -16604,7 +16604,7 @@ msgstr "Malfono:"
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:52
 #, kde-format
 msgid "Comment Character:"
-msgstr "Komenta Karaktero:"
+msgstr "Komenta Signo:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:59
@@ -16872,7 +16872,7 @@ msgstr "Filtrilaj Opcioj"
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:79
 #, kde-format
 msgid "Comment character:"
-msgstr "Komenta karaktero:"
+msgstr "Komenta signo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparator)
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
