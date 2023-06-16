@@ -107,7 +107,8 @@ SearchReplaceWidget::~SearchReplaceWidget() {
 		if (!items.empty())
 			conf.writeEntry("ReplaceTextHistory", items);
 
-		// TODO: history for replace datetime value
+		// history for replace datetime value
+		conf.writeEntry("ReplaceDateTimeHistory", uiSearchReplace.dteReplace->dateTime());
 	}
 }
 
@@ -146,9 +147,9 @@ void SearchReplaceWidget::setInitialPattern(AbstractColumn::ColumnMode mode, con
 			uiSearchReplace.cbDataType->setCurrentIndex(uiSearchReplace.cbDataType->findData((int)DataType::DateTime));
 			auto value = QDateTime::fromString(m_initialPattern, defaultDateTimeFormat);
 			if (value.isValid())
-				uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(value.toMSecsSinceEpoch());
+				uiSearchReplace.dteValue1->setDateTime(value);
 			else
-				uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(QDateTime::currentDateTime().toMSecsSinceEpoch());
+				uiSearchReplace.dteValue1->setDateTime(QDateTime::currentDateTime());
 			break;
 		}
 	}
@@ -248,12 +249,13 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 
 	// set meaninungful non-empty initial value for DateTime so the user doesn't need to type
 	// everything from scratch when switching to DateTime type
-	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(now);
-	uiSearchReplace.dteValue2->setMSecsSinceEpochUTC(now);
+	auto now = QDateTime::currentDateTime();
+	uiSearchReplace.dteValue1->setDateTime(now);
+	uiSearchReplace.dteValue2->setDateTime(now);
 
 	uiSearchReplace.dteValue1->setDisplayFormat(defaultDateTimeFormat);
 	uiSearchReplace.dteValue2->setDisplayFormat(defaultDateTimeFormat);
+	uiSearchReplace.dteReplace->setDisplayFormat(defaultDateTimeFormat);
 
 	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SearchReplaceWidget"));
@@ -280,7 +282,7 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.cbReplace->setCurrentText(QString());
 	uiSearchReplace.cbReplaceText->addItems(conf.readEntry("ReplaceTextHistory", QStringList()));
 	uiSearchReplace.cbReplaceText->setCurrentText(QString());
-	// TODO: datetime
+	uiSearchReplace.dteReplace->setDateTime(conf.readEntry("ReplaceDateTimeHistory", QDateTime::currentDateTime()));
 
 	// connections
 	connect(uiSearchReplace.cbDataType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SearchReplaceWidget::dataTypeChanged);
@@ -300,11 +302,11 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	connect(uiSearchReplace.cbValueText->lineEdit(), &QLineEdit::returnPressed, this, [=]() {
 		findNext(true);
 	});
-	connect(uiSearchReplace.dteValue1, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, [=]() {
+	connect(uiSearchReplace.dteValue1, &QDateTimeEdit::dateTimeChanged, this, [=]() {
 		m_patternFound = false;
 		findNext(false);
 	});
-	connect(uiSearchReplace.dteValue2, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, [=]() {
+	connect(uiSearchReplace.dteValue2, &QDateTimeEdit::dateTimeChanged, this, [=]() {
 		m_patternFound = false;
 		findNext(false);
 	});
@@ -524,9 +526,9 @@ void SearchReplaceWidget::switchFindReplace() {
 			case DataType::DateTime: {
 				QDateTime value = QDateTime::fromString(pattern, defaultDateTimeFormat);
 				if (value.isValid())
-					uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(value.toMSecsSinceEpoch());
+					uiSearchReplace.dteValue1->setDateTime(value);
 				else
-					uiSearchReplace.dteValue1->setMSecsSinceEpochUTC(QDateTime::currentDateTime().toMSecsSinceEpoch());
+					uiSearchReplace.dteValue1->setDateTime(QDateTime::currentDateTime());
 				break;
 			}
 			}
@@ -718,24 +720,31 @@ bool SearchReplaceWidget::findNext(bool proceed, bool findAndReplace) {
 	const auto type = static_cast<DataType>(uiSearchReplace.cbDataType->currentIndex());
 	QString pattern1;
 	QString pattern2;
+	QString replaceValue;
 	switch (type) {
 	case DataType::Text:
 		pattern1 = uiSearchReplace.cbValueText->currentText();
 		addCurrentTextToHistory(uiSearchReplace.cbValueText);
-		if (findAndReplace)
+		if (findAndReplace) {
+			replaceValue = uiSearchReplace.cbReplaceText->currentText();
 			addCurrentTextToHistory(uiSearchReplace.cbReplaceText);
+		}
 		break;
 	case DataType::Numeric:
 		pattern1 = uiSearchReplace.cbValue1->currentText();
 		pattern2 = uiSearchReplace.cbValue2->currentText();
 		addCurrentTextToHistory(uiSearchReplace.cbValue1);
 		addCurrentTextToHistory(uiSearchReplace.cbValue2);
-		if (findAndReplace)
+		if (findAndReplace) {
+			replaceValue = uiSearchReplace.cbReplace->currentText();
 			addCurrentTextToHistory(uiSearchReplace.cbReplace);
+		}
 		break;
 	case DataType::DateTime:
 		pattern1 = uiSearchReplace.dteValue1->text();
 		pattern2 = uiSearchReplace.dteValue2->text();
+		if (findAndReplace)
+			replaceValue = uiSearchReplace.dteReplace->text();
 		break;
 	}
 
@@ -744,7 +753,6 @@ bool SearchReplaceWidget::findNext(bool proceed, bool findAndReplace) {
 		return true;
 	}
 
-	QString replaceValue = uiSearchReplace.cbReplace->currentText();
 	if (findAndReplace && replaceValue.isEmpty())
 		return false;
 
@@ -885,7 +893,7 @@ bool SearchReplaceWidget::findPrevious(bool proceed) {
 		break;
 	case DataType::DateTime:
 		pattern1 = uiSearchReplace.dteValue1->text();
-		pattern1 = uiSearchReplace.dteValue2->text();
+		pattern2 = uiSearchReplace.dteValue2->text();
 		break;
 	}
 
@@ -1088,7 +1096,7 @@ void SearchReplaceWidget::replaceAll() {
 		break;
 	case DataType::DateTime:
 		pattern1 = uiSearchReplace.dteValue1->text();
-		pattern1 = uiSearchReplace.dteValue2->text();
+		pattern2 = uiSearchReplace.dteValue2->text();
 		break;
 	}
 
@@ -1179,7 +1187,7 @@ bool SearchReplaceWidget::checkColumnRow(Column* column,
 		match = checkCellNumeric(column->valueAt(row), pattern1, pattern2, opNumeric);
 		break;
 	case DataType::DateTime:
-		match = checkCellDateTime(column->dateTimeAt(row), pattern1, pattern2, opDateTime);
+		match = checkCellDateTime(column->dateTimeAt(row), uiSearchReplace.dteValue1->dateTime(), uiSearchReplace.dteValue2->dateTime(), opDateTime);
 		break;
 	}
 
@@ -1287,27 +1295,16 @@ bool SearchReplaceWidget::checkCellNumeric(double cellValue, const QString& patt
 	return match;
 }
 
-bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime, const QString& pattern1, const QString& pattern2, Operator op) {
-	if (pattern1.isEmpty())
-		return false;
-
-	if ((op == Operator::BetweenIncl || op == Operator::BetweenExcl) && pattern2.isEmpty())
-		return false;
-
-	QDateTime patternDateTimeValue1 = QDateTime::fromString(pattern1, defaultDateTimeFormat);
+bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime, const QDateTime& patternDateTimeValue1, const QDateTime& patternDateTimeValue2, Operator op) {
 	if (!patternDateTimeValue1.isValid())
 		return false;
 
-	QDateTime patternDateTimeValue2;
-	if (op == Operator::BetweenIncl || op == Operator::BetweenExcl) {
-		patternDateTimeValue2 = QDateTime::fromString(pattern2, defaultDateTimeFormat);
-		if (!patternDateTimeValue2.isValid())
-			return false;
-	}
+	if ((op == Operator::BetweenIncl || op == Operator::BetweenExcl) && !patternDateTimeValue2.isValid())
+		return false;
 
 	const double cellValue = cellValueDateTime.toMSecsSinceEpoch();
 	const double patternValue1 = patternDateTimeValue1.toMSecsSinceEpoch();
-	const double patternValue2 = patternDateTimeValue1.toMSecsSinceEpoch();
+	const double patternValue2 = patternDateTimeValue2.toMSecsSinceEpoch();
 	bool match = false;
 
 	switch (op) {
@@ -1372,8 +1369,8 @@ void SearchReplaceWidget::setValue(Column* column, DataType type, int row, const
 		break;
 	}
 	case DataType::DateTime:
-		const auto value = QDateTime::fromString(replaceValue, defaultDateTimeFormat);
-		if (!value.isValid())
+		const auto& value = uiSearchReplace.dteReplace->dateTime();
+		if (value.isValid())
 			column->setDateTimeAt(row, value);
 		break;
 	}

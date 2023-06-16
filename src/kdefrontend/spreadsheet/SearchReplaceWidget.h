@@ -65,7 +65,7 @@ private:
 						Qt::CaseSensitivity cs);
 	bool checkCellText(const QString& value, const QString& pattern, OperatorText, Qt::CaseSensitivity);
 	bool checkCellNumeric(double value, const QString& pattern1, const QString& pattern2, Operator);
-	bool checkCellDateTime(const QDateTime& value, const QString& pattern1, const QString& pattern2, Operator);
+	bool checkCellDateTime(const QDateTime& value, const QDateTime& pattern1, const QDateTime& pattern2, Operator);
 	void setValue(Column*, DataType, int row, const QString& value);
 	void highlight(DataType, bool invalid);
 	void showMessage(const QString&);
