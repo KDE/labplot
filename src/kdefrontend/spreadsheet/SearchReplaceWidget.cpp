@@ -407,7 +407,7 @@ void SearchReplaceWidget::dataTypeChanged(int index) {
 		uiSearchReplace.lReplace->hide();
 		uiSearchReplace.cbReplace->hide();
 
-		//hide datetime
+		// hide datetime
 		uiSearchReplace.frameDateTime->hide();
 		uiSearchReplace.lReplaceDateTime->hide();
 		uiSearchReplace.dteReplace->hide();
@@ -1295,7 +1295,10 @@ bool SearchReplaceWidget::checkCellNumeric(double cellValue, const QString& patt
 	return match;
 }
 
-bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime, const QDateTime& patternDateTimeValue1, const QDateTime& patternDateTimeValue2, Operator op) {
+bool SearchReplaceWidget::checkCellDateTime(const QDateTime& cellValueDateTime,
+											const QDateTime& patternDateTimeValue1,
+											const QDateTime& patternDateTimeValue2,
+											Operator op) {
 	if (!patternDateTimeValue1.isValid())
 		return false;
 
