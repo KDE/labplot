@@ -4,6 +4,7 @@ New features:
 		* Add possibility to use column labels as axis ticks
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
+		* Extended search and replace
 
 -----2.10.1 () -----
 Bug fixes:

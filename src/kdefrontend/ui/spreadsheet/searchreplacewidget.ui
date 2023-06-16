@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>793</width>
-    <height>274</height>
+    <height>312</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -424,22 +424,28 @@
           </widget>
          </item>
          <item row="0" column="2">
-          <widget class="UTCDateTimeEdit" name="dteValue1">
+          <widget class="QDateTimeEdit" name="dteValue1">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="timeSpec">
+            <enum>Qt::UTC</enum>
+           </property>
           </widget>
          </item>
          <item row="0" column="5">
-          <widget class="UTCDateTimeEdit" name="dteValue2">
+          <widget class="QDateTimeEdit" name="dteValue2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="timeSpec">
+            <enum>Qt::UTC</enum>
            </property>
           </widget>
          </item>
@@ -537,12 +543,15 @@
     </widget>
    </item>
    <item row="4" column="2">
-    <widget class="UTCDateTimeEdit" name="dteReplace">
+    <widget class="QDateTimeEdit" name="dteReplace">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="timeSpec">
+      <enum>Qt::UTC</enum>
      </property>
     </widget>
    </item>
@@ -574,13 +583,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>UTCDateTimeEdit</class>
-   <extends>QDateTimeEdit</extends>
-   <header>UTCDateTimeEdit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
