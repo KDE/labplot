@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-12 00:42+0000\n"
+"POT-Creation-Date: 2023-06-17 00:42+0000\n"
 "PO-Revision-Date: 2023-06-11 14:05+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -373,6 +373,7 @@ msgstr "Groot geheel getal"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:91
 #: src/commonfrontend/worksheet/WorksheetView.cpp:215
 #: src/commonfrontend/worksheet/WorksheetView.cpp:377
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1495
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:280
@@ -438,13 +439,13 @@ msgid "%1: unmask cells"
 msgstr "%1: cellen demaskeren"
 
 #: src/backend/core/abstractcolumncommands.cpp:239
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2419
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2428
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: stel formaat heatmap in"
 
 #: src/backend/core/abstractcolumncommands.cpp:266
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2436
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2445
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: formaat heatmap verwijderen"
@@ -674,7 +675,7 @@ msgid "%1: change cell values"
 msgstr "%1: wijzig celwaarden"
 
 #: src/backend/core/column/columncommands.cpp:516
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2634
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2643
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: stel doel plot in"
@@ -702,6 +703,7 @@ msgstr "%1: geef waarde op voor rij %2"
 
 #: src/backend/core/column/columncommands.h:283
 #: src/backend/matrix/matrixcommands.cpp:104
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1127
 #, kde-format
 msgid "%1: replace values"
 msgstr "%1: waarden vervangen"
@@ -1206,10 +1208,10 @@ msgstr "Index"
 #: src/backend/datasources/filters/AsciiFilter.cpp:2098
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:614
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2315
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2336
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2354
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2371
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2324
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2345
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2363
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2380
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:154
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:187
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -2395,7 +2397,7 @@ msgstr "Constante van Stefan-Boltzmann"
 
 #: src/backend/gsl/constants.cpp:73
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:431
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:494
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:501
 #, kde-format
 msgid "Gauss"
 msgstr "Gauss"
@@ -3433,6 +3435,8 @@ msgstr "if(voorwaarde, ifWaar, ifOnwaar)"
 #: src/backend/gsl/functions.cpp:230 src/backend/lib/XmlStreamReader.cpp:58
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:74
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:220
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:354
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:412
 #, kde-format
 msgid "and"
 msgstr "en"
@@ -5282,7 +5286,7 @@ msgstr "x"
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:474
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Linear"
 msgstr "lineair"
@@ -5332,13 +5336,13 @@ msgid "unexpected end of document"
 msgstr "onverwacht einde document"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3548
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3552
 #, kde-format
 msgid "FITS image"
 msgstr "FITS afbeelding"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3548
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3552
 #, kde-format
 msgid "FITS table"
 msgstr "FITS-tabel"
@@ -5657,7 +5661,7 @@ msgstr "Imaginaire gedeelte"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:478
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:485
 #, kde-format
 msgid "Power"
 msgstr "Macht"
@@ -5815,7 +5819,7 @@ msgstr "Statistieken (verdelingen)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:514
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:521
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:147
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1176
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:245
@@ -5827,7 +5831,7 @@ msgid "Custom"
 msgstr "Aangepast"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:490
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:497
 #, kde-format
 msgid "Inverse Exponential"
 msgstr "Invers exponentieel"
@@ -5855,7 +5859,7 @@ msgstr "Gaussisch (normaal)"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:435
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:498
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:505
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr "Cauchy-Lorentz"
@@ -5887,7 +5891,7 @@ msgstr "Arctangens"
 
 #: src/backend/nsl/nsl_fit.c:45
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:443
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:513
 #, kde-format
 msgid "Hyperbolic Tangent"
 msgstr "Hyperbolische tangens"
@@ -7186,7 +7190,7 @@ msgstr "xy-kromme"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:344
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1629
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:452
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:459
 #: src/commonfrontend/worksheet/WorksheetView.cpp:342
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:82
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:139
@@ -7196,7 +7200,7 @@ msgstr "Histogram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:345
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1670
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:456
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:463
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:536
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:145
 #, kde-format
@@ -7205,7 +7209,7 @@ msgstr "Staafdiagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:346
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1674
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:454
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:461
 #: src/commonfrontend/worksheet/WorksheetView.cpp:343
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:534
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:142
@@ -7260,7 +7264,7 @@ msgstr "Integratie"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:353
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:407
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1770
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:471
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:478
 #: src/commonfrontend/worksheet/WorksheetView.cpp:368
 #: src/commonfrontend/worksheet/WorksheetView.cpp:407
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:110
@@ -7276,7 +7280,7 @@ msgstr "Glad maken"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:530
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1790
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:571
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:578
 #: src/commonfrontend/worksheet/WorksheetView.cpp:173
 #: src/commonfrontend/worksheet/WorksheetView.cpp:369
 #: src/commonfrontend/worksheet/WorksheetView.cpp:408
@@ -7287,7 +7291,7 @@ msgstr "Aanpassen"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:355
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1832
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:518
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:525
 #: src/commonfrontend/worksheet/WorksheetView.cpp:371
 #: src/commonfrontend/worksheet/WorksheetView.cpp:410
 #, kde-format
@@ -7377,19 +7381,19 @@ msgid "Reference Range"
 msgstr "Referentiereeks"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:404
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:463
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:470
 #, kde-format
 msgid "Differentiate"
 msgstr "Differentiëren"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:405
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:466
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:473
 #, kde-format
 msgid "Integrate"
 msgstr "Integreren"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:469
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:476
 #, kde-format
 msgid "Interpolate"
 msgstr "Interpoleren"
@@ -7400,13 +7404,13 @@ msgid "Convolute/Deconvolute"
 msgstr "Convolutie/deconvolutie"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:482
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:489
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr "Exponentieel (1e graads)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:486
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:493
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr "Exponentieel (2e graads)"
@@ -7417,13 +7421,13 @@ msgid "Inverse exponential"
 msgstr "Invers exponentieel"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:502
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:509
 #, kde-format
 msgid "Arc Tangent"
 msgstr "Arctangens"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:510
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:517
 #, kde-format
 msgid "Error Function"
 msgstr "Error Function"
@@ -8987,35 +8991,35 @@ msgid "Curve"
 msgstr "Kromme"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:866
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3842
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3792
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3846
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2408
 #, kde-format
 msgid "Failed to export"
 msgstr "Exporteren is mislukt"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:866
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3842
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3792
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3846
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2408
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Schrijven naar '%1' is mislukt. Controleer a.u.b. het pad."
 
 #: src/commonfrontend/matrix/MatrixView.cpp:120
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:266
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:271
 #, kde-format
 msgid "Cu&t"
 msgstr "Kni&ppen"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:121
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:267
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:272
 #, kde-format
 msgid "&Copy"
 msgstr "&Kopiëren"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:122
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:268
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:273
 #, kde-format
 msgid "Past&e"
 msgstr "Plakk&en"
@@ -9026,32 +9030,32 @@ msgid "Clea&r Selection"
 msgstr "Selectie &wissen"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:124
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:272
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:277
 #: src/commonfrontend/worksheet/WorksheetView.cpp:127
 #, kde-format
 msgid "Select All"
 msgstr "Alles selecteren"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:136
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:281
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:286
 #, kde-format
 msgid "Function Values"
 msgstr "Functiewaarden"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:137
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:282
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:287
 #, kde-format
 msgid "Const Values"
 msgstr "Const waarden"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:138
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:303
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:310
 #, kde-format
 msgid "Clear Content"
 msgstr "Inhoud wissen"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:139
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:292
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
 #, kde-format
 msgid "&Go to Cell..."
 msgstr "Naar cel &gaan..."
@@ -9146,7 +9150,7 @@ msgid "&Insert Empty Rows"
 msgstr "Lege rijen &invoegen"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:184
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:452
 #, kde-format
 msgid "Remo&ve Rows"
 msgstr "Rijen &verwijderen"
@@ -9157,19 +9161,19 @@ msgid "Clea&r Rows"
 msgstr "Rijen &wissen"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:243
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:528
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:535
 #, kde-format
 msgid "Selection"
 msgstr "Selectie"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:265
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:621
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:628
 #, kde-format
 msgid "Generate Data"
 msgstr "&Gegevens genereren"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:270
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:636
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:643
 #, kde-format
 msgid "Manipulate Data"
 msgstr "Gegevens manipuleren"
@@ -9217,7 +9221,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: geselecteerde cel(len) knippen"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:684
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1726
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1735
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: uit klembord plakken"
@@ -9364,19 +9368,19 @@ msgid_plural "Project Explorer: delete %1 selected objects"
 msgstr[0] "Projectverkenner: %1 geselecteerd object wissen"
 msgstr[1] "Projectverkenner: %1 geselecteerde objecten wissen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:269
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:274
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:73
 #, kde-format
 msgid "&Mask"
 msgstr "&Maskeren"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:270
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:275
 #, kde-format
 msgid "&Unmask"
 msgstr "$Masker wissen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:271
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:276
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:453
 #, kde-format
 msgid "Clea&r Content"
 msgstr "Inhoud &wissen"
@@ -9384,308 +9388,316 @@ msgstr "Inhoud &wissen"
 #. i18n("Assign &Formula"), this);
 #. action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
 #. action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:277
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:282
 #, kde-format
 msgid "Row Numbers"
 msgstr "Rijnummers"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:278
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:283
 #, kde-format
 msgid "Uniform Random Values"
 msgstr "Uniforme willekeurige getallen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:279
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:284
 #, kde-format
 msgid "Random Values"
 msgstr "Willekeurige getallen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:280
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:285
 #, kde-format
 msgid "Equidistant Values"
 msgstr "Waarden op onderling gelijke afstanden"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:284
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:289
 #, kde-format
 msgid "Sample Values"
 msgstr "Samplewaarden"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:285
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:290
 #, kde-format
 msgid "Flatten Columns"
 msgstr "Kolommen plat maken"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:288
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:293
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1108
 #, kde-format
 msgid "Show Comments"
 msgstr "Commentaar tonen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:289
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #, kde-format
 msgid "Clear Spreadsheet"
 msgstr "Werkblad wissen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:290
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:295
 #, kde-format
 msgid "Clear Masks"
 msgstr "Maskers wissen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:291
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:296
 #, kde-format
 msgid "&Sort Spreadsheet"
 msgstr "Werkblad &sorteren"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:293
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:298
 #, kde-format
 msgid "&Search"
 msgstr "&Zoeken"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:295
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:432
+#. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:225
+#, fuzzy, kde-format
+#| msgid "Replace"
+msgid "&Replace"
+msgstr "Vervangen"
+
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:439
 #, kde-format
 msgid "Column Statistics..."
 msgstr "Kolomstatistieken..."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:298
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:305
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Voeg kolom links in"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:299
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:306
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Voeg kolom rechts in"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:307
 #, kde-format
 msgid "Insert Multiple Columns Left"
 msgstr "Voeg meerdere kolommen links in"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:301
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:308
 #, kde-format
 msgid "Insert Multiple Columns Right"
 msgstr "Voeg meerdere kolommen rechts in"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
 msgid "Remove Columns"
 msgstr "Kolommen verwijderen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:304
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1595
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:311
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1604
 #, kde-format
 msgid "Freeze Column"
 msgstr "Kolom bevriezen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:338
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:345
 #, kde-format
 msgid "Add"
 msgstr "Toevoegen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:340
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:347
 #, kde-format
 msgid "Subtract"
 msgstr "Aftrekken"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:342
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:349
 #, kde-format
 msgid "Multiply"
 msgstr "Vermenigvuldigen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:344
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:351
 #, kde-format
 msgid "Divide"
 msgstr "Delen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:346
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:353
 #, kde-format
 msgid "Drop"
 msgstr "Laten vallen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:347
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:354
 #, kde-format
 msgid "Mask"
 msgstr "Maskeren"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:355
 #, kde-format
 msgid "Reverse"
 msgstr "Omgekeerd"
 
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:352
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
 #, kde-format
 msgid "Subtract Baseline"
 msgstr "Basislijn aftrekken"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:364
 #, kde-format
 msgid "Divide by Sum"
 msgstr "Delen door som"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:360
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:367
 #, kde-format
 msgid "Divide by Min"
 msgstr "Delen door min"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:363
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:370
 #, kde-format
 msgid "Divide by Max"
 msgstr "Delen door max"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:366
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:373
 #, kde-format
 msgid "Divide by Count"
 msgstr "Delen door aantal"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:369
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:376
 #, kde-format
 msgid "Divide by Mean"
 msgstr "Delen door gemiddelde"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:372
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:379
 #, kde-format
 msgid "Divide by Median"
 msgstr "Delen door mediaan"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:375
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:382
 #, kde-format
 msgid "Divide by Mode"
 msgstr "Delen door modus"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:378
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:385
 #, kde-format
 msgid "Divide by Range"
 msgstr "Delen door bereik"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:381
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:388
 #, kde-format
 msgid "Divide by SD"
 msgstr "Delen door SD"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:384
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:391
 #, kde-format
 msgid "Divide by MAD"
 msgstr "Delen door MAD"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:387
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:394
 #, kde-format
 msgid "Divide by IQR"
 msgstr "Delen door IQR"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:390
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:397
 #, kde-format
 msgid "(x-Mean)/SD"
 msgstr "(x-gemiddelde)/SD"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:393
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:400
 #, kde-format
 msgid "(x-Median)/MAD"
 msgstr "(x-mediaan)/MAD"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:396
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:403
 #, kde-format
 msgid "(x-Median)/IQR"
 msgstr "(x-mediaan)/IQR"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:399
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:406
 #, kde-format
 msgid "Rescale to [a, b]"
 msgstr "Herschalen naar [a, b]"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:429
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:436
 #, kde-format
 msgid "&Selected Columns"
 msgstr "Ge&selecteerde kolommen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:430
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:437
 #, kde-format
 msgid "&Ascending"
 msgstr "&Oplopend"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:431
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:438
 #, kde-format
 msgid "&Descending"
 msgstr "Aflopen&d"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:435
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
 #, kde-format
 msgid "Heatmap"
 msgstr "Heatmap"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:436
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
 #, kde-format
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:439
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Voeg rij boven in"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:447
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Voeg rij onder in"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
 #, kde-format
 msgid "Insert Multiple Rows Above"
 msgstr "Voeg meerdere rijen boven in"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:444
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:451
 #, kde-format
 msgid "Insert Multiple Rows Below"
 msgstr "Voeg meerdere rijen onder in"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:447
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:454
 #, kde-format
 msgid "Row Statisti&cs"
 msgstr "&Rijstatistieken"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:457
 #: src/commonfrontend/worksheet/WorksheetView.cpp:341
 #, kde-format
 msgid "xy-Curve"
 msgstr "xy-kromme"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:467
 #, kde-format
 msgid "Reduce Data"
 msgstr "Gegevens vereenvoudigen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:555
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:562
 #, kde-format
 msgid "Plot Data"
 msgstr "Gegevens plotten"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:561
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:568
 #, kde-format
 msgid "Conditional Formatting"
 msgstr "Voorwaardelijke opmaak"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:589
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:596
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr "Gegevens analyseren en plotten"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:603
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:610
 #, kde-format
 msgid "Set Column As"
 msgstr "Kolom instellen als"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:672
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:679
 #, kde-format
 msgid "Normalize"
 msgstr "Normaliseren"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:695
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:702
 #, kde-format
 msgid "Ladder of Powers"
 msgstr "Ladder van machten"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:710
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:717
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
 #, kde-format
 msgid "Sort"
@@ -9696,93 +9708,93 @@ msgstr "Sorteren"
 msgid "Hide Comments"
 msgstr "Commentaar verbergen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1599
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1608
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "Kolom vrijgeven"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1645
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1654
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: geselecteerde cellen knippen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1965
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1974
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Niet genoeg geheugen om deze bewerking af te maken."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1979
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1988
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: geselecteerde cellen maskeren"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2021
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2030
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: geselecteerde cellen demaskeren"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2079
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2088
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: cellen vullen met rijnummers"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2144
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2153
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: kolom vullen met rijnummers"
 msgstr[1] "%1: kolommen vullen met rijnummers"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2186
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2195
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: cellen vullen met willekeurige waarden"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2306
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2315
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: cellen vullen met constante waarden"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2314
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2336
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2354
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2371
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2323
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2345
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2363
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2380
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Selectie vullen met constante waarde"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2456
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2490
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2465
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2499
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Lege kolommen invoegen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2457
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2491
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2466
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2500
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Voer aantal in te voegen kolommen in"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2509
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2518
 #, kde-format
 msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: lege kolom invoegen"
 msgstr[1] "%1: lege kolommen invoegen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2570
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2579
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: geselecteerde kolommen verwijderen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2667
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2676
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: omgekeerde kolom"
 msgstr[1] "%1: omgekeerde kolommen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2740
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2749
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -9791,174 +9803,161 @@ msgstr ""
 "De geselecteerde kolommen hebben verschillende typen gegevens en kunnen "
 "daarom niet plat gemaakt worden. "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2778
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2787
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: kolommen normaliseren"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2798
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2807
 #, kde-format
 msgid "Sum = 0"
 msgstr "Som = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2809
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2818
 #, kde-format
 msgid "Min = 0"
 msgstr "Min = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2820
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2829
 #, kde-format
 msgid "Max = 0"
 msgstr "Max = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2831
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2840
 #, kde-format
 msgid "Count = 0"
 msgstr "Aantal = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2842
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2851
 #, kde-format
 msgid "Mean = 0"
 msgstr "Gemiddelde = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2853
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2862
 #, kde-format
 msgid "Median = 0"
 msgstr "Mediaan = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2865
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2874
 #, kde-format
 msgid "Mode = 0"
 msgstr "Modus = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2867
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2876
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'Modus niet gedefinieerd'"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2878
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2887
 #, kde-format
 msgid "Range = 0"
 msgstr "Bereik = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2889
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2923
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2898
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2932
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2900
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2935
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2909
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2944
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2911
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2947
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2920
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2956
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2959
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2968
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "Max - Min = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2978
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2987
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normeren onmogelijk"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2990
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2999
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: kolommen machttransformatie"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3112
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3121
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: kolomstatistieken"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3143
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3152
 #, kde-format
 msgid "Selection in %1"
 msgstr "Selectie in %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3186
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3195
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: rijstatistieken"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3196
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3205
 #, kde-format
 msgid "Row %1"
 msgstr "Rij %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3221
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3260
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3230
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3269
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Meerdere rijen invoegen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3222
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3261
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3231
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3270
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Voer aantal in te voegen  rijen in"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3241
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3280
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3250
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3289
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: lege rij invoegen"
 msgstr[1] "%1: lege rijen invoegen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3296
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3305
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: geselecteerde rijen verwijderen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3309
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3318
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr "%1: geselecteerde rijen wissen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3359
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3368
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: geselecteerde cellen wissen"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3418
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
-#: src/kdefrontend/examples/ExamplesWidget.cpp:53
-#, kde-format
-msgid "Search..."
-msgstr "Zoeken..."
-
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3428
-#, kde-format
-msgid "End Search"
-msgstr "Einde zoeken"
-
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3605
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3609
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Rekenblad afdrukken"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4210
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4214
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Kon  SQLite-database %1 niet aanmaken."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4242
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4246
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Kon tabel in de SQLite-database %1 niet aanmaken."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4295
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4299
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Waarden invoeren in de tabel is mislukt."
@@ -10378,6 +10377,13 @@ msgstr "Schakelen tussen tonen van lijsten of pictogrammen"
 #, kde-format
 msgid "Enter the keyword you want to search for"
 msgstr "Voer het sleutelwoord in voor zoeken"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
+#: src/kdefrontend/examples/ExamplesWidget.cpp:53
+#, kde-format
+msgid "Search..."
+msgstr "Zoeken..."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:32
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:47
@@ -12240,6 +12246,7 @@ msgid "%1-Range:"
 msgstr "%1-bereik:"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:654
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:210
 #, kde-format
 msgid "Numeric"
 msgstr "Numeriek"
@@ -12397,11 +12404,13 @@ msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 cartesische plots: sjabloon \"%2\" ingelezen"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:259
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:247
 #, kde-format
 msgid "Column Major"
 msgstr "Hoofdkolom"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:260
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:248
 #, kde-format
 msgid "Row Major"
 msgstr "Hoofdrij"
@@ -14720,6 +14729,8 @@ msgstr "Voorkeuren [Gewijzigd]"
 #: src/kdefrontend/SettingsGeneralPage.cpp:25
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:54
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:241
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:317
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:405
 #, kde-format
 msgid "min."
 msgstr "min."
@@ -15057,71 +15068,93 @@ msgstr ""
 "Geef de lijst op van paren van waardenamen als in het volgend voorbeeld:"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:44
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:222
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:231
 #, kde-format
 msgid "Equal to"
 msgstr "Gelijk aan"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:45
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:223
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:232
 #, kde-format
 msgid "Not Equal to"
 msgstr "Niet gelijk aan"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:46
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:224
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:233
 #, kde-format
 msgid "Between (Incl. End Points)"
 msgstr "Tussen (Incl. grenzen)"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:47
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:225
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:234
 #, kde-format
 msgid "Between (Excl. End Points)"
 msgstr "Tussen (excl. grenzen)"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:48
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:226
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:235
 #, kde-format
 msgid "Greater than"
 msgstr "Groter dan"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:49
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:227
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:236
 #, kde-format
 msgid "Greater than or Equal to"
 msgstr "Groter dan of gelijk aan"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:50
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:228
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:237
 #, kde-format
 msgid "Less than"
 msgstr "Kleiner dan"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:51
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:229
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:238
 #, kde-format
 msgid "Less than or Equal to"
 msgstr "Kleiner dan of gelijk aan"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:56
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:213
 #, kde-format
 msgid "Equal To"
 msgstr "Gelijk aan"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:57
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:214
 #, kde-format
 msgid "Not Equal To"
 msgstr "Niet gelijk aan"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:58
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:215
 #, kde-format
 msgid "Starts With"
 msgstr "Begint met"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:59
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:216
 #, kde-format
 msgid "Ends With"
 msgstr "Eindigt met"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:60
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:217
 #, kde-format
 msgid "Contains"
 msgstr "Bevat"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:61
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:218
 #, kde-format
 msgid "Does Not Contain"
 msgstr "Bevat niet"
@@ -15690,6 +15723,203 @@ msgstr "%1: samplewaarden"
 #, kde-format
 msgid "Sample of %1"
 msgstr "Sample van %1"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:211
+#, fuzzy, kde-format
+#| msgid "DateTime:"
+msgid "DateTime"
+msgstr "DateTime:"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:220
+#, kde-format
+msgid "Regular Expression"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1074
+#, fuzzy, kde-format
+#| msgid "%1 not found"
+msgid "%1 match found"
+msgid_plural "%1 matches found"
+msgstr[0] "%1 niet gevonden"
+msgstr[1] "%1 niet gevonden"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1146
+#, fuzzy, kde-format
+#| msgid "%1: replace values"
+msgid "%1 replacement made"
+msgid_plural "%1 replacements made"
+msgstr[0] "%1: waarden vervangen"
+msgstr[1] "%1: waarden vervangen"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1438
+#, kde-format
+msgid "Add..."
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1523
+#, kde-format
+msgid "Beginning of line"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1524
+#, fuzzy, kde-format
+#| msgid "End of file"
+msgid "End of line"
+msgstr "Einde bestand"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1526
+#, kde-format
+msgid "Match any character excluding new line (by default)"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1527
+#, fuzzy, kde-format
+#| msgid "An error occurred."
+msgid "One or more occurrences"
+msgstr "Er is een fout."
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1528
+#, fuzzy, kde-format
+#| msgid "An error occurred."
+msgid "Zero or more occurrences"
+msgstr "Er is een fout."
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1529
+#, kde-format
+msgid "Zero or one occurrences"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1532
+#, kde-format
+msgid "<a> through <b> occurrences"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1538
+#, kde-format
+msgid "Group, capturing"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1539
+#, kde-format
+msgid "Or"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1540
+#, fuzzy, kde-format
+#| msgid "Comment character:"
+msgid "Set of characters"
+msgstr "Commentaarkarakter:"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1541
+#, kde-format
+msgid "Negative set of characters"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1545
+#, kde-format
+msgid "Whole match reference"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1556
+#, fuzzy, kde-format
+#| msgid "References"
+msgid "Reference"
+msgstr "Referenties"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1563
+#, fuzzy, kde-format
+#| msgid "Linear Algebra"
+msgid "Line break"
+msgstr "Lineaire algebra"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1564
+#, fuzzy, kde-format
+#| msgid "Table"
+msgid "Tab"
+msgstr "Tabel"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1567
+#, kde-format
+msgid "Word boundary"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1568
+#, kde-format
+msgid "Not word boundary"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1569
+#, kde-format
+msgid "Digit"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1570
+#, fuzzy, kde-format
+#| msgid "Zero digit "
+msgid "Non-digit"
+msgstr "Cijfer nul"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1571
+#, kde-format
+msgid "Whitespace (excluding line breaks)"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1572
+#, kde-format
+msgid "Non-whitespace"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1573
+#, kde-format
+msgid "Word character (alphanumerics plus '_')"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1574
+#, fuzzy, kde-format
+#| msgid "Comment character:"
+msgid "Non-word character"
+msgstr "Commentaarkarakter:"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1577
+#, kde-format
+msgid "Octal character 000 to 377 (2^8-1)"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1578
+#, kde-format
+msgid "Hex character 0000 to FFFF (2^16-1)"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1579
+#, kde-format
+msgid "Backslash"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1583
+#, kde-format
+msgid "Group, non-capturing"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1584
+#, kde-format
+msgid "Positive Lookahead"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1585
+#, fuzzy, kde-format
+#| msgid "Negative Binomial"
+msgid "Negative lookahead"
+msgstr "Negatief Binomiale"
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1589
+#, kde-format
+msgid "Fixed-length positive lookbehind"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1590
+#, kde-format
+msgid "Fixed-length negative lookbehind"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:29
 #, kde-format
@@ -16519,6 +16749,7 @@ msgstr "Inbedden"
 msgid "Relative Path"
 msgstr "Relatieve pad"
 
+#. i18n: ectx: property (text), widget (QLabel, lDataType)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, lType)
@@ -16561,6 +16792,7 @@ msgstr "Relatieve pad"
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:437
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:266
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:117
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:538
 #, kde-format
 msgid "Type:"
 msgstr "Type:"
@@ -16776,6 +17008,7 @@ msgstr "Indexkolom aanmaken"
 #. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, ValueWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, LineWidget)
@@ -16789,6 +17022,7 @@ msgstr "Indexkolom aanmaken"
 #: src/kdefrontend/ui/settingsnotebookpage.ui:14
 #: src/kdefrontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/kdefrontend/ui/spreadsheet/samplevalueswidget.ui:14
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:14
 #, kde-format
 msgid "Form"
 msgstr "Vorm"
@@ -18566,6 +18800,7 @@ msgstr "Vert uitl.:"
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:283
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:276
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:20
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:23
 #, kde-format
 msgid "Order:"
@@ -20566,6 +20801,8 @@ msgstr "Voorwaarde:"
 #. i18n: ectx: property (text), widget (QLabel, lMaxDateTime)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:81
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:227
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:334
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:398
 #, kde-format
 msgid "max."
 msgstr "max."
@@ -20805,6 +21042,118 @@ msgstr "a:"
 #, kde-format
 msgid "b:"
 msgstr "b:"
+
+#. i18n: ectx: property (text), widget (QLabel, lReplaceDateTime)
+#. i18n: ectx: property (text), widget (QLabel, lReplace)
+#. i18n: ectx: property (text), widget (QLabel, lReplaceText)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:80
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:87
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:561
+#, fuzzy, kde-format
+#| msgid "Replace"
+msgid "Replace:"
+msgstr "Vervangen"
+
+#. i18n: ectx: property (text), widget (QLabel, lFind)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:97
+#, fuzzy, kde-format
+#| msgid "Find"
+msgid "Find:"
+msgstr "Zoeken"
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, cbOrder)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:134
+#, fuzzy, kde-format
+#| msgid "Search region:"
+msgid "Search order"
+msgstr ":Zoekgebied"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:147
+#: src/kdefrontend/ui/spreadsheet/searchwidget.ui:119
+#, fuzzy, kde-format
+#| msgid "Case Sensitive"
+msgid "Match case sensitive"
+msgstr "Hoofdlettergevoelig"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164
+#, fuzzy, kde-format
+#| msgid "Charge of the electron"
+msgid "Search in the selection only"
+msgstr "Lading van het electron"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, tbFindNext)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:194
+#: src/kdefrontend/ui/spreadsheet/searchwidget.ui:91
+#, kde-format
+msgid "Jump to next match"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, tbFindPrev)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:208
+#: src/kdefrontend/ui/spreadsheet/searchwidget.ui:105
+#, kde-format
+msgid "Jump to previous match"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceNext)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:222
+#, kde-format
+msgid "Replace next match"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceAll)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:232
+#, kde-format
+msgid "Replace all matches"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, bReplaceAll)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:235
+#, fuzzy, kde-format
+#| msgid "Replace"
+msgid "Replace &All"
+msgstr "Vervangen"
+
+#. i18n: ectx: property (text), widget (QPushButton, bFindAll)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:242
+#, fuzzy, kde-format
+#| msgid "Expand All"
+msgid "&Find All"
+msgstr "Alles uitvouwen"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:249
+#, kde-format
+msgid "Switch to incremental search bar"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, cbReplace)
+#. i18n: ectx: property (toolTip), widget (QComboBox, cbReplaceText)
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:525
+#: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:574
+#, kde-format
+msgid "Text to replace with"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lFind)
+#: src/kdefrontend/ui/spreadsheet/searchwidget.ui:50
+#, kde-format
+msgid "F&ind:"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QComboBox, cbFind)
+#: src/kdefrontend/ui/spreadsheet/searchwidget.ui:78
+#, kde-format
+msgid "Text to search for"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
+#: src/kdefrontend/ui/spreadsheet/searchwidget.ui:158
+#, kde-format
+msgid "Switch to power search and replace bar"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:37
@@ -21699,6 +22048,9 @@ msgstr "conversie is mislukt, exitcode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kon bestand niet openen:"
+
+#~ msgid "End Search"
+#~ msgstr "Einde zoeken"
 
 #~ msgid "Point Separation:"
 #~ msgstr "Puntafstand:"
