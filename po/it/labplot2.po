@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-17 00:42+0000\n"
-"PO-Revision-Date: 2023-06-02 09:12+0200\n"
+"PO-Revision-Date: 2023-06-15 18:21+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3423,28 +3423,24 @@ msgid "Round to the nearest integer"
 msgstr "Arrotonda all'intero più vicino"
 
 #: src/backend/gsl/functions.cpp:222
-#, fuzzy, kde-format
-#| msgid "greaterThen"
+#, kde-format
 msgid "greaterThan"
 msgstr "maggiore di"
 
 #: src/backend/gsl/functions.cpp:223
-#, fuzzy, kde-format
-#| msgid "lessThan"
+#, kde-format
 msgid "lessThan"
 msgstr "minore di"
 
 #: src/backend/gsl/functions.cpp:224
-#, fuzzy, kde-format
-#| msgid "greaterEqualThen"
+#, kde-format
 msgid "greaterEqualThan"
 msgstr "maggiore uguale a"
 
 #: src/backend/gsl/functions.cpp:225
-#, fuzzy, kde-format
-#| msgid "lessThan"
+#, kde-format
 msgid "lessEqualThan"
-msgstr "minore di"
+msgstr "minore uguale a"
 
 #: src/backend/gsl/functions.cpp:226
 #, kde-format
@@ -5289,16 +5285,14 @@ msgid "condition"
 msgstr "condizione"
 
 #: src/backend/gsl/functions.cpp:1118
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "trueValue"
-msgstr "Valore"
+msgstr "Valore vero"
 
 #: src/backend/gsl/functions.cpp:1120
-#, fuzzy, kde-format
-#| msgid "Sample Values"
+#, kde-format
 msgid "falseValue"
-msgstr "Valori campione"
+msgstr "Valori falso"
 
 #: src/backend/gsl/functions.cpp:1128
 #, kde-format
@@ -6412,16 +6406,14 @@ msgid "Tricube"
 msgstr "Tricubo"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:357
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linking"
-msgstr "%1: imposta il tratto della linea"
+msgstr "%1: imposta collegamenti"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr "%1: imposta il tratto della linea"
+msgstr "%1: imposta foglio elettronico collegato"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
@@ -6458,10 +6450,9 @@ msgid "%1: sort columns"
 msgstr "%1: ordina le colonne"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1081
-#, fuzzy, kde-format
-#| msgid "no spreadsheet element found"
+#, kde-format
 msgid "%1: linked spreadsheet removed"
-msgstr "non è stato trovato nessun foglio elettronico"
+msgstr "%1: foglio elettronico collegato rimosso"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1423
 #, kde-format
@@ -14648,22 +14639,20 @@ msgid "Custom Folder"
 msgstr "Cartella personalizzata"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Location of plot templates"
+#, kde-format
 msgid "Location of plot area templates"
-msgstr "Posizione dei modelli di grafico"
+msgstr "Posizione dei modelli di area del grafico"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:51
-#, fuzzy, kde-format
-#| msgid "Custom folder for the location of plot templates"
+#, kde-format
 msgid "Custom folder for the location of plot area templates"
-msgstr "Cartella personalizzata per la posizione dei modelli di grafico"
+msgstr ""
+"Cartella personalizzata per la posizione dei modelli di area di grafico"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:55
-#, fuzzy, kde-format
-#| msgid "Open the folder for the location of plot templates"
+#, kde-format
 msgid "Open the folder for the location of plot area templates"
-msgstr "Apri la cartella per la posizione dei modelli di grafico"
+msgstr "Apri la cartella per la posizione dei modelli di area di grafico"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:134
 #, kde-format
@@ -16678,10 +16667,9 @@ msgstr " Seleziona il file dell'immagine"
 #. i18n: ectx: property (toolTip), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:137
 #: src/kdefrontend/ui/datapickerimagewidget.ui:779
-#, fuzzy, kde-format
-#| msgid "Number of digits after the decimal point"
+#, kde-format
 msgid "Number of pixels between two neighbor data points"
-msgstr "Numero di cifre dopo il punto decimale"
+msgstr "Numero di pixel tra due punti dati vicini"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
@@ -16693,10 +16681,9 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:155
-#, fuzzy, kde-format
-#| msgid "Reference"
+#, kde-format
 msgid "References"
-msgstr "Riferimento"
+msgstr "Riferimenti"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:171
@@ -16749,17 +16736,15 @@ msgstr "°"
 #. i18n: ectx: property (toolTip), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:235
 #: src/kdefrontend/ui/datapickerimagewidget.ui:245
-#, fuzzy, kde-format
-#| msgid "%1: set minimum segment length"
+#, kde-format
 msgid "Minimum segment length detection"
-msgstr "%1: imposta la lunghezza del segmento minimo"
+msgstr "Rilevamento della lunghezza del segmento minimo"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:248
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Min. Length:"
-msgstr "Lunghezza:"
+msgstr "Lunghezza min.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:280
@@ -16881,10 +16866,9 @@ msgstr "Tipo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:782
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Separation:"
-msgstr "Saturazione:"
+msgstr "Separazione:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:812

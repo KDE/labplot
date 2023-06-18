@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-17 00:42+0000\n"
-"PO-Revision-Date: 2023-06-11 14:05+0200\n"
+"PO-Revision-Date: 2023-06-17 10:25+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -9447,10 +9447,9 @@ msgstr "&Zoeken"
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:225
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "&Replace"
-msgstr "Vervangen"
+msgstr "Ve&rvangen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:439
@@ -15725,201 +15724,188 @@ msgid "Sample of %1"
 msgstr "Sample van %1"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:211
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#, kde-format
 msgid "DateTime"
-msgstr "DateTime:"
+msgstr "Datum-tijd"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:220
 #, kde-format
 msgid "Regular Expression"
-msgstr ""
+msgstr "Reguliere expressie"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1074
-#, fuzzy, kde-format
-#| msgid "%1 not found"
+#, kde-format
 msgid "%1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] "%1 niet gevonden"
-msgstr[1] "%1 niet gevonden"
+msgstr[0] "1 overeenkomst gevonden"
+msgstr[1] "%1 overeenkomsten gevonden"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1146
-#, fuzzy, kde-format
-#| msgid "%1: replace values"
+#, kde-format
 msgid "%1 replacement made"
 msgid_plural "%1 replacements made"
-msgstr[0] "%1: waarden vervangen"
+msgstr[0] "%1 vervanging uitgevoerd"
 msgstr[1] "%1: waarden vervangen"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1438
 #, kde-format
 msgid "Add..."
-msgstr ""
+msgstr "Toevoegen..."
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1523
 #, kde-format
 msgid "Beginning of line"
-msgstr ""
+msgstr "Begin van de regel"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1524
-#, fuzzy, kde-format
-#| msgid "End of file"
+#, kde-format
 msgid "End of line"
-msgstr "Einde bestand"
+msgstr "Regeleinde"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1526
 #, kde-format
 msgid "Match any character excluding new line (by default)"
-msgstr ""
+msgstr "Elk teken overeen laten komen exclusief regeleindes (standaard)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1527
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "One or more occurrences"
-msgstr "Er is een fout."
+msgstr "Een of meer overeenkomsten"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1528
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Zero or more occurrences"
-msgstr "Er is een fout."
+msgstr "Nul of meer overeenkomsten"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1529
 #, kde-format
 msgid "Zero or one occurrences"
-msgstr ""
+msgstr "Nul of één overeenkomst"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1532
 #, kde-format
 msgid "<a> through <b> occurrences"
-msgstr ""
+msgstr "<a> door <b> overeenkomsten"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1538
 #, kde-format
 msgid "Group, capturing"
-msgstr ""
+msgstr "Groep, opnemen"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1539
 #, kde-format
 msgid "Or"
-msgstr ""
+msgstr "Of"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1540
-#, fuzzy, kde-format
-#| msgid "Comment character:"
+#, kde-format
 msgid "Set of characters"
-msgstr "Commentaarkarakter:"
+msgstr "Set lettertekens"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1541
 #, kde-format
 msgid "Negative set of characters"
-msgstr ""
+msgstr "Negatieve set lettertekens"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1545
 #, kde-format
 msgid "Whole match reference"
-msgstr ""
+msgstr "Volledig overeenkomende referentie "
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1556
-#, fuzzy, kde-format
-#| msgid "References"
+#, kde-format
 msgid "Reference"
-msgstr "Referenties"
+msgstr "Referentie"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1563
-#, fuzzy, kde-format
-#| msgid "Linear Algebra"
+#, kde-format
 msgid "Line break"
-msgstr "Lineaire algebra"
+msgstr "Regelafbreking"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1564
-#, fuzzy, kde-format
-#| msgid "Table"
+#, kde-format
 msgid "Tab"
-msgstr "Tabel"
+msgstr "Tab"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1567
 #, kde-format
 msgid "Word boundary"
-msgstr ""
+msgstr "Woordgrens"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1568
 #, kde-format
 msgid "Not word boundary"
-msgstr ""
+msgstr "Niet-woordgrens"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1569
 #, kde-format
 msgid "Digit"
-msgstr ""
+msgstr "Cijfer"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1570
-#, fuzzy, kde-format
-#| msgid "Zero digit "
+#, kde-format
 msgid "Non-digit"
-msgstr "Cijfer nul"
+msgstr "Geen cijfer"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1571
 #, kde-format
 msgid "Whitespace (excluding line breaks)"
-msgstr ""
+msgstr "Witruimte (exclusief regeleindes)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1572
 #, kde-format
 msgid "Non-whitespace"
-msgstr ""
+msgstr "Niet-witruimte"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1573
 #, kde-format
 msgid "Word character (alphanumerics plus '_')"
-msgstr ""
+msgstr "Woordteken (alfanumeriek plus '_')"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1574
-#, fuzzy, kde-format
-#| msgid "Comment character:"
+#, kde-format
 msgid "Non-word character"
-msgstr "Commentaarkarakter:"
+msgstr " Niet-woordteken"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1577
 #, kde-format
 msgid "Octal character 000 to 377 (2^8-1)"
-msgstr ""
+msgstr "Octaal teken 000 tot 377 (2^8-1)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1578
 #, kde-format
 msgid "Hex character 0000 to FFFF (2^16-1)"
-msgstr ""
+msgstr "Hex-teken 0000 tot FFFF (2^16-1)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1579
 #, kde-format
 msgid "Backslash"
-msgstr ""
+msgstr "Backslash"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1583
 #, kde-format
 msgid "Group, non-capturing"
-msgstr ""
+msgstr "Groep, niet-opnemen"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1584
 #, kde-format
 msgid "Positive Lookahead"
-msgstr ""
+msgstr "Positieve vooruitblik"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1585
-#, fuzzy, kde-format
-#| msgid "Negative Binomial"
+#, kde-format
 msgid "Negative lookahead"
-msgstr "Negatief Binomiale"
+msgstr "Negatieve vooruitblik"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1589
 #, kde-format
 msgid "Fixed-length positive lookbehind"
-msgstr ""
+msgstr "Vaste lengte positieve vooruitblik"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1590
 #, kde-format
 msgid "Fixed-length negative lookbehind"
-msgstr ""
+msgstr "Vaste lengte negatieve vooruitblik"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:29
 #, kde-format
@@ -21049,85 +21035,78 @@ msgstr "b:"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:80
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:87
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:561
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace:"
-msgstr "Vervangen"
+msgstr "Vervangen:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:97
-#, fuzzy, kde-format
-#| msgid "Find"
+#, kde-format
 msgid "Find:"
-msgstr "Zoeken"
+msgstr "Zoeken:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbOrder)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:134
-#, fuzzy, kde-format
-#| msgid "Search region:"
+#, kde-format
 msgid "Search order"
-msgstr ":Zoekgebied"
+msgstr "Zoekvolgorde"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:147
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:119
-#, fuzzy, kde-format
-#| msgid "Case Sensitive"
+#, kde-format
 msgid "Match case sensitive"
-msgstr "Hoofdlettergevoelig"
+msgstr "Hoofdlettergevoelig overeenkomend"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164
-#, fuzzy, kde-format
-#| msgid "Charge of the electron"
+#, kde-format
 msgid "Search in the selection only"
-msgstr "Lading van het electron"
+msgstr "Alleen in de selectie zoeken"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:194
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:91
 #, kde-format
 msgid "Jump to next match"
-msgstr ""
+msgstr "Ga naar volgende overeenkomst"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindPrev)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:208
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:105
 #, kde-format
 msgid "Jump to previous match"
-msgstr ""
+msgstr "Ga naar vorige overeenkomst"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:222
 #, kde-format
 msgid "Replace next match"
-msgstr ""
+msgstr "Volgende overeenkomst vervangen"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:232
 #, kde-format
 msgid "Replace all matches"
-msgstr ""
+msgstr "Alle overeenkomsten vervangen"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:235
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace &All"
-msgstr "Vervangen"
+msgstr "&Alles vervangen"
 
 #. i18n: ectx: property (text), widget (QPushButton, bFindAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Expand All"
+#, kde-format
 msgid "&Find All"
-msgstr "Alles uitvouwen"
+msgstr "Allen &zoeken"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:249
 #, kde-format
 msgid "Switch to incremental search bar"
-msgstr ""
+msgstr "Ga naar incrementele zoekbalk"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbReplace)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbReplaceText)
@@ -21135,25 +21114,25 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:574
 #, kde-format
 msgid "Text to replace with"
-msgstr ""
+msgstr "Tekst om mee te vervangen"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:50
 #, kde-format
 msgid "F&ind:"
-msgstr ""
+msgstr "Zo&eken:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbFind)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:78
 #, kde-format
 msgid "Text to search for"
-msgstr ""
+msgstr "Te zoeken tekst"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:158
 #, kde-format
 msgid "Switch to power search and replace bar"
-msgstr ""
+msgstr "Ga naar de geavanceerde zoek-en-vervang-balk"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:37

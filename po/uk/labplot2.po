@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-17 00:42+0000\n"
-"PO-Revision-Date: 2023-06-11 09:01+0300\n"
+"PO-Revision-Date: 2023-06-17 08:56+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -9524,10 +9524,9 @@ msgstr "&Пошук"
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:225
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "&Replace"
-msgstr "Замінити"
+msgstr "З&амінити"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:439
@@ -15839,32 +15838,29 @@ msgid "Sample of %1"
 msgstr "Елемент вибірки %1"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:211
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#, kde-format
 msgid "DateTime"
-msgstr "Дата і час:"
+msgstr "Дата і час"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:220
 #, kde-format
 msgid "Regular Expression"
-msgstr ""
+msgstr "Формальний вираз"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1074
-#, fuzzy, kde-format
-#| msgid "%1 not found"
+#, kde-format
 msgid "%1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] "%1 не знайдено"
-msgstr[1] "%1 не знайдено"
-msgstr[2] "%1 не знайдено"
-msgstr[3] "%1 не знайдено"
+msgstr[0] "Знайдено %1 відповідник"
+msgstr[1] "Знайдено %1 відповідники"
+msgstr[2] "Знайдено %1 відповідників"
+msgstr[3] "Знайдено один відповідник"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1146
-#, fuzzy, kde-format
-#| msgid "%1: replace values"
+#, kde-format
 msgid "%1 replacement made"
 msgid_plural "%1 replacements made"
-msgstr[0] "%1: замінити значення"
+msgstr[0] "Виконано %1 заміну"
 msgstr[1] "%1: замінити значення"
 msgstr[2] "%1: замінити значення"
 msgstr[3] "%1: замінити значення"
@@ -15872,172 +15868,162 @@ msgstr[3] "%1: замінити значення"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1438
 #, kde-format
 msgid "Add..."
-msgstr ""
+msgstr "Додати…"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1523
 #, kde-format
 msgid "Beginning of line"
-msgstr ""
+msgstr "Початок рядка"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1524
-#, fuzzy, kde-format
-#| msgid "End of file"
+#, kde-format
 msgid "End of line"
-msgstr "Кінець файла"
+msgstr "Кінець рядка"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1526
 #, kde-format
 msgid "Match any character excluding new line (by default)"
-msgstr ""
+msgstr "Будь-який символ, окрім розриву рядка (типовий варіант)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1527
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "One or more occurrences"
-msgstr "Сталася помилка."
+msgstr "Один або декілька результатів"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1528
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Zero or more occurrences"
-msgstr "Сталася помилка."
+msgstr "Жодного або декілька результатів"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1529
 #, kde-format
 msgid "Zero or one occurrences"
-msgstr ""
+msgstr "Жодного або один результат"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1532
 #, kde-format
 msgid "<a> through <b> occurrences"
-msgstr ""
+msgstr "Від <a> до <b> результатів"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1538
 #, kde-format
 msgid "Group, capturing"
-msgstr ""
+msgstr "Група, збирання"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1539
 #, kde-format
 msgid "Or"
-msgstr ""
+msgstr "Або"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1540
-#, fuzzy, kde-format
-#| msgid "Comment character:"
+#, kde-format
 msgid "Set of characters"
-msgstr "Символ коментування:"
+msgstr "Набір символів"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1541
 #, kde-format
 msgid "Negative set of characters"
-msgstr ""
+msgstr "Від’ємна множина символів"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1545
 #, kde-format
 msgid "Whole match reference"
-msgstr ""
+msgstr "Зразок з повною відповідністю"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1556
-#, fuzzy, kde-format
-#| msgid "References"
+#, kde-format
 msgid "Reference"
-msgstr "Еталони"
+msgstr "Еталон"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1563
-#, fuzzy, kde-format
-#| msgid "Linear Algebra"
+#, kde-format
 msgid "Line break"
-msgstr "Лінійна алгебра"
+msgstr "Розрив рядка"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1564
-#, fuzzy, kde-format
-#| msgid "Table"
+#, kde-format
 msgid "Tab"
-msgstr "Таблиця"
+msgstr "Табуляція"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1567
 #, kde-format
 msgid "Word boundary"
-msgstr ""
+msgstr "Межа слова"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1568
 #, kde-format
 msgid "Not word boundary"
-msgstr ""
+msgstr "Не межа слова"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1569
 #, kde-format
 msgid "Digit"
-msgstr ""
+msgstr "Цифра"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1570
-#, fuzzy, kde-format
-#| msgid "Zero digit "
+#, kde-format
 msgid "Non-digit"
-msgstr "Нульова цифра "
+msgstr "Не цифра"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1571
 #, kde-format
 msgid "Whitespace (excluding line breaks)"
-msgstr ""
+msgstr "Пробіл (не включає розриви рядків)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1572
 #, kde-format
 msgid "Non-whitespace"
-msgstr ""
+msgstr "Не пробіли"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1573
 #, kde-format
 msgid "Word character (alphanumerics plus '_')"
-msgstr ""
+msgstr "Символ для слів (літери, цифри і «_»)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1574
-#, fuzzy, kde-format
-#| msgid "Comment character:"
+#, kde-format
 msgid "Non-word character"
-msgstr "Символ коментування:"
+msgstr "Символ не для слів"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1577
 #, kde-format
 msgid "Octal character 000 to 377 (2^8-1)"
-msgstr ""
+msgstr "Вісімковий символ від 000 до 377 (2^8-1)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1578
 #, kde-format
 msgid "Hex character 0000 to FFFF (2^16-1)"
-msgstr ""
+msgstr "Шістнадцятковий символ від 0000 до FFFF (2^16-1)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1579
 #, kde-format
 msgid "Backslash"
-msgstr ""
+msgstr "Зворотна риска"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1583
 #, kde-format
 msgid "Group, non-capturing"
-msgstr ""
+msgstr "Група, без збирання"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1584
 #, kde-format
 msgid "Positive Lookahead"
-msgstr ""
+msgstr "Додатний пошук вперед"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1585
-#, fuzzy, kde-format
-#| msgid "Negative Binomial"
+#, kde-format
 msgid "Negative lookahead"
-msgstr "Від'ємний біноміальний"
+msgstr "Від’ємне значення випередження"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1589
 #, kde-format
 msgid "Fixed-length positive lookbehind"
-msgstr ""
+msgstr "Додатний пошук назад із фіксованою довжиною"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1590
 #, kde-format
 msgid "Fixed-length negative lookbehind"
-msgstr ""
+msgstr "Від'ємний пошук назад із фіксованою довжиною"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:29
 #, kde-format
@@ -21171,85 +21157,78 @@ msgstr "b:"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:80
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:87
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:561
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace:"
-msgstr "Замінити"
+msgstr "Замінити:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:97
-#, fuzzy, kde-format
-#| msgid "Find"
+#, kde-format
 msgid "Find:"
-msgstr "Знайти"
+msgstr "Знайти:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbOrder)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:134
-#, fuzzy, kde-format
-#| msgid "Search region:"
+#, kde-format
 msgid "Search order"
-msgstr "Діапазон пошуку:"
+msgstr "Порядок пошуку"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:147
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:119
-#, fuzzy, kde-format
-#| msgid "Case Sensitive"
+#, kde-format
 msgid "Match case sensitive"
-msgstr "з врахуванням регістру"
+msgstr "З урахуванням регістру"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164
-#, fuzzy, kde-format
-#| msgid "Charge of the electron"
+#, kde-format
 msgid "Search in the selection only"
-msgstr "Заряд електрона"
+msgstr "Шукати лише у позначеному фрагменті"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:194
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:91
 #, kde-format
 msgid "Jump to next match"
-msgstr ""
+msgstr "Перейти до наступного відповідника"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindPrev)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:208
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:105
 #, kde-format
 msgid "Jump to previous match"
-msgstr ""
+msgstr "Перейти до попереднього відповідника"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:222
 #, kde-format
 msgid "Replace next match"
-msgstr ""
+msgstr "Замінити наступний збіг"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:232
 #, kde-format
 msgid "Replace all matches"
-msgstr ""
+msgstr "Замінити всі відповідники"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:235
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace &All"
-msgstr "Замінити"
+msgstr "Замінити &всі"
 
 #. i18n: ectx: property (text), widget (QPushButton, bFindAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Expand All"
+#, kde-format
 msgid "&Find All"
-msgstr "розгорнути все"
+msgstr "&Знайти всі"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:249
 #, kde-format
 msgid "Switch to incremental search bar"
-msgstr ""
+msgstr "Перемкнутися на покроковий пошук"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbReplace)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbReplaceText)
@@ -21257,25 +21236,25 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:574
 #, kde-format
 msgid "Text to replace with"
-msgstr ""
+msgstr "Замінити цим текстом"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:50
 #, kde-format
 msgid "F&ind:"
-msgstr ""
+msgstr "З&найти:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbFind)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:78
 #, kde-format
 msgid "Text to search for"
-msgstr ""
+msgstr "Текст, який слід шукати"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:158
 #, kde-format
 msgid "Switch to power search and replace bar"
-msgstr ""
+msgstr "Перемкнути на панель потужного пошуку і заміни"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:37

@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-17 00:42+0000\n"
-"PO-Revision-Date: 2023-06-11 06:14+0200\n"
+"PO-Revision-Date: 2023-06-17 22:32+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.3.1\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
+"X-Generator: Lokalize 23.04.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -9494,8 +9494,7 @@ msgstr "Poi&šči"
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:225
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "&Replace"
 msgstr "Zamenjaj"
 
@@ -15782,205 +15781,192 @@ msgid "Sample of %1"
 msgstr "Vzorec %1"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:211
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#, kde-format
 msgid "DateTime"
-msgstr "Datum s časom:"
+msgstr "Datum s časom"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:220
 #, kde-format
 msgid "Regular Expression"
-msgstr ""
+msgstr "Regularni izraz"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1074
-#, fuzzy, kde-format
-#| msgid "%1 not found"
+#, kde-format
 msgid "%1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] "%1 ni mogoče najti"
-msgstr[1] "%1 ni mogoče najti"
-msgstr[2] "%1 ni mogoče najti"
-msgstr[3] "%1 ni mogoče najti"
+msgstr[0] "%1 zadetek najden"
+msgstr[1] "%1 zadetka najdena"
+msgstr[2] "%1 zadetki najdeni"
+msgstr[3] "%1 zadetkov najdenih"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1146
-#, fuzzy, kde-format
-#| msgid "%1: replace values"
+#, kde-format
 msgid "%1 replacement made"
 msgid_plural "%1 replacements made"
-msgstr[0] "%1: zamenjajte vrednosti"
-msgstr[1] "%1: zamenjajte vrednosti"
-msgstr[2] "%1: zamenjajte vrednosti"
-msgstr[3] "%1: zamenjajte vrednosti"
+msgstr[0] "%1 vrednost zamenjana"
+msgstr[1] "%1 vrednosti zamenjani"
+msgstr[2] "%1 vrednosti zamenjane"
+msgstr[3] "%1 vrednosti zamenjanih"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1438
 #, kde-format
 msgid "Add..."
-msgstr ""
+msgstr "Dodaj..."
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1523
 #, kde-format
 msgid "Beginning of line"
-msgstr ""
+msgstr "Začetek vrstice"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1524
-#, fuzzy, kde-format
-#| msgid "End of file"
+#, kde-format
 msgid "End of line"
-msgstr "Konec datoteke"
+msgstr "Konec vrstice"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1526
 #, kde-format
 msgid "Match any character excluding new line (by default)"
-msgstr ""
+msgstr "Najdi katerikoli znak razen preloma vrstice (privzeto)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1527
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "One or more occurrences"
-msgstr "Prišlo je do napake."
+msgstr "En ali več pojavov"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1528
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Zero or more occurrences"
-msgstr "Prišlo je do napake."
+msgstr "Nič ali več pojavov"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1529
 #, kde-format
 msgid "Zero or one occurrences"
-msgstr ""
+msgstr "Nič ali en pojav"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1532
 #, kde-format
 msgid "<a> through <b> occurrences"
-msgstr ""
+msgstr "<a> do <b> pojavov"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1538
 #, kde-format
 msgid "Group, capturing"
-msgstr ""
+msgstr "Grupa, ki se združuje"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1539
 #, kde-format
 msgid "Or"
-msgstr ""
+msgstr "Ali"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1540
-#, fuzzy, kde-format
-#| msgid "Comment character:"
+#, kde-format
 msgid "Set of characters"
-msgstr "Znak komentarja:"
+msgstr "Zbirka znakov"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1541
 #, kde-format
 msgid "Negative set of characters"
-msgstr ""
+msgstr "Negativna zbirka znakov"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1545
 #, kde-format
 msgid "Whole match reference"
-msgstr ""
+msgstr "Referenca celotnega zadetka"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1556
-#, fuzzy, kde-format
-#| msgid "References"
+#, kde-format
 msgid "Reference"
-msgstr "Reference"
+msgstr "Referenca"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1563
-#, fuzzy, kde-format
-#| msgid "Linear Algebra"
+#, kde-format
 msgid "Line break"
-msgstr "Linearna algebra"
+msgstr "Prelom vrstice"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1564
-#, fuzzy, kde-format
-#| msgid "Table"
+#, kde-format
 msgid "Tab"
-msgstr "Tabela"
+msgstr "Tabulator"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1567
 #, kde-format
 msgid "Word boundary"
-msgstr ""
+msgstr "Meja besede"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1568
 #, kde-format
 msgid "Not word boundary"
-msgstr ""
+msgstr "Ni meja besede"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1569
 #, kde-format
 msgid "Digit"
-msgstr ""
+msgstr "Števka"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1570
-#, fuzzy, kde-format
-#| msgid "Zero digit "
+#, kde-format
 msgid "Non-digit"
-msgstr "Ničelna števika "
+msgstr "Ne-števka"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1571
 #, kde-format
 msgid "Whitespace (excluding line breaks)"
-msgstr ""
+msgstr "Prazen prostor (brez prelomov vrstic)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1572
 #, kde-format
 msgid "Non-whitespace"
-msgstr ""
+msgstr "Neprazen prostor"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1573
 #, kde-format
 msgid "Word character (alphanumerics plus '_')"
-msgstr ""
+msgstr "Znak besede (alfanumerični znak in '_')"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1574
-#, fuzzy, kde-format
-#| msgid "Comment character:"
+#, kde-format
 msgid "Non-word character"
-msgstr "Znak komentarja:"
+msgstr "Znak ne besede"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1577
 #, kde-format
 msgid "Octal character 000 to 377 (2^8-1)"
-msgstr ""
+msgstr "Osmiški znak od 000 do 3777 (2^8-1)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1578
 #, kde-format
 msgid "Hex character 0000 to FFFF (2^16-1)"
-msgstr ""
+msgstr "Šestnajstiški znak od 0000 do FFFF (2^16-1)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1579
 #, kde-format
 msgid "Backslash"
-msgstr ""
+msgstr "Poševna črta nazaj"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1583
 #, kde-format
 msgid "Group, non-capturing"
-msgstr ""
+msgstr "Skupina, ki ne združuje"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1584
 #, kde-format
 msgid "Positive Lookahead"
-msgstr ""
+msgstr "Pozitivni pregled naprej"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1585
-#, fuzzy, kde-format
-#| msgid "Negative Binomial"
+#, kde-format
 msgid "Negative lookahead"
-msgstr "Negativna binomska"
+msgstr "Negativni pogled naprej"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1589
 #, kde-format
 msgid "Fixed-length positive lookbehind"
-msgstr ""
+msgstr "Pozitivni pogled nazaj v fiksni dolžini"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1590
 #, kde-format
 msgid "Fixed-length negative lookbehind"
-msgstr ""
+msgstr "Negativni pogled nazaj v fiksni dolžini"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:29
 #, kde-format
@@ -21109,85 +21095,78 @@ msgstr "b:"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:80
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:87
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:561
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace:"
-msgstr "Zamenjaj"
+msgstr "Zamenjaj:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:97
-#, fuzzy, kde-format
-#| msgid "Find"
+#, kde-format
 msgid "Find:"
-msgstr "Najdi"
+msgstr "Najdi:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbOrder)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:134
-#, fuzzy, kde-format
-#| msgid "Search region:"
+#, kde-format
 msgid "Search order"
-msgstr "Iskalno območje:"
+msgstr "Vrstni red iskanja"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:147
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:119
-#, fuzzy, kde-format
-#| msgid "Case Sensitive"
+#, kde-format
 msgid "Match case sensitive"
-msgstr "Razlikuj velike in male črke"
+msgstr "Pri iskanju razlikuj velike in male črke"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164
-#, fuzzy, kde-format
-#| msgid "Charge of the electron"
+#, kde-format
 msgid "Search in the selection only"
-msgstr "Naboj elektrona"
+msgstr "Išči samo v izbranem delu"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:194
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:91
 #, kde-format
 msgid "Jump to next match"
-msgstr ""
+msgstr "Skoči na naslednji zadetek"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindPrev)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:208
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:105
 #, kde-format
 msgid "Jump to previous match"
-msgstr ""
+msgstr "Skoči na prejšnji zadetek"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:222
 #, kde-format
 msgid "Replace next match"
-msgstr ""
+msgstr "Zamenjaj naslednji zadetek"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:232
 #, kde-format
 msgid "Replace all matches"
-msgstr ""
+msgstr "Zamenjaj vse zadetke"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:235
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace &All"
-msgstr "Zamenjaj"
+msgstr "Zamenjaj vse"
 
 #. i18n: ectx: property (text), widget (QPushButton, bFindAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Expand All"
+#, kde-format
 msgid "&Find All"
-msgstr "Razširi vse"
+msgstr "Najdi vse"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:249
 #, kde-format
 msgid "Switch to incremental search bar"
-msgstr ""
+msgstr "Preklopi na inkrementalno vrstico iskanja"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbReplace)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbReplaceText)
@@ -21195,25 +21174,25 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:574
 #, kde-format
 msgid "Text to replace with"
-msgstr ""
+msgstr "Besedilo, ki naj se zamenja z"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:50
 #, kde-format
 msgid "F&ind:"
-msgstr ""
+msgstr "Najdi:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbFind)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:78
 #, kde-format
 msgid "Text to search for"
-msgstr ""
+msgstr "Besedilo iskanja"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:158
 #, kde-format
 msgid "Switch to power search and replace bar"
-msgstr ""
+msgstr "Preklopi na močno iskanje in vrstico zamenjav"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:37

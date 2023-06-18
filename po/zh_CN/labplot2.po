@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-17 00:42+0000\n"
-"PO-Revision-Date: 2023-05-22 14:01\n"
+"PO-Revision-Date: 2023-06-17 04:11\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -3022,10 +3022,9 @@ msgid "Comparison Functions"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:44
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "Conditions"
-msgstr "连接"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:46
 #, kde-format
@@ -3388,10 +3387,9 @@ msgid "Round to the nearest integer"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:222
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterThan"
-msgstr "大于"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:223
 #, kde-format
@@ -3399,10 +3397,9 @@ msgid "lessThan"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:224
-#, fuzzy, kde-format
-#| msgid "Greater than"
+#, kde-format
 msgid "greaterEqualThan"
-msgstr "大于"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:225
 #, kde-format
@@ -3439,10 +3436,9 @@ msgid "or"
 msgstr "或"
 
 #: src/backend/gsl/functions.cpp:232
-#, fuzzy, kde-format
-#| msgid "or"
+#, kde-format
 msgid "xor"
-msgstr "或"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:235
@@ -5199,28 +5195,24 @@ msgid "Invalid"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:1116
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgid "condition"
-msgstr "位置"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:1118
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "trueValue"
-msgstr "值"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:1120
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "falseValue"
-msgstr "值"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:1128
-#, fuzzy, kde-format
-#| msgid "no"
+#, kde-format
 msgid "n"
-msgstr "否"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:1130
 #, kde-format
@@ -5233,10 +5225,9 @@ msgid "q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:1134
-#, fuzzy, kde-format
-#| msgid "x="
+#, kde-format
 msgid "x"
-msgstr "x="
+msgstr ""
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
@@ -5349,11 +5340,10 @@ msgid "%1: copy %2"
 msgstr "%1：复制 %2"
 
 #: src/backend/matrix/Matrix.cpp:551
-#, fuzzy, kde-format
-#| msgid "%1: add %2"
+#, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
-msgstr[0] "%1：添加 %2"
+msgstr[0] ""
 
 #: src/backend/matrix/Matrix.cpp:562
 #, kde-format
@@ -6325,10 +6315,9 @@ msgid "Tricube"
 msgstr ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:357
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set linking"
-msgstr "%1：设置字体"
+msgstr ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:377
 #, kde-format
@@ -14276,11 +14265,10 @@ msgid "%1: fill matrix with function values"
 msgstr ""
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:40
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgctxt "@title:window"
 msgid "Plot Area Templates"
-msgstr "绘制区域"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:43
@@ -16292,11 +16280,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:155
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgid "References"
-msgstr "首选项"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:171
@@ -16355,10 +16341,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:248
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Min. Length:"
-msgstr "长度："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:280
@@ -16480,10 +16465,9 @@ msgstr "类型："
 
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:782
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Separation:"
-msgstr "饱和度："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:812
@@ -18932,10 +18916,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Linking"
-msgstr "链接"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
