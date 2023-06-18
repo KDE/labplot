@@ -234,9 +234,16 @@ private:
 	//"add new" actions
 	QAction* addCurveAction{nullptr};
 	QAction* addEquationCurveAction{nullptr};
+
+	// statistical plots
 	QAction* addHistogramAction{nullptr};
-	QAction* addBarPlotAction{nullptr};
 	QAction* addBoxPlotAction{nullptr};
+
+	// bar plots
+	QAction* addBarPlotAction{nullptr};
+	QAction* addLollipopPlotAction{nullptr};
+
+	// analysis curves
 	QAction* addDataReductionCurveAction{nullptr};
 	QAction* addDifferentiationCurveAction{nullptr};
 	QAction* addIntegrationCurveAction{nullptr};
@@ -296,6 +303,7 @@ public Q_SLOTS:
 	void addHistogram();
 	void addHistogramFit(Histogram*, nsl_sf_stats_distribution);
 	void addBarPlot();
+	void addLollipopPlot();
 	void addBoxPlot();
 	void addEquationCurve();
 	void addDataReductionCurve();

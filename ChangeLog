@@ -2,6 +2,8 @@
 New features:
 	* [worksheet]
 		* Add possibility to use column labels as axis ticks
+		* New visualization types:
+			* Lollipop plot
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace

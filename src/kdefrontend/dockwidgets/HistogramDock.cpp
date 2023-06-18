@@ -769,7 +769,7 @@ void HistogramDock::loadConfigFromTemplate(KConfig& config) {
 
 	int size = m_curvesList.size();
 	if (size > 1)
-		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
+		m_curve->beginMacro(i18n("%1 histograms: template \"%2\" loaded", size, name));
 	else
 		m_curve->beginMacro(i18n("%1: template \"%2\" loaded", m_curve->name(), name));
 

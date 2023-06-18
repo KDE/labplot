@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -53,6 +53,7 @@ enum class AspectType : quint64 {
 	InfoElement = 0x0210080,
 	BoxPlot = 0x0210100,
 	BarPlot = 0x0210200,
+	LollipopPlot = 0x0210400,
 	WorksheetElementContainer = 0x0220000,
 	AbstractPlot = 0x0221000,
 	CartesianPlot = 0x0221001,
@@ -195,6 +196,8 @@ public:
 			return QStringLiteral("BarPlot");
 		case AspectType::BoxPlot:
 			return QStringLiteral("BoxPlot");
+		case AspectType::LollipopPlot:
+			return QStringLiteral("LollipoPlot");
 		case AspectType::AbstractPart:
 			return QStringLiteral("AbstractPart");
 		case AspectType::AbstractDataSource:

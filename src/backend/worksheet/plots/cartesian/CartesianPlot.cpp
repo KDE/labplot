@@ -40,6 +40,7 @@
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
+#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -341,11 +342,17 @@ CartesianPlot::Type CartesianPlot::type() const {
 void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-curve"), this);
-	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
-	addBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
-	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from a Formula"), this);
-	// no icons yet
+
+	// statistical plots
+	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
+	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
+
+	// bar plots
+	addBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
+	addLollipopPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), this);
+
+	// analysis curves, no icons yet
 	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), this);
 	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), this);
 	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), this);
@@ -372,10 +379,17 @@ void CartesianPlot::initActions() {
 	addReferenceRangeAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-rectangle")), i18n("Reference Range"), this);
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
-	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
-	connect(addBarPlotAction, &QAction::triggered, this, &CartesianPlot::addBarPlot);
-	connect(addBoxPlotAction, &QAction::triggered, this, &CartesianPlot::addBoxPlot);
 	connect(addEquationCurveAction, &QAction::triggered, this, &CartesianPlot::addEquationCurve);
+
+	// bar plots
+	connect(addBarPlotAction, &QAction::triggered, this, &CartesianPlot::addBarPlot);
+	connect(addLollipopPlotAction, &QAction::triggered, this, &CartesianPlot::addLollipopPlot);
+
+	// statistical plots
+	connect(addBoxPlotAction, &QAction::triggered, this, &CartesianPlot::addBoxPlot);
+	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
+
+	// analysis curves
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
 	connect(addIntegrationCurveAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
@@ -481,10 +495,18 @@ void CartesianPlot::initMenus() {
 	addNewMenu = new QMenu(i18n("Add New"));
 	addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	addNewMenu->addAction(addCurveAction);
-	addNewMenu->addAction(addHistogramAction);
-	addNewMenu->addAction(addBoxPlotAction);
-	addNewMenu->addAction(addBarPlotAction);
 	addNewMenu->addAction(addEquationCurveAction);
+
+	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
+	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
+	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
+	addNewMenu->addMenu(addNewStatisticalPlotsMenu);
+
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
+	addNewBarPlotsMenu->addAction(addBarPlotAction);
+	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
+	addNewMenu->addMenu(addNewBarPlotsMenu);
+
 	addNewMenu->addSeparator();
 
 	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
@@ -659,6 +681,7 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 	QVector<AspectType> types{AspectType::XYCurve,
 							  AspectType::Histogram,
 							  AspectType::BarPlot,
+							  AspectType::LollipopPlot,
 							  AspectType::BoxPlot,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
@@ -1670,6 +1693,10 @@ void CartesianPlot::addBarPlot() {
 	addChild(new BarPlot(i18n("Bar Plot")));
 }
 
+void CartesianPlot::addLollipopPlot() {
+	addChild(new LollipopPlot(i18n("Lollipop Plot")));
+}
+
 void CartesianPlot::addBoxPlot() {
 	addChild(new BoxPlot(i18n("Box Plot")));
 }
@@ -2030,7 +2057,7 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 			break;
 
 		if (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BarPlot
-			|| child->type() == AspectType::BoxPlot || child->inherits(AspectType::XYAnalysisCurve))
+			|| child->type() == AspectType::LollipopPlot || child->type() == AspectType::BoxPlot || child->inherits(AspectType::XYAnalysisCurve))
 			++index;
 	}
 
@@ -2065,6 +2092,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* hist = dynamic_cast<const Histogram*>(child);
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
+	const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(child);
 	const auto* axis = dynamic_cast<const Axis*>(child);
 
 	if (curve) {
@@ -2131,9 +2159,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 	} else if (barPlot) {
 		DEBUG(Q_FUNC_INFO << ", BAR PLOT")
-
-		// update the legend on data columnchanges
 		connect(barPlot, &BarPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
+	} else if (lollipopPlot) {
+		DEBUG(Q_FUNC_INFO << ", LOLLIPOP PLOT")
+		connect(lollipopPlot, &LollipopPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
 	} else {
 		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
 		if (infoElement)
@@ -2751,8 +2780,25 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			d->dataRange(dim, index).end() = max;
 	}
 
-	// loop over all box plots and determine the maximum and minimum x-values
+	// loop over all bar plots and determine the maximum and minimum x-values
 	for (const auto* curve : this->children<const BarPlot>()) {
+		if (!curve->isVisible() || curve->dataColumns().isEmpty())
+			continue;
+
+		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
+			continue;
+
+		const double min = curve->minimum(dim);
+		if (d->dataRange(dim, index).start() > min)
+			d->dataRange(dim, index).start() = min;
+
+		const double max = curve->maximum(dim);
+		if (max > d->dataRange(dim, index).end())
+			d->dataRange(dim, index).end() = max;
+	}
+
+	// loop over all lollipop plots and determine the maximum and minimum x-values
+	for (const auto* curve : this->children<const LollipopPlot>()) {
 		if (!curve->isVisible() || curve->dataColumns().isEmpty())
 			continue;
 
@@ -5179,6 +5225,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(barPlot);
 			else {
 				removeChild(barPlot);
+				return false;
+			}
+		} else if (reader->name() == QLatin1String("lollipopPlot")) {
+			auto* plot = new LollipopPlot(QStringLiteral("LollipopPlot"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else {
+				removeChild(plot);
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("Histogram")) {

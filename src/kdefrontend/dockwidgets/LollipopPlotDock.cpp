@@ -1,13 +1,13 @@
 /*
-	File                 : BarPlotDock.cpp
+	File                 : LollipopPlotDock.cpp
 	Project              : LabPlot
-	Description          : Dock widget for the bar plot
+	Description          : Dock widget for the lolliplot plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "BarPlotDock.h"
+#include "LollipopPlotDock.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
@@ -15,8 +15,8 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
-#include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
+#include "kdefrontend/widgets/SymbolWidget.h"
 #include "kdefrontend/widgets/ValueWidget.h"
 
 #include <QPushButton>
@@ -24,7 +24,7 @@
 #include <KConfig>
 #include <KLocalizedString>
 
-BarPlotDock::BarPlotDock(QWidget* parent)
+LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	: BaseDock(parent)
 	, cbXColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
@@ -50,35 +50,23 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	m_gridLayout->setVerticalSpacing(2);
 	ui.frameDataColumns->setLayout(m_gridLayout);
 
-	ui.cbType->addItem(i18n("Grouped"));
-	ui.cbType->addItem(i18n("Stacked"));
-	ui.cbType->addItem(i18n("Stacked 100%"));
-
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
-	// Tab "Bars"
+	// Tab "Line"
 	QString msg = i18n("Select the data column for which the properties should be shown and edited");
-	ui.lNumber->setToolTip(msg);
-	ui.cbNumber->setToolTip(msg);
+	ui.lNumberLine->setToolTip(msg);
+	ui.cbNumberLine->setToolTip(msg);
+	lineWidget = new LineWidget(ui.tabLine);
+	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabLine->layout());
+	gridLayout->addWidget(lineWidget, 1, 0, 1, 3);
 
-	msg = i18n("Specify the factor in percent to control the width of the bar relative to its default value, applying to all bars");
-	ui.lWidthFactor->setToolTip(msg);
-	ui.sbWidthFactor->setToolTip(msg);
-
-	// filling
-	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBars->layout());
-	backgroundWidget = new BackgroundWidget(ui.tabBars);
-	gridLayout->addWidget(backgroundWidget, 5, 0, 1, 3);
-	auto* spacer = new QSpacerItem(72, 18, QSizePolicy::Minimum, QSizePolicy::Fixed);
-	gridLayout->addItem(spacer, 6, 0, 1, 1);
-
-	// border lines
-	gridLayout->addWidget(ui.lBorder, 7, 0, 1, 1);
-	lineWidget = new LineWidget(ui.tabBars);
-	gridLayout->addWidget(lineWidget, 8, 0, 1, 3);
-	spacer = new QSpacerItem(18, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	gridLayout->addItem(spacer, 9, 0, 1, 1);
+	// Tab "Symbol"
+	ui.lNumberSymbol->setToolTip(msg);
+	ui.cbNumberSymbol->setToolTip(msg);
+	symbolWidget = new SymbolWidget(ui.tabSymbol);
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabSymbol->layout());
+	gridLayout->addWidget(symbolWidget, 1, 0, 1, 3);
 
 	// Tab "Values"
 	auto* hboxLayout = new QHBoxLayout(ui.tabValues);
@@ -100,19 +88,20 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
-	connect(ui.leName, &QLineEdit::textChanged, this, &BarPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &BarPlotDock::commentChanged);
-	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::xColumnChanged);
-	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &BarPlotDock::removeXColumn);
-	connect(m_buttonNew, &QPushButton::clicked, this, &BarPlotDock::addDataColumn);
-	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::typeChanged);
-	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::orientationChanged);
-	connect(ui.chkVisible, &QCheckBox::toggled, this, &BarPlotDock::visibilityChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::plotRangeChanged);
+	connect(ui.leName, &QLineEdit::textChanged, this, &LollipopPlotDock::nameChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &LollipopPlotDock::commentChanged);
+	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &LollipopPlotDock::xColumnChanged);
+	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &LollipopPlotDock::removeXColumn);
+	connect(m_buttonNew, &QPushButton::clicked, this, &LollipopPlotDock::addDataColumn);
+	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::orientationChanged);
+	connect(ui.chkVisible, &QCheckBox::toggled, this, &LollipopPlotDock::visibilityChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::plotRangeChanged);
 
-	// Tab "Bars"
-	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarChanged);
-	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::widthFactorChanged);
+	// Tab "Line"
+	connect(ui.cbNumberLine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::currentBarLineChanged);
+
+	// Tab "Symbol"
+	connect(ui.cbNumberSymbol, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::currentBarSymbolChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -121,20 +110,20 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
 	layout->addWidget(templateHandler);
-	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &BarPlotDock::loadConfigFromTemplate);
-	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &BarPlotDock::saveConfigAsTemplate);
-	connect(templateHandler, &TemplateHandler::info, this, &BarPlotDock::info);
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &LollipopPlotDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &LollipopPlotDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &LollipopPlotDock::info);
 
 	ui.verticalLayout->addWidget(frame);
 }
 
-void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
+void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
 	CONDITIONAL_LOCK_RETURN;
-	m_barPlots = list;
-	m_barPlot = list.first();
+	m_plots = list;
+	m_plot = list.first();
 	setAspects(list);
-	Q_ASSERT(m_barPlot);
-	m_aspectTreeModel = new AspectTreeModel(m_barPlot->project());
+	Q_ASSERT(m_plot);
+	m_aspectTreeModel = new AspectTreeModel(m_plot->project());
 	setModel();
 
 	// if there is more than one point in the list, disable the comment and name widgets in "general"
@@ -143,8 +132,8 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
 		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_barPlot->name());
-		ui.teComment->setText(m_barPlot->comment());
+		ui.leName->setText(m_plot->name());
+		ui.teComment->setText(m_plot->comment());
 
 		ui.lDataColumn->setEnabled(true);
 	} else {
@@ -161,23 +150,23 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	ui.leName->setToolTip(QString());
 
 	// backgrounds
-	QList<Background*> backgrounds;
 	QList<Line*> lines;
+	QList<Symbol*> symbols;
 	QList<Value*> values;
-	for (auto* plot : m_barPlots) {
-		backgrounds << plot->backgroundAt(0);
+	for (auto* plot : m_plots) {
 		lines << plot->lineAt(0);
+		symbols << plot->symbolAt(0);
 		values << plot->value();
 	}
 
-	backgroundWidget->setBackgrounds(backgrounds);
 	lineWidget->setLines(lines);
+	symbolWidget->setSymbols(symbols);
 	valueWidget->setValues(values);
 
 	// show the properties of the first box plot
-	ui.chkVisible->setChecked(m_barPlot->isVisible());
+	ui.chkVisible->setChecked(m_plot->isVisible());
 	load();
-	cbXColumn->setColumn(m_barPlot->xColumn(), m_barPlot->xColumnPath());
+	cbXColumn->setColumn(m_plot->xColumn(), m_plot->xColumnPath());
 	loadDataColumns();
 
 	updatePlotRanges();
@@ -187,17 +176,14 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_barPlot, &AbstractAspect::aspectDescriptionChanged, this, &BarPlotDock::aspectDescriptionChanged);
-	connect(m_barPlot, &WorksheetElement::plotRangeListChanged, this, &BarPlotDock::updatePlotRanges);
-	connect(m_barPlot, &BarPlot::visibleChanged, this, &BarPlotDock::plotVisibilityChanged);
-	connect(m_barPlot, &BarPlot::typeChanged, this, &BarPlotDock::plotTypeChanged);
-	connect(m_barPlot, &BarPlot::xColumnChanged, this, &BarPlotDock::plotXColumnChanged);
-	connect(m_barPlot, &BarPlot::dataColumnsChanged, this, &BarPlotDock::plotDataColumnsChanged);
-
-	connect(m_barPlot, &BarPlot::widthFactorChanged, this, &BarPlotDock::plotWidthFactorChanged);
+	connect(m_plot, &AbstractAspect::aspectDescriptionChanged, this, &LollipopPlotDock::aspectDescriptionChanged);
+	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &LollipopPlotDock::updatePlotRanges);
+	connect(m_plot, &LollipopPlot::visibleChanged, this, &LollipopPlotDock::plotVisibilityChanged);
+	connect(m_plot, &LollipopPlot::xColumnChanged, this, &LollipopPlotDock::plotXColumnChanged);
+	connect(m_plot, &LollipopPlot::dataColumnsChanged, this, &LollipopPlotDock::plotDataColumnsChanged);
 }
 
-void BarPlotDock::setModel() {
+void LollipopPlotDock::setModel() {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
@@ -224,21 +210,22 @@ void BarPlotDock::setModel() {
 /*
  * updates the locale in the widgets. called when the application settins are changed.
  */
-void BarPlotDock::updateLocale() {
+void LollipopPlotDock::updateLocale() {
 	lineWidget->updateLocale();
 }
 
-void BarPlotDock::updatePlotRanges() {
+void LollipopPlotDock::updatePlotRanges() {
 	updatePlotRangeList(ui.cbPlotRanges);
 }
 
-void BarPlotDock::loadDataColumns() {
+void LollipopPlotDock::loadDataColumns() {
 	// add the combobox for the first column, is always present
 	if (m_dataComboBoxes.count() == 0)
 		addDataColumn();
 
-	int count = m_barPlot->dataColumns().count();
-	ui.cbNumber->clear();
+	int count = m_plot->dataColumns().count();
+	ui.cbNumberLine->clear();
+	ui.cbNumberSymbol->clear();
 
 	if (count != 0) {
 		// box plot has already data columns, make sure we have the proper number of comboboxes
@@ -253,12 +240,14 @@ void BarPlotDock::loadDataColumns() {
 
 		// show the columns in the comboboxes
 		for (int i = 0; i < count; ++i)
-			m_dataComboBoxes.at(i)->setAspect(m_barPlot->dataColumns().at(i));
+			m_dataComboBoxes.at(i)->setAspect(m_plot->dataColumns().at(i));
 
 		// show columns names in the combobox for the selection of the bar to be modified
 		for (int i = 0; i < count; ++i)
-			if (m_barPlot->dataColumns().at(i))
-				ui.cbNumber->addItem(m_barPlot->dataColumns().at(i)->name());
+			if (m_plot->dataColumns().at(i)) {
+				ui.cbNumberLine->addItem(m_plot->dataColumns().at(i)->name());
+				ui.cbNumberSymbol->addItem(m_plot->dataColumns().at(i)->name());
+			}
 	} else {
 		// no data columns set in the box plot yet, we show the first combo box only
 		m_dataComboBoxes.first()->setAspect(nullptr);
@@ -267,7 +256,7 @@ void BarPlotDock::loadDataColumns() {
 	}
 
 	// disable data column widgets if we're modifying more than one box plot at the same time
-	bool enabled = (m_barPlots.count() == 1);
+	bool enabled = (m_plots.count() == 1);
 	m_buttonNew->setVisible(enabled);
 	for (auto* cb : m_dataComboBoxes)
 		cb->setEnabled(enabled);
@@ -275,18 +264,22 @@ void BarPlotDock::loadDataColumns() {
 		b->setVisible(enabled);
 
 	// select the first column after all of them were added to the combobox
-	ui.cbNumber->setCurrentIndex(0);
+	ui.cbNumberLine->setCurrentIndex(0);
+	ui.cbNumberSymbol->setCurrentIndex(0);
 }
 
-void BarPlotDock::setDataColumns() const {
+void LollipopPlotDock::setDataColumns() const {
 	int newCount = m_dataComboBoxes.count();
-	int oldCount = m_barPlot->dataColumns().count();
+	int oldCount = m_plot->dataColumns().count();
 
-	if (newCount > oldCount)
-		ui.cbNumber->addItem(QString::number(newCount));
-	else {
-		if (newCount != 0)
-			ui.cbNumber->removeItem(ui.cbNumber->count() - 1);
+	if (newCount > oldCount) {
+		ui.cbNumberLine->addItem(QString::number(newCount));
+		ui.cbNumberSymbol->addItem(QString::number(newCount));
+	} else {
+		if (newCount != 0) {
+			ui.cbNumberLine->removeItem(ui.cbNumberLine->count() - 1);
+			ui.cbNumberSymbol->removeItem(ui.cbNumberSymbol->count() - 1);
+		}
 	}
 
 	QVector<const AbstractColumn*> columns;
@@ -297,14 +290,14 @@ void BarPlotDock::setDataColumns() const {
 			columns << static_cast<AbstractColumn*>(aspect);
 	}
 
-	m_barPlot->setDataColumns(columns);
+	m_plot->setDataColumns(columns);
 }
 
 //**********************************************************
-//******* SLOTs for changes triggered in BarPlotDock *******
+//******* SLOTs for changes triggered in LollipopPlotDock *******
 //**********************************************************
 //"General"-tab
-void BarPlotDock::xColumnChanged(const QModelIndex& index) {
+void LollipopPlotDock::xColumnChanged(const QModelIndex& index) {
 	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column(nullptr);
 	if (aspect) {
@@ -316,18 +309,18 @@ void BarPlotDock::xColumnChanged(const QModelIndex& index) {
 
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* barPlot : m_barPlots)
+	for (auto* barPlot : m_plots)
 		barPlot->setXColumn(column);
 }
 
-void BarPlotDock::removeXColumn() {
+void LollipopPlotDock::removeXColumn() {
 	cbXColumn->setAspect(nullptr);
 	ui.bRemoveXColumn->setEnabled(false);
-	for (auto* barPlot : m_barPlots)
+	for (auto* barPlot : m_plots)
 		barPlot->setXColumn(nullptr);
 }
 
-void BarPlotDock::addDataColumn() {
+void LollipopPlotDock::addDataColumn() {
 	auto* cb = new TreeViewComboBox;
 
 	static const QList<AspectType> list{AspectType::Folder,
@@ -344,7 +337,7 @@ void BarPlotDock::addDataColumn() {
 										AspectType::CantorWorksheet};
 	cb->setTopLevelClasses(list);
 	cb->setModel(m_aspectTreeModel);
-	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::dataColumnChanged);
+	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &LollipopPlotDock::dataColumnChanged);
 
 	int index = m_dataComboBoxes.size();
 
@@ -357,7 +350,7 @@ void BarPlotDock::addDataColumn() {
 	} else {
 		auto* button = new QPushButton();
 		button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
-		connect(button, &QPushButton::clicked, this, &BarPlotDock::removeDataColumn);
+		connect(button, &QPushButton::clicked, this, &LollipopPlotDock::removeDataColumn);
 		m_gridLayout->addWidget(button, index, 1, 1, 1);
 		m_removeButtons << button;
 	}
@@ -369,7 +362,7 @@ void BarPlotDock::addDataColumn() {
 	ui.lDataColumn->setText(i18n("Columns:"));
 }
 
-void BarPlotDock::removeDataColumn() {
+void LollipopPlotDock::removeDataColumn() {
 	auto* sender = static_cast<QPushButton*>(QObject::sender());
 	if (sender) {
 		// remove button was clicked, determin which one and
@@ -401,129 +394,110 @@ void BarPlotDock::removeDataColumn() {
 		setDataColumns();
 }
 
-void BarPlotDock::dataColumnChanged(const QModelIndex&) {
+void LollipopPlotDock::dataColumnChanged(const QModelIndex&) {
 	CONDITIONAL_LOCK_RETURN;
 
 	setDataColumns();
 }
 
-void BarPlotDock::typeChanged(int index) {
+void LollipopPlotDock::orientationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto type = static_cast<BarPlot::Type>(index);
-	for (auto* barPlot : m_barPlots)
-		barPlot->setType(type);
-}
-
-void BarPlotDock::orientationChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto orientation = BarPlot::Orientation(index);
-	for (auto* barPlot : m_barPlots)
+	auto orientation = LollipopPlot::Orientation(index);
+	for (auto* barPlot : m_plots)
 		barPlot->setOrientation(orientation);
 }
 
-void BarPlotDock::visibilityChanged(bool state) {
+void LollipopPlotDock::visibilityChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* barPlot : m_barPlots)
+	for (auto* barPlot : m_plots)
 		barPlot->setVisible(state);
 }
 
-//"Box"-tab
+//"Line"-tab
 /*!
- * called when the current bar number was changed, shows the bar properties for the selected bar.
+ * called when the current bar number was changed, shows the line properties for the selected bar.
  */
-void BarPlotDock::currentBarChanged(int index) {
+void LollipopPlotDock::currentBarLineChanged(int index) {
 	if (index == -1)
 		return;
 
 	CONDITIONAL_LOCK_RETURN;
 
-	QList<Background*> backgrounds;
 	QList<Line*> lines;
-	for (auto* plot : m_barPlots) {
-		auto* background = plot->backgroundAt(index);
-		if (background)
-			backgrounds << background;
-
+	for (auto* plot : m_plots) {
 		auto* line = plot->lineAt(index);
 		if (line)
 			lines << line;
 	}
 
-	backgroundWidget->setBackgrounds(backgrounds);
 	lineWidget->setLines(lines);
 }
 
-void BarPlotDock::widthFactorChanged(int value) {
+
+//"Symbol"-tab
+/*!
+ * called when the current bar number was changed, shows the symbol properties for the selected bar.
+ */
+void LollipopPlotDock::currentBarSymbolChanged(int index) {
+	if (index == -1)
+		return;
+
 	CONDITIONAL_LOCK_RETURN;
 
-	double factor = (double)value / 100.;
-	for (auto* barPlot : m_barPlots)
-		barPlot->setWidthFactor(factor);
+	QList<Symbol*> symbols;
+	for (auto* plot : m_plots) {
+		auto* symbol = plot->symbolAt(index);
+		if (symbol)
+			symbols << symbol;
+	}
+
+	symbolWidget->setSymbols(symbols);
 }
 
 //*************************************************************
-//******* SLOTs for changes triggered in BarPlot ********
+//******* SLOTs for changes triggered in Lollipop ********
 //*************************************************************
 // general
-void BarPlotDock::plotXColumnChanged(const AbstractColumn* column) {
+void LollipopPlotDock::plotXColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXColumn->setColumn(column, m_barPlot->xColumnPath());
+	cbXColumn->setColumn(column, m_plot->xColumnPath());
 }
-void BarPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
+void LollipopPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
 	CONDITIONAL_LOCK_RETURN;
 	loadDataColumns();
 }
-void BarPlotDock::plotTypeChanged(BarPlot::Type type) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbType->setCurrentIndex((int)type);
-}
-void BarPlotDock::plotOrientationChanged(BarPlot::Orientation orientation) {
+void LollipopPlotDock::plotOrientationChanged(LollipopPlot::Orientation orientation) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
-void BarPlotDock::plotVisibilityChanged(bool on) {
+void LollipopPlotDock::plotVisibilityChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
-// box
-void BarPlotDock::plotWidthFactorChanged(double factor) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.sbWidthFactor->setValue(round(factor * 100));
-}
 
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
-void BarPlotDock::load() {
+void LollipopPlotDock::load() {
 	// general
-	ui.cbType->setCurrentIndex((int)m_barPlot->type());
-	ui.cbOrientation->setCurrentIndex((int)m_barPlot->orientation());
-
-	// box
-	ui.sbWidthFactor->setValue(round(m_barPlot->widthFactor()) * 100);
+	ui.cbOrientation->setCurrentIndex((int)m_plot->orientation());
 }
 
-void BarPlotDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QLatin1String("BarPlot"));
+void LollipopPlotDock::loadConfig(KConfig& config) {
+	KConfigGroup group = config.group(QLatin1String("Lollipop"));
 
 	// general
-	ui.cbType->setCurrentIndex(group.readEntry("Type", (int)m_barPlot->type()));
-	ui.cbOrientation->setCurrentIndex(group.readEntry("Orientation", (int)m_barPlot->orientation()));
+	ui.cbOrientation->setCurrentIndex(group.readEntry("Orientation", (int)m_plot->orientation()));
 
-	// box
-	ui.sbWidthFactor->setValue(round(group.readEntry("WidthFactor", m_barPlot->widthFactor()) * 100));
-	backgroundWidget->loadConfig(group);
 	lineWidget->loadConfig(group);
-
-	// values
+	symbolWidget->loadConfig(group);
 	valueWidget->loadConfig(group);
 }
 
-void BarPlotDock::loadConfigFromTemplate(KConfig& config) {
+void LollipopPlotDock::loadConfigFromTemplate(KConfig& config) {
 	// extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QLatin1String("/"));
@@ -532,30 +506,25 @@ void BarPlotDock::loadConfigFromTemplate(KConfig& config) {
 	else
 		name = config.name();
 
-	int size = m_barPlots.size();
+	int size = m_plots.size();
 	if (size > 1)
-		m_barPlot->beginMacro(i18n("%1 bar plots: template \"%2\" loaded", size, name));
+		m_plot->beginMacro(i18n("%1 lollipop plots: template \"%2\" loaded", size, name));
 	else
-		m_barPlot->beginMacro(i18n("%1: template \"%2\" loaded", m_barPlot->name(), name));
+		m_plot->beginMacro(i18n("%1: template \"%2\" loaded", m_plot->name(), name));
 
 	this->loadConfig(config);
 
-	m_barPlot->endMacro();
+	m_plot->endMacro();
 }
 
-void BarPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("BarPlot");
+void LollipopPlotDock::saveConfigAsTemplate(KConfig& config) {
+	KConfigGroup group = config.group("Lollipop");
 
 	// general
-	group.writeEntry("Type", ui.cbType->currentIndex());
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 
-	// box
-	group.writeEntry("WidthFactor", ui.sbWidthFactor->value() / 100.0);
-	backgroundWidget->saveConfig(group);
 	lineWidget->saveConfig(group);
-
-	// values
+	symbolWidget->saveConfig(group);
 	valueWidget->saveConfig(group);
 
 	config.sync();
