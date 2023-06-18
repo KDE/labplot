@@ -1402,6 +1402,10 @@ void AxisPrivate::retransformTicks() {
 	tickLabelValues.clear();
 	tickLabelValuesString.clear();
 
+	// if type is tick number and tick number is auto: recalculate in case scale has changed
+	if (majorTicksType == Axis::TicksType::TotalNumber && majorTicksAutoNumber)
+		majorTicksNumber = range.autoTickCount();
+
 	if (majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks)) {
 		retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 		return;
