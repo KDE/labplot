@@ -475,7 +475,6 @@ QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
 void NumberSpinBox::valueChanged() {
 	if (m_feedback)
 		m_waitFeedback = true;
-	qDebug() << "Value: " << value();
 	emit valueChanged(value());
 	m_waitFeedback = false;
 }
