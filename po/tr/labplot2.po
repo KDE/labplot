@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-27 02:30+0000\n"
-"PO-Revision-Date: 2023-05-28 11:38+0300\n"
+"PO-Revision-Date: 2023-06-17 13:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.07.70\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -7136,12 +7136,12 @@ msgstr "Tema:"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:971
 #, kde-format
 msgid "%1: change geometry rect"
-msgstr "%1: geometri dikdörtgeni değiştir"
+msgstr "%1: Geometri dikdörtgeni değiştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1006
 #, kde-format
 msgid "%1: set range type"
-msgstr "%1: aralık türünü ayarla"
+msgstr "%1: Erim türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1013
 #, fuzzy, kde-format
@@ -7271,7 +7271,7 @@ msgstr "'%1'in indirgenmesi"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1879
 #, kde-format
 msgid "%1: add data reduction curve"
-msgstr "%1: veri indirgeme eğrisi ekle"
+msgstr "%1: Veri indirgeme eğrisi ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1891
 #, kde-format
