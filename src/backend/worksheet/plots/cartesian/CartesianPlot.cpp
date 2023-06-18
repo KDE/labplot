@@ -3207,9 +3207,11 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		if (cs->index(dim) != index)
 			continue;
 
-		const auto r = range(dim, index);
-		DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << "range = " << r.toStdString()
-						  << ", auto scale = " << r.autoScale())
+		auto r = range(dim, index);
+		// Fix range when values not valid
+		r.fixLimits();
+		QDEBUG(Q_FUNC_INFO << CartesianCoordinateSystem::dimensionToString(dim) << "range =" << r.toString() << ", scale =" << r.scale()
+						   << ", auto scale = " << r.autoScale())
 
 		QVector<CartesianScale*> scales;
 
@@ -3220,7 +3222,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 			logicalRange = r;
 
 			if (sceneRange.length() > 0)
-				scales << this->createScale(r.scale(), sceneRange, logicalRange);
+				scales << this->createScale(logicalRange.scale(), sceneRange, logicalRange);
 		} else {
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = r.start();
@@ -3260,6 +3262,10 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 	// Set ranges in the axis
 	for (int i = 0; i < q->rangeCount(dim); i++) {
 		auto& rangep = ranges(dim)[i];
+		// Fix range when values not valid
+		rangep.range.fixLimits();
+
+		QDEBUG(Q_FUNC_INFO << ", range" << i << ":" << rangep.range.toString())
 		const double deltaMin = rangep.range.start() - rangep.prev.start();
 		const double deltaMax = rangep.range.end() - rangep.prev.end();
 
@@ -3492,7 +3498,7 @@ void CartesianPlotPrivate::checkRange(Dimension dim, int index) {
 }
 
 CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double>& sceneRange, const Range<double>& logicalRange) {
-	DEBUG(Q_FUNC_INFO << ", scene range : " << sceneRange.toStdString() << ", logical range : " << logicalRange.toStdString());
+	QDEBUG(Q_FUNC_INFO << ", scale =" << scale << ", scene range : " << sceneRange.toString() << ", logical range : " << logicalRange.toString());
 
 	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
 

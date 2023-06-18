@@ -226,6 +226,41 @@ public:
 	QString toLocaleString(bool round = true) const {
 		return this->toString(round, QLocale());
 	}
+
+	// fix start and end when not supported by scale
+	void fixLimits() {
+		switch (m_scale) {
+		case Scale::Linear: // all values are allowed (catch inf, nan?)
+			break;
+		case Scale::Log10:
+			if (m_end <= 0)
+				m_end = 10.;
+			if (m_start <= 0)
+				m_start = m_end / 10.;
+			break;
+		case Scale::Log2:
+			if (m_end <= 0)
+				m_end = 2.;
+			if (m_start <= 0)
+				m_start = m_end / 2.;
+			break;
+		case Scale::Ln:
+			if (m_end <= 0)
+				m_end = M_E;
+			if (m_start <= 0)
+				m_start = m_end / M_E;
+			break;
+		case Scale::Sqrt:
+		case Scale::Square:
+		case Scale::Inverse:
+			if (m_end < 0)
+				m_end = 1.;
+			if (m_start < 0)
+				m_start = 0.;
+			break;
+		}
+	}
+
 	// extend/shrink range to nice numbers (used in auto scaling)
 	//  get nice size to extend to (see Glassner: Graphic Gems)
 	double niceSize(double size, bool round) {
