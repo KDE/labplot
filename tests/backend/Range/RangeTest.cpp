@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for Range
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2021-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -83,6 +83,26 @@ void RangeTest::testTickCount() {
 		QCOMPARE(test.first.autoTickCount(), test.second);
 	}
 }
+
+void RangeTest::testLimits() {
+	QVector<QPair<Range<double>, Range<double>>> tests{{{0, 1, RangeT::Format::Numeric, RangeT::Scale::Log10}, {0.1, 1.}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Log10}, {1., 10.}},
+													   {{0, 1, RangeT::Format::Numeric, RangeT::Scale::Log2}, {0.5, 1.}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Log2}, {1., 2.}},
+													   {{0, 1, RangeT::Format::Numeric, RangeT::Scale::Ln}, {1 / M_E, 1.}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Ln}, {1., M_E}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Sqrt}, {0., 1.}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Square}, {0., 1.}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Inverse}, {0., 1.}}};
+
+	for (auto& test : tests) {
+		test.first.fixLimits();
+		DEBUG(test.first.toStdString() << " -> " << test.second.toStdString())
+		QCOMPARE(test.first, test.second);
+	}
+}
+
+///////////////////////////////////
 
 void RangeTest::testNiceExtendLog10() {
 	QVector<QPair<Range<double>, Range<double>>> tests{{{0.2, 201.}, {0.1, 1000.}}};

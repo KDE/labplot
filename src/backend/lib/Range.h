@@ -253,7 +253,7 @@ public:
 		case Scale::Sqrt:
 		case Scale::Square:
 		case Scale::Inverse:
-			if (m_end < 0)
+			if (m_end <= 0) // end must be > 0 for start to be < end
 				m_end = 1.;
 			if (m_start < 0)
 				m_start = 0.;
