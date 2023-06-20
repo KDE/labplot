@@ -470,7 +470,7 @@ msgstr "Ma&ximizar"
 #: src/backend/core/AbstractPart.cpp:134
 #, kde-format
 msgid "Show"
-msgstr "Mostrar"
+msgstr "Amosar"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:345
 #, kde-format
@@ -8427,7 +8427,7 @@ msgstr "%1: definir o tipo de letra principal de TeX"
 #: src/backend/worksheet/TextLabel.cpp:334
 #, kde-format
 msgid "%1: set background color"
-msgstr "%1: estabelecer a cor de fondo"
+msgstr "%1: definir a cor de fondo"
 
 #: src/backend/worksheet/TextLabel.cpp:342
 #, kde-format
@@ -8449,7 +8449,7 @@ msgstr "%1: cambiar a propiedade «cambiar a escala do contido»"
 #: src/backend/worksheet/Worksheet.cpp:667
 #, kde-format
 msgid "%1: set layout"
-msgstr "%1: estabelecer a disposición"
+msgstr "%1: definir a disposición"
 
 #: src/backend/worksheet/Worksheet.cpp:729
 #: src/backend/worksheet/Worksheet.cpp:730
@@ -8505,7 +8505,7 @@ msgstr "%1: definir o aliñamento horizontal"
 #: src/backend/worksheet/WorksheetElement.cpp:590
 #, kde-format
 msgid "%1: set vertical alignment"
-msgstr "%1: estabelecer o aliñamento vertical"
+msgstr "%1: definir o aliñamento vertical"
 
 #: src/backend/worksheet/WorksheetElement.cpp:597
 #, fuzzy, kde-format
@@ -9123,7 +9123,7 @@ msgstr "Columnas"
 #: src/commonfrontend/ProjectExplorer.cpp:263
 #, kde-format
 msgid "Show All"
-msgstr "Mostralas todas"
+msgstr "Amosalas todas"
 
 #: src/commonfrontend/ProjectExplorer.cpp:491
 #, kde-format
@@ -9224,7 +9224,7 @@ msgstr "Valores equidistantes"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1048
 #, kde-format
 msgid "Show Comments"
-msgstr "Mostrar os comentarios"
+msgstr "Amosar os comentarios"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:256
 #, kde-format
@@ -10567,7 +10567,7 @@ msgstr "Agochar as opcións"
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:206
 #, kde-format
 msgid "Show Options"
-msgstr "Mostrar as opcións"
+msgstr "Amosar as opcións"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:147
 #, kde-format
@@ -10777,7 +10777,7 @@ msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
 "Use \"All\" if all data has to be kept."
 msgstr ""
-"Indique a cantidade de mostrar que deben gardarse en memoria tras ler.\n"
+"Indique a cantidade de amosar que deben gardarse en memoria tras ler.\n"
 "Use «Todas» para gardar todos os datos."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:221
@@ -11269,24 +11269,24 @@ msgstr ""
 "como número de catro díxitos. Se o ano é negativo, engrádese un signo "
 "negativo diante.</td></tr> </table><br> <br> Expresións que poden usarse "
 "para a parte de hora da cadea de formato: <table> <tr><td>h</td><td>a hora "
-"sen ceros á esquerda (de 0 a 23 ou de 1 a 12 se se mostran a.m. e p.m.)</"
-"td></tr> <tr><td>hh</td><td>a hora con ceros á esquerda (de 00 a 23 ou de 01 "
-"a 12 se se mostran a.m. e p.m.)</td></tr> <tr><td>H</td><td>a hora sen ceros "
-"á esquerda (de 0 a 23, incluso se se mostran a.m. e p.m.)</td></tr> "
-"<tr><td>HH</td><td>a hora con ceros á esquerda (de 00 a 23, incluso se se "
-"mostran a.m. e p.m.)</td></tr> <tr><td>m</td><td>os minutos sen ceros á "
-"esquerda (de 0 a 59)</td></tr> <tr><td>mm</td><td>os minutos con ceros á "
-"esquerda (de 00 a 59)</td></tr> <tr><td>s</td><td>os segundos sen ceros á "
-"esquerda (de 0 a 59)</td></tr> <tr><td>ss</td><td>os segundos con ceros á "
-"esquerda (de 00 a 59)</td></tr> <tr><td>z</td><td>as milésimas de segundo "
-"sen ceros á esquerda (de 0 a 999)</td></tr> <tr><td>zzz</td><td>as milésimas "
-"de segundo con ceros á esquerda (de 000 a 999)</td></tr> <tr><td>AP ou A</"
-"td><td>interpretar como unha hora a.m./p.m. AP debe ser ou «A.M.» ou «P.M.»."
-"</td></tr> <tr><td>ap ou a</td><td>interpretar como unha hora a.m./p.m. AP "
-"debe ser ou «a.m.» ou «p.m.».</td></tr> </table><br> <br> Estes son algúns "
-"exemplos:<table> <tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr> <tr><td>ddd "
-"MMMM d yy</td><td>dom xullo 20 69</td></tr> <tr><td>'O día é' dddd</td><td>O "
-"día é domingo</td></tr> </table>"
+"sen ceros á esquerda (de 0 a 23 ou de 1 a 12 se se amosan a.m. e p.m.)</td></"
+"tr> <tr><td>hh</td><td>a hora con ceros á esquerda (de 00 a 23 ou de 01 a 12 "
+"se se amosan a.m. e p.m.)</td></tr> <tr><td>H</td><td>a hora sen ceros á "
+"esquerda (de 0 a 23, incluso se se amosan a.m. e p.m.)</td></tr> <tr><td>HH</"
+"td><td>a hora con ceros á esquerda (de 00 a 23, incluso se se amosan a.m. e "
+"p.m.)</td></tr> <tr><td>m</td><td>os minutos sen ceros á esquerda (de 0 a "
+"59)</td></tr> <tr><td>mm</td><td>os minutos con ceros á esquerda (de 00 a "
+"59)</td></tr> <tr><td>s</td><td>os segundos sen ceros á esquerda (de 0 a "
+"59)</td></tr> <tr><td>ss</td><td>os segundos con ceros á esquerda (de 00 a "
+"59)</td></tr> <tr><td>z</td><td>as milésimas de segundo sen ceros á esquerda "
+"(de 0 a 999)</td></tr> <tr><td>zzz</td><td>as milésimas de segundo con ceros "
+"á esquerda (de 000 a 999)</td></tr> <tr><td>AP ou A</td><td>interpretar como "
+"unha hora a.m./p.m. AP debe ser ou «A.M.» ou «P.M.».</td></tr> <tr><td>ap ou "
+"a</td><td>interpretar como unha hora a.m./p.m. AP debe ser ou «a.m.» ou «p."
+"m.».</td></tr> </table><br> <br> Estes son algúns exemplos:<table> "
+"<tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr> <tr><td>ddd MMMM d yy</"
+"td><td>dom xullo 20 69</td></tr> <tr><td>'O día é' dddd</td><td>O día é "
+"domingo</td></tr> </table>"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerDialog.cpp:32
 #, kde-format
@@ -16897,7 +16897,7 @@ msgstr "Campo:"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:231
 #, kde-format
 msgid "Show file info"
-msgstr "Mostrar información do ficheiro"
+msgstr "Amosar información do ficheiro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:258
@@ -19540,7 +19540,7 @@ msgstr "Axustar:"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:764
 #, kde-format
 msgid "Show fit curve"
-msgstr "Mostrar a curva de axuste"
+msgstr "Amosar a curva de axuste"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lParameters)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:792
@@ -19765,7 +19765,7 @@ msgstr "Aplicar"
 #: src/kdefrontend/ui/fitoptionswidget.ui:53
 #, kde-format
 msgid "show the fit function with the given start parameters"
-msgstr "mostrar a función de axuste dos parámetros de inicio indicado"
+msgstr "amosar a función de axuste dos parámetros de inicio indicado"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPreview)
 #: src/kdefrontend/ui/fitoptionswidget.ui:56
