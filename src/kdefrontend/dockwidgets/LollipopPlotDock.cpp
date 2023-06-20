@@ -59,14 +59,14 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	ui.cbNumberLine->setToolTip(msg);
 	lineWidget = new LineWidget(ui.tabLine);
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabLine->layout());
-	gridLayout->addWidget(lineWidget, 1, 0, 1, 3);
+	gridLayout->addWidget(lineWidget, 2, 0, 1, 3);
 
 	// Tab "Symbol"
 	ui.lNumberSymbol->setToolTip(msg);
 	ui.cbNumberSymbol->setToolTip(msg);
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabSymbol->layout());
-	gridLayout->addWidget(symbolWidget, 1, 0, 1, 3);
+	gridLayout->addWidget(symbolWidget, 2, 0, 1, 3);
 
 	// Tab "Values"
 	auto* hboxLayout = new QHBoxLayout(ui.tabValues);
@@ -309,15 +309,15 @@ void LollipopPlotDock::xColumnChanged(const QModelIndex& index) {
 
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* barPlot : m_plots)
-		barPlot->setXColumn(column);
+	for (auto* plot : m_plots)
+		plot->setXColumn(column);
 }
 
 void LollipopPlotDock::removeXColumn() {
 	cbXColumn->setAspect(nullptr);
 	ui.bRemoveXColumn->setEnabled(false);
-	for (auto* barPlot : m_plots)
-		barPlot->setXColumn(nullptr);
+	for (auto* plot : m_plots)
+		plot->setXColumn(nullptr);
 }
 
 void LollipopPlotDock::addDataColumn() {
@@ -404,15 +404,15 @@ void LollipopPlotDock::orientationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto orientation = LollipopPlot::Orientation(index);
-	for (auto* barPlot : m_plots)
-		barPlot->setOrientation(orientation);
+	for (auto* plot : m_plots)
+		plot->setOrientation(orientation);
 }
 
 void LollipopPlotDock::visibilityChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* barPlot : m_plots)
-		barPlot->setVisible(state);
+	for (auto* plot : m_plots)
+		plot->setVisible(state);
 }
 
 //"Line"-tab
@@ -434,7 +434,6 @@ void LollipopPlotDock::currentBarLineChanged(int index) {
 
 	lineWidget->setLines(lines);
 }
-
 
 //"Symbol"-tab
 /*!
@@ -476,7 +475,6 @@ void LollipopPlotDock::plotVisibilityChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
-
 
 //**********************************************************
 //******************** SETTINGS ****************************

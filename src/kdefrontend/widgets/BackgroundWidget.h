@@ -23,7 +23,6 @@ public:
 	explicit BackgroundWidget(QWidget*);
 
 	void setBackgrounds(const QList<Background*>&);
-	void adjustLayout();
 	void setEnabled(bool);
 
 	void load();
@@ -39,6 +38,7 @@ private:
 
 	void retranslateUi();
 	void showEvent(QShowEvent*) override;
+	void adjustLayout();
 
 Q_SIGNALS:
 	void dataChanged(bool);

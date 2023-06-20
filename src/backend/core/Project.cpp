@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -22,6 +22,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
@@ -1051,6 +1052,41 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		barPlot->setDataColumns(dataColumns);
 
 		RESTORE_COLUMN_POINTER(barPlot, xColumn, XColumn);
+	}
+
+	// lollipop plots
+	QVector<LollipopPlot*> lollipopPlots;
+	if (hasChildren)
+		lollipopPlots = aspect->children<LollipopPlot>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::BoxPlot)
+		lollipopPlots << static_cast<LollipopPlot*>(aspect);
+
+	for (auto* lollipopPlot : lollipopPlots) {
+		if (!lollipopPlot)
+			continue;
+
+		// initialize the array for the column pointers
+		int count = lollipopPlot->dataColumnPaths().count();
+		QVector<const AbstractColumn*> dataColumns;
+		dataColumns.resize(count);
+
+		// restore the pointers
+		for (int i = 0; i < count; ++i) {
+			dataColumns[i] = nullptr;
+			const auto& path = lollipopPlot->dataColumnPaths().at(i);
+			for (Column* column : columns) {
+				if (!column)
+					continue;
+				if (column->path() == path) {
+					dataColumns[i] = column;
+					break;
+				}
+			}
+		}
+
+		lollipopPlot->setDataColumns(dataColumns);
+
+		RESTORE_COLUMN_POINTER(lollipopPlot, xColumn, XColumn);
 	}
 
 	// data picker curves

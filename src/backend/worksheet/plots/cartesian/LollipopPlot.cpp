@@ -14,9 +14,9 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
@@ -56,7 +56,7 @@ void LollipopPlot::init() {
 	// general
 	d->orientation = (LollipopPlot::Orientation)group.readEntry("Orientation", (int)LollipopPlot::Orientation::Vertical);
 
-	// initial line, symbol and valueo bjects that will be available even if not data column was set yet
+	// initial line, symbol and value objects that will be available even if not data column was set yet
 	d->addLine(group);
 	d->addSymbol(group);
 	d->addValue(group);
@@ -426,14 +426,13 @@ void LollipopPlotPrivate::recalc() {
 		const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 
 		for (int i = 0; i < diff; ++i) {
-			// box filling and border line
 			auto* line = addLine(group);
 			auto* symbol = addSymbol(group);
 
 			if (plot) {
 				const auto& themeColor = plot->themeColorPalette(lines.count() - 1);
 				line->setColor(themeColor);
-				//TODO: symbol->setColor(themeColor);
+				symbol->setColor(themeColor);
 			}
 		}
 	} else if (diff < 0) {
@@ -509,7 +508,6 @@ void LollipopPlotPrivate::recalc() {
 				xMin = min;
 		}
 
-
 		// if there are no negative values, we plot
 		// in the positive x-direction only and we start at x=0
 		if (xMin > 0)
@@ -546,10 +544,9 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 	QVector<QLineF> barLines; // lines for all bars for one colum in scene coordinates
 	QVector<QPointF> symbolPoints;
 
-	double widthFactor = 1.0; //TODO
 	const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
 	const int barCount = dataColumns.size(); // number of bars within a group
-	const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
+	const double width = (m_groupWidth - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 
 	int valueIndex = 0;
 	for (int i = 0; i < column->rowCount(); ++i) {
@@ -562,8 +559,7 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 		if (xColumn)
 			x = xColumn->valueAt(i);
 		else
-			x = m_groupGap + m_groupWidth * (1 - widthFactor) / 2
-				+ valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
+			x = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
 
 		x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
@@ -583,10 +579,9 @@ void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
 	QVector<QLineF> barLines; // lines for all bars for one colum in scene coordinates
 	QVector<QPointF> symbolPoints;
 
-	double widthFactor = 1.0; //TODO
 	const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
 	const int barCount = dataColumns.size(); // number of bars within a group
-	const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
+	const double width = (m_groupWidth - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 
 	int valueIndex = 0;
 	for (int i = 0; i < column->rowCount(); ++i) {
@@ -598,7 +593,7 @@ void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
 		if (xColumn)
 			y = xColumn->valueAt(i);
 		else
-			y = m_groupGap + m_groupWidth * (1 - widthFactor) / 2 + valueIndex * m_groupWidth; // translate to the beginning of the group
+			y = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
 
 		y += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
@@ -757,6 +752,7 @@ void LollipopPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	m_shape = QPainterPath();
 
+	// lines
 	int index = 0;
 	for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
 		for (const auto& line : columnBarLines) { // loop over the bars for every data column
@@ -771,6 +767,38 @@ void LollipopPlotPrivate::recalcShapeAndBoundingRect() {
 		}
 		++index;
 	}
+
+	// symbols
+	auto symbolsPath = QPainterPath();
+	index = 0;
+	for (const auto& symbolPoints : m_symbolPoints) {// loop over the different data columns
+		if (index > symbols.count() - 1)
+			continue;
+
+		const auto* symbol = symbols.at(index);
+		if (symbol->style() != Symbol::Style::NoSymbols) {
+			auto path = Symbol::stylePath(symbol->style());
+
+			QTransform trafo;
+			trafo.scale(symbol->size(), symbol->size());
+			path = trafo.map(path);
+			trafo.reset();
+
+			if (symbol->rotationAngle() != 0.) {
+				trafo.rotate(symbol->rotationAngle());
+				path = trafo.map(path);
+			}
+
+			for (const auto& point : symbolPoints) { // loop over the points for every data column
+				trafo.reset();
+				trafo.translate(point.x(), point.y());
+				symbolsPath.addPath(trafo.map(path));
+			}
+		}
+		++index;
+	}
+
+	m_shape.addPath(symbolsPath);
 
 	if (value->type() != Value::NoValues)
 		m_shape.addPath(m_valuesPath);
@@ -807,11 +835,11 @@ void LollipopPlotPrivate::draw(QPainter* painter) {
 
 	int columnIndex = 0;
 	for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
-		for (const auto& line : columnBarLines) { // loop over the bars for every data column
-			// draw the lines
-			if (columnIndex < lines.size()) { // TODO: remove this check later
-				const auto& borderPen = lines.at(columnIndex)->pen();
-				const double borderOpacity = lines.at(columnIndex)->opacity();
+		// draw the lines
+		if (columnIndex < lines.size()) { // TODO: remove this check later
+			const auto& borderPen = lines.at(columnIndex)->pen();
+			const double borderOpacity = lines.at(columnIndex)->opacity();
+			for (const auto& line : columnBarLines) { // loop over the bars for every data column
 				if (borderPen.style() != Qt::NoPen) {
 					painter->setPen(borderPen);
 					painter->setBrush(Qt::NoBrush);
@@ -819,14 +847,12 @@ void LollipopPlotPrivate::draw(QPainter* painter) {
 					painter->drawLine(line);
 				}
 			}
-
-			// draw symbols
-			if (columnIndex < symbols.size()) { // TODO: remove this check later
-				auto* symbol = symbols.at(columnIndex);
-				if (symbol->style() != Symbol::Style::NoSymbols)
-					symbol->draw(painter, m_symbolPoints.at(columnIndex));
-			}
 		}
+
+		// // draw symbols
+		if (columnIndex < symbols.size())
+			symbols.at(columnIndex)->draw(painter,  m_symbolPoints.at(columnIndex));
+
 		++columnIndex;
 	}
 
@@ -1035,20 +1061,19 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(LollipopPlot);
 	d->m_suppressRecalc = true;
 
-
-	// box border lines
+	// lines
 	for (int i = 0; i < d->lines.count(); ++i) {
 		auto* line = d->lines.at(i);
 		line->loadThemeConfig(group, plot->themeColorPalette(i));
 	}
 
-	// box filling
+	// symbols
 	for (int i = 0; i < d->symbols.count(); ++i) {
 		auto* symbol = d->symbols.at(i);
 		symbol->loadThemeConfig(group, plot->themeColorPalette(i));
 	}
 
-	// Values
+	// values
 	d->value->loadThemeConfig(group, themeColor);
 
 	d->m_suppressRecalc = false;

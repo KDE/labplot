@@ -150,7 +150,7 @@ STD_SETTER_CMD_IMPL_F_S(Line, SetColor, QColor, color, update)
 void Line::setColor(const QColor& color) {
 	Q_D(Line);
 	if (color != d->color)
-		exec(new LineSetColorCmd(d, color, ki18n("%1: set line pen")));
+		exec(new LineSetColorCmd(d, color, ki18n("%1: set line color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Line, SetOpacity, double, opacity, updatePixmap)
