@@ -80,7 +80,6 @@ private:
 	QRectF m_boundingRectangle;
 	QPainterPath m_shape;
 
-
 	QVector<QVector<QLineF>> m_barLines; // QVector<QLineF> contains the lines for each data column
 	QVector<QVector<QPointF>> m_symbolPoints; // QVector<QPointF> contains the positions of symbols for each data column
 

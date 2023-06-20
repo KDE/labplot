@@ -559,7 +559,8 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 		if (xColumn)
 			x = xColumn->valueAt(i);
 		else
-			x = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
+			x = m_groupGap
+					+ valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
 
 		x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
@@ -771,7 +772,7 @@ void LollipopPlotPrivate::recalcShapeAndBoundingRect() {
 	// symbols
 	auto symbolsPath = QPainterPath();
 	index = 0;
-	for (const auto& symbolPoints : m_symbolPoints) {// loop over the different data columns
+	for (const auto& symbolPoints : m_symbolPoints) { // loop over the different data columns
 		if (index > symbols.count() - 1)
 			continue;
 
@@ -849,9 +850,9 @@ void LollipopPlotPrivate::draw(QPainter* painter) {
 			}
 		}
 
-		// // draw symbols
+		// draw symbols
 		if (columnIndex < symbols.size())
-			symbols.at(columnIndex)->draw(painter,  m_symbolPoints.at(columnIndex));
+			symbols.at(columnIndex)->draw(painter, m_symbolPoints.at(columnIndex));
 
 		++columnIndex;
 	}
@@ -945,6 +946,7 @@ void LollipopPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 
 	if (d->xColumn)
 		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
@@ -1005,6 +1007,12 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
 			READ_COLUMN(xColumn);
+
+			str = attribs.value(QStringLiteral("visible")).toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+			else
+				d->setVisible(str.toInt());
 		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 
