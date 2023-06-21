@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-19 00:42+0000\n"
+"POT-Creation-Date: 2023-06-21 00:43+0000\n"
 "PO-Revision-Date: 2014-06-30 02:02+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: lt\n"
@@ -62,8 +62,8 @@ msgstr ""
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2996
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1374
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4629
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
@@ -109,8 +109,8 @@ msgstr ""
 #: src/backend/spreadsheet/Spreadsheet.cpp:1189
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3130
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1438
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2009
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:728
