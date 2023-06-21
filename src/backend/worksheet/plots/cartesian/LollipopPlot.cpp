@@ -560,7 +560,7 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 			x = xColumn->valueAt(i);
 		else
 			x = m_groupGap
-					+ valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
+				+ valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
 
 		x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
