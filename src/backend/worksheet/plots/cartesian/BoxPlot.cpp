@@ -1846,6 +1846,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	for (auto* column : d->dataColumns) {
 		writer->writeStartElement(QStringLiteral("column"));
 		writer->writeAttribute(QStringLiteral("path"), column->path());
@@ -1934,6 +1935,12 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xMax", xMax);
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
+
+			str = attribs.value(QStringLiteral("visible")).toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+			else
+				d->setVisible(str.toInt());
 		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 

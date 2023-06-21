@@ -17,6 +17,7 @@
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
@@ -100,6 +101,8 @@ public:
 			return new XYSmoothCurve(QString());
 		else if (type == AspectType::Histogram)
 			return new Histogram(QString());
+		else if (type == AspectType::BarPlot)
+			return new BarPlot(QString());
 		else if (type == AspectType::BoxPlot)
 			return new BoxPlot(QString());
 		else if (type == AspectType::LollipopPlot)

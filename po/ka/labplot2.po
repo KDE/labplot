@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-17 00:42+0000\n"
-"PO-Revision-Date: 2023-06-12 05:50+0200\n"
+"POT-Creation-Date: 2023-06-21 00:43+0000\n"
+"PO-Revision-Date: 2023-06-19 06:05+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -64,10 +64,10 @@ msgstr "პანელის დამატებები ვერ ვიპ
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2992
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4623
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2996
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1374
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4629
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1933
@@ -111,9 +111,9 @@ msgstr "ატრიბუტი '%1' აკლია ან ცარიელ�
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:1189
 #: src/backend/worksheet/Image.cpp:465
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3126
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2002
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3130
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1438
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2009
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:728
@@ -7127,7 +7127,7 @@ msgstr "ინფორმაცია ხელმუწვდომელი�
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:103
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4971
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4977
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:462
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:457
@@ -7499,7 +7499,7 @@ msgid "%1: load default theme"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1567
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5248
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5254
 #: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set theme"
@@ -7640,29 +7640,29 @@ msgstr "კონვოლუცია"
 msgid "Text Label"
 msgstr "ტექსტური ჭდე"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3715
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3721
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3939
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3960
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3945
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3966
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "x=%1-დან x=%2 -მდე"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3947
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3973
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3953
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3979
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "y=%1 -დან y=%2 -მდე"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3992
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3998
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5195
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5201
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr ""
@@ -9270,7 +9270,7 @@ msgstr ""
 #: src/commonfrontend/ProjectExplorer.cpp:650
 #, kde-format
 msgid "Case Sensitive"
-msgstr "დიდი ასოს გმრძნობიარე"
+msgstr "რეგისტრზე-დამოკიდებული"
 
 #: src/commonfrontend/ProjectExplorer.cpp:658
 #, kde-format
@@ -9393,10 +9393,9 @@ msgstr "&ძებნა"
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:225
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "&Replace"
-msgstr "ჩანაცვლება"
+msgstr "&ჩანაცვლება"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:439
@@ -15443,10 +15442,9 @@ msgid "Sample of %1"
 msgstr "%1-ის ნიმუში"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:211
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#, kde-format
 msgid "DateTime"
-msgstr "თარიღი და დრო:"
+msgstr "თარიღი და დრო"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:220
 #, kde-format
@@ -15454,20 +15452,18 @@ msgid "Regular Expression"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1074
-#, fuzzy, kde-format
-#| msgid "%1 not found"
+#, kde-format
 msgid "%1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] "%1 ფაილი ვერ მოიძებნა"
-msgstr[1] "%1 ფაილი ვერ მოიძებნა"
+msgstr[0] "ნაპოვნია %1 დამთხვევა"
+msgstr[1] "ნაპოვნია %1 დამთხვევა"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1146
-#, fuzzy, kde-format
-#| msgid "%1: replace values"
+#, kde-format
 msgid "%1 replacement made"
 msgid_plural "%1 replacements made"
-msgstr[0] "%1: მნიშვნელობების ჩანაცვლება"
-msgstr[1] "%1: მნიშვნელობების ჩანაცვლება"
+msgstr[0] "%1 ჩანაცვლება"
+msgstr[1] "%1 ჩანაცვლება"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1438
 #, kde-format
@@ -15480,10 +15476,9 @@ msgid "Beginning of line"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1524
-#, fuzzy, kde-format
-#| msgid "End of file"
+#, kde-format
 msgid "End of line"
-msgstr "ფაილის ბოლო"
+msgstr "სტრიქონის დასასრული"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1526
 #, kde-format
@@ -15491,16 +15486,14 @@ msgid "Match any character excluding new line (by default)"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1527
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "One or more occurrences"
-msgstr "შეცდომა."
+msgstr "ერთი ან მეტი გამოვლენა"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1528
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Zero or more occurrences"
-msgstr "შეცდომა."
+msgstr "ნული ან მეტი გამოვლენა"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1529
 #, kde-format
@@ -15523,10 +15516,9 @@ msgid "Or"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1540
-#, fuzzy, kde-format
-#| msgid "character 'X'"
+#, kde-format
 msgid "Set of characters"
-msgstr "სიმბოლო 'X'"
+msgstr "სიმბოლოების ნაკრები"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1541
 #, kde-format
@@ -15539,22 +15531,19 @@ msgid "Whole match reference"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1556
-#, fuzzy, kde-format
-#| msgid "References"
+#, kde-format
 msgid "Reference"
-msgstr "მიმართვები"
+msgstr "მითითება"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1563
-#, fuzzy, kde-format
-#| msgid "Linear Algebra"
+#, kde-format
 msgid "Line break"
-msgstr "წრფივი ალგებრა"
+msgstr "ხაზის დასრულება"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1564
-#, fuzzy, kde-format
-#| msgid "Table"
+#, kde-format
 msgid "Tab"
-msgstr "ცხრილი"
+msgstr "ჩანართი"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1567
 #, kde-format
@@ -15572,10 +15561,9 @@ msgid "Digit"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1570
-#, fuzzy, kde-format
-#| msgid "Zero digit "
+#, kde-format
 msgid "Non-digit"
-msgstr "ნულოვანი ციფრი "
+msgstr "არა-ციფრი"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1571
 #, kde-format
@@ -15623,10 +15611,9 @@ msgid "Positive Lookahead"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1585
-#, fuzzy, kde-format
-#| msgid "Negative Binomial"
+#, kde-format
 msgid "Negative lookahead"
-msgstr "უარყოფითი ბინომური"
+msgstr "უარყოფითი წინმჭვრეტელი"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1589
 #, kde-format
@@ -20740,39 +20727,34 @@ msgstr "b:"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:80
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:87
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:561
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace:"
-msgstr "ჩანაცვლება"
+msgstr "ჩანაცვლება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:97
-#, fuzzy, kde-format
-#| msgid "Find"
+#, kde-format
 msgid "Find:"
-msgstr "ძებნა"
+msgstr "ძებნა:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbOrder)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:134
-#, fuzzy, kde-format
-#| msgid "Search/Filter"
+#, kde-format
 msgid "Search order"
-msgstr "ძებნა/გაფილტვრა"
+msgstr "ძებნის მიმდევრობა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:147
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:119
-#, fuzzy, kde-format
-#| msgid "Case Sensitive"
+#, kde-format
 msgid "Match case sensitive"
-msgstr "დიდი ასოს გმრძნობიარე"
+msgstr "რეგისტრზე-დამოკიდებული დამთხვევა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164
-#, fuzzy, kde-format
-#| msgid "Charge of the electron"
+#, kde-format
 msgid "Search in the selection only"
-msgstr "ელექტრონის მუხტი"
+msgstr "მხოლოდ მონიშნულში ძებნა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:194
@@ -20802,17 +20784,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:235
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace &All"
-msgstr "ჩანაცვლება"
+msgstr "ყველას &ჩანაცვლება"
 
 #. i18n: ectx: property (text), widget (QPushButton, bFindAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Expand All"
+#, kde-format
 msgid "&Find All"
-msgstr "ყველას ამოკეცვა"
+msgstr "&ყველას პოვნა"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:249

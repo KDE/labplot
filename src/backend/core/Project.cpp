@@ -1023,7 +1023,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	QVector<BarPlot*> barPlots;
 	if (hasChildren)
 		barPlots = aspect->children<BarPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::BoxPlot)
+	else if (aspect->type() == AspectType::BarPlot)
 		barPlots << static_cast<BarPlot*>(aspect);
 
 	for (auto* barPlot : barPlots) {
