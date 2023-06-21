@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -990,7 +990,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	QVector<BarPlot*> barPlots;
 	if (hasChildren)
 		barPlots = aspect->children<BarPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::BoxPlot)
+	else if (aspect->type() == AspectType::BarPlot)
 		barPlots << static_cast<BarPlot*>(aspect);
 
 	for (auto* barPlot : barPlots) {
