@@ -197,7 +197,7 @@ public:
 		case AspectType::BoxPlot:
 			return QStringLiteral("BoxPlot");
 		case AspectType::LollipopPlot:
-			return QStringLiteral("LollipoPlot");
+			return QStringLiteral("LollipopPlot");
 		case AspectType::AbstractPart:
 			return QStringLiteral("AbstractPart");
 		case AspectType::AbstractDataSource:
