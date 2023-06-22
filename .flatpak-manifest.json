@@ -198,13 +198,9 @@
             "name": "readstat",
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/WizardMac/ReadStat.git",
-                    "tag": "v1.1.9",
-                    "x-checker-data": {
-                        "type": "git",
-                        "tag-pattern": "^v([\\d.]+)$"
-                    }
+                    "type": "archive",
+                    "url": "https://github.com/WizardMac/ReadStat/archive/v1.1.9.tar.gz",
+                    "sha256": "89af7c785a7ae3d9a7af6e64a69028829a429f66a14b1b913be22816dc07ddca"
                 }
             ]
         },
@@ -251,7 +247,13 @@
                 {
                     "type": "archive",
                     "url": "https://github.com/tbeu/matio/archive/v1.5.23.tar.gz",
-                    "sha256": "5f25c53e698d06b3119e3a4d0536e1da89983dbb7b0a845270663be02ec95978"
+                    "sha256": "5f25c53e698d06b3119e3a4d0536e1da89983dbb7b0a845270663be02ec95978",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 1893,
+                        "stable-only": true,
+                        "url-template": "https://github.com/tbeu/matio/archive/v$version.tar.gz"
+                    }
                 }
             ]
         },
