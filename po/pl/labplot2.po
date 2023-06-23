@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-22 00:44+0000\n"
+"POT-Creation-Date: 2023-06-23 00:42+0000\n"
 "PO-Revision-Date: 2022-08-06 09:40+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -6883,13 +6883,13 @@ msgstr "%1: ustaw nieprzezroczystość linii"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1320
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1321
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: ustaw wypełnienie w poziomie"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1346
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1347
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: ustaw wypełnienie w pionie"
@@ -12367,15 +12367,15 @@ msgstr "%1: ustaw kolor wartości"
 msgid "%1 axes: set color"
 msgstr "%1: ustaw kolor czcionki"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 osi: wczytano szablon \"%2\""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2004
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1812
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1813
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:722
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:415
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:774
@@ -12650,30 +12650,30 @@ msgstr "Prosty"
 msgid "Sloped"
 msgstr "Zakrzywiony"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1134
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1142
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1135
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1143
 #, fuzzy, kde-format
 #| msgid "X range %1 is used in plot range %2. "
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "Zakres x %1 jest używany w zakresie wykresu %2. "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1135
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1143
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1195
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1201
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1136
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1144
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1196
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1202
 #, kde-format
 msgid "Really remove it?"
 msgstr "Czy na pewno to usunąć?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1195
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1201
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1196
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1202
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "Zakres wykresu %1 jest używany przez element \"%2\". "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1292
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:748
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12683,7 +12683,7 @@ msgstr "W poziomie:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1294
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:703
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12693,7 +12693,7 @@ msgstr "W pionie:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1295
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1296
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:696
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12703,7 +12703,7 @@ msgstr "Lewo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1296
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1297
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:645
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12711,19 +12711,19 @@ msgstr "Lewo:"
 msgid "Top:"
 msgstr "Góra:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1628
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1629
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1630
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1631
 #, fuzzy, kde-format
 #| msgid "LabPlot Projects (%1)"
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Projekty LabPlot (%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1810
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 wykresy kartezjańskie: wczytano szablon \"%2\""

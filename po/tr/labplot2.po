@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-22 00:44+0000\n"
-"PO-Revision-Date: 2023-06-17 21:42+0300\n"
+"POT-Creation-Date: 2023-06-23 00:42+0000\n"
+"PO-Revision-Date: 2023-06-22 05:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -6673,10 +6673,9 @@ msgid "%1: set line width"
 msgstr "%1: Satır genişliğini ayarla"
 
 #: src/backend/worksheet/Line.cpp:153
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set line color"
-msgstr "%1: Etiket rengini ayarla"
+msgstr "%1: Çizgi rengini ayarla"
 
 #: src/backend/worksheet/Line.cpp:160
 #, kde-format
@@ -6685,13 +6684,13 @@ msgstr "%1: Çizgi matlığını ayarla"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1320
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1321
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: Yatay boşluğu ayarla"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1346
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1347
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: Dikey boşluğu ayarla"
@@ -7235,7 +7234,7 @@ msgstr "Çubuk Çizim"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1697
 #, kde-format
 msgid "Lollipop Plot"
-msgstr ""
+msgstr "Lolipop Çizim"
 
 #. i18n("Data Operation"),
 #. cartesianPlotAddNewActionGroup);
@@ -7458,16 +7457,14 @@ msgid "Add New"
 msgstr "Yeni Ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical Plots"
-msgstr "İstatistikler"
+msgstr "İstatistiksel Çizimler"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
-#, fuzzy, kde-format
-#| msgid "Bar Plot"
+#, kde-format
 msgid "Bar Plots"
-msgstr "Çubuk Çizim"
+msgstr "Çubuk Çizimler"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:512
 #: src/commonfrontend/worksheet/WorksheetView.cpp:562
@@ -7958,10 +7955,9 @@ msgid "%1: set symbol size"
 msgstr "%1: Sembol boyutunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:165
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set symbol color"
-msgstr "%1: Etiket rengini ayarla"
+msgstr "%1: Sembol rengini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:172
 #, kde-format
@@ -12088,15 +12084,15 @@ msgstr "%1: Eksen rengi ayarla"
 msgid "%1 axes: set color"
 msgstr "%1 eksen: Rengi ayarla"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 eksenleri: \"%2\" şablonu yüklendi"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2004
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1812
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1813
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:722
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:415
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:774
@@ -12176,10 +12172,9 @@ msgid "Column:"
 msgstr "Sütun:"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:537
-#, fuzzy, kde-format
-#| msgid "%1 cartesian plots: template \"%2\" loaded"
+#, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
-msgstr "%1 kartezyen çizimleri: \"%2\" şablonu yüklendi"
+msgstr "%1 Çubuk çizimler: \"%2\" şablonu yüklendi"
 
 #: src/kdefrontend/dockwidgets/BaseDock.cpp:151
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:366
@@ -12255,10 +12250,9 @@ msgstr ""
 "türünden belirtin."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:766
-#, fuzzy, kde-format
-#| msgid "%1 custom points: template \"%2\" loaded"
+#, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr "%1 özel noktalar: \"%2\" şablonu yüklendi"
+msgstr "%1 Kutu çizimler: \"%2\" şablonu yüklendi"
 
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:65
 #, kde-format
@@ -12361,29 +12355,29 @@ msgstr "Basit"
 msgid "Sloped"
 msgstr "Eğimli"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1134
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1142
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1135
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1143
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1 erimi %2, %3 çizim eriminde kullanılıyor. "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1135
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1143
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1195
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1201
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1136
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1144
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1196
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1202
 #, kde-format
 msgid "Really remove it?"
 msgstr "Gerçekten kaldırılsın mı?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1195
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1201
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1196
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1202
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "%1 çizim erimi, \"%2\" ögesi tarafından kullanılıyor. "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1292
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:748
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12393,7 +12387,7 @@ msgstr "Yatay:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1294
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:703
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12403,7 +12397,7 @@ msgstr "Dikey:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1295
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1296
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:696
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12413,7 +12407,7 @@ msgstr "Sol:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1296
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1297
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:645
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12421,18 +12415,18 @@ msgstr "Sol:"
 msgid "Top:"
 msgstr "Üst:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1628
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1629
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Şablon Kayıt Dosyası Seç"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1630
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1631
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Labplot Çizim Şablonları (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1810
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 kartezyen çizimleri: \"%2\" şablonu yüklendi"
@@ -12698,10 +12692,9 @@ msgid "Data, +:"
 msgstr "Veri, +:"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:772
-#, fuzzy, kde-format
-#| msgid "%1 axes: template \"%2\" loaded"
+#, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
-msgstr "%1 eksenleri: \"%2\" şablonu yüklendi"
+msgstr "%1 histogramları: \"%2\" şablonu yüklendi"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:248
 #, kde-format
@@ -12753,10 +12746,9 @@ msgid "Couldn't subscribe to all available topics. Something went wrong"
 msgstr "Tüm kullanılabilir konulara üye olunamadı. Bir şeyler ters gitti"
 
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:509
-#, fuzzy, kde-format
-#| msgid "%1 cartesian plots: template \"%2\" loaded"
+#, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
-msgstr "%1 kartezyen çizimleri: \"%2\" şablonu yüklendi"
+msgstr "%1 lolipop çizimleri: \"%2\" şablonu yüklendi"
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:35
 #, kde-format
@@ -13446,12 +13438,10 @@ msgid "Properties: Bar Plot"
 msgstr "Özellikler: Çubuk Çizim"
 
 #: src/kdefrontend/GuiObserver.cpp:356
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Box Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
-msgstr "Özellikler: Kutu Çizim"
+msgstr "Özellikler: Lolipop Çizim"
 
 #: src/kdefrontend/GuiObserver.cpp:361
 #, kde-format

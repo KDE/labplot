@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-22 00:44+0000\n"
-"PO-Revision-Date: 2023-06-17 09:31+0100\n"
+"POT-Creation-Date: 2023-06-23 00:42+0000\n"
+"PO-Revision-Date: 2023-06-22 22:55+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -6663,10 +6663,9 @@ msgid "%1: set line width"
 msgstr "%1: agordi liniolarĝon"
 
 #: src/backend/worksheet/Line.cpp:153
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set line color"
-msgstr "%1: agordi etikedkoloron"
+msgstr "%1: agordi liniokoloron"
 
 #: src/backend/worksheet/Line.cpp:160
 #, kde-format
@@ -6675,13 +6674,13 @@ msgstr "%1: agordi linion opakecon"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1320
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1321
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: starigis horizontalan kompletigo"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1346
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1347
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: starigis vertikalan kompletigo"
@@ -7448,16 +7447,14 @@ msgid "Add New"
 msgstr "Aldoni Novan"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical Plots"
-msgstr "Statistiko"
+msgstr "Statistikaj grafikoj"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
-#, fuzzy, kde-format
-#| msgid "Bar Plot"
+#, kde-format
 msgid "Bar Plots"
-msgstr "Bastona diagramo"
+msgstr "Bastonaj diagramoj"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:512
 #: src/commonfrontend/worksheet/WorksheetView.cpp:562
@@ -7948,10 +7945,9 @@ msgid "%1: set symbol size"
 msgstr "%1: agordi simbolograndon"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:165
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set symbol color"
-msgstr "%1: agordi etikedkoloron"
+msgstr "%1: agordi simbolkoloron"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:172
 #, kde-format
@@ -12076,15 +12072,15 @@ msgstr "%1: agordi la koloron de la akso"
 msgid "%1 axes: set color"
 msgstr "%1 aksoj: agordi koloron"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1998
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 aksoj: ŝablono \"%2\" ŝargita"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2004
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1812
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1813
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:722
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:415
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:774
@@ -12166,10 +12162,9 @@ msgid "Column:"
 msgstr "Kolumno:"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:537
-#, fuzzy, kde-format
-#| msgid "%1 cartesian plots: template \"%2\" loaded"
+#, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
-msgstr "%1 karteziaj grafikaĵoj: ŝablono \"%2\" ŝargita"
+msgstr "%1 bastonaj grafikaĵoj: ŝablono \"%2\" ŝargita"
 
 #: src/kdefrontend/dockwidgets/BaseDock.cpp:151
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:366
@@ -12247,10 +12242,9 @@ msgstr ""
 "al ĝia defaŭlta valoro."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:766
-#, fuzzy, kde-format
-#| msgid "%1 custom points: template \"%2\" loaded"
+#, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr "%1 propraj punktoj: ŝablono \"%2\" ŝargita"
+msgstr "%1 kestaj grafikoj: ŝablono \"%2\" ŝargita"
 
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:65
 #, kde-format
@@ -12354,29 +12348,29 @@ msgstr "Simpla"
 msgid "Sloped"
 msgstr "Dekliva"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1134
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1142
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1135
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1143
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1 intervalo %2 estas uzata en diagramiga intervalo %3."
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1135
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1143
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1195
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1201
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1136
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1144
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1196
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1202
 #, kde-format
 msgid "Really remove it?"
 msgstr "Ĉu vere forigi ĝin?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1195
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1201
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1196
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1202
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "Grafika gamo %1 estas uzata de elemento \"%2\"."
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1292
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:748
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12386,7 +12380,7 @@ msgstr "Horizontala:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1293
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1294
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:703
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12396,7 +12390,7 @@ msgstr "Vertikala:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1295
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1296
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:696
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12406,7 +12400,7 @@ msgstr "Maldekstre:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1296
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1297
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:645
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12414,18 +12408,18 @@ msgstr "Maldekstre:"
 msgid "Top:"
 msgstr "Supre:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1628
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1629
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Elekti Ŝablonan Konservodosieron"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1630
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1631
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Labplot-Diagramigaj Ŝablonoj (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1810
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 karteziaj grafikaĵoj: ŝablono \"%2\" ŝargita"
@@ -12691,10 +12685,9 @@ msgid "Data, +:"
 msgstr "Datumoj, +:"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:772
-#, fuzzy, kde-format
-#| msgid "%1 axes: template \"%2\" loaded"
+#, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
-msgstr "%1 aksoj: ŝablono \"%2\" ŝargita"
+msgstr "%1 histogramoj: ŝablono \"%2\" ŝargita"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:248
 #, kde-format
@@ -12746,10 +12739,9 @@ msgid "Couldn't subscribe to all available topics. Something went wrong"
 msgstr "Ne eblis aboni ĉiujn disponeblajn temojn. Io misfunkciis"
 
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:509
-#, fuzzy, kde-format
-#| msgid "%1 cartesian plots: template \"%2\" loaded"
+#, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
-msgstr "%1 karteziaj grafikaĵoj: ŝablono \"%2\" ŝargita"
+msgstr "%1 lekbomb-diagramoj: ŝablono \"%2\" ŝargita"
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:35
 #, kde-format
@@ -13440,12 +13432,10 @@ msgid "Properties: Bar Plot"
 msgstr "Proprecoj: Bastondiagramo"
 
 #: src/kdefrontend/GuiObserver.cpp:356
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Box Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
-msgstr "Proprecoj: Skatoldiagramo"
+msgstr "Proprecoj: Lekbombdiagramo"
 
 #: src/kdefrontend/GuiObserver.cpp:361
 #, kde-format
