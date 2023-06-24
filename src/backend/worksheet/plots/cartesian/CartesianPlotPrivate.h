@@ -196,7 +196,7 @@ public:
 		case Dimension::X:
 			return xRanges[index].dataRange;
 		case Dimension::Y:
-			return yRanges[index].dataRange;
+			break;
 		}
 		return yRanges[index].dataRange;
 	}
