@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -366,6 +366,23 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, double, rugOffset, rugOffset)
 bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 	Q_D(const XYCurve);
 	return d->sourceDataChangedSinceLastRecalc;
+}
+
+double XYCurve::minimum(const Dimension dim) const {
+	Q_D(const XYCurve);
+	// TODO
+	return NAN;
+}
+
+double XYCurve::maximum(const Dimension dim) const {
+	Q_D(const XYCurve);
+	// TODO
+	return NAN;
+}
+
+bool XYCurve::hasData() const {
+	Q_D(const XYCurve);
+	return (d->xColumn != nullptr || d->yColumn != nullptr);
 }
 
 // ##############################################################################

@@ -448,6 +448,11 @@ double BoxPlot::maximum(const Dimension dim) const {
 	return NAN;
 }
 
+bool BoxPlot::hasData() const {
+	Q_D(const BoxPlot);
+	return !d->dataColumns.isEmpty();
+}
+
 /* ============================ setter methods and undo commands ================= */
 
 // General

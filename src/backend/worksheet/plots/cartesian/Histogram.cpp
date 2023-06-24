@@ -360,6 +360,11 @@ double Histogram::maximum(const Dimension dim) const {
 	return NAN;
 }
 
+bool Histogram::hasData() const {
+	Q_D(const Histogram);
+	return (d->dataColumn != nullptr);
+}
+
 const AbstractColumn* Histogram::bins() const {
 	D(Histogram);
 	return d->bins();

@@ -2056,8 +2056,7 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 		if (child == curve)
 			break;
 
-		if (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BarPlot
-			|| child->type() == AspectType::LollipopPlot || child->type() == AspectType::BoxPlot || child->inherits(AspectType::XYAnalysisCurve))
+		if (dynamic_cast<const Plot*>(child))
 			++index;
 	}
 
@@ -2688,7 +2687,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 	d->dataRange(dim, index).setRange(INFINITY, -INFINITY);
 	auto range{d->range(dim, index)}; // get reference to range from private
 
-	// loop over all xy-curves and determine the maximum and minimum dir-values
+	// loop over all xy-curves and determine the maximum and minimum values
 	for (const auto* curve : this->children<const XYCurve>()) {
 		// only curves with correct xIndex
 		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
@@ -2745,70 +2744,22 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		DEBUG(Q_FUNC_INFO << ", curves range i = " << d->dataRange(dim, index).toStdString(false))
 	}
 
-	// loop over all histograms and determine the maximum and minimum x-value
-	for (const auto* curve : this->children<const Histogram>()) {
-		if (!curve->isVisible() || !curve->dataColumn())
+	// loop over all other plots and determine the maximum and minimum values
+	for (const auto* plot : this->children<const Plot>()) {
+		if (dynamic_cast<const XYCurve*>(plot))
+			continue; // xy-curve was handled already above
+
+		if (!plot->isVisible() || !plot->hasData())
 			continue;
 
-		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
+		if (coordinateSystem(plot->coordinateSystemIndex())->index(dim) != index)
 			continue;
 
-		const double min = curve->minimum(dim);
+		const double min = plot->minimum(dim);
 		if (d->dataRange(dim, index).start() > min)
 			d->dataRange(dim, index).start() = min;
 
-		const double max = curve->maximum(dim);
-		if (max > d->dataRange(dim, index).end())
-			d->dataRange(dim, index).end() = max;
-	}
-
-	// loop over all box plots and determine the maximum and minimum x-values
-	for (const auto* curve : this->children<const BoxPlot>()) {
-		if (!curve->isVisible() || curve->dataColumns().isEmpty())
-			continue;
-
-		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
-			continue;
-
-		const double min = curve->minimum(dim);
-		if (d->dataRange(dim, index).start() > min)
-			d->dataRange(dim, index).start() = min;
-
-		const double max = curve->maximum(dim);
-		if (max > d->dataRange(dim, index).end())
-			d->dataRange(dim, index).end() = max;
-	}
-
-	// loop over all bar plots and determine the maximum and minimum x-values
-	for (const auto* curve : this->children<const BarPlot>()) {
-		if (!curve->isVisible() || curve->dataColumns().isEmpty())
-			continue;
-
-		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
-			continue;
-
-		const double min = curve->minimum(dim);
-		if (d->dataRange(dim, index).start() > min)
-			d->dataRange(dim, index).start() = min;
-
-		const double max = curve->maximum(dim);
-		if (max > d->dataRange(dim, index).end())
-			d->dataRange(dim, index).end() = max;
-	}
-
-	// loop over all lollipop plots and determine the maximum and minimum x-values
-	for (const auto* curve : this->children<const LollipopPlot>()) {
-		if (!curve->isVisible() || curve->dataColumns().isEmpty())
-			continue;
-
-		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
-			continue;
-
-		const double min = curve->minimum(dim);
-		if (d->dataRange(dim, index).start() > min)
-			d->dataRange(dim, index).start() = min;
-
-		const double max = curve->maximum(dim);
+		const double max = plot->maximum(dim);
 		if (max > d->dataRange(dim, index).end())
 			d->dataRange(dim, index).end() = max;
 	}

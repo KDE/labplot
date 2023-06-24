@@ -211,6 +211,11 @@ double BarPlot::maximum(const Dimension dim) const {
 	return NAN;
 }
 
+bool BarPlot::hasData() const {
+	Q_D(const BarPlot);
+	return !d->dataColumns.isEmpty();
+}
+
 // values
 Value* BarPlot::value() const {
 	Q_D(const BarPlot);
