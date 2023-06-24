@@ -17654,7 +17654,7 @@ msgstr "Actualizar"
 #: src/kdefrontend/ui/datasources/hdf5optionswidget.ui:71
 #, kde-format
 msgid "Shows the content of the selected HDF5 file"
-msgstr "Mostra o contido do ficheiro HDF5 seleccionado"
+msgstr "Amosa o contido do ficheiro HDF5 seleccionado"
 
 #. i18n: ectx: property (text), widget (QLabel, lImportFormat)
 #: src/kdefrontend/ui/datasources/imageoptionswidget.ui:30
@@ -18054,7 +18054,7 @@ msgstr "Importar nomes de obxecto"
 #: src/kdefrontend/ui/datasources/netcdfoptionswidget.ui:23
 #, kde-format
 msgid "Shows the content of the selected NetCDF file"
-msgstr "Mostra o contido do ficheiro NetCDF seleccionado"
+msgstr "Amosa o contido do ficheiro NetCDF seleccionado"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:27
@@ -18172,7 +18172,7 @@ msgstr "QoS 2"
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:30
 #, kde-format
 msgid "Shows the content of the selected ROOT file"
-msgstr "Mostra o contido do ficheiro ROOT seleccionado"
+msgstr "Amosa o contido do ficheiro ROOT seleccionado"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFirst)
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:72
