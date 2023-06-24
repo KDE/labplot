@@ -335,7 +335,7 @@ public:
 			return; // log scales end here
 		}
 
-		DEBUG("scale = " << (int)scale() << ", old size = " << oldSize)
+		DEBUG(Q_FUNC_INFO << ", scale = " << (int)scale() << ", old size = " << oldSize)
 
 		const double newSize = niceSize(oldSize, false);
 		DEBUG(Q_FUNC_INFO << ", new size = " << newSize);

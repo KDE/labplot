@@ -244,7 +244,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot2);
 	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(),
-			 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
+			 3); // there are two vertical ranges (sin, cos and tan range) for the first plot and one y axis for the second plot
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
@@ -291,7 +291,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot2);
 	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0); // first x axis of second plot
 	QCOMPARE(c.logsYScaleRetransformed.count(),
-			 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
+			 3); // there are two vertical ranges (sin, cos and tan range) for the first plot and one y axis for the second plot
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0); // first y axis of first plot
 	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
@@ -987,7 +987,7 @@ void RetransformTest::TestSetScale() {
 		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once
-	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 2 x-Axes but both are using the same range so 1
+	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // one plot with 2 x-Axes (both are using the same range so could be 1)
 	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(), 0);

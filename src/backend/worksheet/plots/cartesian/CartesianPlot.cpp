@@ -708,12 +708,12 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				if (!autoScale(Dimension::X, cSystem->index(Dimension::X)))
 					enableAutoScale(Dimension::X, cSystem->index(Dimension::X), true, true);
 				else // if already autoscale set, scaleAutoX will not be called anymore, so force it to do
-					scaleAuto(Dimension::X, cSystem->index(Dimension::X), true);
+					scaleAuto(Dimension::X, cSystem->index(Dimension::X));
 
 				if (!autoScale(Dimension::Y, cSystem->index(Dimension::Y)))
 					enableAutoScale(Dimension::Y, cSystem->index(Dimension::Y), true, true);
 				else
-					scaleAuto(Dimension::Y, cSystem->index(Dimension::Y), true);
+					scaleAuto(Dimension::Y, cSystem->index(Dimension::Y));
 			}
 			WorksheetElementContainer::retransform();
 		} else {
@@ -741,7 +741,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 			enableAutoScale(Dimension::X, xIndex, true, true);
 			update = true;
 		} else
-			update |= scaleAuto(Dimension::X, xIndex, true);
+			update |= scaleAuto(Dimension::X, xIndex);
 		if (update) {
 			for (int i = 0; i < m_coordinateSystems.count(); i++) {
 				auto cs = coordinateSystem(i);
@@ -756,7 +756,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 			enableAutoScale(Dimension::Y, yIndex, true, true);
 			update = true;
 		} else
-			update |= scaleAuto(Dimension::Y, yIndex, true);
+			update |= scaleAuto(Dimension::Y, yIndex);
 		if (update) {
 			for (int i = 0; i < m_coordinateSystems.count(); i++) {
 				auto cs = coordinateSystem(i);
@@ -2649,8 +2649,7 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange, bool suppr
 }
 
 /*!
- * Calculates and saves data x range.
- * The range of the y axis is not considered.
+ * Calculates and saves data range.
  */
 void CartesianPlot::calculateDataRange(const Dimension dim, const int index, bool completeRange) {
 	DEBUG(Q_FUNC_INFO << ", direction = " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << ", index = " << index
@@ -3190,6 +3189,15 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		return;
 	}
 
+	// we have to recalculate the data range and auto scale in case of scale changes
+	if (range(dim, index).scale() != dataRange(dim, index).scale() && autoScale(dim, index)) {
+		q->calculateDataRange(dim, index);
+		q->scaleAuto(dim, index);
+	}
+	auto r = range(dim, index);
+	QDEBUG(Q_FUNC_INFO << CartesianCoordinateSystem::dimensionToString(dim) << "range =" << r.toString() << ", scale =" << r.scale()
+					   << ", auto scale = " << r.autoScale())
+
 	static const int breakGap = 20;
 	Range<double> plotSceneRange;
 	switch (dim) {
@@ -3206,12 +3214,6 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
 		if (cs->index(dim) != index)
 			continue;
-
-		auto r = range(dim, index);
-		// Fix range when values not valid
-		r.fixLimits();
-		QDEBUG(Q_FUNC_INFO << CartesianCoordinateSystem::dimensionToString(dim) << "range =" << r.toString() << ", scale =" << r.scale()
-						   << ", auto scale = " << r.autoScale())
 
 		QVector<CartesianScale*> scales;
 
