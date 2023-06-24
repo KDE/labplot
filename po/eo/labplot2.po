@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-23 00:42+0000\n"
-"PO-Revision-Date: 2023-06-22 22:55+0100\n"
+"PO-Revision-Date: 2023-06-23 07:33+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -7224,7 +7224,7 @@ msgstr "Bastona diagramo"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1697
 #, kde-format
 msgid "Lollipop Plot"
-msgstr ""
+msgstr "Lekbomba Diagramo"
 
 #. i18n("Data Operation"),
 #. cartesianPlotAddNewActionGroup);

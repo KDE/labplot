@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-23 00:42+0000\n"
-"PO-Revision-Date: 2023-06-18 01:04+0100\n"
+"PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -6756,10 +6756,9 @@ msgid "%1: set line width"
 msgstr "%1: mudar a espessura da linha"
 
 #: src/backend/worksheet/Line.cpp:153
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set line color"
-msgstr "%1: mudar a cor das legendas"
+msgstr "%1: mudar a cor da linha"
 
 #: src/backend/worksheet/Line.cpp:160
 #, kde-format
@@ -7318,7 +7317,7 @@ msgstr "Gráfico de Barras"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1697
 #, kde-format
 msgid "Lollipop Plot"
-msgstr ""
+msgstr "Gráfico em Chupa-Chupa"
 
 #. i18n("Data Operation"),
 #. cartesianPlotAddNewActionGroup);
@@ -7541,14 +7540,12 @@ msgid "Add New"
 msgstr "Adicionar uma Nova"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical Plots"
-msgstr "Estatísticas"
+msgstr "Gráficos Estatísticos"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
-#, fuzzy, kde-format
-#| msgid "Bar Plot"
+#, kde-format
 msgid "Bar Plots"
 msgstr "Gráfico de Barras"
 
@@ -8041,10 +8038,9 @@ msgid "%1: set symbol size"
 msgstr "%1: mudar o tamanho do símbolo"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:165
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set symbol color"
-msgstr "%1: mudar a cor das legendas"
+msgstr "%1: mudar a cor do símbolo"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:172
 #, kde-format
@@ -12277,10 +12273,9 @@ msgid "Column:"
 msgstr "Coluna:"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:537
-#, fuzzy, kde-format
-#| msgid "%1 cartesian plots: template \"%2\" loaded"
+#, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
-msgstr "%1 gráficos cartesianos: foi carregado o modelo \"%2\""
+msgstr "%1 gráficos de barras: foi carregado o modelo \"%2\""
 
 #: src/kdefrontend/dockwidgets/BaseDock.cpp:151
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:366
@@ -12358,10 +12353,9 @@ msgstr ""
 "seu valor predefinido."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:766
-#, fuzzy, kde-format
-#| msgid "%1 custom points: template \"%2\" loaded"
+#, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr "%1 pontos personalizados: foi carregado o modelo \"%2\""
+msgstr "%1 gráficos em caixa: foi carregado o modelo \"%2\""
 
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:65
 #, kde-format
@@ -12804,10 +12798,9 @@ msgid "Data, +:"
 msgstr "Dados, +:"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:772
-#, fuzzy, kde-format
-#| msgid "%1 axes: template \"%2\" loaded"
+#, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
-msgstr "%1 eixos: foi carregado o modelo \"%2\""
+msgstr "%1 histogramas: foi carregado o modelo \"%2\""
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:248
 #, kde-format
@@ -12861,10 +12854,9 @@ msgstr ""
 "errado"
 
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:509
-#, fuzzy, kde-format
-#| msgid "%1 cartesian plots: template \"%2\" loaded"
+#, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
-msgstr "%1 gráficos cartesianos: foi carregado o modelo \"%2\""
+msgstr "%1 gráficos em chupa-chupa: foi carregado o modelo \"%2\""
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:35
 #, kde-format
@@ -13558,12 +13550,10 @@ msgid "Properties: Bar Plot"
 msgstr "Propriedades: Gráfico de Barras"
 
 #: src/kdefrontend/GuiObserver.cpp:356
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Box Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
-msgstr "Propriedades: Gráfico em Caixa"
+msgstr "Propriedades: Gráfico em Chupa-Chupa"
 
 #: src/kdefrontend/GuiObserver.cpp:361
 #, kde-format
@@ -22219,6 +22209,3 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
-
-#~ msgid "%1: set line pen"
-#~ msgstr "%1: mudar o desenho da linha"
