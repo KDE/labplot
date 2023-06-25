@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-23 02:47+0000\n"
+"POT-Creation-Date: 2023-06-25 03:03+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -72,7 +72,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2917
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1374
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4629
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4631
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1933
@@ -7369,7 +7369,7 @@ msgstr "информация недоступна"
 # BUGME: please split strings --aspotashev
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:103
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4977
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4979
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:462
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:457
@@ -7755,7 +7755,7 @@ msgid "%1: load default theme"
 msgstr "%1: загрузка темы по умолчанию"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1567
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5254
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5256
 #: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set theme"
@@ -7908,29 +7908,29 @@ msgstr "Свёртка"
 msgid "Text Label"
 msgstr "Текстовая подпись"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3721
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3723
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "За пределами ограничивающего прямоугольника"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3945
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3966
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3947
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3968
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "от x=%1 до x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3953
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3979
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3955
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3981
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "от y=%1 до y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3998
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4000
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5201
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5203
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr "Неизвестный элемент «%1» внутри элемента «cartesianPlot»."
