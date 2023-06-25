@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Tommi Nieminen <translator@legisign.org>, 2014, 2015, 2018, 2019, 2022.
+# Tommi Nieminen <translator@legisign.org>, 2014, 2015, 2018, 2019, 2022, 2023.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-23 00:42+0000\n"
-"PO-Revision-Date: 2022-07-27 16:51+0300\n"
+"POT-Creation-Date: 2023-06-25 00:44+0000\n"
+"PO-Revision-Date: 2023-06-04 23:26+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -64,7 +64,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2996
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1374
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4675
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4677
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1933
@@ -5551,10 +5551,9 @@ msgid "q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:1134
-#, fuzzy, kde-format
-#| msgid "x="
+#, kde-format
 msgid "x"
-msgstr "x="
+msgstr "x"
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:425
@@ -7604,7 +7603,7 @@ msgstr "ei tietoa saatavilla"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:104
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5023
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5025
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:462
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:457
@@ -8020,7 +8019,7 @@ msgid "%1: load default theme"
 msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1590
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5309
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5311
 #: src/backend/worksheet/Worksheet.cpp:770
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
@@ -8186,29 +8185,29 @@ msgstr "Yhteys:"
 msgid "Text Label"
 msgstr "Tekstikenttä"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3767
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3769
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3991
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4012
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3993
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4014
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "x=%1…x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3999
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4025
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4001
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4027
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "y=%1…y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4044
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4046
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5256
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5258
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr ""
@@ -16704,10 +16703,9 @@ msgid "Whole match reference"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1556
-#, fuzzy, kde-format
-#| msgid "Preferences"
+#, kde-format
 msgid "Reference"
-msgstr "Asetukset"
+msgstr "Viite"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1563
 #, fuzzy, kde-format
@@ -19865,17 +19863,15 @@ msgstr "Sijainti:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCursor0en)
 #: src/kdefrontend/ui/dockwidgets/cursordock.ui:19
-#, fuzzy, kde-format
-#| msgid "Apply actions to"
+#, kde-format
 msgid "Cursor 1"
-msgstr "Käytä toimintoja kohteeseen"
+msgstr "Kohdistin 1"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCursor1en)
 #: src/kdefrontend/ui/dockwidgets/cursordock.ui:42
-#, fuzzy, kde-format
-#| msgid "Apply actions to"
+#, kde-format
 msgid "Cursor 2"
-msgstr "Käytä toimintoja kohteeseen"
+msgstr "Kohdistin 2"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionX)
@@ -19968,7 +19964,7 @@ msgstr "keskitys"
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:17
 #, kde-format
 msgid "Maximum:"
-msgstr ""
+msgstr "Enintään:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinWidth)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:281
@@ -19988,17 +19984,15 @@ msgstr "Menetelmä:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalization)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:328
-#, fuzzy, kde-format
-#| msgid "Normalize:"
+#, kde-format
 msgid "Normalization:"
-msgstr "Normalisoi:"
+msgstr "Normalisointi:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLine)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:336
-#, fuzzy, kde-format
-#| msgid "Shape:"
+#, kde-format
 msgid "Shape"
-msgstr "Muoto:"
+msgstr "Muoto"
 
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataMinus)
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataMinus)
@@ -20012,39 +20006,34 @@ msgstr "Data, -:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
-#, fuzzy, kde-format
-#| msgid "Specify the name of the image file."
+#, kde-format
 msgid "Specify the name of the image file"
-msgstr "Anna kuvatiedoston nimi."
+msgstr "Anna kuvatiedoston nimi"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:114
 #: src/kdefrontend/ui/labelwidget.ui:702
-#, fuzzy, kde-format
-#| msgid "Y"
+#, kde-format
 msgid "Y:"
-msgstr "Y"
+msgstr "Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:170
-#, fuzzy, kde-format
-#| msgid "Position:"
+#, kde-format
 msgid "Position Y:"
-msgstr "Sijainti:"
+msgstr "Y-sijainti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRatio)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:243
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Keep Ratio:"
-msgstr "Kierto:"
+msgstr "Säilytä mittakaava:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:300
-#, fuzzy, kde-format
-#| msgid "Position:"
+#, kde-format
 msgid "Position X:"
-msgstr "Sijainti:"
+msgstr "X-sijainti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:307
@@ -20055,38 +20044,34 @@ msgstr "Pystytasaus:"
 #. i18n: ectx: property (text), widget (QLabel, lPositionXLogical)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:340
 #: src/kdefrontend/ui/labelwidget.ui:166
-#, fuzzy, kde-format
-#| msgid "X"
+#, kde-format
 msgid "X:"
-msgstr "X"
+msgstr "X:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:428
 #: src/kdefrontend/ui/labelwidget.ui:752
-#, fuzzy, kde-format
-#| msgid "%1: use logical coordinates"
+#, kde-format
 msgid "Logical Coordinates"
-msgstr "%1: käytä loogisia koordinaatteja"
+msgstr "Loogiset koordinaatit"
 
 #. i18n: ectx: property (text), widget (QLabel, lEmbedded)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:454
 #, kde-format
 msgid "Embedded:"
-msgstr ""
+msgstr "Upotettu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCurves)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:32
-#, fuzzy, kde-format
-#| msgid "xy-curve"
+#, kde-format
 msgid "Curves:"
-msgstr "xy-käyrä"
+msgstr "Käyrät:"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectToCurve)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:62
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "Connect To:"
-msgstr "Yhteys"
+msgstr "Yhdistä:"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectToAnchor)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:69
@@ -20142,10 +20127,9 @@ msgstr "Aiheet"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:251
-#, fuzzy, kde-format
-#| msgid "Update:"
+#, kde-format
 msgid "Update"
-msgstr "Virkistä:"
+msgstr "Päivitä"
 
 #. i18n: ectx: property (text), widget (QPushButton, bWillUpdateNow)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:264
@@ -20176,31 +20160,27 @@ msgstr "Välistys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXStart)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:167
-#, fuzzy, kde-format
-#| msgid "x-Start:"
+#, kde-format
 msgid "X-Start:"
-msgstr "Aloitus-x:"
+msgstr "Alku-x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXMax)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:181
-#, fuzzy, kde-format
-#| msgid "End:"
+#, kde-format
 msgid "X-End:"
-msgstr "Päättyy:"
+msgstr "Loppu-x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYStart)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:211
-#, fuzzy, kde-format
-#| msgid "x-Start:"
+#, kde-format
 msgid "Y-Start:"
-msgstr "Aloitus-x:"
+msgstr "Alku-y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYEnd)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:225
-#, fuzzy, kde-format
-#| msgid "End:"
+#, kde-format
 msgid "Y-End:"
-msgstr "Päättyy:"
+msgstr "Loppu-y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:305
@@ -20222,10 +20202,9 @@ msgstr "Tekstiväri:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSettings)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:140
-#, fuzzy, kde-format
-#| msgid "Number of points"
+#, kde-format
 msgid "Settings:"
-msgstr "Pisteiden määrä"
+msgstr "Asetukset:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:147
@@ -20235,17 +20214,15 @@ msgstr "Muutettu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:154
-#, fuzzy, kde-format
-#| msgid "Tree options"
+#, kde-format
 msgid "Save Calculations:"
-msgstr "Puun asetukset"
+msgstr "Tallenna laskennat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:174
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:49
-#, fuzzy, kde-format
-#| msgid "File name:"
+#, kde-format
 msgid "File Name:"
 msgstr "Tiedostonimi:"
 
@@ -20269,33 +20246,29 @@ msgstr "Luotu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:46
-#, fuzzy, kde-format
-#| msgid "orange"
+#, kde-format
 msgid "Plot range:"
-msgstr "oranssi"
+msgstr "Piirtoalue:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:63
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:111
-#, fuzzy, kde-format
-#| msgid "Start:"
+#, kde-format
 msgid "Start x:"
-msgstr "Aloitus:"
+msgstr "Alku-x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeEnd)
 #. i18n: ectx: property (text), widget (QLabel, lPositionEnd)
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:223
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:285
-#, fuzzy, kde-format
-#| msgid "End row:"
+#, kde-format
 msgid "End x:"
-msgstr "Lopettava rivi:"
+msgstr "Loppu-x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:50
-#, fuzzy, kde-format
-#| msgid "Column comments:"
+#, kde-format
 msgid "Column Comments:"
 msgstr "Sarakekommentit:"
 
@@ -20312,7 +20285,7 @@ msgstr "Linkki"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:105
 #, kde-format
 msgid "Enabled"
-msgstr ""
+msgstr "Käytössä"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
@@ -20344,10 +20317,9 @@ msgstr "Tietotyyppi:"
 #. i18n: ectx: property (text), widget (QLabel, lSamplingInterval)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:90
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:259
-#, fuzzy, kde-format
-#| msgid "Time interval"
+#, kde-format
 msgid "Sampling Interval:"
-msgstr "Aikaväli"
+msgstr "Näytteenottoväli:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:134
@@ -20393,10 +20365,9 @@ msgstr "Tietotyyppi:"
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:113
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:129
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:97
-#, fuzzy, kde-format
-#| msgid "y-Range"
+#, kde-format
 msgid "X-Range:"
-msgstr "y-alue:"
+msgstr "X-ala:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:227
@@ -20443,10 +20414,9 @@ msgstr "Data:"
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:96
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:506
-#, fuzzy, kde-format
-#| msgid "Connection:"
+#, kde-format
 msgid "Correlation"
-msgstr "Yhteys:"
+msgstr "Korrelaatio"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalize)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:103
@@ -20508,17 +20478,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:690
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "Y Error"
-msgstr "Virhe"
+msgstr "y-virhe"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarX)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:720
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "X Error"
-msgstr "Virhe"
+msgstr "x-virhe"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:107
@@ -20539,26 +20507,23 @@ msgstr "x-Data:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSimplification)
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:243
-#, fuzzy, kde-format
-#| msgid "Scientific notation"
+#, kde-format
 msgid "Simplification"
-msgstr "Tieteellinen merkintätapa"
+msgstr "Sievennys"
 
 #. i18n: ectx: property (text), widget (QLabel, lOption)
 #. i18n: ectx: property (text), widget (QLabel, lOption2)
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:267
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:319
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgid "Option:"
-msgstr "Valinnat"
+msgstr "Valinta:"
 
 #. i18n: ectx: property (text), widget (QLabel, lAccuracyOrder)
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:203
-#, fuzzy, kde-format
-#| msgid "Byte order:"
+#, kde-format
 msgid "Accuracy Order:"
-msgstr "Tavujärjestys:"
+msgstr "Tarkkuusjärjestys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDerivative)
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:233
@@ -20615,14 +20580,13 @@ msgstr "x=f(t)"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:899
 #, kde-format
 msgid "col ="
-msgstr ""
+msgstr "sar ="
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lResults)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:58
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "Fit results"
-msgstr "Tulokset:"
+msgstr "Sovita tulokset"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:84
@@ -20634,7 +20598,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:87
 #, kde-format
 msgid "Category:"
-msgstr ""
+msgstr "Luokka:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:94
@@ -20644,10 +20608,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lXWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:97
-#, fuzzy, kde-format
-#| msgid "Height"
+#, kde-format
 msgid "X-Weight:"
-msgstr "Korkeus"
+msgstr "x-paino:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:110
@@ -20681,10 +20644,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:169
-#, fuzzy, kde-format
-#| msgid "File data source"
+#, kde-format
 msgid "Type of data source"
-msgstr "Tiedostodatalähde"
+msgstr "Tietolähteen tyyppi"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:179
@@ -20779,7 +20741,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:394
 #, kde-format
 msgid "Log"
-msgstr ""
+msgstr "Logaritmi"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:436
@@ -20790,10 +20752,9 @@ msgstr "Tila"
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:446
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:516
-#, fuzzy, kde-format
-#| msgid "iterations"
+#, kde-format
 msgid "Iterations"
-msgstr "iteraatiota"
+msgstr "Iteraatiot"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:456
@@ -20809,17 +20770,15 @@ msgstr "Laskenta-aika"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:476
-#, fuzzy, kde-format
-#| msgid "degrees of freedom"
+#, kde-format
 msgid "Degrees of Freedom"
-msgstr "vapausastetta"
+msgstr "Vapausasteet"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:496
-#, fuzzy, kde-format
-#| msgid "orange"
+#, kde-format
 msgid "X range"
-msgstr "oranssi"
+msgstr "x-ala"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:533
@@ -20829,10 +20788,9 @@ msgstr "y-datan painoarvo"
 
 #. i18n: ectx: property (text), widget (QLabel, lYWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:536
-#, fuzzy, kde-format
-#| msgid "Height"
+#, kde-format
 msgid "Y-Weight:"
-msgstr "Korkeus"
+msgstr "y-paino:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:546
@@ -20843,10 +20801,9 @@ msgstr "vapausastetta"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lData)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:594
-#, fuzzy, kde-format
-#| msgid "Data type:"
+#, kde-format
 msgid "Data to fit"
-msgstr "Tietotyyppi:"
+msgstr "Sovitettava data"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lModel)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:620
@@ -20874,17 +20831,15 @@ msgstr "Sovita:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:693
-#, fuzzy, kde-format
-#| msgid "%1: add %2."
+#, kde-format
 msgid "Show fit curve"
-msgstr "%1: lisää %2."
+msgstr "Näytä sovituskäyrä"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lParameters)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:721
-#, fuzzy, kde-format
-#| msgid "Specify parameters and their start values"
+#, kde-format
 msgid "Specify parameters and their properties"
-msgstr "Määritä parametrit alkuarvoineen"
+msgstr "Määritä parametrit ominaisuuksineen"
 
 #. i18n: ectx: property (text), widget (QToolButton, lParameters)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:724
@@ -20894,10 +20849,9 @@ msgstr "Parametrit:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:747
-#, fuzzy, kde-format
-#| msgid "Source name"
+#, kde-format
 msgid "Source curve"
-msgstr "Lähdenimi"
+msgstr "Lähdekäyrä"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lName)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:757
@@ -20913,24 +20867,21 @@ msgstr "Miten datapisteitä painotetaan"
 
 #. i18n: ectx: property (text), widget (QToolButton, lWeights)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:814
-#, fuzzy, kde-format
-#| msgid "Height"
+#, kde-format
 msgid "Weights:"
-msgstr "Korkeus"
+msgstr "Painot:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lComment)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:872
-#, fuzzy, kde-format
-#| msgid "Column comments"
+#, kde-format
 msgid "Optional comment"
-msgstr "Sarakekommentit"
+msgstr "Valinnainen kommentti"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:979
-#, fuzzy, kde-format
-#| msgid "Functions"
+#, kde-format
 msgid "Select predefined function"
-msgstr "Funktiot"
+msgstr "Valitse esimääritelty funktio"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:992
@@ -20947,17 +20898,15 @@ msgstr "Robusti sovitus"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1027
-#, fuzzy, kde-format
-#| msgid "Robust fit"
+#, kde-format
 msgid "Run"
-msgstr "Robusti sovitus"
+msgstr "Suorita"
 
 #. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1041
-#, fuzzy, kde-format
-#| msgid "Logarithm"
+#, kde-format
 msgid "Algorithm:"
-msgstr "Logaritmi"
+msgstr "Algoritmi:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1118
@@ -20999,15 +20948,13 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lXScale)
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:222
-#, fuzzy, kde-format
-#| msgid "auto scale"
+#, kde-format
 msgid "X-Axis Scale:"
-msgstr "automaattiskaalaus"
+msgstr "x-akselin mittakaava:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTwoSided)
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:231
-#, fuzzy, kde-format
-#| msgid "Two sided"
+#, kde-format
 msgid "Two Sided"
 msgstr "Kaksipuolinen"
 
@@ -21026,10 +20973,9 @@ msgstr "Ikkuna:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAbsolute)
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:373
-#, fuzzy, kde-format
-#| msgid "no values"
+#, kde-format
 msgid "Absolute area"
-msgstr "ei arvoja"
+msgstr "Absoluuttinen alue"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariant)
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:283
@@ -21053,10 +20999,9 @@ msgstr "&Ulottuvuudet"
 
 #. i18n: ectx: property (text), widget (QLabel, lContinuity)
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:325
-#, fuzzy, kde-format
-#| msgid "Density"
+#, kde-format
 msgid "Continuity:"
-msgstr "Tiheys"
+msgstr "Jatkuvuus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBias)
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:348
@@ -21091,10 +21036,9 @@ msgstr "keskittäen monistettu"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:145
-#, fuzzy, kde-format
-#| msgid "Polynomial"
+#, kde-format
 msgid "Polynom Order:"
-msgstr "Polynomi"
+msgstr "Polynomijärjestys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:152
@@ -21117,10 +21061,9 @@ msgstr "Oikea arvo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/kdefrontend/ui/exampleswidget.ui:73
-#, fuzzy, kde-format
-#| msgid "Sample size:"
+#, kde-format
 msgid "Examples:"
-msgstr "Näytekoko:"
+msgstr "Esimerkkejä:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)
@@ -21138,10 +21081,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPreview)
 #: src/kdefrontend/ui/fitoptionswidget.ui:56
-#, fuzzy, kde-format
-#| msgid "Function"
+#, kde-format
 msgid "Preview fit function"
-msgstr "Funktio"
+msgstr "Esikatsele sovitusfunktiota"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEps)
 #: src/kdefrontend/ui/fitoptionswidget.ui:66
@@ -21252,10 +21194,9 @@ msgstr "Robusti sovitus:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/fitoptionswidget.ui:235
-#, fuzzy, kde-format
-#| msgid "Time Interval"
+#, kde-format
 msgid "Confidence Interval"
-msgstr "Aikaväli"
+msgstr "Luottamusväli"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnit)
 #: src/kdefrontend/ui/fitsheadereditaddunitwidget.ui:17
@@ -21271,10 +21212,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bOpen)
 #: src/kdefrontend/ui/fitsheadereditwidget.ui:56
-#, fuzzy, kde-format
-#| msgid "Open File"
+#, kde-format
 msgid "Open File..."
-msgstr "Avaa tiedosto"
+msgstr "Avaa tiedosto…"
 
 #. i18n: ectx: property (text), widget (QPushButton, bClose)
 #: src/kdefrontend/ui/fitsheadereditwidget.ui:63
@@ -21290,17 +21230,15 @@ msgstr "Teksti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
 #: src/kdefrontend/ui/labelwidget.ui:289
-#, fuzzy, kde-format
-#| msgid "Hor. align.:"
+#, kde-format
 msgid "Hor. Alignment:"
 msgstr "Vaakatasaus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #: src/kdefrontend/ui/labelwidget.ui:312
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgid "Background Color:"
-msgstr "Tausta"
+msgstr "Taustaväri:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/kdefrontend/ui/labelwidget.ui:319
@@ -21316,8 +21254,7 @@ msgstr "Pääfontti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
 #: src/kdefrontend/ui/labelwidget.ui:552
-#, fuzzy, kde-format
-#| msgid "Vert. align.:"
+#, kde-format
 msgid "Vert. Alignment:"
 msgstr "Pystytasaus:"
 
@@ -21350,13 +21287,13 @@ msgstr "Y-siirtymä:"
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116
 #, kde-format
 msgid "y = "
-msgstr ""
+msgstr "y = "
 
 #. i18n: ectx: property (text), widget (QLabel, lX)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:132
 #, kde-format
 msgid "x = "
-msgstr ""
+msgstr "x = "
 
 #. i18n: ectx: property (text), widget (QLabel, lZ)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:148
@@ -21384,8 +21321,7 @@ msgstr "Keskihajonta mediaanin ympärillä"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:152
-#, fuzzy, kde-format
-#| msgid "StandardDev"
+#, kde-format
 msgid "Median deviation"
 msgstr "Keskihajonta"
 
@@ -21409,10 +21345,9 @@ msgstr "Oma viesti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillMessageType)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:231
-#, fuzzy, kde-format
-#| msgid "Equation type"
+#, kde-format
 msgid "Message type:"
-msgstr "Yhtälötyyppi"
+msgstr "Viestityyppi:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillUpdate)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:239
@@ -21471,10 +21406,9 @@ msgstr "Tilastot"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillUpdateType)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:315
-#, fuzzy, kde-format
-#| msgid "Data:"
+#, kde-format
 msgid "Update type:"
-msgstr "Data:"
+msgstr "Päivityksen tyyppi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillTopic)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:339
@@ -21580,45 +21514,41 @@ msgstr "Kyselyikkuna"
 
 #. i18n: ectx: property (text), widget (QLabel, lInstalledTemplates)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Save As"
+#, kde-format
 msgid "Installed Templates:"
-msgstr "Tallenna nimellä"
+msgstr "Asennetut mallipohjat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:47
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:143
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "Esikatselu"
+msgstr "Esikatselu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLocation)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:102
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Location:"
-msgstr "Kierto:"
+msgstr "Sijainti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCache)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:23
 #, kde-format
 msgid "Cache:"
-msgstr ""
+msgstr "Välimuisti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFiles)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:30
-#, fuzzy, kde-format
-#| msgid "&File"
+#, kde-format
 msgid "Files - "
-msgstr "&Tiedosto"
+msgstr "Tiedostot – "
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:37
 #, kde-format
 msgid "Total size - "
-msgstr ""
+msgstr "Yhteiskoko – "
 
 #. i18n: ectx: property (text), widget (QPushButton, bClearCache)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:57
@@ -21628,15 +21558,13 @@ msgstr "Tyhjennä"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:17
-#, fuzzy, kde-format
-#| msgid "Max. iterations"
+#, kde-format
 msgid "Omit group separator"
-msgstr "Iteraatioita enintään"
+msgstr "Ohita ryhmäerotin"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoSave)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:24
-#, fuzzy, kde-format
-#| msgid "Auto-Save:"
+#, kde-format
 msgid "Auto-save:"
 msgstr "Automaattitallennus:"
 
@@ -21650,23 +21578,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:34
-#, fuzzy, kde-format
-#| msgid "incompatible filter type"
+#, kde-format
 msgid "Save in compatible format"
-msgstr "epäyhteensopiva suodatintyyppi"
+msgstr "Tallenna yhteensopivaan muotoon"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:44
 #, kde-format
 msgid "Omit leading zero in exponent"
-msgstr ""
+msgstr "Ohita eksponentista alkunolla"
 
 #. i18n: ectx: property (text), widget (QLabel, lTitleBar)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:54
-#, fuzzy, kde-format
-#| msgid "Title"
+#, kde-format
 msgid "Title Bar:"
-msgstr "Otsikko"
+msgstr "Otsikkopalkki:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:77
@@ -21710,10 +21636,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:234
-#, fuzzy, kde-format
-#| msgid "Number of points"
+#, kde-format
 msgid "Number options:"
-msgstr "Pisteiden määrä"
+msgstr "Numerovalinnat:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -21731,10 +21656,9 @@ msgstr "Syntaksikorostus"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxCompletion)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:40
-#, fuzzy, kde-format
-#| msgid "Data format"
+#, kde-format
 msgid "Syntax Completion"
-msgstr "Datan muoto"
+msgstr "Syntaksintäydennys"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLineNumbers)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:47
@@ -21744,17 +21668,15 @@ msgstr "Rivinumerot"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLatexTypesetting)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:54
-#, fuzzy, kde-format
-#| msgid "Tree options"
+#, kde-format
 msgid "LaTeX Typesetting"
-msgstr "Puun asetukset"
+msgstr "LaTeX-ladonta"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnimations)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:61
-#, fuzzy, kde-format
-#| msgid "iterations"
+#, kde-format
 msgid "Animations"
-msgstr "iteraatiota"
+msgstr "Animoinnit"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:90
@@ -21795,10 +21717,9 @@ msgstr "Ylätunniste"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColumnType)
 #: src/kdefrontend/ui/settingsspreadsheetpage.ui:30
-#, fuzzy, kde-format
-#| msgid "%1: change column type"
+#, kde-format
 msgid "Show column type"
-msgstr "%1: muuta sarakkeen tyyppiä"
+msgstr "Näytä sarakkeen tyyppi"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowPlotDesignation)
 #: src/kdefrontend/ui/settingsspreadsheetpage.ui:37
@@ -21851,17 +21772,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
-#, fuzzy, kde-format
-#| msgid "Start:"
+#, kde-format
 msgid "Start Time:"
-msgstr "Aloitus:"
+msgstr "Aloitusaika:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueEnd)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
-#, fuzzy, kde-format
-#| msgid "Value:"
+#, kde-format
 msgid "End Value:"
-msgstr "Arvo:"
+msgstr "Loppuarvo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:130
@@ -21879,31 +21798,27 @@ msgstr "Suunta:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:169
-#, fuzzy, kde-format
-#| msgid "Start value"
+#, kde-format
 msgid "Start Value:"
-msgstr "Aloitusarvo"
+msgstr "Aloitusarvo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:251
-#, fuzzy, kde-format
-#| msgid "iterations"
+#, kde-format
 msgid "Iterations:"
-msgstr "iteraatiota"
+msgstr "Iteraatioita:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:302
-#, fuzzy, kde-format
-#| msgid "Date and Time"
+#, kde-format
 msgid "End Time:"
-msgstr "Aika ja päiväys"
+msgstr "Lopetusaika:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Numeric Values"
-msgstr "Arvot"
+msgstr "Numeeriset arvot"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
@@ -21911,10 +21826,9 @@ msgstr "Arvot"
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:67
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:128
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:234
-#, fuzzy, kde-format
-#| msgid "Connection:"
+#, kde-format
 msgid "Condition:"
-msgstr "Yhteys:"
+msgstr "Ehto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
 #. i18n: ectx: property (text), widget (QLabel, lMaxDateTime)
@@ -21928,28 +21842,25 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:144
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Text Values"
-msgstr "Arvot"
+msgstr "Tekstiarvot"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
-#, fuzzy, kde-format
-#| msgid "Sample size:"
+#, kde-format
 msgid "DateTime Values"
-msgstr "Näytekoko:"
+msgstr "Päiväysarvot"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:17
 #, kde-format
 msgid "Fix:"
-msgstr ""
+msgstr "Korjaa:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
-#, fuzzy, kde-format
-#| msgid "Specify the name of the file to import."
+#, kde-format
 msgid "Specify the name of the file to export."
 msgstr "Valitse tuotavan tiedoston nimi."
 
@@ -22028,8 +21939,7 @@ msgstr "Korostus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColorMap)
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:38
-#, fuzzy, kde-format
-#| msgid "Color map:"
+#, kde-format
 msgid "Color Map:"
 msgstr "Värikartta:"
 
@@ -22053,68 +21963,59 @@ msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
-#, fuzzy, kde-format
-#| msgid "auto-save"
+#, kde-format
 msgid "auto update"
-msgstr "Automaattitallenna"
+msgstr "automaattipäivitys"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
-#, fuzzy, kde-format
-#| msgid "&Selected Columns"
+#, kde-format
 msgid "Placement"
-msgstr "&Valitut sarakkeet"
+msgstr "Sijoittelu"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOnePlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
-#, fuzzy, kde-format
-#| msgid "&All curves in one plot"
+#, kde-format
 msgid "All Plots in one Plot Area"
-msgstr "K&aikki käyrät yhdessä kaaviossa"
+msgstr "Kaikki kaaviot yhdelle piirtoalueelle"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOwnPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
-#, fuzzy, kde-format
-#| msgid "One p&lot per curve"
+#, kde-format
 msgid "One Plot Area per Plot"
-msgstr "&Yksi kaavio/käyrä"
+msgstr "Oma piirtoalue kullekin kaaviolle"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:180
-#, fuzzy, kde-format
-#| msgid "LabPlot2"
+#, kde-format
 msgid "Add Plots to"
-msgstr "LabPlot2"
+msgstr "Lisää kaaviot…"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
-#, fuzzy, kde-format
-#| msgid "E&xisting plot"
+#, kde-format
 msgid "Existing Plot Area"
-msgstr "&Olemassa oleva kaavio"
+msgstr "Olemassa olevalle piirtoalueelle"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:196
-#, fuzzy, kde-format
-#| msgid "&New plot in an existing worksheet"
+#, kde-format
 msgid "&New Plot Area in an existing Worksheet"
-msgstr "&Uusi kuvio olemassa olevaan työvihkoon"
+msgstr "Olemassa olevan työvihkon &uudelle piirtoalueelle"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:203
-#, fuzzy, kde-format
-#| msgid "New plot in a new wor&ksheet"
+#, kde-format
 msgid "New Plot Area in a new Worksheet"
-msgstr "Uusi kuvio uuteen työ&vihkoon"
+msgstr "Uuden työvihkon uudelle piirtoalueelle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateDataCurve)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:226
-#, fuzzy, kde-format
-#| msgid "Create curve for original data"
+#, kde-format
 msgid "Create Plot for original Data"
-msgstr "Luo alkuperäiselle datalle käyrä"
+msgstr "Luo kaavio alkuperäiselle datalle"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter2)
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:42
@@ -22337,8 +22238,7 @@ msgstr "Kohde:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportArea)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:99
-#, fuzzy, kde-format
-#| msgid "Area to export:"
+#, kde-format
 msgid "Area to Export:"
 msgstr "Vietävä alue:"
 
@@ -22352,8 +22252,7 @@ msgstr "Valitse tämä, jos myös laskentataulukon tausta tulisi viedä."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportBackground)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:119
-#, fuzzy, kde-format
-#| msgid "Export background:"
+#, kde-format
 msgid "Export Background:"
 msgstr "Vie tausta:"
 
@@ -22526,16 +22425,14 @@ msgid "Logarithmic (log(x), log(y))"
 msgstr ""
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgid "Logarithmic (log(x), y)"
-msgstr "Logaritminen"
+msgstr "Logaritminen (log(x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:175
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgid "Logarithmic (x, log(y))"
-msgstr "Logaritminen"
+msgstr "Logaritminen (x, log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:176
 #, kde-format
@@ -22563,10 +22460,9 @@ msgid "Save project before using this option"
 msgstr ""
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:392
-#, fuzzy, kde-format
-#| msgid "Invalid pointer"
+#, kde-format
 msgid "Invalid image"
-msgstr "Virheellinen osoitin"
+msgstr "Virheellinen kuva"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
@@ -23127,22 +23023,19 @@ msgid "Couldn't find preview.sty."
 msgstr ""
 
 #: src/tools/TeXRenderer.cpp:80
-#, fuzzy, kde-format
-#| msgid "Couldn't save the file '%1'."
+#, kde-format
 msgid "Couldn't open the file"
-msgstr "Ei voitu tallentaa tiedostoa ”%1”."
+msgstr "Tiedostoa ei voitu avata"
 
 #: src/tools/TeXRenderer.cpp:152
-#, fuzzy, kde-format
-#| msgid "File info"
+#, kde-format
 msgid "%1 not found"
-msgstr "Tiedoston tiedot"
+msgstr "%1 – ei löydy"
 
 #: src/tools/TeXRenderer.cpp:188
-#, fuzzy, kde-format
-#| msgid "Failed to open"
+#, kde-format
 msgid "Timeout: Unable to generate latex file"
-msgstr "Avaaminen epäonnistui"
+msgstr "Aikakatkaisu: LaTeX-tiedostoa ei voi luoda"
 
 #: src/tools/TeXRenderer.cpp:191
 #, kde-format
@@ -23150,10 +23043,9 @@ msgid "process failed, exit code ="
 msgstr ""
 
 #: src/tools/TeXRenderer.cpp:253
-#, fuzzy, kde-format
-#| msgid "File info"
+#, kde-format
 msgid "dvips not found"
-msgstr "Tiedoston tiedot"
+msgstr "dvips-ohjelmaa ei löytynyt"
 
 #: src/tools/TeXRenderer.cpp:260
 #, kde-format
@@ -23161,10 +23053,9 @@ msgid "dvips process failed, exit code ="
 msgstr ""
 
 #: src/tools/TeXRenderer.cpp:282
-#, fuzzy, kde-format
-#| msgid "File info"
+#, kde-format
 msgid "convert not found"
-msgstr "Tiedoston tiedot"
+msgstr "convert-ohjelmaa ei löytynyt"
 
 #: src/tools/TeXRenderer.cpp:290
 #, kde-format
@@ -23172,10 +23063,9 @@ msgid "convert process failed, exit code ="
 msgstr ""
 
 #: src/tools/TeXRenderer.cpp:312
-#, fuzzy, kde-format
-#| msgid "Failed to open"
+#, kde-format
 msgid "Unable to open file:"
-msgstr "Avaaminen epäonnistui"
+msgstr "Tiedostoa ei voi avata:"
 
 #, fuzzy
 #~| msgid "%1: set vertical alignment"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-23 00:42+0000\n"
+"POT-Creation-Date: 2023-06-25 00:44+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2996
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1374
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4675
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4677
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1933
@@ -7575,7 +7575,7 @@ msgstr "%1: Klip markerede celler"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:104
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5023
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5025
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:462
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:457
@@ -8005,7 +8005,7 @@ msgid "%1: load default theme"
 msgstr "&Indsæt tomme rækker"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1590
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5309
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5311
 #: src/backend/worksheet/Worksheet.cpp:770
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
@@ -8172,29 +8172,29 @@ msgstr "Forbindelse:"
 msgid "Text Label"
 msgstr "Etiketter"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3767
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3769
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3991
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4012
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3993
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4014
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3999
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4025
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4001
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4027
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4044
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4046
 #, kde-format
 msgid "x=%1"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5256
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5258
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr ""
