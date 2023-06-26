@@ -1,7 +1,7 @@
+cmake_minimum_required (VERSION 3.17.0 FATAL_ERROR)
 project(labplot2)
 set(LABPLOT_VERSION 2.10.0)
 
-cmake_minimum_required (VERSION 3.17.0 FATAL_ERROR)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
