@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -299,13 +299,7 @@ private:
 public Q_SLOTS:
 	void addHorizontalAxis();
 	void addVerticalAxis();
-	void addCurve();
-	void addHistogram();
 	void addHistogramFit(Histogram*, nsl_sf_stats_distribution);
-	void addBarPlot();
-	void addLollipopPlot();
-	void addBoxPlot();
-	void addEquationCurve();
 	void addDataReductionCurve();
 	void addDifferentiationCurve();
 	void addIntegrationCurve();
@@ -313,10 +307,6 @@ public Q_SLOTS:
 	void addSmoothCurve();
 	void addFitCurve();
 	void addFourierFilterCurve();
-	void addFourierTransformCurve();
-	void addHilbertTransformCurve();
-	void addConvolutionCurve();
-	void addCorrelationCurve();
 
 	void addLegend();
 	void addTextLabel();

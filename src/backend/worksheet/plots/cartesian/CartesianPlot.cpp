@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -378,16 +378,28 @@ void CartesianPlot::initActions() {
 	addReferenceLineAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-line")), i18n("Reference Line"), this);
 	addReferenceRangeAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-rectangle")), i18n("Reference Range"), this);
 
-	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
-	connect(addEquationCurveAction, &QAction::triggered, this, &CartesianPlot::addEquationCurve);
+	connect(addCurveAction, &QAction::triggered, this, [=]() {
+		addChild(new XYCurve(QStringLiteral("xy-curve")));
+	});
+	connect(addEquationCurveAction, &QAction::triggered, this, [=]() {
+		addChild(new XYEquationCurve(QStringLiteral("f(x)")));
+	});
 
 	// bar plots
-	connect(addBarPlotAction, &QAction::triggered, this, &CartesianPlot::addBarPlot);
-	connect(addLollipopPlotAction, &QAction::triggered, this, &CartesianPlot::addLollipopPlot);
+	connect(addBarPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new BarPlot(i18n("Bar Plot")));
+	});
+	connect(addLollipopPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new LollipopPlot(i18n("Lollipop Plot")));
+	});
 
 	// statistical plots
-	connect(addBoxPlotAction, &QAction::triggered, this, &CartesianPlot::addBoxPlot);
-	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
+	connect(addBoxPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new BoxPlot(i18n("Box Plot")));
+	});
+	connect(addHistogramAction, &QAction::triggered, this, [=]() {
+		addChild(new Histogram(i18n("Histogram")));
+	});
 
 	// analysis curves
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
@@ -397,10 +409,18 @@ void CartesianPlot::initActions() {
 	connect(addSmoothCurveAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
 	connect(addFitCurveAction, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
-	connect(addFourierTransformCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
-	connect(addHilbertTransformCurveAction, &QAction::triggered, this, &CartesianPlot::addHilbertTransformCurve);
-	connect(addConvolutionCurveAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
-	connect(addCorrelationCurveAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
+	connect(addFourierTransformCurveAction, &QAction::triggered, this, [=]() {
+		addChild(new XYFourierTransformCurve(i18n("Fourier Transform")));
+	});
+	connect(addHilbertTransformCurveAction, &QAction::triggered, this,  [=]() {
+		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
+	});
+	connect(addConvolutionCurveAction, &QAction::triggered, this,  [=]() {
+		addChild(new XYConvolutionCurve(i18n("Convolution")));
+	});
+	connect(addCorrelationCurveAction, &QAction::triggered, this,  [=]() {
+		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
+	});
 
 	connect(addLegendAction, &QAction::triggered, this, static_cast<void (CartesianPlot::*)()>(&CartesianPlot::addLegend));
 	connect(addHorizontalAxisAction, &QAction::triggered, this, &CartesianPlot::addHorizontalAxis);
@@ -1633,34 +1653,13 @@ void CartesianPlot::addVerticalAxis() {
 	axis->retransform();
 }
 
-void CartesianPlot::addCurve() {
-	DEBUG(Q_FUNC_INFO)
-	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	addChild(curve);
-}
-
-void CartesianPlot::addEquationCurve() {
-	DEBUG(Q_FUNC_INFO << ", to default coordinate system " << defaultCoordinateSystemIndex())
-	auto* curve = new XYEquationCurve(QStringLiteral("f(x)"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	addChild(curve);
-}
-
-void CartesianPlot::addHistogram() {
-	DEBUG(Q_FUNC_INFO << ", to default coordinate system " << defaultCoordinateSystemIndex())
-	auto* hist = new Histogram(i18n("Histogram"));
-	hist->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	addChild(hist);
-}
-
 void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution type) {
 	if (!hist)
 		return;
 
 	beginMacro(i18n("%1: distribution fit to '%2'", name(), hist->name()));
 	auto* curve = new XYFitCurve(i18n("Distribution Fit to '%1'", hist->name()));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+	// curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
 	curve->setDataSourceHistogram(hist);
 
@@ -1689,18 +1688,6 @@ void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution t
 	endMacro();
 }
 
-void CartesianPlot::addBarPlot() {
-	addChild(new BarPlot(i18n("Bar Plot")));
-}
-
-void CartesianPlot::addLollipopPlot() {
-	addChild(new LollipopPlot(i18n("Lollipop Plot")));
-}
-
-void CartesianPlot::addBoxPlot() {
-	addChild(new BoxPlot(i18n("Box Plot")));
-}
-
 /*!
  * returns the first selected XYCurve in the plot
  */
@@ -1716,7 +1703,6 @@ const XYCurve* CartesianPlot::currentCurve() const {
 void CartesianPlot::addDataReductionCurve() {
 	auto* curve = new XYDataReductionCurve(i18n("Data Reduction"));
 	const XYCurve* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: reduce '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Reduction of '%1'", curCurve->name()));
@@ -1736,7 +1722,6 @@ void CartesianPlot::addDataReductionCurve() {
 void CartesianPlot::addDifferentiationCurve() {
 	auto* curve = new XYDifferentiationCurve(i18n("Differentiation"));
 	const XYCurve* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: differentiate '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Derivative of '%1'", curCurve->name()));
@@ -1756,7 +1741,6 @@ void CartesianPlot::addDifferentiationCurve() {
 void CartesianPlot::addIntegrationCurve() {
 	auto* curve = new XYIntegrationCurve(i18n("Integration"));
 	const XYCurve* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: integrate '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Integral of '%1'", curCurve->name()));
@@ -1776,7 +1760,6 @@ void CartesianPlot::addIntegrationCurve() {
 void CartesianPlot::addInterpolationCurve() {
 	auto* curve = new XYInterpolationCurve(i18n("Interpolation"));
 	const XYCurve* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: interpolate '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Interpolation of '%1'", curCurve->name()));
@@ -1796,7 +1779,6 @@ void CartesianPlot::addInterpolationCurve() {
 void CartesianPlot::addSmoothCurve() {
 	auto* curve = new XYSmoothCurve(i18n("Smooth"));
 	const XYCurve* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: smooth '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Smoothing of '%1'", curCurve->name()));
@@ -1816,7 +1798,6 @@ void CartesianPlot::addSmoothCurve() {
 void CartesianPlot::addFitCurve() {
 	auto* curve = new XYFitCurve(i18n("Fit"));
 	const auto* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: fit to '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Fit to '%1'", curCurve->name()));
@@ -1866,34 +1847,9 @@ void CartesianPlot::addFourierFilterCurve() {
 	} else {
 		beginMacro(i18n("%1: add Fourier filter curve", name()));
 	}
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	this->addChild(curve);
 
 	endMacro();
-}
-
-void CartesianPlot::addFourierTransformCurve() {
-	auto* curve = new XYFourierTransformCurve(i18n("Fourier Transform"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	this->addChild(curve);
-}
-
-void CartesianPlot::addHilbertTransformCurve() {
-	auto* curve = new XYHilbertTransformCurve(i18n("Hilbert Transform"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	this->addChild(curve);
-}
-
-void CartesianPlot::addConvolutionCurve() {
-	auto* curve = new XYConvolutionCurve(i18n("Convolution"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	this->addChild(curve);
-}
-
-void CartesianPlot::addCorrelationCurve() {
-	auto* curve = new XYCorrelationCurve(i18n("Auto-/Cross-Correlation"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	this->addChild(curve);
 }
 
 /*!
@@ -2069,7 +2025,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		return;
 
 	Q_D(CartesianPlot);
-	int cSystemIndex = -1;
+	int cSystemIndex = defaultCoordinateSystemIndex();
 	bool checkRanges = false; // check/change ranges when adding new children like curves for example
 	const auto* plot = dynamic_cast<const Plot*>(child);
 
@@ -2083,7 +2039,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		});
 
 		updateLegend();
-		cSystemIndex = plot->coordinateSystemIndex();
+		const_cast<Plot*>(plot)->setCoordinateSystemIndex(cSystemIndex);
 		checkRanges = true;
 	}
 
