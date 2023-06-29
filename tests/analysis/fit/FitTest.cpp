@@ -3073,9 +3073,8 @@ void FitTest::testHistogramGaussianML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3128,9 +3127,8 @@ void FitTest::testHistogramExponentialML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3176,9 +3174,8 @@ void FitTest::testHistogramLaplaceML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3218,9 +3215,8 @@ void FitTest::testHistogramCauchyML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3260,9 +3256,8 @@ void FitTest::testHistogramLognormalML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3302,9 +3297,8 @@ void FitTest::testHistogramPoissonML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3348,9 +3342,8 @@ void FitTest::testHistogramBinomialML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit

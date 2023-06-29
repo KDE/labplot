@@ -641,7 +641,7 @@ void RetransformTest::TestAddCurve() {
 
 	RetransformCallCounter c;
 
-	p->addEquationCurve();
+	p->addChild(new XYEquationCurve(QLatin1String("curve")));
 
 	// check that plot will be recalculated if a curve will be added
 	QCOMPARE(c.callCount(p), 1);
