@@ -368,13 +368,13 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 	return d->sourceDataChangedSinceLastRecalc;
 }
 
-double XYCurve::minimum(const Dimension dim) const {
+double XYCurve::minimum(const Dimension) const {
 	Q_D(const XYCurve);
 	// TODO
 	return NAN;
 }
 
-double XYCurve::maximum(const Dimension dim) const {
+double XYCurve::maximum(const Dimension) const {
 	Q_D(const XYCurve);
 	// TODO
 	return NAN;

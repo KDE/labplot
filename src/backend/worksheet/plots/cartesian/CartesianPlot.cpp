@@ -2656,81 +2656,72 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 	d->dataRange(dim, index).setRange(INFINITY, -INFINITY);
 	auto range{d->range(dim, index)}; // get reference to range from private
 
-	// loop over all xy-curves and determine the maximum and minimum values
-	for (const auto* curve : this->children<const XYCurve>()) {
-		// only curves with correct xIndex
-		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
-			continue;
-		if (!curve->isVisible())
-			continue;
-
-		DEBUG("CURVE \"" << STDSTRING(curve->name()) << "\"")
-
-		auto* column = curve->column(dim);
-		if (!column) {
-			DEBUG(" NO column!")
-			continue;
-		}
-
-		Dimension dim_other = Dimension::Y;
-		switch (dim) {
-		case Dimension::X:
-			break;
-		case Dimension::Y:
-			dim_other = Dimension::X;
-			break;
-		}
-
-		// range of indices
-		Range<int> indexRange{0, 0};
-		if (!completeRange && d->rangeType == RangeType::Free && curve->column(dim_other)) { // only data within y range
-			const int index = coordinateSystem(curve->coordinateSystemIndex())->index(dim_other);
-			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
-			curve->column(dim_other)->indicesMinMax(d->range(dim_other, index).start(), d->range(dim_other, index).end(), indexRange.start(), indexRange.end());
-		} else { // all data
-			DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
-			switch (d->rangeType) {
-			case RangeType::Free:
-				indexRange.setRange(0, column->rowCount() - 1);
-				break;
-			case RangeType::Last:
-				indexRange.setRange(column->rowCount() - d->rangeLastValues, column->rowCount() - 1);
-				break;
-			case RangeType::First:
-				indexRange.setRange(0, d->rangeFirstValues - 1);
-				break;
-			}
-		}
-		DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
-
-		curve->minMax(dim, indexRange, range, true);
-
-		if (range.start() < d->dataRange(dim, index).start())
-			d->dataRange(dim, index).start() = range.start();
-
-		if (range.end() > d->dataRange(dim, index).end())
-			d->dataRange(dim, index).end() = range.end();
-		DEBUG(Q_FUNC_INFO << ", curves range i = " << d->dataRange(dim, index).toStdString(false))
-	}
-
-	// loop over all other plots and determine the maximum and minimum values
+	// loop over all curves/plots and determine the maximum and minimum values
 	for (const auto* plot : this->children<const Plot>()) {
-		if (dynamic_cast<const XYCurve*>(plot))
-			continue; // xy-curve was handled already above
-
 		if (!plot->isVisible() || !plot->hasData())
 			continue;
 
 		if (coordinateSystem(plot->coordinateSystemIndex())->index(dim) != index)
 			continue;
 
-		const double min = plot->minimum(dim);
-		if (d->dataRange(dim, index).start() > min)
-			d->dataRange(dim, index).start() = min;
+		if (dynamic_cast<const XYCurve*>(plot)) {
+			auto* curve = static_cast<const XYCurve*>(plot);
+			DEBUG("CURVE \"" << STDSTRING(curve->name()) << "\"")
+			auto* column = curve->column(dim);
+			if (!column) {
+				DEBUG(" NO column!")
+				continue;
+			}
 
-		const double max = plot->maximum(dim);
-		if (max > d->dataRange(dim, index).end())
-			d->dataRange(dim, index).end() = max;
+			Dimension dim_other = Dimension::Y;
+			switch (dim) {
+			case Dimension::X:
+				break;
+			case Dimension::Y:
+				dim_other = Dimension::X;
+				break;
+			}
+
+			// range of indices
+			Range<int> indexRange{0, 0};
+			if (!completeRange && d->rangeType == RangeType::Free && curve->column(dim_other)) { // only data within y range
+				const int index = coordinateSystem(curve->coordinateSystemIndex())->index(dim_other);
+				DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
+				curve->column(dim_other)->indicesMinMax(d->range(dim_other, index).start(), d->range(dim_other, index).end(), indexRange.start(), indexRange.end());
+			} else { // all data
+				DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
+				switch (d->rangeType) {
+				case RangeType::Free:
+					indexRange.setRange(0, column->rowCount() - 1);
+					break;
+				case RangeType::Last:
+					indexRange.setRange(column->rowCount() - d->rangeLastValues, column->rowCount() - 1);
+					break;
+				case RangeType::First:
+					indexRange.setRange(0, d->rangeFirstValues - 1);
+					break;
+				}
+			}
+			DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
+
+			curve->minMax(dim, indexRange, range, true);
+
+			if (range.start() < d->dataRange(dim, index).start())
+				d->dataRange(dim, index).start() = range.start();
+
+			if (range.end() > d->dataRange(dim, index).end())
+				d->dataRange(dim, index).end() = range.end();
+			DEBUG(Q_FUNC_INFO << ", curves range i = " << d->dataRange(dim, index).toStdString(false))
+
+		} else {
+			const double min = plot->minimum(dim);
+			if (d->dataRange(dim, index).start() > min)
+				d->dataRange(dim, index).start() = min;
+
+			const double max = plot->maximum(dim);
+			if (max > d->dataRange(dim, index).end())
+				d->dataRange(dim, index).end() = max;
+		}
 	}
 
 	// data range is used to nice extend, so set correct scale
