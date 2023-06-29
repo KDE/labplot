@@ -20916,7 +20916,7 @@ msgstr "Guarda automàticament"
 #: src/kdefrontend/ui/settingsprintingpage.ui:22
 #, kde-format
 msgid "TODO"
-msgstr "Per a fer"
+msgstr "Per fer"
 
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)
 #: src/kdefrontend/ui/settingsspreadsheetpage.ui:23

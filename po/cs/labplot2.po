@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-25 00:44+0000\n"
-"PO-Revision-Date: 2023-06-23 13:38+0200\n"
+"PO-Revision-Date: 2023-06-23 15:21+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -10360,7 +10360,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Color Maps Browser"
-msgstr ""
+msgstr "Prohlížeč barevných map"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:34
 #: src/kdefrontend/examples/ExamplesWidget.cpp:33
@@ -10805,7 +10805,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Live Data Source"
-msgstr ""
+msgstr "Přidat nový zdroj měnících se dat"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:108
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:347
@@ -10970,7 +10970,7 @@ msgstr "Automaticky"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:155
 #, kde-format
 msgid "Whole File"
-msgstr ""
+msgstr "Celý soubor"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:192
 #, kde-format
@@ -13337,7 +13337,7 @@ msgstr "Vlastnosti: Zdroj dat MQTT"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
-msgstr ""
+msgstr "Vlastnosti: Zdroj měnících se dat"
 
 #: src/kdefrontend/GuiObserver.cpp:470
 #, kde-format
@@ -13685,7 +13685,7 @@ msgstr ""
 #: src/kdefrontend/LabPlot.cpp:72
 #, kde-format
 msgid "Updated on restart"
-msgstr ""
+msgstr "Aktualizován při restartu"
 
 #: src/kdefrontend/LabPlot.cpp:73
 #, kde-format
@@ -14019,12 +14019,12 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:699
 #, kde-format
 msgid "Live Data Source..."
-msgstr ""
+msgstr "Zdroj měnících se dat..."
 
 #: src/kdefrontend/MainWin.cpp:700
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
-msgstr ""
+msgstr "Vytvoří zdroj měnících se dat pro čtení dat ze zařízení v reálném čase"
 
 #: src/kdefrontend/MainWin.cpp:707 src/kdefrontend/MainWin.cpp:716
 #, kde-format
@@ -14079,7 +14079,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:750
 #, kde-format
 msgid "Color Maps Browser"
-msgstr ""
+msgstr "Prohlížeč barevných map"
 
 #: src/kdefrontend/MainWin.cpp:751
 #, kde-format
@@ -14347,7 +14347,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:2810
 #, kde-format
 msgid "Live data source%1"
-msgstr ""
+msgstr "Zdroj měnících se dat %1"
 
 #: src/kdefrontend/MainWin.cpp:2854
 #, kde-format
@@ -16667,14 +16667,14 @@ msgstr "Písmo:"
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:52
 #, kde-format
 msgid "Comment Character:"
-msgstr ""
+msgstr "Znak komentáře:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:59
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
 #, kde-format
 msgid "Skip empty parts"
-msgstr ""
+msgstr "Přeskočit prázdné části"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:66
@@ -16695,7 +16695,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
 #, kde-format
 msgid "Create Timestamp "
-msgstr ""
+msgstr "Vytvořit časové razítko "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
@@ -16708,7 +16708,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
 #, kde-format
 msgid "Convert NaN to 0"
-msgstr ""
+msgstr "Převést NaN na 0"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:205
@@ -16720,7 +16720,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:212
 #, kde-format
 msgid "Create Index"
-msgstr ""
+msgstr "Vytvořit index"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:219
@@ -16800,7 +16800,7 @@ msgstr "Pořadí bajtů:"
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:23
 #, kde-format
 msgid "Create index column"
-msgstr ""
+msgstr "Vytvořit index sloupce"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
@@ -16911,7 +16911,7 @@ msgstr "Test"
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:34
 #, kde-format
 msgid "Column Descriptions"
-msgstr ""
+msgstr "Popisky sloupců"
 
 #. i18n: ectx: property (text), widget (QPushButton, bDelete)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:40
@@ -16935,7 +16935,7 @@ msgstr "Volby filtru"
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:79
 #, kde-format
 msgid "Comment character:"
-msgstr ""
+msgstr "Znak komentáře:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparator)
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
@@ -16943,7 +16943,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:138
 #, kde-format
 msgid "Separating string:"
-msgstr ""
+msgstr "Oddělovací řetězec:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:93
@@ -16957,7 +16957,7 @@ msgstr "Číselný formát:"
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:40
 #, kde-format
 msgid "DateTime format:"
-msgstr ""
+msgstr "Formát data a času:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:107
@@ -16975,7 +16975,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:144
 #, kde-format
 msgid "Remove quotes"
-msgstr ""
+msgstr "Odstranit uvozovky"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:193
@@ -17125,19 +17125,19 @@ msgstr "Uložit současné nastavení filtru"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:118
 #, kde-format
 msgid "File or Named Pipe"
-msgstr ""
+msgstr "Soubor nebo pojmenovaná roura"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:123
 #, kde-format
 msgid "Network TCP Socket"
-msgstr ""
+msgstr "Síťový socket TCP"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:128
 #, kde-format
 msgid "Network UDP Socket"
-msgstr ""
+msgstr "Síťový socket UDP"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:133
@@ -17285,7 +17285,7 @@ msgstr "Ukončit řadu:"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:734
 #, kde-format
 msgid "Update Options"
-msgstr ""
+msgstr "Možnosti aktualizace"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:741
@@ -17354,7 +17354,7 @@ msgstr "Periodicky"
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:237
 #, kde-format
 msgid "On New Data"
-msgstr ""
+msgstr "Pokud přibudou nová data"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbUpdateInterval)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:843
@@ -20197,7 +20197,7 @@ msgstr "Vytvořit novou barevnou mapu"
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:149
 #, kde-format
 msgid "Open existing color map"
-msgstr ""
+msgstr "Otevřít existující barevnou mapu"
 
 #. i18n: ectx: property (text), widget (QLabel, lFillBrushStyle)
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:211
@@ -20395,7 +20395,7 @@ msgstr ""
 #: src/kdefrontend/ui/settingsgeneralpage.ui:234
 #, kde-format
 msgid "Number options:"
-msgstr ""
+msgstr "Volby čísel:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
