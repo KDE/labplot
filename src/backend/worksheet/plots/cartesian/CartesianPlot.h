@@ -100,6 +100,7 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
+	QMenu* addNewMenu();
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
 	QVector<AspectType> pasteTypes() const override;
@@ -280,7 +281,7 @@ private:
 	QAction* addConvolutionAction{nullptr};
 	QAction* addCorrelationAction{nullptr};
 
-	QMenu* addNewMenu{nullptr};
+	QMenu* m_addNewMenu{nullptr};
 	QMenu* addNewAnalysisMenu{nullptr};
 	QMenu* dataAnalysisMenu{nullptr};
 	QMenu* themeMenu{nullptr};

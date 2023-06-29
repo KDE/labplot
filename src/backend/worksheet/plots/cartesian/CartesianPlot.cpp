@@ -79,7 +79,7 @@ CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
 
 CartesianPlot::~CartesianPlot() {
 	if (m_menusInitialized) {
-		delete addNewMenu;
+		delete m_addNewMenu;
 		delete themeMenu;
 	}
 
@@ -412,13 +412,13 @@ void CartesianPlot::initActions() {
 	connect(addFourierTransformCurveAction, &QAction::triggered, this, [=]() {
 		addChild(new XYFourierTransformCurve(i18n("Fourier Transform")));
 	});
-	connect(addHilbertTransformCurveAction, &QAction::triggered, this,  [=]() {
+	connect(addHilbertTransformCurveAction, &QAction::triggered, this, [=]() {
 		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
 	});
-	connect(addConvolutionCurveAction, &QAction::triggered, this,  [=]() {
+	connect(addConvolutionCurveAction, &QAction::triggered, this, [=]() {
 		addChild(new XYConvolutionCurve(i18n("Convolution")));
 	});
-	connect(addCorrelationCurveAction, &QAction::triggered, this,  [=]() {
+	connect(addCorrelationCurveAction, &QAction::triggered, this, [=]() {
 		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
 	});
 
@@ -495,13 +495,21 @@ void CartesianPlot::initActions() {
 	connect(addIntegrationAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
 	connect(addInterpolationAction, &QAction::triggered, this, &CartesianPlot::addInterpolationCurve);
 	connect(addSmoothAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
-	connect(addConvolutionAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
-	connect(addCorrelationAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
+	connect(addConvolutionAction, &QAction::triggered, this, [=]() {
+		addChild(new XYConvolutionCurve(i18n("Convolution")));
+	});
+	connect(addCorrelationAction, &QAction::triggered, this, [=]() {
+		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
+	});
 	for (const auto& action : addFitActions)
 		connect(action, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
-	connect(addFourierTransformAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
-	connect(addHilbertTransformAction, &QAction::triggered, this, &CartesianPlot::addHilbertTransformCurve);
+	connect(addFourierTransformAction, &QAction::triggered, this, [=]() {
+		addChild(new XYFourierTransformCurve(i18n("Fourier Transform")));
+	});
+	connect(addHilbertTransformAction, &QAction::triggered, this, [=]() {
+		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
+	});
 
 	// visibility action
 	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
@@ -512,22 +520,22 @@ void CartesianPlot::initActions() {
 void CartesianPlot::initMenus() {
 	initActions();
 
-	addNewMenu = new QMenu(i18n("Add New"));
-	addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	addNewMenu->addAction(addCurveAction);
-	addNewMenu->addAction(addEquationCurveAction);
+	m_addNewMenu = new QMenu(i18n("Add New"));
+	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+	m_addNewMenu->addAction(addCurveAction);
+	m_addNewMenu->addAction(addEquationCurveAction);
 
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
-	addNewMenu->addMenu(addNewStatisticalPlotsMenu);
+	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
 	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
 	addNewBarPlotsMenu->addAction(addBarPlotAction);
 	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
-	addNewMenu->addMenu(addNewBarPlotsMenu);
+	m_addNewMenu->addMenu(addNewBarPlotsMenu);
 
-	addNewMenu->addSeparator();
+	m_addNewMenu->addSeparator();
 
 	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
 	addNewAnalysisMenu->addAction(addFitCurveAction);
@@ -546,21 +554,21 @@ void CartesianPlot::initMenus() {
 	addNewAnalysisMenu->addAction(addCorrelationCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addDataReductionCurveAction);
-	addNewMenu->addMenu(addNewAnalysisMenu);
+	m_addNewMenu->addMenu(addNewAnalysisMenu);
 
-	addNewMenu->addSeparator();
-	addNewMenu->addAction(addLegendAction);
-	addNewMenu->addSeparator();
-	addNewMenu->addAction(addHorizontalAxisAction);
-	addNewMenu->addAction(addVerticalAxisAction);
-	addNewMenu->addSeparator();
-	addNewMenu->addAction(addTextLabelAction);
-	addNewMenu->addAction(addImageAction);
-	addNewMenu->addAction(addInfoElementAction);
-	addNewMenu->addSeparator();
-	addNewMenu->addAction(addCustomPointAction);
-	addNewMenu->addAction(addReferenceLineAction);
-	addNewMenu->addAction(addReferenceRangeAction);
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(addLegendAction);
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(addHorizontalAxisAction);
+	m_addNewMenu->addAction(addVerticalAxisAction);
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(addTextLabelAction);
+	m_addNewMenu->addAction(addImageAction);
+	m_addNewMenu->addAction(addInfoElementAction);
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(addCustomPointAction);
+	m_addNewMenu->addAction(addReferenceLineAction);
+	m_addNewMenu->addAction(addReferenceRangeAction);
 
 	// Data manipulation menu
 	// 	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
@@ -636,7 +644,7 @@ QMenu* CartesianPlot::createContextMenu() {
 	menu->setToolTipsVisible(true);
 	QAction* firstAction = menu->actions().at(1);
 
-	menu->insertMenu(firstAction, addNewMenu);
+	menu->insertMenu(firstAction, m_addNewMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, themeMenu);
 	menu->insertSeparator(firstAction);
@@ -654,6 +662,13 @@ QMenu* CartesianPlot::createContextMenu() {
 	}
 
 	return menu;
+}
+
+QMenu* CartesianPlot::addNewMenu() {
+	if (!m_menusInitialized)
+		initMenus();
+
+	return m_addNewMenu;
 }
 
 QMenu* CartesianPlot::analysisMenu() {
@@ -2118,6 +2133,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else if (lollipopPlot) {
 		DEBUG(Q_FUNC_INFO << ", LOLLIPOP PLOT")
 		connect(lollipopPlot, &LollipopPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
+	} else if (axis) {
+		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {
 		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
 		if (infoElement)
@@ -2127,10 +2144,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// must be unhovered
 		if (elem)
 			connect(elem, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
-	}
-
-	if (axis) {
-		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	}
 
 	auto rangeChanged = false;
@@ -2383,8 +2396,8 @@ void CartesianPlot::dataChanged(WorksheetElement* element) {
 	if (cSystemIndex == -1)
 		return;
 
-	auto xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
-	auto yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
+	const auto xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
+	const auto yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 
 	dataChanged(xIndex, yIndex, element);
 }
@@ -2458,9 +2471,9 @@ void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
 }
 
 void CartesianPlot::curveVisibilityChanged() {
-	int index = static_cast<WorksheetElement*>(QObject::sender())->coordinateSystemIndex();
-	int xIndex = coordinateSystem(index)->index(Dimension::X);
-	int yIndex = coordinateSystem(index)->index(Dimension::Y);
+	const int index = static_cast<WorksheetElement*>(QObject::sender())->coordinateSystemIndex();
+	const int xIndex = coordinateSystem(index)->index(Dimension::X);
+	const int yIndex = coordinateSystem(index)->index(Dimension::Y);
 	setRangeDirty(Dimension::X, xIndex, true);
 	setRangeDirty(Dimension::Y, yIndex, true);
 	updateLegend();
