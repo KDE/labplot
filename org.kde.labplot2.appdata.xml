@@ -20,6 +20,7 @@
   <name xml:lang="fi">LabPlot</name>
   <name xml:lang="fr">LabPlot</name>
   <name xml:lang="gl">LabPlot</name>
+  <name xml:lang="ia">LabPlot</name>
   <name xml:lang="id">LabPlot</name>
   <name xml:lang="it">LabPlot</name>
   <name xml:lang="ka">LabPlot</name>
@@ -48,6 +49,7 @@
   <summary xml:lang="eu">Datuen irudikatze eta analisi elkarreragilea</summary>
   <summary xml:lang="fi">Vuorovaikutteinen tiedon visualisointi ja analyysi</summary>
   <summary xml:lang="fr">Analyse et affichage interactif de données</summary>
+  <summary xml:lang="ia">Visualisation e Analyse de Datos Interactive</summary>
   <summary xml:lang="id">Visualisasi dan Analisis Data Interaktif</summary>
   <summary xml:lang="it">Analisi e visualizzazione dei dati interattiva</summary>
   <summary xml:lang="ka">მონაცემების ვიზუალიზაცია და ანალიზი</summary>
@@ -75,6 +77,7 @@
     <p xml:lang="eu">LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.</p>
     <p xml:lang="fi">LabPlot on VAPAA, kaikkien käytettävissä oleva, avointa lähdekoodia ja monialustainen tiedon visualisointi- ja analyysiohjelma.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
+    <p xml:lang="ia">LabPlot es un software LIBERE, a fonte aperite e inter-plattefoirma per Visualisation e Analyse de datos accessibile a omnes.</p>
     <p xml:lang="id">LabPlot adalah perangkat lunak Analisis dan Visualisasi Data open source dan lintas platform GRATIS yang bisa diakses oleh semua orang.</p>
     <p xml:lang="it">LabPlot è un software GRATUITO, open source e multi piattaforma per la visualizzazione e per l'analisi dei dati accessibile da chiunque.</p>
     <p xml:lang="ka">Labplot-ი ყველასთვის ხელმისაწვდომი, უფასო, ღია კოდის და პლატფორმათაშორისი, მონაცემების ვიზუალიზაციისა და ანალიზის პროგრამაა.</p>
@@ -138,6 +141,7 @@
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
+      <caption xml:lang="ia">Visualisation basice de datos</caption>
       <caption xml:lang="id">Visualisasi dasar data</caption>
       <caption xml:lang="it">Visualizzazione di base dei dati</caption>
       <caption xml:lang="ka">მონაცემების საბაზისო ვიზუალიზაცია</caption>
@@ -166,6 +170,7 @@
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
+      <caption xml:lang="ia">Visualisation basice de datos</caption>
       <caption xml:lang="id">Visualisasi dasar data</caption>
       <caption xml:lang="it">Visualizzazione di base dei dati</caption>
       <caption xml:lang="ka">მონაცემების საბაზისო ვიზუალიზაცია</caption>
@@ -248,6 +253,7 @@
       <caption xml:lang="eu">Funtzio matematikoak irudikatzea</caption>
       <caption xml:lang="fi">Matemaattisten funktioiden visualisointi</caption>
       <caption xml:lang="fr">Affichage de fonctions mathématiques</caption>
+      <caption xml:lang="ia">Visualisation de functiones mathematic</caption>
       <caption xml:lang="id">Visualisasi fungsi matematika</caption>
       <caption xml:lang="it">Visualizzazione di funzioni matematiche</caption>
       <caption xml:lang="ka">მათემატიკური ფუნქციების ვიზუალიზაცია</caption>
@@ -354,6 +360,7 @@
       <caption xml:lang="eu">Seinaleen analisia</caption>
       <caption xml:lang="fi">Signaalianalyysi</caption>
       <caption xml:lang="fr">Analyse de signaux</caption>
+      <caption xml:lang="ia">Analyse de signal</caption>
       <caption xml:lang="id">Analisis sinyal</caption>
       <caption xml:lang="it">Analisi del segnale</caption>
       <caption xml:lang="ka">სიგნალის ანალიზი</caption>
@@ -381,6 +388,7 @@
       <caption xml:lang="eu">Herzsprung-Russel diagrama LabPlot-en</caption>
       <caption xml:lang="fi">Herzsprung-Russel-diagrammi LabPlotissa</caption>
       <caption xml:lang="fr">Diagramme de Herzsprung-Russel dans LabPlot</caption>
+      <caption xml:lang="ia">Diagramma de Herzsprung-Russel  in LabPlot</caption>
       <caption xml:lang="id">Diagram Hertzsprung-Russell di LabPlot</caption>
       <caption xml:lang="it">Diagramma Hertzsprung-Russell in LabPlot</caption>
       <caption xml:lang="ka">ჰერცშპრუნგ-რასელის დიაგრამა LabPlot-ში</caption>
@@ -408,6 +416,7 @@
       <caption xml:lang="eu">Maxima saio elkarreragile batean kalkulatuta datuen irudikapena</caption>
       <caption xml:lang="fi">Vuorovaikutteisessa Maxima-istunnossa lasketun tiedon visualisointi</caption>
       <caption xml:lang="fr">Affichage de données calculées dans une session interactive de Maxima</caption>
+      <caption xml:lang="ia">Visualisation de datos calculate in unsession interactide de Maxima</caption>
       <caption xml:lang="id">Visualisasi data yang dihitung dalam sesi Maxima interaktif</caption>
       <caption xml:lang="it">Visualizzazione dei dati calcolati in una sessione interattiva di Maxima</caption>
       <caption xml:lang="ka">Maxima-ის ინტერაქტიურ სესიაში გამოთვლილი მონაცემების ვიზუალიზაცია</caption>
