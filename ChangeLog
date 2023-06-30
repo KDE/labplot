@@ -16,7 +16,8 @@ Bug fixes:
 	* Properly save and load the property "visible" for box and bar plots in the project file
 	* Fixed copy&paste and duplication of box and bar plots
 	* Fixed issues with loading object's templates (BUG 470003)
-	* Don't crash when loading porjects with reference ranges
+	* Don't crash when loading projects with reference ranges
+	* .xlsx import: Fix crash importing empty cells
 
 -----2.10.0 (21.03.2023) -----
 New features:
