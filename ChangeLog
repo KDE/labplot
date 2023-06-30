@@ -23,6 +23,7 @@ Bug fixes:
 	* In the collections of example projects, color maps and data sets allow also to search for sub-strings and do the search case-insensitive
 	* Properly save and load the property "visible" for box and bar plots in the project file
 	* Fixed copy&paste and duplication of box and bar plots
+	* .xlsx import: Fix crash importing empty cells
 
 -----2.10.0 (21.03.2023) -----
 New features:
