@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-29 02:34+0000\n"
-"PO-Revision-Date: 2023-06-28 17:11+0200\n"
+"PO-Revision-Date: 2023-06-29 12:35+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -33,6 +33,8 @@ msgid ""
 "Couldn't find the dynamic library 'cantorpart'. Please check your "
 "installation."
 msgstr ""
+"Non poteva trovar le bibliotheca dynamic 'cantorpart'. Pro favor tu verifica "
+"tu instalaltion."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:88
 #, kde-format
@@ -443,7 +445,7 @@ msgstr "%1: disvela Cellas"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2400
 #, kde-format
 msgid "%1: set heatmap format"
-msgstr "%1: fixa  Formato del mappa de calor"
+msgstr "%1: assigna  formato del mappa de calor"
 
 #: src/backend/core/abstractcolumncommands.cpp:266
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2417
@@ -689,18 +691,18 @@ msgstr "%1: cambia valores de cella"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2634
 #, kde-format
 msgid "%1: set plot designation"
-msgstr "%1: fixa designation de tracia (plot)"
+msgstr "%1: assigna designation de tracia (plot)"
 
 #: src/backend/core/column/columncommands.cpp:687
 #: src/backend/matrix/matrixcommands.cpp:86
 #, kde-format
 msgid "%1: set formula"
-msgstr "%1: fixa formula"
+msgstr "%1: assigna formula"
 
 #: src/backend/core/column/columncommands.cpp:754
 #, kde-format
 msgid "%1: set cell formula"
-msgstr "%1: fixa formula de cella"
+msgstr "%1: assigna formula de cella"
 
 #: src/backend/core/column/columncommands.cpp:796
 #, kde-format
@@ -710,7 +712,7 @@ msgstr "%1: clara omne formulas"
 #: src/backend/core/column/columncommands.h:221
 #, kde-format
 msgid "%1: set value for row %2"
-msgstr "%1: fixa valor per rango %2"
+msgstr "%1: assigna valor per rango %2"
 
 #: src/backend/core/column/columncommands.h:278
 #: src/backend/matrix/matrixcommands.cpp:104
@@ -727,33 +729,33 @@ msgstr "%1: reimplacia le valores per rangos %2 a %3"
 #: src/backend/core/datatypes/String2DateTimeFilter.cpp:137
 #, kde-format
 msgid "%1: set date-time format to %2"
-msgstr ""
+msgstr "%1: Assigna formato de tempore-data a %2"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:57
 #: src/backend/core/datatypes/String2DateTimeFilter.cpp:139
 #, kde-format
 msgid "set date-time format to %1"
-msgstr ""
+msgstr "assigna formato de tempore-data a %1"
 
 #: src/backend/core/datatypes/Double2StringFilter.cpp:81
 #, kde-format
 msgid "%1: set numeric format to '%2'"
-msgstr ""
+msgstr "%1: assigna formato numeric a '%2'"
 
 #: src/backend/core/datatypes/Double2StringFilter.cpp:83
 #, kde-format
 msgid "set numeric format to '%1'"
-msgstr ""
+msgstr " assigna formato numeric a '%1'"
 
 #: src/backend/core/datatypes/Double2StringFilter.cpp:101
 #, kde-format
 msgid "%1: set decimal digits to %2"
-msgstr ""
+msgstr "%1: assigna cifras decimal a %2"
 
 #: src/backend/core/datatypes/Double2StringFilter.cpp:103
 #, kde-format
 msgid "set decimal digits to %1"
-msgstr ""
+msgstr "assigna cifras decimal a %1"
 
 #: src/backend/core/Folder.cpp:350
 #, kde-format
@@ -783,7 +785,7 @@ msgstr "Claude"
 #: src/backend/core/Project.cpp:274
 #, kde-format
 msgid "%1: set author"
-msgstr "%1: fixa autor"
+msgstr "%1: assigna autor"
 
 #: src/backend/core/Project.cpp:280
 #, kde-format
@@ -830,27 +832,28 @@ msgstr ""
 #: src/backend/core/Project.cpp:685 src/backend/core/Project.cpp:687
 #, kde-format
 msgid "Missing Support for CAS"
-msgstr ""
+msgstr "Supporto per CAS Mancante"
 
 #: src/backend/core/Project.cpp:717
 #, kde-format
 msgid "Attribute 'version' is missing."
-msgstr ""
+msgstr "Attributo 'version' es mancante."
 
 #: src/backend/core/Project.cpp:767
 #, kde-format
 msgid "no project element found"
-msgstr ""
+msgstr "necun elemento de porojecto trovate"
 
 #: src/backend/core/Project.cpp:769
 #, kde-format
 msgid "no valid XML document found"
-msgstr ""
+msgstr "necun documento XML valide trovate"
 
 #: src/backend/core/Project.cpp:1072
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
+"Tempore de modification de projecto invalide.On usa le tempore currente."
 
 #: src/backend/core/Workbook.cpp:205
 #, kde-format
@@ -860,7 +863,7 @@ msgstr "matrice"
 #: src/backend/core/Workbook.cpp:212
 #, kde-format
 msgid "unknown workbook element '%1'"
-msgstr ""
+msgstr "elemento de quaderno incognite '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
@@ -873,7 +876,7 @@ msgstr "Plot (Tracia)"
 #: src/backend/datapicker/Datapicker.cpp:135
 #, kde-format
 msgid "%1, active curve \"%2\""
-msgstr ""
+msgstr "%1, curva active \"%2\""
 
 #: src/backend/datapicker/Datapicker.cpp:214
 #, kde-format
@@ -883,7 +886,7 @@ msgstr "Puncto %1"
 #: src/backend/datapicker/Datapicker.cpp:370
 #, kde-format
 msgid "unknown datapicker element '%1'"
-msgstr ""
+msgstr "elemento de DataPicker incognoscite '%1'"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbData)
 #. i18n: ectx: property (text), widget (QLabel, lData)
@@ -917,52 +920,52 @@ msgstr "Datos"
 #: src/backend/datapicker/DatapickerCurve.cpp:268
 #, kde-format
 msgid "%1: set xy-error type"
-msgstr ""
+msgstr "%1: assigna typo de error xy"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:306
 #, kde-format
 msgid "%1: set position X column"
-msgstr ""
+msgstr "%1: assigna position columna X"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:313
 #, kde-format
 msgid "%1: set position Y column"
-msgstr ""
+msgstr "%1: assigna position columna Y"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:320
 #, kde-format
 msgid "%1: set position Z column"
-msgstr ""
+msgstr "%1: assigna position columna Z"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:327
 #, kde-format
 msgid "%1: set +delta_X column"
-msgstr ""
+msgstr "%1: assigna columna +delta X"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:334
 #, kde-format
 msgid "%1: set -delta_X column"
-msgstr ""
+msgstr "%1: assigna columna -delta X"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:341
 #, kde-format
 msgid "%1: set +delta_Y column"
-msgstr ""
+msgstr "%1: assigna +delta Y columna"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:348
 #, kde-format
 msgid "%1: set -delta_Y column"
-msgstr ""
+msgstr "%1: assigna -delta Y columna"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:355
 #, kde-format
 msgid "%1: set error bar size"
-msgstr ""
+msgstr "%1: assigna grandor de barra de error"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:362
 #, kde-format
 msgid "%1: set error bar filling"
-msgstr ""
+msgstr "%1: assigna plenamento de barra de error"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:369
 #, kde-format
@@ -977,7 +980,7 @@ msgstr ""
 #: src/backend/worksheet/WorksheetElementContainer.cpp:68
 #, kde-format
 msgid "%1: set visible"
-msgstr ""
+msgstr "%1: assigna visibile"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:335
@@ -988,18 +991,18 @@ msgstr ""
 #: src/backend/worksheet/WorksheetElementContainer.cpp:88
 #, kde-format
 msgid "%1: set invisible"
-msgstr "%1: Fixa invisibile"
+msgstr "%1: assigna invisibile"
 
 #: src/backend/datapicker/DatapickerImage.cpp:177
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
-msgstr ""
+msgstr "Imprime imagine de DataPicker"
 
 #: src/backend/datapicker/DatapickerImage.cpp:266
 #, kde-format
 msgid "%1: upload new image"
-msgstr ""
+msgstr "%1: incarga nove imagine"
 
 #: src/backend/datapicker/DatapickerImage.cpp:267
 #: src/backend/datapicker/DatapickerImage.cpp:298
@@ -1011,13 +1014,13 @@ msgstr "%1: Incarga imagine"
 #: src/backend/worksheet/Image.cpp:161
 #, kde-format
 msgid "%1: embed image"
-msgstr ""
+msgstr "%1: capsula imagine"
 
 #: src/backend/datapicker/DatapickerImage.cpp:310
 #: src/backend/worksheet/WorksheetElement.cpp:671
 #, kde-format
 msgid "%1: set rotation angle"
-msgstr ""
+msgstr "%1: assigna angulo de rotation"
 
 #: src/backend/datapicker/DatapickerImage.cpp:316
 #, kde-format
@@ -1050,7 +1053,7 @@ msgstr ""
 #: src/backend/worksheet/WorksheetElement.cpp:592
 #, kde-format
 msgid "%1: set position"
-msgstr ""
+msgstr "%1: assigna position"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:224
 #, kde-format
@@ -1569,7 +1572,7 @@ msgstr "incognite"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1527
 #, kde-format
 msgid "No data set selected"
-msgstr ""
+msgstr "Nulle insimul de datos seligite"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1594
 #, kde-format
@@ -6452,7 +6455,7 @@ msgstr "Visibile"
 #: src/backend/worksheet/Image.cpp:154
 #, kde-format
 msgid "%1: set image"
-msgstr "%1: Fixa imagine"
+msgstr "%1: assigna imagine"
 
 #: src/backend/worksheet/Image.cpp:168 src/backend/worksheet/TextLabel.cpp:369
 #, kde-format
@@ -6462,12 +6465,12 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:175
 #, kde-format
 msgid "%1: set width"
-msgstr "%1: Fixa  largessa"
+msgstr "%1: assigna  largessa"
 
 #: src/backend/worksheet/Image.cpp:184
 #, kde-format
 msgid "%1: set height"
-msgstr "%1: fixa altessa"
+msgstr "%1: assigna altessa"
 
 #: src/backend/worksheet/Image.cpp:193
 #, kde-format
@@ -6660,7 +6663,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:556
 #, kde-format
 msgid "%1: set axis position"
-msgstr "%1: Fixa position de axes"
+msgstr "%1: assigna position de axes"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:564
 #, kde-format
@@ -7578,7 +7581,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:223
 #, kde-format
 msgid "%1: set font"
-msgstr "%1: Fixa font"
+msgstr "%1: assigna font"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:230
 #: src/backend/worksheet/TextLabel.cpp:339
@@ -8455,7 +8458,7 @@ msgstr ""
 #: src/backend/worksheet/TextLabel.cpp:347
 #, kde-format
 msgid "%1: set background color"
-msgstr "%1: Fixa color de fundo "
+msgstr "%1: assigna color de fundo "
 
 #: src/backend/worksheet/TextLabel.cpp:355
 #, kde-format
@@ -8481,7 +8484,7 @@ msgstr ""
 #: src/backend/worksheet/Worksheet.cpp:644
 #, kde-format
 msgid "%1: set layout"
-msgstr "%1: Fixa disposition"
+msgstr "%1: assigna disposition"
 
 #: src/backend/worksheet/Worksheet.cpp:706
 #: src/backend/worksheet/Worksheet.cpp:707
@@ -8538,7 +8541,7 @@ msgstr ""
 #: src/backend/worksheet/WorksheetElement.cpp:616
 #, kde-format
 msgid "%1: set vertical alignment"
-msgstr "%1: Fixa alineamento vertical"
+msgstr "%1: assigna alineamento vertical"
 
 #: src/backend/worksheet/WorksheetElement.cpp:630
 #, kde-format
@@ -8818,7 +8821,7 @@ msgstr ""
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:527
 #, kde-format
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
-msgstr ""
+msgstr "%1, curva active \"%2\": %3=%4, %5=%6"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:616
 #, kde-format
@@ -20101,7 +20104,7 @@ msgstr ""
 #: src/kdefrontend/ui/settingswelcomepage.ui:17
 #, kde-format
 msgid "Reset Layout"
-msgstr "Refixa Disposition"
+msgstr "Reassigna Disposition"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/kdefrontend/ui/settingsworksheetpage.ui:30
@@ -20712,7 +20715,7 @@ msgstr "Valor de initio"
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:43
 #, kde-format
 msgid "Fixed"
-msgstr "Fixate"
+msgstr "assignate"
 
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:47
 #, kde-format
