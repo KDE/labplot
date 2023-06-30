@@ -70,7 +70,7 @@ windows_qt515:
       junit: JUnitTestResults.xml
 
 # only changed "script" section
-freebsd_qt515:
+.freebsd_qt515:
   stage: build
   tags:
     - FreeBSD
