@@ -45,6 +45,7 @@
   <summary xml:lang="eu">Datuen irudikatze eta analisi elkarreragilea</summary>
   <summary xml:lang="fi">Vuorovaikutteinen tiedon visualisointi ja analyysi</summary>
   <summary xml:lang="fr">Analyse et affichage interactif de données</summary>
+  <summary xml:lang="ia">Visualisation e Analyse de Datos Interactive</summary>
   <summary xml:lang="id">Visualisasi dan Analisis Data Interaktif</summary>
   <summary xml:lang="it">Analisi e visualizzazione dei dati interattiva</summary>
   <summary xml:lang="ka">მონაცემების ვიზუალიზაცია და ანალიზი</summary>
@@ -128,6 +129,7 @@
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
+      <caption xml:lang="ia">Visualisation basice de datos</caption>
       <caption xml:lang="id">Visualisasi dasar data</caption>
       <caption xml:lang="it">Visualizzazione di base dei dati</caption>
       <caption xml:lang="ka">მონაცემების საბაზისო ვიზუალიზაცია</caption>
@@ -153,6 +155,7 @@
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
+      <caption xml:lang="ia">Visualisation basice de datos</caption>
       <caption xml:lang="id">Visualisasi dasar data</caption>
       <caption xml:lang="it">Visualizzazione di base dei dati</caption>
       <caption xml:lang="ka">მონაცემების საბაზისო ვიზუალიზაცია</caption>
@@ -226,6 +229,7 @@
       <caption xml:lang="eu">Funtzio matematikoak irudikatzea</caption>
       <caption xml:lang="fi">Matemaattisten funktioiden visualisointi</caption>
       <caption xml:lang="fr">Affichage de fonctions mathématiques</caption>
+      <caption xml:lang="ia">Visualisation de functiones mathematic</caption>
       <caption xml:lang="id">Visualisasi fungsi matematika</caption>
       <caption xml:lang="it">Visualizzazione di funzioni matematiche</caption>
       <caption xml:lang="ka">მათემატიკური ფუნქციების ვიზუალიზაცია</caption>
@@ -320,6 +324,7 @@
       <caption xml:lang="eu">Seinaleen analisia</caption>
       <caption xml:lang="fi">Signaalianalyysi</caption>
       <caption xml:lang="fr">Analyse de signaux</caption>
+      <caption xml:lang="ia">Analyse de signal</caption>
       <caption xml:lang="id">Analisis sinyal</caption>
       <caption xml:lang="it">Analisi del segnale</caption>
       <caption xml:lang="ka">სიგნალის ანალიზი</caption>
@@ -344,6 +349,7 @@
       <caption xml:lang="eu">Herzsprung-Russel diagrama LabPlot-en</caption>
       <caption xml:lang="fi">Herzsprung-Russel-diagrammi LabPlotissa</caption>
       <caption xml:lang="fr">Diagramme de Herzsprung-Russel dans LabPlot</caption>
+      <caption xml:lang="ia">Diagramma de Herzsprung-Russel  in LabPlot</caption>
       <caption xml:lang="id">Diagram Hertzsprung-Russell di LabPlot</caption>
       <caption xml:lang="it">Diagramma Hertzsprung-Russell in LabPlot</caption>
       <caption xml:lang="ka">ჰერცშპრუნგ-რასელის დიაგრამა LabPlot-ში</caption>
@@ -368,6 +374,7 @@
       <caption xml:lang="eu">Maxima saio elkarreragile batean kalkulatuta datuen irudikapena</caption>
       <caption xml:lang="fi">Vuorovaikutteisessa Maxima-istunnossa lasketun tiedon visualisointi</caption>
       <caption xml:lang="fr">Affichage de données calculées dans une session interactive de Maxima</caption>
+      <caption xml:lang="ia">Visualisation de datos calculate in unsession interactide de Maxima</caption>
       <caption xml:lang="id">Visualisasi data yang dihitung dalam sesi Maxima interaktif</caption>
       <caption xml:lang="it">Visualizzazione dei dati calcolati in una sessione interattiva di Maxima</caption>
       <caption xml:lang="ka">Maxima-ის ინტერაქტიურ სესიაში გამოთვლილი მონაცემების ვიზუალიზაცია</caption>
