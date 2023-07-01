@@ -23,7 +23,9 @@ Bug fixes:
 	* In the collections of example projects, color maps and data sets allow also to search for sub-strings and do the search case-insensitive
 	* Properly save and load the property "visible" for box and bar plots in the project file
 	* Fixed copy&paste and duplication of box and bar plots
-	* .xlsx import: Fix crash importing empty cells
+	* .xlsx import:
+		* Fix crash importing empty cells
+		* support datetime import (Issue #531)
 	* Properly set the initial properties of the reference line like line width, etc. (Issue #580)
 	* Properly show the initial value of the property "visible" for the reference range (Issue #582)
 

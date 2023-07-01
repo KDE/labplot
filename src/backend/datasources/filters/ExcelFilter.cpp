@@ -433,23 +433,24 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 	const auto rowCount = currentRange.rowCount();
 	const auto colCount = currentRange.columnCount();
 	auto regionToRead = region;
+	bool isDateOnly = true;
 
 	if (auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource)) {
-		QVector<QVector<QString>*> stringDataPointers;
 		std::vector<void*> numericDataPointers;
-		QList<bool> columnNumericTypes;
+		QVector<QVector<QDateTime>*> datetimeDataPointers;
+		QVector<QVector<QString>*> stringDataPointers;
+		QList<QXlsx::Cell::CellType> columnNumericTypes;
 		QStringList columnNames;
 		if (firstRowAsColumnNames)
 			regionToRead.setFirstRow(region.firstRow() + 1);
 
+		// determine column type (numeric or not)
 		for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
-			if (firstRowAsColumnNames) {
-				columnNumericTypes.push_back(isColumnNumericInRange(col, regionToRead));
+			columnNumericTypes.push_back(columnTypeInRange(col, regionToRead));
+			if (firstRowAsColumnNames)
 				columnNames.push_back(m_document->read(regionToRead.firstRow() - 1, col).toString());
-			} else {
-				columnNumericTypes.push_back(isColumnNumericInRange(col, regionToRead));
+			else
 				columnNames.push_back(ExcelFilter::convertFromNumberToExcelColumn(col));
-			}
 		}
 
 		spreadsheet->setUndoAware(false);
@@ -465,10 +466,16 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 
 		for (int n = 0; n < colCount; ++n) {
 			auto* col = spreadsheet->column(columnOffset + n);
-			if (columnNumericTypes.at(n)) {
+			if (columnNumericTypes.at(n) == QXlsx::Cell::CellType::NumberType) {
 				col->setColumnMode(AbstractColumn::ColumnMode::Double);
 				auto* data = static_cast<QVector<double>*>(col->data());
 				numericDataPointers.push_back(data);
+				if (importMode == AbstractFileFilter::ImportMode::Replace)
+					data->clear();
+			} else if (columnNumericTypes.at(n) == QXlsx::Cell::CellType::DateType) {
+				col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+				auto* data = static_cast<QVector<QDateTime>*>(col->data());
+				datetimeDataPointers.push_back(data);
 				if (importMode == AbstractFileFilter::ImportMode::Replace)
 					data->clear();
 			} else {
@@ -482,17 +489,25 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 
 		for (int row = regionToRead.firstRow(); row <= regionToRead.lastRow(); ++row) {
 			int j = 0;
-			unsigned int numericixd = 0;
+			unsigned int numericidx = 0;
+			int datetimeidx = 0;
 			int stringidx = 0;
 			for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
-				if (columnNumericTypes.at(j)) {
-					if (numericixd < numericDataPointers.size())
-						static_cast<QVector<double>*>(numericDataPointers[numericixd++])->push_back(m_document->read(row, col).toDouble());
+				const auto val = m_document->read(row, col);
+				if (columnNumericTypes.at(j) == QXlsx::Cell::CellType::NumberType) {
+					if (numericidx < numericDataPointers.size())
+						static_cast<QVector<double>*>(numericDataPointers[numericidx++])->push_back(val.toDouble());
+				} else if (columnNumericTypes.at(j) == QXlsx::Cell::CellType::DateType) {
+					// QDEBUG("DATETIME:" << m_document->read(row, col).toDateTime())
+					if (datetimeidx < datetimeDataPointers.size()) {
+						if (val.toDateTime().time() != QTime(0, 0))
+							isDateOnly = false;
+						static_cast<QVector<QDateTime>*>(datetimeDataPointers[datetimeidx++])->push_back(val.toDateTime());
+					}
 				} else {
-					// TODO: what about date or time?
 					if (!stringDataPointers.isEmpty() && stringidx < stringDataPointers.size()) {
-						const auto val = m_document->read(row, col).toString();
-						stringDataPointers[stringidx++]->operator<<(val);
+						const auto s = val.toString();
+						stringDataPointers[stringidx++]->operator<<(s);
 					}
 				}
 				++j;
@@ -516,8 +531,14 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 		}
 	}
 
+	QLatin1String datetimeFormat;
+	if (isDateOnly)
+		datetimeFormat = QLatin1String("ddd MMM d yyyy");
+	else
+		datetimeFormat = QLatin1String("ddd MMM dd hh:mm:ss yyyy");
+
 	if (dataSource)
-		dataSource->finalizeImport(columnOffset, 1, colCount, QString(), importMode);
+		dataSource->finalizeImport(columnOffset, 1, colCount, datetimeFormat, importMode);
 }
 #endif
 
@@ -634,15 +655,11 @@ QVector<QStringList> ExcelFilterPrivate::previewForDataRegion(const QString& she
 					else if (val.canConvert(QMetaType::QDateTime)) {
 						QDateTime dt = val.toDateTime();
 						// TODO: use certain date/datetime format?
-						if (dt.time() == QTime(0, 0)) { // just a date
-							DEBUG("DATE")
+						if (dt.time() == QTime(0, 0)) // just a date
 							line << val.toDate().toString();
-						} else {
-							DEBUG("DATETIME")
+						else
 							line << dt.toString();
-						}
 					} else if (val.canConvert(QMetaType::QTime)) {
-						DEBUG("TIME")
 						QTime t = val.toTime();
 						// TODO: use certain time format?
 						line << t.toString();
@@ -736,24 +753,38 @@ QXlsx::CellRange ExcelFilterPrivate::dimension() const {
 #endif
 
 #ifdef HAVE_EXCEL
-bool ExcelFilterPrivate::isColumnNumericInRange(const int column, const QXlsx::CellRange& range) const {
+QXlsx::Cell::CellType ExcelFilterPrivate::columnTypeInRange(const int column, const QXlsx::CellRange& range) const {
+	bool numeric = false, datetime = false;
 	if (column >= range.firstColumn() && column <= range.lastColumn()) {
 		for (int row = range.firstRow(); row <= range.lastRow(); ++row) {
 			const auto* cell = m_document->cellAt(row, column);
-			if (cell && cell->cellType() != QXlsx::Cell::CellType::NumberType) {
-				if (cell->cellType() == QXlsx::Cell::CellType::CustomType) {
-					bool ok = false;
-					cell->value().toDouble(&ok);
-					if (ok)
-						continue;
-				}
-				return false;
+			if (!cell)
+				continue;
+
+			// QDEBUG(" cell type =" << cell->cellType())
+			if (cell->cellType() == QXlsx::Cell::CellType::StringType)
+				return QXlsx::Cell::CellType::StringType;
+			if (cell->cellType() == QXlsx::Cell::CellType::NumberType)
+				numeric = true;
+			else if (cell->cellType() == QXlsx::Cell::CellType::DateType) // switch to date if date cell
+				datetime = true;
+			else if (cell->cellType() == QXlsx::Cell::CellType::CustomType) {
+				bool ok = false;
+				cell->value().toDouble(&ok);
+				if (ok)
+					numeric = true;
+				else
+					return QXlsx::Cell::CellType::StringType;
 			}
 		}
-	} else
-		return false;
+	}
+	if (numeric && !datetime)
+		return QXlsx::Cell::CellType::NumberType;
+	if (datetime && !numeric)
+		return QXlsx::Cell::CellType::DateType;
 
-	return true;
+	// numeric and datetime
+	return QXlsx::Cell::CellType::StringType;
 }
 #endif
 
