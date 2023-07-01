@@ -20,5 +20,6 @@ private Q_SLOTS:
 	void importFile2Cols();
 	void importFile3Cols();
 	void importFileEmptyCells();
+	void importFileDatetime();
 };
 #endif

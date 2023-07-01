@@ -105,4 +105,38 @@ void ExcelFilterTest::importFileEmptyCells() {
 			QCOMPARE(spreadsheet.column(col)->valueAt(row), 0);
 }
 
+void ExcelFilterTest::importFileDatetime() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datatypes-excel.xlsx"));
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	ExcelFilter filter;
+	filter.setCurrentSheet(QStringLiteral("Sheet1"));
+	filter.setCurrentRange(QStringLiteral("A1:E4"));
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 5);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 4);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 3);
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(0).toString(), QStringLiteral("Sun Jan 1 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(1).toString(), QStringLiteral("Thu Mar 2 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(2).toString(), QStringLiteral("Sun Jun 4 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(3).toString(), QStringLiteral("Mon Aug 7 00:00:00 2023"));
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 1.1);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 2.3);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), 4.2);
+	QCOMPARE(spreadsheet.column(2)->valueAt(3), 7.4);
+	QCOMPARE(spreadsheet.column(3)->dateTimeAt(0).toString(), QStringLiteral("Sat Nov 11 01:02:03 2023"));
+	QCOMPARE(spreadsheet.column(3)->dateTimeAt(1).toString(), QStringLiteral("Thu Mar 27 03:17:24 2014"));
+	QCOMPARE(spreadsheet.column(3)->dateTimeAt(2).toString(), QStringLiteral("Sun Sep 19 12:12:12 1999"));
+	QCOMPARE(spreadsheet.column(3)->dateTimeAt(3).toString(), QStringLiteral("Mon Aug 8 23:23:23 1988"));
+	QCOMPARE(spreadsheet.column(4)->valueAt(0), 2.5);
+	QCOMPARE(spreadsheet.column(4)->valueAt(1), 3.14);
+	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0.22);
+	QCOMPARE(spreadsheet.column(4)->valueAt(3), 0.01);
+}
+
 QTEST_MAIN(ExcelFilterTest)
