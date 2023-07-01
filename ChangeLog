@@ -24,6 +24,8 @@ Bug fixes:
 	* Properly save and load the property "visible" for box and bar plots in the project file
 	* Fixed copy&paste and duplication of box and bar plots
 	* .xlsx import: Fix crash importing empty cells
+	* Properly set the initial properties of the reference line like line width, etc. (Issue #580)
+	* Properly show the initial value of the property "visible" for the reference range (Issue #582)
 
 -----2.10.0 (21.03.2023) -----
 New features:
