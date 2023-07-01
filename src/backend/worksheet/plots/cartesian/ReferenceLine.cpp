@@ -83,6 +83,7 @@ void ReferenceLine::init() {
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
+	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
