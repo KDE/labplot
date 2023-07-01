@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-25 00:44+0000\n"
-"PO-Revision-Date: 2023-06-22 09:52+0200\n"
+"PO-Revision-Date: 2023-06-30 11:05+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -12390,10 +12390,11 @@ msgstr ""
 "Especifica el factor en percentatge per a controlar l'amplada del quadre en "
 "relació amb el seu valor predeterminat."
 
+# skip-rule: kct-box
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:766
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr "Diagrames de punts %1: s'ha carregat la plantilla «%2»"
+msgstr "Diagrames de caixes %1: s'ha carregat la plantilla «%2»"
 
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:65
 #, kde-format
