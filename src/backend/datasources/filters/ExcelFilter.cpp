@@ -626,9 +626,28 @@ QVector<QStringList> ExcelFilterPrivate::previewForDataRegion(const QString& she
 				for (int col = region.firstColumn(); col <= region.lastColumn(); ++col) {
 					// see https://github.com/QtExcel/QXlsx/wiki for read() vs. cellAt()->value()
 					const auto val = m_document->read(row, col);
-					QDEBUG("value =" << val << ", type =" << val.type())
-					// TODO: round numeric values in preview
-					line << val.toString();
+					if (val.isValid())
+						QDEBUG("value =" << val << ", type =" << val.type() << ", user type =" << QVariant::typeToName(val.userType()))
+					// correctly read values and show with locale
+					if (val.canConvert(QMetaType::Double))
+						line << QLocale().toString(val.toDouble());
+					else if (val.canConvert(QMetaType::QDateTime)) {
+						QDateTime dt = val.toDateTime();
+						// TODO: use certain date/datetime format?
+						if (dt.time() == QTime(0, 0)) { // just a date
+							DEBUG("DATE")
+							line << val.toDate().toString();
+						} else {
+							DEBUG("DATETIME")
+							line << dt.toString();
+						}
+					} else if (val.canConvert(QMetaType::QTime)) {
+						DEBUG("TIME")
+						QTime t = val.toTime();
+						// TODO: use certain time format?
+						line << t.toString();
+					} else
+						line << val.toString();
 				}
 				infoString << line;
 			}
