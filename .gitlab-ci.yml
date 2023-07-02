@@ -140,8 +140,9 @@ fedora_38_min:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build xorg-x11-server-Xvfb mesa-dri-drivers wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel zlib-devel qt5-qtbase-private-devel
   script:
     - mkdir -p build && cd build
+# readstat disabled until fixed for GCC 13
 # dbc_parser fails with GCC 13 atm (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
-    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # FAIL!  : ParserTest::testLocale() Compared doubles are not the same (fuzzy compare)
 #   Actual   (parse(qPrintable(expr.first), "de_DE")): nan
@@ -159,8 +160,9 @@ fedora_38_full:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build xorg-x11-server-Xvfb mesa-dri-drivers wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel kf5-kparts-devel kf5-syntax-highlighting-devel cantor-devel poppler-qt5-devel libspectre-devel liborigin-devel fftw3-devel netcdf-devel qt5-qtserialport-devel cfitsio-devel libcerf-devel lz4-devel matio-devel discount qt5-qtbase-private-devel
   script:
     - mkdir -p build && cd build
+# readstat disabled until fixed for GCC 13
 # dbc_parser fails with GCC 13 atm (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
-    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # see fedora_38_min
 #    - xvfb-run ctest -T Test --output-on-failure
