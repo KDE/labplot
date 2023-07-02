@@ -24,8 +24,8 @@ variables:
 # Ubuntu 22.04 full (Release)
 # Fedora 37 min (Debug)
 # Fedora 37 full (Release)
-# OS 15.4 min (Release)
-# OS 15.4 full (Debug)
+# OS 15.5 min (Release)
+# OS 15.5 full (Debug)
 
 workflow:
   rules:
@@ -163,9 +163,9 @@ fedora_37_full:
 # see fedora_37_min
 #    - xvfb-run ctest -T Test --output-on-failure
 
-leap_15.4_min:
+leap_15.5_min:
   stage: build
-  image: opensuse/leap:15.4
+  image: opensuse/leap:15.5
   only:
     - merge_requests
     - master
@@ -181,16 +181,16 @@ leap_15.4_min:
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
 
-leap_15.4_full:
+leap_15.5_full:
   stage: build
-  image: opensuse/leap:15.4
+  image: opensuse/leap:15.5
   only:
 #    - merge_requests
     - master
   before_script:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
-# readstat-devel in Science repo only, see leap_15.4_min for tests
+# readstat-devel in Science repo only, see leap_15.5_min for tests
     - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount libQt5Gui-private-headers-devel
   script:
     - mkdir -p build && cd build
