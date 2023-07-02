@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-25 00:44+0000\n"
-"PO-Revision-Date: 2023-06-18 23:42+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"POT-Creation-Date: 2023-07-02 00:43+0000\n"
+"PO-Revision-Date: 2023-06-30 18:05+0200\n"
+"Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -77,7 +77,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1933
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:982
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:414
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:415
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:680
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:250
 #: src/backend/worksheet/plots/cartesian/Value.cpp:255
@@ -123,7 +123,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2009
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:1044
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:459
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:728
 #: src/backend/worksheet/plots/PlotArea.cpp:405
 #: src/backend/worksheet/TextLabel.cpp:1188
@@ -6573,7 +6573,7 @@ msgstr "%1: Hintergrundstil festlegen"
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:89
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:73
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:102
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:103
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:118
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:192
 #: src/backend/worksheet/TextLabel.cpp:253
@@ -6698,10 +6698,9 @@ msgid "%1: set line width"
 msgstr "%1: Linienbreite festlegen"
 
 #: src/backend/worksheet/Line.cpp:153
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set line color"
-msgstr "%1: Schriftfarbe der Beschriftung festlegen"
+msgstr "%1: Linienfarbe festlegen"
 
 #: src/backend/worksheet/Line.cpp:160
 #, kde-format
@@ -6735,7 +6734,7 @@ msgstr "%1: Untere Auffüllung festlegen"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:226
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:82
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:111
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:112
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:127
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:261
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
@@ -6755,7 +6754,7 @@ msgstr "Waagerecht"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:229
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:85
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:114
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:115
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:130
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:262
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:58
@@ -6775,7 +6774,7 @@ msgstr "Senkrecht"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:237
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:93
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:132
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:147
 #, kde-format
 msgid "Orientation"
@@ -6786,7 +6785,7 @@ msgstr "Ausrichtung"
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:292
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:137
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:138
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:467
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:607
@@ -6801,14 +6800,14 @@ msgid "Line"
 msgstr "Linie"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:294
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:139
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:140
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:155
 #, kde-format
 msgid "Style"
 msgstr "Stil"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:299
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:144
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:145
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:160
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:321
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
@@ -7078,7 +7077,7 @@ msgstr "%1: Typ festlegen"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:485
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:253
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:205
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:206
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, kde-format
 msgid "%1: set orientation"
@@ -7258,10 +7257,9 @@ msgstr "Bar-Plot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:353
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1697
-#, fuzzy, kde-format
-#| msgid "All Plots"
+#, kde-format
 msgid "Lollipop Plot"
-msgstr "Alle Diagramme"
+msgstr "Lollipop-Plot"
 
 #. i18n("Data Operation"),
 #. cartesianPlotAddNewActionGroup);
@@ -7484,16 +7482,14 @@ msgid "Add New"
 msgstr "Neu hinzufügen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical Plots"
-msgstr "Statistik"
+msgstr "Statistik-Plots"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
-#, fuzzy, kde-format
-#| msgid "Bar Plot"
+#, kde-format
 msgid "Bar Plots"
-msgstr "Bar-Plot"
+msgstr "Bar-Plots"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:512
 #: src/commonfrontend/worksheet/WorksheetView.cpp:562
@@ -7984,10 +7980,9 @@ msgid "%1: set symbol size"
 msgstr "%1: Symbolgröße festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:165
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set symbol color"
-msgstr "%1: Schriftfarbe der Beschriftung festlegen"
+msgstr "%1: Symbolfarbe festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:172
 #, kde-format
@@ -12167,10 +12162,9 @@ msgid "Column:"
 msgstr "Spalte:"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:537
-#, fuzzy, kde-format
-#| msgid "%1 cartesian plots: template \"%2\" loaded"
+#, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
-msgstr "%1 kartesischer Plot: Die Vorlage \"%2\" wurde geladen"
+msgstr "%1 Bar-Plot: Vorlage \"%2\" geladen"
 
 #: src/kdefrontend/dockwidgets/BaseDock.cpp:151
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:366
@@ -12247,10 +12241,9 @@ msgid ""
 msgstr "Faktor in Prozent der Breite der Box relativ zum Standardwert angeben."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:766
-#, fuzzy, kde-format
-#| msgid "%1 axes: template \"%2\" loaded"
+#, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr "%1-Achsen: Vorlage \"%2\" geladen"
+msgstr "%1 Box-Plot: Vorlage \"%2\" geladen."
 
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:65
 #, kde-format
@@ -12692,10 +12685,9 @@ msgid "Data, +:"
 msgstr "Daten, +:"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:772
-#, fuzzy, kde-format
-#| msgid "%1 axes: template \"%2\" loaded"
+#, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
-msgstr "%1-Achsen: Vorlage \"%2\" geladen"
+msgstr "%1 Histogramme: Vorlage \"%2\" geladen"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:248
 #, kde-format
@@ -12749,10 +12741,9 @@ msgstr ""
 "aufgetreten"
 
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:509
-#, fuzzy, kde-format
-#| msgid "%1 axes: template \"%2\" loaded"
+#, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
-msgstr "%1-Achsen: Vorlage \"%2\" geladen"
+msgstr "%1 Lollipop-Plot: Vorlage \"%2\" geladen"
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:35
 #, kde-format
@@ -13443,12 +13434,10 @@ msgid "Properties: Bar Plot"
 msgstr "Eigenschaften: Balkendiagramm"
 
 #: src/kdefrontend/GuiObserver.cpp:356
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Box Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
-msgstr "Eigenschaften: Boxplot"
+msgstr "Eigenschaften: Lollipop-Plot"
 
 #: src/kdefrontend/GuiObserver.cpp:361
 #, kde-format
