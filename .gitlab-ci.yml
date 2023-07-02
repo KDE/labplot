@@ -22,8 +22,8 @@ variables:
 # FreeBSD (Debug)
 # Ubuntu 22.04 min (Debug)
 # Ubuntu 22.04 full (Release)
-# Fedora 37 min (Debug)
-# Fedora 37 full (Release)
+# Fedora 38 min (Debug)
+# Fedora 38 full (Release)
 # OS 15.5 min (Release)
 # OS 15.5 full (Debug)
 
@@ -130,9 +130,9 @@ ubuntu_22.04_full:
 # 1 test fails: FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-fedora_37_min:
+fedora_38_min:
   stage: build
-  image: fedora:37
+  image: fedora:38
   only:
 #    - merge_requests
     - master
@@ -148,9 +148,9 @@ fedora_37_min:
 # FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-fedora_37_full:
+fedora_38_full:
   stage: build
-  image: fedora:37
+  image: fedora:38
   only:
 #   - merge_requests
     - master
@@ -160,7 +160,7 @@ fedora_37_full:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Release -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
     - ninja
-# see fedora_37_min
+# see fedora_38_min
 #    - xvfb-run ctest -T Test --output-on-failure
 
 leap_15.5_min:
