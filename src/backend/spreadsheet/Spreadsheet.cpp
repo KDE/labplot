@@ -13,6 +13,7 @@
 #include "Spreadsheet.h"
 #include "SpreadsheetModel.h"
 #include "SpreadsheetPrivate.h"
+#include "StatisticsSpreadsheet.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/column/ColumnStringIO.h"
@@ -101,7 +102,8 @@ SpreadsheetModel* Spreadsheet::model() const {
 QWidget* Spreadsheet::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		bool readOnly = (this->parentAspect()->type() == AspectType::DatapickerCurve);
+		auto type = this->parentAspect()->type();
+		bool readOnly = (type == AspectType::Spreadsheet || type == AspectType::DatapickerCurve);
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
 		m_partView = m_view;
 	}
@@ -1116,6 +1118,24 @@ QVector<AspectType> Spreadsheet::dropableOn() const {
 	auto vec = AbstractPart::dropableOn();
 	vec << AspectType::Workbook;
 	return vec;
+}
+
+void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
+	Q_D(Spreadsheet);
+	if (on) {
+		if (d->statisticsSpreadsheet)
+			return;
+
+		d->statisticsSpreadsheet = new StatisticsSpreadsheet(this);
+		addChild(d->statisticsSpreadsheet);
+	} else {
+		if (!d->statisticsSpreadsheet)
+			return;
+
+		setUndoAware(false);
+		removeChild(d->statisticsSpreadsheet);
+		setUndoAware(true);
+	}
 }
 
 // ##############################################################################

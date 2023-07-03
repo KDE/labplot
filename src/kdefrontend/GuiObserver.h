@@ -34,6 +34,7 @@ class LiveDataDock;
 class MatrixDock;
 class ProjectDock;
 class SpreadsheetDock;
+class StatisticsSpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
 class XYDataReductionCurveDock;
@@ -78,6 +79,7 @@ private:
 	LiveDataDock* m_liveDataDock{nullptr};
 	MatrixDock* m_matrixDock{nullptr};
 	SpreadsheetDock* m_spreadsheetDock{nullptr};
+	StatisticsSpreadsheetDock* m_statisticsSpreadsheetDock{nullptr};
 	ProjectDock* m_projectDock{nullptr};
 	XYCurveDock* m_xyCurveDock{nullptr};
 	XYEquationCurveDock* m_xyEquationCurveDock{nullptr};

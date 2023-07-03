@@ -3,6 +3,8 @@
 
 #include "Spreadsheet.h"
 
+class StatisticsSpreadsheet;
+
 class SpreadsheetPrivate : public QObject {
 public:
 	explicit SpreadsheetPrivate(Spreadsheet*);
@@ -11,7 +13,8 @@ public:
 
 public:
 	Spreadsheet::Linking linking;
-	Spreadsheet* q;
+	Spreadsheet* q{nullptr};
+	StatisticsSpreadsheet* statisticsSpreadsheet{nullptr};
 };
 
 #endif // SPREADSHEET_PRIVATE

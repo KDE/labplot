@@ -301,6 +301,9 @@ void SpreadsheetView::initActions() {
 	action_search_replace->setShortcut(QKeySequence::Replace);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
+	action_statistics_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics Spreadsheet"), this);
+	action_statistics_spreadsheet->setCheckable(true);
+
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
 	action_insert_column_right = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Column Right"), this);
@@ -870,6 +873,7 @@ void SpreadsheetView::connectActions() {
 	// statistics
 	connect(action_statistics_columns, &QAction::triggered, this, &SpreadsheetView::showColumnStatistics);
 	connect(action_statistics_all_columns, &QAction::triggered, this, &SpreadsheetView::showAllColumnsStatistics);
+	connect(action_statistics_spreadsheet, &QAction::toggled, m_spreadsheet, &Spreadsheet::toggleStatisticsSpreadsheet);
 
 	connect(action_insert_row_above, &QAction::triggered, this, &SpreadsheetView::insertRowAbove);
 	connect(action_insert_row_below, &QAction::triggered, this, &SpreadsheetView::insertRowBelow);
@@ -962,6 +966,8 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	menu->insertAction(firstAction, action_go_to_cell);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_toggle_comments);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_statistics_spreadsheet);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_all_columns);
 	menu->insertSeparator(firstAction);
