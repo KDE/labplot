@@ -43,6 +43,7 @@ public:
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
 	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues, ColumnLabels };
+	Q_ENUM(TicksType)
 	enum class ArrowType { NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig };
 	enum class ArrowPosition { Left, Right, Both };
 	enum class LabelsPosition { NoLabels, In, Out };

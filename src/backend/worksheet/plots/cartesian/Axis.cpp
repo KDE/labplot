@@ -1420,7 +1420,7 @@ void AxisPrivate::retransformTicks() {
 		start = majorTickStartValue;
 	else if (majorTicksStartType == Axis::TicksStartType::Offset)
 		start += majorTickStartOffset;
-	DEBUG(Q_FUNC_INFO << ", ticks type = " << (int)majorTicksType)
+	QDEBUG(Q_FUNC_INFO << ", ticks type = " << majorTicksType)
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber: // total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
