@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-02 00:43+0000\n"
-"PO-Revision-Date: 2023-06-17 04:11\n"
+"PO-Revision-Date: 2023-07-03 11:38\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -6608,11 +6608,9 @@ msgid "%1: set line width"
 msgstr ""
 
 #: src/backend/worksheet/Line.cpp:153
-#, fuzzy, kde-format
-#| msgid "%1: insert 1 column"
-#| msgid_plural "%1: insert %2 columns"
+#, kde-format
 msgid "%1: set line color"
-msgstr "%1：插入 %2 列"
+msgstr ""
 
 #: src/backend/worksheet/Line.cpp:160
 #, kde-format
@@ -7394,16 +7392,14 @@ msgid "Add New"
 msgstr "新建"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical Plots"
-msgstr "详情"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgid "Bar Plots"
-msgstr "绘图"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:512
 #: src/commonfrontend/worksheet/WorksheetView.cpp:562
@@ -7892,11 +7888,9 @@ msgid "%1: set symbol size"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:165
-#, fuzzy, kde-format
-#| msgid "%1: insert 1 column"
-#| msgid_plural "%1: insert %2 columns"
+#, kde-format
 msgid "%1: set symbol color"
-msgstr "%1：插入 %2 列"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:172
 #, kde-format
@@ -9408,10 +9402,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:225
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "&Replace"
-msgstr "替换"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:439
@@ -15472,10 +15465,9 @@ msgid "Sample of %1"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:211
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#, kde-format
 msgid "DateTime"
-msgstr "日期时间:"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:220
 #, kde-format
@@ -15560,23 +15552,19 @@ msgid "Whole match reference"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1556
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgid "Reference"
-msgstr "首选项"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1563
-#, fuzzy, kde-format
-#| msgid "Line Numbers"
+#, kde-format
 msgid "Line break"
-msgstr "行号"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1564
-#, fuzzy, kde-format
-#| msgid "Table"
+#, kde-format
 msgid "Tab"
-msgstr "表"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1567
 #, kde-format
@@ -20771,32 +20759,28 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:80
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:87
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:561
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace:"
-msgstr "替换"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:97
-#, fuzzy, kde-format
-#| msgid "Find"
+#, kde-format
 msgid "Find:"
-msgstr "查找"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbOrder)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:134
-#, fuzzy, kde-format
-#| msgid "Byte order:"
+#, kde-format
 msgid "Search order"
-msgstr "字节顺序："
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:147
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:119
-#, fuzzy, kde-format
-#| msgid "Case Sensitive"
+#, kde-format
 msgid "Match case sensitive"
-msgstr "区分大小写"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164
@@ -20832,17 +20816,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:235
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace &All"
-msgstr "替换"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bFindAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:242
-#, fuzzy, kde-format
-#| msgid "Expand All"
+#, kde-format
 msgid "&Find All"
-msgstr "全部展开"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:249
