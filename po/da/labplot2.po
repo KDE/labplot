@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-02 00:43+0000\n"
+"POT-Creation-Date: 2023-07-05 00:54+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -294,7 +294,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
 #: src/kdefrontend/GuiTools.cpp:145
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:125
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:128
 #: src/kdefrontend/widgets/LineWidget.cpp:52
 #, kde-format
 msgid "None"
@@ -1174,7 +1174,7 @@ msgstr ""
 #: src/commonfrontend/worksheet/WorksheetView.cpp:378
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1559
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:95
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:134
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:137
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "Image"
@@ -7124,7 +7124,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:226
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:240
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:26
-#: src/kdefrontend/widgets/SymbolWidget.cpp:139
+#: src/kdefrontend/widgets/SymbolWidget.cpp:142
 #, kde-format
 msgid "Line"
 msgstr ""
@@ -7140,7 +7140,7 @@ msgstr "Stil"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:145
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:160
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:321
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:133
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:136
 #, kde-format
 msgid "Color"
 msgstr "Farve"
@@ -12461,7 +12461,7 @@ msgid "Bottom"
 msgstr "Nederst"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:239
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:149
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:152
 #, kde-format
 msgid "Centered"
 msgstr ""
@@ -12537,7 +12537,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:56
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:129
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #: src/kdefrontend/widgets/LabelWidget.cpp:138
 #: src/kdefrontend/widgets/LabelWidget.cpp:155
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
@@ -12555,7 +12555,7 @@ msgstr "Venstre"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:58
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:66
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:130
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:133
 #: src/kdefrontend/widgets/LabelWidget.cpp:140
 #: src/kdefrontend/widgets/LabelWidget.cpp:157
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
@@ -13596,14 +13596,14 @@ msgid "Custom Column"
 msgstr "Brugertilpasset gitter"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:368
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:126
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:129
 #: src/kdefrontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:369
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:127
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:130
 #: src/kdefrontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
@@ -17235,9 +17235,9 @@ msgstr "Stil"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:401
 #: src/kdefrontend/ui/labelwidget.ui:152 src/kdefrontend/ui/symbolwidget.ui:194
 #: src/kdefrontend/ui/symbolwidget.ui:250
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:212
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:236
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:264
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:215
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:239
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:267
 #: src/kdefrontend/worksheet/GridDialog.cpp:65
 #, fuzzy, kde-format
 #| msgid "Color"
@@ -19201,8 +19201,8 @@ msgstr "Varians"
 
 #. i18n: ectx: property (text), widget (QLabel, lFirstColor)
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:155
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:216
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:268
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:219
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:271
 #, fuzzy, kde-format
 #| msgid "First color"
 msgid "First color:"
@@ -19291,7 +19291,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:548
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:161
 #: src/kdefrontend/ui/labelwidget.ui:695 src/kdefrontend/ui/symbolwidget.ui:233
-#: src/kdefrontend/widgets/SymbolWidget.cpp:135
+#: src/kdefrontend/widgets/SymbolWidget.cpp:138
 #, kde-format
 msgid "Border"
 msgstr "Kant"
@@ -22440,79 +22440,79 @@ msgstr "Eksportér baggrund"
 msgid "Resolution:"
 msgstr "Rotation"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:128
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:131
 #, kde-format
 msgid "Zero Baseline"
 msgstr ""
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:135
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:138
 #, kde-format
 msgid "Pattern"
 msgstr "Mønster"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:138
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:141
 #, fuzzy, kde-format
 #| msgid "Line color"
 msgid "Single Color"
 msgstr "Linjefarve"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:139
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:142
 #, fuzzy, kde-format
 #| msgid "Horizontal spacing"
 msgid "Horizontal Gradient"
 msgstr "Vandret afstand"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:140
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:143
 #, fuzzy, kde-format
 #| msgid "Vertical spacing"
 msgid "Vertical Gradient"
 msgstr "Lodret afstand"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:141
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:144
 #, kde-format
 msgid "Diag. Gradient (From Top Left)"
 msgstr ""
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:142
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:145
 #, kde-format
 msgid "Diag. Gradient (From Bottom Left)"
 msgstr ""
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:143
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:146
 #, fuzzy, kde-format
 #| msgid "Vertical spacing"
 msgid "Radial Gradient"
 msgstr "Lodret afstand"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:146
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:149
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "Scaled and Cropped"
 msgstr "%1: Klip markerede celler"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:147
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:150
 #, fuzzy, kde-format
 #| msgid "Scale"
 msgid "Scaled"
 msgstr "Skalér"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:148
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:151
 #, kde-format
 msgid "Scaled, Keep Proportions"
 msgstr ""
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:150
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:153
 #, fuzzy, kde-format
 #| msgid "&Tile"
 msgid "Tiled"
 msgstr "&Fliseudlæg"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:151
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:154
 #, kde-format
 msgid "Center Tiled"
 msgstr ""
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:277
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:280
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1 elements: background color style changed"

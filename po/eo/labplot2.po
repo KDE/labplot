@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-02 00:43+0000\n"
+"POT-Creation-Date: 2023-07-05 00:54+0000\n"
 "PO-Revision-Date: 2023-06-23 07:33+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -286,7 +286,7 @@ msgstr "Tagoj"
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
 #: src/kdefrontend/GuiTools.cpp:145
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:125
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:128
 #: src/kdefrontend/widgets/LineWidget.cpp:52
 #, kde-format
 msgid "None"
@@ -1109,7 +1109,7 @@ msgstr "Ne ekzistas elŝuta URL en la metadatuma dosiero!"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:378
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1559
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:95
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:134
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:137
 #, kde-format
 msgid "Image"
 msgstr "Bildo"
@@ -6759,7 +6759,7 @@ msgstr "Orientiĝo"
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:226
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:240
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:26
-#: src/kdefrontend/widgets/SymbolWidget.cpp:139
+#: src/kdefrontend/widgets/SymbolWidget.cpp:142
 #, kde-format
 msgid "Line"
 msgstr "Linio"
@@ -6775,7 +6775,7 @@ msgstr "Stilo"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:145
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:160
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:321
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:133
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:136
 #, kde-format
 msgid "Color"
 msgstr "Koloro"
@@ -11843,7 +11843,7 @@ msgid "Bottom"
 msgstr "Fundo"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:239
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:149
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:152
 #, kde-format
 msgid "Centered"
 msgstr "Centrita"
@@ -11922,7 +11922,7 @@ msgstr "Duonplenigita, Granda"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:56
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:129
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #: src/kdefrontend/widgets/LabelWidget.cpp:138
 #: src/kdefrontend/widgets/LabelWidget.cpp:155
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
@@ -11940,7 +11940,7 @@ msgstr "Maldekstre"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:58
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:66
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:130
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:133
 #: src/kdefrontend/widgets/LabelWidget.cpp:140
 #: src/kdefrontend/widgets/LabelWidget.cpp:157
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
@@ -12946,14 +12946,14 @@ msgid "Custom Column"
 msgstr "Propra Kolumno"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:368
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:126
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:129
 #: src/kdefrontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "Supre"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:369
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:127
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:130
 #: src/kdefrontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
@@ -16366,9 +16366,9 @@ msgstr "Stilo:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:401
 #: src/kdefrontend/ui/labelwidget.ui:152 src/kdefrontend/ui/symbolwidget.ui:194
 #: src/kdefrontend/ui/symbolwidget.ui:250
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:212
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:236
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:264
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:215
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:239
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:267
 #: src/kdefrontend/worksheet/GridDialog.cpp:65
 #, kde-format
 msgid "Color:"
@@ -18232,8 +18232,8 @@ msgstr "Ebligita:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFirstColor)
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:155
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:216
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:268
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:219
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:271
 #, kde-format
 msgid "First color:"
 msgstr "Unua koloro:"
@@ -18317,7 +18317,7 @@ msgstr "Bastonoj"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:548
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:161
 #: src/kdefrontend/ui/labelwidget.ui:695 src/kdefrontend/ui/symbolwidget.ui:233
-#: src/kdefrontend/widgets/SymbolWidget.cpp:135
+#: src/kdefrontend/widgets/SymbolWidget.cpp:138
 #, kde-format
 msgid "Border"
 msgstr "Bordero"
@@ -21251,72 +21251,72 @@ msgstr "Eksporti Fonon:"
 msgid "Resolution:"
 msgstr "Rezolucio:"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:128
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:131
 #, kde-format
 msgid "Zero Baseline"
 msgstr "Nula Bazlinio"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:135
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:138
 #, kde-format
 msgid "Pattern"
 msgstr "Ŝablono"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:138
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:141
 #, kde-format
 msgid "Single Color"
 msgstr "Ununura Koloro"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:139
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:142
 #, kde-format
 msgid "Horizontal Gradient"
 msgstr "Horizontala Gradiento"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:140
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:143
 #, kde-format
 msgid "Vertical Gradient"
 msgstr "Vertikala Gradiento"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:141
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:144
 #, kde-format
 msgid "Diag. Gradient (From Top Left)"
 msgstr "Diag. Gradiento (De Supre Maldekstre)"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:142
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:145
 #, kde-format
 msgid "Diag. Gradient (From Bottom Left)"
 msgstr "Diag. Gradiento (De Malsupre Maldekstre)"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:143
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:146
 #, kde-format
 msgid "Radial Gradient"
 msgstr "Radiala Gradiento"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:146
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:149
 #, kde-format
 msgid "Scaled and Cropped"
 msgstr "Skvamita kaj Tondita"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:147
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:150
 #, kde-format
 msgid "Scaled"
 msgstr "Skalita"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:148
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:151
 #, kde-format
 msgid "Scaled, Keep Proportions"
 msgstr "Skalita, Konservi Proporciojn"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:150
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:153
 #, kde-format
 msgid "Tiled"
 msgstr "Kahelizita"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:151
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:154
 #, kde-format
 msgid "Center Tiled"
 msgstr "Centro Kahelita"
 
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:277
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:280
 #, kde-format
 msgid "%1 elements: background color style changed"
 msgstr "%1 elementoj: stilo de fonkoloro ŝanĝita"
