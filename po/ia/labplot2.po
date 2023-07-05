@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-29 02:34+0000\n"
-"PO-Revision-Date: 2023-06-29 12:35+0200\n"
+"PO-Revision-Date: 2023-07-04 19:23+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5294,7 +5294,7 @@ msgstr[1] ""
 #, fuzzy, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
-msgstr[0] "Adder Columna..."
+msgstr[0] "Adde columna"
 msgstr[1] ""
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
@@ -9991,7 +9991,7 @@ msgstr ""
 #: src/commonfrontend/worksheet/WorksheetView.cpp:252
 #, kde-format
 msgid "Custom Grid"
-msgstr ""
+msgstr "Grillia personalisate"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:255
 #, kde-format
@@ -13163,7 +13163,7 @@ msgstr ""
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
 msgid "No Line"
-msgstr ""
+msgstr "Necun linea"
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
@@ -15485,7 +15485,7 @@ msgstr ""
 #: src/kdefrontend/TemplateHandler.cpp:135
 #, kde-format
 msgid "Save Default"
-msgstr ""
+msgstr "Salveguarda predefinite"
 
 #: src/kdefrontend/TemplateHandler.cpp:136
 #, kde-format
@@ -16035,7 +16035,7 @@ msgstr "Imagine:"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:40
 #, kde-format
 msgid "x+y+z="
-msgstr ""
+msgstr "x+y+z="
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -16102,7 +16102,7 @@ msgstr "Segmentos"
 #: src/kdefrontend/ui/labelwidget.ui:129 src/kdefrontend/ui/symbolwidget.ui:101
 #, kde-format
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
@@ -16208,7 +16208,7 @@ msgstr "Y="
 #: src/kdefrontend/ui/datapickerimagewidget.ui:486
 #, kde-format
 msgid "3."
-msgstr ""
+msgstr "3."
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionZ2)
 #. i18n: ectx: property (text), widget (QLabel, lPositionZ1)
@@ -16224,13 +16224,13 @@ msgstr "z="
 #: src/kdefrontend/ui/datapickerimagewidget.ui:532
 #, kde-format
 msgid "1."
-msgstr ""
+msgstr "1."
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:558
 #, kde-format
 msgid "2."
-msgstr ""
+msgstr "2."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tSymbol)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:751
@@ -17151,19 +17151,19 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/mqttsubscriptionwidget.ui:155
 #, kde-format
 msgid "QoS 0"
-msgstr ""
+msgstr "QoS 0"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbQos)
 #: src/kdefrontend/ui/datasources/mqttsubscriptionwidget.ui:160
 #, kde-format
 msgid "QoS 1"
-msgstr ""
+msgstr "QoS 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbQos)
 #: src/kdefrontend/ui/datasources/mqttsubscriptionwidget.ui:165
 #, kde-format
 msgid "QoS 2"
-msgstr ""
+msgstr "QoS 2"
 
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:30
@@ -17215,7 +17215,7 @@ msgstr ""
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:211
 #, kde-format
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbUnityRange)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:139
@@ -17227,7 +17227,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:142
 #, kde-format
 msgid "0 .. 1"
-msgstr ""
+msgstr "0 .. 1"
 
 #. i18n: ectx: property (text), widget (QLabel, lScale)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:154
@@ -17419,13 +17419,13 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:861
 #, kde-format
 msgid "Label Type:"
-msgstr ""
+msgstr "Typo de Etiquetta:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextColumn)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:871
 #, kde-format
 msgid "Label Column:"
-msgstr ""
+msgstr "Columna de Etiquetta: "
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicks)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:960
@@ -17559,7 +17559,7 @@ msgstr "Formato:"
 #: src/kdefrontend/worksheet/GridDialog.cpp:80
 #, no-c-format, kde-format
 msgid " %"
-msgstr ""
+msgstr " %"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lPrefix)
@@ -17724,7 +17724,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:404
 #, no-c-format, kde-format
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersRangeParameter)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:43
@@ -17952,7 +17952,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:424
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:297
@@ -18817,7 +18817,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:123
 #, kde-format
 msgid "Drop lines"
-msgstr ""
+msgstr "Lineas  a cadita (Drop Lines)"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineInterpolationPointsCount)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:133
@@ -18931,13 +18931,13 @@ msgstr "Equation"
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:319
 #, kde-format
 msgid "y=g(t)"
-msgstr ""
+msgstr "y=g(t)"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation1)
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:374
 #, kde-format
 msgid "x=f(t)"
-msgstr ""
+msgstr "x=f(t)"
 
 #. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
 #. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
@@ -19079,7 +19079,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:350
 #, kde-format
 msgid "P > F"
-msgstr ""
+msgstr "P > F"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:360
@@ -19278,7 +19278,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1121
 #, kde-format
 msgid "f(x) ="
-msgstr ""
+msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QLabel, lForm)
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:37
@@ -19405,13 +19405,13 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:180
 #, kde-format
 msgid "Left value:"
-msgstr ""
+msgstr "Valor sinistre:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightValue)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:187
 #, kde-format
 msgid "Right value:"
-msgstr ""
+msgstr "Valor dextere:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/kdefrontend/ui/exampleswidget.ui:73
@@ -19487,7 +19487,7 @@ msgstr ""
 #: src/kdefrontend/ui/fitoptionswidget.ui:228
 #, kde-format
 msgid ".."
-msgstr ""
+msgstr ".."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMaxIterations)
 #: src/kdefrontend/ui/fitoptionswidget.ui:112
@@ -19650,13 +19650,13 @@ msgstr "x = "
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:148
 #, kde-format
 msgid "f(x,y) = "
-msgstr ""
+msgstr "f(x,y) = "
 
 #. i18n: ectx: property (text), widget (QLabel, lWillQoS)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:23
 #, kde-format
 msgid "QoS"
-msgstr ""
+msgstr "QoS"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:130
@@ -19692,13 +19692,13 @@ msgstr ""
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:224
 #, kde-format
 msgid "Own message:"
-msgstr ""
+msgstr "Message proprie"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillMessageType)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:231
 #, kde-format
 msgid "Message type:"
-msgstr ""
+msgstr "Typo de message:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillUpdate)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:239
@@ -19722,13 +19722,13 @@ msgstr "Intervallo de Tempore:"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:262
 #, kde-format
 msgid "10000"
-msgstr ""
+msgstr "10000"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillMessageType)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:276
 #, kde-format
 msgid "Own Message"
-msgstr ""
+msgstr "Message proprie"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillMessageType)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:281
@@ -19810,7 +19810,7 @@ msgstr "Limine:"
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:297
 #, kde-format
 msgid "10"
-msgstr ""
+msgstr "10"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeshEnabled)
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:241
@@ -19936,7 +19936,7 @@ msgstr "Position de scheda:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:86
 #, kde-format
 msgid "Number options:"
-msgstr ""
+msgstr "Optiones de numero:"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterface)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:93
@@ -20152,7 +20152,7 @@ msgstr "Tempore de initio:"
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
 #, kde-format
 msgid "End Value:"
-msgstr ""
+msgstr "Valor de fin:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:130
@@ -20188,7 +20188,7 @@ msgstr "Tempore de Fin: "
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
 #, kde-format
 msgid "Numeric Values"
-msgstr ""
+msgstr "Valores numeric"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
@@ -20212,7 +20212,7 @@ msgstr "max."
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:144
 #, kde-format
 msgid "Text Values"
-msgstr ""
+msgstr "Vlores de texto"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
@@ -20236,7 +20236,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:81
 #, kde-format
 msgid "Export header:"
-msgstr ""
+msgstr "Exporta capite:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixVHeader)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:104
@@ -20254,7 +20254,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:162
 #, kde-format
 msgid "Grid lines:"
-msgstr ""
+msgstr "Lineas de Grillia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCaptions)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:179
@@ -20326,7 +20326,7 @@ msgstr "Function:"
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:142
 #, kde-format
 msgid "f(x) = "
-msgstr ""
+msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
@@ -20356,7 +20356,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:180
 #, kde-format
 msgid "Add Plots to"
-msgstr ""
+msgstr "Adde Tracia (Plot) a"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement1)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
@@ -20386,19 +20386,19 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:42
 #, kde-format
 msgid "2:"
-msgstr ""
+msgstr "2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:58
 #, kde-format
 msgid "p(x)"
-msgstr ""
+msgstr "p(x)"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter1)
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:90
 #, kde-format
 msgid "1:"
-msgstr ""
+msgstr "1:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:100
@@ -20410,7 +20410,7 @@ msgstr "Distribution:"
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:113
 #, kde-format
 msgid "3:"
-msgstr ""
+msgstr "3:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbDistribution)
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:149
@@ -20695,7 +20695,7 @@ msgstr "Nulle imagine"
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:188
 #, kde-format
 msgid "Original Image"
-msgstr ""
+msgstr "Imagine original"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:189
 #, kde-format
@@ -20797,7 +20797,7 @@ msgstr ""
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:46
 #, kde-format
 msgid "Add new keyword"
-msgstr ""
+msgstr "Adde Nove Claviero"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:50
 #, kde-format
@@ -20828,22 +20828,22 @@ msgstr ""
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:207
 #, kde-format
 msgid "File already opened"
-msgstr ""
+msgstr "File ja aperite"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:269
 #, kde-format
 msgid "Add New Keyword"
-msgstr ""
+msgstr "Adde Nove Claviero"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:270
 #, kde-format
 msgid "Remove Keyword"
-msgstr ""
+msgstr "Remove Claviero"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:272
 #, kde-format
 msgid "Add Unit"
-msgstr ""
+msgstr "Adde Unitate"
 
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:320
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:327
@@ -20995,7 +20995,7 @@ msgstr ""
 #: src/kdefrontend/widgets/LabelWidget.cpp:176
 #, kde-format
 msgid "No line"
-msgstr ""
+msgstr "Necun linea"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, kde-format
@@ -21045,97 +21045,97 @@ msgstr "Data e Tempore"
 #: src/kdefrontend/widgets/LineWidget.cpp:55
 #, kde-format
 msgid "Drop Lines"
-msgstr ""
+msgstr "Lineas  a cadita (Drop Lines)"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:56
 #, kde-format
 msgid "Half-Bars"
-msgstr ""
+msgstr "Medie-Barras"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:88
 #, kde-format
 msgid "Bars with Ends"
-msgstr ""
+msgstr "Barras con Fins"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:98
 #, kde-format
 msgid "No Drop Lines"
-msgstr ""
+msgstr "Necun Lineas a Cadita"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:99
 #, kde-format
 msgid "Drop Lines, X"
-msgstr ""
+msgstr "Lineas a Cadita, X"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:100
 #, kde-format
 msgid "Drop Lines, Y"
-msgstr ""
+msgstr "Lineas a Cadita, Y"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:101
 #, kde-format
 msgid "Drop Lines, XY"
-msgstr ""
+msgstr "Lineas a Cadita, XY"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:102
 #, kde-format
 msgid "Drop Lines, X, Zero Baseline"
-msgstr ""
+msgstr "Lineas a Cadita, X, Linea  de Referentia de Zero"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:103
 #, kde-format
 msgid "Drop Lines, X, Min Baseline"
-msgstr ""
+msgstr "Lineas a Cadita, X, Linea  de Referentia Min"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:104
 #, kde-format
 msgid "Drop Lines, X, Max Baseline"
-msgstr ""
+msgstr "Lineas a Cadita, X, Linea  de Referentia Max"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:57
 #, kde-format
 msgid "Close this dialog without exporting."
-msgstr ""
+msgstr "Claude iste dialogo sin exportar."
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:68
 #, kde-format
 msgid "Portable Data Format (PDF)"
-msgstr ""
+msgstr "Portable Data Format (PDF)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:69
 #, kde-format
 msgid "Scalable Vector Graphics (SVG)"
-msgstr ""
+msgstr "Scalable Vector Graphics (SVG)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:71
 #, kde-format
 msgid "Portable Network Graphics (PNG)"
-msgstr ""
+msgstr "Portable Network Graphics (PNG)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:72
 #, kde-format
 msgid "Joint Photographic Experts Group (JPG)"
-msgstr ""
+msgstr "Joint Photographic Experts Group (JPG)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:73
 #, kde-format
 msgid "Windows Bitmap (BMP)"
-msgstr ""
+msgstr "Windows Bitmap (BMP)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:74
 #, kde-format
 msgid "Portable Pixmap (PPM)"
-msgstr ""
+msgstr "Portable Pixmap (PPM)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:75
 #, kde-format
 msgid "X11 Bitmap (XBM)"
-msgstr ""
+msgstr "X11 Bitmap (XBM)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:76
 #, kde-format
 msgid "X11 Bitmap (XPM)"
-msgstr ""
+msgstr "X11 Bitmap (XPM)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:78
 #, kde-format
@@ -21177,42 +21177,42 @@ msgstr ""
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:260
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
-msgstr ""
+msgstr "Portable Data Format (*.pdf *.PDF)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:263
 #, kde-format
 msgid "Scalable Vector Graphics (*.svg *.SVG)"
-msgstr ""
+msgstr "Scalable Vector Graphics (*.svg *.SVG)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:266
 #, kde-format
 msgid "Portable Network Graphics (*.png *.PNG)"
-msgstr ""
+msgstr "Portable Network Graphics (*.png *.PNG)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:269
 #, kde-format
 msgid "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
-msgstr ""
+msgstr "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:272
 #, kde-format
 msgid "Windows Bitmap (*.bmp *.BMP)"
-msgstr ""
+msgstr "Windows Bitmap (*.bmp *.BMP)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:275
 #, kde-format
 msgid "Portable Pixmap (*.ppm *.PPM)"
-msgstr ""
+msgstr "Portable Pixmap (*.ppm *.PPM)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:278
 #, kde-format
 msgid "X11 Bitmap (*.xbm *.XBM)"
-msgstr ""
+msgstr "X11 Bitmap (*.xbm *.XBM)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:281
 #, kde-format
 msgid "X11 Bitmap (*.xpm *.XPM)"
-msgstr ""
+msgstr "X11 Bitmap (*.xpm *.XPM)"
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:342
 #, kde-format
@@ -21222,13 +21222,13 @@ msgstr ""
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:345
 #, kde-format
 msgid "Export to clipboard and close the dialog."
-msgstr ""
+msgstr "Exporta a area de trnsferentia e claude le dialogo."
 
 #: src/kdefrontend/worksheet/GridDialog.cpp:35
 #, kde-format
 msgctxt "@title:window"
 msgid "Custom Grid"
-msgstr ""
+msgstr "Grillia personalisate"
 
 #: src/kdefrontend/worksheet/GridDialog.cpp:45
 #, kde-format
@@ -21238,17 +21238,17 @@ msgstr "Punctos"
 #: src/kdefrontend/worksheet/GridDialog.cpp:49
 #, kde-format
 msgid "Horizontal spacing:"
-msgstr ""
+msgstr "Spatiar horizontalmente:"
 
 #: src/kdefrontend/worksheet/GridDialog.cpp:57
 #, kde-format
 msgid "Vertical spacing:"
-msgstr ""
+msgstr "Spatiar Verticalmente:"
 
 #: src/kdefrontend/worksheet/SlidingPanel.cpp:30
 #, kde-format
 msgid "Quit Presentation"
-msgstr ""
+msgstr "Quita Presentation"
 
 #: src/tools/ColorMapsManager.cpp:153
 #, kde-format
@@ -21285,7 +21285,7 @@ msgstr ""
 #: src/tools/TeXRenderer.cpp:253
 #, kde-format
 msgid "dvips not found"
-msgstr ""
+msgstr "dvips non trovate"
 
 #: src/tools/TeXRenderer.cpp:260
 #, kde-format
