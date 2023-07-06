@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-29 02:34+0000\n"
+"POT-Creation-Date: 2023-07-06 03:38+0000\n"
 "PO-Revision-Date: 2022-05-16 21:33+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -70,7 +70,7 @@ msgstr "Kunde inte hitta panelinsticksprogram. Kontrollera installationen."
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1933
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:414
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:415
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:680
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:237
 #: src/backend/worksheet/plots/cartesian/Value.cpp:255
@@ -114,7 +114,7 @@ msgstr "Attribut '%1' saknas eller är tomt, standardvärde används"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1438
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2009
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:458
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:459
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:728
 #: src/backend/worksheet/plots/PlotArea.cpp:405
 #: src/backend/worksheet/TextLabel.cpp:1188
@@ -6596,7 +6596,7 @@ msgstr "%1: ange bakgrundsbild"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:134
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:89
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:102
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:103
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:118
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:192
 #: src/backend/worksheet/TextLabel.cpp:253
@@ -6752,7 +6752,7 @@ msgstr "%1: ställ in utfyllnad under"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:262
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:226
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:111
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:112
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:127
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:261
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
@@ -6770,7 +6770,7 @@ msgstr "Horisontell"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:265
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:229
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:114
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:115
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:130
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:262
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:58
@@ -6788,7 +6788,7 @@ msgstr "Vertikal"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:285
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:237
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:132
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:147
 #, kde-format
 msgid "Orientation"
@@ -6799,7 +6799,7 @@ msgstr "Orientering"
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:291
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:137
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:138
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:467
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:607
@@ -6813,14 +6813,14 @@ msgid "Line"
 msgstr "Linje"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:293
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:139
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:140
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:155
 #, kde-format
 msgid "Style"
 msgstr "Stil"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:298
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:144
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:145
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:160
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:318
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:133
@@ -7092,7 +7092,7 @@ msgstr "%1: ställ in piltyp"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:485
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:205
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:206
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, kde-format
 msgid "%1: set orientation"
