@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-05 00:54+0000\n"
-"PO-Revision-Date: 2023-07-04 19:37+0200\n"
+"PO-Revision-Date: 2023-07-05 22:22+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -822,6 +822,13 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
+"Le projecto ha contento scribite con %1. Tu installation de LabPlot es "
+"mancante del supporto per illo.\n"
+"\n"
+" Tu non essera capace a vider iste parte del projecto. Si tu modifica e "
+"salveguarda le projecto, le contento de CAS essera perdite.\n"
+"\n"
+"Tu vole continuar?"
 
 #: src/backend/core/Project.cpp:707 src/backend/core/Project.cpp:709
 #, kde-format
@@ -964,7 +971,7 @@ msgstr "%1: assigna plenamento de barra de error"
 #: src/backend/datapicker/DatapickerCurve.cpp:369
 #, kde-format
 msgid "%1: set error bar outline style"
-msgstr ""
+msgstr "%1: assigna le stilo de contorno del barra de error"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:400
@@ -1013,28 +1020,28 @@ msgstr "%1: assigna angulo de rotation"
 #: src/backend/datapicker/DatapickerImage.cpp:381
 #, kde-format
 msgid "%1: set Axis points"
-msgstr ""
+msgstr "%1: assigna punctos de Axe"
 
 #: src/backend/datapicker/DatapickerImage.cpp:387
 #, kde-format
 msgid "%1: set editor settings"
-msgstr ""
+msgstr "%1: assigna preferentias de editor"
 
 #: src/backend/datapicker/DatapickerImage.cpp:393
 #, kde-format
 msgid "%1: set minimum segment length"
-msgstr ""
+msgstr "%1: assigna longitude de segmento minime"
 
 #: src/backend/datapicker/DatapickerImage.cpp:419
 #, kde-format
 msgid "%1: remove all axis points"
-msgstr ""
+msgstr "%1: remove omne punctos de axe"
 
 #: src/backend/datapicker/DatapickerImage.cpp:664
 #: src/backend/worksheet/Image.cpp:453
 #, kde-format
 msgid "Failed to read image data"
-msgstr ""
+msgstr "Falleva a leger datos de imagine"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
 #: src/backend/worksheet/InfoElement.cpp:783
@@ -1046,39 +1053,39 @@ msgstr "%1: assigna position"
 #: src/backend/datapicker/DatapickerPoint.cpp:224
 #, kde-format
 msgid "%1: set +delta_X position"
-msgstr ""
+msgstr "%1: assigna position +delta_X"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:226
 #: src/backend/datapicker/DatapickerPoint.cpp:229
 #, kde-format
 msgid "%1: set +delta X position"
-msgstr ""
+msgstr "%1: assigna position +delta X "
 
 #: src/backend/datapicker/DatapickerPoint.cpp:242
 #: src/backend/datapicker/DatapickerPoint.cpp:244
 #: src/backend/datapicker/DatapickerPoint.cpp:247
 #, kde-format
 msgid "%1: set -delta_X position"
-msgstr ""
+msgstr "%1: assigna position -delta_X"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:260
 #: src/backend/datapicker/DatapickerPoint.cpp:262
 #: src/backend/datapicker/DatapickerPoint.cpp:265
 #, kde-format
 msgid "%1: set +delta_Y position"
-msgstr ""
+msgstr "%1: assigna position +delta_Y"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:278
 #: src/backend/datapicker/DatapickerPoint.cpp:280
 #: src/backend/datapicker/DatapickerPoint.cpp:283
 #, kde-format
 msgid "%1: set -delta_Y position"
-msgstr ""
+msgstr "%1: assigna position -delta_Y"
 
 #: src/backend/datapicker/Segment.cpp:169
 #, kde-format
 msgid "%1: draw points over segment"
-msgstr ""
+msgstr "%1: dessigna punctos sur segmento"
 
 #: src/backend/datasources/DatasetHandler.cpp:68
 #: src/backend/datasources/DatasetHandler.cpp:156
@@ -1094,7 +1101,7 @@ msgstr "Le file de metadatos per le insimul de datos seligite es invalide"
 #: src/backend/datasources/DatasetHandler.cpp:156
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
-msgstr ""
+msgstr "Il non ha discargamento de URL inle file de metadata!"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:375
@@ -1114,13 +1121,13 @@ msgstr "Imagine"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:100
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
-msgstr ""
+msgstr "Hierarchical Data Format 5 (HDF5)"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:130
 #, kde-format
 msgid "ASCII Data"
-msgstr ""
+msgstr "Datos ASCII"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:131
@@ -1131,25 +1138,25 @@ msgstr "Datos binari"
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #, kde-format
 msgid "Excel"
-msgstr ""
+msgstr "Excel"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:103
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
-msgstr ""
+msgstr "Network Common Data Format (NetCDF)"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:109
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
-msgstr ""
+msgstr "Flexible Image Transport System Data Format (FITS)"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:219
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:111
 #, kde-format
 msgid "JSON Data"
-msgstr ""
+msgstr "Datos de JSON"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:220
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:115
@@ -1162,12 +1169,12 @@ msgstr "Spice"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:117
 #, kde-format
 msgid "SAS, Stata or SPSS"
-msgstr ""
+msgstr "SAS, Stata o SPSS"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:220
 #, kde-format
 msgid "ROOT (CERN) Histograms"
-msgstr ""
+msgstr "ROOT (CERN) Diagrammas"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:180
 #, kde-format
@@ -1234,12 +1241,12 @@ msgstr "Il non pote aperir dispositivo "
 #: src/backend/datasources/filters/BinaryFilter.cpp:295
 #, kde-format
 msgid "data selection empty"
-msgstr ""
+msgstr "selection de datos vacue"
 
 #: src/backend/datasources/filters/ExcelFilter.cpp:44
 #, kde-format
 msgid "Sheet count: %1"
-msgstr ""
+msgstr "Computo de folio: %1"
 
 #: src/backend/datasources/filters/ExcelFilter.cpp:46
 #, kde-format
@@ -1263,7 +1270,7 @@ msgstr "Tabellas: %1"
 #: src/kdefrontend/datasources/FITSOptionsWidget.cpp:144
 #, kde-format
 msgid "Primary header"
-msgstr ""
+msgstr "Capite primari"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1012
 #, kde-format
@@ -1273,12 +1280,12 @@ msgstr "IMAGE #%1"
 #: src/backend/datasources/filters/FITSFilter.cpp:1015
 #, kde-format
 msgid "ASCII_TBL #%1"
-msgstr ""
+msgstr "ASCII_TBL #%1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1018
 #, kde-format
 msgid "BINARY_TBL #%1"
-msgstr ""
+msgstr "BINARY_TBL #%1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1523
 #, kde-format
@@ -1293,88 +1300,88 @@ msgstr "Tabellas"
 #: src/backend/datasources/filters/HDF5Filter.cpp:182
 #, kde-format
 msgid "Not a HDF5 file"
-msgstr ""
+msgstr "Non un file HDFS"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:186
 #, kde-format
 msgid "Failed checking file"
-msgstr ""
+msgstr "Falleva a verificar file"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:194
 #, kde-format
 msgid "Failed opening HDF5 file"
-msgstr ""
+msgstr "Falleva a aperir file HDFS"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:200
 #, kde-format
 msgid "File size: %1 bytes"
-msgstr ""
+msgstr "Grandor de file: %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:205
 #, kde-format
 msgid "Free space: %1 bytes"
-msgstr ""
+msgstr "Spatio libere: %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:211
 #, kde-format
 msgid "Number of files: %1"
-msgstr ""
+msgstr "Numero de files: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:214
 #, kde-format
 msgid "Number of data sets: %1"
-msgstr ""
+msgstr "Numero de insimules  de datos: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:217
 #, kde-format
 msgid "Number of groups: %1"
-msgstr ""
+msgstr "Numero de gruppos: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:220
 #, kde-format
 msgid "Number of named datatypes: %1"
-msgstr ""
+msgstr "Numero de typos de datos nomine: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:223
 #, kde-format
 msgid "Number of attributes: %1"
-msgstr ""
+msgstr "Numero de attributos: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:226
 #, kde-format
 msgid "Number of all objects: %1"
-msgstr ""
+msgstr "Numero de omne objectos: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:234
 #, kde-format
 msgid "Version of superblock: %1"
-msgstr ""
+msgstr "Version de superblock (superbloco): %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:236
 #, kde-format
 msgid "Size of superblock: %1 bytes"
-msgstr ""
+msgstr "Grandor de superblock (superbloco): %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:238
 #: src/backend/datasources/filters/HDF5Filter.cpp:259
 #, kde-format
 msgid "Size of superblock extension: %1 bytes"
-msgstr ""
+msgstr "Grandor de extension de uperbloco: %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:240
 #, kde-format
 msgid "Version of free-space manager: %1"
-msgstr ""
+msgstr "Version de gerente de spatio libere:%1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:242
 #, kde-format
 msgid "Size of free-space manager metadata: %1 bytes"
-msgstr ""
+msgstr "Grandorde metadata de gerente de spatio libere: %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:244
 #, kde-format
 msgid "Total size of free space: %1 bytes"
-msgstr ""
+msgstr "Grandor total de spatio libere: %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:246
 #, kde-format
@@ -1550,7 +1557,7 @@ msgstr "Liga a: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1401
 #, kde-format
 msgid "hard link"
-msgstr ""
+msgstr "hard link"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1465
 #, kde-format
@@ -1611,12 +1618,12 @@ msgstr ""
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
 msgid "XYZ (grayscale)"
-msgstr ""
+msgstr "XYZ (scala d gris)"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
 msgid "XYRGB"
-msgstr ""
+msgstr "XYRGB"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:229
 #, kde-format
@@ -1686,27 +1693,27 @@ msgstr ""
 #: src/backend/datasources/filters/MatioFilter.cpp:331
 #, kde-format
 msgid "Matlab version 7.3"
-msgstr ""
+msgstr "Matlab version 7.3"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:334
 #, kde-format
 msgid "Matlab version 5"
-msgstr ""
+msgstr "Matlab version 5"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:337
 #, kde-format
 msgid "Matlab version 4"
-msgstr ""
+msgstr "Matlab version 4"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:340
 #, kde-format
 msgid "Matlab version undefined"
-msgstr ""
+msgstr "Matlab version indefinite"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:346
 #, kde-format
 msgid "Number of variables: "
-msgstr ""
+msgstr "Numero de variabiles: "
 
 #: src/backend/datasources/filters/MatioFilter.cpp:349
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:303
@@ -1765,7 +1772,7 @@ msgstr "Int8"
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
 msgid "UInt8"
-msgstr ""
+msgstr "UInt8"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:404
 #: src/backend/datasources/filters/MatioFilter.cpp:432
@@ -1777,7 +1784,7 @@ msgstr "Int16"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #, kde-format
 msgid "UInt16"
-msgstr ""
+msgstr "UInt16"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:408
 #: src/backend/datasources/filters/MatioFilter.cpp:436
@@ -1789,7 +1796,7 @@ msgstr "Int32"
 #: src/backend/datasources/filters/MatioFilter.cpp:438
 #, kde-format
 msgid "UInt32"
-msgstr ""
+msgstr "UInt32"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:412
 #: src/backend/datasources/filters/MatioFilter.cpp:444
@@ -1801,7 +1808,7 @@ msgstr "Int64"
 #: src/backend/datasources/filters/MatioFilter.cpp:446
 #, kde-format
 msgid "UInt64"
-msgstr ""
+msgstr "UInt64"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:416
 #: src/backend/datasources/filters/MatioFilter.cpp:466
@@ -1920,7 +1927,7 @@ msgstr ""
 #: src/backend/datasources/filters/ReadStatFilter.cpp:143
 #, kde-format
 msgid "Number of variables: %1"
-msgstr ""
+msgstr "Numero de variabiles: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:244
 #: src/backend/datasources/filters/ReadStatFilter.cpp:149
@@ -2046,12 +2053,12 @@ msgstr ""
 #: src/backend/datasources/filters/ReadStatFilter.cpp:179
 #, kde-format
 msgid "Table name: %1"
-msgstr ""
+msgstr "Nomine de tabella: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:181
 #, kde-format
 msgid "File label: %1"
-msgstr ""
+msgstr "Etiquetta de file: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:183
 #, kde-format
@@ -2880,7 +2887,7 @@ msgstr ""
 #: src/backend/gsl/errors.h:30
 #, kde-format
 msgid "Invalid pointer"
-msgstr ""
+msgstr "Punctator invalide"
 
 #: src/backend/gsl/errors.h:32
 #, kde-format
@@ -3022,7 +3029,7 @@ msgstr ""
 #: src/backend/gsl/errors.h:86
 #, kde-format
 msgid "End of file"
-msgstr ""
+msgstr "Fin de file"
 
 #: src/backend/gsl/functions.cpp:40
 #, kde-format
@@ -8854,7 +8861,7 @@ msgstr ""
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:140
 #, kde-format
 msgid "Set Axis Points"
-msgstr ""
+msgstr "Assigna punctos de Axe"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
@@ -10896,7 +10903,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:93
 #, kde-format
 msgid "ASCII data"
-msgstr ""
+msgstr "Datos ASCII"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:94
 #, kde-format
@@ -11183,7 +11190,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1854
 #, kde-format
 msgid "Not a HDF5 file: %1"
-msgstr ""
+msgstr "Non un file HDFS: %1"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2286
 #, kde-format
