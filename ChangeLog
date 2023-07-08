@@ -22,6 +22,7 @@ Bug fixes:
 		* support datetime import (Issue #531)
 	* Properly set the initial properties of the reference line like line width, etc. (Issue #580)
 	* Properly show the initial value of the property "visible" for the reference range (Issue #582)
+	* React of Delete and Backspace keys to delete selected cells in spreadsheet columns (Issue #596)
 
 -----2.10.0 (21.03.2023) -----
 New features:

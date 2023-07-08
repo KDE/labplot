@@ -3342,7 +3342,8 @@ void SpreadsheetView::clearSelectedCells() {
 
 	// don't try to clear values if the selected cells don't have any values at all
 	bool empty = true;
-	for (auto* column : selectedColumns()) {
+	const auto& columns = selectedColumns(false);
+	for (auto* column : columns) {
 		for (int row = last; row >= first; row--) {
 			if (column->isValid(row)) {
 				empty = false;
@@ -3358,7 +3359,7 @@ void SpreadsheetView::clearSelectedCells() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected cells", m_spreadsheet->name()));
-	for (auto* column : selectedColumns()) {
+	for (auto* column : columns) {
 		column->setSuppressDataChangedSignal(true);
 		// 		if (formulaModeActive()) {
 		// 			int col = m_spreadsheet->indexOfChild<Column>(column);
