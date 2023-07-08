@@ -462,6 +462,7 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 				continue;
 
 			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::dataChanged);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::updateLegendRequested);
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
