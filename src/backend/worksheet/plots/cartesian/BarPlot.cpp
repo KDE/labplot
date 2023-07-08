@@ -789,7 +789,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			lines << QLineF(0, y + width, 0, y);
 			lines << QLineF(0, y, value, y);
 
-			m_valuesPointsLogical << QPointF(value, y - width / 2);
+			m_valuesPointsLogical << QPointF(value, y + width / 2);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -999,37 +999,41 @@ void BarPlotPrivate::updateValues() {
 	case Value::Above:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesPoints << QPointF(pointsScene.at(i).x() - w / 2, pointsScene.at(i).y() - offset);
+				m_valuesPoints << QPointF(point.x() - w / 2, point.y() - offset);
 			else
-				m_valuesPoints << QPointF(pointsScene.at(i).x() + offset, pointsScene.at(i).y() - w / 2);
+				m_valuesPoints << QPointF(point.x(), point.y() - offset);
 		}
 		break;
 	case Value::Under:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesPoints << QPointF(pointsScene.at(i).x() - w / 2, pointsScene.at(i).y() + offset + h / 2);
+				m_valuesPoints << QPointF(point.x() - w / 2, point.y() + offset + h / 2);
 			else
-				m_valuesPoints << QPointF(pointsScene.at(i).x() - offset - h / 2, pointsScene.at(i).y() - w / 2);
+				m_valuesPoints << QPointF(point.x(), point.y() + offset + h / 2);
 		}
 		break;
 	case Value::Left:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesPoints << QPointF(pointsScene.at(i).x() - offset - w, pointsScene.at(i).y());
+				m_valuesPoints << QPointF(point.x() - offset - w, point.y());
 			else
-				m_valuesPoints << QPointF(pointsScene.at(i).x(), pointsScene.at(i).y() - offset - w);
+				m_valuesPoints << QPointF(point.x() - offset - w, point.y() + h / 2);
 		}
 		break;
 	case Value::Right:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesPoints << QPointF(pointsScene.at(i).x() + offset, pointsScene.at(i).y());
+				m_valuesPoints << QPointF(point.x() + offset, point.y());
 			else
-				m_valuesPoints << QPointF(pointsScene.at(i).x(), pointsScene.at(i).y() + offset);
+				m_valuesPoints << QPointF(point.x() + offset, point.y() + h / 2);
 		}
 		break;
 	}
