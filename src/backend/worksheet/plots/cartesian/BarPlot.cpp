@@ -253,6 +253,7 @@ void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 			// TODO: add disconnect in the undo-function
 
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::updateLegendRequested);
 		}
 	}
 }
