@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-06 03:38+0000\n"
-"PO-Revision-Date: 2023-06-27 14:02+0200\n"
+"PO-Revision-Date: 2023-07-06 21:37+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -12234,10 +12234,9 @@ msgid "File Browser"
 msgstr "Navigateur de fichiers"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:229
-#, fuzzy, kde-format
-#| msgid "Save current properties as a template"
+#, kde-format
 msgid "Save current plot definition as template"
-msgstr "Enregistrer les propriétés courantes comme un modèle"
+msgstr "Enregistrer la définition courante du tracé comme modèle"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:628
 #, kde-format
@@ -14606,20 +14605,19 @@ msgid "Custom Folder"
 msgstr "Dossier personnalisé"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "List of plot ranges"
+#, kde-format
 msgid "Location of plot templates"
-msgstr "List des intervalles de tracé"
+msgstr "Emplacement des modèles de tracé"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:51
 #, kde-format
 msgid "Custom folder for the location of plot templates"
-msgstr ""
+msgstr "Dossier personnalisé pour l'emplacement des modèles de tracé"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:55
 #, kde-format
 msgid "Open the folder for the location of plot templates"
-msgstr ""
+msgstr "Ouvrir le dossier pour l'emplacement des modèles de tracé"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:134
 #, kde-format
