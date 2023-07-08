@@ -19,10 +19,40 @@ public:
 	explicit StatisticsSpreadsheet(Spreadsheet*, bool loading = false, AspectType type = AspectType::StatisticsSpreadsheet);
 	~StatisticsSpreadsheet() override;
 
+	enum class Metric { Count,
+		Minimum,
+		Maximum,
+		ArithmeticMean,
+		GeometricMean,
+		HarmonicMean,
+		ContraharmonicMean,
+		Mode,
+		FirstQuartile,
+		Median,
+		ThirdQuartile,
+		IQR,
+		Percentile1,
+		Percentile5,
+		Percentile10,
+		Percentile90,
+		Percentile95,
+		Percentile99,
+		Trimean,
+		Variance,
+		StandardDeviation,
+		MeanDeviation,
+		MeanDeviationAroundMedian,
+		MedianDeviation,
+		Skewness,
+		Kurtosis,
+		Entropy
+	};
+	Q_DECLARE_FLAGS(Metrics, Metric)
+
 	QIcon icon() const override;
-	// QMenu* createContextMenu() override;
-	// void fillColumnContextMenu(QMenu*, Column*);
-	// QWidget* view() const override;
+
+	Metrics metrics() const;
+	void setMetrics(Metrics);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -32,6 +62,9 @@ private:
 	void updateStatisticsSpreadsheet();
 
 	Spreadsheet* m_spreadsheet{nullptr};
+	Metrics m_metrics;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(StatisticsSpreadsheet::Metrics)
 
 #endif

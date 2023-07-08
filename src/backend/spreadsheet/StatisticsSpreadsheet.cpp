@@ -7,6 +7,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "StatisticsSpreadsheet.h"
+#include "backend/lib/macros.h"
 
 #include <QIcon>
 #include <QXmlStreamWriter>
@@ -39,6 +40,14 @@ QIcon StatisticsSpreadsheet::icon() const {
 	return QIcon::fromTheme(QStringLiteral("view-statistics"));
 }
 
+StatisticsSpreadsheet::Metrics StatisticsSpreadsheet::metrics() const {
+	return m_metrics;
+}
+
+void StatisticsSpreadsheet::setMetrics(Metrics metrics) {
+	m_metrics = metrics;
+}
+
 /*!
 	initializes the spreadsheet with the default number of columns and rows
 */
@@ -49,6 +58,14 @@ void StatisticsSpreadsheet::init() {
 	setRowCount(m_spreadsheet->columnCount());
 	// setColumnCount(22);
 	setColumnCount(7);
+
+	// measures that are shown on default
+	m_metrics.setFlag(StatisticsSpreadsheet::Metric::Count);
+	m_metrics.setFlag(StatisticsSpreadsheet::Metric::Minimum);
+	m_metrics.setFlag(StatisticsSpreadsheet::Metric::Maximum);
+	m_metrics.setFlag(StatisticsSpreadsheet::Metric::ArithmeticMean);
+	m_metrics.setFlag(StatisticsSpreadsheet::Metric::Variance);
+	m_metrics.setFlag(StatisticsSpreadsheet::Metric::StandardDeviation);
 
 	const auto& columns = children<Column>();
 	columns.at(0)->setName(i18n("Column"));
@@ -139,13 +156,16 @@ void StatisticsSpreadsheet::updateStatisticsSpreadsheet() {
   Saves as XML.
  */
 void StatisticsSpreadsheet::save(QXmlStreamWriter* writer) const {
-
+	// writer->writeAttribute(QStringLiteral("metrics"), QString::number(m_metrics));
 }
 
 /*!
   Loads from XML.
 */
 bool StatisticsSpreadsheet::load(XmlStreamReader* reader, bool preview) {
+	if (preview)
+		return true;
 
+	// READ_INT_VALUE("metrics", m_metrics, StatisticsSpreadsheet::Metrics);
 	return true;
 }
