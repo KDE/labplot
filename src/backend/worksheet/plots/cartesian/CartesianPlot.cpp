@@ -5261,6 +5261,13 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
+	// the file can be corrupted, either because of bugs like in
+	// https://invent.kde.org/education/labplot/-/issues/598 or because it was manually compromized.
+	// In order not to crash because of the wrong indices, add a safety check here.
+	// TODO: check the ranges and the coordinate system to make sure they're available.
+	if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
+		d->defaultCoordinateSystemIndex = 0;
+
 	if (preview)
 		return true;
 
