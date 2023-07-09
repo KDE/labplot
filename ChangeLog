@@ -31,6 +31,7 @@ Bug fixes:
 	* React of Delete and Backspace keys to delete selected cells in spreadsheet columns (Issue #596)
 	* Update the plot legend on column name changes used in box and bar plots (Issue #597)
 	* Fixed the positioning of values labels for horizontal bar plots (Issue #599)
+	* Initialize the parameters for the baseline subtraction with reasonable values on first startup and better apperance of the preview plot (Issues #594)
 
 -----2.10.0 (21.03.2023) -----
 New features:
