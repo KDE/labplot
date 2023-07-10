@@ -1683,6 +1683,8 @@ void CartesianPlotDock::plotMinChanged(const Dimension dim, int xRangeIndex, dou
 
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
+
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, double value) {
@@ -1691,6 +1693,8 @@ void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, dou
 
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
+
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<double> range) {
@@ -1701,6 +1705,8 @@ void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<d
 	CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
 	CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
 	CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::plotScaleChanged(const Dimension dim, int rangeIndex, RangeT::Scale scale) {
@@ -1713,6 +1719,8 @@ void CartesianPlotDock::plotRangeFormatChanged(const Dimension dim, int rangeInd
 	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(RangeT, Format, format))
 	CONDITIONAL_LOCK_RETURN;
 	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Format, QComboBox, setCurrentIndex(static_cast<int>(format)));
+
+	updatePlotRangeList();
 }
 
 // plot range
