@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-06 03:38+0000\n"
+"POT-Creation-Date: 2023-07-10 02:40+0000\n"
 "PO-Revision-Date: 2023-06-23 10:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -69,8 +69,8 @@ msgstr ""
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2917
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1374
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1379
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1906
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4631
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
@@ -116,8 +116,8 @@ msgstr "L'atribut «%1» falta o està buit, s'utilitzarà el valor predetermina
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3051
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1438
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2009
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1443
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2010
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:459
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:728
@@ -5343,14 +5343,14 @@ msgid "unexpected end of document"
 msgstr "final inesperat del document"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3549
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3550
 #, kde-format
 msgid "FITS image"
 msgstr "Imatge FITS"
 
 # Nota: https://en.wikipedia.org/wiki/FITS
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3549
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3550
 #, kde-format
 msgid "FITS table"
 msgstr "Taula FITS"
@@ -7028,21 +7028,21 @@ msgstr "%1: establix la columna X"
 msgid "%1: set data columns"
 msgstr "%1: establix les columnes de dades"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:264
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:265
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: establix el tipus"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:485
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:272
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:486
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:206
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: establix l'orientació"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:499
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:279
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:500
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: s'ha canviat el factor d'amplària"
@@ -7097,63 +7097,63 @@ msgstr "comptador de valors atípics"
 msgid "far out points count"
 msgstr "comptador de punts molt llunyans"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:478
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:479
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: establix l'ordenació"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:492
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: s'ha canviat l'amplària variable"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:506
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: s'han canviat els nivells"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:514
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:515
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: establix el tipus de bigots"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:521
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:522
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: establix el paràmetre d'interval dels bigots"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:528
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: establix la mida de l'extrem dels bigots"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
 #, kde-format
 msgid "%1: jitterring changed"
 msgstr "%1: s'ha canviat «jitter»"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:544
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:545
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:537
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:634
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: s'ha habilitat el canvi d'estora"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:551
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:552
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:544
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:648
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: canvia l'amplària d'estora"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:558
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:559
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:551
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:655
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: canvia la llargària d'estora"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:565
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:566
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:558
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:662
 #, kde-format
@@ -7541,7 +7541,7 @@ msgid "%1: load default theme"
 msgstr "%1: carrega el tema predeterminat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1567
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5256
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5263
 #: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set theme"
@@ -8998,16 +8998,16 @@ msgid "Curve"
 msgstr "Corba"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3789
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3843
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3844
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2406
 #, kde-format
 msgid "Failed to export"
 msgstr "No s'ha pogut exportar"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3789
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3843
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3844
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2406
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9942,12 +9942,12 @@ msgstr "%1: elimina les files seleccionades"
 msgid "%1: clear selected rows"
 msgstr "%1: neteja les files seleccionades"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3360
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3361
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: neteja les cel·les seleccionades"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3419
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -9955,28 +9955,28 @@ msgstr "%1: neteja les cel·les seleccionades"
 msgid "Search..."
 msgstr "Busca..."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3429
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, kde-format
 msgid "End Search"
 msgstr "Finalitza la busca"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3606
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3607
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Imprimix el full de càlcul"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4211
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4212
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "No s'ha pogut crear la base de dades SQLite %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4243
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4244
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "No s'ha pogut crear la taula en la base de dades SQLite %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4296
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4297
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "No s'ha pogut inserir valors a la taula."
@@ -15062,54 +15062,54 @@ msgstr "Nombre d'iteracions que es realitzaran."
 msgid "raw data"
 msgstr "dades sense processar"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:540
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:539
 #, kde-format
 msgid "baseline"
 msgstr "línia base"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:549
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:547
 #, kde-format
 msgid "result"
 msgstr "resultat"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:630
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:627
 #, kde-format
 msgid "Ratio: %1"
 msgstr "Relació: %1"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:674
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:681
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:688
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:695
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:893
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:937
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:981
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1025
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:671
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:678
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:685
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:692
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:890
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:934
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:978
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1022
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr "S'ha proporcionat un valor numèric no vàlid."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1209
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: afig %2 als valors de la columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: sostrau %2 dels valors de la columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
 #, kde-format
 msgid "%1: subtract baseline from column values"
 msgstr "%1: sostrau la línia base dels valors de la columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: multiplica els valors de la columna per %2"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1224
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: dividix els valors de la columna per %2"

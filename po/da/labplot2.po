@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-06 03:38+0000\n"
+"POT-Creation-Date: 2023-07-10 02:40+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -61,8 +61,8 @@ msgstr ""
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2917
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1374
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1379
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1906
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4631
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
@@ -108,8 +108,8 @@ msgstr ""
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3051
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1438
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2009
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1443
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2010
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:459
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:728
@@ -5513,14 +5513,14 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3549
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3550
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "FITS image"
 msgstr "Billeder"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3549
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3550
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -7283,14 +7283,14 @@ msgstr "&Indsæt tomme kolonner"
 msgid "%1: set data columns"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:264
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:265
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set type"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:485
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:272
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:486
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:206
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, fuzzy, kde-format
@@ -7298,8 +7298,8 @@ msgstr "&Indsæt tomme rækker"
 msgid "%1: set orientation"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:499
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:279
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:500
 #, fuzzy, kde-format
 #| msgid "Changed"
 msgid "%1: width factor changed"
@@ -7358,49 +7358,49 @@ msgstr "konstanter"
 msgid "far out points count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:478
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:479
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set ordering"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:492
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
 #, fuzzy, kde-format
 #| msgid "Changed"
 msgid "%1: variable width changed"
 msgstr "Ændret"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:506
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: changed notches"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:514
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:515
 #, fuzzy, kde-format
 #| msgid "Data, -"
 msgid "%1: set whiskers type"
 msgstr "Data, -"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:521
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:522
 #, fuzzy, kde-format
 #| msgid "Data, -"
 msgid "%1: set whiskers range parameter"
 msgstr "Data, -"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:528
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
 #, fuzzy, kde-format
 #| msgid "Data, -"
 msgid "%1: set whiskers cap size"
 msgstr "Data, -"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
 #, fuzzy, kde-format
 #| msgid "Changed"
 msgid "%1: jitterring changed"
 msgstr "Ændret"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:544
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:545
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:537
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:634
 #, fuzzy, kde-format
@@ -7408,7 +7408,7 @@ msgstr "Ændret"
 msgid "%1: change rug enabled"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:551
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:552
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:544
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:648
 #, fuzzy, kde-format
@@ -7416,7 +7416,7 @@ msgstr "&Indsæt tomme rækker"
 msgid "%1: change rug width"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:558
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:559
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:551
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:655
 #, fuzzy, kde-format
@@ -7424,7 +7424,7 @@ msgstr "&Indsæt tomme kolonner"
 msgid "%1: change rug length"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:565
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:566
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:558
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:662
 #, fuzzy, kde-format
@@ -7854,7 +7854,7 @@ msgid "%1: load default theme"
 msgstr "&Indsæt tomme rækker"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1567
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5256
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5263
 #: src/backend/worksheet/Worksheet.cpp:770
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
@@ -9410,8 +9410,8 @@ msgid "Curve"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3789
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3843
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3844
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2406
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
@@ -9419,8 +9419,8 @@ msgid "Failed to export"
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3789
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3843
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3844
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2406
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10443,13 +10443,13 @@ msgstr "%1: Klip markerede celler"
 msgid "%1: clear selected rows"
 msgstr "%1: Klip markerede celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3360
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3361
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "%1: clear selected cells"
 msgstr "%1: Klip markerede celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3419
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -10457,30 +10457,30 @@ msgstr "%1: Klip markerede celler"
 msgid "Search..."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3429
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, kde-format
 msgid "End Search"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3606
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3607
 #, fuzzy, kde-format
 #| msgid "Print spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Udskriv regneark"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4211
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4212
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4243
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4244
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4296
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4297
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to insert values into the table."
@@ -15646,59 +15646,59 @@ msgstr "Antal rækker"
 msgid "raw data"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:540
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:539
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "baseline"
 msgstr "Værdier"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:549
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:547
 #, kde-format
 msgid "result"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:630
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:627
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Ratio: %1"
 msgstr "Rotation"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:674
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:681
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:688
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:695
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:893
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:937
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:981
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1025
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:671
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:678
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:685
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:692
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:890
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:934
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:978
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1022
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1209
 #, fuzzy, kde-format
 #| msgid "%1: add %2 column(s)"
 msgid "%1: add %2 to column values"
 msgstr "%1: Tilføj %2 kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: subtract %2 from column values"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: subtract baseline from column values"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1224
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr ""

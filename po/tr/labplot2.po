@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-06 03:38+0000\n"
+"POT-Creation-Date: 2023-07-10 02:40+0000\n"
 "PO-Revision-Date: 2023-06-17 13:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
@@ -78,8 +78,8 @@ msgstr ""
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2917
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1374
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1905
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1379
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1906
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4631
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
@@ -125,8 +125,8 @@ msgstr "'%1' özniteliği eksik ya da boş, öntanımlı değer kullanılacak"
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3051
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1438
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2009
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1443
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2010
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:459
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:728
@@ -5401,13 +5401,13 @@ msgid "unexpected end of document"
 msgstr "beklenmeyen belge sonu"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3549
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3550
 #, kde-format
 msgid "FITS image"
 msgstr "FITS görseli"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3549
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3550
 #, kde-format
 msgid "FITS table"
 msgstr "FITS tablosu"
@@ -7197,14 +7197,14 @@ msgstr "%1: +delta_X sütunu ayarla"
 msgid "%1: set data columns"
 msgstr "%1: +delta_X sütunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:264
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:265
 #, fuzzy, kde-format
 #| msgid "%1: set arrow type"
 msgid "%1: set type"
 msgstr "%1: ok türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:485
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:272
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:486
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:206
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:228
 #, fuzzy, kde-format
@@ -7212,8 +7212,8 @@ msgstr "%1: ok türünü ayarla"
 msgid "%1: set orientation"
 msgstr "%1: eksen yönlendirmeyi ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:499
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:279
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:500
 #, fuzzy, kde-format
 #| msgid "%1: x-start changed"
 msgid "%1: width factor changed"
@@ -7273,49 +7273,49 @@ msgstr "Euler sabiti"
 msgid "far out points count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:478
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:479
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "%1: set ordering"
 msgstr "%1: kenarlık biçemini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:492
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:493
 #, fuzzy, kde-format
 #| msgid "%1: line type changed"
 msgid "%1: variable width changed"
 msgstr "%1: satır türü değişti"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:506
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:507
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: changed notches"
 msgstr "%1: açıklamayı değiştir"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:514
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:515
 #, fuzzy, kde-format
 #| msgid "Histogram type:"
 msgid "%1: set whiskers type"
 msgstr "Histogram türü:"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:521
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:522
 #, fuzzy, kde-format
 #| msgid "%1: set axis end"
 msgid "%1: set whiskers range parameter"
 msgstr "%1: eksen bitişini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:528
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:529
 #, fuzzy, kde-format
 #| msgid "%1: set axis end"
 msgid "%1: set whiskers cap size"
 msgstr "%1: eksen bitişini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
 #, fuzzy, kde-format
 #| msgid "%1: filling type changed"
 msgid "%1: jitterring changed"
 msgstr "%1: dolgu türü değişti"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:544
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:545
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:537
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:634
 #, fuzzy, kde-format
@@ -7323,7 +7323,7 @@ msgstr "%1: dolgu türü değişti"
 msgid "%1: change rug enabled"
 msgstr "%1: x-aralık kırma etkinleştir"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:551
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:552
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:544
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:648
 #, fuzzy, kde-format
@@ -7331,7 +7331,7 @@ msgstr "%1: x-aralık kırma etkinleştir"
 msgid "%1: change rug width"
 msgstr "%1: satır+sembol genişliğini değiştir"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:558
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:559
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:551
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:655
 #, fuzzy, kde-format
@@ -7339,7 +7339,7 @@ msgstr "%1: satır+sembol genişliğini değiştir"
 msgid "%1: change rug length"
 msgstr "%1: açıklamayı değiştir"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:565
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:566
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:558
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:662
 #, fuzzy, kde-format
@@ -7747,7 +7747,7 @@ msgid "%1: load default theme"
 msgstr "%1: %2 temayı yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1567
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5256
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5263
 #: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set theme"
@@ -9274,8 +9274,8 @@ msgid "Curve"
 msgstr "Eğri"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3789
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3843
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3844
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2406
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -9283,8 +9283,8 @@ msgid "Failed to export"
 msgstr "Açma başarısız"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:863
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3789
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3843
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3844
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2406
 #, fuzzy, kde-format
 #| msgid ""
@@ -10290,12 +10290,12 @@ msgstr "%1: seçilen satırları kaldır"
 msgid "%1: clear selected rows"
 msgstr "%1: seçilen satırları temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3360
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3361
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: seçilen hücreleri temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3419
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -10303,31 +10303,31 @@ msgstr "%1: seçilen hücreleri temizle"
 msgid "Search..."
 msgstr "Ara..."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3429
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, fuzzy, kde-format
 #| msgid "Search..."
 msgid "End Search"
 msgstr "Ara..."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3606
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3607
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Hesap Tablosunu Yazdır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4211
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4212
 #, fuzzy, kde-format
 #| msgid "Failed to connect to the database '%1'."
 msgid "Couldn't create the SQLite database %1."
 msgstr "'%1' veritabanına bağlanırken hata oluştu."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4243
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4244
 #, fuzzy, kde-format
 #| msgid "Failed to connect to the database '%1'."
 msgid "Failed to create table in the SQLite database %1."
 msgstr "'%1' veritabanına bağlanırken hata oluştu."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4296
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4297
 #, fuzzy, kde-format
 #| msgid "Failed to connect to the database '%1'."
 msgid "Failed to insert values into the table."
@@ -15617,61 +15617,61 @@ msgstr "Önizlenecek satırların sayısı:"
 msgid "raw data"
 msgstr "Yeni veri üzerinde"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:540
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:539
 #, fuzzy, kde-format
 #| msgid "Dash line"
 msgid "baseline"
 msgstr "Kısa çizgi"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:549
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:547
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgid "result"
 msgstr "Sonuçlar:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:630
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:627
 #, fuzzy, kde-format
 #| msgid "Rotation:"
 msgid "Ratio: %1"
 msgstr "Döndürme:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:674
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:681
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:688
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:695
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:893
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:937
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:981
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1025
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:671
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:678
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:685
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:692
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:890
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:934
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:978
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1022
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1209
 #, fuzzy, kde-format
 #| msgid "%1: add %2 column"
 #| msgid_plural "%1: add %2 columns"
 msgid "%1: add %2 to column values"
 msgstr "%1: %2 sütunu ekle"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
 #, fuzzy, kde-format
 #| msgid "%1: set values column"
 msgid "%1: subtract %2 from column values"
 msgstr "%1: değer sütunlarını ayarla"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
 #, fuzzy, kde-format
 #| msgid "%1: set values column"
 msgid "%1: subtract baseline from column values"
 msgstr "%1: değer sütunlarını ayarla"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1224
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
 #, fuzzy, kde-format
 #| msgid "%1: clear column %2"
 msgid "%1: divide column values by %2"
