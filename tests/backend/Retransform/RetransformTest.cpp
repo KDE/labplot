@@ -226,6 +226,14 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QVERIFY(plot2);
 	QCOMPARE(plot2->name(), QLatin1String("plot2"));
 
+	QCOMPARE(plot->childCount<XYCurve>(), 3);
+	QCOMPARE(plot->child<XYCurve>(0)->name(), QStringLiteral("sin"));
+	QCOMPARE(plot->child<XYCurve>(0)->coordinateSystemIndex(), 0);
+	QCOMPARE(plot->child<XYCurve>(1)->name(), QStringLiteral("cos"));
+	QCOMPARE(plot->child<XYCurve>(1)->coordinateSystemIndex(), 0);
+	QCOMPARE(plot->child<XYCurve>(2)->name(), QStringLiteral("tan"));
+	QCOMPARE(plot->child<XYCurve>(2)->coordinateSystemIndex(), 1);
+
 	QAction a(nullptr);
 	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
 	view->cartesianPlotMouseModeChanged(&a);
