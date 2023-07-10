@@ -1958,11 +1958,10 @@ void MainWin::updateTitleBar() {
 	prints the current sheet (worksheet, spreadsheet or matrix)
 */
 void MainWin::print() {
-	auto* win = m_DockManager->focusedDockWidget();
-	if (!win)
+	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(win)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
 	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
@@ -1971,11 +1970,10 @@ void MainWin::print() {
 }
 
 void MainWin::printPreview() {
-	auto* win = m_DockManager->focusedDockWidget();
-	if (!win)
+	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(win)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
 	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
@@ -2760,11 +2758,10 @@ void MainWin::importDatasetDialog() {
   opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
  */
 void MainWin::exportDialog() {
-	auto* win = m_DockManager->focusedDockWidget();
-	if (!win)
+	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(win)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
 	if (part->exportView())
 		statusBar()->showMessage(i18n("%1 exported", part->name()));
 }
