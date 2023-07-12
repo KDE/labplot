@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-10 00:43+0000\n"
+"POT-Creation-Date: 2023-07-12 00:42+0000\n"
 "PO-Revision-Date: 2023-06-23 07:33+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -1833,7 +1833,7 @@ msgstr "Nekonata"
 #: src/backend/datasources/filters/MatioFilter.cpp:448
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:672 src/kdefrontend/MainWin.cpp:2034
+#: src/kdefrontend/MainWin.cpp:672 src/kdefrontend/MainWin.cpp:2032
 #, kde-format
 msgid "Matrix"
 msgstr "Matrico"
@@ -10046,7 +10046,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:62
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:666
-#: src/kdefrontend/MainWin.cpp:2016 src/kdefrontend/SettingsDialog.cpp:66
+#: src/kdefrontend/MainWin.cpp:2014 src/kdefrontend/SettingsDialog.cpp:66
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, kde-format
 msgid "Spreadsheet"
@@ -10221,7 +10221,7 @@ msgstr "Elekti Y-Regionon kaj Zomi"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:334
-#: src/kdefrontend/MainWin.cpp:2491
+#: src/kdefrontend/MainWin.cpp:2489
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -11742,7 +11742,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2806
+#: src/kdefrontend/MainWin.cpp:2803
 #, kde-format
 msgid "Warning"
 msgstr "Averto"
@@ -14029,14 +14029,14 @@ msgstr "Malsukcesis malfermi"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:678
-#: src/kdefrontend/MainWin.cpp:2052 src/kdefrontend/SettingsDialog.cpp:61
+#: src/kdefrontend/MainWin.cpp:2050 src/kdefrontend/SettingsDialog.cpp:61
 #, kde-format
 msgid "Worksheet"
 msgstr "Laborfolio"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:661
-#: src/kdefrontend/MainWin.cpp:2008
+#: src/kdefrontend/MainWin.cpp:2006
 #, kde-format
 msgid "Data Extractor"
 msgstr "Eltilo de datumoj"
@@ -14162,7 +14162,7 @@ msgstr "%1 dosiero ne estis trovita. Bonvolu kontroli vian instaladon."
 msgid "&Open Example"
 msgstr "Malfermi Ekzempl&on"
 
-#: src/kdefrontend/MainWin.cpp:656 src/kdefrontend/MainWin.cpp:2000
+#: src/kdefrontend/MainWin.cpp:656 src/kdefrontend/MainWin.cpp:1998
 #, kde-format
 msgid "Workbook"
 msgstr "Laborlibro"
@@ -14193,7 +14193,7 @@ msgstr "Kreas novan matricon por redaktado de datumoj"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Kreas novan laborfolion por datuma grafikaĵo"
 
-#: src/kdefrontend/MainWin.cpp:684 src/kdefrontend/MainWin.cpp:2060
+#: src/kdefrontend/MainWin.cpp:684 src/kdefrontend/MainWin.cpp:2058
 #, kde-format
 msgid "Note"
 msgstr "Noto"
@@ -14206,7 +14206,7 @@ msgstr "Kreas novan noton por arbitra teksto"
 #. i18n("Note/Script"),this);
 #. actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
 #. connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
-#: src/kdefrontend/MainWin.cpp:693 src/kdefrontend/MainWin.cpp:1992
+#: src/kdefrontend/MainWin.cpp:693 src/kdefrontend/MainWin.cpp:1990
 #, kde-format
 msgid "Folder"
 msgstr "Dosierujo"
@@ -14510,48 +14510,48 @@ msgstr "Ne eblis malfermi la dosieron '%1' por skribado."
 msgid "Changed"
 msgstr "Ŝanĝita"
 
-#: src/kdefrontend/MainWin.cpp:1966 src/kdefrontend/MainWin.cpp:1979
+#: src/kdefrontend/MainWin.cpp:1965 src/kdefrontend/MainWin.cpp:1977
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Preparante presadon de %1"
 
-#: src/kdefrontend/MainWin.cpp:1968 src/kdefrontend/MainWin.cpp:1981
+#: src/kdefrontend/MainWin.cpp:1967 src/kdefrontend/MainWin.cpp:1979
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 presita"
 
-#: src/kdefrontend/MainWin.cpp:2738
+#: src/kdefrontend/MainWin.cpp:2736
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
 msgstr "Datumaro%1"
 
-#: src/kdefrontend/MainWin.cpp:2769
+#: src/kdefrontend/MainWin.cpp:2766
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 eksportita"
 
-#: src/kdefrontend/MainWin.cpp:2776
+#: src/kdefrontend/MainWin.cpp:2773
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-dosieroj konservitaj"
 
-#: src/kdefrontend/MainWin.cpp:2788
+#: src/kdefrontend/MainWin.cpp:2785
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT Kliento%1"
 
-#: src/kdefrontend/MainWin.cpp:2806
+#: src/kdefrontend/MainWin.cpp:2803
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Jam ekzistas MQTTKliento kun ĉi tiu gastiganto!"
 
-#: src/kdefrontend/MainWin.cpp:2810
+#: src/kdefrontend/MainWin.cpp:2807
 #, kde-format
 msgid "Live data source%1"
 msgstr "Viva datumfonto%1"
 
-#: src/kdefrontend/MainWin.cpp:2854
+#: src/kdefrontend/MainWin.cpp:2851
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
