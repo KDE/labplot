@@ -648,9 +648,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 
 	switch (type) {
 	case BarPlot::Type::Grouped: {
-		const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
-		const int barCount = dataColumns.size(); // number of bars within a group
-		const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
+		double barGap = m_groupWidth * 0.1; // gap between two bars within a group
+		int barCount = dataColumns.size(); // number of bars within a group
+		double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -999,18 +999,45 @@ void BarPlotPrivate::updateValues() {
 	qreal w;
 	const qreal h = fm.ascent();
 	int offset = value->distance();
-
+	QVector<qreal> list_bar_width;
 	switch (value->position()) {
 	case Value::Above:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
 			const auto& point = pointsScene.at(i);
+
 			if (orientation == BarPlot::Orientation::Vertical)
 				m_valuesPoints << QPointF(point.x() - w / 2, point.y() - offset);
 			else
 				m_valuesPoints << QPointF(point.x(), point.y() - offset);
 		}
 		break;
+	case Value::Center:
+	{
+		for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
+			for(const auto& barLines : columnBarLines){
+				qreal maxLength=0;
+				for(const auto& lines :barLines ){
+					if(lines.length()>maxLength)
+						maxLength = lines.length();
+				}
+				list_bar_width.append(maxLength);
+
+			}
+		}
+			for (int i = 0; i < m_valuesStrings.size(); i++) {
+				w = fm.boundingRect(m_valuesStrings.at(i)).width();
+				const auto& point = pointsScene.at(i);
+				if (orientation == BarPlot::Orientation::Vertical)
+					m_valuesPoints << QPointF(point.x() - w / 2, point.y() + list_bar_width.at(i)/2 - offset + h / 2);
+				else
+					m_valuesPoints << QPointF(point.x() - list_bar_width.at(i) / 2 - w, point.y() + h / 2);
+			}
+
+
+		break;
+	}
+
 	case Value::Under:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();

@@ -13,6 +13,7 @@
 
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <QPen>
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 
 class Background;
 class Line;

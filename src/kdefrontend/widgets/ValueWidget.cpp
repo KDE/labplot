@@ -36,6 +36,7 @@ ValueWidget::ValueWidget(QWidget* parent)
 	ui.cbPosition->addItem(i18n("Below"));
 	ui.cbPosition->addItem(i18n("Left"));
 	ui.cbPosition->addItem(i18n("Right"));
+	ui.cbPosition->addItem(i18n("Center"));
 
 	// add formats for numeric values
 	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));

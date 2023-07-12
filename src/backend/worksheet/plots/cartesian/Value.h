@@ -22,7 +22,7 @@ class Value : public AbstractAspect {
 
 public:
 	enum Type { NoValues, BinEntries, CustomColumn };
-	enum Position { Above, Under, Left, Right };
+	enum Position { Above, Under, Left, Right, Center };
 
 	explicit Value(const QString& name);
 	~Value() override;
