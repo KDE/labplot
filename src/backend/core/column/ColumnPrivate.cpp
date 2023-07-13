@@ -18,14 +18,12 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#include <array>
-#include <unordered_map>
-
-extern "C" {
 #include "backend/nsl/nsl_stats.h"
-}
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
+
+#include <array>
+#include <unordered_map>
 
 void ColumnPrivate::ValueLabels::setMode(AbstractColumn::ColumnMode mode) {
 	if (!initialized())

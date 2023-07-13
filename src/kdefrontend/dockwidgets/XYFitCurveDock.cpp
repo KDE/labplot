@@ -23,9 +23,7 @@
 #include "kdefrontend/widgets/FitParametersWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
-}
 
 #include <KMessageWidget>
 

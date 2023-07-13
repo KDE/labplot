@@ -28,10 +28,8 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 
 #include "backend/gsl/parser.h"
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
-}
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_matrix.h>

@@ -13,9 +13,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystemPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 

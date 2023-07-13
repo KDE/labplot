@@ -17,9 +17,7 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
-}
 
 class AbstractColumn;
 class CartesianPlotPrivate;

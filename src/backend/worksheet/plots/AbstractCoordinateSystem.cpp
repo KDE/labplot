@@ -12,9 +12,7 @@
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
 #include <cmath>
 
 /**

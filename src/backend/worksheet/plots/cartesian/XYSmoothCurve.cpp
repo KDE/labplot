@@ -30,8 +30,8 @@
 
 extern "C" {
 #include "backend/nsl/nsl_sf_kernel.h"
-#include "backend/nsl/nsl_stats.h"
 }
+#include "backend/nsl/nsl_stats.h"
 #include <gsl/gsl_math.h> // gsl_pow_*
 
 XYSmoothCurve::XYSmoothCurve(const QString& name)

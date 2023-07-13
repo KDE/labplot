@@ -11,11 +11,8 @@
 #define RANGE_H
 
 #include "backend/gsl/parser.h"
-#include "macros.h" //const auto numberLocale = QLocale();
-
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
+#include "macros.h" //const auto numberLocale = QLocale();
 
 #include <QStringList>
 #include <cmath>

@@ -24,11 +24,8 @@
 #include <KLocalizedString>
 #include <KWindowConfig>
 
-#include <cmath>
-
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
-}
+#include <cmath>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 

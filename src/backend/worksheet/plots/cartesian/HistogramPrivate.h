@@ -12,16 +12,13 @@
 #define HISTOGRAMPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
+#include <gsl/gsl_histogram.h>
 #include <vector>
 
 class Column;
 class Background;
 class Line;
 class Value;
-
-extern "C" {
-#include <gsl/gsl_histogram.h>
-}
 
 class HistogramPrivate : public PlotPrivate {
 public:
