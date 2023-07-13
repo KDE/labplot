@@ -32,8 +32,8 @@
 
 extern "C" {
 #include "backend/nsl/nsl_math.h"
-#include <gsl/gsl_math.h>
 }
+#include <gsl/gsl_math.h>
 
 namespace {
 enum PositionAlignmentComboBoxIndex {

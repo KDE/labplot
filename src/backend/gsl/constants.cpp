@@ -1,10 +1,8 @@
 #include "constants.h"
 
-extern "C" {
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
 #include <gsl/gsl_math.h>
-}
 
 #include <klocalizedstring.h>
 

@@ -23,10 +23,8 @@
 
 #include <cmath>
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 enum class Method { Periodic, Random };
 

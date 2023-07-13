@@ -42,11 +42,9 @@
 #include <KConfig>
 #include <KLocalizedString>
 
-extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
-}
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 

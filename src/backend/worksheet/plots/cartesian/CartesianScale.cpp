@@ -11,9 +11,7 @@
 
 #include "CartesianScale.h"
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 /**
  * \class CartesianScale

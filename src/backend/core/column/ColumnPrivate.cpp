@@ -23,9 +23,9 @@
 
 extern "C" {
 #include "backend/nsl/nsl_stats.h"
+}
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
-}
 
 void ColumnPrivate::ValueLabels::setMode(AbstractColumn::ColumnMode mode) {
 	if (!initialized())

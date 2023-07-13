@@ -26,9 +26,7 @@
 #include <QIcon>
 #include <QThreadPool>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 XYConvolutionCurve::XYConvolutionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYConvolutionCurvePrivate(this), AspectType::XYConvolutionCurve) {

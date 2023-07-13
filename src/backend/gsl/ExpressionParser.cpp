@@ -15,14 +15,12 @@
 
 #include <klocalizedstring.h>
 
-extern "C" {
 #include "backend/gsl/parser.h"
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_version.h>
-}
 
 ExpressionParser* ExpressionParser::m_instance{nullptr};
 

@@ -41,11 +41,9 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 
-extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_histogram.h>
 #include <gsl/gsl_spline.h>
-}
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalcHistogram)
 CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)

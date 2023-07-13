@@ -27,10 +27,11 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 
-extern "C" {
 #include "backend/gsl/parser.h"
+extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
+}
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_matrix.h>
@@ -40,7 +41,6 @@ extern "C" {
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
-}
 
 #include <QDateTime>
 #include <QElapsedTimer>

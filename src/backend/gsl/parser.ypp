@@ -24,9 +24,7 @@
 #define freelocale _free_locale
 #endif
 
-extern "C" {
-    #include "gsl/gsl_sf_gamma.h"
-}
+#include "gsl/gsl_sf_gamma.h"
 
 #ifdef PDEBUG
 #include <stdio.h>
