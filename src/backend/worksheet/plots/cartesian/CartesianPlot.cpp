@@ -2053,9 +2053,14 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			this->dataChanged(const_cast<WorksheetElement*>(elem));
 		});
 
-		updateLegend();
-		const_cast<Plot*>(plot)->setCoordinateSystemIndex(cSystemIndex);
-		checkRanges = true;
+		// don't set the default coordinate system index during the project load,
+		// the index is read in child's load().
+		// same for range and legend updates - settings are read in load().
+		if (!isLoading()) {
+			const_cast<Plot*>(plot)->setCoordinateSystemIndex(cSystemIndex);
+			checkRanges = true;
+			updateLegend();
+		}
 	}
 
 	const auto* curve = dynamic_cast<const XYCurve*>(child);
@@ -2109,7 +2114,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
 
 		// in case the first curve is added, check whether we start plotting datetime data
-		if (curveTotalCount() == 1) {
+		if (!isLoading() && curveTotalCount() == 1) {
 			checkAxisFormat(curve->coordinateSystemIndex(), curve->xColumn(), Axis::Orientation::Horizontal);
 			checkAxisFormat(curve->coordinateSystemIndex(), curve->yColumn(), Axis::Orientation::Vertical);
 		}
@@ -2117,15 +2122,17 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		Q_EMIT curveAdded(curve);
 	} else if (hist) {
 		DEBUG(Q_FUNC_INFO << ", HISTOGRAM")
-		if (curveTotalCount() == 1)
+		if (!isLoading() && curveTotalCount() == 1)
 			checkAxisFormat(hist->coordinateSystemIndex(), hist->dataColumn(), Axis::Orientation::Horizontal);
 	} else if (boxPlot) {
 		DEBUG(Q_FUNC_INFO << ", BOX PLOT")
 		if (curveTotalCount() == 1) {
 			connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
-			boxPlotOrientationChanged(boxPlot->orientation());
-			if (!boxPlot->dataColumns().isEmpty())
-				checkAxisFormat(boxPlot->coordinateSystemIndex(), boxPlot->dataColumns().constFirst(), Axis::Orientation::Vertical);
+			if (!isLoading()) {
+				boxPlotOrientationChanged(boxPlot->orientation());
+				if (!boxPlot->dataColumns().isEmpty())
+					checkAxisFormat(boxPlot->coordinateSystemIndex(), boxPlot->dataColumns().constFirst(), Axis::Orientation::Vertical);
+			}
 		}
 	} else if (barPlot) {
 		DEBUG(Q_FUNC_INFO << ", BAR PLOT")
