@@ -2041,7 +2041,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 	Q_D(CartesianPlot);
 	int cSystemIndex = defaultCoordinateSystemIndex();
-	bool checkRanges = false; // check/change ranges when adding new children like curves for example
+	// check/change ranges when adding new children like curves for example.
+	// The ranges must not be checked if just an element like a TextLabel, Custompoint, ... was added
+	bool checkRanges = false;
 	const auto* plot = dynamic_cast<const Plot*>(child);
 
 	if (plot) {
