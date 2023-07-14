@@ -2259,9 +2259,14 @@ void WorksheetView::handleCartesianPlotActions() {
 	}
 
 	if (!handled) {
-		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomSelectionModeAction->setChecked(false);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setChecked(false);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomYSelectionModeAction->setChecked(false);
+		for (auto* plot : m_worksheet->children<CartesianPlot>())
+			plot->setMouseMode(CartesianPlot::MouseMode::Selection);
 		zoomInAction->setEnabled(false);
 		zoomOutAction->setEnabled(false);
 		zoomInXAction->setEnabled(false);
