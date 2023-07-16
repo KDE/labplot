@@ -1,6 +1,5 @@
 #include "functions.h"
-
-#include <klocalizedstring.h>
+#include "parser.h"
 
 #include "backend/nsl/nsl_sf_basic.h"
 #include <gsl/gsl_cdf.h>
@@ -9,7 +8,7 @@
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_version.h>
 
-#include "parser.h"
+#include <klocalizedstring.h>
 
 #ifdef _MSC_VER
 /* avoid intrinsics */
