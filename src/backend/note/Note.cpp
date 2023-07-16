@@ -20,6 +20,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QTextStream>
 
 #include <KConfig>
 #include <KConfigGroup>
