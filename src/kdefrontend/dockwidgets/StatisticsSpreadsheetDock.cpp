@@ -78,19 +78,16 @@ void StatisticsSpreadsheetDock::load() {
 }
 
 void StatisticsSpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
-
 }
 
 /*!
 	loads saved spreadsheet properties from \c config.
  */
 void StatisticsSpreadsheetDock::loadConfig(KConfig& config) {
-
 }
 
 /*!
 	saves spreadsheet properties to \c config.
  */
 void StatisticsSpreadsheetDock::saveConfigAsTemplate(KConfig& config) {
-
 }

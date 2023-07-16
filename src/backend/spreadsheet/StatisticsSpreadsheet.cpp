@@ -8,6 +8,7 @@
 */
 #include "StatisticsSpreadsheet.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <QIcon>
 #include <QXmlStreamWriter>
@@ -23,8 +24,8 @@
 */
 
 StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool loading, AspectType type)
-	: Spreadsheet(i18n("Column Statistics of '%1'", spreadsheet->name()), loading, type),
-	m_spreadsheet(spreadsheet) {
+	: Spreadsheet(i18n("Column Statistics of '%1'", spreadsheet->name()), loading, type)
+	, m_spreadsheet(spreadsheet) {
 	if (!loading)
 		init();
 }
@@ -156,7 +157,16 @@ void StatisticsSpreadsheet::updateStatisticsSpreadsheet() {
   Saves as XML.
  */
 void StatisticsSpreadsheet::save(QXmlStreamWriter* writer) const {
-	// writer->writeAttribute(QStringLiteral("metrics"), QString::number(m_metrics));
+	writer->writeStartElement(QStringLiteral("statisticsSpreadsheet"));
+	writeBasicAttributes(writer);
+	writer->writeAttribute(QStringLiteral("metrics"), QString::number(m_metrics));
+
+	// columns
+	const auto& columns = children<Column>(ChildIndexFlag::IncludeHidden);
+	for (auto* column : columns)
+		column->save(writer);
+
+	writer->writeEndElement(); // "statisticsSpreadsheet"
 }
 
 /*!
@@ -166,6 +176,41 @@ bool StatisticsSpreadsheet::load(XmlStreamReader* reader, bool preview) {
 	if (preview)
 		return true;
 
-	// READ_INT_VALUE("metrics", m_metrics, StatisticsSpreadsheet::Metrics);
-	return true;
+	if (!readBasicAttributes(reader))
+		return false;
+
+	const KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
+	const auto& attribs = reader->attributes();
+	const auto& str = attribs.value(QStringLiteral("metrics")).toString();
+	if (str.isEmpty())
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("metrics")).toString());
+	else
+		m_metrics = static_cast<StatisticsSpreadsheet::Metric>(str.toInt());
+
+	// read child elements
+	while (!reader->atEnd()) {
+		reader->readNext();
+
+		if (reader->isEndElement() && reader->name() == QStringLiteral("statisticsSpreadsheet"))
+			break;
+
+		if (reader->isStartElement()) {
+			if (reader->name() == QStringLiteral("column")) {
+				Column* column = new Column(QString());
+				column->setIsLoading(true);
+				if (!column->load(reader, preview)) {
+					delete column;
+					setColumnCount(0);
+					return false;
+				}
+				addChildFast(column);
+			} else { // unknown element
+				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				if (!reader->skipToEndElement())
+					return false;
+			}
+		}
+	}
+
+	return !reader->hasError();
 }

@@ -1160,6 +1160,10 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	for (auto* column : columns)
 		column->save(writer);
 
+	// statistics spreadsheet, if available
+	if (d->statisticsSpreadsheet)
+		d->statisticsSpreadsheet->save(writer);
+
 	writer->writeEndElement(); // "spreadsheet"
 }
 
@@ -1205,6 +1209,13 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 					return false;
 				}
 				addChildFast(column);
+			} else if (reader->name() == QLatin1String("statisticsSpreadsheet")) {
+				d->statisticsSpreadsheet = new StatisticsSpreadsheet(this, true);
+				if (!d->statisticsSpreadsheet->load(reader, preview)) {
+					delete d->statisticsSpreadsheet;
+					d->statisticsSpreadsheet = nullptr;
+				} else
+					addChildFast(d->statisticsSpreadsheet);
 			} else { // unknown element
 				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 				if (!reader->skipToEndElement())
