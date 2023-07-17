@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-12 00:42+0000\n"
+"POT-Creation-Date: 2023-07-17 00:43+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -65,7 +65,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1154
+#: src/backend/note/Note.cpp:168 src/backend/spreadsheet/Spreadsheet.cpp:1154
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -5642,13 +5642,43 @@ msgstr "%1: горизонтальное отражение"
 msgid "%1: mirror vertically"
 msgstr "%1: вертикальное отражение"
 
-#: src/backend/note/Note.cpp:43 src/backend/worksheet/Worksheet.cpp:224
+#: src/backend/note/Note.cpp:46
+#, fuzzy, kde-format
+#| msgid "Print"
+msgctxt "@title:window"
+msgid "Print Note"
+msgstr "Печать"
+
+#: src/backend/note/Note.cpp:64
+#, fuzzy, kde-format
+#| msgid "LaTeX files (*.tex)"
+msgid "Text file (*.txt)"
+msgstr "Файлы LaTeX (*.tex)"
+
+# BUGME: please split strings --aspotashev
+#: src/backend/note/Note.cpp:66
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
 #, kde-format
 msgctxt "@title:window"
-msgid "Print Worksheet"
-msgstr "Печать листа"
+msgid "Export to File"
+msgstr "Экспорт в файл"
 
-#: src/backend/note/Note.cpp:130
+# BUGME: please split strings --aspotashev
+#: src/backend/note/Note.cpp:81
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Export to File"
+msgid "Export failed"
+msgstr "Экспорт в файл"
+
+#: src/backend/note/Note.cpp:82
+#, fuzzy, kde-format
+#| msgid "Couldn't open the file '%1' for writing."
+msgid "Failed to open '%1' for writing."
+msgstr "Не удалось открыть файл «%1» для записи."
+
+#: src/backend/note/Note.cpp:161
 #, kde-format
 msgid "no note element found"
 msgstr "Не найден элемент «note»"
@@ -8985,6 +9015,12 @@ msgstr "%1: задание формы границы"
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: задание границы"
+
+#: src/backend/worksheet/Worksheet.cpp:224
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Worksheet"
+msgstr "Печать листа"
 
 #: src/backend/worksheet/Worksheet.cpp:626
 #, kde-format
@@ -15933,14 +15969,6 @@ msgid ""
 msgstr ""
 "Файлы базы данных SQLite (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
 "sqlite3 *.sdb3)"
-
-# BUGME: please split strings --aspotashev
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
-#, kde-format
-msgctxt "@title:window"
-msgid "Export to File"
-msgstr "Экспорт в файл"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
 #, fuzzy, kde-format

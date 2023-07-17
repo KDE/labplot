@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-12 00:42+0000\n"
+"POT-Creation-Date: 2023-07-17 00:43+0000\n"
 "PO-Revision-Date: 2014-02-09 10:11+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -56,7 +56,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1154
+#: src/backend/note/Note.cpp:168 src/backend/spreadsheet/Spreadsheet.cpp:1154
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -5448,13 +5448,36 @@ msgstr ""
 msgid "%1: mirror vertically"
 msgstr ""
 
-#: src/backend/note/Note.cpp:43 src/backend/worksheet/Worksheet.cpp:224
+#: src/backend/note/Note.cpp:46
 #, kde-format
 msgctxt "@title:window"
-msgid "Print Worksheet"
+msgid "Print Note"
 msgstr ""
 
-#: src/backend/note/Note.cpp:130
+#: src/backend/note/Note.cpp:64
+#, kde-format
+msgid "Text file (*.txt)"
+msgstr ""
+
+#: src/backend/note/Note.cpp:66
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
+#, kde-format
+msgctxt "@title:window"
+msgid "Export to File"
+msgstr ""
+
+#: src/backend/note/Note.cpp:81
+#, kde-format
+msgid "Export failed"
+msgstr ""
+
+#: src/backend/note/Note.cpp:82
+#, kde-format
+msgid "Failed to open '%1' for writing."
+msgstr ""
+
+#: src/backend/note/Note.cpp:161
 #, kde-format
 msgid "no note element found"
 msgstr ""
@@ -8619,6 +8642,12 @@ msgstr ""
 #: src/backend/worksheet/TextLabel.cpp:362
 #, kde-format
 msgid "%1: set border"
+msgstr ""
+
+#: src/backend/worksheet/Worksheet.cpp:224
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Worksheet"
 msgstr ""
 
 #: src/backend/worksheet/Worksheet.cpp:626
@@ -15177,13 +15206,6 @@ msgstr ""
 msgid ""
 "SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
 "sqlite3 *.sdb3)"
-msgstr ""
-
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
-#, kde-format
-msgctxt "@title:window"
-msgid "Export to File"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42

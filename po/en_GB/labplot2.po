@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-12 00:42+0000\n"
+"POT-Creation-Date: 2023-07-17 00:43+0000\n"
 "PO-Revision-Date: 2023-06-17 12:24+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -58,7 +58,7 @@ msgstr "Could not find panel plugins. Please check your installation."
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1154
+#: src/backend/note/Note.cpp:168 src/backend/spreadsheet/Spreadsheet.cpp:1154
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -5473,13 +5473,41 @@ msgstr "%1: mirror horizontally"
 msgid "%1: mirror vertically"
 msgstr "%1: mirror vertically"
 
-#: src/backend/note/Note.cpp:43 src/backend/worksheet/Worksheet.cpp:224
+#: src/backend/note/Note.cpp:46
+#, fuzzy, kde-format
+#| msgid "Print"
+msgctxt "@title:window"
+msgid "Print Note"
+msgstr "Print"
+
+#: src/backend/note/Note.cpp:64
+#, fuzzy, kde-format
+#| msgid "LaTeX files (*.tex)"
+msgid "Text file (*.txt)"
+msgstr "LaTeX files (*.tex)"
+
+#: src/backend/note/Note.cpp:66
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
 #, kde-format
 msgctxt "@title:window"
-msgid "Print Worksheet"
-msgstr "Print Worksheet"
+msgid "Export to File"
+msgstr "Export to File"
 
-#: src/backend/note/Note.cpp:130
+#: src/backend/note/Note.cpp:81
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Export to File"
+msgid "Export failed"
+msgstr "Export to File"
+
+#: src/backend/note/Note.cpp:82
+#, fuzzy, kde-format
+#| msgid "Couldn't open the file '%1' for writing."
+msgid "Failed to open '%1' for writing."
+msgstr "Could not open the file '%1' for writing."
+
+#: src/backend/note/Note.cpp:161
 #, kde-format
 msgid "no note element found"
 msgstr "no note element found"
@@ -8642,6 +8670,12 @@ msgstr "%1: set border shape"
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: set border"
+
+#: src/backend/worksheet/Worksheet.cpp:224
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Worksheet"
+msgstr "Print Worksheet"
 
 #: src/backend/worksheet/Worksheet.cpp:626
 #, kde-format
@@ -15355,13 +15389,6 @@ msgid ""
 msgstr ""
 "SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
 "sqlite3 *.sdb3)"
-
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
-#, kde-format
-msgctxt "@title:window"
-msgid "Export to File"
-msgstr "Export to File"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
 #, kde-format

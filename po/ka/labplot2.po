@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-12 00:42+0000\n"
+"POT-Creation-Date: 2023-07-17 00:43+0000\n"
 "PO-Revision-Date: 2023-06-23 04:59+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -60,7 +60,7 @@ msgstr "პანელის დამატებები ვერ ვიპ
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1154
+#: src/backend/note/Note.cpp:168 src/backend/spreadsheet/Spreadsheet.cpp:1154
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -5433,13 +5433,41 @@ msgstr "%1: ჰორიზონტალური ანარეკლი"
 msgid "%1: mirror vertically"
 msgstr "%1: ვერტიკალური ანარეკლი"
 
-#: src/backend/note/Note.cpp:43 src/backend/worksheet/Worksheet.cpp:224
+#: src/backend/note/Note.cpp:46
+#, fuzzy, kde-format
+#| msgid "Print"
+msgctxt "@title:window"
+msgid "Print Note"
+msgstr "ბეჭდვა"
+
+#: src/backend/note/Note.cpp:64
+#, fuzzy, kde-format
+#| msgid "LaTeX files (*.tex)"
+msgid "Text file (*.txt)"
+msgstr "LaTeX ფაილები (*.tex)"
+
+#: src/backend/note/Note.cpp:66
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
 #, kde-format
 msgctxt "@title:window"
-msgid "Print Worksheet"
-msgstr "სამუშაო ფურცლის დაბეჭდვა"
+msgid "Export to File"
+msgstr "ფაილში გატანა"
 
-#: src/backend/note/Note.cpp:130
+#: src/backend/note/Note.cpp:81
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Export to File"
+msgid "Export failed"
+msgstr "ფაილში გატანა"
+
+#: src/backend/note/Note.cpp:82
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
+msgid "Failed to open '%1' for writing."
+msgstr "ფაილის (\"%1\") გახსნის შეცდომა."
+
+#: src/backend/note/Note.cpp:161
 #, kde-format
 msgid "no note element found"
 msgstr ""
@@ -8592,6 +8620,12 @@ msgstr ""
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: საზღვრის დაყენება"
+
+#: src/backend/worksheet/Worksheet.cpp:224
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Worksheet"
+msgstr "სამუშაო ფურცლის დაბეჭდვა"
 
 #: src/backend/worksheet/Worksheet.cpp:626
 #, kde-format
@@ -15100,13 +15134,6 @@ msgid ""
 msgstr ""
 "SQLite ბაზის ფაილები (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
 "sqlite3 *.sdb3)"
-
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
-#, kde-format
-msgctxt "@title:window"
-msgid "Export to File"
-msgstr "ფაილში გატანა"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
 #, kde-format
