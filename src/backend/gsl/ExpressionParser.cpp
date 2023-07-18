@@ -103,7 +103,7 @@ QString ExpressionParser::parameters(const QString& functionName) {
 			QString (*parameterFunction)(int) = _functions[i].parameterFunction;
 
 			if (parameterFunction == nullptr)
-				return QStringLiteral();
+				return QStringLiteral("");
 
 			if (count == 0)
 				return QStringLiteral("()");
@@ -118,7 +118,7 @@ QString ExpressionParser::parameters(const QString& functionName) {
 		// DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
 		// DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
 	}
-	return QStringLiteral();
+	return QStringLiteral("");
 }
 
 QString ExpressionParser::functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType type) {
@@ -193,7 +193,7 @@ QString ExpressionParser::functionDescription(const QString& function) {
 			return m_functionsDescription.at(index);
 	}
 
-	return QStringLiteral();
+	return QStringLiteral("");
 }
 QString ExpressionParser::constantDescription(const QString& constant) {
 	for (int index = 0; index < _number_constants; index++) {
@@ -201,7 +201,7 @@ QString ExpressionParser::constantDescription(const QString& constant) {
 			return m_constantsDescription.at(index) + QStringLiteral(" (") + m_constantsValues.at(index) + QStringLiteral(" ") + m_constantsUnits.at(index)
 				+ QStringLiteral(")");
 	}
-	return QStringLiteral();
+	return QStringLiteral("");
 }
 
 const QStringList& ExpressionParser::constants() {

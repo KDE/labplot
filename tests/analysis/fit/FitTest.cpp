@@ -18,10 +18,8 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
-}
 
 // ##############################################################################
 // #################  linear regression with NIST datasets ######################
