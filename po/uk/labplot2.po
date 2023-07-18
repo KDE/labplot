@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-17 00:43+0000\n"
-"PO-Revision-Date: 2023-06-22 09:15+0300\n"
+"PO-Revision-Date: 2023-07-17 09:34+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -5534,17 +5534,15 @@ msgid "%1: mirror vertically"
 msgstr "%1: віддзеркалити вертикально"
 
 #: src/backend/note/Note.cpp:46
-#, fuzzy, kde-format
-#| msgid "Print"
+#, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
-msgstr "Надрукувати"
+msgstr "Друк нотатки"
 
 #: src/backend/note/Note.cpp:64
-#, fuzzy, kde-format
-#| msgid "LaTeX files (*.tex)"
+#, kde-format
 msgid "Text file (*.txt)"
-msgstr "файли LaTeX (*.tex)"
+msgstr "текстовий файл (*.txt)"
 
 #: src/backend/note/Note.cpp:66
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
@@ -5555,17 +5553,14 @@ msgid "Export to File"
 msgstr "Експорт до файла"
 
 #: src/backend/note/Note.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export to File"
+#, kde-format
 msgid "Export failed"
-msgstr "Експорт до файла"
+msgstr "Не вдалося експортувати"
 
 #: src/backend/note/Note.cpp:82
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid "Failed to open '%1' for writing."
-msgstr "Не вдалося відкрити файл «%1» для запису."
+msgstr "Не вдалося відкрити «%1» для читання."
 
 #: src/backend/note/Note.cpp:161
 #, kde-format

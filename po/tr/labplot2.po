@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-17 00:43+0000\n"
-"PO-Revision-Date: 2023-06-22 05:41+0300\n"
+"PO-Revision-Date: 2023-07-17 13:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -5476,17 +5476,15 @@ msgid "%1: mirror vertically"
 msgstr "%1: Dikey olarak yansıt"
 
 #: src/backend/note/Note.cpp:46
-#, fuzzy, kde-format
-#| msgid "Print"
+#, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
-msgstr "Yazdır"
+msgstr "Notu Yazdır"
 
 #: src/backend/note/Note.cpp:64
-#, fuzzy, kde-format
-#| msgid "LaTeX files (*.tex)"
+#, kde-format
 msgid "Text file (*.txt)"
-msgstr "LaTeX dosyaları (*.tex)"
+msgstr "Metin dosyası (*.txt)"
 
 #: src/backend/note/Note.cpp:66
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
@@ -5497,17 +5495,14 @@ msgid "Export to File"
 msgstr "Dosyaya Dışa Aktar"
 
 #: src/backend/note/Note.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export to File"
+#, kde-format
 msgid "Export failed"
-msgstr "Dosyaya Dışa Aktar"
+msgstr "Dışa aktarma başarısız"
 
 #: src/backend/note/Note.cpp:82
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid "Failed to open '%1' for writing."
-msgstr "'%1' dosyası yazma için açılamadı."
+msgstr "'%1' dosyası yazmak için açılamadı."
 
 #: src/backend/note/Note.cpp:161
 #, kde-format
