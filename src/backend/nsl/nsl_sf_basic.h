@@ -10,6 +10,9 @@
 #ifndef NSL_SF_BASIC_H
 #define NSL_SF_BASIC_H
 
+#include "nsl_complex.h"
+#include <gsl/gsl_version.h>
+
 #undef __BEGIN_DECLS
 #undef __END_DECLS
 #ifdef __cplusplus
@@ -21,8 +24,6 @@
 #endif
 __BEGIN_DECLS
 
-#include "nsl_complex.h"
-#include <gsl/gsl_version.h>
 #include <stdint.h> /* fixed size int types */
 
 /* dummy function for parsing statistical methods */
