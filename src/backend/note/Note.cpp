@@ -77,9 +77,7 @@ bool Note::exportView() const {
 
 	QFile file(path);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-		QMessageBox::critical(view(),
-							  i18n("Export failed"),
-							  i18n("Failed to open '%1' for writing.", path));
+		QMessageBox::critical(view(), i18n("Export failed"), i18n("Failed to open '%1' for writing.", path));
 		return false;
 	}
 
