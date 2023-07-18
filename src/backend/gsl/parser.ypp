@@ -27,7 +27,7 @@
 #include <gsl/gsl_sf_gamma.h>
 
 #ifdef PDEBUG
-#include <stdio.h>
+#include <cstdio>
 #define pdebug(...) fprintf(stderr, __VA_ARGS__)
 #else
 #define pdebug(...) {}
