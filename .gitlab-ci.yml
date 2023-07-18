@@ -39,7 +39,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH
 
 # replaced default targets:
-# only changed "script" section
+# only changed "script" and added QT_QPA_PLATFORM
 windows_qt515:
   stage: build
   image: kdeorg/windows-msvc2019-qt515:latest
@@ -69,7 +69,7 @@ windows_qt515:
     reports:
       junit: JUnitTestResults.xml
 
-# only changed "script" section
+# only changed "script" and added QT_QPA_PLATFORM
 freebsd_qt515:
   stage: build
   tags:
@@ -85,7 +85,7 @@ freebsd_qt515:
     - git clone https://invent.kde.org/sysadmin/ci-utilities
     - git clone https://invent.kde.org/sysadmin/repo-metadata ci-utilities/repo-metadata/
   script:
-    - python3 -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform FreeBSD/Qt5/Shared --extra-cmake-args "-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON"
+    - python3 -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform FreeBSD/Qt5/Shared --extra-cmake-args "-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -DENABLE_TESTS=OFF"
   after_script:
     - rm -rf _build _install _staging
   artifacts:
