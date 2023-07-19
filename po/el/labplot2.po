@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-12 00:42+0000\n"
+"POT-Creation-Date: 2023-07-19 00:45+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -57,7 +57,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1154
+#: src/backend/note/Note.cpp:166 src/backend/spreadsheet/Spreadsheet.cpp:1154
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -5573,14 +5573,40 @@ msgstr ""
 msgid "%1: mirror vertically"
 msgstr ""
 
-#: src/backend/note/Note.cpp:43 src/backend/worksheet/Worksheet.cpp:224
+#: src/backend/note/Note.cpp:46
 #, fuzzy, kde-format
-#| msgid "&Worksheet"
+#| msgid "Print"
 msgctxt "@title:window"
-msgid "Print Worksheet"
-msgstr "&Φύλλο εργασίας"
+msgid "Print Note"
+msgstr "Εκτύπωση"
 
-#: src/backend/note/Note.cpp:130
+#: src/backend/note/Note.cpp:64
+#, kde-format
+msgid "Text file (*.txt)"
+msgstr ""
+
+#: src/backend/note/Note.cpp:66
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
+#, fuzzy, kde-format
+#| msgid "Export to"
+msgctxt "@title:window"
+msgid "Export to File"
+msgstr "Εξαγωγή σε"
+
+#: src/backend/note/Note.cpp:80
+#, fuzzy, kde-format
+#| msgid "Export to"
+msgid "Export failed"
+msgstr "Εξαγωγή σε"
+
+#: src/backend/note/Note.cpp:80
+#, fuzzy, kde-format
+#| msgid "Sorry. Could not open file for writing."
+msgid "Failed to open '%1' for writing."
+msgstr "Αδυναμία ανοίγματος αρχείου για εγγραφή."
+
+#: src/backend/note/Note.cpp:159
 #, kde-format
 msgid "no note element found"
 msgstr ""
@@ -8923,6 +8949,13 @@ msgstr "%1: αλλαγή τύπου στήλης"
 #| msgid "%1: set formula"
 msgid "%1: set border"
 msgstr "%1: ορισμός τύπου"
+
+#: src/backend/worksheet/Worksheet.cpp:224
+#, fuzzy, kde-format
+#| msgid "&Worksheet"
+msgctxt "@title:window"
+msgid "Print Worksheet"
+msgstr "&Φύλλο εργασίας"
 
 #: src/backend/worksheet/Worksheet.cpp:626
 #, fuzzy, kde-format
@@ -15849,14 +15882,6 @@ msgid ""
 "SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
 "sqlite3 *.sdb3)"
 msgstr ""
-
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
-#, fuzzy, kde-format
-#| msgid "Export to"
-msgctxt "@title:window"
-msgid "Export to File"
-msgstr "Εξαγωγή σε"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
 #, fuzzy, kde-format
