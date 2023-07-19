@@ -105,7 +105,6 @@ private:
 	void updateFillingRect(int index, const QVector<QLineF>&);
 
 	void draw(QPainter*);
-	void drawFilling(QPainter*, int);
 	void drawSymbols(QPainter*, int);
 
 	bool m_hovered{false};
