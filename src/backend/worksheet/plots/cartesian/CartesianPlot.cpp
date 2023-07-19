@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -79,7 +79,7 @@ CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
 
 CartesianPlot::~CartesianPlot() {
 	if (m_menusInitialized) {
-		delete addNewMenu;
+		delete m_addNewMenu;
 		delete themeMenu;
 	}
 
@@ -378,16 +378,28 @@ void CartesianPlot::initActions() {
 	addReferenceLineAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-line")), i18n("Reference Line"), this);
 	addReferenceRangeAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-rectangle")), i18n("Reference Range"), this);
 
-	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
-	connect(addEquationCurveAction, &QAction::triggered, this, &CartesianPlot::addEquationCurve);
+	connect(addCurveAction, &QAction::triggered, this, [=]() {
+		addChild(new XYCurve(QStringLiteral("xy-curve")));
+	});
+	connect(addEquationCurveAction, &QAction::triggered, this, [=]() {
+		addChild(new XYEquationCurve(QStringLiteral("f(x)")));
+	});
 
 	// bar plots
-	connect(addBarPlotAction, &QAction::triggered, this, &CartesianPlot::addBarPlot);
-	connect(addLollipopPlotAction, &QAction::triggered, this, &CartesianPlot::addLollipopPlot);
+	connect(addBarPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new BarPlot(i18n("Bar Plot")));
+	});
+	connect(addLollipopPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new LollipopPlot(i18n("Lollipop Plot")));
+	});
 
 	// statistical plots
-	connect(addBoxPlotAction, &QAction::triggered, this, &CartesianPlot::addBoxPlot);
-	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
+	connect(addBoxPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new BoxPlot(i18n("Box Plot")));
+	});
+	connect(addHistogramAction, &QAction::triggered, this, [=]() {
+		addChild(new Histogram(i18n("Histogram")));
+	});
 
 	// analysis curves
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
@@ -397,10 +409,18 @@ void CartesianPlot::initActions() {
 	connect(addSmoothCurveAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
 	connect(addFitCurveAction, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
-	connect(addFourierTransformCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
-	connect(addHilbertTransformCurveAction, &QAction::triggered, this, &CartesianPlot::addHilbertTransformCurve);
-	connect(addConvolutionCurveAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
-	connect(addCorrelationCurveAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
+	connect(addFourierTransformCurveAction, &QAction::triggered, this, [=]() {
+		addChild(new XYFourierTransformCurve(i18n("Fourier Transform")));
+	});
+	connect(addHilbertTransformCurveAction, &QAction::triggered, this, [=]() {
+		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
+	});
+	connect(addConvolutionCurveAction, &QAction::triggered, this, [=]() {
+		addChild(new XYConvolutionCurve(i18n("Convolution")));
+	});
+	connect(addCorrelationCurveAction, &QAction::triggered, this, [=]() {
+		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
+	});
 
 	connect(addLegendAction, &QAction::triggered, this, static_cast<void (CartesianPlot::*)()>(&CartesianPlot::addLegend));
 	connect(addHorizontalAxisAction, &QAction::triggered, this, &CartesianPlot::addHorizontalAxis);
@@ -475,13 +495,21 @@ void CartesianPlot::initActions() {
 	connect(addIntegrationAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
 	connect(addInterpolationAction, &QAction::triggered, this, &CartesianPlot::addInterpolationCurve);
 	connect(addSmoothAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
-	connect(addConvolutionAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
-	connect(addCorrelationAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
+	connect(addConvolutionAction, &QAction::triggered, this, [=]() {
+		addChild(new XYConvolutionCurve(i18n("Convolution")));
+	});
+	connect(addCorrelationAction, &QAction::triggered, this, [=]() {
+		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
+	});
 	for (const auto& action : addFitActions)
 		connect(action, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
-	connect(addFourierTransformAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
-	connect(addHilbertTransformAction, &QAction::triggered, this, &CartesianPlot::addHilbertTransformCurve);
+	connect(addFourierTransformAction, &QAction::triggered, this, [=]() {
+		addChild(new XYFourierTransformCurve(i18n("Fourier Transform")));
+	});
+	connect(addHilbertTransformAction, &QAction::triggered, this, [=]() {
+		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
+	});
 
 	// visibility action
 	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
@@ -492,22 +520,22 @@ void CartesianPlot::initActions() {
 void CartesianPlot::initMenus() {
 	initActions();
 
-	addNewMenu = new QMenu(i18n("Add New"));
-	addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	addNewMenu->addAction(addCurveAction);
-	addNewMenu->addAction(addEquationCurveAction);
+	m_addNewMenu = new QMenu(i18n("Add New"));
+	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+	m_addNewMenu->addAction(addCurveAction);
+	m_addNewMenu->addAction(addEquationCurveAction);
 
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
-	addNewMenu->addMenu(addNewStatisticalPlotsMenu);
+	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
 	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
 	addNewBarPlotsMenu->addAction(addBarPlotAction);
 	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
-	addNewMenu->addMenu(addNewBarPlotsMenu);
+	m_addNewMenu->addMenu(addNewBarPlotsMenu);
 
-	addNewMenu->addSeparator();
+	m_addNewMenu->addSeparator();
 
 	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
 	addNewAnalysisMenu->addAction(addFitCurveAction);
@@ -526,21 +554,21 @@ void CartesianPlot::initMenus() {
 	addNewAnalysisMenu->addAction(addCorrelationCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addDataReductionCurveAction);
-	addNewMenu->addMenu(addNewAnalysisMenu);
+	m_addNewMenu->addMenu(addNewAnalysisMenu);
 
-	addNewMenu->addSeparator();
-	addNewMenu->addAction(addLegendAction);
-	addNewMenu->addSeparator();
-	addNewMenu->addAction(addHorizontalAxisAction);
-	addNewMenu->addAction(addVerticalAxisAction);
-	addNewMenu->addSeparator();
-	addNewMenu->addAction(addTextLabelAction);
-	addNewMenu->addAction(addImageAction);
-	addNewMenu->addAction(addInfoElementAction);
-	addNewMenu->addSeparator();
-	addNewMenu->addAction(addCustomPointAction);
-	addNewMenu->addAction(addReferenceLineAction);
-	addNewMenu->addAction(addReferenceRangeAction);
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(addLegendAction);
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(addHorizontalAxisAction);
+	m_addNewMenu->addAction(addVerticalAxisAction);
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(addTextLabelAction);
+	m_addNewMenu->addAction(addImageAction);
+	m_addNewMenu->addAction(addInfoElementAction);
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(addCustomPointAction);
+	m_addNewMenu->addAction(addReferenceLineAction);
+	m_addNewMenu->addAction(addReferenceRangeAction);
 
 	// Data manipulation menu
 	// 	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
@@ -616,7 +644,7 @@ QMenu* CartesianPlot::createContextMenu() {
 	menu->setToolTipsVisible(true);
 	QAction* firstAction = menu->actions().at(1);
 
-	menu->insertMenu(firstAction, addNewMenu);
+	menu->insertMenu(firstAction, m_addNewMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, themeMenu);
 	menu->insertSeparator(firstAction);
@@ -634,6 +662,13 @@ QMenu* CartesianPlot::createContextMenu() {
 	}
 
 	return menu;
+}
+
+QMenu* CartesianPlot::addNewMenu() {
+	if (!m_menusInitialized)
+		initMenus();
+
+	return m_addNewMenu;
 }
 
 QMenu* CartesianPlot::analysisMenu() {
@@ -1633,34 +1668,13 @@ void CartesianPlot::addVerticalAxis() {
 	axis->retransform();
 }
 
-void CartesianPlot::addCurve() {
-	DEBUG(Q_FUNC_INFO)
-	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	addChild(curve);
-}
-
-void CartesianPlot::addEquationCurve() {
-	DEBUG(Q_FUNC_INFO << ", to default coordinate system " << defaultCoordinateSystemIndex())
-	auto* curve = new XYEquationCurve(QStringLiteral("f(x)"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	addChild(curve);
-}
-
-void CartesianPlot::addHistogram() {
-	DEBUG(Q_FUNC_INFO << ", to default coordinate system " << defaultCoordinateSystemIndex())
-	auto* hist = new Histogram(i18n("Histogram"));
-	hist->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	addChild(hist);
-}
-
 void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution type) {
 	if (!hist)
 		return;
 
 	beginMacro(i18n("%1: distribution fit to '%2'", name(), hist->name()));
 	auto* curve = new XYFitCurve(i18n("Distribution Fit to '%1'", hist->name()));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+	// curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
 	curve->setDataSourceHistogram(hist);
 
@@ -1689,18 +1703,6 @@ void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution t
 	endMacro();
 }
 
-void CartesianPlot::addBarPlot() {
-	addChild(new BarPlot(i18n("Bar Plot")));
-}
-
-void CartesianPlot::addLollipopPlot() {
-	addChild(new LollipopPlot(i18n("Lollipop Plot")));
-}
-
-void CartesianPlot::addBoxPlot() {
-	addChild(new BoxPlot(i18n("Box Plot")));
-}
-
 /*!
  * returns the first selected XYCurve in the plot
  */
@@ -1716,7 +1718,6 @@ const XYCurve* CartesianPlot::currentCurve() const {
 void CartesianPlot::addDataReductionCurve() {
 	auto* curve = new XYDataReductionCurve(i18n("Data Reduction"));
 	const XYCurve* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: reduce '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Reduction of '%1'", curCurve->name()));
@@ -1736,7 +1737,6 @@ void CartesianPlot::addDataReductionCurve() {
 void CartesianPlot::addDifferentiationCurve() {
 	auto* curve = new XYDifferentiationCurve(i18n("Differentiation"));
 	const XYCurve* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: differentiate '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Derivative of '%1'", curCurve->name()));
@@ -1756,7 +1756,6 @@ void CartesianPlot::addDifferentiationCurve() {
 void CartesianPlot::addIntegrationCurve() {
 	auto* curve = new XYIntegrationCurve(i18n("Integration"));
 	const XYCurve* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: integrate '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Integral of '%1'", curCurve->name()));
@@ -1776,7 +1775,6 @@ void CartesianPlot::addIntegrationCurve() {
 void CartesianPlot::addInterpolationCurve() {
 	auto* curve = new XYInterpolationCurve(i18n("Interpolation"));
 	const XYCurve* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: interpolate '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Interpolation of '%1'", curCurve->name()));
@@ -1796,7 +1794,6 @@ void CartesianPlot::addInterpolationCurve() {
 void CartesianPlot::addSmoothCurve() {
 	auto* curve = new XYSmoothCurve(i18n("Smooth"));
 	const XYCurve* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: smooth '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Smoothing of '%1'", curCurve->name()));
@@ -1816,7 +1813,6 @@ void CartesianPlot::addSmoothCurve() {
 void CartesianPlot::addFitCurve() {
 	auto* curve = new XYFitCurve(i18n("Fit"));
 	const auto* curCurve = currentCurve();
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro(i18n("%1: fit to '%2'", name(), curCurve->name()));
 		curve->setName(i18n("Fit to '%1'", curCurve->name()));
@@ -1866,34 +1862,9 @@ void CartesianPlot::addFourierFilterCurve() {
 	} else {
 		beginMacro(i18n("%1: add Fourier filter curve", name()));
 	}
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	this->addChild(curve);
 
 	endMacro();
-}
-
-void CartesianPlot::addFourierTransformCurve() {
-	auto* curve = new XYFourierTransformCurve(i18n("Fourier Transform"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	this->addChild(curve);
-}
-
-void CartesianPlot::addHilbertTransformCurve() {
-	auto* curve = new XYHilbertTransformCurve(i18n("Hilbert Transform"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	this->addChild(curve);
-}
-
-void CartesianPlot::addConvolutionCurve() {
-	auto* curve = new XYConvolutionCurve(i18n("Convolution"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	this->addChild(curve);
-}
-
-void CartesianPlot::addCorrelationCurve() {
-	auto* curve = new XYCorrelationCurve(i18n("Auto-/Cross-Correlation"));
-	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	this->addChild(curve);
 }
 
 /*!
@@ -2056,8 +2027,7 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 		if (child == curve)
 			break;
 
-		if (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BarPlot
-			|| child->type() == AspectType::LollipopPlot || child->type() == AspectType::BoxPlot || child->inherits(AspectType::XYAnalysisCurve))
+		if (dynamic_cast<const Plot*>(child))
 			++index;
 	}
 
@@ -2070,8 +2040,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		return;
 
 	Q_D(CartesianPlot);
-	int cSystemIndex = -1;
-	bool checkRanges = false; // check/change ranges when adding new children like curves for example
+	int cSystemIndex = defaultCoordinateSystemIndex();
+	// check/change ranges when adding new children like curves for example.
+	// The ranges must not be checked if just an element like a TextLabel, Custompoint, ... was added
+	bool checkRanges = false;
 	const auto* plot = dynamic_cast<const Plot*>(child);
 
 	if (plot) {
@@ -2083,9 +2055,14 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			this->dataChanged(const_cast<WorksheetElement*>(elem));
 		});
 
-		updateLegend();
-		cSystemIndex = plot->coordinateSystemIndex();
-		checkRanges = true;
+		// don't set the default coordinate system index during the project load,
+		// the index is read in child's load().
+		// same for range and legend updates - settings are read in load().
+		if (!isLoading()) {
+			const_cast<Plot*>(plot)->setCoordinateSystemIndex(cSystemIndex);
+			checkRanges = true;
+			updateLegend();
+		}
 	}
 
 	const auto* curve = dynamic_cast<const XYCurve*>(child);
@@ -2139,7 +2116,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
 
 		// in case the first curve is added, check whether we start plotting datetime data
-		if (curveTotalCount() == 1) {
+		if (!isLoading() && curveTotalCount() == 1) {
 			checkAxisFormat(curve->coordinateSystemIndex(), curve->xColumn(), Axis::Orientation::Horizontal);
 			checkAxisFormat(curve->coordinateSystemIndex(), curve->yColumn(), Axis::Orientation::Vertical);
 		}
@@ -2147,15 +2124,17 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		Q_EMIT curveAdded(curve);
 	} else if (hist) {
 		DEBUG(Q_FUNC_INFO << ", HISTOGRAM")
-		if (curveTotalCount() == 1)
+		if (!isLoading() && curveTotalCount() == 1)
 			checkAxisFormat(hist->coordinateSystemIndex(), hist->dataColumn(), Axis::Orientation::Horizontal);
 	} else if (boxPlot) {
 		DEBUG(Q_FUNC_INFO << ", BOX PLOT")
 		if (curveTotalCount() == 1) {
 			connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
-			boxPlotOrientationChanged(boxPlot->orientation());
-			if (!boxPlot->dataColumns().isEmpty())
-				checkAxisFormat(boxPlot->coordinateSystemIndex(), boxPlot->dataColumns().constFirst(), Axis::Orientation::Vertical);
+			if (!isLoading()) {
+				boxPlotOrientationChanged(boxPlot->orientation());
+				if (!boxPlot->dataColumns().isEmpty())
+					checkAxisFormat(boxPlot->coordinateSystemIndex(), boxPlot->dataColumns().constFirst(), Axis::Orientation::Vertical);
+			}
 		}
 	} else if (barPlot) {
 		DEBUG(Q_FUNC_INFO << ", BAR PLOT")
@@ -2163,6 +2142,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else if (lollipopPlot) {
 		DEBUG(Q_FUNC_INFO << ", LOLLIPOP PLOT")
 		connect(lollipopPlot, &LollipopPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
+	} else if (axis) {
+		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {
 		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
 		if (infoElement)
@@ -2172,10 +2153,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// must be unhovered
 		if (elem)
 			connect(elem, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
-	}
-
-	if (axis) {
-		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	}
 
 	auto rangeChanged = false;
@@ -2428,8 +2405,8 @@ void CartesianPlot::dataChanged(WorksheetElement* element) {
 	if (cSystemIndex == -1)
 		return;
 
-	auto xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
-	auto yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
+	const auto xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
+	const auto yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 
 	dataChanged(xIndex, yIndex, element);
 }
@@ -2503,9 +2480,9 @@ void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
 }
 
 void CartesianPlot::curveVisibilityChanged() {
-	int index = static_cast<WorksheetElement*>(QObject::sender())->coordinateSystemIndex();
-	int xIndex = coordinateSystem(index)->index(Dimension::X);
-	int yIndex = coordinateSystem(index)->index(Dimension::Y);
+	const int index = static_cast<WorksheetElement*>(QObject::sender())->coordinateSystemIndex();
+	const int xIndex = coordinateSystem(index)->index(Dimension::X);
+	const int yIndex = coordinateSystem(index)->index(Dimension::Y);
 	setRangeDirty(Dimension::X, xIndex, true);
 	setRangeDirty(Dimension::Y, yIndex, true);
 	updateLegend();
@@ -2688,129 +2665,75 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 	d->dataRange(dim, index).setRange(INFINITY, -INFINITY);
 	auto range{d->range(dim, index)}; // get reference to range from private
 
-	// loop over all xy-curves and determine the maximum and minimum dir-values
-	for (const auto* curve : this->children<const XYCurve>()) {
-		// only curves with correct xIndex
-		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
-			continue;
-		if (!curve->isVisible())
+	// loop over all curves/plots and determine the maximum and minimum values
+	for (const auto* plot : this->children<const Plot>()) {
+		if (!plot->isVisible() || !plot->hasData())
 			continue;
 
-		DEBUG("CURVE \"" << STDSTRING(curve->name()) << "\"")
-
-		auto* column = curve->column(dim);
-		if (!column) {
-			DEBUG(" NO column!")
+		if (coordinateSystem(plot->coordinateSystemIndex())->index(dim) != index)
 			continue;
-		}
 
-		Dimension dim_other = Dimension::Y;
-		switch (dim) {
-		case Dimension::X:
-			break;
-		case Dimension::Y:
-			dim_other = Dimension::X;
-			break;
-		}
+		if (dynamic_cast<const XYCurve*>(plot)) {
+			auto* curve = static_cast<const XYCurve*>(plot);
+			DEBUG("CURVE \"" << STDSTRING(curve->name()) << "\"")
+			auto* column = curve->column(dim);
+			if (!column) {
+				DEBUG(" NO column!")
+				continue;
+			}
 
-		// range of indices
-		Range<int> indexRange{0, 0};
-		if (!completeRange && d->rangeType == RangeType::Free && curve->column(dim_other)) { // only data within y range
-			const int index = coordinateSystem(curve->coordinateSystemIndex())->index(dim_other);
-			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
-			curve->column(dim_other)->indicesMinMax(d->range(dim_other, index).start(), d->range(dim_other, index).end(), indexRange.start(), indexRange.end());
-		} else { // all data
-			DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
-			switch (d->rangeType) {
-			case RangeType::Free:
-				indexRange.setRange(0, column->rowCount() - 1);
+			Dimension dim_other = Dimension::Y;
+			switch (dim) {
+			case Dimension::X:
 				break;
-			case RangeType::Last:
-				indexRange.setRange(column->rowCount() - d->rangeLastValues, column->rowCount() - 1);
-				break;
-			case RangeType::First:
-				indexRange.setRange(0, d->rangeFirstValues - 1);
+			case Dimension::Y:
+				dim_other = Dimension::X;
 				break;
 			}
+
+			// range of indices
+			Range<int> indexRange{0, 0};
+			if (!completeRange && d->rangeType == RangeType::Free && curve->column(dim_other)) { // only data within y range
+				const int index = coordinateSystem(curve->coordinateSystemIndex())->index(dim_other);
+				DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
+				curve->column(dim_other)->indicesMinMax(d->range(dim_other, index).start(),
+														d->range(dim_other, index).end(),
+														indexRange.start(),
+														indexRange.end());
+			} else { // all data
+				DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
+				switch (d->rangeType) {
+				case RangeType::Free:
+					indexRange.setRange(0, column->rowCount() - 1);
+					break;
+				case RangeType::Last:
+					indexRange.setRange(column->rowCount() - d->rangeLastValues, column->rowCount() - 1);
+					break;
+				case RangeType::First:
+					indexRange.setRange(0, d->rangeFirstValues - 1);
+					break;
+				}
+			}
+			DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
+
+			curve->minMax(dim, indexRange, range, true);
+
+			if (range.start() < d->dataRange(dim, index).start())
+				d->dataRange(dim, index).start() = range.start();
+
+			if (range.end() > d->dataRange(dim, index).end())
+				d->dataRange(dim, index).end() = range.end();
+			DEBUG(Q_FUNC_INFO << ", curves range i = " << d->dataRange(dim, index).toStdString(false))
+
+		} else {
+			const double min = plot->minimum(dim);
+			if (d->dataRange(dim, index).start() > min)
+				d->dataRange(dim, index).start() = min;
+
+			const double max = plot->maximum(dim);
+			if (max > d->dataRange(dim, index).end())
+				d->dataRange(dim, index).end() = max;
 		}
-		DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
-
-		curve->minMax(dim, indexRange, range, true);
-
-		if (range.start() < d->dataRange(dim, index).start())
-			d->dataRange(dim, index).start() = range.start();
-
-		if (range.end() > d->dataRange(dim, index).end())
-			d->dataRange(dim, index).end() = range.end();
-		DEBUG(Q_FUNC_INFO << ", curves range i = " << d->dataRange(dim, index).toStdString(false))
-	}
-
-	// loop over all histograms and determine the maximum and minimum x-value
-	for (const auto* curve : this->children<const Histogram>()) {
-		if (!curve->isVisible() || !curve->dataColumn())
-			continue;
-
-		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
-			continue;
-
-		const double min = curve->minimum(dim);
-		if (d->dataRange(dim, index).start() > min)
-			d->dataRange(dim, index).start() = min;
-
-		const double max = curve->maximum(dim);
-		if (max > d->dataRange(dim, index).end())
-			d->dataRange(dim, index).end() = max;
-	}
-
-	// loop over all box plots and determine the maximum and minimum x-values
-	for (const auto* curve : this->children<const BoxPlot>()) {
-		if (!curve->isVisible() || curve->dataColumns().isEmpty())
-			continue;
-
-		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
-			continue;
-
-		const double min = curve->minimum(dim);
-		if (d->dataRange(dim, index).start() > min)
-			d->dataRange(dim, index).start() = min;
-
-		const double max = curve->maximum(dim);
-		if (max > d->dataRange(dim, index).end())
-			d->dataRange(dim, index).end() = max;
-	}
-
-	// loop over all bar plots and determine the maximum and minimum x-values
-	for (const auto* curve : this->children<const BarPlot>()) {
-		if (!curve->isVisible() || curve->dataColumns().isEmpty())
-			continue;
-
-		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
-			continue;
-
-		const double min = curve->minimum(dim);
-		if (d->dataRange(dim, index).start() > min)
-			d->dataRange(dim, index).start() = min;
-
-		const double max = curve->maximum(dim);
-		if (max > d->dataRange(dim, index).end())
-			d->dataRange(dim, index).end() = max;
-	}
-
-	// loop over all lollipop plots and determine the maximum and minimum x-values
-	for (const auto* curve : this->children<const LollipopPlot>()) {
-		if (!curve->isVisible() || curve->dataColumns().isEmpty())
-			continue;
-
-		if (coordinateSystem(curve->coordinateSystemIndex())->index(dim) != index)
-			continue;
-
-		const double min = curve->minimum(dim);
-		if (d->dataRange(dim, index).start() > min)
-			d->dataRange(dim, index).start() = min;
-
-		const double max = curve->maximum(dim);
-		if (max > d->dataRange(dim, index).end())
-			d->dataRange(dim, index).end() = max;
 	}
 
 	// data range is used to nice extend, so set correct scale

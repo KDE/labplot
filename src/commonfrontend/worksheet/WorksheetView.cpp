@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2018 Stefan-Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -280,7 +280,16 @@ void WorksheetView::initActions() {
 	plotsLockedAction->setChecked(m_worksheet->plotsLocked());
 	connect(plotsLockedAction, &QAction::triggered, this, &WorksheetView::plotsLockedActionChanged);
 
-	// action for cartesian plots
+	// actions for cartesian plots
+
+	// "add new"-action shown in the context menu
+	cartesianPlotAddNewAction = new QAction(QIcon::fromTheme(QStringLiteral("list-add")), i18n("Add New"), this);
+
+	// "add new"- toolbutton shown in the toolbar
+	tbCartesianPlotAddNew = new QToolButton(this);
+	tbCartesianPlotAddNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+	tbCartesianPlotAddNew->setPopupMode(QToolButton::InstantPopup);
+
 	auto* cartesianPlotActionModeActionGroup = new QActionGroup(this);
 	cartesianPlotActionModeActionGroup->setExclusive(true);
 	cartesianPlotApplyToSelectionAction = new QAction(i18n("Selected Plot Areas"), cartesianPlotActionModeActionGroup);
@@ -336,82 +345,6 @@ void WorksheetView::initActions() {
 	cartesianPlotCursorModeAction->setCheckable(true);
 
 	connect(plotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotMouseModeChanged);
-
-	auto* cartesianPlotAddNewActionGroup = new QActionGroup(this);
-	addCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-Curve"), cartesianPlotAddNewActionGroup);
-	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), cartesianPlotAddNewActionGroup);
-	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), cartesianPlotAddNewActionGroup);
-	addEquationCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-Curve from a Formula"), cartesianPlotAddNewActionGroup);
-	// TODO: no own icons yet
-	addDataOperationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Operation"), cartesianPlotAddNewActionGroup);
-	//	addDataOperationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-operation-curve")), i18n("Data Operation"),
-	// cartesianPlotAddNewActionGroup);
-	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), cartesianPlotAddNewActionGroup);
-	//	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve")), i18n("Data Reduction"),
-	// cartesianPlotAddNewActionGroup);
-	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
-	//	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-differentiation-curve")), i18n("Differentiation"),
-	// cartesianPlotAddNewActionGroup);
-	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), cartesianPlotAddNewActionGroup);
-	//	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-integration-curve")), i18n("Integration"),
-	// cartesianPlotAddNewActionGroup);
-	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("(De-)Convolution"), cartesianPlotAddNewActionGroup);
-	//	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("(De-)Convolution"),
-	// cartesianPlotAddNewActionGroup);
-	addCorrelationCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto/Cross Correlation"), cartesianPlotAddNewActionGroup);
-	//	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("Auto/Cross Correlation"),
-	// cartesianPlotAddNewActionGroup);
-	addInterpolationCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
-	addSmoothCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), cartesianPlotAddNewActionGroup);
-	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit"), cartesianPlotAddNewActionGroup);
-	addFourierFilterCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), cartesianPlotAddNewActionGroup);
-	addFourierTransformCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), cartesianPlotAddNewActionGroup);
-	addLegendAction = new QAction(QIcon::fromTheme(QStringLiteral("text-field")), i18n("Legend"), cartesianPlotAddNewActionGroup);
-	addHorizontalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal Axis"), cartesianPlotAddNewActionGroup);
-	addVerticalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical Axis"), cartesianPlotAddNewActionGroup);
-	addPlotTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), cartesianPlotAddNewActionGroup);
-	addPlotImageAction = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), cartesianPlotAddNewActionGroup);
-	addCustomPointAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-cross")), i18n("Custom Point"), cartesianPlotAddNewActionGroup);
-
-	// Analysis menu
-	// TODO: no own icons yet
-	addDataOperationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Operation"), cartesianPlotAddNewActionGroup);
-	//	addDataOperationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-operation-curve")), i18n("Data Operation"),
-	// cartesianPlotAddNewActionGroup);
-	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), cartesianPlotAddNewActionGroup);
-	//	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve")), i18n("Data Reduction"),
-	// cartesianPlotAddNewActionGroup);
-	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
-	//	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-differentiation-curve")), i18n("Differentiation"),
-	// cartesianPlotAddNewActionGroup);
-	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), cartesianPlotAddNewActionGroup);
-	//	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-integration-curve")), i18n("Integration"),
-	// cartesianPlotAddNewActionGroup);
-	addConvolutionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolution/Deconvolution"), cartesianPlotAddNewActionGroup);
-	//	addConvolutionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("Convolution/Deconvolution"),
-	// cartesianPlotAddNewActionGroup);
-	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto/Cross Correlation"), cartesianPlotAddNewActionGroup);
-	//	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-correlation-curve")), i18n("Auto/Cross Correlation"),
-	// cartesianPlotAddNewActionGroup);
-	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), cartesianPlotAddNewActionGroup);
-	//	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-hilbert-curve")), i18n("Hilbert Transform"),
-	// cartesianPlotAddNewActionGroup);
-
-	addInterpolationAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
-	addSmoothAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), cartesianPlotAddNewActionGroup);
-	addFitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit"), cartesianPlotAddNewActionGroup);
-	addFourierFilterAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), cartesianPlotAddNewActionGroup);
-	addFourierTransformAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), cartesianPlotAddNewActionGroup);
-
-	connect(cartesianPlotAddNewActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotAddNew);
 
 	auto* cartesianPlotNavigationGroup = new QActionGroup(this);
 	scaleAutoAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-all")), i18n("Auto Scale"), cartesianPlotNavigationGroup);
@@ -551,44 +484,6 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotCursorModeAction);
 	m_cartesianPlotMouseModeMenu->addSeparator();
 
-	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add New"), this);
-	m_cartesianPlotAddNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
-	m_cartesianPlotAddNewMenu->addAction(addHistogramAction);
-	m_cartesianPlotAddNewMenu->addAction(addBoxPlotAction);
-	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
-	m_cartesianPlotAddNewMenu->addSeparator();
-
-	m_cartesianPlotAddNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addFitCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addSeparator();
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addDifferentiationCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addIntegrationCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addSeparator();
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addInterpolationCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addSmoothCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addSeparator();
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addFourierFilterCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addFourierTransformCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addSeparator();
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addConvolutionCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addCorrelationCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addSeparator();
-	// 	m_cartesianPlotAddNewAnalysisMenu->addAction(addDataOperationCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addDataReductionCurveAction);
-	m_cartesianPlotAddNewMenu->addMenu(m_cartesianPlotAddNewAnalysisMenu);
-
-	m_cartesianPlotAddNewMenu->addSeparator();
-	m_cartesianPlotAddNewMenu->addAction(addLegendAction);
-	m_cartesianPlotAddNewMenu->addSeparator();
-	m_cartesianPlotAddNewMenu->addAction(addHorizontalAxisAction);
-	m_cartesianPlotAddNewMenu->addAction(addVerticalAxisAction);
-	m_cartesianPlotAddNewMenu->addSeparator();
-	m_cartesianPlotAddNewMenu->addAction(addPlotTextLabelAction);
-	m_cartesianPlotAddNewMenu->addAction(addPlotImageAction);
-	m_cartesianPlotAddNewMenu->addSeparator();
-	m_cartesianPlotAddNewMenu->addAction(addCustomPointAction);
-
 	m_cartesianPlotZoomMenu = new QMenu(i18n("Zoom/Navigate"), this);
 	m_cartesianPlotZoomMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-draw")));
 	m_cartesianPlotZoomMenu->addAction(scaleAutoAction);
@@ -622,19 +517,13 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToSelectionCursor);
 	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToAllCursor);
 
-	m_cartesianPlotMenu->addMenu(m_cartesianPlotAddNewMenu);
+	m_cartesianPlotMenu->addAction(cartesianPlotAddNewAction);
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotMouseModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotZoomMenu);
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotCursorModeMenu);
-
-	// Data manipulation menu
-	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation"), this);
-	m_dataManipulationMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-draw")));
-	m_dataManipulationMenu->addAction(addDataOperationAction);
-	m_dataManipulationMenu->addAction(addDataReductionAction);
 
 	// themes menu
 	m_themeMenu = new QMenu(i18n("Theme"), this);
@@ -695,33 +584,6 @@ void WorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 }
 
-void WorksheetView::createAnalysisMenu(QMenu* menu) {
-	Q_ASSERT(menu != nullptr);
-
-	if (!m_menusInitialized)
-		initMenus();
-
-	// Data manipulation menu
-	// 	menu->insertMenu(nullptr, m_dataManipulationMenu);
-
-	menu->addAction(addFitAction);
-	menu->addSeparator();
-	menu->addAction(addDifferentiationAction);
-	menu->addAction(addIntegrationAction);
-	menu->addSeparator();
-	menu->addAction(addInterpolationAction);
-	menu->addAction(addSmoothAction);
-	menu->addSeparator();
-	menu->addAction(addFourierFilterAction);
-	menu->addAction(addFourierTransformAction);
-	menu->addAction(addHilbertTransformAction);
-	menu->addSeparator();
-	menu->addAction(addConvolutionAction);
-	menu->addAction(addCorrelationAction);
-	menu->addSeparator();
-	menu->addAction(addDataReductionAction);
-}
-
 void WorksheetView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addSeparator();
 	tbNewCartesianPlot = new QToolButton(toolBar);
@@ -766,36 +628,14 @@ void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar) {
 #endif
 
 void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
+	toolBar->addWidget(tbCartesianPlotAddNew);
+	toolBar->addSeparator();
 	toolBar->addAction(cartesianPlotSelectionModeAction);
 	toolBar->addAction(cartesianPlotCrosshairModeAction);
 	toolBar->addAction(cartesianPlotZoomSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomXSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
 	toolBar->addAction(cartesianPlotCursorModeAction);
-	toolBar->addSeparator();
-	toolBar->addAction(addCurveAction);
-	toolBar->addAction(addHistogramAction);
-	toolBar->addAction(addEquationCurveAction);
-	// don't over-populate the tool bar
-	//	toolBar->addAction(addDifferentiationCurveAction);
-	//	toolBar->addAction(addIntegrationCurveAction);
-	//	toolBar->addAction(addDataOperationCurveAction);
-	//	toolBar->addAction(addDataReductionCurveAction);
-	//	toolBar->addAction(addInterpolationCurveAction);
-	//	toolBar->addAction(addSmoothCurveAction);
-	//	toolBar->addAction(addFitCurveAction);
-	//	toolBar->addAction(addFourierFilterCurveAction);
-	//	toolBar->addAction(addFourierTransformCurveAction);
-	//	toolBar->addAction(addConvolutionCurveAction);
-	//	toolBar->addAction(addCorrelationCurveAction);
-	toolBar->addSeparator();
-	toolBar->addAction(addLegendAction);
-	toolBar->addSeparator();
-	toolBar->addAction(addHorizontalAxisAction);
-	toolBar->addAction(addVerticalAxisAction);
-	toolBar->addSeparator();
-	toolBar->addAction(addPlotTextLabelAction);
-	toolBar->addAction(addPlotImageAction);
 	toolBar->addSeparator();
 	toolBar->addAction(scaleAutoAction);
 	toolBar->addAction(scaleAutoXAction);
@@ -1866,7 +1706,10 @@ void WorksheetView::selectionChanged() {
 	handleCartesianPlotActions();
 }
 
-void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot) {
+void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
+	tbCartesianPlotAddNew->setMenu(plot->addNewMenu()); // update the tool button shown in the toolbar
+	cartesianPlotAddNewAction->setMenu(plot->addNewMenu()); // update the action shown in the main menu
+
 	/* Action to All: action is applied to all ranges
 	 *	- Applied to all plots and all ranges
 	 * Action to X: action is applied to all x ranges
@@ -2282,25 +2125,10 @@ void WorksheetView::handleCartesianPlotActions() {
 		scaleAutoYAction->setEnabled(false);
 	}
 
-	m_cartesianPlotAddNewMenu->setEnabled(plot);
+	tbCartesianPlotAddNew->setEnabled(plot);
+	cartesianPlotAddNewAction->setEnabled(plot);
 	m_cartesianPlotZoomMenu->setEnabled(m_selectedElement);
 	m_cartesianPlotMouseModeMenu->setEnabled(plot);
-
-	// analysis menu
-	// TODO: enable also if children of plots are selected
-	// 	m_dataManipulationMenu->setEnabled(plot);
-	// 	addDataOperationAction->setEnabled(false);
-	addDataReductionAction->setEnabled(false);
-	addDifferentiationAction->setEnabled(plot);
-	addIntegrationAction->setEnabled(plot);
-	addInterpolationAction->setEnabled(plot);
-	addSmoothAction->setEnabled(plot);
-	addFitAction->setEnabled(plot);
-	addFourierFilterAction->setEnabled(plot);
-	addFourierTransformAction->setEnabled(plot);
-	addHilbertTransformAction->setEnabled(plot);
-	addConvolutionAction->setEnabled(plot);
-	addCorrelationAction->setEnabled(plot);
 }
 
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
@@ -2631,57 +2459,6 @@ void WorksheetView::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode m
 	m_suppressMouseModeChange = false;
 }
 
-void WorksheetView::cartesianPlotAddNew(QAction* action) {
-	const auto& plots = m_worksheet->children<CartesianPlot>();
-	if (m_worksheet->cartesianPlotActionMode() == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
-		int selectedPlots = 0;
-		for (auto* plot : plots) {
-			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
-				++selectedPlots;
-			else {
-				// current plot is not selected, check if one of its children is selected
-				const auto& children = plot->children<WorksheetElement>();
-				for (auto* child : children) {
-					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
-						++selectedPlots;
-						break;
-					}
-				}
-			}
-		}
-
-		if (selectedPlots > 1)
-			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), selectedPlots));
-
-		for (auto* plot : plots) {
-			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
-				this->cartesianPlotAdd(plot, action);
-			else {
-				// current plot is not selected, check if one of its children is selected
-				const auto& children = plot->children<WorksheetElement>();
-				for (auto* child : children) {
-					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
-						this->cartesianPlotAdd(plot, action);
-						break;
-					}
-				}
-			}
-		}
-
-		if (selectedPlots > 1)
-			m_worksheet->endMacro();
-	} else {
-		if (plots.size() > 1)
-			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), plots.size()));
-
-		for (auto* plot : plots)
-			this->cartesianPlotAdd(plot, action);
-
-		if (plots.size() > 1)
-			m_worksheet->endMacro();
-	}
-}
-
 void WorksheetView::childContextMenuRequested(AspectType t, QMenu* menu) {
 	if (!menu)
 		return;
@@ -2691,73 +2468,6 @@ void WorksheetView::childContextMenuRequested(AspectType t, QMenu* menu) {
 		menu->insertMenu(menu->actions().at(2), m_cartesianPlotZoomMenu);
 	}
 	menu->exec(QCursor::pos());
-}
-
-void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
-	DEBUG("WorksheetView::cartesianPlotAdd()");
-	if (action == addCurveAction)
-		plot->addCurve();
-	else if (action == addHistogramAction)
-		plot->addHistogram();
-	else if (action == addBoxPlotAction)
-		plot->addBoxPlot();
-	else if (action == addEquationCurveAction)
-		plot->addEquationCurve();
-	else if (action == addDataReductionCurveAction)
-		plot->addDataReductionCurve();
-	else if (action == addDifferentiationCurveAction)
-		plot->addDifferentiationCurve();
-	else if (action == addIntegrationCurveAction)
-		plot->addIntegrationCurve();
-	else if (action == addInterpolationCurveAction)
-		plot->addInterpolationCurve();
-	else if (action == addSmoothCurveAction)
-		plot->addSmoothCurve();
-	else if (action == addFitCurveAction)
-		plot->addFitCurve();
-	else if (action == addFourierFilterCurveAction)
-		plot->addFourierFilterCurve();
-	else if (action == addFourierTransformCurveAction)
-		plot->addFourierTransformCurve();
-	else if (action == addConvolutionCurveAction)
-		plot->addConvolutionCurve();
-	else if (action == addCorrelationCurveAction)
-		plot->addCorrelationCurve();
-	else if (action == addLegendAction)
-		plot->addLegend();
-	else if (action == addHorizontalAxisAction)
-		plot->addHorizontalAxis();
-	else if (action == addVerticalAxisAction)
-		plot->addVerticalAxis();
-	else if (action == addPlotTextLabelAction)
-		plot->addTextLabel();
-	else if (action == addPlotImageAction)
-		plot->addImage();
-	else if (action == addCustomPointAction)
-		plot->addCustomPoint();
-	// analysis actions
-	else if (action == addDataReductionAction)
-		plot->addDataReductionCurve();
-	else if (action == addDifferentiationAction)
-		plot->addDifferentiationCurve();
-	else if (action == addIntegrationAction)
-		plot->addIntegrationCurve();
-	else if (action == addInterpolationAction)
-		plot->addInterpolationCurve();
-	else if (action == addSmoothAction)
-		plot->addSmoothCurve();
-	else if (action == addFitAction)
-		plot->addFitCurve();
-	else if (action == addFourierFilterAction)
-		plot->addFourierFilterCurve();
-	else if (action == addFourierTransformAction)
-		plot->addFourierTransformCurve();
-	else if (action == addHilbertTransformAction)
-		plot->addHilbertTransformCurve();
-	else if (action == addConvolutionAction)
-		plot->addConvolutionCurve();
-	else if (action == addCorrelationAction)
-		plot->addCorrelationCurve();
 }
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {

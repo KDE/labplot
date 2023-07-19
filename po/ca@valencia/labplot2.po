@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-12 00:42+0000\n"
-"PO-Revision-Date: 2023-06-30 11:05+0200\n"
+"POT-Creation-Date: 2023-07-19 00:45+0000\n"
+"PO-Revision-Date: 2023-07-17 12:27+0300\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -64,7 +64,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1154
+#: src/backend/note/Note.cpp:166 src/backend/spreadsheet/Spreadsheet.cpp:1154
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -5554,13 +5554,36 @@ msgstr "%1: emmiralla horitzontalment"
 msgid "%1: mirror vertically"
 msgstr "%1: emmiralla verticalment"
 
-#: src/backend/note/Note.cpp:43 src/backend/worksheet/Worksheet.cpp:224
+#: src/backend/note/Note.cpp:46
 #, kde-format
 msgctxt "@title:window"
-msgid "Print Worksheet"
-msgstr "Imprimix el full de treball"
+msgid "Print Note"
+msgstr "Imprimix la nota"
 
-#: src/backend/note/Note.cpp:130
+#: src/backend/note/Note.cpp:64
+#, kde-format
+msgid "Text file (*.txt)"
+msgstr "Fitxer de text (*.txt)"
+
+#: src/backend/note/Note.cpp:66
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
+#, kde-format
+msgctxt "@title:window"
+msgid "Export to File"
+msgstr "Exporta cap a un fitxer"
+
+#: src/backend/note/Note.cpp:80
+#, kde-format
+msgid "Export failed"
+msgstr "L'exportació ha fallat"
+
+#: src/backend/note/Note.cpp:80
+#, kde-format
+msgid "Failed to open '%1' for writing."
+msgstr "No s'ha pogut obrir «%1» per a escriptura."
+
+#: src/backend/note/Note.cpp:159
 #, kde-format
 msgid "no note element found"
 msgstr "no s'ha trobat cap element de nota"
@@ -8745,6 +8768,12 @@ msgstr "%1: establix la forma de la vora"
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: establix la vora"
+
+#: src/backend/worksheet/Worksheet.cpp:224
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Worksheet"
+msgstr "Imprimix el full de treball"
 
 #: src/backend/worksheet/Worksheet.cpp:626
 #, kde-format
@@ -14032,7 +14061,7 @@ msgstr "Configuració regional: "
 #: src/kdefrontend/LabPlot.cpp:72
 #, kde-format
 msgid "Number settings:"
-msgstr "Configureu dels nombres:"
+msgstr "Configureu els nombres:"
 
 #: src/kdefrontend/LabPlot.cpp:72
 #, kde-format
@@ -15513,13 +15542,6 @@ msgid ""
 msgstr ""
 "Fitxers de base de dades SQLite (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 "
 "*.db3 *.sqlite3 *.sdb3)"
-
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
-#, kde-format
-msgctxt "@title:window"
-msgid "Export to File"
-msgstr "Exporta cap a un fitxer"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
 #, kde-format

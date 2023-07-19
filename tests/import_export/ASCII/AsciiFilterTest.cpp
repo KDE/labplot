@@ -15,10 +15,8 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 // ##############################################################################
 // #################  handling of empty and sparse files ########################

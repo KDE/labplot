@@ -226,6 +226,14 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QVERIFY(plot2);
 	QCOMPARE(plot2->name(), QLatin1String("plot2"));
 
+	QCOMPARE(plot->childCount<XYCurve>(), 3);
+	QCOMPARE(plot->child<XYCurve>(0)->name(), QStringLiteral("sin"));
+	QCOMPARE(plot->child<XYCurve>(0)->coordinateSystemIndex(), 0);
+	QCOMPARE(plot->child<XYCurve>(1)->name(), QStringLiteral("cos"));
+	QCOMPARE(plot->child<XYCurve>(1)->coordinateSystemIndex(), 0);
+	QCOMPARE(plot->child<XYCurve>(2)->name(), QStringLiteral("tan"));
+	QCOMPARE(plot->child<XYCurve>(2)->coordinateSystemIndex(), 1);
+
 	QAction a(nullptr);
 	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
 	view->cartesianPlotMouseModeChanged(&a);
@@ -641,7 +649,7 @@ void RetransformTest::TestAddCurve() {
 
 	RetransformCallCounter c;
 
-	p->addEquationCurve();
+	p->addChild(new XYEquationCurve(QLatin1String("curve")));
 
 	// check that plot will be recalculated if a curve will be added
 	QCOMPARE(c.callCount(p), 1);
@@ -677,8 +685,9 @@ void RetransformTest::TestAddCurve() {
 	auto list =
 		QStringList({QStringLiteral("Project/Worksheet/plot/x"), QStringLiteral("Project/Worksheet/plot/y"), QStringLiteral("Project/Worksheet/plot/f(x)")});
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
-		QCOMPARE(c.callCount(s), 1);
+	QCOMPARE(c.callCount(list.at(0)), 1);
+	QCOMPARE(c.callCount(list.at(1)), 1);
+	QCOMPARE(c.callCount(list.at(2)), 0);
 
 	// x and y are called only once
 	QCOMPARE(c.logsXScaleRetransformed.count(), 1);

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-12 00:42+0000\n"
-"PO-Revision-Date: 2023-06-23 07:44+0200\n"
+"POT-Creation-Date: 2023-07-19 00:45+0000\n"
+"PO-Revision-Date: 2023-07-17 07:02+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -63,7 +63,7 @@ msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:137 src/backend/spreadsheet/Spreadsheet.cpp:1154
+#: src/backend/note/Note.cpp:166 src/backend/spreadsheet/Spreadsheet.cpp:1154
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
@@ -5501,13 +5501,36 @@ msgstr "%1: zrcaljenje vodoravno"
 msgid "%1: mirror vertically"
 msgstr "%1: zrcaljenje navpično"
 
-#: src/backend/note/Note.cpp:43 src/backend/worksheet/Worksheet.cpp:224
+#: src/backend/note/Note.cpp:46
 #, kde-format
 msgctxt "@title:window"
-msgid "Print Worksheet"
-msgstr "Natisni delovni list"
+msgid "Print Note"
+msgstr "Natisni opombo"
 
-#: src/backend/note/Note.cpp:130
+#: src/backend/note/Note.cpp:64
+#, kde-format
+msgid "Text file (*.txt)"
+msgstr "Besedilna datoteka (*.txt)"
+
+#: src/backend/note/Note.cpp:66
+#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
+#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
+#, kde-format
+msgctxt "@title:window"
+msgid "Export to File"
+msgstr "Izvozi v datoteko"
+
+#: src/backend/note/Note.cpp:80
+#, kde-format
+msgid "Export failed"
+msgstr "Izvozi ni uspel"
+
+#: src/backend/note/Note.cpp:80
+#, kde-format
+msgid "Failed to open '%1' for writing."
+msgstr "Datoteke '%1' ni bilo mogoče odpreti za pisanje."
+
+#: src/backend/note/Note.cpp:159
 #, kde-format
 msgid "no note element found"
 msgstr "ni najdenega elementa opombe"
@@ -8686,6 +8709,12 @@ msgstr "%1: nastavit obliko obrobe"
 #, kde-format
 msgid "%1: set border"
 msgstr "%1: določite obrobo"
+
+#: src/backend/worksheet/Worksheet.cpp:224
+#, kde-format
+msgctxt "@title:window"
+msgid "Print Worksheet"
+msgstr "Natisni delovni list"
 
 #: src/backend/worksheet/Worksheet.cpp:626
 #, kde-format
@@ -15420,13 +15449,6 @@ msgid ""
 msgstr ""
 "Datoteke zbirk podatkov SQLite (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *."
 "db3 *.sqlite3 *.sdb3)"
-
-#: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
-#: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:285
-#, kde-format
-msgctxt "@title:window"
-msgid "Export to File"
-msgstr "Izvozi v datoteko"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
 #, kde-format

@@ -28,9 +28,7 @@
 #include <QElapsedTimer>
 #endif
 
-extern "C" {
 #include "backend/gsl/parser.h"
-}
 #include <cmath>
 
 /*!
