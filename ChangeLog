@@ -7,6 +7,8 @@ New features:
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
+Internal:
+	* Reduce code duplication caused by multiple plot types (Issue #540)
 
 -----2.10.1 () -----
 Bug fixes:
