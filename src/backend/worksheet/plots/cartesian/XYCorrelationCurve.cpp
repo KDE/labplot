@@ -26,9 +26,7 @@
 #include <QIcon>
 #include <QThreadPool>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 XYCorrelationCurve::XYCorrelationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYCorrelationCurvePrivate(this), AspectType::XYCorrelationCurve) {

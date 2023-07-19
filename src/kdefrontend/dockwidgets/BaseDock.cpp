@@ -15,9 +15,7 @@
 #include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
 
 #include <KConfigGroup>
 #include <KLocalizedString>

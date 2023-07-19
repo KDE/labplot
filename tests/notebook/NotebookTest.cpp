@@ -12,9 +12,7 @@
 #include "backend/cantorWorksheet/VariableParser.h"
 #include "backend/core/AbstractColumn.h"
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 void NotebookTest::initTestCase() {
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");

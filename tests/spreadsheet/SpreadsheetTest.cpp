@@ -32,9 +32,7 @@
 #include <QRandomGenerator>
 #endif
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 //**********************************************************
 //****************** Copy&Paste tests **********************
