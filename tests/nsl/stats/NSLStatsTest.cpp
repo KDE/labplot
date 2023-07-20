@@ -9,10 +9,7 @@
 */
 
 #include "NSLStatsTest.h"
-
-extern "C" {
 #include "backend/nsl/nsl_stats.h"
-}
 
 // ##############################################################################
 // #################  Quantile test

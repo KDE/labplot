@@ -77,7 +77,7 @@
     <p xml:lang="eu">LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.</p>
     <p xml:lang="fi">LabPlot on VAPAA, kaikkien käytettävissä oleva, avointa lähdekoodia ja monialustainen tiedon visualisointi- ja analyysiohjelma.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
-    <p xml:lang="ia">LabPlot es un software LIBERE, a fonte aperite e inter-plattefoirma per Visualisation e Analyse de datos accessibile a omnes.</p>
+    <p xml:lang="ia">LabPlot es un software LIBERE e gratuite, a fonte aperite e inter-platteforma per Visualisation e Analyse de datos accessibile a omnes.</p>
     <p xml:lang="id">LabPlot adalah perangkat lunak Analisis dan Visualisasi Data open source dan lintas platform GRATIS yang bisa diakses oleh semua orang.</p>
     <p xml:lang="it">LabPlot è un software GRATUITO, open source e multi piattaforma per la visualizzazione e per l'analisi dei dati accessibile da chiunque.</p>
     <p xml:lang="ka">Labplot-ი ყველასთვის ხელმისაწვდომი, უფასო, ღია კოდის და პლატფორმათაშორისი, მონაცემების ვიზუალიზაციისა და ანალიზის პროგრამაა.</p>
@@ -108,6 +108,7 @@
     <p xml:lang="fi">LabPlot tarjoaa helpon tavan luoda, hallita ja muokata kaavioita. Voit tuottaa kaavioita laskentataulukon tai muiden ulkoisten tiedostojen datasta. Kaavioita voi viedä eri bittikartta- ja vektorigrafiikkamuotoihin.</p>
     <p xml:lang="fr">LabPlot fournit une moyen facile de créer, gérer et éditer des courbes. Il vous permet de produire des courbes produites à partir de données issues d'un tableur ou d'un fichier externe. Les courbes peuvent être exportées vers plusieurs format d'image matriciels ou vectoriels.</p>
     <p xml:lang="gl">LabPlot fornece unha forma doada de crear, xestionar e editar gráficos. Permítelle producir gráficos baseados en datos dunha folla de cálculo ou datos importados de ficheiros externos. Pode exportar os gráficos en distintos formatos de imaxe, de mapas de píxeles ou vectoriais.</p>
+    <p xml:lang="ia">Labplot forni un modo facile per crear, gerer e modificar tracias (plots). Illo te permitte producer tracias basate sur datos ab un folio electronic o sur datos importate ex files externe. Tracias pote esser exportate a multe formatos de pixmap e vector graphic.</p>
     <p xml:lang="id">LabPlot menyediakan cara mudah untuk menciptakan, mengelola, dan mengedit plot. Ini memungkinkan kamu menghasilkan plot berdasarkan data dari lembar kerja atau data yang diimpor dari file eksternal. Plot bisa diekspor ke beberapa format grafik pixmap dan vector.</p>
     <p xml:lang="it">LabPlot fornisce una modalità semplice per creare, gestire e modificare i grafici. Ti permette di generare grafici basati sui dati di un foglio elettronico, oppure importati da file esterni. I grafici possono essere esportati in diverse immagini e in diversi formati grafici vettoriali.</p>
     <p xml:lang="ka">LabPlot გთავაზობთ მარტივ გზას ნახაზების შესაქმნელად, მართვისა და რედაქტირებისთვის. ის საშუალებას გაძლევთ შექმნათ ნახაზები ელცხრილიდან ან გარე ფაილებიდან იმპორტირებულ მონაცემებზე დაყრდნობით. ნაკვეთების ექსპორტი შესაძლებელია რამდენიმე pixmap და ვექტორული გრაფიკის ფორმატში.</p>
@@ -198,6 +199,7 @@
       <caption xml:lang="eu">Irudien eta trazuen antolamendu aurreratua</caption>
       <caption xml:lang="fi">Kaavioiden ja kuvioiden edistynyt asettelu</caption>
       <caption xml:lang="fr">Mise en forme avancée de tracés et d'images</caption>
+      <caption xml:lang="ia">Dispositionar avantiate de tracias (plots) e imagines</caption>
       <caption xml:lang="id">Tata letak plot dan gambar tingkat lanjut</caption>
       <caption xml:lang="it">Tracciamento avanzato di grafici e immagini</caption>
       <caption xml:lang="ka">ნახაზებისა და გამოსახულებების დამატებითი დალაგება</caption>
@@ -226,6 +228,7 @@
       <caption xml:lang="eu">Gaiak aldatzea</caption>
       <caption xml:lang="fi">Teemoitus</caption>
       <caption xml:lang="fr">Application de thèmes</caption>
+      <caption xml:lang="ia">Facer Themas</caption>
       <caption xml:lang="id">Penemaan</caption>
       <caption xml:lang="it">Temi</caption>
       <caption xml:lang="ka">თემები</caption>
@@ -281,6 +284,7 @@
       <caption xml:lang="eu">Datuei aurrez definitutako edo neurrira egindako ereduak egokitu</caption>
       <caption xml:lang="fi">Sovita tietoon ennalta-asetettuja ja mukautettuja malleja</caption>
       <caption xml:lang="fr">Ajuster des modèles prédéfinis ou personnalisés aux données</caption>
+      <caption xml:lang="ia">Adapta modellos predefinite o personalisat al datos</caption>
       <caption xml:lang="id">Mengepaskan model kustom atau yang telah ditentukan sebelumnya ke data</caption>
       <caption xml:lang="it">Adatta modelli predefiniti o personalizzati ai dati</caption>
       <caption xml:lang="ka">წინასწარ განსაზღვრული და ხელით მითითებული მოდელების მონაცემებში ჩატევა</caption>
@@ -307,6 +311,7 @@
       <caption xml:lang="eu">Datuak leundu, leuntzeko hainbat metodoen laguntzarekin</caption>
       <caption xml:lang="fi">Tasoita tietoja eri tasoitusmenetelmillä</caption>
       <caption xml:lang="fr">Lisser les données grâce aux différentes méthodes de lissage</caption>
+      <caption xml:lang="ia">Lisia le datos con le adjuta de varie metodos de lisiar</caption>
       <caption xml:lang="id">Menghaluskan data dengan bantuan berbagai metode penghalusan</caption>
       <caption xml:lang="it">Smussa i dati per mezzo di diversi metodi di smussatura</caption>
       <caption xml:lang="ka">მონაცემების მოგლუვება სხვადასხვა მეთოდებით</caption>
@@ -333,6 +338,7 @@
       <caption xml:lang="eu">Ohar-blokaren interfazea, Maxima, Octave, R, Sage, Scilab, Python, Julia, eta abarrekin saio elkarreragileak egiteko</caption>
       <caption xml:lang="fi">Muistiokäyttöliittymä vuorovaikutteisiin istuntoihin Maximassa, Octavessa, R:ssä, Sagessa, Scilabissa, Pythonissa, Juliassa jne.</caption>
       <caption xml:lang="fr">Interface pour ordinateur de type « Notebook » pour des sessions interactives pour Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="ia">Interfacie de Notebook per sessiones interactive in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="id">Antarmuka notebook untuk sesi interaktif di Maxima, Octave, R, Sage, Scilab, Python, Julia, dll</caption>
       <caption xml:lang="it">Interfaccia a taccuino per sessioni integrate in Maxima, Octave, R, Sage, Scilab, Python, Julia, eccetera</caption>
       <caption xml:lang="ka">წიგნაკის ინტერფეისი Maxima, Octave, R, Sage, Scilab, Python, Julia-ის და სხვების ინტერაქტიური სესიებისთვის</caption>
@@ -438,6 +444,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="2.10.1" date="2023-07-11"/>
     <release version="2.10.0" date="2023-03-21"/>
     <release version="2.9.0" date="2022-05-03"/>
     <release version="2.8.2" date="2021-04-01"/>

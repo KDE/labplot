@@ -18,9 +18,7 @@
 #include <QFutureWatcher>
 #include <QStaticText>
 
-extern "C" {
 #include <gsl/gsl_const_cgs.h>
-}
 
 class QGraphicsSceneHoverEvent;
 class CartesianPlot;

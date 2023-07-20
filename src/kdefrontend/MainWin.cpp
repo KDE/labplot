@@ -1109,7 +1109,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
 		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
@@ -1189,7 +1188,6 @@ void MainWin::updateGUI() {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
 		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
@@ -1238,14 +1236,6 @@ void MainWin::updateGUI() {
 		}
 		menu->setEnabled(true);
 
-		// populate analysis menu
-		menu = qobject_cast<QMenu*>(factory->container(QLatin1String("analysis"), this));
-		if (update) {
-			menu->clear();
-			view->createAnalysisMenu(menu);
-		}
-		menu->setEnabled(true);
-
 		// populate worksheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("worksheet_toolbar"), this));
 		if (update) {
@@ -1273,7 +1263,6 @@ void MainWin::updateGUI() {
 	} else {
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet_toolbar"), this)->setVisible(false);
-		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
 		//		factory->container(QLatin1String("drawing"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet_toolbar"), this)->setEnabled(false);
 		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->setEnabled(false);
@@ -1958,11 +1947,10 @@ void MainWin::updateTitleBar() {
 	prints the current sheet (worksheet, spreadsheet or matrix)
 */
 void MainWin::print() {
-	auto* win = m_DockManager->focusedDockWidget();
-	if (!win)
+	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(win)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
 	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
@@ -1971,11 +1959,10 @@ void MainWin::print() {
 }
 
 void MainWin::printPreview() {
-	auto* win = m_DockManager->focusedDockWidget();
-	if (!win)
+	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(win)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
 	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
@@ -2760,11 +2747,10 @@ void MainWin::importDatasetDialog() {
   opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
  */
 void MainWin::exportDialog() {
-	auto* win = m_DockManager->focusedDockWidget();
-	if (!win)
+	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(win)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
 	if (part->exportView())
 		statusBar()->showMessage(i18n("%1 exported", part->name()));
 }

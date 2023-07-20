@@ -211,6 +211,11 @@ double BarPlot::maximum(const Dimension dim) const {
 	return NAN;
 }
 
+bool BarPlot::hasData() const {
+	Q_D(const BarPlot);
+	return !d->dataColumns.isEmpty();
+}
+
 // values
 Value* BarPlot::value() const {
 	Q_D(const BarPlot);
@@ -253,6 +258,7 @@ void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 			// TODO: add disconnect in the undo-function
 
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::updateLegendRequested);
 		}
 	}
 }
@@ -788,7 +794,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			lines << QLineF(0, y + width, 0, y);
 			lines << QLineF(0, y, value, y);
 
-			m_valuesPointsLogical << QPointF(value, y - width / 2);
+			m_valuesPointsLogical << QPointF(value, y + width / 2);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -998,37 +1004,41 @@ void BarPlotPrivate::updateValues() {
 	case Value::Above:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesPoints << QPointF(pointsScene.at(i).x() - w / 2, pointsScene.at(i).y() - offset);
+				m_valuesPoints << QPointF(point.x() - w / 2, point.y() - offset);
 			else
-				m_valuesPoints << QPointF(pointsScene.at(i).x() + offset, pointsScene.at(i).y() - w / 2);
+				m_valuesPoints << QPointF(point.x(), point.y() - offset);
 		}
 		break;
 	case Value::Under:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesPoints << QPointF(pointsScene.at(i).x() - w / 2, pointsScene.at(i).y() + offset + h / 2);
+				m_valuesPoints << QPointF(point.x() - w / 2, point.y() + offset + h / 2);
 			else
-				m_valuesPoints << QPointF(pointsScene.at(i).x() - offset - h / 2, pointsScene.at(i).y() - w / 2);
+				m_valuesPoints << QPointF(point.x(), point.y() + offset + h / 2);
 		}
 		break;
 	case Value::Left:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesPoints << QPointF(pointsScene.at(i).x() - offset - w, pointsScene.at(i).y());
+				m_valuesPoints << QPointF(point.x() - offset - w, point.y());
 			else
-				m_valuesPoints << QPointF(pointsScene.at(i).x(), pointsScene.at(i).y() - offset - w);
+				m_valuesPoints << QPointF(point.x() - offset - w, point.y() + h / 2);
 		}
 		break;
 	case Value::Right:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesPoints << QPointF(pointsScene.at(i).x() + offset, pointsScene.at(i).y());
+				m_valuesPoints << QPointF(point.x() + offset, point.y());
 			else
-				m_valuesPoints << QPointF(pointsScene.at(i).x(), pointsScene.at(i).y() + offset);
+				m_valuesPoints << QPointF(point.x() + offset, point.y() + h / 2);
 		}
 		break;
 	}
@@ -1128,11 +1138,12 @@ void BarPlotPrivate::draw(QPainter* painter) {
 		for (const auto& barLines : columnBarLines) { // loop over the bars for every data column
 			// draw the box filling
 			if (columnIndex < backgrounds.size()) { // TODO: remove this check later
-				auto* background = backgrounds.at(columnIndex);
+				const auto* background = backgrounds.at(columnIndex);
 				if (background->enabled()) {
 					painter->setOpacity(background->opacity());
 					painter->setPen(Qt::NoPen);
-					drawFilling(painter, columnIndex, valueIndex);
+					const QPolygonF& polygon = m_fillPolygons.at(columnIndex).at(valueIndex);
+					drawFillingPollygon(polygon, painter, background);
 				}
 			}
 
@@ -1156,99 +1167,6 @@ void BarPlotPrivate::draw(QPainter* painter) {
 
 	// draw values
 	value->draw(painter, m_valuesPoints, m_valuesStrings);
-}
-
-void BarPlotPrivate::drawFilling(QPainter* painter, int columnIndex, int valueIndex) {
-	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-
-	const QPolygonF& polygon = m_fillPolygons.at(columnIndex).at(valueIndex);
-	const QRectF& rect = polygon.boundingRect();
-
-	const auto* background = backgrounds.at(columnIndex);
-
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (background->type() == Background::Type::Image) {
-		if (!background->fileName().trimmed().isEmpty()) {
-			QPixmap pix(background->fileName());
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Centered: {
-				QPixmap backpix(rect.size().toSize());
-				backpix.fill();
-				QPainter p(&backpix);
-				p.drawPixmap(QPointF(0, 0), pix);
-				p.end();
-				painter->setBrush(QBrush(backpix));
-				painter->setBrushOrigin(-pix.size().width() / 2, -pix.size().height() / 2);
-				break;
-			}
-			case Background::ImageStyle::Tiled:
-				painter->setBrush(QBrush(pix));
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern)
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-
-	painter->drawPolygon(polygon);
 }
 
 void BarPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {

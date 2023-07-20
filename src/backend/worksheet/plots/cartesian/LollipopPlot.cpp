@@ -200,6 +200,11 @@ double LollipopPlot::maximum(const Dimension dim) const {
 	return NAN;
 }
 
+bool LollipopPlot::hasData() const {
+	Q_D(const LollipopPlot);
+	return !d->dataColumns.isEmpty();
+}
+
 // values
 Value* LollipopPlot::value() const {
 	Q_D(const LollipopPlot);

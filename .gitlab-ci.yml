@@ -22,10 +22,10 @@ variables:
 # FreeBSD (Debug)
 # Ubuntu 22.04 min (Debug)
 # Ubuntu 22.04 full (Release)
-# Fedora 37 min (Debug)
-# Fedora 37 full (Release)
-# OS 15.4 min (Release)
-# OS 15.4 full (Debug)
+# Fedora 38 min (Debug)
+# Fedora 38 full (Release)
+# OS 15.5 min (Release)
+# OS 15.5 full (Debug)
 
 workflow:
   rules:
@@ -39,7 +39,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH
 
 # replaced default targets:
-# only changed "script" section
+# only changed "script" and added QT_QPA_PLATFORM
 windows_qt515:
   stage: build
   image: kdeorg/windows-msvc2019-qt515:latest
@@ -69,7 +69,7 @@ windows_qt515:
     reports:
       junit: JUnitTestResults.xml
 
-# only changed "script" section
+# only changed "script" and added QT_QPA_PLATFORM
 .freebsd_qt515:
   stage: build
   tags:
@@ -130,9 +130,9 @@ ubuntu_22.04_full:
 # 1 test fails: FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-fedora_37_min:
+fedora_38_min:
   stage: build
-  image: fedora:37
+  image: fedora:38
   only:
 #    - merge_requests
     - master
@@ -140,7 +140,9 @@ fedora_37_min:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build xorg-x11-server-Xvfb mesa-dri-drivers wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel zlib-devel qt5-qtbase-private-devel
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
+# readstat disabled until fixed for GCC 13
+# dbc_parser fails with GCC 13 atm (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
+    - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # FAIL!  : ParserTest::testLocale() Compared doubles are not the same (fuzzy compare)
 #   Actual   (parse(qPrintable(expr.first), "de_DE")): nan
@@ -148,9 +150,9 @@ fedora_37_min:
 # FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-fedora_37_full:
+fedora_38_full:
   stage: build
-  image: fedora:37
+  image: fedora:38
   only:
 #   - merge_requests
     - master
@@ -158,14 +160,16 @@ fedora_37_full:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build xorg-x11-server-Xvfb mesa-dri-drivers wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel kf5-kparts-devel kf5-syntax-highlighting-devel cantor-devel poppler-qt5-devel libspectre-devel liborigin-devel fftw3-devel netcdf-devel qt5-qtserialport-devel cfitsio-devel libcerf-devel lz4-devel matio-devel discount qt5-qtbase-private-devel
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
+# readstat disabled until fixed for GCC 13
+# dbc_parser fails with GCC 13 atm (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
+    - cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
-# see fedora_37_min
+# see fedora_38_min
 #    - xvfb-run ctest -T Test --output-on-failure
 
-leap_15.4_min:
+leap_15.5_min:
   stage: build
-  image: opensuse/leap:15.4
+  image: opensuse/leap:15.5
   only:
     - merge_requests
     - master
@@ -173,28 +177,32 @@ leap_15.4_min:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
 # Mesa-libEGL1 xvfb-run libwayland-egl1 for tests (not working)
-    - zypper in -y gsl-devel ninja libQt5Gui-private-headers-devel
+    - zypper in -y gsl-devel ninja libQt5Gui-private-headers-devel kdoctools-devel
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
+# readstat disabled until fixed for GCC 13
+# could not find git for clone of dbc_parser_cpp-populate (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
+    - cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
 
-leap_15.4_full:
+leap_15.5_full:
   stage: build
-  image: opensuse/leap:15.4
+  image: opensuse/leap:15.5
   only:
 #    - merge_requests
     - master
   before_script:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
-# readstat-devel in Science repo only, see leap_15.4_min for tests
-    - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount libQt5Gui-private-headers-devel
+# readstat-devel in Science repo only, see leap_15.5_min for tests
+    - zypper in -y gsl-devel ninja libQt5Gui-private-headers-devel kdoctools-devel kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
+# readstat disabled until fixed for GCC 13
+# could not find git for clone of dbc_parser_cpp-populate (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
+    - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure

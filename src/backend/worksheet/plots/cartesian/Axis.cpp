@@ -21,11 +21,9 @@
 // #include "backend/lib/trace.h"
 #include "kdefrontend/GuiTools.h"
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
 #include "backend/nsl/nsl_sf_basic.h"
 #include <gsl/gsl_math.h>
-}
 
 #include <KConfig>
 #include <KLocalizedString>
@@ -1420,7 +1418,7 @@ void AxisPrivate::retransformTicks() {
 		start = majorTickStartValue;
 	else if (majorTicksStartType == Axis::TicksStartType::Offset)
 		start += majorTickStartOffset;
-	DEBUG(Q_FUNC_INFO << ", ticks type = " << (int)majorTicksType)
+	QDEBUG(Q_FUNC_INFO << ", ticks type = " << majorTicksType)
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber: // total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;

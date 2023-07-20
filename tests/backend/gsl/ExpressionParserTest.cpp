@@ -9,7 +9,7 @@ void ExpressionParserTest::testFunctionArguments1() {
 			QVERIFY(_functions[i].parameterFunction == nullptr);
 	}
 
-	QCOMPARE(ExpressionParser::parameters(functionName), QStringLiteral());
+	QCOMPARE(ExpressionParser::parameters(functionName), QStringLiteral(""));
 }
 
 void ExpressionParserTest::testFunctionArguments2() {

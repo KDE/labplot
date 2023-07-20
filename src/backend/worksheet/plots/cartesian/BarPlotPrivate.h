@@ -80,7 +80,6 @@ private:
 	void updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>&);
 
 	void draw(QPainter*);
-	void drawFilling(QPainter*, int columnIndex, int valueIndex);
 
 	bool m_hovered{false};
 

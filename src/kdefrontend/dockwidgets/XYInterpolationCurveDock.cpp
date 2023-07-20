@@ -21,10 +21,8 @@
 #include <QStandardItemModel>
 #include <QWidgetAction>
 
-extern "C" {
-#include <gsl/gsl_interp.h> // gsl_interp types
-}
 #include <cmath> // isnan
+#include <gsl/gsl_interp.h> // gsl_interp types
 
 /*!
   \class XYInterpolationCurveDock

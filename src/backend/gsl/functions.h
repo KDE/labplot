@@ -12,7 +12,6 @@
 #define FUNCTIONS_H
 
 #include <QString>
-
 #include <gsl/gsl_version.h>
 
 enum class FunctionGroups;

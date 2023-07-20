@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Plot - private implementation
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,6 +19,9 @@ public:
 	explicit PlotPrivate(Plot*);
 
 	Plot* const q;
+
+protected:
+	void drawFillingPollygon(const QPolygonF&, QPainter*, const Background*) const;
 };
 
 #endif

@@ -23,10 +23,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
-// #include "backend/nsl/nsl_sf_poly.h"
-}
-
 #include <KLocalizedString>
 #include <QDebug> // qWarning()
 #include <QElapsedTimer>
