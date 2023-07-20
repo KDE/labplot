@@ -78,16 +78,17 @@ void StatisticsSpreadsheetDock::load() {
 }
 
 void StatisticsSpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
-}
+	KConfigGroup group = config.group(QLatin1String("StatisticsSpreadsheet"));
 
-/*!
-	loads saved spreadsheet properties from \c config.
- */
-void StatisticsSpreadsheetDock::loadConfig(KConfig& config) {
+	StatisticsSpreadsheet::Metrics metrics = static_cast<StatisticsSpreadsheet::Metrics>(group.readEntry(QStringLiteral("Metrics"), static_cast<int>(m_spreadsheet->metrics())));
+	m_spreadsheet->setMetrics(metrics);
+	load();
 }
 
 /*!
 	saves spreadsheet properties to \c config.
  */
 void StatisticsSpreadsheetDock::saveConfigAsTemplate(KConfig& config) {
+	KConfigGroup group = config.group(QLatin1String("StatisticsSpreadsheet"));
+	group.writeEntry(QStringLiteral("Metrics"), static_cast<int>(m_spreadsheet->metrics()));
 }

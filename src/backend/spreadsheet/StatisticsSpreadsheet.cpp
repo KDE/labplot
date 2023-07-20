@@ -53,20 +53,23 @@ void StatisticsSpreadsheet::setMetrics(Metrics metrics) {
 	initializes the spreadsheet with the default number of columns and rows
 */
 void StatisticsSpreadsheet::init() {
-	// KConfig config;
-	// KConfigGroup group = config.group(QLatin1String("StatisticsSpreadsheet"));
+	// measures that are shown on default
+	KConfig config;
+	KConfigGroup group = config.group(QLatin1String("StatisticsSpreadsheet"));
+
+	Metrics defaultMetrics;
+	defaultMetrics.setFlag(StatisticsSpreadsheet::Metric::Count);
+	defaultMetrics.setFlag(StatisticsSpreadsheet::Metric::Minimum);
+	defaultMetrics.setFlag(StatisticsSpreadsheet::Metric::Maximum);
+	defaultMetrics.setFlag(StatisticsSpreadsheet::Metric::ArithmeticMean);
+	defaultMetrics.setFlag(StatisticsSpreadsheet::Metric::Variance);
+	defaultMetrics.setFlag(StatisticsSpreadsheet::Metric::StandardDeviation);
+
+	m_metrics = static_cast<Metrics>(group.readEntry(QStringLiteral("Metrics"), static_cast<int>(defaultMetrics)));
 
 	setRowCount(m_spreadsheet->columnCount());
 	// setColumnCount(22);
 	setColumnCount(7);
-
-	// measures that are shown on default
-	m_metrics.setFlag(StatisticsSpreadsheet::Metric::Count);
-	m_metrics.setFlag(StatisticsSpreadsheet::Metric::Minimum);
-	m_metrics.setFlag(StatisticsSpreadsheet::Metric::Maximum);
-	m_metrics.setFlag(StatisticsSpreadsheet::Metric::ArithmeticMean);
-	m_metrics.setFlag(StatisticsSpreadsheet::Metric::Variance);
-	m_metrics.setFlag(StatisticsSpreadsheet::Metric::StandardDeviation);
 
 	const auto& columns = children<Column>();
 	columns.at(0)->setName(i18n("Column"));

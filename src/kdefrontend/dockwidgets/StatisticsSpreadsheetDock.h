@@ -29,7 +29,6 @@ private:
 	StatisticsSpreadsheet* m_spreadsheet{nullptr};
 
 	void load();
-	void loadConfig(KConfig&);
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in StatisticsSpreadsheetDock
