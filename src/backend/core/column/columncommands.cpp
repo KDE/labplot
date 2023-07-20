@@ -679,8 +679,9 @@ ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
 													 QString formula,
 													 QStringList variableNames,
 													 QVector<Column*> variableColumns,
-													 bool autoUpdate)
-	: QUndoCommand()
+													 bool autoUpdate,
+													 QUndoCommand* parent)
+	: QUndoCommand(parent)
 	, m_col(col)
 	, m_newFormula(std::move(formula))
 	, m_newVariableNames(std::move(variableNames))

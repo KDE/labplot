@@ -1109,7 +1109,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
 		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
@@ -1189,7 +1188,6 @@ void MainWin::updateGUI() {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
 		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
@@ -1238,14 +1236,6 @@ void MainWin::updateGUI() {
 		}
 		menu->setEnabled(true);
 
-		// populate analysis menu
-		menu = qobject_cast<QMenu*>(factory->container(QLatin1String("analysis"), this));
-		if (update) {
-			menu->clear();
-			view->createAnalysisMenu(menu);
-		}
-		menu->setEnabled(true);
-
 		// populate worksheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("worksheet_toolbar"), this));
 		if (update) {
@@ -1273,7 +1263,6 @@ void MainWin::updateGUI() {
 	} else {
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet_toolbar"), this)->setVisible(false);
-		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
 		//		factory->container(QLatin1String("drawing"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet_toolbar"), this)->setEnabled(false);
 		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->setEnabled(false);
@@ -1404,6 +1393,7 @@ bool MainWin::newProject() {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	m_project = new Project();
+	undoStackIndexLastSave = 0;
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
 
@@ -1474,9 +1464,9 @@ bool MainWin::newProject() {
 	m_guiObserver = new GuiObserver(this); // initialize after all docks were createad
 	m_guiObserver->selectedAspectsChanged({static_cast<AbstractAspect*>(m_project)}); // Trigger showing properties
 
-	connect(m_project, &Project::aspectAdded, this, &MainWin::handleAspectAdded);
-	connect(m_project, &Project::aspectRemoved, this, &MainWin::handleAspectRemoved);
-	connect(m_project, &Project::aspectAboutToBeRemoved, this, &MainWin::handleAspectAboutToBeRemoved);
+	connect(m_project, &Project::childAspectAdded, this, &MainWin::handleAspectAdded);
+	connect(m_project, &Project::childAspectRemoved, this, &MainWin::handleAspectRemoved);
+	connect(m_project, &Project::childAspectAboutToBeRemoved, this, &MainWin::handleAspectAboutToBeRemoved);
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
 	connect(m_project, &Project::changed, this, &MainWin::projectChanged);
 	connect(m_project, &Project::requestProjectContextMenu, this, &MainWin::createContextMenu);
@@ -1868,8 +1858,8 @@ bool MainWin::save(const QString& fileName) {
 		m_project->setWindowState(QString::fromStdString(windowState.data()));
 		m_project->setFileName(fileName);
 		m_project->save(thumbnail, &writer);
-		m_project->undoStack()->clear();
 		m_project->setChanged(false);
+		undoStackIndexLastSave = m_project->undoStack()->index();
 		file->close();
 
 		// target file must not exist
@@ -1957,11 +1947,10 @@ void MainWin::updateTitleBar() {
 	prints the current sheet (worksheet, spreadsheet or matrix)
 */
 void MainWin::print() {
-	auto* win = m_DockManager->focusedDockWidget();
-	if (!win)
+	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(win)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
 	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
@@ -1970,11 +1959,10 @@ void MainWin::print() {
 }
 
 void MainWin::printPreview() {
-	auto* win = m_DockManager->focusedDockWidget();
-	if (!win)
+	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(win)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
 	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
@@ -2300,23 +2288,32 @@ void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 void MainWin::undo() {
 	WAIT_CURSOR;
 	m_project->undoStack()->undo();
-	if (m_project->undoStack()->index() == 0) {
-		m_saveAction->setEnabled(false);
-		m_undoAction->setEnabled(false);
-		m_project->setChanged(false);
-		updateTitleBar();
-	}
 	m_redoAction->setEnabled(true);
+
+	const int index = m_project->undoStack()->index();
+	if (index == 0)
+		m_undoAction->setEnabled(false);
+
+	const bool changed = (index != undoStackIndexLastSave);
+	m_saveAction->setEnabled(changed);
+	m_project->setChanged(changed);
+	updateTitleBar();
 	RESET_CURSOR;
 }
 
 void MainWin::redo() {
 	WAIT_CURSOR;
 	m_project->undoStack()->redo();
-	m_project->setChanged(true);
-	projectChanged();
-	if (m_project->undoStack()->index() == m_project->undoStack()->count())
+	m_undoAction->setEnabled(true);
+
+	const int index = m_project->undoStack()->index();
+	if (index == m_project->undoStack()->count())
 		m_redoAction->setEnabled(false);
+
+	const bool changed = (index != undoStackIndexLastSave);
+	m_saveAction->setEnabled(changed);
+	m_project->setChanged(changed);
+	updateTitleBar();
 	RESET_CURSOR;
 }
 
@@ -2750,11 +2747,10 @@ void MainWin::importDatasetDialog() {
   opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
  */
 void MainWin::exportDialog() {
-	auto* win = m_DockManager->focusedDockWidget();
-	if (!win)
+	if (!m_currentAspectDock)
 		return;
 
-	AbstractPart* part = static_cast<ContentDockWidget*>(win)->part();
+	AbstractPart* part = static_cast<ContentDockWidget*>(m_currentAspectDock)->part();
 	if (part->exportView())
 		statusBar()->showMessage(i18n("%1 exported", part->name()));
 }

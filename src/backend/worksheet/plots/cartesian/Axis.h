@@ -43,6 +43,7 @@ public:
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
 	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues, ColumnLabels };
+	Q_ENUM(TicksType)
 	enum class ArrowType { NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig };
 	enum class ArrowPosition { Left, Right, Both };
 	enum class LabelsPosition { NoLabels, In, Out };
@@ -110,8 +111,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
-	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
-	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range)
+	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range) // range contains scale
+	void setScale(RangeT::Scale scale);
+	RangeT::Scale scale() {
+		return range().scale();
+	}
 	void setStart(const double);
 	void setEnd(const double);
 	void setRange(const double, const double);

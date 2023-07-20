@@ -33,6 +33,9 @@ private:
 	QList<Symbol*> m_symbols;
 	bool m_initializing{false};
 
+	void showEvent(QShowEvent*) override;
+	void adjustLayout();
+
 Q_SIGNALS:
 	void dataChanged(bool);
 

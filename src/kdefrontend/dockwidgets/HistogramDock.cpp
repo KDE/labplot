@@ -331,8 +331,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.dteBinRangesMax->setVisible(!numeric);
 
 	// load the remaining properties
-	KConfig config(QString(), KConfig::SimpleConfig);
-	loadConfig(config);
+	load();
 
 	updatePlotRanges();
 
@@ -719,6 +718,22 @@ void HistogramDock::curveRugOffsetChanged(double value) {
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
+void HistogramDock::load() {
+	// General
+	// we don't load/save the settings in the general-tab, since they are not style related.
+	// It doesn't make sense to load/save them in the template.
+	// This data is read in HistogramDock::setCurves().
+
+	// Error bars
+	ui.cbErrorType->setCurrentIndex((int)m_curve->errorType());
+
+	// Margin plots
+	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->rugWidth(), Worksheet::Unit::Point));
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_curve->rugLength(), Worksheet::Unit::Point));
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_curve->rugOffset(), Worksheet::Unit::Point));
+}
+
 void HistogramDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QLatin1String("Histogram"));
 
@@ -754,7 +769,7 @@ void HistogramDock::loadConfigFromTemplate(KConfig& config) {
 
 	int size = m_curvesList.size();
 	if (size > 1)
-		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
+		m_curve->beginMacro(i18n("%1 histograms: template \"%2\" loaded", size, name));
 	else
 		m_curve->beginMacro(i18n("%1: template \"%2\" loaded", m_curve->name(), name));
 

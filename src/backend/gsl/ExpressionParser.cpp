@@ -15,14 +15,12 @@
 
 #include <klocalizedstring.h>
 
-extern "C" {
 #include "backend/gsl/parser.h"
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_version.h>
-}
 
 ExpressionParser* ExpressionParser::m_instance{nullptr};
 
@@ -98,7 +96,37 @@ int ExpressionParser::functionArgumentCount(const QString& functionName) {
 	return 0;
 }
 
+QString ExpressionParser::parameters(const QString& functionName) {
+	for (int i = 0; i < _number_functions; i++) {
+		if (functionName == QLatin1String(_functions[i].name)) {
+			int count = _functions[i].argc;
+			QString (*parameterFunction)(int) = _functions[i].parameterFunction;
+
+			if (parameterFunction == nullptr)
+				return QStringLiteral("");
+
+			if (count == 0)
+				return QStringLiteral("()");
+
+			QString parameter = QStringLiteral("(");
+			for (int p = 0; p < count - 1; p++)
+				parameter += (*parameterFunction)(p) + QStringLiteral(", ");
+			parameter += (*parameterFunction)(count - 1);
+			parameter += QStringLiteral(")");
+			return parameter;
+		}
+		// DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
+		// DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
+	}
+	return QStringLiteral("");
+}
+
 QString ExpressionParser::functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType type) {
+	QString p = parameters(functionName);
+	if (!p.isEmpty())
+		return p;
+
+	// Default parameters
 	switch (functionArgumentCount(functionName)) {
 	case 0:
 		return QStringLiteral("()");
@@ -165,7 +193,7 @@ QString ExpressionParser::functionDescription(const QString& function) {
 			return m_functionsDescription.at(index);
 	}
 
-	return QStringLiteral();
+	return QStringLiteral("");
 }
 QString ExpressionParser::constantDescription(const QString& constant) {
 	for (int index = 0; index < _number_constants; index++) {
@@ -173,7 +201,7 @@ QString ExpressionParser::constantDescription(const QString& constant) {
 			return m_constantsDescription.at(index) + QStringLiteral(" (") + m_constantsValues.at(index) + QStringLiteral(" ") + m_constantsUnits.at(index)
 				+ QStringLiteral(")");
 	}
-	return QStringLiteral();
+	return QStringLiteral("");
 }
 
 const QStringList& ExpressionParser::constants() {

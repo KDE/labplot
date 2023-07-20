@@ -380,8 +380,6 @@ void ValueWidget::load() {
 }
 
 void ValueWidget::loadConfig(const KConfigGroup& group) {
-	CONDITIONAL_LOCK_RETURN;
-
 	ui.cbType->setCurrentIndex(group.readEntry("ValuesType", (int)m_value->type()));
 	ui.cbPosition->setCurrentIndex(group.readEntry("ValuesPosition", (int)m_value->position()));
 	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", m_value->distance()), Worksheet::Unit::Point));

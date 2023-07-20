@@ -2,6 +2,16 @@
 New features:
 	* [worksheet]
 		* Add possibility to use column labels as axis ticks
+		* New visualization types:
+			* Lollipop plot
+	* [spreadsheet]
+		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
+		* Extended search and replace
+Bug fixes:
+	* Set mousemode to selection when leaving the plot (Issue #614)
+Internal:
+	* Switch from C++11 to C++17
+	* Reduce code duplication caused by multiple plot types (Issue #540)
 
 -----2.10.1 () -----
 Bug fixes:
@@ -9,8 +19,24 @@ Bug fixes:
 	* Improve Vector BLF dependency (git download must be enabled if needed)
 	* Correctly use system header of system QXlsx (BUG 468651)
 	* Fix group separator problem in formulas (BUG 468098)
+	* Improve log scales (auto scaling and tick number)
 	* Improve auto scale (Issue #536)
+	* Fix limits when changing scale (Issue #446)
 	* Use system liborigin headers if linking against system liborigin (BUG 469367)
+	* Don't clear the undo history when saving the project (BUG 470727)
+	* Properly react on orientation changes in the worksheet properties explorer
+	* In the collections of example projects, color maps and data sets allow also to search for sub-strings and do the search case-insensitive
+	* Properly save and load the property "visible" for box and bar plots in the project file
+	* Fixed copy&paste and duplication of box and bar plots
+	* .xlsx import:
+		* Fix crash importing empty cells
+		* support datetime import (Issue #531)
+	* Properly set the initial properties of the reference line like line width, etc. (Issue #580)
+	* Properly show the initial value of the property "visible" for the reference range (Issue #582)
+	* React of Delete and Backspace keys to delete selected cells in spreadsheet columns (Issue #596)
+	* Update the plot legend on column name changes used in box and bar plots (Issue #597)
+	* Fixed the positioning of values labels for horizontal bar plots (Issue #599)
+	* Initialize the parameters for the baseline subtraction with reasonable values on first startup and better apperance of the preview plot (Issues #594)
 
 -----2.10.0 (21.03.2023) -----
 New features:

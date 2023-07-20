@@ -141,9 +141,9 @@ public:
 
 	virtual int rowCount() const = 0;
 	virtual int availableRowCount(int max = -1) const = 0;
-	void insertRows(int before, int count);
-	void removeRows(int first, int count);
-	virtual void clear();
+	void insertRows(int before, int count, QUndoCommand* parent = nullptr);
+	void removeRows(int first, int count, QUndoCommand* parent = nullptr);
+	virtual void clear(QUndoCommand*);
 
 	virtual double maximum(int count = 0) const;
 	virtual double maximum(int startIndex, int endIndex) const;
@@ -219,9 +219,33 @@ Q_SIGNALS:
 	void dataAboutToChange(const AbstractColumn* source);
 	void dataChanged(const AbstractColumn* source);
 	void formatChanged(const AbstractColumn* source);
+	/*!
+	 * \brief rowsAboutToBeInserted
+	 * \param source
+	 * \param before Old number of rows
+	 * \param count Number of rows added
+	 */
 	void rowsAboutToBeInserted(const AbstractColumn* source, int before, int count);
+	/*!
+	 * \brief rowsInserted
+	 * \param source
+	 * \param before Old number of rows
+	 * \param count Number of rows added
+	 */
 	void rowsInserted(const AbstractColumn* source, int before, int count);
+	/*!
+	 * \brief rowsAboutToBeRemoved
+	 * \param source
+	 * \param first Old number of rows
+	 * \param count Number of rows removed
+	 */
 	void rowsAboutToBeRemoved(const AbstractColumn* source, int first, int count);
+	/*!
+	 * \brief rowsRemoved
+	 * \param source
+	 * \param first Old number of rows
+	 * \param count Number of rows removed
+	 */
 	void rowsRemoved(const AbstractColumn* source, int first, int count);
 	void maskingAboutToChange(const AbstractColumn* source);
 	void maskingChanged(const AbstractColumn* source);
@@ -233,8 +257,8 @@ protected:
 	bool XmlReadMask(XmlStreamReader*);
 	void XmlWriteMask(QXmlStreamWriter*) const;
 
-	virtual void handleRowInsertion(int before, int count);
-	virtual void handleRowRemoval(int first, int count);
+	virtual void handleRowInsertion(int before, int count, QUndoCommand* parent);
+	virtual void handleRowRemoval(int first, int count, QUndoCommand* parent);
 
 private:
 	AbstractColumnPrivate* d;

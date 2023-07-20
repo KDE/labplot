@@ -1,9 +1,9 @@
 /*
-	File                 : TextLabelTest.cpp
+	File                 : BarPlotTest.cpp
 	Project              : LabPlot
-	Description          : Tests for TextLabel
+	Description          : Tests for BarPlot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,6 +13,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
+#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 
 /*!
  * \brief one dataset, grouped
@@ -199,6 +200,71 @@ void BarPlotTest::testRange05() {
 	QCOMPARE(barPlot->maximum(Dimension::X), 4.);
 	QCOMPARE(barPlot->minimum(Dimension::Y), 0.);
 	QCOMPARE(barPlot->maximum(Dimension::Y), 100.);
+}
+
+/*!
+ * \brief lollipop plot wiht one dataset, horizontal
+ */
+void BarPlotTest::testRangeLollipopPlot01() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* barPlot = new LollipopPlot(QStringLiteral("barplot"));
+	p->addChild(barPlot);
+
+	// set the data
+	QVector<const AbstractColumn*> dataColumns;
+	auto* c = new Column(QStringLiteral("data"));
+	c->setValueAt(0, 3.);
+	c->setValueAt(1, 6.);
+	c->setValueAt(2, 9.);
+	c->setValueAt(3, 12.);
+	dataColumns << c;
+
+	barPlot->setDataColumns(dataColumns);
+
+	// check the min and max range values
+	QCOMPARE(barPlot->minimum(Dimension::X), 0.0);
+	QCOMPARE(barPlot->maximum(Dimension::X), 4.0);
+	QCOMPARE(barPlot->minimum(Dimension::Y), 0.);
+	QCOMPARE(barPlot->maximum(Dimension::Y), 12.);
+}
+
+/*!
+ * \brief lollipop plot wiht one dataset, vertical
+ */
+void BarPlotTest::testRangeLollipopPlot02() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* barPlot = new LollipopPlot(QStringLiteral("barplot"));
+	barPlot->setOrientation(LollipopPlot::Orientation::Horizontal);
+	p->addChild(barPlot);
+
+	// set the data
+	QVector<const AbstractColumn*> dataColumns;
+	auto* c = new Column(QStringLiteral("data"));
+	c->setValueAt(0, 3.);
+	c->setValueAt(1, 6.);
+	c->setValueAt(2, 9.);
+	c->setValueAt(3, 12.);
+	dataColumns << c;
+
+	barPlot->setDataColumns(dataColumns);
+
+	// check the min and max range values
+	QCOMPARE(barPlot->minimum(Dimension::X), 0.0);
+	QCOMPARE(barPlot->maximum(Dimension::X), 12.0);
+	QCOMPARE(barPlot->minimum(Dimension::Y), 0.);
+	QCOMPARE(barPlot->maximum(Dimension::Y), 4.0);
 }
 
 QTEST_MAIN(BarPlotTest)

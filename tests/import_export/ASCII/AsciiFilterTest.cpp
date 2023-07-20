@@ -15,10 +15,8 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 // ##############################################################################
 // #################  handling of empty and sparse files ########################
@@ -991,6 +989,34 @@ void AsciiFilterTest::testQuotedStrings05() {
 	// the actuall content is irrelevant, we just need to make sure we don't crash because of such wrong content
 	QCOMPARE(spreadsheet.columnCount(), 1);
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+}
+
+// ##############################################################################
+// ################################## locales ###################################
+// ##############################################################################
+void AsciiFilterTest::testUtf8Cyrillic() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/utf8_cyrillic.txt"));
+
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// column names
+	QCOMPARE(spreadsheet.column(0)->name(), QString::fromUtf8("перший_стовпець"));
+	QCOMPARE(spreadsheet.column(1)->name(), QString::fromUtf8("другий_стовпець"));
+
+	// data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	// values
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QString::fromUtf8("тест1"));
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(1), QString::fromUtf8("тест2"));
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 2);
 }
 
 // ##############################################################################

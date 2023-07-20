@@ -107,6 +107,7 @@ public:
 	void saveThemeConfig(const KConfigGroup&) const;
 
 	BASIC_D_ACCESSOR_DECL(Symbol::Style, style, Style)
+	CLASS_D_ACCESSOR_DECL(QColor, color, Color)
 	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(qreal, size, Size)
@@ -128,6 +129,7 @@ Q_SIGNALS:
 	void opacityChanged(qreal);
 	void brushChanged(QBrush);
 	void penChanged(const QPen&);
+	void colorChanged(const QColor&);
 
 	void updateRequested();
 	void updatePixmapRequested();

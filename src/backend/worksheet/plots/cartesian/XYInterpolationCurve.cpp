@@ -27,9 +27,9 @@
 extern "C" {
 #include "backend/nsl/nsl_diff.h"
 #include "backend/nsl/nsl_int.h"
+}
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
-}
 
 #include <QElapsedTimer>
 #include <QIcon>

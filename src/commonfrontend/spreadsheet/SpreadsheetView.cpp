@@ -40,6 +40,7 @@
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
 #include "kdefrontend/spreadsheet/RescaleDialog.h"
 #include "kdefrontend/spreadsheet/SampleValuesDialog.h"
+#include "kdefrontend/spreadsheet/SearchReplaceWidget.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
@@ -74,12 +75,11 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QToolBar>
+#include <QUndoCommand>
 
 #include <algorithm> //for std::reverse
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 enum NormalizationMethod {
 	DivideBySum,
@@ -199,9 +199,12 @@ void SpreadsheetView::init() {
 
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::updateHeaderGeometry);
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::handleHeaderDataChanged);
-	connect(m_spreadsheet, &Spreadsheet::aspectAdded, this, &SpreadsheetView::handleAspectAdded);
-	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeRemoved, this, &SpreadsheetView::handleAspectAboutToBeRemoved);
+	connect(m_spreadsheet, &Spreadsheet::aspectsInserted, this, &SpreadsheetView::handleAspectsAdded);
+	connect(m_spreadsheet, &Spreadsheet::aspectsAboutToBeRemoved, this, &SpreadsheetView::handleAspectAboutToBeRemoved);
 	connect(m_spreadsheet, &Spreadsheet::requestProjectContextMenu, this, &SpreadsheetView::createContextMenu);
+	connect(m_spreadsheet, &Spreadsheet::manyAspectsAboutToBeInserted, [this] {
+		m_suppressResize = true;
+	});
 
 	// selection related connections
 	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
@@ -242,6 +245,10 @@ void SpreadsheetView::resizeHeader() {
 
 		i++;
 	}
+}
+
+void SpreadsheetView::setFocus() {
+	m_tableView->setFocus();
 }
 
 void SpreadsheetView::resizeEvent(QResizeEvent* event) {
@@ -288,6 +295,8 @@ void SpreadsheetView::initActions() {
 	action_go_to_cell = new QAction(QIcon::fromTheme(QStringLiteral("go-jump")), i18n("&Go to Cell..."), this);
 	action_search = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Search"), this);
 	action_search->setShortcut(QKeySequence::Find);
+	action_search_replace = new QAction(QIcon::fromTheme(QStringLiteral("edit-find-replace")), i18n("&Replace"), this);
+	action_search_replace->setShortcut(QKeySequence::Replace);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
 	// column related actions
@@ -756,6 +765,7 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
 	m_spreadsheetMenu->addAction(action_search);
+	m_spreadsheetMenu->addAction(action_search_replace);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
@@ -802,11 +812,12 @@ void SpreadsheetView::connectActions() {
 	connect(action_fill_function, &QAction::triggered, this, &SpreadsheetView::fillWithFunctionValues);
 	connect(action_fill_const, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithConstValues);
 	connect(action_select_all, &QAction::triggered, m_tableView, &QTableView::selectAll);
-	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, &Spreadsheet::clear);
+	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, QOverload<>::of(&Spreadsheet::clear));
 	connect(action_clear_masks, &QAction::triggered, m_spreadsheet, &Spreadsheet::clearMasks);
 	connect(action_sort_spreadsheet, &QAction::triggered, this, &SpreadsheetView::sortSpreadsheet);
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
-	connect(action_search, &QAction::triggered, this, &SpreadsheetView::showSearch);
+	connect(action_search, &QAction::triggered, this, &SpreadsheetView::searchReplace);
+	connect(action_search_replace, &QAction::triggered, this, &SpreadsheetView::searchReplace);
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
@@ -1004,31 +1015,37 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 }
 
 // SLOTS
-void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
-	const Column* col = dynamic_cast<const Column*>(aspect);
-	if (!col || col->parentAspect() != m_spreadsheet)
+void SpreadsheetView::handleAspectsAdded(int first, int last) {
+	if (m_suppressResize) {
+		m_suppressResize = false;
 		return;
-
+	}
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	const int index = m_spreadsheet->indexOfChild<Column>(col);
-	// TODO: this makes it slow!
-	if (col->width() == 0)
-		m_tableView->resizeColumnToContents(index);
-	else
-		m_tableView->setColumnWidth(index, col->width());
 
-	goToCell(0, index);
+	const auto& children = m_spreadsheet->children<Column>();
+
+	for (int i = first; i <= last; i++) {
+		const auto* col = children.at(i);
+		// TODO: this makes it slow!
+		if (col->width() == 0)
+			m_tableView->resizeColumnToContents(i);
+		else
+			m_tableView->setColumnWidth(i, col->width());
+	}
+
+	goToCell(0, last);
 }
 
-void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const Column* col = dynamic_cast<const Column*>(aspect);
-	if (!col || col->parentAspect() != m_spreadsheet)
+void SpreadsheetView::handleAspectAboutToBeRemoved(int first, int last) {
+	const auto& children = m_spreadsheet->children<Column>();
+	if (first < 0 || first >= children.count() || last >= children.count() || first > last)
 		return;
 
-	disconnect(col, nullptr, this, nullptr);
+	for (int i = first; i <= last; i++)
+		disconnect(children.at(i), nullptr, this, nullptr);
 }
 
-void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /*oldSize*/, int newSize) {
+void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /* oldSize */, int newSize) {
 	// save the new size in the column
 	Column* col = m_spreadsheet->child<Column>(logicalIndex);
 	col->setWidth(newSize);
@@ -1045,21 +1062,12 @@ void SpreadsheetView::goToCell(int row, int col) {
 	m_tableView->setCurrentIndex(index);
 }
 
-void SpreadsheetView::searchTextChanged(const QString& text) {
-	m_model->setSearchText(text);
-	m_tableView->setFocus(); // set the focus so the table gets updated with the highlighted found entries
-	m_leSearch->setFocus(); // set the focus back to the line edit so we can continue typing
+void SpreadsheetView::selectCell(int row, int col) {
+	m_tableView->selectionModel()->select(m_model->index(row, col), QItemSelectionModel::Select);
 }
 
-/*!
- * determines the first cell in the spreadsheet matching the current search string and navigates to it
- */
-void SpreadsheetView::searchReturnPressed() {
-	const auto& index = m_model->index(m_leSearch->text());
-	goToCell(index.row(), index.column());
-	m_leSearch->setText(QString());
-	m_frameSearch->hide();
-	m_tableView->setFocus();
+void SpreadsheetView::clearSelection() {
+	m_tableView->selectionModel()->clear();
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
@@ -1109,6 +1117,14 @@ void SpreadsheetView::handleHeaderDataChanged(Qt::Orientation orientation, int f
 
 	for (int index = first; index <= last; ++index)
 		m_tableView->resizeColumnToContents(index);
+}
+
+/*!
+ * return the selection model of the tree view, private function wrapper to be able
+ * to unit-test the selection without exposing the whole internal table view.
+ */
+QItemSelectionModel* SpreadsheetView::selectionModel() {
+	return m_tableView->selectionModel();
 }
 
 /*!
@@ -1446,12 +1462,13 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			// 					scrollBar->setValue(newValue);
 			// 				}
 			// 			}
-		} else if (key_event->matches(QKeySequence::Find)) {
-			showSearch();
-		} else if (key_event->key() == Qt::Key_Escape && m_frameSearch && m_frameSearch->isVisible()) {
-			m_leSearch->clear();
-			m_frameSearch->hide();
-		} else if (key_event->matches(QKeySequence::Cut))
+		} else if (key_event->matches(QKeySequence::Find))
+			showSearchReplace(/* replace */ false);
+		else if (key_event->matches(QKeySequence::Replace))
+			showSearchReplace(/* replace */ true);
+		else if (key_event->key() == Qt::Key_Escape && m_searchReplaceWidget && m_searchReplaceWidget->isVisible())
+			m_searchReplaceWidget->hide();
+		else if (key_event->matches(QKeySequence::Cut))
 			cutSelection();
 	}
 
@@ -1478,17 +1495,26 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	if (!m_plotDataMenu)
 		initMenus();
 
+	const auto& columns = m_spreadsheet->children<Column>();
+
 	const bool cellsAvail = m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0;
-	m_plotDataMenu->setEnabled(cellsAvail);
-	m_selectionMenu->setEnabled(cellsAvail);
-	action_select_all->setEnabled(cellsAvail);
-	action_clear_spreadsheet->setEnabled(cellsAvail);
-	action_sort_spreadsheet->setEnabled(cellsAvail);
+	bool hasValues = false;
+	for (const auto* col : columns) {
+		if (col->hasValues()) {
+			hasValues = true;
+			break;
+		}
+	}
+	m_plotDataMenu->setEnabled(hasValues);
+	m_selectionMenu->setEnabled(hasValues);
+	action_select_all->setEnabled(hasValues);
+	action_clear_spreadsheet->setEnabled(hasValues);
+	action_sort_spreadsheet->setEnabled(hasValues);
+	action_statistics_all_columns->setEnabled(hasValues);
 	action_go_to_cell->setEnabled(cellsAvail);
 
 	// deactivate the "Clear masks" action if there are no masked cells
 	bool hasMasked = false;
-	const auto& columns = m_spreadsheet->children<Column>();
 	for (auto* column : columns) {
 		if (column->maskedIntervals().size() > 0) {
 			hasMasked = true;
@@ -2558,26 +2584,7 @@ void SpreadsheetView::removeSelectedColumns() {
 }
 
 void SpreadsheetView::clearSelectedColumns() {
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: clear selected columns", m_spreadsheet->name()));
-
-	// 	if (formulaModeActive()) {
-	// 		for (auto* col : selectedColumns()) {
-	// 			col->setSuppressDataChangedSignal(true);
-	// 			col->clearFormulas();
-	// 			col->setSuppressDataChangedSignal(false);
-	// 			col->setChanged();
-	// 		}
-	// 	} else {
-	for (auto* col : selectedColumns()) {
-		col->setSuppressDataChangedSignal(true);
-		col->clear();
-		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
-	}
-
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
+	m_spreadsheet->clear(selectedColumns());
 }
 
 void SpreadsheetView::toggleFreezeColumn() {
@@ -3306,7 +3313,7 @@ void SpreadsheetView::clearSelectedRows() {
 		return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: clear selected rows", m_spreadsheet->name()));
+	auto* parent = new QUndoCommand(i18n("%1: clear selected rows", m_spreadsheet->name()));
 	for (auto* col : selectedColumns()) {
 		col->setSuppressDataChangedSignal(true);
 		// 		if (formulaModeActive()) {
@@ -3315,7 +3322,7 @@ void SpreadsheetView::clearSelectedRows() {
 		// 		} else {
 		for (const auto& i : selectedRows().intervals()) {
 			if (i.end() == col->rowCount() - 1)
-				col->removeRows(i.start(), i.size());
+				col->removeRows(i.start(), i.size(), parent);
 			else {
 				QVector<QString> empties;
 				for (int j = 0; j < i.size(); j++)
@@ -3327,7 +3334,6 @@ void SpreadsheetView::clearSelectedRows() {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
-	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 
 	// selected rows were deleted but the view selection is still in place -> reset the selection in the view
@@ -3342,7 +3348,8 @@ void SpreadsheetView::clearSelectedCells() {
 
 	// don't try to clear values if the selected cells don't have any values at all
 	bool empty = true;
-	for (auto* column : selectedColumns()) {
+	const auto& columns = selectedColumns(false);
+	for (auto* column : columns) {
 		for (int row = last; row >= first; row--) {
 			if (column->isValid(row)) {
 				empty = false;
@@ -3358,7 +3365,7 @@ void SpreadsheetView::clearSelectedCells() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected cells", m_spreadsheet->name()));
-	for (auto* column : selectedColumns()) {
+	for (auto* column : columns) {
 		column->setSuppressDataChangedSignal(true);
 		// 		if (formulaModeActive()) {
 		// 			int col = m_spreadsheet->indexOfChild<Column>(column);
@@ -3406,42 +3413,37 @@ void SpreadsheetView::goToCell() {
 	delete dlg;
 }
 
-void SpreadsheetView::showSearch() {
-	if (!m_frameSearch) {
-		// initialize the widgets for search options
-		m_frameSearch = new QFrame(this);
-		auto* layout = new QHBoxLayout(m_frameSearch);
-		layout->setSpacing(0);
-		layout->setContentsMargins(0, 0, 0, 0);
+void SpreadsheetView::searchReplace() {
+	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
+	if (action == action_search_replace)
+		showSearchReplace(true); // search&replace mode
+	else
+		showSearchReplace(false); // search mode
+}
 
-		m_leSearch = new QLineEdit(m_frameSearch);
-		m_leSearch->setClearButtonEnabled(true);
-		m_leSearch->setPlaceholderText(i18n("Search..."));
-		layout->addWidget(m_leSearch);
-		/*
-				auto* bFilterOptions = new QToolButton(m_frameSearch);
-				bFilterOptions->setIcon(QIcon::fromTheme("configure"));
-				bFilterOptions->setCheckable(true);
-				layoutSearch->addWidget(bFilterOptions);
-		*/
-		auto* bCloseSearch = new QPushButton(this);
-		bCloseSearch->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
-		bCloseSearch->setToolTip(i18n("End Search"));
-		bCloseSearch->setFlat(true);
-		layout->addWidget(bCloseSearch);
-		connect(bCloseSearch, &QPushButton::clicked, this, [=]() {
-			m_leSearch->clear();
-			m_frameSearch->hide();
-		});
-
-		static_cast<QVBoxLayout*>(this->layout())->addWidget(m_frameSearch);
-
-		connect(m_leSearch, &QLineEdit::textChanged, this, &SpreadsheetView::searchTextChanged);
-		connect(m_leSearch, &QLineEdit::returnPressed, this, &SpreadsheetView::searchReturnPressed);
-		// connect(bFilterOptions, &QPushButton::toggled, this, &SpreadsheetView::toggleSearchOptionsMenu);
+void SpreadsheetView::showSearchReplace(bool replace) {
+	if (!m_searchReplaceWidget) {
+		m_searchReplaceWidget = new SearchReplaceWidget(m_spreadsheet, this);
+		static_cast<QVBoxLayout*>(this->layout())->addWidget(m_searchReplaceWidget);
 	}
-	m_frameSearch->show();
-	m_leSearch->setFocus();
+
+	m_searchReplaceWidget->setReplaceEnabled(replace);
+
+	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = m_spreadsheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		m_searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	m_searchReplaceWidget->show();
+
+	// interrupt the event loop to show/render the widget first and set the focus
+	// after this otherwise the focus in the search field is not set
+	QTimer::singleShot(0, this, [=]() {
+		m_searchReplaceWidget->setFocus();
+	});
 }
 
 //! Open the sort dialog for the given columns
@@ -3489,9 +3491,9 @@ void SpreadsheetView::sortColumnDescending() {
 /*!
   Cause a repaint of the header.
 */
-void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int /*first*/, int /*last*/) {
+void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int last) {
 	// TODO
-	if (o != Qt::Horizontal)
+	if (o != Qt::Horizontal || last < first)
 		return;
 	m_tableView->horizontalHeader()->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
 	m_tableView->horizontalHeader()->updateGeometry();

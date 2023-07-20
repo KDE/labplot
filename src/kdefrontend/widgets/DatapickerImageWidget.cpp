@@ -301,8 +301,8 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	connect(m_image, &DatapickerImage::fileNameChanged, this, &DatapickerImageWidget::imageFileNameChanged);
 	connect(m_image, &DatapickerImage::embeddedChanged, this, &DatapickerImageWidget::imageEmbeddedChanged);
 	connect(m_image, &DatapickerImage::rotationAngleChanged, this, &DatapickerImageWidget::imageRotationAngleChanged);
-	connect(m_image, &AbstractAspect::aspectRemoved, this, &DatapickerImageWidget::updateSymbolWidgets);
-	connect(m_image, &AbstractAspect::aspectAdded, this, &DatapickerImageWidget::updateSymbolWidgets);
+	connect(m_image, &AbstractAspect::childAspectRemoved, this, &DatapickerImageWidget::updateSymbolWidgets);
+	connect(m_image, &AbstractAspect::childAspectAdded, this, &DatapickerImageWidget::updateSymbolWidgets);
 	connect(m_image, &DatapickerImage::axisPointsChanged, this, &DatapickerImageWidget::imageAxisPointsChanged);
 	connect(m_image, &DatapickerImage::settingsChanged, this, &DatapickerImageWidget::imageEditorSettingsChanged);
 	connect(m_image, &DatapickerImage::minSegmentLengthChanged, this, &DatapickerImageWidget::imageMinSegmentLengthChanged);

@@ -1216,7 +1216,7 @@ void DatapickerTest::datapickerImageLoadImageAbsolute() {
 			QCOMPARE(image->fileName(), imgFile.fileName());
 			QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
 			QCOMPARE(w.ui.leFileName->text(), imgFile.fileName());
-			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // Valid image
+			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 
 			SAVE_PROJECT("DatapickerTestProject");
 
@@ -1243,7 +1243,7 @@ void DatapickerTest::datapickerImageLoadImageAbsolute() {
 			QCOMPARE(image->fileName(), imgFileName);
 			QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
 			QCOMPARE(w.ui.leFileName->text(), imgFileName);
-			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // Valid image
+			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 		}
 	}
 
@@ -1272,7 +1272,7 @@ void DatapickerTest::datapickerImageLoadImageAbsolute() {
 		QCOMPARE(image->fileName(), imgFileName);
 		QCOMPARE(image->originalPlotImage.isNull(), true); // invalid image loaded
 		QCOMPARE(w.ui.leFileName->text(), imgFileName);
-		QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral()); // Invalid image
+		QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral("")); // Invalid image
 	}
 }
 
@@ -1312,7 +1312,7 @@ void DatapickerTest::datapickerImageLoadImageRelative() {
 			QCOMPARE(image->fileName(), imgFileName);
 			QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
 			QCOMPARE(w.ui.leFileName->text(), imgFileName);
-			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // Valid image
+			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 
 			SAVE_PROJECT("DatapickerTestProject");
 
@@ -1349,7 +1349,7 @@ void DatapickerTest::datapickerImageLoadImageRelative() {
 			QCOMPARE(image->fileName(), fi.fileName());
 			QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
 			QCOMPARE(w.ui.leFileName->text(), fi.fileName());
-			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // Valid image
+			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 		}
 	}
 
@@ -1379,7 +1379,7 @@ void DatapickerTest::datapickerImageLoadImageRelative() {
 		QCOMPARE(image->fileName(), fi.fileName());
 		QCOMPARE(image->originalPlotImage.isNull(), true); // invalid image loaded
 		QCOMPARE(w.ui.leFileName->text(), fi.fileName());
-		QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral()); // Invalid image
+		QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral("")); // Invalid image
 	}
 }
 
@@ -1420,7 +1420,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddAbsolute() {
 		QCOMPARE(image->fileName(), imgFileName);
 		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
 		QCOMPARE(w.ui.leFileName->text(), imgFileName);
-		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // Valid image
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 
 		w.ui.cbFileEmbedd->clicked(true); // Embedding image
 
@@ -1450,7 +1450,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddAbsolute() {
 		QCOMPARE(image->fileName(), imgFileName);
 		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
 		QCOMPARE(w.ui.leFileName->text(), imgFileName);
-		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // Valid image
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 	}
 }
 
@@ -1491,7 +1491,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddAbsoluteUndoRedo() {
 		QCOMPARE(image->fileName(), imgFileName);
 		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
 		QCOMPARE(w.ui.leFileName->text(), imgFileName);
-		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // Valid image
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 
 		w.ui.cbFileEmbedd->clicked(true); // Embedding image
 
@@ -1506,14 +1506,14 @@ void DatapickerTest::datapickerImageLoadImageEmbeddAbsoluteUndoRedo() {
 	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
 	QCOMPARE(image->originalPlotImage.isNull(), true); // image does not exist anymore
 	QCOMPARE(w.ui.leFileName->text(), imgFileName);
-	QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral()); // image does not exist anymore
+	QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral("")); // image does not exist anymore
 
 	image->undoStack()->redo();
 	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
 	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
 	QCOMPARE(image->originalPlotImage.isNull(), false); // image is embedded
 	QCOMPARE(w.ui.leFileName->text(), imgFileName);
-	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // image is embedded
+	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // image is embedded
 }
 
 void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
@@ -1553,7 +1553,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
 		QCOMPARE(image->fileName(), imgFileName);
 		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
 		QCOMPARE(w.ui.leFileName->text(), imgFileName);
-		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // Valid image
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 
 		SAVE_PROJECT("DatapickerTestProject");
 
@@ -1595,7 +1595,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
 		QCOMPARE(image->fileName(), fi.fileName());
 		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
 		QCOMPARE(w.ui.leFileName->text(), fi.fileName());
-		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // Valid image
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 	}
 }
 
@@ -1636,7 +1636,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelativeUndoRedo() {
 		QCOMPARE(image->fileName(), imgFileName);
 		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
 		QCOMPARE(w.ui.leFileName->text(), imgFileName);
-		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // Valid image
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 
 		SAVE_PROJECT("DatapickerTestProject");
 
@@ -1664,14 +1664,14 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelativeUndoRedo() {
 	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
 	QCOMPARE(image->originalPlotImage.isNull(), true); // image does not exist anymore
 	QCOMPARE(w.ui.leFileName->text(), fi.fileName());
-	QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral()); // image does not exist anymore
+	QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral("")); // image does not exist anymore
 
 	image->undoStack()->redo();
 	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
 	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
 	QCOMPARE(image->originalPlotImage.isNull(), false); // image is embedded
 	QCOMPARE(w.ui.leFileName->text(), fi.fileName());
-	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral()); // image is embedded
+	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // image is embedded
 }
 
 void DatapickerTest::datapickerImageClipboard() {
@@ -1696,7 +1696,7 @@ void DatapickerTest::datapickerImageClipboard() {
 	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
 
 	// Set image from clipboard
-	image->setImage(img, QStringLiteral(), true);
+	image->setImage(img, QStringLiteral(""), true);
 
 	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
 	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
@@ -1729,7 +1729,7 @@ void DatapickerTest::datapickerImageClipboardSelectImageFromPath() {
 	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
 
 	// Set image from clipboard
-	image->setImage(img2, QStringLiteral(), true);
+	image->setImage(img2, QStringLiteral(""), true);
 
 	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
 	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);

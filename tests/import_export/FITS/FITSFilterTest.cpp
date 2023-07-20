@@ -13,10 +13,11 @@
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-extern "C" {
-#include "fitsio.h"
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
+
+extern "C" {
+#include "fitsio.h"
 }
 
 void FITSFilterTest::importFile1() {

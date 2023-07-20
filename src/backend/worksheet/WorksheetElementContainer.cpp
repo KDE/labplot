@@ -35,12 +35,12 @@
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)
 	: WorksheetElement(name, new WorksheetElementContainerPrivate(this), type) {
-	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
+	connect(this, &WorksheetElementContainer::childAspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd, AspectType type)
 	: WorksheetElement(name, dd, type) {
-	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
+	connect(this, &WorksheetElementContainer::childAspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem

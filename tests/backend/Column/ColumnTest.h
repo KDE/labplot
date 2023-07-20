@@ -54,6 +54,9 @@ private Q_SLOTS:
 
 	void testIndexForValue();
 	void testIndexForValueDoubleVector();
+
+	void testInsertRow();
+	void testRemoveRow();
 };
 
 #endif // COLUMNTEST_H

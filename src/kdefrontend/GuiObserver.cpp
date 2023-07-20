@@ -56,6 +56,7 @@
 #include "kdefrontend/dockwidgets/ImageDock.h"
 #include "kdefrontend/dockwidgets/InfoElementDock.h"
 #include "kdefrontend/dockwidgets/LiveDataDock.h"
+#include "kdefrontend/dockwidgets/LollipopPlotDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
 #include "kdefrontend/dockwidgets/NoteDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
@@ -350,6 +351,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Bar Plot"));
 		raiseDock(m_barPlotDock, m_mainWindow->stackedWidget);
 		m_barPlotDock->setBarPlots(castList<BarPlot>(selectedAspects));
+		break;
+	case AspectType::LollipopPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Lollipop Plot"));
+		raiseDock(m_lollipopPlotDock, m_mainWindow->stackedWidget);
+		m_lollipopPlotDock->setPlots(castList<LollipopPlot>(selectedAspects));
 		break;
 	case AspectType::BoxPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Box Plot"));

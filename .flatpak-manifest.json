@@ -3,6 +3,8 @@
     "branch": "master",
     "runtime": "org.kde.Platform",
     "runtime-version": "5.15-22.08",
+    "base": "io.qt.qtwebengine.BaseApp",
+    "base-version": "5.15-22.08",
     "sdk": "org.kde.Sdk",
     "command": "labplot2",
     "tags": ["nightly"],
@@ -196,20 +198,15 @@
             "name": "readstat",
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/WizardMac/ReadStat.git",
-                    "tag": "v1.1.9",
-                    "x-checker-data": {
-                        "type": "git",
-                        "tag-pattern": "^v([\\d.]+)$"
-                    }
+                    "type": "archive",
+                    "url": "https://github.com/WizardMac/ReadStat/archive/v1.1.9.tar.gz",
+                    "sha256": "89af7c785a7ae3d9a7af6e64a69028829a429f66a14b1b913be22816dc07ddca"
                 }
             ]
         },
         {
             "name": "Qt-Advanced-Docking-System",
             "buildsystem": "cmake-ninja",
-            /* This version is two commits ahead the 4.0.3, with important changes needed to get it build! This must be removed once a new ADS version is released! */
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
                 "-DQT_VERSION_MAJOR=5"
@@ -219,6 +216,44 @@
                     "type": "git",
                     "url": "https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git",
                     "commit": "a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6"
+                }
+            ]
+        },
+	{
+            "name": "discount",
+            "buildsystem": "simple",
+            "build-commands": [
+                "./configure.sh --prefix=/app --enable-all-features --with-fenced-code --shared",
+                "sed -e 's|/sbin/ldconfig|/sbin/ldconfig -n|' -i librarian.sh",
+                "make install"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/Orc/discount/archive/v2.2.7c.tar.gz",
+                    "sha256": "5c5139f1f88e83de86169bee3fde4ebd0e1b0798643dc9065b73dc19dbce07b3",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 12139,
+                        "stable-only": true,
+                        "url-template": "https://github.com/Orc/discount/archive/v$version.tar.gz"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "matio",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/tbeu/matio/archive/v1.5.23.tar.gz",
+                    "sha256": "5f25c53e698d06b3119e3a4d0536e1da89983dbb7b0a845270663be02ec95978",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 1893,
+                        "stable-only": true,
+                        "url-template": "https://github.com/tbeu/matio/archive/v$version.tar.gz"
+                    }
                 }
             ]
         },
@@ -262,10 +297,7 @@
         {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
-            "build-options": {
-                "build-args": ["--share=network"]
-            },
-            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DLOCAL_DBC_PARSER=OFF", "-DLOCAL_VECTOR_BLF=OFF"],
+            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF"],
 	    "sources": [
                 {
                     "type": "dir",

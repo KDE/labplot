@@ -59,6 +59,39 @@ void SymbolWidget::setSymbols(const QList<Symbol*>& symbols) {
 	connect(m_symbol, &Symbol::penChanged, this, &SymbolWidget::symbolPenChanged);
 }
 
+void SymbolWidget::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
+	adjustLayout();
+}
+
+/*!
+ * this functions adjusts the width of the first column in the layout of BackgroundWidget
+ * to the width of the first column in the layout of the parent widget
+ * which BackgroundWidget is being embedded into.
+ */
+void SymbolWidget::adjustLayout() {
+	auto* parentGridLayout = dynamic_cast<QGridLayout*>(parentWidget()->layout());
+	if (!parentGridLayout)
+		return;
+
+	auto* parentWidget = parentGridLayout->itemAtPosition(0, 0)->widget();
+	if (!parentWidget)
+		return;
+
+	auto* gridLayout = static_cast<QGridLayout*>(layout());
+	auto* widget = gridLayout->itemAtPosition(2, 0)->widget(); // use the third line, the first two are optional and not always visible
+
+	if (parentWidget->width() >= widget->width()) {
+		gridLayout->activate();
+		widget->setMinimumWidth(parentWidget->width());
+		updateGeometry();
+	} else {
+		parentGridLayout->activate();
+		parentWidget->setMinimumWidth(widget->width());
+		this->parentWidget()->updateGeometry();
+	}
+}
+
 /*
  * updates the locale in the widgets. called when the application settins are changed.
  */
@@ -278,8 +311,6 @@ void SymbolWidget::load() {
 }
 
 void SymbolWidget::loadConfig(const KConfigGroup& group) {
-	CONDITIONAL_LOCK_RETURN; // need to lock here since this function is also called from outside
-
 	int index = ui.cbStyle->findData((int)m_symbol->style());
 	ui.cbStyle->setCurrentIndex(group.readEntry("SymbolStyle", index));
 	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_symbol->size()), Worksheet::Unit::Point));

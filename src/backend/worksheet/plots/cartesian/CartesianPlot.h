@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -17,9 +17,7 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
-}
 
 class AbstractColumn;
 class CartesianPlotPrivate;
@@ -100,6 +98,7 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
+	QMenu* addNewMenu();
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
 	QVector<AspectType> pasteTypes() const override;
@@ -234,9 +233,16 @@ private:
 	//"add new" actions
 	QAction* addCurveAction{nullptr};
 	QAction* addEquationCurveAction{nullptr};
+
+	// statistical plots
 	QAction* addHistogramAction{nullptr};
-	QAction* addBarPlotAction{nullptr};
 	QAction* addBoxPlotAction{nullptr};
+
+	// bar plots
+	QAction* addBarPlotAction{nullptr};
+	QAction* addLollipopPlotAction{nullptr};
+
+	// analysis curves
 	QAction* addDataReductionCurveAction{nullptr};
 	QAction* addDifferentiationCurveAction{nullptr};
 	QAction* addIntegrationCurveAction{nullptr};
@@ -273,7 +279,7 @@ private:
 	QAction* addConvolutionAction{nullptr};
 	QAction* addCorrelationAction{nullptr};
 
-	QMenu* addNewMenu{nullptr};
+	QMenu* m_addNewMenu{nullptr};
 	QMenu* addNewAnalysisMenu{nullptr};
 	QMenu* dataAnalysisMenu{nullptr};
 	QMenu* themeMenu{nullptr};
@@ -292,12 +298,7 @@ private:
 public Q_SLOTS:
 	void addHorizontalAxis();
 	void addVerticalAxis();
-	void addCurve();
-	void addHistogram();
 	void addHistogramFit(Histogram*, nsl_sf_stats_distribution);
-	void addBarPlot();
-	void addBoxPlot();
-	void addEquationCurve();
 	void addDataReductionCurve();
 	void addDifferentiationCurve();
 	void addIntegrationCurve();
@@ -305,10 +306,6 @@ public Q_SLOTS:
 	void addSmoothCurve();
 	void addFitCurve();
 	void addFourierFilterCurve();
-	void addFourierTransformCurve();
-	void addHilbertTransformCurve();
-	void addConvolutionCurve();
-	void addCorrelationCurve();
 
 	void addLegend();
 	void addTextLabel();

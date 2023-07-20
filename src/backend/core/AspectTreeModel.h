@@ -74,6 +74,7 @@ private:
 	Qt::CaseSensitivity m_filterCaseSensitivity{Qt::CaseInsensitive};
 	bool m_matchCompleteWord{false};
 	bool containsFilterString(const AbstractAspect*) const;
+	bool m_aspectAboutToBeRemovedCalled{false};
 
 Q_SIGNALS:
 	void renameRequested(const QModelIndex&);

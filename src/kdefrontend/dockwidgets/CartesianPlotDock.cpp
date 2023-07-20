@@ -226,7 +226,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
 	tbExportTemplate->setIconSize(QSize(size, size));
 	tbExportTemplate->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as-template")));
-	tbExportTemplate->setToolTip(i18n("Save current plot definition as template"));
+	tbExportTemplate->setToolTip(i18n("Save current plot area definition as template"));
 	connect(tbExportTemplate, &QToolButton::pressed, this, &CartesianPlotDock::exportPlotTemplate);
 	layout->addWidget(tbExportTemplate);
 
@@ -1047,6 +1047,7 @@ void CartesianPlotDock::scaleChanged(const QObject* sender, const Dimension dim,
 	const auto scale{static_cast<RangeT::Scale>(index)};
 	for (auto* plot : m_plotList)
 		plot->setRangeScale(dim, rangeIndex, scale);
+	updateRangeList(dim);
 }
 
 void CartesianPlotDock::rangeFormatChanged(const QObject* sender, const Dimension dim, int index) {
@@ -1615,8 +1616,9 @@ void CartesianPlotDock::borderTypeChanged() {
 void CartesianPlotDock::borderCornerRadiusChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
+	const double radius = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList)
-		plot->plotArea()->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
+		plot->plotArea()->setBorderCornerRadius(radius);
 }
 
 void CartesianPlotDock::exportPlotTemplate() {
@@ -1907,23 +1909,23 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	// Scale breakings
 	// TODO
 
-	// Background-tab
-	backgroundWidget->loadConfig(group);
-
-	// Layout-tab
+	// Layout
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), m_worksheetUnit));
 	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", m_plot->verticalPadding()), m_worksheetUnit));
 	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("RightPadding", m_plot->rightPadding()), m_worksheetUnit));
 	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BottomPadding", m_plot->bottomPadding()), m_worksheetUnit));
 	ui.cbPaddingSymmetric->setChecked(group.readEntry("SymmetricPadding", m_plot->symmetricPadding()));
 
-	// Border-tab
+	// Area
+	backgroundWidget->loadConfig(group);
+
 	const auto* plotArea = m_plot->plotArea();
 	auto type = static_cast<PlotArea::BorderType>(group.readEntry("BorderType", static_cast<int>(plotArea->borderType())));
 	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
 	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
 	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
 	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
+
 	borderLineWidget->loadConfig(group);
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", plotArea->borderCornerRadius()), m_worksheetUnit));
 }
@@ -1939,16 +1941,21 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup plotTitleGroup = config.group("CartesianPlotTitle");
 	labelWidget->saveConfig(plotTitleGroup);
 
+	// Layout
+	group.writeEntry("HorizontalPadding", m_plot->horizontalPadding());
+	group.writeEntry("VerticalPadding", m_plot->verticalPadding());
+	group.writeEntry("RightPadding", m_plot->rightPadding());
+	group.writeEntry("BottomPadding", m_plot->bottomPadding());
+	group.writeEntry("SymmetricPadding", m_plot->symmetricPadding());
+
 	// Scale breakings
 	// TODO
 
-	// Background
+	// Area
 	backgroundWidget->saveConfig(group);
-
-	// Border
 	group.writeEntry("BorderType", static_cast<int>(m_plot->plotArea()->borderType()));
 	borderLineWidget->saveConfig(group);
-	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
+	group.writeEntry("BorderCornerRadius", m_plot->plotArea()->borderCornerRadius());
 
 	config.sync();
 }

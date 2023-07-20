@@ -30,10 +30,8 @@
 #include <QPainter>
 #include <QTimer>
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
 #include <gsl/gsl_math.h>
-}
 
 namespace {
 enum PositionAlignmentComboBoxIndex {
@@ -716,8 +714,12 @@ void AxisDock::scaleChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto scale = static_cast<RangeT::Scale>(index);
-	for (auto* axis : m_axesList)
+	for (auto* axis : m_axesList) {
 		axis->setScale(scale);
+
+		if (axis->majorTicksAutoNumber())
+			ui.sbMajorTicksNumber->setValue(axis->majorTicksNumber());
+	}
 }
 
 void AxisDock::rangeTypeChanged(int index) {

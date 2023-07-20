@@ -298,4 +298,6 @@ void ReferenceRangeDock::load() {
 			ui.dtePositionEnd->setMSecsSinceEpochUTC(m_range->positionLogicalEnd().x());
 		}
 	}
+
+	ui.chkVisible->setChecked(m_range->isVisible());
 }
