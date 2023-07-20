@@ -999,7 +999,6 @@ void BarPlotPrivate::updateValues() {
 	qreal w;
 	const qreal h = fm.ascent();
 	int offset = value->distance();
-	QVector<qreal> list_bar_width;
 	switch (value->position()) {
 	case Value::Above:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
@@ -1013,6 +1012,7 @@ void BarPlotPrivate::updateValues() {
 		}
 		break;
 	case Value::Center: {
+		QVector<qreal> listBarWidth;
 		for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
 			for (const auto& barLines : columnBarLines) {// loop over the bars for every data column
 				qreal maxLength = 0;
@@ -1020,16 +1020,16 @@ void BarPlotPrivate::updateValues() {
 					if (lines.length() > maxLength)
 						maxLength = lines.length();
 				}
-				list_bar_width.append(maxLength);
+				listBarWidth.append(maxLength);
 			}
 		}
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
 			const auto& point = pointsScene.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesPoints << QPointF(point.x() - w / 2, point.y() + list_bar_width.at(i) / 2 - offset + h / 2);
+				m_valuesPoints << QPointF(point.x() - w / 2, point.y() + listBarWidth.at(i) / 2 - offset + h / 2);
 			else
-				m_valuesPoints << QPointF(point.x() - list_bar_width.at(i) / 2 - w, point.y() + h / 2);
+				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - w, point.y() + h / 2);
 		}
 
 		break;

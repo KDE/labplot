@@ -160,7 +160,6 @@ void Histogram::init() {
 	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->rugWidth = group.readEntry("RugWidth", 0.0);
 	d->rugOffset = group.readEntry("RugOffset", 0.0);
-
 	this->initActions();
 }
 
@@ -346,6 +345,7 @@ double Histogram::minimum(const Dimension dim) const {
 	}
 	return NAN;
 }
+
 
 double Histogram::maximum(const Dimension dim) const {
 	Q_D(const Histogram);
@@ -1328,24 +1328,40 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
+
+	case Value::Center: {
+		QVector<qreal> listBarWidth;
+		for (int i =0;i<linesUnclipped.size();i+=1) {
+			auto&columnBarLines = linesUnclipped.at(i);
+			listBarWidth.append(columnBarLines.length());
+		}
+		for (int i = 0; i < valuesStrings.size(); i++) {
+			w = fm.boundingRect(valuesStrings.at(i)).width();
+			tempPoint.setX(pointsScene.at(i).x() - w / 2);
+			tempPoint.setY(pointsScene.at(i).y() - valuesDistance + listBarWidth.at(i)/2+h/2);
+			valuesPoints.append(tempPoint);
+		}
+		break;
+	}
 	}
 
-	QTransform trafo;
-	QPainterPath path;
-	double valuesRotationAngle = value->rotationAngle();
-	for (int i = 0; i < valuesPoints.size(); i++) {
-		path = QPainterPath();
-		path.addText(QPoint(0, 0), value->font(), valuesStrings.at(i));
 
-		trafo.reset();
-		trafo.translate(valuesPoints.at(i).x(), valuesPoints.at(i).y());
-		if (valuesRotationAngle != 0.)
-			trafo.rotate(-valuesRotationAngle);
+QTransform trafo;
+QPainterPath path;
+double valuesRotationAngle = value->rotationAngle();
+for (int i = 0; i < valuesPoints.size(); i++) {
+	path = QPainterPath();
+	path.addText(QPoint(0, 0), value->font(), valuesStrings.at(i));
 
-		valuesPath.addPath(trafo.map(path));
-	}
+	trafo.reset();
+	trafo.translate(valuesPoints.at(i).x(), valuesPoints.at(i).y());
+	if (valuesRotationAngle != 0.)
+		trafo.rotate(-valuesRotationAngle);
 
-	recalcShapeAndBoundingRect();
+	valuesPath.addPath(trafo.map(path));
+}
+
+recalcShapeAndBoundingRect();
 }
 
 void HistogramPrivate::updateFilling() {
