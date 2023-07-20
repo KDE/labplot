@@ -9,6 +9,7 @@ New features:
 		* Extended search and replace
 Bug fixes:
 	* Set mousemode to selection when leaving the plot (Issue #614)
+	* Fix plot range field not being updated (Issue #603)
 	* Fix wrong axis tick type used (Issue #571)
 Internal:
 	* Switch from C++11 to C++17
