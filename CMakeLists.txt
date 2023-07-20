@@ -5,7 +5,7 @@ set(LABPLOT_VERSION 2.10.1)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -121,7 +121,7 @@ set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wu
 set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
-set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++11")
+set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++17")
 
 if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
 	message(STATUS "GNU C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
@@ -226,7 +226,7 @@ if (CMAKE_VERSION VERSION_GREATER "3.5")
       message(STATUS "Clang-tidy supported, found and enabled: ${CLANG_TIDY_EXE}")
       set(CLANG_TIDY_CHECKS "modernize-*,-modernize-use-trailing-return-type,clang-analyzer-*,-clang-analyzer-cplusplus*")
       #set(CLANG_TIDY_CHECKS "-*,modernize-*,clang-analyzer-*")
-      # -extra-arg=--std=c++11
+      # -extra-arg=--std=c++17
       set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-checks=${CLANG_TIDY_CHECKS};-header-filter='${CMAKE_SOURCE_DIR}/*'"
         CACHE STRING "" FORCE)
     else()

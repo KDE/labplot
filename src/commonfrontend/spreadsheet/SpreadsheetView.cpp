@@ -79,9 +79,7 @@
 
 #include <algorithm> //for std::reverse
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 enum NormalizationMethod {
 	DivideBySum,

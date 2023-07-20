@@ -67,8 +67,10 @@ d2594f62ecdd33c177d7673c550a8e830d47a3c1  labplot-2.8.0.dmg
 
 8. Upload packages to https://sourceforge.net/projects/labplot/
 
-9. Update Package in MS Partner Center for Windows App Store https://partner.microsoft.com/en-us/dashboard
+9. Update package in MS Partner Center (appxupload) for Windows App Store https://partner.microsoft.com/en-us/dashboard
 
 10. Ping Jonathan Riddell to update Snap and chtof to update Chocolatey package
 
 11. Publish the release announcement on labplot.kde.org
+
+12. Update Wiki pages

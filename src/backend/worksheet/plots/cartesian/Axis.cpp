@@ -21,11 +21,9 @@
 // #include "backend/lib/trace.h"
 #include "kdefrontend/GuiTools.h"
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
 #include "backend/nsl/nsl_sf_basic.h"
 #include <gsl/gsl_math.h>
-}
 
 #include <KConfig>
 #include <KLocalizedString>

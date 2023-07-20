@@ -1109,7 +1109,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
 		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
@@ -1189,7 +1188,6 @@ void MainWin::updateGUI() {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
-		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
 		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
 		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
@@ -1238,14 +1236,6 @@ void MainWin::updateGUI() {
 		}
 		menu->setEnabled(true);
 
-		// populate analysis menu
-		menu = qobject_cast<QMenu*>(factory->container(QLatin1String("analysis"), this));
-		if (update) {
-			menu->clear();
-			view->createAnalysisMenu(menu);
-		}
-		menu->setEnabled(true);
-
 		// populate worksheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("worksheet_toolbar"), this));
 		if (update) {
@@ -1273,7 +1263,6 @@ void MainWin::updateGUI() {
 	} else {
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet_toolbar"), this)->setVisible(false);
-		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
 		//		factory->container(QLatin1String("drawing"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet_toolbar"), this)->setEnabled(false);
 		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->setEnabled(false);

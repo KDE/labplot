@@ -26,9 +26,7 @@
 #include <QFont>
 #include <QPainter>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 // order of styles in UI comboboxes (defined in Symbol.h, order can be changed without breaking projects)
 static QVector<Symbol::Style> StyleOrder = {Symbol::Style::NoSymbols,

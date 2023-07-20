@@ -24,8 +24,8 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
 #include <gsl/gsl_sf_pow_int.h>
+extern "C" {
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif

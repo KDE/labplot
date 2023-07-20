@@ -12,11 +12,8 @@
 #ifndef INTERVAL_H
 #define INTERVAL_H
 
-#include <QVector>
-
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
+#include <QVector>
 
 template<class T>
 class Interval;

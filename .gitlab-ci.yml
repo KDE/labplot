@@ -39,7 +39,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH
 
 # replaced default targets:
-# only changed "script" section
+# only changed "script" and added QT_QPA_PLATFORM
 windows_qt515:
   stage: build
   image: kdeorg/windows-msvc2019-qt515:latest
@@ -69,8 +69,8 @@ windows_qt515:
     reports:
       junit: JUnitTestResults.xml
 
-# only changed "script" section
-freebsd_qt515:
+# only changed "script" and added QT_QPA_PLATFORM
+.freebsd_qt515:
   stage: build
   tags:
     - FreeBSD

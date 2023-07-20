@@ -9,10 +9,10 @@
 */
 
 %{
-#include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <locale.h>
+#include <cstring>
+#include <cctype>
+#include <cstdlib>
+#include <clocale>
 #include <cmath>
 #ifdef HAVE_XLOCALE
 #include <xlocale.h>
@@ -24,12 +24,10 @@
 #define freelocale _free_locale
 #endif
 
-extern "C" {
-    #include "gsl/gsl_sf_gamma.h"
-}
+#include <gsl/gsl_sf_gamma.h>
 
 #ifdef PDEBUG
-#include <stdio.h>
+#include <cstdio>
 #define pdebug(...) fprintf(stderr, __VA_ARGS__)
 #else
 #define pdebug(...) {}

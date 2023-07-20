@@ -11,6 +11,7 @@
 #define PLOT_H
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 class PlotPrivate;
 class QPointF;
@@ -20,6 +21,11 @@ class Plot : public WorksheetElement {
 
 public:
 	virtual ~Plot();
+
+	virtual double minimum(CartesianCoordinateSystem::Dimension dim) const = 0;
+	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
+
+	virtual bool hasData() const = 0;
 
 	virtual bool activatePlot(QPointF mouseScenePos, double maxDist = -1) = 0;
 	virtual void setHover(bool on) = 0;

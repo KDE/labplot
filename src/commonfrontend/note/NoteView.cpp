@@ -4,7 +4,7 @@
 	Description          : Notes View for taking notes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2016 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,14 +16,12 @@
 #include <QTextEdit>
 
 NoteView::NoteView(Note* notes)
-	: m_notes(notes) {
+	: m_notes(notes)
+	, m_textEdit(new QTextEdit(this)) {
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 
-	m_textEdit = new QTextEdit(this);
-
 	QPalette palette = m_textEdit->palette();
-
 	palette.setColor(QPalette::Base, m_notes->backgroundColor());
 	palette.setColor(QPalette::Text, m_notes->textColor());
 
@@ -48,9 +46,12 @@ void NoteView::textChanged() {
 }
 
 void NoteView::backgroundColorChanged(QColor color) {
-	QPalette palette = m_textEdit->palette();
+	// the background color needs to be applied to the viewport and not
+	// to the widget directly, works in the constructor prior to adding to
+	// the layout, though.
+	QPalette palette = m_textEdit->viewport()->palette();
 	palette.setColor(QPalette::Base, color);
-	m_textEdit->setPalette(palette);
+	m_textEdit->viewport()->setPalette(palette);
 }
 
 void NoteView::textFontChanged(const QFont& font) {

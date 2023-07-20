@@ -18,9 +18,7 @@ class XYFitCurve;
 class Column;
 class Histogram;
 
-extern "C" {
 #include <gsl/gsl_multifit_nlin.h>
-}
 
 class XYFitCurvePrivate : public XYAnalysisCurvePrivate {
 public:
