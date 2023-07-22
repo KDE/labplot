@@ -9,12 +9,12 @@ namespace Settings {
 
 KSharedConfig::Ptr config();
 KConfigGroup settingsGeneral();
-enum class DockPosBehaviour { OriginalPos, AboveLastActive };
 
 #define SETUP_SETTING(setting_name, datatype)                                                                                                                  \
 	datatype read##setting_name();                                                                                                                             \
 	void write##setting_name(const datatype& value);
 
+enum class DockPosBehaviour { OriginalPos, AboveLastActive };
 SETUP_SETTING(DockPosBehaviour, DockPosBehaviour)
 }
 
