@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:44+0000\n"
+"POT-Creation-Date: 2023-07-21 00:44+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -12232,7 +12232,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1813
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1821
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:722
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:415
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:774
@@ -12566,7 +12566,7 @@ msgstr ""
 msgid "Labplot Plot Templates (*%1)"
 msgstr "關閉專案"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1819
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr ""
@@ -15225,41 +15225,41 @@ msgstr "旋轉"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:678
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:685
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:692
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:890
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:934
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:978
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1022
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:900
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:944
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:988
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1032
 #, fuzzy, kde-format
 msgid "Wrong numeric value provided."
 msgstr "數值"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1209
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1219
 #, fuzzy, kde-format
 #| msgid "%1: add %2 column"
 #| msgid_plural "%1: add %2 columns"
 msgid "%1: add %2 to column values"
 msgstr "%1：新增 %2 欄"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1222
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
 msgid "%1: subtract %2 from column values"
 msgstr "%1：插入 %2 欄"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1225
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
 msgid "%1: subtract baseline from column values"
 msgstr "%1：插入 %2 欄"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1228
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1231
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr ""

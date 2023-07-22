@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:44+0000\n"
-"PO-Revision-Date: 2023-07-05 22:22+0200\n"
+"POT-Creation-Date: 2023-07-21 00:44+0000\n"
+"PO-Revision-Date: 2023-07-20 23:12+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5442,11 +5442,10 @@ msgid "%1: mirror vertically"
 msgstr "%1: Reflecte Verticalmente"
 
 #: src/backend/note/Note.cpp:46
-#, fuzzy, kde-format
-#| msgid "Print"
+#, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
-msgstr "Imprime"
+msgstr "Imprime Nota"
 
 #: src/backend/note/Note.cpp:64
 #, kde-format
@@ -5462,17 +5461,14 @@ msgid "Export to File"
 msgstr "Exporta a file"
 
 #: src/backend/note/Note.cpp:80
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export to File"
+#, kde-format
 msgid "Export failed"
-msgstr "Exporta a file"
+msgstr "Exportation falleva"
 
 #: src/backend/note/Note.cpp:80
-#, fuzzy, kde-format
-#| msgid "Could not open file %1 for reading."
+#, kde-format
 msgid "Failed to open '%1' for writing."
-msgstr "Non pote aperir file %1 in lectura."
+msgstr "Il falleva a aperir '%1' pro scriber."
 
 #: src/backend/note/Note.cpp:159
 #, kde-format
@@ -11864,7 +11860,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1813
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1821
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:722
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:415
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:774
@@ -12188,7 +12184,7 @@ msgstr ""
 msgid "Labplot Plot Templates (*%1)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1819
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr ""
@@ -14757,35 +14753,35 @@ msgstr "Proportion: %1"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:678
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:685
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:692
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:890
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:934
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:978
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1022
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:900
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:944
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:988
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1032
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1209
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1219
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1222
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1225
 #, kde-format
 msgid "%1: subtract baseline from column values"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1228
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1231
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr ""

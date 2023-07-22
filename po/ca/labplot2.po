@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-20 00:44+0000\n"
+"POT-Creation-Date: 2023-07-21 00:44+0000\n"
 "PO-Revision-Date: 2023-07-17 12:27+0300\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -12185,7 +12185,7 @@ msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1813
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1821
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:722
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:415
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:774
@@ -12530,7 +12530,7 @@ msgstr "Trieu el fitxer per desar una plantilla"
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Plantilles de diagrames del LabPlot (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1811
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1819
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "Diagrames cartesians %1: s'ha carregat la plantilla «%2»"
@@ -15160,35 +15160,35 @@ msgstr "Relació: %1"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:678
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:685
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:692
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:890
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:934
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:978
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1022
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:900
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:944
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:988
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1032
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr "S'ha proporcionat un valor numèric no vàlid."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1209
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1219
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: afegeix %2 als valors de la columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1212
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1222
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: sostreu %2 dels valors de la columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1215
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1225
 #, kde-format
 msgid "%1: subtract baseline from column values"
 msgstr "%1: sostreu la línia base dels valors de la columna"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1228
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: multiplica els valors de la columna per %2"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1231
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: divideix els valors de la columna pel %2"
