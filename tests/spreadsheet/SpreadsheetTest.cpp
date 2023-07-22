@@ -2680,6 +2680,8 @@ void SpreadsheetTest::testStatisticsSpreadsheetChangeMetrics() {
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
 
+	new SpreadsheetModel(sheet);
+
 	// toggle on the statistics spreadsheet and count the available columns
 	sheet->toggleStatisticsSpreadsheet(true);
 	auto* statisticsSpreadsheet = sheet->children<StatisticsSpreadsheet>().constFirst();
