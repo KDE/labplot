@@ -81,9 +81,6 @@ expr:      NUM       { $$ = $1;                            }
 | VAR '=' expr       { $$ = $3; $1->value.var = $3;        }
 | FNCT '(' ')'       { $$ = (*($1->value.fnctptr))();      }
 | FNCT '(' expr ')'  { $$ = (*((func_t1)($1->value.fnctptr)))($3); }
-| FNCT '(' expr ',' expr ')'  { $$ = (*((func_t2)($1->value.fnctptr)))($3,$5); }
-| FNCT '(' expr ',' expr ','expr ')'  { $$ = (*((func_t3)($1->value.fnctptr)))($3,$5,$7); }
-| FNCT '(' expr ',' expr ',' expr ','expr ')'  { $$ = (*((func_t4)($1->value.fnctptr)))($3,$5,$7,$9); }
 | FNCT '(' expr ';' expr ')'  { $$ = (*((func_t2)($1->value.fnctptr)))($3,$5); }
 | FNCT '(' expr ';' expr ';'expr ')'  { $$ = (*((func_t3)($1->value.fnctptr)))($3,$5,$7); }
 | FNCT '(' expr ';' expr ';' expr ';'expr ')'  { $$ = (*((func_t4)($1->value.fnctptr)))($3,$5,$7,$9); }
