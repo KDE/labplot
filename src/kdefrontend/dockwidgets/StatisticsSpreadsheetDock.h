@@ -10,6 +10,7 @@
 #ifndef STATISTICSSPREADSHEETDOCK_H
 #define STATISTICSSPREADSHEETDOCK_H
 
+#include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_statisticsspreadsheetdock.h"
 
@@ -25,15 +26,14 @@ public:
 
 private:
 	Ui::StatisticsSpreadsheetDock ui;
-	QList<StatisticsSpreadsheet*> m_spreadsheetList;
+	QList<StatisticsSpreadsheet*> m_spreadsheets;
 	StatisticsSpreadsheet* m_spreadsheet{nullptr};
+	QMap<QCheckBox*, StatisticsSpreadsheet::Metric> m_mappingComboBoxMetric;
 
 	void load();
 
 private Q_SLOTS:
-	// SLOTs for changes triggered in StatisticsSpreadsheetDock
-
-	// SLOTs for changes triggered in Spreadsheet
+	void metricChanged(bool);
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);

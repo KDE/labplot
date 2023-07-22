@@ -142,6 +142,7 @@ private Q_SLOTS:
 	void linkedSpreadsheetNewRowCount(int);
 
 Q_SIGNALS:
+	void changed();
 	void requestProjectContextMenu(QMenu*);
 	void columnSelected(int);
 	void columnDeselected(int);
