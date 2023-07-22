@@ -587,7 +587,8 @@ void Spreadsheet::clearMasks() {
 QMenu* Spreadsheet::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
-	Q_EMIT requestProjectContextMenu(menu);
+	if (type() != AspectType::StatisticsSpreadsheet)
+		Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 

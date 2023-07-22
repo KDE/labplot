@@ -768,7 +768,8 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
 	m_spreadsheetMenu->addAction(action_search);
-	m_spreadsheetMenu->addAction(action_search_replace);
+	if (!m_readOnly)
+		m_spreadsheetMenu->addAction(action_search_replace);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();

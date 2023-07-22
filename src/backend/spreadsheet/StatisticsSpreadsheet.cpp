@@ -24,7 +24,7 @@
 */
 
 StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool loading, AspectType type)
-	: Spreadsheet(i18n("Column Statistics of '%1'", spreadsheet->name()), loading, type)
+	: Spreadsheet(i18n("Column Statistics"), loading, type)
 	, m_spreadsheet(spreadsheet) {
 
 	m_metricNames = {
@@ -60,6 +60,7 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 	connect(m_spreadsheet, &Spreadsheet::changed, this, &StatisticsSpreadsheet::update);
 
 	setUndoAware(false);
+	setFixed(true);
 
 	if (!loading)
 		init();
@@ -121,8 +122,10 @@ void StatisticsSpreadsheet::update() {
 
 	// make all columns in this statistics spreadsheet undo unaware
 	const auto& statisticsColumns = children<Column>();
-	for (auto* col : statisticsColumns)
+	for (auto* col : statisticsColumns) {
 		col->setUndoAware(false);
+		col->setFixed(true);
+	}
 
 	// rename the columns
 	statisticsColumns.at(0)->setName(i18n("Column"));
