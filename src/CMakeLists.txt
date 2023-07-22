@@ -283,6 +283,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractPart.cpp
 	${BACKEND_DIR}/core/Workbook.cpp
 	${BACKEND_DIR}/core/AspectTreeModel.cpp
+	${BACKEND_DIR}/core/Settings.cpp
 	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h

@@ -9,6 +9,7 @@
 */
 
 #include "backend/core/AbstractPart.h"
+#include "backend/core/Settings.h"
 #include "commonfrontend/core/ContentDockWidget.h"
 
 #include <QMenu>
@@ -47,8 +48,10 @@ AbstractPart::~AbstractPart() {
  */
 ContentDockWidget* AbstractPart::dockWidget() const {
 #ifndef SDK
-	if (!m_dockWidget)
-		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
+	if (!m_dockWidget) {
+		const bool deleteOnClose = Settings::dockPosBehaviour() == Settings::DockPosBehaviour::AboveLastActive;
+		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this), deleteOnClose);
+	}
 #endif
 	return m_dockWidget;
 }
