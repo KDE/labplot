@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-21 00:44+0000\n"
-"PO-Revision-Date: 2023-06-23 07:33+0100\n"
+"PO-Revision-Date: 2023-07-2120:51+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -5464,17 +5464,15 @@ msgid "%1: mirror vertically"
 msgstr "%1: spegulo vertikale"
 
 #: src/backend/note/Note.cpp:46
-#, fuzzy, kde-format
-#| msgid "Print"
+#, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
-msgstr "Presi"
+msgstr "Presi Noton"
 
 #: src/backend/note/Note.cpp:64
-#, fuzzy, kde-format
-#| msgid "LaTeX files (*.tex)"
+#, kde-format
 msgid "Text file (*.txt)"
-msgstr "LaTeX-dosieroj (*.tex)"
+msgstr "Tekst-dosieroj (*.txt)"
 
 #: src/backend/note/Note.cpp:66
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
@@ -5485,17 +5483,14 @@ msgid "Export to File"
 msgstr "Eksporti al Dosiero"
 
 #: src/backend/note/Note.cpp:80
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export to File"
+#, kde-format
 msgid "Export failed"
-msgstr "Eksporti al Dosiero"
+msgstr "Eksporto Malsukcesis"
 
 #: src/backend/note/Note.cpp:80
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid "Failed to open '%1' for writing."
-msgstr "Ne eblis malfermi la dosieron '%1' por skribado."
+msgstr "Malsukcesis malfermi la dosieron '%1' por skribado."
 
 #: src/backend/note/Note.cpp:159
 #, kde-format
@@ -22018,27 +22013,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "xy-Curve from a Formula"
-#~ msgstr "xy-Kurbo de Formulo"
-
-#~ msgid "Data Operation"
-#~ msgstr "Operacio de datumoj"
-
-#~ msgid "Auto/Cross Correlation"
-#~ msgstr "Aŭtomata/Kruca Korelacio"
-
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Convolution/Deconvolution"
-
-#~ msgid "Data Manipulation"
-#~ msgstr "Manipulado de Datumoj"
-
-#~ msgid "%1: Add curve to %2 plots"
-#~ msgstr "%1: Aldoni kurbon al %2 grafikaĵoj"
-
-#~ msgid "&Analysis"
-#~ msgstr "&Analizo"
-
-#~ msgid "%1: set line pen"
-#~ msgstr "%1: starigis linioplumon"
