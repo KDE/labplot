@@ -2676,7 +2676,6 @@ void SpreadsheetTest::testStatisticsSpreadsheetToggle() {
  * change the statistics metrics and check the presense of the corresponding columns
  */
 void SpreadsheetTest::testStatisticsSpreadsheetChangeMetrics() {
-	QSKIP("fails in the test, crashes in the application");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);

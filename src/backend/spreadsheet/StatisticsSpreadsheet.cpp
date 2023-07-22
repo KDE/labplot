@@ -7,8 +7,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "StatisticsSpreadsheet.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/macros.h"
 
 #include <QIcon>
 #include <QXmlStreamWriter>
@@ -26,7 +26,6 @@
 StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool loading, AspectType type)
 	: Spreadsheet(i18n("Column Statistics"), loading, type)
 	, m_spreadsheet(spreadsheet) {
-
 	m_metricNames = {
 		{StatisticsSpreadsheet::Metric::Count, i18n("Count")},
 		{StatisticsSpreadsheet::Metric::Minimum, i18n("Minimum")},
@@ -67,7 +66,6 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 }
 
 StatisticsSpreadsheet::~StatisticsSpreadsheet() {
-
 }
 
 /*!
