@@ -15,6 +15,7 @@
 #include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
+#include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
@@ -2643,6 +2644,39 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 		QCOMPARE(sheetCalculations->rowCount(), 11);
 	}
+}
+
+// **********************************************************
+// **************** statistics spreadsheet  *****************
+// **********************************************************
+/*!
+ * toggle on and off the statistics spreadsheet and check its presence
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetToggle() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	// initial
+	auto children = sheet->children<StatisticsSpreadsheet>();
+	QCOMPARE(children.size(), 0);
+
+	// toggle on
+	sheet->toggleStatisticsSpreadsheet(true);
+	children = sheet->children<StatisticsSpreadsheet>();
+	QCOMPARE(children.size(), 1);
+
+	// toggle off
+	sheet->toggleStatisticsSpreadsheet(false);
+	children = sheet->children<StatisticsSpreadsheet>();
+	QCOMPARE(children.size(), 0);
+}
+
+/*!
+ * change the statistics metrics and check the presense of the corresponding columns
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetChangeMetrics() {
+
 }
 
 #ifdef HAVE_VECTOR_BLF

@@ -374,8 +374,8 @@ void SpreadsheetModel::handleAspectsRemoved() {
 	m_spreadsheetColumnCountChanging = false;
 }
 
-void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* /*child*/) {
-	if (m_spreadsheetColumnCountChanging)
+void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+	if (m_spreadsheetColumnCountChanging || child->type() != AspectType::Column)
 		return;
 
 	handleAspectsRemoved();

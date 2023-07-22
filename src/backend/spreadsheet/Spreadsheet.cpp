@@ -1145,6 +1145,7 @@ void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
 		setUndoAware(false);
 		removeChild(d->statisticsSpreadsheet);
 		setUndoAware(true);
+		d->statisticsSpreadsheet = nullptr;
 	}
 }
 
