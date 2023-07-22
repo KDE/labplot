@@ -8,7 +8,6 @@ namespace Settings {
 
 namespace {
 static constexpr QLatin1String settingsGeneralConfigName{"Settings_General"};
-static constexpr QLatin1String dockReopenPositionAfterCloseConfigName{"DockReopenPositionAfterClose"};
 
 /*!
  * Setup new setting.
@@ -20,13 +19,16 @@ static constexpr QLatin1String dockReopenPositionAfterCloseConfigName{"DockReope
  * default_value: the default value used, if no value for the setting is stored in the settings file
  */
 #define SETUP_SETTING(setting_name, datatype, settings_datatype, setting_group, config_name, default_value)                                                    \
+	namespace {                                                                                                                                                \
+	static constexpr QLatin1String config_name##ConfigName{#config_name};                                                                                      \
+	}                                                                                                                                                          \
 	/* read config */                                                                                                                                          \
 	datatype read##setting_name() {                                                                                                                            \
-		return static_cast<datatype>(setting_group.readEntry(config_name, static_cast<settings_datatype>(default_value)));                                     \
+		return static_cast<datatype>(setting_group.readEntry(config_name##ConfigName, static_cast<settings_datatype>(default_value)));                         \
 	}                                                                                                                                                          \
 	/* write config */                                                                                                                                         \
 	void write##setting_name(const datatype& value) {                                                                                                          \
-		setting_group.writeEntry(config_name, static_cast<settings_datatype>(value));                                                                          \
+		setting_group.writeEntry(config_name##ConfigName, static_cast<settings_datatype>(value));                                                              \
 	}
 
 KSharedConfig::Ptr confPtr;
@@ -43,6 +45,6 @@ KConfigGroup settingsGeneral() {
 	return config()->group(settingsGeneralConfigName);
 }
 
-SETUP_SETTING(DockPosBehaviour, DockPosBehaviour, int, settingsGeneral(), dockReopenPositionAfterCloseConfigName, DockPosBehaviour::AboveLastActive)
+SETUP_SETTING(DockPosBehaviour, DockPosBehaviour, int, settingsGeneral(), DockReopenPositionAfterClose, DockPosBehaviour::AboveLastActive)
 
 } // namespace Settings
