@@ -15,7 +15,7 @@ enum class DockPosBehaviour { OriginalPos, AboveLastActive };
 	datatype read##setting_name();                                                                                                                             \
 	void write##setting_name(const datatype& value);
 
-SETUP_SETTING(DockPosBehaviour, DockPosBehaviour);
+SETUP_SETTING(DockPosBehaviour, DockPosBehaviour)
 }
 
 #endif // SETTINGS_H
