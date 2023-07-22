@@ -10,12 +10,13 @@
 #include "nsl_baseline.h"
 #include "nsl_stats.h"
 
-#include "gsl/gsl_fit.h"
-#include "gsl/gsl_linalg.h"
-#include "gsl/gsl_sort.h"
-#include "gsl/gsl_spblas.h"
-#include "gsl/gsl_spmatrix.h"
-#include "gsl/gsl_statistics_double.h"
+#include <gsl/gsl_fit.h>
+#include <gsl/gsl_linalg.h>
+#include <gsl/gsl_sort.h>
+#include <gsl/gsl_spblas.h>
+#include <gsl/gsl_splinalg.h>
+#include <gsl/gsl_spmatrix.h>
+#include <gsl/gsl_statistics_double.h>
 
 #include <string.h> // memcpy
 
@@ -87,15 +88,25 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 
 void show_matrix(gsl_spmatrix* M, size_t n, size_t m, char name) {
 	printf("%c:\n", name);
-	for (size_t i = 0; i < n; ++i) {
-		for (size_t j = 0; j < m; ++j)
-			printf("%g ", gsl_spmatrix_get(M, i, j));
+	// for (size_t i = 0; i < n; ++i) {
+	for (size_t i = 0; i < 5; ++i) {
+		// for (size_t j = 0; j < m; ++j)
+		for (size_t j = 0; j < 5; ++j)
+			printf("%f ", gsl_spmatrix_get(M, i, j));
+		puts("\n");
+	}
+	for (size_t i = n - 5; i < n; ++i) {
+		for (size_t j = m - 5; j < m; ++j)
+			printf("%f ", gsl_spmatrix_get(M, i, j));
 		puts("\n");
 	}
 }
 void show_vector(gsl_vector* v, size_t n, char name) {
 	printf("%c:\n", name);
-	for (size_t i = 0; i < n; ++i)
+	for (size_t i = 0; i < 5; ++i)
+		printf("%g ", gsl_vector_get(v, i));
+	printf(" .. ");
+	for (size_t i = n - 5; i < n; ++i)
 		printf("%g ", gsl_vector_get(v, i));
 	puts("\n");
 }
@@ -155,24 +166,32 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 	/* initial guess z */
 	for (size_t i = 0; i < n; i++)
 		gsl_vector_set(z, i, data[i]);
+	// gsl_vector_set(z, i, 0);
 	gsl_vector* diff = gsl_vector_alloc(n); // diff
 	gsl_vector* w_new = gsl_vector_alloc(n);
 
 	gsl_spmatrix* A = gsl_spmatrix_alloc_nzmax(n, n, 5 * n, GSL_SPMATRIX_CSC);
+	// gsl_spmatrix* C = gsl_spmatrix_alloc(n, n);
+	// gsl_spmatrix* A = gsl_spmatrix_ccs(C);
 	gsl_matrix* AA = gsl_matrix_alloc(n, n);
 	gsl_vector* b = gsl_vector_alloc(n);
 	gsl_permutation* per = gsl_permutation_alloc(n);
 	int signum;
+	// const gsl_splinalg_itersolve_type *T = gsl_splinalg_itersolve_gmres;
+	// gsl_splinalg_itersolve *work = gsl_splinalg_itersolve_alloc(T, n, 0);
 	while (crit > p) {
 		printf("iteration %d\n", count);
+
 		// solve (W+H)z = W*data
 
 		// Az=b
 		gsl_spmatrix_add(A, WW, H);
-		// show_matrix(A, n, n, 'A');
+		if (count == 0)
+			show_matrix(A, n, n, 'A');
 
 		gsl_spblas_dgemv(CblasNoTrans, 1., W, d, 0., b);
-		// show_vector(b, n, 'b');
+		if (count == 0)
+			show_vector(b, n, 'b');
 
 		gsl_spmatrix_sp2d(AA, A);
 
@@ -185,9 +204,18 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 		// gsl_linalg_ldlt_solve(AA, b, z);
 		//  Householder: slowest
 		// gsl_linalg_HH_solve(AA, b, z);
-		//  sparse iterative solver: is not working
+		//  sparse iterative solver: not working
+		/*		int iter = 0, maxiter = 10, status;
+				double tol = 1.0e-3;
+				do {
+					status = gsl_splinalg_itersolve_iterate(A, b, tol, z, work);
 
-		// show_vector(z, n, 'z');
+					double residual = gsl_splinalg_itersolve_normr(work);
+					fprintf(stderr, "iter %d residual = %.12e\n", iter, residual);
+				} while (status == GSL_CONTINUE && ++iter < maxiter);
+		*/
+		if (count == 0)
+			show_vector(z, n, 'z');
 
 		for (size_t i = 0; i < n; ++i)
 			gsl_vector_set(diff, i, gsl_vector_get(d, i) - gsl_vector_get(z, i));
