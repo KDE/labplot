@@ -9,6 +9,7 @@
 */
 
 #include "ImageDock.h"
+#include "backend/core/Settings.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/GuiTools.h"
@@ -191,7 +192,7 @@ void ImageDock::updateLocale() {
 }
 
 void ImageDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::config()->group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;

@@ -14,6 +14,7 @@
 #include "TextLabelPrivate.h"
 #include "Worksheet.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -135,7 +136,7 @@ void TextLabel::init() {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 	}
 
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("Settings_Worksheet"));
+	KConfigGroup conf(Settings::config(), QLatin1String("Settings_Worksheet"));
 	const auto& engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
 	if (engine == QLatin1String("lualatex"))
 		d->teXFont.setFamily(QLatin1String("Latin Modern Roman"));

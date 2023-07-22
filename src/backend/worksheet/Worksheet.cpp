@@ -14,6 +14,7 @@
 #include "WorksheetElement.h"
 #include "WorksheetPrivate.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Image.h"
@@ -40,7 +41,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /**
  * \class Worksheet
@@ -101,7 +101,7 @@ void Worksheet::init() {
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
 
 	// default theme
-	KConfigGroup settings = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+	KConfigGroup settings = Settings::config()->group(QLatin1String("Settings_Worksheet"));
 	d->theme = settings.readEntry(QStringLiteral("Theme"), QString());
 	loadTheme(d->theme);
 }

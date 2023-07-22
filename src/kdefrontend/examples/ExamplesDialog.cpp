@@ -8,13 +8,14 @@
 */
 
 #include "ExamplesDialog.h"
+#include "backend/core/Settings.h"
 #include "kdefrontend/examples/ExamplesWidget.h"
 
 #include <QDialogButtonBox>
 #include <QWindow>
 
 #include <KConfigGroup>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -44,7 +45,7 @@ ExamplesDialog::ExamplesDialog(QWidget* parent)
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesDialog");
+	KConfigGroup conf(Settings::config(), "ExamplesDialog");
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
@@ -53,7 +54,7 @@ ExamplesDialog::ExamplesDialog(QWidget* parent)
 }
 
 ExamplesDialog::~ExamplesDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesDialog");
+	KConfigGroup conf(Settings::config(), "ExamplesDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

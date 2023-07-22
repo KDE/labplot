@@ -11,6 +11,7 @@
 #include "FunctionValuesDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/lib/macros.h"
@@ -26,7 +27,7 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -84,7 +85,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
+	KConfigGroup conf(Settings::config(), "FunctionValuesDialog");
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -93,7 +94,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 }
 
 FunctionValuesDialog::~FunctionValuesDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
+	KConfigGroup conf(Settings::config(), "FunctionValuesDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

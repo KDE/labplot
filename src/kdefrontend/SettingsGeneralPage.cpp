@@ -16,7 +16,6 @@
 
 #include <KConfigGroup>
 #include <KI18n/KLocalizedString>
-#include <KSharedConfig>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -89,7 +88,7 @@ void SettingsGeneralPage::applySettings() {
 	if (!m_changed)
 		return;
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	KConfigGroup group = Settings::settingsGeneral();
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentData().toInt());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
@@ -109,7 +108,7 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
-	Settings::saveDockPosBehaviour(group, static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
+	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
 }
 
 void SettingsGeneralPage::restoreDefaults() {
@@ -128,7 +127,7 @@ void SettingsGeneralPage::restoreDefaults() {
 }
 
 void SettingsGeneralPage::loadSettings() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::config()->group(QLatin1String("Settings_General"));
 	auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(loadOnStart));
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
@@ -153,7 +152,7 @@ void SettingsGeneralPage::loadSettings() {
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
 
-	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::dockPosBehaviour())));
+	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::readDockPosBehaviour())));
 }
 
 void SettingsGeneralPage::retranslateUi() {

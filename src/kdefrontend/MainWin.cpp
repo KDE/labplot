@@ -13,6 +13,7 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Folder.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/datasources/DatasetHandler.h"
 #include "backend/datasources/LiveDataSource.h"
@@ -161,14 +162,14 @@ MainWin::MainWin(QWidget* parent, const QString& filename)
 
 MainWin::~MainWin() {
 	// save the current settings in MainWin
-	m_recentProjectsAction->saveEntries(KSharedConfig::openConfig()->group("Recent Files"));
+	m_recentProjectsAction->saveEntries(Settings::config()->group("Recent Files"));
 
-	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");
+	KConfigGroup group = Settings::config()->group("MainWin");
 	group.writeEntry(QLatin1String("geometry"), saveGeometry());
 	group.writeEntry(QLatin1String("WindowState"), saveState());
 	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
-	KSharedConfig::openConfig()->sync();
+	Settings::config()->sync();
 
 	// if welcome screen is shown, save its settings prior to deleting it
 	// 	if (dynamic_cast<QQuickWidget*>(centralWidget()))
@@ -235,7 +236,7 @@ void MainWin::initGUI(const QString& fileName) {
 	//  * on the very first program start, unlock all toolbars
 	//  * on later program starts, set stored lock status
 	// Furthermore, we want to show icons only after the first program start.
-	KConfigGroup groupMain = KSharedConfig::openConfig()->group("MainWindow");
+	KConfigGroup groupMain = Settings::config()->group("MainWindow");
 	if (groupMain.exists()) {
 		// KXMLGUI framework automatically stores "Disabled" for the key "ToolBarsMovable"
 		// in case the toolbars are locked -> load this value
@@ -247,7 +248,7 @@ void MainWin::initGUI(const QString& fileName) {
 	// in case we're starting for the first time, put all toolbars into the IconOnly mode
 	// and maximize the main window. The occurence of LabPlot's own section "MainWin"
 	// indicates whether this is the first start or not
-	groupMain = KSharedConfig::openConfig()->group("MainWin");
+	groupMain = Settings::config()->group("MainWin");
 	if (!groupMain.exists()) {
 		// first start
 		KToolBar::setToolBarsLocked(false);
@@ -303,10 +304,10 @@ void MainWin::initGUI(const QString& fileName) {
 	statusBar()->setFixedHeight(fm.height() + 5);
 
 	// load recently used projects
-	m_recentProjectsAction->loadEntries(KSharedConfig::openConfig()->group("Recent Files"));
+	m_recentProjectsAction->loadEntries(Settings::config()->group("Recent Files"));
 
 	// General Settings
-	const KConfigGroup& group = KSharedConfig::openConfig()->group("Settings_General");
+	const KConfigGroup& group = Settings::config()->group("Settings_General");
 
 	// title bar
 	m_titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
@@ -349,7 +350,7 @@ void MainWin::initGUI(const QString& fileName) {
 				newSpreadsheet();
 				break;
 			case LoadOnStart::LastProject: {
-				const QString& path = KSharedConfig::openConfig()->group("MainWin").readEntry("LastOpenProject", "");
+				const QString& path = Settings::config()->group("MainWin").readEntry("LastOpenProject", "");
 				if (!path.isEmpty())
 					openProject(path);
 				break;
@@ -369,7 +370,7 @@ void MainWin::initGUI(const QString& fileName) {
 	}
 
 	// read the settings of MainWin
-	const KConfigGroup& groupMainWin = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
+	const KConfigGroup& groupMainWin = Settings::config()->group(QLatin1String("MainWin"));
 
 	// show memory info
 	m_toggleMemoryInfoAction->setEnabled(statusBar()->isEnabled()); // disable/enable menu with statusbar
@@ -826,7 +827,7 @@ void MainWin::initActions() {
 	//  KMainWindow should provide a menu that allows showing/hiding of the statusbar via showStatusbar()
 	//  see https://api.kde.org/frameworks/kxmlgui/html/classKXmlGuiWindow.html#a3d7371171cafabe30cb3bb7355fdfed1
 	// KXMLGUI framework automatically stores "Disabled" for the key "StatusBar"
-	KConfigGroup groupMain = KSharedConfig::openConfig()->group("MainWindow");
+	KConfigGroup groupMain = Settings::config()->group("MainWindow");
 	const QString& str = groupMain.readEntry(QLatin1String("StatusBar"), "");
 	bool statusBarDisabled = (str == QLatin1String("Disabled"));
 	DEBUG(Q_FUNC_INFO << ", statusBar enabled in config: " << !statusBarDisabled)
@@ -927,7 +928,7 @@ void MainWin::initMenus() {
 #endif
 
 	// set the action for the current color scheme checked
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	KConfigGroup group = Settings::config()->group(QLatin1String("Settings_General"));
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0) // KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
 #else
@@ -1008,7 +1009,7 @@ void MainWin::colorSchemeChanged(QAction* action) {
 	// m_DockManager->setBackground(brush);
 
 	// save the selected color scheme
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	KConfigGroup group = Settings::config()->group(QLatin1String("Settings_General"));
 	group.writeEntry(QStringLiteral("ColorScheme"), schemeName);
 	group.sync();
 }
@@ -1396,7 +1397,7 @@ bool MainWin::newProject() {
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	KConfigGroup group = Settings::config()->group(QLatin1String("Settings_General"));
 	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
 	m_project->setDockVisibility(vis);
 	if (vis == Project::DockVisibility::folderOnly)
@@ -1414,7 +1415,7 @@ bool MainWin::newProject() {
 	// newProject is called for the first time, there is no project explorer yet
 	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
 	if (!m_projectExplorer) {
-		group = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
+		group = Settings::config()->group(QLatin1String("MainWin"));
 
 		m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
 		m_projectExplorerDock->setObjectName(QLatin1String("projectexplorer"));
@@ -1503,7 +1504,7 @@ void MainWin::openProject() {
 	if (supportOthers)
 		extensions = i18n("All supported files (%1)", allExtensions) + QLatin1String(";;") + extensions;
 
-	KConfigGroup group(KSharedConfig::openConfig(), "MainWin");
+	KConfigGroup group(Settings::config(), "MainWin");
 	const QString& dir = group.readEntry("LastOpenDir", "");
 	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Open Project"), dir, extensions, &m_lastOpenFileFilter);
 	if (path.isEmpty()) // "Cancel" was clicked
@@ -1692,7 +1693,7 @@ void MainWin::openProject(const QString& filename) {
 
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
+	KConfigGroup group = Settings::config()->group(QLatin1String("MainWin"));
 	group.writeEntry("LastOpenProject", filename);
 
 	if (m_autoSaveActive)
@@ -1783,7 +1784,7 @@ bool MainWin::saveProject() {
 }
 
 bool MainWin::saveProjectAs() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
+	KConfigGroup conf(Settings::config(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
 	QString path = QFileDialog::getSaveFileName(this,
 												i18nc("@title:window", "Save Project As"),
@@ -1825,7 +1826,7 @@ bool MainWin::save(const QString& fileName) {
 
 	QIODevice* file;
 	// if file ending is .lml, do xz compression or gzip compression in compatibility mode
-	const KConfigGroup group = KSharedConfig::openConfig()->group("Settings_General");
+	const KConfigGroup group = Settings::config()->group("Settings_General");
 	if (fileName.endsWith(QLatin1String(".lml"))) {
 		if (group.readEntry("CompatibleSave", false))
 			file = new KCompressionDevice(tempFileName, KCompressionDevice::GZip);
@@ -2531,19 +2532,17 @@ void MainWin::dropEvent(QDropEvent* event) {
 
 void MainWin::updateLocale() {
 	// Set default locale
-	QLocale::Language numberLocaleLanguage =
-		static_cast<QLocale::Language>(KSharedConfig::openConfig()
-										   ->group("Settings_General")
-										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	QLocale::Language numberLocaleLanguage = static_cast<QLocale::Language>(
+		Settings::config()->group("Settings_General").readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
 	QLocale::NumberOptions numberOptions = static_cast<QLocale::NumberOptions>(
-		KSharedConfig::openConfig()->group("Settings_General").readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
+		Settings::config()->group("Settings_General").readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
 	QLocale l(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);
 	l.setNumberOptions(numberOptions);
 	QLocale::setDefault(l);
 }
 
 void MainWin::handleSettingsChanges() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group("Settings_General");
+	const KConfigGroup group = Settings::config()->group("Settings_General");
 
 	// title bar
 	MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));

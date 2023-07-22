@@ -9,10 +9,10 @@
 */
 
 #include "BinaryOptionsWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/BinaryFilter.h"
 
 #include <KConfigGroup>
-#include <KSharedConfig>
 
 /*!
 	\class BinaryOptionsWidget
@@ -61,7 +61,7 @@ void BinaryOptionsWidget::applyFilterSettings(BinaryFilter* filter) const {
 }
 
 void BinaryOptionsWidget::loadSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportBinary");
+	KConfigGroup conf(Settings::config(), "ImportBinary");
 
 	ui.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
 	ui.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
@@ -72,7 +72,7 @@ void BinaryOptionsWidget::loadSettings() const {
 }
 
 void BinaryOptionsWidget::saveSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportBinary");
+	KConfigGroup conf(Settings::config(), "ImportBinary");
 
 	conf.writeEntry("Vectors", ui.niVectors->value());
 	conf.writeEntry("ByteOrder", ui.cbByteOrder->currentIndex());

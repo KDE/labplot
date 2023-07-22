@@ -9,6 +9,7 @@
 */
 
 #include "CartesianPlotLegendDock.h"
+#include "backend/core/Settings.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "kdefrontend/GuiTools.h"
@@ -198,7 +199,7 @@ void CartesianPlotLegendDock::updateLocale() {
 }
 
 void CartesianPlotLegendDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::config()->group(QLatin1String("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;

@@ -11,6 +11,7 @@
 
 #include "SpreadsheetView.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
@@ -138,7 +139,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 		resize(w + 50, h);
 	}
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
+	KConfigGroup group = Settings::config()->group(QLatin1String("Spreadsheet"));
 	showComments(group.readEntry(QLatin1String("ShowComments"), false));
 }
 
@@ -1769,7 +1770,7 @@ void SpreadsheetView::pasteIntoSelection() {
 		const auto numberLocale = QLocale();
 		// TEST ' ' as group separator:
 		// numberLocale = QLocale(QLocale::French, QLocale::France);
-		const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+		const KConfigGroup group = Settings::config()->group(QLatin1String("Settings_General"));
 		for (int i = 0; i < input_row_count; i++) {
 			if (hasTabs)
 				cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
@@ -2569,7 +2570,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 			}
 		} else {
 			// no columns available anymore -> resize the spreadsheet and the new column to the default size
-			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
+			KConfigGroup group = Settings::config()->group(QLatin1String("Spreadsheet"));
 			const int rows = group.readEntry(QLatin1String("RowCount"), 100);
 			m_spreadsheet->setRowCount(rows);
 

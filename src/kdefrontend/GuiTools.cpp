@@ -9,6 +9,7 @@
 */
 
 #include "GuiTools.h"
+#include "backend/core/Settings.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <KI18n/KLocalizedString>
@@ -266,7 +267,7 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 }
 
 QString GuiTools::openImageFile(const QString& className) {
-	KConfigGroup conf(KSharedConfig::openConfig(), className);
+	KConfigGroup conf(Settings::config(), className);
 	const QString& dir = conf.readEntry(QLatin1String("LastImageDir"), QString());
 
 	QString formats;

@@ -9,6 +9,7 @@
 
 #include "ImportDatasetDialog.h"
 #include "ImportDatasetWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/DatasetHandler.h"
 #include "backend/lib/macros.h"
 
@@ -20,7 +21,7 @@
 #include <QWindow>
 
 #include <KConfigGroup>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -54,7 +55,7 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent)
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportDatasetDialog");
+	KConfigGroup conf(Settings::config(), "ImportDatasetDialog");
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
@@ -65,7 +66,7 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent)
 }
 
 ImportDatasetDialog::~ImportDatasetDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportDatasetDialog");
+	KConfigGroup conf(Settings::config(), "ImportDatasetDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

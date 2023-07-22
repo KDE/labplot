@@ -49,7 +49,7 @@ AbstractPart::~AbstractPart() {
 ContentDockWidget* AbstractPart::dockWidget() const {
 #ifndef SDK
 	if (!m_dockWidget) {
-		const bool deleteOnClose = Settings::dockPosBehaviour() == Settings::DockPosBehaviour::AboveLastActive;
+		const bool deleteOnClose = Settings::readDockPosBehaviour() == Settings::DockPosBehaviour::AboveLastActive;
 		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this), deleteOnClose);
 	}
 #endif

@@ -1,7 +1,6 @@
 #include "Settings.h"
 
 #include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QLatin1String>
 
@@ -11,14 +10,39 @@ namespace {
 static constexpr QLatin1String settingsGeneralConfigName{"Settings_General"};
 static constexpr QLatin1String dockReopenPositionAfterCloseConfigName{"DockReopenPositionAfterClose"};
 
+/*!
+ * Setup new setting.
+ * setting_name: the name of the function used after the read/write prefix
+ * datatype: the datatype of the setting
+ * settings_datatype: the datatype used in the settings, for example an enum class cannot be directly stored in the settings, it must be converted to an integer
+ * setting_group: the setting group in which the setting shall be located
+ * config_name: the actual name used in the settings for reading/writing. This value must be unique within one setting_group!
+ * default_value: the default value used, if no value for the setting is stored in the settings file
+ */
+#define SETUP_SETTING(setting_name, datatype, settings_datatype, setting_group, config_name, default_value)                                                    \
+	/* read config */                                                                                                                                          \
+	datatype read##setting_name() {                                                                                                                            \
+		return static_cast<datatype>(setting_group.readEntry(config_name, static_cast<settings_datatype>(default_value)));                                     \
+	}                                                                                                                                                          \
+	/* write config */                                                                                                                                         \
+	void write##setting_name(const datatype& value) {                                                                                                          \
+		setting_group.writeEntry(config_name, static_cast<settings_datatype>(value));                                                                          \
+	}
+
+KSharedConfig::Ptr confPtr;
+
 }
 
-DockPosBehaviour dockPosBehaviour() {
-	return static_cast<DockPosBehaviour>(KSharedConfig::openConfig()
-											 ->group(settingsGeneralConfigName)
-											 .readEntry(dockReopenPositionAfterCloseConfigName, static_cast<int>(DockPosBehaviour::AboveLastActive)));
+KSharedConfig::Ptr config() {
+	if (!confPtr)
+		confPtr = KSharedConfig::openConfig();
+	return confPtr;
 }
-void saveDockPosBehaviour(KConfigGroup& group, DockPosBehaviour posBehaviour) {
-	group.writeEntry(dockReopenPositionAfterCloseConfigName, static_cast<int>(posBehaviour));
+
+KConfigGroup settingsGeneral() {
+	return config()->group(settingsGeneralConfigName);
 }
-}
+
+SETUP_SETTING(DockPosBehaviour, DockPosBehaviour, int, settingsGeneral(), dockReopenPositionAfterCloseConfigName, DockPosBehaviour::AboveLastActive)
+
+} // namespace Settings

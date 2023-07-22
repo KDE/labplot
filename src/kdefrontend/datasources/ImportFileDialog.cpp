@@ -12,6 +12,7 @@
 #include "ImportErrorDialog.h"
 #include "ImportFileWidget.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/filters.h"
@@ -27,7 +28,7 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageWidget>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 #include <QDialogButtonBox>
@@ -82,7 +83,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	m_importFileWidget->loadSettings();
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
+	KConfigGroup conf(Settings::config(), "ImportFileDialog");
 	if (conf.exists()) {
 		m_showOptions = conf.readEntry("ShowOptions", false);
 
@@ -113,7 +114,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 
 ImportFileDialog::~ImportFileDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
+	KConfigGroup conf(Settings::config(), "ImportFileDialog");
 	conf.writeEntry("ShowOptions", m_showOptions);
 	if (cbPosition)
 		conf.writeEntry("Position", cbPosition->currentIndex());

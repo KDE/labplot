@@ -19,7 +19,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <kcoreaddons_version.h>
 
 /*!

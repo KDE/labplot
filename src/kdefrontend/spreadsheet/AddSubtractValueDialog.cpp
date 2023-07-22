@@ -10,6 +10,7 @@
 
 #include "AddSubtractValueDialog.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
@@ -210,7 +211,7 @@ void AddSubtractValueDialog::init() {
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
+	KConfigGroup conf(Settings::config(), "AddSubtractValueDialog");
 
 	// baseline subtraction specific parameters
 	const auto numberLocale = QLocale();
@@ -285,7 +286,7 @@ void AddSubtractValueDialog::init() {
 AddSubtractValueDialog::~AddSubtractValueDialog() {
 	delete m_project;
 
-	KConfigGroup conf(KSharedConfig::openConfig(), QStringLiteral("AddSubtractValueDialog"));
+	KConfigGroup conf(Settings::config(), QStringLiteral("AddSubtractValueDialog"));
 	conf.writeEntry(QStringLiteral("Type"), ui.cbType->currentData().toInt());
 	conf.writeEntry(QStringLiteral("Preview"), ui.chbPreview->isChecked());
 

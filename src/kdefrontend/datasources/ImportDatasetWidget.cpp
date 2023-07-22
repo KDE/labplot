@@ -9,6 +9,7 @@
 */
 
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/DatasetHandler.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/DatasetModel.h"
@@ -28,7 +29,6 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
 	\class ImportDatasetWidget
@@ -74,7 +74,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent)
 	connect(m_networkManager, &QNetworkAccessManager::finished, this, &ImportDatasetWidget::downloadFinished);
 
 	// select the last used collection
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportDatasetWidget");
+	KConfigGroup conf(Settings::config(), "ImportDatasetWidget");
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
 		ui.cbCollections->setCurrentIndex(0);
@@ -93,7 +93,7 @@ ImportDatasetWidget::~ImportDatasetWidget() {
 
 	// save the selected collection
 	if (ui.cbCollections->currentIndex() != -1) {
-		KConfigGroup conf(KSharedConfig::openConfig(), "ImportDatasetWidget");
+		KConfigGroup conf(Settings::config(), "ImportDatasetWidget");
 		conf.writeEntry("Collection", ui.cbCollections->itemData(ui.cbCollections->currentIndex()).toString());
 	}
 }

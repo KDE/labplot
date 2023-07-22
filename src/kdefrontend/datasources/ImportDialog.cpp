@@ -11,6 +11,7 @@
 #include "ImportDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
@@ -31,7 +32,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
 
 /*!
 	\class ImportDialog
@@ -58,7 +58,7 @@ ImportDialog::~ImportDialog() {
 
 	// save the last used import position for file imports, no need to do this for live data source (cbPosition=0)
 	if (cbPosition) {
-		KConfigGroup conf(KSharedConfig::openConfig(), "ImportDialog");
+		KConfigGroup conf(Settings::config(), "ImportDialog");
 		conf.writeEntry("Position", cbPosition->currentIndex());
 	}
 }
@@ -106,7 +106,7 @@ void ImportDialog::setModel() {
 	cbPosition->addItem(i18n("Append"));
 	cbPosition->addItem(i18n("Prepend"));
 	cbPosition->addItem(i18n("Replace"));
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportDialog");
+	KConfigGroup conf(Settings::config(), "ImportDialog");
 	cbPosition->setCurrentIndex(conf.readEntry("Position", 0));
 
 	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);

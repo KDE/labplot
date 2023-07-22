@@ -8,10 +8,10 @@
 */
 
 #include "SettingsNotebookPage.h"
+#include "backend/core/Settings.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /**
  * \brief Page for Notebook settings of the Labplot settings dialog.
@@ -44,7 +44,7 @@ void SettingsNotebookPage::applySettings() {
 	if (!m_changed)
 		return;
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
+	KConfigGroup group = Settings::config()->group(QLatin1String("Settings_Notebook"));
 
 	// Appearance
 	group.writeEntry(QLatin1String("SyntaxHighlighting"), ui.chkSyntaxHighlighting->isChecked());
@@ -72,7 +72,7 @@ void SettingsNotebookPage::restoreDefaults() {
 }
 
 void SettingsNotebookPage::loadSettings() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
+	const KConfigGroup group = Settings::config()->group(QLatin1String("Settings_Notebook"));
 
 	// Appearance
 	ui.chkSyntaxHighlighting->setChecked(group.readEntry(QLatin1String("SyntaxHighlighting"), true));

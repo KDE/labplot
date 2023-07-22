@@ -11,6 +11,7 @@
 #include "ImportSQLDatabaseDialog.h"
 #include "ImportSQLDatabaseWidget.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
@@ -25,7 +26,7 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -56,7 +57,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
+	KConfigGroup conf(Settings::config(), "ImportSQLDatabaseDialog");
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -66,7 +67,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent)
 
 ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
+	KConfigGroup conf(Settings::config(), "ImportSQLDatabaseDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

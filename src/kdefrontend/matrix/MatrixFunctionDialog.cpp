@@ -9,6 +9,7 @@
 */
 
 #include "MatrixFunctionDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
@@ -82,7 +83,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "MatrixFunctionDialog");
+	KConfigGroup conf(Settings::config(), "MatrixFunctionDialog");
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -91,7 +92,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent)
 }
 
 MatrixFunctionDialog::~MatrixFunctionDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "MatrixFunctionDialog");
+	KConfigGroup conf(Settings::config(), "MatrixFunctionDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

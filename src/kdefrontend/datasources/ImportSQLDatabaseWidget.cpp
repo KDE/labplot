@@ -11,6 +11,7 @@
 #include "ImportSQLDatabaseWidget.h"
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/GuiTools.h"
@@ -19,7 +20,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/SyntaxHighlighter>
@@ -141,7 +142,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	readConnections();
 
 	// load last used connection and other settings
-	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
+	KConfigGroup config(Settings::config(), "ImportSQLDatabaseWidget");
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(config.readEntry("Connection", "")));
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
@@ -165,7 +166,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 
 ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	// save current settings
-	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
+	KConfigGroup config(Settings::config(), "ImportSQLDatabaseWidget");
 	config.writeEntry("Connection", ui.cbConnection->currentText());
 	config.writeEntry("ImportFrom", ui.cbImportFrom->currentIndex());
 	config.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());

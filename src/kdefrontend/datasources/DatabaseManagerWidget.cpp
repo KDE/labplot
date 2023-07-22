@@ -8,6 +8,7 @@
 */
 
 #include "DatabaseManagerWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/GuiTools.h"
 
@@ -15,7 +16,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <kcoreaddons_version.h>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
@@ -207,7 +208,7 @@ void DatabaseManagerWidget::driverChanged() {
 }
 
 void DatabaseManagerWidget::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), QStringLiteral("DatabaseManagerWidget"));
+	KConfigGroup conf(Settings::config(), QStringLiteral("DatabaseManagerWidget"));
 	QString dir = conf.readEntry(QStringLiteral("LastDir"), "");
 	QString path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the Database File"), dir);
 	if (path.isEmpty())

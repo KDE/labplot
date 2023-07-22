@@ -10,6 +10,7 @@
 */
 
 #include "WorksheetDock.h"
+#include "backend/core/Settings.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
@@ -173,7 +174,7 @@ void WorksheetDock::updateLocale() {
 }
 
 void WorksheetDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::config()->group(QLatin1String("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
