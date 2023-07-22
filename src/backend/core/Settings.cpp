@@ -4,11 +4,6 @@
 
 #include <QLatin1String>
 
-namespace Settings {
-
-namespace {
-static constexpr QLatin1String settingsGeneralConfigName{"Settings_General"};
-
 /*!
  * Setup new setting.
  * setting_name: the name of the function used after the read/write prefix
@@ -31,9 +26,12 @@ static constexpr QLatin1String settingsGeneralConfigName{"Settings_General"};
 		setting_group.writeEntry(config_name##ConfigName, static_cast<settings_datatype>(value));                                                              \
 	}
 
-KSharedConfig::Ptr confPtr;
+namespace Settings {
 
-}
+namespace {
+static constexpr QLatin1String settingsGeneralConfigName{"Settings_General"};
+KSharedConfig::Ptr confPtr;
+} // anonymous namespace
 
 KSharedConfig::Ptr config() {
 	if (!confPtr)
