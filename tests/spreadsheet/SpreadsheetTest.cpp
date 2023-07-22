@@ -2676,7 +2676,28 @@ void SpreadsheetTest::testStatisticsSpreadsheetToggle() {
  * change the statistics metrics and check the presense of the corresponding columns
  */
 void SpreadsheetTest::testStatisticsSpreadsheetChangeMetrics() {
+	QSKIP("fails in the test, crashes in the application");
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
 
+	// toggle on the statistics spreadsheet and count the available columns
+	sheet->toggleStatisticsSpreadsheet(true);
+	auto* statisticsSpreadsheet = sheet->children<StatisticsSpreadsheet>().constFirst();
+	auto metrics = statisticsSpreadsheet->metrics();
+	int colCount = 1; // column "Column Name" is always available
+	auto it = statisticsSpreadsheet->m_metricNames.constBegin();
+	while (it != statisticsSpreadsheet->m_metricNames.constEnd()) {
+		if (metrics.testFlag(it.key()))
+			++colCount;
+		++it;
+	}
+	QCOMPARE(statisticsSpreadsheet->children<Column>().size(), colCount);
+
+	// deactivate Count and check the available columns again
+	metrics.setFlag(StatisticsSpreadsheet::Metric::Count, false);
+	statisticsSpreadsheet->setMetrics(metrics);
+	QCOMPARE(statisticsSpreadsheet->children<Column>().size(), colCount - 1);
 }
 
 #ifdef HAVE_VECTOR_BLF

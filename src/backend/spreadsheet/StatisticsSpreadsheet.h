@@ -65,6 +65,8 @@ private:
 	Spreadsheet* m_spreadsheet{nullptr};
 	Metrics m_metrics;
 	QMap<Metric, QString> m_metricNames;
+
+	friend class SpreadsheetTest;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(StatisticsSpreadsheet::Metrics)

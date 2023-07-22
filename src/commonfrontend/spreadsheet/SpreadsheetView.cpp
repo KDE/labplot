@@ -23,6 +23,7 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
+#include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetHeaderView.h"
@@ -301,6 +302,8 @@ void SpreadsheetView::initActions() {
 
 	action_statistics_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics Spreadsheet"), this);
 	action_statistics_spreadsheet->setCheckable(true);
+	bool hasStatisticsSpreadsheet = (m_spreadsheet->children<StatisticsSpreadsheet>().size() == 1);
+	action_statistics_spreadsheet->setChecked(hasStatisticsSpreadsheet);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
