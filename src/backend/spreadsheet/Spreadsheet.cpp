@@ -89,7 +89,6 @@ void Spreadsheet::init() {
 
 void Spreadsheet::setModel(SpreadsheetModel* model) {
 	m_model = model;
-	connect(m_model, &SpreadsheetModel::dataChanged, this, &Spreadsheet::changed); // notify the statistics spreadsheet about changes
 }
 
 SpreadsheetModel* Spreadsheet::model() const {
@@ -252,8 +251,6 @@ void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
 
 	if (execute)
 		exec(command);
-
-	Q_EMIT changed(); // notify the statistics spreadsheet about changes
 }
 
 void Spreadsheet::insertRows(int before, int count, QUndoCommand* parent) {
@@ -272,8 +269,6 @@ void Spreadsheet::insertRows(int before, int count, QUndoCommand* parent) {
 
 	if (execute)
 		exec(command);
-
-	Q_EMIT changed(); // notify the statistics spreadsheet about changes
 }
 
 void Spreadsheet::appendRows(int count) {
@@ -503,8 +498,6 @@ void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
 
 	if (execute)
 		exec(command);
-
-	Q_EMIT changed(); // notify the statistics spreadsheet about changes
 }
 
 void Spreadsheet::insertColumns(int before, int count, QUndoCommand* parent) {
@@ -525,8 +518,6 @@ void Spreadsheet::insertColumns(int before, int count, QUndoCommand* parent) {
 
 	if (execute)
 		exec(command);
-
-	Q_EMIT changed(); // notify the statistics spreadsheet about changes
 }
 
 /*!

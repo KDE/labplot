@@ -7,6 +7,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "StatisticsSpreadsheet.h"
+#include "SpreadsheetModel.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
@@ -56,7 +57,12 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 		{StatisticsSpreadsheet::Metric::Entropy, i18n("Entropy")},
 	};
 
-	connect(m_spreadsheet, &Spreadsheet::changed, this, &StatisticsSpreadsheet::update);
+	auto* model = m_spreadsheet->model();
+	connect(model, &SpreadsheetModel::dataChanged, this, &StatisticsSpreadsheet::update);
+	connect(model, &SpreadsheetModel::rowsRemoved, this, &StatisticsSpreadsheet::update);
+	connect(model, &SpreadsheetModel::rowsInserted, this, &StatisticsSpreadsheet::update);
+	connect(model, &SpreadsheetModel::columnsRemoved, this, &StatisticsSpreadsheet::update);
+	connect(model, &SpreadsheetModel::columnsInserted, this, &StatisticsSpreadsheet::update);
 
 	setUndoAware(false);
 	setFixed(true);
