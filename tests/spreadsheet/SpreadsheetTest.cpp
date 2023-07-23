@@ -2731,8 +2731,8 @@ void SpreadsheetTest::testStatisticsSpreadsheetChildIndex() {
 	// and "append right to" - ensure no columns are added after the statistics spreadhseet
 	auto* view = static_cast<SpreadsheetView*>(sheet->view());
 
-	//insert a new column right to the last selected column, it should be placed in front of the statistics spreadsheet
-	view->selectColumn(3); //select the last 4th column
+	// insert a new column right to the last selected column, it should be placed in front of the statistics spreadsheet
+	view->selectColumn(3); // select the last 4th column
 	view->insertColumnsRight(1);
 	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 5);
 }
