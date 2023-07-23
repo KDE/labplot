@@ -2548,7 +2548,10 @@ void SpreadsheetView::insertColumnsRight(int count) {
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 
 				// last column selected, no next column available -> add/append a new column
-				m_spreadsheet->addChild(newCol);
+				if (!m_spreadsheet->statisticsSpreadsheet())
+					m_spreadsheet->addChild(newCol);
+				else
+					m_spreadsheet->insertChildBefore(newCol, m_spreadsheet->statisticsSpreadsheet());
 			}
 		}
 	} else {

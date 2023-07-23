@@ -19,6 +19,7 @@ class AbstractFileFilter;
 class SpreadsheetView;
 class SpreadsheetModel;
 class SpreadsheetPrivate;
+class StatisticsSpreadsheet;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
@@ -31,6 +32,7 @@ public:
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
 	QWidget* view() const override;
+	StatisticsSpreadsheet* statisticsSpreadsheet() const;
 
 	bool exportView() const override;
 	bool printView() override;

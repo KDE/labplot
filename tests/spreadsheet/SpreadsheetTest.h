@@ -97,6 +97,7 @@ private Q_SLOTS:
 	// statistics spreadsheet
 	void testStatisticsSpreadsheetToggle();
 	void testStatisticsSpreadsheetChangeMetrics();
+	void testStatisticsSpreadsheetChildIndex();
 
 #ifdef HAVE_VECTOR_BLF
 	void testLinkSpreadSheetImportBLF();

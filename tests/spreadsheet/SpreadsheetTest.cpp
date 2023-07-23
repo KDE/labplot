@@ -2701,6 +2701,42 @@ void SpreadsheetTest::testStatisticsSpreadsheetChangeMetrics() {
 	QCOMPARE(statisticsSpreadsheet->children<Column>().size(), colCount - 1);
 }
 
+/*!
+ * check the position of the statistics spreadsheet in the list of children of the parent
+ * spreadsheet, it should always be put at the last position.
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetChildIndex() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	// toggle on the statistics spreadsheet and count the available columns
+	sheet->toggleStatisticsSpreadsheet(true);
+	auto* statisticsSpreadsheet = sheet->children<StatisticsSpreadsheet>().constFirst();
+
+	// set the column count and check the position of the statistics spreadsheet
+	sheet->setColumnCount(2);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 2);
+
+	// change the column count and check the position again
+	sheet->setColumnCount(3);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 3);
+
+	// append one more column and check the position again
+	sheet->appendColumn();
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 4);
+
+	// check also the position when adding new columns via the actions in the view that also
+	// take the current selected column into account and have more logic for "append left to"
+	// and "append right to" - ensure no columns are added after the statistics spreadhseet
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+
+	//insert a new column right to the last selected column, it should be placed in front of the statistics spreadsheet
+	view->selectColumn(3); //select the last 4th column
+	view->insertColumnsRight(1);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 5);
+}
+
 #ifdef HAVE_VECTOR_BLF
 // Copied from BLFFilterTest.cpp
 namespace {

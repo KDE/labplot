@@ -138,6 +138,11 @@ bool Spreadsheet::printPreview() const {
 #endif
 }
 
+StatisticsSpreadsheet* Spreadsheet::statisticsSpreadsheet() const {
+	Q_D(const Spreadsheet);
+	return d->statisticsSpreadsheet;
+}
+
 /*!
  * \brief Called when the application settings were changed.
  *  adjusts the appearence of the spreadsheet header.
