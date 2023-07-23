@@ -2562,7 +2562,10 @@ void SpreadsheetView::insertColumnsRight(int count) {
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 
 				// columns available but no columns selected -> append the new column at the very end
-				m_spreadsheet->addChild(newCol);
+				if (!m_spreadsheet->statisticsSpreadsheet())
+					m_spreadsheet->addChild(newCol);
+				else
+					m_spreadsheet->insertChildBefore(newCol, m_spreadsheet->statisticsSpreadsheet());
 			}
 		} else {
 			// no columns available anymore -> resize the spreadsheet and the new column to the default size
@@ -2576,7 +2579,10 @@ void SpreadsheetView::insertColumnsRight(int count) {
 				newCol->insertRows(0, rows);
 
 				// add/append a new column
-				m_spreadsheet->addChild(newCol);
+				if (!m_spreadsheet->statisticsSpreadsheet())
+					m_spreadsheet->addChild(newCol);
+				else
+					m_spreadsheet->insertChildBefore(newCol, m_spreadsheet->statisticsSpreadsheet());
 			}
 		}
 	}
