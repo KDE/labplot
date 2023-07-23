@@ -18,6 +18,7 @@
 #include <QSize>
 #include <QTimeLine>
 #include <QToolButton>
+#include <QAction>
 
 #include <KLocalizedString>
 
@@ -141,8 +142,42 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	show();
 }
 
+class ToolButton: public QToolButton {
+public:
+	ToolButton(QWidget *parent = nullptr): QToolButton(parent) {
+
+	}
+	void setDefaultAction(QAction *action) {
+
+// Works fine, triggers actionChanged
+//		action->setVisible(false);
+//		action->setVisible(true);
+//		action->setChecked(false);
+//		action->setChecked(true);
+//		action->setEnabled(false);
+//		action->setEnabled(true);
+
+		if (action) {
+			connect(action, &QAction::changed, this, &ToolButton::actionChanged);
+			//connect(action, &QAction::triggered, this, &ToolButton::actionChanged);
+		}
+		QToolButton::setDefaultAction(action);
+	}
+
+	void actionChanged() {
+		// TODO: for some reason it will not be called when action changes properties!
+		// To trigger that
+		// setCheckable(action->isCheckable());
+		// setChecked(action->isChecked());
+		// setEnabled(action->isEnabled());
+		// will be executed
+		QToolButton::setDefaultAction(defaultAction());
+	}
+
+};
+
 void SlidingPanelBottom::addButtonToLayout(CartesianPlot::NavigationOperation op, QBoxLayout* layout, WorksheetView* view) {
-	auto* button = new QToolButton(this);
+	auto* button = new ToolButton(this);
 	button->setDefaultAction(view->action(op));
 	m_sizeHintHeight = qMax(m_sizeHintHeight, button->sizeHint().height());
 	layout->addWidget(button);
