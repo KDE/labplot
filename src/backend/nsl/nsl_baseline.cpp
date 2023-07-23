@@ -11,18 +11,21 @@
 #include "nsl_stats.h"
 
 #include <gsl/gsl_fit.h>
+#include <gsl/gsl_statistics_double.h>
+
+#ifdef HAVE_EIGEN3
+#include <Eigen/Sparse>
+#include <Eigen/SparseCholesky>
+#else // GSL
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_sort.h>
 #include <gsl/gsl_spblas.h>
 #include <gsl/gsl_splinalg.h>
 #include <gsl/gsl_spmatrix.h>
-#include <gsl/gsl_statistics_double.h>
-
-// TODO
-//#include <eigen3/Eigen/Sparse>
-//#include <eigen3/Eigen/SparseCholesky>
 
 #include <cstring> // memcpy
+#endif
+
 #include <iostream>
 
 void nsl_baseline_remove_minimum(double* data, const size_t n) {
@@ -91,6 +94,7 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 	return 0;
 }
 
+#ifndef HAVE_EIGEN3
 void show_matrix(gsl_spmatrix* M, size_t n, size_t m, char name) {
 	printf("%c:\n", name);
 	// for (size_t i = 0; i < n; ++i) {
@@ -115,129 +119,127 @@ void show_vector(gsl_vector* v, size_t n, char name) {
 		printf("%g ", gsl_vector_get(v, i));
 	puts("\n");
 }
+#endif
 
+// Eigen3 version of ARPLS
 /* see https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract */
-double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double lambda, int niter) {
-	if (p == 0)
-		p = 0.001;
-	if (lambda == 0)
-		lambda = 1.e4;
-	if (niter == 0)
-		niter = 10;
-
+double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, double lambda, int niter) {
 	double crit = 1.;
 	int count = 0;
 
-	// Eigen version
-	/*	typedef Eigen::SparseMatrix<double> SMat; // declares a column-major sparse matrix type of double
-		typedef Eigen::SparseVector<double> SVec; // declares a sparse vector type of double
+#ifdef HAVE_EIGEN3
+	typedef Eigen::SparseMatrix<double> SMat; // declares a column-major sparse matrix type of double
+	typedef Eigen::SparseVector<double> SVec; // declares a sparse vector type of double
 
-		Eigen::SparseMatrix<double> Dmat(n, n-2);
-		for (size_t i = 0; i < n; ++i) {
-			for (size_t j = 0; j < n - 2; ++j) {
-				if (i == j)
-					Dmat.insert(i, j) = 1.;
-				if (i == j + 1)
-					Dmat.insert(i, j) = -2.;
-				if (i == j + 2)
-					Dmat.insert(i, j) = 1.;
+	Eigen::SparseMatrix<double> Dmat(n, n - 2);
+	for (size_t i = 0; i < n; ++i) {
+		for (size_t j = 0; j < n - 2; ++j) {
+			if (i == j)
+				Dmat.insert(i, j) = 1.;
+			if (i == j + 1)
+				Dmat.insert(i, j) = -2.;
+			if (i == j + 2)
+				Dmat.insert(i, j) = 1.;
+		}
+	}
+	// std::cout << "Dmat =" << std::endl << Dmat << std::endl;
+
+	// H = lambda * D.dot(D.T)
+	SMat Hmat = lambda * Dmat * Dmat.transpose();
+	// std::cout << "Hmat =" << std::endl << Hmat << std::endl;
+
+	// weights
+	SVec wvec(n);
+	SMat Wmat(n, n);
+	for (size_t i = 0; i < n; ++i) {
+		wvec.insert(i) = 1.;
+		Wmat.insert(i, i) = 1.;
+	}
+
+	SVec dvec(n); // data
+	for (size_t i = 0; i < n; i++)
+		dvec.insert(i) = data[i];
+	SVec zvec(n); // solution
+	for (size_t i = 0; i < n; i++) // initial guess for z
+		zvec.insert(i) = data[i];
+
+	while (crit > p) {
+		printf("iteration %d\n", count);
+
+		// solve (W+H)z = W*data
+		Eigen::SimplicialLLT<SMat> solver;
+		solver.compute(Wmat + Hmat);
+		if (solver.info() != Eigen::Success)
+			puts("decomposition failed\n");
+
+		zvec = solver.solve(Wmat * dvec);
+		if (solver.info() != Eigen::Success)
+			puts("solving failed\n");
+
+		// std::cout << "zvec = " << zvec << std::endl;
+
+		SVec diffvec = dvec - zvec;
+		// std::cout << "diffvec = " << diffvec << std::endl;
+
+		// mean and stdev of negative diffs
+		double m = 0.;
+		int num = 0;
+		for (SVec::InnerIterator it(diffvec); it; ++it) {
+			double v = it.value();
+			if (v < 0) {
+				m += v;
+				num++;
 			}
 		}
-		//std::cout << "Dmat =" << std::endl << Dmat << std::endl;
-
-		// H = lambda * D.dot(D.T)
-		SMat Hmat = lambda * Dmat * Dmat.transpose();
-		//std::cout << "Hmat =" << std::endl << Hmat << std::endl;
-
-		// weights
-		SVec wvec(n);
-		SMat Wmat(n, n);
-		for (size_t i = 0; i < n; ++i) {
-			wvec.insert(i) = 1.;
-			Wmat.insert(i, i) = 1.;
+		if (num > 0)
+			m /= num;
+		// printf("m = %g\n", m);
+		double s = 0.;
+		for (SVec::InnerIterator it(diffvec); it; ++it) {
+			double v = it.value();
+			if (v < 0)
+				s += (v - m) * (v - m);
 		}
+		if (num > 0)
+			s /= num;
+		s = sqrt(s);
+		// printf("s = %g\n", s);
 
-		SVec dvec(n);	// data
-		for (size_t i = 0; i < n; i++)
-			dvec.insert(i) = data[i];
-		SVec zvec(n);	// solution
-		for (size_t i = 0; i < n; i++)	// initial guess for z
-			zvec.insert(i) = data[i];
+		// w_new = 1 / (1 + np.exp(2 * (d - (2*s - m))/s))
+		SVec wnvec(n);
+		for (size_t i = 0; i < n; ++i)
+			wnvec.insert(i) = 1. / (1. + exp(2. * (diffvec.coeffRef(i) - (2. * s - m)) / s));
+		// std::cout << "wnvec = " << wnvec << std::endl;
 
-		while (crit > p) {
-			printf("iteration %d\n", count);
+		// crit = norm(w_new - w) / norm(w)
+		crit = (wnvec - wvec).norm() / wvec.norm();
+		printf("crit = %.15g\n", crit);
 
-			// solve (W+H)z = W*data
-			Eigen::SimplicialLLT<SMat> solver;
-			solver.compute(Wmat + Hmat);
-			if(solver.info() != Eigen::Success)
-				puts("decomposition failed\n");
+		// w = w_new
+		wvec = wnvec;
+		// W.setdiag(w)
+		for (size_t i = 0; i < n; ++i)
+			Wmat.coeffRef(i, i) = wnvec.coeffRef(i);
+		// std::cout << "Wmat = " << Wmat << std::endl;
 
-			zvec = solver.solve(Wmat * dvec);
-			if(solver.info() != Eigen::Success)
-				puts("solving failed\n");
+		count++;
 
-			//std::cout << "zvec = " << zvec << std::endl;
-
-			SVec diffvec = dvec - zvec;
-			//std::cout << "diffvec = " << diffvec << std::endl;
-
-			// mean and stdev of negative diffs
-			double m = 0.;
-			int num = 0;
-			for (SVec::InnerIterator it(diffvec); it; ++it) {
-				double v = it.value();
-				if (v < 0) {
-					m += v;
-					num++;
-				}
-			}
-			if (num > 0)
-				m /= num;
-			//printf("m = %g\n", m);
-			double s = 0.;
-			for (SVec::InnerIterator it(diffvec); it; ++it) {
-				double v = it.value();
-				if (v < 0)
-					s += (v - m) * (v - m);
-			}
-			if (num > 0)
-				s /= num;
-			s = sqrt(s);
-			//printf("s = %g\n", s);
-
-			// w_new = 1 / (1 + np.exp(2 * (d - (2*s - m))/s))
-			SVec wnvec(n);
-			for (size_t i = 0; i < n; ++i)
-				wnvec.insert(i) = 1. / (1. + exp(2. * (diffvec.coeffRef(i) - (2. * s - m)) / s));
-
-			//std::cout << "wnvec = " << wnvec << std::endl;
-
-			// crit = norm(w_new - w) / norm(w)
-			crit = (wnvec - wvec).norm() / wvec.norm();
-			printf("crit = %.15g\n", crit);
-
-			// w = w_new
-			wvec = wnvec;
-			// W.setdiag(w)
-			for (size_t i = 0; i < n; ++i)
-				Wmat.coeffRef(i, i) = wnvec.coeffRef(i);
-			//std::cout << "Wmat = " << Wmat << std::endl;
-
-			count++;
-
-			if (count > niter) {
-				puts("Maximum number of iterations reached");
-				break;
-			}
+		if (count > niter) {
+			puts("Maximum number of iterations reached");
+			break;
 		}
-	*/
+	}
+#endif
 
-	// GSL version
-	printf("**************** GSL ********************\n");
-	crit = 1.;
-	count = 0;
+	return crit;
+}
 
+// GSL version of ARPLS (much slower than Eigen3 version)
+double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, double lambda, int niter) {
+	double crit = 1.;
+	int count = 0;
+
+#ifndef HAVE_EIGEN3
 	gsl_spmatrix* D = gsl_spmatrix_alloc(n, n - 2);
 	for (size_t i = 0; i < n; ++i) {
 		for (size_t j = 0; j < n - 2; ++j) {
@@ -409,6 +411,25 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 	gsl_vector_free(diff);
 	gsl_vector_free(z);
 	gsl_vector_free(d);
+#endif
 
 	return crit;
+}
+
+double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double lambda, int niter) {
+	if (p == 0)
+		p = 0.001;
+	if (lambda == 0)
+		lambda = 1.e4;
+	if (niter == 0)
+		niter = 10;
+
+	double crit = 1.;
+	int count = 0;
+
+#ifdef HAVE_EIGEN3
+	return nsl_baseline_remove_arpls_Eigen3(data, n, p, lambda, niter);
+#endif
+
+	return nsl_baseline_remove_arpls_GSL(data, n, p, lambda, niter);
 }
