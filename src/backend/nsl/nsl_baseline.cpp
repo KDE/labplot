@@ -229,6 +229,9 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 			break;
 		}
 	}
+
+	for (size_t i = 0; i < n; ++i)
+		data[i] -= zvec.coeffRef(i);
 #endif
 
 	return crit;
