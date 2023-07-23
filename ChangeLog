@@ -7,6 +7,8 @@ New features:
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
+Performance improvements:
+	* Make baseline removal much faster by using Eigen3 library (optional dependency)
 Bug fixes:
 	* Set mousemode to selection when leaving the plot (Issue #614)
 	* Fix plot range field not being updated (Issue #603)
