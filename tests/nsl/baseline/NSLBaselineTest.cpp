@@ -9,12 +9,9 @@
 */
 
 #include "NSLBaselineTest.h"
+#include "backend/nsl/nsl_baseline.h"
 
 #include <fstream>
-
-extern "C" {
-#include "backend/nsl/nsl_baseline.h"
-}
 
 // ##############################################################################
 // #################  constant base lines

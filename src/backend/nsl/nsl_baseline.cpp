@@ -18,17 +18,22 @@
 #include <gsl/gsl_spmatrix.h>
 #include <gsl/gsl_statistics_double.h>
 
-#include <string.h> // memcpy
+// TODO
+//#include <eigen3/Eigen/Sparse>
+//#include <eigen3/Eigen/SparseCholesky>
+
+#include <cstring> // memcpy
+#include <iostream>
 
 void nsl_baseline_remove_minimum(double* data, const size_t n) {
-	const double min = nsl_stats_minimum(data, n, NULL);
+	const double min = nsl_stats_minimum(data, n, nullptr);
 
 	for (size_t i = 0; i < n; i++)
 		data[i] -= min;
 }
 
 void nsl_baseline_remove_maximum(double* data, const size_t n) {
-	const double max = nsl_stats_maximum(data, n, NULL);
+	const double max = nsl_stats_maximum(data, n, nullptr);
 
 	for (size_t i = 0; i < n; i++)
 		data[i] -= max;
@@ -120,6 +125,119 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 	if (niter == 0)
 		niter = 10;
 
+	double crit = 1.;
+	int count = 0;
+
+	// Eigen version
+	/*	typedef Eigen::SparseMatrix<double> SMat; // declares a column-major sparse matrix type of double
+		typedef Eigen::SparseVector<double> SVec; // declares a sparse vector type of double
+
+		Eigen::SparseMatrix<double> Dmat(n, n-2);
+		for (size_t i = 0; i < n; ++i) {
+			for (size_t j = 0; j < n - 2; ++j) {
+				if (i == j)
+					Dmat.insert(i, j) = 1.;
+				if (i == j + 1)
+					Dmat.insert(i, j) = -2.;
+				if (i == j + 2)
+					Dmat.insert(i, j) = 1.;
+			}
+		}
+		//std::cout << "Dmat =" << std::endl << Dmat << std::endl;
+
+		// H = lambda * D.dot(D.T)
+		SMat Hmat = lambda * Dmat * Dmat.transpose();
+		//std::cout << "Hmat =" << std::endl << Hmat << std::endl;
+
+		// weights
+		SVec wvec(n);
+		SMat Wmat(n, n);
+		for (size_t i = 0; i < n; ++i) {
+			wvec.insert(i) = 1.;
+			Wmat.insert(i, i) = 1.;
+		}
+
+		SVec dvec(n);	// data
+		for (size_t i = 0; i < n; i++)
+			dvec.insert(i) = data[i];
+		SVec zvec(n);	// solution
+		for (size_t i = 0; i < n; i++)	// initial guess for z
+			zvec.insert(i) = data[i];
+
+		while (crit > p) {
+			printf("iteration %d\n", count);
+
+			// solve (W+H)z = W*data
+			Eigen::SimplicialLLT<SMat> solver;
+			solver.compute(Wmat + Hmat);
+			if(solver.info() != Eigen::Success)
+				puts("decomposition failed\n");
+
+			zvec = solver.solve(Wmat * dvec);
+			if(solver.info() != Eigen::Success)
+				puts("solving failed\n");
+
+			//std::cout << "zvec = " << zvec << std::endl;
+
+			SVec diffvec = dvec - zvec;
+			//std::cout << "diffvec = " << diffvec << std::endl;
+
+			// mean and stdev of negative diffs
+			double m = 0.;
+			int num = 0;
+			for (SVec::InnerIterator it(diffvec); it; ++it) {
+				double v = it.value();
+				if (v < 0) {
+					m += v;
+					num++;
+				}
+			}
+			if (num > 0)
+				m /= num;
+			//printf("m = %g\n", m);
+			double s = 0.;
+			for (SVec::InnerIterator it(diffvec); it; ++it) {
+				double v = it.value();
+				if (v < 0)
+					s += (v - m) * (v - m);
+			}
+			if (num > 0)
+				s /= num;
+			s = sqrt(s);
+			//printf("s = %g\n", s);
+
+			// w_new = 1 / (1 + np.exp(2 * (d - (2*s - m))/s))
+			SVec wnvec(n);
+			for (size_t i = 0; i < n; ++i)
+				wnvec.insert(i) = 1. / (1. + exp(2. * (diffvec.coeffRef(i) - (2. * s - m)) / s));
+
+			//std::cout << "wnvec = " << wnvec << std::endl;
+
+			// crit = norm(w_new - w) / norm(w)
+			crit = (wnvec - wvec).norm() / wvec.norm();
+			printf("crit = %.15g\n", crit);
+
+			// w = w_new
+			wvec = wnvec;
+			// W.setdiag(w)
+			for (size_t i = 0; i < n; ++i)
+				Wmat.coeffRef(i, i) = wnvec.coeffRef(i);
+			//std::cout << "Wmat = " << Wmat << std::endl;
+
+			count++;
+
+			if (count > niter) {
+				puts("Maximum number of iterations reached");
+				break;
+			}
+		}
+	*/
+
+	// GSL version
+	printf("**************** GSL ********************\n");
+	crit = 1.;
+	count = 0;
+
 	gsl_spmatrix* D = gsl_spmatrix_alloc(n, n - 2);
 	for (size_t i = 0; i < n; ++i) {
 		for (size_t j = 0; j < n - 2; ++j) {
@@ -157,8 +275,6 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 	gsl_spmatrix* WW = gsl_spmatrix_ccs(W);
 
 	// loop
-	double crit = 1.;
-	int count = 0;
 	gsl_vector* d = gsl_vector_alloc(n); // data
 	for (size_t i = 0; i < n; i++)
 		gsl_vector_set(d, i, data[i]);
@@ -214,13 +330,13 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 					fprintf(stderr, "iter %d residual = %.12e\n", iter, residual);
 				} while (status == GSL_CONTINUE && ++iter < maxiter);
 		*/
-		if (count == 0)
-			show_vector(z, n, 'z');
+		// show_vector(z, n, 'z');
 
 		for (size_t i = 0; i < n; ++i)
 			gsl_vector_set(diff, i, gsl_vector_get(d, i) - gsl_vector_get(z, i));
 		// show_vector(diff, n, 'D');
 
+		// mean and stdev of negative diffs
 		double m = 0.;
 		int num = 0;
 		for (size_t i = 0; i < n; ++i) {

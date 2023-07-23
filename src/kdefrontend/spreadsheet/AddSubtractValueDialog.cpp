@@ -26,9 +26,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-extern "C" {
 #include "backend/nsl/nsl_baseline.h"
-}
 
 #include <KLocalizedString>
 #include <KMessageBox>
