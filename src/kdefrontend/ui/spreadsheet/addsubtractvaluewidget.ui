@@ -58,8 +58,8 @@
    </item>
    <item row="7" column="1">
     <widget class="QSpinBox" name="sbBaselineParameter1">
-     <property name="minimum">
-      <number>1</number>
+     <property name="value">
+      <number>6</number>
      </property>
     </widget>
    </item>
@@ -115,6 +115,12 @@
      </property>
      <property name="minimum">
       <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1000</number>
+     </property>
+     <property name="value">
+      <number>10</number>
      </property>
     </widget>
    </item>

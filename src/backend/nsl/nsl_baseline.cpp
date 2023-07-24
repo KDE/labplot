@@ -99,33 +99,6 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 	return 0;
 }
 
-#ifndef HAVE_EIGEN3
-void show_matrix(gsl_spmatrix* M, size_t n, size_t m, char name) {
-	printf("%c:\n", name);
-	// for (size_t i = 0; i < n; ++i) {
-	for (size_t i = 0; i < 5; ++i) {
-		// for (size_t j = 0; j < m; ++j)
-		for (size_t j = 0; j < 5; ++j)
-			printf("%f ", gsl_spmatrix_get(M, i, j));
-		puts("\n");
-	}
-	for (size_t i = n - 5; i < n; ++i) {
-		for (size_t j = m - 5; j < m; ++j)
-			printf("%f ", gsl_spmatrix_get(M, i, j));
-		puts("\n");
-	}
-}
-void show_vector(gsl_vector* v, size_t n, char name) {
-	printf("%c:\n", name);
-	for (size_t i = 0; i < 5; ++i)
-		printf("%g ", gsl_vector_get(v, i));
-	printf(" .. ");
-	for (size_t i = n - 5; i < n; ++i)
-		printf("%g ", gsl_vector_get(v, i));
-	puts("\n");
-}
-#endif
-
 // Eigen3 version of ARPLS
 /* see https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract */
 double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, double lambda, int niter) {
@@ -246,6 +219,33 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 
 	return crit;
 }
+
+#ifndef HAVE_EIGEN3
+void show_matrix(gsl_spmatrix* M, size_t n, size_t m, char name) {
+	printf("%c:\n", name);
+	// for (size_t i = 0; i < n; ++i) {
+	for (size_t i = 0; i < 5; ++i) {
+		// for (size_t j = 0; j < m; ++j)
+		for (size_t j = 0; j < 5; ++j)
+			printf("%f ", gsl_spmatrix_get(M, i, j));
+		puts("\n");
+	}
+	for (size_t i = n - 5; i < n; ++i) {
+		for (size_t j = m - 5; j < m; ++j)
+			printf("%f ", gsl_spmatrix_get(M, i, j));
+		puts("\n");
+	}
+}
+void show_vector(gsl_vector* v, size_t n, char name) {
+	printf("%c:\n", name);
+	for (size_t i = 0; i < 5; ++i)
+		printf("%g ", gsl_vector_get(v, i));
+	printf(" .. ");
+	for (size_t i = n - 5; i < n; ++i)
+		printf("%g ", gsl_vector_get(v, i));
+	puts("\n");
+}
+#endif
 
 // GSL version of ARPLS (much slower than Eigen3 version)
 double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, double lambda, int niter) {
