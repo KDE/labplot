@@ -2737,6 +2737,37 @@ void SpreadsheetTest::testStatisticsSpreadsheetChildIndex() {
 	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 5);
 }
 
+/*!
+ * check the position of the statistics spreadsheet in the list of children of the parent
+ * spreadsheet after an undo and redo of a column appen, it should always be put at the last position,
+ * and also check  the handling of added and removed childrend in the model in the presense of the
+ * statistics spreadsheet.
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetChildIndexAfterUndoRedo() {
+	QSKIP("crashes at the moment");
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	// toggle on the statistics spreadsheet and count the available columns
+	sheet->toggleStatisticsSpreadsheet(true);
+	auto* statisticsSpreadsheet = sheet->children<StatisticsSpreadsheet>().constFirst();
+
+	// set the column count , append a column, undo and redo this change and check the position of the statistics spreadsheet
+	sheet->setColumnCount(2);
+	sheet->appendColumn();
+	QCOMPARE(sheet->model()->columnCount(), 3);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 3);
+
+	project.undoStack()->undo();
+	QCOMPARE(sheet->model()->columnCount(), 2);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 2);
+
+	project.undoStack()->redo();
+	QCOMPARE(sheet->model()->columnCount(), 3);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 3);
+}
+
 #ifdef HAVE_VECTOR_BLF
 // Copied from BLFFilterTest.cpp
 namespace {

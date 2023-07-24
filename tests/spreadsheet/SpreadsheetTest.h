@@ -98,6 +98,7 @@ private Q_SLOTS:
 	void testStatisticsSpreadsheetToggle();
 	void testStatisticsSpreadsheetChangeMetrics();
 	void testStatisticsSpreadsheetChildIndex();
+	void testStatisticsSpreadsheetChildIndexAfterUndoRedo();
 
 #ifdef HAVE_VECTOR_BLF
 	void testLinkSpreadSheetImportBLF();
