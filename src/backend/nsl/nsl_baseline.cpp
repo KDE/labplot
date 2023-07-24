@@ -10,24 +10,38 @@
 #include "nsl_baseline.h"
 #include "nsl_stats.h"
 
-#include "gsl/gsl_fit.h"
-#include "gsl/gsl_linalg.h"
-#include "gsl/gsl_sort.h"
-#include "gsl/gsl_spblas.h"
-#include "gsl/gsl_spmatrix.h"
-#include "gsl/gsl_statistics_double.h"
+#include <QtGlobal>
 
-#include <string.h> // memcpy
+#include <gsl/gsl_fit.h>
+#include <gsl/gsl_statistics_double.h>
+
+#ifdef HAVE_EIGEN3
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#include <Eigen/Sparse>
+#include <Eigen/SparseCholesky>
+#pragma GCC diagnostic pop
+#else // GSL
+#include <gsl/gsl_linalg.h>
+#include <gsl/gsl_sort.h>
+#include <gsl/gsl_spblas.h>
+#include <gsl/gsl_splinalg.h>
+#include <gsl/gsl_spmatrix.h>
+
+#include <cstring> // memcpy
+#endif
+
+#include <iostream>
 
 void nsl_baseline_remove_minimum(double* data, const size_t n) {
-	const double min = nsl_stats_minimum(data, n, NULL);
+	const double min = nsl_stats_minimum(data, n, nullptr);
 
 	for (size_t i = 0; i < n; i++)
 		data[i] -= min;
 }
 
 void nsl_baseline_remove_maximum(double* data, const size_t n) {
-	const double max = nsl_stats_maximum(data, n, NULL);
+	const double max = nsl_stats_maximum(data, n, nullptr);
 
 	for (size_t i = 0; i < n; i++)
 		data[i] -= max;
@@ -85,30 +99,158 @@ int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 	return 0;
 }
 
+// Eigen3 version of ARPLS
+/* see https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract */
+double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, double lambda, int niter) {
+	double crit = 1.;
+
+#ifdef HAVE_EIGEN3
+	typedef Eigen::SparseMatrix<double> SMat; // declares a column-major sparse matrix type of double
+	typedef Eigen::SparseVector<double> SVec; // declares a sparse vector type of double
+
+	Eigen::SparseMatrix<double> D(n, n - 2);
+	for (size_t i = 0; i < n; ++i) {
+		for (size_t j = 0; j < n - 2; ++j) {
+			if (i == j)
+				D.insert(i, j) = 1.;
+			if (i == j + 1)
+				D.insert(i, j) = -2.;
+			if (i == j + 2)
+				D.insert(i, j) = 1.;
+		}
+	}
+	// std::cout << "D =" << std::endl << D << std::endl;
+
+	// H = lambda * D.dot(D.T)
+	SMat H = lambda * D * D.transpose();
+	// std::cout << "H =" << std::endl << H << std::endl;
+
+	// weights
+	SVec w(n);
+	SMat W(n, n);
+	for (size_t i = 0; i < n; ++i) {
+		w.insert(i) = 1.;
+		W.insert(i, i) = 1.;
+	}
+
+	SVec d(n), z(n); // data, solution (initial guess: data)
+	for (size_t i = 0; i < n; i++) {
+		d.insert(i) = data[i];
+		z.insert(i) = data[i];
+	}
+
+	int count = 0;
+	while (crit > p) {
+		printf("iteration %d:", count);
+
+		// solve (W+H)z = W*data
+		Eigen::SimplicialLDLT<SMat> solver;
+		solver.compute(W + H);
+		if (solver.info() != Eigen::Success)
+			puts("compute(): decomposition failed\n");
+
+		z = solver.solve(W * d);
+		if (solver.info() != Eigen::Success)
+			puts("solve(): solving failed\n");
+
+		// std::cout << "z = " << z << std::endl;
+
+		SVec diff = d - z;
+		// std::cout << "diff = " << diff << std::endl;
+
+		// mean and stdev of negative diff values
+		double m = 0.;
+		int num = 0;
+		for (SVec::InnerIterator it(diff); it; ++it) {
+			double v = it.value();
+			if (v < 0) {
+				m += v;
+				num++;
+			}
+		}
+		if (num > 0)
+			m /= num;
+		// printf("m = %g\n", m);
+		double s = 0.;
+		for (SVec::InnerIterator it(diff); it; ++it) {
+			double v = it.value();
+			if (v < 0)
+				s += (v - m) * (v - m);
+		}
+		if (num > 0)
+			s /= num;
+		s = sqrt(s);
+		// printf("s = %g\n", s);
+
+		// w_new = 1 / (1 + np.exp(2 * (d - (2*s - m))/s))
+		SVec wn(n);
+		for (size_t i = 0; i < n; ++i)
+			wn.insert(i) = 1. / (1. + exp(2. * (diff.coeffRef(i) - (2. * s - m)) / s));
+		// std::cout << "wnvec = " << wnvec << std::endl;
+
+		// crit = norm(w_new - w) / norm(w)
+		crit = (wn - w).norm() / w.norm();
+		printf(" crit = %.15g\n", crit);
+
+		w = wn;
+		// W.setdiag(w)
+		for (size_t i = 0; i < n; ++i)
+			W.coeffRef(i, i) = wn.coeffRef(i);
+		// std::cout << "Wmat = " << Wmat << std::endl;
+
+		count++;
+
+		if (count > niter) {
+			puts("Maximum number of iterations reached");
+			break;
+		}
+	}
+
+	for (size_t i = 0; i < n; ++i)
+		data[i] -= z.coeffRef(i);
+#else
+	Q_UNUSED(data);
+	Q_UNUSED(n);
+	Q_UNUSED(p);
+	Q_UNUSED(lambda);
+	Q_UNUSED(niter);
+#endif
+
+	return crit;
+}
+
+#ifndef HAVE_EIGEN3
 void show_matrix(gsl_spmatrix* M, size_t n, size_t m, char name) {
 	printf("%c:\n", name);
-	for (size_t i = 0; i < n; ++i) {
-		for (size_t j = 0; j < m; ++j)
-			printf("%g ", gsl_spmatrix_get(M, i, j));
+	// for (size_t i = 0; i < n; ++i) {
+	for (size_t i = 0; i < 5; ++i) {
+		// for (size_t j = 0; j < m; ++j)
+		for (size_t j = 0; j < 5; ++j)
+			printf("%f ", gsl_spmatrix_get(M, i, j));
+		puts("\n");
+	}
+	for (size_t i = n - 5; i < n; ++i) {
+		for (size_t j = m - 5; j < m; ++j)
+			printf("%f ", gsl_spmatrix_get(M, i, j));
 		puts("\n");
 	}
 }
 void show_vector(gsl_vector* v, size_t n, char name) {
 	printf("%c:\n", name);
-	for (size_t i = 0; i < n; ++i)
+	for (size_t i = 0; i < 5; ++i)
+		printf("%g ", gsl_vector_get(v, i));
+	printf(" .. ");
+	for (size_t i = n - 5; i < n; ++i)
 		printf("%g ", gsl_vector_get(v, i));
 	puts("\n");
 }
+#endif
 
-/* see https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract */
-double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double lambda, int niter) {
-	if (p == 0)
-		p = 0.001;
-	if (lambda == 0)
-		lambda = 1.e4;
-	if (niter == 0)
-		niter = 10;
+// GSL version of ARPLS (much slower than Eigen3 version)
+double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, double lambda, int niter) {
+	double crit = 1.;
 
+#ifndef HAVE_EIGEN3
 	gsl_spmatrix* D = gsl_spmatrix_alloc(n, n - 2);
 	for (size_t i = 0; i < n; ++i) {
 		for (size_t j = 0; j < n - 2; ++j) {
@@ -146,8 +288,6 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 	gsl_spmatrix* WW = gsl_spmatrix_ccs(W);
 
 	// loop
-	double crit = 1.;
-	int count = 0;
 	gsl_vector* d = gsl_vector_alloc(n); // data
 	for (size_t i = 0; i < n; i++)
 		gsl_vector_set(d, i, data[i]);
@@ -155,24 +295,33 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 	/* initial guess z */
 	for (size_t i = 0; i < n; i++)
 		gsl_vector_set(z, i, data[i]);
+	// gsl_vector_set(z, i, 0);
 	gsl_vector* diff = gsl_vector_alloc(n); // diff
 	gsl_vector* w_new = gsl_vector_alloc(n);
 
 	gsl_spmatrix* A = gsl_spmatrix_alloc_nzmax(n, n, 5 * n, GSL_SPMATRIX_CSC);
+	// gsl_spmatrix* C = gsl_spmatrix_alloc(n, n);
+	// gsl_spmatrix* A = gsl_spmatrix_ccs(C);
 	gsl_matrix* AA = gsl_matrix_alloc(n, n);
 	gsl_vector* b = gsl_vector_alloc(n);
 	gsl_permutation* per = gsl_permutation_alloc(n);
 	int signum;
+	// const gsl_splinalg_itersolve_type *T = gsl_splinalg_itersolve_gmres;
+	// gsl_splinalg_itersolve *work = gsl_splinalg_itersolve_alloc(T, n, 0);
+	int count = 0;
 	while (crit > p) {
 		printf("iteration %d\n", count);
+
 		// solve (W+H)z = W*data
 
 		// Az=b
 		gsl_spmatrix_add(A, WW, H);
-		// show_matrix(A, n, n, 'A');
+		if (count == 0)
+			show_matrix(A, n, n, 'A');
 
 		gsl_spblas_dgemv(CblasNoTrans, 1., W, d, 0., b);
-		// show_vector(b, n, 'b');
+		if (count == 0)
+			show_vector(b, n, 'b');
 
 		gsl_spmatrix_sp2d(AA, A);
 
@@ -185,14 +334,23 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 		// gsl_linalg_ldlt_solve(AA, b, z);
 		//  Householder: slowest
 		// gsl_linalg_HH_solve(AA, b, z);
-		//  sparse iterative solver: is not working
+		//  sparse iterative solver: not working
+		/*		int iter = 0, maxiter = 10, status;
+				double tol = 1.0e-3;
+				do {
+					status = gsl_splinalg_itersolve_iterate(A, b, tol, z, work);
 
+					double residual = gsl_splinalg_itersolve_normr(work);
+					fprintf(stderr, "iter %d residual = %.12e\n", iter, residual);
+				} while (status == GSL_CONTINUE && ++iter < maxiter);
+		*/
 		// show_vector(z, n, 'z');
 
 		for (size_t i = 0; i < n; ++i)
 			gsl_vector_set(diff, i, gsl_vector_get(d, i) - gsl_vector_get(z, i));
 		// show_vector(diff, n, 'D');
 
+		// mean and stdev of negative diffs
 		double m = 0.;
 		int num = 0;
 		for (size_t i = 0; i < n; ++i) {
@@ -265,6 +423,29 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 	gsl_vector_free(diff);
 	gsl_vector_free(z);
 	gsl_vector_free(d);
+#else
+	Q_UNUSED(data);
+	Q_UNUSED(n);
+	Q_UNUSED(p);
+	Q_UNUSED(lambda);
+	Q_UNUSED(niter);
+#endif
 
 	return crit;
+}
+
+double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double lambda, int niter) {
+	// default values
+	if (p == 0)
+		p = 0.001;
+	if (lambda == 0)
+		lambda = 1.e4;
+	if (niter == 0)
+		niter = 10;
+
+#ifdef HAVE_EIGEN3
+	return nsl_baseline_remove_arpls_Eigen3(data, n, p, lambda, niter);
+#endif
+
+	return nsl_baseline_remove_arpls_GSL(data, n, p, lambda, niter);
 }
