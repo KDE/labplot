@@ -133,33 +133,32 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 		W.insert(i, i) = 1.;
 	}
 
-	SVec d(n); // data
-	for (size_t i = 0; i < n; i++)
+	SVec d(n), z(n); // data, solution (initial guess: data)
+	for (size_t i = 0; i < n; i++) {
 		d.insert(i) = data[i];
-	SVec z(n); // solution
-	for (size_t i = 0; i < n; i++) // initial guess for z
 		z.insert(i) = data[i];
+	}
 
 	int count = 0;
 	while (crit > p) {
-		printf("iteration %d\n", count);
+		printf("iteration %d:", count);
 
 		// solve (W+H)z = W*data
-		Eigen::SimplicialLLT<SMat> solver;
+		Eigen::SimplicialLDLT<SMat> solver;
 		solver.compute(W + H);
 		if (solver.info() != Eigen::Success)
-			puts("decomposition failed\n");
+			puts("compute(): decomposition failed\n");
 
 		z = solver.solve(W * d);
 		if (solver.info() != Eigen::Success)
-			puts("solving failed\n");
+			puts("solve(): solving failed\n");
 
 		// std::cout << "z = " << z << std::endl;
 
 		SVec diff = d - z;
 		// std::cout << "diff = " << diff << std::endl;
 
-		// mean and stdev of negative diffs
+		// mean and stdev of negative diff values
 		double m = 0.;
 		int num = 0;
 		for (SVec::InnerIterator it(diff); it; ++it) {
@@ -191,7 +190,7 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 
 		// crit = norm(w_new - w) / norm(w)
 		crit = (wn - w).norm() / w.norm();
-		printf("crit = %.15g\n", crit);
+		printf(" crit = %.15g\n", crit);
 
 		w = wn;
 		// W.setdiag(w)
