@@ -10,12 +10,17 @@
 #include "nsl_baseline.h"
 #include "nsl_stats.h"
 
+#include <QtGlobal>
+
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_statistics_double.h>
 
 #ifdef HAVE_EIGEN3
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #include <Eigen/Sparse>
 #include <Eigen/SparseCholesky>
+#pragma GCC diagnostic pop
 #else // GSL
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_sort.h>
@@ -125,7 +130,6 @@ void show_vector(gsl_vector* v, size_t n, char name) {
 /* see https://pubs.rsc.org/en/content/articlelanding/2015/AN/C4AN01061B#!divAbstract */
 double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, double lambda, int niter) {
 	double crit = 1.;
-	int count = 0;
 
 #ifdef HAVE_EIGEN3
 	typedef Eigen::SparseMatrix<double> SMat; // declares a column-major sparse matrix type of double
@@ -163,6 +167,7 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 	for (size_t i = 0; i < n; i++) // initial guess for z
 		z.insert(i) = data[i];
 
+	int count = 0;
 	while (crit > p) {
 		printf("iteration %d\n", count);
 
@@ -231,6 +236,12 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 
 	for (size_t i = 0; i < n; ++i)
 		data[i] -= z.coeffRef(i);
+#else
+	Q_UNUSED(data);
+	Q_UNUSED(n);
+	Q_UNUSED(p);
+	Q_UNUSED(lambda);
+	Q_UNUSED(niter);
 #endif
 
 	return crit;
@@ -239,7 +250,6 @@ double nsl_baseline_remove_arpls_Eigen3(double* data, const size_t n, double p, 
 // GSL version of ARPLS (much slower than Eigen3 version)
 double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, double lambda, int niter) {
 	double crit = 1.;
-	int count = 0;
 
 #ifndef HAVE_EIGEN3
 	gsl_spmatrix* D = gsl_spmatrix_alloc(n, n - 2);
@@ -299,6 +309,7 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 	int signum;
 	// const gsl_splinalg_itersolve_type *T = gsl_splinalg_itersolve_gmres;
 	// gsl_splinalg_itersolve *work = gsl_splinalg_itersolve_alloc(T, n, 0);
+	int count = 0;
 	while (crit > p) {
 		printf("iteration %d\n", count);
 
@@ -413,21 +424,25 @@ double nsl_baseline_remove_arpls_GSL(double* data, const size_t n, double p, dou
 	gsl_vector_free(diff);
 	gsl_vector_free(z);
 	gsl_vector_free(d);
+#else
+	Q_UNUSED(data);
+	Q_UNUSED(n);
+	Q_UNUSED(p);
+	Q_UNUSED(lambda);
+	Q_UNUSED(niter);
 #endif
 
 	return crit;
 }
 
 double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double lambda, int niter) {
+	// default values
 	if (p == 0)
 		p = 0.001;
 	if (lambda == 0)
 		lambda = 1.e4;
 	if (niter == 0)
 		niter = 10;
-
-	double crit = 1.;
-	int count = 0;
 
 #ifdef HAVE_EIGEN3
 	return nsl_baseline_remove_arpls_Eigen3(data, n, p, lambda, niter);
