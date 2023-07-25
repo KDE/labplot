@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-21 00:44+0000\n"
+"POT-Creation-Date: 2023-07-25 00:41+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -3704,7 +3704,7 @@ msgstr "Størrelse"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/functions.cpp:231
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:137
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:62
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:99
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
@@ -3714,7 +3714,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/functions.cpp:232 src/backend/nsl/nsl_conv.c:23
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:100
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
@@ -3733,7 +3733,7 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/functions.cpp:234
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:529
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
@@ -15637,171 +15637,171 @@ msgstr ""
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:109
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
 #, fuzzy, kde-format
 #| msgid "Values"
 msgctxt "@title:window"
 msgid "Add Value"
 msgstr "Værdier"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:110
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:108
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, fuzzy, kde-format
 #| msgid "&Add Rows"
 msgid "&Add"
 msgstr "&Tilføj rækker"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:111
 #, fuzzy, kde-format
 #| msgid "Startup"
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Opstart"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:114
 #, fuzzy, kde-format
 #| msgid "Startup"
 msgctxt "@title:window"
 msgid "Subtract Baseline"
 msgstr "Opstart"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:117
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:115
 #, fuzzy, kde-format
 #| msgid "Startup"
 msgid "Subtract:"
 msgstr "Opstart"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:118
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
 #, kde-format
 msgid "&Subtract"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:120
 #, kde-format
 msgid "&Multiply"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:125
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:123
 #, kde-format
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:126
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:124
 #, kde-format
 msgid "&Divide"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:142
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:519
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean"
 msgstr "Gennemsnit"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:145
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:143
 #, fuzzy, kde-format
 #| msgid "Custom grid"
 msgid "Custom Value"
 msgstr "Brugertilpasset gitter"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:146
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:144
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Difference"
 msgstr "Retning"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:162
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:160
 #, kde-format
 msgid "Baseline (arPLS Algorithm)"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:169
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:167
 #, kde-format
 msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
 "background."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:173
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:171
 #, kde-format
 msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
 "less negative values."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:177
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:175
 #, fuzzy, kde-format
 #| msgid "Number of rows"
 msgid "Number of iterations to perform."
 msgstr "Antal rækker"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:533
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:531
 #, kde-format
 msgid "raw data"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:539
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:537
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "baseline"
 msgstr "Værdier"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:547
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:545
 #, kde-format
 msgid "result"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:627
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:625
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Ratio: %1"
 msgstr "Rotation"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:671
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:678
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:685
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:692
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:900
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:944
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:988
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1032
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:669
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:676
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:683
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:690
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:898
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:942
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:986
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1030
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "Wrong numeric value provided."
 msgstr "Værdier"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1219
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1217
 #, fuzzy, kde-format
 #| msgid "%1: add %2 column(s)"
 msgid "%1: add %2 to column values"
 msgstr "%1: Tilføj %2 kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1222
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1220
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: subtract %2 from column values"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1225
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1223
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: subtract baseline from column values"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1228
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1226
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1231
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1229
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr ""
@@ -21592,7 +21592,7 @@ msgstr "Gem som"
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:47
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:143
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgid "Preview:"
@@ -21876,35 +21876,35 @@ msgid "End Value:"
 msgstr "Værdier"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:130
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Smoothness (Power of 10):"
 msgstr "Gør intet"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:156
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Termination Ratio:"
 msgstr "Retning"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:169
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:175
 #, fuzzy, kde-format
 #| msgid "Startup"
 msgid "Start Value:"
 msgstr "Opstart"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:251
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:257
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Iterations:"
 msgstr "Rotation"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:302
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:308
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "End Time:"
