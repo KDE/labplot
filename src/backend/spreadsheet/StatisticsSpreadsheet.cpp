@@ -121,8 +121,10 @@ void StatisticsSpreadsheet::update() {
 		++it;
 	}
 
+	setUndoAware(false);
 	setRowCount(m_spreadsheet->columnCount());
 	setColumnCount(colCount);
+	setUndoAware(true);
 
 	// make all columns in this statistics spreadsheet undo unaware
 	const auto& statisticsColumns = children<Column>();

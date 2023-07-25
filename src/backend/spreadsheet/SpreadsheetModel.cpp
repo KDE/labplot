@@ -301,8 +301,11 @@ void SpreadsheetModel::handleAspectsAboutToBeInserted(int first, int last) {
 	beginInsertColumns(QModelIndex(), first, last);
 }
 
-void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect*, int index, const AbstractAspect*) {
+void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect*, int index, const AbstractAspect* aspect) {
 	if (m_spreadsheetColumnCountChanging || m_suppressSignals)
+		return;
+	const Column* col = dynamic_cast<const Column*>(aspect);
+	if (!col || aspect->parentAspect() != m_spreadsheet)
 		return;
 	beginInsertColumns(QModelIndex(), index, index);
 }
@@ -333,6 +336,9 @@ void SpreadsheetModel::handleAspectsInserted(int first, int last) {
 void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	// PERFTRACE(Q_FUNC_INFO);
 	if (m_spreadsheetColumnCountChanging)
+		return;
+	const Column* col = dynamic_cast<const Column*>(aspect);
+	if (!col || aspect->parentAspect() != m_spreadsheet)
 		return;
 	int index = m_spreadsheet->indexOfChild<Column>(aspect);
 	handleAspectsInserted(index, index);
