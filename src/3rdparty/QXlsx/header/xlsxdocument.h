@@ -24,7 +24,7 @@ class Chart;
 class CellReference;
 class DocumentPrivate;
 
-class Document : public QObject
+class QXLSX_EXPORT Document : public QObject
 {
 	Q_OBJECT
     Q_DECLARE_PRIVATE(Document) // D-Pointer. Qt classes have a Q_DECLARE_PRIVATE
@@ -100,6 +100,7 @@ public:
     bool insertSheet(int index, const QString &name = QString(),
                      AbstractSheet::SheetType type = AbstractSheet::ST_WorkSheet);
 	bool selectSheet(const QString &name);
+	bool selectSheet(int index);
 	bool renameSheet(const QString &oldName, const QString &newName);
 	bool copySheet(const QString &srcName, const QString &distName = QString());
 	bool moveSheet(const QString &srcName, int distIndex);

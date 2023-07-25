@@ -24,7 +24,7 @@ class Worksheet;
 class Styles;
 class ConditionalFormattingPrivate;
 
-class ConditionalFormatting
+class QXLSX_EXPORT ConditionalFormatting
 {
 public:
     enum HighlightRuleType {
@@ -110,7 +110,7 @@ private:
 
 private:
     bool saveToXml(QXmlStreamWriter &writer) const;
-    bool loadFromXml(QXmlStreamReader &reader, Styles* styles = nullptr);
+    bool loadFromXml(QXmlStreamReader &reader, Styles* styles = NULL);
 
     QSharedDataPointer<ConditionalFormattingPrivate> d;
 };

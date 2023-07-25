@@ -10,6 +10,8 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
+#include <memory>
+
 #include "xlsxglobal.h"
 
 QT_BEGIN_NAMESPACE_XLSX
@@ -60,8 +62,8 @@ public:
     virtual bool loadFromXml(QXmlStreamReader &reader) = 0;
     virtual void saveToXml(QXmlStreamWriter &writer) const = 0;
 
-    virtual int row();
-    virtual int col();
+    virtual int row() const;
+    virtual int col() const;
 
 protected:
     QPoint loadXmlPos(QXmlStreamReader &reader);
@@ -86,7 +88,7 @@ protected:
 
     Drawing *m_drawing;
     ObjectType m_objectType;
-    QSharedPointer<MediaFile> m_pictureFile;
+    std::shared_ptr<MediaFile> m_pictureFile;
     QSharedPointer<Chart> m_chartFile;
 
     int m_id;
@@ -140,8 +142,8 @@ public:
     XlsxMarker from;
     QSize ext;
 
-    virtual int row() override;
-    virtual int col() override;
+    int row() const override;
+    int col() const override;
 
     bool loadFromXml(QXmlStreamReader &reader) override;
     void saveToXml(QXmlStreamWriter &writer) const override;
@@ -155,8 +157,8 @@ public:
     XlsxMarker from;
     XlsxMarker to;
 
-    virtual int row() override;
-    virtual int col() override;
+    int row() const override;
+    int col() const override;
 
     bool loadFromXml(QXmlStreamReader &reader) override;
     void saveToXml(QXmlStreamWriter &writer) const override;

@@ -4,7 +4,6 @@
 #define QXLSX_CHART_H
 
 #include <QtGlobal>
-#include <QSharedPointer>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
@@ -18,7 +17,7 @@ class ChartPrivate;
 class CellRange;
 class DrawingAnchor;
 
-class Chart : public AbstractOOXmlFile
+class QXLSX_EXPORT Chart : public AbstractOOXmlFile
 {
     Q_DECLARE_PRIVATE(Chart)
 public:
@@ -42,7 +41,7 @@ private:
 public:
     ~Chart();
 public:
-    void addSeries(const CellRange &range, AbstractSheet *sheet = nullptr, bool headerH = false, bool headerV = false, bool swapHeaders = false);
+    void addSeries(const CellRange &range, AbstractSheet *sheet = NULL, bool headerH = false, bool headerV = false, bool swapHeaders = false);
     void setChartType(ChartType type);
     void setChartStyle(int id);
     void setAxisTitle(Chart::ChartAxisPos pos, QString axisTitle);

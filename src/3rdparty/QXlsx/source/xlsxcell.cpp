@@ -86,7 +86,7 @@ Cell::Cell(const Cell * const cell):
  */
 Cell::~Cell()
 {
-	if ( nullptr != d_ptr )
+	if ( NULL != d_ptr )
 		delete d_ptr;
 }
 
@@ -348,6 +348,17 @@ qint32 Cell::styleNumber() const
 
 	qint32 ret = d->styleNumber;
 	return ret; 
+}
+
+bool Cell::isDateType(CellType cellType, const Format &format)
+{
+    if ( cellType == NumberType ||
+         cellType == DateType ||
+         cellType == CustomType )
+    {
+        return format.isValid() && format.isDateTimeFormat();
+    }
+	return false;
 }
 
 QT_END_NAMESPACE_XLSX
