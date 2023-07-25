@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -42,11 +42,9 @@
 #include <KConfig>
 #include <KLocalizedString>
 
-extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
-}
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
@@ -269,10 +267,10 @@ void XYCurve::setHover(bool on) {
 	d->setHover(on);
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
-// general
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
+//  general
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, legendVisible, legendVisible)
 
 // data source
@@ -368,9 +366,24 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 	return d->sourceDataChangedSinceLastRecalc;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+double XYCurve::minimum(const Dimension) const {
+	// TODO
+	return NAN;
+}
+
+double XYCurve::maximum(const Dimension) const {
+	// TODO
+	return NAN;
+}
+
+bool XYCurve::hasData() const {
+	Q_D(const XYCurve);
+	return (d->xColumn != nullptr || d->yColumn != nullptr);
+}
+
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 
 // 1) add XYCurveSetXColumnCmd as friend class to XYCurve
 // 2) add XYCURVE_COLUMN_CONNECT(x) as private method to XYCurve
@@ -662,9 +675,9 @@ void XYCurve::setRugOffset(double offset) {
 		exec(new XYCurveSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void XYCurve::retransform() {
 	Q_D(XYCurve);
 	d->retransform();
@@ -854,17 +867,17 @@ void XYCurve::valuesColumnNameChanged() {
 	setValuesColumnPath(d->valuesColumn->path());
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 
 void XYCurve::navigateTo() {
 	project()->navigateTo(navigateToAction->data().toString());
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYCurvePrivate::XYCurvePrivate(XYCurve* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
@@ -1046,9 +1059,13 @@ void XYCurvePrivate::recalcLogicalPoints() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
+				tempPoint.setX(xColumn->doubleAt(row));
+				break;
 			case AbstractColumn::ColumnMode::Integer:
+				tempPoint.setX(xColumn->integerAt(row));
+				break;
 			case AbstractColumn::ColumnMode::BigInt:
-				tempPoint.setX(xColumn->valueAt(row));
+				tempPoint.setX(xColumn->bigIntAt(row));
 				break;
 			case AbstractColumn::ColumnMode::DateTime:
 				tempPoint.setX(xColumn->dateTimeAt(row).toMSecsSinceEpoch());
@@ -1061,9 +1078,13 @@ void XYCurvePrivate::recalcLogicalPoints() {
 
 			switch (yColMode) {
 			case AbstractColumn::ColumnMode::Double:
+				tempPoint.setY(yColumn->doubleAt(row));
+				break;
 			case AbstractColumn::ColumnMode::Integer:
+				tempPoint.setY(yColumn->integerAt(row));
+				break;
 			case AbstractColumn::ColumnMode::BigInt:
-				tempPoint.setY(yColumn->valueAt(row));
+				tempPoint.setY(yColumn->bigIntAt(row));
 				break;
 			case AbstractColumn::ColumnMode::DateTime:
 				tempPoint.setY(yColumn->dateTimeAt(row).toMSecsSinceEpoch());
@@ -1111,10 +1132,10 @@ void XYCurvePrivate::addLine(QPointF p,
 							 RangeT::Scale scale,
 							 bool& prevPixelDiffZero) {
 	if (scale == RangeT::Scale::Linear) {
-		pixelDiff = (qRound64(p.x() / minDiffX) - x) != 0; // only relevant if greater zero or not
+		pixelDiff = (std::round(p.x() / minDiffX) - x) != 0; // only relevant if greater zero or not
 		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
 		if (pixelDiff > 0) // set x to next pixel
-			x = qRound64(p.x() / minDiffX);
+			x = std::round(p.x() / minDiffX);
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point
 		static const double preCalc = (double)plot()->dataRect().width() / numberOfPixelX;
@@ -1127,13 +1148,13 @@ void XYCurvePrivate::addLine(QPointF p,
 
 		// using only the difference between the points is not sufficient, because
 		// p0 is updated always independent if new line added or not
-		const int p1Pixel = qRound((pScene.x() - plot()->dataRect().x()) / preCalc);
+		const int p1Pixel = std::round((pScene.x() - plot()->dataRect().x()) / preCalc);
 		pixelDiff = p1Pixel - x;
 
 		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
 
 		if (pixelDiff > 0) // set x to next pixel
-			x = qRound((pScene.x() - plot()->dataRect().x()) / preCalc);
+			x = std::round((pScene.x() - plot()->dataRect().x()) / preCalc);
 	}
 }
 
@@ -1148,8 +1169,8 @@ void XYCurvePrivate::addLine(QPointF p,
  */
 void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF>& lines, bool& prevPixelDiffZero) {
 	if (pixelDiff == 0) {
-		maxY = qMax(p.y(), maxY);
-		minY = qMin(p.y(), minY);
+		maxY = std::max(p.y(), maxY);
+		minY = std::min(p.y(), minY);
 		prevPixelDiffZero = true;
 	} else {
 		if (prevPixelDiffZero) {
@@ -1258,7 +1279,7 @@ void XYCurvePrivate::updateLines() {
 			tempPoint2 = QPointF(xRange.start(), yRange.end());
 			m_lines.append(QLineF(tempPoint1, tempPoint2));
 		} else {
-			QPointF lastPoint{qQNaN(), qQNaN()}; // last x value
+			QPointF lastPoint{NAN, NAN}; // last x value
 			int pixelDiff = 0;
 			bool prevPixelDiffZero = false;
 			double minY{INFINITY}, maxY{-INFINITY};
@@ -1288,7 +1309,7 @@ void XYCurvePrivate::updateLines() {
 				if (lineType != XYCurve::LineType::SplineCubicNatural && lineType != XYCurve::LineType::SplineCubicPeriodic
 					&& lineType != XYCurve::LineType::SplineAkimaNatural && lineType != XYCurve::LineType::SplineAkimaPeriodic) {
 					if (scale == RangeT::Scale::Linear) {
-						xPos = qRound64(p0.x() / minDiffX);
+						xPos = std::round(p0.x() / minDiffX);
 						lastPoint = p0;
 						minY = p0.y();
 						maxY = p0.y();
@@ -1297,7 +1318,7 @@ void XYCurvePrivate::updateLines() {
 						QPointF pScene = q->cSystem->mapLogicalToScene(p0, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 						if (!visible)
 							continue;
-						xPos = qRound((pScene.x() - plot()->dataRect().x()) / ((double)plot()->dataRect().width() * numberOfPixelX));
+						xPos = std::round((pScene.x() - plot()->dataRect().x()) / ((double)plot()->dataRect().width() * numberOfPixelX));
 						lastPoint = p0;
 					}
 				}
@@ -1825,7 +1846,7 @@ void XYCurvePrivate::updateValues() {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				value = numberLocale.toString(point.x(), valuesNumericFormat, precision);
 			else
-				value = QDateTime::fromMSecsSinceEpoch(point.x()).toString(valuesDateTimeFormat);
+				value = QDateTime::fromMSecsSinceEpoch(point.x(), Qt::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
@@ -1842,7 +1863,7 @@ void XYCurvePrivate::updateValues() {
 			if (rangeFormat == RangeT::Format::Numeric)
 				value = numberLocale.toString(point.y(), valuesNumericFormat, precision);
 			else
-				value = QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);
+				value = QDateTime::fromMSecsSinceEpoch(point.y(), Qt::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
@@ -1869,12 +1890,12 @@ void XYCurvePrivate::updateValues() {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				value += numberLocale.toString(point.x(), valuesNumericFormat, xPrecision);
 			else
-				value += QDateTime::fromMSecsSinceEpoch(point.x()).toString(valuesDateTimeFormat);
+				value += QDateTime::fromMSecsSinceEpoch(point.x(), Qt::UTC).toString(valuesDateTimeFormat);
 
 			if (yRangeFormat == RangeT::Format::Numeric)
 				value += QLatin1Char(',') + numberLocale.toString(point.y(), valuesNumericFormat, yPrecision);
 			else
-				value += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);
+				value += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y(), Qt::UTC).toString(valuesDateTimeFormat);
 
 			if (valuesType == XYCurve::ValuesType::XYBracketed)
 				value += QLatin1Char(')');
@@ -1889,7 +1910,7 @@ void XYCurvePrivate::updateValues() {
 			return;
 		}
 
-		const int endRow{qMin(qMin(xColumn->rowCount(), yColumn->rowCount()), valuesColumn->rowCount())};
+		const int endRow{std::min(std::min(xColumn->rowCount(), yColumn->rowCount()), valuesColumn->rowCount())};
 		auto xColMode{xColumn->columnMode()};
 		auto vColMode{valuesColumn->columnMode()};
 
@@ -1920,8 +1941,8 @@ void XYCurvePrivate::updateValues() {
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start())
-					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end()))
+				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC)
+					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end(), Qt::UTC))
 					continue;
 				break;
 			case AbstractColumn::ColumnMode::Text:
@@ -2273,13 +2294,13 @@ void XYCurvePrivate::updateFilling() {
 double XYCurve::y(double x, bool& valueFound) const {
 	if (!yColumn() || !xColumn()) {
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 
 	const int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 
 	valueFound = true;
@@ -2287,7 +2308,7 @@ double XYCurve::y(double x, bool& valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 }
 
@@ -2301,7 +2322,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 
 	AbstractColumn::ColumnMode xColumnMode = xColumn()->columnMode();
@@ -2313,7 +2334,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 	else {
 		// any other type implemented
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 
 	valueFound = true;
@@ -2321,7 +2342,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 }
 
@@ -2406,7 +2427,7 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 	if (column1->rowCount() == 0)
 		return false;
 
-	range.setRange(qInf(), -qInf());
+	range.setRange(INFINITY, -INFINITY);
 	// DEBUG(Q_FUNC_INFO << ", calculate range for index range " << indexRange.start() << " .. " << indexRange.end())
 
 	for (int i = indexRange.start(); i <= indexRange.end(); ++i) {
@@ -2843,7 +2864,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	if (background->position() != Background::Position::No) {
 		painter->setOpacity(background->opacity());
 		painter->setPen(Qt::SolidLine);
-		drawFilling(painter);
+		for (const auto& polygon : qAsConst(m_fillPolygons))
+			drawFillingPollygon(polygon, painter, background);
 	}
 
 	// draw lines
@@ -3005,95 +3027,6 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
 	}
 }
 
-void XYCurvePrivate::drawFilling(QPainter* painter) {
-	for (const auto& pol : qAsConst(m_fillPolygons)) {
-		QRectF rect = pol.boundingRect();
-		if (background->type() == Background::Type::Color) {
-			switch (background->colorStyle()) {
-			case Background::ColorStyle::SingleColor: {
-				painter->setBrush(QBrush(background->firstColor()));
-				break;
-			}
-			case Background::ColorStyle::HorizontalLinearGradient: {
-				QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-				linearGrad.setColorAt(0, background->firstColor());
-				linearGrad.setColorAt(1, background->secondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case Background::ColorStyle::VerticalLinearGradient: {
-				QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-				linearGrad.setColorAt(0, background->firstColor());
-				linearGrad.setColorAt(1, background->secondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-				QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-				linearGrad.setColorAt(0, background->firstColor());
-				linearGrad.setColorAt(1, background->secondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-				QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-				linearGrad.setColorAt(0, background->firstColor());
-				linearGrad.setColorAt(1, background->secondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case Background::ColorStyle::RadialGradient: {
-				QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-				radialGrad.setColorAt(0, background->firstColor());
-				radialGrad.setColorAt(1, background->secondColor());
-				painter->setBrush(QBrush(radialGrad));
-				break;
-			}
-			}
-		} else if (background->type() == Background::Type::Image) {
-			if (!background->fileName().trimmed().isEmpty()) {
-				QPixmap pix(background->fileName());
-				switch (background->imageStyle()) {
-				case Background::ImageStyle::ScaledCropped:
-					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-					break;
-				case Background::ImageStyle::Scaled:
-					pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-					break;
-				case Background::ImageStyle::ScaledAspectRatio:
-					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-					break;
-				case Background::ImageStyle::Centered: {
-					QPixmap backpix(rect.size().toSize());
-					backpix.fill();
-					QPainter p(&backpix);
-					p.drawPixmap(QPointF(0, 0), pix);
-					p.end();
-					painter->setBrush(QBrush(backpix));
-					painter->setBrushOrigin(-pix.size().width() / 2, -pix.size().height() / 2);
-					break;
-				}
-				case Background::ImageStyle::Tiled:
-					painter->setBrush(QBrush(pix));
-					break;
-				case Background::ImageStyle::CenterTiled:
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				}
-			}
-		} else if (background->type() == Background::Type::Pattern)
-			painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-
-		painter->drawPolygon(pol);
-	}
-}
-
 /*!
  * checks if the mousePress event was done near the histogram shape
  * and selects the graphics item if it is the case.
@@ -3129,9 +3062,9 @@ void XYCurvePrivate::setHover(bool on) {
 	update();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYCurve);
@@ -3319,9 +3252,9 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 

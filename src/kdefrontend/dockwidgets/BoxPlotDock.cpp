@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -129,6 +129,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.chkVariableWidth, &QCheckBox::toggled, this, &BoxPlotDock::variableWidthChanged);
 	connect(ui.chkNotches, &QCheckBox::toggled, this, &BoxPlotDock::notchesEnabledChanged);
 	connect(ui.chkVisible, &QCheckBox::toggled, this, &BoxPlotDock::visibilityChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::plotRangeChanged);
 
 	// Tab "Box"
 	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::currentBoxChanged);
@@ -177,7 +178,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_boxPlot->project());
 	setModel();
 
-	// if there is more then one point in the list, disable the comment and name widgets in "general"
+	// if there is more than one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -220,9 +221,10 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_boxPlot->isVisible());
-	KConfig config(QString(), KConfig::SimpleConfig);
-	loadConfig(config);
+	load();
 	loadDataColumns();
+
+	updatePlotRanges();
 
 	// set the current locale
 	updateLocale();
@@ -230,6 +232,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	// SIGNALs/SLOTs
 	// general
 	connect(m_boxPlot, &AbstractAspect::aspectDescriptionChanged, this, &BoxPlotDock::plotDescriptionChanged);
+	connect(m_boxPlot, &WorksheetElement::plotRangeListChanged, this, &BoxPlotDock::updatePlotRanges);
 	connect(m_boxPlot, &BoxPlot::visibleChanged, this, &BoxPlotDock::plotVisibilityChanged);
 	connect(m_boxPlot, &BoxPlot::orientationChanged, this, &BoxPlotDock::plotOrientationChanged);
 	connect(m_boxPlot, &BoxPlot::variableWidthChanged, this, &BoxPlotDock::plotVariableWidthChanged);
@@ -271,13 +274,16 @@ void BoxPlotDock::updateLocale() {
 	whiskersCapLineWidget->updateLocale();
 }
 
+void BoxPlotDock::updatePlotRanges() {
+	updatePlotRangeList(ui.cbPlotRanges);
+}
+
 void BoxPlotDock::loadDataColumns() {
 	// add the combobox for the first column, is always present
 	if (m_dataComboBoxes.count() == 0)
 		addDataColumn();
 
 	int count = m_boxPlot->dataColumns().count();
-	const int currentBoxIndex = ui.cbNumber->currentIndex();
 	ui.cbNumber->clear();
 
 	if (count != 0) {
@@ -314,10 +320,8 @@ void BoxPlotDock::loadDataColumns() {
 	for (auto* b : m_removeButtons)
 		b->setVisible(enabled);
 
-	if (currentBoxIndex != -1)
-		ui.cbNumber->setCurrentIndex(currentBoxIndex);
-	else
-		ui.cbNumber->setCurrentIndex(0);
+	// select the first column after all of them were added to the combobox
+	ui.cbNumber->setCurrentIndex(0);
 }
 
 void BoxPlotDock::setDataColumns() const {
@@ -639,8 +643,7 @@ void BoxPlotDock::plotVisibilityChanged(bool on) {
 // box
 void BoxPlotDock::plotWidthFactorChanged(double factor) {
 	CONDITIONAL_LOCK_RETURN;
-	// 	float v = (float)value*100.;
-	ui.sbWidthFactor->setValue(factor * 100);
+	ui.sbWidthFactor->setValue(round(factor * 100));
 }
 
 // symbols
@@ -686,6 +689,34 @@ void BoxPlotDock::plotRugOffsetChanged(double value) {
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
+void BoxPlotDock::load() {
+	// general
+	ui.cbOrdering->setCurrentIndex((int)m_boxPlot->ordering());
+	ui.cbOrientation->setCurrentIndex((int)m_boxPlot->orientation());
+	ui.chkVariableWidth->setChecked(m_boxPlot->variableWidth());
+	ui.chkNotches->setChecked(m_boxPlot->notchesEnabled());
+
+	// box
+	ui.sbWidthFactor->setValue(round(m_boxPlot->widthFactor()) * 100);
+
+	// symbols
+	symbolCategoryChanged();
+	ui.chkJitteringEnabled->setChecked(m_boxPlot->jitteringEnabled());
+
+	// whiskers
+	ui.cbWhiskersType->setCurrentIndex((int)m_boxPlot->whiskersType());
+	ui.leWhiskersRangeParameter->setText(QLocale().toString(m_boxPlot->whiskersRangeParameter()));
+
+	// whiskers cap
+	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->whiskersCapSize(), Worksheet::Unit::Point));
+
+	// Margin plots
+	ui.chkRugEnabled->setChecked(m_boxPlot->rugEnabled());
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugWidth(), Worksheet::Unit::Point));
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugLength(), Worksheet::Unit::Point));
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugOffset(), Worksheet::Unit::Point));
+}
+
 void BoxPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("BoxPlot"));
 
@@ -732,7 +763,7 @@ void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {
 
 	int size = m_boxPlots.size();
 	if (size > 1)
-		m_boxPlot->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
+		m_boxPlot->beginMacro(i18n("%1 box plots: template \"%2\" loaded", size, name));
 	else
 		m_boxPlot->beginMacro(i18n("%1: template \"%2\" loaded", m_boxPlot->name(), name));
 

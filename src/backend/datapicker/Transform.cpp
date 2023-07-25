@@ -9,13 +9,11 @@
 */
 
 #include "Transform.h"
-// TODO: replace with GSL or better methods
-#include <cmath>
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
 #include <gsl/gsl_math.h>
-}
+// TODO: replace with GSL or better methods
+#include <cmath>
 
 // Transform::Transform() = default;
 
@@ -117,7 +115,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 	return true;
 }
 
-QVector3D Transform::mapSceneToLogical(QPointF scenePoint, const DatapickerImage::ReferencePoints& axisPoints) {
+Vector3D Transform::mapSceneToLogical(QPointF scenePoint, const DatapickerImage::ReferencePoints& axisPoints) {
 	X[3] = scenePoint.x();
 	Y[3] = scenePoint.y();
 
@@ -152,42 +150,42 @@ QVector3D Transform::mapSceneToLogical(QPointF scenePoint, const DatapickerImage
 	return {};
 }
 
-QVector3D Transform::mapSceneLengthToLogical(QPointF errorSpan, const DatapickerImage::ReferencePoints& axisPoints) {
+Vector3D Transform::mapSceneLengthToLogical(QPointF errorSpan, const DatapickerImage::ReferencePoints& axisPoints) {
 	return mapSceneToLogical(errorSpan, axisPoints) - mapSceneToLogical(QPointF(0, 0), axisPoints);
 }
 
-QVector3D Transform::mapCartesianToType(QPointF point, const DatapickerImage::ReferencePoints& axisPoints) const {
+Vector3D Transform::mapCartesianToType(QPointF point, const DatapickerImage::ReferencePoints& axisPoints) const {
 	switch (axisPoints.type) {
 	case DatapickerImage::GraphType::Linear:
-		return QVector3D(point.x(), point.y(), 0);
+		return Vector3D(point.x(), point.y(), 0);
 	case DatapickerImage::GraphType::LnXY:
-		return QVector3D(exp(point.x()), exp(point.y()), 0);
+		return Vector3D(exp(point.x()), exp(point.y()), 0);
 	case DatapickerImage::GraphType::LnX:
-		return QVector3D(exp(point.x()), point.y(), 0);
+		return Vector3D(exp(point.x()), point.y(), 0);
 	case DatapickerImage::GraphType::LnY:
-		return QVector3D(point.x(), exp(point.y()), 0);
+		return Vector3D(point.x(), exp(point.y()), 0);
 	case DatapickerImage::GraphType::Log10XY:
-		return QVector3D(pow(10, point.x()), pow(10, point.y()), 0);
+		return Vector3D(pow(10, point.x()), pow(10, point.y()), 0);
 	case DatapickerImage::GraphType::Log10X:
-		return QVector3D(pow(10, point.x()), point.y(), 0);
+		return Vector3D(pow(10, point.x()), point.y(), 0);
 	case DatapickerImage::GraphType::Log10Y:
-		return QVector3D(point.x(), pow(10, point.y()), 0);
+		return Vector3D(point.x(), pow(10, point.y()), 0);
 	case DatapickerImage::GraphType::PolarInDegree: {
 		double r = sqrt(point.x() * point.x() + point.y() * point.y());
 		double angle = atan(point.y() / point.x()) * M_180_PI;
-		return QVector3D(r, angle, 0);
+		return Vector3D(r, angle, 0);
 	}
 	case DatapickerImage::GraphType::PolarInRadians: {
 		double r = sqrt(point.x() * point.x() + point.y() * point.y());
 		double angle = atan(point.y() / point.x());
-		return QVector3D(r, angle, 0);
+		return Vector3D(r, angle, 0);
 	}
 	case DatapickerImage::GraphType::Ternary: {
 		double c = (point.y() * 2 * axisPoints.ternaryScale) / M_SQRT3;
 		double b = (point.x() * 2 * axisPoints.ternaryScale - c) / 2;
 		double a = axisPoints.ternaryScale - b - c;
-		return QVector3D(a, b, c);
+		return Vector3D(a, b, c);
 	}
 	}
-	return QVector3D(point.x(), point.y(), 0); // should never happen
+	return Vector3D(point.x(), point.y(), 0); // should never happen
 }

@@ -56,8 +56,5 @@ private Q_SLOTS:
 	void testPerformance_nearest();
 	void testPerformance_constant();
 	void testPerformance_periodic();
-
-private:
-	QString m_dataDir;
 };
 #endif

@@ -56,8 +56,8 @@ WorkbookView::WorkbookView(Workbook* workbook)
 
 	// SIGNALs/SLOTs
 	connect(m_workbook, &Workbook::aspectDescriptionChanged, this, &WorkbookView::handleDescriptionChanged);
-	connect(m_workbook, &Workbook::aspectAdded, this, &WorkbookView::handleAspectAdded);
-	connect(m_workbook, &Workbook::aspectAboutToBeRemoved, this, &WorkbookView::handleAspectAboutToBeRemoved);
+	connect(m_workbook, &Workbook::childAspectAdded, this, &WorkbookView::handleAspectAdded);
+	connect(m_workbook, &Workbook::childAspectAboutToBeRemoved, this, &WorkbookView::handleAspectAboutToBeRemoved);
 	connect(m_workbook, &Workbook::requestProjectContextMenu, this, &WorkbookView::createContextMenu);
 	connect(m_workbook, &Workbook::workbookItemSelected, this, &WorkbookView::itemSelected);
 
@@ -79,9 +79,9 @@ int WorkbookView::currentIndex() const {
 	return m_tabWidget->currentIndex();
 }
 
-//##############################################################################
-//#########################  Private slots  ####################################
-//##############################################################################
+// ##############################################################################
+// #########################  Private slots  ####################################
+// ##############################################################################
 /*!
   called when the current tab was changed. Propagates the selection of \c Spreadsheet
   or of a \c Matrix object to \c Workbook.
@@ -132,7 +132,7 @@ void WorkbookView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
-	auto* addNewMenu = new QMenu(i18n("Add New"));
+	auto* addNewMenu = new QMenu(i18n("Add New"), const_cast<WorkbookView*>(this));
 	addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	addNewMenu->addAction(action_add_spreadsheet);
 	addNewMenu->addAction(action_add_matrix);

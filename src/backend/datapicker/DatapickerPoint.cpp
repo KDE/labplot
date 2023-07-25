@@ -140,6 +140,8 @@ void DatapickerPoint::init() {
 }
 
 void DatapickerPoint::initErrorBar(DatapickerCurve::Errors errors) {
+	if (m_errorBarItemList.isEmpty() && errors.x == DatapickerCurve::ErrorType::NoError && errors.y == DatapickerCurve::ErrorType::NoError)
+		return; // no need to update
 	m_errorBarItemList.clear();
 	if (errors.x != DatapickerCurve::ErrorType::NoError) {
 		auto* plusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::ErrorBarType::PlusDeltaX);
@@ -222,7 +224,7 @@ void DatapickerPoint::setPlusDeltaXPos(QPointF pos) {
 		beginMacro(i18n("%1: set +delta_X position", name()));
 		if (curve->curveErrorTypes().x == DatapickerCurve::ErrorType::SymmetricError) {
 			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, ki18n("%1: set +delta X position")));
-			setMinusDeltaXPos(QPointF(-qAbs(pos.x()), pos.y()));
+			setMinusDeltaXPos(QPointF(-std::abs(pos.x()), pos.y()));
 		} else
 			exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, ki18n("%1: set +delta X position")));
 		endMacro();
@@ -240,7 +242,7 @@ void DatapickerPoint::setMinusDeltaXPos(QPointF pos) {
 		beginMacro(i18n("%1: set -delta_X position", name()));
 		if (curve->curveErrorTypes().x == DatapickerCurve::ErrorType::SymmetricError) {
 			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, ki18n("%1: set -delta_X position")));
-			setPlusDeltaXPos(QPointF(qAbs(pos.x()), pos.y()));
+			setPlusDeltaXPos(QPointF(std::abs(pos.x()), pos.y()));
 		} else
 			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, ki18n("%1: set -delta_X position")));
 		endMacro();
@@ -258,7 +260,7 @@ void DatapickerPoint::setPlusDeltaYPos(QPointF pos) {
 		beginMacro(i18n("%1: set +delta_Y position", name()));
 		if (curve->curveErrorTypes().y == DatapickerCurve::ErrorType::SymmetricError) {
 			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, ki18n("%1: set +delta_Y position")));
-			setMinusDeltaYPos(QPointF(pos.x(), qAbs(pos.y())));
+			setMinusDeltaYPos(QPointF(pos.x(), std::abs(pos.y())));
 		} else
 			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, ki18n("%1: set +delta_Y position")));
 		endMacro();
@@ -276,7 +278,7 @@ void DatapickerPoint::setMinusDeltaYPos(QPointF pos) {
 		beginMacro(i18n("%1: set -delta_Y position", name()));
 		if (curve->curveErrorTypes().y == DatapickerCurve::ErrorType::SymmetricError) {
 			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, ki18n("%1: set -delta_Y position")));
-			setPlusDeltaYPos(QPointF(pos.x(), -qAbs(pos.y())));
+			setPlusDeltaYPos(QPointF(pos.x(), -std::abs(pos.y())));
 		} else
 			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, ki18n("%1: set -delta_Y position")));
 		endMacro();
@@ -298,9 +300,9 @@ bool DatapickerPoint::isReferencePoint() const {
 	return d->isReferencePoint;
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 DatapickerPointPrivate::DatapickerPointPrivate(DatapickerPoint* owner)
 	: q(owner) {
 	setFlag(QGraphicsItem::ItemIsMovable);
@@ -423,6 +425,8 @@ void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 QVariant DatapickerPointPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) {
 	if (change == QGraphicsItem::GraphicsItemChange::ItemSelectedHasChanged && value.toBool())
 		emit q->pointSelected(q);
+	else if (change == QGraphicsItem::GraphicsItemChange::ItemPositionChange)
+		emit q->positionChanged(value.toPointF());
 	return QGraphicsItem::itemChange(change, value);
 }
 
@@ -455,9 +459,9 @@ void DatapickerPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* ev
 	q->createContextMenu()->exec(event->screenPos());
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 	Q_D(const DatapickerPoint);

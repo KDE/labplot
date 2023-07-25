@@ -35,8 +35,6 @@ private:
 	LineWidget* lineWidget{nullptr};
 
 	void load();
-	void loadConfig(KConfig&);
-
 	void updateWidgetsOrientation(ReferenceLine::Orientation);
 
 private Q_SLOTS:
@@ -46,7 +44,7 @@ private Q_SLOTS:
 	// Position
 	void orientationChanged(int);
 	void positionLogicalChanged(double);
-	void positionLogicalDateTimeChanged(const QDateTime&);
+	void positionLogicalDateTimeChanged(qint64);
 
 	// SLOTs for changes triggered in ReferenceLine
 	void updatePlotRanges() override;
@@ -55,6 +53,13 @@ private Q_SLOTS:
 	// Position
 	void linePositionLogicalChanged(const QPointF&);
 	void lineOrientationChanged(ReferenceLine::Orientation);
+
+	// load and save
+	void loadConfigFromTemplate(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
+
+Q_SIGNALS:
+	void info(const QString&);
 };
 
 #endif

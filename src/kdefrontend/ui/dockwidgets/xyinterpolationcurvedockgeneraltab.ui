@@ -77,7 +77,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>10</height>
+       <height>18</height>
       </size>
      </property>
     </spacer>
@@ -127,16 +127,6 @@
     <widget class="QLabel" name="lXRange">
      <property name="text">
       <string>X-Range:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="2">
-    <widget class="QCheckBox" name="cbAutoRange">
-     <property name="text">
-      <string>Auto</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -235,14 +225,14 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QDateTimeEdit" name="dateTimeEditMin">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditMin">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QDateTimeEdit" name="dateTimeEditMax">
+       <widget class="UTCDateTimeEdit" name="dateTimeEditMax">
         <property name="calendarPopup">
          <bool>true</bool>
         </property>
@@ -377,22 +367,6 @@
      </item>
     </layout>
    </item>
-   <item row="14" column="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="15" column="0">
     <widget class="QLabel" name="lEval">
      <property name="text">
@@ -445,22 +419,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="17" column="2">
-    <spacer name="verticalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>214</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="18" column="0">
     <widget class="QLabel" name="lResults">
@@ -535,15 +493,57 @@
      </property>
     </widget>
    </item>
-   <item row="21" column="2">
-    <widget class="QComboBox" name="cbPlotRanges"/>
-   </item>
    <item row="21" column="0">
     <widget class="QLabel" name="lPlotRange">
      <property name="text">
       <string>Plot Range:</string>
      </property>
     </widget>
+   </item>
+   <item row="21" column="2" colspan="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
+   </item>
+   <item row="8" column="2" colspan="2">
+    <widget class="QCheckBox" name="cbAutoRange">
+     <property name="text">
+      <string>Auto</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="2" colspan="2">
+    <spacer name="verticalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>214</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="14" column="2" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -562,6 +562,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

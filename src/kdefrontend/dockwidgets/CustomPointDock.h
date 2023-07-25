@@ -35,7 +35,6 @@ private:
 
 	void load();
 	void initConnections() const;
-	void loadConfig(KConfig&);
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in CustomPointDock
@@ -48,9 +47,9 @@ private Q_SLOTS:
 	void bindingChanged(bool checked);
 
 	void positionXLogicalChanged(double);
-	void positionXLogicalDateTimeChanged(const QDateTime&);
+	void positionXLogicalDateTimeChanged(qint64);
 	void positionYLogicalChanged(double);
-	void positionYLogicalDateTimeChanged(const QDateTime&);
+	void positionYLogicalDateTimeChanged(qint64);
 
 	// SLOTs for changes triggered in CustomPoint
 	// General-Tab
@@ -66,6 +65,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void info(const QString&);
+
+	friend class WorksheetElementTest;
 };
 
 #endif

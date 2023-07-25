@@ -73,51 +73,58 @@ void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 	m_column = m_columns.first();
 
 	// show the available value labels for the first columm
-	if (m_column->hasValueLabels()) {
-		auto mode = m_column->columnMode();
+	if (m_column->valueLabelsInitialized()) {
 		QString text;
 
-		switch (mode) {
+		switch (m_column->labelsMode()) {
 		case AbstractColumn::ColumnMode::Double: {
-			auto labels = m_column->valueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
+			const auto* labels = m_column->valueLabels();
+			if (!labels)
+				return;
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
 				if (!text.isEmpty())
 					text += QLatin1Char('\n');
-				text += QString::number(it.key()) + QLatin1String(" = ") + it.value();
+				text += QString::number(it->value) + QLatin1String(" = ") + it->label;
 				++it;
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			auto labels = m_column->intValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
+			const auto* labels = m_column->intValueLabels();
+			if (!labels)
+				return;
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
 				if (!text.isEmpty())
 					text += QLatin1Char('\n');
-				text += QString::number(it.key()) + QLatin1String(" = ") + it.value();
+				text += QString::number(it->value) + QLatin1String(" = ") + it->label;
 				++it;
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			auto labels = m_column->bigIntValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
+			const auto* labels = m_column->bigIntValueLabels();
+			if (!labels)
+				return;
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
 				if (!text.isEmpty())
 					text += QLatin1Char('\n');
-				text += QString::number(it.key()) + QLatin1String(" = ") + it.value();
+				text += QString::number(it->value) + QLatin1String(" = ") + it->label;
 				++it;
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
-			auto labels = m_column->textValueLabels();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
+			const auto* labels = m_column->textValueLabels();
+			if (!labels)
+				return;
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
 				if (!text.isEmpty())
 					text += QLatin1Char('\n');
-				text += it.key() + QLatin1String(" = ") + it.value();
+				text += it->value + QLatin1String(" = ") + it->label;
 				++it;
 			}
 			break;
@@ -125,14 +132,16 @@ void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			auto labels = m_column->dateTimeValueLabels();
+			const auto* labels = m_column->dateTimeValueLabels();
+			if (!labels)
+				return;
 			const auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
 			const auto& dateTimeFormat = filter->format();
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
 				if (!text.isEmpty())
 					text += QLatin1Char('\n');
-				text += it.key().toString(dateTimeFormat) + QLatin1String(" = ") + it.value();
+				text += it->value.toString(dateTimeFormat) + QLatin1String(" = ") + it->label;
 				++it;
 			}
 			break;
@@ -150,7 +159,7 @@ void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 void BatchEditValueLabelsDialog::save() const {
 	// remove all already available labels first
 	for (auto* column : m_columns)
-		column->clearValueLabels();
+		column->valueLabelsRemoveAll();
 
 	// add new labels
 	const auto numberLocale = QLocale();

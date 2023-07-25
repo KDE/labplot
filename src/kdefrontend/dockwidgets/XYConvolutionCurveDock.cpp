@@ -15,7 +15,6 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <QMenu>
-#include <QStandardItemModel>
 #include <QWidgetAction>
 
 extern "C" {
@@ -28,7 +27,7 @@ extern "C" {
 		(2D-curves defined by a convolution) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -37,7 +36,7 @@ extern "C" {
 */
 
 XYConvolutionCurveDock::XYConvolutionCurveDock(QWidget* parent)
-	: XYCurveDock(parent) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -117,7 +116,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 
 void XYConvolutionCurveDock::initGeneralTab() {
 	DEBUG(Q_FUNC_INFO);
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -186,39 +185,11 @@ void XYConvolutionCurveDock::initGeneralTab() {
 
 void XYConvolutionCurveDock::setModel() {
 	DEBUG(Q_FUNC_INFO);
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Datapicker,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYCurve,
-						   AspectType::XYAnalysisCurve};
-	cbDataSourceCurve->setTopLevelClasses(list);
+	auto list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYConvolutionCurve);
 
-	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
-		hiddenAspects << curve;
-	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
+	XYAnalysisCurveDock::setModel(list);
 
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYConvolutionCurve};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-	cbY2DataColumn->setTopLevelClasses(list);
-
-	cbDataSourceCurve->setModel(m_aspectTreeModel);
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-	cbY2DataColumn->setModel(m_aspectTreeModel);
-
-	XYCurveDock::setModel();
 	DEBUG("XYConvolutionCurveDock::setModel() DONE");
 }
 
@@ -530,31 +501,7 @@ void XYConvolutionCurveDock::enableRecalculate() const {
  * show the result and details of the convolution
  */
 void XYConvolutionCurveDock::showConvolutionResult() {
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = m_convolutionCurve->convolutionResult();
-	if (!convolutionResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
-
-	QString str = i18n("status: %1", convolutionResult.status) + QStringLiteral("<br>");
-
-	if (!convolutionResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	const auto numberLocale = QLocale();
-	if (convolutionResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(convolutionResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(convolutionResult.elapsedTime)) + QStringLiteral("<br>");
-
-	str += QStringLiteral("<br><br>");
-
-	uiGeneralTab.teResult->setText(str);
-
-	// enable the "recalculate"-button if the source data was changed since the last convolution
-	uiGeneralTab.pbRecalculate->setEnabled(m_convolutionCurve->isSourceDataChangedSinceLastRecalc());
+	showResult(m_convolutionCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
 }
 
 //*************************************************************

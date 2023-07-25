@@ -125,34 +125,37 @@ double nsl_math_places(double value, int n, int method) {
 	}
 }
 
-double nsl_math_round_precision(double value, unsigned int p) {
-	/*	printf("nsl_math_round_precision(%g, %d)\n", value, p); */
+double nsl_math_round_precision(double value, int p) {
+	return nsl_math_round_basex(value, p, 10.);
+}
+
+double nsl_math_round_basex(double value, int p, double base) {
+	/*	printf("nsl_math_round_basex(%g, %d, %g)\n", value, p, base); */
 
 	// no need to round
 	if (value == 0. || p > 16 || isnan(value) || isinf(value))
 		return value;
 
 	int e = 0;
-	while (fabs(value) > 10.) {
-		value /= 10.;
+	while (fabs(value) > base) {
+		value /= base;
 		e++;
 	}
 	while (fabs(value) < 1.) {
-		value *= 10.;
+		value *= base;
 		e--;
 	}
-	double order_of_magnitude = gsl_pow_int(10., e);
+	double power_of_x = gsl_pow_int(base, e);
 
-	/*if (p < 0)
-		return order_of_magnitude;
-	*/
+	if (p < 0)
+		return power_of_x;
 
-	double scale = gsl_pow_uint(10., p);
+	double scale = gsl_pow_uint(base, p);
 	double scaled_value = value * scale;
 	/*
-		printf("nsl_math_round_precision(): scale = %g, scaled_value = %g, e = %d, return: %g\n", scale, scaled_value, e, round(scaled_value)/scale *
+		printf("nsl_math_round_basex(): scale = %g, scaled_value = %g, e = %d, return: %g\n", scale, scaled_value, e, round(scaled_value)/scale *
 	   gsl_pow_int(10., e));
 	*/
 
-	return round(scaled_value) / scale * order_of_magnitude;
+	return round(scaled_value) / scale * power_of_x;
 }

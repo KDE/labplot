@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for image properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,6 +14,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
+#include "kdefrontend/widgets/LineWidget.h"
 
 #include <QCompleter>
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
@@ -68,6 +69,10 @@ ImageDock::ImageDock(QWidget* parent)
 	ui.cbVerticalAlignment->addItem(i18n("Center"));
 	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 
+	auto* layout = static_cast<QHBoxLayout*>(ui.tabBorder->layout());
+	borderLineWidget = new LineWidget(ui.tabBorder);
+	layout->insertWidget(0, borderLineWidget);
+
 	QString suffix;
 	if (m_units == BaseDock::Units::Metric)
 		suffix = QStringLiteral(" cm");
@@ -78,14 +83,6 @@ ImageDock::ImageDock(QWidget* parent)
 	ui.sbHeight->setSuffix(suffix);
 	ui.sbPositionX->setSuffix(suffix);
 	ui.sbPositionY->setSuffix(suffix);
-
-	// border
-	ui.cbBorderStyle->addItem(i18n("No line"));
-	ui.cbBorderStyle->addItem(i18n("Solid line"));
-	ui.cbBorderStyle->addItem(i18n("Dash line"));
-	ui.cbBorderStyle->addItem(i18n("Dot line"));
-	ui.cbBorderStyle->addItem(i18n("Dash dot line"));
-	ui.cbBorderStyle->addItem(i18n("Dash dot dot line"));
 
 	ImageDock::updateLocale();
 
@@ -113,13 +110,12 @@ ImageDock::ImageDock(QWidget* parent)
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::verticalAlignmentChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::rotationChanged);
 
-	connect(ui.chbVisible, &QCheckBox::clicked, this, &ImageDock::visibilityChanged);
+	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ImageDock::positionXLogicalDateTimeChanged);
+	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ImageDock::positionXLogicalDateTimeChanged);
+	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::positionYLogicalChanged);
 
-	// Border
-	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::borderStyleChanged);
-	connect(ui.kcbBorderColor, &KColorButton::changed, this, &ImageDock::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::borderWidthChanged);
-	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::borderOpacityChanged);
+	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &ImageDock::bindingChanged);
+	connect(ui.chbVisible, &QCheckBox::clicked, this, &ImageDock::visibilityChanged);
 }
 
 void ImageDock::setImages(QList<Image*> list) {
@@ -130,7 +126,7 @@ void ImageDock::setImages(QList<Image*> list) {
 
 	updateLocale();
 
-	// if there are more then one image in the list, disable the name and comment field in the tab "general"
+	// if there are more than one image in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -151,6 +147,12 @@ void ImageDock::setImages(QList<Image*> list) {
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
 
+	QList<Line*> lines;
+	for (auto* image : m_imageList)
+		lines << image->borderLine();
+
+	borderLineWidget->setLines(lines);
+
 	// show the properties of the first image
 	this->load();
 
@@ -169,13 +171,11 @@ void ImageDock::setImages(QList<Image*> list) {
 
 	// Position
 	connect(m_image, &Image::positionChanged, this, &ImageDock::imagePositionChanged);
+	connect(m_image, &Image::positionLogicalChanged, this, &ImageDock::imagePositionLogicalChanged);
+	connect(m_image, &Image::coordinateBindingEnabledChanged, this, &ImageDock::imageCoordinateBindingEnabledChanged);
 	connect(m_image, &Image::horizontalAlignmentChanged, this, &ImageDock::imageHorizontalAlignmentChanged);
 	connect(m_image, &Image::verticalAlignmentChanged, this, &ImageDock::imageVerticalAlignmentChanged);
 	connect(m_image, &Image::rotationAngleChanged, this, &ImageDock::imageRotationAngleChanged);
-
-	// Border
-	connect(m_image, &Image::borderPenChanged, this, &ImageDock::imageBorderPenChanged);
-	connect(m_image, &Image::borderOpacityChanged, this, &ImageDock::imageBorderOpacityChanged);
 }
 
 /*
@@ -187,7 +187,7 @@ void ImageDock::updateLocale() {
 	ui.sbHeight->setLocale(numberLocale);
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
+	borderLineWidget->updateLocale();
 }
 
 void ImageDock::updateUnits() {
@@ -250,20 +250,26 @@ void ImageDock::embeddedChanged(int state) {
 
 	CONDITIONAL_LOCK_RETURN;
 
+	for (auto* image : m_imageList)
+		image->setEmbedded(embedded);
+
+	// embedded property was set, update the file name LineEdit after this
 	if (embedded) {
 		QFileInfo fi(m_image->fileName());
 		ui.leFileName->setText(fi.fileName());
 	} else
 		ui.leFileName->setText(m_image->fileName());
-
-	for (auto* image : m_imageList)
-		image->setEmbedded(embedded);
 }
 
 void ImageDock::fileNameChanged() {
 	const QString& fileName = ui.leFileName->text();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
-	GuiTools::highlight(ui.leFileName, invalid);
+
+	if (!m_image->embedded()) {
+		bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+		GuiTools::highlight(ui.leFileName, invalid);
+		ui.chbEmbedded->setEnabled(!invalid);
+	} else
+		GuiTools::highlight(ui.leFileName, false);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -280,10 +286,6 @@ void ImageDock::opacityChanged(int value) {
 }
 
 // Size
-void ImageDock::sizeChanged(int /*index*/) {
-	CONDITIONAL_LOCK_RETURN;
-}
-
 void ImageDock::widthChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
@@ -314,7 +316,7 @@ void ImageDock::keepRatioChanged(int state) {
 void ImageDock::positionXChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	WorksheetElement::PositionWrapper position = m_image->position();
+	auto position = m_image->position();
 	position.horizontalPosition = WorksheetElement::HorizontalPosition(index);
 	for (auto* image : m_imageList)
 		image->setPosition(position);
@@ -354,6 +356,76 @@ void ImageDock::customPositionYChanged(double value) {
 	}
 }
 
+/*!
+ * \brief ImageDock::bindingChanged
+ * Bind Image to the cartesian plot coords or not
+ * \param checked
+ */
+void ImageDock::bindingChanged(bool checked) {
+	// widgets for positioning using absolute plot distances
+	ui.lPositionX->setVisible(!checked);
+	ui.cbPositionX->setVisible(!checked);
+	ui.sbPositionX->setVisible(!checked);
+
+	ui.lPositionY->setVisible(!checked);
+	ui.cbPositionY->setVisible(!checked);
+	ui.sbPositionY->setVisible(!checked);
+
+	// widgets for positioning using logical plot coordinates
+	const auto* plot = static_cast<const CartesianPlot*>(m_image->parent(AspectType::CartesianPlot));
+	if (plot && plot->xRangeFormatDefault() == RangeT::Format::DateTime) {
+		ui.lPositionXLogicalDateTime->setVisible(checked);
+		ui.dtePositionXLogical->setVisible(checked);
+
+		ui.lPositionXLogical->setVisible(false);
+		ui.sbPositionXLogical->setVisible(false);
+	} else {
+		ui.lPositionXLogicalDateTime->setVisible(false);
+		ui.dtePositionXLogical->setVisible(false);
+
+		ui.lPositionXLogical->setVisible(checked);
+		ui.sbPositionXLogical->setVisible(checked);
+	}
+
+	ui.lPositionYLogical->setVisible(checked);
+	ui.sbPositionYLogical->setVisible(checked);
+
+	CONDITIONAL_LOCK_RETURN;
+
+	ui.chbBindLogicalPos->setChecked(checked);
+
+	for (auto* label : m_imageList)
+		label->setCoordinateBindingEnabled(checked);
+}
+
+// positioning using logical plot coordinates
+void ImageDock::positionXLogicalChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	QPointF pos = m_image->positionLogical();
+	pos.setX(value);
+	for (auto* label : m_imageList)
+		label->setPositionLogical(pos);
+}
+
+void ImageDock::positionXLogicalDateTimeChanged(qint64 value) {
+	CONDITIONAL_LOCK_RETURN;
+
+	QPointF pos = m_image->positionLogical();
+	pos.setX(value);
+	for (auto* label : m_imageList)
+		label->setPositionLogical(pos);
+}
+
+void ImageDock::positionYLogicalChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	QPointF pos = m_image->positionLogical();
+	pos.setY(value);
+	for (auto* label : m_imageList)
+		label->setPositionLogical(pos);
+}
+
 void ImageDock::horizontalAlignmentChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -382,51 +454,6 @@ void ImageDock::visibilityChanged(bool state) {
 		image->setVisible(state);
 }
 
-// border
-void ImageDock::borderStyleChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* image : m_imageList) {
-		pen = image->borderPen();
-		pen.setStyle(penStyle);
-		image->setBorderPen(pen);
-	}
-}
-
-void ImageDock::borderColorChanged(const QColor& color) {
-	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-
-	CONDITIONAL_LOCK_RETURN;
-
-	QPen pen;
-	for (auto* image : m_imageList) {
-		pen = image->borderPen();
-		pen.setColor(color);
-		image->setBorderPen(pen);
-	}
-}
-
-void ImageDock::borderWidthChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	QPen pen;
-	for (auto* image : m_imageList) {
-		pen = image->borderPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		image->setBorderPen(pen);
-	}
-}
-
-void ImageDock::borderOpacityChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* image : m_imageList)
-		image->setBorderOpacity(opacity);
-}
-
 //*************************************************************
 //********** SLOTs for changes triggered in Image *************
 //*************************************************************
@@ -442,7 +469,7 @@ void ImageDock::imageEmbeddedChanged(bool keep) {
 
 void ImageDock::imageOpacityChanged(float opacity) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbOpacity->setValue(qRound(opacity * 100.0));
+	ui.sbOpacity->setValue(std::round(opacity * 100));
 }
 
 // Size
@@ -480,6 +507,18 @@ void ImageDock::imageVerticalAlignmentChanged(WorksheetElement::VerticalAlignmen
 	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
 }
 
+void ImageDock::imageCoordinateBindingEnabledChanged(bool enabled) {
+	CONDITIONAL_LOCK_RETURN;
+	bindingChanged(enabled);
+}
+
+void ImageDock::imagePositionLogicalChanged(QPointF pos) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbPositionXLogical->setValue(pos.x());
+	ui.dtePositionXLogical->setMSecsSinceEpochUTC(pos.x());
+	ui.sbPositionYLogical->setValue(pos.y());
+}
+
 void ImageDock::imageRotationAngleChanged(qreal angle) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
@@ -488,22 +527,6 @@ void ImageDock::imageRotationAngleChanged(qreal angle) {
 void ImageDock::imageVisibleChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chbVisible->setChecked(on);
-}
-
-// Border
-void ImageDock::imageBorderPenChanged(const QPen& pen) {
-	CONDITIONAL_LOCK_RETURN;
-	if (ui.cbBorderStyle->currentIndex() != pen.style())
-		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if (ui.kcbBorderColor->color() != pen.color())
-		ui.kcbBorderColor->setColor(pen.color());
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point)); // No if!
-}
-
-void ImageDock::imageBorderOpacityChanged(float value) {
-	CONDITIONAL_LOCK_RETURN;
-	float v = (float)value * 100.;
-	ui.sbBorderOpacity->setValue(v);
 }
 
 //*************************************************************
@@ -535,12 +558,41 @@ void ImageDock::load() {
 
 	ui.cbHorizontalAlignment->setCurrentIndex((int)m_image->horizontalAlignment());
 	ui.cbVerticalAlignment->setCurrentIndex((int)m_image->verticalAlignment());
-	ui.sbRotation->setValue(m_image->rotationAngle());
 
-	// Border
-	ui.kcbBorderColor->setColor(m_image->borderPen().color());
-	ui.cbBorderStyle->setCurrentIndex((int)m_image->borderPen().style());
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(m_image->borderPen().widthF(), Worksheet::Unit::Point));
-	ui.sbBorderOpacity->setValue(round(m_image->borderOpacity() * 100));
-	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	// widgets for positioning using logical plot coordinates
+	bool allowLogicalCoordinates = (m_image->plot() != nullptr);
+	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);
+
+	if (allowLogicalCoordinates) {
+		const auto* plot = static_cast<const CartesianPlot*>(m_image->plot());
+		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric) {
+			ui.lPositionXLogical->show();
+			ui.sbPositionXLogical->show();
+			ui.lPositionXLogicalDateTime->hide();
+			ui.dtePositionXLogical->hide();
+
+			ui.sbPositionXLogical->setValue(m_image->positionLogical().x());
+			ui.sbPositionYLogical->setValue(m_image->positionLogical().y());
+		} else { // DateTime
+			ui.lPositionXLogical->hide();
+			ui.sbPositionXLogical->hide();
+			ui.lPositionXLogicalDateTime->show();
+			ui.dtePositionXLogical->show();
+
+			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
+			ui.dtePositionXLogical->setMSecsSinceEpochUTC(m_image->positionLogical().x());
+		}
+
+		ui.chbBindLogicalPos->setChecked(m_image->coordinateBindingEnabled());
+		bindingChanged(m_image->coordinateBindingEnabled());
+	} else {
+		ui.lPositionXLogical->hide();
+		ui.sbPositionXLogical->hide();
+		ui.lPositionYLogical->hide();
+		ui.sbPositionYLogical->hide();
+		ui.lPositionXLogicalDateTime->hide();
+		ui.dtePositionXLogical->hide();
+	}
+
+	ui.sbRotation->setValue(m_image->rotationAngle());
 }

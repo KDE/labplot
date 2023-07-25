@@ -59,6 +59,7 @@ void BackgroundWidget::setBackgrounds(const QList<Background*>& backgrounds) {
 	m_background = m_backgrounds.first();
 	m_prefix = m_background->prefix();
 
+	CONDITIONAL_LOCK_RETURN;
 	load();
 
 	connect(m_background, &Background::enabledChanged, this, &BackgroundWidget::backgroundEnabledChanged);
@@ -71,7 +72,10 @@ void BackgroundWidget::setBackgrounds(const QList<Background*>& backgrounds) {
 	connect(m_background, &Background::secondColorChanged, this, &BackgroundWidget::backgroundSecondColorChanged);
 	connect(m_background, &Background::fileNameChanged, this, &BackgroundWidget::backgroundFileNameChanged);
 	connect(m_background, &Background::opacityChanged, this, &BackgroundWidget::backgroundOpacityChanged);
+}
 
+void BackgroundWidget::showEvent(QShowEvent* event) {
+	QWidget::showEvent(event);
 	adjustLayout();
 }
 
@@ -86,6 +90,9 @@ void BackgroundWidget::adjustLayout() {
 		return;
 
 	auto* parentWidget = parentGridLayout->itemAtPosition(0, 0)->widget();
+	if (!parentWidget)
+		return;
+
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	auto* widget = gridLayout->itemAtPosition(2, 0)->widget(); // use the third line, the first two are optional and not always visible
 
@@ -152,8 +159,6 @@ void BackgroundWidget::retranslateUi() {
 //******** SLOTs for changes triggered in BackgroundWidget ****
 //*************************************************************
 void BackgroundWidget::enabledChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
 	ui.cbType->setEnabled(state);
 	ui.cbColorStyle->setEnabled(state);
 	ui.cbBrushStyle->setEnabled(state);
@@ -163,6 +168,8 @@ void BackgroundWidget::enabledChanged(bool state) {
 	ui.leFileName->setEnabled(state);
 	ui.bOpen->setEnabled(state);
 	ui.sbOpacity->setEnabled(state);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* background : m_backgrounds)
 		background->setEnabled(state);
@@ -328,11 +335,11 @@ void BackgroundWidget::selectFile() {
 }
 
 void BackgroundWidget::fileNameChanged() {
-	CONDITIONAL_LOCK_RETURN;
-
 	const QString& fileName = ui.leFileName->text();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* background : m_backgrounds)
 		background->setFileName(fileName);
@@ -388,14 +395,13 @@ void BackgroundWidget::backgroundFileNameChanged(const QString& name) {
 
 void BackgroundWidget::backgroundOpacityChanged(float opacity) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbOpacity->setValue(qRound(opacity * 100.0));
+	ui.sbOpacity->setValue(std::round(opacity * 100));
 }
 
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
 void BackgroundWidget::load() {
-	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)m_background->type());
 	ui.cbColorStyle->setCurrentIndex((int)m_background->colorStyle());
 	ui.cbImageStyle->setCurrentIndex((int)m_background->imageStyle());
@@ -403,7 +409,7 @@ void BackgroundWidget::load() {
 	ui.leFileName->setText(m_background->fileName());
 	ui.kcbFirstColor->setColor(m_background->firstColor());
 	ui.kcbSecondColor->setColor(m_background->secondColor());
-	ui.sbOpacity->setValue(qRound(m_background->opacity() * 100));
+	ui.sbOpacity->setValue(std::round(m_background->opacity() * 100));
 
 	// optional parameters
 	bool visible = m_background->enabledAvailable();
@@ -427,7 +433,6 @@ void BackgroundWidget::load() {
 }
 
 void BackgroundWidget::loadConfig(const KConfigGroup& group) {
-	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), (int)m_background->type()));
 	ui.cbColorStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ColorStyle"), (int)m_background->colorStyle()));
 	ui.cbImageStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ImageStyle"), (int)m_background->imageStyle()));
@@ -435,7 +440,7 @@ void BackgroundWidget::loadConfig(const KConfigGroup& group) {
 	ui.leFileName->setText(group.readEntry(m_prefix + QStringLiteral("FileName"), m_background->fileName()));
 	ui.kcbFirstColor->setColor(group.readEntry(m_prefix + QStringLiteral("FirstColor"), m_background->firstColor()));
 	ui.kcbSecondColor->setColor(group.readEntry(m_prefix + QStringLiteral("SecondColor"), m_background->secondColor()));
-	ui.sbOpacity->setValue(qRound(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_background->opacity()) * 100));
+	ui.sbOpacity->setValue(std::round(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_background->opacity()) * 100));
 
 	// optional parameters
 	if (m_background->enabledAvailable())

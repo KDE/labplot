@@ -12,12 +12,12 @@
 #define XYFOURIERTRANSFORMCURVEDOCK_H
 
 #include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyfouriertransformcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYFourierTransformCurveDock : public XYCurveDock {
+class XYFourierTransformCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
@@ -31,14 +31,12 @@ private:
 	void showTransformResult();
 
 	Ui::XYFourierTransformCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYFourierTransformCurve* m_transformCurve{nullptr};
 	XYFourierTransformCurve::TransformData m_transformData;
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYFourierTransformCurveDock

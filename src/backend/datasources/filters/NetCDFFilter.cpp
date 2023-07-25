@@ -57,7 +57,7 @@
 		for (int i = 0; i < actualRows; i++)                                                                                                                   \
 			sourceData[i] = (dtype)data[i];                                                                                                                    \
 	} else { /* preview */                                                                                                                                     \
-		for (int i = 0; i < qMin(actualRows, lines); i++)                                                                                                      \
+		for (int i = 0; i < std::min(actualRows, lines); i++)                                                                                                  \
 			dataStrings << (QStringList() << QString::number(data[i]));                                                                                        \
 	}                                                                                                                                                          \
 	delete[] data;
@@ -75,7 +75,7 @@
 	handleError(m_status, QStringLiteral("nc_get_vara_" #type));                                                                                               \
                                                                                                                                                                \
 	if (!dataSource) { /* preview */                                                                                                                           \
-		for (int i = 0; i < qMin(actualRows, lines); i++)                                                                                                      \
+		for (int i = 0; i < std::min(actualRows, lines); i++)                                                                                                  \
 			dataStrings << (QStringList() << QString::number(data[i]));                                                                                        \
 		delete[] data;                                                                                                                                         \
 	}
@@ -90,7 +90,7 @@
 	handleError(m_status, QStringLiteral("nc_get_var_" #ftype));                                                                                               \
                                                                                                                                                                \
 	if (m_status == NC_NOERR) {                                                                                                                                \
-		for (int i = 0; i < qMin((int)rows, lines); i++) {                                                                                                     \
+		for (int i = 0; i < std::min((int)rows, lines); i++) {                                                                                                 \
 			QStringList line;                                                                                                                                  \
 			for (size_t j = 0; j < cols; j++) {                                                                                                                \
 				if (dataSource && dataContainer[0])                                                                                                            \
@@ -291,9 +291,9 @@ QString NetCDFFilter::fileCDLString(const QString& fileName) {
 	return CDLString;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 
 NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner)
 	: q(owner) {
@@ -893,7 +893,7 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 				for (int i = 0; i < actualRows; i++)
 					sourceData[i] = QChar::fromLatin1(data[i]);
 			} else { // preview
-				for (int i = 0; i < qMin(actualRows, lines); i++)
+				for (int i = 0; i < std::min(actualRows, lines); i++)
 					dataStrings << (QStringList() << QChar::fromLatin1(data[i]));
 			}
 			delete[] data;
@@ -1015,7 +1015,7 @@ NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource*
 			handleError(m_status, QStringLiteral("nc_get_var_text"));
 
 			if (m_status == NC_NOERR) {
-				for (int i = 0; i < qMin((int)rows, lines); i++) {
+				for (int i = 0; i < std::min((int)rows, lines); i++) {
 					QStringList line;
 					for (size_t j = 0; j < cols; j++) {
 						if (dataSource && dataContainer[0])
@@ -1117,9 +1117,9 @@ void NetCDFFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource*
 	// TODO: writing NetCDF files not implemented yet
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.

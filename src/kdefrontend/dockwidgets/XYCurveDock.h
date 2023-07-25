@@ -57,7 +57,8 @@ private:
 
 protected:
 	void initTabs();
-	virtual void setModel();
+	static QList<AspectType> defaultColumnTopLevelClasses();
+	void setModel();
 	void setSymbols(QList<XYCurve*>);
 
 	Ui::XYCurveDock ui;

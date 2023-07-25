@@ -24,7 +24,9 @@ ConstantsWidget::ConstantsWidget(QWidget* parent)
 	ui.bInsert->setIcon(QIcon::fromTheme(QStringLiteral("edit-paste")));
 	ui.bCancel->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
 	m_expressionParser = ExpressionParser::getInstance();
-	ui.cbGroup->addItems(m_expressionParser->constantsGroups());
+
+	for (int i = 0; i < (int)ConstantGroups::END; i++)
+		ui.cbGroup->addItem(constantGroupsToString(static_cast<ConstantGroups>(i)), i);
 
 	// SLOTS
 	connect(ui.leFilter, &QLineEdit::textChanged, this, &ConstantsWidget::filterChanged);
@@ -47,11 +49,13 @@ ConstantsWidget::ConstantsWidget(QWidget* parent)
 void ConstantsWidget::groupChanged(int index) {
 	static const QStringList& constants = m_expressionParser->constants();
 	static const QStringList& names = m_expressionParser->constantsNames();
-	static const QVector<int>& indices = m_expressionParser->constantsGroupIndices();
+	static const QVector<ConstantGroups>& indices = m_expressionParser->constantsGroupIndices();
+
+	const auto group = static_cast<ConstantGroups>(ui.cbGroup->itemData(index).toInt());
 
 	ui.lwConstants->clear();
 	for (int i = 0; i < names.size(); ++i) {
-		if (indices.at(i) == index)
+		if (indices.at(i) == group)
 			ui.lwConstants->addItem(names.at(i) + QStringLiteral(" (") + constants.at(i) + QStringLiteral(")"));
 	}
 	ui.lwConstants->setCurrentRow(0);

@@ -12,10 +12,8 @@
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 void ROOTFilterTest::importFile1() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/advanced_zlib.root"));
@@ -42,7 +40,7 @@ void ROOTFilterTest::importFile1() {
 	QCOMPARE(spreadsheet.column(0)->valueAt(99), 4.94505);
 	QCOMPARE(spreadsheet.column(1)->valueAt(99), 0);
 	QCOMPARE(spreadsheet.column(2)->valueAt(99), 0);
-	QCOMPARE(spreadsheet.column(0)->valueAt(100), qInf());
+	QCOMPARE(spreadsheet.column(0)->valueAt(100), INFINITY);
 	QCOMPARE(spreadsheet.column(1)->valueAt(100), 0);
 	QCOMPARE(spreadsheet.column(2)->valueAt(100), 0);
 
@@ -91,7 +89,7 @@ void ROOTFilterTest::importFile2() {
 	QCOMPARE(spreadsheet.column(0)->valueAt(99), 4.95);
 	QCOMPARE(spreadsheet.column(1)->valueAt(99), 0);
 	QCOMPARE(spreadsheet.column(2)->valueAt(99), 0);
-	QCOMPARE(spreadsheet.column(0)->valueAt(100), qInf());
+	QCOMPARE(spreadsheet.column(0)->valueAt(100), INFINITY);
 	QCOMPARE(spreadsheet.column(1)->valueAt(100), 0);
 	QCOMPARE(spreadsheet.column(2)->valueAt(100), 0);
 }

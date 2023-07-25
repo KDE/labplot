@@ -127,7 +127,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//	/*
 	//	 * Summary:
 	//	 * - Using .at() is faster than []
-	//	 * - Chaching calculations. So (qRound64(x / minLogicalDiffX)) must not be
+	//	 * - Chaching calculations. So (std::round(x / minLogicalDiffX)) must not be
 	//	 * done every time.
 	//	 * - Try to get as much as possible calculations away. instead of abs() use !=
 	//	 * 0 which is secure for long int
@@ -144,7 +144,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//	//		x = 0;
 	//	//		PERFTRACE(QString(Q_FUNC_INFO) + "XYCurve::addUniqueLine use array
 	//	// access"); 		for (int i=0; i < count; i++) { 			pixelDiff =
-	//	// llabs(qRound64(points[i].x() / minLogicalDiffX) - qRound64(x /
+	//	// llabs(std::round(points[i].x() / minLogicalDiffX) - std::round(x /
 	//	// minLogicalDiffX)) > 0; // only relevant if greater zero or not
 	//	//			XYCurvePrivate::addUniqueLine(points[i], minY, maxY, lastPoint,
 	//	// pixelDiff, lines, prevPixelDiffZero); 			if (pixelDiff > 0) // set x to next
@@ -169,10 +169,10 @@ void XYCurveTest::addUniqueLineTest01() {
 	//			x = 0;
 	//			PERFTRACE(QString(Q_FUNC_INFO) + "01_XYCurve::addUniqueLine use @access");
 	//			for (int i = 0; i < count; i++) {
-	//				pixelDiff = llabs(qRound64(points.at(i).x() / minLogicalDiffX) - qRound64(x / minLogicalDiffX)) > 0; // only relevant if greater zero or not
-	//				XYCurvePrivate::addUniqueLine(points.at(i), minY, maxY, lastPoint, pixelDiff, lines, prevPixelDiffZero);
-	//				if (pixelDiff > 0) // set x to next pixel
-	//					x += minLogicalDiffX;
+	//				pixelDiff = llabs(std::round(points.at(i).x() / minLogicalDiffX) - std::round(x / minLogicalDiffX)) > 0; // only relevant if greater zero or
+	// not 				XYCurvePrivate::addUniqueLine(points.at(i), minY, maxY, lastPoint, pixelDiff, lines, prevPixelDiffZero);
+	// 				if (pixelDiff > 0) // set x to next pixel
+	// 					x += minLogicalDiffX;
 	//			}
 	//		}
 	//		qDebug() << x;
@@ -205,11 +205,11 @@ void XYCurveTest::addUniqueLineTest01() {
 	//                "011_XYCurve::addUniqueLine use @access try to simplify "
 	//                "calculation, cache x/minLogicalDiffX");
 	//			for (int i = 0; i < count; i++) {
-	//				pixelDiff = (qRound64(points.at(i).x() / minLogicalDiffX) - r) != 0; // only relevant if greater zero or not
+	//				pixelDiff = (std::round(points.at(i).x() / minLogicalDiffX) - r) != 0; // only relevant if greater zero or not
 	//				XYCurvePrivate::addUniqueLine(points.at(i), minY, maxY, lastPoint, pixelDiff, lines, prevPixelDiffZero);
 	//				if (pixelDiff > 0) { // set x to next pixel
 	//					x += minLogicalDiffX;
-	//					r = qRound64(x / minLogicalDiffX);
+	//					r = std::round(x / minLogicalDiffX);
 	//				}
 	//			}
 	//		}
@@ -242,8 +242,8 @@ void XYCurveTest::addUniqueLineTest01() {
 	//	//		bool prevPixelDiffZero = false;
 	//	//		x = 0;
 	//	//		for (int i=0; i < count; i++) {
-	//	//			qint64 res = llabs(qRound64(points.at(i).x() / minLogicalDiffX)
-	//	//- qRound64(x / minLogicalDiffX)); 			pixelDiff_.append(res); 			pixelDiff = res >
+	//	//			qint64 res = llabs(std::round(points.at(i).x() / minLogicalDiffX)
+	//	//- std::round(x / minLogicalDiffX)); 			pixelDiff_.append(res); 			pixelDiff = res >
 	//	// 0; // only relevant if greater zero or not
 	//	//			XYCurvePrivate::addUniqueLine(points.at(i), minY, maxY,
 	//	// lastPoint, pixelDiff, lines, prevPixelDiffZero); 			if (pixelDiff > 0) // set x
@@ -278,7 +278,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//			PERFTRACE(QString(Q_FUNC_INFO) + "02_XYCurve::addUniqueLine use raw vector");
 	//			for (int i = 0; i < count; i++) {
 	// only relevant if greater zero or not
-	//				pixelDiff = llabs(qRound64(pointerArray[i].x() / minLogicalDiffX) - qRound64(x / minLogicalDiffX)) > 0;
+	//				pixelDiff = llabs(std::round(pointerArray[i].x() / minLogicalDiffX) - std::round(x / minLogicalDiffX)) > 0;
 	//			addUniqueLine01(pointerArray[i], minY, maxY, lastPoint, pixelDiff, lines, prevPixelDiffZero);
 	//          if (pixelDiff > 0) // set x to next pixel
 	//             x += minLogicalDiffX;
@@ -312,7 +312,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//			PERFTRACE(QString(Q_FUNC_INFO) + "03_XYCurve::addUniqueLine use raw double vector");
 	//			for (int i = 0; i < count; i++) {
 	//				only relevant if greater zero or not
-	//				pixelDiff = llabs(qRound64(pointerArray[2 * i] / minLogicalDiffX) - qRound64(x / minLogicalDiffX)) > 0;
+	//				pixelDiff = llabs(std::round(pointerArray[2 * i] / minLogicalDiffX) - std::round(x / minLogicalDiffX)) > 0;
 	//			    addUniqueLine_double_vector(&pointerArray[2 * i], minY, maxY, lastPoint, pixelDiff, lines, prevPixelDiffZero);
 	//				if (pixelDiff > 0) // set x to next pixel
 	//  				x += minLogicalDiffX;
@@ -347,7 +347,8 @@ void XYCurveTest::addUniqueLineTest01() {
 	//                "04_XYCurve::addUniqueLine use raw double vector last point "
 	//                "double vector");
 	//			for (int i = 0; i < count; i++) {
-	//				pixelDiff = llabs(qRound64(pointerArray[2 * i] / minLogicalDiffX) - qRound64(x / minLogicalDiffX)) > 0; // only relevant if greater zero or
+	//				pixelDiff = llabs(std::round(pointerArray[2 * i] / minLogicalDiffX) - std::round(x / minLogicalDiffX)) > 0; // only relevant if greater zero
+	// or
 	// not 				addUniqueLine_double_vector_last_point_vector(&pointerArray[2 * i], minY, maxY, lastPoint, pixelDiff, lines, prevPixelDiffZero);
 	// if (pixelDiff > 0) // set x to next pixel 					x += minLogicalDiffX;
 	//			}
@@ -383,7 +384,8 @@ void XYCurveTest::addUniqueLineTest01() {
 	//                "05_XYCurve::addUniqueLine use raw double vector "
 	//                "last_point_double lines_double_vector");
 	//			for (int i = 0; i < count; i++) {
-	//				pixelDiff = llabs(qRound64(pointerArray[2 * i] / minLogicalDiffX) - qRound64(x / minLogicalDiffX)) > 0; // only relevant if greater zero or
+	//				pixelDiff = llabs(std::round(pointerArray[2 * i] / minLogicalDiffX) - std::round(x / minLogicalDiffX)) > 0; // only relevant if greater zero
+	// or
 	// not 				addUniqueLine_double_vector_last_point_vector_lines_vector(&pointerArray[2 * i],
 	// minY, maxY, lastPoint, 																		   pixelDiff, lines, prevPixelDiffZero,
 	// number_lines); 				if (pixelDiff > 0) // set x to next pixel 					x += minLogicalDiffX;
@@ -426,7 +428,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//			PERFTRACE(QString(Q_FUNC_INFO) + "051_XYCurve::addUniqueLine use raw "
 	//                                       "double vector cache x/minLogicalDiffX");
 	//			for (int i = 0; i < count; i++) {
-	//				pixelDiff = llabs(qRound64(pointerArray[2 * i] / minLogicalDiffX) - r) > 0; // only relevant if greater zero or not
+	//				pixelDiff = llabs(std::round(pointerArray[2 * i] / minLogicalDiffX) - r) > 0; // only relevant if greater zero or not
 	//				addUniqueLine_double_vector_last_point_vector_lines_vector(&pointerArray[2 * i],
 	//																		   minY,
 	//																		   maxY,
@@ -437,7 +439,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//																		   number_lines);
 	//				if (pixelDiff > 0) { // set x to next pixel
 	//					x += minLogicalDiffX;
-	//					r = qRound64(x / minLogicalDiffX);
+	//					r = std::round(x / minLogicalDiffX);
 	//				}
 	//			}
 
@@ -479,7 +481,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//                "0511_XYCurve::addUniqueLine use raw double vector cache "
 	//                "x/minLogicalDiffX remove abs");
 	//			for (int i = 0; i < count; i++) {
-	//				pixelDiff = (qRound64(pointerArray[2 * i] / minLogicalDiffX) - r) != 0; // only relevant if not zero
+	//				pixelDiff = (std::round(pointerArray[2 * i] / minLogicalDiffX) - r) != 0; // only relevant if not zero
 	//				addUniqueLine_double_vector_last_point_vector_lines_vector(&pointerArray[2 * i],
 	//																		   minY,
 	//																		   maxY,
@@ -490,7 +492,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//																		   number_lines);
 	//				if (pixelDiff > 0) { // set x to next pixel
 	//					x += minLogicalDiffX;
-	//					r = qRound64(x / minLogicalDiffX);
+	//					r = std::round(x / minLogicalDiffX);
 	//				}
 	//			}
 
@@ -529,13 +531,13 @@ void XYCurveTest::addUniqueLineTest01() {
 	//	//			bool prevPixelDiffZero = false;
 	//	//			PERFTRACE(QString(Q_FUNC_INFO) + "052_XYCurve::addUniqueLine use
 	//	// raw double vector cache x/minLogicalDiffX without linecopy"); 			for (int i=0;
-	//	// i < count; i++) { 				pixelDiff = llabs(qRound64(pointerArray[2*i] /
+	//	// i < count; i++) { 				pixelDiff = llabs(std::round(pointerArray[2*i] /
 	//	// minLogicalDiffX) - r) > 0; // only relevant if greater zero or not
 	//	//				addUniqueLine_double_vector_last_point_vector_lines_vector(&pointerArray[2*i],
 	//	// minY, maxY, lastPoint, pixelDiff, lines, prevPixelDiffZero, number_lines);
 	//	//				if (pixelDiff > 0) { // set x to next pixel
 	//	//					x += minLogicalDiffX;
-	//	//					r = qRound64(x / minLogicalDiffX);
+	//	//					r = std::round(x / minLogicalDiffX);
 	//	//				}
 	//	//			}
 	//	//		}
@@ -574,7 +576,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//          "053_XYCurve::addUniqueLine use raw double vector cache "
 	//          "x/minLogicalDiffX without linecopy number_lines add 4 directly");
 	//			for (int i = 0; i < count; i++) {
-	//				pixelDiff = llabs(qRound64(pointerArray[2 * i] / minLogicalDiffX) - r) > 0; // only relevant if greater zero or not
+	//				pixelDiff = llabs(std::round(pointerArray[2 * i] / minLogicalDiffX) - r) > 0; // only relevant if greater zero or not
 	//				addUniqueLine_double_vector_last_point_vector_lines_vector_add4(&pointerArray[2 * i],
 	//																				minY,
 	//																				maxY,
@@ -585,7 +587,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//																				number_lines);
 	//				if (pixelDiff > 0) { // set x to next pixel
 	//					x += minLogicalDiffX;
-	//					r = qRound64(x / minLogicalDiffX);
+	//					r = std::round(x / minLogicalDiffX);
 	//				}
 	//			}
 	//		}
@@ -621,13 +623,13 @@ void XYCurveTest::addUniqueLineTest01() {
 	//	//			PERFTRACE(QString(Q_FUNC_INFO) + "06_XYCurve::addUniqueLine use
 	//	// raw double vector cache x/minLogicalDiffX without linecopy number_lines add
 	//	// 4 directly don't copy last point"); 			for (int i=0; i < count; i++) {
-	//	//				pixelDiff = llabs(qRound64(pointerArray[2*i] /
+	//	//				pixelDiff = llabs(std::round(pointerArray[2*i] /
 	//	// minLogicalDiffX) - r) > 0; // only relevant if greater zero or not
 	//	//				addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_last_point(&pointerArray[2*i],
 	//	// minY, maxY, &lastPoint, pixelDiff, lines, prevPixelDiffZero, number_lines);
 	//	//				if (pixelDiff > 0) { // set x to next pixel
 	//	//					x += minLogicalDiffX;
-	//	//					r = qRound64(x / minLogicalDiffX);
+	//	//					r = std::round(x / minLogicalDiffX);
 	//	//				}
 	//	//			}
 	//	//		}
@@ -661,8 +663,8 @@ void XYCurveTest::addUniqueLineTest01() {
 	//	//		lines.resize(maximumLines);
 	//	//	PERFTRACE(QString(Q_FUNC_INFO) + "addUniqueLine PreAllocate");
 	//	//		for (int i=0; i < count; i++) {
-	//	//			pixelDiff = llabs(qRound64(points.at(i).x() / minLogicalDiffX) -
-	//	// qRound64(x / minLogicalDiffX)) > 0; // only relevant if greater zero or not
+	//	//			pixelDiff = llabs(std::round(points.at(i).x() / minLogicalDiffX) -
+	//	// std::round(x / minLogicalDiffX)) > 0; // only relevant if greater zero or not
 	//	//			XYCurvePrivate::addUniqueLine(points.at(i), minY, maxY,
 	//	// lastPoint, pixelDiff, lines, prevPixelDiffZero); 			if (pixelDiff > 0) // set x
 	//	// to next pixel 				x += minLogicalDiffX;
@@ -672,8 +674,8 @@ void XYCurveTest::addUniqueLineTest01() {
 
 void addUniqueLine01(QPointF p, double& minY, double& maxY, QPointF& lastPoint, const int& pixelDiff, QVector<QLineF>& lines, bool& prevPixelDiffZero) {
 	if (pixelDiff == 0) {
-		maxY = qMax(p.y(), maxY);
-		minY = qMin(p.y(), minY);
+		maxY = std::max(p.y(), maxY);
+		minY = std::min(p.y(), minY);
 		prevPixelDiffZero = true;
 		lastPoint = p;
 	} else {
@@ -698,8 +700,8 @@ void addUniqueLine_double_vector(double* p,
 								 QVector<QLineF>& lines,
 								 bool& prevPixelDiffZero) {
 	if (pixelDiff == 0) {
-		maxY = qMax(p[1], maxY);
-		minY = qMin(p[1], minY);
+		maxY = std::max(p[1], maxY);
+		minY = std::min(p[1], minY);
 		prevPixelDiffZero = true;
 		lastPoint = QPointF(p[0], p[1]);
 	} else {
@@ -724,8 +726,8 @@ void addUniqueLine_double_vector_last_point_vector(double* p,
 												   QVector<QLineF>& lines,
 												   bool& prevPixelDiffZero) {
 	if (pixelDiff == 0) {
-		maxY = qMax(p[1], maxY);
-		minY = qMin(p[1], minY);
+		maxY = std::max(p[1], maxY);
+		minY = std::min(p[1], minY);
 		prevPixelDiffZero = true;
 		// lastPoint = QPointF(p[0], p[1]);
 		lastPoint[0] = p[0];
@@ -754,8 +756,8 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector(double* p,
 																bool& prevPixelDiffZero,
 																int& numberLines) {
 	if (pixelDiff == 0) {
-		maxY = qMax(p[1], maxY);
-		minY = qMin(p[1], minY);
+		maxY = std::max(p[1], maxY);
+		minY = std::min(p[1], minY);
 		prevPixelDiffZero = true;
 		// lastPoint = QPointF(p[0], p[1]);
 		lastPoint[0] = p[0];
@@ -803,8 +805,8 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(double* p,
 																	 bool& prevPixelDiffZero,
 																	 int& numberLines) {
 	if (pixelDiff == 0) {
-		maxY = qMax(p[1], maxY);
-		minY = qMin(p[1], minY);
+		maxY = std::max(p[1], maxY);
+		minY = std::min(p[1], minY);
 		prevPixelDiffZero = true;
 		// lastPoint = QPointF(p[0], p[1]);
 		lastPoint[0] = p[0];
@@ -852,8 +854,8 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_l
 																						  bool& prevPixelDiffZero,
 																						  int& numberLines) {
 	if (pixelDiff == 0) {
-		maxY = qMax(p[1], maxY);
-		minY = qMin(p[1], minY);
+		maxY = std::max(p[1], maxY);
+		minY = std::min(p[1], minY);
 		prevPixelDiffZero = true;
 		// lastPoint = QPointF(p[0], p[1]);
 		// lastPoint = &p;
@@ -893,8 +895,8 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_l
 void addUniqueLine02(QPointF p, double x, double& minY, double& maxY, QPointF& lastPoint, const int& pixelDiff, QVector<QLineF>& lines) {
 	static bool prevPixelDiffZero = false;
 	if (pixelDiff == 0) {
-		maxY = qMax(p.y(), maxY);
-		minY = qMin(p.y(), minY);
+		maxY = std::max(p.y(), maxY);
+		minY = std::min(p.y(), minY);
 		lastPoint = p; // save last point
 		prevPixelDiffZero = true;
 	} else {
@@ -1429,9 +1431,9 @@ void XYCurveTest::updateLinesWithGapLineSkipDirectConnection() {
 	QCOMPARE(updateLinesCalled, true);
 }
 
-//######################################################################################
-// With Gap, skipGaps = True
-//######################################################################################
+// ######################################################################################
+//  With Gap, skipGaps = True
+// ######################################################################################
 void XYCurveTest::updateLinesWithGapLineSkipDirectConnection2() {
 	LOAD_PROJECT
 	bool updateLinesCalled = false;
@@ -1668,9 +1670,9 @@ void XYCurveTest::updateLinesWithGapLineSkipSegments3() {
 	QCOMPARE(updateLinesCalled, true);
 }
 
-//######################################################################################
-// With Gap, skipGaps = false
-//######################################################################################
+// ######################################################################################
+//  With Gap, skipGaps = false
+// ######################################################################################
 void XYCurveTest::updateLinesWithGapDirectConnection() {
 	LOAD_PROJECT
 	withGapCurve2->setLineSkipGaps(true);
@@ -1942,9 +1944,9 @@ void XYCurveTest::updateLinesLog10() {
 
 // TODO: create tests for Splines
 
-//############################################################################
-// Hover tests
-//############################################################################
+// ############################################################################
+//  Hover tests
+// ############################################################################
 void XYCurveTest::hooverCurveIntegerEndingZeros() {
 	LOAD_HOVER_PROJECT
 

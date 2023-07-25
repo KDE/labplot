@@ -33,7 +33,7 @@
       <item row="1" column="2">
        <widget class="QLineEdit" name="leFileName">
         <property name="toolTip">
-         <string>Specify the name of the file to import.</string>
+         <string>Specify the name of the file to export.</string>
         </property>
         <property name="clearButtonEnabled">
          <bool>true</bool>

@@ -16,7 +16,21 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "commonfrontend/core/PartMdiView.h"
+#include "commonfrontend/core/ContentDockWidget.h"
+
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KMessageWidget>
+#include <KSharedConfig>
+#include <kcoreaddons_version.h>
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 79, 0)
+#define HAS_FUZZY_MATCHER true
+#include <KFuzzyMatcher>
+#else
+#define HAS_FUZZY_MATCHER false
+#endif
 
 #include <QClipboard>
 #include <QContextMenuEvent>
@@ -29,21 +43,6 @@
 #include <QPushButton>
 #include <QTreeView>
 #include <QVBoxLayout>
-
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KMessageWidget>
-#include <KSharedConfig>
-
-#include <kcoreaddons_version.h>
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 79, 0)
-#define HAS_FUZZY_MATCHER true
-#include <KFuzzyMatcher>
-#else
-#define HAS_FUZZY_MATCHER false
-#endif
 
 /*!
   \class ProjectExplorer
@@ -166,7 +165,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 			menu->insertAction(firstAction, collapseTreeAction);
 		}
 	} else {
-		menu = new QMenu();
+		menu = new QMenu(this);
 
 		if (items.size() / 4 > 1) {
 			// add "expand/collapse" entries if the selected indices have children
@@ -304,7 +303,7 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 }
 
 void ProjectExplorer::setProject(Project* project) {
-	connect(project, &Project::aspectAdded, this, &ProjectExplorer::aspectAdded);
+	connect(project, &Project::childAspectAdded, this, &ProjectExplorer::aspectAdded);
 	connect(project, &Project::requestSaveState, this, &ProjectExplorer::save);
 	connect(project, &Project::requestLoadState, this, &ProjectExplorer::load);
 	connect(project, &Project::requestNavigateTo, this, &ProjectExplorer::navigateTo);
@@ -379,8 +378,9 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				QVector<quintptr> vec;
 				QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
 				// there are four model indices in each row -> divide by 4 to obtain the number of selected rows (=aspects)
-				for (int i = 0; i < items.size() / 4; ++i) {
-					const QModelIndex& index = items.at(i * 4);
+				const int columnCount = m_treeView->model()->columnCount();
+				for (int i = 0; i < items.size() / columnCount; ++i) {
+					const QModelIndex& index = items.at(i * columnCount);
 					auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 					vec << (quintptr)aspect;
 				}
@@ -518,9 +518,7 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 		}
 	} else if (event->key() == 32) {
 		// space key - hide/show the current object
-		auto* we = dynamic_cast<WorksheetElement*>(aspect);
-		if (we)
-			we->setVisible(!we->isVisible());
+		changeSelectedVisible();
 	}
 }
 
@@ -539,9 +537,9 @@ void ProjectExplorer::showErrorMessage(const QString& message) {
 	}
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 /*!
   expand the aspect \c aspect (the tree index corresponding to it) in the tree view
   and makes it visible and selected. Called when a new aspect is added to the project.
@@ -681,17 +679,15 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 #endif
 	}
 
-	if (checked) {
-		QMenu menu;
+	QMenu menu;
 #if HAS_FUZZY_MATCHER
-		menu.addAction(fuzzyMatchingAction);
-		menu.addSeparator();
+	menu.addAction(fuzzyMatchingAction);
+	menu.addSeparator();
 #endif
-		menu.addAction(caseSensitiveAction);
-		menu.addAction(matchCompleteWordAction);
-		connect(&menu, &QMenu::aboutToHide, bFilterOptions, &QPushButton::toggle);
-		menu.exec(bFilterOptions->mapToGlobal(QPoint(0, bFilterOptions->height())));
-	}
+	menu.addAction(caseSensitiveAction);
+	menu.addAction(matchCompleteWordAction);
+	connect(&menu, &QMenu::aboutToHide, bFilterOptions, &QPushButton::toggle);
+	menu.exec(bFilterOptions->mapToGlobal(QPoint(0, bFilterOptions->height())));
 }
 
 void ProjectExplorer::resizeHeader() {
@@ -861,6 +857,37 @@ void ProjectExplorer::collapseSelected() {
 		m_treeView->setExpanded(index, false);
 }
 
+void ProjectExplorer::changeSelectedVisible() {
+	const auto& items = m_treeView->selectionModel()->selectedIndexes();
+
+	// determine all selected aspects
+	QVector<WorksheetElement*> elements;
+	const auto columnCount = m_treeView->model()->columnCount();
+	for (int i = 0; i < items.size() / columnCount; ++i) {
+		const QModelIndex& index = items.at(i * columnCount);
+		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		auto* element = dynamic_cast<WorksheetElement*>(aspect);
+		if (element)
+			elements << element;
+	}
+
+	const int numberElements = elements.size();
+	if (numberElements == 0)
+		return;
+
+	// Use first element as reference
+	const auto& firstElement = elements.constFirst();
+	const bool newVisible = !firstElement->isVisible();
+
+	if (numberElements > 1) {
+		firstElement->beginMacro(i18n("%1 elements: set visible: %2").arg(numberElements, newVisible));
+		for (auto* e : elements)
+			e->setVisible(newVisible);
+		firstElement->endMacro();
+	} else
+		firstElement->setVisible(newVisible);
+}
+
 void ProjectExplorer::deleteSelected() {
 	const auto& items = m_treeView->selectionModel()->selectedIndexes();
 	if (!items.size())
@@ -868,8 +895,9 @@ void ProjectExplorer::deleteSelected() {
 
 	// determine all selected aspects
 	QVector<AbstractAspect*> aspects;
-	for (int i = 0; i < items.size() / 4; ++i) {
-		const QModelIndex& index = items.at(i * 4);
+	const auto columnCount = m_treeView->model()->columnCount();
+	for (int i = 0; i < items.size() / columnCount; ++i) {
+		const QModelIndex& index = items.at(i * columnCount);
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspects << aspect;
 	}
@@ -880,9 +908,17 @@ void ProjectExplorer::deleteSelected() {
 	else
 		msg = i18n("Do you really want to delete %1?", aspects.constFirst()->name());
 
-	int rc = KMessageBox::warningYesNo(this, msg, i18np("Delete selected object", "Delete selected objects", aspects.size()));
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+	auto status = KMessageBox::warningTwoActions(this,
+												 msg,
+												 i18np("Delete selected object", "Delete selected objects", aspects.size()),
+												 KStandardGuiItem::del(),
+												 KStandardGuiItem::cancel());
+#else
+	auto status = KMessageBox::warningYesNo(this, msg, i18np("Delete selected object", "Delete selected objects", aspects.size()));
+#endif
 
-	if (rc == KMessageBox::No)
+	if (status == KMessageBox::No)
 		return;
 
 	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size() / 4));
@@ -914,9 +950,9 @@ void ProjectExplorer::deleteSelected() {
 	m_project->endMacro();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 struct ViewState {
 	Qt::WindowStates state;
 	QRect geometry;
@@ -960,7 +996,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 
 		if (part && part->hasMdiSubWindow()) {
 			writer->writeStartElement(QStringLiteral("view"));
-			const auto& geometry = part->mdiSubWindow()->geometry();
+			const auto& geometry = part->dockWidget()->geometry();
 			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeAttribute(QStringLiteral("state"), QString::number(part->view()->windowState()));
 			writer->writeAttribute(QStringLiteral("x"), QString::number(geometry.x()));
@@ -1078,7 +1114,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 						reader->raiseWarning(attributeWarning.subs(QStringLiteral("state")).toString());
 					else {
 						part->view()->setWindowState(Qt::WindowStates(str.toInt()));
-						part->mdiSubWindow()->setWindowState(Qt::WindowStates(str.toInt()));
+						part->dockWidget()->setWindowState(Qt::WindowStates(str.toInt()));
 					}
 
 					if (str != QLatin1String("0"))
@@ -1109,7 +1145,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 					else
 						geometry.setHeight(str.toInt());
 
-					part->mdiSubWindow()->setGeometry(geometry);
+					part->dockWidget()->setGeometry(geometry);
 				}
 			}
 		}
@@ -1146,7 +1182,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 					reader->raiseWarning(attributeWarning.subs(QStringLiteral("state")).toString());
 				else {
 					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
-					part->mdiSubWindow()->setWindowState(Qt::WindowStates(str.toInt()));
+					part->dockWidget()->setWindowState(Qt::WindowStates(str.toInt()));
 				}
 
 				if (str != QLatin1String("0"))
@@ -1177,7 +1213,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				else
 					geometry.setHeight(str.toInt());
 
-				part->mdiSubWindow()->setGeometry(geometry);
+				part->dockWidget()->setGeometry(geometry);
 			}
 		}
 	}

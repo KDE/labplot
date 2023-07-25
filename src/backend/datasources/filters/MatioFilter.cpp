@@ -16,6 +16,8 @@
 
 #include <KLocalizedString>
 
+#include <cmath>
+
 ///////////// macros ///////////////////////////////////////////////
 
 // see NetCDFFilter.cpp
@@ -39,7 +41,7 @@
 					header << QLatin1String("Re ") + QString::number(j + 1) << QLatin1String("Im ") + QString::number(j + 1);                                  \
 				}                                                                                                                                              \
 				dataStrings << header;                                                                                                                         \
-				for (size_t i = 0; i < qMin(actualRows, lines); i++) {                                                                                         \
+				for (size_t i = 0; i < std::min(actualRows, lines); i++) {                                                                                     \
 					QStringList row;                                                                                                                           \
 					for (size_t j = 0; j < actualCols / 2; j++) {                                                                                              \
 						const size_t index = i + startRow - 1 + (j + startColumn - 1) * rows;                                                                  \
@@ -58,7 +60,7 @@
 							data[index];                                                                                                                       \
 					}                                                                                                                                          \
 			} else { /* preview */                                                                                                                             \
-				for (size_t i = 0; i < qMin(actualRows, lines); i++) {                                                                                         \
+				for (size_t i = 0; i < std::min(actualRows, lines); i++) {                                                                                     \
 					QStringList row;                                                                                                                           \
 					for (size_t j = 0; j < actualCols; j++)                                                                                                    \
 						row << QString::number(data[i + startRow - 1 + (j + startColumn - 1) * rows]);                                                         \
@@ -108,7 +110,7 @@
 			auto* re = (type*)complex_data->Re;                                                                                                                \
 			auto* im = (type*)complex_data->Im;                                                                                                                \
 			if (dataSource) {                                                                                                                                  \
-				for (size_t i = 0; i < qMin((size_t)sparse->njc - 1, actualCols / 2); i++)                                                                     \
+				for (size_t i = 0; i < std::min((size_t)sparse->njc - 1, actualCols / 2); i++)                                                                 \
 					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) {                                          \
 						if (sparse->ir[j] >= (size_t)startRow - 1 && sparse->ir[j] < actualEndRow) { /* only read requested rows */                            \
 							static_cast<QVector<dtype>*>(dataContainer[(int)2 * i])->operator[](sparse->ir[j] - startRow + 1) =                                \
@@ -118,7 +120,7 @@
 						}                                                                                                                                      \
 					}                                                                                                                                          \
 			} else { /* preview */                                                                                                                             \
-				for (size_t i = 0; i < qMin((size_t)sparse->njc - 1, actualEndColumn / 2 + 1); i++)                                                            \
+				for (size_t i = 0; i < std::min((size_t)sparse->njc - 1, actualEndColumn / 2 + 1); i++)                                                        \
 					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) {                                          \
 						if (sparse->ir[j] >= (size_t)startRow - 1 && sparse->ir[j] < actualEndRow) { /* only read requested rows */                            \
 							if (2 * i < actualEndColumn) /* Im may be last col */                                                                              \
@@ -131,21 +133,21 @@
 		} else { /* real */                                                                                                                                    \
 			auto* data = (type*)sparse->data;                                                                                                                  \
 			if (dataSource) {                                                                                                                                  \
-				for (size_t i = startColumn - 1; i < qMin((size_t)sparse->njc - 1, actualEndColumn); i++)                                                      \
+				for (size_t i = startColumn - 1; i < std::min((size_t)sparse->njc - 1, actualEndColumn); i++)                                                  \
 					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) {                                          \
 						if (sparse->ir[j] >= (size_t)startRow - 1 && sparse->ir[j] < actualEndRow) /* only read requested rows */                              \
 							static_cast<QVector<dtype>*>(dataContainer[(int)i - startColumn + 1])->operator[](sparse->ir[j] - startRow + 1) =                  \
 								*(data + j * stride / sizeof(type));                                                                                           \
 					}                                                                                                                                          \
 			} else { /* preview */                                                                                                                             \
-				for (size_t i = 0; i < qMin((size_t)sparse->njc - 1, actualEndColumn); i++)                                                                    \
+				for (size_t i = 0; i < std::min((size_t)sparse->njc - 1, actualEndColumn); i++)                                                                \
 					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++)                                            \
 						if (sparse->ir[j] < actualEndRow) /* don't read beyond last row */                                                                     \
 							matrix[sparse->ir[j]][i] = *(data + j * stride / sizeof(type));                                                                    \
 			}                                                                                                                                                  \
 		}                                                                                                                                                      \
 		if (!dataSource) { /* preview */                                                                                                                       \
-			for (size_t i = startRow - 1; i < qMin(actualEndRow, lines); i++) {                                                                                \
+			for (size_t i = startRow - 1; i < std::min(actualEndRow, lines); i++) {                                                                            \
 				QStringList row;                                                                                                                               \
 				for (size_t j = startColumn - 1; j < actualEndColumn; j++)                                                                                     \
 					row << QString::number(matrix[i][j]);                                                                                                      \
@@ -169,7 +171,7 @@
 					static_cast<QVector<type>*>(dataContainer[colIndex + 1])->operator[](j) = im[j + startRow - 1];                                            \
 				}                                                                                                                                              \
 			} else { /* preview */                                                                                                                             \
-				for (size_t j = 0; j < qMin(actualRows, lines); j++) {                                                                                         \
+				for (size_t j = 0; j < std::min(actualRows, lines); j++) {                                                                                     \
 					/* TODO: use when complex column mode is supported */                                                                                      \
 					/* if (im[j] < 0)                                                                                                                          \
 						dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" - ")                                                                \
@@ -194,7 +196,7 @@
 				for (size_t j = 0; j < actualRows; j++)                                                                                                        \
 					static_cast<QVector<type>*>(dataContainer[colIndex])->operator[](j) = data[j + startRow - 1];                                              \
 			} else { /* preview */                                                                                                                             \
-				for (size_t j = 0; j < qMin(actualRows, lines); j++)                                                                                           \
+				for (size_t j = 0; j < std::min(actualRows, lines); j++)                                                                                       \
 					dataStrings[j + 1][colIndex] = QString::number(data[j + startRow - 1]);                                                                    \
 			}                                                                                                                                                  \
 		}                                                                                                                                                      \
@@ -365,9 +367,9 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 	return info;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 
 MatioFilterPrivate::MatioFilterPrivate(MatioFilter* owner)
 	: q(owner) {
@@ -813,7 +815,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 
 			// set actualRows
 			auto** fields = (matvar_t**)var->data;
-			for (int i = startColumn - 1; i < qMin(nfields, endColumn); i++) {
+			for (int i = startColumn - 1; i < std::min(nfields, endColumn); i++) {
 				if (fields[i]->name) {
 					// TODO: not needed when supporting complex column mode
 					if (fields[i]->isComplex)
@@ -837,7 +839,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 						if (endRow == -1)
 							size = fields[i]->dims[0] * fields[i]->dims[1] - startRow + 1;
 						else
-							size = qMin(fields[i]->dims[0] * fields[i]->dims[1], actualRows);
+							size = std::min(fields[i]->dims[0] * fields[i]->dims[1], actualRows);
 					}
 
 					if (actualRows < size)
@@ -853,7 +855,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 			if (dataSource) {
 				columnModes.resize(actualCols);
 				int index = 0;
-				for (int i = startColumn - 1; i < qMin(nfields, endColumn); i++) {
+				for (int i = startColumn - 1; i < std::min(nfields, endColumn); i++) {
 					auto mode = classMode(fields[i]->class_type);
 					if (dynamic_cast<Matrix*>(dataSource) && mode == AbstractColumn::ColumnMode::Text) // text not supported for matrix
 						mode = AbstractColumn::ColumnMode::Double;
@@ -879,10 +881,10 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 		case MAT_C_OBJECT: // not available (not supported by matio yet)
 			DEBUG(Q_FUNC_INFO << ", found OBJECT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			return dataStrings << (QStringList() << i18n("Not implemented yet"));
-			break;
 		case MAT_C_FUNCTION: // not available (not supported by matio yet)
 			DEBUG(Q_FUNC_INFO << ", found FUNCTION. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			QDEBUG(Q_FUNC_INFO << ", data: " << (const char*)var->data)
+			return dataStrings << (QStringList() << i18n("Not implemented yet"));
 		case MAT_C_OPAQUE:
 			return dataStrings << (QStringList() << i18n("Not implemented yet"));
 		}
@@ -961,7 +963,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 									continue;
 								}
 								if (i == 0) { // first line
-									if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16)
+									if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16) // valgrind: invalid read of size 2
 										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf16((const mat_uint16_t*)cell->data);
 									else if (cell->data_type == MAT_T_UTF8)
 										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf8((const char*)cell->data);
@@ -1249,9 +1251,9 @@ void MatioFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* 
 	// TODO: writing MAT files not implemented yet
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.

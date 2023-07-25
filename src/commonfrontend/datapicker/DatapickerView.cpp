@@ -60,8 +60,8 @@ DatapickerView::DatapickerView(Datapicker* datapicker)
 
 	// SIGNALs/SLOTs
 	connect(m_datapicker, &Datapicker::aspectDescriptionChanged, this, &DatapickerView::handleDescriptionChanged);
-	connect(m_datapicker, &Datapicker::aspectAdded, this, &DatapickerView::handleAspectAdded);
-	connect(m_datapicker, &Datapicker::aspectAboutToBeRemoved, this, &DatapickerView::handleAspectAboutToBeRemoved);
+	connect(m_datapicker, &Datapicker::childAspectAdded, this, &DatapickerView::handleAspectAdded);
+	connect(m_datapicker, &Datapicker::childAspectAboutToBeRemoved, this, &DatapickerView::handleAspectAboutToBeRemoved);
 	connect(m_datapicker, &Datapicker::datapickerItemSelected, this, &DatapickerView::itemSelected);
 
 	connect(m_tabWidget, &QTabWidget::currentChanged, this, &DatapickerView::tabChanged);
@@ -97,9 +97,9 @@ int DatapickerView::currentIndex() const {
 	return m_tabWidget->currentIndex();
 }
 
-//##############################################################################
-//#########################  Private slots  ####################################
-//##############################################################################
+// ##############################################################################
+// #########################  Private slots  ####################################
+// ##############################################################################
 /*!
   called when the current tab was changed. Propagates the selection of \c Spreadsheet
   or of a \c DatapickerImage object to \c Datapicker.

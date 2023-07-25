@@ -20,6 +20,8 @@
 #include <QDateTime>
 #include <QIcon>
 
+#include <cmath>
+
 /**
  * \class AbstractColumn
  * \brief Interface definition for data with column logic
@@ -119,6 +121,27 @@ QStringList AbstractColumn::dateTimeFormats() {
 			dateTimes << d + QLatin1Char(' ') + t;
 
 	return dateTimes;
+}
+
+/**
+ * \brief Convenience method for getting time unit string
+ * translated since used in UI
+ */
+QString AbstractColumn::timeUnitString(TimeUnit unit) {
+	switch (unit) {
+	case TimeUnit::Milliseconds:
+		return i18n("Milliseconds");
+	case TimeUnit::Seconds:
+		return i18n("Seconds");
+	case TimeUnit::Minutes:
+		return i18n("Minutes");
+	case TimeUnit::Hours:
+		return i18n("Hours");
+	case TimeUnit::Days:
+		return i18n("Days");
+	}
+
+	return {};
 }
 
 /**
@@ -291,62 +314,94 @@ bool AbstractColumn::copy(const AbstractColumn* /*source*/, int /*source_start*/
  * \brief Return the number of available data rows
  */
 
+class ColumnSetRowsCountCmd : public QUndoCommand {
+public:
+	ColumnSetRowsCountCmd(AbstractColumn* column, bool insert, int first, int count, QUndoCommand* parent)
+		: QUndoCommand(parent)
+		, m_column(column)
+		, m_insert(insert)
+		, m_first(first)
+		, m_count(count) {
+		if (insert)
+			setText(i18np("%1: insert 1 row", "%1: insert %2 rows", m_column->name(), count));
+		else
+			setText(i18np("%1: remove 1 row", "%1: remove %2 rows", m_column->name(), count));
+	}
+
+	virtual void redo() override {
+		if (m_insert)
+			Q_EMIT m_column->rowsAboutToBeInserted(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsAboutToBeRemoved(m_column, m_first, m_count);
+
+		QUndoCommand::redo();
+
+		if (m_insert)
+			Q_EMIT m_column->rowsInserted(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsRemoved(m_column, m_first, m_count);
+	}
+
+	virtual void undo() override {
+		if (m_insert)
+			Q_EMIT m_column->rowsAboutToBeRemoved(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsAboutToBeInserted(m_column, m_first, m_count);
+		QUndoCommand::undo();
+
+		if (m_insert)
+			Q_EMIT m_column->rowsRemoved(m_column, m_first, m_count);
+		else
+			Q_EMIT m_column->rowsInserted(m_column, m_first, m_count);
+	}
+
+private:
+	AbstractColumn* m_column;
+	bool m_insert;
+	int m_first;
+	int m_count;
+};
+
 /**
  * \brief Insert some empty (or initialized with invalid values) rows
  */
-void AbstractColumn::insertRows(int before, int count) {
-	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
-	exec(new SignallingUndoCommand(QStringLiteral("pre-signal"),
-								   this,
-								   "rowsAboutToBeInserted",
-								   "rowsRemoved",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, before),
-								   Q_ARG(int, count)));
+void AbstractColumn::insertRows(int before, int count, QUndoCommand* parent) {
+	bool execute = false;
+	auto* command = new ColumnSetRowsCountCmd(this, true, before, count, parent);
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
 
-	handleRowInsertion(before, count);
+	handleRowInsertion(before, count, parent);
 
-	exec(new SignallingUndoCommand(QStringLiteral("post-signal"),
-								   this,
-								   "rowsInserted",
-								   "rowsAboutToBeRemoved",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, before),
-								   Q_ARG(int, count)));
-	endMacro();
+	if (execute)
+		exec(parent);
 }
 
-void AbstractColumn::handleRowInsertion(int before, int count) {
-	exec(new AbstractColumnInsertRowsCmd(this, before, count));
+void AbstractColumn::handleRowInsertion(int before, int count, QUndoCommand* parent) {
+	new AbstractColumnInsertRowsCmd(this, before, count, parent);
 }
 
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
-void AbstractColumn::removeRows(int first, int count) {
-	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
-	exec(new SignallingUndoCommand(QStringLiteral("change signal"),
-								   this,
-								   "rowsAboutToBeRemoved",
-								   "rowsInserted",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, first),
-								   Q_ARG(int, count)));
+void AbstractColumn::removeRows(int first, int count, QUndoCommand* parent) {
+	bool execute = false;
+	auto* command = new ColumnSetRowsCountCmd(this, false, first, count, parent);
+	if (!parent) {
+		execute = true;
+		parent = command;
+	}
 
-	handleRowRemoval(first, count);
+	handleRowRemoval(first, count, parent);
 
-	exec(new SignallingUndoCommand(QStringLiteral("change signal"),
-								   this,
-								   "rowsRemoved",
-								   "rowsAboutToBeInserted",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, first),
-								   Q_ARG(int, count)));
-	endMacro();
+	if (execute)
+		exec(parent);
 }
 
-void AbstractColumn::handleRowRemoval(int first, int count) {
-	exec(new AbstractColumnRemoveRowsCmd(this, first, count));
+void AbstractColumn::handleRowRemoval(int first, int count, QUndoCommand* parent) {
+	new AbstractColumnRemoveRowsCmd(this, first, count, parent);
 }
 
 /**
@@ -367,13 +422,13 @@ bool AbstractColumn::isNumeric() const {
 
 bool AbstractColumn::isPlottable() const {
 	const auto mode = columnMode();
-	return (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::DateTime);
+	return (isNumeric() || mode == ColumnMode::DateTime);
 }
 
 /**
  * \brief Clear the whole column
  */
-void AbstractColumn::clear() {
+void AbstractColumn::clear(QUndoCommand*) {
 }
 
 /**
@@ -383,7 +438,7 @@ bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 	case ColumnMode::Double: {
 		double value = valueAt(row);
-		return !(std::isnan(value) || std::isinf(value));
+		return std::isfinite(value);
 	}
 	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
@@ -626,6 +681,15 @@ void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) 
  *
  * Use this only when columnMode() is Numeric
  */
+double AbstractColumn::doubleAt(int /*row*/) const {
+	return NAN;
+}
+
+/**
+ * \brief Return the double value in row 'row' independent of the column mode.
+ *
+ * Integer and big integer values are converted to double, NAN is returned for other modes.
+ */
 double AbstractColumn::valueAt(int /*row*/) const {
 	return NAN;
 }
@@ -706,19 +770,19 @@ AbstractColumn::Properties AbstractColumn::properties() const {
 
 /**********************************************************************/
 double AbstractColumn::minimum(int /*count*/) const {
-	return -INFINITY;
+	return INFINITY;
 }
 
 double AbstractColumn::minimum(int /*startIndex*/, int /*endIndex*/) const {
-	return -INFINITY;
+	return INFINITY;
 }
 
 double AbstractColumn::maximum(int /*count*/) const {
-	return INFINITY;
+	return -INFINITY;
 }
 
 double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
-	return INFINITY;
+	return -INFINITY;
 }
 
 bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/, int& /*end*/) const {

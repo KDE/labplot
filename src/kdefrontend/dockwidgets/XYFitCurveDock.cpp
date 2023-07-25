@@ -23,9 +23,7 @@
 #include "kdefrontend/widgets/FitParametersWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
-}
 
 #include <KMessageWidget>
 
@@ -46,7 +44,7 @@ extern "C" {
 		(2D-curves defined by a fit model) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -117,15 +115,18 @@ void XYFitCurveDock::setupGeneral() {
 	l->addWidget(fitParametersWidget);
 	uiGeneralTab.frameParameters->setLayout(l);
 
-	// use white background in the preview label
-	QPalette p;
-	p.setColor(QPalette::Window, Qt::white);
-	uiGeneralTab.lFuncPic->setAutoFillBackground(true);
-	uiGeneralTab.lFuncPic->setPalette(p);
-
 	uiGeneralTab.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
+
+	for (int i = 0; i < NSL_FIT_ALGORITHM_COUNT; i++)
+		uiGeneralTab.cbAlgorithm->addItem(QLatin1String(nsl_fit_algorithm_name[i]));
+
+	if (m_fitData.modelCategory != nsl_fit_model_distribution) { // disable ML
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
+		auto* item = model->item(nsl_fit_algorithm_ml);
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+	}
 
 	// TODO: setting checked background color to unchecked color
 	//	p = uiGeneralTab.lData->palette();
@@ -180,7 +181,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(1, 0)->setText(uiGeneralTab.twGoodness->item(1, 0)->text() + UTF8_QSTRING(" (χ²/dof)"));
 	uiGeneralTab.twGoodness->item(3, 0)->setText(uiGeneralTab.twGoodness->item(3, 0)->text() + UTF8_QSTRING(" (R²)"));
 	uiGeneralTab.twGoodness->item(4, 0)->setText(uiGeneralTab.twGoodness->item(4, 0)->text() + UTF8_QSTRING(" (R̄²)"));
-	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" ( P > χ²)"));
+	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" (P > χ²)"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -201,6 +202,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.tbConstants, &QToolButton::clicked, this, &XYFitCurveDock::showConstants);
 	connect(uiGeneralTab.tbFunctions, &QToolButton::clicked, this, &XYFitCurveDock::showFunctions);
 	connect(uiGeneralTab.pbOptions, &QPushButton::clicked, this, &XYFitCurveDock::showOptions);
+	connect(uiGeneralTab.cbAlgorithm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::algorithmChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFitCurveDock::recalculateClicked);
 	connect(uiGeneralTab.lData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
 	connect(uiGeneralTab.lFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
@@ -219,7 +221,7 @@ void XYFitCurveDock::setupGeneral() {
  * load curve settings
  */
 void XYFitCurveDock::initGeneralTab() {
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -241,12 +243,16 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_fitCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 
-	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Curve)
+	switch (m_fitCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Curve:
 		cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());
-	else if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Histogram)
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
 		cbDataSourceCurve->setAspect(m_fitCurve->dataSourceHistogram());
-	else
+		break;
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
 		cbDataSourceCurve->setAspect(nullptr);
+	}
 
 	cbXDataColumn->setColumn(m_fitCurve->xDataColumn(), m_fitCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
@@ -267,11 +273,12 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.xWeightsType);
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
+	DEBUG(Q_FUNC_INFO << ", model degree = " << m_fitData.degree);
 
 	if (m_fitData.paramStartValues.size() > 0)
 		DEBUG(Q_FUNC_INFO << ", start value 1 = " << m_fitData.paramStartValues.at(0));
 
-	DEBUG(Q_FUNC_INFO << ", model degree = " << m_fitData.degree);
+	uiGeneralTab.cbAlgorithm->setCurrentIndex(m_fitData.algorithm);
 
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
@@ -333,7 +340,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_fitCurve = static_cast<XYFitCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 
-	// we need a second model for data source comboboxe which will be dynamically
+	// we need a second model for data source comboboxes which will be dynamically
 	// updated in the slot depending on the current type (spreadsheet, curve or histogram)
 	// to allow to select the relevant aspects only
 	m_dataSourceModel = new AspectTreeModel(m_curve->project());
@@ -359,8 +366,8 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 		m_messageWidget->close();
 
 	showFitResult();
-	enableRecalculate();
 	m_initializing = false;
+	enableRecalculate();
 
 	updatePlotRanges();
 
@@ -388,7 +395,9 @@ bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
+	DEBUG(Q_FUNC_INFO << ", source type = " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, type))
 	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.cbCategory->setEnabled(true);
 		uiGeneralTab.lDataSourceCurve->hide();
@@ -410,7 +419,7 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 			// TODO: why do we need to reset the model here and below again to get the combobox updated?
 			cbDataSourceCurve->setModel(m_dataSourceModel);
 		}
-	} else {
+	} else { // curve or histogram
 		uiGeneralTab.lDataSourceCurve->show();
 		cbDataSourceCurve->show();
 		uiGeneralTab.lXColumn->hide();
@@ -461,7 +470,8 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
@@ -710,15 +720,24 @@ void XYFitCurveDock::categoryChanged(int index) {
 	if (m_fitData.modelCategory == (nsl_fit_model_category)index
 		|| (m_fitData.modelCategory == nsl_fit_model_custom && index == uiGeneralTab.cbCategory->count() - 1))
 		hasChanged = false;
+	DEBUG("HAS CHANGED: " << hasChanged)
 
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
 	else
 		m_fitData.modelCategory = (nsl_fit_model_category)index;
-
 	uiGeneralTab.cbModel->clear();
 	uiGeneralTab.cbModel->show();
 	uiGeneralTab.lModel->show();
+
+	// enable algorithm selection only for distributions
+	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+		uiGeneralTab.lAlgorithm->show();
+		uiGeneralTab.cbAlgorithm->show();
+	} else {
+		uiGeneralTab.lAlgorithm->hide();
+		uiGeneralTab.cbAlgorithm->hide();
+	}
 
 	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
@@ -730,8 +749,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 			uiGeneralTab.cbModel->addItem(QLatin1String(nsl_fit_model_peak_name[i]));
 #if defined(_MSC_VER)
 		// disable voigt model
-		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
-		QStandardItem* item = model->item(nsl_fit_model_voigt);
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
+		auto* item = model->item(nsl_fit_model_voigt);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 		break;
@@ -748,10 +767,17 @@ void XYFitCurveDock::categoryChanged(int index) {
 		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
 
 		for (int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
-			// unused distributions
-			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_bernoulli) {
-				QStandardItem* item = model->item(i);
-				item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+			if (m_fitData.algorithm == nsl_fit_algorithm_ml) {
+				if (!nsl_sf_stats_distribution_supports_ML((nsl_sf_stats_distribution)i)) {
+					auto* item = model->item(i);
+					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+				}
+			} else { // LM
+				// unused distributions
+				if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_bernoulli) {
+					auto* item = model->item(i);
+					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+				}
 			}
 		}
 		break;
@@ -763,11 +789,23 @@ void XYFitCurveDock::categoryChanged(int index) {
 	}
 
 	if (hasChanged) {
+		DEBUG("HAS CHANGED! Resetting MODEL")
 		// show the fit-model for the currently selected default (first) fit-model
 		uiGeneralTab.cbModel->setCurrentIndex(0);
 		uiGeneralTab.sbDegree->setValue(1);
 		// when model type does not change, call it here
 		updateModelEquation();
+	}
+
+	// update algorithm list
+	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
+	auto* item = model->item(nsl_fit_algorithm_ml);
+	// enable ML item only for distributions
+	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	} else {
+		uiGeneralTab.cbAlgorithm->setCurrentIndex(nsl_fit_algorithm_lm);
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 
 	enableRecalculate();
@@ -804,7 +842,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		// xColumn = dynamic_cast<AbstractColumn*>(aspect);
 		xColumn = m_fitCurve->xDataColumn();
 	} else {
-		DEBUG("	data source: Curve")
+		DEBUG("	data source: Curve or Histogram")
 		if (m_fitCurve->dataSourceCurve())
 			xColumn = m_fitCurve->dataSourceCurve()->xColumn();
 	}
@@ -819,7 +857,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		case nsl_fit_model_polynomial:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setMaximum(qMin(availableRowCount - 1, 10));
+			uiGeneralTab.sbDegree->setMaximum(std::min(availableRowCount - 1, 10));
 			break;
 		case nsl_fit_model_fourier:
 			if (availableRowCount < 4) { // too few data points
@@ -829,7 +867,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 			} else {
 				uiGeneralTab.lDegree->setVisible(true);
 				uiGeneralTab.sbDegree->setVisible(true);
-				uiGeneralTab.sbDegree->setMaximum(qMin(availableRowCount / 2 - 1, 10));
+				uiGeneralTab.sbDegree->setMaximum(std::min(availableRowCount / 2 - 1, 10));
 			}
 			break;
 		case nsl_fit_model_power:
@@ -862,7 +900,21 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
 
-	m_fitData.modelType = index;
+	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+		// enable ML only for supported distros
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
+		auto* item = model->item(nsl_fit_algorithm_ml);
+
+		if (nsl_sf_stats_distribution_supports_ML((nsl_sf_stats_distribution)index))
+			item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+		else { // switch to LM
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+			uiGeneralTab.cbAlgorithm->setCurrentIndex(nsl_fit_algorithm_lm);
+		}
+	}
+
+	if (!m_initializing)
+		m_fitData.modelType = index;
 
 	updateModelEquation();
 
@@ -952,10 +1004,32 @@ void XYFitCurveDock::updateModelEquation() {
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
 		QImage image = GuiTools::importPDFFile(file);
 
+		// use system palette for background
+		if (DARKMODE) {
+			// invert image if in dark mode
+			image.invertPixels();
+
+			for (int i = 0; i < image.size().width(); i++)
+				for (int j = 0; j < image.size().height(); j++)
+					if (qGray(image.pixel(i, j)) < 64) // 0-255: 0-64 covers all dark pixel
+						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+		} else {
+			for (int i = 0; i < image.size().width(); i++)
+				for (int j = 0; j < image.size().height(); j++)
+					if (qGray(image.pixel(i, j)) > 192) // 0-255: 224-255 covers all light pixel
+						image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+		}
+
 		if (image.isNull()) {
 			uiGeneralTab.lEquation->hide();
 			uiGeneralTab.lFuncPic->hide();
 		} else {
+			// use light/dark background in the preview label
+			QPalette p;
+			p.setColor(QPalette::Window, palette().color(QPalette::Base));
+			uiGeneralTab.lFuncPic->setAutoFillBackground(true);
+			uiGeneralTab.lFuncPic->setPalette(p);
+
 			uiGeneralTab.lFuncPic->setPixmap(QPixmap::fromImage(image));
 			uiGeneralTab.lFuncPic->show();
 		}
@@ -994,6 +1068,12 @@ void XYFitCurveDock::showFunctions() {
 
 	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.tbFunctions->width(), -menu.sizeHint().height());
 	menu.exec(uiGeneralTab.tbFunctions->mapToGlobal(pos));
+}
+
+void XYFitCurveDock::algorithmChanged(int index) {
+	m_fitData.algorithm = (nsl_fit_algorithm)index;
+
+	enableRecalculate();
 }
 
 /*!
@@ -1044,7 +1124,7 @@ void XYFitCurveDock::parametersChanged(bool updateParameterWidget) {
 	vars << QStringLiteral("x"); // TODO: generalize when we support other XYEquationCurve::EquationType
 	uiGeneralTab.teEquation->setVariables(vars);
 
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK
 
 	if (updateParameterWidget)
 		fitParametersWidget->setFitData(&m_fitData);
@@ -1163,14 +1243,15 @@ void XYFitCurveDock::expressionChanged() {
 }
 
 void XYFitCurveDock::enableRecalculate() {
-	DEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing);
 	if (m_initializing || !m_fitCurve)
 		return;
 
 	// no fitting possible without the x- and y-data
 	bool hasSourceData = false;
-	auto type = m_fitCurve->dataSourceType();
-	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+	//	auto type = m_fitCurve->dataSourceType();
+	switch (m_fitCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet: {
 		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX && aspectY);
@@ -1182,11 +1263,16 @@ void XYFitCurveDock::enableRecalculate() {
 			cbYDataColumn->useCurrentIndexText(true);
 			cbYDataColumn->setInvalid(false);
 		}
-	} else if (type == XYAnalysisCurve::DataSourceType::Curve)
+		break;
+	}
+	case XYAnalysisCurve::DataSourceType::Curve:
 		hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
-	else
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
 		hasSourceData = (m_fitCurve->dataSourceHistogram() != nullptr);
+	}
 
+	DEBUG(Q_FUNC_INFO << ", hasSourceData = " << hasSourceData << ", m_parametersValid = " << m_parametersValid)
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData && m_parametersValid);
 
 	// PREVIEW as soon as recalculate is enabled (does not need source data)
@@ -1254,19 +1340,19 @@ void XYFitCurveDock::resultCopyAll() {
 }
 
 void XYFitCurveDock::resultParametersContextMenuRequest(QPoint pos) {
-	auto* contextMenu = new QMenu;
+	auto* contextMenu = new QMenu(this);
 	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twParameters->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultGoodnessContextMenuRequest(QPoint pos) {
-	auto* contextMenu = new QMenu;
+	auto* contextMenu = new QMenu(this);
 	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twGoodness->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
-	auto* contextMenu = new QMenu;
+	auto* contextMenu = new QMenu(this);
 	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twLog->mapToGlobal(pos));
@@ -1401,13 +1487,16 @@ void XYFitCurveDock::showFitResult() {
 
 			// Conf. interval
 			if (!std::isnan(errorValue)) {
-				const double margin = fitResult.tdist_marginValues.at(i);
+				const double marginLow = fitResult.marginValues.at(i);
 				// TODO: if (fitResult.tdist_tValues.at(i) > 1.e6)
 				//	item = new QTableWidgetItem(i18n("too small"));
+				double marginHigh = marginLow;
+				if (fitResult.marginValues.size() >= i && fitResult.marginValues.at(i) != 0.)
+					marginHigh = fitResult.marginValues.at(i);
 
-				item = new QTableWidgetItem(numberLocale.toString(paramValue - margin));
+				item = new QTableWidgetItem(numberLocale.toString(paramValue - marginLow));
 				uiGeneralTab.twParameters->setItem(i, 6, item);
-				item = new QTableWidgetItem(numberLocale.toString(paramValue + margin));
+				item = new QTableWidgetItem(numberLocale.toString(paramValue + marginHigh));
 				uiGeneralTab.twParameters->setItem(i, 7, item);
 			}
 		}

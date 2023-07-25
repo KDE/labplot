@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the box plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -50,8 +50,9 @@ private:
 	QVector<TreeViewComboBox*> m_dataComboBoxes;
 	QVector<QPushButton*> m_removeButtons;
 
-	void setModel();
+	void load();
 	void loadConfig(KConfig&);
+	void setModel();
 	void setDataColumns() const;
 	void loadDataColumns();
 	void updateSymbolWidgets();
@@ -90,6 +91,7 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in BoxPlot
 	// general
+	void updatePlotRanges() override;
 	void plotDescriptionChanged(const AbstractAspect*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotOrderingChanged(BoxPlot::Ordering);

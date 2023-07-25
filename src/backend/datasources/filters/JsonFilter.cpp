@@ -17,14 +17,16 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <KFilterDev>
+#include <KLocalizedString>
+
 #include <QDataStream>
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 
-#include <KFilterDev>
-#include <KLocalizedString>
+#include <cmath>
 
 /*!
 \class JsonFilter
@@ -139,10 +141,7 @@ QLocale::Language JsonFilter::numberFormat() const {
 }
 
 void JsonFilter::setNaNValueToZero(bool b) {
-	if (b)
-		d->nanValue = 0;
-	else
-		d->nanValue = NAN;
+	d->nanValue = (b ? 0 : NAN);
 }
 bool JsonFilter::NaNValueToZeroEnabled() const {
 	if (d->nanValue == 0)
@@ -225,9 +224,9 @@ QString JsonFilter::fileInfoString(const QString& fileName) {
 	return info;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 JsonFilterPrivate::JsonFilterPrivate(JsonFilter* owner)
 	: q(owner) {
 }
@@ -333,7 +332,7 @@ int JsonFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 }
 
 void JsonFilterPrivate::setEmptyValue(int column, int row) {
-	switch (columnModes[column]) {
+	switch (columnModes.at(column)) {
 	case AbstractColumn::ColumnMode::Double:
 		static_cast<QVector<double>*>(m_dataContainer[column])->operator[](row) = nanValue;
 		break;
@@ -357,7 +356,7 @@ void JsonFilterPrivate::setEmptyValue(int column, int row) {
 
 void JsonFilterPrivate::setValueFromString(int column, int row, const QString& valueString) {
 	QLocale locale(numberFormat);
-	switch (columnModes[column]) {
+	switch (columnModes.at(column)) {
 	case AbstractColumn::ColumnMode::Double: {
 		bool isNumber;
 		const double value = locale.toDouble(valueString, &isNumber);
@@ -670,14 +669,14 @@ generates the preview for document \c m_preparedDoc.
 QVector<QStringList> JsonFilterPrivate::preview(int lines) {
 	QVector<QStringList> dataStrings;
 	const int rowOffset = startRow - 1;
-	DEBUG("	Generating preview for " << qMin(lines, m_actualRows) << " lines");
+	DEBUG("	Generating preview for " << std::min(lines, m_actualRows) << " lines");
 
 	const auto& array = m_preparedDoc.array();
 	const auto& arrayIterator = array.begin();
 	const auto& object = m_preparedDoc.object();
 	const auto& objectIterator = object.begin();
 
-	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
+	for (int i = 0; i < std::min(lines, m_actualRows); ++i) {
 		QString rowName;
 		QJsonValue row;
 		switch (containerType) {
@@ -742,9 +741,9 @@ void JsonFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /
 	// TODO: saving data to json file not supported yet
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
 Saves as XML.
 */

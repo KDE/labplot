@@ -31,7 +31,6 @@ public:
 	bool positionInvalid{false};
 	bool coordinateBindingEnabled{false};
 	QPointF positionLogical;
-	qreal rotationAngle{0.0};
 	QRectF boundingRectangle; // bounding rectangle of the text
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};

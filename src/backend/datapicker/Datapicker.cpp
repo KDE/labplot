@@ -30,8 +30,8 @@
 Datapicker::Datapicker(const QString& name, const bool loading)
 	: AbstractPart(name, AspectType::Datapicker)
 	, m_transform(new Transform()) {
-	connect(this, &Datapicker::aspectAdded, this, &Datapicker::handleAspectAdded);
-	connect(this, &Datapicker::aspectAboutToBeRemoved, this, &Datapicker::handleAspectAboutToBeRemoved);
+	connect(this, &Datapicker::childAspectAdded, this, &Datapicker::handleAspectAdded);
+	connect(this, &Datapicker::childAspectAboutToBeRemoved, this, &Datapicker::handleAspectAboutToBeRemoved);
 
 	if (!loading)
 		init();
@@ -203,6 +203,11 @@ void Datapicker::setSelectedInView(const bool b) {
 		Q_EMIT childAspectDeselectedInView(this);
 }
 
+/*!
+ * \brief Datapicker::addNewPoint
+ * \param pos position in scene coordinates
+ * \param parentAspect
+ */
 void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 	auto points = parentAspect->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 
@@ -211,8 +216,12 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 
 	beginMacro(i18n("%1: add %2", parentAspect->name(), newPoint->name()));
 	parentAspect->addChild(newPoint);
+	const QPointF oldPos = newPoint->position();
 	newPoint->setPosition(pos);
-	newPoint->retransform();
+	if (oldPos == pos) {
+		// Just if pos == oldPos, setPosition will not trigger retransform() then
+		newPoint->retransform();
+	}
 
 	auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
 	if (m_image == parentAspect) {
@@ -224,18 +233,22 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 		connect(newPoint, &DatapickerPoint::pointSelected, m_image, QOverload<const DatapickerPoint*>::of(&DatapickerImage::referencePointSelected));
 	} else if (datapickerCurve) {
 		newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
-		datapickerCurve->updatePoint(newPoint);
+		// datapickerCurve->updatePoint(newPoint);
 	}
 
 	endMacro();
 	Q_EMIT requestUpdateActions();
 }
 
-QVector3D Datapicker::mapSceneToLogical(QPointF point) const {
+bool Datapicker::xDateTime() const {
+	return m_image->axisPoints().datetime;
+}
+
+Vector3D Datapicker::mapSceneToLogical(QPointF point) const {
 	return m_transform->mapSceneToLogical(point, m_image->axisPoints());
 }
 
-QVector3D Datapicker::mapSceneLengthToLogical(QPointF point) const {
+Vector3D Datapicker::mapSceneLengthToLogical(QPointF point) const {
 	return m_transform->mapSceneLengthToLogical(point, m_image->axisPoints());
 }
 
@@ -303,9 +316,9 @@ void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void Datapicker::save(QXmlStreamWriter* writer) const {

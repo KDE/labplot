@@ -14,12 +14,6 @@
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
 
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QStandardItem>
-#include <QTimer>
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -30,6 +24,14 @@
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
+
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QStandardItem>
+#include <QTimer>
+
+#include <cmath>
 
 ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 	: QWidget(parent) {
@@ -115,8 +117,8 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teQuery->document());
 	m_highlighter->setDefinition(m_repository.definitionForName(QStringLiteral("SQL")));
-	m_highlighter->setTheme((palette().color(QPalette::Base).lightness() < 128) ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-																				: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+	m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+									 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("sql_connections");

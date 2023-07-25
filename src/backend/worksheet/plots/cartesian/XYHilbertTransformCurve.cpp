@@ -23,10 +23,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
-//#include "backend/nsl/nsl_sf_poly.h"
-}
-
 #include <KLocalizedString>
 #include <QDebug> // qWarning()
 #include <QElapsedTimer>
@@ -50,9 +46,9 @@ void XYHilbertTransformCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYHilbertTransformCurve::resultAvailable() const {
+const XYAnalysisCurve::Result& XYHilbertTransformCurve::result() const {
 	Q_D(const XYHilbertTransformCurve);
-	return d->transformResult.available;
+	return d->transformResult;
 }
 
 /*!
@@ -62,28 +58,23 @@ QIcon XYHilbertTransformCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYHilbertTransformCurve, XYHilbertTransformCurve::TransformData, transformData, transformData)
 
-const XYHilbertTransformCurve::TransformResult& XYHilbertTransformCurve::transformResult() const {
-	Q_D(const XYHilbertTransformCurve);
-	return d->transformResult;
-}
-
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYHilbertTransformCurve, SetTransformData, XYHilbertTransformCurve::TransformData, transformData, recalculate)
 void XYHilbertTransformCurve::setTransformData(const XYHilbertTransformCurve::TransformData& transformData) {
 	Q_D(XYHilbertTransformCurve);
 	exec(new XYHilbertTransformCurveSetTransformDataCmd(d, transformData, ki18n("%1: set transform options and perform the Hilbert transform")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYHilbertTransformCurvePrivate::XYHilbertTransformCurvePrivate(XYHilbertTransformCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -93,67 +84,43 @@ XYHilbertTransformCurvePrivate::XYHilbertTransformCurvePrivate(XYHilbertTransfor
 // when the parent aspect is removed
 XYHilbertTransformCurvePrivate::~XYHilbertTransformCurvePrivate() = default;
 
-void XYHilbertTransformCurvePrivate::recalculate() {
+void XYHilbertTransformCurvePrivate::resetResults() {
+	transformResult = XYHilbertTransformCurve::TransformResult();
+}
+
+bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	DEBUG(Q_FUNC_INFO)
+	if (!tmpXDataColumn || !tmpYDataColumn)
+		return false;
+
 	QElapsedTimer timer;
 	timer.start();
-
-	// create transform result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	transformResult = XYHilbertTransformCurve::TransformResult();
-
-	if (!xDataColumn || !yDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		DEBUG(Q_FUNC_INFO << "no data columns!")
-		return;
-	}
 
 	// copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	double xmin, xmax;
-	if (xDataColumn && transformData.autoRange) {
-		xmin = xDataColumn->minimum();
-		xmax = xDataColumn->maximum();
+	if (transformData.autoRange) {
+		xmin = tmpXDataColumn->minimum();
+		xmax = tmpXDataColumn->maximum();
 	} else {
 		xmin = transformData.xRange.first();
 		xmax = transformData.xRange.last();
 	}
 
-	int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	DEBUG(Q_FUNC_INFO << ", row count = " << rowCount)
 	DEBUG(Q_FUNC_INFO << ", xmin/xmax = " << xmin << '/' << xmax)
 	for (int row = 0; row < rowCount; ++row) {
 		// only copy those data where _all_ values (for x and y, if given) are valid
-		if (std::isnan(xDataColumn->valueAt(row)) || std::isnan(yDataColumn->valueAt(row)) || xDataColumn->isMasked(row) || yDataColumn->isMasked(row))
+		if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row)) || tmpXDataColumn->isMasked(row)
+			|| tmpYDataColumn->isMasked(row))
 			continue;
 
 		// only when inside given range
-		if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+		if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+			xdataVector.append(tmpXDataColumn->valueAt(row));
+			ydataVector.append(tmpYDataColumn->valueAt(row));
 		}
 	}
 
@@ -163,11 +130,8 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
 		DEBUG(Q_FUNC_INFO << "no data (n = 0)!")
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -207,16 +171,12 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 	transformResult.valid = (status == GSL_SUCCESS);
 	transformResult.status = gslErrorToString(status);
 	transformResult.elapsedTime = timer.elapsed();
-
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYHilbertTransformCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYHilbertTransformCurve);

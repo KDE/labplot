@@ -108,6 +108,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::typeChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::orientationChanged);
 	connect(ui.chkVisible, &QCheckBox::toggled, this, &BarPlotDock::visibilityChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::plotRangeChanged);
 
 	// Tab "Bars"
 	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarChanged);
@@ -136,7 +137,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_barPlot->project());
 	setModel();
 
-	// if there is more then one point in the list, disable the comment and name widgets in "general"
+	// if there is more than one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -175,10 +176,11 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_barPlot->isVisible());
-	KConfig config(QString(), KConfig::SimpleConfig);
-	loadConfig(config);
+	load();
 	cbXColumn->setColumn(m_barPlot->xColumn(), m_barPlot->xColumnPath());
 	loadDataColumns();
+
+	updatePlotRanges();
 
 	// set the current locale
 	updateLocale();
@@ -236,7 +238,6 @@ void BarPlotDock::loadDataColumns() {
 		addDataColumn();
 
 	int count = m_barPlot->dataColumns().count();
-	const int currentBarIndex = ui.cbNumber->currentIndex();
 	ui.cbNumber->clear();
 
 	if (count != 0) {
@@ -273,10 +274,8 @@ void BarPlotDock::loadDataColumns() {
 	for (auto* b : m_removeButtons)
 		b->setVisible(enabled);
 
-	if (currentBarIndex != -1)
-		ui.cbNumber->setCurrentIndex(currentBarIndex);
-	else
-		ui.cbNumber->setCurrentIndex(0);
+	// select the first column after all of them were added to the combobox
+	ui.cbNumber->setCurrentIndex(0);
 }
 
 void BarPlotDock::setDataColumns() const {
@@ -493,13 +492,21 @@ void BarPlotDock::plotVisibilityChanged(bool on) {
 // box
 void BarPlotDock::plotWidthFactorChanged(double factor) {
 	CONDITIONAL_LOCK_RETURN;
-	// 	float v = (float)value*100.;
-	ui.sbWidthFactor->setValue(factor * 100);
+	ui.sbWidthFactor->setValue(round(factor * 100));
 }
 
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
+void BarPlotDock::load() {
+	// general
+	ui.cbType->setCurrentIndex((int)m_barPlot->type());
+	ui.cbOrientation->setCurrentIndex((int)m_barPlot->orientation());
+
+	// box
+	ui.sbWidthFactor->setValue(round(m_barPlot->widthFactor()) * 100);
+}
+
 void BarPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QLatin1String("BarPlot"));
 
@@ -527,7 +534,7 @@ void BarPlotDock::loadConfigFromTemplate(KConfig& config) {
 
 	int size = m_barPlots.size();
 	if (size > 1)
-		m_barPlot->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
+		m_barPlot->beginMacro(i18n("%1 bar plots: template \"%2\" loaded", size, name));
 	else
 		m_barPlot->beginMacro(i18n("%1: template \"%2\" loaded", m_barPlot->name(), name));
 

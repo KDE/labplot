@@ -4,7 +4,7 @@
 	Description          : Notes Widget for taking notes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,10 +14,13 @@
 #include "backend/lib/macros.h"
 #include "commonfrontend/note/NoteView.h"
 
+#include <QFileDialog>
+#include <QMessageBox>
 #include <QPalette>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QTextStream>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -40,7 +43,7 @@ QIcon Note::icon() const {
 bool Note::printView() {
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
-	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
+	dlg->setWindowTitle(i18nc("@title:window", "Print Note"));
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted)))
 		m_view->print(&printer);
@@ -56,7 +59,33 @@ bool Note::printPreview() const {
 }
 
 bool Note::exportView() const {
-	return false;
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExportNote");
+	QString dir = conf.readEntry("LastDir", "");
+	QString extensions = i18n("Text file (*.txt)");
+
+	const QString path = QFileDialog::getSaveFileName(view(), i18nc("@title:window", "Export to File"), dir, extensions);
+
+	if (path.isEmpty())
+		return false;
+
+	int pos = path.lastIndexOf(QLatin1String("/"));
+	if (pos != -1) {
+		QString newDir = path.left(pos);
+		if (newDir != dir)
+			conf.writeEntry("LastDir", newDir);
+	}
+
+	QFile file(path);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		QMessageBox::critical(view(), i18n("Export failed"), i18n("Failed to open '%1' for writing.", path));
+		return false;
+	}
+
+	QTextStream out(&file);
+	out << m_note;
+	file.close();
+
+	return true;
 }
 
 void Note::setNote(const QString& note) {
@@ -103,9 +132,9 @@ QWidget* Note::view() const {
 	return m_partView;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Note::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement(QStringLiteral("note"));

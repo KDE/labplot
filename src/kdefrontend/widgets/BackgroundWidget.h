@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : background settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,6 +12,8 @@
 
 #include "backend/worksheet/Background.h"
 #include "ui_backgroundwidget.h"
+
+class QShowEvent;
 #include <KConfigGroup>
 
 class BackgroundWidget : public QWidget {
@@ -21,7 +23,6 @@ public:
 	explicit BackgroundWidget(QWidget*);
 
 	void setBackgrounds(const QList<Background*>&);
-	void adjustLayout();
 	void setEnabled(bool);
 
 	void load();
@@ -36,6 +37,8 @@ private:
 	QString m_prefix;
 
 	void retranslateUi();
+	void showEvent(QShowEvent*) override;
+	void adjustLayout();
 
 Q_SIGNALS:
 	void dataChanged(bool);

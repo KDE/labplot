@@ -89,6 +89,7 @@ private Q_SLOTS:
 	void expandSelected();
 	void collapseSelected();
 	void deleteSelected();
+	void changeSelectedVisible();
 
 	void navigateTo(const QString& path);
 	void selectIndex(const QModelIndex&);

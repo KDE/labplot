@@ -49,7 +49,9 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, const Column* column)
 
 		if (mode == AbstractColumn::ColumnMode::Double) {
 			leValue->setLocale(QLocale());
-			leValue->setValidator(new QDoubleValidator(leValue));
+			auto* validator = new QDoubleValidator(leValue);
+			validator->setLocale(QLocale());
+			leValue->setValidator(validator);
 		} else if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
 			leValue->setValidator(new QIntValidator(leValue));
 	} else if (mode == AbstractColumn::ColumnMode::Text) {

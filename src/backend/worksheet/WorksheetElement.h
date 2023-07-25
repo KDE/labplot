@@ -62,7 +62,7 @@ public:
 	typedef WorksheetElementPrivate Private;
 
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
-	void setCoordinateBindingEnabled(bool);
+	bool setCoordinateBindingEnabled(bool);
 	bool coordinateBindingEnabled() const;
 	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
 	void setPosition(QPointF);
@@ -70,6 +70,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
 	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
+	BASIC_D_ACCESSOR_DECL(qreal, scale, Scale)
 
 	void finalizeAdd() override;
 
@@ -148,20 +149,18 @@ Q_SIGNALS:
 	friend class AbstractPlotSetRightPaddingCmd;
 	friend class AbstractPlotSetBottomPaddingCmd;
 	friend class AbstractPlotSetSymmetricPaddingCmd;
-	void horizontalPaddingChanged(double);
-	void verticalPaddingChanged(double);
-	void rightPaddingChanged(double);
-	void bottomPaddingChanged(double);
-	void symmetricPaddingChanged(bool);
 	void positionChanged(const WorksheetElement::PositionWrapper&) const;
 	void horizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment) const;
 	void verticalAlignmentChanged(const WorksheetElement::VerticalAlignment) const;
 	void coordinateBindingEnabledChanged(bool) const;
 	void positionLogicalChanged(QPointF) const;
 	void rotationAngleChanged(qreal) const;
+	void rotationChanged(qreal) const;
 	void visibleChanged(bool) const;
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
+
+	void objectPositionChanged(); // Position changed, independend of logical or scene, bot are triggering this
 
 	void hovered();
 	void unhovered();
@@ -171,6 +170,8 @@ Q_SIGNALS:
 	void moveEnd(); // called, at the end of execMoveInFrontOf or execMoveBehind is called
 
 	void plotRangeListChanged();
+
+	friend class WorksheetElementTest;
 };
 
 #endif

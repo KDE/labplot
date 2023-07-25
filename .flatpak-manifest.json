@@ -2,7 +2,9 @@
     "id": "org.kde.labplot2",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "5.15-21.08",
+    "runtime-version": "5.15-22.08",
+    "base": "io.qt.qtwebengine.BaseApp",
+    "base-version": "5.15-22.08",
     "sdk": "org.kde.Sdk",
     "command": "labplot2",
     "tags": ["nightly"],
@@ -196,20 +198,106 @@
             "name": "readstat",
             "sources": [
                 {
+                    "type": "archive",
+                    "url": "https://github.com/WizardMac/ReadStat/archive/v1.1.9.tar.gz",
+                    "sha256": "89af7c785a7ae3d9a7af6e64a69028829a429f66a14b1b913be22816dc07ddca"
+                }
+            ]
+        },
+        {
+            "name": "Qt-Advanced-Docking-System",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DADS_VERSION=4.0.3",
+                "-DQT_VERSION_MAJOR=5"
+            ],
+            "sources": [
+                {
                     "type": "git",
-                    "url": "https://github.com/WizardMac/ReadStat.git",
-                    "tag": "v1.1.6",
+                    "url": "https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git",
+                    "commit": "a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6"
+                }
+            ]
+        },
+	{
+            "name": "discount",
+            "buildsystem": "simple",
+            "build-commands": [
+                "./configure.sh --prefix=/app --enable-all-features --with-fenced-code --shared",
+                "sed -e 's|/sbin/ldconfig|/sbin/ldconfig -n|' -i librarian.sh",
+                "make install"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/Orc/discount/archive/v2.2.7c.tar.gz",
+                    "sha256": "5c5139f1f88e83de86169bee3fde4ebd0e1b0798643dc9065b73dc19dbce07b3",
                     "x-checker-data": {
-                        "type": "git",
-                        "tag-pattern": "^v([\\d.]+)$"
+                        "type": "anitya",
+                        "project-id": 12139,
+                        "stable-only": true,
+                        "url-template": "https://github.com/Orc/discount/archive/v$version.tar.gz"
                     }
                 }
             ]
         },
         {
-            "name": "labplot2",
+            "name": "matio",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/tbeu/matio/archive/v1.5.23.tar.gz",
+                    "sha256": "5f25c53e698d06b3119e3a4d0536e1da89983dbb7b0a845270663be02ec95978",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 1893,
+                        "stable-only": true,
+                        "url-template": "https://github.com/tbeu/matio/archive/v$version.tar.gz"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "fast_float",
             "buildsystem": "cmake-ninja",
-            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/fastfloat/fast_float.git",
+                    "tag": "1ea4f27b2aeee2859a1354a3c24cff52a116cad1"
+                }
+            ]
+        },
+        {
+            "name": "dbc_parser_cpp",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DENABLE_TESTS=OFF",
+                "-DBUILD_DOCUMENTATION=OFF"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/Murmele/dbc_parser_cpp.git",
+                    "tag": "ca69d0dd08a03fc0210820a4f81bfd217ad25722"
+                }
+            ]
+        },
+        {
+            "name": "vector_blf",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/Murmele/vector_blf.git",
+                    "tag": "b7a419c4d8edbf495ab309b57a380a2444ee2730"
+                }
+            ]
+        },
+        {
+            "name": "labplot",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF"],
 	    "sources": [
                 {
                     "type": "dir",

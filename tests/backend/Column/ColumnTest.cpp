@@ -16,6 +16,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 
+#include <QUndoStack>
+
 void ColumnTest::doubleMinimum() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 2.0, 5.0});
@@ -166,7 +168,7 @@ void ColumnTest::statisticsDoubleNegative() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 5.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -.25);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -197,11 +199,11 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	QCOMPARE(stats.minimum, -100.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, -23.25);
-	QCOMPARE(stats.geometricMean, qQNaN()); // special case
+	QCOMPARE(stats.geometricMean, NAN); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, -3343. / 31.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -25.);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -236,7 +238,7 @@ void ColumnTest::statisticsDoubleZero() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 3.75);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, 0.75);
 	QCOMPARE(stats.median, 1.5);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -307,7 +309,7 @@ void ColumnTest::statisticsIntNegative() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 5.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -.25);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -338,11 +340,11 @@ void ColumnTest::statisticsIntBigNegative() {
 	QCOMPARE(stats.minimum, -100.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, -23.25);
-	QCOMPARE(stats.geometricMean, qQNaN()); // special case
+	QCOMPARE(stats.geometricMean, NAN); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, -3343. / 31.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -25.);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -377,7 +379,7 @@ void ColumnTest::statisticsIntZero() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 3.75);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, 0.75);
 	QCOMPARE(stats.median, 1.5);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -412,7 +414,7 @@ void ColumnTest::statisticsIntOverflow() {
 	QCOMPARE(stats.harmonicMean, 1139064055.75838);
 	QCOMPARE(stats.contraharmonicMean, 1160869565.21739);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, 1075000000);
 	QCOMPARE(stats.median, 1150000000);
 	QCOMPARE(stats.thirdQuartile, 1225000000);
@@ -443,11 +445,11 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.minimum, -10000000000);
 	QCOMPARE(stats.maximum, 10000000000);
 	QCOMPARE(stats.arithmeticMean, 250000000);
-	QCOMPARE(stats.geometricMean, qQNaN());
+	QCOMPARE(stats.geometricMean, NAN);
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 201000000000);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 // Windows CI fails here
 #ifndef HAVE_WINDOWS
 	QCOMPARE(stats.firstQuartile, -2500000000);
@@ -862,6 +864,180 @@ void ColumnTest::testIndexForValueDoubleVector() {
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
 		QCOMPARE(Column::indexForValue(value, points, properties), 1);
 	}
+}
+
+void ColumnTest::testInsertRow() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Test"), Column::ColumnMode::Double);
+	project.addChild(c);
+	c->resizeTo(100);
+	QCOMPARE(c->rowCount(), 100);
+
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(c, &Column::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+		QCOMPARE(source, c);
+		switch (rowsAboutToBeInsertedCounter) {
+		case 0:
+			QCOMPARE(before, 100);
+			QCOMPARE(count, 2);
+			break;
+		case 1:
+			QCOMPARE(before, 102);
+			QCOMPARE(count, 3);
+			break;
+		case 3: // redo()
+			QCOMPARE(before, 102);
+			QCOMPARE(count, 3);
+			break;
+		}
+		rowsAboutToBeInsertedCounter++;
+	});
+
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(c, &Column::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+		QCOMPARE(source, c);
+		switch (rowsAboutToBeRemovedCounter) {
+		case 0:
+			QCOMPARE(first, 102);
+			QCOMPARE(count, 3);
+			break;
+		}
+		rowsAboutToBeRemovedCounter++;
+	});
+
+	int rowsInsertedCounter = 0;
+	connect(c, &Column::rowsInserted, [&rowsInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+		QCOMPARE(source, c);
+
+		switch (rowsInsertedCounter) {
+		case 0:
+			QCOMPARE(before, 100);
+			QCOMPARE(count, 2);
+			break;
+		case 1:
+			QCOMPARE(before, 102);
+			QCOMPARE(count, 3);
+			break;
+		case 3: // redo()
+			QCOMPARE(before, 102);
+			QCOMPARE(count, 3);
+			break;
+		}
+
+		rowsInsertedCounter++;
+	});
+
+	int rowsRemovedCounter = 0;
+	connect(c, &Column::rowsRemoved, [&rowsRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+		QCOMPARE(source, c);
+
+		switch (rowsRemovedCounter) {
+		case 0:
+			QCOMPARE(first, 102);
+			QCOMPARE(count, 3);
+			break;
+		}
+
+		rowsRemovedCounter++;
+	});
+
+	c->insertRows(c->rowCount(), 2);
+	QCOMPARE(c->rowCount(), 102);
+	c->insertRows(c->rowCount(), 3);
+	QCOMPARE(c->rowCount(), 105);
+
+	c->undoStack()->undo();
+	QCOMPARE(c->rowCount(), 102);
+	c->undoStack()->redo();
+	QCOMPARE(c->rowCount(), 105);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 3);
+	QCOMPARE(rowsAboutToBeRemovedCounter, 1);
+	QCOMPARE(rowsInsertedCounter, 3);
+	QCOMPARE(rowsRemovedCounter, 1);
+}
+
+void ColumnTest::testRemoveRow() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Test"), Column::ColumnMode::Double);
+	project.addChild(c);
+	c->resizeTo(100);
+	QCOMPARE(c->rowCount(), 100);
+
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(c, &Column::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+		QCOMPARE(source, c);
+		QCOMPARE(before, 96);
+		QCOMPARE(count, 3);
+		rowsAboutToBeInsertedCounter++;
+	});
+
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(c, &Column::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+		QCOMPARE(source, c);
+		switch (rowsAboutToBeRemovedCounter) {
+		case 0:
+			QCOMPARE(first, 99);
+			QCOMPARE(count, 1);
+			break;
+		case 1:
+			QCOMPARE(first, 96);
+			QCOMPARE(count, 3);
+			break;
+		case 2: // redo()
+			QCOMPARE(first, 96);
+			QCOMPARE(count, 3);
+			break;
+		}
+		rowsAboutToBeRemovedCounter++;
+	});
+
+	int rowsInsertedCounter = 0;
+	connect(c, &Column::rowsInserted, [&rowsInsertedCounter, c](const AbstractColumn* source, int before, int count) {
+		QCOMPARE(source, c);
+
+		QCOMPARE(before, 96);
+		QCOMPARE(count, 3);
+
+		rowsInsertedCounter++;
+	});
+
+	int rowsRemovedCounter = 0;
+	connect(c, &Column::rowsRemoved, [&rowsRemovedCounter, c](const AbstractColumn* source, int first, int count) {
+		QCOMPARE(source, c);
+
+		switch (rowsRemovedCounter) {
+		case 0:
+			QCOMPARE(first, 99);
+			QCOMPARE(count, 1);
+			break;
+		case 1:
+			QCOMPARE(first, 96);
+			QCOMPARE(count, 3);
+			break;
+		case 2: // redo()
+			QCOMPARE(first, 96);
+			QCOMPARE(count, 3);
+			break;
+		}
+
+		rowsRemovedCounter++;
+	});
+
+	c->removeRows(c->rowCount() - 1, 1);
+	QCOMPARE(c->rowCount(), 99);
+	c->removeRows(c->rowCount() - 3, 3);
+	QCOMPARE(c->rowCount(), 96);
+
+	c->undoStack()->undo();
+	QCOMPARE(c->rowCount(), 99);
+	c->undoStack()->redo();
+	QCOMPARE(c->rowCount(), 96);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 1);
+	QCOMPARE(rowsAboutToBeRemovedCounter, 3);
+	QCOMPARE(rowsInsertedCounter, 1);
+	QCOMPARE(rowsRemovedCounter, 3);
 }
 
 QTEST_MAIN(ColumnTest)

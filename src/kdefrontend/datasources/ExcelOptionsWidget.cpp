@@ -4,7 +4,7 @@
 	Description          : Widget providing options for the import of Excel (xlsx) data
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Fabian Kristof (fkristofszabolcs@gmail.com)
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,7 +14,7 @@
 #include "src/kdefrontend/datasources/ImportFileWidget.h"
 
 #ifdef HAVE_EXCEL
-#include "3rdparty/QXlsx/header/xlsxcellrange.h"
+#include "xlsxcellrange.h"
 #endif
 
 #include <QAbstractItemModel>
@@ -107,9 +107,9 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 			selectedRegion.setLastColumn(lastCol);
 		}
 
-		const QVector<QStringList> importedStrings =
-			filter->previewForDataRegion(sheetName, selectedRegion, &regionCanBeImportedToMatrix, ui.sbPreviewLines->value());
+		const auto importedStrings = filter->previewForDataRegion(sheetName, selectedRegion, &regionCanBeImportedToMatrix, ui.sbPreviewLines->value());
 		m_previewString = importedStrings;
+		// QDEBUG("PREVIEW:" << importedStrings)
 
 		// enable the first row as column names option only if the data contains more than 1 row
 		m_fileWidget->enableExcelFirstRowAsColNames(importedStrings.size() > 1);
@@ -119,42 +119,52 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 		// sheet name - item row will identify the region
 		const auto mapVal = qMakePair(sheetName, row);
 		// this region was not currently selected
-		if (m_regionIsPossibleToImportToMatrix.find(mapVal) != m_regionIsPossibleToImportToMatrix.end()) {
+		if (m_regionIsPossibleToImportToMatrix.find(mapVal) != m_regionIsPossibleToImportToMatrix.end())
 			m_regionIsPossibleToImportToMatrix.insert(mapVal, regionCanBeImportedToMatrix);
-		} else {
-			// the item was deselected
-			if (!item->isSelected()) {
-				m_regionIsPossibleToImportToMatrix.remove(mapVal);
-			}
-		}
+		else if (!item->isSelected()) // the item was deselected
+			m_regionIsPossibleToImportToMatrix.remove(mapVal);
 
 		const auto rows = importedStrings.size();
 		ui.twPreview->clear();
-		ui.twPreview->setRowCount(rows);
+		const bool firstRowAsHeader = m_fileWidget->excelUseFirstRowAsColNames();
+		DEBUG("first row as header enabled = " << firstRowAsHeader)
+		ui.twPreview->setRowCount(rows - firstRowAsHeader);
 
 		int colCount = 0;
 		const int maxColumns = 50;
 		for (int i = 0; i < rows; ++i) {
-			auto lineString = importedStrings[i];
-			if (i == 0) {
-				colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
-				ui.twPreview->setColumnCount(colCount);
-
-				for (int col = 0; col < colCount; ++col) {
-					auto colName = ExcelFilter::convertFromNumberToExcelColumn(selectedRegion.firstColumn() + col);
-					auto* item = new QTableWidgetItem(colName);
-
-					ui.twPreview->setHorizontalHeaderItem(col, item);
-				}
-			}
+			auto lineString = importedStrings.at(i);
 			colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
 
-			auto* item = new QTableWidgetItem(QString::number(selectedRegion.firstRow() + i));
-			ui.twPreview->setVerticalHeaderItem(i, item);
+			if (i == 0) {
+				ui.twPreview->setColumnCount(colCount);
+
+				if (firstRowAsHeader) {
+					for (int col = 0; col < colCount; ++col) {
+						auto* item = new QTableWidgetItem(lineString.at(col));
+						ui.twPreview->setHorizontalHeaderItem(col, item);
+					}
+					continue; // data used as header
+				} else {
+					for (int col = 0; col < colCount; ++col) {
+						auto colName = ExcelFilter::convertFromNumberToExcelColumn(selectedRegion.firstColumn() + col);
+						// DEBUG("COLUMN " << col + 1 << " NAME = " << STDSTRING(colName))
+						//  TODO: show column modes?
+						// auto* item = new QTableWidgetItem(colName + QStringLiteral(" {") + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode,
+						//	filter->columnModes().at(i))) + QStringLiteral("}"));
+						auto* item = new QTableWidgetItem(colName);
+
+						ui.twPreview->setHorizontalHeaderItem(col, item);
+					}
+				}
+			}
+
+			auto* item = new QTableWidgetItem(QString::number(selectedRegion.firstRow() + i - firstRowAsHeader));
+			ui.twPreview->setVerticalHeaderItem(i - firstRowAsHeader, item);
 
 			for (int j = 0; j < colCount; ++j) {
-				auto* item = new QTableWidgetItem(lineString[j]);
-				ui.twPreview->setItem(i, j, item);
+				auto* item = new QTableWidgetItem(lineString.at(j));
+				ui.twPreview->setItem(i - firstRowAsHeader, j, item);
 			}
 		}
 		ui.twPreview->resizeColumnsToContents();

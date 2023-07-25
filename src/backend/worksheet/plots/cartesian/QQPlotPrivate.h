@@ -3,20 +3,20 @@
 	Project              : LabPlot
 	Description          : Private members of QQPlot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef QQPLOTPRIVATE_H
 #define QQPLOTPRIVATE_H
 
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 
 class Column;
 class Line;
 class QQPlot;
 
-class QQPlotPrivate : public WorksheetElementPrivate {
+class QQPlotPrivate : public PlotPrivate {
 public:
 	explicit QQPlotPrivate(QQPlot* owner);
 	~QQPlotPrivate() override;

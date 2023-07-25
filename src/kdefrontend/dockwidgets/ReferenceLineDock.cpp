@@ -9,10 +9,7 @@
 */
 
 #include "ReferenceLineDock.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-
-#include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/LineWidget.h"
 
@@ -29,9 +26,9 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
-	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
-	lineWidget = new LineWidget(ui.tabGeneral);
-	gridLayout->addWidget(lineWidget, 9, 0, 1, 3);
+	auto* layout = static_cast<QHBoxLayout*>(ui.tabLine->layout());
+	lineWidget = new LineWidget(ui.tabLine);
+	layout->insertWidget(0, lineWidget);
 
 	// SLOTS
 	// General
@@ -40,9 +37,22 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::positionLogicalChanged);
-	connect(ui.dtePosition, &QDateTimeEdit::dateTimeChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
+	connect(ui.dtePosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
+
+	// Template handler
+	auto* frame = new QFrame(this);
+	auto* hlayout = new QHBoxLayout(frame);
+	hlayout->setContentsMargins(0, 11, 0, 11);
+
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::ReferenceLine);
+	hlayout->addWidget(templateHandler);
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ReferenceLineDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ReferenceLineDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &ReferenceLineDock::info);
+
+	ui.verticalLayout->addWidget(frame);
 }
 
 void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
@@ -52,7 +62,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	setAspects(list);
 	Q_ASSERT(m_line);
 
-	// if there is more then one point in the list, disable the comment and name widgets in "general"
+	// if there is more than one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -161,10 +171,9 @@ void ReferenceLineDock::positionLogicalChanged(double pos) {
 	}
 }
 
-void ReferenceLineDock::positionLogicalDateTimeChanged(const QDateTime& dateTime) {
+void ReferenceLineDock::positionLogicalDateTimeChanged(qint64 pos) {
 	CONDITIONAL_LOCK_RETURN;
 
-	quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* line : m_linesList) {
 		auto positionLogical = line->positionLogical();
 		if (line->orientation() == ReferenceLine::Orientation::Horizontal)
@@ -189,10 +198,10 @@ void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogica
 	CONDITIONAL_LOCK_RETURN;
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
 		ui.sbPosition->setValue(positionLogical.y());
-		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
+		ui.dtePosition->setMSecsSinceEpochUTC(positionLogical.y());
 	} else {
 		ui.sbPosition->setValue(positionLogical.x());
-		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
+		ui.dtePosition->setMSecsSinceEpochUTC(positionLogical.x());
 	}
 }
 
@@ -226,14 +235,41 @@ void ReferenceLineDock::load() {
 			ui.sbPosition->setValue(m_line->positionLogical().y());
 		else { // DateTime
 			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
-			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().y()));
+			ui.dtePosition->setMSecsSinceEpochUTC(m_line->positionLogical().y());
 		}
 	} else {
 		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric)
 			ui.sbPosition->setValue(m_line->positionLogical().x());
 		else { // DateTime
 			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().x()));
+			ui.dtePosition->setMSecsSinceEpochUTC(m_line->positionLogical().x());
 		}
 	}
+
+	ui.chkVisible->setChecked(m_line->isVisible());
+}
+
+void ReferenceLineDock::loadConfigFromTemplate(KConfig& config) {
+	// extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QLatin1String("/"));
+	if (index != -1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+
+	int size = m_linesList.size();
+	if (size > 1)
+		m_line->beginMacro(i18n("%1 reference lines: template \"%2\" loaded", size, name));
+	else
+		m_line->beginMacro(i18n("%1: template \"%2\" loaded", m_line->name(), name));
+
+	lineWidget->loadConfig(config.group("ReferenceLine"));
+
+	m_line->endMacro();
+}
+
+void ReferenceLineDock::saveConfigAsTemplate(KConfig& config) {
+	KConfigGroup group = config.group(QStringLiteral("ReferenceLine"));
+	lineWidget->saveConfig(group);
 }

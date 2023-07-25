@@ -50,6 +50,7 @@ public:
 	void setImages(QList<DatapickerImage*>);
 	void load();
 	void updateLocale() override;
+	void updateXPositionWidgets(bool datetime);
 
 private:
 	Ui::DatapickerImageWidget ui;
@@ -73,7 +74,9 @@ private:
 private Q_SLOTS:
 	// SLOTs for changes triggered in DatapickerImageWidget
 	//"General"-tab
+	void embeddedChanged(bool embedded);
 	void fileNameChanged();
+	void relativeChanged(bool checked);
 	void selectFile();
 	void plotImageTypeChanged(int);
 
@@ -90,6 +93,7 @@ private Q_SLOTS:
 	void graphTypeChanged(int);
 	void ternaryScaleChanged(double);
 	void logicalPositionChanged();
+	void dateTimeUsageChanged(bool checked);
 
 	// symbol properties
 	void pointsVisibilityChanged(bool);
@@ -104,6 +108,10 @@ private Q_SLOTS:
 	void handleWidgetActions();
 	void symbolVisibleChanged(bool);
 	void imageReferencePointSelected(int);
+	void imageEmbeddedChanged(bool embedded);
+	void imageRelativeChanged(bool);
+
+	void updateFileRelativePathCheckBoxEnable();
 
 	friend class DatapickerTest;
 };

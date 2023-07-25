@@ -32,15 +32,15 @@ public:
 	QVector<QStringList> previewForDataRegion(const QString& sheet, const QXlsx::CellRange& region, bool* okToMatrix, int lines);
 	QXlsx::CellRange cellContainedInRegions(const QXlsx::CellReference& cell, const QVector<QXlsx::CellRange>& regions) const;
 	bool dataRangeCanBeExportedToMatrix(const QXlsx::CellRange& range) const;
-	bool isColumnNumericInRange(const int column, const QXlsx::CellRange& range) const;
+	QXlsx::Cell::CellType columnTypeInRange(const int column, const QXlsx::CellRange& range) const;
 
 	QXlsx::CellRange dimension() const;
 #endif
 	const ExcelFilter* q;
 
 	bool exportDataSourceAsNewSheet{true};
-	bool columnNamesAsFirstRow{true};
-	bool firstRowAsColumnNames{false};
+	bool firstRowAsColumnNames{false}; // import first row as column names
+	bool columnNamesAsFirstRow{true}; // export column names a first row
 	bool overwriteExportData{true};
 
 	QString sheetToAppendSpreadsheetTo;

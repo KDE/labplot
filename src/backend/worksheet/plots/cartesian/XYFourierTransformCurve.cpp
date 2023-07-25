@@ -51,11 +51,6 @@ void XYFourierTransformCurve::recalculate() {
 	d->recalculate();
 }
 
-bool XYFourierTransformCurve::resultAvailable() const {
-	Q_D(const XYFourierTransformCurve);
-	return d->transformResult.available;
-}
-
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -63,28 +58,28 @@ QIcon XYFourierTransformCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFourierTransformCurve, XYFourierTransformCurve::TransformData, transformData, transformData)
 
-const XYFourierTransformCurve::TransformResult& XYFourierTransformCurve::transformResult() const {
+const XYAnalysisCurve::Result& XYFourierTransformCurve::result() const {
 	Q_D(const XYFourierTransformCurve);
 	return d->transformResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYFourierTransformCurve, SetTransformData, XYFourierTransformCurve::TransformData, transformData, recalculate)
 void XYFourierTransformCurve::setTransformData(const XYFourierTransformCurve::TransformData& transformData) {
 	Q_D(XYFourierTransformCurve);
 	exec(new XYFourierTransformCurveSetTransformDataCmd(d, transformData, ki18n("%1: set transform options and perform the Fourier transform")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransformCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -94,40 +89,13 @@ XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransfor
 // when the parent aspect is removed
 XYFourierTransformCurvePrivate::~XYFourierTransformCurvePrivate() = default;
 
-void XYFourierTransformCurvePrivate::recalculate() {
+void XYFourierTransformCurvePrivate::resetResults() {
+	transformResult = XYFourierTransformCurve::TransformResult();
+}
+
+bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
-
-	// create transform result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
-		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>*>(xColumn->data());
-		yVector = static_cast<QVector<double>*>(yColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-	}
-
-	// clear the previous result
-	transformResult = XYFourierTransformCurve::TransformResult();
-
-	if (!xDataColumn || !yDataColumn) {
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
 
 	// copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
@@ -135,16 +103,17 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	const double xmin = transformData.xRange.first();
 	const double xmax = transformData.xRange.last();
 
-	int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
 		// only copy those data where _all_ values (for x and y, if given) are valid
-		if (std::isnan(xDataColumn->valueAt(row)) || std::isnan(yDataColumn->valueAt(row)) || xDataColumn->isMasked(row) || yDataColumn->isMasked(row))
+		if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row)) || tmpXDataColumn->isMasked(row)
+			|| tmpYDataColumn->isMasked(row))
 			continue;
 
 		// only when inside given range
-		if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+		if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+			xdataVector.append(tmpXDataColumn->valueAt(row));
+			ydataVector.append(tmpYDataColumn->valueAt(row));
 		}
 	}
 
@@ -154,10 +123,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");
-		recalcLogicalPoints();
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
+		return true;
 	}
 
 	double* xdata = xdataVector.data();
@@ -241,15 +207,12 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	transformResult.status = gslErrorToString(status);
 	transformResult.elapsedTime = timer.elapsed();
 
-	// redraw the curve
-	recalcLogicalPoints();
-	Q_EMIT q->dataChanged();
-	sourceDataChangedSinceLastRecalc = false;
+	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFourierTransformCurve);

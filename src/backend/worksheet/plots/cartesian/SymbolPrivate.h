@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of Symbol
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,12 +19,14 @@ public:
 	explicit SymbolPrivate(Symbol*);
 
 	QString name() const;
+	void update();
 	void updateSymbols();
 	void updatePixmap();
 
 	Symbol::Style style{Symbol::Style::NoSymbols};
 	QBrush brush;
 	QPen pen;
+	QColor color{Qt::black};
 	qreal opacity{1.0};
 	qreal rotationAngle{0.0};
 	qreal size{1.0};

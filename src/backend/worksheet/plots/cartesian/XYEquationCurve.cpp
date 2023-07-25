@@ -4,6 +4,7 @@
 	Description          : A xy-curve defined by a mathematical equation
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,10 +18,12 @@
 #include "XYEquationCurve.h"
 #include "XYEquationCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Folder.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <KLocalizedString>
@@ -66,6 +69,11 @@ void XYEquationCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYEquationCurve::dataAvailable() const {
+	Q_D(const XYEquationCurve);
+	return (d->equationData.count > 0);
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -73,14 +81,14 @@ QIcon XYEquationCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYEquationCurve, XYEquationCurve::EquationData, equationData, equationData)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYEquationCurve, SetEquationData, XYEquationCurve::EquationData, equationData, recalculate)
 void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equationData) {
 	Q_D(XYEquationCurve);
@@ -89,9 +97,41 @@ void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equat
 		exec(new XYEquationCurveSetEquationDataCmd(d, equationData, ki18n("%1: set equation")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
+
+/*!
+ * creates a new spreadsheet having the data with the results of the calculation.
+ * the new spreadsheet is added to the current folder.
+ */
+void XYEquationCurve::createDataSpreadsheet() {
+	if (!xColumn() || !yColumn())
+		return;
+
+	auto* spreadsheet = new Spreadsheet(i18n("%1 - Data", name()));
+	spreadsheet->removeColumns(0, spreadsheet->columnCount()); // remove default columns
+	spreadsheet->setRowCount(xColumn()->rowCount());
+
+	// x values
+	auto* data = static_cast<const Column*>(xColumn())->data();
+	auto* xColumn = new Column(QLatin1String("x"), *static_cast<QVector<double>*>(data));
+	xColumn->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+	spreadsheet->addChild(xColumn);
+
+	// y values
+	data = static_cast<const Column*>(yColumn())->data();
+	auto* yColumn = new Column(QLatin1String("y"), *static_cast<QVector<double>*>(data));
+	yColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+	spreadsheet->addChild(yColumn);
+
+	// add the new spreadsheet to the current folder
+	folder()->addChild(spreadsheet);
+}
+
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner)
 	: XYCurvePrivate(owner)
 	, xColumn(new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double))
@@ -153,9 +193,9 @@ void XYEquationCurvePrivate::recalculate() {
 	Q_EMIT q->dataChanged();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYEquationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYEquationCurve);

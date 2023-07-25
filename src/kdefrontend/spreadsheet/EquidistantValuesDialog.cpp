@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for generating equidistant numbers
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,6 +13,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QDialogButtonBox>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QWindow>
 
@@ -29,6 +30,7 @@
 EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent)
 	: QDialog(parent)
 	, m_spreadsheet(s) {
+	Q_ASSERT(m_spreadsheet);
 	setWindowTitle(i18nc("@title:window", "Equidistant Values"));
 
 	auto* mainWidget = new QWidget(this);
@@ -142,28 +144,19 @@ void EquidistantValuesDialog::checkValues() {
 }
 
 void EquidistantValuesDialog::generate() {
-	Q_ASSERT(m_spreadsheet);
-
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(
-		i18np("%1: fill column with equidistant numbers", "%1: fill columns with equidistant numbers", m_spreadsheet->name(), m_columns.size()));
-
 	const auto numberLocale = QLocale();
 	bool ok;
 	double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
 	if (!ok) {
 		DEBUG("Double value start invalid!")
-		m_spreadsheet->endMacro();
-		RESET_CURSOR;
 		return;
 	}
 	double end = numberLocale.toDouble(ui.leTo->text(), &ok);
 	if (!ok) {
 		DEBUG("Double value end invalid!")
-		m_spreadsheet->endMacro();
-		RESET_CURSOR;
 		return;
 	}
+
 	int number{0};
 	double dist{0};
 	if (ui.cbType->currentIndex() == 0) { // fixed number
@@ -176,15 +169,27 @@ void EquidistantValuesDialog::generate() {
 			number = (end - start) / dist + 1;
 	}
 
+	WAIT_CURSOR;
+	QVector<double> newData;
+	try {
+		newData.resize(number);
+	} catch (std::bad_alloc&) {
+		RESET_CURSOR;
+		QMessageBox::critical(this, i18n("Failed to allocate memory"), i18n("Not enough memory to perform this operation."));
+		return;
+	}
+
+	m_spreadsheet->beginMacro(
+		i18np("%1: fill column with equidistant numbers", "%1: fill columns with equidistant numbers", m_spreadsheet->name(), m_columns.size()));
+
 	if (m_spreadsheet->rowCount() < number)
 		m_spreadsheet->setRowCount(number);
 
-	QVector<double> newData;
 	for (int i = 0; i < number; ++i)
-		newData.push_back(start + dist * i);
+		newData[i] = start + dist * i;
 
 	for (auto* col : m_columns)
-		col->replaceValues(0, newData);
+		col->setValues(newData);
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;

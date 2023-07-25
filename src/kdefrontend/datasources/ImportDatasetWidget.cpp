@@ -220,7 +220,8 @@ void ImportDatasetWidget::collectionChanged(int index) {
 
 	m_completer = new QCompleter(keywords, this);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
-	m_completer->setCaseSensitivity(Qt::CaseSensitive);
+	m_completer->setCaseSensitivity(Qt::CaseInsensitive);
+	m_completer->setFilterMode(Qt::MatchContains);
 	ui.leSearch->setCompleter(m_completer);
 }
 

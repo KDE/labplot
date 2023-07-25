@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Gui REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui REQUIRED)
+find_package(Qt${QT_MAJOR_VERSION} COMPONENTS Core Gui REQUIRED)
 
 if(NOT DEFINED ${QXLSX_PARENTPATH})
 	set(QXLSX_PARENTPATH ${CMAKE_CURRENT_SOURCE_DIR}/../)
@@ -45,8 +45,8 @@ add_library(QXlsx STATIC
 target_include_directories(QXlsx PRIVATE ${QXLSX_HEADERPATH})
 
 target_link_libraries(${PROJECT_NAME}
- Qt${QT_VERSION_MAJOR}::Core
- Qt${QT_VERSION_MAJOR}::GuiPrivate
+ Qt${QT_MAJOR_VERSION}::Core
+ Qt${QT_MAJOR_VERSION}::GuiPrivate
  )
 
 target_compile_definitions(QXlsx PRIVATE QXLSX_LIBRARY)

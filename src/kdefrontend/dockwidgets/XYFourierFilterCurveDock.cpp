@@ -25,7 +25,7 @@
 		(2D-curves defined by a Fourier filter) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -34,7 +34,7 @@
 */
 
 XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget* parent)
-	: XYCurveDock(parent) {
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -90,6 +90,8 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYFourierFilterCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.dateTimeEditMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYFourierFilterCurveDock::xRangeMinDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &XYFourierFilterCurveDock::xRangeMaxDateTimeChanged);
 
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::typeChanged);
 	connect(uiGeneralTab.cbForm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::formChanged);
@@ -107,7 +109,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 }
 
 void XYFourierFilterCurveDock::initGeneralTab() {
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -133,9 +135,29 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	cbXDataColumn->setColumn(m_filterCurve->xDataColumn(), m_filterCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_filterCurve->yDataColumn(), m_filterCurve->xDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_filterData.autoRange);
-	const auto numberLocale = QLocale();
-	uiGeneralTab.leMin->setText(numberLocale.toString(m_filterData.xRange.first()));
-	uiGeneralTab.leMax->setText(numberLocale.toString(m_filterData.xRange.last()));
+
+	// range widgets
+	const auto* plot = static_cast<const CartesianPlot*>(m_filterCurve->parentAspect());
+	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
+	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
+	if (!m_dateTimeRange) {
+		const auto numberLocale = QLocale();
+		uiGeneralTab.leMin->setText(numberLocale.toString(m_filterData.xRange.first()));
+		uiGeneralTab.leMax->setText(numberLocale.toString(m_filterData.xRange.last()));
+	} else {
+		uiGeneralTab.dateTimeEditMin->setMSecsSinceEpochUTC(m_filterData.xRange.first());
+		uiGeneralTab.dateTimeEditMax->setMSecsSinceEpochUTC(m_filterData.xRange.last());
+	}
+
+	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.leMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.leMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.lMinDateTime->setVisible(m_dateTimeRange);
+	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
+	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
+	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
+
 	this->autoRangeChanged();
 
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
@@ -168,37 +190,10 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 }
 
 void XYFourierFilterCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Datapicker,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYCurve,
-						   AspectType::XYAnalysisCurve};
-	cbDataSourceCurve->setTopLevelClasses(list);
+	auto list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYFitCurve);
 
-	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
-		hiddenAspects << curve;
-	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
-
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-
-	cbDataSourceCurve->setModel(m_aspectTreeModel);
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-
-	XYCurveDock::setModel();
+	XYAnalysisCurveDock::setModel(list);
 }
 
 /*!
@@ -304,12 +299,15 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
 	m_filterData.autoRange = autoRange;
 
+	uiGeneralTab.lMin->setEnabled(!autoRange);
+	uiGeneralTab.leMin->setEnabled(!autoRange);
+	uiGeneralTab.lMax->setEnabled(!autoRange);
+	uiGeneralTab.leMax->setEnabled(!autoRange);
+	uiGeneralTab.lMinDateTime->setEnabled(!autoRange);
+	uiGeneralTab.dateTimeEditMin->setEnabled(!autoRange);
+	uiGeneralTab.lMaxDateTime->setEnabled(!autoRange);
+	uiGeneralTab.dateTimeEditMax->setEnabled(!autoRange);
 	if (autoRange) {
-		uiGeneralTab.lMin->setEnabled(false);
-		uiGeneralTab.leMin->setEnabled(false);
-		uiGeneralTab.lMax->setEnabled(false);
-		uiGeneralTab.leMax->setEnabled(false);
-
 		const AbstractColumn* xDataColumn = nullptr;
 		if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_filterCurve->xDataColumn();
@@ -323,11 +321,6 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 			uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 		}
-	} else {
-		uiGeneralTab.lMin->setEnabled(true);
-		uiGeneralTab.leMin->setEnabled(true);
-		uiGeneralTab.lMax->setEnabled(true);
-		uiGeneralTab.leMax->setEnabled(true);
 	}
 }
 void XYFourierFilterCurveDock::xRangeMinChanged() {
@@ -336,6 +329,20 @@ void XYFourierFilterCurveDock::xRangeMinChanged() {
 
 void XYFourierFilterCurveDock::xRangeMaxChanged() {
 	SET_DOUBLE_FROM_LE_REC(m_filterData.xRange.last(), uiGeneralTab.leMax);
+}
+
+void XYFourierFilterCurveDock::xRangeMinDateTimeChanged(qint64 value) {
+	CONDITIONAL_LOCK_RETURN;
+
+	m_filterData.xRange.first() = value;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYFourierFilterCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
+	CONDITIONAL_LOCK_RETURN;
+
+	m_filterData.xRange.last() = value;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYFourierFilterCurveDock::typeChanged() {
@@ -487,7 +494,7 @@ void XYFourierFilterCurveDock::recalculateClicked() {
 	m_filterData.cutoff2 = uiGeneralTab.sbCutoff2->value();
 
 	if ((m_filterData.type == nsl_filter_type_band_pass || m_filterData.type == nsl_filter_type_band_reject) && m_filterData.cutoff2 <= m_filterData.cutoff) {
-		KMessageBox::sorry(this,
+		KMessageBox::error(this,
 						   i18n("The band width is <= 0 since lower cutoff value is not smaller than upper cutoff value. Please fix this."),
 						   i18n("band width <= 0"));
 		return;
@@ -530,31 +537,7 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
  * show the result and details of the filter
  */
 void XYFourierFilterCurveDock::showFilterResult() {
-	const XYFourierFilterCurve::FilterResult& filterResult = m_filterCurve->filterResult();
-	if (!filterResult.available) {
-		uiGeneralTab.teResult->clear();
-		return;
-	}
-
-	QString str = i18n("status: %1", filterResult.status) + QStringLiteral("<br>");
-
-	if (!filterResult.valid) {
-		uiGeneralTab.teResult->setText(str);
-		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
-	}
-
-	const auto numberLocale = QLocale();
-	if (filterResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(filterResult.elapsedTime / 1000)) + QStringLiteral("<br>");
-	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(filterResult.elapsedTime)) + QStringLiteral("<br>");
-
-	str += QStringLiteral("<br><br>");
-
-	uiGeneralTab.teResult->setText(str);
-
-	// enable the "recalculate"-button if the source data was changed since the last filter
-	uiGeneralTab.pbRecalculate->setEnabled(m_filterCurve->isSourceDataChangedSinceLastRecalc());
+	showResult(m_filterCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
 }
 
 //*************************************************************

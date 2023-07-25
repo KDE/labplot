@@ -56,10 +56,10 @@ public:
 	double widthFactor{1.0};
 	qreal opacity{1.0};
 
-	double xMin;
-	double xMax;
-	double yMin;
-	double yMax;
+	double xMin{0.};
+	double xMax{1.};
+	double yMin{0.};
+	double yMax{1.};
 
 	// bar properties
 	QVector<Background*> backgrounds;
@@ -80,7 +80,6 @@ private:
 	void updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>&);
 
 	void draw(QPainter*);
-	void drawFilling(QPainter*, int columnIndex, int valueIndex);
 
 	bool m_hovered{false};
 

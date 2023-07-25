@@ -66,6 +66,13 @@ typedef enum {
 } nsl_fit_weight_type;
 extern const char* nsl_fit_weight_type_name[];
 
+#define NSL_FIT_ALGORITHM_COUNT 2
+typedef enum {
+	nsl_fit_algorithm_lm, /* Levenberg-Marquardt */
+	nsl_fit_algorithm_ml, /* Maximum Likelihood */
+} nsl_fit_algorithm;
+extern const char* nsl_fit_algorithm_name[];
+
 /* convert unbounded variable x to bounded variable where bounds are [min, max] */
 double nsl_fit_map_bound(double x, double min, double max);
 /* convert bounded variable x to unbounded variable where bounds are [min, max] */

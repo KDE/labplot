@@ -18,7 +18,6 @@
 #include "LinePrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/worksheet/Worksheet.h"
 
 #include <KLocalizedString>
 
@@ -74,9 +73,9 @@ void Line::init(const KConfigGroup& group) {
 	d->opacity = group.readEntry(d->prefix + QStringLiteral("Opacity"), 1.0);
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Line, bool, histogramLineTypeAvailable, histogramLineTypeAvailable)
 BASIC_SHARED_D_READER_IMPL(Line, Histogram::LineType, histogramLineType, histogramLineType)
 
@@ -92,9 +91,9 @@ BASIC_SHARED_D_READER_IMPL(Line, QColor, color, color)
 BASIC_SHARED_D_READER_IMPL(Line, double, width, width)
 BASIC_SHARED_D_READER_IMPL(Line, double, opacity, opacity)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 void Line::setHistogramLineTypeAvailable(bool available) {
 	Q_D(Line);
 	d->histogramLineTypeAvailable = available;
@@ -151,7 +150,7 @@ STD_SETTER_CMD_IMPL_F_S(Line, SetColor, QColor, color, update)
 void Line::setColor(const QColor& color) {
 	Q_D(Line);
 	if (color != d->color)
-		exec(new LineSetColorCmd(d, color, ki18n("%1: set line pen")));
+		exec(new LineSetColorCmd(d, color, ki18n("%1: set line color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Line, SetOpacity, double, opacity, updatePixmap)
@@ -161,9 +160,9 @@ void Line::setOpacity(qreal opacity) {
 		exec(new LineSetOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 LinePrivate::LinePrivate(Line* owner)
 	: q(owner) {
 }
@@ -183,9 +182,9 @@ void LinePrivate::updatePixmap() {
 	Q_EMIT q->updatePixmapRequested();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Line::save(QXmlStreamWriter* writer) const {
 	Q_D(const Line);
@@ -248,9 +247,9 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Line::loadThemeConfig(const KConfigGroup& group) {
 	Q_D(const Line);
 	const auto& themeColor = group.readEntry(d->prefix + QStringLiteral("Color"), QColor(Qt::black));

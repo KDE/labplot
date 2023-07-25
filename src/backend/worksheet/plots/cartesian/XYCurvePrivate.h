@@ -72,13 +72,13 @@ public:
 	QString yColumnPath;
 	bool sourceDataChangedSinceLastRecalc{false};
 
-	bool legendVisible;
+	bool legendVisible{true};
 
 	// line
-	XYCurve::LineType lineType;
-	bool lineSkipGaps;
-	bool lineIncreasingXOnly;
-	int lineInterpolationPointsCount;
+	XYCurve::LineType lineType{XYCurve::LineType::Line};
+	bool lineSkipGaps{false};
+	bool lineIncreasingXOnly{false};
+	int lineInterpolationPointsCount{1};
 	Line* line{nullptr};
 	Line* dropLine{nullptr};
 
@@ -88,21 +88,21 @@ public:
 	// rug
 	bool rugEnabled{false};
 	WorksheetElement::Orientation rugOrientation{WorksheetElement::Orientation::Vertical};
-	double rugOffset;
-	double rugLength;
-	double rugWidth;
+	double rugOffset{0.0};
+	double rugLength{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
+	double rugWidth{0.0};
 	QPainterPath rugPath;
 
 	// values
-	XYCurve::ValuesType valuesType;
+	XYCurve::ValuesType valuesType{XYCurve::ValuesType::NoValues};
 	const AbstractColumn* valuesColumn{nullptr};
 	QString valuesColumnPath;
-	XYCurve::ValuesPosition valuesPosition;
-	qreal valuesDistance;
-	qreal valuesRotationAngle;
-	qreal valuesOpacity;
-	char valuesNumericFormat; //'g', 'e', 'E', etc. for numeric values
-	int valuesPrecision; // number of digits for numeric values
+	XYCurve::ValuesPosition valuesPosition{XYCurve::ValuesPosition::Above};
+	qreal valuesDistance{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
+	qreal valuesRotationAngle{0.0};
+	qreal valuesOpacity{1.0};
+	char valuesNumericFormat{'f'}; //'g', 'e', 'E', etc. for numeric values
+	int valuesPrecision{2}; // number of digits for numeric values
 	QString valuesDateTimeFormat;
 	QString valuesPrefix;
 	QString valuesSuffix;
@@ -113,13 +113,13 @@ public:
 	Background* background{nullptr};
 
 	// error bars
-	XYCurve::ErrorType xErrorType;
+	XYCurve::ErrorType xErrorType{XYCurve::ErrorType::NoError};
 	const AbstractColumn* xErrorPlusColumn{nullptr};
 	QString xErrorPlusColumnPath;
 	const AbstractColumn* xErrorMinusColumn{nullptr};
 	QString xErrorMinusColumnPath;
 
-	XYCurve::ErrorType yErrorType;
+	XYCurve::ErrorType yErrorType{XYCurve::ErrorType::NoError};
 	const AbstractColumn* yErrorPlusColumn{nullptr};
 	QString yErrorPlusColumnPath;
 	const AbstractColumn* yErrorMinusColumn{nullptr};
@@ -143,7 +143,6 @@ private:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void drawValues(QPainter*);
-	void drawFilling(QPainter*);
 	void draw(QPainter*);
 	void calculateScenePoints();
 

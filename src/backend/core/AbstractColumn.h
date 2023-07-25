@@ -14,27 +14,26 @@
 
 #include "backend/core/AbstractAspect.h"
 #include <QColor>
-#include <cmath> // NAN
 
 class AbstractColumnPrivate;
 class AbstractSimpleFilter;
-class QStringList;
 class QString;
 class QDateTime;
 class QDate;
 class QTime;
-template<class T>
-class QVector;
 template<class T>
 class Interval;
 
 class AbstractColumn : public AbstractAspect {
 	Q_OBJECT
 	Q_ENUMS(PlotDesignation)
+	Q_ENUMS(TimeUnit)
 	Q_ENUMS(ColumnMode)
 
 public:
 	enum class PlotDesignation { NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorPlus, YErrorMinus };
+	// how to convert numeric <-> datetime
+	enum class TimeUnit { Milliseconds, Seconds, Minutes, Hours, Days };
 	enum class ColumnMode {
 		// BASIC FORMATS
 		Double = 0, // double
@@ -88,32 +87,32 @@ public:
 	struct ColumnStatistics {
 		int size{0};
 		int unique{0}; // number of unique values, relevant for text columns only
-		double minimum{NAN};
-		double maximum{NAN};
-		double arithmeticMean{NAN};
-		double geometricMean{NAN};
-		double harmonicMean{NAN};
-		double contraharmonicMean{NAN};
-		double mode{NAN};
-		double firstQuartile{NAN};
-		double median{NAN};
-		double thirdQuartile{NAN};
-		double iqr{NAN};
-		double percentile_1{NAN};
-		double percentile_5{NAN};
-		double percentile_10{NAN};
-		double percentile_90{NAN};
-		double percentile_95{NAN};
-		double percentile_99{NAN};
-		double trimean{NAN};
-		double variance{NAN};
-		double standardDeviation{NAN};
-		double meanDeviation{NAN}; // mean absolute deviation around mean
-		double meanDeviationAroundMedian{NAN}; // mean absolute deviation around median
-		double medianDeviation{NAN}; // median absolute deviation
-		double skewness{NAN};
-		double kurtosis{NAN};
-		double entropy{NAN};
+		double minimum{qQNaN()};
+		double maximum{qQNaN()};
+		double arithmeticMean{qQNaN()};
+		double geometricMean{qQNaN()};
+		double harmonicMean{qQNaN()};
+		double contraharmonicMean{qQNaN()};
+		double mode{qQNaN()};
+		double firstQuartile{qQNaN()};
+		double median{qQNaN()};
+		double thirdQuartile{qQNaN()};
+		double iqr{qQNaN()};
+		double percentile_1{qQNaN()};
+		double percentile_5{qQNaN()};
+		double percentile_10{qQNaN()};
+		double percentile_90{qQNaN()};
+		double percentile_95{qQNaN()};
+		double percentile_99{qQNaN()};
+		double trimean{qQNaN()};
+		double variance{qQNaN()};
+		double standardDeviation{qQNaN()};
+		double meanDeviation{qQNaN()}; // mean absolute deviation around mean
+		double meanDeviationAroundMedian{qQNaN()}; // mean absolute deviation around median
+		double medianDeviation{qQNaN()}; // median absolute deviation
+		double skewness{qQNaN()};
+		double kurtosis{qQNaN()};
+		double entropy{qQNaN()};
 	};
 
 	AbstractColumn(const QString& name, AspectType type);
@@ -122,6 +121,7 @@ public:
 	static QStringList dateFormats(); // supported date formats
 	static QStringList timeFormats(); // supported time formats
 	static QStringList dateTimeFormats(); // supported datetime formats
+	static QString timeUnitString(TimeUnit);
 	static QString plotDesignationString(PlotDesignation, bool withBrackets = true);
 	static QString columnModeString(ColumnMode);
 	static QIcon modeIcon(ColumnMode);
@@ -141,9 +141,9 @@ public:
 
 	virtual int rowCount() const = 0;
 	virtual int availableRowCount(int max = -1) const = 0;
-	void insertRows(int before, int count);
-	void removeRows(int first, int count);
-	virtual void clear();
+	void insertRows(int before, int count, QUndoCommand* parent = nullptr);
+	void removeRows(int first, int count, QUndoCommand* parent = nullptr);
+	virtual void clear(QUndoCommand*);
 
 	virtual double maximum(int count = 0) const;
 	virtual double maximum(int startIndex, int endIndex) const;
@@ -180,6 +180,7 @@ public:
 	virtual void setDateTimeAt(int row, const QDateTime& new_value);
 	virtual void replaceDateTimes(int first, const QVector<QDateTime>& new_values);
 
+	virtual double doubleAt(int row) const;
 	virtual double valueAt(int row) const;
 	virtual void setValueAt(int row, double new_value);
 	virtual void replaceValues(int first, const QVector<double>& new_values);
@@ -218,9 +219,33 @@ Q_SIGNALS:
 	void dataAboutToChange(const AbstractColumn* source);
 	void dataChanged(const AbstractColumn* source);
 	void formatChanged(const AbstractColumn* source);
+	/*!
+	 * \brief rowsAboutToBeInserted
+	 * \param source
+	 * \param before Old number of rows
+	 * \param count Number of rows added
+	 */
 	void rowsAboutToBeInserted(const AbstractColumn* source, int before, int count);
+	/*!
+	 * \brief rowsInserted
+	 * \param source
+	 * \param before Old number of rows
+	 * \param count Number of rows added
+	 */
 	void rowsInserted(const AbstractColumn* source, int before, int count);
+	/*!
+	 * \brief rowsAboutToBeRemoved
+	 * \param source
+	 * \param first Old number of rows
+	 * \param count Number of rows removed
+	 */
 	void rowsAboutToBeRemoved(const AbstractColumn* source, int first, int count);
+	/*!
+	 * \brief rowsRemoved
+	 * \param source
+	 * \param first Old number of rows
+	 * \param count Number of rows removed
+	 */
 	void rowsRemoved(const AbstractColumn* source, int first, int count);
 	void maskingAboutToChange(const AbstractColumn* source);
 	void maskingChanged(const AbstractColumn* source);
@@ -232,8 +257,8 @@ protected:
 	bool XmlReadMask(XmlStreamReader*);
 	void XmlWriteMask(QXmlStreamWriter*) const;
 
-	virtual void handleRowInsertion(int before, int count);
-	virtual void handleRowRemoval(int first, int count);
+	virtual void handleRowInsertion(int before, int count, QUndoCommand* parent);
+	virtual void handleRowRemoval(int first, int count, QUndoCommand* parent);
 
 private:
 	AbstractColumnPrivate* d;

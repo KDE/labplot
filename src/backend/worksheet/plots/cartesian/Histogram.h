@@ -4,14 +4,13 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
 class AbstractColumn;
@@ -34,9 +33,9 @@ public:
 	friend class HistogramSetErrorPlusColumnCmd;
 	friend class HistogramSetErrorMinusColumnCmd;
 
-	enum HistogramType { Ordinary, Cumulative, AvgShift };
-	enum HistogramOrientation { Vertical, Horizontal };
-	enum HistogramNormalization { Count, Probability, CountDensity, ProbabilityDensity };
+	enum Type { Ordinary, Cumulative, AvgShift };
+	enum Orientation { Vertical, Horizontal };
+	enum Normalization { Count, Probability, CountDensity, ProbabilityDensity };
 	enum BinningMethod { ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott };
 	enum LineType { NoLine, Bars, Envelope, DropLines, HalfBars };
 	enum ValuesType { NoValues, ValuesBinEntries, ValuesCustomColumn };
@@ -60,20 +59,15 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 
-	BASIC_D_ACCESSOR_DECL(Histogram::HistogramType, type, Type)
-	BASIC_D_ACCESSOR_DECL(Histogram::HistogramOrientation, orientation, Orientation)
-	BASIC_D_ACCESSOR_DECL(Histogram::HistogramNormalization, normalization, Normalization)
+	BASIC_D_ACCESSOR_DECL(Histogram::Type, type, Type)
+	BASIC_D_ACCESSOR_DECL(Histogram::Orientation, orientation, Orientation)
+	BASIC_D_ACCESSOR_DECL(Histogram::Normalization, normalization, Normalization)
 	BASIC_D_ACCESSOR_DECL(Histogram::BinningMethod, binningMethod, BinningMethod)
 	BASIC_D_ACCESSOR_DECL(int, binCount, BinCount)
-	BASIC_D_ACCESSOR_DECL(float, binWidth, BinWidth)
+	BASIC_D_ACCESSOR_DECL(double, binWidth, BinWidth)
 	BASIC_D_ACCESSOR_DECL(bool, autoBinRanges, AutoBinRanges)
 	BASIC_D_ACCESSOR_DECL(double, binRangesMin, BinRangesMin)
 	BASIC_D_ACCESSOR_DECL(double, binRangesMax, BinRangesMax)
-
-	BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
-	BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
-	BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
-	BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
 
 	Line* line() const;
 	Background* background() const;
@@ -94,8 +88,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
 	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
-	double minimum(CartesianCoordinateSystem::Dimension dim) const;
-	double maximum(CartesianCoordinateSystem::Dimension dim) const;
+	double minimum(CartesianCoordinateSystem::Dimension) const override;
+	double maximum(CartesianCoordinateSystem::Dimension) const override;
+	bool hasData() const override;
 
 	const AbstractColumn* bins() const;
 	const AbstractColumn* binValues() const;
@@ -138,16 +133,15 @@ private:
 
 Q_SIGNALS:
 	// General-Tab
-	void dataChanged();
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 
-	void typeChanged(Histogram::HistogramType);
-	void orientationChanged(Histogram::HistogramOrientation);
-	void normalizationChanged(Histogram::HistogramNormalization);
+	void typeChanged(Histogram::Type);
+	void orientationChanged(Histogram::Orientation);
+	void normalizationChanged(Histogram::Normalization);
 	void binningMethodChanged(Histogram::BinningMethod);
 	void binCountChanged(int);
-	void binWidthChanged(float);
+	void binWidthChanged(double);
 	void autoBinRangesChanged(bool);
 	void binRangesMinChanged(double);
 	void binRangesMaxChanged(double);

@@ -11,19 +11,14 @@
 #ifndef HISTOGRAMPRIVATE_H
 #define HISTOGRAMPRIVATE_H
 
-// #include "backend/worksheet/plots/cartesian/XYCurve.h"
-
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
+#include <gsl/gsl_histogram.h>
 #include <vector>
 
 class Column;
 class Background;
 class Line;
 class Value;
-
-extern "C" {
-#include <gsl/gsl_histogram.h>
-}
 
 class HistogramPrivate : public PlotPrivate {
 public:
@@ -67,13 +62,13 @@ public:
 	// General
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
-	Histogram::HistogramType type{Histogram::Ordinary};
-	Histogram::HistogramOrientation orientation{Histogram::Vertical};
-	Histogram::HistogramNormalization normalization{Histogram::Count};
+	Histogram::Type type{Histogram::Ordinary};
+	Histogram::Orientation orientation{Histogram::Vertical};
+	Histogram::Normalization normalization{Histogram::Count};
 	Histogram::BinningMethod binningMethod{Histogram::SquareRoot};
 	int totalCount{0};
 	int binCount{10};
-	float binWidth{1.0f};
+	double binWidth{1.0};
 	bool autoBinRanges{true};
 	double binRangesMin{0.0};
 	double binRangesMax{1.0};
@@ -93,9 +88,9 @@ public:
 
 	// rug
 	bool rugEnabled{false};
-	double rugOffset;
-	double rugLength;
-	double rugWidth;
+	double rugOffset{0.0};
+	double rugLength{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
+	double rugWidth{0.0};
 	QPainterPath rugPath;
 
 	QPainterPath linePath;
@@ -137,7 +132,6 @@ private:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void histogramValue(double& value, int bin) const;
-	void drawFilling(QPainter*);
 	void draw(QPainter*);
 };
 

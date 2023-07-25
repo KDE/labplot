@@ -11,9 +11,7 @@
 
 #include "CartesianScale.h"
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 /**
  * \class CartesianScale
@@ -149,7 +147,7 @@ public:
 	}
 
 	bool inverseMap(double* value) const override {
-		*value = sqrt(qAbs((*value - m_a) / m_b));
+		*value = std::sqrt(std::abs((*value - m_a) / m_b));
 		return true;
 	}
 	int direction() const override {

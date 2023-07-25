@@ -47,6 +47,7 @@ private:
 	QVector<QPushButton*> m_removeButtons;
 
 	void setModel();
+	void load();
 	void loadConfig(KConfig&);
 	void setDataColumns() const;
 	void loadDataColumns();

@@ -42,7 +42,7 @@ private:
 	QList<Axis*> m_axesList;
 	Axis* m_axis{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	LabelWidget* labelWidget;
+	LabelWidget* labelWidget; // Title
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
 	TreeViewComboBox* cbLabelsTextColumn;
@@ -63,14 +63,13 @@ private:
 	void loadConfig(KConfig&);
 	void updatePositionText(Axis::Orientation);
 	void updateLabelsPosition(Axis::LabelsPosition);
+	void updateAxisColor();
 
 	void setOffset(double);
 
 	// own created widgets
 	DateTimeSpinBox* dtsbMajorTicksIncrement{nullptr};
 	DateTimeSpinBox* dtsbMinorTicksIncrement{nullptr};
-
-	QVector<QMetaObject::Connection> m_connections;
 
 	friend class AxisTest;
 
@@ -80,6 +79,7 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in AxisDock
 	//"General"-tab
 	void visibilityChanged(bool);
+	void colorChanged(const QColor&);
 	void orientationChanged(int);
 	void positionChanged(int);
 	void positionChanged(double value);
@@ -88,8 +88,8 @@ private Q_SLOTS:
 	void rangeTypeChanged(int);
 	void startChanged(double);
 	void endChanged(double);
-	void startDateTimeChanged(const QDateTime&);
-	void endDateTimeChanged(const QDateTime&);
+	void startDateTimeChanged(qint64);
+	void endDateTimeChanged(qint64);
 	void zeroOffsetChanged(double);
 	void scalingFactorChanged(double);
 	void showScaleOffsetChanged(bool);
@@ -98,8 +98,10 @@ private Q_SLOTS:
 	void setRightOffset();
 	void setUnityScale();
 	void setUnityRange();
+	void setAxisColor();
 
 	// Line-Tab
+	void updateArrowLineColor(const QColor&);
 	void arrowPositionChanged(int);
 	void arrowTypeChanged(int);
 	void arrowSizeChanged(int);
@@ -216,6 +218,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void info(const QString&);
+
+	friend class AxisTest;
 };
 
 #endif

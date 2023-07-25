@@ -54,27 +54,36 @@ void ReferenceLine::init() {
 	KConfig config;
 	KConfigGroup group = config.group("ReferenceLine");
 
-	d->coordinateBindingEnabled = true;
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
-	if (d->orientation == Orientation::Horizontal)
-		d->position.positionLimit = PositionLimit::Y;
-	else if (d->orientation == Orientation::Vertical)
-		d->position.positionLimit = PositionLimit::X;
-	else
-		d->position.positionLimit = PositionLimit::None;
+	switch (d->orientation) {
+	case WorksheetElement::Orientation::Horizontal:
+		d->position.positionLimit = WorksheetElement::PositionLimit::Y;
+		break;
+	case WorksheetElement::Orientation::Vertical:
+		d->position.positionLimit = WorksheetElement::PositionLimit::X;
+		break;
+	case WorksheetElement::Orientation::Both:
+		d->position.positionLimit = WorksheetElement::PositionLimit::None;
+		break;
+	}
 
-	// default position
-	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-	const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-	const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-	d->positionLogical = QPointF(x, y);
+	if (plot()) {
+		d->coordinateBindingEnabled = true;
+		// default position
+		auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
+		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+		DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
+		d->positionLogical = QPointF(x, y);
+	} else
+		d->position.point = QPointF(0, 0);
 	d->updatePosition(); // To update also scene coordinates
 
 	// line
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
+	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -190,28 +199,16 @@ Line* ReferenceLine::line() const {
 }
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetOrientation, ReferenceLine::Orientation, orientation, retransform)
+STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetOrientation, ReferenceLine::Orientation, orientation, updateOrientation)
 void ReferenceLine::setOrientation(Orientation orientation) {
 	Q_D(ReferenceLine);
-	if (orientation != d->orientation) {
+	if (orientation != d->orientation)
 		exec(new ReferenceLineSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
-		switch (orientation) {
-		case ReferenceLine::Orientation::Horizontal:
-			d->position.positionLimit = PositionLimit::Y;
-			break;
-		case ReferenceLine::Orientation::Vertical:
-			d->position.positionLimit = PositionLimit::X;
-			break;
-		case ReferenceLine::Orientation::Both:
-			d->position.positionLimit = PositionLimit::None;
-			break;
-		}
-	}
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void ReferenceLine::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Orientation::Horizontal);
@@ -234,9 +231,9 @@ void ReferenceLine::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ReferenceLinePrivate::ReferenceLinePrivate(ReferenceLine* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -293,6 +290,21 @@ void ReferenceLinePrivate::retransform() {
 	QDEBUG(Q_FUNC_INFO << ", scene list after = " << listScene)
 
 	recalcShapeAndBoundingRect();
+}
+
+void ReferenceLinePrivate::updateOrientation() {
+	switch (orientation) {
+	case WorksheetElement::Orientation::Horizontal:
+		position.positionLimit = WorksheetElement::PositionLimit::Y;
+		break;
+	case WorksheetElement::Orientation::Vertical:
+		position.positionLimit = WorksheetElement::PositionLimit::X;
+		break;
+	case WorksheetElement::Orientation::Both:
+		position.positionLimit = WorksheetElement::PositionLimit::None;
+		break;
+	}
+	retransform();
 }
 
 /*!
@@ -372,9 +384,9 @@ void ReferenceLinePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void ReferenceLine::save(QXmlStreamWriter* writer) const {
 	Q_D(const ReferenceLine);
@@ -452,9 +464,9 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void ReferenceLine::loadThemeConfig(const KConfig& config) {
 	Q_D(ReferenceLine);
 

@@ -58,10 +58,13 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	, m_root(root) {
 	connect(m_root, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 	connect(m_root, &AbstractAspect::aspectDescriptionChanged, this, &AspectTreeModel::aspectDescriptionChanged);
-	connect(m_root, &AbstractAspect::aspectAboutToBeAdded, this, &AspectTreeModel::aspectAboutToBeAdded);
-	connect(m_root, &AbstractAspect::aspectAboutToBeRemoved, this, &AspectTreeModel::aspectAboutToBeRemoved);
-	connect(m_root, &AbstractAspect::aspectAdded, this, &AspectTreeModel::aspectAdded);
-	connect(m_root, &AbstractAspect::aspectRemoved, this, &AspectTreeModel::aspectRemoved);
+	connect(m_root,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
+			this,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AspectTreeModel::aspectAboutToBeAdded));
+	connect(m_root, &AbstractAspect::childAspectAboutToBeRemoved, this, &AspectTreeModel::aspectAboutToBeRemoved);
+	connect(m_root, &AbstractAspect::childAspectAdded, this, &AspectTreeModel::aspectAdded);
+	connect(m_root, &AbstractAspect::childAspectRemoved, this, &AspectTreeModel::aspectRemoved);
 	connect(m_root, &AbstractAspect::aspectHiddenAboutToChange, this, &AspectTreeModel::aspectHiddenAboutToChange);
 	connect(m_root, &AbstractAspect::aspectHiddenChanged, this, &AspectTreeModel::aspectHiddenChanged);
 }
@@ -366,10 +369,18 @@ void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 void AspectTreeModel::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	AbstractAspect* parent = aspect->parentAspect();
 	int index = parent->indexOfChild<AbstractAspect>(aspect);
+	m_aspectAboutToBeRemovedCalled = true;
 	beginRemoveRows(modelIndexOfAspect(parent), index, index);
 }
 
 void AspectTreeModel::aspectRemoved() {
+	// make sure aspectToBeRemoved(), and with this beginRemoveRows() in the model, was called
+	// prior to calling endRemoveRows() further below.
+	// see https://invent.kde.org/education/labplot/-/merge_requests/278 for more information.
+	if (!m_aspectAboutToBeRemovedCalled)
+		return;
+
+	m_aspectAboutToBeRemovedCalled = false;
 	endRemoveRows();
 }
 
@@ -399,7 +410,7 @@ bool AspectTreeModel::setData(const QModelIndex& index, const QVariant& value, i
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	switch (index.column()) {
 	case 0: {
-		if (!aspect->setName(value.toString(), false)) {
+		if (!aspect->setName(value.toString(), AbstractAspect::NameHandling::UniqueRequired)) {
 			Q_EMIT statusInfo(i18n("The name \"%1\" is already in use. Choose another name.", value.toString()));
 			return false;
 		}
@@ -416,6 +427,8 @@ bool AspectTreeModel::setData(const QModelIndex& index, const QVariant& value, i
 }
 
 QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, int column) const {
+	if (!aspect)
+		return QModelIndex();
 	AbstractAspect* parent = aspect->parentAspect();
 	return createIndex(parent ? parent->indexOfChild<AbstractAspect>(aspect) : 0, column, const_cast<AbstractAspect*>(aspect));
 }
@@ -482,9 +495,9 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const {
 	// 	}
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void AspectTreeModel::renameRequestedSlot() {
 	auto* aspect = dynamic_cast<AbstractAspect*>(QObject::sender());
 	if (aspect)

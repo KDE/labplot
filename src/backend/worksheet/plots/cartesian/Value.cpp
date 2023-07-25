@@ -19,7 +19,6 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/worksheet/Worksheet.h"
 
 #include <KLocalizedString>
 #include <QPainter>
@@ -76,9 +75,9 @@ void Value::draw(QPainter* painter, const QVector<QPointF>& points, const QVecto
 	}
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Value, Value::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(Value, const AbstractColumn*, column, column)
 QString& Value::columnPath() const {
@@ -97,9 +96,9 @@ BASIC_SHARED_D_READER_IMPL(Value, QString, suffix, suffix)
 BASIC_SHARED_D_READER_IMPL(Value, QColor, color, color)
 BASIC_SHARED_D_READER_IMPL(Value, QFont, font, font)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(Value, SetType, Value::Type, type, updateValue)
 void Value::setType(Value::Type type) {
 	Q_D(Value);
@@ -114,7 +113,7 @@ void Value::setColumn(const AbstractColumn* column) {
 		exec(new ValueSetColumnCmd(d, column, ki18n("%1: set values column")));
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Value::updateRequested);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Value::columnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Value::columnAboutToBeRemoved);
 		}
 	}
 }
@@ -204,9 +203,9 @@ void Value::columnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ValuePrivate::ValuePrivate(Value* owner)
 	: q(owner) {
 }
@@ -223,9 +222,9 @@ void ValuePrivate::updatePixmap() {
 	Q_EMIT q->updatePixmapRequested();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Value::save(QXmlStreamWriter* writer) const {
 	Q_D(const Value);
@@ -284,9 +283,9 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Value::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
 	setOpacity(group.readEntry("ValueOpacity", 1.0));
 	setColor(group.readEntry("ValueColor", themeColor));

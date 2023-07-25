@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,6 +13,8 @@
 #define SPREADSHEETTEST_H
 
 #include "../CommonTest.h"
+
+class Spreadsheet;
 
 class SpreadsheetTest : public CommonTest {
 	Q_OBJECT
@@ -33,7 +35,7 @@ private Q_SLOTS:
 	void testCopyPasteSizeChange00();
 	void testCopyPasteSizeChange01();
 
-	// sorting tests
+	// sorting
 	void testSortSingleNumeric1();
 	void testSortSingleNumeric2();
 	void testSortSingleInteger1();
@@ -59,10 +61,47 @@ private Q_SLOTS:
 	void testSortPerformanceNumeric1();
 	void testSortPerformanceNumeric2();
 
+	// flattening
 	void testFlatten00();
 	void testFlatten01();
 	void testFlatten02();
 	void testFlatten03();
+
+	// search&replace
+	void testSearchSimple00();
+
+	void testSearchExtended00();
+	void testSearchExtended01();
+	void testSearchExtended02();
+	void testSearchExtended03();
+
+	void testSearchFindAll();
+	void testSearchReplaceAll();
+
+	// size changes
+	void testInsertRows();
+	void testRemoveRows();
+	void testInsertColumns();
+	void testRemoveColumns();
+
+	void testInsertRowsSuppressUpdate();
+	void testInsertColumnsSuppressUpdate();
+
+	void testLinkSpreadsheetsUndoRedo();
+	void testLinkSpreadsheetDeleteAdd();
+	void testLinkSpreadsheetAddRow();
+	void testLinkSpreadsheetRemoveRow();
+	void testLinkSpreadsheetRecalculate();
+	void testLinkSpreadsheetSaveLoad();
+
+#ifdef HAVE_VECTOR_BLF
+	void testLinkSpreadSheetImportBLF();
+#endif // HAVE_VECTOR_BLF
+
+	void testNaming();
+
+private:
+	Spreadsheet* createSearchReplaceSpreadsheet();
 };
 
 #endif

@@ -40,6 +40,7 @@ private:
 	void updateValuesWidgets();
 	void updatePlotRanges() override;
 	void updateLocale() override;
+	void load();
 	void loadConfig(KConfig&);
 
 protected:
@@ -74,8 +75,8 @@ private Q_SLOTS:
 	void autoBinRangesChanged(bool);
 	void binRangesMinChanged(const QString&);
 	void binRangesMaxChanged(const QString&);
-	void binRangesMinDateTimeChanged(const QDateTime&);
-	void binRangesMaxDateTimeChanged(const QDateTime&);
+	void binRangesMinDateTimeChanged(qint64);
+	void binRangesMaxDateTimeChanged(qint64);
 
 	//"Error bars"-Tab
 	void errorTypeChanged(int);
@@ -91,9 +92,9 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in Histogram
 	// General-Tab
 	void curveDataColumnChanged(const AbstractColumn*);
-	void curveTypeChanged(Histogram::HistogramType);
-	void curveOrientationChanged(Histogram::HistogramOrientation);
-	void curveNormalizationChanged(Histogram::HistogramNormalization);
+	void curveTypeChanged(Histogram::Type);
+	void curveOrientationChanged(Histogram::Orientation);
+	void curveNormalizationChanged(Histogram::Normalization);
 	void curveBinningMethodChanged(Histogram::BinningMethod);
 	void curveBinCountChanged(int);
 	void curveBinWidthChanged(double);

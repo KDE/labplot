@@ -13,12 +13,12 @@
 
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyinterpolationcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYInterpolationCurveDock : public XYCurveDock {
+class XYInterpolationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
@@ -33,9 +33,6 @@ private:
 	void showInterpolationResult();
 
 	Ui::XYInterpolationCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYInterpolationCurve* m_interpolationCurve{nullptr};
 	XYInterpolationCurve::InterpolationData m_interpolationData;
@@ -43,7 +40,7 @@ private:
 	bool m_dateTimeRange{false};
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYInterpolationCurveDock
@@ -55,8 +52,8 @@ private Q_SLOTS:
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
-	void xRangeMinDateTimeChanged(const QDateTime&);
-	void xRangeMaxDateTimeChanged(const QDateTime&);
+	void xRangeMinDateTimeChanged(qint64);
+	void xRangeMaxDateTimeChanged(qint64);
 	void typeChanged(int);
 	void variantChanged(int);
 	void tensionChanged(double);

@@ -132,7 +132,8 @@ void ExamplesWidget::collectionChanged(int) {
 	m_completer = new QCompleter(exampleNames, this);
 	connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &ExamplesWidget::activated);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
-	m_completer->setCaseSensitivity(Qt::CaseSensitive);
+	m_completer->setCaseSensitivity(Qt::CaseInsensitive);
+	m_completer->setFilterMode(Qt::MatchContains);
 	ui.leSearch->setCompleter(m_completer);
 }
 

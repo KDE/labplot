@@ -96,8 +96,8 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 	ui.cbOperatorText->setCurrentIndex(conf.readEntry("OperatorText", 0));
 
 	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	ui.dteValue1->setDateTime(QDateTime::fromMSecsSinceEpoch(conf.readEntry("Value1DateTime", now)));
-	ui.dteValue2->setDateTime(QDateTime::fromMSecsSinceEpoch(conf.readEntry("Value2DateTime", now)));
+	ui.dteValue1->setMSecsSinceEpochUTC(conf.readEntry("Value1DateTime", now));
+	ui.dteValue2->setMSecsSinceEpochUTC(conf.readEntry("Value2DateTime", now));
 	ui.cbOperatorDateTime->setCurrentIndex(conf.readEntry("OperatorDateTime", 0));
 	operatorDateTimeChanged(ui.cbOperatorDateTime->currentIndex());
 
@@ -554,7 +554,7 @@ public:
 			}
 
 			if (changed)
-				m_column->replaceValues(0, new_data);
+				m_column->setValues(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::Integer) {
 			auto* data = static_cast<QVector<int>*>(m_column->data());
 			QVector<int> new_data(*data);
@@ -626,7 +626,7 @@ public:
 			}
 
 			if (changed)
-				m_column->replaceInteger(0, new_data);
+				m_column->setIntegers(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 			auto* data = static_cast<QVector<qint64>*>(m_column->data());
 			QVector<qint64> new_data(*data);
@@ -698,7 +698,7 @@ public:
 			}
 
 			if (changed)
-				m_column->replaceBigInt(0, new_data);
+				m_column->setBigInts(new_data);
 		} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 			auto* data = static_cast<QVector<QDateTime>*>(m_column->data());
 			QVector<QDateTime> new_data(*data);
@@ -770,7 +770,7 @@ public:
 			}
 
 			if (changed)
-				m_column->replaceDateTimes(0, new_data);
+				m_column->setDateTimes(new_data);
 		}
 	}
 
@@ -784,10 +784,10 @@ private:
 // implementation of tasks for text columns
 class MaskTextValuesTask : public QRunnable {
 public:
-	MaskTextValuesTask(Column* col, OperatorText op, const QString& value) {
-		m_column = col;
-		m_operator = op;
-		m_value = value;
+	MaskTextValuesTask(Column* col, OperatorText op, const QString& value)
+		: m_operator(op)
+		, m_value(value)
+		, m_column(col) {
 	}
 
 	void run() override {
@@ -861,10 +861,10 @@ private:
 
 class DropTextValuesTask : public QRunnable {
 public:
-	DropTextValuesTask(Column* col, OperatorText op, const QString& value) {
-		m_column = col;
-		m_operator = op;
-		m_value = value;
+	DropTextValuesTask(Column* col, OperatorText op, const QString& value)
+		: m_operator(op)
+		, m_value(value)
+		, m_column(col) {
 	}
 
 	void run() override {

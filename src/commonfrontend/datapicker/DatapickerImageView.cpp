@@ -19,10 +19,13 @@
 
 #include <limits>
 
+#include <QClipboard>
 #include <QDesktopWidget>
+#include <QFileInfo>
 #include <QImage>
 #include <QMenu>
 #include <QMessageBox>
+#include <QMimeData>
 #include <QPrinter>
 #include <QSvgGenerator>
 #include <QTimeLine>
@@ -342,9 +345,31 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 	painter->restore();
 }
 
-//##############################################################################
-//####################################  Events   ###############################
-//##############################################################################
+// ##############################################################################
+// ####################################  Events   ###############################
+// ##############################################################################
+void DatapickerImageView::keyPressEvent(QKeyEvent* event) {
+	if (event->matches(QKeySequence::Paste)) {
+		const QClipboard* clipboard = QApplication::clipboard();
+		const QMimeData* mimeData = clipboard->mimeData();
+		if (mimeData->hasImage()) {
+			m_image->setImage(qvariant_cast<QImage>(mimeData->imageData()), QStringLiteral(""), true);
+			event->accept();
+		} else if (mimeData->hasText()) {
+			// Check if it is a filepath
+			QString text = mimeData->text();
+			if (text.startsWith(QStringLiteral("file://")))
+				text.replace(QStringLiteral("file://"), QStringLiteral(""));
+			QFileInfo fi(text);
+			if (fi.exists()) {
+				m_image->setImage(fi.absoluteFilePath(), true);
+				event->accept();
+			}
+		}
+	}
+	QGraphicsView::keyPressEvent(event);
+}
+
 void DatapickerImageView::wheelEvent(QWheelEvent* event) {
 	// https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 	if (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
@@ -486,7 +511,7 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 
 	// show the current coordinates under the mouse cursor in the status bar
 	if (m_image->plotPointsType() == DatapickerImage::PointsType::CurvePoints) {
-		QVector3D logicalPos = m_transform->mapSceneToLogical(pos, m_image->axisPoints());
+		Vector3D logicalPos = m_transform->mapSceneToLogical(pos, m_image->axisPoints());
 		if (m_image->axisPoints().type == DatapickerImage::GraphType::Ternary) {
 			Q_EMIT statusInfo(QStringLiteral("a =") + QString::number(logicalPos.x()) + QStringLiteral(", b =") + QString::number(logicalPos.y())
 							  + QStringLiteral(", c =") + QString::number(logicalPos.z()));
@@ -565,9 +590,9 @@ void DatapickerImageView::contextMenuEvent(QContextMenuEvent*) {
 	menu->exec(QCursor::pos());
 }
 
-//##############################################################################
-//####################################  SLOTs   ###############################
-//##############################################################################
+// ##############################################################################
+// ####################################  SLOTs   ###############################
+// ##############################################################################
 void DatapickerImageView::mouseModeChanged(QAction* action) {
 	m_mouseMode = (DatapickerImageView::MouseMode)action->data().toInt();
 

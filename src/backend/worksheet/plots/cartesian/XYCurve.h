@@ -83,6 +83,10 @@ public:
 				bool includeErrorBars) const;
 	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 
+	double minimum(CartesianCoordinateSystem::Dimension dim) const override;
+	double maximum(CartesianCoordinateSystem::Dimension dim) const override;
+	bool hasData() const override;
+
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 

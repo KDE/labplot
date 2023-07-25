@@ -37,6 +37,9 @@ public:
 	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
 	template<typename T>
 	void setAspects(QList<T*> aspects) {
+		if (m_aspect)
+			disconnect(m_aspect, nullptr, this, nullptr);
+
 		m_aspects.clear();
 		if (aspects.length() == 0) {
 			m_aspect = nullptr;
@@ -44,11 +47,18 @@ public:
 		}
 
 		m_aspect = aspects.first();
+		connect(m_aspect, &AbstractAspect::childAspectAboutToBeRemoved, this, &BaseDock::disconnectAspect);
 		for (auto* aspect : aspects) {
 			if (aspect->inherits(AspectType::AbstractAspect))
 				m_aspects.append(static_cast<AbstractAspect*>(aspect));
 		}
 	}
+
+	void disconnectAspect(const AbstractAspect* a) {
+		disconnect(a, nullptr, this, nullptr);
+		m_aspect = nullptr;
+	}
+
 	const AbstractAspect* aspect() {
 		return m_aspect;
 	}

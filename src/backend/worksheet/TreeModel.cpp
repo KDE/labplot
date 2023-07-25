@@ -10,9 +10,9 @@
 
 #include "TreeModel.h"
 
-//##########################################################
-// TreeItem ###############################################
-//##########################################################
+// ##########################################################
+//  TreeItem ###############################################
+// ##########################################################
 
 TreeItem::TreeItem(const QVector<QVariant>& data, TreeItem* parent)
 	: itemData(data)
@@ -119,14 +119,14 @@ bool TreeItem::setBackgroundColor(int column, const QVariant& value) {
 	return true;
 }
 
-//##########################################################
-// TreeModel ###############################################
-//##########################################################
+// ##########################################################
+//  TreeModel ###############################################
+// ##########################################################
 
 TreeModel::TreeModel(const QStringList& headers, QObject* parent)
 	: QAbstractItemModel(parent) {
 	QVector<QVariant> rootData;
-	for (auto header : headers)
+	for (auto& header : headers)
 		rootData << header;
 
 	rootItem = new TreeItem(rootData);

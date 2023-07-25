@@ -18,9 +18,9 @@
 #include <QLineEdit>
 #include <QLocale>
 #include <QString>
-#include <QStringRef>
-#include <QtMath>
+#include <QStringView>
 
+#include <cmath>
 #include <limits>
 
 NumberSpinBox::NumberSpinBox(QWidget* parent)
@@ -44,6 +44,7 @@ void NumberSpinBox::init(double initValue, bool feedback) {
 	m_feedback = feedback; // must be after setValue()!
 	setInvalid(Errors::NoError);
 	setDecimals(2);
+	lineEdit()->setValidator(nullptr);
 }
 
 QString NumberSpinBox::errorToString(Errors e) {
@@ -70,9 +71,23 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	case Qt::Key_Up:
 		increaseValue();
 		return;
-	default:
+	default: {
+		if (lineEdit()->selectionLength() > 0) {
+			int selectionStart = qMax(lineEdit()->selectionStart(), prefix().length());
+			selectionStart = qMin(selectionStart, lineEdit()->text().length() - suffix().length());
+
+			int selectionEnd = qMax(lineEdit()->selectionEnd(), prefix().length());
+			selectionEnd = qMin(selectionEnd, lineEdit()->text().length() - suffix().length());
+
+			lineEdit()->setSelection(selectionStart, selectionEnd - selectionStart);
+		} else {
+			int cursorPos = qMax(lineEdit()->cursorPosition(), prefix().length());
+			cursorPos = qMin(cursorPos, lineEdit()->text().length() - suffix().length());
+			lineEdit()->setCursorPosition(cursorPos);
+		}
 		QDoubleSpinBox::keyPressEvent(event);
 		break;
+	}
 	}
 	QString text = lineEdit()->text();
 	double v;
@@ -163,7 +178,6 @@ bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const 
 	}
 
 	if (p.exponentPos > 0) {
-		bool ok;
 		if (v_str.at(p.exponentPos + 1) == QLatin1Char('+') || v_str.at(p.exponentPos + 1) == QLatin1Char('-'))
 			p.exponentSign = v_str.at(p.exponentPos + 1);
 		const QString& e = v_str.mid(p.exponentPos + 1 + !p.exponentSign.isNull(), number_length - (p.exponentPos + 1 + !p.exponentSign.isNull()));
@@ -211,7 +225,7 @@ QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, 
 
 QString NumberSpinBox::strip(const QString& t) const {
 	// Copied from QAbstractSpinBox.cpp
-	QStringRef text(&t);
+	QStringView text(t);
 
 	int size = text.size();
 	const QString p = prefix();
@@ -302,7 +316,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 			initial = exponentialIndex;
 		else
 			initial = end;
-		increase = steps * qPow(10, initial - cursorPos);
+		increase = steps * std::pow(10, initial - cursorPos);
 
 		// from 0.1 with step -1 the desired result shall be -1.1 not -0.9
 		if ((integerFraction > 0 && integerFraction + increase > 0) || (integerFraction < 0 && integerFraction + increase < 0))
@@ -313,12 +327,12 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 		}
 	} else if (comma >= 0 && (exponentialIndex == -1 || before_exponent)) {
 		// fraction
-		increase = steps * qPow(10, -(cursorPos - 1 - comma));
+		increase = steps * std::pow(10, -(cursorPos - 1 - comma));
 		integerFraction += increase;
 	} else {
 		// exponent
 		increase = end - cursorPos;
-		const auto calc = steps * qPow(10, increase);
+		const auto calc = steps * std::pow(10, increase);
 		exponent += calc;
 
 		// double max value 1.7976931348623157E+308
@@ -334,7 +348,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	else if (integerFraction < std::numeric_limits<int>::min())
 		integerFraction = std::numeric_limits<int>::min();
 
-	double v = integerFraction * qPow(10, exponent);
+	double v = integerFraction * std::pow(10, exponent);
 
 	if (v > maximum())
 		return Errors::Max;
@@ -408,11 +422,9 @@ bool NumberSpinBox::setValue(double v) {
 		return true;
 	}
 
-	if (decimals() == 0 || abs(v) < 1 / (pow(10, decimals())))
-		setText(locale().toString(v, 'g'));
-	else
-		setText(locale().toString(v, 'f', decimals()));
+	setText(locale().toString(v, 'g'));
 	m_value = v;
+	valueChanged();
 	return true;
 }
 
@@ -463,7 +475,6 @@ QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
 void NumberSpinBox::valueChanged() {
 	if (m_feedback)
 		m_waitFeedback = true;
-	qDebug() << "Value: " << value();
 	emit valueChanged(value());
 	m_waitFeedback = false;
 }

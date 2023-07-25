@@ -19,7 +19,5 @@ private Q_SLOTS:
 	void testQuantile();
 	// performance
 	// void testPerformance();
-private:
-	QString m_dataDir;
 };
 #endif

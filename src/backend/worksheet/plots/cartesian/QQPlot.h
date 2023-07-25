@@ -3,14 +3,14 @@
 	Project              : LabPlot
 	Description          : QQ-Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef QQPLOT_H
 #define QQPLOT_H
 
-#include "Curve.h"
+#include "Plot.h"
 #include "backend/lib/Range.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
@@ -27,9 +27,9 @@ class QQPlotPrivate;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT QQPlot : public WorksheetElement, public Curve {
+class LABPLOT_EXPORT QQPlot : public Plot {
 #else
-class QQPlot : public WorksheetElement, public Curve {
+class QQPlot : public Plot {
 #endif
 	Q_OBJECT
 
@@ -51,7 +51,7 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
 
-	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
@@ -63,6 +63,10 @@ public:
 	void retransform() override;
 	void recalc();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+
+	double minimum(CartesianCoordinateSystem::Dimension) const override;
+	double maximum(CartesianCoordinateSystem::Dimension) const override;
+	bool hasData() const override;
 
 	typedef QQPlotPrivate Private;
 

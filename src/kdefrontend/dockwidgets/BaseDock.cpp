@@ -15,9 +15,7 @@
 #include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -115,7 +113,7 @@ void BaseDock::plotRangeChanged(int index) {
 			e->setSuppressRetransform(true);
 			e->setCoordinateSystemIndex(index);
 			e->setSuppressRetransform(false);
-			if (dynamic_cast<Axis*>(e))
+			if (dynamic_cast<Axis*>(e) && dynamic_cast<AxisDock*>(this))
 				dynamic_cast<AxisDock*>(this)->updateAutoScale();
 			updateLocale(); // update line edits
 		}
@@ -146,7 +144,7 @@ void BaseDock::nameChanged() {
 	if (m_initializing || !m_aspect)
 		return;
 
-	if (!m_aspect->setName(m_leName->text(), false)) {
+	if (!m_aspect->setName(m_leName->text(), AbstractAspect::NameHandling::UniqueRequired)) {
 		SET_WARNING_STYLE(m_leName)
 		m_leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 	} else {

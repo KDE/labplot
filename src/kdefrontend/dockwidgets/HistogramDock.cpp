@@ -126,8 +126,8 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(ui.chkAutoBinRanges, &QCheckBox::toggled, this, &HistogramDock::autoBinRangesChanged);
 	connect(ui.leBinRangesMin, &QLineEdit::textChanged, this, &HistogramDock::binRangesMinChanged);
 	connect(ui.leBinRangesMax, &QLineEdit::textChanged, this, &HistogramDock::binRangesMaxChanged);
-	connect(ui.dteBinRangesMin, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
-	connect(ui.dteBinRangesMax, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
+	connect(ui.dteBinRangesMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
+	connect(ui.dteBinRangesMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::plotRangeChanged);
 
 	// Error bars
@@ -235,7 +235,7 @@ void HistogramDock::setModel() {
 }
 
 void HistogramDock::setCurves(QList<Histogram*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
@@ -262,7 +262,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	valueWidget->setValues(values);
 	errorBarsLineWidget->setLines(errorBarLines);
 
-	// if there are more then one curve in the list, disable the content in the tab "general"
+	// if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -315,8 +315,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	const auto* plot = static_cast<const CartesianPlot*>(m_curve->parent(AspectType::CartesianPlot));
 	ui.dteBinRangesMin->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
 	ui.dteBinRangesMax->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-	ui.dteBinRangesMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_curve->binRangesMin()));
-	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_curve->binRangesMax()));
+	ui.dteBinRangesMin->setMSecsSinceEpochUTC(m_curve->binRangesMin());
+	ui.dteBinRangesMax->setMSecsSinceEpochUTC(m_curve->binRangesMax());
 
 	bool numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
 
@@ -331,8 +331,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.dteBinRangesMax->setVisible(!numeric);
 
 	// load the remaining properties
-	KConfig config(QString(), KConfig::SimpleConfig);
-	loadConfig(config);
+	load();
 
 	updatePlotRanges();
 
@@ -361,8 +360,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::rugLengthChanged, this, &HistogramDock::curveRugLengthChanged);
 	connect(m_curve, &Histogram::rugWidthChanged, this, &HistogramDock::curveRugWidthChanged);
 	connect(m_curve, &Histogram::rugOffsetChanged, this, &HistogramDock::curveRugOffsetChanged);
-
-	m_initializing = false;
 }
 
 void HistogramDock::retranslateUi() {
@@ -411,7 +408,7 @@ void HistogramDock::visibilityChanged(bool state) {
 void HistogramDock::typeChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto histogramType = Histogram::HistogramType(index);
+	auto histogramType = Histogram::Type(index);
 	for (auto* curve : m_curvesList)
 		curve->setType(histogramType);
 }
@@ -433,7 +430,7 @@ void HistogramDock::dataColumnChanged(const QModelIndex& index) {
 void HistogramDock::orientationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto orientation = Histogram::HistogramOrientation(index);
+	auto orientation = Histogram::Orientation(index);
 	for (auto* curve : m_curvesList)
 		curve->setOrientation(orientation);
 }
@@ -441,7 +438,7 @@ void HistogramDock::orientationChanged(int index) {
 void HistogramDock::normalizationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto normalization = Histogram::HistogramNormalization(index);
+	auto normalization = Histogram::Normalization(index);
 	for (auto* curve : m_curvesList)
 		curve->setNormalization(normalization);
 }
@@ -523,20 +520,18 @@ void HistogramDock::binRangesMaxChanged(const QString& value) {
 	}
 }
 
-void HistogramDock::binRangesMinDateTimeChanged(const QDateTime& dateTime) {
+void HistogramDock::binRangesMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	qint64 min = dateTime.toMSecsSinceEpoch();
 	for (auto* hist : m_curvesList)
-		hist->setBinRangesMin(min);
+		hist->setBinRangesMin(value);
 }
 
-void HistogramDock::binRangesMaxDateTimeChanged(const QDateTime& dateTime) {
+void HistogramDock::binRangesMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	qint64 max = dateTime.toMSecsSinceEpoch();
 	for (auto* hist : m_curvesList)
-		hist->setBinRangesMax(max);
+		hist->setBinRangesMax(value);
 }
 
 //"Error bars"-Tab
@@ -636,17 +631,17 @@ void HistogramDock::curveDataColumnChanged(const AbstractColumn* column) {
 	cbDataColumn->setColumn(column, m_curve->dataColumnPath());
 }
 
-void HistogramDock::curveTypeChanged(Histogram::HistogramType type) {
+void HistogramDock::curveTypeChanged(Histogram::Type type) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)type);
 }
 
-void HistogramDock::curveOrientationChanged(Histogram::HistogramOrientation orientation) {
+void HistogramDock::curveOrientationChanged(Histogram::Orientation orientation) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
 
-void HistogramDock::curveNormalizationChanged(Histogram::HistogramNormalization normalization) {
+void HistogramDock::curveNormalizationChanged(Histogram::Normalization normalization) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbNormalization->setCurrentIndex((int)normalization);
 }
@@ -674,13 +669,13 @@ void HistogramDock::curveAutoBinRangesChanged(bool value) {
 void HistogramDock::curveBinRangesMinChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.leBinRangesMin->setText(QLocale().toString(value));
-	ui.dteBinRangesMin->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
+	ui.dteBinRangesMin->setMSecsSinceEpochUTC(value);
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.leBinRangesMax->setText(QLocale().toString(value));
-	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
+	ui.dteBinRangesMax->setMSecsSinceEpochUTC(value);
 }
 
 void HistogramDock::curveVisibilityChanged(bool on) {
@@ -723,6 +718,22 @@ void HistogramDock::curveRugOffsetChanged(double value) {
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
+void HistogramDock::load() {
+	// General
+	// we don't load/save the settings in the general-tab, since they are not style related.
+	// It doesn't make sense to load/save them in the template.
+	// This data is read in HistogramDock::setCurves().
+
+	// Error bars
+	ui.cbErrorType->setCurrentIndex((int)m_curve->errorType());
+
+	// Margin plots
+	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->rugWidth(), Worksheet::Unit::Point));
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_curve->rugLength(), Worksheet::Unit::Point));
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_curve->rugOffset(), Worksheet::Unit::Point));
+}
+
 void HistogramDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QLatin1String("Histogram"));
 
@@ -758,7 +769,7 @@ void HistogramDock::loadConfigFromTemplate(KConfig& config) {
 
 	int size = m_curvesList.size();
 	if (size > 1)
-		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
+		m_curve->beginMacro(i18n("%1 histograms: template \"%2\" loaded", size, name));
 	else
 		m_curve->beginMacro(i18n("%1: template \"%2\" loaded", m_curve->name(), name));
 

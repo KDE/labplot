@@ -12,18 +12,18 @@
 #include "FitTest.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
-}
 
-//##############################################################################
-//#################  linear regression with NIST datasets ######################
-//##############################################################################
+// ##############################################################################
+// #################  linear regression with NIST datasets ######################
+// ##############################################################################
 void FitTest::testLinearNorris() {
 	// NIST data for Norris dataset
 	QVector<double> xData = {0.2,	337.4, 118.2, 884.6, 10.1,	226.5, 666.3, 996.3, 448.6, 777.0, 558.2, 0.4,	 0.6,  775.5, 666.9, 338.0, 447.5, 11.6,
@@ -897,9 +897,9 @@ void FitTest::testLinearR_lm2() {
 	FuzzyCompare(fitResult.bic, 426.4202, 1.e-7);
 }
 
-//##############################################################################
-//#############  non-linear regression with NIST datasets  #####################
-//##############################################################################
+// ##############################################################################
+// #############  non-linear regression with NIST datasets  #####################
+// ##############################################################################
 
 void FitTest::testNonLinearMisra1a() {
 	// NIST data for Misra1a dataset
@@ -2320,9 +2320,9 @@ void FitTest::testNonLinearMichaelis_Menten() {
 	DEBUG(std::setprecision(15) << fitResult.sse); // result: 0.0252438073757174
 	FuzzyCompare(fitResult.sse, 0.0252438073989537, 1.e-9);
 }
-//##############################################################################
-//#########################  Fits with weights #################################
-//##############################################################################
+// ##############################################################################
+// #########################  Fits with weights #################################
+// ##############################################################################
 
 // see http://gnuplot.sourceforge.net/demo_5.2/fit.html
 void FitTest::testNonLinearGP_lcdemo() {
@@ -3020,6 +3020,15 @@ void FitTest::testHistogramFit() {
 	QCOMPARE(fitResult.available, true);
 	QCOMPARE(fitResult.valid, true);
 
+	// ML results
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 1.);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 0.999776858937);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), -0.0294045302042);
+
+	/* LM results
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));
 	QCOMPARE(fitResult.paramValues.at(0), 0.999829585605626);
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));
@@ -3043,6 +3052,323 @@ void FitTest::testHistogramFit() {
 	QCOMPARE(fitResult.rsquare, 0.961753741845289);
 	DEBUG(std::setprecision(15) << fitResult.rsquareAdj); // result:
 	QCOMPARE(fitResult.rsquareAdj, 0.957504157605876);
+	*/
+}
+
+void FitTest::testHistogramGaussianML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Gaussian.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1000);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_gaussian);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 210.380459328);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 0.999776858937);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.0223507017166885);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 0.955917043549699);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.marginValues.at(1), 1.0436366743251);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), -0.0294045302042);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(2));
+	QCOMPARE(fitResult.errorValues.at(2), 0.0316157202617);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2) - fitResult.marginValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2) - fitResult.marginValues.at(2), -0.0914455198610062);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2) + fitResult.marginValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2) + fitResult.marginValues.at(2), 0.0326364594526431);
+}
+
+void FitTest::testHistogramExponentialML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Exponential.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_exponential);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 41.6543778722);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 1.93906050400681);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.195884683568035);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 1.5740096363284);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 2.34119114746796);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), 5.01032231564491);
+}
+
+void FitTest::testHistogramLaplaceML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Laplace.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_laplace);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 145.64147805241);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 1.99538835213796);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), 4.95890340967321);
+}
+
+void FitTest::testHistogramCauchyML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Cauchy.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1000);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_cauchy_lorentz);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 34973.659700564);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 1.87876026823743);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), 5.09155507540282);
+}
+
+void FitTest::testHistogramLognormalML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Lognormal.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1000);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_lognormal);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 4714813.91602);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 2.07876791650682);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), 5.01070949852617);
+}
+
+void FitTest::testHistogramPoissonML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Poisson.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_poisson);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 150.);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 9.55);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.309030742807249);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 8.95383732390823);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 10.1754213697868);
+}
+
+void FitTest::testHistogramBinomialML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Binomial.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_binomial);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 270.);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 0.4931);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.0499952387733072);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 0.482953993308348);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 0.503287947118723);
+
+	QCOMPARE(fitResult.paramValues.at(2), spreadsheet.rowCount());
 }
 
 QTEST_MAIN(FitTest)

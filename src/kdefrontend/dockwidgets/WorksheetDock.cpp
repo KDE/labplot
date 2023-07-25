@@ -104,12 +104,12 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 }
 
 void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_worksheetList = list;
 	m_worksheet = list.first();
 	setAspects(list);
 
-	// if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
+	// if there are more than one worksheet in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -129,6 +129,12 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	}
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
+
+	// set the initial standard page and the orientation to A4/portrait.
+	// this should be used as default initial setting when the user switches
+	// from Custom to Standard Page
+	ui.cbPage->setCurrentIndex(ui.cbPage->findData(QPageSize::A4));
+	ui.cbOrientation->setCurrentIndex(0);
 
 	// show the properties of the first worksheet
 	this->load();
@@ -152,8 +158,6 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	connect(m_worksheet, &Worksheet::layoutColumnCountChanged, this, &WorksheetDock::worksheetLayoutColumnCountChanged);
 
 	connect(m_worksheet, &Worksheet::themeChanged, m_themeHandler, &ThemeHandler::setCurrentTheme);
-
-	m_initializing = false;
 }
 
 void WorksheetDock::updateLocale() {
@@ -219,7 +223,7 @@ void WorksheetDock::updateUnits() {
 */
 void WorksheetDock::updatePaperSize() {
 	if (m_worksheet->useViewSize()) {
-		ui.cbSizeType->setCurrentIndex(0);
+		ui.cbSizeType->setCurrentIndex(ui.cbSizeType->findData((int)SizeType::ViewSize));
 		return;
 	}
 
@@ -258,7 +262,9 @@ void WorksheetDock::updatePaperSize() {
 	}
 
 	if (!found)
-		ui.cbSizeType->setCurrentIndex(2); // select "Custom"
+		ui.cbSizeType->setCurrentIndex(ui.cbSizeType->findData((int)SizeType::Custom));
+	else
+		ui.cbSizeType->setCurrentIndex(ui.cbSizeType->findData((int)SizeType::StandardPage));
 }
 
 //*************************************************************
@@ -288,9 +294,9 @@ void WorksheetDock::retranslateUi() {
 	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
 
 	ui.cbSizeType->clear();
-	ui.cbSizeType->addItem(i18n("View Size"));
-	ui.cbSizeType->addItem(i18n("Standard Page"));
-	ui.cbSizeType->addItem(i18n("Custom"));
+	ui.cbSizeType->addItem(i18n("View Size"), (int)SizeType::ViewSize);
+	ui.cbSizeType->addItem(i18n("Standard Page"), (int)SizeType::StandardPage);
+	ui.cbSizeType->addItem(i18n("Custom"), (int)SizeType::Custom);
 
 	const QVector<QPageSize::PageSizeId> pageSizeIds = {
 		QPageSize::A0,	  QPageSize::A1,	 QPageSize::A2,	   QPageSize::A3,	  QPageSize::A4,	  QPageSize::A5,	 QPageSize::A6,	 QPageSize::A7,
@@ -311,46 +317,60 @@ void WorksheetDock::scaleContentChanged(bool scaled) {
 }
 
 void WorksheetDock::sizeTypeChanged(int index) {
-	if (index == 0) { // view size
+	const auto sizeType = static_cast<SizeType>(ui.cbSizeType->itemData(index).toInt());
+
+	switch (sizeType) {
+	case SizeType::ViewSize:
 		ui.lPage->hide();
 		ui.cbPage->hide();
 		ui.lOrientation->hide();
 		ui.cbOrientation->hide();
 		ui.sbWidth->setEnabled(false);
 		ui.sbHeight->setEnabled(false);
-	} else if (index == 1) { // standard page
+		break;
+	case SizeType::StandardPage:
 		ui.lPage->show();
 		ui.cbPage->show();
 		ui.lOrientation->show();
 		ui.cbOrientation->show();
 		ui.sbWidth->setEnabled(false);
 		ui.sbHeight->setEnabled(false);
-	} else { // custom size
+		break;
+	case SizeType::Custom:
 		ui.lPage->hide();
 		ui.cbPage->hide();
 		ui.lOrientation->hide();
 		ui.cbOrientation->hide();
 		ui.sbWidth->setEnabled(true);
 		ui.sbHeight->setEnabled(true);
+		break;
 	}
 
-	CONDITIONAL_LOCK_RETURN;
+	if (m_initializing) // don't lock here since we potentially need to call setters in pageChanged() below
+		return;
 
-	if (index == 0) { // viewSize
-		CONDITIONAL_LOCK_RETURN;
+	switch (sizeType) {
+	case SizeType::ViewSize:
 		for (auto* worksheet : m_worksheetList)
 			worksheet->setUseViewSize(true);
-	} else if (index == 1) { // standard page
+		break;
+	case SizeType::StandardPage:
 		pageChanged(ui.cbPage->currentIndex());
-	} else { // custom size
+		break;
+	case SizeType::Custom:
 		if (m_worksheet->useViewSize()) {
 			for (auto* worksheet : m_worksheetList)
 				worksheet->setUseViewSize(false);
 		}
 		sizeChanged();
+		break;
 	}
 }
 
+/*!
+ * \brief called when one of the standard page sizes was changed
+ * \param i - index of the page size in the combobox
+ */
 void WorksheetDock::pageChanged(int i) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -369,32 +389,35 @@ void WorksheetDock::pageChanged(int i) {
 		ui.sbHeight->setValue(s.height() / 25.4);
 	}
 
-	double w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Unit::Millimeter);
-	double h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Unit::Millimeter);
+	const double w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Unit::Millimeter);
+	const double h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Unit::Millimeter);
 	for (auto* worksheet : m_worksheetList) {
+		worksheet->beginMacro(i18n("%1: set page size", worksheet->name()));
 		worksheet->setUseViewSize(false);
 		worksheet->setPageRect(QRectF(0, 0, w, h));
+		worksheet->endMacro();
 	}
 }
 
+/*!
+ * \brief called when the width or the the highth of the page was changed manually
+ */
 void WorksheetDock::sizeChanged() {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	double w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
-	double h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
+	const double w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
+	const double h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
 	for (auto* worksheet : m_worksheetList)
 		worksheet->setPageRect(QRectF(0, 0, w, h));
 }
 
 void WorksheetDock::orientationChanged(int /*index*/) {
-	CONDITIONAL_LOCK_RETURN;
-
 	this->pageChanged(ui.cbPage->currentIndex());
 }
 
 //"Layout"-tab
 void WorksheetDock::layoutChanged(int index) {
-	auto layout = (Worksheet::Layout)index;
+	auto layout = static_cast<Worksheet::Layout>(index);
 
 	bool b = (layout != Worksheet::Layout::NoLayout);
 	ui.sbLayoutTopMargin->setEnabled(b);

@@ -14,7 +14,10 @@
 #include "columncommands.h"
 #include "ColumnPrivate.h"
 #include "backend/lib/macros.h"
+
 #include <KLocalizedString>
+
+#include <cmath>
 
 /** ***************************************************************************
  * \class ColumnSetModeCmd
@@ -139,6 +142,7 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
  * \brief Execute the command
  */
 void ColumnSetModeCmd::redo() {
+	DEBUG(Q_FUNC_INFO)
 	if (!m_executed) {
 		// save old values
 		m_old_mode = m_col->columnMode();
@@ -147,6 +151,7 @@ void ColumnSetModeCmd::redo() {
 		m_old_out_filter = m_col->outputFilter();
 
 		// do the conversion
+		m_col->setLabelsMode(m_mode); // must be done before setColumnMode, because setColumnMode() sends signal to dock
 		m_col->setColumnMode(m_mode);
 
 		// save new values
@@ -167,6 +172,7 @@ void ColumnSetModeCmd::redo() {
 void ColumnSetModeCmd::undo() {
 	// reset to old values
 	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter);
+	// setLabelsMode will be done in replaceModeData()
 
 	m_undone = true;
 }
@@ -673,8 +679,9 @@ ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
 													 QString formula,
 													 QStringList variableNames,
 													 QVector<Column*> variableColumns,
-													 bool autoUpdate)
-	: QUndoCommand()
+													 bool autoUpdate,
+													 QUndoCommand* parent)
+	: QUndoCommand(parent)
 	, m_col(col)
 	, m_newFormula(std::move(formula))
 	, m_newVariableNames(std::move(variableNames))

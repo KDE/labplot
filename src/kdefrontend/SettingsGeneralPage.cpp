@@ -27,9 +27,6 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbTitleBar, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
-	connect(ui.cbInterface, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::interfaceChanged);
-	connect(ui.cbMdiVisibility, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
-	connect(ui.cbTabPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbUnits, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbDecimalSeparator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.chkGUMTerms, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
@@ -40,14 +37,13 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 
 	loadSettings();
-	interfaceChanged(ui.cbInterface->currentIndex());
 	autoSaveChanged(ui.chkAutoSave->isChecked());
 }
 
 /* returns decimal separator (as SettingsGeneralPage::DecimalSeparator) of given locale (default: system setting) */
 SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLocale locale) {
 	DEBUG(Q_FUNC_INFO << ", LOCALE: " << STDSTRING(locale.name()) << ", " << locale.language())
-	QChar decimalPoint{locale.decimalPoint()};
+	QChar decimalPoint = locale.decimalPoint();
 	DEBUG(Q_FUNC_INFO << ", SEPARATING CHAR: " << STDSTRING(QString(decimalPoint)))
 	if (decimalPoint == QLatin1Char('.'))
 		return DecimalSeparator::Dot;
@@ -62,7 +58,7 @@ QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 	DEBUG(Q_FUNC_INFO << ", SYSTEM LOCALE: " << STDSTRING(QLocale().name()) << ':' << QLocale().language())
 	DEBUG(Q_FUNC_INFO << ", SYSTEM SEPARATING CHAR: " << STDSTRING(QString(QLocale().decimalPoint())))
 
-	QChar groupSeparator{QLocale().groupSeparator()};
+	QChar groupSeparator = QLocale().groupSeparator();
 	switch (currentIndex) {
 	case static_cast<int>(DecimalSeparator::Dot):
 		if (groupSeparator == QLocale(QLocale::Language::Zarma).groupSeparator()) // \u00a0
@@ -93,9 +89,6 @@ void SettingsGeneralPage::applySettings() {
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentData().toInt());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
-	group.writeEntry(QLatin1String("ViewMode"), ui.cbInterface->currentIndex());
-	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
-	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
 	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic)) // need to overwrite previous setting
 		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage));
@@ -118,9 +111,6 @@ void SettingsGeneralPage::applySettings() {
 void SettingsGeneralPage::restoreDefaults() {
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(static_cast<int>(MainWin::LoadOnStart::NewProject)));
 	ui.cbTitleBar->setCurrentIndex(0);
-	ui.cbInterface->setCurrentIndex(0);
-	ui.cbTabPosition->setCurrentIndex(0);
-	ui.cbMdiVisibility->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
 	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
 	ui.chkGUMTerms->setChecked(false);
@@ -137,12 +127,11 @@ void SettingsGeneralPage::loadSettings() {
 	auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(loadOnStart));
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
-	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
-	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
-	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
-	QLocale locale(static_cast<QLocale::Language>(group.readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage))));
-	if (locale.language() == QLocale::Language::AnyLanguage) // no or default setting
+	// must be done, because locale.language() will return the default locale if AnyLanguage is passed
+	const auto l = static_cast<QLocale::Language>(group.readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	QLocale locale(l);
+	if (l == QLocale::Language::AnyLanguage) // no or default setting
 		ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
 	else
 		ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(decimalSeparator(locale)));
@@ -174,21 +163,6 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbTitleBar->addItem(i18n("Show File Name"));
 	ui.cbTitleBar->addItem(i18n("Show Project Name"));
 
-	ui.cbInterface->clear();
-	ui.cbInterface->addItem(i18n("Sub-window View"));
-	ui.cbInterface->addItem(i18n("Tabbed View"));
-
-	ui.cbMdiVisibility->clear();
-	ui.cbMdiVisibility->addItem(i18n("Show Windows of the Current Folder Only"));
-	ui.cbMdiVisibility->addItem(i18n("Show Windows of the Current Folder and its Subfolders Only"));
-	ui.cbMdiVisibility->addItem(i18n("Show all Windows"));
-
-	ui.cbTabPosition->clear();
-	ui.cbTabPosition->addItem(i18n("Top"));
-	ui.cbTabPosition->addItem(i18n("Bottom"));
-	ui.cbTabPosition->addItem(i18n("Left"));
-	ui.cbTabPosition->addItem(i18n("Right"));
-
 	ui.cbUnits->addItem(i18n("Metric"));
 	ui.cbUnits->addItem(i18n("Imperial"));
 
@@ -201,15 +175,6 @@ void SettingsGeneralPage::retranslateUi() {
 void SettingsGeneralPage::changed() {
 	m_changed = true;
 	Q_EMIT settingsChanged();
-}
-
-void SettingsGeneralPage::interfaceChanged(int index) {
-	bool tabbedView = (index == 1);
-	ui.lTabPosition->setVisible(tabbedView);
-	ui.cbTabPosition->setVisible(tabbedView);
-	ui.lMdiVisibility->setVisible(!tabbedView);
-	ui.cbMdiVisibility->setVisible(!tabbedView);
-	changed();
 }
 
 void SettingsGeneralPage::autoSaveChanged(bool state) {

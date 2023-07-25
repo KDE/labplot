@@ -133,11 +133,11 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
 	});
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &PlotDataDialog::reject);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &PlotDataDialog::accept);
-	connect(ui->rbCurvePlacement1, &QRadioButton::toggled, this, &PlotDataDialog::curvePlacementChanged);
-	connect(ui->rbCurvePlacement2, &QRadioButton::toggled, this, &PlotDataDialog::curvePlacementChanged);
-	connect(ui->rbPlotPlacement1, &QRadioButton::toggled, this, &PlotDataDialog::plotPlacementChanged);
-	connect(ui->rbPlotPlacement2, &QRadioButton::toggled, this, &PlotDataDialog::plotPlacementChanged);
-	connect(ui->rbPlotPlacement3, &QRadioButton::toggled, this, &PlotDataDialog::plotPlacementChanged);
+	connect(ui->rbCurvePlacementAllInOnePlotArea, &QRadioButton::toggled, this, &PlotDataDialog::curvePlacementChanged);
+	connect(ui->rbCurvePlacementAllInOwnPlotArea, &QRadioButton::toggled, this, &PlotDataDialog::curvePlacementChanged);
+	connect(ui->rbPlotPlacementExistingPlotArea, &QRadioButton::toggled, this, &PlotDataDialog::plotPlacementChanged);
+	connect(ui->rbPlotPlacementExistingWorksheet, &QRadioButton::toggled, this, &PlotDataDialog::plotPlacementChanged);
+	connect(ui->rbPlotPlacementNewWorksheet, &QRadioButton::toggled, this, &PlotDataDialog::plotPlacementChanged);
 	connect(cbExistingPlots, &TreeViewComboBox::currentModelIndexChanged, this, &PlotDataDialog::checkOkButton);
 	connect(cbExistingWorksheets, &TreeViewComboBox::currentModelIndexChanged, this, &PlotDataDialog::checkOkButton);
 
@@ -147,13 +147,13 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
 	if (conf.exists()) {
 		int index = conf.readEntry("CurvePlacement", 0);
 		if (index == 2)
-			ui->rbCurvePlacement2->setChecked(true);
+			ui->rbCurvePlacementAllInOwnPlotArea->setChecked(true);
 
 		index = conf.readEntry("PlotPlacement", 0);
 		if (index == 2)
-			ui->rbPlotPlacement2->setChecked(true);
+			ui->rbPlotPlacementExistingWorksheet->setChecked(true);
 		if (index == 3)
-			ui->rbPlotPlacement3->setChecked(true);
+			ui->rbPlotPlacementNewWorksheet->setChecked(true);
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -168,17 +168,17 @@ PlotDataDialog::~PlotDataDialog() {
 	// save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "PlotDataDialog");
 	int index = 0;
-	if (ui->rbCurvePlacement1->isChecked())
+	if (ui->rbCurvePlacementAllInOnePlotArea->isChecked())
 		index = 1;
-	if (ui->rbCurvePlacement2->isChecked())
+	if (ui->rbCurvePlacementAllInOwnPlotArea->isChecked())
 		index = 2;
 	conf.writeEntry("CurvePlacement", index);
 
-	if (ui->rbPlotPlacement1->isChecked())
+	if (ui->rbPlotPlacementExistingPlotArea->isChecked())
 		index = 1;
-	if (ui->rbPlotPlacement2->isChecked())
+	if (ui->rbPlotPlacementExistingWorksheet->isChecked())
 		index = 2;
-	if (ui->rbPlotPlacement3->isChecked())
+	if (ui->rbPlotPlacementNewWorksheet->isChecked())
 		index = 3;
 	conf.writeEntry("PlotPlacement", index);
 
@@ -284,7 +284,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 		}
 	} else {
 		// two columns provided, only one curve is possible -> hide the curve placement options
-		ui->rbCurvePlacement1->setChecked(true);
+		ui->rbCurvePlacementAllInOnePlotArea->setChecked(true);
 		ui->gbCurvePlacement->hide();
 		ui->gbPlotPlacement->setTitle(i18n("Add Plot to"));
 	}
@@ -339,7 +339,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		//-> hide the curve placement options and the scroll areas for further columns
 		ui->lYColumn->hide();
 		ui->cbYColumn->hide();
-		ui->rbCurvePlacement1->setChecked(true);
+		ui->rbCurvePlacementAllInOnePlotArea->setChecked(true);
 		ui->gbCurvePlacement->hide();
 
 		if (m_plotType == PlotType::Histogram)
@@ -352,16 +352,16 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	} else {
 		if (m_plotType == PlotType::Histogram) {
-			ui->rbCurvePlacement1->setText(i18n("All histograms in one plot area"));
-			ui->rbCurvePlacement2->setText(i18n("One plot area per histogram"));
+			ui->rbCurvePlacementAllInOnePlotArea->setText(i18n("All histograms in one plot area"));
+			ui->rbCurvePlacementAllInOwnPlotArea->setText(i18n("One plot area per histogram"));
 			ui->gbPlotPlacement->setTitle(i18n("Add Histograms to"));
 		} else if (m_plotType == PlotType::BoxPlot) {
-			ui->rbCurvePlacement1->setText(i18n("All box plots in one plot area"));
-			ui->rbCurvePlacement2->setText(i18n("One plot area per box plot"));
+			ui->rbCurvePlacementAllInOnePlotArea->setText(i18n("All box plots in one plot area"));
+			ui->rbCurvePlacementAllInOwnPlotArea->setText(i18n("One plot area per box plot"));
 			ui->gbPlotPlacement->setTitle(i18n("Add Box Plots to"));
 		} else {
-			ui->rbCurvePlacement1->setText(i18n("All bar plots in one plot area"));
-			ui->rbCurvePlacement2->setText(i18n("One plot area per bar plot"));
+			ui->rbCurvePlacementAllInOnePlotArea->setText(i18n("All bar plots in one plot area"));
+			ui->rbCurvePlacementAllInOwnPlotArea->setText(i18n("One plot area per bar plot"));
 			ui->gbPlotPlacement->setTitle(i18n("Add Bar Plots to"));
 		}
 
@@ -392,24 +392,27 @@ void PlotDataDialog::plot() {
 	m_spreadsheet->project()->setSuppressAspectAddedSignal(true);
 	m_lastAddedCurve = nullptr;
 
-	if (ui->rbPlotPlacement1->isChecked()) {
+	if (ui->rbPlotPlacementExistingPlotArea->isChecked()) {
 		// add curves to an existing plot
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
 		auto* plot = static_cast<CartesianPlot*>(aspect);
 		plot->beginMacro(i18n("Plot Area - %1", m_spreadsheet->name()));
 		addCurvesToPlot(plot);
 		plot->endMacro();
-	} else if (ui->rbPlotPlacement2->isChecked()) {
+	} else if (ui->rbPlotPlacementExistingWorksheet->isChecked()) {
 		// add curves to a new plot in an existing worksheet
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
 		auto* worksheet = static_cast<Worksheet*>(aspect);
 		worksheet->beginMacro(i18n("Worksheet - %1", m_spreadsheet->name()));
 
-		if (ui->rbCurvePlacement1->isChecked()) {
+		if (ui->rbCurvePlacementAllInOnePlotArea->isChecked()) {
 			// all curves in one plot
 			auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_spreadsheet->name()));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
+			if (m_columnComboBoxes.count() == 2)
+				setAxesColumnLabels(plot, m_columnComboBoxes.at(1)->currentText());
+
 			addCurvesToPlot(plot);
 			setAxesTitles(plot);
 		} else {
@@ -432,11 +435,13 @@ void PlotDataDialog::plot() {
 		auto* worksheet = new Worksheet(i18n("Worksheet - %1", m_spreadsheet->name()));
 		parent->addChild(worksheet);
 
-		if (ui->rbCurvePlacement1->isChecked()) {
+		if (ui->rbCurvePlacementAllInOnePlotArea->isChecked()) {
 			// all curves in one plot
 			auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_spreadsheet->name()));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
+			if (m_columnComboBoxes.count() == 2)
+				setAxesColumnLabels(plot, m_columnComboBoxes.at(1)->currentText());
 			addCurvesToPlot(plot);
 			setAxesTitles(plot);
 		} else {
@@ -565,6 +570,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
+			setAxesColumnLabels(plot, yColumn);
 			addCurve(name, xColumn, yColumn, plot);
 			plot->scaleAuto(-1, -1);
 			plot->retransform();
@@ -769,6 +775,27 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 	}
 }
 
+void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const Column* column) {
+	// Use value labels if possible
+	if (column && column->valueLabelsInitialized()) {
+		auto axes = plot->children(AspectType::Axis);
+		for (auto a : axes) {
+			auto axis = static_cast<Axis*>(a);
+			if (axis->orientation() == Axis::Orientation::Vertical) {
+				// Use first vertical axis
+				axis->setMajorTicksType(Axis::TicksType::ColumnLabels);
+				axis->setMajorTicksColumn(column);
+				break;
+			}
+		}
+	}
+}
+
+void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const QString& columnName) {
+	Column* column = columnFromName(columnName);
+	setAxesColumnLabels(plot, column);
+}
+
 void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) const {
 	DEBUG(Q_FUNC_INFO)
 	const auto& axes = plot->children<Axis>();
@@ -837,7 +864,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 
 		// number of box plots per plot:
 		int count = 1; // 1 if we create a separate plot for every box plot
-		if (ui->rbCurvePlacement1->isChecked())
+		if (ui->rbCurvePlacementAllInOnePlotArea->isChecked())
 			count = m_columnComboBoxes.count(); // all box plots in one single plot
 
 		// set the range of the plot and the number of ticks manuall.
@@ -897,28 +924,28 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 	}
 }
 
-//################################################################
-//########################## Slots ###############################
-//################################################################
+// ################################################################
+// ########################## Slots ###############################
+// ################################################################
 void PlotDataDialog::curvePlacementChanged() {
-	if (ui->rbCurvePlacement1->isChecked()) {
-		ui->rbPlotPlacement1->setEnabled(true);
-		ui->rbPlotPlacement2->setText(i18n("new plot in an existing worksheet"));
-		ui->rbPlotPlacement3->setText(i18n("new plot in a new worksheet"));
+	if (ui->rbCurvePlacementAllInOnePlotArea->isChecked()) {
+		ui->rbPlotPlacementExistingPlotArea->setEnabled(true);
+		ui->rbPlotPlacementExistingWorksheet->setText(i18n("new plot in an existing worksheet"));
+		ui->rbPlotPlacementNewWorksheet->setText(i18n("new plot in a new worksheet"));
 	} else {
-		ui->rbPlotPlacement1->setEnabled(false);
-		if (ui->rbPlotPlacement1->isChecked())
-			ui->rbPlotPlacement2->setChecked(true);
-		ui->rbPlotPlacement2->setText(i18n("new plots in an existing worksheet"));
-		ui->rbPlotPlacement3->setText(i18n("new plots in a new worksheet"));
+		ui->rbPlotPlacementExistingPlotArea->setEnabled(false);
+		if (ui->rbPlotPlacementExistingPlotArea->isChecked())
+			ui->rbPlotPlacementExistingWorksheet->setChecked(true);
+		ui->rbPlotPlacementExistingWorksheet->setText(i18n("new plots in an existing worksheet"));
+		ui->rbPlotPlacementNewWorksheet->setText(i18n("new plots in a new worksheet"));
 	}
 }
 
 void PlotDataDialog::plotPlacementChanged() {
-	if (ui->rbPlotPlacement1->isChecked()) {
+	if (ui->rbPlotPlacementExistingPlotArea->isChecked()) {
 		cbExistingPlots->setEnabled(true);
 		cbExistingWorksheets->setEnabled(false);
-	} else if (ui->rbPlotPlacement2->isChecked()) {
+	} else if (ui->rbPlotPlacementExistingWorksheet->isChecked()) {
 		cbExistingPlots->setEnabled(false);
 		cbExistingWorksheets->setEnabled(true);
 	} else {
@@ -935,12 +962,12 @@ void PlotDataDialog::checkOkButton() {
 	if ((m_plotType == PlotType::XYCurve && (ui->cbXColumn->currentIndex() == -1 || ui->cbYColumn->currentIndex() == -1))
 		|| (m_plotType == PlotType::Histogram && ui->cbXColumn->currentIndex() == -1))
 		msg = i18n("No data selected to plot.");
-	else if (ui->rbPlotPlacement1->isChecked()) {
+	else if (ui->rbPlotPlacementExistingPlotArea->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
 		enable = (aspect != nullptr);
 		if (!enable)
 			msg = i18n("An already existing plot has to be selected.");
-	} else if (ui->rbPlotPlacement2->isChecked()) {
+	} else if (ui->rbPlotPlacementExistingWorksheet->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
 		enable = (aspect != nullptr);
 		if (!enable)

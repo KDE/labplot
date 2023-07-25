@@ -20,19 +20,20 @@
 #include "SettingsNotebookPage.h"
 #endif
 
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QWindow>
-
 #include <KConfigGroup>
 #include <KI18n/KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
 #include <KWindowConfig>
+#include <kcoreaddons_version.h>
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/FeedbackConfigWidget>
 #endif
+
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QWindow>
 
 /**
  * \brief Settings dialog for Labplot.
@@ -116,7 +117,11 @@ void SettingsDialog::slotButtonClicked(QAbstractButton* button) {
 		}
 	} else if (button == buttonBox()->button(QDialogButtonBox::RestoreDefaults)) {
 		const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		if (KMessageBox::questionTwoActions(this, text, QString(), KStandardGuiItem::reset(), KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction) {
+#else
 		if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
+#endif
 			restoreDefaults();
 			setWindowTitle(i18nc("@title:window", "Preferences"));
 			buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(false);

@@ -9,6 +9,7 @@
 */
 
 #include "ImportFileDialog.h"
+#include "ImportErrorDialog.h"
 #include "ImportFileWidget.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Workbook.h"
@@ -175,13 +176,20 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		return;
 	}
 
-	if (m_importFileWidget->isFileEmpty()) {
-		KMessageBox::information(nullptr, i18n("No data to import."), i18n("No Data"));
+	auto filter = m_importFileWidget->currentFileFilter();
+	if (m_importFileWidget->importValid()) {
+		auto errors = filter->lastErrors();
+		if (errors.isEmpty()) {
+			// Default message, because not all filters implement lastErrors yet
+			errors.append(i18n("No data to import."));
+		}
+		ImportErrorDialog* d = new ImportErrorDialog(errors);
+		d->setAttribute(Qt::WA_DeleteOnClose);
+		d->show();
 		return;
 	}
 
 	QString fileName = m_importFileWidget->fileName();
-	auto filter = m_importFileWidget->currentFileFilter();
 	auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 
 	// show a progress bar in the status bar
@@ -215,10 +223,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for special types
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
-			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel) {
+			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel
+			|| fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
 			QStringList names;
 			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
+			else if (fileType == AbstractFileFilter::FileType::VECTOR_BLF)
+				names = QStringList({QStringLiteral("TODO")}); // m_importFileWidget->selectedVectorBLFNames();
 			else if (fileType == AbstractFileFilter::FileType::NETCDF)
 				names = m_importFileWidget->selectedNetCDFNames();
 			else if (fileType == AbstractFileFilter::FileType::ROOT)
@@ -318,6 +329,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		}
 	}
 	statusBar->showMessage(i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed() / 1000));
+
+	const auto errors = filter->lastErrors();
+	if (!errors.isEmpty()) {
+		ImportErrorDialog* d = new ImportErrorDialog(errors);
+		d->setAttribute(Qt::WA_DeleteOnClose);
+		d->show();
+	}
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);

@@ -123,7 +123,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 	// disable "whole file" option
 	const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+	auto* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	if (ui.cbReadingType->currentIndex() == static_cast<int>(LiveDataSource::ReadingType::WholeFile))
 		ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
@@ -289,7 +289,7 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 
 	// disable "whole file" when having no file (i.e. socket or port)
 	auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+	auto* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		// for file types other than ASCII and binary we support re-reading the whole file only
@@ -361,7 +361,7 @@ void LiveDataDock::updateNow() {
 
 void LiveDataDock::nameChanged(const QString& name) {
 	if (m_liveDataSource) {
-		if (!m_liveDataSource->setName(name, false)) {
+		if (!m_liveDataSource->setName(name, AbstractAspect::NameHandling::UniqueRequired)) {
 			SET_WARNING_STYLE(m_leName)
 			ui.leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 			return;
@@ -369,7 +369,7 @@ void LiveDataDock::nameChanged(const QString& name) {
 	}
 #ifdef HAVE_MQTT
 	else if (m_mqttClient) {
-		if (!m_mqttClient->setName(name, false)) {
+		if (!m_mqttClient->setName(name, AbstractAspect::NameHandling::UniqueRequired)) {
 			SET_WARNING_STYLE(m_leName)
 			ui.leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 			return;

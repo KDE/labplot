@@ -29,7 +29,7 @@
 // type - data type
 #define HDF5_READ_1D(type)                                                                                                                                     \
 	{                                                                                                                                                          \
-		for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) {                                                                              \
+		for (int i = startRow - 1; i < std::min(endRow, lines + startRow - 1); ++i) {                                                                          \
 			if (dataContainer)                                                                                                                                 \
 				(*static_cast<QVector<type>*>(dataContainer))[i - startRow + 1] = data[i];                                                                     \
 			else /* for preview */                                                                                                                             \
@@ -40,7 +40,7 @@
 #define HDF5_READ_VLEN_1D(type, ctype)                                                                                                                         \
 	{                                                                                                                                                          \
 		auto* data = (type*)rdata[c].p;                                                                                                                        \
-		for (int i = startRow - 1; i < qMin(length, lines + startRow - 1); ++i) {                                                                              \
+		for (int i = startRow - 1; i < std::min(length, lines + startRow - 1); ++i) {                                                                          \
 			if (dataSource)                                                                                                                                    \
 				(*static_cast<QVector<ctype>*>(dataContainer[c - startColumn + 1]))[i - startRow + 1] = data[i];                                               \
 			else /* for preview */                                                                                                                             \
@@ -48,7 +48,7 @@
 		}                                                                                                                                                      \
 		/* fill columns until maxLength */                                                                                                                     \
 		if (!dataSource)                                                                                                                                       \
-			for (int i = qMin(length, lines + startRow - 1); i < qMin(endRow, lines + startRow - 1); i++) {                                                    \
+			for (int i = std::min(length, lines + startRow - 1); i < std::min(endRow, lines + startRow - 1); i++) {                                            \
 				dataStrings[i - startRow + 1] << QString();                                                                                                    \
 			}                                                                                                                                                  \
 	}
@@ -56,7 +56,7 @@
 // type - data type
 #define HDF5_READ_2D(type)                                                                                                                                     \
 	{                                                                                                                                                          \
-		for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) {                                                                              \
+		for (int i = startRow - 1; i < std::min(endRow, lines + startRow - 1); ++i) {                                                                          \
 			QStringList line;                                                                                                                                  \
 			line.reserve(endColumn - startColumn + 1);                                                                                                         \
 			for (int j = startColumn - 1; j < endColumn; ++j) {                                                                                                \
@@ -381,9 +381,9 @@ QString HDF5Filter::fileDDLString(const QString& fileName) {
 	return DDLString;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 
 HDF5FilterPrivate::HDF5FilterPrivate(HDF5Filter* owner)
 	: q(owner) {
@@ -596,7 +596,7 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 
 	QStringList dataString;
 	if (preview) {
-		for (int i = 0; i < qMin(rows, lines); ++i)
+		for (int i = 0; i < std::min(rows, lines); ++i)
 			dataString << QStringLiteral("(");
 		dataContainer.resize(members); // avoid "index out of range" for preview
 	}
@@ -671,10 +671,10 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 			mdataString = readHDF5Data1D<long double>(dataset, ctype, rows, lines, dataContainer[m]);
 		else {
 			if (dataContainer[m]) {
-				for (int row = startRow - 1; row < qMin(endRow, lines + startRow - 1); ++row)
+				for (int row = startRow - 1; row < std::min(endRow, lines + startRow - 1); ++row)
 					static_cast<QVector<double>*>(dataContainer[m])->operator[](row - startRow + 1) = 0;
 			} else {
-				for (int i = 0; i < qMin(rows, lines); ++i)
+				for (int i = 0; i < std::min(rows, lines); ++i)
 					mdataString << QStringLiteral("_");
 			}
 			H5T_class_t mclass = H5Tget_member_class(tid, m);
@@ -683,7 +683,7 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 		}
 
 		if (preview) {
-			for (int i = 0; i < qMin(rows, lines); ++i) {
+			for (int i = 0; i < std::min(rows, lines); ++i) {
 				dataString[i] += mdataString[i];
 				if (m < members - 1)
 					dataString[i] += QLatin1String(",");
@@ -694,7 +694,7 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 	}
 
 	if (preview) {
-		for (int i = 0; i < qMin(rows, lines); ++i)
+		for (int i = 0; i < std::min(rows, lines); ++i)
 			dataString[i] += QLatin1String(")");
 	}
 
@@ -744,7 +744,7 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5CompoundData2D(hid_t dataset, hi
 	DEBUG(" # members =" << members);
 
 	QVector<QStringList> dataStrings;
-	for (int i = 0; i < qMin(rows, lines); ++i) {
+	for (int i = 0; i < std::min(rows, lines); ++i) {
 		QStringList lineStrings;
 		for (int j = 0; j < cols; ++j)
 			lineStrings << QStringLiteral("(");
@@ -823,7 +823,7 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5CompoundData2D(hid_t dataset, hi
 		else if (H5Tequal(mtype, H5T_NATIVE_LDOUBLE))
 			mdataStrings = readHDF5Data2D<long double>(dataset, ctype, rows, cols, lines, dummy);
 		else {
-			for (int i = 0; i < qMin(rows, lines); ++i) {
+			for (int i = 0; i < std::min(rows, lines); ++i) {
 				QStringList lineString;
 				for (int j = 0; j < cols; ++j)
 					lineString << QStringLiteral("_");
@@ -838,7 +838,7 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5CompoundData2D(hid_t dataset, hi
 		m_status = H5Tclose(ctype);
 		handleError(m_status, QStringLiteral("H5Tclose"));
 
-		for (int i = 0; i < qMin(rows, lines); i++) {
+		for (int i = 0; i < std::min(rows, lines); i++) {
 			for (int j = 0; j < cols; j++) {
 				dataStrings[i][j] += mdataStrings[i][j];
 				if (m < members - 1)
@@ -847,7 +847,7 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5CompoundData2D(hid_t dataset, hi
 		}
 	}
 
-	for (int i = 0; i < qMin(rows, lines); ++i) {
+	for (int i = 0; i < std::min(rows, lines); ++i) {
 		for (int j = 0; j < cols; ++j)
 			dataStrings[i][j] += QStringLiteral(")");
 	}
@@ -1666,7 +1666,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 				handleError(m_status, QStringLiteral("H5Dread"));
 			}
 
-			for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i)
+			for (int i = startRow - 1; i < std::min(endRow, lines + startRow - 1); ++i)
 				dataString << QLatin1String(data[i]);
 
 			free(data);
@@ -1775,13 +1775,13 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 
 			size_t maxLength = 0;
 			for (int c = startColumn - 1; c < endColumn; c++) // columns
-				maxLength = qMax(maxLength, rdata[c].len);
+				maxLength = std::max(maxLength, rdata[c].len);
 			if (endRow == -1 || endRow > (int)maxLength)
 				endRow = maxLength;
 			actualRows = endRow - startRow + 1;
 			if (lines == -1 || lines > actualRows)
 				lines = actualRows;
-			dataStrings.resize(qMin(lines, actualRows));
+			dataStrings.resize(std::min(lines, actualRows));
 
 			DEBUG("start/end row = " << startRow << "/" << endRow << ", lines = " << lines << ", max length = " << maxLength)
 			DEBUG("start/end col = " << startColumn << "/" << endColumn)
@@ -1892,7 +1892,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			QDEBUG("dataString =" << dataString);
 			DEBUG("	data string size = " << dataString.size());
 			DEBUG("	rows = " << rows << ", lines = " << lines << ", actual rows = " << actualRows);
-			for (int i = 0; i < qMin(actualRows, lines); ++i)
+			for (int i = 0; i < std::min(actualRows, lines); ++i)
 				dataStrings << (QStringList() << dataString[i]);
 		}
 
@@ -2066,7 +2066,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 					}
 				}
 			} else {
-				for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) {
+				for (int i = startRow - 1; i < std::min(endRow, lines + startRow - 1); ++i) {
 					QStringList row;
 					for (int j = startColumn - 1; j < endColumn; ++j)
 						row << QLatin1String(data[j + i * cols]);
@@ -2149,9 +2149,9 @@ void HDF5FilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /
 	// TODO: writing HDF5 not implemented yet
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.

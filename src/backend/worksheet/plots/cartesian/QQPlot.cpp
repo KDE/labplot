@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : QQPlot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -43,14 +43,12 @@ extern "C" {
 CURVE_COLUMN_CONNECT(QQPlot, Data, data, recalc)
 
 QQPlot::QQPlot(const QString& name)
-	: WorksheetElement(name, new QQPlotPrivate(this), AspectType::QQPlot)
-	, Curve() {
+	: Plot(name, new QQPlotPrivate(this), AspectType::QQPlot) {
 	init();
 }
 
 QQPlot::QQPlot(const QString& name, QQPlotPrivate* dd)
-	: WorksheetElement(name, dd, AspectType::QQPlot)
-	, Curve() {
+	: Plot(name, dd, AspectType::QQPlot) {
 	init();
 }
 
@@ -130,7 +128,7 @@ QGraphicsItem* QQPlot::graphicsItem() const {
 	return d_ptr;
 }
 
-bool QQPlot::activateCurve(QPointF mouseScenePos, double maxDist) {
+bool QQPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	Q_D(QQPlot);
 	return d->activateCurve(mouseScenePos, maxDist);
 }
@@ -162,6 +160,34 @@ Symbol* QQPlot::symbol() const {
 	Q_D(const QQPlot);
 	return d->percentilesCurve->symbol();
 }
+
+double QQPlot::minimum(const Dimension dim) const {
+	Q_D(const QQPlot);
+	// switch (dim) {
+	// case Dimension::X:
+	// 	return d->xMin;
+	// case Dimension::Y:
+	// 	return d->yMin;
+	// }
+	return NAN;
+}
+
+double QQPlot::maximum(const Dimension dim) const {
+	Q_D(const QQPlot);
+	// switch (dim) {
+	// case Dimension::X:
+	// 	return d->xMax;
+	// case Dimension::Y:
+	// 	return d->yMax;
+	// }
+	return NAN;
+}
+
+bool QQPlot::hasData() const {
+	Q_D(const QQPlot);
+	return (d->dataColumn != nullptr);
+}
+
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -209,7 +235,7 @@ void QQPlot::dataColumnNameChanged() {
 //######################### Private implementation #############################
 //##############################################################################
 QQPlotPrivate::QQPlotPrivate(QQPlot* owner)
-	: WorksheetElementPrivate(owner)
+	: PlotPrivate(owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);

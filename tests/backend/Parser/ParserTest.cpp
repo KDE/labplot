@@ -10,9 +10,7 @@
 
 #include "ParserTest.h"
 
-extern "C" {
 #include "backend/gsl/parser.h"
-}
 
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_errno.h>
@@ -96,12 +94,12 @@ void ParserTest::testErrors() {
 									QStringLiteral("asin(2)")};
 
 	for (auto& expr : testsNan)
-		QVERIFY(qIsNaN(parse(qPrintable(expr), "C")));
+		QVERIFY(std::isnan(parse(qPrintable(expr), "C")));
 
 	const QVector<QString> testsInf{QStringLiteral("1/0"), QStringLiteral("-1/0"), QStringLiteral("1+1/0")};
 
 	for (auto& expr : testsInf)
-		QVERIFY(qIsInf(parse(qPrintable(expr), "C")));
+		QVERIFY(std::isinf(parse(qPrintable(expr), "C")));
 }
 
 void ParserTest::testVariables() {
@@ -117,7 +115,7 @@ void ParserTest::testVariables() {
 	assign_symbol("a", 0.); // only vars set to zero get removed
 	remove_symbol("a");
 	for (auto& expr : tests)
-		QVERIFY(qIsNaN(parse(qPrintable(expr.first), "C")));
+		QVERIFY(std::isnan(parse(qPrintable(expr.first), "C")));
 
 	// longer var name
 	assign_symbol("sina", 1.5);

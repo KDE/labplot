@@ -11,6 +11,7 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"
+#include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
@@ -114,6 +115,15 @@ QStringList AbstractFileFilter::numberFormats() {
 	return formats;
 }
 
+/*!
+ * \brief AbstractFileFilter::lastErrors
+ * Errors occured during last parse
+ * \return
+ */
+QStringList AbstractFileFilter::lastErrors() {
+	return QStringList();
+}
+
 AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO)
 	QString fileInfo;
@@ -170,6 +180,10 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	else if (fileInfo.contains(QLatin1String("NetCDF Data Format")) || fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive)
 			 || fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive))
 		fileType = FileType::NETCDF;
+#endif
+#ifdef HAVE_VECTOR_BLF
+	else if (fileName.endsWith(QLatin1String("blf")) && VectorBLFFilter::isValid(fileName))
+		fileType = FileType::VECTOR_BLF;
 #endif
 #ifdef HAVE_FITS
 	else if (fileInfo.contains(QLatin1String("FITS image data")) || fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive)

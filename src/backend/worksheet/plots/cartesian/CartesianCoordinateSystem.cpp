@@ -13,9 +13,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystemPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
@@ -56,9 +54,9 @@ QString CartesianCoordinateSystem::info() const {
 	return i18n("no info available");
 }
 
-//##############################################################################
-//######################### logical to scene mappers ###########################
-//##############################################################################
+// ##############################################################################
+// ######################### logical to scene mappers ###########################
+// ##############################################################################
 Points CartesianCoordinateSystem::mapLogicalToScene(const Points& points, MappingFlags flags) const {
 	// DEBUG(Q_FUNC_INFO << ", (points with flags)")
 	const QRectF pageRect = d->plot->dataRect();
@@ -189,8 +187,8 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 	const double xPage = pageRect.x(), yPage = pageRect.y();
 	const double w = pageRect.width(), h = pageRect.height();
 
-	const int numberOfPixelX = pageRect.width();
-	const int numberOfPixelY = pageRect.height();
+	const int numberOfPixelX = std::ceil(pageRect.width());
+	const int numberOfPixelY = std::ceil(pageRect.height());
 
 	if (numberOfPixelX <= 0 || numberOfPixelY <= 0)
 		return;
@@ -199,9 +197,6 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 	QVector<QVector<bool>> scenePointsUsed(numberOfPixelX + 1);
 	for (auto& col : scenePointsUsed)
 		col.resize(numberOfPixelY + 1);
-
-	const double minLogicalDiffX = pageRect.width() / numberOfPixelX;
-	const double minLogicalDiffY = pageRect.height() / numberOfPixelY;
 
 	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
@@ -235,8 +230,8 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 				// DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
 					// TODO: check
-					const int indexX = qRound((x - xPage) / minLogicalDiffX);
-					const int indexY = qRound((y - yPage) / minLogicalDiffY);
+					const int indexX = std::round(x - xPage);
+					const int indexY = std::round(y - yPage);
 					if (scenePointsUsed.at(indexX).at(indexY))
 						continue;
 
@@ -312,9 +307,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 	const bool doPageClipping = !pageRect.isNull() && !(flags & MappingFlag::SuppressPageClipping);
 
 	double xGapBefore;
-	double xGapAfter = qQNaN();
+	double xGapAfter = NAN;
 	double yGapBefore;
-	double yGapAfter = qQNaN();
+	double yGapAfter = NAN;
 
 	DEBUG(Q_FUNC_INFO << ", xScales/yScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
@@ -341,9 +336,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 			if (valid)
 				xGapAfter = x2 - x1;
 			else
-				xGapAfter = qQNaN();
+				xGapAfter = NAN;
 		} else
-			xGapAfter = qQNaN();
+			xGapAfter = NAN;
 
 		QVectorIterator<CartesianScale*> yIterator(d->yScales);
 		while (yIterator.hasNext()) {
@@ -366,9 +361,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 				if (valid)
 					yGapAfter = y2 - y1;
 				else
-					yGapAfter = qQNaN();
+					yGapAfter = NAN;
 			} else
-				yGapAfter = qQNaN();
+				yGapAfter = NAN;
 
 			const QRectF scaleRect = QRectF(xScale->start(), yScale->start(), xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();
 
@@ -467,9 +462,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 	return result;
 }
 
-//##############################################################################
-//######################### scene to logical mappers ###########################
-//##############################################################################
+// ##############################################################################
+// ######################### scene to logical mappers ###########################
+// ##############################################################################
 Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	Points result;
@@ -679,9 +674,11 @@ void CartesianCoordinateSystem::setIndex(const Dimension dim, const int index) {
 	switch (dim) {
 	case Dimension::X:
 		d->xIndex = index;
+		d->xScales.clear();
 		break;
 	case Dimension::Y:
 		d->yIndex = index;
+		d->yScales.clear();
 		break;
 	}
 }
@@ -721,9 +718,9 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF po
 	return true;
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem* owner)
 	: q(owner) {
 }

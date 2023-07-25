@@ -12,4 +12,4 @@ ICONS
 512-apps-labplot2.png
 64-apps-labplot2.png
 sc-apps-labplot2.svgz
-DESTINATION ${ICON_INSTALL_DIR}/)
+DESTINATION ${KDE_INSTALL_ICONDIR}/)

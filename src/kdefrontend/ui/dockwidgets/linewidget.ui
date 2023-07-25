@@ -153,6 +153,12 @@
    </item>
    <item row="4" column="2">
     <widget class="NumberSpinBox" name="sbWidth">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="toolTip">
       <string/>
      </property>
@@ -172,6 +178,12 @@
    </item>
    <item row="1" column="2">
     <widget class="NumberSpinBox" name="sbErrorBarsCapSize">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="toolTip">
       <string/>
      </property>
@@ -208,6 +220,14 @@
    <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbType</tabstop>
+  <tabstop>sbErrorBarsCapSize</tabstop>
+  <tabstop>cbStyle</tabstop>
+  <tabstop>kcbColor</tabstop>
+  <tabstop>sbWidth</tabstop>
+  <tabstop>sbOpacity</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

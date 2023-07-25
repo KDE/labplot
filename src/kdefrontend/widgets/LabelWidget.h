@@ -71,6 +71,12 @@ private:
 
 Q_SIGNALS:
 	void dataChanged(bool);
+	/*!
+	 * \brief fontColorChangedSignal
+	 * Used to send out that font color has changed. So in the case of the axis
+	 * the axisdock can update the axis color widget
+	 */
+	void labelFontColorChangedSignal(const QColor&);
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in LabelWidget
@@ -103,7 +109,7 @@ private Q_SLOTS:
 	void verticalAlignmentChanged(int);
 
 	void positionXLogicalChanged(double);
-	void positionXLogicalDateTimeChanged(const QDateTime&);
+	void positionXLogicalDateTimeChanged(qint64);
 	void positionYLogicalChanged(double);
 
 	void rotationChanged(int);
@@ -144,6 +150,9 @@ private Q_SLOTS:
 	void labelModeChanged(TextLabel::Mode);
 
 	friend TextLabelTest;
+	friend class AxisTest;
+	friend class AxisDock; // fontColorChanged() is a private method of LabelWidget, needs to be called
+	friend class WorksheetElementTest;
 };
 
 #endif // LABELWIDGET_H

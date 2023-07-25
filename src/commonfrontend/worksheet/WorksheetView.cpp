@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2018 Stefan-Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -21,12 +21,22 @@
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-#include "commonfrontend/core/PartMdiView.h"
+#include "backend/worksheet/plots/cartesian/ReferenceRange.h"
+#include "commonfrontend/core/ContentDockWidget.h"
 #include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
-#include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
+
+#ifdef Q_OS_MAC
+#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
+#endif
+
+#include <KColorScheme>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <kcoreaddons_version.h>
 
 #include <QApplication>
 #include <QClipboard>
@@ -45,14 +55,7 @@
 #include <QWheelEvent>
 #include <QWidgetAction>
 
-#include <KColorScheme>
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <KMessageBox>
-
-#ifdef Q_OS_MAC
-#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
-#endif
+#include <DockManager.h>
 
 #include <limits>
 
@@ -77,10 +80,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	setMinimumSize(16, 16);
 	setFocusPolicy(Qt::StrongFocus);
 
-	if (m_worksheet->useViewSize()) {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	}
+	updateScrollBarPolicy();
 
 	viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
 	viewport()->setAttribute(Qt::WA_NoSystemBackground);
@@ -94,8 +94,8 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	connect(m_worksheet, &Worksheet::itemSelected, this, &WorksheetView::selectItem);
 	connect(m_worksheet, &Worksheet::itemDeselected, this, &WorksheetView::deselectItem);
 	connect(m_worksheet, &Worksheet::requestUpdate, this, &WorksheetView::updateBackground);
-	connect(m_worksheet, &Worksheet::aspectAboutToBeRemoved, this, &WorksheetView::aspectAboutToBeRemoved);
-	connect(m_worksheet, &Worksheet::useViewSizeRequested, this, &WorksheetView::useViewSizeRequested);
+	connect(m_worksheet, &Worksheet::childAspectAboutToBeRemoved, this, &WorksheetView::aspectAboutToBeRemoved);
+	connect(m_worksheet, &Worksheet::useViewSizeChanged, this, &WorksheetView::useViewSizeChanged);
 	connect(m_worksheet, &Worksheet::layoutChanged, this, &WorksheetView::layoutChanged);
 	connect(scene(), &QGraphicsScene::selectionChanged, this, &WorksheetView::selectionChanged);
 
@@ -155,9 +155,24 @@ void WorksheetView::initActions() {
 	zoomActionGroup->addAction(zoomOutViewAction);
 	zoomActionGroup->addAction(zoomOriginAction);
 
-	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18n("Fit to Height"), zoomActionGroup);
-	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18n("Fit to Width"), zoomActionGroup);
-	zoomFitSelectionAction = new QAction(i18n("Fit to Selection"), zoomActionGroup);
+	auto* fitActionGroup = new QActionGroup(zoomActionGroup);
+	fitActionGroup->setExclusive(true);
+	zoomFitNoneAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18n("No fit"), fitActionGroup);
+	zoomFitNoneAction->setCheckable(true);
+	zoomFitNoneAction->setChecked(true);
+	zoomFitNoneAction->setData((int)Worksheet::ZoomFit::None);
+	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18n("Fit to Height"), fitActionGroup);
+	zoomFitPageHeightAction->setCheckable(true);
+	zoomFitPageHeightAction->setData((int)Worksheet::ZoomFit::FitToHeight);
+	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18n("Fit to Width"), fitActionGroup);
+	zoomFitPageWidthAction->setCheckable(true);
+	zoomFitPageWidthAction->setData((int)Worksheet::ZoomFit::FitToWidth);
+	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18n("Fit to Selection"), fitActionGroup);
+	zoomFitSelectionAction->setCheckable(true);
+	zoomFitSelectionAction->setData((int)Worksheet::ZoomFit::FitToSelection);
+	zoomFitAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18n("Fit"), fitActionGroup);
+	zoomFitAction->setCheckable(true);
+	zoomFitAction->setData((int)Worksheet::ZoomFit::Fit);
 
 	// Mouse mode actions
 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), mouseModeActionGroup);
@@ -250,6 +265,7 @@ void WorksheetView::initActions() {
 
 	connect(addNewActionGroup, &QActionGroup::triggered, this, &WorksheetView::addNew);
 	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::mouseModeChanged);
+	connect(fitActionGroup, &QActionGroup::triggered, this, &WorksheetView::fitChanged);
 	connect(zoomActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoom);
 	connect(magnificationActionGroup, &QActionGroup::triggered, this, &WorksheetView::magnificationChanged);
 	connect(layoutActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeLayout);
@@ -264,7 +280,16 @@ void WorksheetView::initActions() {
 	plotsLockedAction->setChecked(m_worksheet->plotsLocked());
 	connect(plotsLockedAction, &QAction::triggered, this, &WorksheetView::plotsLockedActionChanged);
 
-	// action for cartesian plots
+	// actions for cartesian plots
+
+	// "add new"-action shown in the context menu
+	cartesianPlotAddNewAction = new QAction(QIcon::fromTheme(QStringLiteral("list-add")), i18n("Add New"), this);
+
+	// "add new"- toolbutton shown in the toolbar
+	tbCartesianPlotAddNew = new QToolButton(this);
+	tbCartesianPlotAddNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+	tbCartesianPlotAddNew->setPopupMode(QToolButton::InstantPopup);
+
 	auto* cartesianPlotActionModeActionGroup = new QActionGroup(this);
 	cartesianPlotActionModeActionGroup->setExclusive(true);
 	cartesianPlotApplyToSelectionAction = new QAction(i18n("Selected Plot Areas"), cartesianPlotActionModeActionGroup);
@@ -320,82 +345,6 @@ void WorksheetView::initActions() {
 	cartesianPlotCursorModeAction->setCheckable(true);
 
 	connect(plotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotMouseModeChanged);
-
-	auto* cartesianPlotAddNewActionGroup = new QActionGroup(this);
-	addCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-Curve"), cartesianPlotAddNewActionGroup);
-	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), cartesianPlotAddNewActionGroup);
-	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), cartesianPlotAddNewActionGroup);
-	addEquationCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-Curve from a Formula"), cartesianPlotAddNewActionGroup);
-	// TODO: no own icons yet
-	addDataOperationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Operation"), cartesianPlotAddNewActionGroup);
-	//	addDataOperationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-operation-curve")), i18n("Data Operation"),
-	// cartesianPlotAddNewActionGroup);
-	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), cartesianPlotAddNewActionGroup);
-	//	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve")), i18n("Data Reduction"),
-	// cartesianPlotAddNewActionGroup);
-	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
-	//	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-differentiation-curve")), i18n("Differentiation"),
-	// cartesianPlotAddNewActionGroup);
-	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), cartesianPlotAddNewActionGroup);
-	//	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-integration-curve")), i18n("Integration"),
-	// cartesianPlotAddNewActionGroup);
-	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("(De-)Convolution"), cartesianPlotAddNewActionGroup);
-	//	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("(De-)Convolution"),
-	// cartesianPlotAddNewActionGroup);
-	addCorrelationCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto/Cross Correlation"), cartesianPlotAddNewActionGroup);
-	//	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("Auto/Cross Correlation"),
-	// cartesianPlotAddNewActionGroup);
-	addInterpolationCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
-	addSmoothCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), cartesianPlotAddNewActionGroup);
-	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit"), cartesianPlotAddNewActionGroup);
-	addFourierFilterCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), cartesianPlotAddNewActionGroup);
-	addFourierTransformCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), cartesianPlotAddNewActionGroup);
-	addLegendAction = new QAction(QIcon::fromTheme(QStringLiteral("text-field")), i18n("Legend"), cartesianPlotAddNewActionGroup);
-	addHorizontalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal Axis"), cartesianPlotAddNewActionGroup);
-	addVerticalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical Axis"), cartesianPlotAddNewActionGroup);
-	addPlotTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), cartesianPlotAddNewActionGroup);
-	addPlotImageAction = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), cartesianPlotAddNewActionGroup);
-	addCustomPointAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-cross")), i18n("Custom Point"), cartesianPlotAddNewActionGroup);
-
-	// Analysis menu
-	// TODO: no own icons yet
-	addDataOperationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Operation"), cartesianPlotAddNewActionGroup);
-	//	addDataOperationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-operation-curve")), i18n("Data Operation"),
-	// cartesianPlotAddNewActionGroup);
-	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), cartesianPlotAddNewActionGroup);
-	//	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve")), i18n("Data Reduction"),
-	// cartesianPlotAddNewActionGroup);
-	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
-	//	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-differentiation-curve")), i18n("Differentiation"),
-	// cartesianPlotAddNewActionGroup);
-	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), cartesianPlotAddNewActionGroup);
-	//	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-integration-curve")), i18n("Integration"),
-	// cartesianPlotAddNewActionGroup);
-	addConvolutionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolution/Deconvolution"), cartesianPlotAddNewActionGroup);
-	//	addConvolutionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("Convolution/Deconvolution"),
-	// cartesianPlotAddNewActionGroup);
-	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto/Cross Correlation"), cartesianPlotAddNewActionGroup);
-	//	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-correlation-curve")), i18n("Auto/Cross Correlation"),
-	// cartesianPlotAddNewActionGroup);
-	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), cartesianPlotAddNewActionGroup);
-	//	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-hilbert-curve")), i18n("Hilbert Transform"),
-	// cartesianPlotAddNewActionGroup);
-
-	addInterpolationAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
-	addSmoothAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), cartesianPlotAddNewActionGroup);
-	addFitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit"), cartesianPlotAddNewActionGroup);
-	addFourierFilterAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), cartesianPlotAddNewActionGroup);
-	addFourierTransformAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), cartesianPlotAddNewActionGroup);
-
-	connect(cartesianPlotAddNewActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotAddNew);
 
 	auto* cartesianPlotNavigationGroup = new QActionGroup(this);
 	scaleAutoAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-all")), i18n("Auto Scale"), cartesianPlotNavigationGroup);
@@ -485,6 +434,8 @@ void WorksheetView::initMenus() {
 	m_zoomMenu->addAction(zoomInViewAction);
 	m_zoomMenu->addAction(zoomOutViewAction);
 	m_zoomMenu->addAction(zoomOriginAction);
+	m_zoomMenu->addAction(zoomFitNoneAction);
+	m_zoomMenu->addAction(zoomFitAction);
 	m_zoomMenu->addAction(zoomFitPageHeightAction);
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 	m_zoomMenu->addAction(zoomFitSelectionAction);
@@ -533,44 +484,6 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotCursorModeAction);
 	m_cartesianPlotMouseModeMenu->addSeparator();
 
-	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add New"), this);
-	m_cartesianPlotAddNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
-	m_cartesianPlotAddNewMenu->addAction(addHistogramAction);
-	m_cartesianPlotAddNewMenu->addAction(addBoxPlotAction);
-	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
-	m_cartesianPlotAddNewMenu->addSeparator();
-
-	m_cartesianPlotAddNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addFitCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addSeparator();
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addDifferentiationCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addIntegrationCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addSeparator();
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addInterpolationCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addSmoothCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addSeparator();
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addFourierFilterCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addFourierTransformCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addSeparator();
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addConvolutionCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addCorrelationCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addSeparator();
-	// 	m_cartesianPlotAddNewAnalysisMenu->addAction(addDataOperationCurveAction);
-	m_cartesianPlotAddNewAnalysisMenu->addAction(addDataReductionCurveAction);
-	m_cartesianPlotAddNewMenu->addMenu(m_cartesianPlotAddNewAnalysisMenu);
-
-	m_cartesianPlotAddNewMenu->addSeparator();
-	m_cartesianPlotAddNewMenu->addAction(addLegendAction);
-	m_cartesianPlotAddNewMenu->addSeparator();
-	m_cartesianPlotAddNewMenu->addAction(addHorizontalAxisAction);
-	m_cartesianPlotAddNewMenu->addAction(addVerticalAxisAction);
-	m_cartesianPlotAddNewMenu->addSeparator();
-	m_cartesianPlotAddNewMenu->addAction(addPlotTextLabelAction);
-	m_cartesianPlotAddNewMenu->addAction(addPlotImageAction);
-	m_cartesianPlotAddNewMenu->addSeparator();
-	m_cartesianPlotAddNewMenu->addAction(addCustomPointAction);
-
 	m_cartesianPlotZoomMenu = new QMenu(i18n("Zoom/Navigate"), this);
 	m_cartesianPlotZoomMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-draw")));
 	m_cartesianPlotZoomMenu->addAction(scaleAutoAction);
@@ -604,19 +517,13 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToSelectionCursor);
 	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToAllCursor);
 
-	m_cartesianPlotMenu->addMenu(m_cartesianPlotAddNewMenu);
+	m_cartesianPlotMenu->addAction(cartesianPlotAddNewAction);
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotMouseModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotZoomMenu);
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotCursorModeMenu);
-
-	// Data manipulation menu
-	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation"), this);
-	m_dataManipulationMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-draw")));
-	m_dataManipulationMenu->addAction(addDataOperationAction);
-	m_dataManipulationMenu->addAction(addDataReductionAction);
 
 	// themes menu
 	m_themeMenu = new QMenu(i18n("Theme"), this);
@@ -677,33 +584,6 @@ void WorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 }
 
-void WorksheetView::createAnalysisMenu(QMenu* menu) {
-	Q_ASSERT(menu != nullptr);
-
-	if (!m_menusInitialized)
-		initMenus();
-
-	// Data manipulation menu
-	// 	menu->insertMenu(nullptr, m_dataManipulationMenu);
-
-	menu->addAction(addFitAction);
-	menu->addSeparator();
-	menu->addAction(addDifferentiationAction);
-	menu->addAction(addIntegrationAction);
-	menu->addSeparator();
-	menu->addAction(addInterpolationAction);
-	menu->addAction(addSmoothAction);
-	menu->addSeparator();
-	menu->addAction(addFourierFilterAction);
-	menu->addAction(addFourierTransformAction);
-	menu->addAction(addHilbertTransformAction);
-	menu->addSeparator();
-	menu->addAction(addConvolutionAction);
-	menu->addAction(addCorrelationAction);
-	menu->addSeparator();
-	menu->addAction(addDataReductionAction);
-}
-
 void WorksheetView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addSeparator();
 	tbNewCartesianPlot = new QToolButton(toolBar);
@@ -748,36 +628,14 @@ void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar) {
 #endif
 
 void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
+	toolBar->addWidget(tbCartesianPlotAddNew);
+	toolBar->addSeparator();
 	toolBar->addAction(cartesianPlotSelectionModeAction);
 	toolBar->addAction(cartesianPlotCrosshairModeAction);
 	toolBar->addAction(cartesianPlotZoomSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomXSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
 	toolBar->addAction(cartesianPlotCursorModeAction);
-	toolBar->addSeparator();
-	toolBar->addAction(addCurveAction);
-	toolBar->addAction(addHistogramAction);
-	toolBar->addAction(addEquationCurveAction);
-	// don't over-populate the tool bar
-	//	toolBar->addAction(addDifferentiationCurveAction);
-	//	toolBar->addAction(addIntegrationCurveAction);
-	//	toolBar->addAction(addDataOperationCurveAction);
-	//	toolBar->addAction(addDataReductionCurveAction);
-	//	toolBar->addAction(addInterpolationCurveAction);
-	//	toolBar->addAction(addSmoothCurveAction);
-	//	toolBar->addAction(addFitCurveAction);
-	//	toolBar->addAction(addFourierFilterCurveAction);
-	//	toolBar->addAction(addFourierTransformCurveAction);
-	//	toolBar->addAction(addConvolutionCurveAction);
-	//	toolBar->addAction(addCorrelationCurveAction);
-	toolBar->addSeparator();
-	toolBar->addAction(addLegendAction);
-	toolBar->addSeparator();
-	toolBar->addAction(addHorizontalAxisAction);
-	toolBar->addAction(addVerticalAxisAction);
-	toolBar->addSeparator();
-	toolBar->addAction(addPlotTextLabelAction);
-	toolBar->addAction(addPlotImageAction);
 	toolBar->addSeparator();
 	toolBar->addAction(scaleAutoAction);
 	toolBar->addAction(scaleAutoXAction);
@@ -1043,21 +901,29 @@ CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
 	return plot;
 }
 
-//##############################################################################
-//####################################  Events   ###############################
-//##############################################################################
+// ##############################################################################
+// ####################################  Events   ###############################
+// ##############################################################################
 void WorksheetView::resizeEvent(QResizeEvent* event) {
 	if (m_isClosing)
 		return;
 
 	if (m_worksheet->useViewSize())
 		this->processResize();
+	else
+		updateFit();
 
 	QGraphicsView::resizeEvent(event);
 }
 
 void WorksheetView::wheelEvent(QWheelEvent* event) {
 	if (isInteractive() && (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier))) {
+		if (!zoomFitNoneAction)
+			initActions();
+		zoomFitNoneAction->setChecked(true);
+		m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
+		updateScrollBarPolicy();
+
 		// https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 		QPoint numDegrees = event->angleDelta() / 8;
 		int numSteps = numDegrees.y() / 15; // see QWheelEvent documentation
@@ -1266,7 +1132,7 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 		aspect->copy();
 		aspect->parentAspect()->paste(true);
 
-		/* zooming related key events, handle them here so we can also use them in DynamicPresenterWidget without registering shortcuts */
+		/* zooming related key events, handle them here so we can also use them in PresenterWidget without registering shortcuts */
 	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Plus)) {
 		changeZoom(zoomInViewAction);
 	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Minus)) {
@@ -1313,7 +1179,7 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 
 	// select the worksheet in the project explorer and bring the view to the foreground
 	m_worksheet->setSelectedInView(true);
-	m_worksheet->mdiSubWindow()->mdiArea()->setActiveSubWindow(m_worksheet->mdiSubWindow());
+	m_worksheet->dockWidget()->dockManager()->setDockWidgetFocused(m_worksheet->dockWidget());
 
 	event->setAccepted(true);
 }
@@ -1333,16 +1199,16 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 	plot->processDropEvent(plot->project()->droppedAspects(mimeData));
 }
 
-//##############################################################################
-//####################################  SLOTs   ################################
-//##############################################################################
-void WorksheetView::useViewSizeRequested() {
+// ##############################################################################
+// ####################################  SLOTs   ################################
+// ##############################################################################
+void WorksheetView::useViewSizeChanged(bool useViewSize) {
 	if (!m_actionsInitialized)
 		initActions();
 
-	if (m_worksheet->useViewSize()) {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	updateScrollBarPolicy();
+
+	if (useViewSize) {
 		zoomFitPageHeightAction->setVisible(false);
 		zoomFitPageWidthAction->setVisible(false);
 		currentZoomAction = zoomInViewAction;
@@ -1352,8 +1218,6 @@ void WorksheetView::useViewSizeRequested() {
 		// determine and set the current view size
 		this->processResize();
 	} else {
-		setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-		setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		zoomFitPageHeightAction->setVisible(true);
 		zoomFitPageWidthAction->setVisible(true);
 	}
@@ -1370,6 +1234,8 @@ void WorksheetView::processResize() {
 }
 
 void WorksheetView::changeZoom(QAction* action) {
+	zoomFitNoneAction->setChecked(true);
+	m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
 	if (action == zoomInViewAction)
 		zoom(1);
 	else if (action == zoomOutViewAction)
@@ -1378,20 +1244,59 @@ void WorksheetView::changeZoom(QAction* action) {
 		static const float hscale = QApplication::desktop()->physicalDpiX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		static const float vscale = QApplication::desktop()->physicalDpiY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
-	} else if (action == zoomFitPageWidthAction) {
-		float scaleFactor = viewport()->width() / scene()->sceneRect().width();
-		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-	} else if (action == zoomFitPageHeightAction) {
-		float scaleFactor = viewport()->height() / scene()->sceneRect().height();
-		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-	} else if (action == zoomFitSelectionAction)
-		fitInView(scene()->selectionArea().boundingRect(), Qt::KeepAspectRatio);
+	}
 
 	currentZoomAction = action;
 	if (tbZoom)
 		tbZoom->setDefaultAction(action);
 
 	updateLabelsZoom();
+}
+
+void WorksheetView::updateFit() {
+	switch (m_worksheet->zoomFit()) {
+	case Worksheet::ZoomFit::None:
+		break;
+	case Worksheet::ZoomFit::FitToWidth: {
+		const float scaleFactor = viewport()->width() / scene()->sceneRect().width();
+		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+		break;
+	}
+	case Worksheet::ZoomFit::FitToHeight: {
+		const float scaleFactor = viewport()->height() / scene()->sceneRect().height();
+		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+		break;
+	}
+	case Worksheet::ZoomFit::FitToSelection: {
+		fitInView(scene()->selectionArea().boundingRect(), Qt::KeepAspectRatio);
+		break;
+	}
+	case Worksheet::ZoomFit::Fit: {
+		const float scaleFactorVertical = viewport()->height() / scene()->sceneRect().height();
+		const float scaleFactorHorizontal = viewport()->width() / scene()->sceneRect().width();
+		if (scaleFactorVertical * scene()->sceneRect().width() < viewport()->width())
+			setTransform(QTransform::fromScale(scaleFactorVertical, scaleFactorVertical));
+		else
+			setTransform(QTransform::fromScale(scaleFactorHorizontal, scaleFactorHorizontal));
+		break;
+	}
+	}
+}
+
+void WorksheetView::updateScrollBarPolicy() {
+	if (m_worksheet->useViewSize() || m_worksheet->zoomFit() != Worksheet::ZoomFit::None) {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	} else {
+		setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+		setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	}
+}
+
+void WorksheetView::fitChanged(QAction* action) {
+	m_worksheet->setZoomFit(static_cast<Worksheet::ZoomFit>(action->data().toInt()));
+	updateScrollBarPolicy();
+	updateFit();
 }
 
 double WorksheetView::zoomFactor() const {
@@ -1579,12 +1484,21 @@ void WorksheetView::deleteElement() {
 	if (m_selectedItems.isEmpty())
 		return;
 
-	int rc = KMessageBox::warningYesNo(
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+	auto status = KMessageBox::warningTwoActions(
+		this,
+		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
+		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()),
+		KStandardGuiItem::del(),
+		KStandardGuiItem::cancel());
+#else
+	auto status = KMessageBox::warningYesNo(
 		this,
 		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
 		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
+#endif
 
-	if (rc == KMessageBox::No)
+	if (status == KMessageBox::No)
 		return;
 
 	m_suppressSelectionChangedEvent = true;
@@ -1792,7 +1706,10 @@ void WorksheetView::selectionChanged() {
 	handleCartesianPlotActions();
 }
 
-void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot) {
+void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
+	tbCartesianPlotAddNew->setMenu(plot->addNewMenu()); // update the tool button shown in the toolbar
+	cartesianPlotAddNewAction->setMenu(plot->addNewMenu()); // update the action shown in the main menu
+
 	/* Action to All: action is applied to all ranges
 	 *	- Applied to all plots and all ranges
 	 * Action to X: action is applied to all x ranges
@@ -1890,7 +1807,19 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot) {
 	cartesianPlotCursorModeAction->setEnabled(true);
 }
 
+void WorksheetView::handleReferenceRangeSelected() {
+	auto l = static_cast<ReferenceRange*>(m_selectedElement);
+	bool vert = (l->orientation() == ReferenceRange::Orientation::Vertical);
+	handleReferences(vert);
+}
+
 void WorksheetView::handleReferenceLineSelected() {
+	auto l = static_cast<ReferenceLine*>(m_selectedElement);
+	bool vert = (l->orientation() == ReferenceLine::Orientation::Vertical);
+	handleReferences(vert);
+}
+
+void WorksheetView::handleReferences(bool vertical) {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
 	 * Action to X: action is applied to all x ranges
@@ -1903,9 +1832,6 @@ void WorksheetView::handleReferenceLineSelected() {
 	 * - x zoom selection: if vertical: zoom only into the range from the reference line
 	 * - y zoom selection: if !vertical:zoom only into the range from the reference line
 	 */
-
-	auto l = static_cast<ReferenceLine*>(m_selectedElement);
-	bool vert = (l->orientation() == ReferenceLine::Orientation::Vertical);
 
 	zoomInAction->setEnabled(false);
 	zoomOutAction->setEnabled(false);
@@ -1924,57 +1850,57 @@ void WorksheetView::handleReferenceLineSelected() {
 		shiftRightXAction->setEnabled(false);
 		shiftUpYAction->setEnabled(false);
 		shiftDownYAction->setEnabled(false);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
-		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
-		zoomInXAction->setEnabled(vert);
-		zoomOutXAction->setEnabled(vert);
-		zoomInYAction->setEnabled(!vert);
-		zoomOutYAction->setEnabled(!vert);
-		shiftLeftXAction->setEnabled(vert);
-		shiftRightXAction->setEnabled(vert);
-		shiftUpYAction->setEnabled(!vert);
-		shiftDownYAction->setEnabled(!vert);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vertical);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vertical);
+		zoomInXAction->setEnabled(vertical);
+		zoomOutXAction->setEnabled(vertical);
+		zoomInYAction->setEnabled(!vertical);
+		zoomOutYAction->setEnabled(!vertical);
+		shiftLeftXAction->setEnabled(vertical);
+		shiftRightXAction->setEnabled(vertical);
+		shiftUpYAction->setEnabled(!vertical);
+		shiftDownYAction->setEnabled(!vertical);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
-		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
-		zoomInXAction->setEnabled(vert);
-		zoomOutXAction->setEnabled(vert);
-		zoomInYAction->setEnabled(!vert);
-		zoomOutYAction->setEnabled(!vert);
-		shiftLeftXAction->setEnabled(vert);
-		shiftRightXAction->setEnabled(vert);
-		shiftUpYAction->setEnabled(!vert);
-		shiftDownYAction->setEnabled(!vert);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vertical);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vertical);
+		zoomInXAction->setEnabled(vertical);
+		zoomOutXAction->setEnabled(vertical);
+		zoomInYAction->setEnabled(!vertical);
+		zoomOutYAction->setEnabled(!vertical);
+		shiftLeftXAction->setEnabled(vertical);
+		shiftRightXAction->setEnabled(vertical);
+		shiftUpYAction->setEnabled(!vertical);
+		shiftDownYAction->setEnabled(!vertical);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
-		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
-		zoomInXAction->setEnabled(vert);
-		zoomOutXAction->setEnabled(vert);
-		zoomInYAction->setEnabled(!vert);
-		zoomOutYAction->setEnabled(!vert);
-		shiftLeftXAction->setEnabled(vert);
-		shiftRightXAction->setEnabled(vert);
-		shiftUpYAction->setEnabled(!vert);
-		shiftDownYAction->setEnabled(!vert);
-		scaleAutoXAction->setEnabled(vert);
-		scaleAutoYAction->setEnabled(!vert);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vertical);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vertical);
+		zoomInXAction->setEnabled(vertical);
+		zoomOutXAction->setEnabled(vertical);
+		zoomInYAction->setEnabled(!vertical);
+		zoomOutYAction->setEnabled(!vertical);
+		shiftLeftXAction->setEnabled(vertical);
+		shiftRightXAction->setEnabled(vertical);
+		shiftUpYAction->setEnabled(!vertical);
+		shiftDownYAction->setEnabled(!vertical);
+		scaleAutoXAction->setEnabled(vertical);
+		scaleAutoYAction->setEnabled(!vertical);
 		break;
 	}
 	cartesianPlotSelectionModeAction->setEnabled(true);
 	cartesianPlotCursorModeAction->setEnabled(false);
 }
 
-void WorksheetView::handleXYCurveSelected() {
+void WorksheetView::handlePlotSelected() {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
 	 * Action to X: action is applied to all x ranges
@@ -2153,34 +2079,37 @@ void WorksheetView::handleCartesianPlotActions() {
 			m_selectedElement = w;
 			handleCartesianPlotSelected(static_cast<CartesianPlot*>(m_selectedElement));
 			break;
-		} else if (w->inherits(AspectType::XYCurve)) {
-			handled = true;
-			m_selectedElement = w;
-			// XYCurvePrivate does not depend yet on WorksheetElementContainerPrivate
-			// m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
-			handleXYCurveSelected();
-			break;
-		} else if (w->inherits(AspectType::XYAnalysisCurve)) {
-			handled = true;
-			m_selectedElement = w;
-			handleXYCurveSelected();
-			break;
 		} else if (w->type() == AspectType::ReferenceLine) {
 			handled = true;
 			m_selectedElement = w;
 			handleReferenceLineSelected();
+		} else if (w->type() == AspectType::ReferenceRange) {
+			handled = true;
+			m_selectedElement = w;
+			handleReferenceRangeSelected();
 		} else if (w->type() == AspectType::Axis) {
 			handled = true;
 			m_selectedElement = w;
 			handleAxisSelected(static_cast<Axis*>(m_selectedElement));
 			break;
+		} else if (dynamic_cast<Plot*>(w) || w->coordinateBindingEnabled()) {
+			// Plot and other WorksheetElements like custompoint, infoelement, textlabel
+			handled = true;
+			m_selectedElement = w;
+			handlePlotSelected();
+			break;
 		}
 	}
 
 	if (!handled) {
-		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomSelectionModeAction->setChecked(false);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setChecked(false);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomYSelectionModeAction->setChecked(false);
+		for (auto* plot : m_worksheet->children<CartesianPlot>())
+			plot->setMouseMode(CartesianPlot::MouseMode::Selection);
 		zoomInAction->setEnabled(false);
 		zoomOutAction->setEnabled(false);
 		zoomInXAction->setEnabled(false);
@@ -2196,25 +2125,10 @@ void WorksheetView::handleCartesianPlotActions() {
 		scaleAutoYAction->setEnabled(false);
 	}
 
-	m_cartesianPlotAddNewMenu->setEnabled(plot);
+	tbCartesianPlotAddNew->setEnabled(plot);
+	cartesianPlotAddNewAction->setEnabled(plot);
 	m_cartesianPlotZoomMenu->setEnabled(m_selectedElement);
 	m_cartesianPlotMouseModeMenu->setEnabled(plot);
-
-	// analysis menu
-	// TODO: enable also if children of plots are selected
-	// 	m_dataManipulationMenu->setEnabled(plot);
-	// 	addDataOperationAction->setEnabled(false);
-	addDataReductionAction->setEnabled(false);
-	addDifferentiationAction->setEnabled(plot);
-	addIntegrationAction->setEnabled(plot);
-	addInterpolationAction->setEnabled(plot);
-	addSmoothAction->setEnabled(plot);
-	addFitAction->setEnabled(plot);
-	addFourierFilterAction->setEnabled(plot);
-	addFourierTransformAction->setEnabled(plot);
-	addHilbertTransformAction->setEnabled(plot);
-	addConvolutionAction->setEnabled(plot);
-	addCorrelationAction->setEnabled(plot);
 }
 
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
@@ -2414,7 +2328,7 @@ void WorksheetView::print(QPrinter* printer) {
 	// draw background
 	const auto& page_rect = printer->pageLayout().paintRectPixels(printer->resolution());
 	const auto& scene_rect = scene()->sceneRect();
-	float scale = qMax(scene_rect.width() / page_rect.width(), scene_rect.height() / page_rect.height());
+	float scale = std::max(scene_rect.width() / page_rect.width(), scene_rect.height() / page_rect.height());
 	drawBackgroundItems(&painter, QRectF(0, 0, scene_rect.width() / scale, scene_rect.height() / scale));
 
 	// draw scene
@@ -2487,9 +2401,9 @@ void WorksheetView::unregisterShortcuts() {
 	zoomOriginAction->setShortcut(QKeySequence());
 }
 
-//##############################################################################
-//########################  SLOTs for cartesian plots   ########################
-//##############################################################################
+// ##############################################################################
+// ########################  SLOTs for cartesian plots   ########################
+// ##############################################################################
 void WorksheetView::cartesianPlotActionModeChanged(QAction* action) {
 	if (action == cartesianPlotApplyToSelectionAction)
 		m_worksheet->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
@@ -2545,57 +2459,6 @@ void WorksheetView::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode m
 	m_suppressMouseModeChange = false;
 }
 
-void WorksheetView::cartesianPlotAddNew(QAction* action) {
-	const auto& plots = m_worksheet->children<CartesianPlot>();
-	if (m_worksheet->cartesianPlotActionMode() == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
-		int selectedPlots = 0;
-		for (auto* plot : plots) {
-			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
-				++selectedPlots;
-			else {
-				// current plot is not selected, check if one of its children is selected
-				const auto& children = plot->children<WorksheetElement>();
-				for (auto* child : children) {
-					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
-						++selectedPlots;
-						break;
-					}
-				}
-			}
-		}
-
-		if (selectedPlots > 1)
-			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), selectedPlots));
-
-		for (auto* plot : plots) {
-			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
-				this->cartesianPlotAdd(plot, action);
-			else {
-				// current plot is not selected, check if one of its children is selected
-				const auto& children = plot->children<WorksheetElement>();
-				for (auto* child : children) {
-					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
-						this->cartesianPlotAdd(plot, action);
-						break;
-					}
-				}
-			}
-		}
-
-		if (selectedPlots > 1)
-			m_worksheet->endMacro();
-	} else {
-		if (plots.size() > 1)
-			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), plots.size()));
-
-		for (auto* plot : plots)
-			this->cartesianPlotAdd(plot, action);
-
-		if (plots.size() > 1)
-			m_worksheet->endMacro();
-	}
-}
-
 void WorksheetView::childContextMenuRequested(AspectType t, QMenu* menu) {
 	if (!menu)
 		return;
@@ -2605,73 +2468,6 @@ void WorksheetView::childContextMenuRequested(AspectType t, QMenu* menu) {
 		menu->insertMenu(menu->actions().at(2), m_cartesianPlotZoomMenu);
 	}
 	menu->exec(QCursor::pos());
-}
-
-void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
-	DEBUG("WorksheetView::cartesianPlotAdd()");
-	if (action == addCurveAction)
-		plot->addCurve();
-	else if (action == addHistogramAction)
-		plot->addHistogram();
-	else if (action == addBoxPlotAction)
-		plot->addBoxPlot();
-	else if (action == addEquationCurveAction)
-		plot->addEquationCurve();
-	else if (action == addDataReductionCurveAction)
-		plot->addDataReductionCurve();
-	else if (action == addDifferentiationCurveAction)
-		plot->addDifferentiationCurve();
-	else if (action == addIntegrationCurveAction)
-		plot->addIntegrationCurve();
-	else if (action == addInterpolationCurveAction)
-		plot->addInterpolationCurve();
-	else if (action == addSmoothCurveAction)
-		plot->addSmoothCurve();
-	else if (action == addFitCurveAction)
-		plot->addFitCurve();
-	else if (action == addFourierFilterCurveAction)
-		plot->addFourierFilterCurve();
-	else if (action == addFourierTransformCurveAction)
-		plot->addFourierTransformCurve();
-	else if (action == addConvolutionCurveAction)
-		plot->addConvolutionCurve();
-	else if (action == addCorrelationCurveAction)
-		plot->addCorrelationCurve();
-	else if (action == addLegendAction)
-		plot->addLegend();
-	else if (action == addHorizontalAxisAction)
-		plot->addHorizontalAxis();
-	else if (action == addVerticalAxisAction)
-		plot->addVerticalAxis();
-	else if (action == addPlotTextLabelAction)
-		plot->addTextLabel();
-	else if (action == addPlotImageAction)
-		plot->addImage();
-	else if (action == addCustomPointAction)
-		plot->addCustomPoint();
-	// analysis actions
-	else if (action == addDataReductionAction)
-		plot->addDataReductionCurve();
-	else if (action == addDifferentiationAction)
-		plot->addDifferentiationCurve();
-	else if (action == addIntegrationAction)
-		plot->addIntegrationCurve();
-	else if (action == addInterpolationAction)
-		plot->addInterpolationCurve();
-	else if (action == addSmoothAction)
-		plot->addSmoothCurve();
-	else if (action == addFitAction)
-		plot->addFitCurve();
-	else if (action == addFourierFilterAction)
-		plot->addFourierFilterCurve();
-	else if (action == addFourierTransformAction)
-		plot->addFourierTransformCurve();
-	else if (action == addHilbertTransformAction)
-		plot->addHilbertTransformCurve();
-	else if (action == addConvolutionAction)
-		plot->addConvolutionCurve();
-	else if (action == addCorrelationAction)
-		plot->addCorrelationCurve();
 }
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
@@ -2725,41 +2521,9 @@ Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode() {
 
 void WorksheetView::presenterMode() {
 #ifndef SDK
-	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
-
-	// show dynamic presenter widget, if enabled
-	if (group.readEntry("PresenterModeInteractive", false)) {
-		auto* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet);
-		dynamicPresenterWidget->showFullScreen();
-		return;
-	}
-
-	// show static presenter widget (default)
-	QRectF sourceRect(scene()->sceneRect());
-
-	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
-	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-	w *= QApplication::desktop()->physicalDpiX() / 25.4;
-	h *= QApplication::desktop()->physicalDpiY() / 25.4;
-
-	QRectF targetRect(0, 0, w, h);
-	const QRectF& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
-
-	if (targetRect.width() > screenSize.width() || ((targetRect.height() > screenSize.height()))) {
-		const double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
-		targetRect.setWidth(targetRect.width() * ratio);
-		targetRect.setHeight(targetRect.height() * ratio);
-	}
-
-	QImage image(QSize(targetRect.width(), targetRect.height()), QImage::Format_ARGB32_Premultiplied);
-	image.fill(Qt::transparent);
-	QPainter painter;
-	painter.begin(&image);
-	painter.setRenderHint(QPainter::Antialiasing);
-	exportPaint(&painter, targetRect, sourceRect, true);
-	painter.end();
-
-	auto* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
+	const auto& group = KSharedConfig::openConfig()->group("Settings_Worksheet");
+	const bool interactive = group.readEntry("PresenterModeInteractive", false);
+	auto* presenterWidget = new PresenterWidget(m_worksheet, interactive);
 	presenterWidget->showFullScreen();
 #endif
 }

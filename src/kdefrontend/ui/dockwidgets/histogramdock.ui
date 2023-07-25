@@ -43,7 +43,7 @@
         </widget>
        </item>
        <item row="24" column="2">
-        <widget class="QDateTimeEdit" name="dteBinRangesMax">
+        <widget class="UTCDateTimeEdit" name="dteBinRangesMax">
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
@@ -82,7 +82,7 @@
         <widget class="QComboBox" name="cbPlotRanges"/>
        </item>
        <item row="23" column="2">
-        <widget class="QDateTimeEdit" name="dteBinRangesMin">
+        <widget class="UTCDateTimeEdit" name="dteBinRangesMin">
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
@@ -92,7 +92,6 @@
         <widget class="QLabel" name="lBinning">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -205,7 +204,6 @@
         <widget class="QLabel" name="lBinRanges">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -392,7 +390,6 @@
         <widget class="QLabel" name="lErrorBar">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -471,7 +468,6 @@
         <widget class="QLabel" name="lErrorFormat">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -567,7 +563,6 @@
         <widget class="QLabel" name="lRug">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -598,6 +593,12 @@
        </item>
        <item row="2" column="2">
         <widget class="NumberSpinBox" name="sbRugLength">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -617,6 +618,12 @@
        </item>
        <item row="3" column="2">
         <widget class="NumberSpinBox" name="sbRugWidth">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -636,6 +643,12 @@
        </item>
        <item row="4" column="2">
         <widget class="NumberSpinBox" name="sbRugOffset">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -671,6 +684,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

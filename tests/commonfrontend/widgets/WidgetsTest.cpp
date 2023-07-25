@@ -9,7 +9,12 @@
 */
 
 #include "WidgetsTest.h"
+#include "backend/core/Project.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/widgets/NumberSpinBox.h"
+#include "src/kdefrontend/dockwidgets/CartesianPlotDock.h"
 
 #include <QLineEdit>
 
@@ -408,23 +413,23 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.lineEdit()->setCursorPosition(1);
 		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 2);
+		VALUES_EQUAL(sb.value(), 2.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 1);
+		VALUES_EQUAL(sb.value(), 1.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 0);
+		VALUES_EQUAL(sb.value(), 0.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), -1);
+		VALUES_EQUAL(sb.value(), -1.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), -2);
+		VALUES_EQUAL(sb.value(), -2.);
 
 		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), -1);
+		VALUES_EQUAL(sb.value(), -1.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 0);
+		VALUES_EQUAL(sb.value(), 0.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 1);
+		VALUES_EQUAL(sb.value(), 1.);
 	}
 
 	{
@@ -433,21 +438,21 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.lineEdit()->setCursorPosition(2);
 		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 2900);
+		VALUES_EQUAL(sb.value(), 2900.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 2800);
+		VALUES_EQUAL(sb.value(), 2800.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 2700);
+		VALUES_EQUAL(sb.value(), 2700.);
 
 		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 2800);
+		VALUES_EQUAL(sb.value(), 2800.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 2900);
+		VALUES_EQUAL(sb.value(), 2900.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 3000);
+		VALUES_EQUAL(sb.value(), 3000.);
 		sb.stepBy(71);
-		VALUES_EQUAL(sb.value(), 10100);
+		VALUES_EQUAL(sb.value(), 10100.);
 	}
 
 	{
@@ -456,17 +461,17 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.lineEdit()->setCursorPosition(3);
 		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 5e0);
+		VALUES_EQUAL(sb.value(), 5.e0);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 5e-1);
+		VALUES_EQUAL(sb.value(), 5.e-1);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 5e-2);
+		VALUES_EQUAL(sb.value(), 5.e-2);
 
 		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 5e-1);
+		VALUES_EQUAL(sb.value(), 5.e-1);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 5e0);
+		VALUES_EQUAL(sb.value(), 5.e0);
 	}
 
 	{
@@ -596,9 +601,9 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.lineEdit()->setCursorPosition(1);
 		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 3);
+		VALUES_EQUAL(sb.value(), 3.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), 2);
+		VALUES_EQUAL(sb.value(), 2.);
 	}
 
 	// Jump to next valid position with the cursor
@@ -609,9 +614,9 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.lineEdit()->setCursorPosition(2);
 		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), -3);
+		VALUES_EQUAL(sb.value(), -3.);
 		sb.keyPressEvent(&event);
-		VALUES_EQUAL(sb.value(), -2);
+		VALUES_EQUAL(sb.value(), -2.);
 	}
 }
 
@@ -629,40 +634,41 @@ void WidgetsTest::numberSpinBoxLimit() {
 
 	sb.lineEdit()->setCursorPosition(1);
 	sb.increaseValue();
-	VALUES_EQUAL(sb.value(), 6);
+	VALUES_EQUAL(sb.value(), 6.);
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(lastValue, 6);
 	sb.increaseValue();
-	VALUES_EQUAL(sb.value(), 7);
+	VALUES_EQUAL(sb.value(), 7.);
 	QCOMPARE(valueChangedCounter, 2);
 	QCOMPARE(lastValue, 7);
 	sb.increaseValue();
-	VALUES_EQUAL(sb.value(), 7); // unable to go beyond
+	VALUES_EQUAL(sb.value(), 7.); // unable to go beyond
 	QCOMPARE(valueChangedCounter, 2);
 
 	sb.setValue(4);
-	sb.lineEdit()->setCursorPosition(1);
-	VALUES_EQUAL(sb.value(), 4);
-	QCOMPARE(valueChangedCounter, 2);
-	sb.decreaseValue();
-	VALUES_EQUAL(sb.value(), 3);
 	QCOMPARE(valueChangedCounter, 3);
+	sb.lineEdit()->setCursorPosition(1);
+	VALUES_EQUAL(sb.value(), 4.);
+	QCOMPARE(valueChangedCounter, 3);
+	sb.decreaseValue();
+	VALUES_EQUAL(sb.value(), 3.);
+	QCOMPARE(valueChangedCounter, 4);
 	QCOMPARE(lastValue, 3);
 	sb.decreaseValue();
-	VALUES_EQUAL(sb.value(), 3);
-	QCOMPARE(valueChangedCounter, 3);
+	VALUES_EQUAL(sb.value(), 3.);
+	QCOMPARE(valueChangedCounter, 4);
 
 	// Try to insert a number
 	sb.lineEdit()->setCursorPosition(1);
 	// Important: the event text is used by the lineedit. So it has to be filled!
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
 	sb.keyPressEvent(&event);
-	QCOMPARE(valueChangedCounter, 3);
-	VALUES_EQUAL(sb.value(), 3);
+	QCOMPARE(valueChangedCounter, 4);
+	VALUES_EQUAL(sb.value(), 3.);
 }
 
 void WidgetsTest::numberSpinBoxPrefixSuffix() {
-	NumberSpinBox sb(5);
+	NumberSpinBox sb(5.01);
 	sb.setMaximum(7);
 	sb.setMinimum(3);
 
@@ -676,15 +682,127 @@ void WidgetsTest::numberSpinBoxPrefixSuffix() {
 	sb.setPrefix(QStringLiteral("Prefix "));
 	sb.setSuffix(QStringLiteral(" Suffix"));
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.00 Suffix"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.01 Suffix"));
 
 	sb.lineEdit()->setCursorPosition(14); // In suffix text
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
 	QCOMPARE(valueChangedCounter, 1);
-	QCOMPARE(sb.value(), 5.01);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.01 Suffix"));
+	QCOMPARE(sb.value(), 5.02);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("Prefix 5.02 Suffix"));
+}
+
+void WidgetsTest::numberSpinBoxSuffixFrontToBackSelection() {
+	// Select from front to back
+	NumberSpinBox sb;
+	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
+
+	sb.setValue(5);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("5 cm"));
+
+	int counter = 0;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&counter](double value) {
+		QCOMPARE(value, 51);
+		counter++;
+	});
+
+	sb.lineEdit()->setSelection(1, 1); // select space
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm"));
+	QCOMPARE(counter, 1);
+}
+
+void WidgetsTest::numberSpinBoxSuffixBackToFrontSelection() {
+	// Select from back to front
+	NumberSpinBox sb;
+	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
+
+	sb.setValue(55);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("55 cm"));
+
+	int counter = 0;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&counter](double value) {
+		QCOMPARE(value, 51);
+		counter++;
+	});
+
+	sb.lineEdit()->setSelection(3, -2);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm"));
+	QCOMPARE(counter, 1);
+}
+
+void WidgetsTest::numberSpinBoxSuffixSetCursor() {
+	// Just set cursor into suffix
+	NumberSpinBox sb;
+	sb.setSuffix(QStringLiteral(" cm")); // whitespace is important!
+
+	sb.setValue(5);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("5 cm"));
+
+	int counter = 0;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&counter](double value) {
+		QCOMPARE(value, 51);
+		counter++;
+	});
+
+	sb.lineEdit()->setCursorPosition(2);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("51 cm")); // 1 appended
+	QCOMPARE(counter, 1);
+}
+
+void WidgetsTest::numberSpinBoxPrefixFrontToBackSelection() {
+	// from front to back
+	NumberSpinBox sb;
+	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
+
+	sb.setValue(5);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 5"));
+
+	sb.lineEdit()->setSelection(1, 7); // ref selected
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 1"));
+}
+
+void WidgetsTest::numberSpinBoxPrefixBackToFrontSelection() {
+	// from back to front
+	NumberSpinBox sb;
+	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
+
+	sb.setValue(5);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 5"));
+
+	sb.lineEdit()->setSelection(8, -5); // "fix 5"
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 1"));
+}
+
+void WidgetsTest::numberSpinBoxPrefixSetCursorPosition() {
+	// set cursor
+	NumberSpinBox sb;
+	sb.setPrefix(QStringLiteral("prefix ")); // whitespace is important!
+
+	sb.setValue(5);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 5"));
+
+	// For some reason the cursor position is not applied
+	sb.lineEdit()->setCursorPosition(2);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
+	sb.keyPressEvent(&event);
+
+	// QCOMPARE(sb.lineEdit()->text(), QStringLiteral("prefix 15"));
 }
 
 void WidgetsTest::numberSpinBoxEnterNumber() {
@@ -858,47 +976,78 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", 5));
 }
 
-void WidgetsTest::numberSpinBoxDecimals() {
-	{
-		NumberSpinBox sb(5);
-		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("5.00"));
-		sb.setDecimals(3);
-		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("5.00")); // does not change
+void WidgetsTest::numberSpinBoxFeedbackCursorPosition() {
+	NumberSpinBox sb(5.11);
+	sb.setFeedback(true);
 
-		sb.setValue(6);
-		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("6.000"));
-	}
+	int valueChangedCounter = 0;
+	// double lastValue = NAN;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter](double value) {
+		valueChangedCounter++;
+		sb.setValue(value);
+	});
 
-	{
-		NumberSpinBox sb(5);
-		sb.setFeedback(true);
+	sb.lineEdit()->setCursorPosition(3); // after first 1
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
 
-		int valueChangedCounter = 0;
-		double lastValue = NAN;
-		connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter, &lastValue](double value) {
-			valueChangedCounter++;
-			lastValue = value; // value is 6
-			QVERIFY(5 != value);
-			sb.setValue(5); // Important other value
-		});
+	QCOMPARE(valueChangedCounter, 1);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
+	QCOMPARE(sb.value(), 5.21);
+	QCOMPARE(sb.toolTip(), QStringLiteral(""));
 
-		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("5.00"));
-		sb.setDecimals(3);
+	// another time key up
+	sb.keyPressEvent(&event);
 
-		sb.lineEdit()->setCursorPosition(1);
-		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
-		sb.keyPressEvent(&event);
-
-		QCOMPARE(valueChangedCounter, 1);
-		QCOMPARE(sb.toolTip(), QStringLiteral("Invalid value entered. Valid value: 5"));
-		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("6.00")); // not 3 decimals!
-	}
+	QCOMPARE(valueChangedCounter, 2);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
+	QCOMPARE(sb.value(), 5.31);
+	QCOMPARE(sb.toolTip(), QStringLiteral(""));
 }
 
-/*!
- * \brief WidgetsTest::numberSpinBoxDecimals
- * Check that application shows the correct value, even decimals is set to zero
- */
+void WidgetsTest::numberSpinBoxFeedbackCursorPosition2() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("1");
+	data.max = QStringLiteral("2");
+	data.count = 1000;
+	data.expression1 = QStringLiteral("x");
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	CHECK_RANGE(p, curve, Dimension::X, 1.0, 2.0);
+	CHECK_RANGE(p, curve, Dimension::Y, 1.0, 2.0);
+
+	CartesianPlotDock d(nullptr);
+
+	d.setPlots({p});
+	d.setPlots({p}); // Important to do it a second time to see that the connections are cleared bevore connecting again
+
+	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.5 cm"));
+	d.ui.sbPaddingHorizontal->lineEdit()->setCursorPosition(3);
+
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	d.ui.sbPaddingHorizontal->keyPressEvent(&event);
+
+	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.6 cm"));
+	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->cursorPosition(), 3);
+}
+
+// \brief WidgetsTest::numberSpinBoxDecimals
+// Check that application shows the correct value, even decimals is set to zero
 void WidgetsTest::numberSpinBoxDecimals2() {
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
@@ -910,20 +1059,20 @@ void WidgetsTest::numberSpinBoxDecimals2() {
 void WidgetsTest::numberSpinBoxScrollingNegToPos() {
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
-	sb.setValue(-1);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.00"));
+	sb.setValue(-1.01);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.01"));
 
 	sb.lineEdit()->setCursorPosition(2);
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
-	QCOMPARE(sb.lineEdit()->cursorPosition(), 1); // cursor should not be at position of the comma but behind the 0
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-0.01"));
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 2); // cursor should not be at position of the comma but behind the 0
 
 	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.01"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 2); // cursor should not be at position of the minus but behind the 1
 }
 
@@ -955,20 +1104,20 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos2() {
 void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
 	NumberSpinBox sb;
 	sb.setMinimum(-20);
-	sb.setValue(-9.80);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-9.80"));
+	sb.setValue(-9.81);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-9.81"));
 
 	sb.lineEdit()->setCursorPosition(2);
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-10.80"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-10.81"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 
 	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-11.80"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-11.81"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 }
 
@@ -977,7 +1126,7 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	// instead of raising an error
 	NumberSpinBox sb;
 	sb.setMinimum(0);
-	sb.setValue(1);
+	sb.setValue(1.01);
 	sb.setFeedback(true);
 
 	int valueChangedCounter = 0;
@@ -987,30 +1136,41 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 		lastValue = value;
 	});
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("1.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("1.01"));
 
 	sb.lineEdit()->setCursorPosition(1);
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.01"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.toolTip(), QString());
 
 	sb.keyPressEvent(&event);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.01"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.toolTip(), QString());
+
+	sb.lineEdit()->setCursorPosition(4);
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 4);
+	QCOMPARE(valueChangedCounter, 2);
+	QCOMPARE(sb.toolTip(), QString());
+
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 4);
+	QCOMPARE(valueChangedCounter, 2);
+	QCOMPARE(sb.toolTip(), QString());
 }
 
-/*!
- * \brief WidgetsTest::numberSpinBoxDecimalsMinMax
- * In the default implementation of QDoubleSpinbox the maximum and
- * minimums are round to the decimals. The numberspinbox should not do
- * this
- */
+// \brief WidgetsTest::numberSpinBoxDecimalsMinMax
+// In the default implementation of QDoubleSpinbox the maximum and
+// minimums are round to the decimals. The numberspinbox should not do
+// this
 void WidgetsTest::numberSpinBoxDecimalsMinMax() {
 	NumberSpinBox sb;
 	sb.setDecimals(2);

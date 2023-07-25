@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -12,19 +12,27 @@
 #include "SpreadsheetTest.h"
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/spreadsheet/SpreadsheetModel.h"
+#include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
+#include "kdefrontend/spreadsheet/SearchReplaceWidget.h"
+
+#ifdef HAVE_VECTOR_BLF
+#include <Vector/BLF.h>
+#endif
 
 #include <QClipboard>
+#include <QModelIndex>
 #include <QUndoStack>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 #include <QRandomGenerator>
 #endif
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 //**********************************************************
 //****************** Copy&Paste tests **********************
@@ -37,6 +45,7 @@ extern "C" {
    insert two columns with float values into an empty spreadsheet
 */
 void SpreadsheetTest::testCopyPasteColumnMode00() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -98,6 +107,7 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
    the first column has to be converted to integer column, the second to float.
 */
 void SpreadsheetTest::testCopyPasteColumnMode02() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -127,6 +137,7 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
    Properly handle empty values in the tab separated data.
 */
 void SpreadsheetTest::testCopyPasteColumnMode03() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -190,6 +201,7 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 	automatically detect the proper format for the datetime columns
  */
 void SpreadsheetTest::testCopyPasteColumnMode04() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -226,6 +238,7 @@ void SpreadsheetTest::testCopyPasteColumnMode04() {
 	automatically detect the proper format for the datetime columns, time part only
  */
 void SpreadsheetTest::testCopyPasteColumnMode05() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -396,6 +409,7 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
    the spreadsheet has to be extended accordingly
 */
 void SpreadsheetTest::testCopyPasteSizeChange01() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
@@ -432,7 +446,9 @@ void SpreadsheetTest::testCopyPasteSizeChange01() {
 	QCOMPARE(sheet.column(2)->valueAt(2), 4.4);
 }
 
-/////////////////////////////// Sorting tests ////////////////////////////
+// **********************************************************
+// *********************** sorting  *************************
+// **********************************************************
 // single column
 
 /*
@@ -1153,6 +1169,9 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 	QBENCHMARK { sheet.sortColumns(col0, {col0, col1}, true); }
 }
 
+// **********************************************************
+// ********************* flattening  ************************
+// **********************************************************
 void SpreadsheetTest::testFlatten00() {
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
@@ -1489,6 +1508,1342 @@ void SpreadsheetTest::testFlatten03() {
 	QCOMPARE(col2->integerAt(3), 10);
 	QCOMPARE(col2->integerAt(4), 20);
 	QCOMPARE(col2->integerAt(5), 30);
+}
+
+// **********************************************************
+// ******************** search&replace  *********************
+// **********************************************************
+Spreadsheet* SpreadsheetTest::createSearchReplaceSpreadsheet() {
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+
+	sheet->setColumnCount(4);
+	sheet->setRowCount(4);
+
+	// first text column
+	auto* col1 = sheet->column(0);
+	col1->setName(QStringLiteral("text"));
+	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col1->setTextAt(0, QStringLiteral("A"));
+	col1->setTextAt(1, QStringLiteral("B"));
+	col1->setTextAt(2, QStringLiteral("A"));
+	col1->setTextAt(3, QStringLiteral("C"));
+
+	// first numeric (integer) column
+	auto* col2 = sheet->column(1);
+	col2->setName(QStringLiteral("integer"));
+	col2->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col2->setIntegerAt(0, 1);
+	col2->setIntegerAt(1, 2);
+	col2->setIntegerAt(2, 4);
+	col2->setIntegerAt(3, 2);
+
+	// second text column
+	auto* col3 = sheet->column(2);
+	col3->setName(QStringLiteral("text2"));
+	col3->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col3->setTextAt(0, QStringLiteral("B1"));
+	col3->setTextAt(1, QStringLiteral("A"));
+	col3->setTextAt(2, QStringLiteral("C2"));
+	col3->setTextAt(3, QStringLiteral("A2"));
+
+	// second numeric (double) column
+	auto* col4 = sheet->column(3);
+	col4->setName(QStringLiteral("double"));
+	col4->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col4->setValueAt(0, 4);
+	col4->setValueAt(1, 3);
+	col4->setValueAt(2, 2);
+	col4->setValueAt(3, 1);
+
+	return sheet;
+}
+
+/*!
+ * simple search ignoring data types, column-major order
+ */
+void SpreadsheetTest::testSearchSimple00() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// navigate to the (0,0) cell having the text value "A"
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	view->goToCell(0, 0);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
+	searchReplaceWidget->setReplaceEnabled(false);
+
+	auto indexes = view->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = sheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	// checks: the initial cell text is "A", we navigate with 'next'
+	// and then back with 'prev' in the column-major order looking for "A"
+
+	// initial
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	auto curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next
+	searchReplaceWidget->findNextSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next
+	searchReplaceWidget->findNextSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// next
+	searchReplaceWidget->findNextSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 2);
+
+	// next, last matching cell reached
+	searchReplaceWidget->findNextSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 2);
+
+	// previous
+	searchReplaceWidget->findPreviousSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// previous
+	searchReplaceWidget->findPreviousSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous
+	searchReplaceWidget->findPreviousSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous, last matching cell reached
+	searchReplaceWidget->findPreviousSimple(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+}
+
+/*!
+ * extended search for Text, column-major order
+ */
+void SpreadsheetTest::testSearchExtended00() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// navigate to the (0,0) cell having the text value "A"
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	view->goToCell(0, 0);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Text);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::ColumnMajor);
+
+	auto indexes = view->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = sheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	// checks: the initial cell text is "A", we navigate with 'next'
+	// and then back with 'prev' in the column-major order looking for "A"
+
+	// initial
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	auto curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// next, last matching cell reached
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous, last matching cell reached
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+}
+
+/*!
+ * extended search for Text, row-major order
+ */
+void SpreadsheetTest::testSearchExtended01() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// navigate to the (0,0) cell having the text value "A"
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	view->goToCell(0, 0);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Text);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::RowMajor);
+
+	auto indexes = view->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = sheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	// checks: the initial cell text is "A", we navigate with 'next'
+	// and then back with 'prev' in the row-major order looking for "A"
+
+	// initial
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	auto curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// next, last matching cell reached
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 2);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+
+	// previous, last matching cell reached
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 0);
+	QCOMPARE(curIndex.column(), 0);
+}
+
+/*!
+ * search for Numeric, column-major order
+ */
+void SpreadsheetTest::testSearchExtended02() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// navigate to the (1,1) cell having the numeric value "2"
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	view->goToCell(1, 1);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Numeric);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::ColumnMajor);
+
+	auto indexes = view->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = sheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	// checks: the initial cell text is "2", we navigate with 'next'
+	// and then back with 'prev' in the column-major order looking for "2"
+
+	// initial
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	auto curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 1);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 3);
+
+	// next, last matching cell reached
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 3);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 1);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+
+	// previous, last matching cell reached
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+}
+
+/*!
+ * search for Numeric, row major
+ */
+void SpreadsheetTest::testSearchExtended03() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// navigate to the (1,1) cell having the numeric value "2"
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	view->goToCell(1, 1);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, view);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Numeric);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::RowMajor);
+
+	auto indexes = view->selectionModel()->selectedIndexes();
+	if (!indexes.isEmpty()) {
+		const auto& firstIndex = indexes.constFirst();
+		const auto* column = sheet->column(firstIndex.column());
+		const int row = firstIndex.row();
+		searchReplaceWidget->setInitialPattern(column->columnMode(), column->asStringColumn()->textAt(row));
+	}
+
+	// checks: the initial cell text is "2", we navigate with 'next'
+	// and then back with 'prev' in the column-major order looking for "2"
+
+	// initial
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	auto curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 3);
+
+	// next
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 1);
+
+	// next, last matching cell reached
+	searchReplaceWidget->findNext(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 3);
+	QCOMPARE(curIndex.column(), 1);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 2);
+	QCOMPARE(curIndex.column(), 3);
+
+	// previous
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+
+	// previous, last matching cell reached
+	searchReplaceWidget->findPrevious(true);
+	indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.count(), 1);
+	curIndex = indexes.constFirst();
+	QCOMPARE(curIndex.row(), 1);
+	QCOMPARE(curIndex.column(), 1);
+}
+
+void SpreadsheetTest::testSearchFindAll() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, nullptr);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Text);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::ColumnMajor);
+	searchReplaceWidget->setTextOperator(SearchReplaceWidget::OperatorText::StartsWith);
+
+	// search for cells starting with "B" and highlight them ("find")
+	searchReplaceWidget->setInitialPattern(AbstractColumn::ColumnMode::Text, QLatin1String("B"));
+	searchReplaceWidget->findAll();
+
+	// checks
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+	auto indexes = view->selectionModel()->selectedIndexes();
+	QCOMPARE(indexes.size(), 2);
+	QCOMPARE(indexes.at(0).row(), 1);
+	QCOMPARE(indexes.at(0).column(), 0);
+	QCOMPARE(indexes.at(1).row(), 0);
+	QCOMPARE(indexes.at(1).column(), 2);
+}
+
+void SpreadsheetTest::testSearchReplaceAll() {
+	Project project;
+	auto* sheet = createSearchReplaceSpreadsheet();
+	project.addChild(sheet);
+
+	// initialize the search&replace widget
+	auto* searchReplaceWidget = new SearchReplaceWidget(sheet, nullptr);
+	searchReplaceWidget->setReplaceEnabled(true);
+	searchReplaceWidget->setDataType(SearchReplaceWidget::DataType::Text);
+	searchReplaceWidget->setOrder(SearchReplaceWidget::Order::ColumnMajor);
+	searchReplaceWidget->setTextOperator(SearchReplaceWidget::OperatorText::RegEx);
+
+	// search for "A" or "C" and replace with "test"
+	searchReplaceWidget->setInitialPattern(AbstractColumn::ColumnMode::Text, QLatin1String("[A.C]"));
+	searchReplaceWidget->setReplaceText(QLatin1String("test"));
+	searchReplaceWidget->replaceAll();
+
+	// checks
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.at(0)->textAt(0), QLatin1String("test"));
+	QCOMPARE(columns.at(0)->textAt(2), QLatin1String("test"));
+	QCOMPARE(columns.at(2)->textAt(1), QLatin1String("test"));
+	QCOMPARE(columns.at(2)->textAt(2), QLatin1String("test"));
+}
+
+// **********************************************************
+// ********************** size changes  *********************
+// **********************************************************
+void SpreadsheetTest::testInsertRows() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter]() {
+		rowsAboutToBeInsertedCounter++;
+	});
+	int rowsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsInserted, [&rowsInsertedCounter]() {
+		rowsInsertedCounter++;
+	});
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter]() {
+		rowsAboutToBeRemovedCounter++;
+	});
+	int rowsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsRemoved, [&rowsRemovedCounter]() {
+		rowsRemovedCounter++;
+	});
+
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->setRowCount(101); // No crash shall happen
+	QCOMPARE(sheet->rowCount(), 101);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->rowCount(), 101);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 2); // set and redo()
+	QCOMPARE(rowsInsertedCounter, 2); // set and redo()
+	QCOMPARE(rowsAboutToBeRemovedCounter, 1); // undo()
+	QCOMPARE(rowsRemovedCounter, 1); // undo()
+}
+
+void SpreadsheetTest::testRemoveRows() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter]() {
+		rowsAboutToBeInsertedCounter++;
+	});
+	int rowsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsInserted, [&rowsInsertedCounter]() {
+		rowsInsertedCounter++;
+	});
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter]() {
+		rowsAboutToBeRemovedCounter++;
+	});
+	int rowsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsRemoved, [&rowsRemovedCounter]() {
+		rowsRemovedCounter++;
+	});
+
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->setRowCount(10); // No crash shall happen
+	QCOMPARE(sheet->rowCount(), 10);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->rowCount(), 10);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 1); // undo
+	QCOMPARE(rowsInsertedCounter, 1); // undo
+	QCOMPARE(rowsAboutToBeRemovedCounter, 2); // set and redo()
+	QCOMPARE(rowsRemovedCounter, 2); // set and redo()
+}
+
+void SpreadsheetTest::testInsertColumns() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+
+	int columnsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [&columnsAboutToBeInsertedCounter]() {
+		columnsAboutToBeInsertedCounter++;
+	});
+	int columnsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsInserted, [&columnsInsertedCounter]() {
+		columnsInsertedCounter++;
+	});
+	int columnsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [&columnsAboutToBeRemovedCounter]() {
+		columnsAboutToBeRemovedCounter++;
+	});
+	int columnsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsRemoved, [&columnsRemovedCounter]() {
+		columnsRemovedCounter++;
+	});
+
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->setColumnCount(5); // No crash shall happen
+	QCOMPARE(sheet->columnCount(), 5);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->columnCount(), 5);
+
+	QCOMPARE(columnsAboutToBeInsertedCounter, 2); // set and redo()
+	QCOMPARE(columnsInsertedCounter, 2); // set and redo()
+	QCOMPARE(columnsRemovedCounter, 1); // undo()
+	QCOMPARE(columnsAboutToBeRemovedCounter, 1); // undo()
+}
+
+void SpreadsheetTest::testRemoveColumns() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+
+	int columnsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [&columnsAboutToBeInsertedCounter]() {
+		columnsAboutToBeInsertedCounter++;
+	});
+	int columnsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsInserted, [&columnsInsertedCounter]() {
+		columnsInsertedCounter++;
+	});
+	int columnsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [&columnsAboutToBeRemovedCounter]() {
+		columnsAboutToBeRemovedCounter++;
+	});
+	int columnsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsRemoved, [&columnsRemovedCounter]() {
+		columnsRemovedCounter++;
+	});
+
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->setColumnCount(1); // No crash shall happen
+	QCOMPARE(sheet->columnCount(), 1);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->columnCount(), 1);
+
+	QCOMPARE(columnsAboutToBeInsertedCounter, 1); // undo()
+	QCOMPARE(columnsInsertedCounter, 1); // undo()
+	QCOMPARE(columnsRemovedCounter, 2); // set and redo()
+	QCOMPARE(columnsAboutToBeRemovedCounter, 2); // set and redo()
+}
+
+/*!
+ * \brief testInsertRowsSuppressUpdate
+ * It shall not crash
+ * Testing if in the model begin and end are used properly
+ */
+void SpreadsheetTest::testInsertRowsSuppressUpdate() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter]() {
+		rowsAboutToBeInsertedCounter++;
+	});
+	int rowsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsInserted, [&rowsInsertedCounter]() {
+		rowsInsertedCounter++;
+	});
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter]() {
+		rowsAboutToBeRemovedCounter++;
+	});
+	int rowsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsRemoved, [&rowsRemovedCounter]() {
+		rowsRemovedCounter++;
+	});
+
+	int modelResetCounter = 0;
+	connect(model, &SpreadsheetModel::modelReset, [&modelResetCounter]() {
+		modelResetCounter++;
+	});
+	int modelAboutToResetCounter = 0;
+	connect(model, &SpreadsheetModel::modelAboutToBeReset, [&modelAboutToResetCounter]() {
+		modelAboutToResetCounter++;
+	});
+
+	model->suppressSignals(true);
+
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->setRowCount(101); // No crash shall happen
+	QCOMPARE(sheet->rowCount(), 101);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->rowCount(), 100);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->rowCount(), 101);
+
+	model->suppressSignals(false);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 0);
+	QCOMPARE(rowsInsertedCounter, 0);
+	QCOMPARE(rowsAboutToBeRemovedCounter, 0);
+	QCOMPARE(rowsRemovedCounter, 0);
+	QCOMPARE(modelResetCounter, 1);
+	QCOMPARE(modelAboutToResetCounter, 1);
+}
+
+/*!
+ * \brief testInsertColumnsSuppressUpdate
+ * It shall not crash
+ * Testing if in the model begin and end are used properly
+ */
+void SpreadsheetTest::testInsertColumnsSuppressUpdate() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+
+	int columnsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [&columnsAboutToBeInsertedCounter]() {
+		columnsAboutToBeInsertedCounter++;
+	});
+	int columnsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsInserted, [&columnsInsertedCounter]() {
+		columnsInsertedCounter++;
+	});
+	int columnsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [&columnsAboutToBeRemovedCounter]() {
+		columnsAboutToBeRemovedCounter++;
+	});
+	int columnsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsRemoved, [&columnsRemovedCounter]() {
+		columnsRemovedCounter++;
+	});
+
+	int modelResetCounter = 0;
+	connect(model, &SpreadsheetModel::modelReset, [&modelResetCounter]() {
+		modelResetCounter++;
+	});
+	int modelAboutToResetCounter = 0;
+	connect(model, &SpreadsheetModel::modelAboutToBeReset, [&modelAboutToResetCounter]() {
+		modelAboutToResetCounter++;
+	});
+
+	model->suppressSignals(true);
+
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->setColumnCount(5); // No crash shall happen
+	QCOMPARE(sheet->columnCount(), 5);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->columnCount(), 2);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->columnCount(), 5);
+
+	model->suppressSignals(false);
+
+	QCOMPARE(columnsAboutToBeInsertedCounter, 0);
+	QCOMPARE(columnsInsertedCounter, 0);
+	QCOMPARE(columnsRemovedCounter, 0);
+	QCOMPARE(columnsAboutToBeRemovedCounter, 0);
+	QCOMPARE(modelResetCounter, 1);
+	QCOMPARE(modelAboutToResetCounter, 1);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(3);
+	sheetData->setRowCount(10);
+
+	auto* sheetData2 = new Spreadsheet(QStringLiteral("data2"), false);
+	project.addChild(sheetData2);
+	sheetData2->setColumnCount(3);
+	sheetData2->setRowCount(100);
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(3);
+	sheetCalculations->setRowCount(2);
+
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
+	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+	QCOMPARE(dock.m_spreadsheet->linking(), false);
+
+	dock.ui.cbLinkingEnabled->toggled(true);
+
+	// QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), true); // does not work here. Don't know why
+	// QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), true);
+	// QCOMPARE(dock.ui.sbRowCount->isEnabled(), false);
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
+	QCOMPARE(sheetCalculations->rowCount(), 2);
+
+	const auto index = dock.m_aspectTreeModel->modelIndexOfAspect(sheetData);
+	QCOMPARE(index.isValid(), true);
+	// dock.ui.cbLinkedSpreadsheet->setCurrentModelIndex(index); // Does not trigger the slot
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	sheetCalculations->setLinkedSpreadsheet(sheetData2);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData2);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
+	QCOMPARE(sheetCalculations->rowCount(), 100);
+
+	sheetCalculations->undoStack()->undo();
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	sheetCalculations->undoStack()->redo();
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData2);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData2->path());
+	QCOMPARE(sheetCalculations->rowCount(), 100);
+
+	sheetCalculations->undoStack()->undo(); // first undo
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	sheetCalculations->undoStack()->undo();
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr); // No linked spreadsheet anymore
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
+	QCOMPARE(sheetCalculations->rowCount(), 2); // Go back to original row count
+
+	sheetCalculations->undoStack()->undo();
+	QCOMPARE(sheetCalculations->linking(), false);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QLatin1String());
+	QCOMPARE(sheetCalculations->rowCount(), 2);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(3);
+	sheetData->setRowCount(10);
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(3);
+	sheetCalculations->setRowCount(2);
+
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
+	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+	QCOMPARE(sheetCalculations->linking(), false);
+
+	Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
+
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	sheetData->remove();
+	sheetData->setRowCount(100);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QStringLiteral("Project/data"));
+	QCOMPARE(sheetCalculations->rowCount(), 10); // does not change
+
+	auto* sheetDataNew = new Spreadsheet(QStringLiteral("data"), false);
+	sheetDataNew->setColumnCount(3);
+	sheetDataNew->setRowCount(12);
+	project.addChild(sheetDataNew);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetDataNew);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetDataNew->path());
+	QCOMPARE(sheetCalculations->rowCount(), 12);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetAddRow() {
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(3);
+	sheetData->setRowCount(10);
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(3);
+	sheetCalculations->setRowCount(2);
+
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
+	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+	QCOMPARE(sheetCalculations->linking(), false);
+
+	Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
+
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+	sheetData->setRowCount(13);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 13);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(3);
+	sheetData->setRowCount(10);
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(3);
+	sheetCalculations->setRowCount(2);
+
+	SpreadsheetDock dock(nullptr);
+	dock.setSpreadsheets({sheetCalculations});
+
+	QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
+	QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
+	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+	QCOMPARE(sheetCalculations->linking(), false);
+
+	dock.ui.cbLinkingEnabled->toggled(true);
+
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+	sheetData->setRowCount(7);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 7);
+}
+
+void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
+	Project project;
+	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(2);
+	sheetData->setRowCount(10);
+	auto* sheetDataColumn0 = sheetData->child<Column>(0);
+	sheetDataColumn0->replaceValues(0, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+	QVERIFY(sheetDataColumn0);
+	auto* sheetDataColumn1 = sheetData->child<Column>(1);
+	QVERIFY(sheetDataColumn1);
+	sheetDataColumn1->replaceValues(0, {1, 2, 1, 2, 1, 2, 1, 2, 1, 3});
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(1);
+	sheetCalculations->setRowCount(2);
+	auto* sheetCalculationsColumn0 = sheetCalculations->child<Column>(0);
+	QVERIFY(sheetCalculationsColumn0);
+	sheetCalculationsColumn0->setFormula(QStringLiteral("x + y"), {QStringLiteral("x"), QStringLiteral("y")}, {sheetDataColumn0, sheetDataColumn1}, true);
+	sheetCalculationsColumn0->updateFormula();
+
+	{
+		QVector<double> ref{2, 4, 4, 6, 6, 8, 8, 10, 10, 13};
+		QCOMPARE(sheetCalculationsColumn0->rowCount(), 10); // currently the update() triggers a resize
+		for (int i = 0; i < 10; i++)
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
+	}
+	sheetCalculations->setLinking(true);
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+	sheetData->setRowCount(7);
+	sheetDataColumn0->replaceValues(0, {3, 4, 6, 2, 1, 8, 5});
+	QCOMPARE(sheetDataColumn0->rowCount(), 7);
+
+	{
+		QVector<double> ref{4, 6, 7, 4, 2, 10, 6};
+		QCOMPARE(sheetCalculationsColumn0->rowCount(), ref.count());
+		for (int i = 0; i < ref.count(); i++) {
+			qDebug() << i;
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
+		}
+	}
+}
+
+void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
+	QString savePath;
+	{
+		Project project;
+		auto model = new AspectTreeModel(&project, this);
+		ProjectExplorer pe; // Needed otherwise the state key is missing in the file and then no restorePointers will be called
+		pe.setProject(&project);
+		pe.setModel(model);
+		auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
+		project.addChild(sheetData);
+		sheetData->setColumnCount(3);
+		sheetData->setRowCount(10);
+
+		auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+		project.addChild(sheetCalculations);
+		sheetCalculations->setColumnCount(3);
+		sheetCalculations->setRowCount(2);
+
+		SpreadsheetDock dock(nullptr);
+		dock.setSpreadsheets({sheetCalculations});
+
+		QCOMPARE(dock.ui.cbLinkingEnabled->isChecked(), false);
+		QCOMPARE(dock.ui.cbLinkedSpreadsheet->isVisible(), false);
+		QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
+		QCOMPARE(sheetCalculations->linking(), false);
+
+		Q_EMIT dock.ui.cbLinkingEnabled->toggled(true);
+
+		sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+		QCOMPARE(sheetCalculations->linking(), true);
+		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+		QCOMPARE(sheetCalculations->rowCount(), 10);
+
+		SAVE_PROJECT("testLinkSpreadsheetSaveLoad")
+	}
+
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		auto sheetData = project.child<Spreadsheet>(0);
+		QVERIFY(sheetData);
+		auto sheetCalculations = project.child<Spreadsheet>(1);
+		QVERIFY(sheetCalculations);
+
+		QCOMPARE(sheetCalculations->linking(), true);
+		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+		QCOMPARE(sheetCalculations->rowCount(), 10);
+
+		new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+		sheetData->setRowCount(11); // Changing shall also update sheetCalculations also after loading
+
+		QCOMPARE(sheetCalculations->linking(), true);
+		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+		QCOMPARE(sheetCalculations->rowCount(), 11);
+	}
+}
+
+#ifdef HAVE_VECTOR_BLF
+// Copied from BLFFilterTest.cpp
+namespace {
+static const std::string PRIMITIVE_DBC =
+	R"(VERSION "1.0.0"
+
+NS_ :
+
+BS_:
+
+BU_: DBG DRIVER IO MOTOR SENSOR
+
+)";
+
+void createDBCFile(const QString& filename, const std::string& content) {
+	auto* file = std::fopen(filename.toStdString().c_str(), "w");
+	QVERIFY(file);
+	std::fputs(PRIMITIVE_DBC.c_str(), file);
+	std::fputs(content.c_str(), file);
+	std::fclose(file);
+}
+
+Vector::BLF::CanMessage2* createCANMessage(uint32_t id, uint64_t timestamp, const std::vector<uint8_t>& data) {
+	auto* canMessage = new Vector::BLF::CanMessage2();
+	canMessage->channel = 1;
+	canMessage->flags = 1; // TX
+	canMessage->dlc = std::min<uint8_t>(data.size(), 8);
+	canMessage->id = id;
+	canMessage->objectTimeStamp = timestamp;
+	canMessage->objectFlags = Vector::BLF::ObjectHeader::ObjectFlags::TimeOneNans;
+	if (canMessage->data.size() < canMessage->dlc)
+		canMessage->data.resize(canMessage->dlc);
+
+	for (int i = 0; i < canMessage->dlc; i++) {
+		canMessage->data[i] = data.at(i);
+	}
+	return canMessage;
+}
+
+void createBLFFile(const QString& filename, QVector<Vector::BLF::CanMessage2*> messages) {
+	Vector::BLF::File blfFile;
+	blfFile.open(filename.toStdString().c_str(), std::ios_base::out);
+	QVERIFY(blfFile.is_open());
+
+	for (auto msg : messages) {
+		blfFile.write(msg);
+	}
+	// Finish creating files
+	blfFile.close();
+}
+}
+
+void SpreadsheetTest::testLinkSpreadSheetImportBLF() {
+	QTemporaryFile blfFileName(QStringLiteral("XXXXXX.blf"));
+	QVERIFY(blfFileName.open());
+	QVector<Vector::BLF::CanMessage2*> messages{
+		createCANMessage(337, 5, {0, 4, 252, 19, 0, 0, 0, 0}),
+		createCANMessage(541, 10, {7, 39, 118, 33, 250, 30, 76, 24}), // 99.91, 85.66, 79.3, 22.2
+		createCANMessage(337, 15, {47, 4, 60, 29, 0, 0, 0, 0}),
+		createCANMessage(337, 20, {57, 4, 250, 29, 0, 0, 0, 0}),
+		createCANMessage(541, 25, {7, 39, 118, 33, 250, 30, 76, 24}), // 99.91, 85.66, 79.3, 22.2
+	}; // time is in nanoseconds
+	createBLFFile(blfFileName.fileName(), messages);
+
+	QTemporaryFile dbcFile(QStringLiteral("XXXXXX.dbc"));
+	QVERIFY(dbcFile.open());
+	const auto dbcContent = R"(BO_ 337 STATUS: 8 Vector__XXX
+ SG_ Value6 : 27|3@1+ (1,0) [0|7] ""  Vector__XXX
+ SG_ Value5 : 16|11@1+ (0.1,-102) [-102|102] "%"  Vector__XXX
+ SG_ Value2 : 8|2@1+ (1,0) [0|2] ""  Vector__XXX
+ SG_ Value3 : 10|1@1+ (1,0) [0|1] ""  Vector__XXX
+ SG_ Value7 : 30|2@1+ (1,0) [0|3] ""  Vector__XXX
+ SG_ Value4 : 11|4@1+ (1,0) [0|3] ""  Vector__XXX
+ SG_ Value1 : 0|8@1+ (1,0) [0|204] "Km/h"  Vector__XXX"
+BO_ 541 MSG2: 8 Vector__XXX
+ SG_ MSG2Value4 : 48|16@1+ (0.01,-40) [-40|125] "C"  Vector__XXX
+ SG_ MSG2Value1 : 0|16@1+ (0.01,0) [0|100] "%"  Vector__XXX
+ SG_ MSG2Value3 : 32|16@1+ (0.01,0) [0|100] "%"  Vector__XXX
+ SG_ MSG2Value2 : 16|16@1+ (0.01,0) [0|100] "%"  Vector__XXX
+)";
+	createDBCFile(dbcFile.fileName(), dbcContent);
+
+	//------------------------------------------------------------------------------------------
+	Project project;
+	const auto spreadsheetName = blfFileName.fileName().replace(QStringLiteral(".blf"), QStringLiteral(""));
+	auto* sheetData = new Spreadsheet(spreadsheetName, false);
+	project.addChild(sheetData);
+	sheetData->setColumnCount(2);
+	sheetData->setRowCount(10);
+	auto* sheetDataColumn0 = sheetData->child<Column>(0);
+	sheetDataColumn0->setName(QStringLiteral("Value6_"));
+	sheetDataColumn0->replaceValues(0, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+	QVERIFY(sheetDataColumn0);
+	auto* sheetDataColumn1 = sheetData->child<Column>(1);
+	sheetDataColumn1->setName(QStringLiteral("Value5_%"));
+	QVERIFY(sheetDataColumn1);
+	sheetDataColumn1->replaceValues(0, {1, 2, 1, 2, 1, 2, 1, 2, 1, 3});
+
+	auto* sheetCalculations = new Spreadsheet(QStringLiteral("calculations"), false);
+	project.addChild(sheetCalculations);
+	sheetCalculations->setColumnCount(2);
+	sheetCalculations->setRowCount(2);
+
+	auto* sheetCalculationsColumn0 = sheetCalculations->child<Column>(0);
+	QVERIFY(sheetCalculationsColumn0);
+	sheetCalculationsColumn0->setFormula(QStringLiteral("2*x"), {QStringLiteral("x")}, {sheetDataColumn0}, true);
+	sheetCalculationsColumn0->updateFormula();
+
+	auto* sheetCalculationsColumn1 = sheetCalculations->child<Column>(1);
+	QVERIFY(sheetCalculationsColumn1);
+	sheetCalculationsColumn1->setFormula(QStringLiteral("2*x"), {QStringLiteral("x")}, {sheetDataColumn1}, true);
+	sheetCalculationsColumn1->updateFormula();
+
+	{
+		QVector<double> ref{2, 4, 6, 8, 10, 12, 14, 16, 18, 20};
+		QCOMPARE(sheetCalculationsColumn0->rowCount(), 10);
+		for (int i = 0; i < 10; i++)
+			VALUES_EQUAL(sheetCalculationsColumn0->doubleAt(i), ref.at(i));
+	}
+
+	{
+		QVector<double> ref{2, 4, 2, 4, 2, 4, 2, 4, 2, 6};
+		QCOMPARE(sheetCalculationsColumn1->rowCount(), 10);
+		for (int i = 0; i < 10; i++)
+			VALUES_EQUAL(sheetCalculationsColumn1->doubleAt(i), ref.at(i));
+	}
+
+	sheetCalculations->setLinking(true);
+	sheetCalculations->setLinkedSpreadsheet(sheetData);
+
+	QCOMPARE(sheetCalculations->linking(), true);
+	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
+	QCOMPARE(sheetCalculations->rowCount(), 10);
+
+	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
+
+	VectorBLFFilter filter;
+	filter.setConvertTimeToSeconds(true);
+	filter.setTimeHandlingMode(CANFilter::TimeHandling::ConcatPrevious);
+	QCOMPARE(filter.isValid(blfFileName.fileName()), true);
+
+	// Valid blf and valid dbc
+	filter.setDBCFile(dbcFile.fileName());
+	filter.readDataFromFile(blfFileName.fileName(), sheetData);
+	QCOMPARE(sheetData->columnCount(), 12);
+
+	QCOMPARE(sheetData->rowCount(), 5);
+	QCOMPARE(sheetDataColumn0->rowCount(), 5);
+	QCOMPARE(sheetDataColumn1->rowCount(), 5);
+
+	const auto* sheetDataColumn6 = sheetData->child<Column>(1);
+	QCOMPARE(sheetDataColumn6->name(), QStringLiteral("Value6_"));
+	const auto* sheetDataColumn5 = sheetData->child<Column>(2);
+	QCOMPARE(sheetDataColumn5->name(), QStringLiteral("Value5_%"));
+
+	{
+		QVector<double> ref{4., 4., 6., 6., 6.};
+		const auto* sheetCalculationsColumn = sheetCalculations->child<Column>(0);
+		QCOMPARE(sheetCalculationsColumn->formulaData().at(0).column(), sheetDataColumn6);
+		QCOMPARE(sheetCalculationsColumn->rowCount(), ref.count());
+		for (int i = 0; i < ref.count(); i++) {
+			qDebug() << i;
+			VALUES_EQUAL(sheetCalculationsColumn->doubleAt(i), ref.at(i));
+		}
+	}
+
+	{
+		QVector<double> ref{0., 0., 64., 102., 102.};
+		const auto* sheetCalculationsColumn = sheetCalculations->child<Column>(1);
+		QCOMPARE(sheetCalculationsColumn->formulaData().at(0).column(), sheetDataColumn5);
+		QCOMPARE(sheetCalculationsColumn->rowCount(), ref.count());
+		for (int i = 0; i < ref.count(); i++) {
+			qDebug() << i;
+			VALUES_EQUAL(sheetCalculationsColumn->doubleAt(i), ref.at(i));
+		}
+	}
+}
+#endif // HAVE_VECTOR_BLF
+
+/*!
+ * Columns are named in the correct number order
+ */
+void SpreadsheetTest::testNaming() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	new SpreadsheetModel(sheet);
+
+	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(sheet->column(0)->name(), QStringLiteral("1"));
+	QCOMPARE(sheet->column(1)->name(), QStringLiteral("2"));
+
+	sheet->setColumnCount(10);
+	QCOMPARE(sheet->columnCount(), 10);
+	for (int i = 0; i < 10; i++) {
+		QCOMPARE(sheet->column(i)->name(), QString::number(i + 1));
+	}
 }
 
 QTEST_MAIN(SpreadsheetTest)

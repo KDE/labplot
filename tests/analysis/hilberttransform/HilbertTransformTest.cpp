@@ -12,7 +12,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/XYHilbertTransformCurve.h"
 
-//##############################################################################
+// ##############################################################################
 
 void HilbertTransformTest::test1() {
 	// data
@@ -35,7 +35,7 @@ void HilbertTransformTest::test1() {
 	curve.setTransformData(data);
 
 	// perform the transform
-	const XYHilbertTransformCurve::TransformResult& result = curve.transformResult();
+	const auto& result = curve.result();
 
 	// check the results
 	QCOMPARE(result.available, true);
@@ -79,7 +79,7 @@ void HilbertTransformTest::test2() {
 	curve.setTransformData(data);
 
 	// perform the transform
-	const XYHilbertTransformCurve::TransformResult& result = curve.transformResult();
+	const auto& result = curve.result();
 
 	// check the results
 	QCOMPARE(result.available, true);
@@ -127,7 +127,7 @@ void HilbertTransformTest::test3() {
 	// perform the transform
 	curve.setTransformData(data);
 
-	const XYHilbertTransformCurve::TransformResult& result = curve.transformResult();
+	const auto& result = curve.result();
 
 	// check the results
 	QCOMPARE(result.available, true);
@@ -176,7 +176,7 @@ void HilbertTransformTest::test4() {
 	// perform the transform
 	curve.setTransformData(data);
 
-	const XYHilbertTransformCurve::TransformResult& result = curve.transformResult();
+	const auto& result = curve.result();
 
 	// check the results
 	QCOMPARE(result.available, true);
@@ -237,7 +237,7 @@ void HilbertTransformTest::testPerformance() {
 	}
 
 	// check the results
-	const XYHilbertTransformCurve::TransformResult& result = curve.transformResult();
+	const auto& result = curve.result();
 
 	QCOMPARE(result.available, true);
 	QCOMPARE(result.valid, true);

@@ -23,7 +23,10 @@
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 
+#include <QBuffer>
 #include <QDesktopWidget>
+#include <QDir>
+#include <QFileInfo>
 #include <QGraphicsScene>
 #include <QMenu>
 #include <QPrintDialog>
@@ -90,16 +93,16 @@ void DatapickerImage::init() {
 
 	// edit image settings
 	d->plotImageType = DatapickerImage::PlotImageType::OriginalImage;
-	d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 90);
-	d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 30);
-	d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", 360);
-	d->settings.hueThresholdLow = group.readEntry("HueThresholdLow", 0);
-	d->settings.intensityThresholdHigh = group.readEntry("IntensityThresholdHigh", 100);
-	d->settings.intensityThresholdLow = group.readEntry("IntensityThresholdLow", 20);
-	d->settings.saturationThresholdHigh = group.readEntry("SaturationThresholdHigh", 100);
-	d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", 30);
-	d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 90);
-	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 30);
+	d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", d->settings.foregroundThresholdHigh);
+	d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", d->settings.foregroundThresholdLow);
+	d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", d->settings.hueThresholdHigh);
+	d->settings.hueThresholdLow = group.readEntry("HueThresholdLow", d->settings.hueThresholdLow);
+	d->settings.intensityThresholdHigh = group.readEntry("IntensityThresholdHigh", d->settings.intensityThresholdHigh);
+	d->settings.intensityThresholdLow = group.readEntry("IntensityThresholdLow", d->settings.intensityThresholdLow);
+	d->settings.saturationThresholdHigh = group.readEntry("SaturationThresholdHigh", d->settings.saturationThresholdHigh);
+	d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", d->settings.saturationThresholdLow);
+	d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", d->settings.valueThresholdHigh);
+	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", d->settings.valueThresholdLow);
 
 	// reference point symbol properties
 	d->symbol = new Symbol(QString());
@@ -226,8 +229,85 @@ DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 	return d->plotImageType;
 }
 
+class DatapickerImageSetOriginalImageCmd : public QUndoCommand {
+public:
+	DatapickerImageSetOriginalImageCmd(DatapickerImage::Private* target,
+									   const QImage& newImage,
+									   const QString& filename,
+									   bool embedded,
+									   const KLocalizedString& description,
+									   QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_img(newImage)
+		, m_filename(filename)
+		, m_embedded(embedded)
+		, m_target(target) {
+		setText(description.subs(m_target->name()).toString());
+	}
+	virtual void redo() override {
+		const QImage tmp = m_target->q->originalPlotImage;
+		const QString tmpFilename = m_target->q->fileName();
+		const bool tmpEmbedded = m_target->q->embedded();
+
+		if (m_embedded && !m_img.isNull())
+			m_target->q->originalPlotImage = m_img;
+		else
+			m_target->q->originalPlotImage.load(m_filename);
+		m_target->fileName = m_filename;
+		m_target->embedded = m_embedded;
+
+		if (tmpEmbedded)
+			m_img = tmp;
+		else
+			m_img = QImage();
+		m_filename = tmpFilename;
+		m_embedded = tmpEmbedded;
+		QUndoCommand::redo(); // redo all childs
+
+		finalize();
+		Q_EMIT m_target->q->fileNameChanged(m_target->fileName);
+		Q_EMIT m_target->q->embeddedChanged(m_target->embedded);
+	}
+
+	virtual void undo() override {
+		redo();
+	}
+
+	void finalize() {
+		m_target->updateImage();
+	}
+
+private:
+	QImage m_img;
+	QString m_filename;
+	bool m_embedded;
+	DatapickerImage::Private* m_target;
+};
+
+// 1. Image from clipboard, 2. file from path (embedded or not embedded)
+//     -> important to store qimage, because otherwise image is lost when doing undo
+// 1. Image from clipboard, 2. image from clipboard
+//     -> important to store qimage, because otherwise image is lost when doing undo
+// 1. Image from path (embedded or not embedded), 2. image from clipboard
+//     -> important to store qimage, because when doing redo after undo the image must be available
+// 1. Image from path (not embedded), 2. image from path
+//     -> storing qimage is not important
+// 1. Image from path (embedded), 2. image from path
+//     -> storing qimage is important because otherwise if undo and path is anymore valid image is anymore available
+
+void DatapickerImage::setImage(const QString& fileName, bool embedded) {
+	return setImage(QImage(), fileName, embedded);
+}
+
+void DatapickerImage::setImage(const QImage& image, const QString& filename, bool embedded) {
+	if (image != originalPlotImage || filename != fileName() || embedded != this->embedded())
+		exec(new DatapickerImageSetOriginalImageCmd(d, image, filename, embedded, ki18n("%1: upload image")));
+}
+
 /* =============================== getter methods for background options ================================= */
 BASIC_D_READER_IMPL(DatapickerImage, QString, fileName, fileName)
+BASIC_D_READER_IMPL(DatapickerImage, bool, isRelativeFilePath, isRelativeFilePath)
+BASIC_D_READER_IMPL(DatapickerImage, bool, embedded, embedded)
 BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::ReferencePoints, axisPoints, axisPoints)
 BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::EditorSettings, settings, settings)
 BASIC_D_READER_IMPL(DatapickerImage, float, rotationAngle, rotationAngle)
@@ -243,12 +323,49 @@ Symbol* DatapickerImage::symbol() const {
 
 BASIC_D_READER_IMPL(DatapickerImage, bool, pointVisibility, pointVisibility)
 /* ============================ setter methods and undo commands  for background options  ================= */
-STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetFileName, QString, fileName, updateFileName)
 void DatapickerImage::setFileName(const QString& fileName) {
-	if (fileName != d->fileName) {
+	setImage(fileName, embedded());
+}
+
+class DatapickerImageSetRelativeFilePathCmd : public StandardSetterCmd<DatapickerImage::Private, bool> {
+public:
+	DatapickerImageSetRelativeFilePathCmd(DatapickerImage::Private* target, bool newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)
+		: StandardSetterCmd<DatapickerImage::Private, bool>(target, &DatapickerImage::Private::isRelativeFilePath, newValue, description, parent) {
+	}
+	virtual void finalize() override {
+		if (m_target->q->project()) {
+			QString filename;
+			if (m_target->isRelativeFilePath) {
+				// Calculate from absolute to relative
+				QFileInfo fi(m_target->q->project()->fileName());
+				filename = fi.absoluteDir().relativeFilePath(m_target->fileName);
+			} else {
+				// Calculate from relative to absolute
+				QFileInfo fi(m_target->q->project()->fileName());
+				fi.setFile(m_target->fileName);
+				filename = fi.absoluteFilePath();
+			}
+			// setting relative is only possible if the image is not embedded!
+			m_target->q->setImage(filename, false);
+		}
+		emit m_target->q->relativeFilePathChanged(m_target->*m_field);
+	}
+};
+
+void DatapickerImage::setRelativeFilePath(bool relative) {
+	if (relative != d->isRelativeFilePath) {
 		beginMacro(i18n("%1: upload new image", name()));
-		exec(new DatapickerImageSetFileNameCmd(d, fileName, ki18n("%1: upload image")));
+		exec(new DatapickerImageSetRelativeFilePathCmd(d, relative, ki18n("%1: upload image")));
 		endMacro();
+	}
+}
+
+void DatapickerImage::setEmbedded(bool embedded) {
+	if (embedded != d->embedded) {
+		if (embedded)
+			setImage(originalPlotImage, fileName(), true);
+		else
+			setImage(fileName(), false);
 	}
 }
 
@@ -260,7 +377,7 @@ void DatapickerImage::setRotationAngle(float angle) {
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetAxisPoints, DatapickerImage::ReferencePoints, axisPoints)
 void DatapickerImage::setAxisPoints(const DatapickerImage::ReferencePoints& points) {
-	if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0)
+	if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0) // valgrind: Conditional jump or move depends on uninitialised value(s)
 		exec(new DatapickerImageSetAxisPointsCmd(d, points, ki18n("%1: set Axis points")));
 }
 
@@ -340,9 +457,9 @@ void DatapickerImage::referencePointSelected(const DatapickerPoint* point) {
 	m_currentRefPoint = -1;
 }
 
-//##############################################################################
-//######################  Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ######################  Private implementation ###############################
+// ##############################################################################
 DatapickerImagePrivate::DatapickerImagePrivate(DatapickerImage* owner)
 	: q(owner)
 	, pageRect(0, 0, 1000, 1000)
@@ -361,8 +478,9 @@ void DatapickerImagePrivate::retransform() {
 		point->retransform();
 }
 
-bool DatapickerImagePrivate::uploadImage(const QString& address) {
-	bool rc = q->originalPlotImage.load(address);
+bool DatapickerImagePrivate::uploadImage() {
+	const bool rc = !q->originalPlotImage.isNull();
+
 	if (rc) {
 		// convert the image to 32bit-format if this is not the case yet
 		QImage::Format format = q->originalPlotImage.format();
@@ -415,18 +533,15 @@ DatapickerImagePrivate::~DatapickerImagePrivate() {
 	delete m_scene;
 }
 
-void DatapickerImagePrivate::updateFileName() {
+void DatapickerImagePrivate::updateImage() {
 	WAIT_CURSOR;
 	q->isLoaded = false;
-	const QString& address = fileName.trimmed();
 
-	if (!address.isEmpty()) {
-		if (uploadImage(address))
-			fileName = address;
-	} else {
+	if (q->originalPlotImage.isNull()) {
 		// hide segments if they are visible
 		q->m_segments->setSegmentsVisible(false);
-	}
+	} else
+		uploadImage();
 
 	auto points = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	if (!points.isEmpty()) {
@@ -439,9 +554,9 @@ void DatapickerImagePrivate::updateFileName() {
 	RESET_CURSOR;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void DatapickerImage::save(QXmlStreamWriter* writer) const {
@@ -450,10 +565,23 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 
 	// general properties
 	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("embedded"), QString::number(d->embedded));
+	writer->writeAttribute(QStringLiteral("relativePath"), QString::number(d->isRelativeFilePath));
 	writer->writeAttribute(QStringLiteral("fileName"), d->fileName);
 	writer->writeAttribute(QStringLiteral("plotPointsType"), QString::number(static_cast<int>(d->plotPointsType)));
 	writer->writeAttribute(QStringLiteral("pointVisibility"), QString::number(d->pointVisibility));
 	writer->writeEndElement();
+
+	// image data
+	if (d->embedded && !originalPlotImage.isNull()) {
+		writer->writeStartElement(QStringLiteral("data"));
+		QByteArray data;
+		QBuffer buffer(&data);
+		buffer.open(QIODevice::WriteOnly);
+		originalPlotImage.save(&buffer, "PNG");
+		writer->writeCharacters(QLatin1String(data.toBase64()));
+		writer->writeEndElement();
+	}
 
 	writer->writeStartElement(QStringLiteral("axisPoint"));
 	writer->writeAttribute(QStringLiteral("graphType"), QString::number(static_cast<int>(d->axisPoints.type)));
@@ -523,11 +651,17 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 		if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE("embedded", embedded, bool);
+			READ_INT_VALUE("relativePath", isRelativeFilePath, bool);
 			str = attribs.value(QStringLiteral("fileName")).toString();
 			d->fileName = str;
 
 			READ_INT_VALUE("plotPointsType", plotPointsType, DatapickerImage::PointsType);
 			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
+		} else if (reader->name() == QLatin1String("data")) {
+			QByteArray ba = QByteArray::fromBase64(reader->readElementText().toLatin1());
+			if (!originalPlotImage.loadFromData(ba))
+				reader->raiseWarning(i18n("Failed to read image data"));
 		} else if (!preview && reader->name() == QLatin1String("axisPoint")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE_DIRECT("graphType", d->axisPoints.type, GraphType);
@@ -756,7 +890,10 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	d->uploadImage(d->fileName);
+	// No undo redo
+	if (originalPlotImage.isNull())
+		originalPlotImage.load(d->fileName);
+	d->uploadImage();
 	d->retransform();
 	return true;
 }

@@ -228,6 +228,19 @@
    <header>kcolorbutton.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbPosition</tabstop>
+  <tabstop>chkEnabled</tabstop>
+  <tabstop>cbType</tabstop>
+  <tabstop>leFileName</tabstop>
+  <tabstop>bOpen</tabstop>
+  <tabstop>cbColorStyle</tabstop>
+  <tabstop>cbImageStyle</tabstop>
+  <tabstop>cbBrushStyle</tabstop>
+  <tabstop>kcbFirstColor</tabstop>
+  <tabstop>kcbSecondColor</tabstop>
+  <tabstop>sbOpacity</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

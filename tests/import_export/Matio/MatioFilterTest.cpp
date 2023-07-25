@@ -403,11 +403,11 @@ void MatioFilterTest::testImportCell() {
 	QCOMPARE(spreadsheet.column(0)->textAt(2), QLatin1String());
 	QCOMPARE(spreadsheet.column(0)->textAt(3), QLatin1String());
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.);
-	QCOMPARE(spreadsheet.column(1)->valueAt(1), qQNaN());
-	QCOMPARE(spreadsheet.column(1)->valueAt(2), qQNaN());
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), NAN);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), NAN);
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 1.);
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 2.);
-	QCOMPARE(spreadsheet.column(2)->valueAt(2), qQNaN());
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), NAN);
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.);
 	QCOMPARE(spreadsheet.column(3)->valueAt(1), 2.);
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), 3.);
@@ -439,7 +439,7 @@ void MatioFilterTest::testImportCellPortion() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
 
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.);
-	QCOMPARE(spreadsheet.column(0)->valueAt(1), qQNaN());
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), NAN);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 2.);
 }
@@ -475,8 +475,8 @@ void MatioFilterTest::testImportEmptyCell() {
 
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2);
-	QCOMPARE(spreadsheet.column(2)->valueAt(0), qQNaN());
-	QCOMPARE(spreadsheet.column(3)->valueAt(0), qQNaN());
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), NAN);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), NAN);
 	QCOMPARE(spreadsheet.column(4)->valueAt(0), 3);
 }
 

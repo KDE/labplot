@@ -10,6 +10,19 @@
 #ifndef NSL_SF_STATS_H
 #define NSL_SF_STATS_H
 
+#undef __BEGIN_DECLS
+#undef __END_DECLS
+#ifdef __cplusplus
+#define __BEGIN_DECLS extern "C" {
+#define __END_DECLS }
+#else
+#define __BEGIN_DECLS /* empty */
+#define __END_DECLS /* empty */
+#endif
+__BEGIN_DECLS
+
+#include <stdbool.h>
+
 #define NSL_SF_STATS_DISTRIBUTION_COUNT 35
 #define NSL_SF_STATS_DISTRIBUTION_RNG_COUNT 31 /* GSL RNG distributions */
 /* ordered as defined in GSL random number distributions */
@@ -56,5 +69,9 @@ typedef enum {
 extern const char* nsl_sf_stats_distribution_name[];
 extern const char* nsl_sf_stats_distribution_pic_name[];
 extern const char* nsl_sf_stats_distribution_equation[];
+
+bool nsl_sf_stats_distribution_supports_ML(nsl_sf_stats_distribution);
+
+__END_DECLS
 
 #endif /* NSL_SF_STATS_H */

@@ -32,20 +32,14 @@ public:
 		// TODO: use Range
 		QVector<double> xRange{0., 0.}; // x range for correlation
 	};
-	struct CorrelationResult {
-		CorrelationResult(){};
-
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
-	};
 
 	explicit XYCorrelationCurve(const QString& name);
 	~XYCorrelationCurve() override;
 
+	typedef XYAnalysisCurve::Result CorrelationResult;
+	virtual const XYAnalysisCurve::Result& result() const override;
+
 	void recalculate() override;
-	bool resultAvailable() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

@@ -4,7 +4,7 @@
 	Description          : Widget for handling saving and loading of templates
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2012 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-	SPDX-FileCopyrightText: 2012-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,7 +21,7 @@ class TemplateHandler : public QWidget {
 	Q_OBJECT
 
 public:
-	enum class ClassName { Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint };
+	enum class ClassName { Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint, ReferenceLine };
 
 	TemplateHandler(QWidget* parent, ClassName);
 	void setToolButtonStyle(Qt::ToolButtonStyle);

@@ -11,6 +11,10 @@
 #ifndef DATAPICKERIMAGEPRIVATE_H
 #define DATAPICKERIMAGEPRIVATE_H
 
+#include "backend/datapicker/DatapickerImage.h"
+
+#include <QString>
+
 class Symbol;
 class QGraphicsScene;
 
@@ -29,6 +33,8 @@ public:
 	QGraphicsScene* m_scene;
 	float rotationAngle{0.0};
 	QString fileName;
+	bool isRelativeFilePath{false};
+	bool embedded{false};
 	int pointSeparation{30};
 	int minSegmentLength{30};
 
@@ -38,10 +44,10 @@ public:
 
 	QString name() const;
 	void retransform();
-	void updateFileName();
+	void updateImage();
 	void discretize();
 	void makeSegments();
-	bool uploadImage(const QString&);
+	bool uploadImage();
 };
 
 #endif

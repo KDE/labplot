@@ -11,16 +11,14 @@
 #ifndef TEXTLABELPRIVATE_H
 #define TEXTLABELPRIVATE_H
 
+#include "src/backend/worksheet/TextLabel.h"
 #include "src/backend/worksheet/WorksheetElementPrivate.h"
-#include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "tools/TeXRenderer.h"
 #include <QDesktopWidget>
 #include <QFutureWatcher>
 #include <QStaticText>
 
-extern "C" {
 #include <gsl/gsl_const_cgs.h>
-}
 
 class QGraphicsSceneHoverEvent;
 class CartesianPlot;
@@ -34,11 +32,6 @@ public:
 	explicit TextLabelPrivate(TextLabel*);
 
 	double zoomFactor{-1.0};
-	// scaling:
-	// we need to scale from the font size specified in points to scene units.
-	// furhermore, we create the tex-image in a higher resolution then usual desktop resolution
-	//  -> take this into account
-	double scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
 	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
 	double teXImageScaleFactor{Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 
@@ -84,6 +77,7 @@ public:
 
 	// used in the InfoElement (Marker) to attach the line to the label
 	QVector<TextLabel::GluePoint> m_gluePoints;
+	QVector<TextLabel::GluePoint> m_gluePointsTransformed;
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;

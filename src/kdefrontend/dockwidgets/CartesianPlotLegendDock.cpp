@@ -121,7 +121,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	m_legend = list.first();
 	setAspects(list);
 
-	// if there is more then one legend in the list, disable the tab "general"
+	// if there is more than one legend in the list, disable the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -541,7 +541,7 @@ void CartesianPlotLegendDock::legendVerticalAlignmentChanged(TextLabel::Vertical
 void CartesianPlotLegendDock::legendPositionLogicalChanged(QPointF pos) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionXLogical->setValue(pos.x());
-	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
+	ui.dtePositionXLogical->setMSecsSinceEpochUTC(pos.x());
 	ui.sbPositionYLogical->setValue(pos.y());
 }
 
@@ -614,7 +614,7 @@ void CartesianPlotLegendDock::load() {
 	// Format
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF(qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrLabelFont->setFont(font);
 
 	ui.kcbLabelColor->setColor(m_legend->labelColor());
@@ -661,7 +661,7 @@ void CartesianPlotLegendDock::load() {
 			ui.dtePositionXLogical->show();
 
 			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
-			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_legend->positionLogical().x()));
+			ui.dtePositionXLogical->setMSecsSinceEpochUTC(m_legend->positionLogical().x());
 		}
 
 		ui.chbBindLogicalPos->setChecked(m_legend->coordinateBindingEnabled());
@@ -734,7 +734,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	// Format
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF(qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrLabelFont->setFont(group.readEntry("LabelFont", font));
 
 	ui.kcbLabelColor->setColor(group.readEntry("LabelColor", m_legend->labelColor()));

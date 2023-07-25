@@ -46,9 +46,8 @@ ThemesWidget::ThemesWidget(QWidget* parent)
 
 	// show preview pixmaps
 	auto* mContentItemModel = new QStandardItemModel(this);
-	QStringList themeList = ThemeHandler::themes();
-	QStringList themeImgPathList =
-		QStandardPaths::locateAll(QStandardPaths::AppDataLocation, QStringLiteral("themes/screenshots/"), QStandardPaths::LocateDirectory);
+	auto themeList = ThemeHandler::themes();
+	auto themeImgPathList = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, QStringLiteral("themes/screenshots/"), QStandardPaths::LocateDirectory);
 	if (themeImgPathList.isEmpty()) {
 		delete mContentItemModel;
 		return;
@@ -75,7 +74,7 @@ ThemesWidget::ThemesWidget(QWidget* parent)
 
 	// adding download themes option
 	// TODO: activate this later
-	// 	QStandardItem* listItem = new QStandardItem();
+	// 	auto* listItem = new QStandardItem();
 	// 	listItem->setIcon(QIcon::fromTheme("get-hot-new-stuff"));
 	// 	listItem->setText("Download Themes");
 	// 	listItem->setData("file_download_theme", Qt::UserRole);

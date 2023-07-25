@@ -145,6 +145,7 @@ void AsciiOptionsWidget::headerChanged(bool state) const {
 }
 
 void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
+	DEBUG(Q_FUNC_INFO)
 	Q_ASSERT(filter);
 	filter->setCommentCharacter(ui.cbCommentCharacter->currentText());
 	filter->setSeparatingCharacter(ui.cbSeparatingCharacter->currentText());

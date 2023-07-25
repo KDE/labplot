@@ -45,12 +45,26 @@ private Q_SLOTS:
 	void logarithmic10YMapping();
 	void logarithmic10XYMapping();
 
-	// void referenceMove();
+	void referenceMove();
+	void referenceMoveKeyPress();
 	void curvePointMove();
 	void curvePointMoveUndoRedo();
 	void selectReferencePoint();
 
 	void imageAxisPointsChanged();
+
+	void datapickerDateTime();
+
+	void datapickerDeleteCurvePoint();
+
+	void datapickerImageLoadImageAbsolute();
+	void datapickerImageLoadImageRelative();
+	void datapickerImageLoadImageEmbeddAbsolute();
+	void datapickerImageLoadImageEmbeddAbsoluteUndoRedo();
+	void datapickerImageLoadImageEmbeddRelative();
+	void datapickerImageLoadImageEmbeddRelativeUndoRedo();
+	void datapickerImageClipboard();
+	void datapickerImageClipboardSelectImageFromPath();
 };
 
 #endif // DATAPICKERTEST_H

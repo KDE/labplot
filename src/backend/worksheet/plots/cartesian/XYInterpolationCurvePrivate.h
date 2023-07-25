@@ -22,7 +22,8 @@ public:
 	explicit XYInterpolationCurvePrivate(XYInterpolationCurve*);
 	~XYInterpolationCurvePrivate() override;
 
-	void recalculate();
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
+	virtual void resetResults() override;
 
 	XYInterpolationCurve::InterpolationData interpolationData;
 	XYInterpolationCurve::InterpolationResult interpolationResult;

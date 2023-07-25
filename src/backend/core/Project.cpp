@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -22,6 +22,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
@@ -38,6 +39,13 @@
 #endif
 #endif
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KFilterDev>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <kcoreaddons_version.h>
+
 #include <QBuffer>
 #include <QDateTime>
 #include <QFile>
@@ -47,18 +55,12 @@
 #include <QThreadPool>
 #include <QUndoStack>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KFilterDev>
-#include <KLocalizedString>
-#include <KMessageBox>
-
 namespace {
 // xmlVersion of this labplot version
 // the project version will compared with this.
 // if you make any compatibilty changes to the xmlfile
 // or the function in labplot, increase this number
-int buildXmlVersion = 7;
+int buildXmlVersion = 8;
 }
 
 /**
@@ -141,7 +143,7 @@ public:
 		return mXmlVersion;
 	}
 
-	MdiWindowVisibility mdiWindowVisibility{Project::MdiWindowVisibility::folderOnly};
+	DockVisibility dockVisibility{DockVisibility::folderOnly};
 	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
 
@@ -152,6 +154,7 @@ public:
 	QDateTime modificationTime;
 	Project* const q;
 	QString fileName;
+	QString windowState;
 	QString author;
 	bool saveCalculations{true};
 	QUndoStack undo_stack;
@@ -168,15 +171,9 @@ Project::Project()
 	KConfig config;
 	KConfigGroup group = config.group("Project");
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 	QString user = qEnvironmentVariable("USER"); // !Windows
 	if (user.isEmpty())
 		user = qEnvironmentVariable("USERNAME"); // Windows
-#else
-	QString user = qgetenv("USER"); // !Windows
-	if (user.isEmpty())
-		user = qgetenv("USERNAME"); // Windows
-#endif
 	d->author = group.readEntry("Author", user);
 
 	// we don't have direct access to the members name and comment
@@ -190,7 +187,7 @@ Project::Project()
 	d->changed = false;
 
 	connect(this, &Project::aspectDescriptionChanged, this, &Project::descriptionChanged);
-	connect(this, &Project::aspectAdded, this, &Project::aspectAddedSlot);
+	connect(this, &Project::childAspectAdded, this, &Project::aspectAddedSlot);
 }
 
 Project::~Project() {
@@ -259,16 +256,17 @@ QMenu* Project::createFolderContextMenu(const Folder* folder) {
 	return menu;
 }
 
-void Project::setMdiWindowVisibility(MdiWindowVisibility visibility) {
-	d->mdiWindowVisibility = visibility;
+void Project::setDockVisibility(DockVisibility visibility) {
+	d->dockVisibility = visibility;
 	Q_EMIT mdiWindowVisibilityChanged();
 }
 
-Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
-	return d->mdiWindowVisibility;
+Project::DockVisibility Project::dockVisibility() const {
+	return d->dockVisibility;
 }
 
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
+CLASS_D_ACCESSOR_IMPL(Project, QString, windowState, WindowState, windowState)
 BASIC_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
 BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
@@ -317,7 +315,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	// when the name of a column is being changed, it can match again the names being used in the curves, etc.
+	// when the name of a column is being changed, it can matches again the names being used in the curves, etc.
 	// and we need to update the dependencies
 	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (column) {
@@ -372,6 +370,12 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 				updateColumnDependencies(boxPlots, column);
 		}
 	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
+		// name in a linked spreadsheet, etc. and update the dependencies
+		const auto* newSpreadsheet = static_cast<const Spreadsheet*>(aspect);
+		const auto& spreadsheets = children<Spreadsheet>(ChildIndexFlag::Recursive);
+		updateSpreadsheetDependencies(spreadsheets, newSpreadsheet);
+
 		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
@@ -382,6 +386,17 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			for (auto* we : wes)
 				we->setSuppressRetransform(false);
 		});
+	}
+}
+
+void Project::updateSpreadsheetDependencies(const QVector<Spreadsheet*>& spreadsheets, const Spreadsheet* spreadsheet) const {
+	const QString& spreadsheetPath = spreadsheet->path();
+
+	for (auto* sh : spreadsheets) {
+		sh->setUndoAware(false);
+		if (sh->linkedSpreadsheetPath() == spreadsheetPath)
+			sh->setLinkedSpreadsheet(spreadsheet);
+		sh->setUndoAware(true);
 	}
 }
 
@@ -533,9 +548,9 @@ QVector<quintptr> Project::droppedAspects(const QMimeData* mimeData) {
 	return vec;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	// set the version and the modification time to the current values
@@ -552,6 +567,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
 	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
+	writer->writeAttribute(QStringLiteral("windowState"), d->windowState);
 
 	QString image;
 	if (!thumbnail.isNull()) {
@@ -587,9 +603,11 @@ void Project::save(QXmlStreamWriter* writer) const {
 
 	writer->writeEndElement();
 	writer->writeEndDocument();
+	Q_EMIT saved();
 }
 
 bool Project::load(const QString& filename, bool preview) {
+	setFileName(filename);
 	DEBUG(Q_FUNC_INFO << ", LOADING file " << STDSTRING(filename))
 	QIODevice* file;
 	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive)) {
@@ -685,8 +703,12 @@ bool Project::load(const QString& filename, bool preview) {
 			"If you modify and save the project, the CAS content will be lost.\n\n"
 			"Do you want to continue?",
 			reader.missingCASWarning());
-		auto rc = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));
-		if (rc == KMessageBox::ButtonCode::No) {
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		auto status = KMessageBox::warningTwoActions(nullptr, msg, i18n("Missing Support for CAS"), KStandardGuiItem::cont(), KStandardGuiItem::cancel());
+#else
+		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));
+#endif
+		if (status == KMessageBox::No) {
 			file->close();
 			delete file;
 			return false;
@@ -706,6 +728,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	while (!(reader->isStartDocument() || reader->atEnd()))
 		reader->readNext();
 
+	bool stateAttributeFound = false;
 	if (!(reader->atEnd())) {
 		if (!reader->skipToNextTag())
 			return false;
@@ -746,6 +769,12 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 						// and the state of the project explorer (expanded items, currently selected item).
 						//"state" is read at the very end of XML, restore the pointers here so the current index
 						// can be properly selected in ProjectExplorer after requestLoadState() is called.
+						// Restore pointers and retransform elements before loading the state,
+						// otherwise curves don't have column pointers assigned and therefore calculations
+						// in the docks might be wrong
+						stateAttributeFound = true;
+						restorePointers(this, preview);
+						retransformElements(this);
 						Q_EMIT requestLoadState(reader);
 					} else {
 						if (!preview)
@@ -760,8 +789,12 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	} else // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
-	restorePointers(this, preview);
-	retransformElements(this);
+	if (!preview && !stateAttributeFound) {
+		// No state attribute available, means no project explorer reacted on the signal
+		restorePointers(this, preview);
+		retransformElements(this);
+	}
+
 	return !reader->hasError();
 }
 
@@ -990,7 +1023,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	QVector<BarPlot*> barPlots;
 	if (hasChildren)
 		barPlots = aspect->children<BarPlot>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::BoxPlot)
+	else if (aspect->type() == AspectType::BarPlot)
 		barPlots << static_cast<BarPlot*>(aspect);
 
 	for (auto* barPlot : barPlots) {
@@ -1021,6 +1054,41 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		RESTORE_COLUMN_POINTER(barPlot, xColumn, XColumn);
 	}
 
+	// lollipop plots
+	QVector<LollipopPlot*> lollipopPlots;
+	if (hasChildren)
+		lollipopPlots = aspect->children<LollipopPlot>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::BoxPlot)
+		lollipopPlots << static_cast<LollipopPlot*>(aspect);
+
+	for (auto* lollipopPlot : lollipopPlots) {
+		if (!lollipopPlot)
+			continue;
+
+		// initialize the array for the column pointers
+		int count = lollipopPlot->dataColumnPaths().count();
+		QVector<const AbstractColumn*> dataColumns;
+		dataColumns.resize(count);
+
+		// restore the pointers
+		for (int i = 0; i < count; ++i) {
+			dataColumns[i] = nullptr;
+			const auto& path = lollipopPlot->dataColumnPaths().at(i);
+			for (Column* column : columns) {
+				if (!column)
+					continue;
+				if (column->path() == path) {
+					dataColumns[i] = column;
+					break;
+				}
+			}
+		}
+
+		lollipopPlot->setDataColumns(dataColumns);
+
+		RESTORE_COLUMN_POINTER(lollipopPlot, xColumn, XColumn);
+	}
+
 	// data picker curves
 #ifndef SDK
 	QVector<DatapickerCurve*> dataPickerCurves;
@@ -1040,6 +1108,20 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
 	}
 #endif
+
+	// spreadsheet
+	QVector<Spreadsheet*> spreadsheets;
+	if (hasChildren)
+		spreadsheets = aspect->children<Spreadsheet>(ChildIndexFlag::Recursive);
+	for (auto* linkingSpreadsheet : spreadsheets) {
+		if (!linkingSpreadsheet->linking())
+			continue;
+		for (const auto* toLinkedSpreadsheet : spreadsheets) {
+			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path()) {
+				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
+			}
+		}
+	}
 
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {
@@ -1064,6 +1146,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 
 	d->author = attribs.value(QStringLiteral("author")).toString();
 	d->saveCalculations = attribs.value(QStringLiteral("saveCalculations")).toInt();
+	d->windowState = attribs.value(QStringLiteral("windowState")).toString();
 
 	return true;
 }

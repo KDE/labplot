@@ -24,6 +24,8 @@
 
 #include <KLocalizedString>
 
+#include <QInputDialog>
+
 /*!
   \class ColumnDock
   \brief Provides a widget for editing the properties of the spreadsheet columns currently selected in the project explorer.
@@ -216,54 +218,62 @@ void ColumnDock::showValueLabels() {
 	for (int i = 0; ui.twLabels->rowCount(); ++i)
 		ui.twLabels->removeRow(0);
 
-	if (m_column->hasValueLabels()) {
-		auto mode = m_column->columnMode();
+	if (m_column->valueLabelsInitialized()) {
+		auto mode = m_column->labelsMode();
 		int i = 0;
 
 		switch (mode) {
 		case AbstractColumn::ColumnMode::Double: {
-			auto labels = m_column->valueLabels();
-			ui.twLabels->setRowCount(labels.size());
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
-				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+			const auto* labels = m_column->valueLabels();
+			if (!labels)
+				return;
+			ui.twLabels->setRowCount(labels->size());
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it->value)));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it->label));
 				++it;
 				++i;
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			auto labels = m_column->intValueLabels();
-			ui.twLabels->setRowCount(labels.size());
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
-				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+			const auto* labels = m_column->intValueLabels();
+			if (!labels)
+				return;
+			ui.twLabels->setRowCount(labels->size());
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it->value)));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it->label));
 				++it;
 				++i;
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			auto labels = m_column->bigIntValueLabels();
-			ui.twLabels->setRowCount(labels.size());
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
-				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+			const auto* labels = m_column->bigIntValueLabels();
+			if (!labels)
+				return;
+			ui.twLabels->setRowCount(labels->size());
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it->value)));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it->label));
 				++it;
 				++i;
 			}
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
-			auto labels = m_column->textValueLabels();
-			ui.twLabels->setRowCount(labels.size());
-			auto it = labels.constBegin();
-			while (it != labels.constEnd()) {
-				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it.key()));
-				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+			const auto* labels = m_column->textValueLabels();
+			if (!labels)
+				return;
+			ui.twLabels->setRowCount(labels->size());
+			auto it = labels->constBegin();
+			while (it != labels->constEnd()) {
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it->value));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it->label));
 				++it;
 				++i;
 			}
@@ -272,13 +282,15 @@ void ColumnDock::showValueLabels() {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			auto labels = m_column->dateTimeValueLabels();
-			ui.twLabels->setRowCount(labels.size());
-			auto it = labels.constBegin();
+			const auto* labels = m_column->dateTimeValueLabels();
+			if (!labels)
+				return;
+			ui.twLabels->setRowCount(labels->size());
+			auto it = labels->constBegin();
 			const QString& format = ui.cbDateTimeFormat->currentText();
-			while (it != labels.constEnd()) {
-				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it.key().toString(format)));
-				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+			while (it != labels->constEnd()) {
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it->value.toString(format)));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it->label));
 				++it;
 				++i;
 			}
@@ -360,13 +372,34 @@ void ColumnDock::typeChanged(int index) {
 			col->endMacro();
 		}
 		break;
-	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::DateTime: // -> DateTime
 		for (auto* col : columns) {
-			col->beginMacro(i18n("%1: change column type", col->name()));
 			// use standard format
 			const QString& format(QStringLiteral("yyyy-MM-dd hh:mm:ss"));
 			QDEBUG(Q_FUNC_INFO << ", format = " << format)
-			col->setColumnMode(columnMode);
+
+			// enable if unit cat be used
+			/*if (col->isNumeric()) {	// ask how to interpret numeric input value
+
+				QStringList items;
+				for (int i = 0; i < ENUM_COUNT(AbstractColumn, TimeUnit); i++)
+					items << AbstractColumn::timeUnitString((AbstractColumn::TimeUnit)i);
+				QDEBUG("ITEMS: " << items)
+
+				bool ok;
+				QString item = QInputDialog::getItem(this, i18n("DateTime Filter"), i18n("Unit:"), items, 0, false, &ok);
+				if (ok) {
+					int index = items.indexOf(item);
+
+					DEBUG("Selected index: " << index)
+					//TODO: use index
+				}
+				else	// Cancel
+					return;
+			}*/
+
+			col->beginMacro(i18n("%1: change column type", col->name()));
+			col->setColumnMode(columnMode); // TODO: timeUnit
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
 			col->endMacro();
@@ -415,40 +448,42 @@ void ColumnDock::plotDesignationChanged(int index) {
 
 // value labels
 void ColumnDock::addLabel() {
-	auto mode = m_column->columnMode();
-	auto* dlg = new AddValueLabelDialog(this, m_column);
+	m_column->setLabelsMode(m_column->columnMode());
+
+	const auto mode = m_column->columnMode();
+	AddValueLabelDialog dlg(this, m_column);
 
 	if (mode == AbstractColumn::ColumnMode::Month || mode == AbstractColumn::ColumnMode::Day || mode == AbstractColumn::ColumnMode::DateTime)
-		dlg->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
+		dlg.setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 
-	if (dlg->exec() == QDialog::Accepted) {
-		const QString& label = dlg->label();
+	if (dlg.exec() == QDialog::Accepted) {
+		const QString& label = dlg.label();
 		const auto& columns = m_columnsList;
 		QString valueStr;
 		switch (mode) {
 		case AbstractColumn::ColumnMode::Double: {
-			double value = dlg->value();
+			double value = dlg.value();
 			valueStr = QString::number(value);
 			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			int value = dlg->valueInt();
+			int value = dlg.valueInt();
 			valueStr = QString::number(value);
 			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			qint64 value = dlg->valueBigInt();
+			qint64 value = dlg.valueBigInt();
 			valueStr = QString::number(value);
 			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
-			valueStr = dlg->valueText();
+			valueStr = dlg.valueText();
 			for (auto* col : columns)
 				col->addValueLabel(valueStr, label);
 			break;
@@ -456,20 +491,18 @@ void ColumnDock::addLabel() {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			const QDateTime& value = dlg->valueDateTime();
+			const QDateTime& value = dlg.valueDateTime();
 			valueStr = value.toString(ui.cbDateTimeFormat->currentText());
 			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		}
-
-		int count = ui.twLabels->rowCount();
-		ui.twLabels->insertRow(count);
-		ui.twLabels->setItem(count, 0, new QTableWidgetItem(valueStr));
-		ui.twLabels->setItem(count, 1, new QTableWidgetItem(label));
 	}
-	delete dlg;
+
+	// reload all, because due to the migration the view
+	// might be changed
+	showValueLabels();
 	m_column->project()->setChanged(true);
 }
 
@@ -491,7 +524,7 @@ void ColumnDock::batchEditLabels() {
 	auto* dlg = new BatchEditValueLabelsDialog(this);
 	dlg->setColumns(m_columnsList);
 	if (dlg->exec() == QDialog::Accepted)
-		showValueLabels(); // new value labels were saved in the dialog, show them here
+		showValueLabels(); // new value labels were saved into the columns in the dialog, show them here
 
 	delete dlg;
 	m_column->project()->setChanged(true);
@@ -506,6 +539,7 @@ void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
 		return;
 
 	updateTypeWidgets(m_column->columnMode());
+	showValueLabels(); // Update value labels shown in the list, because due to the change they might be migrated
 }
 
 void ColumnDock::columnFormatChanged() {

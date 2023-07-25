@@ -167,9 +167,9 @@ void PlotArea::setBorderCornerRadius(qreal radius) {
 		exec(new PlotAreaSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set plot area corner radius")));
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 PlotAreaPrivate::PlotAreaPrivate(PlotArea* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -341,9 +341,9 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void PlotArea::save(QXmlStreamWriter* writer) const {

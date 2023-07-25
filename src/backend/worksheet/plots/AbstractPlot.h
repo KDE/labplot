@@ -40,6 +40,13 @@ public:
 
 	typedef AbstractPlotPrivate Private;
 
+Q_SIGNALS:
+	void horizontalPaddingChanged(double);
+	void verticalPaddingChanged(double);
+	void rightPaddingChanged(double);
+	void bottomPaddingChanged(double);
+	void symmetricPaddingChanged(bool);
+
 protected:
 	AbstractPlot(const QString&, AbstractPlotPrivate*, AspectType);
 	QVector<AbstractCoordinateSystem*> m_coordinateSystems;

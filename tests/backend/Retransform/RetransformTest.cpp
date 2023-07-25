@@ -226,6 +226,14 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QVERIFY(plot2);
 	QCOMPARE(plot2->name(), QLatin1String("plot2"));
 
+	QCOMPARE(plot->childCount<XYCurve>(), 3);
+	QCOMPARE(plot->child<XYCurve>(0)->name(), QStringLiteral("sin"));
+	QCOMPARE(plot->child<XYCurve>(0)->coordinateSystemIndex(), 0);
+	QCOMPARE(plot->child<XYCurve>(1)->name(), QStringLiteral("cos"));
+	QCOMPARE(plot->child<XYCurve>(1)->coordinateSystemIndex(), 0);
+	QCOMPARE(plot->child<XYCurve>(2)->name(), QStringLiteral("tan"));
+	QCOMPARE(plot->child<XYCurve>(2)->coordinateSystemIndex(), 1);
+
 	QAction a(nullptr);
 	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
 	view->cartesianPlotMouseModeChanged(&a);
@@ -244,7 +252,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot2);
 	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(),
-			 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
+			 3); // there are two vertical ranges (sin, cos and tan range) for the first plot and one y axis for the second plot
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
@@ -291,7 +299,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot2);
 	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0); // first x axis of second plot
 	QCOMPARE(c.logsYScaleRetransformed.count(),
-			 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
+			 3); // there are two vertical ranges (sin, cos and tan range) for the first plot and one y axis for the second plot
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0); // first y axis of first plot
 	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
@@ -361,10 +369,10 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
 
-	CHECK_RANGE(plot, curve1, Dimension::X, 0, 10);
-	CHECK_RANGE(plot, curve1, Dimension::Y, 1000, 1011); // Nice extend applied
-	CHECK_RANGE(plot, curve2, Dimension::X, 0, 10);
-	CHECK_RANGE(plot, curve2, Dimension::Y, -10, 1);
+	CHECK_RANGE(plot, curve1, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 1000., 1011.); // Nice extend applied
+	CHECK_RANGE(plot, curve2, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, curve2, Dimension::Y, -10., 1.);
 
 	plot->enableAutoScale(Dimension::Y, 1, false); // disable autoscale for second y range
 
@@ -373,9 +381,9 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	r.setEnd(0.1);
 	plot->setRange(Dimension::Y, 1, r);
 
-	CHECK_RANGE(plot, curve1, Dimension::X, 0, 10);
-	CHECK_RANGE(plot, curve1, Dimension::Y, 1000, 1011);
-	CHECK_RANGE(plot, curve2, Dimension::X, 0, 10);
+	CHECK_RANGE(plot, curve1, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 1000., 1011.);
+	CHECK_RANGE(plot, curve2, Dimension::X, 0., 10.);
 	CHECK_RANGE(plot, curve2, Dimension::Y, -9.9, 0.1);
 
 	QAction a(nullptr);
@@ -392,9 +400,9 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(3, 100));
 	emit plot->mouseReleaseZoomSelectionModeSignal();
 
-	CHECK_RANGE(plot, curve1, Dimension::X, 2, 3);
+	CHECK_RANGE(plot, curve1, Dimension::X, 2., 3.);
 	CHECK_RANGE(plot, curve1, Dimension::Y, 1002.2, 1003.3); // Nice Extend applied
-	CHECK_RANGE(plot, curve2, Dimension::X, 2, 3);
+	CHECK_RANGE(plot, curve2, Dimension::X, 2., 3.);
 	CHECK_RANGE(plot, curve2, Dimension::Y, -9.9, 0.1); // Not changed, because autoscale is turned off
 }
 
@@ -459,10 +467,10 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
 	QCOMPARE(plot->rangeFormat(Dimension::X, 1), RangeT::Format::Numeric);
 
-	CHECK_RANGE(plot, curve1, Dimension::Y, 0, 10);
-	CHECK_RANGE(plot, curve1, Dimension::X, 1000, 1011); // Nice extend applied
-	CHECK_RANGE(plot, curve2, Dimension::Y, 0, 10);
-	CHECK_RANGE(plot, curve2, Dimension::X, -10, 1);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 0., 10.);
+	CHECK_RANGE(plot, curve1, Dimension::X, 1000., 1011.); // Nice extend applied
+	CHECK_RANGE(plot, curve2, Dimension::Y, 0., 10.);
+	CHECK_RANGE(plot, curve2, Dimension::X, -10., 1.);
 
 	plot->enableAutoScale(Dimension::X, 1, false); // disable autoscale for second y range
 
@@ -471,9 +479,9 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	r.setEnd(0.1);
 	plot->setRange(Dimension::X, 1, r);
 
-	CHECK_RANGE(plot, curve1, Dimension::Y, 0, 10);
-	CHECK_RANGE(plot, curve1, Dimension::X, 1000, 1011);
-	CHECK_RANGE(plot, curve2, Dimension::Y, 0, 10);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 0., 10.);
+	CHECK_RANGE(plot, curve1, Dimension::X, 1000., 1011.);
+	CHECK_RANGE(plot, curve2, Dimension::Y, 0., 10.);
 	CHECK_RANGE(plot, curve2, Dimension::X, -9.9, 0.1);
 
 	QAction a(nullptr);
@@ -490,9 +498,9 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(100, 3));
 	emit plot->mouseReleaseZoomSelectionModeSignal();
 
-	CHECK_RANGE(plot, curve1, Dimension::Y, 2, 3);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 2., 3.);
 	CHECK_RANGE(plot, curve1, Dimension::X, 1002.2, 1003.3); // Nice Extend applied
-	CHECK_RANGE(plot, curve2, Dimension::Y, 2, 3);
+	CHECK_RANGE(plot, curve2, Dimension::Y, 2., 3.);
 	CHECK_RANGE(plot, curve2, Dimension::X, -9.9, 0.1); // Not changed, because autoscale is turned off
 }
 
@@ -641,7 +649,7 @@ void RetransformTest::TestAddCurve() {
 
 	RetransformCallCounter c;
 
-	p->addEquationCurve();
+	p->addChild(new XYEquationCurve(QLatin1String("curve")));
 
 	// check that plot will be recalculated if a curve will be added
 	QCOMPARE(c.callCount(p), 1);
@@ -677,8 +685,9 @@ void RetransformTest::TestAddCurve() {
 	auto list =
 		QStringList({QStringLiteral("Project/Worksheet/plot/x"), QStringLiteral("Project/Worksheet/plot/y"), QStringLiteral("Project/Worksheet/plot/f(x)")});
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
-		QCOMPARE(c.callCount(s), 1);
+	QCOMPARE(c.callCount(list.at(0)), 1);
+	QCOMPARE(c.callCount(list.at(1)), 1);
+	QCOMPARE(c.callCount(list.at(2)), 0);
 
 	// x and y are called only once
 	QCOMPARE(c.logsXScaleRetransformed.count(), 1);
@@ -873,6 +882,7 @@ void RetransformTest::TestImportCSV() {
 	file.close();
 
 	AsciiFilter filter;
+	filter.setHeaderLine(1);
 	filter.readDataFromFile(file.fileName(), spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet->rowCount(), 3);
@@ -986,7 +996,7 @@ void RetransformTest::TestSetScale() {
 		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once
-	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 2 x-Axes but both are using the same range so 1
+	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // one plot with 2 x-Axes (both are using the same range so could be 1)
 	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
@@ -1383,7 +1393,8 @@ void RetransformTest::TestChangePlotRangeElement2() {
 
 	// No update of the scales, because the range did not change
 	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1); // The respective coordinate system must be rescaled
 
 	c.resetRetransformCount();
 
@@ -1590,7 +1601,8 @@ void RetransformTest::TestChangePlotRangeElement3() {
 
 	// No update of the scales, because the range did not change
 	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1); // The respective coordinate system must be rescaled
 
 	c.resetRetransformCount();
 
