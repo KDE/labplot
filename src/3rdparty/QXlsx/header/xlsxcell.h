@@ -24,7 +24,7 @@ class CellFormula;
 class CellPrivate;
 class WorksheetPrivate;
 
-class Cell
+class QXLSX_EXPORT Cell
 {
 	Q_DECLARE_PRIVATE(Cell)
 
@@ -72,6 +72,8 @@ public:
 	bool isRichString() const;
 
 	qint32 styleNumber() const;
+
+	static bool isDateType(CellType cellType, const Format &format);
 
 };
 

@@ -9,7 +9,8 @@
 #include <QVector>
 #include <QList>
 #include <QMetaType>
-#include <QSharedPointer>
+
+#include <memory>
 
 #include "xlsxglobal.h"
 
@@ -17,7 +18,7 @@ QT_BEGIN_NAMESPACE_XLSX
 
 class Cell;
 
-class CellLocation
+class QXLSX_EXPORT CellLocation
 {
 public:
     CellLocation();
@@ -25,7 +26,7 @@ public:
     int col;
     int row;
 
-    QSharedPointer<Cell> cell;
+    std::shared_ptr<Cell> cell;
 };
 
 QT_END_NAMESPACE_XLSX
