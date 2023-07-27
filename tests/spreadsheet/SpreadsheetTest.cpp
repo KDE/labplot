@@ -2744,10 +2744,11 @@ void SpreadsheetTest::testStatisticsSpreadsheetChildIndex() {
  * statistics spreadsheet.
  */
 void SpreadsheetTest::testStatisticsSpreadsheetChildIndexAfterUndoRedo() {
-	QSKIP("crashes at the moment");
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
+
+	new SpreadsheetModel(sheet);
 
 	// toggle on the statistics spreadsheet and count the available columns
 	sheet->toggleStatisticsSpreadsheet(true);

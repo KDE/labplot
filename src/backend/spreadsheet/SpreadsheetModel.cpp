@@ -301,11 +301,11 @@ void SpreadsheetModel::handleAspectsAboutToBeInserted(int first, int last) {
 	beginInsertColumns(QModelIndex(), first, last);
 }
 
-void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect*, int index, const AbstractAspect* aspect) {
+void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect* parent, int index, const AbstractAspect* aspect) {
 	if (m_spreadsheetColumnCountChanging || m_suppressSignals)
 		return;
 	const Column* col = dynamic_cast<const Column*>(aspect);
-	if (!col || aspect->parentAspect() != m_spreadsheet)
+	if (!col || parent != m_spreadsheet)
 		return;
 	beginInsertColumns(QModelIndex(), index, index);
 }
@@ -380,9 +380,9 @@ void SpreadsheetModel::handleAspectsRemoved() {
 	m_spreadsheetColumnCountChanging = false;
 }
 
-void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* child) {
 	// same conditions as in handleAspectAboutToBeRemoved()
-	if (m_spreadsheetColumnCountChanging || child->type() != AspectType::Column || child->parentAspect() != m_spreadsheet)
+	if (m_spreadsheetColumnCountChanging || child->type() != AspectType::Column || parent != m_spreadsheet)
 		return;
 
 	handleAspectsRemoved();
