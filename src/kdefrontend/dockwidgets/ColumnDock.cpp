@@ -79,12 +79,20 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	// check whether we have non-editable columns:
 	// 1. columns in a LiveDataSource
 	// 2. columns in the spreadsheet of a datapicker curve
-	// 3. columns for residuals calculated in XYFitCurve)
+	// 3. columns in the statistics spreadsheet
+	// 4. columns for residuals calculated in XYFitCurve (don't have Spreadsheet as the parent)
 	bool nonEditable = false;
+	bool statisticsColumn = false;
 	for (auto* col : m_columnsList) {
 		auto* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
 		if (s) {
 			if (s->type() == AspectType::LiveDataSource || s->parentAspect()->type() == AspectType::DatapickerCurve) {
+				nonEditable = true;
+				break;
+			}
+
+			if (s->type() == AspectType::StatisticsSpreadsheet) {
+				statisticsColumn = true;
 				nonEditable = true;
 				break;
 			}
@@ -137,6 +145,11 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	ui.twLabels->setEnabled(sameMode);
 	ui.frameLabels->setEnabled(sameMode);
 
+	// no value labels to columns in StatisticsSpreadsheet
+	ui.lLabels->setVisible(!statisticsColumn);
+	ui.twLabels->setVisible(!statisticsColumn);
+	ui.frameLabels->setVisible(!statisticsColumn);
+
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
 
@@ -159,7 +172,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
 	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
 
-	// don't allow to change the column type at least one non-editable column
+	// don't allow to change the column type if there is at least one non-editable column
 	if (sameMode)
 		ui.cbType->setEnabled(!nonEditable);
 }

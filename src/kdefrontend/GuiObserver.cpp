@@ -16,6 +16,7 @@
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/TextLabel.h"
@@ -65,6 +66,7 @@
 #include "kdefrontend/dockwidgets/ReferenceLineDock.h"
 #include "kdefrontend/dockwidgets/ReferenceRangeDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
+#include "kdefrontend/dockwidgets/StatisticsSpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/dockwidgets/XYConvolutionCurveDock.h"
 #include "kdefrontend/dockwidgets/XYCorrelationCurveDock.h"
@@ -223,6 +225,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Spreadsheet"));
 		raiseDockConnect(m_spreadsheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_spreadsheetDock->setSpreadsheets(castList<Spreadsheet>(selectedAspects));
+		break;
+	case AspectType::StatisticsSpreadsheet:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Column Statistics"));
+		raiseDockConnect(m_statisticsSpreadsheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_statisticsSpreadsheetDock->setSpreadsheets(castList<StatisticsSpreadsheet>(selectedAspects));
 		break;
 	case AspectType::Column: {
 #ifdef HAVE_CANTOR_LIBS

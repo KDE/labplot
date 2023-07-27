@@ -7,15 +7,20 @@ New features:
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
+		* Column statistics spreadsheet - child spreadsheet showing various statistical properties of the parent spreadsheet
+
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
+
 Bug fixes:
 	* Set mousemode to selection when leaving the plot (Issue #614)
 	* Fix plot range field not being updated (Issue #603)
 	* Fix wrong axis tick type used (Issue #571)
+
 Internal:
 	* Switch from C++11 to C++17
 	* Reduce code duplication caused by multiple plot types (Issue #540)
+	* update included QXlsx to 1.4.6
 
 -----2.10.1 () -----
 Bug fixes:

@@ -15,6 +15,7 @@
 #include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
+#include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
@@ -2643,6 +2644,129 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 		QCOMPARE(sheetCalculations->rowCount(), 11);
 	}
+}
+
+// **********************************************************
+// **************** statistics spreadsheet  *****************
+// **********************************************************
+/*!
+ * toggle on and off the statistics spreadsheet and check its presence
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetToggle() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	// initial
+	auto children = sheet->children<StatisticsSpreadsheet>();
+	QCOMPARE(children.size(), 0);
+
+	// toggle on
+	sheet->toggleStatisticsSpreadsheet(true);
+	children = sheet->children<StatisticsSpreadsheet>();
+	QCOMPARE(children.size(), 1);
+
+	// toggle off
+	sheet->toggleStatisticsSpreadsheet(false);
+	children = sheet->children<StatisticsSpreadsheet>();
+	QCOMPARE(children.size(), 0);
+}
+
+/*!
+ * change the statistics metrics and check the presense of the corresponding columns
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetChangeMetrics() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	new SpreadsheetModel(sheet);
+
+	// toggle on the statistics spreadsheet and count the available columns
+	sheet->toggleStatisticsSpreadsheet(true);
+	auto* statisticsSpreadsheet = sheet->children<StatisticsSpreadsheet>().constFirst();
+	auto metrics = statisticsSpreadsheet->metrics();
+	int colCount = 1; // column "Column Name" is always available
+	auto it = statisticsSpreadsheet->m_metricNames.constBegin();
+	while (it != statisticsSpreadsheet->m_metricNames.constEnd()) {
+		if (metrics.testFlag(it.key()))
+			++colCount;
+		++it;
+	}
+	QCOMPARE(statisticsSpreadsheet->children<Column>().size(), colCount);
+
+	// deactivate Count and check the available columns again
+	metrics.setFlag(StatisticsSpreadsheet::Metric::Count, false);
+	statisticsSpreadsheet->setMetrics(metrics);
+	QCOMPARE(statisticsSpreadsheet->children<Column>().size(), colCount - 1);
+}
+
+/*!
+ * check the position of the statistics spreadsheet in the list of children of the parent
+ * spreadsheet, it should always be put at the last position.
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetChildIndex() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	// toggle on the statistics spreadsheet and count the available columns
+	sheet->toggleStatisticsSpreadsheet(true);
+	auto* statisticsSpreadsheet = sheet->children<StatisticsSpreadsheet>().constFirst();
+
+	// set the column count and check the position of the statistics spreadsheet
+	sheet->setColumnCount(2);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 2);
+
+	// change the column count and check the position again
+	sheet->setColumnCount(3);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 3);
+
+	// append one more column and check the position again
+	sheet->appendColumn();
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 4);
+
+	// check also the position when adding new columns via the actions in the view that also
+	// take the current selected column into account and have more logic for "append left to"
+	// and "append right to" - ensure no columns are added after the statistics spreadhseet
+	auto* view = static_cast<SpreadsheetView*>(sheet->view());
+
+	// insert a new column right to the last selected column, it should be placed in front of the statistics spreadsheet
+	view->selectColumn(3); // select the last 4th column
+	view->insertColumnsRight(1);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 5);
+}
+
+/*!
+ * check the position of the statistics spreadsheet in the list of children of the parent
+ * spreadsheet after an undo and redo of a column appen, it should always be put at the last position,
+ * and also check  the handling of added and removed childrend in the model in the presense of the
+ * statistics spreadsheet.
+ */
+void SpreadsheetTest::testStatisticsSpreadsheetChildIndexAfterUndoRedo() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	new SpreadsheetModel(sheet);
+
+	// toggle on the statistics spreadsheet and count the available columns
+	sheet->toggleStatisticsSpreadsheet(true);
+	auto* statisticsSpreadsheet = sheet->children<StatisticsSpreadsheet>().constFirst();
+
+	// set the column count , append a column, undo and redo this change and check the position of the statistics spreadsheet
+	sheet->setColumnCount(2);
+	sheet->appendColumn();
+	QCOMPARE(sheet->model()->columnCount(), 3);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 3);
+
+	project.undoStack()->undo();
+	QCOMPARE(sheet->model()->columnCount(), 2);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 2);
+
+	project.undoStack()->redo();
+	QCOMPARE(sheet->model()->columnCount(), 3);
+	QCOMPARE(sheet->indexOfChild<AbstractAspect>(statisticsSpreadsheet), 3);
 }
 
 #ifdef HAVE_VECTOR_BLF
