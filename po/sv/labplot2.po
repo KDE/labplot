@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2022-05-16 21:33+0200\n"
+"PO-Revision-Date: 2023-07-27 17:29+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -150,10 +150,9 @@ msgid "Paste '%1'"
 msgstr "Klistra in '%1'"
 
 #: src/backend/core/AbstractAspect.cpp:349
-#, fuzzy, kde-format
-#| msgid "Clear Spreadsheet"
+#, kde-format
 msgid "Create Data Spreadsheet"
-msgstr "Rensa kalkylark"
+msgstr "Skapa datakalkylark"
 
 #: src/backend/core/AbstractAspect.cpp:397
 #, kde-format
@@ -252,31 +251,29 @@ msgid "Invalid creation time for '%1'. Using current time."
 msgstr "Ogiltig skapelsetid för '%1'. Använder aktuell tid."
 
 #: src/backend/core/AbstractColumn.cpp:133
-#, fuzzy, kde-format
-#| msgid "second"
+#, kde-format
 msgid "Milliseconds"
-msgstr "andra"
+msgstr "Millisekunder"
 
 #: src/backend/core/AbstractColumn.cpp:135
-#, fuzzy, kde-format
-#| msgid "second"
+#, kde-format
 msgid "Seconds"
-msgstr "andra"
+msgstr "Sekunder"
 
 #: src/backend/core/AbstractColumn.cpp:137
 #, kde-format
 msgid "Minutes"
-msgstr ""
+msgstr "Minuter"
 
 #: src/backend/core/AbstractColumn.cpp:139
 #, kde-format
 msgid "Hours"
-msgstr ""
+msgstr "Timmar"
 
 #: src/backend/core/AbstractColumn.cpp:141
 #, kde-format
 msgid "Days"
-msgstr ""
+msgstr "Dagar"
 
 #: src/backend/core/AbstractColumn.cpp:157 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
@@ -292,76 +289,64 @@ msgid "None"
 msgstr "Inget"
 
 #: src/backend/core/AbstractColumn.cpp:170
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X-Uncertainty"
-msgstr "Osäkerhet"
+msgstr "x-osäkerhet"
 
 #: src/backend/core/AbstractColumn.cpp:172
-#, fuzzy, kde-format
-#| msgid "x-Error"
+#, kde-format
 msgid "X-Error"
 msgstr "x-fel"
 
 #: src/backend/core/AbstractColumn.cpp:176
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X-Uncertainty +"
-msgstr "Osäkerhet"
+msgstr "x-osäkerhet +"
 
 #: src/backend/core/AbstractColumn.cpp:178
-#, fuzzy, kde-format
-#| msgid "X-error +"
+#, kde-format
 msgid "X-Error +"
-msgstr "X-fel +"
+msgstr "x-fel +"
 
 #: src/backend/core/AbstractColumn.cpp:182
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X-Uncertainty -"
-msgstr "Osäkerhet"
+msgstr "x-osäkerhet -"
 
 #: src/backend/core/AbstractColumn.cpp:184
-#, fuzzy, kde-format
-#| msgid "X-error -"
+#, kde-format
 msgid "X-Error -"
-msgstr "X-fel -"
+msgstr "x-fel -"
 
 #: src/backend/core/AbstractColumn.cpp:188
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y-Uncertainty"
-msgstr "Osäkerhet"
+msgstr "x-osäkerhet"
 
 #: src/backend/core/AbstractColumn.cpp:190
-#, fuzzy, kde-format
-#| msgid "x-Error"
+#, kde-format
 msgid "Y-Error"
-msgstr "x-fel"
+msgstr "y-fel"
 
 #: src/backend/core/AbstractColumn.cpp:194
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y-Uncertainty +"
-msgstr "Osäkerhet"
+msgstr "y-osäkerhet +"
 
 #: src/backend/core/AbstractColumn.cpp:196
-#, fuzzy, kde-format
-#| msgid "Y-error +"
+#, kde-format
 msgid "Y-Error +"
-msgstr "Y-fel +"
+msgstr "y-fel +"
 
 #: src/backend/core/AbstractColumn.cpp:200
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y-Uncertainty -"
-msgstr "Osäkerhet"
+msgstr "y-osäkerhet -"
 
 #: src/backend/core/AbstractColumn.cpp:202
-#, fuzzy, kde-format
-#| msgid "Y-error -"
+#, kde-format
 msgid "Y-Error -"
-msgstr "Y-fel -"
+msgstr "y-fel -"
 
 #: src/backend/core/AbstractColumn.cpp:221
 #: src/backend/datasources/filters/MatioFilter.cpp:396
@@ -600,22 +585,19 @@ msgid "Plot Designation: %1"
 msgstr "Diagrambenämning: %1"
 
 #: src/backend/core/AspectTreeModel.cpp:232
-#, fuzzy, kde-format
-#| msgid "Format:"
+#, kde-format
 msgid "Formula:"
-msgstr "Format:"
+msgstr "Formel:"
 
 #: src/backend/core/AspectTreeModel.cpp:254
-#, fuzzy, kde-format
-#| msgid "auto update"
+#, kde-format
 msgid "auto update: true"
-msgstr "automatisk uppdatering"
+msgstr "automatisk uppdatering: sann"
 
 #: src/backend/core/AspectTreeModel.cpp:256
-#, fuzzy, kde-format
-#| msgid "auto update"
+#, kde-format
 msgid "auto update: false"
-msgstr "automatisk uppdatering"
+msgstr "automatisk uppdatering: falsk"
 
 #: src/backend/core/AspectTreeModel.cpp:403
 #, kde-format
@@ -2152,56 +2134,50 @@ msgid "Message too long. CAN id: %1"
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown id: %1"
-msgstr "Okänd"
+msgstr "Okänd identifierare: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:98
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid blf file"
-msgstr "Ogiltig metadatafil"
+msgstr "Ogiltig blf-fil"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:101
-#, fuzzy, kde-format
-#| msgid "File format version: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1"
-msgstr "Filformatversion: %1"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
 #, kde-format
 msgid "No dbc parser installed"
-msgstr ""
+msgstr "Ingen dbc-tolk installerad"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid dbc file"
-msgstr "Ogiltig metadatafil"
+msgstr "Ogiltig dbc-fil"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:110
-#, fuzzy, kde-format
-#| msgid "Unknown MQTT error"
+#, kde-format
 msgid "Unknown error"
-msgstr "Okänt MQTT-fel"
+msgstr "Okänt fel"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:350
-#, fuzzy, kde-format
-#| msgid "Time"
+#, kde-format
 msgid "Time_s"
-msgstr "Tid"
+msgstr "Tid s"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:352
 #, fuzzy, kde-format
 #| msgid "Time"
 msgid "Time_ns"
-msgstr "Tid"
+msgstr "Tid "
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:354
 #, kde-format
 msgid "Time_10µs"
-msgstr ""
+msgstr "Tid 10 µs"
 
 #: src/backend/datasources/LiveDataSource.cpp:434
 #: src/backend/datasources/MQTTTopic.cpp:142
@@ -6925,7 +6901,7 @@ msgstr "%1: ställ in huvudgraderingens typ"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:733
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
-msgstr ""
+msgstr "%1: aktivera eller inaktivera automatiska huvudgraderingsnummer"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:735
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:746
@@ -6937,7 +6913,7 @@ msgstr "%1: ställ in totalt antal huvudgraderingar"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:830
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
-msgstr ""
+msgstr "%1: inaktivera automatiska huvudgraderingsnummer"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:771
 #, kde-format
