@@ -47,7 +47,8 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	hBoxLayout->insertWidget(0, lineWidget);
 
 	// Tab "Percentiles"
-	hBoxLayout = new QHBoxLayout(ui.tabPercentiles);
+	// hBoxLayout = new QHBoxLayout(ui.tabPercentiles);
+	hBoxLayout = static_cast<QHBoxLayout*>(ui.tabPercentiles->layout());
 	symbolWidget = new SymbolWidget(ui.tabPercentiles);
 	hBoxLayout->insertWidget(0, symbolWidget);
 
@@ -71,17 +72,17 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &QQPlotDock::plotRangeChanged);
 
 	// template handler
-	//auto* frame = new QFrame(this);
-	//auto* layout = new QHBoxLayout(frame);
-	//layout->setContentsMargins(0, 11, 0, 11);
+	auto* frame = new QFrame(this);
+	auto* layout = new QHBoxLayout(frame);
+	layout->setContentsMargins(0, 11, 0, 11);
 
-	//auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::QQPlot);
-	//layout->addWidget(templateHandler);
-	//connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &QQPlotDock::loadConfigFromTemplate);
-	//connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &QQPlotDock::saveConfigAsTemplate);
-	//connect(templateHandler, &TemplateHandler::info, this, &QQPlotDock::info);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
+	layout->addWidget(templateHandler);
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &QQPlotDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &QQPlotDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &QQPlotDock::info);
 
-	//ui.verticalLayout->addWidget(frame);
+	ui.verticalLayout->addWidget(frame);
 
 	updateLocale();
 	retranslateUi();

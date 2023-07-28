@@ -163,23 +163,23 @@ Symbol* QQPlot::symbol() const {
 
 double QQPlot::minimum(const Dimension dim) const {
 	Q_D(const QQPlot);
-	// switch (dim) {
-	// case Dimension::X:
-	// 	return d->xMin;
-	// case Dimension::Y:
-	// 	return d->yMin;
-	// }
+	switch (dim) {
+	case Dimension::X:
+		return d->referenceCurve->minimum(dim);
+	case Dimension::Y:
+		return std::min(d->referenceCurve->minimum(dim), d->percentilesCurve->minimum(dim));;
+	}
 	return NAN;
 }
 
 double QQPlot::maximum(const Dimension dim) const {
 	Q_D(const QQPlot);
-	// switch (dim) {
-	// case Dimension::X:
-	// 	return d->xMax;
-	// case Dimension::Y:
-	// 	return d->yMax;
-	// }
+	switch (dim) {
+	case Dimension::X:
+		return d->referenceCurve->maximum(dim);
+	case Dimension::Y:
+		return std::max(d->referenceCurve->maximum(dim), d->percentilesCurve->maximum(dim));
+	}
 	return NAN;
 }
 
@@ -326,8 +326,7 @@ void QQPlotPrivate::recalc() {
 	//referenceCurve->recalcLogicalPoints();
 	//percentilesCurve->recalcLogicalPoints();
 
-	// histogram changed because of the actual data changes or because of new bin settings,
-	// Q_EMIT dataChanged() in order to recalculate everything with the new size/shape of the histogram
+	// Q_EMIT dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
 }
 
