@@ -12,7 +12,7 @@ Additionally, some fixes were applied to silence UBSan warnings caused by
 uninitialised POD struct members.
 
 AUTHORS:  
-	Stefan Gerlach	2005-2021
+	Stefan Gerlach	2005-2023
 	Miquel Garriga	2014-2018
 	Knut Franke	2010
 	Ion Vasilief	2006-2010
@@ -38,8 +38,8 @@ This will compile and install:
 	liborigin.pc a pkg-config metadata file to get compiler and linker flags
 	c++ devel headers
 
-To disable shared or static libraries (and opj2dat in the later case) you can also specify the cmake options
--DBUILD_SHARED_LIBS=off or -DBUILD_STATIC_LIBS=off.
+To disable shared or static libraries you can also specify the cmake options
+-DBUILD_SHARED_LIBS=off or -DBUILD_STATIC_LIBS=off. opj2dat will be build if one of them is enabled.
 
 Doc generation requires doxygen (http://doxygen.org)
 
@@ -61,9 +61,13 @@ To enable it define a GENERATE_CODE_FOR_LOG variable at the cmake command:
 
 ---------------------------------------------------------------------------
 FEATURES:
-	* supports the import of any project from version 3.5 to latest (2021bSR0)
+	* supports the import of any project from version 3.5 to latest (2022b)
 	* includes a pkg-config metadata file
 
 ---------------------------------------------------------------------------
 EXAMPLES:
 	* opj2dat (included) extracts the data tables of an origin project file into dat files
+---------------------------------------------------------------------------
+RELATED PROJECTS:
+	* Ropj (https://github.com/aitap/Ropj)
+	* openopj (https://github.com/jgonera/openopj)
