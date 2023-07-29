@@ -49,6 +49,7 @@ void Value::init(const KConfigGroup& group) {
 	d->font = group.readEntry("ValueFont", QFont());
 	d->font.setPixelSize(Worksheet::convertToSceneUnits(defaultFont.pointSizeF(), Worksheet::Unit::Point));
 	d->color = group.readEntry("ValueColor", QColor(Qt::black));
+
 }
 
 void Value::draw(QPainter* painter, const QVector<QPointF>& points, const QVector<QString>& strings) {
@@ -79,12 +80,15 @@ void Value::draw(QPainter* painter, const QVector<QPointF>& points, const QVecto
 // ##########################  getter methods  ##################################
 // ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Value, Value::Type, type, type)
+
 BASIC_SHARED_D_READER_IMPL(Value, const AbstractColumn*, column, column)
 QString& Value::columnPath() const {
 	D(Value);
 	return d->columnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Value, Value::Position, position, position)
+BASIC_SHARED_D_READER_IMPL(Value, bool, centerPositionAvailable, centerPositionAvailable)
+
 BASIC_SHARED_D_READER_IMPL(Value, double, distance, distance)
 BASIC_SHARED_D_READER_IMPL(Value, double, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(Value, double, opacity, opacity)
@@ -105,6 +109,11 @@ void Value::setType(Value::Type type) {
 	if (type != d->type)
 		exec(new ValueSetTypeCmd(d, type, ki18n("%1: set values type")));
 }
+void Value::setcenterPositionAvailable(bool available){
+	Q_D(Value);
+	d->centerPositionAvailable= available;
+}
+
 
 STD_SETTER_CMD_IMPL_F_S(Value, SetColumn, const AbstractColumn*, column, updateValue)
 void Value::setColumn(const AbstractColumn* column) {

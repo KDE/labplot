@@ -67,6 +67,7 @@ void BarPlot::init() {
 
 	// values
 	d->addValue(group);
+//	d->value->setcenterPositionAvailable(true);
 }
 
 /*!

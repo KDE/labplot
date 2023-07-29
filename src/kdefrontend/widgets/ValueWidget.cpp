@@ -23,7 +23,6 @@
 ValueWidget::ValueWidget(QWidget* parent)
 	: QWidget(parent) {
 	ui.setupUi(this);
-
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	cbColumn = new TreeViewComboBox(this);
 	gridLayout->addWidget(cbColumn, 2, 2, 1, 1);
@@ -36,8 +35,9 @@ ValueWidget::ValueWidget(QWidget* parent)
 	ui.cbPosition->addItem(i18n("Below"));
 	ui.cbPosition->addItem(i18n("Left"));
 	ui.cbPosition->addItem(i18n("Right"));
-	ui.cbPosition->addItem(i18n("Center"));
-
+	if(m_value->centerPositionAvailable()){
+		ui.cbPosition->addItem(i18n("Center"));
+	}
 	// add formats for numeric values
 	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
 	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
