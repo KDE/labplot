@@ -166,6 +166,7 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
+	ui.chkVisible->setChecked(m_plot->isVisible());
 
 	// load the remaining properties
 	KConfig config(QString(), KConfig::SimpleConfig);

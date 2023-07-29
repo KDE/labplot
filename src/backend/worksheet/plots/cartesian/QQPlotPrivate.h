@@ -58,12 +58,6 @@ private:
 	bool m_selectionEffectImageIsDirty{false};
 
 	void copyValidData(QVector<double>&) const;
-
-	//void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	//void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-	//void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	//void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 };
 
 #endif

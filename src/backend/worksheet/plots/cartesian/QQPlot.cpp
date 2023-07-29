@@ -58,23 +58,38 @@ QQPlot::~QQPlot() = default;
 void QQPlot::init() {
 	Q_D(QQPlot);
 
-	//KConfig config;
-	//KConfigGroup group = config.group("QQPlot");
+	KConfig config;
+	KConfigGroup group = config.group("QQPlot");
+
+	// reference curve - line conneting two central quantiles Q1 and Q3
 	d->referenceCurve = new XYCurve(QStringLiteral("reference"));
+	d->referenceCurve->setUndoAware(false);
 	d->referenceCurve->setHidden(true);
+	d->referenceCurve->graphicsItem()->setParentItem(d);
+
+	d->referenceCurve->line()->init(group);
 	d->referenceCurve->line()->setStyle(Qt::SolidLine);
 	d->referenceCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->referenceCurve->background()->setPosition(Background::Position::No);
+
+	d->referenceCurve->setUndoAware(true);
+
 	d->xReferenceColumn = new Column(QStringLiteral("x"));
 	d->yReferenceColumn = new Column(QStringLiteral("y"));
 	d->referenceCurve->setXColumn(d->xReferenceColumn);
 	d->referenceCurve->setYColumn(d->yReferenceColumn);
 
+	// percentiles curve
 	d->percentilesCurve = new XYCurve(QStringLiteral("percentiles"));
+	d->percentilesCurve->setUndoAware(false);
 	d->percentilesCurve->setHidden(true);
-	d->percentilesCurve->line()->setStyle(Qt::NoPen);
+	d->percentilesCurve->graphicsItem()->setParentItem(d);
+
+	d->percentilesCurve->symbol()->init(group);
 	d->percentilesCurve->symbol()->setStyle(Symbol::Style::Circle);
+	d->percentilesCurve->line()->setStyle(Qt::NoPen);
 	d->percentilesCurve->background()->setPosition(Background::Position::No);
+	d->percentilesCurve->setUndoAware(true);
 
 	d->xPercentilesColumn = new Column(QStringLiteral("x"));
 	d->yPercentilesColumn = new Column(QStringLiteral("y"));
@@ -94,8 +109,10 @@ void QQPlot::init() {
 void QQPlot::finalizeAdd() {
 	Q_D(QQPlot);
 	WorksheetElement::finalizeAdd();
-	plot()->addChild(d->referenceCurve);
-	plot()->addChild(d->percentilesCurve);
+	d->referenceCurve->setHidden(true);
+	addChild(d->referenceCurve);
+	d->percentilesCurve->setHidden(true);
+	addChild(d->percentilesCurve);
 }
 
 void QQPlot::initActions() {
@@ -139,6 +156,15 @@ void QQPlot::setHover(bool on) {
 
 void QQPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 // TODO
+}
+
+void QQPlot::setVisible(bool on) {
+	Q_D(QQPlot);
+	beginMacro(on ? i18n("%1: set visible", name()) : i18n("%1: set invisible", name()));
+	d->referenceCurve->setVisible(on);
+	d->percentilesCurve->setVisible(on);
+	WorksheetElement::setVisible(on);
+	endMacro();
 }
 
 //##############################################################################
@@ -280,10 +306,6 @@ QPainterPath QQPlotPrivate::shape() const {
 	return curveShape;
 }
 
-//void QQPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	//q->createContextMenu()->exec(event->screenPos());
-//}
-
 /*!
   called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
   recalculates the position of the scene points to be drawn.
@@ -300,6 +322,7 @@ void QQPlotPrivate::retransform() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	referenceCurve->retransform();
 	percentilesCurve->retransform();
+	recalcShapeAndBoundingRect();
 }
 
 /*!
@@ -308,8 +331,11 @@ void QQPlotPrivate::retransform() {
 void QQPlotPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
-	if (!dataColumn)
+	if (!dataColumn) {
+		yPercentilesColumn->clear();
+		Q_EMIT q->dataChanged();
 		return;
+	}
 
 	// copy the non-nan and not masked values into a new vector
 	QVector<double> rawData;
@@ -326,7 +352,7 @@ void QQPlotPrivate::recalc() {
 
 	yPercentilesColumn->replaceValues(0, yData);
 
-	// add the reference line connecting (x1, y1) = (-0.6745, Q1) and (x2, y2) = (0.6745, Q2)
+	// add the reference line connecting (x1, y1) = (-0.6745, Q1) and (x2, y2) = (0.6745, Q3)
 	double y1 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.25);
 	double y2 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.75);
 	double x1 = -0.6745;
@@ -407,15 +433,6 @@ void QQPlotPrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = curveShape.boundingRect();
 }
 
-/*!
-  Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
-  \sa QGraphicsItem::paint().
-  */
-void QQPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
-	if (!isVisible())
-		return;
-}
-
 bool QQPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
 	if (!isVisible())
 		return false;
@@ -453,6 +470,9 @@ void QQPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
+	d->referenceCurve->save(writer);
+	d->percentilesCurve->save(writer);
+
 	writer->writeEndElement(); // close "QQPlot" section
 }
 
@@ -486,6 +506,16 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
 			else
 				d->setVisible(str.toInt());
+		} else if (reader->name() == QLatin1String("xyCurve")) {
+			attribs = reader->attributes();
+			bool rc = true;
+			if (attribs.value(QStringLiteral("name")) ==  QLatin1String("reference"))
+				rc = d->referenceCurve->load(reader, preview);
+			else
+				rc = d->percentilesCurve->load(reader, preview);
+
+			if (!rc)
+				return false;
 		}
 	}
 	return true;
@@ -510,8 +540,8 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(QQPlot);
 	d->m_suppressRecalc = true;
 
-	// TODO: different colors have to be used
 	d->referenceCurve->line()->loadThemeConfig(group, themeColor);
+	d->percentilesCurve->line()->setStyle(Qt::NoPen);
 	d->percentilesCurve->symbol()->loadThemeConfig(group, themeColor);
 
 	d->m_suppressRecalc = false;
@@ -521,8 +551,6 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 void QQPlot::saveThemeConfig(const KConfig& config) {
 	Q_D(const QQPlot);
 	KConfigGroup group = config.group("QQPlot");
-
-	// TODO:
-	//d->line->saveThemeConfig(group);
-	//d->symbol->saveThemeConfig(group);
+	d->referenceCurve->line()->saveThemeConfig(group);
+	d->percentilesCurve->symbol()->saveThemeConfig(group);
 }

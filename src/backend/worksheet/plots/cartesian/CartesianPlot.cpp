@@ -5183,6 +5183,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				removeChild(hist);
 				return false;
 			}
+		} else if (reader->name() == QLatin1String("QQPlot")) {
+			auto* plot = new QQPlot(QStringLiteral("Q-Q Plot"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else {
+				removeChild(plot);
+				return false;
+			}
 		} else { // unknown element
 			if (!preview)
 				reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
