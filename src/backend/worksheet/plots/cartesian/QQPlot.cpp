@@ -15,7 +15,6 @@
   */
 #include "QQPlot.h"
 #include "QQPlotPrivate.h"
-//#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -161,6 +160,32 @@ Symbol* QQPlot::symbol() const {
 	return d->percentilesCurve->symbol();
 }
 
+bool QQPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
+	Q_D(const QQPlot);
+
+	switch (dim) {
+	case Dimension::X:
+		return d->referenceCurve->minMax(dim, indexRange, r, false);
+	case Dimension::Y: {
+		Range referenceRange(r);
+		Range percentilesRange(r);
+		bool rc = true;
+		rc= d->referenceCurve->minMax(dim, indexRange, referenceRange, false);
+		if (!rc)
+			return false;
+
+		rc = d->percentilesCurve->minMax(dim, indexRange, percentilesRange, false);
+		if (!rc)
+			return false;
+
+		r.setStart(std::min(referenceRange.start(), percentilesRange.start()));
+		r.setEnd(std::max(referenceRange.end(), percentilesRange.end()));
+		return true;
+	}
+	}
+	return false;
+}
+
 double QQPlot::minimum(const Dimension dim) const {
 	Q_D(const QQPlot);
 	switch (dim) {
@@ -187,7 +212,6 @@ bool QQPlot::hasData() const {
 	Q_D(const QQPlot);
 	return (d->dataColumn != nullptr);
 }
-
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -322,9 +346,6 @@ void QQPlotPrivate::recalc() {
 
 	yReferenceColumn->setValueAt(0, y1New);
 	yReferenceColumn->setValueAt(1, y2New);
-
-	//referenceCurve->recalcLogicalPoints();
-	//percentilesCurve->recalcLogicalPoints();
 
 	// Q_EMIT dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();

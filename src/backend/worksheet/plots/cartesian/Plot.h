@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all plots like scatter plot, box plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -22,6 +22,7 @@ class Plot : public WorksheetElement {
 public:
 	virtual ~Plot();
 
+	virtual bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 	virtual double minimum(CartesianCoordinateSystem::Dimension dim) const = 0;
 	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
 
