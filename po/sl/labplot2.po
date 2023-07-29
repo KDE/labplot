@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-28 00:41+0000\n"
-"PO-Revision-Date: 2023-07-17 07:02+0200\n"
+"PO-Revision-Date: 2023-07-28 10:00+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.3.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6610,38 +6610,32 @@ msgid "Count"
 msgstr "Števec"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:34
-#, fuzzy, kde-format
-#| msgid "Arithmetic mean"
+#, kde-format
 msgid "ArithmeticMean"
-msgstr "Aritmetična sredina"
+msgstr "Aritmetično povprečje"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:35
-#, fuzzy, kde-format
-#| msgid "Geometric mean"
+#, kde-format
 msgid "GeometricMean"
-msgstr "Geometrična sredina"
+msgstr "Geometrijsko povprečje"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:36
-#, fuzzy, kde-format
-#| msgid "Harmonic mean"
+#, kde-format
 msgid "HarmonicMean"
-msgstr "Harmonična srednja vrednost"
+msgstr "Harmonično povprečje"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:37
-#, fuzzy, kde-format
-#| msgid "Contraharmonic mean"
+#, kde-format
 msgid "ContraharmonicMean"
-msgstr "Kontraharmonična srednja vrednost"
+msgstr "Kontraharmonično povprečje"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:39
-#, fuzzy, kde-format
-#| msgid "First Quartile"
+#, kde-format
 msgid "FirstQuartile"
 msgstr "Prvi kvartil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:41
-#, fuzzy, kde-format
-#| msgid "Third Quartile"
+#, kde-format
 msgid "ThirdQuartile"
 msgstr "Tretji kvartil"
 
@@ -6652,64 +6646,54 @@ msgid "Interquartile Range"
 msgstr "Medkvartilni obseg"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:43
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile1"
-msgstr "Percentil"
+msgstr "Percentil1"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:44
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile5"
-msgstr "Percentil"
+msgstr "Percentil5"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:45
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile10"
-msgstr "Percentil"
+msgstr "Percentil10"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:46
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile90"
-msgstr "Percentil"
+msgstr "Percentil90"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:47
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile95"
-msgstr "Percentil"
+msgstr "Percentil95"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:48
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile99"
-msgstr "Percentil"
+msgstr "Percentil99"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:51
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "StandardDeviation"
-msgstr "Standardni odklon"
+msgstr "Standardna deviacija"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:52
-#, fuzzy, kde-format
-#| msgid "Mean deviation"
+#, kde-format
 msgid "MeanDeviation"
-msgstr "Odklon sredine"
+msgstr "Deviacija povprečja"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:53
-#, fuzzy, kde-format
-#| msgid "Mean deviation around median"
+#, kde-format
 msgid "MeanDeviationAroundMedian"
-msgstr "Odklon okoli mediane"
+msgstr "Povprečje deviacije okoli mediane"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:54
-#, fuzzy, kde-format
-#| msgid "Median deviation"
+#, kde-format
 msgid "MedianDeviation"
-msgstr "Mediana odstopanja"
+msgstr "Mediana deviacije"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberLine)
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)

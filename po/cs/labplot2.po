@@ -5489,17 +5489,15 @@ msgid "%1: mirror vertically"
 msgstr "%1: zrcadlit svisle"
 
 #: src/backend/note/Note.cpp:46
-#, fuzzy, kde-format
-#| msgid "Print"
+#, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
-msgstr "Vytisknout"
+msgstr "Vytisknout poznámku"
 
 #: src/backend/note/Note.cpp:64
-#, fuzzy, kde-format
-#| msgid "DBC file (*.dbc)"
+#, kde-format
 msgid "Text file (*.txt)"
-msgstr "Soubor DBC (*.dbc)"
+msgstr ""
 
 #: src/backend/note/Note.cpp:66
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:381
@@ -5510,17 +5508,14 @@ msgid "Export to File"
 msgstr "Exportovat do souboru"
 
 #: src/backend/note/Note.cpp:80
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export to File"
+#, kde-format
 msgid "Export failed"
-msgstr "Exportovat do souboru"
+msgstr "Export selhal"
 
 #: src/backend/note/Note.cpp:80
-#, fuzzy, kde-format
-#| msgid "Could not open file %1 for reading."
+#, kde-format
 msgid "Failed to open '%1' for writing."
-msgstr "Nelze otevřít soubor %1 pro čtení."
+msgstr ""
 
 #: src/backend/note/Note.cpp:159
 #, kde-format
@@ -6545,40 +6540,34 @@ msgid "Count"
 msgstr "Počet"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:34
-#, fuzzy, kde-format
-#| msgid "Arithmetic mean"
+#, kde-format
 msgid "ArithmeticMean"
-msgstr "Aritmetický průměr"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:35
-#, fuzzy, kde-format
-#| msgid "Geometric mean"
+#, kde-format
 msgid "GeometricMean"
-msgstr "Geometrický průměr"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:36
-#, fuzzy, kde-format
-#| msgid "Harmonic mean"
+#, kde-format
 msgid "HarmonicMean"
-msgstr "Harmonický průměr"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:37
-#, fuzzy, kde-format
-#| msgid "Contraharmonic mean"
+#, kde-format
 msgid "ContraharmonicMean"
-msgstr "Kontraharmonický průměr"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:39
-#, fuzzy, kde-format
-#| msgid "First Quartile"
+#, kde-format
 msgid "FirstQuartile"
-msgstr "První čtvrť"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:41
-#, fuzzy, kde-format
-#| msgid "Third Quartile"
+#, kde-format
 msgid "ThirdQuartile"
-msgstr "Třetí čtvrť"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:42
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:81
@@ -6587,52 +6576,44 @@ msgid "Interquartile Range"
 msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:43
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile1"
-msgstr "Percentil"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:44
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile5"
-msgstr "Percentil"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:45
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile10"
-msgstr "Percentil"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:46
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile90"
-msgstr "Percentil"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:47
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile95"
-msgstr "Percentil"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:48
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile99"
-msgstr "Percentil"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:51
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "StandardDeviation"
-msgstr "Směrodatná odchylka"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:52
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "MeanDeviation"
-msgstr "Směrodatná odchylka"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:53
 #, kde-format
@@ -6640,10 +6621,9 @@ msgid "MeanDeviationAroundMedian"
 msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:54
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "MedianDeviation"
-msgstr "Medián absolutní odchylky"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberLine)
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
@@ -9633,10 +9613,9 @@ msgid "Column Statistics..."
 msgstr "Statistika sloupce..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:303
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Column Statistics Spreadsheet"
-msgstr "Statistika sloupce"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
@@ -13246,11 +13225,10 @@ msgid "Properties: Spreadsheet"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:228
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Statistika sloupce"
+msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:238
 #, kde-format
@@ -21928,6 +21906,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgid "&Analysis"
-#~ msgstr "&Analýza"

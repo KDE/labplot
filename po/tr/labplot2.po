@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-28 00:41+0000\n"
-"PO-Revision-Date: 2023-07-17 13:50+0300\n"
+"PO-Revision-Date: 2023-07-28 11:56+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -6566,40 +6566,34 @@ msgid "Count"
 msgstr "Sayım"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:34
-#, fuzzy, kde-format
-#| msgid "Arithmetic mean"
+#, kde-format
 msgid "ArithmeticMean"
-msgstr "Aritmetik ortalama"
+msgstr "AritmetikOrtalama"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:35
-#, fuzzy, kde-format
-#| msgid "Geometric mean"
+#, kde-format
 msgid "GeometricMean"
-msgstr "Geometrik ortalama"
+msgstr "GeometrikOrtalama"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:36
-#, fuzzy, kde-format
-#| msgid "Harmonic mean"
+#, kde-format
 msgid "HarmonicMean"
-msgstr "Harmonik ortalama"
+msgstr "HarmonikOrtalama"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:37
-#, fuzzy, kde-format
-#| msgid "Contraharmonic mean"
+#, kde-format
 msgid "ContraharmonicMean"
-msgstr "Kontraharmonik ortalama"
+msgstr "KontraharmonikOrtalama"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:39
-#, fuzzy, kde-format
-#| msgid "First Quartile"
+#, kde-format
 msgid "FirstQuartile"
-msgstr "İlk Çeyrek"
+msgstr "İlkÇeyrek"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:41
-#, fuzzy, kde-format
-#| msgid "Third Quartile"
+#, kde-format
 msgid "ThirdQuartile"
-msgstr "Üçüncü Çeyrek"
+msgstr "ÜçüncüÇeyrek"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:42
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:81
@@ -6608,64 +6602,54 @@ msgid "Interquartile Range"
 msgstr "İnterçeyrek Erimi"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:43
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile1"
-msgstr "Yüzde birlik"
+msgstr "Yüzde1"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:44
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile5"
-msgstr "Yüzde birlik"
+msgstr "Yüzde5"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:45
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile10"
-msgstr "Yüzde birlik"
+msgstr "Yüzde10"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:46
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile90"
-msgstr "Yüzde birlik"
+msgstr "Yüzde90"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:47
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile95"
-msgstr "Yüzde birlik"
+msgstr "Yüzde95"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:48
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile99"
-msgstr "Yüzde birlik"
+msgstr "Yüzde99"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:51
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "StandardDeviation"
-msgstr "Standart sapma"
+msgstr "StandartSapma"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:52
-#, fuzzy, kde-format
-#| msgid "Mean deviation"
+#, kde-format
 msgid "MeanDeviation"
-msgstr "Ortalama sapma"
+msgstr "OrtalamaSapma"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:53
-#, fuzzy, kde-format
-#| msgid "Mean deviation around median"
+#, kde-format
 msgid "MeanDeviationAroundMedian"
-msgstr "Ortadaki ortalama sapma"
+msgstr "OrtadakiOrtalamaSapma"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:54
-#, fuzzy, kde-format
-#| msgid "Median deviation"
+#, kde-format
 msgid "MedianDeviation"
-msgstr "Orta sapma"
+msgstr "OrtaSapma"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberLine)
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
@@ -9660,10 +9644,9 @@ msgid "Column Statistics..."
 msgstr "Sütun İstatistikleri..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:303
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Column Statistics Spreadsheet"
-msgstr "Sütun İstatistikleri"
+msgstr "Sütun İstatistikleri Sayfası"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
@@ -13437,12 +13420,10 @@ msgid "Properties: Spreadsheet"
 msgstr "Özellikler: Hesap Tablosu"
 
 #: src/kdefrontend/GuiObserver.cpp:228
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Column"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Özellikler: Sütun"
+msgstr "Özellikler: Sütun İstatistikleri"
 
 #: src/kdefrontend/GuiObserver.cpp:238
 #, kde-format
