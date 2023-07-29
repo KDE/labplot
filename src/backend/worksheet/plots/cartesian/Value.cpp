@@ -88,7 +88,6 @@ QString& Value::columnPath() const {
 }
 BASIC_SHARED_D_READER_IMPL(Value, Value::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Value, bool, centerPositionAvailable, centerPositionAvailable)
-
 BASIC_SHARED_D_READER_IMPL(Value, double, distance, distance)
 BASIC_SHARED_D_READER_IMPL(Value, double, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(Value, double, opacity, opacity)

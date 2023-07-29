@@ -67,7 +67,7 @@ void BarPlot::init() {
 
 	// values
 	d->addValue(group);
-//	d->value->setcenterPositionAvailable(true);
+	d->value->setcenterPositionAvailable(true);
 }
 
 /*!
@@ -1014,14 +1014,13 @@ void BarPlotPrivate::updateValues() {
 		break;
 	case Value::Center: {
 		QVector<qreal> listBarWidth;
-		for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
-			for (const auto& barLines : columnBarLines) {// loop over the bars for every data column
-				qreal maxLength = 0;
-				for (const auto& lines : barLines) {// loop over the four lines for every bar
-					if (lines.length() > maxLength)
-						maxLength = lines.length();
+		for (int i = 0; i < m_barLines.size(); i++) {
+			auto& columnBarLines = m_barLines.at(i);
+
+			for (int i = 0; i < columnBarLines.size(); i++) { // loop over the different data columns
+				if (visiblePoints.at(i) == true) {
+					listBarWidth.append(columnBarLines.at(i).at(1).length());
 				}
-				listBarWidth.append(maxLength);
 			}
 		}
 		for (int i = 0; i < m_valuesStrings.size(); i++) {

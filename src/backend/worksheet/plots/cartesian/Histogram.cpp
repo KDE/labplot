@@ -111,6 +111,7 @@ void Histogram::init() {
 	d->value = new Value(QString());
 	addChild(d->value);
 	d->value->setHidden(true);
+	d->value->setcenterPositionAvailable(true);
 	d->value->init(group);
 	connect(d->value, &Value::updatePixmapRequested, [=] {
 		d->updatePixmap();

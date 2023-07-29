@@ -35,9 +35,8 @@ ValueWidget::ValueWidget(QWidget* parent)
 	ui.cbPosition->addItem(i18n("Below"));
 	ui.cbPosition->addItem(i18n("Left"));
 	ui.cbPosition->addItem(i18n("Right"));
-	if(m_value->centerPositionAvailable()){
-		ui.cbPosition->addItem(i18n("Center"));
-	}
+
+
 	// add formats for numeric values
 	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
 	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
@@ -83,6 +82,14 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	auto* m_aspectTreeModel = new AspectTreeModel(m_value->project());
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
+
+	if(m_value->centerPositionAvailable()){
+		if(ui.cbPosition->count()==4){
+			ui.cbPosition->addItem(i18n("Center"));
+		}
+	}
+
+
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
