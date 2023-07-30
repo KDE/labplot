@@ -811,7 +811,7 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="text">
-      <string>Weights:</string>
+      <string>Uncertainties:</string>
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
