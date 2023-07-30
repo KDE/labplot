@@ -408,6 +408,41 @@ void WorksheetView::initActions() {
 	m_actionsInitialized = true;
 }
 
+QAction* WorksheetView::action(CartesianPlot::NavigationOperation op) {
+	if (!m_actionsInitialized)
+		initActions();
+
+	switch (op) {
+	case CartesianPlot::NavigationOperation::ScaleAuto:
+		return scaleAutoAction;
+	case CartesianPlot::NavigationOperation::ScaleAutoX:
+		return scaleAutoXAction;
+	case CartesianPlot::NavigationOperation::ScaleAutoY:
+		return scaleAutoYAction;
+	case CartesianPlot::NavigationOperation::ZoomIn:
+		return zoomInAction;
+	case CartesianPlot::NavigationOperation::ZoomOut:
+		return zoomOutAction;
+	case CartesianPlot::NavigationOperation::ZoomInX:
+		return zoomInXAction;
+	case CartesianPlot::NavigationOperation::ZoomOutX:
+		return zoomOutXAction;
+	case CartesianPlot::NavigationOperation::ZoomInY:
+		return zoomInYAction;
+	case CartesianPlot::NavigationOperation::ZoomOutY:
+		return zoomOutYAction;
+	case CartesianPlot::NavigationOperation::ShiftLeftX:
+		return shiftLeftXAction;
+	case CartesianPlot::NavigationOperation::ShiftRightX:
+		return shiftRightXAction;
+	case CartesianPlot::NavigationOperation::ShiftUpY:
+		return shiftUpYAction;
+	case CartesianPlot::NavigationOperation::ShiftDownY:
+		return shiftDownYAction;
+	}
+	return nullptr;
+}
+
 void WorksheetView::initMenus() {
 	if (!m_actionsInitialized)
 		initActions();
@@ -2551,7 +2586,7 @@ void WorksheetView::presenterMode() {
 #ifndef SDK
 	const auto& group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	const bool interactive = group.readEntry("PresenterModeInteractive", false);
-	auto* presenterWidget = new PresenterWidget(m_worksheet, interactive);
+	auto* presenterWidget = new PresenterWidget(m_worksheet, screen(), interactive);
 	presenterWidget->showFullScreen();
 #endif
 }

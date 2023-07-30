@@ -16,13 +16,13 @@
 #include <QScreen>
 #include <QTimeLine>
 
-PresenterWidget::PresenterWidget(Worksheet* worksheet, bool interactive, QWidget* parent)
+PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool interactive, QWidget* parent)
 	: QWidget(parent)
 	, m_worksheet(worksheet)
-	, m_view(new WorksheetView(worksheet))
-	, m_timeLine(new QTimeLine(600)) {
+	, m_view(new WorksheetView(worksheet)) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setFocus();
+	this->screen();
 
 	m_view->setParent(this);
 	m_view->setInteractive(interactive);
@@ -36,16 +36,17 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, bool interactive, QWidget
 	m_view->show();
 	m_view->setFocus();
 
-	m_panel = new SlidingPanel(this, worksheet->name());
+	m_panel = new SlidingPanelTop(screenRect, worksheet->name(), this);
 	qApp->installEventFilter(this);
-	connect(m_timeLine, &QTimeLine::valueChanged, m_panel, &SlidingPanel::movePanel);
 	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=]() {
 		close();
 	});
+
+	if (interactive)
+		m_navigationPanel = new SlidingPanelBottom(screenRect, m_view, this);
 }
 
 PresenterWidget::~PresenterWidget() {
-	delete m_timeLine;
 	delete m_view;
 
 	// since the temporary view created in the presenter widget is using the same scene underneath,
@@ -57,10 +58,19 @@ PresenterWidget::~PresenterWidget() {
 
 bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
-		if (m_panel->y() != 0 && m_panel->rect().contains(QCursor::pos()))
-			slideDown();
-		else if (m_panel->y() == 0 && !m_panel->rect().contains(QCursor::pos()))
-			slideUp();
+		bool visible = m_panel->y() == 0;
+		if (!visible && m_panel->insideRect(QCursor::pos()))
+			m_panel->slideDown();
+		else if (visible && !m_panel->insideRect(QCursor::pos()))
+			m_panel->slideUp();
+
+		if (m_navigationPanel) {
+			visible = m_navigationPanel->y() < screen()->geometry().bottom();
+			if (!visible && m_navigationPanel->insideRect(QCursor::pos()))
+				m_navigationPanel->slideUp();
+			else if (visible && !m_navigationPanel->insideRect(QCursor::pos()))
+				m_navigationPanel->slideDown();
+		}
 	}
 
 	return false;
@@ -69,21 +79,6 @@ bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 void PresenterWidget::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Escape)
 		close();
-}
-
-void PresenterWidget::slideDown() {
-	m_timeLine->setDirection(QTimeLine::Forward);
-	startTimeline();
-}
-
-void PresenterWidget::slideUp() {
-	m_timeLine->setDirection(QTimeLine::Backward);
-	startTimeline();
-}
-
-void PresenterWidget::startTimeline() {
-	if (m_timeLine->state() != QTimeLine::Running)
-		m_timeLine->start();
 }
 
 void PresenterWidget::focusOutEvent(QFocusEvent* e) {
