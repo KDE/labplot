@@ -32,7 +32,6 @@
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
 #include <KPluginFactory>
-#include <KPluginLoader>
 #include <KPluginMetaData>
 #include <kcoreaddons_version.h>
 
