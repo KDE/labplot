@@ -13,6 +13,7 @@
 #include "DatabaseManagerWidget.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -117,7 +118,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teQuery->document());
 	m_highlighter->setDefinition(m_repository.definitionForName(QStringLiteral("SQL")));
-	m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+	m_highlighter->setTheme(GuiTools::isDarkMode() ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
 									 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 

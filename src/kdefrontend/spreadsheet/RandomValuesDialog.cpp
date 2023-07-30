@@ -59,6 +59,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 	layout->addWidget(buttonBox);
 	setLayout(layout);
 	setAttribute(Qt::WA_DeleteOnClose);
+
 	QVector<QPair<QString, int>> distros;
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
 		distros << QPair<QString, int>(i18n(nsl_sf_stats_distribution_name[i]), i);
@@ -364,7 +365,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	QImage image = GuiTools::importPDFFile(file);
 
 	// use system palette for background
-	if (DARKMODE) {
+	if (GuiTools::isDarkMode()) {
 		// invert image if in dark mode
 		image.invertPixels();
 

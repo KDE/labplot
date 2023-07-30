@@ -13,7 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
-#include "backend/lib/macros.h"
+#include "kdefrontend/GuiTools.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
@@ -53,7 +53,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	layout->addWidget(m_tabWidget);
 	setLayout(layout);
 
-	const QString htmlColor = DARKMODE ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
+	const QString htmlColor = GuiTools::isDarkMode() ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
 	// clang-format off
 	if (column->isNumeric()) {
 		m_htmlOverview = QStringLiteral("<table border=0 width=100%><tr><td colspan=2 align=center bgcolor=") + htmlColor
@@ -216,7 +216,7 @@ void StatisticsColumnWidget::showOverview() {
 	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::Text) {
 		// add the frequencies table
 		const auto& frequencies = m_column->frequencies();
-		const QString htmlColor = DARKMODE ? QStringLiteral("#5f5f5f") : QStringLiteral("#D1D1D1");
+		const QString htmlColor = GuiTools::isDarkMode() ? QStringLiteral("#5f5f5f") : QStringLiteral("#D1D1D1");
 		m_htmlOverview += QStringLiteral("<br><table border=0 width=100%>") + QStringLiteral("<tr>") + QStringLiteral("<td colspan=3 align=center bgcolor=")
 			+ htmlColor + QStringLiteral("><b><big>") + i18n("Frequency Table") + QStringLiteral("</big><b></td>") + QStringLiteral("</tr>")
 			+ QStringLiteral("<tr>") + QStringLiteral("<td width=60%></td>") + QStringLiteral("<td>") + i18n("Frequency") + QStringLiteral("</td>")

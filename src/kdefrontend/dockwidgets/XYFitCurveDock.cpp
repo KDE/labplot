@@ -13,7 +13,6 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/gsl/ExpressionParser.h"
-#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -1005,7 +1004,7 @@ void XYFitCurveDock::updateModelEquation() {
 		QImage image = GuiTools::importPDFFile(file);
 
 		// use system palette for background
-		if (DARKMODE) {
+		if (GuiTools::isDarkMode()) {
 			// invert image if in dark mode
 			image.invertPixels();
 

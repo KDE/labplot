@@ -180,7 +180,7 @@ void DatabaseManagerWidget::driverChanged() {
 		if (!m_highlighter) {
 			m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teCustomConnection->document());
 			m_highlighter->setDefinition(m_repository.definitionForName(QStringLiteral("INI Files")));
-			m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+			m_highlighter->setTheme(GuiTools::isDarkMode() ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
 											 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 		}
 #endif

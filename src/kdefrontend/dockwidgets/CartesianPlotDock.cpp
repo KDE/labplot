@@ -12,7 +12,6 @@
 #include "CartesianPlotDock.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
@@ -248,7 +247,7 @@ void CartesianPlotDock::init() {
 	QPixmap pm(iconSize, iconSize);
 
 	QPen pen(Qt::SolidPattern);
-	const QColor& color = DARKMODE ? Qt::white : Qt::black;
+	const QColor& color = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	pen.setColor(color);
 
 	// left

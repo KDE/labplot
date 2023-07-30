@@ -15,10 +15,10 @@
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
+#include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
-
 #include <QFrame>
 
 #include <KConfig>
@@ -192,24 +192,14 @@ void QQPlotDock::retranslateUi() {
 
 	std::sort(std::begin(distros), std::end(distros));
 	for (const auto& d : distros) {
-		if (d.second == nsl_sf_stats_gaussian_tail
-			|| d.second == nsl_sf_stats_exponential_power
-			|| d.second == nsl_sf_stats_rayleigh_tail
-			|| d.second == nsl_sf_stats_landau
-			|| d.second == nsl_sf_stats_levy_alpha_stable
-			|| d.second == nsl_sf_stats_levy_skew_alpha_stable
-			|| d.second == nsl_sf_stats_poisson
-			|| d.second == nsl_sf_stats_bernoulli
-			|| d.second == nsl_sf_stats_binomial
-			|| d.second == nsl_sf_stats_negative_binomial
-			|| d.second == nsl_sf_stats_pascal
-			|| d.second == nsl_sf_stats_geometric
-			|| d.second == nsl_sf_stats_hypergeometric
-			|| d.second == nsl_sf_stats_logarithmic
-			|| d.second == nsl_sf_stats_maxwell_boltzmann
-			|| d.second == nsl_sf_stats_sech
-			|| d.second == nsl_sf_stats_levy
-			|| d.second == nsl_sf_stats_frechet)
+		// skip distributions where the inverse of the CDF is not available in gsl_cdf.h
+		// s.a. QQPlotPrivate::updateDistribution()
+		if (d.second == nsl_sf_stats_gaussian_tail || d.second == nsl_sf_stats_exponential_power || d.second == nsl_sf_stats_rayleigh_tail
+			|| d.second == nsl_sf_stats_landau || d.second == nsl_sf_stats_levy_alpha_stable || d.second == nsl_sf_stats_levy_skew_alpha_stable
+			|| d.second == nsl_sf_stats_poisson || d.second == nsl_sf_stats_bernoulli || d.second == nsl_sf_stats_binomial
+			|| d.second == nsl_sf_stats_negative_binomial || d.second == nsl_sf_stats_pascal || d.second == nsl_sf_stats_geometric
+			|| d.second == nsl_sf_stats_hypergeometric || d.second == nsl_sf_stats_logarithmic || d.second == nsl_sf_stats_maxwell_boltzmann
+			|| d.second == nsl_sf_stats_sech || d.second == nsl_sf_stats_levy || d.second == nsl_sf_stats_frechet)
 			continue;
 
 		ui.cbDistribution->addItem(d.first, d.second);
@@ -260,9 +250,46 @@ void QQPlotDock::dataColumnChanged(const QModelIndex& index) {
 }
 
 void QQPlotDock::distributionChanged(int index) {
+	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+
+	QString file =
+		QStandardPaths::locate(QStandardPaths::AppDataLocation,
+							   QStringLiteral("pics/gsl_distributions/") + QLatin1String(nsl_sf_stats_distribution_pic_name[dist]) + QStringLiteral(".pdf"));
+	QImage image = GuiTools::importPDFFile(file);
+
+	// use system palette for background
+	if (GuiTools::isDarkMode()) {
+		// invert image if in dark mode
+		image.invertPixels();
+
+		for (int i = 0; i < image.size().width(); i++)
+			for (int j = 0; j < image.size().height(); j++)
+				if (qGray(image.pixel(i, j)) < 64) // 0-255: 0-64 covers all dark pixel
+					image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+	} else {
+		for (int i = 0; i < image.size().width(); i++)
+			for (int j = 0; j < image.size().height(); j++)
+				if (qGray(image.pixel(i, j)) > 192) // 0-255: 224-255 covers all light pixel
+					image.setPixel(QPoint(i, j), palette().color(QPalette::Base).rgb());
+	}
+
+	if (image.isNull()) {
+		ui.lFunc->hide();
+		ui.lFuncPic->hide();
+	} else {
+		// use light/dark background in the preview label
+		QPalette p;
+		p.setColor(QPalette::Window, palette().color(QPalette::Base));
+		ui.lFuncPic->setAutoFillBackground(true);
+		ui.lFuncPic->setPalette(p);
+		ui.lFuncPic->setScaledContents(false);
+
+		ui.lFuncPic->setPixmap(QPixmap::fromImage(image));
+		ui.lFuncPic->show();
+	}
+
 	CONDITIONAL_LOCK_RETURN;
 
-	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
 	for (auto* plot : m_plots)
 		plot->setDistribution(dist);
 }
