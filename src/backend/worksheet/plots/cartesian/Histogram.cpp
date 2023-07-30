@@ -1332,14 +1332,16 @@ void HistogramPrivate::updateValues() {
 
 	case Value::Center: {
 		QVector<qreal> listBarWidth;
-		for (int i =0;i<linesUnclipped.size();i+=1) {
-			auto&columnBarLines = linesUnclipped.at(i);
-			listBarWidth.append(columnBarLines.length());
+		for (int i = 0, j = 0; i < linesUnclipped.size(); i += 4, j++) {
+			auto& columnBarLines = linesUnclipped.at(i);
+			if (visiblePoints.at(j) == true) {
+				listBarWidth.append(columnBarLines.length());
+			}
 		}
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			w = fm.boundingRect(valuesStrings.at(i)).width();
 			tempPoint.setX(pointsScene.at(i).x() - w / 2);
-			tempPoint.setY(pointsScene.at(i).y() - valuesDistance + listBarWidth.at(i)/2+h/2);
+			tempPoint.setY(pointsScene.at(i).y() - valuesDistance + listBarWidth.at(i) / 2 + h / 2);
 			valuesPoints.append(tempPoint);
 		}
 		break;

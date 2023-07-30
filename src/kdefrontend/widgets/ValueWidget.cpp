@@ -1,10 +1,10 @@
 /*
-	File                 : ValueWidget.cpp
-	Project              : LabPlot
-	Description          : values settings widget
-	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
-	SPDX-License-Identifier: GPL-2.0-or-later
+								File                 : ValueWidget.cpp
+								Project              : LabPlot
+								Description          : values settings widget
+								--------------------------------------------------------------------
+								SPDX-FileCopyrightText: 2022 Alexander Semke
+   <alexander.semke@web.de> SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ValueWidget.h"
@@ -16,7 +16,8 @@
 
 /*!
 	\class ValueWidget
-	\brief Widget for editing the properties of a Value object, mostly used in an appropriate dock widget.
+	\brief Widget for editing the properties of a
+   Value object, mostly used in an appropriate dock widget.
 
 	\ingroup kdefrontend
  */
@@ -35,7 +36,6 @@ ValueWidget::ValueWidget(QWidget* parent)
 	ui.cbPosition->addItem(i18n("Below"));
 	ui.cbPosition->addItem(i18n("Left"));
 	ui.cbPosition->addItem(i18n("Right"));
-
 
 	// add formats for numeric values
 	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
@@ -83,13 +83,11 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
-	if(m_value->centerPositionAvailable()){
-		if(ui.cbPosition->count()==4){
+	if (m_value->centerPositionAvailable()) {
+		if (!ui.cbPosition->contains(i18n("Center"))) {
 			ui.cbPosition->addItem(i18n("Center"));
 		}
 	}
-
-
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
@@ -126,7 +124,7 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	connect(m_value, &Value::suffixChanged, this, &ValueWidget::valueSuffixChanged);
 	connect(m_value, &Value::fontChanged, this, &ValueWidget::valueFontChanged);
 	connect(m_value, &Value::colorChanged, this, &ValueWidget::valueColorChanged);
-}
+	}
 
 //*************************************************************
 //******** SLOTs for changes triggered in ValueWidget ****
@@ -145,9 +143,10 @@ void ValueWidget::typeChanged(int index) {
 }
 
 /*!
-  depending on the currently selected values column type (column mode) updates the widgets for the values column format,
-  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
-  Called when the values column was changed.
+  depending on the currently selected values column type (column mode) updates
+  the widgets for the values column format, shows/hides the allowed widgets,
+  fills the corresponding combobox with the possible entries. Called when the
+  values column was changed.
 */
 void ValueWidget::updateWidgets() {
 	const auto type = Value::Type(ui.cbType->currentIndex());

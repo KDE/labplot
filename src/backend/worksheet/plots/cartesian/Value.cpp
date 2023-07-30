@@ -110,7 +110,7 @@ void Value::setType(Value::Type type) {
 }
 void Value::setcenterPositionAvailable(bool available){
 	Q_D(Value);
-	d->centerPositionAvailable= available;
+	d->centerPositionAvailable = available;
 }
 
 

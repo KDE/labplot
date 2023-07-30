@@ -67,7 +67,7 @@ void BarPlot::init() {
 
 	// values
 	d->addValue(group);
-	d->value->setcenterPositionAvailable(true);
+
 }
 
 /*!
@@ -388,6 +388,7 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 	value = new Value(QString());
 	q->addChild(value);
 	value->setHidden(true);
+	value->setcenterPositionAvailable(true);
 	if (!q->isLoading())
 		value->init(group);
 
