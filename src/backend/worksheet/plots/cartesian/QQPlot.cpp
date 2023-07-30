@@ -74,9 +74,15 @@ void QQPlot::init() {
 
 	d->referenceCurve->setUndoAware(true);
 
-	d->xReferenceColumn = new Column(QStringLiteral("x"));
-	d->yReferenceColumn = new Column(QStringLiteral("y"));
+	// columns holding the data for the reference curve
+	d->xReferenceColumn = new Column(QStringLiteral("xReference"));
+	d->xReferenceColumn->setHidden(true);
+	addChildFast(d->xReferenceColumn);
 	d->referenceCurve->setXColumn(d->xReferenceColumn);
+
+	d->yReferenceColumn = new Column(QStringLiteral("yReference"));
+	d->yReferenceColumn->setHidden(true);
+	addChildFast(d->yReferenceColumn);
 	d->referenceCurve->setYColumn(d->yReferenceColumn);
 
 	// percentiles curve
@@ -91,21 +97,24 @@ void QQPlot::init() {
 	d->percentilesCurve->background()->setPosition(Background::Position::No);
 	d->percentilesCurve->setUndoAware(true);
 
-	d->xPercentilesColumn = new Column(QStringLiteral("x"));
-	d->yPercentilesColumn = new Column(QStringLiteral("y"));
+	// columns holding the data for the percentiles curve
+	d->xPercentilesColumn = new Column(QStringLiteral("xPercentiles"));
+	d->xPercentilesColumn->setHidden(true);
+	addChildFast(d->xPercentilesColumn);
 	d->percentilesCurve->setXColumn(d->xPercentilesColumn);
+
+	d->yPercentilesColumn = new Column(QStringLiteral("yPercentiles"));
+	d->yPercentilesColumn->setHidden(true);
+	addChildFast(d->yPercentilesColumn);
 	d->percentilesCurve->setYColumn(d->yPercentilesColumn);
 
 	d->updateDistribution();
-	initActions();
 }
 
 void QQPlot::finalizeAdd() {
 	Q_D(QQPlot);
 	WorksheetElement::finalizeAdd();
-	d->referenceCurve->setHidden(true);
 	addChild(d->referenceCurve);
-	d->percentilesCurve->setHidden(true);
 	addChild(d->percentilesCurve);
 }
 
@@ -116,6 +125,9 @@ void QQPlot::initActions() {
 }
 
 QMenu* QQPlot::createContextMenu() {
+	if (!visibilityAction)
+		initActions();
+
 	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
@@ -149,7 +161,7 @@ void QQPlot::setHover(bool on) {
 }
 
 void QQPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
-// TODO
+	// TODO
 }
 
 void QQPlot::setVisible(bool on) {
@@ -191,7 +203,7 @@ bool QQPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<dou
 		Range referenceRange(r);
 		Range percentilesRange(r);
 		bool rc = true;
-		rc= d->referenceCurve->minMax(dim, indexRange, referenceRange, false);
+		rc = d->referenceCurve->minMax(dim, indexRange, referenceRange, false);
 		if (!rc)
 			return false;
 
@@ -258,7 +270,6 @@ void QQPlot::setDistribution(nsl_sf_stats_distribution distribution) {
 		exec(new QQPlotSetDistributionCmd(d, distribution, ki18n("%1: set distribution")));
 }
 
-
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -295,7 +306,6 @@ QQPlotPrivate::QQPlotPrivate(QQPlot* owner)
 }
 
 QQPlotPrivate::~QQPlotPrivate() {
-
 }
 
 QRectF QQPlotPrivate::boundingRect() const {
@@ -511,10 +521,21 @@ void QQPlot::save(QXmlStreamWriter* writer) const {
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->dataColumn, dataColumn);
+	WRITE_COLUMN(d->xReferenceColumn, xReferenceColumn);
+	WRITE_COLUMN(d->yReferenceColumn, yReferenceColumn);
+	WRITE_COLUMN(d->xPercentilesColumn, xPercentilesColumn);
+	WRITE_COLUMN(d->yPercentilesColumn, yPercentilesColumn);
 	writer->writeAttribute(QStringLiteral("distribution"), QString::number(static_cast<int>(d->distribution)));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
+	// save the internal columns, above only the references to them were saved
+	d->xReferenceColumn->save(writer);
+	d->yReferenceColumn->save(writer);
+	d->xPercentilesColumn->save(writer);
+	d->yPercentilesColumn->save(writer);
+
+	// save the internal curves
 	d->referenceCurve->save(writer);
 	d->percentilesCurve->save(writer);
 
@@ -546,6 +567,10 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 			READ_COLUMN(dataColumn);
+			READ_COLUMN(xReferenceColumn);
+			READ_COLUMN(yReferenceColumn);
+			READ_COLUMN(xPercentilesColumn);
+			READ_COLUMN(yPercentilesColumn);
 			READ_INT_VALUE("distribution", distribution, nsl_sf_stats_distribution);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
@@ -553,10 +578,25 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
 			else
 				d->setVisible(str.toInt());
+		} else if (reader->name() == QLatin1String("column")) {
+			attribs = reader->attributes();
+			bool rc = true;
+			const auto& name = attribs.value(QStringLiteral("name")) ;
+			if (name == QLatin1String("xReference"))
+				rc = d->xReferenceColumn->load(reader, preview);
+			else if (name == QLatin1String("yReference"))
+				rc = d->yReferenceColumn->load(reader, preview);
+			else if (name == QLatin1String("xPercentiles"))
+				rc = d->xPercentilesColumn->load(reader, preview);
+			else if (name == QLatin1String("yPercentiles"))
+				rc = d->yPercentilesColumn->load(reader, preview);
+
+			if (!rc)
+				return false;
 		} else if (reader->name() == QLatin1String("xyCurve")) {
 			attribs = reader->attributes();
 			bool rc = true;
-			if (attribs.value(QStringLiteral("name")) ==  QLatin1String("reference"))
+			if (attribs.value(QStringLiteral("name")) == QLatin1String("reference"))
 				rc = d->referenceCurve->load(reader, preview);
 			else
 				rc = d->percentilesCurve->load(reader, preview);

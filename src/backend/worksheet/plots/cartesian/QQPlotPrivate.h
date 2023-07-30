@@ -37,11 +37,15 @@ public:
 
 	XYCurve* referenceCurve{nullptr};
 	Column* xReferenceColumn{nullptr};
+	QString xReferenceColumnPath;
 	Column* yReferenceColumn{nullptr};
+	QString yReferenceColumnPath;
 
 	XYCurve* percentilesCurve{nullptr};
 	Column* xPercentilesColumn{nullptr};
+	QString xPercentilesColumnPath;
 	Column* yPercentilesColumn{nullptr};
+	QString yPercentilesColumnPath;
 
 	// General
 	const AbstractColumn* dataColumn{nullptr};
@@ -51,7 +55,6 @@ public:
 	QQPlot* const q;
 
 private:
-
 	bool m_hovered{false};
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;

@@ -2691,7 +2691,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 			// range of indices
 			Range<int> indexRange{0, 0};
-			if (!completeRange && d->rangeType == RangeType::Free ) {
+			if (!completeRange && d->rangeType == RangeType::Free) {
 				Dimension dim_other = Dimension::Y;
 				switch (dim) {
 				case Dimension::X:

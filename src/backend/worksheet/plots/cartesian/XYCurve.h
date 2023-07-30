@@ -179,13 +179,13 @@ private:
 	void connectValuesColumn(const AbstractColumn*);
 
 	bool minMax(const AbstractColumn* column1,
-			const AbstractColumn* column2,
-			const ErrorType errorType,
-			const AbstractColumn* errorPlusColumn,
-			const AbstractColumn* errorMinusColumn,
-			const Range<int>& indexRange,
-			Range<double>& yRange,
-			bool includeErrorBars) const;
+				const AbstractColumn* column2,
+				const ErrorType errorType,
+				const AbstractColumn* errorPlusColumn,
+				const AbstractColumn* errorMinusColumn,
+				const Range<int>& indexRange,
+				Range<double>& yRange,
+				bool includeErrorBars) const;
 
 	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};
