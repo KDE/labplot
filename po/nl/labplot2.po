@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-28 00:41+0000\n"
-"PO-Revision-Date: 2023-07-17 11:18+0200\n"
+"PO-Revision-Date: 2023-07-29 13:18+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -6571,38 +6571,32 @@ msgid "Count"
 msgstr "Aantal"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:34
-#, fuzzy, kde-format
-#| msgid "Arithmetic mean"
+#, kde-format
 msgid "ArithmeticMean"
 msgstr "Rekenkundig gemiddelde"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:35
-#, fuzzy, kde-format
-#| msgid "Geometric mean"
+#, kde-format
 msgid "GeometricMean"
 msgstr "Geometrische gemiddelde"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:36
-#, fuzzy, kde-format
-#| msgid "Harmonic mean"
+#, kde-format
 msgid "HarmonicMean"
 msgstr "Harmonische gemiddelde"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:37
-#, fuzzy, kde-format
-#| msgid "Contraharmonic mean"
+#, kde-format
 msgid "ContraharmonicMean"
 msgstr "Contra-harmonische gemiddelde"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:39
-#, fuzzy, kde-format
-#| msgid "First Quartile"
+#, kde-format
 msgid "FirstQuartile"
 msgstr "Eerste kwartiel"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:41
-#, fuzzy, kde-format
-#| msgid "Third Quartile"
+#, kde-format
 msgid "ThirdQuartile"
 msgstr "Derde kwartiel"
 
@@ -6613,62 +6607,52 @@ msgid "Interquartile Range"
 msgstr "Interkwartiel bereik"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:43
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile1"
 msgstr "Percentiel"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:44
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile5"
 msgstr "Percentiel"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:45
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile10"
-msgstr "Percentiel"
+msgstr "Percentiel10"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:46
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile90"
-msgstr "Percentiel"
+msgstr "Percentiel90"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:47
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile95"
-msgstr "Percentiel"
+msgstr "Percentiel95"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:48
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile99"
-msgstr "Percentiel"
+msgstr "Percentiel99"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:51
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "StandardDeviation"
 msgstr "Standaard deviatie"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:52
-#, fuzzy, kde-format
-#| msgid "Mean deviation"
+#, kde-format
 msgid "MeanDeviation"
 msgstr "Gemiddelde deviatie"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:53
-#, fuzzy, kde-format
-#| msgid "Mean deviation around median"
+#, kde-format
 msgid "MeanDeviationAroundMedian"
 msgstr "Gemiddelde deviatie rond mediaan"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:54
-#, fuzzy, kde-format
-#| msgid "Median deviation"
+#, kde-format
 msgid "MedianDeviation"
 msgstr "Deviatie mediaan"
 
@@ -9663,10 +9647,9 @@ msgid "Column Statistics..."
 msgstr "Kolomstatistieken..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:303
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Column Statistics Spreadsheet"
-msgstr "Kolomstatistieken"
+msgstr "Kolomstatistieken vn rekenblad"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
@@ -13452,12 +13435,10 @@ msgid "Properties: Spreadsheet"
 msgstr "Eigenschappen: rekenblad"
 
 #: src/kdefrontend/GuiObserver.cpp:228
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Column"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Eigenschappen: kolom"
+msgstr "Eigenschappen: kolomstatistieken"
 
 #: src/kdefrontend/GuiObserver.cpp:238
 #, kde-format

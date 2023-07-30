@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-28 00:41+0000\n"
-"PO-Revision-Date: 2023-07-28 10:00+0200\n"
+"PO-Revision-Date: 2023-07-29 07:34+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -9694,10 +9694,9 @@ msgid "Column Statistics..."
 msgstr "Statistika stolpca..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:303
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Column Statistics Spreadsheet"
-msgstr "Statistika stolpca"
+msgstr "Preglednica statistik stolpca"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
@@ -13493,12 +13492,10 @@ msgid "Properties: Spreadsheet"
 msgstr "Lastnosti: Preglednica"
 
 #: src/kdefrontend/GuiObserver.cpp:228
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Column"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Lastnosti: Stolpec"
+msgstr "Lastnosti: Statistike stolpca"
 
 #: src/kdefrontend/GuiObserver.cpp:238
 #, kde-format
