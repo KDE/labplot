@@ -3,8 +3,9 @@
     File                 : OriginFile.cpp
     Description          : Origin file import class
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2005-2008, 2017 Stefan Gerlach
-    SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky Ion Vasilief <kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr (use @ for *)>
+    SPDX-FileCopyrightText: 2005-2008, 2017-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky <kargovsky*yumr.phys.msu.su>
+    SPDX-FileCopyrightText: 2007-2008 Ion Vasilief <ion_vasilief*yahoo.fr>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -132,11 +133,21 @@ OriginFile::OriginFile(const string &fileName) : fileVersion(0), buildVersion(0)
                                       // (9.8.5.212) SR0, SR1, SR2 3478
         fileVersion = 985;
         newFileVersion = 20215;
+    } else if (buildVersion < 3522) { // 2022 (9.90.220) SR0
+        fileVersion = 990;
+        newFileVersion = 20220;
+    } else if (buildVersion < 3523) { // 2022 (9.90.225) SR1
+        fileVersion = 990;
+        newFileVersion = 20221;
+    } else if (buildVersion < 3552) { // 2022b (9.95.167) SR0, OriginViewer 9.9.5 (9.95.63) 3534
+        fileVersion = 995;
+        newFileVersion = 20225;
+        // 2023 does not support OPJ anymore, but newer OriginViewer may do.
     } else {
-        // > 2021bSR2
-        fileVersion = 986;
-        newFileVersion = 20216;
-        LOG_PRINT(logfile, "Found project version 2021bSR3 (9.8.6) or newer\n")
+        // > 2022b
+        fileVersion = 1000;
+        newFileVersion = 20230;
+        LOG_PRINT(logfile, "Found project version 2023 (10.0.0) or newer\n")
     }
 
     if (newFileVersion == 0) {

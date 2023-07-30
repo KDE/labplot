@@ -3,7 +3,8 @@
     Description          : Origin internal object classes
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2005-2007, 2017 Stefan Gerlach
-    SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky Ion Vasilief <kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr (use @ for *)>
+    SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky <kargovsky*yumr.phys.msu.su>
+    SPDX-FileCopyrightText: 2007-2008 Ion Vasilief <ion_vasilief*yahoo.fr>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -1047,7 +1048,7 @@ struct GraphLayer
     // bool threeDimensional;
     bool is3D() const
     {
-        for (auto& c : curves) {
+        for (auto &c : curves) {
             switch (c.type) {
             case GraphCurve::Scatter3D:
             case GraphCurve::Surface3D:

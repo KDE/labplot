@@ -161,7 +161,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	if (sameMode)
 		showValueLabels();
 	else {
-		for (int i = 0; ui.twLabels->rowCount(); ++i)
+		for (int i = 0; i < ui.twLabels->rowCount(); ++i)
 			ui.twLabels->removeRow(0);
 	}
 
@@ -228,7 +228,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 }
 
 void ColumnDock::showValueLabels() {
-	for (int i = 0; ui.twLabels->rowCount(); ++i)
+	for (int i = 0; i < ui.twLabels->rowCount(); ++i)
 		ui.twLabels->removeRow(0);
 
 	if (m_column->valueLabelsInitialized()) {
