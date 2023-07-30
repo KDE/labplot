@@ -185,11 +185,35 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 
 void QQPlotDock::retranslateUi() {
 	ui.cbDistribution->clear();
-	ui.cbDistribution->addItem(i18n("Normal"), nsl_sf_stats_gaussian);
-	ui.cbDistribution->addItem(i18n("Log-Normal"), nsl_sf_stats_lognormal);
-	ui.cbDistribution->addItem(i18n("Exponential"), nsl_sf_stats_exponential);
-	ui.cbDistribution->addItem(i18n("Gamma"), nsl_sf_stats_gamma);
-	ui.cbDistribution->addItem(i18n("Weibull"), nsl_sf_stats_weibull);
+
+	QVector<QPair<QString, int>> distros;
+	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
+		distros << QPair<QString, int>(i18n(nsl_sf_stats_distribution_name[i]), i);
+
+	std::sort(std::begin(distros), std::end(distros));
+	for (const auto& d : distros) {
+		if (d.second == nsl_sf_stats_gaussian_tail
+			|| d.second == nsl_sf_stats_exponential_power
+			|| d.second == nsl_sf_stats_rayleigh_tail
+			|| d.second == nsl_sf_stats_landau
+			|| d.second == nsl_sf_stats_levy_alpha_stable
+			|| d.second == nsl_sf_stats_levy_skew_alpha_stable
+			|| d.second == nsl_sf_stats_poisson
+			|| d.second == nsl_sf_stats_bernoulli
+			|| d.second == nsl_sf_stats_binomial
+			|| d.second == nsl_sf_stats_negative_binomial
+			|| d.second == nsl_sf_stats_pascal
+			|| d.second == nsl_sf_stats_geometric
+			|| d.second == nsl_sf_stats_hypergeometric
+			|| d.second == nsl_sf_stats_logarithmic
+			|| d.second == nsl_sf_stats_maxwell_boltzmann
+			|| d.second == nsl_sf_stats_sech
+			|| d.second == nsl_sf_stats_levy
+			|| d.second == nsl_sf_stats_frechet)
+			continue;
+
+		ui.cbDistribution->addItem(d.first, d.second);
+	}
 }
 
 /*

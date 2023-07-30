@@ -225,7 +225,7 @@ double QQPlot::minimum(const Dimension dim) const {
 	case Dimension::X:
 		return d->referenceCurve->minimum(dim);
 	case Dimension::Y:
-		return std::min(d->referenceCurve->minimum(dim), d->percentilesCurve->minimum(dim));;
+		return std::min(d->referenceCurve->minimum(dim), d->percentilesCurve->minimum(dim));
 	}
 	return NAN;
 }
@@ -375,28 +375,21 @@ void QQPlotPrivate::recalc() {
 }
 
 /*!
- * called when the distribution was changed, recalculates everything that depends on the distribution only
- * and is not dependent on the source data
+ * called when the distribution was changed, recalculates everything that depends on
+ * the distribution only and doesn't dependent on the source data
  */
 void QQPlotPrivate::updateDistribution() {
-	// calculate x-values - the percentiles for the distribution
 	QVector<double> xData;
 	double x1 = 0.;
 	double x2 = 0.;
 
+	// handle all distributions where the inverse of the CDF is available in gsl_cdf.h
 	switch (distribution) {
 	case nsl_sf_stats_gaussian: {
 		x1 = gsl_cdf_gaussian_Pinv(0.01, 1.0);
 		x2 = gsl_cdf_gaussian_Pinv(0.99, 1.0);
 		for (int i = 1; i < 100; ++i)
 			xData << gsl_cdf_gaussian_Pinv(double(i) / 100., 1.0);
-		break;
-	}
-	case nsl_sf_stats_lognormal: {
-		x1 = gsl_cdf_lognormal_Pinv(0.01, 1.0, 1.0);
-		x2 = gsl_cdf_lognormal_Pinv(0.99, 1.0, 1.0);
-		for (int i = 1; i < 100; ++i)
-			xData << gsl_cdf_lognormal_Pinv(double(i) / 100., 1.0, 1.0);
 		break;
 	}
 	case nsl_sf_stats_exponential: {
@@ -406,11 +399,88 @@ void QQPlotPrivate::updateDistribution() {
 			xData << gsl_cdf_exponential_Pinv(double(i) / 100., 1.0);
 		break;
 	}
+	case nsl_sf_stats_laplace: {
+		x1 = gsl_cdf_laplace_Pinv(0.01, 1.0);
+		x2 = gsl_cdf_laplace_Pinv(0.99, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_laplace_Pinv(double(i) / 100., 1.0);
+		break;
+	}
+	case nsl_sf_stats_cauchy_lorentz: {
+		x1 = gsl_cdf_cauchy_Pinv(0.01, 1.0);
+		x2 = gsl_cdf_cauchy_Pinv(0.99, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_cauchy_Pinv(double(i) / 100., 1.0);
+		break;
+	}
+	case nsl_sf_stats_rayleigh: {
+		x1 = gsl_cdf_rayleigh_Pinv(0.01, 1.0);
+		x2 = gsl_cdf_rayleigh_Pinv(0.99, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_rayleigh_Pinv(double(i) / 100., 1.0);
+		break;
+	}
 	case nsl_sf_stats_gamma: {
 		x1 = gsl_cdf_gamma_Pinv(0.01, 1.0, 1.0);
 		x2 = gsl_cdf_gamma_Pinv(0.99, 1.0, 1.0);
 		for (int i = 1; i < 100; ++i)
 			xData << gsl_cdf_gamma_Pinv(double(i) / 100., 1.0, 1.0);
+		break;
+	}
+	case nsl_sf_stats_flat: {
+		x1 = gsl_cdf_flat_Pinv(0.01, 0.0, 1.0);
+		x2 = gsl_cdf_flat_Pinv(0.99, 0.0, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_flat_Pinv(double(i) / 100., 0.0, 1.0);
+		break;
+	}
+	case nsl_sf_stats_lognormal: {
+		x1 = gsl_cdf_lognormal_Pinv(0.01, 1.0, 1.0);
+		x2 = gsl_cdf_lognormal_Pinv(0.99, 1.0, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_lognormal_Pinv(double(i) / 100., 1.0, 1.0);
+		break;
+	}
+	case nsl_sf_stats_chi_squared: {
+		x1 = gsl_cdf_chisq_Pinv(0.01, 1.0);
+		x2 = gsl_cdf_chisq_Pinv(0.99, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_chisq_Pinv(double(i) / 100., 1.0);
+		break;
+	}
+	case nsl_sf_stats_fdist: {
+		x1 = gsl_cdf_fdist_Pinv(0.01, 1.0, 1.0);
+		x2 = gsl_cdf_fdist_Pinv(0.99, 1.0, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_fdist_Pinv(double(i) / 100., 1.0, 1.0);
+		break;
+	}
+	case nsl_sf_stats_tdist: {
+		x1 = gsl_cdf_tdist_Pinv(0.01, 1.0);
+		x2 = gsl_cdf_tdist_Pinv(0.99, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_tdist_Pinv(double(i) / 100., 1.0);
+		break;
+	}
+	case nsl_sf_stats_beta: {
+		x1 = gsl_cdf_beta_Pinv(0.01, 1.0, 1.0);
+		x2 = gsl_cdf_beta_Pinv(0.99, 1.0, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_beta_Pinv(double(i) / 100., 1.0, 1.0);
+		break;
+	}
+	case nsl_sf_stats_logistic: {
+		x1 = gsl_cdf_logistic_Pinv(0.01, 1.0);
+		x2 = gsl_cdf_logistic_Pinv(0.99, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_logistic_Pinv(double(i) / 100., 1.0);
+		break;
+	}
+	case nsl_sf_stats_pareto: {
+		x1 = gsl_cdf_pareto_Pinv(0.01, 1.0, 1.0);
+		x2 = gsl_cdf_pareto_Pinv(0.99, 1.0, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_pareto_Pinv(double(i) / 100., 1.0, 1.0);
 		break;
 	}
 	case nsl_sf_stats_weibull: {
@@ -420,6 +490,39 @@ void QQPlotPrivate::updateDistribution() {
 			xData << gsl_cdf_weibull_Pinv(double(i) / 100., 1.0, 1.0);
 		break;
 	}
+	case nsl_sf_stats_gumbel1: {
+		x1 = gsl_cdf_gumbel1_Pinv(0.01, 1.0, 1.0);
+		x2 = gsl_cdf_gumbel1_Pinv(0.99, 1.0, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_gumbel1_Pinv(double(i) / 100., 1.0, 1.0);
+		break;
+	}
+	case nsl_sf_stats_gumbel2: {
+		x1 = gsl_cdf_gumbel2_Pinv(0.01, 1.0, 1.0);
+		x2 = gsl_cdf_gumbel2_Pinv(0.99, 1.0, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_gumbel2_Pinv(double(i) / 100., 1.0, 1.0);
+		break;
+	}
+	case nsl_sf_stats_gaussian_tail:
+	case nsl_sf_stats_exponential_power:
+	case nsl_sf_stats_rayleigh_tail:
+	case nsl_sf_stats_landau:
+	case nsl_sf_stats_levy_alpha_stable:
+	case nsl_sf_stats_levy_skew_alpha_stable:
+	case nsl_sf_stats_poisson:
+	case nsl_sf_stats_bernoulli:
+	case nsl_sf_stats_binomial:
+	case nsl_sf_stats_negative_binomial:
+	case nsl_sf_stats_pascal:
+	case nsl_sf_stats_geometric:
+	case nsl_sf_stats_hypergeometric:
+	case nsl_sf_stats_logarithmic:
+	case nsl_sf_stats_maxwell_boltzmann:
+	case nsl_sf_stats_sech:
+	case nsl_sf_stats_levy:
+	case nsl_sf_stats_frechet:
+		break;
 	}
 
 	xReferenceColumn->setValueAt(0, x1);
@@ -581,7 +684,7 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 			bool rc = true;
-			const auto& name = attribs.value(QStringLiteral("name")) ;
+			const auto& name = attribs.value(QStringLiteral("name"));
 			if (name == QLatin1String("xReference"))
 				rc = d->xReferenceColumn->load(reader, preview);
 			else if (name == QLatin1String("yReference"))
