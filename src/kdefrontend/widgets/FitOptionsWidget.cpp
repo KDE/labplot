@@ -83,6 +83,10 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	this->autoEvalRangeChanged();
 
 	ui.cbUseDataErrors->setChecked(m_fitData->useDataErrors);
+	// disable option to use uncertainties when there are no x- and y-weights
+	if (m_fitData->xWeightsType == nsl_fit_weight_no && m_fitData->yWeightsType == nsl_fit_weight_no)
+		ui.cbUseDataErrors->setEnabled(false);
+
 	ui.cbUseResults->setChecked(m_fitData->useResults);
 	ui.cbPreview->setChecked(m_fitData->previewEnabled);
 	ui.sbConfidenceInterval->setValue(m_fitData->confidenceInterval);
