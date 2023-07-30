@@ -50,7 +50,7 @@ public:
 	// General
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
-	nsl_sf_stats_distribution distribution;
+	nsl_sf_stats_distribution distribution{nsl_sf_stats_gaussian};
 
 	QQPlot* const q;
 

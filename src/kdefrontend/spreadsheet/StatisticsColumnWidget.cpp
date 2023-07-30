@@ -24,6 +24,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -411,78 +412,10 @@ void StatisticsColumnWidget::showQQPlot() {
 	}
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	// copy the non-nan and not masked values into a new vector
-	QVector<double> rawData;
-	copyValidData(rawData);
-	size_t n = rawData.count();
+	auto* qqPlot = new QQPlot(QString());
+	plot->addChild(qqPlot);
+	qqPlot->setDataColumn(m_column);
 
-	// sort the data to calculate the percentiles
-	std::sort(rawData.begin(), rawData.end());
-
-	// calculate y-values - the percentiles for the column data
-	Column* yColumn = new Column(QStringLiteral("y"));
-	m_project->addChildFast(yColumn);
-	QVector<double> yData;
-	for (int i = 1; i < 100; ++i)
-		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, double(i) / 100.);
-
-	yColumn->setValues(yData);
-
-	// calculate x-values - the percentiles for the standard normal distribution
-	Column* xColumn = new Column(QStringLiteral("x"));
-	m_project->addChildFast(xColumn);
-	QVector<double> xData;
-	for (int i = 1; i < 100; ++i)
-		xData << gsl_cdf_gaussian_Pinv(double(i) / 100., 1.0);
-
-	xColumn->setValues(xData);
-
-	// add curve with the quantiles
-	auto* curve = new XYCurve(QString());
-	curve->setSuppressRetransform(true);
-	plot->addChild(curve);
-	curve->line()->setStyle(Qt::NoPen);
-	curve->symbol()->setStyle(Symbol::Style::Circle);
-	curve->background()->setPosition(Background::Position::No);
-	curve->setXColumn(xColumn);
-	curve->setYColumn(yColumn);
-
-	// add the reference line connecting (x1, y1) = (-0.6745, Q1) and (x2, y2) = (0.6745, Q2)
-	double y1 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.25);
-	double y2 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.75);
-	double x1 = -0.6745;
-	double x2 = 0.6745;
-
-	// we only want do show the line starting from x = PInv(0.01) = -2.32635
-	// and going to x = PInv(0.99) = 2.32635;
-	double k = (y2 - y1) / (x2 - x1);
-	double b = y1 - k * x1;
-	double x1New = -2.32635;
-	double x2New = 2.32635;
-	double y1New = k * x1New + b;
-	double y2New = k * x2New + b;
-
-	Column* xColumn2 = new Column(QStringLiteral("x2"));
-	m_project->addChildFast(xColumn2);
-	xColumn2->setValueAt(0, x1New);
-	xColumn2->setValueAt(1, x2New);
-
-	Column* yColumn2 = new Column(QStringLiteral("y2"));
-	m_project->addChildFast(yColumn2);
-	yColumn2->setValueAt(0, y1New);
-	yColumn2->setValueAt(1, y2New);
-
-	auto* curve2 = new XYCurve(QStringLiteral("2"));
-	curve2->setSuppressRetransform(true);
-	plot->addChild(curve2);
-	curve2->line()->setStyle(Qt::SolidLine);
-	curve2->symbol()->setStyle(Symbol::Style::NoSymbols);
-	curve2->background()->setPosition(Background::Position::No);
-	curve2->setXColumn(xColumn2);
-	curve2->setYColumn(yColumn2);
-
-	curve->setSuppressRetransform(false);
-	curve2->setSuppressRetransform(false);
 	plot->retransform();
 	m_qqPlotInitialized = true;
 }
