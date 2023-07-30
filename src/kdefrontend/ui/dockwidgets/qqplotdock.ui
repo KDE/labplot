@@ -148,7 +148,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="lFunc">
          <property name="text">
-          <string>p(x):</string>
+          <string>p(x) =</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
