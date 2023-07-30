@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for QQ-plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -54,11 +54,13 @@ private Q_SLOTS:
 
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
+	void distributionChanged(int);
 	void visibilityChanged(bool);
 
 	// SLOTs for changes triggered in QQPlot
 	// General-Tab
 	void plotDataColumnChanged(const AbstractColumn*);
+	void plotDistributionChanged(nsl_sf_stats_distribution);
 	void plotVisibilityChanged(bool);
 
 	// load and save

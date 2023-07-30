@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for QQ-plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -11,8 +11,9 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
-#include "backend/worksheet/plots/cartesian/QQPlot.h"
+#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/LineWidget.h"
@@ -69,6 +70,7 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	connect(ui.teComment, &QTextEdit::textChanged, this, &QQPlotDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &QQPlotDock::visibilityChanged);
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &QQPlotDock::dataColumnChanged);
+	connect(ui.cbDistribution, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &QQPlotDock::distributionChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &QQPlotDock::plotRangeChanged);
 
 	// template handler
@@ -178,11 +180,16 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 	// General-tab
 	connect(m_plot, &QQPlot::aspectDescriptionChanged, this, &QQPlotDock::aspectDescriptionChanged);
 	connect(m_plot, &QQPlot::dataColumnChanged, this, &QQPlotDock::plotDataColumnChanged);
+	connect(m_plot, &QQPlot::distributionChanged, this, &QQPlotDock::plotDistributionChanged);
 }
 
 void QQPlotDock::retranslateUi() {
 	ui.cbDistribution->clear();
-	ui.cbDistribution->addItem(i18n("Normal"));
+	ui.cbDistribution->addItem(i18n("Normal"), nsl_sf_stats_gaussian);
+	ui.cbDistribution->addItem(i18n("Log-Normal"), nsl_sf_stats_lognormal);
+	ui.cbDistribution->addItem(i18n("Exponential"), nsl_sf_stats_exponential);
+	ui.cbDistribution->addItem(i18n("Gamma"), nsl_sf_stats_gamma);
+	ui.cbDistribution->addItem(i18n("Weibull"), nsl_sf_stats_weibull);
 }
 
 /*
@@ -228,6 +235,14 @@ void QQPlotDock::dataColumnChanged(const QModelIndex& index) {
 		plot->setDataColumn(column);
 }
 
+void QQPlotDock::distributionChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
+
+	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	for (auto* plot : m_plots)
+		plot->setDistribution(dist);
+}
+
 void QQPlotDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
@@ -244,6 +259,12 @@ void QQPlotDock::plotDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
 	m_initializing = false;
+}
+
+void QQPlotDock::plotDistributionChanged(nsl_sf_stats_distribution distribution) {
+	CONDITIONAL_LOCK_RETURN;
+	int index = ui.cbDistribution->findData(static_cast<int>(distribution));
+	ui.cbDistribution->setCurrentIndex(index);
 }
 
 void QQPlotDock::plotVisibilityChanged(bool on) {
@@ -263,7 +284,10 @@ void QQPlotDock::loadConfig(KConfig& config) {
 	// It doesn't make sense to load/save them in the template.
 	// This data is read in QQPlotDock::setCurves().
 
-	//TODO distribution
+	// distribution
+	auto dist = group.readEntry(QLatin1String("distribution"), static_cast<int>(m_plot->distribution()));
+	int index = ui.cbDistribution->findData(static_cast<int>(dist));
+	ui.cbDistribution->setCurrentIndex(index);
 
 	lineWidget->loadConfig(group);
 	symbolWidget->loadConfig(group);

@@ -26,6 +26,7 @@ public:
 
 	void retransform() override;
 	void recalc();
+	void updateDistribution();
 	void recalcShapeAndBoundingRect() override;
 
 	void setHover(bool on);
@@ -45,6 +46,7 @@ public:
 	// General
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
+	nsl_sf_stats_distribution distribution;
 
 	QQPlot* const q;
 

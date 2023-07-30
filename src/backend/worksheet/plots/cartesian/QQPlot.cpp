@@ -96,14 +96,8 @@ void QQPlot::init() {
 	d->percentilesCurve->setXColumn(d->xPercentilesColumn);
 	d->percentilesCurve->setYColumn(d->yPercentilesColumn);
 
-	// calculate x-values - the percentiles for the standard normal distribution
-	QVector<double> xData;
-	for (int i = 1; i < 100; ++i)
-		xData << gsl_cdf_gaussian_Pinv(double(i) / 100., 1.0);
-
-	d->xPercentilesColumn->replaceValues(0, xData);
-
-	this->initActions();
+	d->updateDistribution();
+	initActions();
 }
 
 void QQPlot::finalizeAdd() {
@@ -173,6 +167,7 @@ void QQPlot::setVisible(bool on) {
 // general
 BASIC_SHARED_D_READER_IMPL(QQPlot, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(QQPlot, QString, dataColumnPath, dataColumnPath)
+BASIC_SHARED_D_READER_IMPL(QQPlot, nsl_sf_stats_distribution, distribution, distribution)
 
 // line
 Line* QQPlot::line() const {
@@ -256,6 +251,14 @@ void QQPlot::setDataColumnPath(const QString& path) {
 	d->dataColumnPath = path;
 }
 
+STD_SETTER_CMD_IMPL_F_S(QQPlot, SetDistribution, nsl_sf_stats_distribution, distribution, updateDistribution)
+void QQPlot::setDistribution(nsl_sf_stats_distribution distribution) {
+	Q_D(QQPlot);
+	if (distribution != d->distribution)
+		exec(new QQPlotSetDistributionCmd(d, distribution, ki18n("%1: set distribution")));
+}
+
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -326,7 +329,7 @@ void QQPlotPrivate::retransform() {
 }
 
 /*!
- * called when the data was changed. recalculates the histogram.
+ * called when the source data was changed, recalculates the plot.
  */
 void QQPlotPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
@@ -352,26 +355,67 @@ void QQPlotPrivate::recalc() {
 
 	yPercentilesColumn->replaceValues(0, yData);
 
-	// add the reference line connecting (x1, y1) = (-0.6745, Q1) and (x2, y2) = (0.6745, Q3)
-	double y1 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.25);
-	double y2 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.75);
-	double x1 = -0.6745;
-	double x2 = 0.6745;
+	double y1 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.01);
+	double y2 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.99);
+	yReferenceColumn->setValueAt(0, y1);
+	yReferenceColumn->setValueAt(1, y2);
 
-	// we only want do show the line starting from x = PInv(0.01) = -2.32635
-	// and going to x = PInv(0.99) = 2.32635;
-	double k = (y2 - y1) / (x2 - x1);
-	double b = y1 - k * x1;
-	double x1New = -2.32635;
-	double x2New = 2.32635;
-	double y1New = k * x1New + b;
-	double y2New = k * x2New + b;
+	// Q_EMIT dataChanged() in order to retransform everything with the new size/shape of the plot
+	Q_EMIT q->dataChanged();
+}
 
-	xReferenceColumn->setValueAt(0, x1New);
-	xReferenceColumn->setValueAt(1, x2New);
+/*!
+ * called when the distribution was changed, recalculates everything that depends on the distribution only
+ * and is not dependent on the source data
+ */
+void QQPlotPrivate::updateDistribution() {
+	// calculate x-values - the percentiles for the distribution
+	QVector<double> xData;
+	double x1 = 0.;
+	double x2 = 0.;
 
-	yReferenceColumn->setValueAt(0, y1New);
-	yReferenceColumn->setValueAt(1, y2New);
+	switch (distribution) {
+	case nsl_sf_stats_gaussian: {
+		x1 = gsl_cdf_gaussian_Pinv(0.01, 1.0);
+		x2 = gsl_cdf_gaussian_Pinv(0.99, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_gaussian_Pinv(double(i) / 100., 1.0);
+		break;
+	}
+	case nsl_sf_stats_lognormal: {
+		x1 = gsl_cdf_lognormal_Pinv(0.01, 1.0, 1.0);
+		x2 = gsl_cdf_lognormal_Pinv(0.99, 1.0, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_lognormal_Pinv(double(i) / 100., 1.0, 1.0);
+		break;
+	}
+	case nsl_sf_stats_exponential: {
+		x1 = gsl_cdf_exponential_Pinv(0.01, 1.0);
+		x2 = gsl_cdf_exponential_Pinv(0.99, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_exponential_Pinv(double(i) / 100., 1.0);
+		break;
+	}
+	case nsl_sf_stats_gamma: {
+		x1 = gsl_cdf_gamma_Pinv(0.01, 1.0, 1.0);
+		x2 = gsl_cdf_gamma_Pinv(0.99, 1.0, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_gamma_Pinv(double(i) / 100., 1.0, 1.0);
+		break;
+	}
+	case nsl_sf_stats_weibull: {
+		x1 = gsl_cdf_weibull_Pinv(0.01, 1.0, 1.0);
+		x2 = gsl_cdf_weibull_Pinv(0.99, 1.0, 1.0);
+		for (int i = 1; i < 100; ++i)
+			xData << gsl_cdf_weibull_Pinv(double(i) / 100., 1.0, 1.0);
+		break;
+	}
+	}
+
+	xReferenceColumn->setValueAt(0, x1);
+	xReferenceColumn->setValueAt(1, x2);
+
+	xPercentilesColumn->replaceValues(0, xData);
 
 	// Q_EMIT dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
@@ -467,6 +511,7 @@ void QQPlot::save(QXmlStreamWriter* writer) const {
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->dataColumn, dataColumn);
+	writer->writeAttribute(QStringLiteral("distribution"), QString::number(static_cast<int>(d->distribution)));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
@@ -501,6 +546,8 @@ bool QQPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 			READ_COLUMN(dataColumn);
+			READ_INT_VALUE("distribution", distribution, nsl_sf_stats_distribution);
+
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());

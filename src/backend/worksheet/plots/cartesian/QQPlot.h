@@ -11,6 +11,7 @@
 #define QQPLOT_H
 
 #include "Plot.h"
+#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/lib/Range.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
@@ -56,6 +57,7 @@ public:
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
+	BASIC_D_ACCESSOR_DECL(nsl_sf_stats_distribution, distribution, Distribution)
 
 	Line* line() const;
 	Symbol* symbol() const;
@@ -96,6 +98,7 @@ Q_SIGNALS:
 	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
+	void distributionChanged(nsl_sf_stats_distribution);
 };
 
 #endif
