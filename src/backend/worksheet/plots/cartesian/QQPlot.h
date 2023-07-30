@@ -11,9 +11,9 @@
 #define QQPLOT_H
 
 #include "Plot.h"
-#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/lib/Range.h"
 #include "backend/lib/macros.h"
+#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 

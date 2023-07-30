@@ -10,8 +10,8 @@
 #include "kdefrontend/datasources/DatasetMetadataManagerWidget.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
-#include "kdefrontend/GuiTools.h"
 #include "kdefrontend/DatasetModel.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <KConfigGroup>
 #include <KSharedConfig>
