@@ -18,7 +18,7 @@ variables:
   QT_QPA_PLATFORM: "eglfs"
 
 # test builds (prepend '.' to temporary disable):
-# Win (Release)
+# Win (Debug)
 # FreeBSD (Debug)
 # Ubuntu 22.04 min (Debug)
 # Ubuntu 22.04 full (Release)
@@ -85,7 +85,7 @@ windows_qt515:
     - git clone https://invent.kde.org/sysadmin/ci-utilities
     - git clone https://invent.kde.org/sysadmin/repo-metadata ci-utilities/repo-metadata/
   script:
-    - python3 -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform FreeBSD/Qt5/Shared --extra-cmake-args "-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON"
+    - python3 -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform FreeBSD/Qt5/Shared --extra-cmake-args "-DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON"
   after_script:
     - rm -rf _build _install _staging
   artifacts:

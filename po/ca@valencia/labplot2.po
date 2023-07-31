@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-28 00:41+0000\n"
-"PO-Revision-Date: 2023-07-17 12:27+0300\n"
+"PO-Revision-Date: 2023-07-28 13:08+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -6652,41 +6652,35 @@ msgid "Count"
 msgstr "Comptador"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:34
-#, fuzzy, kde-format
-#| msgid "Arithmetic mean"
+#, kde-format
 msgid "ArithmeticMean"
-msgstr "Mitjana aritmètica"
+msgstr "MitjanaAritmètica"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:35
-#, fuzzy, kde-format
-#| msgid "Geometric mean"
+#, kde-format
 msgid "GeometricMean"
-msgstr "Mitjana geomètrica"
+msgstr "MitjanaGeomètrica"
 
 # Nota: https://ca.wikipedia.org/wiki/Mitjana_harm%C3%B2nica
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:36
-#, fuzzy, kde-format
-#| msgid "Harmonic mean"
+#, kde-format
 msgid "HarmonicMean"
-msgstr "Mitjana harmònica"
+msgstr "MitjanaHarmònica"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:37
-#, fuzzy, kde-format
-#| msgid "Contraharmonic mean"
+#, kde-format
 msgid "ContraharmonicMean"
-msgstr "Mitjana contra harmònica"
+msgstr "MitjanaContraharmònica"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:39
-#, fuzzy, kde-format
-#| msgid "First Quartile"
+#, kde-format
 msgid "FirstQuartile"
-msgstr "Primer quartil"
+msgstr "PrimerQuartil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:41
-#, fuzzy, kde-format
-#| msgid "Third Quartile"
+#, kde-format
 msgid "ThirdQuartile"
-msgstr "Tercer quartil"
+msgstr "TercerQuartil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:42
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:81
@@ -6695,64 +6689,54 @@ msgid "Interquartile Range"
 msgstr "Amplitud interquartílica"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:43
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile1"
-msgstr "Percentil"
+msgstr "Percentil1"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:44
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile5"
-msgstr "Percentil"
+msgstr "Percentil5"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:45
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile10"
-msgstr "Percentil"
+msgstr "Percentil10"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:46
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile90"
-msgstr "Percentil"
+msgstr "Percentil90"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:47
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile95"
-msgstr "Percentil"
+msgstr "Percentil95"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:48
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile99"
-msgstr "Percentil"
+msgstr "Percentil99"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:51
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "StandardDeviation"
-msgstr "Desviació estàndard"
+msgstr "DesviacióEstàndard"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:52
-#, fuzzy, kde-format
-#| msgid "Mean deviation"
+#, kde-format
 msgid "MeanDeviation"
-msgstr "Desviació de la mitjana"
+msgstr "DesviacióMitjana"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:53
-#, fuzzy, kde-format
-#| msgid "Mean deviation around median"
+#, kde-format
 msgid "MeanDeviationAroundMedian"
-msgstr "Desviació de la mitjana sobre la mediana"
+msgstr "DesviacióMitjanaSobreMediana"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:54
-#, fuzzy, kde-format
-#| msgid "Median deviation"
+#, kde-format
 msgid "MedianDeviation"
-msgstr "Desviació de la mediana"
+msgstr "DesviacióMediana"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberLine)
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
@@ -9766,10 +9750,9 @@ msgid "Column Statistics..."
 msgstr "Estadístiques de les columnes..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:303
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Column Statistics Spreadsheet"
-msgstr "Estadístiques de les columnes"
+msgstr "Full de treball d'estadístiques de les columnes"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
@@ -13589,12 +13572,10 @@ msgid "Properties: Spreadsheet"
 msgstr "Propietats: Full de càlcul"
 
 #: src/kdefrontend/GuiObserver.cpp:228
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Column"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Propietats: Columna"
+msgstr "Propietats: Estadístiques de les columnes"
 
 #: src/kdefrontend/GuiObserver.cpp:238
 #, kde-format
@@ -22407,24 +22388,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "xy-Curve from a Formula"
-#~ msgstr "Corba XY des d'una fórmula"
-
-#~ msgid "Data Operation"
-#~ msgstr "Operació de dades"
-
-#~ msgid "Auto/Cross Correlation"
-#~ msgstr "Correlació automàtica/creuada"
-
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Convolució/Desconvolució"
-
-#~ msgid "Data Manipulation"
-#~ msgstr "Manipulació de les dades"
-
-#~ msgid "%1: Add curve to %2 plots"
-#~ msgstr "%1: afig una corba a %2 diagrames"
-
-#~ msgid "&Analysis"
-#~ msgstr "&Anàlisi"
