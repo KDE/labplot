@@ -537,6 +537,7 @@ IF (ENABLE_MATIO)
 		MESSAGE (STATUS "Matio library NOT FOUND.")
 	ENDIF ()
 ELSE ()
+	add_definitions (-DMATIO_DISABLED)
 	MESSAGE (STATUS "Matio support DISABLED")
 ENDIF ()
 
