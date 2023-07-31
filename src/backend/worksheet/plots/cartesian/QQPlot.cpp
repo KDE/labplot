@@ -119,7 +119,7 @@ void QQPlot::finalizeAdd() {
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
-	connect (this, &AbstractAspect::aspectDescriptionChanged, [this] {
+	connect(this, &AbstractAspect::aspectDescriptionChanged, [this] {
 		Q_D(QQPlot);
 		d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
