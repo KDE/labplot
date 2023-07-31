@@ -58,53 +58,53 @@ QQPlot::~QQPlot() = default;
 void QQPlot::init() {
 	Q_D(QQPlot);
 
+	// setUndoAware(false);
+
 	KConfig config;
 	KConfigGroup group = config.group("QQPlot");
-
 	// reference curve - line conneting two central quantiles Q1 and Q3
-	d->referenceCurve = new XYCurve(QStringLiteral("reference"));
-	d->referenceCurve->setUndoAware(false);
+	d->referenceCurve = new XYCurve(QString());
+	d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->referenceCurve->setHidden(true);
 	d->referenceCurve->graphicsItem()->setParentItem(d);
-
 	d->referenceCurve->line()->init(group);
 	d->referenceCurve->line()->setStyle(Qt::SolidLine);
 	d->referenceCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->referenceCurve->background()->setPosition(Background::Position::No);
 
-	d->referenceCurve->setUndoAware(true);
-
 	// columns holding the data for the reference curve
 	d->xReferenceColumn = new Column(QStringLiteral("xReference"));
 	d->xReferenceColumn->setHidden(true);
+	d->xReferenceColumn->setUndoAware(false);
 	addChildFast(d->xReferenceColumn);
 	d->referenceCurve->setXColumn(d->xReferenceColumn);
 
 	d->yReferenceColumn = new Column(QStringLiteral("yReference"));
 	d->yReferenceColumn->setHidden(true);
+	d->yReferenceColumn->setUndoAware(false);
 	addChildFast(d->yReferenceColumn);
 	d->referenceCurve->setYColumn(d->yReferenceColumn);
 
 	// percentiles curve
-	d->percentilesCurve = new XYCurve(QStringLiteral("percentiles"));
-	d->percentilesCurve->setUndoAware(false);
+	d->percentilesCurve = new XYCurve(QString());
+	d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->percentilesCurve->setHidden(true);
 	d->percentilesCurve->graphicsItem()->setParentItem(d);
-
 	d->percentilesCurve->symbol()->init(group);
 	d->percentilesCurve->symbol()->setStyle(Symbol::Style::Circle);
 	d->percentilesCurve->line()->setStyle(Qt::NoPen);
 	d->percentilesCurve->background()->setPosition(Background::Position::No);
-	d->percentilesCurve->setUndoAware(true);
 
 	// columns holding the data for the percentiles curve
 	d->xPercentilesColumn = new Column(QStringLiteral("xPercentiles"));
 	d->xPercentilesColumn->setHidden(true);
+	d->xPercentilesColumn->setUndoAware(false);
 	addChildFast(d->xPercentilesColumn);
 	d->percentilesCurve->setXColumn(d->xPercentilesColumn);
 
 	d->yPercentilesColumn = new Column(QStringLiteral("yPercentiles"));
 	d->yPercentilesColumn->setHidden(true);
+	d->yPercentilesColumn->setUndoAware(false);
 	addChildFast(d->yPercentilesColumn);
 	d->percentilesCurve->setYColumn(d->yPercentilesColumn);
 
@@ -116,6 +116,14 @@ void QQPlot::finalizeAdd() {
 	WorksheetElement::finalizeAdd();
 	addChild(d->referenceCurve);
 	addChild(d->percentilesCurve);
+
+	// synchronize the names of the internal XYCurves with the name of the current q-q plot
+	// so we have the same name shown on the undo stack
+	connect (this, &AbstractAspect::aspectDescriptionChanged, [this] {
+		Q_D(QQPlot);
+		d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+		d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	});
 }
 
 void QQPlot::initActions() {

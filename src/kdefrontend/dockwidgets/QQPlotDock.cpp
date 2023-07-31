@@ -171,8 +171,7 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 	ui.chkVisible->setChecked(m_plot->isVisible());
 
 	// load the remaining properties
-	KConfig config(QString(), KConfig::SimpleConfig);
-	loadConfig(config);
+	load();
 
 	updatePlotRanges();
 
@@ -327,6 +326,12 @@ void QQPlotDock::plotVisibilityChanged(bool on) {
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
+void QQPlotDock::load() {
+	// distribution
+	int index = ui.cbDistribution->findData(static_cast<int>(m_plot->distribution()));
+	ui.cbDistribution->setCurrentIndex(index);
+}
+
 void QQPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QLatin1String("QQPlot"));
 

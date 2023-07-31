@@ -34,6 +34,7 @@ private:
 	TreeViewComboBox* cbDataColumn;
 
 	void updatePlotRanges() override;
+	void load();
 	void loadConfig(KConfig&);
 
 protected:
