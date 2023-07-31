@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-28 00:41+0000\n"
-"PO-Revision-Date: 2023-07-23 12:28\n"
+"PO-Revision-Date: 2023-07-30 07:09\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -6506,10 +6506,9 @@ msgid "ArithmeticMean"
 msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:35
-#, fuzzy, kde-format
-#| msgid "Geometric"
+#, kde-format
 msgid "GeometricMean"
-msgstr "集合分布"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:36
 #, kde-format
@@ -6568,16 +6567,14 @@ msgid "Percentile99"
 msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:51
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "StandardDeviation"
-msgstr "标准差"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:52
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "MeanDeviation"
-msgstr "标准差"
+msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:53
 #, kde-format
@@ -6585,10 +6582,9 @@ msgid "MeanDeviationAroundMedian"
 msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:54
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "MedianDeviation"
-msgstr "标准差"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberLine)
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
