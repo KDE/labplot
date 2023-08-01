@@ -13,6 +13,7 @@
 #include "Spreadsheet.h"
 #include "SpreadsheetModel.h"
 #include "SpreadsheetPrivate.h"
+#include "StatisticsSpreadsheet.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/column/ColumnStringIO.h"
@@ -101,7 +102,8 @@ SpreadsheetModel* Spreadsheet::model() const {
 QWidget* Spreadsheet::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		bool readOnly = (this->parentAspect()->type() == AspectType::DatapickerCurve);
+		auto type = this->parentAspect()->type();
+		bool readOnly = (type == AspectType::Spreadsheet || type == AspectType::DatapickerCurve);
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
 		m_partView = m_view;
 	}
@@ -133,6 +135,11 @@ bool Spreadsheet::printPreview() const {
 #else
 	return true;
 #endif
+}
+
+StatisticsSpreadsheet* Spreadsheet::statisticsSpreadsheet() const {
+	Q_D(const Spreadsheet);
+	return d->statisticsSpreadsheet;
 }
 
 /*!
@@ -576,7 +583,8 @@ void Spreadsheet::clearMasks() {
 QMenu* Spreadsheet::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
-	Q_EMIT requestProjectContextMenu(menu);
+	if (type() != AspectType::StatisticsSpreadsheet)
+		Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 
@@ -1118,6 +1126,25 @@ QVector<AspectType> Spreadsheet::dropableOn() const {
 	return vec;
 }
 
+void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
+	Q_D(Spreadsheet);
+	if (on) {
+		if (d->statisticsSpreadsheet)
+			return;
+
+		d->statisticsSpreadsheet = new StatisticsSpreadsheet(this);
+		addChild(d->statisticsSpreadsheet);
+	} else {
+		if (!d->statisticsSpreadsheet)
+			return;
+
+		setUndoAware(false);
+		removeChild(d->statisticsSpreadsheet);
+		setUndoAware(true);
+		d->statisticsSpreadsheet = nullptr;
+	}
+}
+
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
@@ -1139,6 +1166,10 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	const auto& columns = children<Column>(ChildIndexFlag::IncludeHidden);
 	for (auto* column : columns)
 		column->save(writer);
+
+	// statistics spreadsheet, if available
+	if (d->statisticsSpreadsheet)
+		d->statisticsSpreadsheet->save(writer);
 
 	writer->writeEndElement(); // "spreadsheet"
 }
@@ -1185,6 +1216,13 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 					return false;
 				}
 				addChildFast(column);
+			} else if (reader->name() == QLatin1String("statisticsSpreadsheet")) {
+				d->statisticsSpreadsheet = new StatisticsSpreadsheet(this, true);
+				if (!d->statisticsSpreadsheet->load(reader, preview)) {
+					delete d->statisticsSpreadsheet;
+					d->statisticsSpreadsheet = nullptr;
+				} else
+					addChildFast(d->statisticsSpreadsheet);
 			} else { // unknown element
 				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 				if (!reader->skipToEndElement())

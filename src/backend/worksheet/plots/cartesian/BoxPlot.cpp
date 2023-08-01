@@ -23,6 +23,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "kdefrontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
@@ -199,7 +200,7 @@ QIcon BoxPlot::staticIcon() {
 	QPixmap pm(iconSize, iconSize);
 
 	QPen pen(Qt::SolidLine);
-	pen.setColor(DARKMODE ? Qt::white : Qt::black);
+	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
 
 	pm.fill(Qt::transparent);

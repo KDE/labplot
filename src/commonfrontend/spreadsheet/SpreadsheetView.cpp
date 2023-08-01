@@ -23,6 +23,7 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
+#include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetHeaderView.h"
@@ -298,6 +299,11 @@ void SpreadsheetView::initActions() {
 	action_search_replace = new QAction(QIcon::fromTheme(QStringLiteral("edit-find-replace")), i18n("&Replace"), this);
 	action_search_replace->setShortcut(QKeySequence::Replace);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
+
+	action_statistics_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics Spreadsheet"), this);
+	action_statistics_spreadsheet->setCheckable(true);
+	bool hasStatisticsSpreadsheet = (m_spreadsheet->children<StatisticsSpreadsheet>().size() == 1);
+	action_statistics_spreadsheet->setChecked(hasStatisticsSpreadsheet);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
@@ -765,7 +771,8 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
 	m_spreadsheetMenu->addAction(action_search);
-	m_spreadsheetMenu->addAction(action_search_replace);
+	if (!m_readOnly)
+		m_spreadsheetMenu->addAction(action_search_replace);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
@@ -868,6 +875,7 @@ void SpreadsheetView::connectActions() {
 	// statistics
 	connect(action_statistics_columns, &QAction::triggered, this, &SpreadsheetView::showColumnStatistics);
 	connect(action_statistics_all_columns, &QAction::triggered, this, &SpreadsheetView::showAllColumnsStatistics);
+	connect(action_statistics_spreadsheet, &QAction::toggled, m_spreadsheet, &Spreadsheet::toggleStatisticsSpreadsheet);
 
 	connect(action_insert_row_above, &QAction::triggered, this, &SpreadsheetView::insertRowAbove);
 	connect(action_insert_row_below, &QAction::triggered, this, &SpreadsheetView::insertRowBelow);
@@ -960,6 +968,8 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	menu->insertAction(firstAction, action_go_to_cell);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_toggle_comments);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, action_statistics_spreadsheet);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_all_columns);
 	menu->insertSeparator(firstAction);
@@ -2538,7 +2548,10 @@ void SpreadsheetView::insertColumnsRight(int count) {
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 
 				// last column selected, no next column available -> add/append a new column
-				m_spreadsheet->addChild(newCol);
+				if (!m_spreadsheet->statisticsSpreadsheet())
+					m_spreadsheet->addChild(newCol);
+				else
+					m_spreadsheet->insertChildBefore(newCol, m_spreadsheet->statisticsSpreadsheet());
 			}
 		}
 	} else {
@@ -2549,7 +2562,10 @@ void SpreadsheetView::insertColumnsRight(int count) {
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 
 				// columns available but no columns selected -> append the new column at the very end
-				m_spreadsheet->addChild(newCol);
+				if (!m_spreadsheet->statisticsSpreadsheet())
+					m_spreadsheet->addChild(newCol);
+				else
+					m_spreadsheet->insertChildBefore(newCol, m_spreadsheet->statisticsSpreadsheet());
 			}
 		} else {
 			// no columns available anymore -> resize the spreadsheet and the new column to the default size
@@ -2563,7 +2579,10 @@ void SpreadsheetView::insertColumnsRight(int count) {
 				newCol->insertRows(0, rows);
 
 				// add/append a new column
-				m_spreadsheet->addChild(newCol);
+				if (!m_spreadsheet->statisticsSpreadsheet())
+					m_spreadsheet->addChild(newCol);
+				else
+					m_spreadsheet->insertChildBefore(newCol, m_spreadsheet->statisticsSpreadsheet());
 			}
 		}
 	}

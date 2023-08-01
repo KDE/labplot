@@ -333,9 +333,16 @@ QString CantorWorksheet::backendName() {
 	return this->m_backendName;
 }
 
-// TODO
 bool CantorWorksheet::exportView() const {
-	return false;
+	// TODO: file_export_pdf exists starting with Cantor 23.12,
+	// remove this check later once 23.12 is the minimal
+	// supported version of Cantor.
+	auto* action = m_part->action("file_export_pdf");
+	if (action) {
+		action->trigger();
+		return true;
+	} else
+		return false;
 }
 
 bool CantorWorksheet::printView() {

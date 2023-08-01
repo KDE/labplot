@@ -54,6 +54,7 @@ enum class AspectType : quint64 {
 	BoxPlot = 0x0210100,
 	BarPlot = 0x0210200,
 	LollipopPlot = 0x0210400,
+	QQPlot = 0x0210800,
 	WorksheetElementContainer = 0x0220000,
 	AbstractPlot = 0x0221000,
 	CartesianPlot = 0x0221001,
@@ -79,6 +80,7 @@ enum class AspectType : quint64 {
 	Spreadsheet = 0x0412000,
 	LiveDataSource = 0x0412001,
 	MQTTTopic = 0x0412002,
+	StatisticsSpreadsheet = 0x0412004,
 	CantorWorksheet = 0x0420001,
 	Datapicker = 0x0420002,
 	DatapickerImage = 0x0420004,
@@ -196,6 +198,8 @@ public:
 			return QStringLiteral("BarPlot");
 		case AspectType::BoxPlot:
 			return QStringLiteral("BoxPlot");
+		case AspectType::QQPlot:
+			return QStringLiteral("QQPlot");
 		case AspectType::LollipopPlot:
 			return QStringLiteral("LollipopPlot");
 		case AspectType::AbstractPart:
@@ -206,6 +210,8 @@ public:
 			return QStringLiteral("Matrix");
 		case AspectType::Spreadsheet:
 			return QStringLiteral("Spreadsheet");
+		case AspectType::StatisticsSpreadsheet:
+			return QStringLiteral("StatisticsSpreadsheet");
 		case AspectType::LiveDataSource:
 			return QStringLiteral("LiveDataSource");
 		case AspectType::MQTTTopic:

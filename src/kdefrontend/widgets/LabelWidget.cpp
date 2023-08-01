@@ -9,7 +9,6 @@
 */
 
 #include "LabelWidget.h"
-#include "backend/lib/macros.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -217,8 +216,8 @@ LabelWidget::LabelWidget(QWidget* parent)
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
-	m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-									 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+	m_highlighter->setTheme(GuiTools::isDarkMode() ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+												   : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 
 	m_messageWidget = new KMessageWidget(this);

@@ -242,7 +242,7 @@ void XYCurveDock::init() {
 	ui.cbLineType->setIconSize(QSize(iconSize, iconSize));
 
 	QPen pen(Qt::SolidPattern, 0);
-	const QColor& color = DARKMODE ? Qt::white : Qt::black;
+	const QColor& color = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	pen.setColor(color);
 	pa.setPen(pen);
 

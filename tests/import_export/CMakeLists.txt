@@ -26,7 +26,7 @@ ENDIF ()
 IF (NETCDF_FOUND)
         add_subdirectory(NetCDF)
 ENDIF ()
-IF (QXLSX_LIBRARIES)
+IF (QXLSX_FOUND OR BUILD_EXCEL)
         add_subdirectory(XLSX)
 ENDIF ()
 

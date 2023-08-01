@@ -44,6 +44,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
@@ -347,6 +348,7 @@ void CartesianPlot::initActions() {
 	// statistical plots
 	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
 	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
+	addQQPlotAction = new QAction(i18n("Q-Q Plot"), this);
 
 	// bar plots
 	addBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
@@ -399,6 +401,9 @@ void CartesianPlot::initActions() {
 	});
 	connect(addHistogramAction, &QAction::triggered, this, [=]() {
 		addChild(new Histogram(i18n("Histogram")));
+	});
+	connect(addQQPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new QQPlot(i18n("Q-Q Plot")));
 	});
 
 	// analysis curves
@@ -528,6 +533,7 @@ void CartesianPlot::initMenus() {
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
+	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
 	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
 	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
@@ -2070,6 +2076,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
 	const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(child);
+
 	const auto* axis = dynamic_cast<const Axis*>(child);
 
 	if (curve) {
@@ -2682,24 +2689,26 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 				continue;
 			}
 
-			Dimension dim_other = Dimension::Y;
-			switch (dim) {
-			case Dimension::X:
-				break;
-			case Dimension::Y:
-				dim_other = Dimension::X;
-				break;
-			}
-
 			// range of indices
 			Range<int> indexRange{0, 0};
-			if (!completeRange && d->rangeType == RangeType::Free && curve->column(dim_other)) { // only data within y range
-				const int index = coordinateSystem(curve->coordinateSystemIndex())->index(dim_other);
-				DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
-				curve->column(dim_other)->indicesMinMax(d->range(dim_other, index).start(),
-														d->range(dim_other, index).end(),
-														indexRange.start(),
-														indexRange.end());
+			if (!completeRange && d->rangeType == RangeType::Free) {
+				Dimension dim_other = Dimension::Y;
+				switch (dim) {
+				case Dimension::X:
+					break;
+				case Dimension::Y:
+					dim_other = Dimension::X;
+					break;
+				}
+
+				if (curve->column(dim_other)) { // only data within y range
+					const int index = coordinateSystem(curve->coordinateSystemIndex())->index(dim_other);
+					DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
+					curve->column(dim_other)->indicesMinMax(d->range(dim_other, index).start(),
+															d->range(dim_other, index).end(),
+															indexRange.start(),
+															indexRange.end());
+				}
 			} else { // all data
 				DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
 				switch (d->rangeType) {
@@ -2717,23 +2726,21 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
 
 			curve->minMax(dim, indexRange, range, true);
-
-			if (range.start() < d->dataRange(dim, index).start())
-				d->dataRange(dim, index).start() = range.start();
-
-			if (range.end() > d->dataRange(dim, index).end())
-				d->dataRange(dim, index).end() = range.end();
-			DEBUG(Q_FUNC_INFO << ", curves range i = " << d->dataRange(dim, index).toStdString(false))
-
+		} else if (plot->type() == AspectType::QQPlot) {
+			Range<int> indexRange{0, 99};
+			plot->minMax(dim, indexRange, range, true);
 		} else {
-			const double min = plot->minimum(dim);
-			if (d->dataRange(dim, index).start() > min)
-				d->dataRange(dim, index).start() = min;
-
-			const double max = plot->maximum(dim);
-			if (max > d->dataRange(dim, index).end())
-				d->dataRange(dim, index).end() = max;
+			range.setStart(plot->minimum(dim));
+			range.setEnd(plot->maximum(dim));
 		}
+
+		if (range.start() < d->dataRange(dim, index).start())
+			d->dataRange(dim, index).start() = range.start();
+
+		if (range.end() > d->dataRange(dim, index).end())
+			d->dataRange(dim, index).end() = range.end();
+
+		DEBUG(Q_FUNC_INFO << ", plot's range i = " << d->dataRange(dim, index).toStdString(false))
 	}
 
 	// data range is used to nice extend, so set correct scale
@@ -5174,6 +5181,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(hist);
 			else {
 				removeChild(hist);
+				return false;
+			}
+		} else if (reader->name() == QLatin1String("QQPlot")) {
+			auto* plot = new QQPlot(QStringLiteral("Q-Q Plot"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else {
+				removeChild(plot);
 				return false;
 			}
 		} else { // unknown element

@@ -3,7 +3,11 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
+<<<<<<< HEAD
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+=======
 	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+>>>>>>> master
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later

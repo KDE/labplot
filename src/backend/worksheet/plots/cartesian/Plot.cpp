@@ -28,6 +28,11 @@ Plot::Plot(const QString& name, PlotPrivate* dd, AspectType type)
 
 Plot::~Plot() = default;
 
+// TODO: make this function pure abstract and implement it for all plot types
+bool Plot::minMax(const CartesianCoordinateSystem::Dimension, const Range<int>&, Range<double>&, bool) const {
+	return false;
+};
+
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################

@@ -88,6 +88,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/StatisticsSpreadsheetDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/QQPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYAnalysisCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
@@ -217,6 +219,8 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/statisticsspreadsheetdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/qqplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui
@@ -360,6 +364,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/note/Note.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
+	${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
 	${BACKEND_DIR}/worksheet/Background.cpp
 	${BACKEND_DIR}/worksheet/Image.cpp
 	${BACKEND_DIR}/worksheet/Line.cpp
@@ -388,6 +393,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/QQPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
@@ -421,7 +427,7 @@ IF (ENABLE_LIBORIGIN)
 ENDIF ()
 
 set(NSL_SOURCES
-	${BACKEND_DIR}/nsl/nsl_baseline.c
+	${BACKEND_DIR}/nsl/nsl_baseline.cpp
 	${BACKEND_DIR}/nsl/nsl_conv.c
 	${BACKEND_DIR}/nsl/nsl_corr.c
 	${BACKEND_DIR}/nsl/nsl_dft.c

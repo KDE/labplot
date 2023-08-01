@@ -83,9 +83,13 @@ void AbstractPart::deleteView() const {
  * \brief Return AbstractAspect::createContextMenu() plus operations on the primary view.
  */
 QMenu* AbstractPart::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-	menu->addSeparator();
 	auto type = this->type();
+	QMenu* menu;
+	if (type != AspectType::StatisticsSpreadsheet) {
+		menu = AbstractAspect::createContextMenu();
+		menu->addSeparator();
+	} else
+		menu = new QMenu();
 
 	// import actions for spreadsheet and matrix
 	if ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && type != AspectType::LiveDataSource && type != AspectType::MQTTTopic) {

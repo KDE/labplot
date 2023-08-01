@@ -5,7 +5,6 @@
 
 #include <QtGlobal>
 #include <QSharedPointer>
-#include <QPair>
 #include <QStringList>
 
 #include "xlsxworkbook.h"
@@ -45,7 +44,7 @@ public:
     QStringList sheetNames;
     QSharedPointer<Styles> styles;
     QSharedPointer<Theme> theme;
-    QList<QSharedPointer<MediaFile> > mediaFiles;
+    QList<std::shared_ptr<MediaFile> > mediaFiles;
     QList<QSharedPointer<Chart> > chartFiles;
     QList<XlsxDefineNameData> definedNamesList;
 

@@ -144,6 +144,7 @@ private:
 	QAction* action_search{nullptr};
 	QAction* action_search_replace{nullptr};
 	QAction* action_statistics_all_columns{nullptr};
+	QAction* action_statistics_spreadsheet{nullptr};
 
 	// column related actions
 	QAction* action_insert_column_left{nullptr};

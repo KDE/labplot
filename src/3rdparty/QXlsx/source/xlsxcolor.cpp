@@ -95,7 +95,7 @@ bool XlsxColor::loadFromXml(QXmlStreamReader &reader)
         const auto& colorString = attributes.value(QLatin1String("rgb")).toString();
         val.setValue(fromARGBString(colorString));
     } else if (attributes.hasAttribute(QLatin1String("indexed"))) {
-        int index = attributes.value(QLatin1String("indexed")).toString().toInt();
+        int index = attributes.value(QLatin1String("indexed")).toInt();
         val.setValue(index);
     } else if (attributes.hasAttribute(QLatin1String("theme"))) {
         const auto& theme = attributes.value(QLatin1String("theme")).toString();
@@ -119,67 +119,18 @@ XlsxColor::operator QVariant() const
 
 QColor XlsxColor::fromARGBString(const QString &c)
 {
-    // issue #173 https://github.com/QtExcel/QXlsx/issues/173
-
     QColor color;
-    QString strColor = QLatin1String("00000000");
-
-    if ( c.length() == 8 )
-    {
-        strColor = c;
+    if (c.startsWith(u'#')) {
+        color.setNamedColor(c);
+    } else {
+        color.setNamedColor(QLatin1Char('#') + c);
     }
-
-    if ( c.length() == 6 )
-    {
-        strColor = QLatin1String("00") + c;
-    }
-
-#if QT_VERSION >= 0x060000 // Qt 6.0 or over
-    QString strAlpha = strColor.mid(0, 2);
-    int alpha = strAlpha.toInt(0, 16);
-    color.setAlpha( alpha );
-
-    QString strRed = strColor.mid(2, 2);
-    int red = strRed.toInt(0, 16);
-    color.setRed( red );
-
-    QString strGreen = strColor.mid(4, 2);
-    int green = strGreen.toInt(0, 16);
-    color.setGreen( green );
-
-    QString strBlue = strColor.mid(6, 2);
-    int blue = strBlue.toInt(0, 16);
-    color.setBlue( blue );
-#else
-    QStringRef strAlpha = strColor.midRef(0, 2);
-    int alpha = strAlpha.toInt(nullptr, 16);
-    color.setAlpha( alpha );
-
-    QStringRef strRed = strColor.midRef(2, 2);
-    int red = strRed.toInt(nullptr, 16);
-    color.setRed( red );
-
-    QStringRef strGreen = strColor.midRef(4, 2);
-    int green = strGreen.toInt(nullptr, 16);
-    color.setGreen( green );
-
-    QStringRef strBlue = strColor.midRef(6, 2);
-    int blue = strBlue.toInt(nullptr, 16);
-    color.setBlue( blue );
-#endif
-
     return color;
 }
 
 QString XlsxColor::toARGBString(const QColor &c)
 {
-#if QT_VERSION >= 0x050600 // Qt 5.6 or over
     return QString::asprintf("%02X%02X%02X%02X", c.alpha(), c.red(), c.green(), c.blue());
-#else
-    QString color;
-    color.sprintf("%02X%02X%02X%02X", c.alpha(), c.red(), c.green(), c.blue());
-    return color;
-#endif
 }
 
 #if !defined(QT_NO_DATASTREAM)
@@ -234,7 +185,7 @@ QDebug operator<<(QDebug dbg, const XlsxColor &c)
     else if (c.isIndexedColor())
         dbg.nospace() << "XlsxColor(indexed," << c.indexedColor() << ")";
     else if (c.isThemeColor())
-        dbg.nospace() << "XlsxColor(theme," << c.themeColor().join(QLatin1String(":")) << ")";
+        dbg.nospace() << "XlsxColor(theme," << c.themeColor().join(QLatin1Char(':')) << ')';
 
     return dbg.space();
 }

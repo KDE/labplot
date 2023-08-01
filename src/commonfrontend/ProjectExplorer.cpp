@@ -553,17 +553,19 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	// don't do anything for newly added data spreadsheets of data picker curves
-	if (aspect->inherits(AspectType::Spreadsheet) && aspect->parentAspect()->inherits(AspectType::DatapickerCurve))
+	if (aspect->type() == AspectType::Spreadsheet && aspect->parentAspect()->type() == AspectType::DatapickerCurve)
 		return;
 
 	const auto* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	const auto& index = tree_model->modelIndexOfAspect(aspect);
 
 	// expand and make the aspect visible
-	m_treeView->setExpanded(index, true);
+	// no need to expand and to show child columns of a statistics spreadsheet
+	if (aspect->type() != AspectType::StatisticsSpreadsheet)
+		m_treeView->setExpanded(index, true);
 
 	// newly added columns are only expanded but not selected, return here
-	if (aspect->inherits(AspectType::Column)) {
+	if (aspect->type() == AspectType::Column) {
 		m_treeView->setExpanded(tree_model->modelIndexOfAspect(aspect->parentAspect()), true);
 		return;
 	}

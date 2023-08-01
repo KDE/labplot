@@ -237,6 +237,7 @@ private:
 	// statistical plots
 	QAction* addHistogramAction{nullptr};
 	QAction* addBoxPlotAction{nullptr};
+	QAction* addQQPlotAction{nullptr};
 
 	// bar plots
 	QAction* addBarPlotAction{nullptr};
@@ -299,6 +300,7 @@ public Q_SLOTS:
 	void addHorizontalAxis();
 	void addVerticalAxis();
 	void addHistogramFit(Histogram*, nsl_sf_stats_distribution);
+
 	void addDataReductionCurve();
 	void addDifferentiationCurve();
 	void addIntegrationCurve();

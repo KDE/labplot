@@ -110,6 +110,9 @@ Column::~Column() {
 }
 
 QMenu* Column::createContextMenu() {
+	if (parentAspect()->type() == AspectType::StatisticsSpreadsheet)
+		return nullptr;
+
 	// initialize the actions if not done yet
 	if (!m_copyDataAction) {
 		m_copyDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Data"), this);

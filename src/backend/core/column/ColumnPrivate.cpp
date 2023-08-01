@@ -27,7 +27,7 @@
 
 void ColumnPrivate::ValueLabels::setMode(AbstractColumn::ColumnMode mode) {
 	if (!initialized())
-		init(mode);
+		m_mode = mode;
 	else
 		migrateLabels(mode);
 }

@@ -162,11 +162,11 @@ DocumentPrivate::DocumentPrivate(Document *p) :
 
 void DocumentPrivate::init()
 {
-	if (contentTypes.isNull())
-		contentTypes = QSharedPointer<ContentTypes>(new ContentTypes(ContentTypes::F_NewFromScratch));
+    if (!contentTypes)
+        contentTypes = std::make_shared<ContentTypes>(ContentTypes::F_NewFromScratch);
 
-	if (workbook.isNull())
-		workbook = QSharedPointer<Workbook>(new Workbook(Workbook::F_NewFromScratch));
+    if (workbook.isNull())
+        workbook = QSharedPointer<Workbook>(new Workbook(Workbook::F_NewFromScratch));
 }
 
 bool DocumentPrivate::loadPackage(QIODevice *device)
@@ -178,7 +178,7 @@ bool DocumentPrivate::loadPackage(QIODevice *device)
 	//Load the Content_Types file
 	if (!filePaths.contains(QLatin1String("[Content_Types].xml")))
 		return false;
-	contentTypes = QSharedPointer<ContentTypes>(new ContentTypes(ContentTypes::F_LoadFromExists));
+    contentTypes = std::make_shared<ContentTypes>(ContentTypes::F_LoadFromExists);
 	contentTypes->loadFromXmlData(zipReader.fileData(QStringLiteral("[Content_Types].xml")));
 
 	//Load root rels file
@@ -217,12 +217,13 @@ bool DocumentPrivate::loadPackage(QIODevice *device)
 
 	//load workbook now, Get the workbook file path from the root rels file
 	//In normal case, this should be "xl/workbook.xml"
-	workbook = QSharedPointer<Workbook>(new Workbook(Workbook::F_LoadFromExists));
+    workbook = QSharedPointer<Workbook>(new Workbook(Workbook::F_LoadFromExists));
 	QList<XlsxRelationship> rels_xl = rootRels.documentRelationships(QStringLiteral("/officeDocument"));
 	if (rels_xl.isEmpty())
 		return false;
     const QString xlworkbook_Path = rels_xl[0].target;
-    const QString xlworkbook_Dir = *( splitPath(xlworkbook_Path).begin() );
+    const auto parts = splitPath(xlworkbook_Path);
+    const QString xlworkbook_Dir = parts.first();
     const QString relFilePath = getRelFilePath(xlworkbook_Path);
 
     workbook->relationships()->loadFromXmlData( zipReader.fileData(relFilePath) );
@@ -307,9 +308,8 @@ bool DocumentPrivate::loadPackage(QIODevice *device)
 	}
 
 	//load media files
-	QList<QSharedPointer<MediaFile> > mediaFileToLoad = workbook->mediaFiles();
-	for (int i=0; i<mediaFileToLoad.size(); ++i) {
-		QSharedPointer<MediaFile> mf = mediaFileToLoad[i];
+    const auto mediaFileToLoad = workbook->mediaFiles();
+    for (const auto &mf : mediaFileToLoad) {
 		const QString path = mf->fileName();
 		const QString suffix = path.mid(path.lastIndexOf(QLatin1Char('.'))+1);
 		mf->set(zipReader.fileData(path), suffix);
@@ -432,9 +432,10 @@ bool DocumentPrivate::savePackage(QIODevice *device) const
 	}
 
 	// save image files
-    for (int i=0; i<workbook->mediaFiles().size(); ++i)
+    const auto mfs = workbook->mediaFiles();
+    for (int i=0; i < mfs.size(); ++i)
     {
-		QSharedPointer<MediaFile> mf = workbook->mediaFiles()[i];
+        auto mf = mfs[i];
 		if (!mf->mimeType().isEmpty())
 			contentTypes->addDefault(mf->suffix(), mf->mimeType());
 
@@ -1095,7 +1096,7 @@ QStringList Document::documentPropertyNames() const
 Workbook *Document::workbook() const
 {
 	Q_D(const Document);
-	return d->workbook.data();
+    return d->workbook.data();
 }
 
 /*!
@@ -1205,6 +1206,16 @@ bool Document::selectSheet(const QString &name)
 }
 
 /*!
+ * \brief Set worksheet whose index is \a index to be active sheet.
+ * Returns true if success.
+ */
+bool Document::selectSheet(int index)
+{
+	Q_D(Document);
+	return d->workbook->setActiveSheet(index);
+}
+
+/*!
  * Returns the names of worksheets contained in current document.
  */
 QStringList Document::sheetNames() const
@@ -1277,12 +1288,11 @@ Document::~Document()
 bool Document::changeimage(int filenoinmidea, QString newfile)
 {
 	Q_D(const Document);
-	QImage newpic;
+
+    QImage newpic(newfile);
 	
-	newpic=QImage(newfile);
-	
-	QList<QSharedPointer<MediaFile> > mediaFileToLoad = d->workbook->mediaFiles();
-	QSharedPointer<MediaFile> mf = mediaFileToLoad[filenoinmidea];
+    auto mediaFileToLoad = d->workbook->mediaFiles();
+    const auto mf = mediaFileToLoad[filenoinmidea];
 	
 	const QString suffix = newfile.mid(newfile.lastIndexOf(QLatin1Char('.'))+1);
 	QString mimetypemy;
@@ -1317,10 +1327,10 @@ QMap<int, int> Document::getMaximalColumnWidth(int firstRow, int lastRow)
     const int defaultPixelSize = 11;    //Default font pixel size of excel?
     int maxRows = -1;
     int maxCols = -1;
-    QVector<CellLocation> cellLocation = currentWorksheet()->getFullCells(&maxRows, &maxCols);
-
     QMap<int, int> colWidth;
-
+    if (!currentWorksheet()) return colWidth;
+    QVector<CellLocation> cellLocation = currentWorksheet()->getFullCells(&maxRows, &maxCols);
+    
     for(int i=0; i < cellLocation.size(); i++)
     {
         int col = cellLocation.at(i).col;

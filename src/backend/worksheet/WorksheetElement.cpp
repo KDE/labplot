@@ -56,11 +56,11 @@ WorksheetElement::~WorksheetElement() {
 void WorksheetElement::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
 	if (!m_plot) {
-		/*Not in every case the parentAspect is a cartesian plot. When creating an infoelement, the parent
-		 * of a custom point is not the CartesianPlot (and so this function returns a nullptr), but the InfoElement.
-		 * So the plot is set manally in the custompoint and therefore the plot should not be set anymore.
-		 */
-		m_plot = dynamic_cast<CartesianPlot*>(parentAspect());
+		// determine the plot parent which is not neccessarily the parent aspect like for
+		// * child CustomPoint in InfoeElement
+		// * child XYCurves in QQPlot
+		// * etc.
+		m_plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
 	}
 
 	if (m_plot) {

@@ -12,7 +12,6 @@
 #include "CartesianPlotDock.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
@@ -248,7 +247,7 @@ void CartesianPlotDock::init() {
 	QPixmap pm(iconSize, iconSize);
 
 	QPen pen(Qt::SolidPattern);
-	const QColor& color = DARKMODE ? Qt::white : Qt::black;
+	const QColor& color = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	pen.setColor(color);
 
 	// left
@@ -614,11 +613,11 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		break;
 	}
 
-	tw->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeMode::ResizeToContents); // Autoscale
-	tw->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeMode::ResizeToContents); // Format
-	tw->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeMode::Stretch); // Start
-	tw->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeMode::Stretch); // End
-	tw->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeMode::ResizeToContents); // Scale
+	tw->horizontalHeader()->setSectionResizeMode(TwRangesColumn::Automatic, QHeaderView::ResizeMode::ResizeToContents);
+	tw->horizontalHeader()->setSectionResizeMode(TwRangesColumn::Format, QHeaderView::ResizeMode::ResizeToContents);
+	tw->horizontalHeader()->setSectionResizeMode(TwRangesColumn::Min, QHeaderView::ResizeMode::Stretch);
+	tw->horizontalHeader()->setSectionResizeMode(TwRangesColumn::Max, QHeaderView::ResizeMode::Stretch);
+	tw->horizontalHeader()->setSectionResizeMode(TwRangesColumn::Scale, QHeaderView::ResizeMode::ResizeToContents);
 	tw->horizontalHeader()->setStretchLastSection(false);
 
 	const int rangeCount = m_plot->rangeCount(dim);
@@ -1683,6 +1682,8 @@ void CartesianPlotDock::plotMinChanged(const Dimension dim, int xRangeIndex, dou
 
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
+
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, double value) {
@@ -1691,6 +1692,8 @@ void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, dou
 
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
 	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
+
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<double> range) {
@@ -1701,6 +1704,8 @@ void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<d
 	CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
 	CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
 	CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::plotScaleChanged(const Dimension dim, int rangeIndex, RangeT::Scale scale) {
@@ -1713,6 +1718,8 @@ void CartesianPlotDock::plotRangeFormatChanged(const Dimension dim, int rangeInd
 	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(RangeT, Format, format))
 	CONDITIONAL_LOCK_RETURN;
 	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Format, QComboBox, setCurrentIndex(static_cast<int>(format)));
+
+	updatePlotRangeList();
 }
 
 // plot range
