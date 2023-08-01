@@ -238,6 +238,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				names = m_importFileWidget->selectedMatioNames();
 			else if (fileType == AbstractFileFilter::FileType::Excel)
 				names = m_importFileWidget->selectedExcelRegionNames();
+			// TODO: Ods regions
 
 			int nrNames = names.size(), offset = sheets.size();
 			// QDEBUG(Q_FUNC_INFO << ", selected names: " << names)

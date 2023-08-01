@@ -21,9 +21,17 @@
 #include "JsonOptionsWidget.h"
 #include "MatioOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
+#include "OdsOptionsWidget.h"
 #include "ROOTOptionsWidget.h"
+
 #include "backend/datasources/filters/filters.h"
 #include "backend/lib/macros.h"
+
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KUrlComboBox>
+
 #include <QCompleter>
 #include <QDir>
 #include <QDirModel>
@@ -39,11 +47,6 @@
 #include <QTreeWidgetItem>
 #include <QUdpSocket>
 #include <QWhatsThis>
-
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <KSharedConfig>
-#include <KUrlComboBox>
 
 #ifdef HAVE_MQTT
 #include "MQTTConnectionManagerDialog.h"
@@ -565,6 +568,7 @@ QString ImportFileWidget::selectedObject() const {
 			name += QLatin1Char('/') + names.first();
 		}
 	}
+	// TODO: Ods
 	return name;
 }
 
@@ -717,9 +721,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	case AbstractFileFilter::FileType::Excel: {
 		DEBUG(Q_FUNC_INFO << ", Excel");
 
-		if (!m_currentFilter) {
+		if (!m_currentFilter)
 			m_currentFilter.reset(new ExcelFilter);
-		}
 
 		auto filter = static_cast<ExcelFilter*>(m_currentFilter.get());
 		filter->setStartRow(ui.sbStartRow->value());
@@ -1255,7 +1258,16 @@ void ImportFileWidget::initOptionsWidget() {
 		ui.swOptions->setCurrentWidget(m_excelOptionsWidget->parentWidget());
 		break;
 	case AbstractFileFilter::FileType::Ods:
-		// TODO
+		if (!m_odsOptionsWidget) {
+			QWidget* odsw = new QWidget();
+			m_odsOptionsWidget = std::unique_ptr<OdsOptionsWidget>(new OdsOptionsWidget(odsw, this));
+			ui.swOptions->addWidget(odsw);
+			connect(dynamic_cast<OdsOptionsWidget*>(m_odsOptionsWidget.get()),
+					&OdsOptionsWidget::enableDataPortionSelection,
+					this,
+					&ImportFileWidget::enableDataPortionSelection);
+		}
+		ui.swOptions->setCurrentWidget(m_odsOptionsWidget->parentWidget());
 		break;
 	case AbstractFileFilter::FileType::HDF5:
 		if (!m_hdf5OptionsWidget) {
@@ -1667,7 +1679,8 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
 	case AbstractFileFilter::FileType::Ods:
-		// TODO
+		importedStrings = m_odsOptionsWidget->previewString();
+		// Nothing else to do. Ods has it's own preview table
 		break;
 	case AbstractFileFilter::FileType::Image: {
 		ui.tePreview->clear();
@@ -1898,7 +1911,9 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 #endif
 			break;
 		case AbstractFileFilter::FileType::Ods:
-			// TODO
+#ifdef HAVE_ORCUS
+			m_odsOptionsWidget->updateContent(reinterpret_cast<OdsFilter*>(filter), fileName);
+#endif
 			break;
 		case AbstractFileFilter::FileType::Ascii:
 		case AbstractFileFilter::FileType::Binary:

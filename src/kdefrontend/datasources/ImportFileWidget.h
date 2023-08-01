@@ -28,14 +28,16 @@ class AbstractFileFilter;
 class AsciiOptionsWidget;
 class BinaryOptionsWidget;
 class CANOptionsWidget;
+class ExcelOptionsWidget;
+class FITSOptionsWidget;
 class HDF5OptionsWidget;
 class ImageOptionsWidget;
-class MatioOptionsWidget;
-class ExcelOptionsWidget;
-class NetCDFOptionsWidget;
-class FITSOptionsWidget;
 class JsonOptionsWidget;
+class MatioOptionsWidget;
+class NetCDFOptionsWidget;
+class OdsOptionsWidget;
 class ROOTOptionsWidget;
+
 class QTableWidget;
 class QCompleter;
 class QTimer;
@@ -63,13 +65,15 @@ public:
 	QString selectedObject() const;
 	bool importValid() const;
 	bool excelUseFirstRowAsColNames() const;
-	const QStringList selectedHDF5Names() const;
-	//	const QStringList selectedVectorBLFNames() const;
-	const QStringList selectedNetCDFNames() const;
-	const QStringList selectedMatioNames() const;
-	const QStringList selectedFITSExtensions() const;
-	const QStringList selectedROOTNames() const;
+
 	const QStringList selectedExcelRegionNames() const;
+	const QStringList selectedFITSExtensions() const;
+	const QStringList selectedHDF5Names() const;
+	const QStringList selectedMatioNames() const;
+	const QStringList selectedNetCDFNames() const;
+	// TODO: const QStringList selectedOdsRegionNames() const;
+	const QStringList selectedROOTNames() const;
+	//	const QStringList selectedVectorBLFNames() const;
 
 	QString host() const;
 	QString port() const;
@@ -94,6 +98,7 @@ private:
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
 	std::unique_ptr<HDF5OptionsWidget> m_hdf5OptionsWidget;
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
+	std::unique_ptr<OdsOptionsWidget> m_odsOptionsWidget;
 	std::unique_ptr<ExcelOptionsWidget> m_excelOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
 	std::unique_ptr<CANOptionsWidget> m_canOptionsWidget;
@@ -149,6 +154,7 @@ private Q_SLOTS:
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
 	friend class ROOTOptionsWidget; // to access refreshPreview() and others
+	friend class OdsOptionsWidget; // to access refreshPreview()
 	friend class ExcelOptionsWidget; // to access refreshPreview()
 
 #ifdef HAVE_MQTT
