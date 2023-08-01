@@ -50,6 +50,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/OdsOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ExcelOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
@@ -196,6 +197,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/odsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/exceloptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui

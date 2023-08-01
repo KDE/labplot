@@ -22,9 +22,8 @@ public:
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
-	/*
-		void parse(const QString& fileName, QTreeWidgetItem* root);
-		QStringList sheets() const;
+	void parse(const QString& fileName, QTreeWidgetItem* root);
+	/*	QStringList sheets() const;
 
 	#ifdef HAVE_EXCEL
 		void readDataRegion(const QXlsx::CellRange& region, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);

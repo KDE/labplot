@@ -95,6 +95,10 @@ void OdsFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
 }
 
+void OdsFilter::parse(const QString& fileName, QTreeWidgetItem* root) {
+	d->parse(fileName, root);
+}
+
 void OdsFilter::loadFilterSettings(const QString& filterName) {
 	Q_UNUSED(filterName)
 }
@@ -130,9 +134,16 @@ OdsFilterPrivate::~OdsFilterPrivate() {
 }
 
 void OdsFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
+	DEBUG(Q_FUNC_INFO)
 	// TODO
 }
 
 void OdsFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	DEBUG(Q_FUNC_INFO)
+	// TODO
+}
+
+void OdsFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentItem) {
+	DEBUG(Q_FUNC_INFO)
 	// TODO
 }

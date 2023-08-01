@@ -20,7 +20,7 @@
 #endif
 
 class OdsFilterPrivate;
-// class QTreeWidgetItem;
+class QTreeWidgetItem;
 
 class OdsFilter : public AbstractFileFilter {
 	Q_OBJECT
@@ -39,9 +39,9 @@ public:
 		void setOverwriteData(const bool);
 		void setDataExportStartPos(const QString&);
 		void setFirstRowAsColumnNames(const bool);
-
-		void parse(const QString& fileName, QTreeWidgetItem* root);
-		static QString convertFromNumberToExcelColumn(int n);
+	*/
+	void parse(const QString& fileName, QTreeWidgetItem* root);
+	/*	static QString convertFromNumberToExcelColumn(int n);
 
 	#ifdef HAVE_EXCEL
 		QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);
