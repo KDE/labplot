@@ -22,7 +22,7 @@ visit https://labplot.kde.org/contribute/.
 * [Documentation](https://labplot.kde.org/documentation/)
 * [PeerTube](https://tube.kockatoo.org/c/labplot/videos)
 * [Mastodon](https://floss.social/@LabPlot)
-* [YouTube](https://www.youtube.com/channel/UCoxs-QOKb4SdIk4TMbrTzlQ)
+* [YouTube](https://youtube.com/@LabPlot)
 * [Twitter](https://twitter.com/LabPlot)
 
 # How To Build LabPlot
@@ -41,3 +41,6 @@ LabPlot Team (2023), LabPlot: A FREE, open source, cross-platform Data Visualiza
 ```
 
 See also: https://guides.libraries.uc.edu/citing/code
+
+# Donate
+We provide LabPlot for free. If you productively use LabPlot and want to financially support its developement in future, please consider donating via [Liberapay](https://liberapay.com/LabPlot/donate)
