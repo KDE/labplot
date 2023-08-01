@@ -1,4 +1,4 @@
------XX.XX.XX () -----
+-----2.11.0 () -----
 New features:
 	* [worksheet]
 		* Add possibility to use column labels as axis ticks
@@ -24,7 +24,7 @@ Internal:
 	* update included QXlsx to 1.4.6
 	* Log skipped tests
 
------2.10.1 () -----
+-----2.10.1 (12.07.2023) -----
 Bug fixes:
 	* Support markdown library discount version 3
 	* Improve Vector BLF dependency (git download must be enabled if needed)

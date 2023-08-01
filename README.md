@@ -20,6 +20,8 @@ If you're reading this on GitHub, please be aware this is just a mirror. The mai
 visit https://labplot.kde.org/contribute/.
 * For more screenshots, see the [gallery](https://labplot.kde.org/gallery/) on our homepage.
 * [Documentation](https://labplot.kde.org/documentation/)
+* [PeerTube](https://tube.kockatoo.org/c/labplot/videos)
+* [Mastodon](https://floss.social/@LabPlot)
 * [YouTube](https://www.youtube.com/channel/UCoxs-QOKb4SdIk4TMbrTzlQ)
 * [Twitter](https://twitter.com/LabPlot)
 
