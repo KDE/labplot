@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 00:41+0000\n"
-"PO-Revision-Date: 2023-07-28 13:08+0200\n"
+"POT-Creation-Date: 2023-08-02 00:42+0000\n"
+"PO-Revision-Date: 2023-08-01 18:36+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -55,7 +55,7 @@ msgstr ""
 "No s'han pogut trobar els connectors del plafó. Si us plau, comproveu la "
 "instal·lació."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:404
 #: src/backend/core/column/Column.cpp:1282
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:639
@@ -108,7 +108,7 @@ msgstr ""
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "L'atribut «%1» falta o està buit, s'usarà el valor per omissió"
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:455
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1412 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:781
@@ -7500,10 +7500,9 @@ msgstr "Diagrama de caixes"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#, fuzzy, kde-format
-#| msgid "Normal Q-Q Plot"
+#, kde-format
 msgid "Q-Q Plot"
-msgstr "Diagrama Q-Q normal"
+msgstr "Diagrama Q-Q"
 
 # skip-rule: kct-box
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
@@ -8192,10 +8191,9 @@ msgstr ""
 "que el valor mínim."
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
-#, fuzzy, kde-format
-#| msgid "%1: set position"
+#, kde-format
 msgid "%1: set distribution"
-msgstr "%1: estableix una posició"
+msgstr "%1: estableix una distribució"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #, kde-format
@@ -13750,11 +13748,10 @@ msgid "Properties: Box Plot"
 msgstr "Propietats: Diagrama de caixes"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Normal Q-Q Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr "Diagrama Q-Q normal"
+msgstr "Diagrama Q-Q"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -19621,17 +19618,15 @@ msgstr "Distribució:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:151
-#, fuzzy, kde-format
-#| msgid "f(x) ="
+#, kde-format
 msgid "p(x) ="
-msgstr "f(x) ="
+msgstr "p(x) ="
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentiles"
-msgstr "Percentil"
+msgstr "Percentils"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)

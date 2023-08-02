@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 00:41+0000\n"
+"POT-Creation-Date: 2023-08-02 00:42+0000\n"
 "PO-Revision-Date: 2023-06-23 15:21+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -47,7 +47,7 @@ msgstr "Nelze najít modul pro %1. Prosím, zkontrolujte svou instalaci."
 msgid "Couldn't find panel plugins. Please check your installation."
 msgstr "Nelze najít moduly panelu. Prosím, zkontrolujte svou instalaci."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:404
 #: src/backend/core/column/Column.cpp:1282
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:639
@@ -100,7 +100,7 @@ msgstr "Nelze najít moduly panelu. Prosím, zkontrolujte svou instalaci."
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr ""
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:455
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1412 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:781

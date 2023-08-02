@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 00:41+0000\n"
-"PO-Revision-Date: 2023-07-30 19:43+0200\n"
+"POT-Creation-Date: 2023-08-02 00:42+0000\n"
+"PO-Revision-Date: 2023-08-01 14:27+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -48,7 +48,7 @@ msgstr ""
 msgid "Couldn't find panel plugins. Please check your installation."
 msgstr "No se han encontrado complementos del panel. Compruebe su instalación."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:404
 #: src/backend/core/column/Column.cpp:1282
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:639
@@ -101,7 +101,7 @@ msgstr "No se han encontrado complementos del panel. Compruebe su instalación."
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "El atributo «%1» falta o está vacío; se usa el valor por omisión"
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:455
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1412 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:781
@@ -7413,10 +7413,9 @@ msgstr "Diagrama de caja"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#, fuzzy, kde-format
-#| msgid "Normal Q-Q Plot"
+#, kde-format
 msgid "Q-Q Plot"
-msgstr "Gráfico Q-Q normal"
+msgstr "Gráfico Q-Q"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:392
@@ -8103,10 +8102,9 @@ msgstr ""
 "el valor mínimo."
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
-#, fuzzy, kde-format
-#| msgid "%1: set position"
+#, kde-format
 msgid "%1: set distribution"
-msgstr "%1: definir posición"
+msgstr "%1: definir distribución"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #, kde-format
@@ -13641,11 +13639,10 @@ msgid "Properties: Box Plot"
 msgstr "Propiedades: Gráfico de cajas"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Normal Q-Q Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr "Gráfico Q-Q normal"
+msgstr "Gráfico Q-Q"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -19491,17 +19488,15 @@ msgstr "Distribución:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:151
-#, fuzzy, kde-format
-#| msgid "f(x) ="
+#, kde-format
 msgid "p(x) ="
-msgstr "f(x) ="
+msgstr "p(x) ="
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentiles"
-msgstr "Percentil"
+msgstr "Percentiles"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)

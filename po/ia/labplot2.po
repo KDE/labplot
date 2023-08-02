@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 00:41+0000\n"
+"POT-Creation-Date: 2023-08-02 00:42+0000\n"
 "PO-Revision-Date: 2023-07-20 23:12+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 "Non poteva trovar le plugins de pannello . Pro favor tu verifica tu "
 "installation."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:404
 #: src/backend/core/column/Column.cpp:1282
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:639
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "Attributo '%1' mancante o vacue, le valor predefinite es usate"
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:455
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1412 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:781

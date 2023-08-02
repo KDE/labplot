@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 00:41+0000\n"
-"PO-Revision-Date: 2023-07-30 10:01+0100\n"
+"POT-Creation-Date: 2023-08-02 00:42+0000\n"
+"PO-Revision-Date: 2023-08-01 23:56+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -49,7 +49,7 @@ msgstr ""
 msgid "Couldn't find panel plugins. Please check your installation."
 msgstr "Ne eblis trovi panelajn kromaĵojn. Bonvolu kontroli vian instaladon."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:404
 #: src/backend/core/column/Column.cpp:1282
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:639
@@ -102,7 +102,7 @@ msgstr "Ne eblis trovi panelajn kromaĵojn. Bonvolu kontroli vian instaladon."
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "Atributo '%1' mankas aŭ malplena, defaŭlta valoro estas uzata"
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:455
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1412 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:781
@@ -7394,10 +7394,9 @@ msgstr "Skatola diagramo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#, fuzzy, kde-format
-#| msgid "Normal Q-Q Plot"
+#, kde-format
 msgid "Q-Q Plot"
-msgstr "Normala Q-Q Diagramo"
+msgstr "Q-Q Diagramo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:392
@@ -8084,10 +8083,9 @@ msgstr ""
 "ol la minimuma."
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
-#, fuzzy, kde-format
-#| msgid "%1: set position"
+#, kde-format
 msgid "%1: set distribution"
-msgstr "%1: starigis pozicion"
+msgstr "%1: meti distribuon"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #, kde-format
@@ -8097,12 +8095,12 @@ msgstr "Lima Linio"
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:235
 #, kde-format
 msgid "%1: set start logical position"
-msgstr "%1: starigis komencan logikan pozicion"
+msgstr "%1: meti komencan logikan pozicion"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:242
 #, kde-format
 msgid "%1: set end logical position"
-msgstr "%1: starigis finan logikan pozicion"
+msgstr "%1: meti finan logikan pozicion"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:149
 #, kde-format
@@ -13587,11 +13585,10 @@ msgid "Properties: Box Plot"
 msgstr "Proprecoj: Skatoldiagramo"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Normal Q-Q Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr "Normala Q-Q Diagramo"
+msgstr "Q-Q Diagramo"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -19415,17 +19412,15 @@ msgstr "Distribuo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:151
-#, fuzzy, kde-format
-#| msgid "f(x) ="
+#, kde-format
 msgid "p(x) ="
-msgstr "f(x) ="
+msgstr "p(x) ="
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentiles"
-msgstr "Percentilo"
+msgstr "Percentiloj"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)

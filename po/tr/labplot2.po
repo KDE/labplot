@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 00:41+0000\n"
-"PO-Revision-Date: 2023-07-28 11:56+0300\n"
+"POT-Creation-Date: 2023-08-02 00:42+0000\n"
+"PO-Revision-Date: 2023-08-02 01:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 23.11.70\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -47,7 +47,7 @@ msgstr "%1 için eklenti bulunamadı. Lütfen kurulumunuzu denetleyin."
 msgid "Couldn't find panel plugins. Please check your installation."
 msgstr "Panel eklentileri bulunamadı. Lütfen kurulumunuzu denetleyin."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:397
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:404
 #: src/backend/core/column/Column.cpp:1282
 #: src/backend/datapicker/DatapickerCurve.cpp:553
 #: src/backend/datapicker/DatapickerImage.cpp:639
@@ -100,7 +100,7 @@ msgstr "Panel eklentileri bulunamadı. Lütfen kurulumunuzu denetleyin."
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr "'%1' özniteliği eksik veya boş, öntanımlı değer kullanılacak"
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:448
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:455
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1412 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:781
@@ -999,7 +999,7 @@ msgstr "%1: Görünmez yap"
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
-msgstr "Veri Seçici Görselini Yazdır"
+msgstr "Veri Seçicisi Görselini Yazdır"
 
 #: src/backend/datapicker/DatapickerImage.cpp:304
 #: src/backend/datapicker/DatapickerImage.cpp:358
@@ -3702,7 +3702,7 @@ msgstr "Dağılım dilimi"
 #: src/backend/gsl/functions.cpp:258 src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Percentile"
-msgstr "Yüzde birlik"
+msgstr "Persantil"
 
 #: src/backend/gsl/functions.cpp:262
 #, kde-format
@@ -6607,32 +6607,32 @@ msgstr "İnterçeyrek Erimi"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:43
 #, kde-format
 msgid "Percentile1"
-msgstr "Yüzde1"
+msgstr "Persantil1"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:44
 #, kde-format
 msgid "Percentile5"
-msgstr "Yüzde5"
+msgstr "Persantil5"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:45
 #, kde-format
 msgid "Percentile10"
-msgstr "Yüzde10"
+msgstr "Persantil10"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:46
 #, kde-format
 msgid "Percentile90"
-msgstr "Yüzde90"
+msgstr "Persantil90"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:47
 #, kde-format
 msgid "Percentile95"
-msgstr "Yüzde95"
+msgstr "Persantil95"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:48
 #, kde-format
 msgid "Percentile99"
-msgstr "Yüzde99"
+msgstr "Persantil99"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:51
 #, kde-format
@@ -7404,10 +7404,9 @@ msgstr "Kutu Çizim"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#, fuzzy, kde-format
-#| msgid "Normal Q-Q Plot"
+#, kde-format
 msgid "Q-Q Plot"
-msgstr "Normal Q-Q Çizimi"
+msgstr "Q-Q Çizimi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:392
@@ -8094,10 +8093,9 @@ msgstr ""
 "daha büyük olmalı."
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
-#, fuzzy, kde-format
-#| msgid "%1: set position"
+#, kde-format
 msgid "%1: set distribution"
-msgstr "%1: Konum ayarla"
+msgstr "%1: Dağıtım ayarla"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #, kde-format
@@ -10534,7 +10532,7 @@ msgstr "%1: Seçili çalışma sayfası ögelerini kaldır."
 #, kde-format
 msgctxt "@title:window"
 msgid "Color Maps Browser"
-msgstr "Renk Haritası Tarayıcı"
+msgstr "Renk Haritası Tarayıcısı"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:34
 #: src/kdefrontend/examples/ExamplesWidget.cpp:33
@@ -12401,7 +12399,7 @@ msgstr "%1 Kutu çizimler: \"%2\" şablonu yüklendi"
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:65
 #, kde-format
 msgid "File Browser"
-msgstr "Dosya Tarayıcı"
+msgstr "Dosya Tarayıcısı"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:228
 #, kde-format
@@ -13593,11 +13591,10 @@ msgid "Properties: Box Plot"
 msgstr "Özellikler: Kutu Çizim"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Normal Q-Q Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr "Normal Q-Q Çizimi"
+msgstr "Q-Q Çizimi"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -13633,7 +13630,7 @@ msgstr "Başvuru Erimi"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
-msgstr "Özellikler: Veri Seçici Eğrisi"
+msgstr "Özellikler: Veri Seçicisi Eğrisi"
 
 #: src/kdefrontend/GuiObserver.cpp:410
 #, kde-format
@@ -14431,7 +14428,7 @@ msgstr "Seçili ögeyi dışa aktar"
 #: src/kdefrontend/MainWin.cpp:750
 #, kde-format
 msgid "Color Maps Browser"
-msgstr "Renk Haritası Tarayıcı"
+msgstr "Renk Haritası Tarayıcısı"
 
 #: src/kdefrontend/MainWin.cpp:751
 #, kde-format
@@ -19424,17 +19421,15 @@ msgstr "Dağıtım:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:151
-#, fuzzy, kde-format
-#| msgid "f(x) ="
+#, kde-format
 msgid "p(x) ="
-msgstr "f(x) ="
+msgstr "p(x) ="
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentiles"
-msgstr "Yüzde birlik"
+msgstr "Persantiller"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
@@ -20196,7 +20191,7 @@ msgstr "Ağırlık:"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:138
 #, kde-format
 msgid "Percentile:"
-msgstr "Yüzde:"
+msgstr "Persantil:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:145
