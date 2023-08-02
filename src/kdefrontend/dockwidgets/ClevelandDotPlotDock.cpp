@@ -1,13 +1,13 @@
 /*
-	File                 : LollipopPlotDock.cpp
+	File                 : ClevelandDotPlotDock.cpp
 	Project              : LabPlot
-	Description          : Dock widget for the lolliplot plot
+	Description          : Dock widget for the dot plot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "LollipopPlotDock.h"
+#include "ClevelandDotPlotDock.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
@@ -24,7 +24,7 @@
 #include <KConfig>
 #include <KLocalizedString>
 
-LollipopPlotDock::LollipopPlotDock(QWidget* parent)
+ClevelandDotPlotDock::ClevelandDotPlotDock(QWidget* parent)
 	: BaseDock(parent)
 	, cbXColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
@@ -53,19 +53,12 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
-	// Tab "Line"
-	QString msg = i18n("Select the data column for which the properties should be shown and edited");
-	ui.lNumberLine->setToolTip(msg);
-	ui.cbNumberLine->setToolTip(msg);
-	lineWidget = new LineWidget(ui.tabLine);
-	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabLine->layout());
-	gridLayout->addWidget(lineWidget, 2, 0, 1, 3);
-
 	// Tab "Symbol"
+	QString msg = i18n("Select the data column for which the properties should be shown and edited");
 	ui.lNumberSymbol->setToolTip(msg);
 	ui.cbNumberSymbol->setToolTip(msg);
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
-	gridLayout = qobject_cast<QGridLayout*>(ui.tabSymbol->layout());
+	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabSymbol->layout());
 	gridLayout->addWidget(symbolWidget, 2, 0, 1, 3);
 
 	// Tab "Values"
@@ -88,20 +81,17 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
-	connect(ui.leName, &QLineEdit::textChanged, this, &LollipopPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &LollipopPlotDock::commentChanged);
-	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &LollipopPlotDock::xColumnChanged);
-	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &LollipopPlotDock::removeXColumn);
-	connect(m_buttonNew, &QPushButton::clicked, this, &LollipopPlotDock::addDataColumn);
-	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::orientationChanged);
-	connect(ui.chkVisible, &QCheckBox::toggled, this, &LollipopPlotDock::visibilityChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::plotRangeChanged);
-
-	// Tab "Line"
-	connect(ui.cbNumberLine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::currentBarLineChanged);
+	connect(ui.leName, &QLineEdit::textChanged, this, &ClevelandDotPlotDock::nameChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &ClevelandDotPlotDock::commentChanged);
+	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ClevelandDotPlotDock::xColumnChanged);
+	connect(ui.bRemoveXColumn, &QPushButton::clicked, this, &ClevelandDotPlotDock::removeXColumn);
+	connect(m_buttonNew, &QPushButton::clicked, this, &ClevelandDotPlotDock::addDataColumn);
+	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ClevelandDotPlotDock::orientationChanged);
+	connect(ui.chkVisible, &QCheckBox::toggled, this, &ClevelandDotPlotDock::visibilityChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ClevelandDotPlotDock::plotRangeChanged);
 
 	// Tab "Symbol"
-	connect(ui.cbNumberSymbol, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LollipopPlotDock::currentBarSymbolChanged);
+	connect(ui.cbNumberSymbol, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ClevelandDotPlotDock::currentBarSymbolChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -110,14 +100,14 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
 	layout->addWidget(templateHandler);
-	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &LollipopPlotDock::loadConfigFromTemplate);
-	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &LollipopPlotDock::saveConfigAsTemplate);
-	connect(templateHandler, &TemplateHandler::info, this, &LollipopPlotDock::info);
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ClevelandDotPlotDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ClevelandDotPlotDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &ClevelandDotPlotDock::info);
 
 	ui.verticalLayout->addWidget(frame);
 }
 
-void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
+void ClevelandDotPlotDock::setPlots(QList<ClevelandDotPlot*> list) {
 	CONDITIONAL_LOCK_RETURN;
 	m_plots = list;
 	m_plot = list.first();
@@ -150,16 +140,13 @@ void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
 	ui.leName->setToolTip(QString());
 
 	// backgrounds
-	QList<Line*> lines;
 	QList<Symbol*> symbols;
 	QList<Value*> values;
 	for (auto* plot : m_plots) {
-		lines << plot->lineAt(0);
 		symbols << plot->symbolAt(0);
 		values << plot->value();
 	}
 
-	lineWidget->setLines(lines);
 	symbolWidget->setSymbols(symbols);
 	valueWidget->setValues(values);
 
@@ -176,14 +163,14 @@ void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_plot, &AbstractAspect::aspectDescriptionChanged, this, &LollipopPlotDock::aspectDescriptionChanged);
-	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &LollipopPlotDock::updatePlotRanges);
-	connect(m_plot, &LollipopPlot::visibleChanged, this, &LollipopPlotDock::plotVisibilityChanged);
-	connect(m_plot, &LollipopPlot::xColumnChanged, this, &LollipopPlotDock::plotXColumnChanged);
-	connect(m_plot, &LollipopPlot::dataColumnsChanged, this, &LollipopPlotDock::plotDataColumnsChanged);
+	connect(m_plot, &AbstractAspect::aspectDescriptionChanged, this, &ClevelandDotPlotDock::aspectDescriptionChanged);
+	connect(m_plot, &WorksheetElement::plotRangeListChanged, this, &ClevelandDotPlotDock::updatePlotRanges);
+	connect(m_plot, &ClevelandDotPlot::visibleChanged, this, &ClevelandDotPlotDock::plotVisibilityChanged);
+	connect(m_plot, &ClevelandDotPlot::xColumnChanged, this, &ClevelandDotPlotDock::plotXColumnChanged);
+	connect(m_plot, &ClevelandDotPlot::dataColumnsChanged, this, &ClevelandDotPlotDock::plotDataColumnsChanged);
 }
 
-void LollipopPlotDock::setModel() {
+void ClevelandDotPlotDock::setModel() {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
@@ -210,22 +197,20 @@ void LollipopPlotDock::setModel() {
 /*
  * updates the locale in the widgets. called when the application settins are changed.
  */
-void LollipopPlotDock::updateLocale() {
-	lineWidget->updateLocale();
+void ClevelandDotPlotDock::updateLocale() {
 	symbolWidget->updateLocale();
 }
 
-void LollipopPlotDock::updatePlotRanges() {
+void ClevelandDotPlotDock::updatePlotRanges() {
 	updatePlotRangeList(ui.cbPlotRanges);
 }
 
-void LollipopPlotDock::loadDataColumns() {
+void ClevelandDotPlotDock::loadDataColumns() {
 	// add the combobox for the first column, is always present
 	if (m_dataComboBoxes.count() == 0)
 		addDataColumn();
 
 	int count = m_plot->dataColumns().count();
-	ui.cbNumberLine->clear();
 	ui.cbNumberSymbol->clear();
 
 	if (count != 0) {
@@ -245,10 +230,8 @@ void LollipopPlotDock::loadDataColumns() {
 
 		// show columns names in the combobox for the selection of the bar to be modified
 		for (int i = 0; i < count; ++i)
-			if (m_plot->dataColumns().at(i)) {
-				ui.cbNumberLine->addItem(m_plot->dataColumns().at(i)->name());
+			if (m_plot->dataColumns().at(i))
 				ui.cbNumberSymbol->addItem(m_plot->dataColumns().at(i)->name());
-			}
 	} else {
 		// no data columns set in the box plot yet, we show the first combo box only
 		m_dataComboBoxes.first()->setAspect(nullptr);
@@ -265,22 +248,18 @@ void LollipopPlotDock::loadDataColumns() {
 		b->setVisible(enabled);
 
 	// select the first column after all of them were added to the combobox
-	ui.cbNumberLine->setCurrentIndex(0);
 	ui.cbNumberSymbol->setCurrentIndex(0);
 }
 
-void LollipopPlotDock::setDataColumns() const {
+void ClevelandDotPlotDock::setDataColumns() const {
 	int newCount = m_dataComboBoxes.count();
 	int oldCount = m_plot->dataColumns().count();
 
-	if (newCount > oldCount) {
-		ui.cbNumberLine->addItem(QString::number(newCount));
+	if (newCount > oldCount)
 		ui.cbNumberSymbol->addItem(QString::number(newCount));
-	} else {
-		if (newCount != 0) {
-			ui.cbNumberLine->removeItem(ui.cbNumberLine->count() - 1);
+	else {
+		if (newCount != 0)
 			ui.cbNumberSymbol->removeItem(ui.cbNumberSymbol->count() - 1);
-		}
 	}
 
 	QVector<const AbstractColumn*> columns;
@@ -295,10 +274,10 @@ void LollipopPlotDock::setDataColumns() const {
 }
 
 //**********************************************************
-//******* SLOTs for changes triggered in LollipopPlotDock *******
+//******* SLOTs for changes triggered in ClevelandDotPlotDock *******
 //**********************************************************
 //"General"-tab
-void LollipopPlotDock::xColumnChanged(const QModelIndex& index) {
+void ClevelandDotPlotDock::xColumnChanged(const QModelIndex& index) {
 	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column(nullptr);
 	if (aspect) {
@@ -314,14 +293,14 @@ void LollipopPlotDock::xColumnChanged(const QModelIndex& index) {
 		plot->setXColumn(column);
 }
 
-void LollipopPlotDock::removeXColumn() {
+void ClevelandDotPlotDock::removeXColumn() {
 	cbXColumn->setAspect(nullptr);
 	ui.bRemoveXColumn->setEnabled(false);
 	for (auto* plot : m_plots)
 		plot->setXColumn(nullptr);
 }
 
-void LollipopPlotDock::addDataColumn() {
+void ClevelandDotPlotDock::addDataColumn() {
 	auto* cb = new TreeViewComboBox;
 
 	static const QList<AspectType> list{AspectType::Folder,
@@ -338,7 +317,7 @@ void LollipopPlotDock::addDataColumn() {
 										AspectType::CantorWorksheet};
 	cb->setTopLevelClasses(list);
 	cb->setModel(m_aspectTreeModel);
-	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &LollipopPlotDock::dataColumnChanged);
+	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &ClevelandDotPlotDock::dataColumnChanged);
 
 	int index = m_dataComboBoxes.size();
 
@@ -351,7 +330,7 @@ void LollipopPlotDock::addDataColumn() {
 	} else {
 		auto* button = new QPushButton();
 		button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
-		connect(button, &QPushButton::clicked, this, &LollipopPlotDock::removeDataColumn);
+		connect(button, &QPushButton::clicked, this, &ClevelandDotPlotDock::removeDataColumn);
 		m_gridLayout->addWidget(button, index, 1, 1, 1);
 		m_removeButtons << button;
 	}
@@ -363,7 +342,7 @@ void LollipopPlotDock::addDataColumn() {
 	ui.lDataColumn->setText(i18n("Columns:"));
 }
 
-void LollipopPlotDock::removeDataColumn() {
+void ClevelandDotPlotDock::removeDataColumn() {
 	auto* sender = static_cast<QPushButton*>(QObject::sender());
 	if (sender) {
 		// remove button was clicked, determin which one and
@@ -395,52 +374,32 @@ void LollipopPlotDock::removeDataColumn() {
 		setDataColumns();
 }
 
-void LollipopPlotDock::dataColumnChanged(const QModelIndex&) {
+void ClevelandDotPlotDock::dataColumnChanged(const QModelIndex&) {
 	CONDITIONAL_LOCK_RETURN;
 
 	setDataColumns();
 }
 
-void LollipopPlotDock::orientationChanged(int index) {
+void ClevelandDotPlotDock::orientationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto orientation = LollipopPlot::Orientation(index);
+	auto orientation = ClevelandDotPlot::Orientation(index);
 	for (auto* plot : m_plots)
 		plot->setOrientation(orientation);
 }
 
-void LollipopPlotDock::visibilityChanged(bool state) {
+void ClevelandDotPlotDock::visibilityChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plots)
 		plot->setVisible(state);
 }
 
-//"Line"-tab
-/*!
- * called when the current bar number was changed, shows the line properties for the selected bar.
- */
-void LollipopPlotDock::currentBarLineChanged(int index) {
-	if (index == -1)
-		return;
-
-	CONDITIONAL_LOCK_RETURN;
-
-	QList<Line*> lines;
-	for (auto* plot : m_plots) {
-		auto* line = plot->lineAt(index);
-		if (line)
-			lines << line;
-	}
-
-	lineWidget->setLines(lines);
-}
-
 //"Symbol"-tab
 /*!
  * called when the current bar number was changed, shows the symbol properties for the selected bar.
  */
-void LollipopPlotDock::currentBarSymbolChanged(int index) {
+void ClevelandDotPlotDock::currentBarSymbolChanged(int index) {
 	if (index == -1)
 		return;
 
@@ -457,22 +416,22 @@ void LollipopPlotDock::currentBarSymbolChanged(int index) {
 }
 
 //*************************************************************
-//******* SLOTs for changes triggered in Lollipop ********
+//******* SLOTs for changes triggered in Dot ********
 //*************************************************************
 // general
-void LollipopPlotDock::plotXColumnChanged(const AbstractColumn* column) {
+void ClevelandDotPlotDock::plotXColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
 	cbXColumn->setColumn(column, m_plot->xColumnPath());
 }
-void LollipopPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
+void ClevelandDotPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
 	CONDITIONAL_LOCK_RETURN;
 	loadDataColumns();
 }
-void LollipopPlotDock::plotOrientationChanged(LollipopPlot::Orientation orientation) {
+void ClevelandDotPlotDock::plotOrientationChanged(ClevelandDotPlot::Orientation orientation) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
-void LollipopPlotDock::plotVisibilityChanged(bool on) {
+void ClevelandDotPlotDock::plotVisibilityChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
@@ -480,23 +439,22 @@ void LollipopPlotDock::plotVisibilityChanged(bool on) {
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
-void LollipopPlotDock::load() {
+void ClevelandDotPlotDock::load() {
 	// general
 	ui.cbOrientation->setCurrentIndex((int)m_plot->orientation());
 }
 
-void LollipopPlotDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QLatin1String("LollipopPlot"));
+void ClevelandDotPlotDock::loadConfig(KConfig& config) {
+	KConfigGroup group = config.group(QLatin1String("ClevelandDotPlot"));
 
 	// general
 	ui.cbOrientation->setCurrentIndex(group.readEntry("Orientation", (int)m_plot->orientation()));
 
-	lineWidget->loadConfig(group);
 	symbolWidget->loadConfig(group);
 	valueWidget->loadConfig(group);
 }
 
-void LollipopPlotDock::loadConfigFromTemplate(KConfig& config) {
+void ClevelandDotPlotDock::loadConfigFromTemplate(KConfig& config) {
 	// extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QLatin1String("/"));
@@ -507,7 +465,7 @@ void LollipopPlotDock::loadConfigFromTemplate(KConfig& config) {
 
 	int size = m_plots.size();
 	if (size > 1)
-		m_plot->beginMacro(i18n("%1 dot plots: template \"%2\" loaded", size, name));
+		m_plot->beginMacro(i18n("%1 lollipop plots: template \"%2\" loaded", size, name));
 	else
 		m_plot->beginMacro(i18n("%1: template \"%2\" loaded", m_plot->name(), name));
 
@@ -516,13 +474,12 @@ void LollipopPlotDock::loadConfigFromTemplate(KConfig& config) {
 	m_plot->endMacro();
 }
 
-void LollipopPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("LollipopPlot");
+void ClevelandDotPlotDock::saveConfigAsTemplate(KConfig& config) {
+	KConfigGroup group = config.group("ClevelandDotPlot");
 
 	// general
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 
-	lineWidget->saveConfig(group);
 	symbolWidget->saveConfig(group);
 	valueWidget->saveConfig(group);
 

@@ -81,6 +81,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/BoxPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/ClevelandDotPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/LiveDataDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/LollipopPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
@@ -209,6 +210,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/boxplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/clevelanddotplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/linewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
@@ -387,6 +389,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/ClevelandDotPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/LollipopPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Plot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp

@@ -8,8 +8,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef BARPLOTPRIVATE_H
-#define BARPLOTPRIVATE_H
+#ifndef LOLLIPLOTPRIVATE_H
+#define LOLLIPLOTPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <QPen>

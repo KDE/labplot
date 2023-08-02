@@ -241,6 +241,7 @@ private:
 
 	// bar plots
 	QAction* addBarPlotAction{nullptr};
+	QAction* addDotPlotAction{nullptr};
 	QAction* addLollipopPlotAction{nullptr};
 
 	// analysis curves

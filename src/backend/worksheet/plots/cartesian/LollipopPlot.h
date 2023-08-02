@@ -28,7 +28,7 @@ class LollipopPlot : public Plot {
 	Q_OBJECT
 
 public:
-	explicit LollipopPlot(const QString&);
+	explicit LollipopPlot(const QString&, AspectType = AspectType::LollipopPlot);
 	~LollipopPlot() override;
 
 	QIcon icon() const override;
@@ -66,10 +66,10 @@ public:
 
 protected:
 	LollipopPlot(const QString& name, LollipopPlotPrivate* dd);
+	void init();
 
 private:
 	Q_DECLARE_PRIVATE(LollipopPlot)
-	void init();
 	void initActions();
 	void initMenus();
 

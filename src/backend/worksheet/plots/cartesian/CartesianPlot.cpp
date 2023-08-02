@@ -43,6 +43,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/ClevelandDotPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
@@ -352,6 +353,7 @@ void CartesianPlot::initActions() {
 
 	// bar plots
 	addBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
+	addDotPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Cleveland Dot Plot"), this);
 	addLollipopPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), this);
 
 	// analysis curves, no icons yet
@@ -390,6 +392,9 @@ void CartesianPlot::initActions() {
 	// bar plots
 	connect(addBarPlotAction, &QAction::triggered, this, [=]() {
 		addChild(new BarPlot(i18n("Bar Plot")));
+	});
+	connect(addDotPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new ClevelandDotPlot(i18n("Cleveland Dot Plot")));
 	});
 	connect(addLollipopPlotAction, &QAction::triggered, this, [=]() {
 		addChild(new LollipopPlot(i18n("Lollipop Plot")));
@@ -539,6 +544,7 @@ void CartesianPlot::initMenus() {
 	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
 	addNewBarPlotsMenu->addAction(addBarPlotAction);
 	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
+	addNewBarPlotsMenu->addAction(addDotPlotAction);
 	m_addNewMenu->addMenu(addNewBarPlotsMenu);
 
 	m_addNewMenu->addSeparator();
@@ -723,6 +729,7 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::Histogram,
 							  AspectType::BarPlot,
 							  AspectType::LollipopPlot,
+							  AspectType::ClevelandDotPlot,
 							  AspectType::BoxPlot,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,

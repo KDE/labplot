@@ -33,8 +33,8 @@
  * \brief Lollipop Plot
  */
 
-LollipopPlot::LollipopPlot(const QString& name)
-	: Plot(name, new LollipopPlotPrivate(this), AspectType::LollipopPlot) {
+LollipopPlot::LollipopPlot(const QString& name, AspectType type)
+	: Plot(name, new LollipopPlotPrivate(this), type) {
 	init();
 }
 
@@ -57,7 +57,8 @@ void LollipopPlot::init() {
 	d->orientation = (LollipopPlot::Orientation)group.readEntry("Orientation", (int)LollipopPlot::Orientation::Vertical);
 
 	// initial line, symbol and value objects that will be available even if not data column was set yet
-	d->addLine(group);
+	if (type() != AspectType::ClevelandDotPlot)
+		d->addLine(group);
 	d->addSymbol(group);
 	d->addValue(group);
 }
@@ -760,18 +761,20 @@ void LollipopPlotPrivate::recalcShapeAndBoundingRect() {
 
 	// lines
 	int index = 0;
-	for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
-		for (const auto& line : columnBarLines) { // loop over the bars for every data column
-			QPainterPath barPath;
-			barPath.moveTo(line.p1());
-			barPath.lineTo(line.p2());
+	if (q->type() != AspectType::ClevelandDotPlot) {
+		for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
+			for (const auto& line : columnBarLines) { // loop over the bars for every data column
+				QPainterPath barPath;
+				barPath.moveTo(line.p1());
+				barPath.lineTo(line.p2());
 
-			if (index < lines.count()) { // TODO
-				const auto& borderPen = lines.at(index)->pen();
-				m_shape.addPath(WorksheetElement::shapeFromPath(barPath, borderPen));
+				if (index < lines.count()) { // TODO
+					const auto& borderPen = lines.at(index)->pen();
+					m_shape.addPath(WorksheetElement::shapeFromPath(barPath, borderPen));
+				}
 			}
+			++index;
 		}
-		++index;
 	}
 
 	// symbols
@@ -842,15 +845,17 @@ void LollipopPlotPrivate::draw(QPainter* painter) {
 	int columnIndex = 0;
 	for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
 		// draw the lines
-		if (columnIndex < lines.size()) { // TODO: remove this check later
-			const auto& borderPen = lines.at(columnIndex)->pen();
-			const double borderOpacity = lines.at(columnIndex)->opacity();
-			for (const auto& line : columnBarLines) { // loop over the bars for every data column
-				if (borderPen.style() != Qt::NoPen) {
-					painter->setPen(borderPen);
-					painter->setBrush(Qt::NoBrush);
-					painter->setOpacity(borderOpacity);
-					painter->drawLine(line);
+		if (q->type() != AspectType::ClevelandDotPlot) {
+			if (columnIndex < lines.size()) { // TODO: remove this check later
+				const auto& borderPen = lines.at(columnIndex)->pen();
+				const double borderOpacity = lines.at(columnIndex)->opacity();
+				for (const auto& line : columnBarLines) { // loop over the bars for every data column
+					if (borderPen.style() != Qt::NoPen) {
+						painter->setPen(borderPen);
+						painter->setBrush(Qt::NoBrush);
+						painter->setOpacity(borderOpacity);
+						painter->drawLine(line);
+					}
 				}
 			}
 		}
@@ -939,7 +944,10 @@ void LollipopPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void LollipopPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const LollipopPlot);
 
-	writer->writeStartElement(QStringLiteral("lollipopPlot"));
+	if (type() == AspectType::ClevelandDotPlot)
+		writer->writeStartElement(QStringLiteral("dotPlot"));
+	else
+		writer->writeStartElement(QStringLiteral("lollipopPlot"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -964,8 +972,10 @@ void LollipopPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// lines
-	for (auto* line : d->lines)
-		line->save(writer);
+	if (type() != AspectType::ClevelandDotPlot) {
+		for (auto* line : d->lines)
+			line->save(writer);
+	}
 
 	// symbols
 	for (auto* symbol : d->symbols)
@@ -1064,8 +1074,12 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))
 		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
-	else
-		group = config.group("LollipopPlot");
+	else {
+		if (type() == AspectType::ClevelandDotPlot)
+			group = config.group("DotPlot");
+		else
+			group = config.group("LollipopPlot");
+	}
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);
@@ -1075,9 +1089,11 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	d->m_suppressRecalc = true;
 
 	// lines
-	for (int i = 0; i < d->lines.count(); ++i) {
-		auto* line = d->lines.at(i);
-		line->loadThemeConfig(group, plot->themeColorPalette(i));
+	if (type() != AspectType::ClevelandDotPlot) {
+		for (int i = 0; i < d->lines.count(); ++i) {
+			auto* line = d->lines.at(i);
+			line->loadThemeConfig(group, plot->themeColorPalette(i));
+		}
 	}
 
 	// symbols

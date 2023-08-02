@@ -1,43 +1,41 @@
 /*
-	File                 : LollipopPlotDock.h
+	File                 : ClevelandDotPlotDock.h
 	Project              : LabPlot
-	Description          : Dock widget for the lollipop plot
+	Description          : Dock widget for the Cleveland dot plot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef LOLLIPOPPLOTDOCK_H
-#define LOLLIPOPPLOTDOCK_H
+#ifndef CLEVELANDDOTPLOTDOCK_H
+#define CLEVELANDDOTPLOTDOCK_H
 
-#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/ClevelandDotPlot.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
-#include "ui_lollipopplotdock.h"
+#include "ui_clevelanddotplotdock.h"
 
 class AbstractAspect;
 class AspectTreeModel;
-class LineWidget;
 class SymbolWidget;
 class ValueWidget;
-class LollipopPlot;
+class ClevelandDotPlot;
 class TreeViewComboBox;
 class KConfig;
 
-class LollipopPlotDock : public BaseDock {
+class ClevelandDotPlotDock : public BaseDock {
 	Q_OBJECT
 
 public:
-	explicit LollipopPlotDock(QWidget*);
-	void setPlots(QList<LollipopPlot*>);
+	explicit ClevelandDotPlotDock(QWidget*);
+	void setPlots(QList<ClevelandDotPlot*>);
 	void updateLocale() override;
 
 private:
-	Ui::LollipopPlotDock ui;
-	LineWidget* lineWidget{nullptr};
+	Ui::ClevelandDotPlotDock ui;
 	SymbolWidget* symbolWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
-	QList<LollipopPlot*> m_plots;
-	LollipopPlot* m_plot{nullptr};
+	QList<ClevelandDotPlot*> m_plots;
+	ClevelandDotPlot* m_plot{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	TreeViewComboBox* cbXColumn{nullptr};
 
@@ -53,7 +51,7 @@ private:
 	void loadDataColumns();
 
 private Q_SLOTS:
-	// SLOTs for changes triggered in LollipopPlotDock
+	// SLOTs for changes triggered in ClevelandDotPlotDock
 
 	//"General"-tab
 	void xColumnChanged(const QModelIndex&);
@@ -64,18 +62,15 @@ private Q_SLOTS:
 	void orientationChanged(int);
 	void visibilityChanged(bool);
 
-	//"Line"-tab
-	void currentBarLineChanged(int);
-
 	//"Symbol"-tab
 	void currentBarSymbolChanged(int);
 
-	// SLOTs for changes triggered in LollipopPlot
+	// SLOTs for changes triggered in Lollipop
 	// general
 	void updatePlotRanges() override;
 	void plotXColumnChanged(const AbstractColumn*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
-	void plotOrientationChanged(LollipopPlot::Orientation);
+	void plotOrientationChanged(ClevelandDotPlot::Orientation);
 	void plotVisibilityChanged(bool);
 
 	// load and save

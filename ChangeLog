@@ -4,6 +4,7 @@ New features:
 		* Add possibility to use column labels as axis ticks
 		* New visualization types:
 			* Lollipop plot
+			* Cleveland Dot plot
 			* Q-Q plot
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets

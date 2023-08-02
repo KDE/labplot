@@ -23,6 +23,7 @@ class NoteDock;
 class CartesianPlotDock;
 class HistogramDock;
 class BarPlotDock;
+class ClevelandDotPlotDock;
 class LollipopPlotDock;
 class BoxPlotDock;
 class QQPlotDock;
@@ -98,6 +99,7 @@ private:
 	HistogramDock* m_histogramDock{nullptr};
 	BarPlotDock* m_barPlotDock{nullptr};
 	LollipopPlotDock* m_lollipopPlotDock{nullptr};
+	ClevelandDotPlotDock* m_clevelandDotPlotDock{nullptr};
 	BoxPlotDock* m_boxPlotDock{nullptr};
 	QQPlotDock* m_qqPlotDock{nullptr};
 	WorksheetDock* m_worksheetDock{nullptr};
