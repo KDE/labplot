@@ -89,6 +89,15 @@ private Q_SLOTS:
 		QSKIP("Skipping Cantor Tests, because it was not found!");
 	}
 #endif
+#ifdef VECTOR_BLF_DISABLED
+	void checkVectorBLF() {
+		QSKIP("Skipping Vector BLF Tests, because it was disabled!");
+	}
+#elif !defined(HAVE_VECTOR_BLF)
+	void checkVectorBLF() {
+		QSKIP("Skipping Vector Cantor Tests, because it was not found!");
+	}
+#endif
 };
 
 #endif

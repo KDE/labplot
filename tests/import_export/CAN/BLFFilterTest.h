@@ -43,10 +43,6 @@ private:
 	void createDBCFile(const QString& filename, const std::string& content);
 	Vector::BLF::CanMessage2* createCANMessage(uint32_t id, uint64_t timestamp, const std::vector<uint8_t>& data);
 	void createBLFFile(const QString& filename, QVector<Vector::BLF::CanMessage2*> messages);
-#else
-	void testSkip() {
-        QSKIP("Skipping BLF Tests, because blf was not found!");
-	}
 #endif
 };
 #endif // BLFFILTERTEST_H
