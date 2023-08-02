@@ -15,7 +15,7 @@
  */
 #define SETUP_SETTING(setting_name, datatype, settings_datatype, setting_group, config_name, default_value)                                                    \
 	namespace {                                                                                                                                                \
-	static const QLatin1String config_name##ConfigName(#config_name);                                                                                          \
+	const QLatin1String config_name##ConfigName(#config_name);                                                                                                 \
 	}                                                                                                                                                          \
 	/* read config */                                                                                                                                          \
 	datatype read##setting_name() {                                                                                                                            \
@@ -29,7 +29,7 @@
 namespace Settings {
 
 namespace {
-static const QLatin1String settingsGeneralConfigName("Settings_General");
+const QLatin1String settingsGeneralConfigName("Settings_General");
 KSharedConfig::Ptr confPtr;
 } // anonymous namespace
 
