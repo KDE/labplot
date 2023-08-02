@@ -71,10 +71,8 @@ if (ENABLE_VECTOR_BLF)
   if (${LOCAL_DBC_PARSER})
       FetchContent_Declare(
         dbc_parser_cpp
-        GIT_REPOSITORY https://github.com/Murmele/dbc_parser_cpp.git
-        GIT_TAG f1409c6363a9edce1bd231e5e9ce2deb2ee62705
-        #GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
-        #GIT_TAG        master
+        GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
+        GIT_TAG 0f3b22b3fe124976a86a85fcd1bfdd55c20ca428 # At least this version is needed!
       )
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
