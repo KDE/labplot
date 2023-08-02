@@ -4966,11 +4966,12 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("image")) {
 			auto* image = new Image(QString());
 			image->setIsLoading(true);
-			if (!image->load(reader, preview)) {
+			if (!image->load(reader, preview))
+				addChildFast(image);
+			else {
 				delete image;
 				return false;
-			} else
-				addChildFast(image);
+			}
 		} else if (!preview && reader->name() == QLatin1String("infoElement")) {
 			auto* marker = new InfoElement(QStringLiteral("Marker"), this);
 			marker->setIsLoading(true);
@@ -4999,7 +5000,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyEquationCurve")) {
@@ -5008,7 +5009,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyDataReductionCurve")) {
@@ -5017,7 +5018,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyDifferentiationCurve")) {
@@ -5026,7 +5027,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyIntegrationCurve")) {
@@ -5035,7 +5036,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyInterpolationCurve")) {
@@ -5044,7 +5045,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xySmoothCurve")) {
@@ -5053,7 +5054,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyFitCurve")) {
@@ -5062,7 +5063,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyFourierFilterCurve")) {
@@ -5071,7 +5072,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyFourierTransformCurve")) {
@@ -5080,7 +5081,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyHilbertTransformCurve")) {
@@ -5089,7 +5090,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyConvolutionCurve")) {
@@ -5098,7 +5099,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyCorrelationCurve")) {
@@ -5107,7 +5108,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("cartesianPlotLegend")) {
@@ -5152,7 +5153,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (boxPlot->load(reader, preview))
 				addChildFast(boxPlot);
 			else {
-				removeChild(boxPlot);
+				delete boxPlot;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("barPlot")) {
@@ -5161,7 +5162,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (barPlot->load(reader, preview))
 				addChildFast(barPlot);
 			else {
-				removeChild(barPlot);
+				delete barPlot;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("lollipopPlot")) {
@@ -5170,7 +5171,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else {
-				removeChild(plot);
+				delete plot;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("Histogram")) {
@@ -5179,7 +5180,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (hist->load(reader, preview))
 				addChildFast(hist);
 			else {
-				removeChild(hist);
+				delete hist;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("QQPlot")) {
@@ -5188,7 +5189,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else {
-				removeChild(plot);
+				delete plot;
 				return false;
 			}
 		} else { // unknown element
