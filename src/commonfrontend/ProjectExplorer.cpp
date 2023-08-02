@@ -1040,7 +1040,6 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	QList<QModelIndex> expanded;
 	QModelIndex currentIndex;
 	QString str;
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 
 	// xmlVersion < 3: old logic where the "rows" for the selected and expanded items were saved
 	// ignoring the sub-folder structure. Remove it later.
@@ -1113,7 +1112,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 					str = attribs.value(QStringLiteral("state")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs(QStringLiteral("state")).toString());
+						reader->raiseMissingAttributeWarning(QStringLiteral("state"));
 					else {
 						part->view()->setWindowState(Qt::WindowStates(str.toInt()));
 						part->dockWidget()->setWindowState(Qt::WindowStates(str.toInt()));
@@ -1125,25 +1124,25 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 					QRect geometry;
 					str = attribs.value(QStringLiteral("x")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+						reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 					else
 						geometry.setX(str.toInt());
 
 					str = attribs.value(QStringLiteral("y")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+						reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 					else
 						geometry.setY(str.toInt());
 
 					str = attribs.value(QStringLiteral("width")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+						reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 					else
 						geometry.setWidth(str.toInt());
 
 					str = attribs.value(QStringLiteral("height")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
+						reader->raiseMissingAttributeWarning(QStringLiteral("height"));
 					else
 						geometry.setHeight(str.toInt());
 
@@ -1181,7 +1180,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 				str = attribs.value(QStringLiteral("state")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("state")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("state"));
 				else {
 					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
 					part->dockWidget()->setWindowState(Qt::WindowStates(str.toInt()));
@@ -1193,25 +1192,25 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				QRect geometry;
 				str = attribs.value(QStringLiteral("x")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 				else
 					geometry.setX(str.toInt());
 
 				str = attribs.value(QStringLiteral("y")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 				else
 					geometry.setY(str.toInt());
 
 				str = attribs.value(QStringLiteral("width")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 				else
 					geometry.setWidth(str.toInt());
 
 				str = attribs.value(QStringLiteral("height")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("height"));
 				else
 					geometry.setHeight(str.toInt());
 

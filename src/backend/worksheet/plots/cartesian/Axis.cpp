@@ -2991,7 +2991,6 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -3022,7 +3021,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			// scale
 			str = attribs.value(QStringLiteral("scale")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("scale")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("scale"));
 			else
 				d->range.scale() = static_cast<RangeT::Scale>(str.toInt());
 			READ_DOUBLE_VALUE("offset", offset);
@@ -3053,7 +3052,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (reader->name() == QLatin1String("textLabel")) {
@@ -3125,7 +3124,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("minorGrid")) {
 			d->minorGridLine->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

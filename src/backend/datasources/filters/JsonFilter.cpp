@@ -773,7 +773,6 @@ void JsonFilter::save(QXmlStreamWriter* writer) const {
 Loads from XML.
 */
 bool JsonFilter::load(XmlStreamReader* reader) {
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 	QString str;
 
@@ -790,7 +789,7 @@ bool JsonFilter::load(XmlStreamReader* reader) {
 
 	QStringList list = attribs.value(QStringLiteral("modelRows")).toString().split(QLatin1Char(';'));
 	if (list.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("'modelRows'")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("'modelRows'"));
 	else {
 		d->modelRows = QVector<int>();
 		for (auto& it : list)

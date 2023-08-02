@@ -1267,7 +1267,5 @@ void MatioFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool MatioFilter::load(XmlStreamReader*) {
-	// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
-	// 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

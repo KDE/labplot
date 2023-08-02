@@ -2805,7 +2805,6 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFitCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str, model;
 
@@ -2932,6 +2931,10 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 			else if (column->name() == QLatin1String("residuals"))
 				d->residualsColumn = column;
+		} else { // unknown element
+				reader->raiseUnknownElementWarning();
+				if (!reader->skipToEndElement())
+					return false;
 		}
 	}
 

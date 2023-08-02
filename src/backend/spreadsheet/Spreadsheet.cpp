@@ -1182,7 +1182,6 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	const KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 	QXmlStreamAttributes attribs;
 
@@ -1201,7 +1200,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 				attribs = reader->attributes();
 				str = attribs.value(QStringLiteral("enabled")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("enabled")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("enabled"));
 				else
 					d->linking.linking = static_cast<bool>(str.toInt());
 
@@ -1224,7 +1223,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 				} else
 					addChildFast(d->statisticsSpreadsheet);
 			} else { // unknown element
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())
 					return false;
 			}

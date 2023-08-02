@@ -1702,7 +1702,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	// clear the theme that was potentially set in init() in order to correctly load here the worksheets without any theme used
 	d->theme.clear();
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1725,25 +1724,25 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				d->pageRect.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 			else
 				d->pageRect.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 			else
 				d->pageRect.setWidth(str.toDouble());
 
 			str = attribs.value(QStringLiteral("height")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("height"));
 			else
 				d->pageRect.setHeight(str.toDouble());
 
@@ -1794,8 +1793,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			} else
 				addChildFast(image);
 		} else { // unknown element
-			if (!preview)
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

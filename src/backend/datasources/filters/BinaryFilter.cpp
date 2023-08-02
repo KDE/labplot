@@ -559,61 +559,60 @@ void BinaryFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool BinaryFilter::load(XmlStreamReader* reader) {
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	// read attributes
 	QString str = attribs.value(QStringLiteral("vectors")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("vectors")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("vectors"));
 	else
 		d->vectors = (size_t)str.toULong();
 
 	str = attribs.value(QStringLiteral("dataType")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("dataType")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("dataType"));
 	else
 		d->dataType = (BinaryFilter::DataType)str.toInt();
 
 	str = attribs.value(QStringLiteral("byteOrder")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("byteOrder")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("byteOrder"));
 	else
 		d->byteOrder = (QDataStream::ByteOrder)str.toInt();
 
 	str = attribs.value(QStringLiteral("autoMode")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoMode")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("autoMode"));
 	else
 		d->autoModeEnabled = str.toInt();
 
 	str = attribs.value(QStringLiteral("startRow")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("startRow")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("startRow"));
 	else
 		d->startRow = str.toInt();
 
 	str = attribs.value(QStringLiteral("endRow")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("endRow")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("endRow"));
 	else
 		d->endRow = str.toInt();
 
 	str = attribs.value(QStringLiteral("skipStartBytes")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("skipStartBytes")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("skipStartBytes"));
 	else
 		d->skipStartBytes = (size_t)str.toULong();
 
 	str = attribs.value(QStringLiteral("skipBytes")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("skipBytes")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("skipBytes"));
 	else
 		d->skipBytes = (size_t)str.toULong();
 
 	str = attribs.value(QStringLiteral("createIndex")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("createIndex")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("createIndex"));
 	else
 		d->createIndexEnabled = str.toInt();
 

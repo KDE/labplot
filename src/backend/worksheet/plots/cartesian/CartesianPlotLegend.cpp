@@ -912,7 +912,6 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -938,7 +937,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			if (Project::xmlVersion() < 6) {
 				str = attribs.value(QStringLiteral("visible")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 				else
 					d->setVisible(str.toInt());
 			}
@@ -952,25 +951,25 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("x")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 				else
 					d->position.point.setX(str.toDouble());
 
 				str = attribs.value(QStringLiteral("y")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 				else
 					d->position.point.setY(str.toDouble());
 
 				str = attribs.value(QStringLiteral("horizontalPosition")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("horizontalPosition")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("horizontalPosition"));
 				else
 					d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)str.toInt();
 
 				str = attribs.value(QStringLiteral("verticalPosition")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("verticalPosition")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("verticalPosition"));
 				else
 					d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
 
@@ -997,6 +996,10 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("verticalSpacing", layoutVerticalSpacing);
 			READ_DOUBLE_VALUE("horizontalSpacing", layoutHorizontalSpacing);
 			READ_INT_VALUE("columnCount", layoutColumnCount, int);
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

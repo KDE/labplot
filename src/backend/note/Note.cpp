@@ -163,7 +163,6 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -186,6 +185,10 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 			READ_QCOLOR(m_textColor);
 			READ_QFONT(m_textFont);
 			m_note = attribs.value(QStringLiteral("text")).toString();
+		} else { // unknown element
+				reader->raiseUnknownElementWarning();
+				if (!reader->skipToEndElement())
+					return false;
 		}
 	}
 

@@ -220,7 +220,6 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Background);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 
 	auto attribs = reader->attributes();
@@ -238,37 +237,37 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(QStringLiteral("firstColor_r")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("firstColor_r")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("firstColor_r"));
 	else
 		d->firstColor.setRed(str.toInt());
 
 	str = attribs.value(QStringLiteral("firstColor_g")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("firstColor_g")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("firstColor_g"));
 	else
 		d->firstColor.setGreen(str.toInt());
 
 	str = attribs.value(QStringLiteral("firstColor_b")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("firstColor_b")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("firstColor_b"));
 	else
 		d->firstColor.setBlue(str.toInt());
 
 	str = attribs.value(QStringLiteral("secondColor_r")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("secondColor_r")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("secondColor_r"));
 	else
 		d->secondColor.setRed(str.toInt());
 
 	str = attribs.value(QStringLiteral("secondColor_g")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("secondColor_g")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("secondColor_g"));
 	else
 		d->secondColor.setGreen(str.toInt());
 
 	str = attribs.value(QStringLiteral("secondColor_b")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("secondColor_b")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("secondColor_b"));
 	else
 		d->secondColor.setBlue(str.toInt());
 
