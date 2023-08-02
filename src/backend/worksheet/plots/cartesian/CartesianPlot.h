@@ -238,6 +238,7 @@ private:
 	QAction* addHistogramAction{nullptr};
 	QAction* addBoxPlotAction{nullptr};
 	QAction* addQQPlotAction{nullptr};
+	QAction* addKDEPlotAction{nullptr};
 
 	// bar plots
 	QAction* addBarPlotAction{nullptr};

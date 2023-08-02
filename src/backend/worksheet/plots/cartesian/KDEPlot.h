@@ -1,0 +1,101 @@
+/*
+	File                 : KDEPlot.h
+	Project              : LabPlot
+	Description          : KDE-Plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+#ifndef KDEPLOT_H
+#define KDEPLOT_H
+
+#include "Plot.h"
+// #include "backend/lib/Range.h"
+// #include "backend/lib/macros.h"
+// #include "backend/nsl/nsl_sf_stats.h"
+// #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+
+// #include <QFont>
+// #include <QPen>
+
+class AbstractColumn;
+class KDEPlotPrivate;
+class XYCurve;
+class Histogram;
+
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT KDEPlot : public Plot {
+#else
+class KDEPlot : public Plot {
+#endif
+	Q_OBJECT
+
+public:
+	friend class KDEPlotSetDataColumnCmd;
+
+	explicit KDEPlot(const QString& name);
+	~KDEPlot() override;
+
+	void finalizeAdd() override;
+
+	QIcon icon() const override;
+	QMenu* createContextMenu() override;
+	QGraphicsItem* graphicsItem() const override;
+
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
+
+	void loadThemeConfig(const KConfig&) override;
+	void saveThemeConfig(const KConfig&) override;
+
+	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
+	void setHover(bool on) override;
+
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
+	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
+
+	XYCurve* estimationCurve() const;
+	Histogram* histogram() const;
+
+	void retransform() override;
+	void recalc();
+	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void setVisible(bool) override;
+
+	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
+	double minimum(CartesianCoordinateSystem::Dimension) const override;
+	double maximum(CartesianCoordinateSystem::Dimension) const override;
+	bool hasData() const override;
+
+	typedef KDEPlotPrivate Private;
+
+private Q_SLOTS:
+	void dataColumnAboutToBeRemoved(const AbstractAspect*);
+	void dataColumnNameChanged();
+
+protected:
+	KDEPlot(const QString& name, KDEPlotPrivate* dd);
+
+private:
+	Q_DECLARE_PRIVATE(KDEPlot)
+	void init();
+	void initActions();
+	void connectDataColumn(const AbstractColumn*);
+
+	QAction* visibilityAction{nullptr};
+	QAction* navigateToAction{nullptr};
+	bool m_menusInitialized{false};
+
+Q_SIGNALS:
+	void linesUpdated(const KDEPlot*, const QVector<QLineF>&);
+
+	// General-Tab
+	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
+	void dataDataChanged();
+	void dataColumnChanged(const AbstractColumn*);
+};
+
+#endif

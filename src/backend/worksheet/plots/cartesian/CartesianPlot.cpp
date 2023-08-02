@@ -43,6 +43,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
@@ -348,6 +349,7 @@ void CartesianPlot::initActions() {
 	// statistical plots
 	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
 	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
+	addKDEPlotAction = new QAction(i18n("KDE Plot"), this);
 	addQQPlotAction = new QAction(i18n("Q-Q Plot"), this);
 
 	// bar plots
@@ -404,6 +406,9 @@ void CartesianPlot::initActions() {
 	});
 	connect(addQQPlotAction, &QAction::triggered, this, [=]() {
 		addChild(new QQPlot(i18n("Q-Q Plot")));
+	});
+	connect(addKDEPlotAction, &QAction::triggered, this, [=]() {
+		addChild(new KDEPlot(i18n("KDE Plot")));
 	});
 
 	// analysis curves
@@ -533,6 +538,7 @@ void CartesianPlot::initMenus() {
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
+	addNewStatisticalPlotsMenu->addAction(addKDEPlotAction);
 	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
 	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
