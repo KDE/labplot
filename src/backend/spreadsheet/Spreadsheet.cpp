@@ -1261,6 +1261,8 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	}
 
 	columnOffset = this->resize(importMode, colNameList, actualCols);
+	if (initializeContainer)
+		dataContainer.resize(actualCols);
 	const auto& columns = children<Column>(); // Get new children because of the resize it might be different
 
 	// resize the spreadsheet
@@ -1275,11 +1277,6 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	if (columnMode.size() < actualCols) {
 		DEBUG(Q_FUNC_INFO << ", columnMode[] size is too small! Giving up.");
 		return -1;
-	}
-
-	if (initializeContainer) {
-		dataContainer.resize(actualCols);
-		columns = children<Column>();
 	}
 
 	for (int n = 0; n < actualCols; n++) {
