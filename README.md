@@ -1,3 +1,5 @@
+[![Donate Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/LabPlot/donate)
+
 # LabPlot
 
 LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.
