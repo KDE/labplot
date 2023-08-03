@@ -148,19 +148,21 @@ public:
 		: QToolButton(parent) {
 	}
 	void setDefaultAction(QAction* action) {
-		// Works fine, triggers actionChanged
-		//		action->setVisible(false);
-		//		action->setVisible(true);
-		//		action->setChecked(false);
-		//		action->setChecked(true);
-		//		action->setEnabled(false);
-		//		action->setEnabled(true);
-
 		if (action) {
 			connect(action, &QAction::changed, this, &ToolButton::actionChanged);
 			connect(action, &QAction::triggered, this, &ToolButton::actionChanged);
 		}
 		QToolButton::setDefaultAction(action);
+
+		// Works fine, triggers actionChanged
+		action->setVisible(false);
+		action->setVisible(true);
+		action->setChecked(false);
+		action->setChecked(true);
+		action->setEnabled(false);
+		action->setEnabled(true);
+
+		emit action->changed();
 	}
 
 	void actionChanged() {
