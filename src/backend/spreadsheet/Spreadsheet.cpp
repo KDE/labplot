@@ -1261,7 +1261,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	}
 
 	columnOffset = this->resize(importMode, colNameList, actualCols);
-	auto columns = children<Column>(); // Get new children because of the resize it might be different
+	const auto& columns = children<Column>(); // Get new children because of the resize it might be different
 
 	// resize the spreadsheet
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
