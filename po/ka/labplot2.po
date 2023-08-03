@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-02 00:42+0000\n"
-"PO-Revision-Date: 2023-07-29 03:10+0200\n"
+"PO-Revision-Date: 2023-08-02 06:50+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7362,10 +7362,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgid "Q-Q Plot"
-msgstr "გრაფიკი"
+msgstr "Q-Q გრაფიკი"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:392
@@ -8050,10 +8049,9 @@ msgid ""
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
-#, fuzzy, kde-format
-#| msgid "%1: set position"
+#, kde-format
 msgid "%1: set distribution"
-msgstr "%1: მდებარეობის დაყენება"
+msgstr "%1: განაწილების დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #, kde-format
@@ -13370,11 +13368,10 @@ msgid "Properties: Box Plot"
 msgstr "თვისებები: ყუთის ნახაზი"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr "გრაფიკი"
+msgstr "Q-Q გრაფიკი"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -15686,7 +15683,7 @@ msgstr "სტრიქონის დასასრული"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1526
 #, kde-format
 msgid "Match any character excluding new line (by default)"
-msgstr ""
+msgstr "დაემთხვეს ყველა სიმბოლოს ახალი ხაზის ჩათვლით (ნაგულისხმევი)"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1527
 #, kde-format
@@ -15706,7 +15703,7 @@ msgstr "ნული ან ერთი გამოვლენა"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1532
 #, kde-format
 msgid "<a> through <b> occurrences"
-msgstr ""
+msgstr "<a> ამდენჯერ <b> მეორდება"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1538
 #, kde-format
@@ -15771,7 +15768,7 @@ msgstr "არა-ციფრი"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1571
 #, kde-format
 msgid "Whitespace (excluding line breaks)"
-msgstr ""
+msgstr "ჰარეს სიმბოლო"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1572
 #, kde-format
@@ -15821,12 +15818,12 @@ msgstr "უარყოფითი წინმჭვრეტელი"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1589
 #, kde-format
 msgid "Fixed-length positive lookbehind"
-msgstr ""
+msgstr "წინ-წინასწარ-წაკითხვის ფიქსირებული რაოდენობა"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1590
 #, kde-format
 msgid "Fixed-length negative lookbehind"
-msgstr ""
+msgstr "უკან-წინასწარ-წაკითხვის ფიქსირებული რაოდენობა"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:29
 #, kde-format
@@ -19154,17 +19151,15 @@ msgstr "განაწილება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:151
-#, fuzzy, kde-format
-#| msgid "f(x) ="
+#, kde-format
 msgid "p(x) ="
-msgstr "f(x) ="
+msgstr "p(x) ="
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentiles"
-msgstr "პროცენტული"
+msgstr "პროცენტულობები"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
