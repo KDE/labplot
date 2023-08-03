@@ -10,6 +10,7 @@
 
 #include "commonfrontend/worksheet/WorksheetView.h"
 
+#include <QAction>
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -18,7 +19,6 @@
 #include <QSize>
 #include <QTimeLine>
 #include <QToolButton>
-#include <QAction>
 
 #include <KLocalizedString>
 
@@ -34,13 +34,13 @@ SlidingPanel::SlidingPanel(const QRect& screenRect, Position position, QWidget* 
 SlidingPanel::~SlidingPanel() {
 }
 
-void SlidingPanel::slideDown() {
+void SlidingPanel::slideShow() {
 	// timeline: 0 --> 1
 	m_timeLine->setDirection(QTimeLine::Forward);
 	startTimeline();
 }
 
-void SlidingPanel::slideUp() {
+void SlidingPanel::slideHide() {
 	// timeline: 1 --> 0
 	m_timeLine->setDirection(QTimeLine::Backward);
 	startTimeline();
@@ -142,24 +142,23 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	show();
 }
 
-class ToolButton: public QToolButton {
+class ToolButton : public QToolButton {
 public:
-	ToolButton(QWidget *parent = nullptr): QToolButton(parent) {
-
+	ToolButton(QWidget* parent = nullptr)
+		: QToolButton(parent) {
 	}
-	void setDefaultAction(QAction *action) {
-
-// Works fine, triggers actionChanged
-//		action->setVisible(false);
-//		action->setVisible(true);
-//		action->setChecked(false);
-//		action->setChecked(true);
-//		action->setEnabled(false);
-//		action->setEnabled(true);
+	void setDefaultAction(QAction* action) {
+		// Works fine, triggers actionChanged
+		//		action->setVisible(false);
+		//		action->setVisible(true);
+		//		action->setChecked(false);
+		//		action->setChecked(true);
+		//		action->setEnabled(false);
+		//		action->setEnabled(true);
 
 		if (action) {
 			connect(action, &QAction::changed, this, &ToolButton::actionChanged);
-			//connect(action, &QAction::triggered, this, &ToolButton::actionChanged);
+			connect(action, &QAction::triggered, this, &ToolButton::actionChanged);
 		}
 		QToolButton::setDefaultAction(action);
 	}
@@ -173,7 +172,6 @@ public:
 		// will be executed
 		QToolButton::setDefaultAction(defaultAction());
 	}
-
 };
 
 void SlidingPanelBottom::addButtonToLayout(CartesianPlot::NavigationOperation op, QBoxLayout* layout, WorksheetView* view) {

@@ -22,7 +22,6 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool int
 	, m_view(new WorksheetView(worksheet)) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setFocus();
-	this->screen();
 
 	m_view->setParent(this);
 	m_view->setInteractive(interactive);
@@ -31,19 +30,19 @@ PresenterWidget::PresenterWidget(Worksheet* worksheet, QScreen* screen, bool int
 	m_view->setContextMenuPolicy(Qt::NoContextMenu);
 	m_view->initActions(); // init the actions so we can also navigate in the plots
 
-	const QRect& screenSize = screen()->geometry();
+	const QRect& screenSize = screen->geometry();
 	m_view->setGeometry(screenSize); // use the full screen size for the view
 	m_view->show();
 	m_view->setFocus();
 
-	m_panel = new SlidingPanelTop(screenRect, worksheet->name(), this);
+	m_panel = new SlidingPanelTop(screenSize, worksheet->name(), this);
 	qApp->installEventFilter(this);
 	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=]() {
 		close();
 	});
 
 	if (interactive)
-		m_navigationPanel = new SlidingPanelBottom(screenRect, m_view, this);
+		m_navigationPanel = new SlidingPanelBottom(screenSize, m_view, this);
 }
 
 PresenterWidget::~PresenterWidget() {
@@ -60,16 +59,16 @@ bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		bool visible = m_panel->y() == 0;
 		if (!visible && m_panel->insideRect(QCursor::pos()))
-			m_panel->slideDown();
+			m_panel->slideShow();
 		else if (visible && !m_panel->insideRect(QCursor::pos()))
-			m_panel->slideUp();
+			m_panel->slideHide();
 
 		if (m_navigationPanel) {
 			visible = m_navigationPanel->y() < screen()->geometry().bottom();
 			if (!visible && m_navigationPanel->insideRect(QCursor::pos()))
-				m_navigationPanel->slideUp();
+				m_navigationPanel->slideHide();
 			else if (visible && !m_navigationPanel->insideRect(QCursor::pos()))
-				m_navigationPanel->slideDown();
+				m_navigationPanel->slideShow();
 		}
 	}
 

@@ -31,8 +31,8 @@ public:
 
 	SlidingPanel(const QRect& screenRect, Position, QWidget* parent);
 	~SlidingPanel() override;
-	void slideDown();
-	void slideUp();
+	void slideShow();
+	void slideHide();
 	virtual bool insideRect(QPoint screenPos) = 0;
 
 public Q_SLOTS:
