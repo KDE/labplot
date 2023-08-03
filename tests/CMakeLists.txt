@@ -17,10 +17,11 @@ add_subdirectory(multirange)
 add_subdirectory(commonfrontend)
 
 IF (Cantor_FOUND)
-	add_subdirectory(notebook)
+    add_subdirectory(notebook)
+ENDIF ()
 
 add_executable (DependenciesTest DependenciesTest.cpp)
 target_link_libraries(DependenciesTest labplot2lib labplot2test)
 add_test(NAME DependenciesTest COMMAND DependenciesTest)
 
-ENDIF ()
+
