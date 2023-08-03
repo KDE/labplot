@@ -1332,39 +1332,50 @@ void HistogramPrivate::updateValues() {
 
 	case Value::Center: {
 		QVector<qreal> listBarWidth;
-		for (int i = 0, j = 0; i < linesUnclipped.size(); i += 4, j++) {
+		for (int i = 0, j = 0; i < linesUnclipped.size(); i += 3, j++) {
 			auto& columnBarLines = linesUnclipped.at(i);
+			if ((int)(visiblePoints.size()) == j) {
+				break;
+			}
 			if (visiblePoints.at(j) == true) {
 				listBarWidth.append(columnBarLines.length());
 			}
 		}
-		for (int i = 0; i < valuesStrings.size(); i++) {
-			w = fm.boundingRect(valuesStrings.at(i)).width();
-			tempPoint.setX(pointsScene.at(i).x() - w / 2);
-			tempPoint.setY(pointsScene.at(i).y() - valuesDistance + listBarWidth.at(i) / 2 + h / 2);
-			valuesPoints.append(tempPoint);
+		if (orientation == Histogram::Vertical)
+			for (int i = 0; i < valuesStrings.size(); i++) {
+				w = fm.boundingRect(valuesStrings.at(i)).width();
+				tempPoint.setX(pointsScene.at(i).x() - w / 2);
+				tempPoint.setY(pointsScene.at(i).y() + listBarWidth.at(i) / 2 - valuesDistance + h / 2 + w / 2);
+				valuesPoints.append(tempPoint);
+			}
+		else {
+			for (int i = 0; i < valuesStrings.size(); i++) {
+				w = fm.boundingRect(valuesStrings.at(i)).width();
+				tempPoint.setX(pointsScene.at(i).x() - listBarWidth.at(i) / 2 - valuesDistance + h / 2 - w / 2 - 2);
+				tempPoint.setY(pointsScene.at(i).y() + w / 2);
+				valuesPoints.append(tempPoint);
+			}
 		}
 		break;
 	}
 	}
 
+	QTransform trafo;
+	QPainterPath path;
+	double valuesRotationAngle = value->rotationAngle();
+	for (int i = 0; i < valuesPoints.size(); i++) {
+		path = QPainterPath();
+		path.addText(QPoint(0, 0), value->font(), valuesStrings.at(i));
 
-QTransform trafo;
-QPainterPath path;
-double valuesRotationAngle = value->rotationAngle();
-for (int i = 0; i < valuesPoints.size(); i++) {
-	path = QPainterPath();
-	path.addText(QPoint(0, 0), value->font(), valuesStrings.at(i));
+		trafo.reset();
+		trafo.translate(valuesPoints.at(i).x(), valuesPoints.at(i).y());
+		if (valuesRotationAngle != 0.)
+			trafo.rotate(-valuesRotationAngle);
 
-	trafo.reset();
-	trafo.translate(valuesPoints.at(i).x(), valuesPoints.at(i).y());
-	if (valuesRotationAngle != 0.)
-		trafo.rotate(-valuesRotationAngle);
+		valuesPath.addPath(trafo.map(path));
+	}
 
-	valuesPath.addPath(trafo.map(path));
-}
-
-recalcShapeAndBoundingRect();
+	recalcShapeAndBoundingRect();
 }
 
 void HistogramPrivate::updateFilling() {
