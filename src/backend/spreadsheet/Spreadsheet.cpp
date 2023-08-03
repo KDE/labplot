@@ -1254,11 +1254,14 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 
 	// make the available columns undo unaware before we resize and rename them below,
 	// the same will be done for new columns in this->resize().
-	for (auto* column : qAsConst(children<Column>()))
-		column->setUndoAware(false);
+	{
+		const auto& columns = children<Column>();
+		for (auto* column : qAsConst(columns))
+			column->setUndoAware(false);
+	}
 
 	columnOffset = this->resize(importMode, colNameList, actualCols);
-	auto columns = children<Column>(); // Get new childs because of the resize it might be different
+	auto columns = children<Column>(); // Get new children because of the resize it might be different
 
 	// resize the spreadsheet
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
