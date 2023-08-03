@@ -1254,7 +1254,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 
 	// make the available columns undo unaware before we resize and rename them below,
 	// the same will be done for new columns in this->resize().
-	for (auto* column : children<Column>())
+	for (auto* column : qAsConst(children<Column>()))
 		column->setUndoAware(false);
 
 	columnOffset = this->resize(importMode, colNameList, actualCols);
