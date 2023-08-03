@@ -233,7 +233,7 @@ struct funs _functions[] = {
 	{i18n("outside with boundaries excluded"), "outside", (func_t)outside, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
 
 	// Logical
-	{i18n("if(condition, ifTrue, ifFalse)"), "if", (func_t)ifCondition, 3, &ifParameterNames, FunctionGroups::LogicalFunctions},
+	{i18n("if(condition; ifTrue; ifFalse)"), "if", (func_t)ifCondition, 3, &ifParameterNames, FunctionGroups::LogicalFunctions},
 	{i18n("and"), "and", (func_t)andFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 	{i18n("or"), "or", (func_t)orFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
 	{i18n("xor"), "xor", (func_t)xorFunction, 2, nullptr, FunctionGroups::LogicalFunctions},
