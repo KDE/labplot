@@ -1,5 +1,8 @@
 <!-- This is a comment. They are not shown in the final issue and are only informative. You can remove them or ignore them -->
 
+Requirements
+============
+
 - [ ] I searched through the issues if the issue already exists
 
 Steps to reproduce
@@ -20,7 +23,8 @@ Observed
 
 Labplot Version
 ------------------
+<!-- Add text from the labplot executable between the ``` ``` block below: Help -> About Labplot -->
 ```
-<!-- Add text from the labplot executable: Help -> About Labplot -->
+
 
 ```
