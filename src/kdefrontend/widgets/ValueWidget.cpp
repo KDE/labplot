@@ -84,10 +84,9 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
 	//add center value if position is available
-	if (m_value->centerPositionAvailable()) {
+	if (m_value->centerPositionAvailable())
 		if (!ui.cbPosition->contains(i18n("Center")))
 			ui.cbPosition->addItem(i18n("Center"));
-	}
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
