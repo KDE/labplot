@@ -1,5 +1,7 @@
 <!-- This is a comment. They are not shown in the final issue and are only informative. You can remove them or ignore them -->
 
+<!-- IMPORTANT: For feature requests choose the featureRrequest template from the template drop down menu just above this text field! -->
+
 Requirements
 ============
 
