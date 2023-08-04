@@ -1019,9 +1019,8 @@ void BarPlotPrivate::updateValues() {
 			auto& columnBarLines = m_barLines.at(i);
 
 			for (int i = 0; i < columnBarLines.size(); i++) { // loop over the different data columns
-				if (visiblePoints.at(i) == true) {
+				if (visiblePoints.at(i) == true)
 					listBarWidth.append(columnBarLines.at(i).at(1).length());
-				}
 			}
 		}
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
@@ -1032,10 +1031,8 @@ void BarPlotPrivate::updateValues() {
 			else
 				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - w, point.y() + h / 2);
 		}
-
 		break;
 	}
-
 	case Value::Under:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();

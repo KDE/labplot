@@ -124,7 +124,8 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	connect(m_value, &Value::suffixChanged, this, &ValueWidget::valueSuffixChanged);
 	connect(m_value, &Value::fontChanged, this, &ValueWidget::valueFontChanged);
 	connect(m_value, &Value::colorChanged, this, &ValueWidget::valueColorChanged);
-	}
+
+}
 
 //*************************************************************
 //******** SLOTs for changes triggered in ValueWidget ****

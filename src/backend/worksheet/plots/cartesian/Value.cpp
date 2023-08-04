@@ -49,7 +49,6 @@ void Value::init(const KConfigGroup& group) {
 	d->font = group.readEntry("ValueFont", QFont());
 	d->font.setPixelSize(Worksheet::convertToSceneUnits(defaultFont.pointSizeF(), Worksheet::Unit::Point));
 	d->color = group.readEntry("ValueColor", QColor(Qt::black));
-
 }
 
 void Value::draw(QPainter* painter, const QVector<QPointF>& points, const QVector<QString>& strings) {

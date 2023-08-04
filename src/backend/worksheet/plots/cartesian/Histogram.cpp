@@ -1334,12 +1334,10 @@ void HistogramPrivate::updateValues() {
 		QVector<qreal> listBarWidth;
 		for (int i = 0, j = 0; i < linesUnclipped.size(); i += 3, j++) {
 			auto& columnBarLines = linesUnclipped.at(i);
-			if ((int)(visiblePoints.size()) == j) {
+			if ((int)(visiblePoints.size()) == j)
 				break;
-			}
-			if (visiblePoints.at(j) == true) {
+			if (visiblePoints.at(j) == true)
 				listBarWidth.append(columnBarLines.length());
-			}
 		}
 		if (orientation == Histogram::Vertical)
 			for (int i = 0; i < valuesStrings.size(); i++) {
