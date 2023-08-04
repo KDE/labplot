@@ -71,10 +71,8 @@ if (ENABLE_VECTOR_BLF)
   if (${LOCAL_DBC_PARSER})
       FetchContent_Declare(
         dbc_parser_cpp
-        GIT_REPOSITORY https://github.com/Murmele/dbc_parser_cpp.git
-        GIT_TAG 18a2a4e46f44a06617e1fa9c2e4524eff2bc389d
-        #GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
-        #GIT_TAG        master
+        GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
+        GIT_TAG 0f3b22b3fe124976a86a85fcd1bfdd55c20ca428 # At least this version is needed!
       )
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
@@ -112,13 +110,17 @@ if (ENABLE_VECTOR_BLF)
                           ${vector_blf_BINARY_DIR}/src) # config.h is in there
       target_link_libraries(labplot2lib Vector_BLF)
       target_compile_definitions(labplot2lib PRIVATE HAVE_VECTOR_BLF)
+      add_definitions (-DHAVE_VECTOR_BLF)
   else()
     pkg_check_modules(Vector_BLF IMPORTED_TARGET GLOBAL Vector_BLF)
     if (Vector_BLF_FOUND)
         target_link_libraries(labplot2lib PkgConfig::Vector_BLF)
         target_compile_definitions(labplot2lib PRIVATE HAVE_VECTOR_BLF)
+        add_definitions (-DHAVE_VECTOR_BLF)
     endif()
   endif()
+else()
+    add_definitions (-DVECTOR_BLF_DISABLED)
 endif()
 
 if (LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
