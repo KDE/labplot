@@ -106,11 +106,10 @@ void Value::setType(Value::Type type) {
 	if (type != d->type)
 		exec(new ValueSetTypeCmd(d, type, ki18n("%1: set values type")));
 }
-void Value::setcenterPositionAvailable(bool available){
+void Value::setcenterPositionAvailable(bool available) {
 	Q_D(Value);
 	d->centerPositionAvailable = available;
 }
-
 
 STD_SETTER_CMD_IMPL_F_S(Value, SetColumn, const AbstractColumn*, column, updateValue)
 void Value::setColumn(const AbstractColumn* column) {
