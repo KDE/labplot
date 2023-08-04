@@ -83,7 +83,7 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
-	// A                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    dd center value if position is available
+	// add center value if position is available
 	if (m_value->centerPositionAvailable())
 		if (!ui.cbPosition->contains(i18n("Center")))
 			ui.cbPosition->addItem(i18n("Center"));
