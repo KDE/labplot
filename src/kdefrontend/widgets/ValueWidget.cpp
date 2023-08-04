@@ -83,10 +83,10 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
+	//add center value if position is available
 	if (m_value->centerPositionAvailable()) {
-		if (!ui.cbPosition->contains(i18n("Center"))) {
+		if (!ui.cbPosition->contains(i18n("Center")))
 			ui.cbPosition->addItem(i18n("Center"));
-		}
 	}
 
 	QList<AspectType> list{AspectType::Folder,
@@ -124,7 +124,6 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	connect(m_value, &Value::suffixChanged, this, &ValueWidget::valueSuffixChanged);
 	connect(m_value, &Value::fontChanged, this, &ValueWidget::valueFontChanged);
 	connect(m_value, &Value::colorChanged, this, &ValueWidget::valueColorChanged);
-
 }
 
 //*************************************************************

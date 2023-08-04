@@ -67,7 +67,6 @@ void BarPlot::init() {
 
 	// values
 	d->addValue(group);
-
 }
 
 /*!

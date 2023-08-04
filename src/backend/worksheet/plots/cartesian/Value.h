@@ -40,7 +40,6 @@ public:
 	QString& columnPath() const;
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
 	BASIC_D_ACCESSOR_DECL(bool, centerPositionAvailable, centerPositionAvailable)
-
 	BASIC_D_ACCESSOR_DECL(double, distance, Distance)
 	BASIC_D_ACCESSOR_DECL(double, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)

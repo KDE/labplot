@@ -347,7 +347,6 @@ double Histogram::minimum(const Dimension dim) const {
 	return NAN;
 }
 
-
 double Histogram::maximum(const Dimension dim) const {
 	Q_D(const Histogram);
 	switch (dim) {
@@ -1329,7 +1328,6 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
-
 	case Value::Center: {
 		QVector<qreal> listBarWidth;
 		for (int i = 0, j = 0; i < linesUnclipped.size(); i += 3, j++) {

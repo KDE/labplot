@@ -14,7 +14,6 @@
 #include "backend/worksheet/Worksheet.h"
 
 #include "Value.h"
-
 #include <QColor>
 #include <QFont>
 

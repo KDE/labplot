@@ -79,7 +79,6 @@ void Value::draw(QPainter* painter, const QVector<QPointF>& points, const QVecto
 // ##########################  getter methods  ##################################
 // ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Value, Value::Type, type, type)
-
 BASIC_SHARED_D_READER_IMPL(Value, const AbstractColumn*, column, column)
 QString& Value::columnPath() const {
 	D(Value);
