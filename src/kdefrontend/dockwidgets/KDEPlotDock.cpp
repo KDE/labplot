@@ -47,7 +47,7 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	hBoxLayout->insertWidget(1, estimationLineWidget);
 
 	estimationBackgroundWidget = new BackgroundWidget(ui.tabKDE);
-	hBoxLayout->insertWidget(4, estimationBackgroundWidget);
+	hBoxLayout->insertWidget(5, estimationBackgroundWidget);
 
 	// Tab "Histogram"
 	gridLayout = static_cast<QGridLayout*>(ui.tabHistogram->layout());

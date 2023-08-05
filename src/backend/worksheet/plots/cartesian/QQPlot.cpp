@@ -736,8 +736,6 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	QPen p;
-
 	Q_D(QQPlot);
 	d->m_suppressRecalc = true;
 

@@ -25,6 +25,7 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 extern "C" {
+#include "backend/nsl/nsl_kde.h"
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
@@ -88,14 +89,14 @@ void KDEPlot::init() {
 
 	// histogram
 	d->histogram = new Histogram(QString());
-	// TODO
+	d->histogram->setNormalization(Histogram::ProbabilityDensity);
 }
 
 void KDEPlot::finalizeAdd() {
 	Q_D(KDEPlot);
 	WorksheetElement::finalizeAdd();
 	addChild(d->estimationCurve);
-	addChild(d->histogram);
+//	addChild(d->histogram);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
@@ -180,10 +181,7 @@ Histogram* KDEPlot::histogram() const {
 
 bool KDEPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
 	Q_D(const KDEPlot);
-
-	// TODO
-
-	return false;
+	return d->estimationCurve->minMax(dim, indexRange, r);
 }
 
 double KDEPlot::minimum(const Dimension dim) const {
@@ -294,7 +292,7 @@ void KDEPlotPrivate::retransform() {
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	estimationCurve->retransform();
-	histogram->retransform();
+	//histogram->retransform();
 	recalcShapeAndBoundingRect();
 }
 
@@ -315,11 +313,28 @@ void KDEPlotPrivate::recalc() {
 	}
 
 	// copy the non-nan and not masked values into a new vector
-	QVector<double> rawData;
-	copyValidData(rawData);
-	size_t n = rawData.count();
+	QVector<double> data;
+	copyValidData(data);
 
-	// TODO
+	// calculate 200 points to plot
+	int count = 200;
+	QVector<double> xData;
+	QVector<double> yData;
+	xData.resize(count);
+	yData.resize(count);
+	double min = *std::min_element(data.constBegin(), data.constEnd());
+	double max = *std::max_element(data.constBegin(), data.constEnd());
+	double step = (max - min) / count;
+	int n = data.count();
+	double h = std::max(nsl_kde_normal_dist_bandwith(data.data(), n), 1e-6);
+	for (int i = 0; i < count; ++i) {
+		double x = min + i * step;
+		xData[i] = x;
+		yData[i] = nsl_kde(data.data(), x, h, n);
+	}
+
+	xEstimationColumn->setValues(xData);
+	yEstimationColumn->setValues(yData);
 
 	// Q_EMIT dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
@@ -376,7 +391,7 @@ void KDEPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	curveShape = QPainterPath();
 	curveShape.addPath(estimationCurve->graphicsItem()->shape());
-	curveShape.addPath(histogram->graphicsItem()->shape());
+	//curveShape.addPath(histogram->graphicsItem()->shape());
 
 	boundingRectangle = curveShape.boundingRect();
 }
@@ -501,13 +516,11 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	QPen p;
-
 	Q_D(KDEPlot);
 	d->m_suppressRecalc = true;
 
-	// TODO
-	// d->estimationCurve->loadThemeConfig(group);
+	d->estimationCurve->line()->loadThemeConfig(group, themeColor);
+	d->estimationCurve->background()->loadThemeConfig(group, themeColor);
 	// d->histogram->loadThemeConfig(group);
 
 	d->m_suppressRecalc = false;

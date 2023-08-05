@@ -2732,6 +2732,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
 
 			curve->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::KDEPlot) {
+			Range<int> indexRange{0, 199};
+			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::QQPlot) {
 			Range<int> indexRange{0, 99};
 			plot->minMax(dim, indexRange, range, true);
@@ -5198,6 +5201,13 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete plot;
 				return false;
 			}
+		} else if (reader->name() == QLatin1String("KDEPlot")) {
+			auto* plot = new KDEPlot(QStringLiteral("KDE Plot"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
 		} else { // unknown element
 			if (!preview)
 				reader->raiseUnknownElementWarning();
