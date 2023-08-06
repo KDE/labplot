@@ -35,6 +35,14 @@ public:
 	QPainterPath curveShape;
 	bool m_suppressRecalc{false};
 
+	// General
+	const AbstractColumn* dataColumn{nullptr};
+	QString dataColumnPath;
+	nsl_kernel_type kernelType{nsl_kernel_gauss};
+	nsl_kde_bandwidth_type bandwidthType{nsl_kde_bandwidth_gaussian};
+	double bandwidth{0.1};
+
+	// KDE curve
 	XYCurve* estimationCurve{nullptr};
 	Column* xEstimationColumn{nullptr};
 	QString xEstimationColumnPath;
@@ -42,10 +50,6 @@ public:
 	QString yEstimationColumnPath;
 
 	Histogram* histogram{nullptr};
-
-	// General
-	const AbstractColumn* dataColumn{nullptr};
-	QString dataColumnPath;
 
 	KDEPlot* const q;
 

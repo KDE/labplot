@@ -11,14 +11,9 @@
 #define KDEPLOT_H
 
 #include "Plot.h"
-// #include "backend/lib/Range.h"
-// #include "backend/lib/macros.h"
-// #include "backend/nsl/nsl_sf_stats.h"
-// #include "backend/worksheet/WorksheetElement.h"
+#include "backend/nsl/nsl_kde.h"
+#include "backend/nsl/nsl_sf_kernel.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-
-// #include <QFont>
-// #include <QPen>
 
 class AbstractColumn;
 class KDEPlotPrivate;
@@ -56,6 +51,9 @@ public:
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
+	BASIC_D_ACCESSOR_DECL(nsl_kernel_type, kernelType, KernelType)
+	BASIC_D_ACCESSOR_DECL(nsl_kde_bandwidth_type, bandwidthType, BandwidthType)
+	BASIC_D_ACCESSOR_DECL(double, bandwidth, Bandwidth)
 
 	XYCurve* estimationCurve() const;
 	Histogram* histogram() const;
@@ -96,6 +94,9 @@ Q_SIGNALS:
 	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
+	void kernelTypeChanged(nsl_kernel_type);
+	void bandwidthTypeChanged(nsl_kde_bandwidth_type);
+	void bandwidthChanged(double);
 };
 
 #endif

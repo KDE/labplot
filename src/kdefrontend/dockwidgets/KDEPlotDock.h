@@ -14,6 +14,9 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_kdeplotdock.h"
 
+#include "backend/nsl/nsl_kde.h"
+#include "backend/nsl/nsl_sf_kernel.h"
+
 class AspectTreeModel;
 class BackgroundWidget;
 class KDEPlot;
@@ -58,11 +61,17 @@ private Q_SLOTS:
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
 	void visibilityChanged(bool);
+	void kernelTypeChanged(int);
+	void bandwidthTypeChanged(int);
+	void bandwidthChanged(double);
 
 	// SLOTs for changes triggered in KDEPlot
 	// General-Tab
 	void plotDataColumnChanged(const AbstractColumn*);
 	void plotVisibilityChanged(bool);
+	void plotKernelTypeChanged(nsl_kernel_type);
+	void plotBandwidthTypeChanged(nsl_kde_bandwidth_type);
+	void plotBandwidthChanged(double);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

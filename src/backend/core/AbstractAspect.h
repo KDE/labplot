@@ -208,7 +208,7 @@ public:
 			return QStringLiteral("BoxPlot");
 		case AspectType::QQPlot:
 			return QStringLiteral("QQPlot");
-			case AspectType::KDEPlot:
+		case AspectType::KDEPlot:
 			return QStringLiteral("KDEPlot");
 		case AspectType::LollipopPlot:
 			return QStringLiteral("LollipopPlot");

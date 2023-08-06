@@ -24,8 +24,10 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-extern "C" {
+#include "backend/nsl/nsl_sf_kernel.h"
 #include "backend/nsl/nsl_kde.h"
+
+extern "C" {
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
@@ -96,7 +98,7 @@ void KDEPlot::finalizeAdd() {
 	Q_D(KDEPlot);
 	WorksheetElement::finalizeAdd();
 	addChild(d->estimationCurve);
-//	addChild(d->histogram);
+	// addChild(d->histogram);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
@@ -168,6 +170,9 @@ void KDEPlot::setVisible(bool on) {
 // general
 BASIC_SHARED_D_READER_IMPL(KDEPlot, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(KDEPlot, QString, dataColumnPath, dataColumnPath)
+BASIC_SHARED_D_READER_IMPL(KDEPlot, nsl_kernel_type, kernelType, kernelType)
+BASIC_SHARED_D_READER_IMPL(KDEPlot, nsl_kde_bandwidth_type, bandwidthType, bandwidthType)
+BASIC_SHARED_D_READER_IMPL(KDEPlot, double, bandwidth, bandwidth)
 
 XYCurve* KDEPlot::estimationCurve() const {
 	Q_D(const KDEPlot);
@@ -226,6 +231,27 @@ void KDEPlot::setDataColumn(const AbstractColumn* column) {
 void KDEPlot::setDataColumnPath(const QString& path) {
 	Q_D(KDEPlot);
 	d->dataColumnPath = path;
+}
+
+STD_SETTER_CMD_IMPL_F_S(KDEPlot, SetKernelType, nsl_kernel_type, kernelType, recalc)
+void KDEPlot::setKernelType(nsl_kernel_type kernelType) {
+	Q_D(KDEPlot);
+	if (kernelType != d->kernelType)
+		exec(new KDEPlotSetKernelTypeCmd(d, kernelType, ki18n("%1: set kernel type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(KDEPlot, SetBandwidthType, nsl_kde_bandwidth_type, bandwidthType, recalc)
+void KDEPlot::setBandwidthType(nsl_kde_bandwidth_type bandwidthType) {
+	Q_D(KDEPlot);
+	if (bandwidthType != d->bandwidthType)
+		exec(new KDEPlotSetBandwidthTypeCmd(d, bandwidthType, ki18n("%1: set bandwidth type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(KDEPlot, SetBandwidth, double, bandwidth, recalc)
+void KDEPlot::setBandwidth(double bandwidth) {
+	Q_D(KDEPlot);
+	if (bandwidth != d->bandwidth)
+		exec(new KDEPlotSetBandwidthCmd(d, bandwidth, ki18n("%1: set bandwidth")));
 }
 
 //##############################################################################
@@ -292,7 +318,7 @@ void KDEPlotPrivate::retransform() {
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	estimationCurve->retransform();
-	//histogram->retransform();
+	// histogram->retransform();
 	recalcShapeAndBoundingRect();
 }
 
@@ -326,7 +352,16 @@ void KDEPlotPrivate::recalc() {
 	double max = *std::max_element(data.constBegin(), data.constEnd());
 	double step = (max - min) / count;
 	int n = data.count();
-	double h = std::max(nsl_kde_normal_dist_bandwith(data.data(), n), 1e-6);
+
+	// bandwidth
+	double h;
+	if (bandwidthType == nsl_kde_bandwidth_custom)
+		h = bandwidth;
+	else
+		h = nsl_kde_bandwidth(data.data(), n, bandwidthType);
+
+	h = std::max(h, 1e-6);
+
 	for (int i = 0; i < count; ++i) {
 		double x = min + i * step;
 		xData[i] = x;
@@ -391,7 +426,7 @@ void KDEPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	curveShape = QPainterPath();
 	curveShape.addPath(estimationCurve->graphicsItem()->shape());
-	//curveShape.addPath(histogram->graphicsItem()->shape());
+	// curveShape.addPath(histogram->graphicsItem()->shape());
 
 	boundingRectangle = curveShape.boundingRect();
 }

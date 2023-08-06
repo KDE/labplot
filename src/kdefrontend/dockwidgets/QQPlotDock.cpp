@@ -302,9 +302,8 @@ void QQPlotDock::visibilityChanged(bool state) {
 //*************************************************************
 // General-Tab
 void QQPlotDock::plotDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
-	m_initializing = false;
 }
 
 void QQPlotDock::plotDistributionChanged(nsl_sf_stats_distribution distribution) {
@@ -314,9 +313,8 @@ void QQPlotDock::plotDistributionChanged(nsl_sf_stats_distribution distribution)
 }
 
 void QQPlotDock::plotVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //*************************************************************

@@ -11,14 +11,14 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
-#include "backend/nsl/nsl_sf_stats.h"
+//#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
-#include <QFrame>
+//#include <QFrame>
 
 #include <KConfig>
 #include <KLocalizedString>
@@ -72,8 +72,12 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &KDEPlotDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &KDEPlotDock::commentChanged);
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &KDEPlotDock::visibilityChanged);
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &KDEPlotDock::dataColumnChanged);
+	connect(ui.cbKernelType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::kernelTypeChanged);
+	connect(ui.cbBandwidthType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::bandwidthTypeChanged);
+	connect(ui.sbBandwidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &KDEPlotDock::bandwidthChanged);
+
+	connect(ui.chkVisible, &QCheckBox::clicked, this, &KDEPlotDock::visibilityChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::plotRangeChanged);
 
 	// template handler
@@ -139,9 +143,9 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	QList<Background*> histogramBackgrounds;
 	for (auto* plot : m_plots) {
 		estimationLines << plot->estimationCurve()->line();
-		estimationBackgrounds<< plot->estimationCurve()->background();
+		estimationBackgrounds << plot->estimationCurve()->background();
 		histogramLines << plot->histogram()->line();
-		histogramBackgrounds<< plot->histogram()->background();
+		histogramBackgrounds << plot->histogram()->background();
 	}
 	estimationLineWidget->setLines(estimationLines);
 	estimationBackgroundWidget->setBackgrounds(estimationBackgrounds);
@@ -188,10 +192,27 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	// General-tab
 	connect(m_plot, &KDEPlot::aspectDescriptionChanged, this, &KDEPlotDock::aspectDescriptionChanged);
 	connect(m_plot, &KDEPlot::dataColumnChanged, this, &KDEPlotDock::plotDataColumnChanged);
+	connect(m_plot, &KDEPlot::kernelTypeChanged, this, &KDEPlotDock::plotKernelTypeChanged);
+	connect(m_plot, &KDEPlot::bandwidthTypeChanged, this, &KDEPlotDock::plotBandwidthTypeChanged);
+	connect(m_plot, &KDEPlot::bandwidthChanged, this, &KDEPlotDock::plotBandwidthChanged);
 }
 
 void KDEPlotDock::retranslateUi() {
+	//TODO unify with nsl_smooth_weight_type_name in nsl_smooth.c.
+	ui.cbKernelType->clear();
+	ui.cbKernelType->addItem(i18n("Gauss"), static_cast<int>(nsl_kernel_gauss));
+	ui.cbKernelType->addItem(i18n("Uniform (Rectangular)"), static_cast<int>(nsl_kernel_uniform));
+	ui.cbKernelType->addItem(i18n("Triangular"), static_cast<int>(nsl_kernel_triangular));
+	ui.cbKernelType->addItem(i18n("Binomial"), static_cast<int>(nsl_kernel_binomial));
+	ui.cbKernelType->addItem(i18n("Parabolic (Epanechnikov)"), static_cast<int>(nsl_kernel_parabolic));
+	ui.cbKernelType->addItem(i18n("Quartic (Biweight)"), static_cast<int>(nsl_kernel_quartic));
+	ui.cbKernelType->addItem(i18n("Triweight"), static_cast<int>(nsl_kernel_triweight));
+	ui.cbKernelType->addItem(i18n("Tricube"), static_cast<int>(nsl_kernel_tricube));
+	ui.cbKernelType->addItem(i18n("Cosine"), static_cast<int>(nsl_kernel_cosine));
 
+	ui.cbBandwidthType->clear();
+	ui.cbBandwidthType->addItem(i18n("Gaussian approximation"), static_cast<int>(nsl_kde_bandwidth_gaussian));
+	ui.cbBandwidthType->addItem(i18n("Custom"), static_cast<int>(nsl_kde_bandwidth_custom));
 }
 
 /*
@@ -237,6 +258,31 @@ void KDEPlotDock::dataColumnChanged(const QModelIndex& index) {
 		plot->setDataColumn(column);
 }
 
+void KDEPlotDock::kernelTypeChanged(int index) {
+	const nsl_kernel_type type = static_cast<nsl_kernel_type>(ui.cbKernelType->itemData(index).toInt());
+
+	CONDITIONAL_LOCK_RETURN
+
+	for (auto* plot : m_plots)
+		plot->setKernelType(type);
+}
+
+void KDEPlotDock::bandwidthTypeChanged(int index) {
+	const nsl_kde_bandwidth_type type = static_cast<nsl_kde_bandwidth_type>(ui.cbBandwidthType->itemData(index).toInt());
+
+	CONDITIONAL_LOCK_RETURN
+
+	for (auto* plot : m_plots)
+		plot->setBandwidthType(type);
+}
+
+void KDEPlotDock::bandwidthChanged(double value) {
+	CONDITIONAL_LOCK_RETURN
+
+	for (auto* plot : m_plots)
+		plot->setBandwidth(value);
+}
+
 void KDEPlotDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
@@ -246,26 +292,49 @@ void KDEPlotDock::visibilityChanged(bool state) {
 }
 
 //*************************************************************
-//*********** SLOTs for changes triggered in KDEPlot *******
+//*********** SLOTs for changes triggered in KDEPlot **********
 //*************************************************************
 // General-Tab
 void KDEPlotDock::plotDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN
 	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
-	m_initializing = false;
+}
+
+void KDEPlotDock::plotKernelTypeChanged(nsl_kernel_type type) {
+	CONDITIONAL_LOCK_RETURN
+	int index = ui.cbKernelType->findData(static_cast<int>(type));
+	ui.cbKernelType->setCurrentIndex(index);
+}
+
+void KDEPlotDock::plotBandwidthTypeChanged(nsl_kde_bandwidth_type type) {
+	CONDITIONAL_LOCK_RETURN
+	int index = ui.cbBandwidthType->findData(static_cast<int>(type));
+	ui.cbBandwidthType->setCurrentIndex(index);
+}
+
+void KDEPlotDock::plotBandwidthChanged(double value) {
+	CONDITIONAL_LOCK_RETURN
+	ui.sbBandwidth->setValue(value);
 }
 
 void KDEPlotDock::plotVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
 void KDEPlotDock::load() {
-	// TODO
+	cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
+
+	int index = ui.cbKernelType->findData(static_cast<int>(m_plot->kernelType()));
+	ui.cbKernelType->setCurrentIndex(index);
+
+	index = ui.cbBandwidthType->findData(static_cast<int>(m_plot->bandwidthType()));
+	ui.cbBandwidthType->setCurrentIndex(index);
+
+	ui.sbBandwidth->setValue(m_plot->bandwidth());
 }
 
 void KDEPlotDock::loadConfig(KConfig& config) {

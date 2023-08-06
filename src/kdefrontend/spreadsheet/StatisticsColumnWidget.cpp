@@ -369,7 +369,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	double max = *std::max_element(data.constBegin(), data.constEnd());
 	double step = (max - min) / count;
 	int n = data.count();
-	double h = std::max(nsl_kde_normal_dist_bandwith(data.data(), n), 1e-6);
+	double h = std::max(nsl_kde_normal_dist_bandwidth(data.data(), n), 1e-6);
 	for (int i = 0; i < count; ++i) {
 		double x = min + i * step;
 		xData[i] = x;
