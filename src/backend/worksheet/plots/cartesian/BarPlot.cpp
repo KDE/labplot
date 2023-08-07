@@ -839,7 +839,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			if (value > 0) {
 				m_stackedBarPositiveOffsets[valueIndex] += value;
 				m_valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
-			}else {
+			} else {
 				m_stackedBarNegativeOffsets[valueIndex] += value;
 				m_valuesPointsLogical << QPointF(m_stackedBarNegativeOffsets.at(valueIndex), y + width / 2);
 			}
@@ -1041,7 +1041,8 @@ void BarPlotPrivate::updateValues() {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
 			const auto& point = pointsScene.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesPoints << QPointF(point.x() - w / 2, point.y() + listBarWidth.at(i) / 2 + offset  - Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
+				m_valuesPoints << QPointF(point.x() - w / 2,
+										  point.y() + listBarWidth.at(i) / 2 + offset - Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
 			else
 				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - w - offset, point.y() + h / 2);
 		}
