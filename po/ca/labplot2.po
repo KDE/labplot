@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-02 00:42+0000\n"
+"POT-Creation-Date: 2023-08-05 00:41+0000\n"
 "PO-Revision-Date: 2023-08-01 18:36+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -73,18 +73,18 @@ msgstr ""
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2994
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1292
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1313
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1822
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4607
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:915
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:279
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:1849
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:1875
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:987
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:663
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:415
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:680
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:248
-#: src/backend/worksheet/plots/cartesian/Value.cpp:255
+#: src/backend/worksheet/plots/cartesian/Value.cpp:260
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:282
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:262
@@ -123,7 +123,7 @@ msgstr "L'atribut «%1» falta o està buit, s'usarà el valor per omissió"
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:317
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3128
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1356
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1377
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1926
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:305
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:1049
@@ -8552,79 +8552,79 @@ msgstr "pala"
 msgid "club"
 msgstr "club"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:106
+#: src/backend/worksheet/plots/cartesian/Value.cpp:107
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:456
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: estableix el tipus dels valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:113
+#: src/backend/worksheet/plots/cartesian/Value.cpp:118
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:463
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: estableix la columna dels valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:125
+#: src/backend/worksheet/plots/cartesian/Value.cpp:130
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:482
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: estableix la posició dels valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:132
+#: src/backend/worksheet/plots/cartesian/Value.cpp:137
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:489
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: estableix la distància dels valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:139
+#: src/backend/worksheet/plots/cartesian/Value.cpp:144
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:496
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: gira els valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:146
+#: src/backend/worksheet/plots/cartesian/Value.cpp:151
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:503
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: estableix l'opacitat dels valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:153
+#: src/backend/worksheet/plots/cartesian/Value.cpp:158
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:510
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: estableix el format numèric dels valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:160
+#: src/backend/worksheet/plots/cartesian/Value.cpp:165
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:517
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: estableix la precisió dels valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:167
+#: src/backend/worksheet/plots/cartesian/Value.cpp:172
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:524
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: estableix el format dels valors «datahora»"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:174
+#: src/backend/worksheet/plots/cartesian/Value.cpp:179
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:531
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: estableix el prefix dels valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:181
+#: src/backend/worksheet/plots/cartesian/Value.cpp:186
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:538
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: estableix el sufix dels valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:188
+#: src/backend/worksheet/plots/cartesian/Value.cpp:193
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:545
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: estableix el tipus de lletra dels valors"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:195
+#: src/backend/worksheet/plots/cartesian/Value.cpp:200
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:552
 #, kde-format
 msgid "%1: set values color"
@@ -12746,6 +12746,8 @@ msgstr "Fila principal"
 #: src/kdefrontend/widgets/LabelWidget.cpp:142
 #: src/kdefrontend/widgets/LabelWidget.cpp:155
 #: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/widgets/ValueWidget.cpp:88
+#: src/kdefrontend/widgets/ValueWidget.cpp:89
 #, kde-format
 msgid "Center"
 msgstr "Centre"

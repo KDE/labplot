@@ -1828,6 +1828,8 @@ void XYCurvePrivate::updateValues() {
 	m_valuePoints.reserve(numberOfPoints);
 	m_valueStrings.reserve(numberOfPoints);
 
+	calculateScenePoints();
+
 	// determine the value string for all points that are currently visible in the plot
 	int i{0};
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
@@ -1976,9 +1978,6 @@ void XYCurvePrivate::updateValues() {
 	QPointF tempPoint;
 	QFontMetrics fm(valuesFont);
 	const int h{fm.ascent()};
-
-	if (m_valueStrings.count())
-		calculateScenePoints();
 
 	i = 0;
 	for (const auto& string : qAsConst(m_valueStrings)) {
@@ -2710,6 +2709,8 @@ void XYCurvePrivate::updateErrorBars() {
 	QVector<QPointF> pointsErrorBarAnchorX;
 	QVector<QPointF> pointsErrorBarAnchorY;
 	const auto errorBarsType = errorBarsLine->errorBarsType();
+
+	calculateScenePoints();
 
 	for (int i = 0; i < m_logicalPoints.size(); ++i) {
 		if (!m_pointVisible.at(i))

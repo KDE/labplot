@@ -387,6 +387,7 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 	value = new Value(QString());
 	q->addChild(value);
 	value->setHidden(true);
+	value->setcenterPositionAvailable(true);
 	if (!q->isLoading())
 		value->init(group);
 
@@ -999,18 +1000,38 @@ void BarPlotPrivate::updateValues() {
 	qreal w;
 	const qreal h = fm.ascent();
 	int offset = value->distance();
-
 	switch (value->position()) {
 	case Value::Above:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
 			const auto& point = pointsScene.at(i);
+
 			if (orientation == BarPlot::Orientation::Vertical)
 				m_valuesPoints << QPointF(point.x() - w / 2, point.y() - offset);
 			else
 				m_valuesPoints << QPointF(point.x(), point.y() - offset);
 		}
 		break;
+	case Value::Center: {
+		QVector<qreal> listBarWidth;
+		for (int i = 0; i < m_barLines.size(); i++) {
+			auto& columnBarLines = m_barLines.at(i);
+
+			for (int i = 0; i < columnBarLines.size(); i++) { // loop over the different data columns
+				if (visiblePoints.at(i) == true)
+					listBarWidth.append(columnBarLines.at(i).at(1).length());
+			}
+		}
+		for (int i = 0; i < m_valuesStrings.size(); i++) {
+			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
+			if (orientation == BarPlot::Orientation::Vertical)
+				m_valuesPoints << QPointF(point.x() - w / 2, point.y() + listBarWidth.at(i) / 2 - offset + h / 2);
+			else
+				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - w, point.y() + h / 2);
+		}
+		break;
+	}
 	case Value::Under:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();

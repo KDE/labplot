@@ -85,6 +85,7 @@ QString& Value::columnPath() const {
 	return d->columnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Value, Value::Position, position, position)
+BASIC_SHARED_D_READER_IMPL(Value, bool, centerPositionAvailable, centerPositionAvailable)
 BASIC_SHARED_D_READER_IMPL(Value, double, distance, distance)
 BASIC_SHARED_D_READER_IMPL(Value, double, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(Value, double, opacity, opacity)
@@ -104,6 +105,10 @@ void Value::setType(Value::Type type) {
 	Q_D(Value);
 	if (type != d->type)
 		exec(new ValueSetTypeCmd(d, type, ki18n("%1: set values type")));
+}
+void Value::setcenterPositionAvailable(bool available) {
+	Q_D(Value);
+	d->centerPositionAvailable = available;
 }
 
 STD_SETTER_CMD_IMPL_F_S(Value, SetColumn, const AbstractColumn*, column, updateValue)

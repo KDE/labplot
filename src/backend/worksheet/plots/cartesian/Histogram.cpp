@@ -111,6 +111,7 @@ void Histogram::init() {
 	d->value = new Value(QString());
 	addChild(d->value);
 	d->value->setHidden(true);
+	d->value->setcenterPositionAvailable(true);
 	d->value->init(group);
 	connect(d->value, &Value::updatePixmapRequested, [=] {
 		d->updatePixmap();
@@ -160,7 +161,6 @@ void Histogram::init() {
 	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->rugWidth = group.readEntry("RugWidth", 0.0);
 	d->rugOffset = group.readEntry("RugOffset", 0.0);
-
 	this->initActions();
 }
 
@@ -1328,6 +1328,32 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
+	case Value::Center: {
+		QVector<qreal> listBarWidth;
+		for (int i = 0, j = 0; i < linesUnclipped.size(); i += 3, j++) {
+			auto& columnBarLines = linesUnclipped.at(i);
+			if ((int)(visiblePoints.size()) == j)
+				break;
+			if (visiblePoints.at(j) == true)
+				listBarWidth.append(columnBarLines.length());
+		}
+		if (orientation == Histogram::Vertical)
+			for (int i = 0; i < valuesStrings.size(); i++) {
+				w = fm.boundingRect(valuesStrings.at(i)).width();
+				tempPoint.setX(pointsScene.at(i).x() - w / 2);
+				tempPoint.setY(pointsScene.at(i).y() + listBarWidth.at(i) / 2 - valuesDistance + h / 2 + w / 2);
+				valuesPoints.append(tempPoint);
+			}
+		else {
+			for (int i = 0; i < valuesStrings.size(); i++) {
+				w = fm.boundingRect(valuesStrings.at(i)).width();
+				tempPoint.setX(pointsScene.at(i).x() - listBarWidth.at(i) / 2 - valuesDistance + h / 2 - w / 2 - 2);
+				tempPoint.setY(pointsScene.at(i).y() + w / 2);
+				valuesPoints.append(tempPoint);
+			}
+		}
+		break;
+	}
 	}
 
 	QTransform trafo;

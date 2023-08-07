@@ -6,7 +6,7 @@ Description
 
 Labplot Version
 ------------------
+<!-- Add text from the labplot executable between the ``` ``` block below: Help -> About Labplot -->
 ```
-<!-- Add text from the labplot executable: Help -> About Labplot -->
 
 ```
