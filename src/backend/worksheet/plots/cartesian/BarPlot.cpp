@@ -970,8 +970,12 @@ void BarPlotPrivate::updateValues() {
 					m_valuesStrings << prefix + QString::number(point.y(), value->numericFormat(), 1) + QString::fromStdString("%") + suffix;
 				else
 					m_valuesStrings << prefix + QString::number(point.y()) + suffix;
-			} else
-				m_valuesStrings << prefix + QString::number(point.x()) + suffix;
+			} else {
+				if (type == BarPlot::Type::Stacked_100_Percent)
+					m_valuesStrings << prefix + QString::number(point.x(), value->numericFormat(), 1) + QString::fromStdString("%") + suffix;
+				else
+					m_valuesStrings << prefix + QString::number(point.x()) + suffix;
+			}
 		}
 	} else if (value->type() == Value::CustomColumn) {
 		const auto* valuesColumn = value->column();
