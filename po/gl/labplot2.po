@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2016, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-05 00:41+0000\n"
-"PO-Revision-Date: 2020-01-12 12:23+0100\n"
+"PO-Revision-Date: 2023-08-06 05:44+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3770,7 +3770,7 @@ msgstr "Desviación absoluta da mediana"
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:185
 #, kde-format
 msgid "Mean absolute deviation around median"
-msgstr "Desviación absoluta da media con respecto á mediana"
+msgstr "Desviación absoluta da media con respecto á mediana."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedianDeviation)
 #: src/backend/gsl/functions.cpp:253
@@ -3778,7 +3778,7 @@ msgstr "Desviación absoluta da media con respecto á mediana"
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:192
 #, kde-format
 msgid "Median absolute deviation"
-msgstr "Desviación absoluta da mediana"
+msgstr "Desviación absoluta da mediana."
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
@@ -5790,7 +5790,7 @@ msgstr "circular"
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:61
 #, kde-format
 msgid "Auto"
-msgstr "Automático"
+msgstr "Automático."
 
 #: src/backend/nsl/nsl_conv.c:21
 #, fuzzy, kde-format
@@ -7046,7 +7046,7 @@ msgstr "%1: definir a imaxe de fondo"
 #: src/kdefrontend/ui/labelwidget.ui:275
 #, kde-format
 msgid "Visible"
-msgstr "Visíbel"
+msgstr "Visíbel."
 
 #: src/backend/worksheet/Image.cpp:154
 #, fuzzy, kde-format
@@ -7857,7 +7857,7 @@ msgstr "Correlación automática ou cruzada"
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:147
 #, kde-format
 msgid "Legend"
-msgstr "Lenda"
+msgstr "Lenda."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:374
 #, kde-format
@@ -16901,7 +16901,7 @@ msgstr "Medicións de dispersión"
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:178
 #, kde-format
 msgid "Mean absolute deviation around mean"
-msgstr "Desviación absoluta da media con respecto á media"
+msgstr "Desviación absoluta da media con respecto á media."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:85
@@ -17815,7 +17815,7 @@ msgstr "Intensidade:"
 #: src/kdefrontend/ui/labelwidget.ui:173 src/kdefrontend/ui/labelwidget.ui:234
 #, kde-format
 msgid "Vertical position relative to label's parent"
-msgstr "Posición vertical relativa ao contedor da etiqueta"
+msgstr "Posición vertical relativa ao contedor da etiqueta."
 
 #. i18n: ectx: property (text), widget (QLabel, lHue)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:917
@@ -17893,7 +17893,7 @@ msgstr "Retirar as comiñas"
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
 #, kde-format
 msgid "Convert NaN to 0"
-msgstr "Converter NaN en 0"
+msgstr "Converter NaN en 0."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:205
@@ -17991,7 +17991,7 @@ msgstr "Orde dos bytes:"
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:23
 #, kde-format
 msgid "Create index column"
-msgstr "Crear unha columna de índice"
+msgstr "Crear unha columna de índice."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
@@ -18045,7 +18045,7 @@ msgstr "Base de datos"
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:39
 #, kde-format
 msgid "enable"
-msgstr "activar"
+msgstr "Activar."
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomConnection)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:46
@@ -18177,7 +18177,7 @@ msgstr "Simplifizar os espazos en branco."
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:144
 #, kde-format
 msgid "Remove quotes"
-msgstr "Retirar as comiñas"
+msgstr "Retirar as comiñas."
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:193
@@ -18247,7 +18247,7 @@ msgstr "Actualizar"
 #: src/kdefrontend/ui/datasources/hdf5optionswidget.ui:71
 #, kde-format
 msgid "Shows the content of the selected HDF5 file"
-msgstr "Amosa o contido do ficheiro HDF5 seleccionado"
+msgstr "Amosa o contido do ficheiro HDF5 seleccionado."
 
 #. i18n: ectx: property (text), widget (QLabel, lImportFormat)
 #: src/kdefrontend/ui/datasources/imageoptionswidget.ui:30
@@ -18364,7 +18364,7 @@ msgstr "Porto serie"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:155
 #, kde-format
 msgid "Manage filters"
-msgstr "Xestionar os filtros"
+msgstr "Xestionar os filtros."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:188
@@ -18387,7 +18387,7 @@ msgstr "Ruta relativa:"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:304
 #, kde-format
 msgid "Show file info"
-msgstr "Amosar información do ficheiro"
+msgstr "Amosar información do ficheiro."
 
 #. i18n: ectx: property (text), widget (QLabel, lBaudRate)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:330
@@ -18581,7 +18581,7 @@ msgstr " ms"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:862
 #, kde-format
 msgid "Link the file"
-msgstr "Ligar co ficheiro"
+msgstr "Ligar co ficheiro."
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:23
@@ -18602,7 +18602,7 @@ msgstr "Obxectos para importar"
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Import unused object"
-msgstr "Importar un obxecto non usado"
+msgstr "Importar un obxecto non usado."
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
@@ -18639,7 +18639,7 @@ msgstr "Consultar"
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:99
 #, kde-format
 msgid "Import object names"
-msgstr "Importar nomes de obxecto"
+msgstr "Importar nomes de obxecto."
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twContent)
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, twContent)
@@ -18647,7 +18647,7 @@ msgstr "Importar nomes de obxecto"
 #: src/kdefrontend/ui/datasources/netcdfoptionswidget.ui:23
 #, kde-format
 msgid "Shows the content of the selected NetCDF file"
-msgstr "Amosa o contido do ficheiro NetCDF seleccionado"
+msgstr "Amosa o contido do ficheiro NetCDF seleccionado."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:27
@@ -18705,19 +18705,19 @@ msgstr "Nome de usuario:"
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:95
 #, kde-format
 msgid "Set client ID"
-msgstr "Definir o identificador de cliente"
+msgstr "Definir o identificador de cliente."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbAuthentication)
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:102
 #, kde-format
 msgid "Use authentication"
-msgstr "Usar autenticación"
+msgstr "Usar autenticación."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRetain)
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:109
 #, kde-format
 msgid "Interpret retain messages"
-msgstr "Interpretar as mensaxes de conservación"
+msgstr "Interpretar as mensaxes de conservación."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, MQTTErrorWidget)
 #: src/kdefrontend/ui/datasources/mqtterrorwidget.ui:14
@@ -18765,7 +18765,7 @@ msgstr "QoS 2"
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:30
 #, kde-format
 msgid "Shows the content of the selected ROOT file"
-msgstr "Amosa o contido do ficheiro ROOT seleccionado"
+msgstr "Amosa o contido do ficheiro ROOT seleccionado."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFirst)
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:72
@@ -19265,7 +19265,7 @@ msgstr "Datos:"
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:56
 #, kde-format
 msgid "visible"
-msgstr "visíbel"
+msgstr "Visíbel."
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionXLogicalDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX)
@@ -19775,7 +19775,7 @@ msgstr "Ata:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1079
 #, kde-format
 msgid "Add new scale breaking"
-msgstr "Engadir unha nova interrupción da escala"
+msgstr "Engadir unha nova interrupción da escala."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveXBreak)
 #. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveYBreak)
@@ -19783,7 +19783,7 @@ msgstr "Engadir unha nova interrupción da escala"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1089
 #, kde-format
 msgid "Remove scale breaking"
-msgstr "Retirar a interrupción da escala"
+msgstr "Retirar a interrupción da escala."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbXBreak)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbYBreak)
@@ -19791,7 +19791,7 @@ msgstr "Retirar a interrupción da escala"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1099
 #, kde-format
 msgid "Current scale breaking"
-msgstr "Interrupción actual da escala"
+msgstr "Interrupción actual da escala."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1028
@@ -19919,13 +19919,13 @@ msgstr "Designación da gráfica:"
 #: src/kdefrontend/ui/dockwidgets/cursordock.ui:19
 #, kde-format
 msgid "Cursor 1"
-msgstr "Cursor 1"
+msgstr "Cursor 1."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCursor1en)
 #: src/kdefrontend/ui/dockwidgets/cursordock.ui:42
 #, kde-format
 msgid "Cursor 2"
-msgstr "Cursor 2"
+msgstr "Cursor 2."
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionX)
@@ -19942,7 +19942,7 @@ msgstr "Cursor 2"
 #: src/kdefrontend/ui/labelwidget.ui:83 src/kdefrontend/ui/labelwidget.ui:353
 #, kde-format
 msgid "Horizontal position relative to label's parent"
-msgstr "Posición horizontal relativa ao contedor da etiqueta"
+msgstr "Posición horizontal relativa ao contedor da etiqueta."
 
 #. i18n: ectx: property (text), widget (QLabel, lMinimum)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
@@ -20541,7 +20541,7 @@ msgstr "1 de sinal de datos de y:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:78
 #, kde-format
 msgid "intermediate points to evaluate between each two points"
-msgstr "puntos intermediarios para avaliar entre cada dous puntos"
+msgstr "puntos intermediarios para avaliar entre cada dous puntos."
 
 #. i18n: ectx: property (text), widget (QLabel, lDropLines)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:123
@@ -20642,7 +20642,7 @@ msgstr "Derivada:"
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:116
 #, kde-format
 msgid "Functions"
-msgstr "Funcións"
+msgstr "Funcións."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
@@ -20654,7 +20654,7 @@ msgstr "Funcións"
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:126
 #, kde-format
 msgid "Constants"
-msgstr "Constantes"
+msgstr "Constantes."
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation)
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:170
@@ -20686,13 +20686,13 @@ msgstr "col ="
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:58
 #, kde-format
 msgid "Fit results"
-msgstr "Axustar os resultados"
+msgstr "Axustar os resultados."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:84
 #, kde-format
 msgid "Fit model category"
-msgstr "Categoría do modelo de axuste"
+msgstr "Categoría do modelo de axuste."
 
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:87
@@ -20704,7 +20704,7 @@ msgstr "Categoría:"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:94
 #, kde-format
 msgid "Weight for x data"
-msgstr "Peso dos datos de x"
+msgstr "Peso dos datos de x."
 
 #. i18n: ectx: property (text), widget (QLabel, lXWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:97
@@ -20717,7 +20717,7 @@ msgstr "Peso de x:"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:110
 #, kde-format
 msgid "Advanced fit options"
-msgstr "Opcións avanzadas de axuste"
+msgstr "Opcións avanzadas de axuste."
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:113
@@ -20741,19 +20741,19 @@ msgstr "Opcións"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:146
 #, kde-format
 msgid "Source of y data"
-msgstr "Fonte dos datos de y"
+msgstr "Fonte dos datos de y."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:169
 #, kde-format
 msgid "Type of data source"
-msgstr "Tipo de fonte de datos"
+msgstr "Tipo de fonte de datos."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:179
 #, kde-format
 msgid "Source of x data"
-msgstr "Fonte dos datos de x"
+msgstr "Fonte dos datos de x."
 
 #. i18n: ectx: property (toolTip), widget (QTabWidget, twResults)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:189
@@ -20889,32 +20889,31 @@ msgstr "Intervalo nas X"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:533
 #, kde-format
 msgid "Weight for y data"
-msgstr "Peso dos datos de y"
+msgstr "Peso dos datos de y."
 
 #. i18n: ectx: property (text), widget (QLabel, lYWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:536
-#, fuzzy, kde-format
-#| msgid "x-Weight:"
+#, kde-format
 msgid "Y-Weight:"
-msgstr "Peso de x:"
+msgstr "Peso de Y:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:546
 #, kde-format
 msgid "Degree of fit model"
-msgstr "Grao do modelo de axuste"
+msgstr "Grao do modelo de axuste."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lData)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:594
 #, kde-format
 msgid "Data to fit"
-msgstr "Datos para axustar"
+msgstr "Datos para axustar."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lModel)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:620
 #, kde-format
 msgid "Fit model type"
-msgstr "Tipo de modelo de axuste"
+msgstr "Tipo de modelo de axuste."
 
 #. i18n: ectx: property (text), widget (QLabel, lModel)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:623
@@ -20926,7 +20925,7 @@ msgstr "Modelo:"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:658
 #, kde-format
 msgid "Function to fit and options"
-msgstr "Función para axustar e opcións"
+msgstr "Función para axustar e opcións."
 
 #. i18n: ectx: property (text), widget (QToolButton, lFit)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:667
@@ -20938,7 +20937,7 @@ msgstr "Axustar:"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:693
 #, kde-format
 msgid "Show fit curve"
-msgstr "Amosar a curva de axuste"
+msgstr "Amosar a curva de axuste."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lParameters)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:721
@@ -20956,19 +20955,19 @@ msgstr "Parámetros:"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:747
 #, kde-format
 msgid "Source curve"
-msgstr "Curva da fonte"
+msgstr "Curva da fonte."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lName)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:757
 #, kde-format
 msgid "Name of the fit curve"
-msgstr "Nome da curva de axuste"
+msgstr "Nome da curva de axuste."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lWeights)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:808
 #, kde-format
 msgid "How to weight the data points"
-msgstr "Como pesar os puntos de datos"
+msgstr "Como pesar os puntos de datos."
 
 #. i18n: ectx: property (text), widget (QToolButton, lWeights)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:814
@@ -20981,7 +20980,7 @@ msgstr "Pesos"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:872
 #, kde-format
 msgid "Optional comment"
-msgstr "Comentario opcional"
+msgstr "Comentario opcional."
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:979
@@ -20999,7 +20998,7 @@ msgstr "Seleccionar constantes predefinidas"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1024
 #, kde-format
 msgid "Run fit"
-msgstr "Executar o axuste"
+msgstr "Executar o axuste."
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1027
@@ -21019,7 +21018,7 @@ msgstr "Función de Spence"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1118
 #, kde-format
 msgid "Function of fit model"
-msgstr "Función de modelo de axuste"
+msgstr "Función de modelo de axuste."
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1121
@@ -21070,7 +21069,7 @@ msgstr "Dous lados"
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:238
 #, kde-format
 msgid "Shifted"
-msgstr "Desprazado"
+msgstr "Desprazado."
 
 #. i18n: ectx: property (text), widget (QLabel, lWindow)
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:247
@@ -21082,7 +21081,7 @@ msgstr "Xanela:"
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:373
 #, kde-format
 msgid "Absolute area"
-msgstr "Zona absoluta"
+msgstr "Zona absoluta."
 
 #. i18n: ectx: property (text), widget (QLabel, lVariant)
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:283
@@ -21124,7 +21123,7 @@ msgstr "Avaliar:"
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:401
 #, kde-format
 msgid "number should be bigger than number of data points"
-msgstr "o número debería ser superior ao número de puntos de datos"
+msgstr "O número debería ser superior ao número de puntos de datos."
 
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:131
@@ -21183,19 +21182,19 @@ msgstr "Aplicar"
 #: src/kdefrontend/ui/fitoptionswidget.ui:53
 #, kde-format
 msgid "show the fit function with the given start parameters"
-msgstr "amosar a función de axuste dos parámetros de inicio indicado"
+msgstr "Amosar a función de axuste dos parámetros de inicio indicado."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPreview)
 #: src/kdefrontend/ui/fitoptionswidget.ui:56
 #, kde-format
 msgid "Preview fit function"
-msgstr "Obter unha vista previa da función de axuste"
+msgstr "Obter unha vista previa da función de axuste."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEps)
 #: src/kdefrontend/ui/fitoptionswidget.ui:66
 #, kde-format
 msgid "Specify the tolerance for the fit algorithm convergence"
-msgstr "Indicar a tolerancia da converxencia do algoritmo de axuste"
+msgstr "Indicar a tolerancia da converxencia do algoritmo de axuste."
 
 #. i18n: ectx: property (text), widget (QLabel, lEps)
 #: src/kdefrontend/ui/fitoptionswidget.ui:69
@@ -21227,7 +21226,7 @@ msgstr "Usar os erros de datos indicados"
 #: src/kdefrontend/ui/fitoptionswidget.ui:95
 #, kde-format
 msgid "Number of points to use when evaluating the final fit function"
-msgstr "Número de puntos para usar ao avaliar a función de axuste final"
+msgstr "Número de puntos para usar ao avaliar a función de axuste final."
 
 #. i18n: ectx: property (text), widget (QLabel, lEvaluatedPoints)
 #: src/kdefrontend/ui/fitoptionswidget.ui:98
@@ -21251,7 +21250,7 @@ msgstr ".."
 #: src/kdefrontend/ui/fitoptionswidget.ui:112
 #, kde-format
 msgid "Specify maximum number of iterations for the fit algorithm"
-msgstr "Indique o número máximo de iteracións para o algoritmo de axuste"
+msgstr "Indique o número máximo de iteracións para o algoritmo de axuste."
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxIterations)
 #: src/kdefrontend/ui/fitoptionswidget.ui:115
@@ -21263,25 +21262,25 @@ msgstr "Iteracións máx.:"
 #: src/kdefrontend/ui/fitoptionswidget.ui:141
 #, kde-format
 msgid "Select range of data to use for fitting"
-msgstr "Seleccione o intervalo de datos para usar para o axuste"
+msgstr "Seleccione o intervalo de datos para usar para o axuste."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoRange)
 #: src/kdefrontend/ui/fitoptionswidget.ui:144
 #, kde-format
 msgid "Auto fit range"
-msgstr "Intervalo de axuste automático"
+msgstr "Intervalo de axuste automático."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoEvalRange)
 #: src/kdefrontend/ui/fitoptionswidget.ui:154
 #, kde-format
 msgid "Select the range to evaluate the resulting fit function"
-msgstr "Seleccionar o intervalo para avaliar a función de axuste resultante"
+msgstr "Seleccionar o intervalo para avaliar a función de axuste resultante."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoEvalRange)
 #: src/kdefrontend/ui/fitoptionswidget.ui:157
 #, kde-format
 msgid "Auto evaluation range"
-msgstr "Intervalo de avaliación automática"
+msgstr "Intervalo de avaliación automática."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseResults)
 #: src/kdefrontend/ui/fitoptionswidget.ui:167
@@ -21295,7 +21294,7 @@ msgstr ""
 #: src/kdefrontend/ui/fitoptionswidget.ui:170
 #, kde-format
 msgid "Use results as new start values"
-msgstr "Usar os resultados como novos valores de inicio"
+msgstr "Usar os resultados como novos valores de inicio."
 
 #. i18n: ectx: property (text), widget (QLabel, lRobust)
 #: src/kdefrontend/ui/fitoptionswidget.ui:183
@@ -21537,7 +21536,7 @@ msgstr "Tópico:"
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:304
 #, kde-format
 msgid "Activate"
-msgstr "Activar"
+msgstr "Activar."
 
 #. i18n: ectx: property (text), widget (QLabel, lColorMap)
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:40
@@ -21581,13 +21580,13 @@ msgstr "10"
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:241
 #, kde-format
 msgid "Mesh"
-msgstr "Malla"
+msgstr "Malla."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbRelativeScaleEnabled)
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:248
 #, kde-format
 msgid "Relative scale"
-msgstr "Escala relativa"
+msgstr "Escala relativa."
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsTop)
 #. i18n: ectx: property (text), widget (QLabel, lLevels)
@@ -21619,7 +21618,7 @@ msgstr "Cor das liñas:"
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:341
 #, kde-format
 msgid "Multicoloring"
-msgstr "Coloración múltipla"
+msgstr "Coloración múltipla."
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, PlotTemplateDialog)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:14
@@ -21785,19 +21784,19 @@ msgstr "Altura:"
 #: src/kdefrontend/ui/settingsnotebookpage.ui:40
 #, kde-format
 msgid "Syntax Completion"
-msgstr "Completado de sintaxe"
+msgstr "Completado de sintaxe."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLineNumbers)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:47
 #, kde-format
 msgid "Line Numbers"
-msgstr "Números de liña"
+msgstr "Números de liña."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLatexTypesetting)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:54
 #, kde-format
 msgid "LaTeX Typesetting"
-msgstr "Composición con LaTeX"
+msgstr "Composición con LaTeX."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnimations)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:61
@@ -21875,7 +21874,7 @@ msgstr "Tema:"
 #: src/kdefrontend/ui/settingsworksheetpage.ui:82
 #, kde-format
 msgid "Interactive"
-msgstr "Interactivo"
+msgstr "Interactivo."
 
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
 #: src/kdefrontend/ui/settingsworksheetpage.ui:111
@@ -21887,7 +21886,7 @@ msgstr "Rendemento"
 #: src/kdefrontend/ui/settingsworksheetpage.ui:118
 #, kde-format
 msgid "Enable double buffering"
-msgstr "Activar o dobre búfer"
+msgstr "Activar o dobre búfer."
 
 #. i18n: ectx: property (text), widget (QLabel, lTexEngine)
 #: src/kdefrontend/ui/settingsworksheetpage.ui:154
@@ -22107,7 +22106,7 @@ msgstr "f(x) = "
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
 #, kde-format
 msgid "auto update"
-msgstr "actualización automática"
+msgstr "Actualización automática."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
