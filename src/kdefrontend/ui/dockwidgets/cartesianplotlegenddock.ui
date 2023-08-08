@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -125,6 +125,7 @@
         <widget class="QLabel" name="lFormat">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -291,6 +292,7 @@
         <widget class="QLabel" name="lPosition">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -466,6 +468,7 @@
         <widget class="QLabel" name="lBackground">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -568,6 +571,7 @@
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -619,6 +623,7 @@
         <widget class="QLabel" name="lMargin">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -631,6 +636,7 @@
         <widget class="QLabel" name="lSpacing">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -850,9 +856,24 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>UTCDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>UTCDateTimeEdit.h</header>
   </customwidget>
   <customwidget>
    <class>KColorButton</class>
@@ -863,21 +884,6 @@
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
-  </customwidget>
-  <customwidget>
-   <class>NumberSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>NumberSpinBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ResizableTextEdit</class>
-   <extends>QTextEdit</extends>
-   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>UTCDateTimeEdit</class>
-   <extends>QDateTimeEdit</extends>
-   <header>UTCDateTimeEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

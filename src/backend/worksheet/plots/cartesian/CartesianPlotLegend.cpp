@@ -455,9 +455,8 @@ void CartesianPlotLegendPrivate::retransform() {
 	float legendHeight = layoutTopMargin + layoutBottomMargin; // margins
 	legendHeight += rowCount * h; // height of the rows
 	legendHeight += (rowCount - 1) * layoutVerticalSpacing; // spacing between the rows
-	if (title->isVisible() && !title->text().text.isEmpty()) {
-		legendHeight += title->graphicsItem()->boundingRect().height(); // legend title
-	}
+	if (title->isVisible() && !title->text().text.isEmpty())
+		legendHeight += title->graphicsItem()->boundingRect().height(); // legend titl
 
 	rect.setX(-legendWidth / 2);
 	rect.setY(-legendHeight / 2);
@@ -813,7 +812,8 @@ bool CartesianPlotLegendPrivate::translatePainter(QPainter* painter, int& row, i
 
 			row = 0;
 			painter->restore();
-			int deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col); // the width of the current columns
+
+			double deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col - 1); // width of the current column (subtract 1 because of ++col above)
 			deltaX += 2 * layoutHorizontalSpacing; // spacing between two columns
 			painter->translate(deltaX, 0);
 			painter->save();
@@ -821,7 +821,7 @@ bool CartesianPlotLegendPrivate::translatePainter(QPainter* painter, int& row, i
 	} else { // row major order
 		++col;
 		if (col != columnCount) {
-			int deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col); // the width of the current columns
+			double deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col - 1); // width of the current column (subtract 1 because of ++col above)
 			deltaX += 2 * layoutHorizontalSpacing; // spacing between two columns
 			painter->translate(deltaX, 0);
 		} else {
