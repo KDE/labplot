@@ -52,7 +52,7 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "FITSHeaderEditDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -64,7 +64,7 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent)
  * \brief FITSHeaderEditDialog::~FITSHeaderEditDialog
  */
 FITSHeaderEditDialog::~FITSHeaderEditDialog() {
-	KConfigGroup conf(Settings::config(), "FITSHeaderEditDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 	delete m_headerEditWidget;
 }

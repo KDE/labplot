@@ -44,7 +44,7 @@ void SettingsNotebookPage::applySettings() {
 	if (!m_changed)
 		return;
 
-	KConfigGroup group = Settings::config()->group(QLatin1String("Settings_Notebook"));
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
 
 	// Appearance
 	group.writeEntry(QLatin1String("SyntaxHighlighting"), ui.chkSyntaxHighlighting->isChecked());
@@ -72,7 +72,7 @@ void SettingsNotebookPage::restoreDefaults() {
 }
 
 void SettingsNotebookPage::loadSettings() {
-	const KConfigGroup group = Settings::config()->group(QLatin1String("Settings_Notebook"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
 
 	// Appearance
 	ui.chkSyntaxHighlighting->setChecked(group.readEntry(QLatin1String("SyntaxHighlighting"), true));

@@ -61,7 +61,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "FITSHeaderEditNewKeywordDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditNewKeywordDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -70,7 +70,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget* parent)
 }
 
 FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog() {
-	KConfigGroup conf(Settings::config(), "FITSHeaderEditNewKeywordDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditNewKeywordDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

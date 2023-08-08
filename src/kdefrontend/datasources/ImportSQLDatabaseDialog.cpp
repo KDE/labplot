@@ -57,7 +57,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "ImportSQLDatabaseDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportSQLDatabaseDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -67,7 +67,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent)
 
 ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {
 	// save current settings
-	KConfigGroup conf(Settings::config(), "ImportSQLDatabaseDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportSQLDatabaseDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

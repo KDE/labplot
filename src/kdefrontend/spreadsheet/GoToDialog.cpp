@@ -60,7 +60,7 @@ GoToDialog::GoToDialog(QWidget* parent)
 	layout->addWidget(btnBox, 2, 1);
 
 	// restore saved settings if available
-	KConfigGroup conf(Settings::config(), QLatin1String("GoToDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("GoToDialog"));
 
 	create(); // ensure there's a window created
 	if (conf.exists()) {
@@ -72,7 +72,7 @@ GoToDialog::GoToDialog(QWidget* parent)
 
 GoToDialog::~GoToDialog() {
 	// save the current settings
-	KConfigGroup conf(Settings::config(), QLatin1String("GoToDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("GoToDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

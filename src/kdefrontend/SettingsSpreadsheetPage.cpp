@@ -28,7 +28,7 @@ void SettingsSpreadsheetPage::applySettings() {
 	if (!m_changed)
 		return;
 
-	KConfigGroup group = Settings::config()->group(QLatin1String("Settings_Spreadsheet"));
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Spreadsheet"));
 	group.writeEntry(QLatin1String("ShowColumnType"), ui.chkShowColumnType->isChecked());
 	group.writeEntry(QLatin1String("ShowPlotDesignation"), ui.chkShowPlotDesignation->isChecked());
 }
@@ -39,7 +39,7 @@ void SettingsSpreadsheetPage::restoreDefaults() {
 }
 
 void SettingsSpreadsheetPage::loadSettings() {
-	const KConfigGroup group = Settings::config()->group(QLatin1String("Settings_Spreadsheet"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Spreadsheet"));
 	ui.chkShowColumnType->setChecked(group.readEntry(QLatin1String("ShowColumnType"), true));
 	ui.chkShowPlotDesignation->setChecked(group.readEntry(QLatin1String("ShowPlotDesignation"), true));
 }

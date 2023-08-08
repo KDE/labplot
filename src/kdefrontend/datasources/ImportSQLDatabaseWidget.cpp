@@ -142,7 +142,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	readConnections();
 
 	// load last used connection and other settings
-	KConfigGroup config(Settings::config(), "ImportSQLDatabaseWidget");
+	KConfigGroup config = Settings::group(QStringLiteral("ImportSQLDatabaseWidget"));
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(config.readEntry("Connection", "")));
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
@@ -166,7 +166,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 
 ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	// save current settings
-	KConfigGroup config(Settings::config(), "ImportSQLDatabaseWidget");
+	KConfigGroup config = Settings::group(QStringLiteral("ImportSQLDatabaseWidget"));
 	config.writeEntry("Connection", ui.cbConnection->currentText());
 	config.writeEntry("ImportFrom", ui.cbImportFrom->currentIndex());
 	config.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());

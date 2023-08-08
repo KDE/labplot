@@ -102,7 +102,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	setWindowIcon(QIcon::fromTheme(QLatin1String("document-export-database")));
 
 	// restore saved settings if available
-	KConfigGroup conf(Settings::config(), "ExportWorksheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->cbExportTo->setCurrentIndex(conf.readEntry("ExportTo", 0));
 	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 0));
@@ -122,7 +122,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 
 ExportWorksheetDialog::~ExportWorksheetDialog() {
 	// save current settings
-	KConfigGroup conf(Settings::config(), "ExportWorksheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
 	conf.writeEntry("ExportTo", ui->cbExportTo->currentIndex());
 	conf.writeEntry("Area", ui->cbExportArea->currentIndex());
@@ -148,7 +148,7 @@ void ExportWorksheetDialog::setProjectFileName(const QString& name) {
 void ExportWorksheetDialog::setFileName(const QString& name) {
 	if (m_projectPath.isEmpty()) {
 		// no project folder is available (yet), use the last used directory in this dialog
-		KConfigGroup conf(Settings::config(), "ExportWorksheetDialog");
+		KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 		QString dir = conf.readEntry("LastDir", "");
 		if (dir.isEmpty())
 			dir = QDir::homePath();
@@ -215,7 +215,7 @@ void ExportWorksheetDialog::okClicked() {
 			return;
 	}
 
-	KConfigGroup conf(Settings::config(), "ExportWorksheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	const auto& path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
@@ -247,7 +247,7 @@ void ExportWorksheetDialog::toggleOptions() {
 	opens a file dialog and lets the user select the file.
 */
 void ExportWorksheetDialog::selectFile() {
-	KConfigGroup conf(Settings::config(), "ExportWorksheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	const QString dir = conf.readEntry("LastDir", "");
 
 	DEBUG(Q_FUNC_INFO << ", format" << ui->cbFormat->currentIndex())

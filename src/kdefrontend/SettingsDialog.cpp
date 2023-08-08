@@ -97,7 +97,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "SettingsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("SettingsDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -106,7 +106,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 }
 
 SettingsDialog::~SettingsDialog() {
-	KConfigGroup dialogConfig = Settings::config()->group("SettingsDialog");
+	KConfigGroup dialogConfig = Settings::group(QStringLiteral("SettingsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
 }
 
@@ -146,7 +146,7 @@ void SettingsDialog::applySettings() {
 	m_notebookPage->applySettings();
 #endif
 
-	Settings::config()->sync();
+	Settings::sync();
 
 #ifdef HAVE_KUSERFEEDBACK
 	auto* mainWin = static_cast<MainWin*>(parent());

@@ -7,8 +7,9 @@ class KConfigGroup;
 
 namespace Settings {
 
-KSharedConfig::Ptr config();
+KConfigGroup group(const QString& name);
 KConfigGroup settingsGeneral();
+bool sync();
 
 #define SETUP_SETTING(setting_name, datatype)                                                                                                                  \
 	datatype read##setting_name();                                                                                                                             \

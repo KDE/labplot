@@ -85,7 +85,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "FunctionValuesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FunctionValuesDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -94,7 +94,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 }
 
 FunctionValuesDialog::~FunctionValuesDialog() {
-	KConfigGroup conf(Settings::config(), "FunctionValuesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FunctionValuesDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

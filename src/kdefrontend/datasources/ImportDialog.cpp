@@ -58,7 +58,7 @@ ImportDialog::~ImportDialog() {
 
 	// save the last used import position for file imports, no need to do this for live data source (cbPosition=0)
 	if (cbPosition) {
-		KConfigGroup conf(Settings::config(), "ImportDialog");
+		KConfigGroup conf = Settings::group(QStringLiteral("ImportDialog"));
 		conf.writeEntry("Position", cbPosition->currentIndex());
 	}
 }
@@ -106,7 +106,7 @@ void ImportDialog::setModel() {
 	cbPosition->addItem(i18n("Append"));
 	cbPosition->addItem(i18n("Prepend"));
 	cbPosition->addItem(i18n("Replace"));
-	KConfigGroup conf(Settings::config(), "ImportDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportDialog"));
 	cbPosition->setCurrentIndex(conf.readEntry("Position", 0));
 
 	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);

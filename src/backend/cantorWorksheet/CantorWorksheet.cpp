@@ -114,7 +114,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 		}
 
 		// default settings
-		const KConfigGroup group = Settings::config()->group(QLatin1String("Settings_Notebook"));
+		const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
 
 		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
 		// and we need to go through the actions provided in cantor_part.

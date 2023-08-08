@@ -199,7 +199,7 @@ void CartesianPlotLegendDock::updateLocale() {
 }
 
 void CartesianPlotLegendDock::updateUnits() {
-	const KConfigGroup group = Settings::config()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;

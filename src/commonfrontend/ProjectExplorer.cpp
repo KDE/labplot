@@ -110,7 +110,7 @@ ProjectExplorer::~ProjectExplorer() {
 			status += QString::number(i);
 		}
 	}
-	KConfigGroup group(Settings::config(), QLatin1String("ProjectExplorer"));
+	KConfigGroup group = Settings::group(QStringLiteral("ProjectExplorer"));
 	group.writeEntry("VisibleColumns", status);
 }
 
@@ -250,7 +250,7 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 	// this is done here since the number of columns is  not available in createActions() yet.
 	if (list_showColumnActions.isEmpty()) {
 		// read the status of the column actions if available
-		KConfigGroup group(Settings::config(), QLatin1String("ProjectExplorer"));
+		KConfigGroup group = Settings::group(QStringLiteral("ProjectExplorer"));
 		const QString& status = group.readEntry(QLatin1String("VisibleColumns"), QString());
 		QVector<int> checkedActions;
 		if (!status.isEmpty()) {

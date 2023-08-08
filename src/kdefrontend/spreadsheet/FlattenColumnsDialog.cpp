@@ -65,7 +65,7 @@ FlattenColumnsDialog::FlattenColumnsDialog(Spreadsheet* s, QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FlattenColumnsDialog::reject);
 
 	// restore saved settings if available
-	KConfigGroup conf(Settings::config(), QLatin1String("FlattenColumnsDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("FlattenColumnsDialog"));
 	create(); // ensure there's a window created
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
@@ -76,7 +76,7 @@ FlattenColumnsDialog::FlattenColumnsDialog(Spreadsheet* s, QWidget* parent)
 
 FlattenColumnsDialog::~FlattenColumnsDialog() {
 	// save the current settings
-	KConfigGroup conf(Settings::config(), QLatin1String("FlattenColumnsDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("FlattenColumnsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

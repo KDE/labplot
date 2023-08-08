@@ -91,7 +91,7 @@ GridDialog::GridDialog(QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), QLatin1String("GridDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("GridDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -101,7 +101,7 @@ GridDialog::GridDialog(QWidget* parent)
 
 GridDialog::~GridDialog() {
 	// save the current settings
-	KConfigGroup conf(Settings::config(), QLatin1String("GridDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("GridDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

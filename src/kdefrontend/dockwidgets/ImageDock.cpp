@@ -192,7 +192,7 @@ void ImageDock::updateLocale() {
 }
 
 void ImageDock::updateUnits() {
-	const KConfigGroup group = Settings::config()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;

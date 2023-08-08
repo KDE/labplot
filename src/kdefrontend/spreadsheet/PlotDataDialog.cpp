@@ -144,7 +144,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "PlotDataDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("PlotDataDialog"));
 	if (conf.exists()) {
 		int index = conf.readEntry("CurvePlacement", 0);
 		if (index == 2)
@@ -167,7 +167,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
 
 PlotDataDialog::~PlotDataDialog() {
 	// save current settings
-	KConfigGroup conf(Settings::config(), "PlotDataDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("PlotDataDialog"));
 	int index = 0;
 	if (ui->rbCurvePlacementAllInOnePlotArea->isChecked())
 		index = 1;

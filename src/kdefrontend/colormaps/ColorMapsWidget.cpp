@@ -62,7 +62,7 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent)
 	connect(ui.lwColorMaps, &QListWidget::itemSelectionChanged, this, &ColorMapsWidget::colorMapChanged);
 
 	// select the last used collection
-	KConfigGroup conf(Settings::config(), "ColorMapsWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsWidget"));
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
 		ui.cbCollections->setCurrentIndex(0);
@@ -87,7 +87,7 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent)
 
 ColorMapsWidget::~ColorMapsWidget() {
 	// save the selected collection
-	KConfigGroup conf(Settings::config(), "ColorMapsWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsWidget"));
 	conf.writeEntry("Collection", ui.cbCollections->currentText());
 	conf.writeEntry("ViewIndex", ui.stackedWidget->currentIndex());
 	if (ui.lwColorMaps->currentItem())

@@ -179,7 +179,7 @@ void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
 }
 
 void AsciiOptionsWidget::loadSettings() const {
-	KConfigGroup conf(Settings::config(), "ImportAscii");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportAscii"));
 
 	ui.cbCommentCharacter->setCurrentText(conf.readEntry("CommentCharacter", "#"));
 	ui.cbSeparatingCharacter->setCurrentText(conf.readEntry("SeparatingCharacter", "auto"));
@@ -202,7 +202,7 @@ void AsciiOptionsWidget::loadSettings() const {
 }
 
 void AsciiOptionsWidget::saveSettings() {
-	KConfigGroup conf(Settings::config(), "ImportAscii");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportAscii"));
 
 	conf.writeEntry("CommentCharacter", ui.cbCommentCharacter->currentText());
 	conf.writeEntry("SeparatingCharacter", ui.cbSeparatingCharacter->currentText());

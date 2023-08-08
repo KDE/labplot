@@ -133,7 +133,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -163,7 +163,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 
 ImportProjectDialog::~ImportProjectDialog() {
 	// save current settings
-	KConfigGroup conf(Settings::config(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	QString file;
@@ -367,7 +367,7 @@ void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const
 	opens a file dialog and lets the user select the project file.
 */
 void ImportProjectDialog::selectFile() {
-	KConfigGroup conf(Settings::config(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 
 	QString title;
 	QString lastDir;

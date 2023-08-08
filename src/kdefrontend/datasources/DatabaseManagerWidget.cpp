@@ -208,7 +208,7 @@ void DatabaseManagerWidget::driverChanged() {
 }
 
 void DatabaseManagerWidget::selectFile() {
-	KConfigGroup conf(Settings::config(), QStringLiteral("DatabaseManagerWidget"));
+	KConfigGroup conf = Settings::group(QStringLiteral("DatabaseManagerWidget"));
 	QString dir = conf.readEntry(QStringLiteral("LastDir"), "");
 	QString path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the Database File"), dir);
 	if (path.isEmpty())

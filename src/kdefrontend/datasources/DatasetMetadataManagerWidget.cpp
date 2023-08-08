@@ -79,7 +79,7 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 }
 
 DatasetMetadataManagerWidget::~DatasetMetadataManagerWidget() {
-	KConfigGroup conf(Settings::config(), "DatasetMetadataManagerWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatasetMetadataManagerWidget"));
 
 	// filter settings
 	conf.writeEntry("separator", ui.cbSeparatingCharacter->currentText());
@@ -100,7 +100,7 @@ DatasetMetadataManagerWidget::~DatasetMetadataManagerWidget() {
  * @brief Loads the settings of the widget.
  */
 void DatasetMetadataManagerWidget::loadSettings() {
-	KConfigGroup conf(Settings::config(), "DatasetMetadataManagerWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatasetMetadataManagerWidget"));
 	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("commentChar", "#"));
 	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("separator", "auto"));
 	// TODO: use general setting for decimal separator?

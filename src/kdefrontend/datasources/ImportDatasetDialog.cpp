@@ -55,7 +55,7 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent)
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
-	KConfigGroup conf(Settings::config(), "ImportDatasetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportDatasetDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
@@ -66,7 +66,7 @@ ImportDatasetDialog::ImportDatasetDialog(MainWin* parent)
 }
 
 ImportDatasetDialog::~ImportDatasetDialog() {
-	KConfigGroup conf(Settings::config(), "ImportDatasetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportDatasetDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

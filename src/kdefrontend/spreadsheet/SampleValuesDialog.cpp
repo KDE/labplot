@@ -69,7 +69,7 @@ SampleValuesDialog::SampleValuesDialog(Spreadsheet* s, QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::rejected, this, &SampleValuesDialog::reject);
 
 	// restore saved settings if available
-	KConfigGroup conf(Settings::config(), QLatin1String("SampleValuesDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("SampleValuesDialog"));
 	ui.cbMethod->setCurrentIndex(conf.readEntry("Method", 0));
 	ui.sbValue->setValue(conf.readEntry("Value", 1));
 	methodChanged(ui.cbMethod->currentIndex());
@@ -84,7 +84,7 @@ SampleValuesDialog::SampleValuesDialog(Spreadsheet* s, QWidget* parent)
 
 SampleValuesDialog::~SampleValuesDialog() {
 	// save the current settings
-	KConfigGroup conf(Settings::config(), QLatin1String("SampleValuesDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("SampleValuesDialog"));
 	conf.writeEntry("Method", ui.cbMethod->currentIndex());
 	conf.writeEntry("Value", ui.sbValue->value());
 	KWindowConfig::saveWindowSize(windowHandle(), conf);

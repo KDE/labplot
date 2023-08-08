@@ -40,7 +40,7 @@ SearchReplaceWidget::SearchReplaceWidget(Spreadsheet* spreadsheet, QWidget* pare
 SearchReplaceWidget::~SearchReplaceWidget() {
 	// save the current settings,
 	// save everything except of the patterns, they will be set when the widget is opened again
-	KConfigGroup conf(Settings::config(), QLatin1String("SearchReplaceWidget"));
+	KConfigGroup conf = Settings::group(QLatin1String("SearchReplaceWidget"));
 
 	if (m_searchWidget) {
 		conf.writeEntry("SimpleMatchCase", uiSearch.tbMatchCase->isChecked());
@@ -169,7 +169,7 @@ void SearchReplaceWidget::initSearchWidget() {
 	static_cast<QVBoxLayout*>(layout())->insertWidget(0, m_searchWidget);
 
 	// restore saved settings if available
-	KConfigGroup conf(Settings::config(), QLatin1String("SearchReplaceWidget"));
+	KConfigGroup conf = Settings::group(QLatin1String("SearchReplaceWidget"));
 	uiSearch.cbFind->addItems(conf.readEntry(QLatin1String("SimpleValueHistory"), QStringList()));
 	uiSearch.cbFind->setCurrentText(QString()); // will be set to the initial search pattern later
 	uiSearch.tbMatchCase->setChecked(conf.readEntry(QLatin1String("SimpleMatchCase"), false));
@@ -258,7 +258,7 @@ void SearchReplaceWidget::initSearchReplaceWidget() {
 	uiSearchReplace.dteReplace->setDisplayFormat(defaultDateTimeFormat);
 
 	// restore saved settings if available
-	KConfigGroup conf(Settings::config(), QLatin1String("SearchReplaceWidget"));
+	KConfigGroup conf = Settings::group(QLatin1String("SearchReplaceWidget"));
 	uiSearchReplace.cbDataType->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("DataType", 0)));
 	uiSearchReplace.cbOrder->setCurrentIndex(uiSearchReplace.cbOperator->findData(conf.readEntry("Order", 0)));
 	uiSearchReplace.tbMatchCase->setChecked(conf.readEntry("MatchCase", false));

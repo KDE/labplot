@@ -73,7 +73,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "HistoryDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("HistoryDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -83,7 +83,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 
 HistoryDialog::~HistoryDialog() {
 	// save dialog size
-	KConfigGroup conf(Settings::config(), "HistoryDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("HistoryDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

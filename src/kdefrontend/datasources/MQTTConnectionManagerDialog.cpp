@@ -46,7 +46,7 @@ MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const 
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "MQTTConnectionManagerDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("MQTTConnectionManagerDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -71,7 +71,7 @@ bool MQTTConnectionManagerDialog::initialConnectionChanged() const {
 
 MQTTConnectionManagerDialog::~MQTTConnectionManagerDialog() {
 	// save current settings
-	KConfigGroup conf(Settings::config(), "MQTTConnectionManagerDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("MQTTConnectionManagerDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

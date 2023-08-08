@@ -83,7 +83,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	m_importFileWidget->loadSettings();
 
-	KConfigGroup conf(Settings::config(), "ImportFileDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileDialog"));
 	if (conf.exists()) {
 		m_showOptions = conf.readEntry("ShowOptions", false);
 
@@ -114,7 +114,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 
 ImportFileDialog::~ImportFileDialog() {
 	// save current settings
-	KConfigGroup conf(Settings::config(), "ImportFileDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileDialog"));
 	conf.writeEntry("ShowOptions", m_showOptions);
 	if (cbPosition)
 		conf.writeEntry("Position", cbPosition->currentIndex());

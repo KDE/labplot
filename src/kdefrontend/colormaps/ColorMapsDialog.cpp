@@ -45,7 +45,7 @@ ColorMapsDialog::ColorMapsDialog(QWidget* parent)
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
-	KConfigGroup conf(Settings::config(), "ColorMapsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
@@ -54,7 +54,7 @@ ColorMapsDialog::ColorMapsDialog(QWidget* parent)
 }
 
 ColorMapsDialog::~ColorMapsDialog() {
-	KConfigGroup conf(Settings::config(), "ColorMapsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

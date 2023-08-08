@@ -501,7 +501,7 @@ void SpreadsheetModel::updateHorizontalHeader(bool sendSignal) {
 	while (m_horizontal_header_data.size() > column_count)
 		m_horizontal_header_data.removeLast();
 
-	KConfigGroup group = Settings::config()->group("Settings_Spreadsheet");
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Spreadsheet"));
 	bool showColumnType = group.readEntry(QLatin1String("ShowColumnType"), true);
 	bool showPlotDesignation = group.readEntry(QLatin1String("ShowPlotDesignation"), true);
 

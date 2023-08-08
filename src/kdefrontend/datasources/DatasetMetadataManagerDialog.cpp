@@ -47,7 +47,7 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "DatasetMetadataManagerDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatasetMetadataManagerDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -60,7 +60,7 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 
 DatasetMetadataManagerDialog::~DatasetMetadataManagerDialog() {
 	// save current settings
-	KConfigGroup conf(Settings::config(), "DatasetMetadataManagerDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatasetMetadataManagerDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

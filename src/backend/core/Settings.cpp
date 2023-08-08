@@ -29,7 +29,6 @@
 namespace Settings {
 
 namespace {
-const QLatin1String settingsGeneralConfigName("Settings_General");
 KSharedConfig::Ptr confPtr;
 } // anonymous namespace
 
@@ -39,8 +38,17 @@ KSharedConfig::Ptr config() {
 	return confPtr;
 }
 
+KConfigGroup group(const QString& name) {
+	return config()->group(name);
+}
+
+bool sync() {
+	return config()->sync();
+}
+
 KConfigGroup settingsGeneral() {
-	return config()->group(settingsGeneralConfigName);
+	const QLatin1String settingsGeneralConfigName("Settings_General");
+	return group(settingsGeneralConfigName);
 }
 
 SETUP_SETTING(DockPosBehaviour, DockPosBehaviour, int, settingsGeneral(), DockReopenPositionAfterClose, DockPosBehaviour::AboveLastActive)

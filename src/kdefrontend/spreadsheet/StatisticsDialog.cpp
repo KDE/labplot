@@ -61,7 +61,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>&
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "StatisticsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("StatisticsDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -70,7 +70,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>&
 }
 
 StatisticsDialog::~StatisticsDialog() {
-	KConfigGroup conf(Settings::config(), "StatisticsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("StatisticsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

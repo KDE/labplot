@@ -45,7 +45,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "FITSHeaderEditAddUnitDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditAddUnitDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -54,7 +54,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 }
 
 FITSHeaderEditAddUnitDialog::~FITSHeaderEditAddUnitDialog() {
-	KConfigGroup conf(Settings::config(), "FITSHeaderEditAddUnitDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditAddUnitDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

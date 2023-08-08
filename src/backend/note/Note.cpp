@@ -60,7 +60,7 @@ bool Note::printPreview() const {
 }
 
 bool Note::exportView() const {
-	KConfigGroup conf(Settings::config(), "ExportNote");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportNote"));
 	QString dir = conf.readEntry("LastDir", "");
 	QString extensions = i18n("Text file (*.txt)");
 

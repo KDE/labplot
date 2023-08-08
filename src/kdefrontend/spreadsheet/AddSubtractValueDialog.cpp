@@ -211,7 +211,7 @@ void AddSubtractValueDialog::init() {
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "AddSubtractValueDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("AddSubtractValueDialog"));
 
 	// baseline subtraction specific parameters
 	const auto numberLocale = QLocale();
@@ -286,7 +286,7 @@ void AddSubtractValueDialog::init() {
 AddSubtractValueDialog::~AddSubtractValueDialog() {
 	delete m_project;
 
-	KConfigGroup conf(Settings::config(), QStringLiteral("AddSubtractValueDialog"));
+	KConfigGroup conf = Settings::group(QStringLiteral("AddSubtractValueDialog"));
 	conf.writeEntry(QStringLiteral("Type"), ui.cbType->currentData().toInt());
 	conf.writeEntry(QStringLiteral("Preview"), ui.chbPreview->isChecked());
 

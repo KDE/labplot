@@ -267,7 +267,7 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 }
 
 QString GuiTools::openImageFile(const QString& className) {
-	KConfigGroup conf(Settings::config(), className);
+	KConfigGroup conf = Settings::group(className);
 	const QString& dir = conf.readEntry(QLatin1String("LastImageDir"), QString());
 
 	QString formats;

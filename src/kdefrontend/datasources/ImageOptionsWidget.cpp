@@ -34,13 +34,13 @@ ImageOptionsWidget::ImageOptionsWidget(QWidget* parent)
 }
 
 void ImageOptionsWidget::loadSettings() const {
-	KConfigGroup conf(Settings::config(), "Import");
+	KConfigGroup conf = Settings::group(QStringLiteral("Import"));
 
 	ui.cbImportFormat->setCurrentIndex(conf.readEntry("ImportFormat", 0));
 }
 
 void ImageOptionsWidget::saveSettings() {
-	KConfigGroup conf(Settings::config(), "Import");
+	KConfigGroup conf = Settings::group(QStringLiteral("Import"));
 
 	conf.writeEntry("ImportFormat", ui.cbImportFormat->currentIndex());
 }

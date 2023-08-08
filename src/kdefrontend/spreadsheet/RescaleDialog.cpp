@@ -47,7 +47,7 @@ RescaleDialog::RescaleDialog(QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), QLatin1String("RescaleDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("RescaleDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -65,7 +65,7 @@ RescaleDialog::RescaleDialog(QWidget* parent)
 
 RescaleDialog::~RescaleDialog() {
 	// save the current settings
-	KConfigGroup conf(Settings::config(), QLatin1String("RescaleDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("RescaleDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	// general settings

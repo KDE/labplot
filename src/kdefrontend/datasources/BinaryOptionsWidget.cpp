@@ -61,7 +61,7 @@ void BinaryOptionsWidget::applyFilterSettings(BinaryFilter* filter) const {
 }
 
 void BinaryOptionsWidget::loadSettings() const {
-	KConfigGroup conf(Settings::config(), "ImportBinary");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportBinary"));
 
 	ui.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
 	ui.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
@@ -72,7 +72,7 @@ void BinaryOptionsWidget::loadSettings() const {
 }
 
 void BinaryOptionsWidget::saveSettings() {
-	KConfigGroup conf(Settings::config(), "ImportBinary");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportBinary"));
 
 	conf.writeEntry("Vectors", ui.niVectors->value());
 	conf.writeEntry("ByteOrder", ui.cbByteOrder->currentIndex());

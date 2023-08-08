@@ -83,7 +83,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(Settings::config(), "MatrixFunctionDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("MatrixFunctionDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -92,7 +92,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent)
 }
 
 MatrixFunctionDialog::~MatrixFunctionDialog() {
-	KConfigGroup conf(Settings::config(), "MatrixFunctionDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("MatrixFunctionDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

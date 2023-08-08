@@ -136,7 +136,7 @@ void TextLabel::init() {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 	}
 
-	KConfigGroup conf(Settings::config(), QLatin1String("Settings_Worksheet"));
+	KConfigGroup conf = Settings::group(QLatin1String("Settings_Worksheet"));
 	const auto& engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
 	if (engine == QLatin1String("lualatex"))
 		d->teXFont.setFamily(QLatin1String("Latin Modern Roman"));

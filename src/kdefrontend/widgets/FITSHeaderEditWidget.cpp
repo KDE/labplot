@@ -168,7 +168,7 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
  * then the file is parsed, so the treeview for the extensions is built and the table is filled.
  */
 void FITSHeaderEditWidget::openFile() {
-	KConfigGroup conf(Settings::config(), "FITSHeaderEditWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditWidget"));
 	QString dir = conf.readEntry("LastDir", "");
 	QString fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Open FITS File"), dir, i18n("FITS files (*.fits *.fit *.fts)"));
 	if (fileName.isEmpty())

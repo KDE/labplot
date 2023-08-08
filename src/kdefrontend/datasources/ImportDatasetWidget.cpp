@@ -74,7 +74,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent)
 	connect(m_networkManager, &QNetworkAccessManager::finished, this, &ImportDatasetWidget::downloadFinished);
 
 	// select the last used collection
-	KConfigGroup conf(Settings::config(), "ImportDatasetWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportDatasetWidget"));
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
 		ui.cbCollections->setCurrentIndex(0);
@@ -93,7 +93,7 @@ ImportDatasetWidget::~ImportDatasetWidget() {
 
 	// save the selected collection
 	if (ui.cbCollections->currentIndex() != -1) {
-		KConfigGroup conf(Settings::config(), "ImportDatasetWidget");
+		KConfigGroup conf = Settings::group(QStringLiteral("ImportDatasetWidget"));
 		conf.writeEntry("Collection", ui.cbCollections->itemData(ui.cbCollections->currentIndex()).toString());
 	}
 }

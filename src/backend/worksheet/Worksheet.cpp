@@ -101,7 +101,7 @@ void Worksheet::init() {
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
 
 	// default theme
-	KConfigGroup settings = Settings::config()->group(QLatin1String("Settings_Worksheet"));
+	KConfigGroup settings = Settings::group(QStringLiteral("Settings_Worksheet"));
 	d->theme = settings.readEntry(QStringLiteral("Theme"), QString());
 	loadTheme(d->theme);
 }

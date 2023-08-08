@@ -45,7 +45,7 @@ ExamplesDialog::ExamplesDialog(QWidget* parent)
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
-	KConfigGroup conf(Settings::config(), "ExamplesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExamplesDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
@@ -54,7 +54,7 @@ ExamplesDialog::ExamplesDialog(QWidget* parent)
 }
 
 ExamplesDialog::~ExamplesDialog() {
-	KConfigGroup conf(Settings::config(), "ExamplesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExamplesDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
