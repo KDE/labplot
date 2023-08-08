@@ -24,9 +24,9 @@
 
 #include <KIconLoader>
 #include <KMessageBox>
-#include <kcoreaddons_version.h>
 
 #include <QButtonGroup>
+#include <QBuffer>
 #include <QDebug>
 #include <QFileDialog>
 #include <QIntValidator>
@@ -1642,6 +1642,18 @@ void CartesianPlotDock::exportPlotTemplate() {
 	writer.writeDTD(QStringLiteral("<!DOCTYPE LabPlotXML>"));
 	writer.writeStartElement(QStringLiteral("PlotTemplate"));
 	writer.writeAttribute(QStringLiteral("xmlVersion"), QString::number(Project::currentBuildXmlVersion()));
+
+	// save the preview image of the plot
+	QPixmap thumbnail;
+	// TODO: get the image of the current plot, s. a. WorksheetView::exportToFile()
+	if (!thumbnail.isNull()) {
+		QByteArray bArray;
+		QBuffer buffer(&bArray);
+		buffer.open(QIODevice::WriteOnly);
+		thumbnail.save(&buffer, "PNG");
+		writer.writeAttribute(QStringLiteral("thumbnail"), QString::fromLatin1(bArray.toBase64().data()));
+	}
+
 	m_plot->save(&writer);
 	writer.writeEndElement();
 	writer.writeEndDocument();

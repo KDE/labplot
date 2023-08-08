@@ -187,6 +187,17 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 		return nullptr;
 	}
 	Project::setXmlVersion(xmlVersion);
+
+	// read the thumbnail if available
+	// TODO: move it to a private variable that can be reused in showPreview()
+	// or only read it if the live preview doesn't work
+	QString content = reader.attributes().value(QLatin1String("thumbnail")).toString();
+	if (!content.isEmpty()) {
+		QByteArray ba = QByteArray::fromBase64(content.toLatin1());
+		QPixmap pixmap;
+		pixmap.loadFromData(ba);
+	}
+
 	reader.readNext();
 
 	while (!((reader.isStartElement() && reader.name() == QLatin1String("cartesianPlot")) || reader.atEnd()))
@@ -219,6 +230,15 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 	return plot;
 }
 
+/*! shows the preview of the currently selected template.
+ * Following logic is implemented:
+ * 1. check for the presence of data columns in the currenct project
+ * that were used in the template and render a live preview.
+ * 2. in case the source columns are not available, show the save thumbnail image
+ * so the user gets at least an idea about how the plot will look if data is available
+ * 3. if the first two steps fail (no source columns nor thumbnail available) render
+ * the plot as it is in the current project, i.e. without any curves shown yet.
+ * */
 void PlotTemplateDialog::showPreview() {
 	for (auto* plot : m_worksheet->children<CartesianPlot>())
 		m_worksheet->removeChild(plot);
