@@ -347,6 +347,11 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 		}
 	}
 
+	setUndoAware(false);
+	if (curve->name() == connectionLineCurveName())
+		setConnectionLineCurveName(markerpoints.count() > 0 ? markerpoints.at(0).curve->name() : QStringLiteral());
+	setUndoAware(true);
+
 	m_title->setUndoAware(false);
 	m_title->setText(createTextLabelText());
 
