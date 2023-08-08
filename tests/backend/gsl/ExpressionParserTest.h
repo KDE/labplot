@@ -9,6 +9,7 @@ class ExpressionParserTest : public CommonTest {
 private Q_SLOTS:
 	void testFunctionArguments1();
 	void testFunctionArguments2();
+	void testUniques();
 };
 
 #endif // EXPRESSIONPARSERTEST_H

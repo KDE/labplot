@@ -22,4 +22,13 @@ void ExpressionParserTest::testFunctionArguments2() {
 	QCOMPARE(ExpressionParser::parameters(functionName), QStringLiteral("(condition, trueValue, falseValue)"));
 }
 
+void ExpressionParserTest::testUniques() {
+	QSet<QString> names;
+	for (int i = 0; i < _number_functions; i++) {
+		const QString name = QLatin1String(_functions[i].name);
+		// Dawson is in two groups available with the same function access
+		QVERIFY2(!names.contains(name) || name == QStringLiteral("dawson"), qPrintable(name));
+		names.insert(name);
+	}
+}
 QTEST_MAIN(ExpressionParserTest)

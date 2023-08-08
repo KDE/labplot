@@ -226,7 +226,7 @@ struct funs _functions[] = {
 	{i18n("greaterEqualThan"), "greaterEqualThan", (func_t)greaterEqualThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
 	{i18n("lessEqualThan"), "lessEqualThan", (func_t)lessEqualThan, 2, nullptr, FunctionGroups::ComparisonFunctions},
 	{i18n("equal"), "equal", (func_t)equal, 2, nullptr, FunctionGroups::ComparisonFunctions},
-	{i18n("equal with epsilon"), "equal", (func_t)equalEpsilon, 3, &equalEpsilonParameterNames, FunctionGroups::ComparisonFunctions},
+	{i18n("equal with epsilon"), "equalE", (func_t)equalEpsilon, 3, &equalEpsilonParameterNames, FunctionGroups::ComparisonFunctions},
 	{i18n("between with boundaries included"), "between_inc", (func_t)betweenIncluded, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
 	{i18n("outside with boundaries included"), "outside_inc", (func_t)outsideIncluded, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
 	{i18n("between with boundaries excluded"), "between", (func_t)between, 3, &betweenOutsideParameterNames, FunctionGroups::ComparisonFunctions},
@@ -456,7 +456,7 @@ struct funs _functions[] = {
 	 FunctionGroups::CoulombFunctions},
 
 	// Dawson Function
-	{i18n("Dawson integral"), "dawson", (func_t)nsl_sf_dawson, 1, nullptr, FunctionGroups::DawsonFunction},
+	{i18n("Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"), "dawson", (func_t)nsl_sf_dawson, 1, nullptr, FunctionGroups::DawsonFunction},
 
 	// Debye Functions
 	{i18n("First-order Debye function"), "D1", (func_t)gsl_sf_debye_1, 1, nullptr, FunctionGroups::DebyeFunctions},
