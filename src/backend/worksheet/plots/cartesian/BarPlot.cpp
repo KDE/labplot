@@ -967,12 +967,12 @@ void BarPlotPrivate::updateValues() {
 			auto& point = m_valuesPointsLogical.at(i);
 			if (orientation == BarPlot::Orientation::Vertical) {
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + QString::number(point.y(), value->numericFormat(), 1) + QString::fromStdString("%") + suffix;
+					m_valuesStrings << prefix + QString::number(point.y(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
 					m_valuesStrings << prefix + QString::number(point.y()) + suffix;
 			} else {
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + QString::number(point.x(), value->numericFormat(), 1) + QString::fromStdString("%") + suffix;
+					m_valuesStrings << prefix + QString::number(point.x(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
 					m_valuesStrings << prefix + QString::number(point.x()) + suffix;
 			}
