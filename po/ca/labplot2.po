@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-05 00:41+0000\n"
-"PO-Revision-Date: 2023-08-01 18:36+0200\n"
+"POT-Creation-Date: 2023-08-08 00:41+0000\n"
+"PO-Revision-Date: 2023-08-07 21:16+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -88,7 +88,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:282
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:262
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3162
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3163
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:269
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:224
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:225
@@ -1054,7 +1054,7 @@ msgstr "%1: elimina tots els punts de l'eix"
 #: src/backend/worksheet/Image.cpp:453
 #, kde-format
 msgid "Failed to read image data"
-msgstr "Ha fallat en llegir les dades de la imatge."
+msgstr "Ha fallat en llegir les dades de la imatge"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
 #: src/backend/worksheet/InfoElement.cpp:783
@@ -17171,6 +17171,7 @@ msgstr "Separació:"
 msgid "Datetime"
 msgstr "DataHora"
 
+# skip-rule: punctuation-period-no
 #. i18n: ectx: attribute (title), widget (QWidget, tSymbol)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:820
 #, kde-format

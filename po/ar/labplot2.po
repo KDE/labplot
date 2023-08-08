@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-05 00:41+0000\n"
+"POT-Creation-Date: 2023-08-08 00:41+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -78,7 +78,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:282
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:262
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3162
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3163
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:269
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:224
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:225

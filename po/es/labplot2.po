@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-05 00:41+0000\n"
+"POT-Creation-Date: 2023-08-08 00:41+0000\n"
 "PO-Revision-Date: 2023-08-01 14:27+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -81,7 +81,7 @@ msgstr "No se han encontrado complementos del panel. Compruebe su instalación."
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:466
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:282
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:262
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3162
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3163
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:269
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:224
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:225
