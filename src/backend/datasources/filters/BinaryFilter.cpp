@@ -118,19 +118,6 @@ size_t BinaryFilter::rowNumber(const QString& fileName, const size_t vectors, co
 }
 
 ///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void BinaryFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void BinaryFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-///////////////////////////////////////////////////////////////////////
 
 void BinaryFilter::setVectors(const size_t v) {
 	d->vectors = v;

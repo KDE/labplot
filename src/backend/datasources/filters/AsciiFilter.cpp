@@ -125,18 +125,6 @@ void AsciiFilter::write(const QString& fileName, AbstractDataSource* dataSource)
 }
 
 /*!
-  loads the predefined filter settings for \c filterName
-*/
-void AsciiFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void AsciiFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-/*!
   returns the list with the names of all saved
   (system wide or user defined) filter settings.
 */
@@ -2026,6 +2014,17 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	READ_INT_VALUE("startColumn", startColumn, int);
 	READ_INT_VALUE("endColumn", endColumn, int);
 	return true;
+}
+
+// ##############################################################################
+// ########################## Template handling   ##############################
+// ##############################################################################
+void AsciiFilter::loadConfigFromTemplate(KConfig& config) {
+
+}
+
+void AsciiFilter::saveConfigAsTemplate(KConfig& config) const {
+
 }
 
 // ##############################################################################

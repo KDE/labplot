@@ -52,19 +52,6 @@ void ImageFilter::write(const QString& fileName, AbstractDataSource* dataSource)
 }
 
 ///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void ImageFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void ImageFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-///////////////////////////////////////////////////////////////////////
 void ImageFilter::setImportFormat(const ImageFilter::ImportFormat f) {
 	d->importFormat = f;
 }

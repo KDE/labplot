@@ -44,7 +44,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	connect(ui.cbLinkingEnabled, &QCheckBox::toggled, this, &SpreadsheetDock::linkingChanged);
 	connect(ui.cbLinkedSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &SpreadsheetDock::linkedSpreadsheetChanged);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Spreadsheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Spreadsheet"));
 	ui.gridLayout->addWidget(templateHandler, 16, 0, 1, 4);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);

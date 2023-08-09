@@ -21,9 +21,8 @@ class TemplateHandler : public QWidget {
 	Q_OBJECT
 
 public:
-	enum class ClassName { Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint, ReferenceLine };
-
-	TemplateHandler(QWidget* parent, ClassName);
+	TemplateHandler(QWidget* parent, const QString& className, bool expand = true);
+	void setClassName(const QString&);
 	void setToolButtonStyle(Qt::ToolButtonStyle);
 
 private:
@@ -31,8 +30,7 @@ private:
 	bool eventFilter(QObject*, QEvent*) override;
 
 	QString m_dirName;
-	ClassName m_className;
-	QList<QString> m_subDirNames;
+	QString m_className;
 
 	QMenu* m_textPositionMenu{nullptr};
 	QToolButton* m_tbLoad;

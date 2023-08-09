@@ -50,9 +50,6 @@ public:
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device);
 
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
-
 #ifdef HAVE_MQTT
 	QVector<QStringList> preview(const QString& message);
 	void readMQTTTopic(const QString& message, AbstractDataSource*);
@@ -103,6 +100,10 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
+
+	// save/load template
+	void loadConfigFromTemplate(KConfig&) override;
+	void saveConfigAsTemplate(KConfig&) const override;
 
 	int isPrepared();
 

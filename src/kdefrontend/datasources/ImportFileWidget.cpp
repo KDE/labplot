@@ -24,6 +24,8 @@
 #include "ROOTOptionsWidget.h"
 #include "backend/datasources/filters/filters.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/TemplateHandler.h"
+
 #include <QCompleter>
 #include <QDir>
 #include <QDirModel>
@@ -40,6 +42,7 @@
 #include <QUdpSocket>
 #include <QWhatsThis>
 
+#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -157,8 +160,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 	ui.bOpenDBC->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 	ui.bFileInfo->setIcon(QIcon::fromTheme(QStringLiteral("help-about")));
-	ui.bManageFilters->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
-	ui.bSaveFilter->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
 	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 
 	ui.tvJson->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -248,9 +249,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 #endif
 
-	// TODO: implement save/load of user-defined settings later and activate these buttons again
-	ui.bSaveFilter->hide();
-	ui.bManageFilters->hide();
+	// templates for plot properties
+	m_templateHandler = new TemplateHandler(this, QLatin1String("import"), false);
+	ui.hLayoutFilter->addWidget(m_templateHandler);
+	connect(m_templateHandler, &TemplateHandler::loadConfigRequested, this, &ImportFileWidget::loadConfigFromTemplate);
+	connect(m_templateHandler, &TemplateHandler::saveConfigRequested, this, &ImportFileWidget::saveConfigAsTemplate);
+	//connect(m_templateHandler,&TemplateHandler::info, this, &CartesianPlotDock::info);
 }
 
 void ImportFileWidget::loadSettings() {
@@ -444,8 +448,6 @@ void ImportFileWidget::initSlots() {
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportFileWidget::selectFile);
 	connect(ui.bOpenDBC, &QPushButton::clicked, this, &ImportFileWidget::selectDBCFile);
 	connect(ui.bFileInfo, &QPushButton::clicked, this, &ImportFileWidget::showFileInfo);
-	connect(ui.bSaveFilter, &QPushButton::clicked, this, &ImportFileWidget::saveFilter);
-	connect(ui.bManageFilters, &QPushButton::clicked, this, &ImportFileWidget::manageFilters);
 	connect(ui.cbFileType, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ImportFileWidget::fileTypeChanged);
 	connect(ui.cbUpdateType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::updateTypeChanged);
 	connect(ui.cbReadingType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::readingTypeChanged);
@@ -684,8 +686,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 				filter->setStartColumn(ui.sbStartColumn->value());
 			if (ui.sbEndColumn->value() != -1)
 				filter->setEndColumn(ui.sbEndColumn->value());
-		} else
-			filter->loadFilterSettings(ui.cbFilter->currentText());
+		} else {
+			// TODO: load from the selected template
+			//filter->loadFilterSettings(ui.cbFilter->currentText());
+		}
 
 		break;
 	}
@@ -985,7 +989,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 	bool fileExists = QFile::exists(fileName);
 	ui.gbOptions->setEnabled(fileExists);
-	ui.bManageFilters->setEnabled(fileExists);
 	ui.cbFilter->setEnabled(fileExists);
 	ui.cbFileType->setEnabled(fileExists);
 	ui.bFileInfo->setEnabled(fileExists);
@@ -1036,19 +1039,27 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 /*!
   saves the current filter settings
 */
-void ImportFileWidget::saveFilter() {
+void ImportFileWidget::saveConfigAsTemplate(KConfig& config) {
 	bool ok;
 	QString text = QInputDialog::getText(this, i18n("Save Filter Settings as"), i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
-	if (ok && !text.isEmpty()) {
-		// TODO
-		// AsciiFilter::saveFilter()
+	if (!(ok && !text.isEmpty()))
+		return;
+
+	auto fileType = currentFileType();
+	auto* filter = currentFileFilter();
+	if (fileType == AbstractFileFilter::FileType::Ascii) {
+		m_templateHandler->setClassName(QLatin1String("Ascii"));
+	} else {
+		m_templateHandler->setClassName(QLatin1String("Binary"));
 	}
+
+	filter->saveConfigAsTemplate(config);
 }
 
 /*!
   opens a dialog for managing all available predefined filters.
 */
-void ImportFileWidget::manageFilters() {
+void ImportFileWidget::loadConfigFromTemplate(KConfig& config) {
 	// TODO
 }
 
@@ -1077,8 +1088,9 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 
 	// default
 	hidePropertyWidgets();
-	ui.lFilter->show();
-	ui.cbFilter->show();
+	ui.lFilter->hide();
+	ui.cbFilter->hide();
+	m_templateHandler->hide();
 
 	// different file types show different number of tabs in ui.tabWidget.
 	// when switching from the previous file type we re-set the tab widget to its original state
@@ -1102,8 +1114,14 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii:
+		ui.lFilter->show();
+		ui.cbFilter->show();
+		m_templateHandler->show();
 		break;
 	case AbstractFileFilter::FileType::Binary:
+		ui.lFilter->show();
+		ui.cbFilter->show();
+		m_templateHandler->show();
 		ui.lStartColumn->hide();
 		ui.sbStartColumn->hide();
 		ui.lEndColumn->hide();
@@ -1117,8 +1135,6 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	case AbstractFileFilter::FileType::FITS:
 	case AbstractFileFilter::FileType::MATIO:
 	case AbstractFileFilter::FileType::Excel:
-		ui.lFilter->hide();
-		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
 		ui.tabWidget->setTabText(0, i18n("Data format && preview"));
 		ui.tabWidget->removeTab(1);
@@ -1129,8 +1145,6 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		ui.bOpenDBC->show();
 		m_cbDBCFileName->show();
 		ui.lWarningLimitedMessages->show();
-		ui.lFilter->hide();
-		ui.cbFilter->hide();
 		ui.lStartColumn->hide();
 		ui.sbStartColumn->hide();
 		ui.lEndColumn->hide();
@@ -1138,14 +1152,10 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		ui.tabWidget->setCurrentIndex(0);
 		break;
 	case AbstractFileFilter::FileType::Image:
-		ui.lFilter->hide();
-		ui.cbFilter->hide();
 		ui.lPreviewLines->hide();
 		ui.sbPreviewLines->hide();
 		break;
 	case AbstractFileFilter::FileType::Spice:
-		ui.lFilter->hide();
-		ui.cbFilter->hide();
 		ui.lStartColumn->hide();
 		ui.sbStartColumn->hide();
 		ui.lEndColumn->hide();
@@ -1154,15 +1164,11 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		ui.tabWidget->setCurrentIndex(0);
 		break;
 	case AbstractFileFilter::FileType::JSON:
-		ui.lFilter->hide();
-		ui.cbFilter->hide();
 		showJsonModel(true);
 		break;
 	case AbstractFileFilter::FileType::READSTAT:
 		ui.tabWidget->removeTab(0);
 		ui.tabWidget->setCurrentIndex(0);
-		ui.lFilter->hide();
-		ui.cbFilter->hide();
 		break;
 	}
 
@@ -1489,10 +1495,10 @@ void ImportFileWidget::filterChanged(int index) {
 
 	if (index == 0) { // "automatic"
 		ui.swOptions->setEnabled(false);
-		ui.bSaveFilter->setEnabled(false);
+		//ui.bSaveFilter->setEnabled(false);
 	} else if (index == 1) { // custom
 		ui.swOptions->setEnabled(true);
-		ui.bSaveFilter->setEnabled(true);
+		//ui.bSaveFilter->setEnabled(true);
 	} else {
 		// predefined filter settings were selected.
 		// load and show them in the GUI.
@@ -2022,7 +2028,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbUpdateType->setCurrentIndex(0);
 
 		ui.gbOptions->setEnabled(true);
-		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
 		ui.cbFileType->show();
@@ -2052,7 +2057,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 		ui.gbOptions->setEnabled(true);
-		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 		ui.cbFileType->setEnabled(true);
 		ui.cbFileType->show();
@@ -2088,7 +2092,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.cbFileType->setEnabled(true);
 		ui.cbFileType->show();
 		ui.gbOptions->setEnabled(true);
-		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 		ui.lFileType->show();
 		setMQTTVisible(false);
@@ -2131,7 +2134,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		ui.cbFileType->setEnabled(true);
 		ui.gbOptions->setEnabled(true);
-		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 
 		// in case there are already connections defined,

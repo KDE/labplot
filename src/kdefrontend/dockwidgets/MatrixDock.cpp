@@ -57,7 +57,7 @@ MatrixDock::MatrixDock(QWidget* parent)
 	connect(ui.sbPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &MatrixDock::precisionChanged);
 	connect(ui.cbHeader, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MatrixDock::headerFormatChanged);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Matrix);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Matrix"));
 	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
 	// templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &MatrixDock::loadConfigFromTemplate);

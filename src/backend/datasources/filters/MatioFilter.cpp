@@ -247,19 +247,6 @@ void MatioFilter::write(const QString& fileName, AbstractDataSource* dataSource)
 }
 
 ///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void MatioFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void MatioFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-///////////////////////////////////////////////////////////////////////
 
 void MatioFilter::setCurrentVarName(const QString& name) {
 	d->currentVarName = name;
