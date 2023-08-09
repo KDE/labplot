@@ -110,7 +110,7 @@ QString ExpressionParser::parameters(const QString& functionName) {
 
 			QString parameter = QStringLiteral("(");
 			for (int p = 0; p < count - 1; p++)
-				parameter += (*parameterFunction)(p) + QStringLiteral(", ");
+				parameter += (*parameterFunction)(p) + QStringLiteral("; ");
 			parameter += (*parameterFunction)(count - 1);
 			parameter += QStringLiteral(")");
 			return parameter;
@@ -146,40 +146,40 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 	case 2:
 		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QStringLiteral("(x, y)");
+			return QStringLiteral("(x; y)");
 		case XYEquationCurve::EquationType::Polar:
-			return QStringLiteral("(phi, theta)");
+			return QStringLiteral("(phi; theta)");
 		case XYEquationCurve::EquationType::Parametric:
-			return QStringLiteral("(u, v)");
+			return QStringLiteral("(u; v)");
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QStringLiteral("(x, y)");
+			return QStringLiteral("(x; y)");
 		}
 		break;
 	case 3:
 		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QStringLiteral("(x, y, z)");
+			return QStringLiteral("(x; y; z)");
 		case XYEquationCurve::EquationType::Polar:
-			return QStringLiteral("(alpha, beta, gamma)");
+			return QStringLiteral("(alpha; beta; gamma)");
 		case XYEquationCurve::EquationType::Parametric:
-			return QStringLiteral("(u, v, w)");
+			return QStringLiteral("(u; v; w)");
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QStringLiteral("(x, y, z)");
+			return QStringLiteral("(x; y; z)");
 		}
 		break;
 	case 4:
 		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QStringLiteral("(a, b, c, d)");
+			return QStringLiteral("(a; b; c; d)");
 		case XYEquationCurve::EquationType::Polar:
-			return QStringLiteral("(alpha, beta, gamma, delta)");
+			return QStringLiteral("(alpha; beta; gamma; delta)");
 		case XYEquationCurve::EquationType::Parametric:
-			return QStringLiteral("(a, b, c, d)");
+			return QStringLiteral("(a; b; c; d)");
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QStringLiteral("(a, b, c, d)");
+			return QStringLiteral("(a; b; c; d)");
 		}
 		break;
 	}
