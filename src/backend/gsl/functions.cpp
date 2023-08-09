@@ -43,7 +43,7 @@ QString FunctionGroupsToString(FunctionGroups group) {
 	case FunctionGroups::ComparisonFunctions:
 		return i18n("Comparison Functions");
 	case FunctionGroups::LogicalFunctions:
-		return i18n("Conditions");
+		return i18n("Logical Functions");
 	case FunctionGroups::ColumnStatistics:
 		return i18n("Column Statistics");
 	case FunctionGroups::MovingStatistics:
