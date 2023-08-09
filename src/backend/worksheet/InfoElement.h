@@ -30,7 +30,7 @@ class InfoElement : public WorksheetElement {
 
 public:
 	InfoElement(const QString& name, CartesianPlot*);
-	InfoElement(const QString& name, CartesianPlot*, const XYCurve*, double pos);
+	InfoElement(const QString& name, CartesianPlot*, const XYCurve*, double logicalPos);
 	void setParentGraphicsItem(QGraphicsItem* item);
 	~InfoElement();
 

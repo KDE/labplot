@@ -40,7 +40,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
 	setVisible(false);
 }
 
-InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double pos)
+InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double logicalPos)
 	: WorksheetElement(name, new InfoElementPrivate(this, curve), AspectType::InfoElement) {
 	Q_D(InfoElement);
 	m_plot = p;
@@ -63,7 +63,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		if (curve->xColumn() && curve->yColumn()) {
 			bool valueFound;
 			double xpos;
-			double y = curve->y(pos, xpos, valueFound);
+			double y = curve->y(logicalPos, xpos, valueFound);
 			if (valueFound) {
 				d->positionLogical = xpos;
 				d->m_index = curve->xColumn()->indexForValue(xpos);
