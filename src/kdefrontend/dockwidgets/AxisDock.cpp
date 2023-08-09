@@ -1491,7 +1491,8 @@ void AxisDock::labelsFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 
 	QFont labelsFont = font;
-	labelsFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
+	qDebug() << "AxisDock Fontsize: " << font.pointSizeF() << "Pixelsize: " << Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point);
+	//labelsFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
 	for (auto* axis : m_axesList)
 		axis->setLabelsFont(labelsFont);
 }

@@ -384,6 +384,7 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner)
 	// m_textItem is only used for the normal text not for latex. So the scale is only needed for the
 	// normal text, for latex the generated image will be shown directly
 	m_textItem = new ScaledTextItem(this);
+	qDebug() << "Scale: " << Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point);
 	m_textItem->setScale(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
 	m_textItem->setTextInteractionFlags(Qt::NoTextInteraction);
 }

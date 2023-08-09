@@ -2622,6 +2622,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		for (int i = 0; i < tickLabelPoints.size(); i++) {
 			tempPath = QPainterPath();
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
+				qDebug() << "Boundingrect: " << fm.boundingRect(tickLabelStrings.at(i));
 				tempPath.addRect(fm.boundingRect(tickLabelStrings.at(i)));
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
@@ -2715,6 +2716,7 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 	// draw tick labels
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
+		const auto scale = Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point);
 		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 		painter->setOpacity(labelsOpacity);
 		painter->setPen(QPen(labelsColor));
@@ -2722,6 +2724,7 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		QTextDocument doc;
 		doc.setDefaultFont(labelsFont);
 		QFontMetrics fm(labelsFont);
+		qDebug() << QStringLiteral("Pixelsize:") << labelsFont.pixelSize();
 		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
 		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
@@ -2733,11 +2736,14 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 				painter->rotate(-labelsRotationAngle);
 
 				if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
+					painter->save();
+					painter->scale(scale, scale);
 					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
 						const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
 						painter->fillRect(rect, labelsBackgroundColor);
 					}
 					painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
+					painter->restore();
 				} else {
 					const QString style(QStringLiteral("p {color: %1;}"));
 					doc.setDefaultStyleSheet(style.arg(labelsColor.name()));
@@ -2746,10 +2752,16 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 					int height = size.height();
 					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
 						int width = size.width();
+						painter->save();
+						painter->scale(scale, scale);
 						painter->fillRect(0, -height, width, height, labelsBackgroundColor);
+						painter->restore();
 					}
 					painter->translate(0, -height);
+					painter->save();
+					painter->scale(scale, scale);
 					doc.drawContents(painter);
+					painter->restore();
 				}
 				painter->restore();
 				painter->translate(-tickLabelPoints.at(i));
@@ -2763,7 +2775,11 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 					const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
 					painter->fillRect(rect, labelsBackgroundColor);
 				}
+				painter->save();
+				painter->scale(scale, scale);
 				painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
+				painter->restore();
+
 				painter->restore();
 				painter->translate(-tickLabelPoints.at(i));
 			}
