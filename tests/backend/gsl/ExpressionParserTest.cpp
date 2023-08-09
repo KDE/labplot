@@ -65,7 +65,7 @@ void ExpressionParserTest::testgreaterThan() {
 	QCOMPARE(fnct(5, 5), 0);
 	QCOMPARE(fnct(5.000001, 5), 1);
 	QCOMPARE(fnct(10, 5), 1);
-	QCOMPARE(fnct(0, -0, 0));
+	QCOMPARE(fnct(0, -0), 0);
 }
 void ExpressionParserTest::testgreaterEqualThan() {
 	auto fnct = getFunction2(QStringLiteral("greaterEqualThan"));
@@ -76,7 +76,7 @@ void ExpressionParserTest::testgreaterEqualThan() {
 	QCOMPARE(fnct(5, 5), 1);
 	QCOMPARE(fnct(5.000001, 5), 1);
 	QCOMPARE(fnct(10, 5), 1);
-	QCOMPARE(fnct(0, -0, 1));
+	QCOMPARE(fnct(0, -0), 1);
 }
 void ExpressionParserTest::testlessThan() {
 	auto fnct = getFunction2(QStringLiteral("lessThan"));
@@ -87,7 +87,7 @@ void ExpressionParserTest::testlessThan() {
 	QCOMPARE(fnct(5, 5), 0);
 	QCOMPARE(fnct(5.000001, 0), 0);
 	QCOMPARE(fnct(10, 5), 0);
-	QCOMPARE(fnct(0, -0, 0));
+	QCOMPARE(fnct(0, -0), 0);
 }
 void ExpressionParserTest::testlessEqualThan() {
 	auto fnct = getFunction2(QStringLiteral("lessEqualThan"));
@@ -98,7 +98,7 @@ void ExpressionParserTest::testlessEqualThan() {
 	QCOMPARE(fnct(5, 5), 1);
 	QCOMPARE(fnct(5.000001, 0), 0);
 	QCOMPARE(fnct(10, 5), 0);
-	QCOMPARE(fnct(0, -0, 1));
+	QCOMPARE(fnct(0, -0), 1);
 }
 void ExpressionParserTest::testequal() {
 	auto fnct = getFunction2(QStringLiteral("equal"));
@@ -109,7 +109,7 @@ void ExpressionParserTest::testequal() {
 	QCOMPARE(fnct(5, 5), 1);
 	QCOMPARE(fnct(5.000001, 0), 0);
 	QCOMPARE(fnct(10, 5), 0);
-	QCOMPARE(fnct(0, -0, 1));
+	QCOMPARE(fnct(0, -0), 1);
 }
 
 void ExpressionParserTest::testifCondition() {
