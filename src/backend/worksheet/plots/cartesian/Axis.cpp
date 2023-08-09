@@ -207,7 +207,7 @@ void Axis::init(Orientation orientation) {
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
 	d->labelsTextType = (LabelsTextType)group.readEntry("LabelsTextType", static_cast<int>(LabelsTextType::PositionValues));
 	d->labelsFont = group.readEntry("LabelsFont", QFont());
-	d->labelsFont.setPixelSize(Worksheet::convertToSceneUnits(10.0, Worksheet::Unit::Point));
+	d->labelsFont.setPixelSize(10);
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
 	d->labelsBackgroundType = (LabelsBackgroundType)group.readEntry("LabelsBackgroundType", static_cast<int>(LabelsBackgroundType::Transparent));
 	d->labelsBackgroundColor = group.readEntry("LabelsBackgroundColor", QColor(Qt::white));

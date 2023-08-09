@@ -68,7 +68,7 @@ void CartesianPlotLegend::init() {
 	KConfigGroup group = config.group("CartesianPlotLegend");
 
 	d->labelFont = group.readEntry("LabelsFont", QFont());
-	d->labelFont.setPixelSize(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	d->labelFont.setPixelSize(10);
 
 	d->labelColor = group.readEntry("FontColor", QColor(Qt::black));
 	d->labelColumnMajor = true;
@@ -562,7 +562,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		painter->translate(0, title->graphicsItem()->boundingRect().height());
 
 	painter->save();
-
+	const auto scale = Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point);
 	int col = 0;
 	int row = 0;
 	for (auto* plot : m_plots) {
@@ -662,7 +662,10 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			// curve's name
 			painter->setPen(QPen(labelColor));
 			painter->setOpacity(1.0);
+			painter->save();
+			painter->scale(scale, scale);
 			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), curve->name());
+			painter->restore();
 
 			if (!translatePainter(painter, row, col, h))
 				break;
@@ -688,7 +691,10 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			// curve's name
 			painter->setPen(QPen(labelColor));
 			painter->setOpacity(1.0);
+			painter->save();
+			painter->scale(scale, scale);
 			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), hist->name());
+			painter->restore();
 
 			if (!translatePainter(painter, row, col, h))
 				break;
@@ -722,7 +728,10 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				// draw the name text
 				painter->setPen(QPen(labelColor));
 				painter->setOpacity(1.0);
+				painter->save();
+				painter->scale(scale, scale);
 				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
+				painter->restore();
 				++index;
 				if (!translatePainter(painter, row, col, h))
 					break;
@@ -750,7 +759,10 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				// draw the name text
 				painter->setPen(QPen(labelColor));
 				painter->setOpacity(1.0);
+				painter->save();
+				painter->scale(scale, scale);
 				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
+				painter->restore();
 				++index;
 				if (!translatePainter(painter, row, col, h))
 					break;
