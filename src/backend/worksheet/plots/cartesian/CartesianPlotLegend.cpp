@@ -813,7 +813,8 @@ bool CartesianPlotLegendPrivate::translatePainter(QPainter* painter, int& row, i
 			row = 0;
 			painter->restore();
 
-			double deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col - 1); // width of the current column (subtract 1 because of ++col above)
+			double deltaX =
+				lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col - 1); // width of the current column (subtract 1 because of ++col above)
 			deltaX += 2 * layoutHorizontalSpacing; // spacing between two columns
 			painter->translate(deltaX, 0);
 			painter->save();
@@ -821,7 +822,8 @@ bool CartesianPlotLegendPrivate::translatePainter(QPainter* painter, int& row, i
 	} else { // row major order
 		++col;
 		if (col != columnCount) {
-			double deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col - 1); // width of the current column (subtract 1 because of ++col above)
+			double deltaX =
+				lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col - 1); // width of the current column (subtract 1 because of ++col above)
 			deltaX += 2 * layoutHorizontalSpacing; // spacing between two columns
 			painter->translate(deltaX, 0);
 		} else {
