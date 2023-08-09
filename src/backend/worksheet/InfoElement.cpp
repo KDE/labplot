@@ -56,7 +56,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		custompoint->setCoordinateBindingEnabled(true);
 		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
 		addChild(custompoint);
-		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
+		InfoElement::MarkerPoints_T markerpoint(custompoint, curve, curve->path());
 		markerpoints.append(markerpoint);
 
 		// setpos after label was created
@@ -251,7 +251,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	if (d->m_index < 0 && curve->xColumn())
 		d->m_index = curve->xColumn()->indexForValue(custompoint->positionLogical().x());
 
-	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
+	struct MarkerPoints_T markerpoint = {custompoint, curve, curve->path()};
 	markerpoints.append(markerpoint);
 
 	if (markerpoints.count() == 1) // first point
@@ -296,7 +296,7 @@ void InfoElement::addCurvePath(QString& curvePath, CustomPoint* custompoint) {
 		addChild(custompoint);
 	}
 
-	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), nullptr, curvePath};
+	struct MarkerPoints_T markerpoint = {custompoint, nullptr, curvePath};
 	markerpoints.append(markerpoint);
 }
 
