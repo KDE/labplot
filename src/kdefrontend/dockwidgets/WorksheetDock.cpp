@@ -401,7 +401,7 @@ void WorksheetDock::pageChanged(int i) {
 }
 
 /*!
- * \brief called when the width or the the highth of the page was changed manually
+ * \brief called when the width or the height of the page was changed manually
  */
 void WorksheetDock::sizeChanged() {
 	CONDITIONAL_RETURN_NO_LOCK;

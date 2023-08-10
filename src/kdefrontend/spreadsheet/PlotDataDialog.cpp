@@ -869,7 +869,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 			count = m_columnComboBoxes.count(); // all box plots in one single plot
 
 		// set the range of the plot and the number of ticks manuall.
-		// the n-th box plot is positioned at x=n and and has the width=0.5 in logical coordinatates.
+		// the n-th box plot is positioned at x=n and has the width=0.5 in logical coordinatates.
 		// manually set the range to (0.5, n+0.5) and ajdust the number of ticks starting at 0.5
 		// to make sure we have every tick precisely under the middle of the box plot
 		const auto xIndex = plot->coordinateSystem(boxPlot->coordinateSystemIndex())->index(Dimension::X);

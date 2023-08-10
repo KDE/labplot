@@ -164,7 +164,7 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->addItem(i18n("Load Last Used Project"), static_cast<int>(MainWin::LoadOnStart::LastProject));
 	// 	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
 
-	ui.cbDockWindowPositionReopen->setToolTip(i18n("Controlls the behaviour of where the dock widgets are placed after being re-opened."));
+	ui.cbDockWindowPositionReopen->setToolTip(i18n("Controls the behavior of where the dock widgets are placed after being re-opened."));
 	ui.cbDockWindowPositionReopen->clear();
 	ui.cbDockWindowPositionReopen->addItem(i18n("Original Position"), static_cast<int>(Settings::DockPosBehaviour::OriginalPos));
 	ui.cbDockWindowPositionReopen->addItem(i18n("On top of the last active Dock Widget"), static_cast<int>(Settings::DockPosBehaviour::AboveLastActive));
