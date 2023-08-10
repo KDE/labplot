@@ -101,10 +101,6 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
 
-	// save/load template
-	void loadConfigFromTemplate(KConfig&) override;
-	void saveConfigAsTemplate(KConfig&) const override;
-
 	int isPrepared();
 
 private:

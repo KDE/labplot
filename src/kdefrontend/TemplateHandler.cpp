@@ -127,6 +127,31 @@ void TemplateHandler::setClassName(const QString& className) {
 	m_className = className.toLower();
 }
 
+void TemplateHandler::setSaveDefaultAvailable(bool on) {
+	m_tbSaveDefault->setVisible(on);
+}
+
+void TemplateHandler::setLoadAvailable(bool on) {
+	m_tbLoad->setVisible(on);
+}
+
+QStringList TemplateHandler::templateNames() const {
+	QStringList names;
+	auto list = QDir(m_dirName + m_className).entryList();
+	list.removeAll(QLatin1String("."));
+	list.removeAll(QLatin1String(".."));
+	for (int i = 0; i < list.size(); ++i) {
+		QFileInfo fileinfo(list.at(i));
+		names << fileinfo.baseName();
+	}
+
+	return names;
+}
+
+KConfig TemplateHandler::config(const QString& name) {
+	QString configFile = m_dirName + m_className + QLatin1Char('/') + name;
+	return KConfig(configFile, KConfig::SimpleConfig);
+}
 void TemplateHandler::retranslateUi() {
 	m_tbLoad->setText(i18n("Load"));
 	m_tbLoad->setToolTip(i18n("Load properties from a template"));

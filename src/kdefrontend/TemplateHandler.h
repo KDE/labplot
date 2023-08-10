@@ -23,7 +23,13 @@ class TemplateHandler : public QWidget {
 public:
 	TemplateHandler(QWidget* parent, const QString& className, bool expand = true);
 	void setClassName(const QString&);
+
 	void setToolButtonStyle(Qt::ToolButtonStyle);
+	void setSaveDefaultAvailable(bool);
+	void setLoadAvailable(bool);
+
+	KConfig config(const QString& name);
+	QStringList templateNames() const;
 
 private:
 	void retranslateUi();

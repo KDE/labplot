@@ -53,10 +53,6 @@ public:
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*) = 0;
 
-	// save/load template
-	virtual void loadConfigFromTemplate(KConfig&) {}
-	virtual void saveConfigAsTemplate(KConfig&) const {}
-
 	FileType type() const {
 		return m_type;
 	}
