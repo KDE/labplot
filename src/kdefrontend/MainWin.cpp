@@ -1146,7 +1146,17 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	m_redoAction->setEnabled(false);
 
 	if (!windowState.isEmpty()) {
+		for (auto dock : m_DockManager->dockWidgetsMap()) {
+			auto* d = dynamic_cast<ContentDockWidget*>(dock);
+			if (d)
+				d->part()->suppressDeletion(true);
+		}
 		changeVisibleAllDocks(false);
+		for (auto dock : m_DockManager->dockWidgetsMap()) {
+			auto* d = dynamic_cast<ContentDockWidget*>(dock);
+			if (d)
+				d->part()->suppressDeletion(false);
+		}
 		m_DockManager->restoreState(windowState);
 	} else {
 		// They might be not available, if at startup the "Do nothing" option is selected
