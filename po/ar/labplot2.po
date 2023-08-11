@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-10 00:41+0000\n"
+"POT-Creation-Date: 2023-08-11 00:41+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -12287,12 +12287,12 @@ msgstr "أضف عمودًا..."
 msgid "%1 axes: set color"
 msgstr "أضف عمودًا..."
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2001
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2003
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1821
@@ -15021,7 +15021,7 @@ msgstr ""
 #: src/kdefrontend/SettingsGeneralPage.cpp:167
 #, kde-format
 msgid ""
-"Controlls the behaviour of where the dock widgets are placed after being re-"
+"Controls the behavior of where the dock widgets are placed after being re-"
 "opened."
 msgstr ""
 

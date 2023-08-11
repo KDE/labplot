@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-10 00:41+0000\n"
+"POT-Creation-Date: 2023-08-11 00:41+0000\n"
 "PO-Revision-Date: 2023-08-07 21:16+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -12358,12 +12358,12 @@ msgstr "%1: establix el color de l'eix"
 msgid "%1 axes: set color"
 msgstr "%1 eixos: establix el color"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2001
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2003
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1821
@@ -15114,7 +15114,7 @@ msgstr "Carrega l'últim projecte emprat"
 #: src/kdefrontend/SettingsGeneralPage.cpp:167
 #, kde-format
 msgid ""
-"Controlls the behaviour of where the dock widgets are placed after being re-"
+"Controls the behavior of where the dock widgets are placed after being re-"
 "opened."
 msgstr ""
 

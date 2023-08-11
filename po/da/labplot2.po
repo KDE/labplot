@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-10 00:41+0000\n"
+"POT-Creation-Date: 2023-08-11 00:41+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -12852,12 +12852,12 @@ msgstr "&Indsæt tomme rækker"
 msgid "%1 axes: set color"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2001
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2003
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1821
@@ -15738,7 +15738,7 @@ msgstr ""
 #: src/kdefrontend/SettingsGeneralPage.cpp:167
 #, kde-format
 msgid ""
-"Controlls the behaviour of where the dock widgets are placed after being re-"
+"Controls the behavior of where the dock widgets are placed after being re-"
 "opened."
 msgstr ""
 

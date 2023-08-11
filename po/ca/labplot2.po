@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-10 00:41+0000\n"
-"PO-Revision-Date: 2023-08-07 21:16+0200\n"
+"POT-Creation-Date: 2023-08-11 00:41+0000\n"
+"PO-Revision-Date: 2023-08-10 19:06+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -12361,12 +12361,12 @@ msgstr "%1: estableix el color de l'eix"
 msgid "%1 axes: set color"
 msgstr "%1 eixos: estableix el color"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2001
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2003
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1821
@@ -15115,22 +15115,26 @@ msgstr "Carrega l'últim projecte emprat"
 
 #. i18n("Show Welcome Screen"));
 #: src/kdefrontend/SettingsGeneralPage.cpp:167
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Controlls the behaviour of where the dock widgets are placed after being "
+#| "re-opened."
 msgid ""
-"Controlls the behaviour of where the dock widgets are placed after being re-"
+"Controls the behavior of where the dock widgets are placed after being re-"
 "opened."
 msgstr ""
+"Controla el comportament d'on se situen els ginys acoblats després que es "
+"tornin a obrir."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:169
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original Position"
-msgstr "Mida original"
+msgstr "Posició original"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, kde-format
 msgid "On top of the last active Dock Widget"
-msgstr ""
+msgstr "A la part superior del darrer giny acoblat actiu"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:173
 #, kde-format
@@ -21034,7 +21038,7 @@ msgstr "Compleix la GUM"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:241
 #, kde-format
 msgid "Dock widget placement:"
-msgstr ""
+msgstr "Situació del giny acoblat:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

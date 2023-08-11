@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-10 00:41+0000\n"
-"PO-Revision-Date: 2023-08-01 14:34+0200\n"
+"POT-Creation-Date: 2023-08-11 00:41+0000\n"
+"PO-Revision-Date: 2023-08-10 07:23+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -12232,12 +12232,12 @@ msgstr "%1: ställ in färg för värden"
 msgid "%1 axes: set color"
 msgstr "%1: ställ in teckensnittsfärg"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2000
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2001
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 axlar: mall \"%2\" inläst"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2002
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2003
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:539
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:768
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1821
@@ -14958,22 +14958,26 @@ msgstr "Läs in senast använda projekt"
 
 #. i18n("Show Welcome Screen"));
 #: src/kdefrontend/SettingsGeneralPage.cpp:167
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Controlls the behaviour of where the dock widgets are placed after being "
+#| "re-opened."
 msgid ""
-"Controlls the behaviour of where the dock widgets are placed after being re-"
+"Controls the behavior of where the dock widgets are placed after being re-"
 "opened."
 msgstr ""
+"Styr beteendet när det gäller var dockningskomponenter placeras efter de har "
+"öppnats igen."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:169
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original Position"
-msgstr "Ursprunglig storlek"
+msgstr "Ursprunglig position"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, kde-format
 msgid "On top of the last active Dock Widget"
-msgstr ""
+msgstr "Ovanpå den senast aktiva dockningskomponenten"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:173
 #, kde-format
@@ -20839,10 +20843,9 @@ msgstr "Överensstämmer med GUM"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:241
-#, fuzzy, kde-format
-#| msgid "Box Plot Placement"
+#, kde-format
 msgid "Dock widget placement:"
-msgstr "Placering av låddiagram"
+msgstr "Placering av dockningskomponenter"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
