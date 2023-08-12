@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-11 00:41+0000\n"
-"PO-Revision-Date: 2023-08-02 06:50+0200\n"
+"PO-Revision-Date: 2023-08-11 08:17+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -14721,10 +14721,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:169
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original Position"
-msgstr "საწყისი ზომა"
+msgstr "საწყისი მდებარეობა"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, kde-format

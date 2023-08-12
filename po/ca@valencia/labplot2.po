@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-11 00:41+0000\n"
-"PO-Revision-Date: 2023-08-07 21:16+0200\n"
+"PO-Revision-Date: 2023-08-11 09:34+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -15117,17 +15117,18 @@ msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened."
 msgstr ""
+"Controla el comportament d'on se situen els ginys acoblats després que es "
+"tornen a obrir."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:169
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original Position"
-msgstr "Mida original"
+msgstr "Posició original"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, kde-format
 msgid "On top of the last active Dock Widget"
-msgstr ""
+msgstr "En la part superior de l'últim giny acoblat actiu"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:173
 #, kde-format
@@ -21033,7 +21034,7 @@ msgstr "Complix la GUM"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:241
 #, kde-format
 msgid "Dock widget placement:"
-msgstr ""
+msgstr "Situació del giny acoblat:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-11 00:41+0000\n"
-"PO-Revision-Date: 2023-08-10 07:23+0200\n"
+"PO-Revision-Date: 2023-08-11 08:18+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -14958,10 +14958,7 @@ msgstr "Läs in senast använda projekt"
 
 #. i18n("Show Welcome Screen"));
 #: src/kdefrontend/SettingsGeneralPage.cpp:167
-#, fuzzy, kde-format
-#| msgid ""
-#| "Controlls the behaviour of where the dock widgets are placed after being "
-#| "re-opened."
+#, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened."

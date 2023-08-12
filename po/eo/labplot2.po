@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-11 00:41+0000\n"
-"PO-Revision-Date: 2023-08-01 23:56+0100\n"
+"PO-Revision-Date: 2023-08-11 10:45+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -14948,22 +14948,23 @@ msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened."
 msgstr ""
+"Regas la konduton de kie la dokaj fenestraĵoj estas metitaj post esti "
+"remalfermitaj."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:169
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original Position"
-msgstr "Originala Grandeco"
+msgstr "Origina Pozicio"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, kde-format
 msgid "On top of the last active Dock Widget"
-msgstr ""
+msgstr "Super la lasta aktiva Dokfenestraĵo"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:173
 #, kde-format
 msgid "Show File Path"
-msgstr "Montru Dosieran Vojon"
+msgstr "Montri Dosieran Vojon"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:174
 #, kde-format
@@ -20820,7 +20821,7 @@ msgstr "GUM konforma"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:241
 #, kde-format
 msgid "Dock widget placement:"
-msgstr ""
+msgstr "Lokigo de doka fenestraĵo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

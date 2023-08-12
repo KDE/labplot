@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-11 00:41+0000\n"
-"PO-Revision-Date: 2023-08-10 09:44+0300\n"
+"PO-Revision-Date: 2023-08-11 09:30+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -15071,10 +15071,7 @@ msgstr "Завантажити останній використаний про�
 
 #. i18n("Show Welcome Screen"));
 #: src/kdefrontend/SettingsGeneralPage.cpp:167
-#, fuzzy, kde-format
-#| msgid ""
-#| "Controlls the behaviour of where the dock widgets are placed after being "
-#| "re-opened."
+#, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened."
