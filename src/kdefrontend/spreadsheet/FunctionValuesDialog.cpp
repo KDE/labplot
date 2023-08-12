@@ -177,6 +177,7 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 }
 
 void FunctionValuesDialog::checkValues() {
+	bool btnShow = true;
 	if (!ui.teEquation->isValid()) { // check whether the formula syntax is correct
 		DEBUG(Q_FUNC_INFO << ", syntax incorrect")
 		m_okButton->setEnabled(false);
@@ -194,7 +195,7 @@ void FunctionValuesDialog::checkValues() {
 		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
 			m_okButton->setEnabled(false);
-			return;
+			btnShow = false;
 		}
 
 		// TODO: why is the column check disabled?
@@ -207,8 +208,8 @@ void FunctionValuesDialog::checkValues() {
 				}
 		*/
 	}
-
-	m_okButton->setEnabled(true);
+	if (btnShow)
+		m_okButton->setEnabled(true);
 }
 
 void FunctionValuesDialog::showConstants() {
