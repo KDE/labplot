@@ -29,6 +29,7 @@
 #include <KLocalizedString>
 
 #include <KWindowConfig>
+#include <QStack>
 
 /*!
 	\class FunctionValuesDialog
@@ -103,8 +104,8 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	const Column* firstColumn{m_columns.first()};
 
 	// formula expression
-	ui.teEquation->setPlainText(firstColumn->formula());
-
+	// Todo Evaluate firstColumn->formula() and change matching bracket color;
+	ui.teEquation->setText(firstColumn->formula());
 	// variables
 	const auto& formulaData = firstColumn->formulaData();
 	if (formulaData.isEmpty()) { // no formula was used for this column -> add the first variable "x"
@@ -164,12 +165,14 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 	} else if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
+	} else if (le->text().at(0).isDigit()) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("Provided variable name starts with a digit."));
 	} else {
 		le->setStyleSheet(QString());
 		le->setToolTip(QString());
 		isValid = true;
 	}
-
 	return isValid;
 }
 
@@ -182,12 +185,11 @@ void FunctionValuesDialog::checkValues() {
 
 	// check whether for the variables where a name was provided also a column was selected
 	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
-		auto varName = m_variableLineEdits.at(i)->text().simplified();
+		auto varName = m_variableLineEdits.at(i)->text();
 		DEBUG(Q_FUNC_INFO << ", variable " << i + 1)
-		// ignore empty or not used variables
-		if (varName.isEmpty() || !ui.teEquation->toPlainText().contains(varName))
+		// ignore empty
+		if (varName.isEmpty())
 			continue;
-
 		auto* cb = m_variableDataColumns.at(i);
 		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
@@ -391,7 +393,6 @@ void FunctionValuesDialog::generate() {
 		col->setFormula(expression, variableNames, variableColumns, autoUpdate);
 		col->updateFormula();
 	}
-
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
