@@ -41,13 +41,13 @@ static QVector<TemplateHandler*> templateHandlers;
  \ingroup kdefrontend
 */
 
-TemplateHandler::TemplateHandler(QWidget* parent, const QString& className, bool expand)
+TemplateHandler::TemplateHandler(QWidget* parent, const QString& className, bool alignRight)
 	: QWidget(parent) {
 	auto* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
 	horizontalLayout->setMargin(0);
 
-	if (expand) {
+	if (alignRight) {
 		auto* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 		horizontalLayout->addItem(horizontalSpacer);
 	}
@@ -84,6 +84,11 @@ TemplateHandler::TemplateHandler(QWidget* parent, const QString& className, bool
 	m_tbSaveDefault->setIcon(QIcon::fromTheme(QLatin1String("document-save-as")));
 	// 	m_tbCopy->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
 	// 	m_tbPaste->setIcon(QIcon::fromTheme(QLatin1String("edit-paste")));
+
+	if (!alignRight) {
+		auto* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+		horizontalLayout->addItem(horizontalSpacer);
+	}
 
 	connect(m_tbLoad, &QToolButton::clicked, this, &TemplateHandler::loadMenu);
 	connect(m_tbSave, &QToolButton::clicked, this, &TemplateHandler::saveMenu);

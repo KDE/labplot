@@ -250,14 +250,7 @@ void ReferenceLineDock::load() {
 }
 
 void ReferenceLineDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_linesList.size();
 	if (size > 1)
 		m_line->beginMacro(i18n("%1 reference lines: template \"%2\" loaded", size, name));

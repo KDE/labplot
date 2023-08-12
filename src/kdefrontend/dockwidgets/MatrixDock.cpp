@@ -279,14 +279,7 @@ void MatrixDock::load() {
 }
 
 void MatrixDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	const int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	const int size = m_matrixList.size();
 	if (size > 1)
 		m_matrix->beginMacro(i18n("%1 matrices: template \"%2\" loaded", size, name));

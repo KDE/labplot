@@ -1297,14 +1297,7 @@ void XYCurveDock::load() {
 }
 
 void XYCurveDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_curvesList.size();
 	if (size > 1)
 		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));

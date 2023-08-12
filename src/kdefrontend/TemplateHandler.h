@@ -21,7 +21,7 @@ class TemplateHandler : public QWidget {
 	Q_OBJECT
 
 public:
-	TemplateHandler(QWidget* parent, const QString& className, bool expand = true);
+	TemplateHandler(QWidget* parent, const QString& className, bool alignRight = true);
 	void setClassName(const QString&);
 
 	void setToolButtonStyle(Qt::ToolButtonStyle);
