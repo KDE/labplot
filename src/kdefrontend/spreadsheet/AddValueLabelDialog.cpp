@@ -8,6 +8,7 @@
 */
 
 #include "AddValueLabelDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 
@@ -22,7 +23,7 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -92,7 +93,7 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, const Column* column)
 	layout->addWidget(btnBox, 2, 1);
 
 	// restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("AddValueLabelDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("AddValueLabelDialog"));
 
 	create(); // ensure there's a window created
 	if (conf.exists()) {
@@ -104,7 +105,7 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, const Column* column)
 
 AddValueLabelDialog::~AddValueLabelDialog() {
 	// save the current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("AddValueLabelDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("AddValueLabelDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

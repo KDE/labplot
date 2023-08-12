@@ -33,7 +33,6 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <algorithm>
 

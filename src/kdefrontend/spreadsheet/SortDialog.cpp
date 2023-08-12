@@ -8,13 +8,14 @@
 */
 
 #include "SortDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 
 #include <QPushButton>
 #include <QWindow>
 
 #include <KConfigGroup>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -41,7 +42,7 @@ SortDialog::SortDialog(QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SortDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("SortDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -55,7 +56,7 @@ SortDialog::SortDialog(QWidget* parent)
 
 SortDialog::~SortDialog() {
 	// save the current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SortDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("SortDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	// general settings

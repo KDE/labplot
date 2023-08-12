@@ -40,7 +40,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
 	setVisible(false);
 }
 
-InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double pos)
+InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double logicalPos)
 	: WorksheetElement(name, new InfoElementPrivate(this, curve), AspectType::InfoElement) {
 	Q_D(InfoElement);
 	m_plot = p;
@@ -56,14 +56,14 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		custompoint->setCoordinateBindingEnabled(true);
 		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
 		addChild(custompoint);
-		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
+		InfoElement::MarkerPoints_T markerpoint(custompoint, curve, curve->path());
 		markerpoints.append(markerpoint);
 
 		// setpos after label was created
 		if (curve->xColumn() && curve->yColumn()) {
 			bool valueFound;
 			double xpos;
-			double y = curve->y(pos, xpos, valueFound);
+			double y = curve->y(logicalPos, xpos, valueFound);
 			if (valueFound) {
 				d->positionLogical = xpos;
 				d->m_index = curve->xColumn()->indexForValue(xpos);
@@ -251,7 +251,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	if (d->m_index < 0 && curve->xColumn())
 		d->m_index = curve->xColumn()->indexForValue(custompoint->positionLogical().x());
 
-	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
+	struct MarkerPoints_T markerpoint = {custompoint, curve, curve->path()};
 	markerpoints.append(markerpoint);
 
 	if (markerpoints.count() == 1) // first point
@@ -296,7 +296,7 @@ void InfoElement::addCurvePath(QString& curvePath, CustomPoint* custompoint) {
 		addChild(custompoint);
 	}
 
-	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), nullptr, curvePath};
+	struct MarkerPoints_T markerpoint = {custompoint, nullptr, curvePath};
 	markerpoints.append(markerpoint);
 }
 
@@ -346,6 +346,11 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 			removeChild(mp.customPoint);
 		}
 	}
+
+	setUndoAware(false);
+	if (curve->name() == connectionLineCurveName())
+		setConnectionLineCurveName(markerpoints.count() > 0 ? markerpoints.at(0).curve->name() : QStringLiteral());
+	setUndoAware(true);
 
 	m_title->setUndoAware(false);
 	m_title->setText(createTextLabelText());

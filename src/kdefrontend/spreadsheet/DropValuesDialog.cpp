@@ -8,6 +8,7 @@
 */
 
 #include "DropValuesDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
@@ -86,7 +87,7 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::rejected, this, &DropValuesDialog::reject);
 
 	// restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DropValuesDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("DropValuesDialog"));
 	ui.leValue1->setText(conf.readEntry("Value1", QString()));
 	ui.leValue2->setText(conf.readEntry("Value2", QString()));
 	ui.cbOperator->setCurrentIndex(conf.readEntry("Operator", 0));
@@ -111,7 +112,7 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 
 DropValuesDialog::~DropValuesDialog() {
 	// save the current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DropValuesDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("DropValuesDialog"));
 	conf.writeEntry("Operator", ui.cbOperator->currentIndex());
 	conf.writeEntry("Value1", ui.leValue1->text());
 	conf.writeEntry("Value2", ui.leValue2->text());

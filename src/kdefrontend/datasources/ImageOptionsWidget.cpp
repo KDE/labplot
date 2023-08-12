@@ -8,9 +8,9 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "ImageOptionsWidget.h"
+#include "backend/core/Settings.h"
 
 #include <KConfigGroup>
-#include <KSharedConfig>
 
 /*!
    \class ImageOptionsWidget
@@ -34,13 +34,13 @@ ImageOptionsWidget::ImageOptionsWidget(QWidget* parent)
 }
 
 void ImageOptionsWidget::loadSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
+	KConfigGroup conf = Settings::group(QStringLiteral("Import"));
 
 	ui.cbImportFormat->setCurrentIndex(conf.readEntry("ImportFormat", 0));
 }
 
 void ImageOptionsWidget::saveSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
+	KConfigGroup conf = Settings::group(QStringLiteral("Import"));
 
 	conf.writeEntry("ImportFormat", ui.cbImportFormat->currentIndex());
 }
