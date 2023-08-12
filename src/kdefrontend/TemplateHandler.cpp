@@ -135,6 +135,29 @@ void TemplateHandler::setLoadAvailable(bool on) {
 	m_tbLoad->setVisible(on);
 }
 
+/*!
+ * returns the config object for the given template name \c name.
+ */
+KConfig TemplateHandler::config(const QString& name) {
+	QString configFile = m_dirName + m_className + QLatin1Char('/') + name;
+	return KConfig(configFile, KConfig::SimpleConfig);
+}
+
+/*!
+ * returns the name of the template for the config object \c config.
+ */
+QString TemplateHandler::templateName(const KConfig& config) {
+	// extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QLatin1Char('/'));
+	if (index != -1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+
+	return name;
+}
+
 QStringList TemplateHandler::templateNames() const {
 	QStringList names;
 	auto list = QDir(m_dirName + m_className).entryList();
@@ -148,10 +171,6 @@ QStringList TemplateHandler::templateNames() const {
 	return names;
 }
 
-KConfig TemplateHandler::config(const QString& name) {
-	QString configFile = m_dirName + m_className + QLatin1Char('/') + name;
-	return KConfig(configFile, KConfig::SimpleConfig);
-}
 void TemplateHandler::retranslateUi() {
 	m_tbLoad->setText(i18n("Load"));
 	m_tbLoad->setToolTip(i18n("Load properties from a template"));

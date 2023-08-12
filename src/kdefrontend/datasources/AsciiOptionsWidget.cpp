@@ -209,8 +209,9 @@ void AsciiOptionsWidget::loadConfigFromTemplate(KConfig& config) const {
 	ui.chbConvertNaNToZero->setChecked(group.readEntry("ConvertNaNToZero", false));
 	ui.chbRemoveQuotes->setChecked(group.readEntry("RemoveQuotes", false));
 	ui.chbSkipEmptyParts->setChecked(group.readEntry("SkipEmptyParts", false));
-	ui.chbHeader->setChecked(group.readEntry("UseFirstRow", true));
+	ui.chbHeader->setChecked(group.readEntry("UseFirstRow", true)); // header enabled - yes/no
 	headerChanged(ui.chbHeader->isChecked()); // call this to update the status of the SpinBox for the header line
+	ui.sbHeaderLine->setValue(group.readEntry(QLatin1String("HeaderLine"), 1));
 	ui.kleVectorNames->setText(group.readEntry("Names", ""));
 }
 
@@ -227,6 +228,7 @@ void AsciiOptionsWidget::saveConfigAsTemplate(KConfig& config) const {
 	group.writeEntry("ConvertNaNToZero", ui.chbConvertNaNToZero->isChecked());
 	group.writeEntry("RemoveQuotes", ui.chbRemoveQuotes->isChecked());
 	group.writeEntry("SkipEmptyParts", ui.chbSkipEmptyParts->isChecked());
-	group.writeEntry("UseFirstRow", ui.chbHeader->isChecked());
+	group.writeEntry("UseFirstRow", ui.chbHeader->isChecked()); // header enabled - yes/no
+	group.writeEntry(QLatin1String("HeaderLine"), ui.sbHeaderLine->value());
 	group.writeEntry("Names", ui.kleVectorNames->text());
 }

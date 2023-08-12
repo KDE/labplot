@@ -29,6 +29,7 @@ public:
 	void setLoadAvailable(bool);
 
 	KConfig config(const QString& name);
+	static QString templateName(const KConfig&);
 	QStringList templateNames() const;
 
 private:
