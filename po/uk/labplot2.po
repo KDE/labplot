@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-11 00:41+0000\n"
+"POT-Creation-Date: 2023-08-13 00:41+0000\n"
 "PO-Revision-Date: 2023-08-11 09:30+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -68,7 +68,7 @@ msgstr ""
 #: src/backend/note/Note.cpp:167 src/backend/spreadsheet/Spreadsheet.cpp:1184
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:291
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
-#: src/backend/worksheet/InfoElement.cpp:1158
+#: src/backend/worksheet/InfoElement.cpp:1163
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2994
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1333
@@ -986,7 +986,7 @@ msgstr "%1: встановити стиль контурів позначок п
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:400
-#: src/backend/worksheet/InfoElement.cpp:813
+#: src/backend/worksheet/InfoElement.cpp:818
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:177
 #: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElementContainer.cpp:67
@@ -997,7 +997,7 @@ msgstr "%1: зробити видимим"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:400
-#: src/backend/worksheet/InfoElement.cpp:813
+#: src/backend/worksheet/InfoElement.cpp:818
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:177
 #: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElement.cpp:630
@@ -1057,7 +1057,7 @@ msgid "Failed to read image data"
 msgstr "Не вдалося прочитати дані зображення"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
-#: src/backend/worksheet/InfoElement.cpp:783
+#: src/backend/worksheet/InfoElement.cpp:788
 #: src/backend/worksheet/WorksheetElement.cpp:592
 #, kde-format
 msgid "%1: set position"
@@ -6872,7 +6872,7 @@ msgstr "%1: змінити співвідношення розмірів"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:132
-#: src/backend/worksheet/InfoElement.cpp:1194
+#: src/backend/worksheet/InfoElement.cpp:1199
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
@@ -6890,12 +6890,12 @@ msgstr "Мітка"
 msgid "Symbol"
 msgstr "Позначення"
 
-#: src/backend/worksheet/InfoElement.cpp:799
+#: src/backend/worksheet/InfoElement.cpp:804
 #, kde-format
 msgid "%1: set gluepoint index"
 msgstr "%1: встановити індекс точки прилипання"
 
-#: src/backend/worksheet/InfoElement.cpp:806
+#: src/backend/worksheet/InfoElement.cpp:811
 #, kde-format
 msgid "%1: set connectionline curve name"
 msgstr "%1: встановити назву кривої лінії з'єднання"

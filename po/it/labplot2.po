@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-11 00:41+0000\n"
+"POT-Creation-Date: 2023-08-13 00:41+0000\n"
 "PO-Revision-Date: 2023-06-18 08:27+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 #: src/backend/note/Note.cpp:167 src/backend/spreadsheet/Spreadsheet.cpp:1184
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:291
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
-#: src/backend/worksheet/InfoElement.cpp:1158
+#: src/backend/worksheet/InfoElement.cpp:1163
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2994
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1333
@@ -980,7 +980,7 @@ msgstr "%1: imposta lo stile della bordatura della barra di errore"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:400
-#: src/backend/worksheet/InfoElement.cpp:813
+#: src/backend/worksheet/InfoElement.cpp:818
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:177
 #: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElementContainer.cpp:67
@@ -991,7 +991,7 @@ msgstr "%1: imposta visibile"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:400
-#: src/backend/worksheet/InfoElement.cpp:813
+#: src/backend/worksheet/InfoElement.cpp:818
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:177
 #: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElement.cpp:630
@@ -1051,7 +1051,7 @@ msgid "Failed to read image data"
 msgstr "Impossibile leggere i dati dell'immagine."
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
-#: src/backend/worksheet/InfoElement.cpp:783
+#: src/backend/worksheet/InfoElement.cpp:788
 #: src/backend/worksheet/WorksheetElement.cpp:592
 #, kde-format
 msgid "%1: set position"
@@ -6852,7 +6852,7 @@ msgstr "%1: cambia il rapporto di mantenimento"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:132
-#: src/backend/worksheet/InfoElement.cpp:1194
+#: src/backend/worksheet/InfoElement.cpp:1199
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
@@ -6870,12 +6870,12 @@ msgstr "Etichetta"
 msgid "Symbol"
 msgstr "Simbolo"
 
-#: src/backend/worksheet/InfoElement.cpp:799
+#: src/backend/worksheet/InfoElement.cpp:804
 #, kde-format
 msgid "%1: set gluepoint index"
 msgstr "%1: imposta l'indice del punto di adesione"
 
-#: src/backend/worksheet/InfoElement.cpp:806
+#: src/backend/worksheet/InfoElement.cpp:811
 #, kde-format
 msgid "%1: set connectionline curve name"
 msgstr "%1: imposta il nome della curva della linea di connessione"
