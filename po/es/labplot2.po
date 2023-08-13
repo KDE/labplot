@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-11 00:41+0000\n"
-"PO-Revision-Date: 2023-08-01 14:27+0200\n"
+"POT-Creation-Date: 2023-08-13 00:41+0000\n"
+"PO-Revision-Date: 2023-08-13 00:47+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -63,7 +63,7 @@ msgstr "No se han encontrado complementos del panel. Compruebe su instalación."
 #: src/backend/note/Note.cpp:167 src/backend/spreadsheet/Spreadsheet.cpp:1184
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:291
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
-#: src/backend/worksheet/InfoElement.cpp:1158
+#: src/backend/worksheet/InfoElement.cpp:1163
 #: src/backend/worksheet/Line.cpp:224
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2994
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1333
@@ -975,7 +975,7 @@ msgstr "%1: definir estilo del esquema de la barra de error"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:400
-#: src/backend/worksheet/InfoElement.cpp:813
+#: src/backend/worksheet/InfoElement.cpp:818
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:177
 #: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElementContainer.cpp:67
@@ -986,7 +986,7 @@ msgstr "%1: definir como visible"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:376
 #: src/backend/datapicker/DatapickerImage.cpp:400
-#: src/backend/worksheet/InfoElement.cpp:813
+#: src/backend/worksheet/InfoElement.cpp:818
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:177
 #: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElement.cpp:630
@@ -1046,7 +1046,7 @@ msgid "Failed to read image data"
 msgstr "Ha fallado la lectura de datos de la imagen"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:213
-#: src/backend/worksheet/InfoElement.cpp:783
+#: src/backend/worksheet/InfoElement.cpp:788
 #: src/backend/worksheet/WorksheetElement.cpp:592
 #, kde-format
 msgid "%1: set position"
@@ -6805,7 +6805,7 @@ msgstr "%1: cambiar las proporciones"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:132
-#: src/backend/worksheet/InfoElement.cpp:1194
+#: src/backend/worksheet/InfoElement.cpp:1199
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
@@ -6823,12 +6823,12 @@ msgstr "Etiqueta"
 msgid "Symbol"
 msgstr "Símbolo"
 
-#: src/backend/worksheet/InfoElement.cpp:799
+#: src/backend/worksheet/InfoElement.cpp:804
 #, kde-format
 msgid "%1: set gluepoint index"
 msgstr "%1: definir índice del punto de adhesión"
 
-#: src/backend/worksheet/InfoElement.cpp:806
+#: src/backend/worksheet/InfoElement.cpp:811
 #, kde-format
 msgid "%1: set connectionline curve name"
 msgstr "%1: definir nombre de curva de la línea de conexión"
@@ -15008,17 +15008,18 @@ msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened."
 msgstr ""
+"Controla el comportamiento de dónde se sitúan los elementos de anclaje tras "
+"volver a abrir."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:169
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original Position"
-msgstr "Tamaño original"
+msgstr "Posición original"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, kde-format
 msgid "On top of the last active Dock Widget"
-msgstr ""
+msgstr "Encima del último elemento de anclaje activo"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:173
 #, kde-format
@@ -20897,10 +20898,9 @@ msgstr "Compatible con GUM"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:241
-#, fuzzy, kde-format
-#| msgid "Box Plot Placement"
+#, kde-format
 msgid "Dock widget placement:"
-msgstr "Ubicación del diagrama de caja"
+msgstr "Ubicación del elemento de anclaje:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
