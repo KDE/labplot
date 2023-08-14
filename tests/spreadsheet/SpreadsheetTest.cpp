@@ -405,6 +405,29 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
 	QCOMPARE((bool)std::isnan(sheet->column(1)->valueAt(5)), true);
 }
 
+void SpreadsheetTest::testCopyPasteUtf8() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
+
+	const QString str = QString::fromUtf8("тест1 1\nтест2 2");
+
+	QApplication::clipboard()->setText(str);
+
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
+
+	// data types
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	// values
+	QCOMPARE(sheet.column(0)->textAt(0), QString::fromUtf8("тест1"));
+	QCOMPARE(sheet.column(1)->integerAt(0), 1);
+
+	QCOMPARE(sheet.column(0)->textAt(1), QString::fromUtf8("тест2"));
+	QCOMPARE(sheet.column(1)->integerAt(1), 2);
+}
 /*!
    insert the data at the edge of the spreadsheet and paste the data.
    the spreadsheet has to be extended accordingly

@@ -35,6 +35,8 @@ private Q_SLOTS:
 	void testCopyPasteSizeChange00();
 	void testCopyPasteSizeChange01();
 
+	void testCopyPasteUtf8();
+
 	// sorting
 	void testSortSingleNumeric1();
 	void testSortSingleNumeric2();

@@ -1752,7 +1752,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	QVector<QStringList> cellTexts;
 
 	try {
-		QString input_str = QLatin1String(mime_data->data(QStringLiteral("text/plain"))).trimmed();
+		QString input_str = QString::fromUtf8(mime_data->data(QStringLiteral("text/plain"))).trimmed();
 		QString separator;
 		if (input_str.indexOf(QLatin1String("\r\n")) != -1)
 			separator = QLatin1String("\r\n");
