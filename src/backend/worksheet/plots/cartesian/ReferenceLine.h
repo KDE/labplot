@@ -1,46 +1,28 @@
-/***************************************************************************
-    File                 : ReferenceLine.h
-    Project              : LabPlot
-    Description          : Reference line on the plot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : ReferenceLine.h
+	Project              : LabPlot
+	Description          : Reference line on the plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef REFERENCELINE_H
 #define REFERENCELINE_H
 
-#include <QPen>
-
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
-class ReferenceLinePrivate;
 class CartesianPlot;
+class Line;
+class ReferenceLinePrivate;
 class QActionGroup;
 
 class ReferenceLine : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit ReferenceLine(const CartesianPlot*, const QString&);
+	explicit ReferenceLine(CartesianPlot*, const QString&);
 	~ReferenceLine() override;
 
 	QIcon icon() const override;
@@ -49,15 +31,10 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfig&) override;
 
-	BASIC_D_ACCESSOR_DECL(double, position, Position)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
-	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
-	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
-
-	void setVisible(bool on) override;
-	bool isVisible() const override;
-	void setPrinting(bool) override;
+	Line* line() const;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
@@ -65,7 +42,6 @@ public:
 	typedef ReferenceLinePrivate Private;
 
 protected:
-	ReferenceLinePrivate* const d_ptr;
 	ReferenceLine(const QString& name, ReferenceLinePrivate* dd);
 
 private:
@@ -78,7 +54,6 @@ private:
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 
-	QActionGroup* orientationActionGroup{nullptr};
 	QActionGroup* lineStyleActionGroup{nullptr};
 	QActionGroup* lineColorActionGroup{nullptr};
 
@@ -87,20 +62,16 @@ private:
 	QMenu* lineStyleMenu{nullptr};
 	QMenu* lineColorMenu{nullptr};
 
-private slots:
-	//SLOTs for changes triggered via QActions in the context menu
+private Q_SLOTS:
+	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);
 	void visibilityChangedSlot();
 
-signals:
+Q_SIGNALS:
 	friend class ReferenceLineSetPositionCmd;
 	void orientationChanged(Orientation);
-	void positionChanged(double);
-	void penChanged(const QPen&);
-	void opacityChanged(qreal);
-	void visibleChanged(bool);
 };
 
 #endif

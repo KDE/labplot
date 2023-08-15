@@ -1,52 +1,41 @@
-/***************************************************************************
-    File                 : SettingsDialog.cpp
-    Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
-    Description          : application settings dialog
+/*
+	File                 : SettingsDialog.cpp
+	Project              : LabPlot
+	Description          : application settings dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #include "SettingsDialog.h"
 
 #include "MainWin.h"
-#include "SettingsGeneralPage.h"
 #include "SettingsDatasetsPage.h"
+#include "SettingsGeneralPage.h"
 // #include "SettingsWelcomePage.h"
 #include "SettingsSpreadsheetPage.h"
 #include "SettingsWorksheetPage.h"
 
-#include <QPushButton>
-#include <QDialogButtonBox>
-#include <QWindow>
+#include "backend/core/Settings.h"
 
-#include <KMessageBox>
+#ifdef HAVE_CANTOR_LIBS
+#include "SettingsNotebookPage.h"
+#endif
+
 #include <KConfigGroup>
-#include <KSharedConfig>
-#include <KWindowConfig>
 #include <KI18n/KLocalizedString>
+#include <KMessageBox>
+
+#include <KWindowConfig>
+#include <kcoreaddons_version.h>
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/FeedbackConfigWidget>
 #endif
+
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QWindow>
 
 /**
  * \brief Settings dialog for Labplot.
@@ -54,10 +43,11 @@
  * Contains the pages for general settings and view settings.
  *
  */
-SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
+SettingsDialog::SettingsDialog(QWidget* parent)
+	: KPageDialog(parent) {
 	setFaceType(List);
 	setWindowTitle(i18nc("@title:window", "Preferences"));
-	setWindowIcon(QIcon::fromTheme("preferences-other"));
+	setWindowIcon(QIcon::fromTheme(QLatin1String("preferences-other")));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	buttonBox()->addButton(QDialogButtonBox::Apply)->setEnabled(false);
@@ -66,7 +56,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 
 	m_generalPage = new SettingsGeneralPage(this);
 	KPageWidgetItem* generalFrame = addPage(m_generalPage, i18n("General"));
-	generalFrame->setIcon(QIcon::fromTheme("system-run"));
+	generalFrame->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
 	connect(m_generalPage, &SettingsGeneralPage::settingsChanged, this, &SettingsDialog::changed);
 
 	m_worksheetPage = new SettingsWorksheetPage(this);
@@ -79,14 +69,21 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	spreadsheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")));
 	connect(m_spreadsheetPage, &SettingsSpreadsheetPage::settingsChanged, this, &SettingsDialog::changed);
 
+#ifdef HAVE_CANTOR_LIBS
+	m_notebookPage = new SettingsNotebookPage(this);
+	KPageWidgetItem* notebookFrame = addPage(m_notebookPage, i18n("Notebook"));
+	notebookFrame->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
+	connect(m_notebookPage, &SettingsNotebookPage::settingsChanged, this, &SettingsDialog::changed);
+#endif
+
 	m_datasetsPage = new SettingsDatasetsPage(this);
 	KPageWidgetItem* datasetsFrame = addPage(m_datasetsPage, i18n("Datasets"));
 	datasetsFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
 
-// 	m_welcomePage = new SettingsWelcomePage(this);
-// 	KPageWidgetItem* welcomeFrame = addPage(m_welcomePage, i18n("Welcome Screen"));
-// 	welcomeFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
-// 	connect(m_welcomePage, &SettingsWelcomePage::resetWelcomeScreen, this, &SettingsDialog::resetWelcomeScreen);
+	// 	m_welcomePage = new SettingsWelcomePage(this);
+	// 	KPageWidgetItem* welcomeFrame = addPage(m_welcomePage, i18n("Welcome Screen"));
+	// 	welcomeFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
+	// 	connect(m_welcomePage, &SettingsWelcomePage::resetWelcomeScreen, this, &SettingsDialog::resetWelcomeScreen);
 
 #ifdef HAVE_KUSERFEEDBACK
 	auto* mainWin = static_cast<MainWin*>(parent);
@@ -98,9 +95,9 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	userFeedBackFrame->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-locale")));
 #endif
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("SettingsDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -109,7 +106,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 }
 
 SettingsDialog::~SettingsDialog() {
-	KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
+	KConfigGroup dialogConfig = Settings::group(QStringLiteral("SettingsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
 }
 
@@ -122,7 +119,11 @@ void SettingsDialog::slotButtonClicked(QAbstractButton* button) {
 		}
 	} else if (button == buttonBox()->button(QDialogButtonBox::RestoreDefaults)) {
 		const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		if (KMessageBox::questionTwoActions(this, text, QString(), KStandardGuiItem::reset(), KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction) {
+#else
 		if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
+#endif
 			restoreDefaults();
 			setWindowTitle(i18nc("@title:window", "Preferences"));
 			buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(false);
@@ -141,7 +142,11 @@ void SettingsDialog::applySettings() {
 	m_generalPage->applySettings();
 	m_worksheetPage->applySettings();
 	m_spreadsheetPage->applySettings();
-	KSharedConfig::openConfig()->sync();
+#ifdef HAVE_CANTOR_LIBS
+	m_notebookPage->applySettings();
+#endif
+
+	Settings::sync();
 
 #ifdef HAVE_KUSERFEEDBACK
 	auto* mainWin = static_cast<MainWin*>(parent());
@@ -149,7 +154,7 @@ void SettingsDialog::applySettings() {
 	mainWin->userFeedbackProvider().setSurveyInterval(m_userFeedbackWidget->surveyInterval());
 #endif
 
-	emit settingsChanged();
+	Q_EMIT settingsChanged();
 }
 
 void SettingsDialog::restoreDefaults() {
@@ -157,4 +162,7 @@ void SettingsDialog::restoreDefaults() {
 	m_generalPage->restoreDefaults();
 	m_worksheetPage->restoreDefaults();
 	m_spreadsheetPage->restoreDefaults();
+#ifdef HAVE_CANTOR_LIBS
+	m_notebookPage->restoreDefaults();
+#endif
 }

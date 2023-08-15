@@ -1,29 +1,13 @@
-/***************************************************************************
-File                 : ROOTOptionsWidget.cpp
-Project              : LabPlot
-Description          : widget providing options for the import of ROOT data
---------------------------------------------------------------------
-Copyright            : (C) 2018 Christoph Roick (chrisito@gmx.de)
-***************************************************************************/
+/*
+	File                 : ROOTOptionsWidget.cpp
+	Project              : LabPlot
+	Description          : widget providing options for the import of ROOT data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "ROOTOptionsWidget.h"
 #include "ImportFileWidget.h"
@@ -31,7 +15,9 @@ Copyright            : (C) 2018 Christoph Roick (chrisito@gmx.de)
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/lib/macros.h"
 
-ROOTOptionsWidget::ROOTOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
+ROOTOptionsWidget::ROOTOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
+	: QWidget(parent)
+	, m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
 	histItem = new QTreeWidgetItem(ui.twContent, QStringList(i18n("Histograms")));
 	histItem->setFlags(Qt::ItemIsEnabled);
@@ -48,32 +34,28 @@ void ROOTOptionsWidget::clear() {
 	ui.twPreview->clearContents();
 }
 
-void fillTree(QTreeWidgetItem* node, const ROOTFilter::Directory& dir)
-{
+void fillTree(QTreeWidgetItem* node, const ROOTFilter::Directory& dir) {
 	node->setFlags(Qt::ItemIsEnabled);
-	for (const ROOTFilter::Directory& child : dir.children)
+	for (const auto& child : dir.children)
 		fillTree(new QTreeWidgetItem(node, QStringList(child.name)), child);
 	for (const auto& content : dir.content)
 		(new QTreeWidgetItem(node, QStringList(content.first)))->setData(0, Qt::UserRole, content.second);
 }
 
-QHash<QStringList, QVector<QStringList> > findLeaves(
-	QTreeWidgetItem* node,
-	ROOTFilter* filter,
-	const QString& fileName, const QStringList& path = QStringList{}
-) {
-	QHash<QStringList, QVector<QStringList> > leaves;
+QHash<QStringList, QVector<QStringList>>
+findLeaves(QTreeWidgetItem* node, ROOTFilter* filter, const QString& fileName, const QStringList& path = QStringList{}) {
+	QMultiHash<QStringList, QVector<QStringList>> leaves;
 	if (node->childCount() > 0) {
 		for (int i = 0; i < node->childCount(); ++i)
 			leaves.unite(findLeaves(node->child(i), filter, fileName, path + QStringList(node->child(i)->text(0))));
 	} else {
-		leaves[path] = filter->listLeaves(fileName, node->data(0, Qt::UserRole).toLongLong());
+		leaves.insert(path, filter->listLeaves(fileName, node->data(0, Qt::UserRole).toLongLong()));
 	}
 	return leaves;
 }
 
 void ROOTOptionsWidget::updateContent(ROOTFilter* filter, const QString& fileName) {
-	DEBUG("updateContent()");
+	DEBUG(Q_FUNC_INFO);
 
 	qDeleteAll(histItem->takeChildren());
 	qDeleteAll(treeItem->takeChildren());
@@ -139,7 +121,7 @@ void ROOTOptionsWidget::rootObjectSelectionChanged() {
 				bool ok = false;
 				if (l.count() > 1) {
 					QString index(l.back());
-					if (index.at(0) == '[' && index.at(index.size() - 1) == ']') {
+					if (index.at(0) == QLatin1Char('[') && index.at(index.size() - 1) == QLatin1Char(']')) {
 						size_t elements = index.midRef(1, index.length() - 2).toUInt(&ok);
 						if (ok) {
 							leaf->setFlags(Qt::ItemIsEnabled);
@@ -148,7 +130,7 @@ void ROOTOptionsWidget::rootObjectSelectionChanged() {
 							if (l.count() > 2)
 								eldata.prepend(l.front());
 							for (size_t i = 0; i < elements; ++i) {
-								eldata.last() = elname.last() = QString("[%1]").arg(i);
+								eldata.last() = elname.last() = QStringLiteral("[%1]").arg(i);
 								auto el = new QTreeWidgetItem(leaf, elname);
 								el->setData(0, Qt::UserRole, eldata);
 							}
@@ -180,10 +162,10 @@ const QStringList ROOTOptionsWidget::selectedNames() const {
 	for (QTreeWidgetItem* item : ui.twContent->selectedItems()) {
 		QString path;
 		while (item && item != histItem && item != treeItem) {
-			path.prepend('/' + item->text(0));
+			path.prepend(QLatin1Char('/') + item->text(0));
 			item = item->parent();
 		}
-		path[0] = ':';
+		path[0] = QLatin1Char(':');
 		if (item == histItem)
 			names << QStringLiteral("Hist") + path;
 		else if (item == treeItem)
@@ -218,15 +200,14 @@ void ROOTOptionsWidget::setNRows(int nrows) {
 	//   else set it to one after underflow
 	// - if nrows didn't change, keep end row,
 	//   else set it to one before overflow
-	const int max = qMax(nrows - 1, 0);
+	const int max = std::max(nrows - 1, 0);
 	int firstval = ui.sbFirst->value();
 	if (ui.sbFirst->maximum() == 0)
-		firstval = qMin(nrows - 1, histselected ? 1 : 0);
+		firstval = std::min(nrows - 1, histselected ? 1 : 0);
 	ui.sbFirst->setMaximum(max);
 	ui.sbFirst->setValue(firstval);
 
-	int lastval = max == ui.sbLast->maximum() ? ui.sbLast->value()
-	                                          : qMax(max - (histselected ? 1 : 0), 0);
+	int lastval = max == ui.sbLast->maximum() ? ui.sbLast->value() : std::max(max - (histselected ? 1 : 0), 0);
 	ui.sbLast->setMaximum(max);
 	ui.sbLast->setValue(lastval);
 }

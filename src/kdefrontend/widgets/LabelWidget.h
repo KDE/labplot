@@ -1,51 +1,36 @@
-/***************************************************************************
-    File                 : LabelWidget.h
-    Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Description          : label settings widget
+/*
+	File                 : LabelWidget.h
+	Project              : LabPlot
+	Description          : label settings widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2014 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef LABELWIDGET_H
 #define LABELWIDGET_H
 
-#include "ui_labelwidget.h"
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
+#include "ui_labelwidget.h"
 #include <KConfigGroup>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
-#include <repository.h>
+#include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
-	class SyntaxHighlighter;
+class SyntaxHighlighter;
 }
 #endif
 
 class Label;
 class Axis;
 class QMenu;
+class KMessageWidget;
 
-class LabelWidget : public QWidget {
+class TextLabelTest;
+
+class LabelWidget : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -53,8 +38,8 @@ public:
 
 	void setLabels(QList<TextLabel*>);
 	void setAxes(QList<Axis*>);
-	void updateUnits();
-	void updateLocale();
+	void updateUnits() override;
+	void updateLocale() override;
 
 	void load();
 	void loadConfig(KConfigGroup&);
@@ -69,8 +54,8 @@ private:
 	TextLabel* m_label{nullptr};
 	QList<TextLabel*> m_labelsList;
 	QList<Axis*> m_axesList;
-	bool m_initializing{false};
 	QMenu* m_dateTimeMenu;
+	bool m_initializing{false};
 	bool m_teXEnabled{false};
 	BaseDock::Units m_units{BaseDock::Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
@@ -78,17 +63,27 @@ private:
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;
 #endif
+	KMessageWidget* m_messageWidget;
 
-	void initConnections() const;
+	QVector<QMetaObject::Connection> m_connections;
 
-signals:
+	void initConnections();
+
+Q_SIGNALS:
 	void dataChanged(bool);
+	/*!
+	 * \brief fontColorChangedSignal
+	 * Used to send out that font color has changed. So in the case of the axis
+	 * the axisdock can update the axis color widget
+	 */
+	void labelFontColorChangedSignal(const QColor&);
 
-private slots:
-	//SLOTs for changes triggered in LabelWidget
+private Q_SLOTS:
+	// SLOTs for changes triggered in LabelWidget
 	void textChanged();
 	void charFormatChanged(const QTextCharFormat&);
-	void teXUsedChanged(bool);
+	void modeChanged(int);
+	void updateMode(TextLabel::Mode mode);
 	void fontColorChanged(const QColor&);
 	void updateBackground() const;
 	void backgroundColorChanged(const QColor&);
@@ -112,6 +107,11 @@ private slots:
 	void customPositionYChanged(double);
 	void horizontalAlignmentChanged(int);
 	void verticalAlignmentChanged(int);
+
+	void positionXLogicalChanged(double);
+	void positionXLogicalDateTimeChanged(qint64);
+	void positionYLogicalChanged(double);
+
 	void rotationChanged(int);
 	void offsetXChanged(double);
 	void offsetYChanged(double);
@@ -123,18 +123,22 @@ private slots:
 	void borderOpacityChanged(int);
 
 	void visibilityChanged(bool);
+	void bindingChanged(bool checked);
+	void showPlaceholderTextChanged(bool checked);
 
-	//SLOTs for changes triggered in TextLabel
+	// SLOTs for changes triggered in TextLabel
 	void labelTextWrapperChanged(const TextLabel::TextWrapper&);
-	void labelTeXImageUpdated(bool);
+	void labelTeXImageUpdated(const TeXRenderer::Result&);
 	void labelTeXFontChanged(const QFont&);
-	void labelFontColorChanged(const QColor);
-	void labelBackgroundColorChanged(const QColor);
+	void labelFontColorChanged(const QColor&);
+	void labelBackgroundColorChanged(const QColor&);
 	void labelPositionChanged(const TextLabel::PositionWrapper&);
 	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);
-	void labelOffsetxChanged(qreal);
-	void labelOffsetyChanged(qreal);
+	void labelPositionLogicalChanged(QPointF);
+	void labelCoordinateBindingEnabledChanged(bool);
+	void labelOffsetXChanged(qreal);
+	void labelOffsetYChanged(qreal);
 	void labelRotationAngleChanged(qreal);
 
 	void labelBorderShapeChanged(TextLabel::BorderShape);
@@ -142,6 +146,13 @@ private slots:
 	void labelBorderOpacityChanged(float);
 
 	void labelVisibleChanged(bool);
+	void labelCartesianPlotParent(bool on);
+	void labelModeChanged(TextLabel::Mode);
+
+	friend TextLabelTest;
+	friend class AxisTest;
+	friend class AxisDock; // fontColorChanged() is a private method of LabelWidget, needs to be called
+	friend class WorksheetElementTest;
 };
 
-#endif //LABELWIDGET_H
+#endif // LABELWIDGET_H

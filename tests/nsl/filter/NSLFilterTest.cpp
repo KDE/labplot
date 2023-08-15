@@ -1,29 +1,12 @@
-/***************************************************************************
-    File                 : NSLFilterTest.cpp
-    Project              : LabPlot
-    Description          : NSL Tests for filter
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
- ***************************************************************************/
+/*
+	File                 : NSLFilterTest.cpp
+	Project              : LabPlot
+	Description          : NSL Tests for filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "NSLFilterTest.h"
 
@@ -32,23 +15,22 @@ extern "C" {
 }
 
 void NSLFilterTest::initTestCase() {
-	const QString currentDir = __FILE__;
+	const QString currentDir = QLatin1String(__FILE__);
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
 }
 
-//##############################################################################
-//#################  form test
-//##############################################################################
-
+// ##############################################################################
+// #################  form test
+// ##############################################################################
 
 void NSLFilterTest::testForm() {
 	const int N = 1000;
-	double data[N+2];
+	double data[N + 2];
 
 	int i;
-	for (i = 0; i < N+2; i++)
+	for (i = 0; i < N + 2; i++)
 		data[i] = 1.0;
-	
+
 	/*Bessel gain*/
 	int n = 3;
 	double x = 1.;
@@ -66,7 +48,7 @@ void NSLFilterTest::testForm() {
 	nsl_filter_apply(data, N, nsl_filter_type_band_pass, nsl_filter_form_bessel, 2, 100, 100);
 	nsl_filter_apply(data, N, nsl_filter_type_band_reject, nsl_filter_form_bessel, 2, 100, 100);
 
-	//for(i=0; i < N/2; i++)
+	// for(i=0; i < N/2; i++)
 	//	printf("%d %g\n", i, data[2*i]);
 
 	/* all pass order,cut,bw */
@@ -82,8 +64,8 @@ void NSLFilterTest::testForm() {
 	nsl_filter_fourier(data, N, nsl_filter_type_band_pass, nsl_filter_form_butterworth, 2, 2, 2);
 }
 
-//##############################################################################
-//#################  performance
-//##############################################################################
+// ##############################################################################
+// #################  performance
+// ##############################################################################
 
 QTEST_MAIN(NSLFilterTest)

@@ -1,82 +1,63 @@
-/***************************************************************************
-    File             : XYDataReductionCurveDock.h
-    Project          : LabPlot
-    --------------------------------------------------------------------
-    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright        : (C) 2017 Alexander Semke (alexander.semke@web.de)
-    Description      : widget for editing properties of data reduction curves
+/*
+	File             : XYDataReductionCurveDock.h
+	Project          : LabPlot
+	Description      : widget for editing properties of data reduction curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef XYDATAREDUCTIONCURVEDOCK_H
 #define XYDATAREDUCTIONCURVEDOCK_H
 
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
+#include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xydatareductioncurvedockgeneraltab.h"
 
 class XYAnalysisCurve;
 class TreeViewComboBox;
 class QStatusBar;
 
-class XYDataReductionCurveDock : public XYCurveDock {
+class XYDataReductionCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYDataReductionCurveDock(QWidget *parent, QStatusBar *sb);
+	explicit XYDataReductionCurveDock(QWidget* parent, QStatusBar* sb);
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
 
 private:
 	void initGeneralTab() override;
-	void showDataReductionResult();
+	void updatePlotRanges() override;
 	void updateTolerance();
 	void updateTolerance2();
+	void showDataReductionResult();
+	virtual QString customText() const override;
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
-	QStatusBar* statusBar;	// main status bar to display progress
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
+	QStatusBar* statusBar; // main status bar to display progress
 
 	XYDataReductionCurve* m_dataReductionCurve{nullptr};
 	XYDataReductionCurve::DataReductionData m_dataReductionData;
 	bool m_dateTimeRange{false};
 
 protected:
-	void setModel() override;
+	void setModel();
 
-private slots:
-	//SLOTs for changes triggered in XYDataReductionCurveDock
-	//general tab
+private Q_SLOTS:
+	// SLOTs for changes triggered in XYDataReductionCurveDock
+	// general tab
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
-	void xRangeMinChanged(double);
-	void xRangeMaxChanged(double);
-	void xRangeMinDateTimeChanged(const QDateTime&);
-	void xRangeMaxDateTimeChanged(const QDateTime&);
+	void xRangeMinChanged();
+	void xRangeMaxChanged();
+	void xRangeMinDateTimeChanged(qint64);
+	void xRangeMaxDateTimeChanged(qint64);
 	void typeChanged(int);
 	void autoToleranceChanged();
 	void toleranceChanged(double);
@@ -86,9 +67,8 @@ private slots:
 	void recalculateClicked();
 	void enableRecalculate() const;
 
-	//SLOTs for changes triggered in XYCurve
-	//General-Tab
-	void curveDescriptionChanged(const AbstractAspect*);
+	// SLOTs for changes triggered in XYCurve
+	// General-Tab
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);

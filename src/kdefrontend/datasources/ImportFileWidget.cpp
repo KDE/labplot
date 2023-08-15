@@ -1,51 +1,34 @@
-/***************************************************************************
-File                 : ImportFileWidget.cpp
-Project              : LabPlot
-Description          : import file data widget
---------------------------------------------------------------------
-Copyright            : (C) 2009-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
-Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
-Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
-
-***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : ImportFileWidget.cpp
+	Project              : LabPlot
+	Description          : import file data widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2009-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "ImportFileWidget.h"
-#include "FileInfoDialog.h"
-#include "backend/datasources/filters/filters.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
+#include "CANOptionsWidget.h"
+#include "ExcelOptionsWidget.h"
+#include "FITSOptionsWidget.h"
 #include "HDF5OptionsWidget.h"
 #include "ImageOptionsWidget.h"
-#include "NetCDFOptionsWidget.h"
-#include "FITSOptionsWidget.h"
 #include "JsonOptionsWidget.h"
+#include "MatioOptionsWidget.h"
+#include "NetCDFOptionsWidget.h"
 #include "ROOTOptionsWidget.h"
-
+#include "backend/core/Settings.h"
+#include "backend/datasources/filters/filters.h"
+#include "backend/lib/macros.h"
 #include <QCompleter>
 #include <QDir>
 #include <QDirModel>
 #include <QFileDialog>
-#include <QImageReader>
 #include <QInputDialog>
 #include <QIntValidator>
 #include <QLocalSocket>
@@ -54,36 +37,38 @@ Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 #include <QTableWidget>
 #include <QTcpSocket>
 #include <QTimer>
-#include <QUdpSocket>
-#include <QCheckBox>
 #include <QTreeWidgetItem>
-#include <QStringList>
+#include <QUdpSocket>
+#include <QWhatsThis>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KUrlComboBox>
 
 #ifdef HAVE_MQTT
-#include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
 #include "MQTTConnectionManagerDialog.h"
 #include "MQTTSubscriptionWidget.h"
+#include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
+#include <QMenu>
+#include <QMessageBox>
 #include <QMqttClient>
+#include <QMqttMessage>
 #include <QMqttSubscription>
 #include <QMqttTopicFilter>
-#include <QMqttMessage>
-#include <QMessageBox>
 #include <QWidgetAction>
-#include <QMenu>
 #endif
 
-QString absolutePath(const QString& fileName) {
+QString ImportFileWidget::absolutePath(const QString& fileName) {
+	if (fileName.isEmpty())
+		return fileName;
+
 #ifdef HAVE_WINDOWS
-	if (!fileName.isEmpty() && fileName.at(1) != QLatin1String(":"))
+	if (fileName.size() == 1 || (fileName.at(0) != QLatin1Char('/') && fileName.at(1) != QLatin1Char(':')))
 #else
-	if (!fileName.isEmpty() && fileName.at(0) != QLatin1String("/"))
+	if (fileName.at(0) != QLatin1Char('/'))
 #endif
-		return QDir::homePath() + QLatin1String("/") + fileName;
+		return QDir::homePath() + QLatin1Char('/') + fileName;
 
 	return fileName;
 }
@@ -94,54 +79,63 @@ QString absolutePath(const QString& fileName) {
 
    \ingroup kdefrontend
 */
-ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName) : QWidget(parent),
-	m_fileName(fileName),
-	m_liveDataSource(liveDataSource)
+ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName)
+	: QWidget(parent)
+	, m_fileName(fileName)
+	, m_liveDataSource(liveDataSource)
 #ifdef HAVE_MQTT
-	,
-	m_connectTimeoutTimer(new QTimer(this)),
-	m_subscriptionWidget(new MQTTSubscriptionWidget(this))
+	, m_subscriptionWidget(new MQTTSubscriptionWidget(this))
 #endif
 {
 	ui.setupUi(this);
 
-	//add supported file types
+	// add supported file types
 	if (!liveDataSource) {
 		ui.cbFileType->addItem(i18n("ASCII data"), static_cast<int>(AbstractFileFilter::FileType::Ascii));
 		ui.cbFileType->addItem(i18n("Binary data"), static_cast<int>(AbstractFileFilter::FileType::Binary));
 		ui.cbFileType->addItem(i18n("Image"), static_cast<int>(AbstractFileFilter::FileType::Image));
+#ifdef HAVE_EXCEL
+		ui.cbFileType->addItem(i18n("Excel 2007+ (XSLX)"), static_cast<int>(AbstractFileFilter::FileType::Excel));
+#endif
 #ifdef HAVE_HDF5
 		ui.cbFileType->addItem(i18n("Hierarchical Data Format 5 (HDF5)"), static_cast<int>(AbstractFileFilter::FileType::HDF5));
 #endif
 #ifdef HAVE_NETCDF
 		ui.cbFileType->addItem(i18n("Network Common Data Format (NetCDF)"), static_cast<int>(AbstractFileFilter::FileType::NETCDF));
 #endif
+#ifdef HAVE_VECTOR_BLF
+		ui.cbFileType->addItem(i18n("Vector Binary Logfile (BLF)"), static_cast<int>(AbstractFileFilter::FileType::VECTOR_BLF));
+#endif
 #ifdef HAVE_FITS
 		ui.cbFileType->addItem(i18n("Flexible Image Transport System Data Format (FITS)"), static_cast<int>(AbstractFileFilter::FileType::FITS));
 #endif
-		ui.cbFileType->addItem(i18n("JSON data"), static_cast<int>(AbstractFileFilter::FileType::JSON));
+		ui.cbFileType->addItem(i18n("JSON Data"), static_cast<int>(AbstractFileFilter::FileType::JSON));
 #ifdef HAVE_ZIP
 		ui.cbFileType->addItem(i18n("ROOT (CERN)"), static_cast<int>(AbstractFileFilter::FileType::ROOT));
 #endif
-		ui.cbFileType->addItem(i18n("Ngspice RAW ASCII"), static_cast<int>(AbstractFileFilter::FileType::NgspiceRawAscii));
-		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), static_cast<int>(AbstractFileFilter::FileType::NgspiceRawBinary));
+		ui.cbFileType->addItem(i18n("Spice"), static_cast<int>(AbstractFileFilter::FileType::Spice));
+#ifdef HAVE_READSTAT
+		ui.cbFileType->addItem(i18n("SAS, Stata or SPSS"), static_cast<int>(AbstractFileFilter::FileType::READSTAT));
+#endif
+#ifdef HAVE_MATIO
+		ui.cbFileType->addItem(i18n("MATLAB MAT file"), static_cast<int>(AbstractFileFilter::FileType::MATIO));
+#endif
 
-		//hide widgets relevant for live data reading only
+		// hide widgets relevant for live data reading only
 		ui.lRelativePath->hide();
 		ui.chbRelativePath->hide();
 		ui.lSourceType->hide();
 		ui.cbSourceType->hide();
 		ui.gbUpdateOptions->hide();
-	} else {
-		ui.cbFileType->addItem(i18n("ASCII data"), static_cast<int>(AbstractFileFilter::FileType::Ascii));
-		ui.cbFileType->addItem(i18n("Binary data"), static_cast<int>(AbstractFileFilter::FileType::Binary));
+	} else { // Live data source
+		ui.cbFileType->addItem(i18n("ASCII Data"), static_cast<int>(AbstractFileFilter::FileType::Ascii));
+		ui.cbFileType->addItem(i18n("Binary Data"), static_cast<int>(AbstractFileFilter::FileType::Binary));
 #ifdef HAVE_ZIP
 		ui.cbFileType->addItem(i18n("ROOT (CERN)"), static_cast<int>(AbstractFileFilter::FileType::ROOT));
 #endif
-		ui.cbFileType->addItem(i18n("Ngspice RAW ASCII"), static_cast<int>(AbstractFileFilter::FileType::NgspiceRawAscii));
-		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), static_cast<int>(AbstractFileFilter::FileType::NgspiceRawBinary));
+		ui.cbFileType->addItem(i18n("Spice"), static_cast<int>(AbstractFileFilter::FileType::Spice));
 
-		ui.lePort->setValidator( new QIntValidator(ui.lePort) );
+		ui.lePort->setValidator(new QIntValidator(ui.lePort));
 		ui.cbBaudRate->addItems(LiveDataSource::supportedBaudRates());
 		ui.cbSerialPort->addItems(LiveDataSource::availablePorts());
 
@@ -149,27 +143,24 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 		ui.chbLinkFile->setToolTip(i18n("If this option is checked, only the link to the file is stored in the project file but not its content."));
 		ui.chbRelativePath->setToolTip(i18n("If this option is checked, the relative path of the file (relative to project's folder) will be saved."));
-
-#ifdef HAVE_MQTT
-		m_connectTimeoutTimer->setInterval(6000);
-#endif
 	}
 
-	QStringList filterItems {i18n("Automatic"), i18n("Custom")};
+	QStringList filterItems{i18n("Automatic"), i18n("Custom")};
 	ui.cbFilter->addItems(filterItems);
 
-	//hide options that will be activated on demand
+	// hide options that will be activated on demand
 	ui.gbOptions->hide();
 	ui.gbUpdateOptions->hide();
 	setMQTTVisible(false);
 
-	ui.cbReadingType->addItem(i18n("Whole file"), static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+	ui.cbReadingType->addItem(i18n("Whole File"), static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 
-	ui.bOpen->setIcon( QIcon::fromTheme(QLatin1String("document-open")) );
-	ui.bFileInfo->setIcon( QIcon::fromTheme(QLatin1String("help-about")) );
-	ui.bManageFilters->setIcon( QIcon::fromTheme(QLatin1String("configure")) );
-	ui.bSaveFilter->setIcon( QIcon::fromTheme(QLatin1String("document-save")) );
-	ui.bRefreshPreview->setIcon( QIcon::fromTheme(QLatin1String("view-refresh")) );
+	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
+	ui.bOpenDBC->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
+	ui.bFileInfo->setIcon(QIcon::fromTheme(QStringLiteral("help-about")));
+	ui.bManageFilters->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
+	ui.bSaveFilter->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 
 	ui.tvJson->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.tvJson->setAlternatingRowColors(true);
@@ -191,28 +182,36 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	if (gridLayout)
 		gridLayout->addWidget(m_cbFileName, 1, 2, 1, 3);
 
+	m_cbDBCFileName = new KUrlComboBox(KUrlComboBox::Mode::Files, this);
+	m_cbDBCFileName->setMaxItems(7);
+	gridLayout = dynamic_cast<QGridLayout*>(ui.gbDataSource->layout());
+	if (gridLayout)
+		gridLayout->addWidget(m_cbDBCFileName, 2, 2, 1, 3);
 
-	//tooltips
-	QString info = i18n("Specify how the data source has to be processed on every read:"
-					   "<ul>"
-					   "<li>Continuously fixed - fixed amount of samples is processed starting from the beginning of the newly received data.</li>"
-					   "<li>From End - fixed amount of samples is processed starting from the end of the newly received data.</li>"
-					   "<li>Till the End - all newly received data is processed.</li>"
-					   "<li>Whole file - on every read the whole file is re-read completely and processed. Only available for \"File Or Named Pipe\" data sources.</li>"
-					   "</ul>");
+	// tooltips
+	QString info = i18n(
+		"Specify how the data source has to be processed on every read:"
+		"<ul>"
+		"<li>Continuously fixed - fixed amount of samples is processed starting from the beginning of the newly received data.</li>"
+		"<li>From End - fixed amount of samples is processed starting from the end of the newly received data.</li>"
+		"<li>Till the End - all newly received data is processed.</li>"
+		"<li>Whole file - on every read the whole file is re-read completely and processed. Only available for \"File Or Named Pipe\" data sources.</li>"
+		"</ul>");
 	ui.lReadingType->setToolTip(info);
 	ui.cbReadingType->setToolTip(info);
 
-	info = i18n("Number of samples (lines) to be processed on every read.\n"
-				"Only needs to be specified for the reading mode \"Continuously Fixed\" and \"From End\".");
+	info = i18n(
+		"Number of samples (lines) to be processed on every read.\n"
+		"Only needs to be specified for the reading mode \"Continuously Fixed\" and \"From End\".");
 	ui.lSampleSize->setToolTip(info);
 	ui.sbSampleSize->setToolTip(info);
 
-	info = i18n("Specify when and how frequently the data source needs to be read:"
-				"<ul>"
-				"<li>Periodically - the data source is read periodically with user specified time interval.</li>"
-				"<li>On New Data - the data source is read when new data arrives.</li>"
-				"</ul>");
+	info = i18n(
+		"Specify when and how frequently the data source needs to be read:"
+		"<ul>"
+		"<li>Periodically - the data source is read periodically with user specified time interval.</li>"
+		"<li>On New Data - the data source is read when new data arrives.</li>"
+		"</ul>");
 	ui.lUpdateType->setToolTip(info);
 	ui.cbUpdateType->setToolTip(info);
 
@@ -220,23 +219,27 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.lUpdateInterval->setToolTip(info);
 	ui.sbUpdateInterval->setToolTip(info);
 
-	info = i18n("Specify how many samples need to be kept in memory after reading.\n"
-				"Use \"All\" if all data has to be kept.");
+	info = i18n(
+		"Specify how many samples need to be kept in memory after reading.\n"
+		"Use \"All\" if all data has to be kept.");
 	ui.lKeepLastValues->setToolTip(info);
 	ui.sbKeepNValues->setToolTip(info);
 
+	info = i18n("Enable to use the first row of the selected data region for the column names of the spreadsheet.");
+	ui.lExcelFirstRowAsColNames->setToolTip(info);
+	ui.chbExcelFirstRowAsColName->setToolTip(info);
 #ifdef HAVE_MQTT
-	ui.cbSourceType->addItem(QLatin1String("MQTT"));
-	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QLatin1String("MQTT_connections");
+	ui.cbSourceType->addItem(QStringLiteral("MQTT"));
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("MQTT_connections");
 
-	//add subscriptions widget
+	// add subscriptions widget
 	layout = new QHBoxLayout;
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
 	layout->addWidget(m_subscriptionWidget);
 	ui.frameSubscriptions->setLayout(layout);
 
-	ui.bManageConnections->setIcon(QIcon::fromTheme(QLatin1String("network-server")));
+	ui.bManageConnections->setIcon(QIcon::fromTheme(QStringLiteral("network-server")));
 	ui.bManageConnections->setToolTip(i18n("Manage MQTT connections"));
 
 	info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
@@ -246,7 +249,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 #endif
 
-	//TODO: implement save/load of user-defined settings later and activate these buttons again
+	// TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
 	ui.bManageFilters->hide();
 }
@@ -254,19 +257,19 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 void ImportFileWidget::loadSettings() {
 	m_suppressRefresh = true;
 
-	//load last used settings
+	// load last used settings
 	QString confName;
 	if (m_liveDataSource)
-		confName = QLatin1String("LiveDataImport");
+		confName = QStringLiteral("LiveDataImport");
 	else
-		confName = QLatin1String("FileImport");
-	KConfigGroup conf(KSharedConfig::openConfig(), confName);
+		confName = QStringLiteral("FileImport");
+	KConfigGroup conf = Settings::group(confName);
 
-	//read the source type first since settings in fileNameChanged() depend on this
+	// read the source type first since settings in fileNameChanged() depend on this
 	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
 
-	//general settings
-	AbstractFileFilter::FileType fileType = static_cast<AbstractFileFilter::FileType>(conf.readEntry("Type", 0));
+	// general settings
+	auto fileType = static_cast<AbstractFileFilter::FileType>(conf.readEntry("Type", 0));
 	for (int i = 0; i < ui.cbFileType->count(); ++i) {
 		if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == fileType) {
 			if (ui.cbFileType->currentIndex() == i)
@@ -280,32 +283,42 @@ void ImportFileWidget::loadSettings() {
 
 	if (m_fileName.isEmpty()) {
 		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
-		m_cbFileName->setUrl(conf.readEntry("LastImportedFile", ""));
+		m_cbFileName->setUrl(QUrl(conf.readEntry("LastImportedFile", "")));
 		QStringList urls = m_cbFileName->urls();
 		urls.append(conf.readXdgListEntry("LastImportedFiles"));
 		m_cbFileName->setUrls(urls);
-		filterChanged(ui.cbFilter->currentIndex());	// needed if filter is not changed
+		filterChanged(ui.cbFilter->currentIndex()); // needed if filter is not changed
 	} else
 		m_cbFileName->setUrl(QUrl(m_fileName));
 
-	ui.sbPreviewLines->setValue(conf.readEntry("PreviewLines", 100));
+	if (m_dbcFileName.isEmpty()) {
+		m_cbDBCFileName->setUrl(QUrl(conf.readEntry("LastImportedDBCFile", "")));
+		QStringList urls = m_cbDBCFileName->urls();
+		urls.append(conf.readXdgListEntry("LastImportedDBCFiles"));
+		m_cbDBCFileName->setUrls(urls);
+		filterChanged(ui.cbFilter->currentIndex()); // needed if filter is not changed
+	} else
+		m_cbDBCFileName->setUrl(QUrl(m_dbcFileName));
 
-	//live data related settings
+	ui.sbPreviewLines->setValue(conf.readEntry("PreviewLines", 100));
+	ui.chbExcelFirstRowAsColName->setCheckState((Qt::CheckState)conf.readEntry("ExcelFirstLineAsColNames", (int)Qt::CheckState::Unchecked));
+
+	// live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate", 13)); // index for bautrate 19200b/s
 	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType", static_cast<int>(LiveDataSource::ReadingType::WholeFile)));
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
 	ui.cbUpdateType->setCurrentIndex(conf.readEntry("UpdateType", static_cast<int>(LiveDataSource::UpdateType::NewData)));
 	updateTypeChanged(ui.cbUpdateType->currentIndex());
-	ui.leHost->setText(conf.readEntry("Host",""));
+	ui.leHost->setText(conf.readEntry("Host", ""));
 	ui.sbKeepNValues->setValue(conf.readEntry("KeepNValues", 0)); // keep all values
-	ui.lePort->setText(conf.readEntry("Port",""));
+	ui.lePort->setText(conf.readEntry("Port", ""));
 	ui.sbSampleSize->setValue(conf.readEntry("SampleSize", 1));
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval", 1000));
 	ui.chbLinkFile->setCheckState((Qt::CheckState)conf.readEntry("LinkFile", (int)Qt::CheckState::Unchecked));
 	ui.chbRelativePath->setCheckState((Qt::CheckState)conf.readEntry("RelativePath", (int)Qt::CheckState::Unchecked));
 
 #ifdef HAVE_MQTT
-	//read available MQTT connections
+	// read available MQTT connections
 	m_initialisingMQTT = true;
 	readMQTTConnections();
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conf.readEntry("Connection", "")));
@@ -319,29 +332,32 @@ void ImportFileWidget::loadSettings() {
 	m_willSettings.willOwnMessage = conf.readEntry("mqttWillOwnMessage", m_willSettings.willOwnMessage);
 	m_willSettings.willTimeInterval = conf.readEntry("mqttWillUpdateInterval", m_willSettings.willTimeInterval);
 
-	const QString& willStatistics = conf.readEntry("mqttWillStatistics","");
-	const QStringList& statisticsList = willStatistics.split('|', QString::SplitBehavior::SkipEmptyParts);
+	const QString& willStatistics = conf.readEntry("mqttWillStatistics", "");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	const QStringList& statisticsList = willStatistics.split(QLatin1Char('|'), Qt::SkipEmptyParts);
+#else
+	const QStringList& statisticsList = willStatistics.split(QLatin1Char('|'), QString::SkipEmptyParts);
+#endif
 	for (auto value : statisticsList)
 		m_willSettings.willStatistics[value.toInt()] = true;
 #endif
 
-	//initialize the slots after all settings were set in order to avoid unneeded refreshes
+	// initialize the slots after all settings were set in order to avoid unneeded refreshes
 	initSlots();
 
-	//update the status of the widgets
+	// update the status of the widgets
 	fileTypeChanged();
 	sourceTypeChanged(static_cast<int>(currentSourceType()));
 	readingTypeChanged(ui.cbReadingType->currentIndex());
 
-	//all set now, refresh the content of the file and the preview for the selected dataset
+	// all set now, refresh the content of the file and the preview for the selected dataset
 	m_suppressRefresh = false;
-	QTimer::singleShot(100, this, [=] () {
+	QTimer::singleShot(100, this, [=]() {
 		WAIT_CURSOR;
 		if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
-			QString tempFileName = fileName();
-			const QString& fileName = absolutePath(tempFileName);
-			if (QFile::exists(fileName))
-				updateContent(fileName);
+			const QString& file = absolutePath(fileName());
+			if (QFile::exists(file))
+				updateContent(file);
 		}
 
 		refreshPreview();
@@ -353,19 +369,22 @@ ImportFileWidget::~ImportFileWidget() {
 	// save current settings
 	QString confName;
 	if (m_liveDataSource)
-		confName = QLatin1String("LiveDataImport");
+		confName = QStringLiteral("LiveDataImport");
 	else
-		confName = QLatin1String("FileImport");
-	KConfigGroup conf(KSharedConfig::openConfig(), confName);
+		confName = QStringLiteral("FileImport");
+	KConfigGroup conf = Settings::group(confName);
 
 	// general settings
 	conf.writeEntry("Type", (int)currentFileType());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
 	conf.writeEntry("LastImportedFile", m_cbFileName->currentText());
 	conf.writeXdgListEntry("LastImportedFiles", m_cbFileName->urls());
+	conf.writeEntry("LastImportedDBCFile", m_cbDBCFileName->currentText());
+	conf.writeXdgListEntry("LastImportedDBCFiles", m_cbDBCFileName->urls());
 	conf.writeEntry("PreviewLines", ui.sbPreviewLines->value());
+	conf.writeEntry("ExcelFirstLineAsColNames", ui.chbExcelFirstRowAsColName->isChecked());
 
-	//live data related settings
+	// live data related settings
 	conf.writeEntry("SourceType", (int)currentSourceType());
 	conf.writeEntry("UpdateType", ui.cbUpdateType->currentIndex());
 	conf.writeEntry("ReadingType", ui.cbReadingType->currentIndex());
@@ -383,7 +402,7 @@ ImportFileWidget::~ImportFileWidget() {
 	delete m_connectTimeoutTimer;
 	delete m_subscriptionWidget;
 
-	//MQTT related settings
+	// MQTT related settings
 	conf.writeEntry("Connection", ui.cbConnection->currentText());
 	conf.writeEntry("mqttWillMessageType", static_cast<int>(m_willSettings.willMessageType));
 	conf.writeEntry("mqttWillUpdateType", static_cast<int>(m_willSettings.willUpdateType));
@@ -393,7 +412,7 @@ ImportFileWidget::~ImportFileWidget() {
 	QString willStatistics;
 	for (int i = 0; i < m_willSettings.willStatistics.size(); ++i) {
 		if (m_willSettings.willStatistics[i])
-			willStatistics += QString::number(i)+ QLatin1Char('|');
+			willStatistics += QString::number(i) + QLatin1Char('|');
 	}
 	conf.writeEntry("mqttWillStatistics", willStatistics);
 	conf.writeEntry("mqttWillRetain", static_cast<int>(m_willSettings.willRetain));
@@ -409,48 +428,79 @@ ImportFileWidget::~ImportFileWidget() {
 		m_imageOptionsWidget->saveSettings();
 	if (m_jsonOptionsWidget)
 		m_jsonOptionsWidget->saveSettings();
+	if (m_canOptionsWidget)
+		m_canOptionsWidget->saveSettings();
 }
 
 void ImportFileWidget::initSlots() {
-	//SLOTs for the general part of the data source configuration
-	connect(ui.cbSourceType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
-	        this, static_cast<void (ImportFileWidget::*) (int)>(&ImportFileWidget::sourceTypeChanged));
-	connect(m_cbFileName, &KUrlComboBox::urlActivated,
-			this, [=](const QUrl &url){fileNameChanged(url.path());});
+	// SLOTs for the general part of the data source configuration
+	connect(ui.cbSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&ImportFileWidget::sourceTypeChanged));
+	connect(m_cbFileName, &KUrlComboBox::urlActivated, this, [=](const QUrl& url) {
+		fileNameChanged(url.toLocalFile());
+	});
 	connect(ui.leHost, &QLineEdit::textChanged, this, &ImportFileWidget::hostChanged);
 	connect(ui.lePort, &QLineEdit::textChanged, this, &ImportFileWidget::portChanged);
 	connect(ui.tvJson, &QTreeView::clicked, this, &ImportFileWidget::refreshPreview);
+
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportFileWidget::selectFile);
-	connect(ui.bFileInfo, &QPushButton::clicked, this, &ImportFileWidget::fileInfoDialog);
+	connect(ui.bOpenDBC, &QPushButton::clicked, this, &ImportFileWidget::selectDBCFile);
+	connect(ui.bFileInfo, &QPushButton::clicked, this, &ImportFileWidget::showFileInfo);
 	connect(ui.bSaveFilter, &QPushButton::clicked, this, &ImportFileWidget::saveFilter);
 	connect(ui.bManageFilters, &QPushButton::clicked, this, &ImportFileWidget::manageFilters);
-	connect(ui.cbFileType, static_cast<void (KComboBox::*) (int)>(&KComboBox::currentIndexChanged),
-	        this, &ImportFileWidget::fileTypeChanged);
-	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
-	        this, &ImportFileWidget::updateTypeChanged);
-	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
-	        this, &ImportFileWidget::readingTypeChanged);
-	connect(ui.cbFilter, static_cast<void (KComboBox::*) (int)>(&KComboBox::activated), this, &ImportFileWidget::filterChanged);
+	connect(ui.cbFileType, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ImportFileWidget::fileTypeChanged);
+	connect(ui.cbUpdateType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::updateTypeChanged);
+	connect(ui.cbReadingType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::readingTypeChanged);
+	connect(ui.cbFilter, QOverload<int>::of(&KComboBox::activated), this, &ImportFileWidget::filterChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, this, &ImportFileWidget::refreshPreview);
 
+	if (m_asciiOptionsWidget)
+		connect(m_asciiOptionsWidget.get(), &AsciiOptionsWidget::headerLineChanged, this, &ImportFileWidget::updateStartRow);
+
 #ifdef HAVE_MQTT
-	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
-	connect(m_connectTimeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttConnectTimeout);
-	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {
-		emit checkFileType();
+	connect(ui.cbConnection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
+	connect(ui.cbFileType, QOverload<int>::of(&QComboBox::currentIndexChanged), [this]() {
+		Q_EMIT checkFileType();
 	});
 	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
 	connect(ui.bLWT, &QPushButton::clicked, this, &ImportFileWidget::showWillSettings);
-	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, this, &ImportFileWidget::mqttSubscribe);
-	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::MQTTUnsubscribeFromTopic, this, &ImportFileWidget::unsubscribeFromTopic);
+	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, this, &ImportFileWidget::subscribeTopic);
+	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::MQTTUnsubscribeFromTopic, this, &ImportFileWidget::unsubscribeTopic);
 	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::enableWill, this, &ImportFileWidget::enableWill);
 	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::subscriptionChanged, this, &ImportFileWidget::refreshPreview);
 #endif
 }
 
-void ImportFileWidget::showAsciiHeaderOptions(bool b) {
+/*!
+ * \brief Called when the current target data containter was changed in ImportDilaog
+ */
+void ImportFileWidget::dataContainerChanged(AbstractAspect* aspect) {
+	m_targetContainer = aspect;
+	updateHeaderOptions();
+}
+
+void ImportFileWidget::enableExcelFirstRowAsColNames(bool enable) {
+	ui.chbExcelFirstRowAsColName->setEnabled(enable);
+}
+
+/*!
+ *  update header specific options that are available for some filter types (ASCII and Excel)
+ *  and for some target data containers (Spreadsheet) only
+ */
+void ImportFileWidget::updateHeaderOptions() {
+	auto fileType = currentFileType();
+	bool spreadsheet = true; // assume it's spreadsheet on default if no container is selected yet
+	if (m_targetContainer)
+		spreadsheet = m_targetContainer->type() == AspectType::Spreadsheet;
+
+	// handle ASCII
+	bool visible = (fileType == AbstractFileFilter::FileType::Ascii) && spreadsheet;
 	if (m_asciiOptionsWidget)
-		m_asciiOptionsWidget->showAsciiHeaderOptions(b);
+		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
+
+	// handle Excel
+	visible = (fileType == AbstractFileFilter::FileType::Excel) && spreadsheet;
+	ui.lExcelFirstRowAsColNames->setVisible(visible);
+	ui.chbExcelFirstRowAsColName->setVisible(visible);
 }
 
 void ImportFileWidget::showJsonModel(bool b) {
@@ -468,26 +518,29 @@ void ImportFileWidget::showOptions(bool b) {
 }
 
 QString ImportFileWidget::fileName() const {
-	DEBUG("ImportFileWidget::fileName() : " << STDSTRING(m_cbFileName->currentText()))
 	return m_cbFileName->currentText();
+}
+
+QString ImportFileWidget::dbcFileName() const {
+	return m_cbDBCFileName->currentText();
 }
 
 QString ImportFileWidget::selectedObject() const {
 	const QString& path = fileName();
 
-	//determine the file name only
-	QString name = path.right(path.length() - path.lastIndexOf('/') - 1);
+	// determine the file name only
+	QString name = path.right(path.length() - path.lastIndexOf(QLatin1Char('/')) - 1);
 
-	//strip away the extension if available
-	if (name.indexOf('.') != -1)
-		name = name.left(name.lastIndexOf('.'));
+	// strip away the extension if available
+	if (name.indexOf(QLatin1Char('.')) != -1)
+		name = name.left(name.lastIndexOf(QLatin1Char('.')));
 
-	//for multi-dimensional formats like HDF, netCDF and FITS add the currently selected object
+	// for multi-dimensional formats like HDF, netCDF and FITS add the currently selected object
 	const auto format = currentFileType();
 	if (format == AbstractFileFilter::FileType::HDF5) {
 		const QStringList& hdf5Names = m_hdf5OptionsWidget->selectedNames();
 		if (hdf5Names.size())
-			name += hdf5Names.first(); //the names of the selected HDF5 objects already have '/'
+			name += hdf5Names.first(); // the names of the selected HDF5 objects already have '/'
 	} else if (format == AbstractFileFilter::FileType::NETCDF) {
 		const QStringList& names = m_netcdfOptionsWidget->selectedNames();
 		if (names.size())
@@ -500,8 +553,16 @@ QString ImportFileWidget::selectedObject() const {
 		const QStringList& names = m_rootOptionsWidget->selectedNames();
 		if (names.size())
 			name += QLatin1Char('/') + names.first();
+	} else if (format == AbstractFileFilter::FileType::MATIO) {
+		const QStringList& names = m_matioOptionsWidget->selectedNames();
+		if (names.size())
+			name += QLatin1Char('/') + names.first();
+	} else if (format == AbstractFileFilter::FileType::Excel) {
+		const auto& names = m_excelOptionsWidget->selectedExcelRegionNames();
+		if (names.size()) {
+			name += QLatin1Char('/') + names.first();
+		}
 	}
-
 	return name;
 }
 
@@ -509,8 +570,8 @@ QString ImportFileWidget::selectedObject() const {
  * returns \c true if the number of lines to be imported from the currently selected file is zero ("file is empty"),
  * returns \c false otherwise.
  */
-bool ImportFileWidget::isFileEmpty() const {
-	return m_fileEmpty;
+bool ImportFileWidget::importValid() const {
+	return m_importValid;
 }
 
 QString ImportFileWidget::host() const {
@@ -533,12 +594,11 @@ int ImportFileWidget::baudRate() const {
 	saves the settings to the data source \c source.
 */
 void ImportFileWidget::saveSettings(LiveDataSource* source) const {
-	AbstractFileFilter::FileType fileType = currentFileType();
+	auto fileType = currentFileType();
 	auto updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
-	LiveDataSource::SourceType sourceType = currentSourceType();
+	auto sourceType = currentSourceType();
 	auto readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex());
 
-	source->setComment( fileName() );
 	source->setFileType(fileType);
 	currentFileFilter();
 	source->setFilter(m_currentFilter.release()); // pass ownership of the filter to the LiveDataSource
@@ -549,15 +609,17 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	case LiveDataSource::SourceType::FileOrPipe:
 		source->setFileName(fileName());
 		source->setFileLinked(ui.chbLinkFile->isChecked());
+		source->setComment(fileName());
 		if (m_liveDataSource)
 			source->setUseRelativePath(ui.chbRelativePath->isChecked());
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
 		source->setFileName(fileName());
 		source->setLocalSocketName(fileName());
+		source->setComment(fileName());
 		break;
-	case LiveDataSource::SourceType::NetworkTcpSocket:
-	case LiveDataSource::SourceType::NetworkUdpSocket:
+	case LiveDataSource::SourceType::NetworkTCPSocket:
+	case LiveDataSource::SourceType::NetworkUDPSocket:
 		source->setHost(ui.leHost->text());
 		source->setPort((quint16)ui.lePort->text().toInt());
 		break;
@@ -567,11 +629,9 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		break;
 	case LiveDataSource::SourceType::MQTT:
 		break;
-	default:
-		break;
 	}
 
-	//reading options
+	// reading options
 	source->setReadingType(readingType);
 	source->setKeepNValues(ui.sbKeepNValues->value());
 	source->setUpdateType(updateType);
@@ -581,57 +641,6 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	if (readingType != LiveDataSource::ReadingType::TillEnd)
 		source->setSampleSize(ui.sbSampleSize->value());
 }
-
-#ifdef HAVE_MQTT
-/*!
-	saves the settings to the MQTTClient \c client.
-*/
-void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
-	DEBUG("ImportFileWidget::saveMQTTSettings");
-	MQTTClient::UpdateType updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
-	MQTTClient::ReadingType readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
-
-	client->setComment(fileName());
-	currentFileFilter();
-	client->setFilter(static_cast<AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
-
-	client->setReadingType(readingType);
-
-	if (updateType == MQTTClient::UpdateType::TimeInterval)
-		client->setUpdateInterval(ui.sbUpdateInterval->value());
-
-	client->setKeepNValues(ui.sbKeepNValues->value());
-	client->setUpdateType(updateType);
-
-	if (readingType != MQTTClient::ReadingType::TillEnd)
-		client->setSampleSize(ui.sbSampleSize->value());
-
-	client->setMQTTClientHostPort(m_client->hostname(), m_client->port());
-
-	KConfig config(m_configPath, KConfig::SimpleConfig);
-	KConfigGroup group = config.group(ui.cbConnection->currentText());
-
-	bool useID = group.readEntry("UseID").toUInt();
-	bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
-
-	client->setMQTTUseAuthentication(useAuthentication);
-	if (useAuthentication)
-		client->setMQTTClientAuthentication(m_client->username(), m_client->password());
-
-	client->setMQTTUseID(useID);
-	if (useID)
-		client->setMQTTClientId(m_client->clientId());
-
-	for (int i = 0; i < m_mqttSubscriptions.count(); ++i)
-		client->addInitialMQTTSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
-
-	const bool retain = group.readEntry("Retain").toUInt();
-	client->setMQTTRetain(retain);
-
-	if (m_willSettings.enabled)
-		client->setWillSettings(m_willSettings);
-}
-#endif
 
 /*!
 	returns the currently used file type.
@@ -648,49 +657,54 @@ LiveDataSource::SourceType ImportFileWidget::currentSourceType() const {
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
-	DEBUG("ImportFileWidget::currentFileFilter()");
-	AbstractFileFilter::FileType fileType = currentFileType();
+	auto fileType = currentFileType();
 	if (m_currentFilter && m_currentFilter->type() != fileType)
 		m_currentFilter.reset();
 
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii: {
-		DEBUG("	ASCII");
+		DEBUG(Q_FUNC_INFO << ", ASCII");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new AsciiFilter);
 		auto filter = static_cast<AsciiFilter*>(m_currentFilter.get());
 
-		if (ui.cbFilter->currentIndex() == 0)     //"automatic"
+		if (ui.cbFilter->currentIndex() == 0) //"automatic"
 			filter->setAutoModeEnabled(true);
 		else if (ui.cbFilter->currentIndex() == 1) { //"custom"
 			filter->setAutoModeEnabled(false);
+
 			if (m_asciiOptionsWidget)
 				m_asciiOptionsWidget->applyFilterSettings(filter);
+
+			// set the data portion to import
+			if (ui.sbStartRow->value() != 1)
+				filter->setStartRow(ui.sbStartRow->value());
+			if (ui.sbEndRow->value() != -1)
+				filter->setEndRow(ui.sbEndRow->value());
+			if (ui.sbStartColumn->value() != 1)
+				filter->setStartColumn(ui.sbStartColumn->value());
+			if (ui.sbEndColumn->value() != -1)
+				filter->setEndColumn(ui.sbEndColumn->value());
 		} else
 			filter->loadFilterSettings(ui.cbFilter->currentText());
-
-		//save the data portion to import
-		filter->setStartRow(ui.sbStartRow->value());
-		filter->setEndRow(ui.sbEndRow->value());
-		filter->setStartColumn(ui.sbStartColumn->value());
-		filter->setEndColumn(ui.sbEndColumn->value());
 
 		break;
 	}
 	case AbstractFileFilter::FileType::Binary: {
-		DEBUG("	Binary");
+		DEBUG(Q_FUNC_INFO << ", Binary");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new BinaryFilter);
 		auto filter = static_cast<BinaryFilter*>(m_currentFilter.get());
-		if ( ui.cbFilter->currentIndex() == 0 ) 	//"automatic"
+
+		if (ui.cbFilter->currentIndex() == 0) //"automatic"
 			filter->setAutoModeEnabled(true);
-		else if (ui.cbFilter->currentIndex() == 1) {	//"custom"
+		else if (ui.cbFilter->currentIndex() == 1) { //"custom"
 			filter->setAutoModeEnabled(false);
 			if (m_binaryOptionsWidget)
 				m_binaryOptionsWidget->applyFilterSettings(filter);
 		} else {
-			//TODO: load filter settings
-			// 			filter->setFilterName( ui.cbFilter->currentText() );
+			// TODO: load filter settings
+			//  			filter->setFilterName( ui.cbFilter->currentText() );
 		}
 
 		filter->setStartRow(ui.sbStartRow->value());
@@ -698,8 +712,34 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
+	case AbstractFileFilter::FileType::Excel: {
+		DEBUG(Q_FUNC_INFO << ", Excel");
+
+		if (!m_currentFilter) {
+			m_currentFilter.reset(new ExcelFilter);
+		}
+
+		auto filter = static_cast<ExcelFilter*>(m_currentFilter.get());
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
+		filter->setFirstRowAsColumnNames(ui.chbExcelFirstRowAsColName->isChecked());
+
+		const auto& sern = selectedExcelRegionNames();
+		if (!sern.isEmpty()) {
+			const auto& firstRegion = sern.last();
+			const auto& nameSplit = firstRegion.split(QLatin1Char('!'));
+			const auto& sheet = nameSplit[0];
+			const auto& range = nameSplit[1];
+			filter->setCurrentRange(range);
+			filter->setCurrentSheet(sheet);
+		}
+
+		break;
+	}
 	case AbstractFileFilter::FileType::Image: {
-		DEBUG("	Image");
+		DEBUG(Q_FUNC_INFO << ", Image");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new ImageFilter);
 		auto filter = static_cast<ImageFilter*>(m_currentFilter.get());
@@ -713,24 +753,24 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::HDF5: {
-		DEBUG("ImportFileWidget::currentFileFilter(): HDF5");
+		DEBUG(Q_FUNC_INFO << ", HDF5");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new HDF5Filter);
 		auto filter = static_cast<HDF5Filter*>(m_currentFilter.get());
 		QStringList names = selectedHDF5Names();
-		QDEBUG("ImportFileWidget::currentFileFilter(): selected HDF5 names =" << names);
+		QDEBUG(Q_FUNC_INFO << ", selected HDF5 names =" << names);
 		if (!names.isEmpty())
-			filter->setCurrentDataSetName(names[0]);
+			filter->setCurrentDataSetName(names.at(0));
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
 		filter->setEndColumn(ui.sbEndColumn->value());
-		DEBUG("ImportFileWidget::currentFileFilter(): OK");
+		DEBUG(Q_FUNC_INFO << ", OK");
 
 		break;
 	}
 	case AbstractFileFilter::FileType::NETCDF: {
-		DEBUG("	NETCDF");
+		DEBUG(Q_FUNC_INFO << ", NetCDF");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new NetCDFFilter);
 		auto filter = static_cast<NetCDFFilter*>(m_currentFilter.get());
@@ -744,8 +784,21 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
+	case AbstractFileFilter::FileType::VECTOR_BLF: {
+		DEBUG(Q_FUNC_INFO << ", VECTOR_BLF");
+		if (!m_currentFilter) {
+			auto filter = new VectorBLFFilter;
+			filter->setDBCFile(dbcFileName());
+			m_currentFilter.reset(filter);
+		}
+		auto filter = static_cast<VectorBLFFilter*>(m_currentFilter.get());
+		if (m_canOptionsWidget)
+			m_canOptionsWidget->applyFilterSettings(filter);
+
+		break;
+	}
 	case AbstractFileFilter::FileType::FITS: {
-		DEBUG("	FITS");
+		DEBUG(Q_FUNC_INFO << ", FITS");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new FITSFilter);
 		auto filter = static_cast<FITSFilter*>(m_currentFilter.get());
@@ -757,7 +810,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::JSON: {
-		DEBUG("	JSON");
+		DEBUG(Q_FUNC_INFO << ", JSON");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new JsonFilter);
 		auto filter = static_cast<JsonFilter*>(m_currentFilter.get());
@@ -771,7 +824,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::ROOT: {
-		DEBUG("	ROOT");
+		DEBUG(Q_FUNC_INFO << ", ROOT");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new ROOTFilter);
 		auto filter = static_cast<ROOTFilter*>(m_currentFilter.get());
@@ -785,23 +838,39 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
-	case AbstractFileFilter::FileType::NgspiceRawAscii: {
-		DEBUG("	NgspiceRawAscii");
+	case AbstractFileFilter::FileType::Spice: {
+		DEBUG(Q_FUNC_INFO << ", Spice");
 		if (!m_currentFilter)
-			m_currentFilter.reset(new NgspiceRawAsciiFilter);
-		auto filter = static_cast<NgspiceRawAsciiFilter*>(m_currentFilter.get());
+			m_currentFilter.reset(new SpiceFilter());
+		auto filter = static_cast<SpiceFilter*>(m_currentFilter.get());
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 
 		break;
 	}
-	case AbstractFileFilter::FileType::NgspiceRawBinary: {
-		DEBUG("	NgspiceRawBinary");
+	case AbstractFileFilter::FileType::READSTAT: {
+		DEBUG(Q_FUNC_INFO << ", READSTAT");
 		if (!m_currentFilter)
-			m_currentFilter.reset(new NgspiceRawBinaryFilter);
-		auto filter = static_cast<NgspiceRawBinaryFilter*>(m_currentFilter.get());
+			m_currentFilter.reset(new ReadStatFilter);
+		auto filter = static_cast<ReadStatFilter*>(m_currentFilter.get());
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
+
+		break;
+	}
+	case AbstractFileFilter::FileType::MATIO: {
+		DEBUG(Q_FUNC_INFO << ", MATIO");
+		if (!m_currentFilter)
+			m_currentFilter.reset(new MatioFilter);
+		auto filter = static_cast<MatioFilter*>(m_currentFilter.get());
+		if (!selectedMatioNames().isEmpty())
+			filter->setSelectedVarNames(selectedMatioNames());
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
 
 		break;
 	}
@@ -814,24 +883,24 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	opens a file dialog and lets the user select the file data source.
 */
 void ImportFileWidget::selectFile() {
-	DEBUG("ImportFileWidget::selectFile()")
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("ImportFileWidget"));
-	const QString& dir = conf.readEntry(QLatin1String("LastDir"), "");
-	const QString& path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
+	DEBUG(Q_FUNC_INFO)
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileWidget"));
+	const QString& dir = conf.readEntry(QStringLiteral("LastDir"), "");
+	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the File Data Source"), dir);
 	DEBUG("	dir = " << STDSTRING(dir))
 	DEBUG("	path = " << STDSTRING(path))
-	if (path.isEmpty())	//cancel was clicked in the file-dialog
+	if (path.isEmpty()) // cancel was clicked in the file-dialog
 		return;
 
-	int pos = path.lastIndexOf('/');
+	int pos = path.lastIndexOf(QLatin1Char('/'));
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
-			conf.writeEntry(QLatin1String("LastDir"), newDir);
+			conf.writeEntry(QStringLiteral("LastDir"), newDir);
 	}
 
-	//process all events after the FileDialog was closed to repaint the widget
-	//before we start calculating the preview
+	// process all events after the FileDialog was closed to repaint the widget
+	// before we start calculating the preview
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	QStringList urls = m_cbFileName->urls();
@@ -842,6 +911,37 @@ void ImportFileWidget::selectFile() {
 	fileNameChanged(path); // why do I have to call this function separately
 }
 
+void ImportFileWidget::selectDBCFile() {
+	DEBUG(Q_FUNC_INFO)
+	const QString entry = QStringLiteral("DBCDir");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileWidget"));
+	const QString& dir = conf.readEntry(entry, "");
+	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the DBC file"), dir, i18n("DBC file (*.dbc)"));
+	DEBUG("	dir = " << STDSTRING(dir))
+	DEBUG("	path = " << STDSTRING(path))
+	if (path.isEmpty()) // cancel was clicked in the file-dialog
+		return;
+
+	int pos = path.lastIndexOf(QLatin1Char('/'));
+	if (pos != -1) {
+		QString newDir = path.left(pos);
+		if (newDir != dir)
+			conf.writeEntry(entry, newDir);
+	}
+
+	// process all events after the FileDialog was closed to repaint the widget
+	// before we start calculating the preview
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+
+	QStringList urls = m_cbDBCFileName->urls();
+	urls.insert(0, QUrl::fromLocalFile(path).url()); // add type of path
+	m_cbDBCFileName->setUrls(urls);
+	m_cbDBCFileName->setCurrentText(urls.first());
+	DEBUG("	combobox text = " << STDSTRING(m_cbDBCFileName->currentText()))
+
+	refreshPreview();
+}
+
 /*!
 	hides the MQTT related items of the widget
 */
@@ -850,7 +950,7 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 	ui.cbConnection->setVisible(visible);
 	ui.bManageConnections->setVisible(visible);
 
-	//topics
+	// topics
 	if (ui.cbConnection->currentIndex() != -1 && visible) {
 		ui.lTopics->setVisible(true);
 		ui.frameSubscriptions->setVisible(true);
@@ -867,73 +967,10 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 #endif
 	}
 
-	//will message
+	// will message
 	ui.lLWT->setVisible(visible);
 	ui.bLWT->setVisible(visible);
 }
-
-#ifdef HAVE_MQTT
-/*!
- * returns \c true if there is a valid connection to an MQTT broker and the user has subscribed to at least 1 topic,
- * returns \c false otherwise.
- */
-bool ImportFileWidget::isMqttValid() {
-	if (!m_client)
-		return false;
-
-	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
-	bool subscribed = (m_subscriptionWidget->subscriptionCount() > 0);
-	bool fileTypeOk = false;
-	if (this->currentFileType() == AbstractFileFilter::FileType::Ascii)
-		fileTypeOk = true;
-
-	return connected && subscribed && fileTypeOk;
-}
-
-/*!
- *\brief Unsubscribes from the given topic, and removes any data connected to it
- *
- * \param topicName the name of a topic we want to unsubscribe from
- */
-void ImportFileWidget::unsubscribeFromTopic(const QString& topicName, QVector<QTreeWidgetItem*> children) {
-	if (topicName.isEmpty())
-		return;
-
-	QMqttTopicFilter filter{topicName};
-	m_client->unsubscribe(filter);
-
-	for (int i = 0; i< m_mqttSubscriptions.count(); ++i)
-		if (m_mqttSubscriptions[i]->topic().filter() == topicName) {
-			m_mqttSubscriptions.remove(i);
-			break;
-		}
-
-	QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
-	while (j.hasNext()) {
-		j.next();
-        if (MQTTSubscriptionWidget::checkTopicContains(topicName, j.key().name()))
-			m_lastMessage.remove(j.key());
-	}
-
-	for (int i = 0; i < m_subscribedTopicNames.size(); ++i) {
-        if (MQTTSubscriptionWidget::checkTopicContains(topicName, m_subscribedTopicNames[i])) {
-			m_subscribedTopicNames.remove(i);
-			i--;
-		}
-	}
-
-	if (m_willSettings.willTopic == topicName) {
-		if (m_subscriptionWidget->subscriptionCount() > 0)
-			m_willSettings.willTopic = children[0]->text(0);
-		else
-			m_willSettings.willTopic.clear();
-	}
-
-	//signals that there was a change among the subscribed topics
-	emit subscriptionsChanged();
-	refreshPreview();
-}
-#endif
 
 /************** SLOTS **************************************************************/
 /*!
@@ -942,15 +979,12 @@ void ImportFileWidget::unsubscribeFromTopic(const QString& topicName, QVector<QT
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-	DEBUG("ImportFileWidget::fileNameChanged() : " << STDSTRING(name))
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(name))
+	Q_EMIT error(QString()); // clear previous errors
+
 	const QString fileName = absolutePath(name);
 
 	bool fileExists = QFile::exists(fileName);
-	if (fileExists)
-		m_cbFileName->setStyleSheet(QString());
-	else
-		m_cbFileName->setStyleSheet("QComboBox{background:red;}");
-
 	ui.gbOptions->setEnabled(fileExists);
 	ui.bManageFilters->setEnabled(fileExists);
 	ui.cbFilter->setEnabled(fileExists);
@@ -958,34 +992,34 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.bFileInfo->setEnabled(fileExists);
 	ui.gbUpdateOptions->setEnabled(fileExists);
 	if (!fileExists) {
-		//file doesn't exist -> delete the content preview that is still potentially
-		//available from the previously selected file
+		// file doesn't exist -> delete the content preview that is still potentially
+		// available from the previously selected file
 		ui.tePreview->clear();
 		m_twPreview->clear();
 		initOptionsWidget();
 
-		emit fileNameChanged();
+		Q_EMIT fileNameChanged();
 		return;
 	}
 
 	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
-		const AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
+		const auto fileType = AbstractFileFilter::fileType(fileName);
 		for (int i = 0; i < ui.cbFileType->count(); ++i) {
 			if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == fileType) {
 				// automatically select a new file type
 				if (ui.cbFileType->currentIndex() != i) {
 					ui.cbFileType->setCurrentIndex(i); // will call the slot fileTypeChanged which updates content and preview
 
-					//automatically set the comma separator if a csv file was selected
+					// automatically set the comma separator if a csv file was selected
 					if (fileType == AbstractFileFilter::FileType::Ascii && name.endsWith(QLatin1String("csv"), Qt::CaseInsensitive))
 						m_asciiOptionsWidget->setSeparatingCharacter(QLatin1Char(','));
 
-					emit fileNameChanged();
+					Q_EMIT fileNameChanged();
 					return;
 				} else {
 					initOptionsWidget();
 
-					//automatically set the comma separator if a csv file was selected
+					// automatically set the comma separator if a csv file was selected
 					if (fileType == AbstractFileFilter::FileType::Ascii && name.endsWith(QLatin1String("csv"), Qt::CaseInsensitive))
 						m_asciiOptionsWidget->setSeparatingCharacter(QLatin1Char(','));
 
@@ -996,7 +1030,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		}
 	}
 
-	emit fileNameChanged();
+	Q_EMIT fileNameChanged();
 	refreshPreview();
 }
 
@@ -1005,11 +1039,10 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 */
 void ImportFileWidget::saveFilter() {
 	bool ok;
-	QString text = QInputDialog::getText(this, i18n("Save Filter Settings as"),
-	                                     i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
+	QString text = QInputDialog::getText(this, i18n("Save Filter Settings as"), i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
 	if (ok && !text.isEmpty()) {
-		//TODO
-		//AsciiFilter::saveFilter()
+		// TODO
+		// AsciiFilter::saveFilter()
 	}
 }
 
@@ -1017,33 +1050,47 @@ void ImportFileWidget::saveFilter() {
   opens a dialog for managing all available predefined filters.
 */
 void ImportFileWidget::manageFilters() {
-	//TODO
+	// TODO
+}
+
+/*!
+ * \brief ImportFileWidget::hidePropertyWidgets
+ * Hide all Widgets related to the properties. This should be the default
+ * Currently every filetype is turning off, but it makes sense to turn on
+ * only when needed
+ * TODO: move all widgets in here
+ */
+void ImportFileWidget::hidePropertyWidgets() {
+	ui.lDBCDatabase->hide();
+	ui.bOpenDBC->hide();
+	m_cbDBCFileName->hide();
+	ui.lWarningLimitedMessages->hide();
 }
 
 /*!
 	Depending on the selected file type, activates the corresponding options in the data portion tab
 	and populates the combobox with the available pre-defined filter settings for the selected type.
 */
-void ImportFileWidget::fileTypeChanged(int index) {
-	Q_UNUSED(index);
-	AbstractFileFilter::FileType fileType = currentFileType();
-	DEBUG("ImportFileWidget::fileTypeChanged " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
+void ImportFileWidget::fileTypeChanged(int /*index*/) {
+	auto fileType = currentFileType();
+	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	initOptionsWidget();
 
-	//default
+	// default
+	hidePropertyWidgets();
 	ui.lFilter->show();
 	ui.cbFilter->show();
 
-	//different file types show different number of tabs in ui.tabWidget.
-	//when switching from the previous file type we re-set the tab widget to its original state
-	//and remove/add the required tabs further below
-	for (int i = 0; i<ui.tabWidget->count(); ++i)
+	// different file types show different number of tabs in ui.tabWidget.
+	// when switching from the previous file type we re-set the tab widget to its original state
+	// and remove/add the required tabs further below
+	for (int i = 0; i < ui.tabWidget->count(); ++i)
 		ui.tabWidget->removeTab(0);
 
-	ui.tabWidget->addTab(ui.tabDataFormat, i18n("Data format"));
+	ui.tabWidget->addTab(ui.tabDataFormat, i18n("Data Format"));
 	ui.tabWidget->addTab(ui.tabDataPreview, i18n("Preview"));
 	if (!m_liveDataSource)
-		ui.tabWidget->addTab(ui.tabDataPortion, i18n("Data portion to read"));
+		ui.tabWidget->addTab(ui.tabDataPortion, i18n("Data Portion to Read"));
 
 	ui.lPreviewLines->show();
 	ui.sbPreviewLines->show();
@@ -1069,11 +1116,26 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	case AbstractFileFilter::FileType::HDF5:
 	case AbstractFileFilter::FileType::NETCDF:
 	case AbstractFileFilter::FileType::FITS:
+	case AbstractFileFilter::FileType::MATIO:
+	case AbstractFileFilter::FileType::Excel:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
 		ui.tabWidget->setTabText(0, i18n("Data format && preview"));
 		ui.tabWidget->removeTab(1);
+		ui.tabWidget->setCurrentIndex(0);
+		break;
+	case AbstractFileFilter::FileType::VECTOR_BLF:
+		ui.lDBCDatabase->show();
+		ui.bOpenDBC->show();
+		m_cbDBCFileName->show();
+		ui.lWarningLimitedMessages->show();
+		ui.lFilter->hide();
+		ui.cbFilter->hide();
+		ui.lStartColumn->hide();
+		ui.sbStartColumn->hide();
+		ui.lEndColumn->hide();
+		ui.sbEndColumn->hide();
 		ui.tabWidget->setCurrentIndex(0);
 		break;
 	case AbstractFileFilter::FileType::Image:
@@ -1082,8 +1144,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 		ui.lPreviewLines->hide();
 		ui.sbPreviewLines->hide();
 		break;
-	case AbstractFileFilter::FileType::NgspiceRawAscii:
-	case AbstractFileFilter::FileType::NgspiceRawBinary:
+	case AbstractFileFilter::FileType::Spice:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		ui.lStartColumn->hide();
@@ -1098,28 +1159,35 @@ void ImportFileWidget::fileTypeChanged(int index) {
 		ui.cbFilter->hide();
 		showJsonModel(true);
 		break;
-	default:
-		DEBUG("unknown file type");
+	case AbstractFileFilter::FileType::READSTAT:
+		ui.tabWidget->removeTab(0);
+		ui.tabWidget->setCurrentIndex(0);
+		ui.lFilter->hide();
+		ui.cbFilter->hide();
+		break;
 	}
+
+	// update header specific options that are available for some filter types (ASCII and Excel)
+	// and for some target data containers (Spreadsheet) only
+	updateHeaderOptions();
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();
-	ui.cbFilter->addItem( i18n("Automatic") );
-	ui.cbFilter->addItem( i18n("Custom") );
+	ui.cbFilter->addItem(i18n("Automatic"));
+	ui.cbFilter->addItem(i18n("Custom"));
 
-	//TODO: populate the combobox with the available pre-defined filter settings for the selected type
+	// TODO: populate the combobox with the available pre-defined filter settings for the selected type
 	ui.cbFilter->setCurrentIndex(lastUsedFilterIndex);
 	filterChanged(lastUsedFilterIndex);
 
 	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
-		QString tempFileName = fileName();
-		const QString& fileName = absolutePath(tempFileName);
-		if (QFile::exists(fileName))
-			updateContent(fileName);
+		const QString& file = absolutePath(fileName());
+		if (QFile::exists(file))
+			updateContent(file);
 	}
 
-	//for file types other than ASCII and binary we support re-reading the whole file only
-	//select "read whole file" and deactivate the combobox
+	// for file types other than ASCII and binary we support re-reading the whole file only
+	// select "read whole file" and deactivate the combobox
 	if (m_liveDataSource && (fileType != AbstractFileFilter::FileType::Ascii && fileType != AbstractFileFilter::FileType::Binary)) {
 		ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 		ui.cbReadingType->setEnabled(false);
@@ -1131,31 +1199,26 @@ void ImportFileWidget::fileTypeChanged(int index) {
 
 // file type specific option widgets
 void ImportFileWidget::initOptionsWidget() {
-	DEBUG("ImportFileWidget::initOptionsWidget for " << ENUM_TO_STRING(AbstractFileFilter, FileType, currentFileType()));
+	DEBUG(Q_FUNC_INFO << ", for " << ENUM_TO_STRING(AbstractFileFilter, FileType, currentFileType()));
 	switch (currentFileType()) {
 	case AbstractFileFilter::FileType::Ascii: {
 		if (!m_asciiOptionsWidget) {
-			QWidget* asciiw = new QWidget();
+			auto* asciiw = new QWidget();
 			m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
 			m_asciiOptionsWidget->loadSettings();
 
-			//allow to add timestamp column for live data sources
+			// allow to add timestamp column for live data sources
 			if (m_liveDataSource)
 				m_asciiOptionsWidget->showTimestampOptions(true);
 			ui.swOptions->addWidget(asciiw);
 		}
-
-		//for MQTT topics we don't allow to set the vector names since the different topics
-		//can have different number of columns
-		bool isMQTT = (currentSourceType() == LiveDataSource::SourceType::MQTT);
-		m_asciiOptionsWidget->showAsciiHeaderOptions(!isMQTT);
 
 		ui.swOptions->setCurrentWidget(m_asciiOptionsWidget->parentWidget());
 		break;
 	}
 	case AbstractFileFilter::FileType::Binary:
 		if (!m_binaryOptionsWidget) {
-			QWidget* binaryw = new QWidget();
+			auto* binaryw = new QWidget();
 			m_binaryOptionsWidget = std::unique_ptr<BinaryOptionsWidget>(new BinaryOptionsWidget(binaryw));
 			ui.swOptions->addWidget(binaryw);
 			m_binaryOptionsWidget->loadSettings();
@@ -1164,16 +1227,28 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::Image:
 		if (!m_imageOptionsWidget) {
-			QWidget* imagew = new QWidget();
+			auto* imagew = new QWidget();
 			m_imageOptionsWidget = std::unique_ptr<ImageOptionsWidget>(new ImageOptionsWidget(imagew));
 			ui.swOptions->addWidget(imagew);
 			m_imageOptionsWidget->loadSettings();
 		}
 		ui.swOptions->setCurrentWidget(m_imageOptionsWidget->parentWidget());
 		break;
+	case AbstractFileFilter::FileType::Excel:
+		if (!m_excelOptionsWidget) {
+			QWidget* excelw = new QWidget();
+			m_excelOptionsWidget = std::unique_ptr<ExcelOptionsWidget>(new ExcelOptionsWidget(excelw, this));
+			ui.swOptions->addWidget(excelw);
+			connect(dynamic_cast<ExcelOptionsWidget*>(m_excelOptionsWidget.get()),
+					&ExcelOptionsWidget::enableDataPortionSelection,
+					this,
+					&ImportFileWidget::enableDataPortionSelection);
+		}
+		ui.swOptions->setCurrentWidget(m_excelOptionsWidget->parentWidget());
+		break;
 	case AbstractFileFilter::FileType::HDF5:
 		if (!m_hdf5OptionsWidget) {
-			QWidget* hdf5w = new QWidget();
+			auto* hdf5w = new QWidget();
 			m_hdf5OptionsWidget = std::unique_ptr<HDF5OptionsWidget>(new HDF5OptionsWidget(hdf5w, this));
 			ui.swOptions->addWidget(hdf5w);
 		} else
@@ -1182,16 +1257,24 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::NETCDF:
 		if (!m_netcdfOptionsWidget) {
-			QWidget* netcdfw = new QWidget();
+			auto* netcdfw = new QWidget();
 			m_netcdfOptionsWidget = std::unique_ptr<NetCDFOptionsWidget>(new NetCDFOptionsWidget(netcdfw, this));
 			ui.swOptions->insertWidget(static_cast<int>(AbstractFileFilter::FileType::NETCDF), netcdfw);
 		} else
 			m_netcdfOptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_netcdfOptionsWidget->parentWidget());
 		break;
+	case AbstractFileFilter::FileType::VECTOR_BLF:
+		if (!m_canOptionsWidget) {
+			auto* vectorBLF = new QWidget();
+			m_canOptionsWidget = std::unique_ptr<CANOptionsWidget>(new CANOptionsWidget(vectorBLF));
+			ui.swOptions->addWidget(vectorBLF);
+		}
+		ui.swOptions->setCurrentWidget(m_canOptionsWidget->parentWidget());
+		break;
 	case AbstractFileFilter::FileType::FITS:
 		if (!m_fitsOptionsWidget) {
-			QWidget* fitsw = new QWidget();
+			auto* fitsw = new QWidget();
 			m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
 			ui.swOptions->addWidget(fitsw);
 		} else
@@ -1200,7 +1283,7 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::JSON:
 		if (!m_jsonOptionsWidget) {
-			QWidget* jsonw = new QWidget();
+			auto* jsonw = new QWidget();
 			m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
 			ui.tvJson->setModel(m_jsonOptionsWidget->model());
 			ui.swOptions->addWidget(jsonw);
@@ -1212,15 +1295,24 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::ROOT:
 		if (!m_rootOptionsWidget) {
-			QWidget* rootw = new QWidget();
+			auto* rootw = new QWidget();
 			m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
 			ui.swOptions->addWidget(rootw);
 		} else
 			m_rootOptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_rootOptionsWidget->parentWidget());
 		break;
-	case AbstractFileFilter::FileType::NgspiceRawAscii:
-	case AbstractFileFilter::FileType::NgspiceRawBinary:
+	case AbstractFileFilter::FileType::MATIO:
+		if (!m_matioOptionsWidget) {
+			auto* matiow = new QWidget();
+			m_matioOptionsWidget = std::unique_ptr<MatioOptionsWidget>(new MatioOptionsWidget(matiow, this));
+			ui.swOptions->insertWidget(static_cast<int>(AbstractFileFilter::FileType::MATIO), matiow);
+		} else
+			m_matioOptionsWidget->clear();
+		ui.swOptions->setCurrentWidget(m_matioOptionsWidget->parentWidget());
+		break;
+	case AbstractFileFilter::FileType::Spice:
+	case AbstractFileFilter::FileType::READSTAT:
 		break;
 	}
 }
@@ -1229,8 +1321,16 @@ const QStringList ImportFileWidget::selectedHDF5Names() const {
 	return m_hdf5OptionsWidget->selectedNames();
 }
 
+// const QStringList ImportFileWidget::selectedVectorBLFNames() const {
+//	return m_vectorBLFOptionsWidget->selectedNames();
+// }
+
 const QStringList ImportFileWidget::selectedNetCDFNames() const {
 	return m_netcdfOptionsWidget->selectedNames();
+}
+
+const QStringList ImportFileWidget::selectedMatioNames() const {
+	return m_matioOptionsWidget->selectedNames();
 }
 
 const QStringList ImportFileWidget::selectedFITSExtensions() const {
@@ -1241,14 +1341,140 @@ const QStringList ImportFileWidget::selectedROOTNames() const {
 	return m_rootOptionsWidget->selectedNames();
 }
 
+const QStringList ImportFileWidget::selectedExcelRegionNames() const {
+	return m_excelOptionsWidget->selectedExcelRegionNames();
+}
+
+bool ImportFileWidget::excelUseFirstRowAsColNames() const {
+	return ui.chbExcelFirstRowAsColName->isChecked();
+}
+
 /*!
 	shows the dialog with the information about the file(s) to be imported.
 */
-void ImportFileWidget::fileInfoDialog() {
-	QStringList files = fileName().split(';');
-	auto* dlg = new FileInfoDialog(this);
-	dlg->setFiles(files);
-	dlg->exec();
+void ImportFileWidget::showFileInfo() {
+	const QString& info = fileInfoString(fileName());
+	QWhatsThis::showText(ui.bFileInfo->mapToGlobal(QPoint(0, 0)), info, ui.bFileInfo);
+}
+
+/*!
+	returns a string containing the general information about the file \c name
+	and some content specific information
+	(number of columns and lines for ASCII, color-depth for images etc.).
+*/
+QString ImportFileWidget::fileInfoString(const QString& name) const {
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(name))
+	QString infoString;
+	QFileInfo fileInfo;
+	QString fileTypeString;
+	QIODevice* file = new QFile(name);
+
+	QString fileName = absolutePath(name);
+
+	if (!file)
+		file = new QFile(fileName);
+
+	if (file->open(QIODevice::ReadOnly)) {
+		QStringList infoStrings;
+
+		infoStrings << QStringLiteral("<u><b>") + fileName + QStringLiteral("</b></u><br>");
+
+		// File type given by "file"
+#ifdef Q_OS_LINUX
+		const QString fileFullPath = QStandardPaths::findExecutable(QStringLiteral("file"));
+		if (fileFullPath.isEmpty())
+			return i18n("file command not found");
+
+		QProcess proc;
+		QStringList args;
+		args << QStringLiteral("-b") << fileName;
+		proc.start(fileFullPath, args);
+
+		if (proc.waitForReadyRead(1000) == false)
+			infoStrings << i18n("Reading from file %1 failed.", fileName);
+		else {
+			fileTypeString = QLatin1String(proc.readLine());
+			if (fileTypeString.contains(i18n("cannot open")))
+				fileTypeString.clear();
+			else
+				fileTypeString.remove(fileTypeString.length() - 1, 1); // remove '\n'
+		}
+		infoStrings << i18n("<b>File type:</b> %1", fileTypeString);
+#endif
+
+		// General:
+		fileInfo.setFile(fileName);
+		infoStrings << QStringLiteral("<b>") << i18n("General:") << QStringLiteral("</b>");
+
+		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Executable: %1", fileInfo.isExecutable() ? i18n("yes") : i18n("no"));
+
+		infoStrings << i18n("Birth time: %1", fileInfo.birthTime().toString());
+		infoStrings << i18n("Last metadata changed: %1", fileInfo.metadataChangeTime().toString());
+		infoStrings << i18n("Last modified: %1", fileInfo.lastModified().toString());
+		infoStrings << i18n("Last read: %1", fileInfo.lastRead().toString());
+		infoStrings << i18n("Owner: %1", fileInfo.owner());
+		infoStrings << i18n("Group: %1", fileInfo.group());
+		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
+
+		// Summary:
+		infoStrings << QStringLiteral("<b>") << i18n("Summary:") << QStringLiteral("</b>");
+		// depending on the file type, generate summary and content information about the file
+		// TODO: content information (in BNF) for more types
+		// TODO: introduce a function in the base class and work with infoStrings << currentFileFilter()->fileInfoString(fileName);
+		// instead of this big switch-case.
+		switch (AbstractFileFilter::fileType(fileName)) {
+		case AbstractFileFilter::FileType::Ascii:
+			infoStrings << AsciiFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::Binary:
+			infoStrings << BinaryFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::Excel:
+			infoStrings << ExcelFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::Image:
+			infoStrings << ImageFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::HDF5:
+			infoStrings << HDF5Filter::fileInfoString(fileName);
+			infoStrings << QStringLiteral("<b>") << i18n("Content:") << QStringLiteral("</b>");
+			infoStrings << HDF5Filter::fileDDLString(fileName);
+			break;
+		case AbstractFileFilter::FileType::NETCDF:
+			infoStrings << NetCDFFilter::fileInfoString(fileName);
+			infoStrings << QStringLiteral("<b>") << i18n("Content:") << QStringLiteral("</b>");
+			infoStrings << NetCDFFilter::fileCDLString(fileName);
+			break;
+		case AbstractFileFilter::FileType::VECTOR_BLF:
+			infoStrings << VectorBLFFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::FITS:
+			infoStrings << FITSFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::JSON:
+			infoStrings << JsonFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::ROOT:
+			infoStrings << ROOTFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::Spice:
+			infoStrings << SpiceFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::READSTAT:
+			infoStrings << ReadStatFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::MATIO:
+			infoStrings << MatioFilter::fileInfoString(fileName);
+			break;
+		}
+
+		infoString += infoStrings.join(QLatin1String("<br>"));
+	} else
+		infoString += i18n("Could not open file %1 for reading.", fileName);
+
+	return infoString;
 }
 
 /*!
@@ -1256,7 +1482,7 @@ void ImportFileWidget::fileInfoDialog() {
 */
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
-	AbstractFileFilter::FileType fileType = currentFileType();
+	auto fileType = currentFileType();
 	if (fileType != AbstractFileFilter::FileType::Ascii && fileType != AbstractFileFilter::FileType::Binary) {
 		ui.swOptions->setEnabled(true);
 		return;
@@ -1265,36 +1491,38 @@ void ImportFileWidget::filterChanged(int index) {
 	if (index == 0) { // "automatic"
 		ui.swOptions->setEnabled(false);
 		ui.bSaveFilter->setEnabled(false);
-	} else if (index == 1) { //custom
+	} else if (index == 1) { // custom
 		ui.swOptions->setEnabled(true);
 		ui.bSaveFilter->setEnabled(true);
 	} else {
 		// predefined filter settings were selected.
-		//load and show them in the GUI.
-		//TODO
+		// load and show them in the GUI.
+		// TODO
 	}
 }
 
 void ImportFileWidget::refreshPreview() {
-	if (m_suppressRefresh)
+	DEBUG(Q_FUNC_INFO)
+	// don't generate any preview if it was explicitly suppressed
+	// or if the options box together with the preview widget is not visible
+	if (m_suppressRefresh || !ui.gbOptions->isVisible())
 		return;
 
-	DEBUG("ImportFileWidget::refreshPreview()");
 	WAIT_CURSOR;
 
-	QString tempFileName = fileName();
-	QString fileName = absolutePath(tempFileName);
-	AbstractFileFilter::FileType fileType = currentFileType();
-	LiveDataSource::SourceType sourceType = currentSourceType();
+	QString file = absolutePath(fileName());
+	const QString dbcFile = dbcFileName();
+	auto fileType = currentFileType();
+	auto sourceType = currentSourceType();
 	int lines = ui.sbPreviewLines->value();
 
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
-		DEBUG("	file name = " << STDSTRING(fileName));
+		DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(file));
 
-	// generic table widget
-	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary
-	        || fileType == AbstractFileFilter::FileType::JSON || fileType == AbstractFileFilter::FileType::NgspiceRawAscii
-	        || fileType == AbstractFileFilter::FileType::NgspiceRawBinary)
+	// default preview widget
+	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary || fileType == AbstractFileFilter::FileType::JSON
+		|| fileType == AbstractFileFilter::FileType::Spice || fileType == AbstractFileFilter::FileType::VECTOR_BLF
+		|| fileType == AbstractFileFilter::FileType::READSTAT)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1304,7 +1532,7 @@ void ImportFileWidget::refreshPreview() {
 	QVector<QStringList> importedStrings;
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
-	DEBUG("Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
+	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii: {
 		ui.tePreview->clear();
@@ -1314,47 +1542,48 @@ void ImportFileWidget::refreshPreview() {
 		DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
-			importedStrings = filter->preview(fileName, lines);
+			importedStrings = filter->preview(file, lines);
 			break;
 		}
 		case LiveDataSource::SourceType::LocalSocket: {
 			QLocalSocket lsocket{this};
 			DEBUG("Local socket: CONNECT PREVIEW");
-			lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
+			lsocket.connectToServer(file, QLocalSocket::ReadOnly);
 			if (lsocket.waitForConnected()) {
-				DEBUG("connected to local socket " << STDSTRING(fileName));
+				DEBUG("connected to local socket " << STDSTRING(file));
 				if (lsocket.waitForReadyRead())
 					importedStrings = filter->preview(lsocket);
 				DEBUG("Local socket: DISCONNECT PREVIEW");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else
-				DEBUG("failed connect to local socket " << STDSTRING(fileName) << " - " << STDSTRING(lsocket.errorString()));
+				DEBUG("failed connect to local socket " << STDSTRING(file) << " - " << STDSTRING(lsocket.errorString()));
 
 			break;
 		}
-		case LiveDataSource::SourceType::NetworkTcpSocket: {
+		case LiveDataSource::SourceType::NetworkTCPSocket: {
 			QTcpSocket tcpSocket{this};
 			tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
 			if (tcpSocket.waitForConnected()) {
 				DEBUG("connected to TCP socket");
-				if ( tcpSocket.waitForReadyRead() )
+				if (tcpSocket.waitForReadyRead())
 					importedStrings = filter->preview(tcpSocket);
 
 				tcpSocket.disconnectFromHost();
 			} else
-				DEBUG("failed to connect to TCP socket " << " - " << STDSTRING(tcpSocket.errorString()));
+				DEBUG("failed to connect to TCP socket "
+					  << " - " << STDSTRING(tcpSocket.errorString()));
 
 			break;
 		}
-		case LiveDataSource::SourceType::NetworkUdpSocket: {
+		case LiveDataSource::SourceType::NetworkUDPSocket: {
 			QUdpSocket udpSocket{this};
 			DEBUG("UDP Socket: CONNECT PREVIEW, state = " << udpSocket.state());
 			udpSocket.bind(QHostAddress(host()), port().toInt());
 			udpSocket.connectToHost(host(), 0, QUdpSocket::ReadOnly);
 			if (udpSocket.waitForConnected()) {
 				DEBUG("	connected to UDP socket " << STDSTRING(host()) << ':' << port().toInt());
-				if (!udpSocket.waitForReadyRead(2000) )
+				if (!udpSocket.waitForReadyRead(2000))
 					DEBUG("	ERROR: not ready for read after 2 sec");
 				if (udpSocket.hasPendingDatagrams()) {
 					DEBUG("	has pending data");
@@ -1366,15 +1595,16 @@ void ImportFileWidget::refreshPreview() {
 				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
 			} else
-				DEBUG("failed to connect to UDP socket " << " - " << STDSTRING(udpSocket.errorString()));
+				DEBUG("failed to connect to UDP socket "
+					  << " - " << STDSTRING(udpSocket.errorString()));
 
 			break;
 		}
 		case LiveDataSource::SourceType::SerialPort: {
 #ifdef HAVE_QTSERIALPORT
 			QSerialPort sPort{this};
-			DEBUG("	Port: " << STDSTRING(serialPort()) << ", Settings: " << baudRate() << ',' << sPort.dataBits()
-			      << ',' << sPort.parity() << ',' << sPort.stopBits());
+			DEBUG("	Port: " << STDSTRING(serialPort()) << ", Settings: " << baudRate() << ',' << sPort.dataBits() << ',' << sPort.parity() << ','
+							<< sPort.stopBits());
 			sPort.setPortName(serialPort());
 			sPort.setBaudRate(baudRate());
 
@@ -1392,13 +1622,13 @@ void ImportFileWidget::refreshPreview() {
 		}
 		case LiveDataSource::SourceType::MQTT: {
 #ifdef HAVE_MQTT
-			//show the preview for the currently selected topic
+			// show the preview for the currently selected topic
 			auto* item = m_subscriptionWidget->currentItem();
-			if (item && item->childCount() == 0) { //only preview if the lowest level (i.e. a topic) is selected
+			if (item && item->childCount() == 0) { // only preview if the lowest level (i.e. a topic) is selected
 				const QString& topicName = item->text(0);
 				auto i = m_lastMessage.find(topicName);
 				if (i != m_lastMessage.end())
-					importedStrings = filter->preview(i.value().payload().data());
+					importedStrings = filter->preview(QLatin1String(i.value().payload().data()));
 				else
 					importedStrings << QStringList{i18n("No data arrived yet for the selected topic")};
 			}
@@ -1414,49 +1644,66 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::Binary: {
 		ui.tePreview->clear();
 		auto filter = static_cast<BinaryFilter*>(currentFileFilter());
-		importedStrings = filter->preview(fileName, lines);
+		importedStrings = filter->preview(file, lines);
+		break;
+	}
+
+	case AbstractFileFilter::FileType::Excel: {
+		importedStrings = m_excelOptionsWidget->previewString();
+		// Nothing else to do. Excel has it's own preview table
+
 		break;
 	}
 	case AbstractFileFilter::FileType::Image: {
 		ui.tePreview->clear();
 
-		QImage image(fileName);
+		QImage image(file);
 		QTextCursor cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
 		RESET_CURSOR;
 		return;
 	}
 	case AbstractFileFilter::FileType::HDF5: {
-		DEBUG("ImportFileWidget::refreshPreview: HDF5");
+		DEBUG(Q_FUNC_INFO << ", HDF5");
 		auto filter = static_cast<HDF5Filter*>(currentFileFilter());
 		lines = m_hdf5OptionsWidget->lines();
 
-		importedStrings = filter->readCurrentDataSet(fileName, nullptr, ok, AbstractFileFilter::ImportMode::Replace, lines);
+		importedStrings = filter->readCurrentDataSet(file, nullptr, ok, AbstractFileFilter::ImportMode::Replace, lines);
 		tmpTableWidget = m_hdf5OptionsWidget->previewWidget();
 		break;
 	}
 	case AbstractFileFilter::FileType::NETCDF: {
+		DEBUG(Q_FUNC_INFO << ", NetCDF");
 		auto filter = static_cast<NetCDFFilter*>(currentFileFilter());
 		lines = m_netcdfOptionsWidget->lines();
 
-		importedStrings = filter->readCurrentVar(fileName, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
+		importedStrings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
 		tmpTableWidget = m_netcdfOptionsWidget->previewWidget();
 		break;
 	}
+	case AbstractFileFilter::FileType::VECTOR_BLF: {
+		ui.tePreview->clear();
+		auto filter = static_cast<VectorBLFFilter*>(currentFileFilter());
+		filter->setDBCFile(dbcFile);
+		importedStrings = filter->preview(file, lines);
+		vectorNameList = filter->vectorNames();
+		columnModes = filter->columnModes();
+		break;
+	}
 	case AbstractFileFilter::FileType::FITS: {
+		DEBUG(Q_FUNC_INFO << ", FITS");
 		auto filter = static_cast<FITSFilter*>(currentFileFilter());
 		lines = m_fitsOptionsWidget->lines();
 
 		QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
 		if (!extensionName.isEmpty()) {
-			DEBUG("	extension name = " << STDSTRING(extensionName));
-			fileName = extensionName;
+			DEBUG(Q_FUNC_INFO << ", extension name = " << STDSTRING(extensionName));
+			file = extensionName;
 		}
-		DEBUG("	file name = " << STDSTRING(fileName));
 
 		bool readFitsTableToMatrix;
-		importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
-		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
+		importedStrings = filter->readChdu(file, &readFitsTableToMatrix, lines);
+		Q_EMIT enableImportToMatrix(readFitsTableToMatrix);
 
 		tmpTableWidget = m_fitsOptionsWidget->previewWidget();
 		break;
@@ -1465,7 +1712,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		auto filter = static_cast<JsonFilter*>(currentFileFilter());
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
-		importedStrings = filter->preview(fileName, lines);
+		importedStrings = filter->preview(file, lines);
 
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
@@ -1474,34 +1721,60 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::ROOT: {
 		auto filter = static_cast<ROOTFilter*>(currentFileFilter());
 		lines = m_rootOptionsWidget->lines();
-		m_rootOptionsWidget->setNRows(filter->rowsInCurrentObject(fileName));
-		importedStrings = filter->previewCurrentObject(
-		                      fileName,
-		                      m_rootOptionsWidget->startRow(),
-		                      qMin(m_rootOptionsWidget->startRow() + lines - 1,
-		                           m_rootOptionsWidget->endRow())
-		                  );
+		m_rootOptionsWidget->setNRows(filter->rowsInCurrentObject(file));
+		importedStrings = filter->previewCurrentObject(file,
+													   m_rootOptionsWidget->startRow(),
+													   std::min(m_rootOptionsWidget->startRow() + lines - 1, m_rootOptionsWidget->endRow()));
 		tmpTableWidget = m_rootOptionsWidget->previewWidget();
 		// the last vector element contains the column names
 		vectorNameList = importedStrings.last();
 		importedStrings.removeLast();
-		columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::ColumnMode::Numeric);
+		columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::ColumnMode::Double);
 		break;
 	}
-	case AbstractFileFilter::FileType::NgspiceRawAscii: {
+	case AbstractFileFilter::FileType::Spice: {
 		ui.tePreview->clear();
-		auto filter = static_cast<NgspiceRawAsciiFilter*>(currentFileFilter());
-		importedStrings = filter->preview(fileName, lines);
+		auto filter = static_cast<SpiceFilter*>(currentFileFilter());
+		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
 	}
-	case AbstractFileFilter::FileType::NgspiceRawBinary: {
+	case AbstractFileFilter::FileType::READSTAT: {
 		ui.tePreview->clear();
-		auto filter = static_cast<NgspiceRawBinaryFilter*>(currentFileFilter());
-		importedStrings = filter->preview(fileName, lines);
+		auto filter = static_cast<ReadStatFilter*>(currentFileFilter());
+		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
+		DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")
+		break;
+	}
+	case AbstractFileFilter::FileType::MATIO: {
+		auto filter = static_cast<MatioFilter*>(currentFileFilter());
+		lines = m_matioOptionsWidget->lines();
+
+		QVector<QStringList> strings;
+		// loop over all selected vars
+		for (const QString& var : filter->selectedVarNames()) {
+			// DEBUG(Q_FUNC_INFO << ", reading variable: " << STDSTRING(var))
+			filter->setCurrentVarName(var);
+			strings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
+			if (importedStrings.size() == 0) // first var
+				importedStrings = strings;
+			else { // append
+				if (importedStrings.size() < strings.size()) { // more rows than before
+					const int oldSize = importedStrings.size();
+					importedStrings.resize(strings.size());
+					for (int row = oldSize; row < strings.size(); row++) // fill new items
+						for (int col = 0; col < importedStrings.at(0).size(); col++)
+							importedStrings[row] << QString();
+				}
+				for (int i = 0; i < strings.size(); i++)
+					importedStrings[i] << strings.at(i);
+			}
+		}
+
+		tmpTableWidget = m_matioOptionsWidget->previewWidget();
 		break;
 	}
 	}
@@ -1509,7 +1782,7 @@ void ImportFileWidget::refreshPreview() {
 	// fill the table widget
 	tmpTableWidget->setRowCount(0);
 	tmpTableWidget->setColumnCount(0);
-	if ( !importedStrings.isEmpty() ) {
+	if (!importedStrings.isEmpty()) {
 		if (!ok) {
 			// show imported strings as error message
 			tmpTableWidget->setRowCount(1);
@@ -1518,13 +1791,12 @@ void ImportFileWidget::refreshPreview() {
 			item->setText(importedStrings[0][0]);
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
-			//TODO: maxrows not used
-			const int rows = qMax(importedStrings.size(), 1);
+			const int rows = std::max(importedStrings.size(), 1);
 			const int maxColumns = 300;
 			tmpTableWidget->setRowCount(rows);
 
 			for (int i = 0; i < rows; ++i) {
-				const int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();
+				const int cols = importedStrings.at(i).size() > maxColumns ? maxColumns : importedStrings[i].size();
 				if (cols > tmpTableWidget->columnCount())
 					tmpTableWidget->setColumnCount(cols);
 
@@ -1534,28 +1806,36 @@ void ImportFileWidget::refreshPreview() {
 				}
 			}
 
-			// set header if columnMode available
-			for (int i = 0; i < qMin(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
-				QString columnName = QString::number(i+1);
-				if (i < vectorNameList.size())
-					columnName = vectorNameList[i];
+			// Excel has special h/vheader, don't overwrite the preview table
+			if (fileType != AbstractFileFilter::FileType::Excel) {
+				// set header if columnMode available
+				for (int i = 0; i < std::min(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
+					QString columnName = QString::number(i + 1);
+					if (i < vectorNameList.size())
+						columnName = vectorNameList.at(i);
 
-				auto* item = new QTableWidgetItem(columnName + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i]) + QLatin1String("}"));
-				item->setTextAlignment(Qt::AlignLeft);
-				item->setIcon(AbstractColumn::iconForMode(columnModes[i]));
+					auto* item = new QTableWidgetItem(columnName + QStringLiteral(" {")
+													  + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes.at(i))) + QStringLiteral("}"));
+					item->setTextAlignment(Qt::AlignLeft);
+					item->setIcon(AbstractColumn::modeIcon(columnModes.at(i)));
 
-				tmpTableWidget->setHorizontalHeaderItem(i, item);
+					DEBUG("COLUMN " << i + 1 << " NAME = " << STDSTRING(columnName))
+					tmpTableWidget->setHorizontalHeaderItem(i, item);
+				}
 			}
 		}
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
-		m_fileEmpty = false;
+		m_importValid = false;
 	} else
-		m_fileEmpty = true;
-
-	emit previewRefreshed();
+		m_importValid = true;
 
 	RESET_CURSOR;
+}
+
+void ImportFileWidget::updateStartRow(int line) {
+	if (line >= ui.sbStartRow->value())
+		ui.sbStartRow->setValue(line + 1);
 }
 
 void ImportFileWidget::updateContent(const QString& fileName) {
@@ -1565,15 +1845,23 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
 
-	QDEBUG("ImportFileWidget::updateContent(): file name = " << fileName);
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
-		case AbstractFileFilter::FileType::HDF5:
-			m_hdf5OptionsWidget->updateContent(static_cast<HDF5Filter*>(filter), fileName);
+		case AbstractFileFilter::FileType::HDF5: {
+			int status = m_hdf5OptionsWidget->updateContent(static_cast<HDF5Filter*>(filter), fileName);
+			if (status != 0) { // parsing failed: switch to binary filter
+				ui.cbFileType->setCurrentIndex(ui.cbFileType->findData(static_cast<int>(AbstractFileFilter::FileType::Binary)));
+				Q_EMIT error(i18n("Not a HDF5 file: %1", fileName));
+			}
 			break;
+		}
 		case AbstractFileFilter::FileType::NETCDF:
 			m_netcdfOptionsWidget->updateContent(static_cast<NetCDFFilter*>(filter), fileName);
 			break;
+			//		case AbstractFileFilter::FileType::VECTOR_BLF:
+			//			m_vectorBLFOptionsWidget->updateContent(static_cast<VectorBLFFilter*>(filter), fileName);
+			//			break;
 		case AbstractFileFilter::FileType::FITS:
 #ifdef HAVE_FITS
 			m_fitsOptionsWidget->updateContent(static_cast<FITSFilter*>(filter), fileName);
@@ -1584,13 +1872,22 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			break;
 		case AbstractFileFilter::FileType::JSON:
 			m_jsonOptionsWidget->loadDocument(fileName);
-			ui.tvJson->setExpanded( m_jsonOptionsWidget->model()->index(0, 0), true); //expand the root node
+			ui.tvJson->setExpanded(m_jsonOptionsWidget->model()->index(0, 0), true); // expand the root node
+			break;
+		case AbstractFileFilter::FileType::MATIO:
+			m_matioOptionsWidget->updateContent(static_cast<MatioFilter*>(filter), fileName);
+			break;
+		case AbstractFileFilter::FileType::Excel:
+#ifdef HAVE_EXCEL
+			m_excelOptionsWidget->updateContent(reinterpret_cast<ExcelFilter*>(filter), fileName);
+#endif
 			break;
 		case AbstractFileFilter::FileType::Ascii:
 		case AbstractFileFilter::FileType::Binary:
 		case AbstractFileFilter::FileType::Image:
-		case AbstractFileFilter::FileType::NgspiceRawAscii:
-		case AbstractFileFilter::FileType::NgspiceRawBinary:
+		case AbstractFileFilter::FileType::Spice:
+		case AbstractFileFilter::FileType::READSTAT:
+		case AbstractFileFilter::FileType::VECTOR_BLF:
 			break;
 		}
 	}
@@ -1615,9 +1912,9 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 	const auto readingType = static_cast<LiveDataSource::ReadingType>(idx);
 	const LiveDataSource::SourceType sourceType = currentSourceType();
 
-	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
-	        || sourceType == LiveDataSource::SourceType::SerialPort
-	        || readingType == LiveDataSource::ReadingType::TillEnd || readingType == LiveDataSource::ReadingType::WholeFile) {
+	if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket || sourceType == LiveDataSource::SourceType::LocalSocket
+		|| sourceType == LiveDataSource::SourceType::SerialPort || readingType == LiveDataSource::ReadingType::TillEnd
+		|| readingType == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else {
@@ -1634,12 +1931,27 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 	}
 }
 
+void ImportFileWidget::excelFirstRowAsColNamesChanged(bool checked) {
+	if (checked) {
+		if (ui.sbStartRow->value() == 1)
+			ui.sbStartRow->setValue(2);
+	} else
+		ui.sbStartRow->setValue(1);
+}
+
 void ImportFileWidget::sourceTypeChanged(int idx) {
 	const auto sourceType = static_cast<LiveDataSource::SourceType>(idx);
 
+#ifdef HAVE_MQTT
+	// when switching from mqtt to another source type, make sure we disconnect from
+	// the current broker, if connected, in order not to get any notification anymore
+	if (sourceType != LiveDataSource::SourceType::MQTT)
+		disconnectMqttConnection();
+#endif
+
 	// enable/disable "on new data"-option
 	const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
-	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
+	auto* item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
@@ -1653,7 +1965,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		}
 		ui.chbLinkFile->show();
 
-		//option for sample size are available for "continuously fixed" and "from end" reading options
+		// option for sample size are available for "continuously fixed" and "from end" reading options
 		if (ui.cbReadingType->currentIndex() < 2) {
 			ui.lSampleSize->show();
 			ui.sbSampleSize->show();
@@ -1678,13 +1990,13 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lFileType->show();
 		setMQTTVisible(false);
 		break;
-	case LiveDataSource::SourceType::NetworkTcpSocket:
-	case LiveDataSource::SourceType::NetworkUdpSocket:
+	case LiveDataSource::SourceType::NetworkTCPSocket:
+	case LiveDataSource::SourceType::NetworkUDPSocket:
 		ui.lHost->show();
 		ui.leHost->show();
 		ui.lePort->show();
 		ui.lPort->show();
-		if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket) {
+		if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {
@@ -1705,7 +2017,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.chbRelativePath->hide();
 		ui.chbLinkFile->hide();
 
+		// don't allow to select "New Data" for network sockets.
+		// select "Periodically" in the combo box in case "New Data" was selected before
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+		ui.cbUpdateType->setCurrentIndex(0);
 
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
@@ -1766,7 +2081,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.chbRelativePath->hide();
 		ui.chbLinkFile->hide();
 
+		// don't allow to select "New Data" serial port.
+		// select "Periodically" in the combo box in case "New Data" was selected before
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+		ui.cbUpdateType->setCurrentIndex(0);
 
 		ui.cbFileType->setEnabled(true);
 		ui.cbFileType->show();
@@ -1780,7 +2098,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 #ifdef HAVE_MQTT
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-		//for MQTT we read ascii data only, hide the file type options
+		// for MQTT we read ascii data only, hide the file type options
 		for (int i = 0; i < ui.cbFileType->count(); ++i) {
 			if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == AbstractFileFilter::FileType::Ascii) {
 				if (ui.cbFileType->currentIndex() == i)
@@ -1817,17 +2135,17 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.bManageFilters->setEnabled(true);
 		ui.cbFilter->setEnabled(true);
 
-		//in case there are already connections defined,
-		//show the available topics for the currently selected connection
+		// in case there are already connections defined,
+		// show the available topics for the currently selected connection
 		mqttConnectionChanged();
 #endif
 		break;
 	}
 
-	//deactivate/activate options that are specific to file of pipe sources only
+	// deactivate/activate options that are specific to file of pipe sources only
 	auto* typeModel = qobject_cast<const QStandardItemModel*>(ui.cbFileType->model());
 	if (sourceType != LiveDataSource::SourceType::FileOrPipe) {
-		//deactivate file types other than ascii and binary
+		// deactivate file types other than ascii and binary
 		for (int i = 2; i < ui.cbFileType->count(); ++i)
 			typeModel->item(i)->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (ui.cbFileType->currentIndex() > 1)
@@ -1835,26 +2153,41 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		//"whole file" read option is available for file or pipe only, disable it
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		QStandardItem* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::ReadingType::WholeFile)
 			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 
 		//"update options" groupbox can be deactivated for "file and pipe" if the file is invalid.
-		//Activate the groupbox when switching from "file and pipe" to a different source type.
+		// Activate the groupbox when switching from "file and pipe" to a different source type.
 		ui.gbUpdateOptions->setEnabled(true);
 	} else {
 		for (int i = 2; i < ui.cbFileType->count(); ++i)
 			typeModel->item(i)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-		//enable "whole file" item for file or pipe
+		// enable "whole file" item for file or pipe
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		QStandardItem* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	}
 
-	emit sourceTypeChanged();
+	// disable the header options for non-file sources because:
+	//* for sockets we allow to import one single value only at the moment
+	//* for MQTT topics we don't allow to set the vector names since the different topics can have different number of columns
+	// For files this option still can be useful if the user have to re-read the whole file
+	// and wants to use the header to set the column names or the user provides manually the column names.
+	// TODO: adjust this logic later once we allow to import multiple columns from sockets,
+	// it should be possible to provide the names of the columns
+	bool visible = (sourceType == LiveDataSource::SourceType::FileOrPipe);
+	if (m_asciiOptionsWidget)
+		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
+
+	Q_EMIT sourceTypeChanged();
 	refreshPreview();
+}
+
+void ImportFileWidget::enableDataPortionSelection(bool enabled) {
+	ui.tabWidget->setTabEnabled(ui.tabWidget->indexOf(ui.tabDataPortion), enabled);
 }
 
 #ifdef HAVE_MQTT
@@ -1864,21 +2197,20 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
  * connects to the MQTT broker according to the connection settings.
  */
 void ImportFileWidget::mqttConnectionChanged() {
-	if (m_initialisingMQTT || ui.cbConnection->currentIndex() == -1)
+	if (m_initialisingMQTT || ui.cbConnection->currentIndex() == -1) {
+		ui.lLWT->hide();
+		ui.bLWT->hide();
+		ui.lTopics->hide();
 		return;
-
-	WAIT_CURSOR;
-
-	//disconnected from the broker that was selected before, if this is the case
-	if (m_client && m_client->state() == QMqttClient::ClientState::Connected) {
-		emit MQTTClearTopics();
-		disconnect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
-		QDEBUG("Disconnecting from " << m_client->hostname());
-		m_client->disconnectFromHost();
-		delete m_client;
 	}
 
-	//determine the connection settings for the new broker and initialize the mqtt client
+	WAIT_CURSOR;
+	Q_EMIT error(QString());
+
+	// disconnected from the broker that was selected before
+	disconnectMqttConnection();
+
+	// determine the connection settings for the new broker and initialize the mqtt client
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	KConfigGroup group = config.group(ui.cbConnection->currentText());
 
@@ -1901,10 +2233,43 @@ void ImportFileWidget::mqttConnectionChanged() {
 		m_client->setPassword(group.readEntry("Password"));
 	}
 
-	//connect to the selected broker
+	// connect to the selected broker
 	QDEBUG("Connect to " << m_client->hostname() << ":" << m_client->port());
+	if (!m_connectTimeoutTimer) {
+		m_connectTimeoutTimer = new QTimer(this);
+		m_connectTimeoutTimer->setInterval(6000);
+		connect(m_connectTimeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttConnectTimeout);
+	}
 	m_connectTimeoutTimer->start();
 	m_client->connectToHost();
+}
+
+void ImportFileWidget::disconnectMqttConnection() {
+	if (m_client && m_client->state() == QMqttClient::ClientState::Connected) {
+		Q_EMIT MQTTClearTopics();
+		disconnect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
+		QDEBUG("Disconnecting from " << m_client->hostname());
+		m_client->disconnectFromHost();
+		delete m_client;
+		m_client = nullptr;
+	}
+}
+
+/*!
+ * returns \c true if there is a valid connection to an MQTT broker and the user has subscribed to at least 1 topic,
+ * returns \c false otherwise.
+ */
+bool ImportFileWidget::isMqttValid() {
+	if (!m_client)
+		return false;
+
+	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
+	bool subscribed = (m_subscriptionWidget->subscriptionCount() > 0);
+	bool fileTypeOk = false;
+	if (this->currentFileType() == AbstractFileFilter::FileType::Ascii)
+		fileTypeOk = true;
+
+	return connected && subscribed && fileTypeOk;
 }
 
 /*!
@@ -1912,16 +2277,24 @@ void ImportFileWidget::mqttConnectionChanged() {
  * subscribes to every topic (# wildcard) in order to later list every available topic
  */
 void ImportFileWidget::onMqttConnect() {
+	m_connectTimeoutTimer->stop();
 	if (m_client->error() == QMqttClient::NoError) {
-		m_connectTimeoutTimer->stop();
 		ui.frameSubscriptions->setVisible(true);
 		m_subscriptionWidget->setVisible(true);
 		m_subscriptionWidget->makeVisible(true);
 
 		if (!m_client->subscribe(QMqttTopicFilter(QLatin1String("#")), 1))
-			QMessageBox::critical(this, i18n("Couldn't subscribe"), i18n("Couldn't subscribe to all available topics. Something went wrong"));
-	}
-	emit subscriptionsChanged();
+			Q_EMIT error(i18n("Couldn't subscribe to all available topics."));
+		else {
+			Q_EMIT error(QString());
+			ui.lLWT->show();
+			ui.bLWT->show();
+			ui.lTopics->show();
+		}
+	} else
+		Q_EMIT error(QStringLiteral("on mqtt connect error ") + QString::number(m_client->error()));
+
+	Q_EMIT subscriptionsChanged();
 	RESET_CURSOR;
 }
 
@@ -1938,36 +2311,74 @@ void ImportFileWidget::onMqttDisconnect() {
 	ui.lLWT->hide();
 	ui.bLWT->hide();
 
-	ui.cbConnection->setItemText(ui.cbConnection->currentIndex(), ui.cbConnection->currentText() + ' ' + i18n("(Disconnected)"));
+	ui.cbConnection->setCurrentIndex(-1);
 
-	emit subscriptionsChanged();
+	Q_EMIT subscriptionsChanged();
+	Q_EMIT error(i18n("Disconnected from '%1'.", m_client->hostname()));
 	RESET_CURSOR;
-	QMessageBox::critical(this, i18n("Disconnected"),
-		i18n("Disconnected from the broker '%1' before the connection was successful.", m_client->hostname()));
 }
 
 /*!
  *\brief called when the subscribe button is pressed
  * subscribes to the topic represented by the current item of twTopics
  */
-void ImportFileWidget::mqttSubscribe(const QString& name, uint QoS) {
-	const QMqttTopicFilter filter {name};
-	QMqttSubscription* tempSubscription = m_client->subscribe(filter, static_cast<quint8>(QoS) );
+void ImportFileWidget::subscribeTopic(const QString& name, uint QoS) {
+	const QMqttTopicFilter filter{name};
+	QMqttSubscription* tempSubscription = m_client->subscribe(filter, static_cast<quint8>(QoS));
 
 	if (tempSubscription) {
 		m_mqttSubscriptions.push_back(tempSubscription);
 		connect(tempSubscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-		emit subscriptionsChanged();
+		Q_EMIT subscriptionsChanged();
 	}
+}
+
+/*!
+ *\brief Unsubscribes from the given topic, and removes any data connected to it
+ *
+ * \param topicName the name of a topic we want to unsubscribe from
+ */
+void ImportFileWidget::unsubscribeTopic(const QString& topicName, QVector<QTreeWidgetItem*> children) {
+	if (topicName.isEmpty())
+		return;
+
+	for (int i = 0; i < m_mqttSubscriptions.count(); ++i) {
+		if (m_mqttSubscriptions[i]->topic().filter() == topicName) {
+			// explicitly disconnect from the signal, callling QMqttClient::unsubscribe() below is not enough
+			disconnect(m_mqttSubscriptions.at(i), &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+			m_mqttSubscriptions.remove(i);
+			break;
+		}
+	}
+
+	QMqttTopicFilter filter{topicName};
+	m_client->unsubscribe(filter);
+
+	QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
+	while (j.hasNext()) {
+		j.next();
+		if (MQTTSubscriptionWidget::checkTopicContains(topicName, j.key().name()))
+			m_lastMessage.remove(j.key());
+	}
+
+	if (m_willSettings.willTopic == topicName) {
+		if (m_subscriptionWidget->subscriptionCount() > 0)
+			m_willSettings.willTopic = children[0]->text(0);
+		else
+			m_willSettings.willTopic.clear();
+	}
+
+	// signals that there was a change among the subscribed topics
+	Q_EMIT subscriptionsChanged();
+	refreshPreview();
 }
 
 /*!
  *\brief called when the client receives a message
  * if the message arrived from a new topic, the topic is put in twTopics
  */
-void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
-	Q_UNUSED(message);
-// 	qDebug()<<"received " << topic.name();
+void ImportFileWidget::mqttMessageReceived(const QByteArray& /*message*/, const QMqttTopicName& topic) {
+	// 	qDebug()<<"received " << topic.name();
 	if (m_addedTopics.contains(topic.name()))
 		return;
 
@@ -1975,16 +2386,20 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 	m_subscriptionWidget->setTopicTreeText(i18n("Available (%1)", m_addedTopics.size()));
 	QStringList name;
 	QString rootName;
-	const QChar sep = '/';
+	const QChar sep = QLatin1Char('/');
 
 	if (topic.name().contains(sep)) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		const QStringList& list = topic.name().split(sep, Qt::SkipEmptyParts);
+#else
 		const QStringList& list = topic.name().split(sep, QString::SkipEmptyParts);
+#endif
 
 		if (!list.isEmpty()) {
 			rootName = list.at(0);
 			name.append(list.at(0));
 			int topItemIdx = -1;
-			//check whether the first level of the topic can be found in twTopics
+			// check whether the first level of the topic can be found in twTopics
 			for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
 				if (m_subscriptionWidget->topLevelTopic(i)->text(0) == list.at(0)) {
 					topItemIdx = i;
@@ -1992,9 +2407,9 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 				}
 			}
 
-			//if not we simply add every level of the topic to the tree
+			// if not we simply add every level of the topic to the tree
 			if (topItemIdx < 0) {
-				QTreeWidgetItem* currentItem = new QTreeWidgetItem(name);
+				auto* currentItem = new QTreeWidgetItem(name);
 				m_subscriptionWidget->addTopic(currentItem);
 				for (int i = 1; i < list.size(); ++i) {
 					name.clear();
@@ -2003,8 +2418,8 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 					currentItem = currentItem->child(0);
 				}
 			}
-			//otherwise we search for the first level that isn't part of the tree,
-			//then add every level of the topic to the tree from that certain level
+			// otherwise we search for the first level that isn't part of the tree,
+			// then add every level of the topic to the tree from that certain level
 			else {
 				QTreeWidgetItem* currentItem = m_subscriptionWidget->topLevelTopic(topItemIdx);
 				int listIdx = 1;
@@ -2020,12 +2435,12 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 						}
 					}
 					if (!found) {
-						//this is the level that isn't present in the tree
+						// this is the level that isn't present in the tree
 						break;
 					}
 				}
 
-				//add every level to the tree starting with the first level that isn't part of the tree
+				// add every level to the tree starting with the first level that isn't part of the tree
 				for (; listIdx < list.size(); ++listIdx) {
 					name.clear();
 					name.append(list.at(listIdx));
@@ -2040,34 +2455,35 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 		m_subscriptionWidget->addTopic(new QTreeWidgetItem(name));
 	}
 
-	//if a subscribed topic contains the new topic, we have to update twSubscriptions
+	// if a subscribed topic contains the new topic, we have to update twSubscriptions
 	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
-		const QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		const QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(sep, Qt::SkipEmptyParts);
+#else
+		const QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(sep, QString::SkipEmptyParts);
+#endif
 		if (!subscriptionName.isEmpty()) {
 			if (rootName == subscriptionName.first()) {
 				QVector<QString> subscriptions;
-				for(int i = 0; i < m_mqttSubscriptions.size(); ++i)
-					subscriptions.push_back(m_mqttSubscriptions[i]->topic().filter());
-				emit updateSubscriptionTree(subscriptions);
+				for (const auto& sub : m_mqttSubscriptions)
+					subscriptions.push_back(sub->topic().filter());
+				Q_EMIT updateSubscriptionTree(subscriptions);
 				break;
 			}
 		}
 	}
 
-	//signals that a newTopic was added, in order to fill the completer of leTopics
-	emit newTopic(rootName);
+	// signals that a newTopic was added, in order to fill the completer of leTopics
+	Q_EMIT newTopic(rootName);
 }
 
 /*!
  *\brief called when the client receives a message from a subscribed topic (that isn't the "#" wildcard)
  */
-void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) {
+void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage& msg) {
 	QDEBUG("message received from: " << msg.topic().name());
 
-	if (!m_subscribedTopicNames.contains(msg.topic().name()))
-		m_subscribedTopicNames.push_back(msg.topic().name());
-
-	//update the last message for the topic
+	// update the last message for the topic
 	m_lastMessage[msg.topic()] = msg;
 }
 
@@ -2079,29 +2495,32 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	switch (clientError) {
 	case QMqttClient::BadUsernameOrPassword:
-		QMessageBox::critical(this, i18n("Couldn't connect"), i18n("Wrong username or password"));
+		Q_EMIT error(i18n("Wrong username or password"));
 		break;
 	case QMqttClient::IdRejected:
-		QMessageBox::critical(this, i18n("Couldn't connect"), i18n("The client ID wasn't accepted"));
+		Q_EMIT error(i18n("The client ID wasn't accepted"));
 		break;
 	case QMqttClient::ServerUnavailable:
-		QMessageBox::critical(this, i18n("Server unavailable"), i18n("The broker couldn't be reached."));
+	case QMqttClient::TransportInvalid:
+		Q_EMIT error(i18n("The broker %1 couldn't be reached.", m_client->hostname()));
 		break;
 	case QMqttClient::NotAuthorized:
-		QMessageBox::critical(this, i18n("Not authorized"), i18n("The client is not authorized to connect."));
+		Q_EMIT error(i18n("The client is not authorized to connect."));
 		break;
 	case QMqttClient::UnknownError:
-		QMessageBox::critical(this, i18n("Unknown MQTT error"), i18n("An unknown error occurred."));
+		Q_EMIT error(i18n("An unknown error occurred."));
 		break;
 	case QMqttClient::NoError:
 	case QMqttClient::InvalidProtocolVersion:
-	case QMqttClient::TransportInvalid:
 	case QMqttClient::ProtocolViolation:
 	case QMqttClient::Mqtt5SpecificError:
+		Q_EMIT error(i18n("An error occurred."));
 		break;
 	default:
+		Q_EMIT error(i18n("An error occurred."));
 		break;
 	}
+	m_connectTimeoutTimer->stop();
 }
 
 /*!
@@ -2110,11 +2529,10 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
  *		 disconnects the client, stops the timer, and warns the user
  */
 void ImportFileWidget::mqttConnectTimeout() {
-	m_connectionTimedOut = true;
 	m_client->disconnectFromHost();
 	m_connectTimeoutTimer->stop();
+	Q_EMIT error(i18n("Connecting to '%1:%2' timed out.", m_client->hostname(), m_client->port()));
 	RESET_CURSOR;
-	QMessageBox::warning(this, i18n("Warning"), i18n("Connecting to the given broker timed out! Try changing the settings"));
 }
 
 /*!
@@ -2123,31 +2541,31 @@ void ImportFileWidget::mqttConnectTimeout() {
 */
 void ImportFileWidget::showMQTTConnectionManager() {
 	bool previousConnectionChanged = false;
-	MQTTConnectionManagerDialog* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText(), previousConnectionChanged);
+	auto* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText(), previousConnectionChanged);
 
 	if (dlg->exec() == QDialog::Accepted) {
-		//re-read the available connections to be in sync with the changes in MQTTConnectionManager
+		// re-read the available connections to be in sync with the changes in MQTTConnectionManager
 		m_initialisingMQTT = true;
 		const QString& prevConn = ui.cbConnection->currentText();
 		ui.cbConnection->clear();
 		readMQTTConnections();
 		m_initialisingMQTT = false;
 
-		//select the connection the user has selected in MQTTConnectionManager
+		// select the connection the user has selected in MQTTConnectionManager
 		const QString& conn = dlg->connection();
 
 		int index = ui.cbConnection->findText(conn);
-		if (conn != prevConn) {//Current connection isn't the previous one
+		if (conn != prevConn) { // Current connection isn't the previous one
 			if (ui.cbConnection->currentIndex() != index)
 				ui.cbConnection->setCurrentIndex(index);
 			else
 				mqttConnectionChanged();
-		} else if (dlg->initialConnectionChanged()) {//Current connection is the same with previous one but it changed
+		} else if (dlg->initialConnectionChanged()) { // Current connection is the same with previous one but it changed
 			if (ui.cbConnection->currentIndex() == index)
 				mqttConnectionChanged();
 			else
 				ui.cbConnection->setCurrentIndex(index);
-		} else { //Previous connection wasn't changed
+		} else { // Previous connection wasn't changed
 			m_initialisingMQTT = true;
 			ui.cbConnection->setCurrentIndex(index);
 			m_initialisingMQTT = false;
@@ -2177,8 +2595,8 @@ void ImportFileWidget::showWillSettings() {
 		MQTTSubscriptionWidget::findSubscriptionLeafChildren(children, m_subscriptionWidget->topLevelSubscription(i));
 
 	QVector<QString> topics;
-	for (int i = 0; i < children.size(); ++i)
-		topics.append(children[i]->text(0));
+	for (const auto& child : children)
+		topics.append(child->text(0));
 
 	MQTTWillSettingsWidget willSettingsWidget(&menu, m_willSettings, topics);
 
@@ -2186,20 +2604,67 @@ void ImportFileWidget::showWillSettings() {
 		m_willSettings = willSettingsWidget.will();
 		menu.close();
 	});
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&willSettingsWidget);
 	menu.addAction(widgetAction);
 
-	const QPoint pos(ui.bLWT->sizeHint().width(),ui.bLWT->sizeHint().height());
+	const QPoint pos(ui.bLWT->sizeHint().width(), ui.bLWT->sizeHint().height());
 	menu.exec(ui.bLWT->mapToGlobal(pos));
 }
 
 void ImportFileWidget::enableWill(bool enable) {
-	if(enable) {
-		if(!ui.bLWT->isEnabled())
+	if (enable) {
+		if (!ui.bLWT->isEnabled())
 			ui.bLWT->setEnabled(enable);
 	} else
 		ui.bLWT->setEnabled(enable);
 }
 
+/*!
+	saves the settings to the MQTTClient \c client.
+*/
+void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
+	DEBUG(Q_FUNC_INFO);
+	auto updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
+	auto readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
+
+	currentFileFilter();
+	client->setFilter(static_cast<AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
+
+	client->setReadingType(readingType);
+
+	if (updateType == MQTTClient::UpdateType::TimeInterval)
+		client->setUpdateInterval(ui.sbUpdateInterval->value());
+
+	client->setKeepNValues(ui.sbKeepNValues->value());
+	client->setUpdateType(updateType);
+
+	if (readingType != MQTTClient::ReadingType::TillEnd)
+		client->setSampleSize(ui.sbSampleSize->value());
+
+	client->setMQTTClientHostPort(m_client->hostname(), m_client->port());
+
+	KConfig config(m_configPath, KConfig::SimpleConfig);
+	KConfigGroup group = config.group(ui.cbConnection->currentText());
+
+	bool useID = group.readEntry("UseID").toUInt();
+	bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
+
+	client->setMQTTUseAuthentication(useAuthentication);
+	if (useAuthentication)
+		client->setMQTTClientAuthentication(m_client->username(), m_client->password());
+
+	client->setMQTTUseID(useID);
+	if (useID)
+		client->setMQTTClientId(m_client->clientId());
+
+	for (int i = 0; i < m_mqttSubscriptions.count(); ++i)
+		client->addInitialMQTTSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
+
+	const bool retain = group.readEntry("Retain").toUInt();
+	client->setMQTTRetain(retain);
+
+	if (m_willSettings.enabled)
+		client->setWillSettings(m_willSettings);
+}
 #endif

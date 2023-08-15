@@ -1,75 +1,57 @@
-/***************************************************************************
-File                 : MQTTErrorWidget.cpp
-Project              : LabPlot
-Description          : Widget for informing about an MQTT error, and for trying to solve it
---------------------------------------------------------------------
-Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+/*
+	File                 : MQTTErrorWidget.cpp
+	Project              : LabPlot
+	Description          : Widget for informing about an MQTT error, and for trying to solve it
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "src/kdefrontend/datasources/MQTTErrorWidget.h"
 
 #include "backend/datasources/MQTTClient.h"
+#include <QMqttMessage>
 #include <QMqttSubscription>
 #include <QMqttTopicFilter>
-#include <QMqttMessage>
 
-MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* client, QWidget *parent) : QWidget(parent),
-	m_error(error),
-	m_client(client) {
-
+MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* client, QWidget* parent)
+	: QWidget(parent)
+	, m_error(error)
+	, m_client(client) {
 	ui.setupUi(this);
 	bool close = false;
-	//showing the appropriate options according to the error type
+	// showing the appropriate options according to the error type
 	switch (m_error) {
 	case QMqttClient::ClientError::IdRejected:
 		ui.lePassword->hide();
 		ui.lPassword->hide();
 		ui.leUserName->hide();
 		ui.lUserName->hide();
-		ui.lErrorType->setText("The client ID is malformed. This might be related to its length.\nSet new ID!");
+		ui.lErrorType->setText(QStringLiteral("The client ID is malformed. This might be related to its length.\nSet new ID!"));
 		break;
 	case QMqttClient::ClientError::BadUsernameOrPassword:
 		ui.lId->hide();
 		ui.leId->hide();
-		ui.lErrorType->setText("The data in the username or password is malformed.\nSet new username and password!");
+		ui.lErrorType->setText(QStringLiteral("The data in the username or password is malformed.\nSet new username and password!"));
 		break;
 	case QMqttClient::ClientError::NotAuthorized:
 		ui.lId->hide();
 		ui.leId->hide();
-		ui.lErrorType->setText("The client is not authorized to connect.");
+		ui.lErrorType->setText(QStringLiteral("The client is not authorized to connect."));
 		break;
 	case QMqttClient::ClientError::ServerUnavailable:
 		ui.lePassword->hide();
 		ui.lPassword->hide();
 		ui.leUserName->hide();
 		ui.lUserName->hide();
-		ui.lErrorType->setText("The network connection has been established, but the service is unavailable on the broker side.");
+		ui.lErrorType->setText(QStringLiteral("The network connection has been established, but the service is unavailable on the broker side."));
 		break;
 	case QMqttClient::ClientError::UnknownError:
 		ui.lePassword->hide();
 		ui.lPassword->hide();
 		ui.leUserName->hide();
 		ui.lUserName->hide();
-		ui.lErrorType->setText("An unknown error occurred.");
+		ui.lErrorType->setText(QStringLiteral("An unknown error occurred."));
 		break;
 	case QMqttClient::NoError:
 	case QMqttClient::InvalidProtocolVersion:

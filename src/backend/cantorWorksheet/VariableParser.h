@@ -1,55 +1,74 @@
-/***************************************************************************
-    File                 : VariableParser.h
-    Project              : LabPlot
-    Description          : Variable parser for different CAS backends
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
-    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : VariableParser.h
+	Project              : LabPlot
+	Description          : Variable parser for different CAS backends
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef VARIABLEPARSER_H
 #define VARIABLEPARSER_H
 
 class QString;
+#include <QDateTime>
 #include <QVector>
+
+#include "backend/core/AbstractColumn.h"
 
 class VariableParser {
 public:
 	VariableParser(QString name, QString value);
-	QVector<double> values();
+	~VariableParser() {
+		clearValues();
+		m_parsed = false;
+	}
+	QVector<int>& integers();
+	QVector<qint64>& bigInt();
+	QVector<double>& doublePrecision();
+	QVector<QDateTime>& dateTime();
+	QVector<QString>& text();
 	bool isParsed();
+
+	enum class Datatype {
+		uint8,
+		int8,
+		uint16,
+		int16,
+		uint32,
+		int32,
+		uint64,
+		int64,
+		float32,
+		float64,
+		datetime64_ms,
+		datetime64_s,
+		datetime64_m,
+		datetime64_h, // hour is smallest unit
+		datetime64_D, // day is smallest unit
+		text,
+	};
+
+	AbstractColumn::ColumnMode dataType() {
+		return m_dataType;
+	}
 
 private:
 	QString m_backendName;
 	QString m_string;
-	QVector<double> m_values;
+	void* m_values{nullptr};
 	bool m_parsed{false};
+	AbstractColumn::ColumnMode m_dataType{AbstractColumn::ColumnMode::Double};
 
 	void parseMaximaValues();
 	void parsePythonValues();
 	void parseRValues();
 	void parseOctaveValues();
-	void parseValues(const QStringList&);
+	void parseValues(const QStringList&, Datatype type = Datatype::float64);
+	Datatype convertNumpyDatatype(const QString& datatype);
+
+	void clearValues();
 };
 
 #endif // VARIABLEPARSER_H

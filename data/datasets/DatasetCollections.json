@@ -21,7 +21,7 @@
 	},
 	{
 		"name" : "StatLib",
-		"description" : "<b>StatLib</b> is a datasets archive maintained by Pantelis Vlachos from Carnegie Melon University.",
-		"url" : "http://lib.stat.cmu.edu/datasets/"
+		"description" : "<b>StatLib</b> is a datasets archive maintained by Pantelis Vlachos from Carnegie Melon University. This collection also contains the datasets from the book \"Case studies in biometry\", by Nicholas Lange, Louise Ryan and Lynne Billard, David Brillinger, Loveday Conquest, Joel Greenhouse.",
+		"url" : "http://lib.stat.cmu.edu/datasets/csb/"
 	}
 ]

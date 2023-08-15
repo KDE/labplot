@@ -1,34 +1,18 @@
 #=============================================================================
-# Copyright (c) 2019 Harald Sitter <sitter@kde.org>
+# SPDX-FileCopyrightText: 2019 Harald Sitter <sitter@kde.org>
 #
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#
-# 1. Redistributions of source code must retain the copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# SPDX-License-Identifier: BSD-3-Clause
 #=============================================================================
 
+include(FeatureSummary)
+SET_PACKAGE_PROPERTIES(Cantor PROPERTIES
+    DESCRIPTION "Provide a nice Interface for doing Mathematics and Scientific Computing"
+    URL "https://edu.kde.org/cantor/"
+)
 # Try to find via config. If that isn't available fall back to manual lookup.
 # Config is vastly preferable because it will also make sure link dependencies
 # are found and actually in the target link interface.
-find_package(Cantor ${Cantor_FIND_VERSION} ${Cantor_FIND_REQUIRED} CONFIG QUIET)
+find_package(Cantor ${Cantor_FIND_VERSION} ${Cantor_FIND_REQUIRED} CONFIG)
 if(Cantor_FOUND)
     return()
 endif()
@@ -72,6 +56,4 @@ if(Cantor_FOUND AND NOT TARGET Cantor::cantorlibs)
 endif()
 
 mark_as_advanced(Cantor_LIBRARIES Cantor_INCLUDE_DIR Cantor_VERSION)
-
-include(FeatureSummary)
 

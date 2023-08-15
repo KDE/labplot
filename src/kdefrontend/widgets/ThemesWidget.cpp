@@ -1,31 +1,13 @@
-/***************************************************************************
-    File                 : ThemesWidget.cpp
-    Project              : LabPlot
-    Description          : widget for selecting themes
-    --------------------------------------------------------------------
-    Copyright            : (C) 2016 Prakriti Bhardwaj (p_bhardwaj14@informatik.uni-kl.de)
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : ThemesWidget.cpp
+	Project              : LabPlot
+	Description          : widget for selecting themes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Prakriti Bhardwaj <p_bhardwaj14@informatik.uni-kl.de>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #include "ThemesWidget.h"
 #include "kdefrontend/ThemeHandler.h"
 
@@ -49,36 +31,36 @@
 
 	\ingroup kdefrontend
  */
-ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
+ThemesWidget::ThemesWidget(QWidget* parent)
+	: QListView(parent) {
 	setSelectionMode(QAbstractItemView::SingleSelection);
 	setWordWrap(true);
 	setViewMode(QListWidget::IconMode);
 	setResizeMode(QListWidget::Adjust);
 	setDragDropMode(QListView::NoDragDrop);
 
-	//make the icon 3x3cm big and show two of them in the height
-	static const int themeIconSize = std::ceil(3.0/2.54 * QApplication::desktop()->physicalDpiX());
+	// make the icon 3x3cm big and show two of them in the height
+	static const int themeIconSize = std::ceil(3.0 / 2.54 * QApplication::desktop()->physicalDpiX());
 	setIconSize(QSize(themeIconSize, themeIconSize));
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-	//show preview pixmaps
+	// show preview pixmaps
 	auto* mContentItemModel = new QStandardItemModel(this);
-	QStringList themeList = ThemeHandler::themes();
-	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots/", QStandardPaths::LocateDirectory);
+	auto themeList = ThemeHandler::themes();
+	auto themeImgPathList = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, QStringLiteral("themes/screenshots/"), QStandardPaths::LocateDirectory);
 	if (themeImgPathList.isEmpty()) {
 		delete mContentItemModel;
 		return;
 	}
 
 	const QString& themeImgPath = themeImgPathList.first();
-	QString tempPath;
 
 	for (int i = 0; i < themeList.size(); ++i) {
 		auto* listItem = new QStandardItem();
 
-		tempPath = themeImgPath + themeList.at(i) + ".png";
+		QString tempPath = themeImgPath + themeList.at(i) + QStringLiteral(".png");
 		if (!QFile::exists(tempPath))
-			tempPath = themeImgPath + "Unavailable.png";
+			tempPath = themeImgPath + QStringLiteral("Unavailable.png");
 
 		listItem->setIcon(QIcon(QPixmap(tempPath)));
 		if (themeList.at(i) == QLatin1String("Default")) {
@@ -90,51 +72,51 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 		}
 	}
 
-	//adding download themes option
-	//TODO: activate this later
-// 	QStandardItem* listItem = new QStandardItem();
-// 	listItem->setIcon(QIcon::fromTheme("get-hot-new-stuff"));
-// 	listItem->setText("Download Themes");
-// 	listItem->setData("file_download_theme", Qt::UserRole);
-// 	mContentItemModel->appendRow(listItem);
+	// adding download themes option
+	// TODO: activate this later
+	// 	auto* listItem = new QStandardItem();
+	// 	listItem->setIcon(QIcon::fromTheme("get-hot-new-stuff"));
+	// 	listItem->setText("Download Themes");
+	// 	listItem->setData("file_download_theme", Qt::UserRole);
+	// 	mContentItemModel->appendRow(listItem);
 
 	QListView::setModel(mContentItemModel);
 
-	//SLOTS
+	// SLOTS
 	connect(this, &ThemesWidget::clicked, this, &ThemesWidget::applyClicked);
 }
 
 void ThemesWidget::applyClicked(const QModelIndex& index) {
 	const QString& themeName = index.data(Qt::DisplayRole).toString();
 
-	//TODO: activate this later
-// 	if (themeName == "file_download_theme")
-// 		this->downloadThemes();
-// 	else
+	// TODO: activate this later
+	// 	if (themeName == "file_download_theme")
+	// 		this->downloadThemes();
+	// 	else
 
 	if (index.row() == 0)
-		emit themeSelected(QString()); //item with the string "None" was selected -> no theme
+		Q_EMIT themeSelected(QString()); // item with the string "None" was selected -> no theme
 	else
-		emit themeSelected(themeName);
+		Q_EMIT themeSelected(themeName);
 }
 
-//TODO: activate this later
-// void ThemesWidget::downloadThemes() {
-// 	KNS3::DownloadDialog dialog("labplot2_themes.knsrc", this);
-// 	dialog.exec();
-// 	foreach (const KNS3::Entry& e, dialog.changedEntries()) {
-// 	    kDebug() << "Changed Entry: " << e.name();
-// 	}
-// }
+// TODO: activate this later
+//  void ThemesWidget::downloadThemes() {
+//  	KNS3::DownloadDialog dialog("labplot2_themes.knsrc", this);
+//  	dialog.exec();
+//  	foreach (const KNS3::Entry& e, dialog.changedEntries()) {
+//  	    kDebug() << "Changed Entry: " << e.name();
+//  	}
+//  }
 
 void ThemesWidget::setFixedMode() {
-	//resize the widget to show three items only
+	// resize the widget to show three items only
 	int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
 	QFont font;
 	QFontMetrics fm(font);
-	static const int themeIconSize = std::ceil(3.0/2.54 * QApplication::desktop()->physicalDpiX());
-	QSize widgetSize(themeIconSize + style()->pixelMetric(QStyle::PM_ScrollBarExtent) + frameWidth*2,
-					 3*(themeIconSize + fm.height() + 2* frameWidth) + fm.height() + frameWidth);
+	static const int themeIconSize = std::ceil(3.0 / 2.54 * QApplication::desktop()->physicalDpiX());
+	QSize widgetSize(themeIconSize + style()->pixelMetric(QStyle::PM_ScrollBarExtent) + frameWidth * 2,
+					 3 * (themeIconSize + fm.height() + 2 * frameWidth) + fm.height() + frameWidth);
 	setMinimumSize(widgetSize);
 	setMaximumSize(widgetSize);
 }

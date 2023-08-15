@@ -1,39 +1,22 @@
-/***************************************************************************
-    File                 : RescaleDialog.h
-    Project              : LabPlot
-    Description          : Dialog to provide the rescale interval
-    --------------------------------------------------------------------
-	Copyright            : (C) 2020 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : RescaleDialog.h
+	Project              : LabPlot
+	Description          : Dialog to provide the rescale interval
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
 
- ***************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "RescaleDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/macros.h"
 
 #include <QDoubleValidator>
 #include <QPushButton>
 #include <QWindow>
 
-#include <KConfigGroup>
-#include <KSharedConfig>
 #include <KWindowConfig>
 
 /*!
@@ -42,8 +25,9 @@
 
 	\ingroup kdefrontend
  */
-RescaleDialog::RescaleDialog(QWidget* parent) : QDialog(parent) {
-	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
+RescaleDialog::RescaleDialog(QWidget* parent)
+	: QDialog(parent) {
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("view-sort-ascending")));
 	setWindowTitle(i18nc("@title:window", "Rescale Interval"));
 	setSizeGripEnabled(true);
 
@@ -61,9 +45,9 @@ RescaleDialog::RescaleDialog(QWidget* parent) : QDialog(parent) {
 	connect(ui.leMin, &QLineEdit::textChanged, this, &RescaleDialog::validateOkButton);
 	connect(ui.leMax, &QLineEdit::textChanged, this, &RescaleDialog::validateOkButton);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("RescaleDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("RescaleDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -72,7 +56,7 @@ RescaleDialog::RescaleDialog(QWidget* parent) : QDialog(parent) {
 
 	double min = conf.readEntry(QLatin1String("Min"), 0.0);
 	double max = conf.readEntry(QLatin1String("Max"), 1.0);
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.leMin->setText(numberLocale.toString(min));
 	ui.leMax->setText(numberLocale.toString(max));
 
@@ -80,12 +64,12 @@ RescaleDialog::RescaleDialog(QWidget* parent) : QDialog(parent) {
 }
 
 RescaleDialog::~RescaleDialog() {
-	//save the current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("RescaleDialog"));
+	// save the current settings
+	KConfigGroup conf = Settings::group(QLatin1String("RescaleDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	// general settings
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	conf.writeEntry(QLatin1String("Min"), numberLocale.toDouble(ui.leMin->text()));
 	conf.writeEntry(QLatin1String("Max"), numberLocale.toDouble(ui.leMax->text()));
 }
@@ -95,13 +79,11 @@ void RescaleDialog::setColumns(const QVector<Column*>& columns) {
 }
 
 double RescaleDialog::min() const {
-	SET_NUMBER_LOCALE
-	return numberLocale.toDouble(ui.leMin->text());
+	return QLocale().toDouble(ui.leMin->text());
 }
 
 double RescaleDialog::max() const {
-	SET_NUMBER_LOCALE
-	return numberLocale.toDouble(ui.leMax->text());
+	return QLocale().toDouble(ui.leMax->text());
 }
 
 void RescaleDialog::validateOkButton() {

@@ -1,32 +1,13 @@
-/***************************************************************************
-    File                 : CopyThroughFilter.h
-    Project              : SciDAVis
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke
-    Email (use @ for *)  : knut.franke*gmx.de
-    Description          : Filter which copies all provided inputs unaltered
-                           to an equal number of outputs.
+/*
+	File                 : CopyThroughFilter.h
+	Project              : SciDAVis
+	Description          : Filter which copies all provided inputs unaltered
+	to an equal number of outputs.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef COPY_THROUGH_FILTER_H
 #define COPY_THROUGH_FILTER_H
 
@@ -34,10 +15,9 @@
 
 class CopyThroughFilter : public AbstractFilter {
 public:
-	virtual int inputCount() const;
-	virtual int outputCount() const;
-	virtual AbstractColumn* output(int port) const;
+	virtual int inputCount() const override;
+	virtual int outputCount() const override;
+	virtual AbstractColumn* output(int port) const override;
 };
 
 #endif // ifndef COPY_THROUGH_FILTER_H
-

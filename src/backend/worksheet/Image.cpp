@@ -1,42 +1,28 @@
-/***************************************************************************
-    File                 : Image.cpp
-    Project              : LabPlot
-    Description          : Worksheet element to draw images
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019 Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
+/*
+	File                 : Image.cpp
+	Project              : LabPlot
+	Description          : Worksheet element to draw images
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019-2022 Alexander Semke <alexander.semke@web.de>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "Image.h"
-#include "Worksheet.h"
 #include "ImagePrivate.h"
-#include "backend/lib/commandtemplates.h"
+#include "Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/worksheet/Line.h"
 
-#include <QPainter>
+#include <QBuffer>
+#include <QFileInfo>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
-#include <QMenu>
-
 #include <QIcon>
+#include <QMenu>
+#include <QPainter>
+
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -51,16 +37,13 @@
  * flags (\c HorizontalPosition, \c VerticalPosition).
  */
 
-
 Image::Image(const QString& name)
-	: WorksheetElement(name, AspectType::Image), d_ptr(new ImagePrivate(this)) {
-
+	: WorksheetElement(name, new ImagePrivate(this), AspectType::Image) {
 	init();
 }
 
-Image::Image(const QString &name, ImagePrivate *dd)
-	: WorksheetElement(name, AspectType::Image), d_ptr(dd) {
-
+Image::Image(const QString& name, ImagePrivate* dd)
+	: WorksheetElement(name, dd, AspectType::Image) {
 	init();
 }
 
@@ -70,29 +53,34 @@ void Image::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Image");
 
+	d->embedded = group.readEntry("embedded", true);
 	d->opacity = group.readEntry("opacity", d->opacity);
 
-	//geometry
-	d->position.point.setX( group.readEntry("PositionXValue", d->position.point.x()) );
-	d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
-	d->position.horizontalPosition = (WorksheetElement::HorizontalPosition) group.readEntry("PositionX", (int)d->position.horizontalPosition);
-	d->position.verticalPosition = (WorksheetElement::VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
-	d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)d->horizontalAlignment);
-	d->verticalAlignment = (WorksheetElement::VerticalAlignment) group.readEntry("VerticalAlignment", (int)d->verticalAlignment);
-	d->rotationAngle = group.readEntry("Rotation", d->rotationAngle);
+	// geometry
+	d->position.point.setX(group.readEntry("PositionXValue", 0.));
+	d->position.point.setY(group.readEntry("PositionYValue", 0.));
+	d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)group.readEntry("PositionX", (int)WorksheetElement::HorizontalPosition::Center);
+	d->position.verticalPosition = (WorksheetElement::VerticalPosition)group.readEntry("PositionY", (int)WorksheetElement::VerticalPosition::Center);
+	d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry("HorizontalAlignment", (int)WorksheetElement::HorizontalAlignment::Center);
+	d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry("VerticalAlignment", (int)WorksheetElement::VerticalAlignment::Center);
+	d->setRotation(group.readEntry("Rotation", d->rotation()));
 
-	//border
-	d->borderPen = QPen(group.readEntry("BorderColor", d->borderPen.color()),
-						group.readEntry("BorderWidth", d->borderPen.widthF()),
-						(Qt::PenStyle) group.readEntry("BorderStyle", (int)(d->borderPen.style())));
-	d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
-
-	//initial placeholder image
-	d->image = QIcon::fromTheme("viewimage").pixmap(d->width, d->height).toImage();
+	// border
+	d->borderLine = new Line(QString());
+	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine->setHidden(true);
+	addChild(d->borderLine);
+	d->borderLine->init(group);
+	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->borderLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 Image::~Image() = default;
 
 QGraphicsItem* Image::graphicsItem() const {
@@ -110,35 +98,32 @@ void Image::retransform() {
 	d->retransform();
 }
 
-void Image::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	DEBUG("Image::handleResize()");
-	Q_UNUSED(pageResize);
-	Q_UNUSED(horizontalRatio);
-	Q_UNUSED(verticalRatio);
-// 	Q_D(Image);
+void Image::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
+	DEBUG(Q_FUNC_INFO);
+	// 	Q_D(Image);
 
-// 	double ratio = 0;
-// 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
-// 		ratio = qMax(horizontalRatio, verticalRatio);
-// 	else
-// 		ratio = qMin(horizontalRatio, verticalRatio);
+	// 	double ratio = 0;
+	// 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
+	// 		ratio = std::max(horizontalRatio, verticalRatio);
+	// 	else
+	// 		ratio = std::min(horizontalRatio, verticalRatio);
 }
 
 /*!
 	Returns an icon to be used in the project explorer.
 */
-QIcon Image::icon() const{
-	return QIcon::fromTheme("viewimage");
+QIcon Image::icon() const {
+	return QIcon::fromTheme(QStringLiteral("viewimage"));
 }
 
 QMenu* Image::createContextMenu() {
-	QMenu *menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
+	QMenu* menu = WorksheetElement::createContextMenu();
+	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
 
 	if (!visibilityAction) {
 		visibilityAction = new QAction(i18n("Visible"), this);
 		visibilityAction->setCheckable(true);
-		connect(visibilityAction, &QAction::triggered, this, &Image::visibilityChanged);
+		connect(visibilityAction, &QAction::triggered, this, &Image::changeVisibility);
 	}
 
 	visibilityAction->setChecked(isVisible());
@@ -149,18 +134,17 @@ QMenu* Image::createContextMenu() {
 }
 
 /* ============================ getter methods ================= */
-CLASS_SHARED_D_READER_IMPL(Image, QString, fileName, fileName)
+BASIC_SHARED_D_READER_IMPL(Image, QString, fileName, fileName)
+BASIC_SHARED_D_READER_IMPL(Image, bool, embedded, embedded)
 BASIC_SHARED_D_READER_IMPL(Image, qreal, opacity, opacity)
 BASIC_SHARED_D_READER_IMPL(Image, int, width, width)
 BASIC_SHARED_D_READER_IMPL(Image, int, height, height)
 BASIC_SHARED_D_READER_IMPL(Image, bool, keepRatio, keepRatio)
-CLASS_SHARED_D_READER_IMPL(Image, WorksheetElement::PositionWrapper, position, position)
-BASIC_SHARED_D_READER_IMPL(Image, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment)
-BASIC_SHARED_D_READER_IMPL(Image, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment)
-BASIC_SHARED_D_READER_IMPL(Image, qreal, rotationAngle, rotationAngle)
 
-CLASS_SHARED_D_READER_IMPL(Image, QPen, borderPen, borderPen)
-BASIC_SHARED_D_READER_IMPL(Image, qreal, borderOpacity, borderOpacity)
+Line* Image::borderLine() const {
+	Q_D(const Image);
+	return d->borderLine;
+}
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(Image, SetFileName, QString, fileName, updateImage)
@@ -170,6 +154,13 @@ void Image::setFileName(const QString& fileName) {
 		exec(new ImageSetFileNameCmd(d, fileName, ki18n("%1: set image")));
 }
 
+STD_SETTER_CMD_IMPL_S(Image, SetEmbedded, bool, embedded)
+void Image::setEmbedded(bool embedded) {
+	Q_D(Image);
+	if (embedded != d->embedded)
+		exec(new ImageSetEmbeddedCmd(d, embedded, ki18n("%1: embed image")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(Image, SetOpacity, qreal, opacity, update)
 void Image::setOpacity(qreal opacity) {
 	Q_D(Image);
@@ -177,18 +168,22 @@ void Image::setOpacity(qreal opacity) {
 		exec(new ImageSetOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetWidth, int, width, scaleImage)
+STD_SETTER_CMD_IMPL_F_S(Image, SetWidth, int, width, retransform)
 void Image::setWidth(int width) {
 	Q_D(Image);
-	if (width != d->width)
+	if (width != d->width) {
 		exec(new ImageSetWidthCmd(d, width, ki18n("%1: set width")));
+		d->scaleImage();
+	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetHeight, int, height, scaleImage)
+STD_SETTER_CMD_IMPL_F_S(Image, SetHeight, int, height, retransform)
 void Image::setHeight(int height) {
 	Q_D(Image);
-	if (height != d->height)
+	if (height != d->height) {
 		exec(new ImageSetHeightCmd(d, height, ki18n("%1: set height")));
+		d->scaleImage();
+	}
 }
 
 STD_SETTER_CMD_IMPL_S(Image, SetKeepRatio, bool, keepRatio)
@@ -198,151 +193,43 @@ void Image::setKeepRatio(bool keepRatio) {
 		exec(new ImageSetKeepRatioCmd(d, keepRatio, ki18n("%1: change keep ratio")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetPosition, WorksheetElement::PositionWrapper, position, retransform);
-void Image::setPosition(const WorksheetElement::PositionWrapper& pos) {
-	Q_D(Image);
-	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition)
-		exec(new ImageSetPositionCmd(d, pos, ki18n("%1: set position")));
-}
-
-/*!
-	sets the position without undo/redo-stuff
-*/
-void Image::setPosition(QPointF point) {
-	Q_D(Image);
-	if (point != d->position.point) {
-		d->position.point = point;
-		retransform();
-	}
-}
-
-STD_SETTER_CMD_IMPL_F_S(Image, SetRotationAngle, qreal, rotationAngle, recalcShapeAndBoundingRect);
-void Image::setRotationAngle(qreal angle) {
-	Q_D(Image);
-	if (angle != d->rotationAngle)
-		exec(new ImageSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Image, SetHorizontalAlignment, WorksheetElement::HorizontalAlignment, horizontalAlignment, retransform);
-void Image::setHorizontalAlignment(const WorksheetElement::HorizontalAlignment hAlign) {
-	Q_D(Image);
-	if (hAlign != d->horizontalAlignment)
-		exec(new ImageSetHorizontalAlignmentCmd(d, hAlign, ki18n("%1: set horizontal alignment")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Image, SetVerticalAlignment, WorksheetElement::VerticalAlignment, verticalAlignment, retransform);
-void Image::setVerticalAlignment(const WorksheetElement::VerticalAlignment vAlign) {
-	Q_D(Image);
-	if (vAlign != d->verticalAlignment)
-		exec(new ImageSetVerticalAlignmentCmd(d, vAlign, ki18n("%1: set vertical alignment")));
-}
-
-//Border
-STD_SETTER_CMD_IMPL_F_S(Image, SetBorderPen, QPen, borderPen, update)
-void Image::setBorderPen(const QPen &pen) {
-	Q_D(Image);
-	if (pen != d->borderPen)
-		exec(new ImageSetBorderPenCmd(d, pen, ki18n("%1: set border")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Image, SetBorderOpacity, qreal, borderOpacity, update)
-void Image::setBorderOpacity(qreal opacity) {
-	Q_D(Image);
-	if (opacity != d->borderOpacity)
-		exec(new ImageSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
-}
-
-//misc
-STD_SWAP_METHOD_SETTER_CMD_IMPL_F(Image, SetVisible, bool, swapVisible, retransform);
-void Image::setVisible(bool on) {
-	Q_D(Image);
-	exec(new ImageSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
-}
-
-bool Image::isVisible() const {
-	Q_D(const Image);
-	return d->isVisible();
-}
-
-void Image::setPrinting(bool on) {
-	Q_D(Image);
-	d->m_printing = on;
-}
-
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
-void Image::visibilityChanged() {
-	Q_D(const Image);
-	this->setVisible(!d->isVisible());
-}
-
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
-ImagePrivate::ImagePrivate(Image* owner) : q(owner) {
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
+ImagePrivate::ImagePrivate(Image* owner)
+	: WorksheetElementPrivate(owner)
+	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
-}
 
-QString ImagePrivate::name() const {
-	return q->name();
+	// initial placeholder image
+	image = QIcon::fromTheme(QStringLiteral("viewimage")).pixmap(width, height).toImage();
+	imageScaled = image;
 }
 
 /*!
 	calculates the position and the bounding box of the label. Called on geometry or text changes.
  */
 void ImagePrivate::retransform() {
-	if (suppressRetransform)
+	const bool suppress = suppressRetransform || q->isLoading();
+	trackRetransformCalled(suppress);
+	if (suppress)
 		return;
 
-	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom
-	        || position.verticalPosition != WorksheetElement::VerticalPosition::Custom)
-		updatePosition();
-
-	float x = position.point.x();
-	float y = position.point.y();
-	float w = image.width();
-	float h = image.height();
-
- 	//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
-	QPointF itemPos;
-	switch (horizontalAlignment) {
-	case WorksheetElement::HorizontalAlignment::Left:
-		itemPos.setX(x - w/2);
-		break;
-	case WorksheetElement::HorizontalAlignment::Center:
-		itemPos.setX(x);
-		break;
-	case WorksheetElement::HorizontalAlignment::Right:
-		itemPos.setX(x + w/2);
-		break;
-	}
-
-	switch (verticalAlignment) {
-	case WorksheetElement::VerticalAlignment::Top:
-		itemPos.setY(y - h/2);
-		break;
-	case WorksheetElement::VerticalAlignment::Center:
-		itemPos.setY(y);
-		break;
-	case WorksheetElement::VerticalAlignment::Bottom:
-		itemPos.setY(y + h/2);
-		break;
-	}
-
-	suppressItemChangeEvent = true;
-	setPos(itemPos);
-	suppressItemChangeEvent = false;
-
-	boundingRectangle.setX(-w/2);
-	boundingRectangle.setY(-h/2);
+	int w = imageScaled.width();
+	int h = imageScaled.height();
+	boundingRectangle.setX(-w / 2);
+	boundingRectangle.setY(-h / 2);
 	boundingRectangle.setWidth(w);
 	boundingRectangle.setHeight(h);
 
+	updatePosition(); // needed, because CartesianPlot calls retransform if some operations are done
 	updateBorder();
+
+	Q_EMIT q->changed();
 }
 
 void ImagePrivate::updateImage() {
@@ -350,92 +237,49 @@ void ImagePrivate::updateImage() {
 		image = QImage(fileName);
 		width = image.width();
 		height = image.height();
-		q->widthChanged(width);
-		q->heightChanged(height);
 	} else {
 		width = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
 		height = Worksheet::convertToSceneUnits(3, Worksheet::Unit::Centimeter);
-		image = QIcon::fromTheme("viewimage").pixmap(width, height).toImage();
-		q->widthChanged(width);
-		q->heightChanged(height);
+		image = QIcon::fromTheme(QStringLiteral("viewimage")).pixmap(width, height).toImage();
 	}
+
+	imageScaled = image;
+
+	Q_EMIT q->widthChanged(width);
+	Q_EMIT q->heightChanged(height);
 
 	retransform();
 }
 
 void ImagePrivate::scaleImage() {
 	if (keepRatio) {
-		if (width != image.width()) {
-			//width was changed -> rescale the height to keep the ratio
-			if (image.width() != 0)
-				height = image.height()*width/image.width();
+		if (width != imageScaled.width()) {
+			// width was changed -> rescale the height to keep the ratio
+			if (imageScaled.width() != 0)
+				height = imageScaled.height() * width / imageScaled.width();
 			else
 				height = 0;
-			q->heightChanged(height);
-		} else {
-			//height was changed -> rescale the width to keep the ratio
-			if (image.height() != 0)
-				width = image.width()*height/image.height();
+			Q_EMIT q->heightChanged(height);
+		} else if (height != imageScaled.height()) {
+			// height was changed -> rescale the width to keep the ratio
+			if (imageScaled.height() != 0)
+				width = imageScaled.width() * height / imageScaled.height();
 			else
 				width = 0;
-			q->widthChanged(width);
+			Q_EMIT q->widthChanged(width);
 		}
 	}
 
 	if (width != 0 && height != 0)
-		image = image.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		imageScaled = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
 	retransform();
-}
-
-/*!
-	calculates the position of the label, when the position relative to the parent was specified (left, right, etc.)
-*/
-void ImagePrivate::updatePosition() {
-	//determine the parent item
-	QRectF parentRect;
-	QGraphicsItem* parent = parentItem();
-	if (parent) {
-		parentRect = parent->boundingRect();
-	} else {
-		if (!scene())
-			return;
-
-		parentRect = scene()->sceneRect();
-	}
-
-	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
-		if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
-			position.point.setX( parentRect.x() );
-		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Center)
-			position.point.setX( parentRect.x() + parentRect.width()/2 );
-		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
-			position.point.setX( parentRect.x() + parentRect.width() );
-	}
-
-	if (position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
-		if (position.verticalPosition == WorksheetElement::VerticalPosition::Top)
-			position.point.setY( parentRect.y() );
-		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Center)
-			position.point.setY( parentRect.y() + parentRect.height()/2 );
-		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
-			position.point.setY( parentRect.y() + parentRect.height() );
-	}
-
-	emit q->positionChanged(position);
 }
 
 void ImagePrivate::updateBorder() {
 	borderShapePath = QPainterPath();
 	borderShapePath.addRect(boundingRectangle);
 	recalcShapeAndBoundingRect();
-}
-
-bool ImagePrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-	setVisible(on);
-	emit q->changed();
-	emit q->visibleChanged(on);
-	return oldValue;
 }
 
 /*!
@@ -459,10 +303,9 @@ void ImagePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	QMatrix matrix;
-	matrix.rotate(-rotationAngle);
 	imageShape = QPainterPath();
-	if (borderPen.style() != Qt::NoPen) {
-		imageShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
+	if (borderLine->pen().style() != Qt::NoPen) {
+		imageShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderLine->pen()));
 		transformedBoundingRectangle = matrix.mapRect(imageShape.boundingRect());
 	} else {
 		imageShape.addRect(boundingRectangle);
@@ -471,115 +314,43 @@ void ImagePrivate::recalcShapeAndBoundingRect() {
 
 	imageShape = matrix.map(imageShape);
 
-	emit q->changed();
+	Q_EMIT q->changed();
 }
 
-void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	painter->save();
 
-	//draw the image
-	painter->rotate(-rotationAngle);
+	// draw the image
 	painter->setOpacity(opacity);
-	painter->drawImage(boundingRectangle.topLeft(), image, image.rect());
+	painter->drawImage(boundingRectangle.topLeft(), imageScaled, imageScaled.rect());
 	painter->restore();
 
-	//draw the border
-	if (borderPen.style() != Qt::NoPen) {
+	// draw the border
+	if (borderLine->style() != Qt::NoPen) {
 		painter->save();
-		painter->rotate(-rotationAngle);
-		painter->setPen(borderPen);
-		painter->setOpacity(borderOpacity);
+		painter->setPen(borderLine->pen());
+		painter->setBrush(Qt::NoBrush);
+		painter->setOpacity(borderLine->opacity());
 		painter->drawPath(borderShapePath);
 		painter->restore();
 	}
 
-	if (m_hovered && !isSelected() && !m_printing) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(imageShape);
+	const bool selected = isSelected();
+	const bool hovered = (m_hovered && !selected);
+	if ((hovered || selected) && !q->isPrinting()) {
+		static double penWidth = 2.;
+		const QRectF& br = boundingRect();
+		const qreal width = br.width();
+		const qreal height = br.height();
+		const QRectF rect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
+
+		if (hovered)
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
+		else
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
+
+		painter->drawRect(rect);
 	}
-
-	if (isSelected() && !m_printing) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(imageShape);
-	}
-}
-
-QVariant ImagePrivate::itemChange(GraphicsItemChange change, const QVariant &value) {
-	if (suppressItemChangeEvent)
-		return value;
-
-	if (change == QGraphicsItem::ItemPositionChange) {
-		//convert item's center point in parent's coordinates
-		WorksheetElement::PositionWrapper tempPosition;
-		tempPosition.point = positionFromItemPosition(value.toPointF());
-		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
-		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
-
-		//emit the signals in order to notify the UI.
-		//we don't set the position related member variables during the mouse movements.
-		//this is done on mouse release events only.
-		emit q->positionChanged(tempPosition);
-	}
-
-	return QGraphicsItem::itemChange(change, value);
-}
-
-void ImagePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	//convert position of the item in parent coordinates to label's position
-	QPointF point = positionFromItemPosition(pos());
-	if (qAbs(point.x()-position.point.x())>20 && qAbs(point.y()-position.point.y())>20 ) {
-		//position was changed -> set the position related member variables
-		suppressRetransform = true;
-		WorksheetElement::PositionWrapper tempPosition;
-		tempPosition.point = point;
-		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
-		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
-		q->setPosition(tempPosition);
-		suppressRetransform = false;
-	}
-
-	QGraphicsItem::mouseReleaseEvent(event);
-}
-
-/*!
- *	converts label's position to GraphicsItem's position.
- */
-QPointF ImagePrivate::positionFromItemPosition(QPointF itemPos) {
-	float x = itemPos.x();
-	float y = itemPos.y();
-	float w = image.width();
-	float h = image.height();
-	QPointF tmpPosition;
-
-	//depending on the alignment, calculate the new position
-	switch (horizontalAlignment) {
-	case WorksheetElement::HorizontalAlignment::Left:
-		tmpPosition.setX(x + w/2);
-		break;
-	case WorksheetElement::HorizontalAlignment::Center:
-		tmpPosition.setX(x);
-		break;
-	case WorksheetElement::HorizontalAlignment::Right:
-		tmpPosition.setX(x - w/2);
-		break;
-	}
-
-	switch (verticalAlignment) {
-	case WorksheetElement::VerticalAlignment::Top:
-		tmpPosition.setY(y + h/2);
-		break;
-	case WorksheetElement::VerticalAlignment::Center:
-		tmpPosition.setY(y);
-		break;
-	case WorksheetElement::VerticalAlignment::Bottom:
-		tmpPosition.setY(y - h/2);
-		break;
-	}
-
-	return tmpPosition;
 }
 
 void ImagePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -589,7 +360,7 @@ void ImagePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 void ImagePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		emit q->hovered();
+		Q_EMIT q->hovered();
 		update();
 	}
 }
@@ -597,48 +368,55 @@ void ImagePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void ImagePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		emit q->unhovered();
+		Q_EMIT q->unhovered();
 		update();
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Image::save(QXmlStreamWriter* writer) const {
 	Q_D(const Image);
 
-	writer->writeStartElement("image");
+	writer->writeStartElement(QStringLiteral("image"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//general
-	writer->writeStartElement("general");
-	writer->writeAttribute("fileName", d->fileName);
-	writer->writeAttribute("opacity", QString::number(d->opacity));
+	// general
+	writer->writeStartElement(QStringLiteral("general"));
+	if (d->embedded) {
+		QFileInfo fi(d->fileName);
+		writer->writeAttribute(QStringLiteral("fileName"), fi.fileName()); // save the actual file name only and not the whole path
+	} else
+		writer->writeAttribute(QStringLiteral("fileName"), d->fileName);
+
+	writer->writeAttribute(QStringLiteral("embedded"), QString::number(d->embedded));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->opacity));
 	writer->writeEndElement();
 
-	//geometry
-	writer->writeStartElement("geometry");
-	writer->writeAttribute("width", QString::number(d->width));
-	writer->writeAttribute("height", QString::number(d->height));
-	writer->writeAttribute("keepRatio", QString::number(d->keepRatio));
-	writer->writeAttribute("x", QString::number(d->position.point.x()));
-	writer->writeAttribute("y", QString::number(d->position.point.y()));
-	writer->writeAttribute("horizontalPosition", QString::number(static_cast<int>(d->position.horizontalPosition)));
-	writer->writeAttribute("verticalPosition", QString::number(static_cast<int>(d->position.verticalPosition)));
-	writer->writeAttribute("horizontalAlignment", QString::number(static_cast<int>(d->horizontalAlignment)));
-	writer->writeAttribute("verticalAlignment", QString::number(static_cast<int>(d->verticalAlignment)));
-	writer->writeAttribute("rotationAngle", QString::number(d->rotationAngle));
-	writer->writeAttribute("visible", QString::number(d->isVisible()));
+	// image data
+	if (d->embedded && !d->image.isNull()) {
+		writer->writeStartElement(QStringLiteral("data"));
+		QByteArray data;
+		QBuffer buffer(&data);
+		buffer.open(QIODevice::WriteOnly);
+		d->image.save(&buffer, "PNG");
+		writer->writeCharacters(QLatin1String(data.toBase64()));
+		writer->writeEndElement();
+	}
+
+	// geometry
+	writer->writeStartElement(QStringLiteral("geometry"));
+	WorksheetElement::save(writer);
+	writer->writeAttribute(QStringLiteral("width"), QString::number(d->width));
+	writer->writeAttribute(QStringLiteral("height"), QString::number(d->height));
+	writer->writeAttribute(QStringLiteral("keepRatio"), QString::number(d->keepRatio));
 	writer->writeEndElement();
 
-	//border
-	writer->writeStartElement("border");
-	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute("borderOpacity", QString::number(d->borderOpacity));
-	writer->writeEndElement();
+	// border
+	d->borderLine->save(writer);
 
 	writer->writeEndElement(); // close "image" section
 }
@@ -655,73 +433,61 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "image")
+		if (reader->isEndElement() && reader->name() == QLatin1String("image"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
-		} else if (!preview && reader->name() == "general") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
-			d->fileName = attribs.value("fileName").toString();
+			d->fileName = attribs.value(QStringLiteral("fileName")).toString();
+			READ_INT_VALUE("embedded", embedded, bool);
 			READ_DOUBLE_VALUE("opacity", opacity);
-		} else if (!preview && reader->name() == "geometry") {
+		} else if (reader->name() == QLatin1String("data")) {
+			QByteArray ba = QByteArray::fromBase64(reader->readElementText().toLatin1());
+			if (!d->image.loadFromData(ba))
+				reader->raiseWarning(i18n("Failed to read image data"));
+		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("width", width, int);
 			READ_INT_VALUE("height", height, int);
 			READ_INT_VALUE("keepRatio", keepRatio, bool);
 
-			str = attribs.value("x").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->position.point.setX(str.toDouble());
-
-			str = attribs.value("y").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("y").toString());
-			else
-				d->position.point.setY(str.toDouble());
-
-			READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
-			READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
-			READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
-			READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
-			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
-
-			str = attribs.value("visible").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("visible").toString());
-			else
-				d->setVisible(str.toInt());
-		} else if (!preview && reader->name() == "border") {
-			attribs = reader->attributes();
-			READ_QPEN(d->borderPen);
-			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
+			WorksheetElement::load(reader, preview);
+		} else if (!preview && reader->name() == QLatin1String("border")) {
+			d->borderLine->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
 	if (!preview) {
-		d->image = QImage(d->fileName);
-		d->scaleImage();
+		if (!d->embedded)
+			d->image = QImage(d->fileName);
+		d->imageScaled = d->image.scaled(d->width, d->height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	}
 
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Image::loadThemeConfig(const KConfig& config) {
-	Q_UNUSED(config)
+	Q_D(Image);
+	const auto& group = config.group("CartesianPlot");
+	d->borderLine->loadThemeConfig(group);
 }
 
 void Image::saveThemeConfig(const KConfig& config) {
-	Q_UNUSED(config)
+	Q_D(Image);
+	KConfigGroup group = config.group("Image");
+	d->borderLine->saveThemeConfig(group);
 }

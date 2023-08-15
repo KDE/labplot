@@ -1,41 +1,30 @@
-/***************************************************************************
-    File                 : ImportProjectDialog.cpp
-    Project              : LabPlot
-    Description          : import project dialog
-    --------------------------------------------------------------------
-    Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : ImportProjectDialog.cpp
+	Project              : LabPlot
+	Description          : import project dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "ImportProjectDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/projects/LabPlotProjectParser.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
+#include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/MainWin.h"
-#include "commonfrontend/widgets/TreeViewComboBox.h"
+
+#include <KLocalizedString>
+#include <KMessageBox>
+
+#include <KUrlComboBox>
+#include <KWindowConfig>
+#include <kcoreaddons_version.h>
 
 #include <QDialogButtonBox>
 #include <QDir>
@@ -46,28 +35,30 @@
 #include <QStatusBar>
 #include <QWindow>
 
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KSharedConfig>
-#include <KWindowConfig>
-
 /*!
-    \class ImportProjectDialog
-    \brief Dialog for importing project files.
+	\class ImportProjectDialog
+	\brief Dialog for importing project files.
 
 	\ingroup kdefrontend
  */
-ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QDialog(parent),
-	m_mainWin(parent),
-	m_projectType(type),
-	m_aspectTreeModel(new AspectTreeModel(parent->project())) {
-
+ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
+	: QDialog(parent)
+	, m_mainWin(parent)
+	, m_projectType(type)
+	, m_aspectTreeModel(new AspectTreeModel(parent->project())) {
 	auto* vLayout = new QVBoxLayout(this);
 
-	//main widget
-	QWidget* mainWidget = new QWidget(this);
+	// main widget
+	auto* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	ui.chbUnusedObjects->hide();
+
+	m_cbFileName = new KUrlComboBox(KUrlComboBox::Mode::Files, this);
+	m_cbFileName->setMaxItems(7);
+	auto* l = dynamic_cast<QHBoxLayout*>(ui.gbProject->layout());
+	if (l)
+		l->insertWidget(1, m_cbFileName);
+
 	vLayout->addWidget(mainWidget);
 
 	ui.tvPreview->setAnimated(true);
@@ -76,7 +67,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	ui.tvPreview->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	ui.tvPreview->setUniformRowHeights(true);
 
-	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
+	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 
 	m_cbAddTo = new TreeViewComboBox(ui.gbImportTo);
 	m_cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -88,22 +79,24 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	m_cbAddTo->setModel(m_aspectTreeModel);
 
 	m_bNewFolder = new QPushButton(ui.gbImportTo);
-	m_bNewFolder->setIcon(QIcon::fromTheme("list-add"));
+	m_bNewFolder->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	m_bNewFolder->setToolTip(i18n("Add new folder"));
 	ui.gbImportTo->layout()->addWidget(m_bNewFolder);
 
-	//dialog buttons
+	// dialog buttons
 	m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	vLayout->addWidget(m_buttonBox);
 
-	//ok-button is only enabled if some project objects were selected (s.a. ImportProjectDialog::selectionChanged())
+	// ok-button is only enabled if some project objects were selected (s.a. ImportProjectDialog::selectionChanged())
 	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-	//Signals/Slots
-	connect(ui.leFileName, &QLineEdit::textChanged, this, &ImportProjectDialog::fileNameChanged);
+	// Signals/Slots
+	connect(m_cbFileName, &KUrlComboBox::urlActivated, this, [=](const QUrl& url) {
+		fileNameChanged(url.path());
+	});
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportProjectDialog::selectFile);
 	connect(m_bNewFolder, &QPushButton::clicked, this, &ImportProjectDialog::newFolder);
-	connect(ui.chbUnusedObjects, &QCheckBox::stateChanged, this, &ImportProjectDialog::refreshPreview);
+	connect(ui.chbUnusedObjects, &QCheckBox::toggled, this, &ImportProjectDialog::refreshPreview);
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -121,62 +114,73 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 		break;
 	}
 
-	//dialog title and icon
+	// dialog title and icon
 	setWindowTitle(title);
-	setWindowIcon(QIcon::fromTheme("document-import"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-import")));
 
 	//"What's this?" texts
 	QString info = i18n("Specify the file where the project content has to be imported from.");
-	ui.leFileName->setWhatsThis(info);
+	m_cbFileName->setWhatsThis(info);
 
-	info = i18n("Select one or several objects to be imported into the current project.\n"
-	            "Note, all children of the selected objects as well as all the dependent objects will be automatically selected.\n"
-	            "To import the whole project, select the top-level project node."
-	           );
+	info = i18n(
+		"Select one or several objects to be imported into the current project.\n"
+		"Note, all children of the selected objects as well as all the dependent objects will be automatically selected.\n"
+		"To import the whole project, select the top-level project node.");
 	ui.tvPreview->setWhatsThis(info);
 
 	info = i18n("Specify the target folder in the current project where the selected objects have to be imported into.");
 	m_cbAddTo->setWhatsThis(info);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
 
-	QString lastImportedFile;
+	QString file;
+	QString files;
 	switch (m_projectType) {
 	case ProjectType::LabPlot:
-		lastImportedFile = QLatin1String("LastImportedLabPlotProject");
+		file = QStringLiteral("LastImportedLabPlotProject");
+		files = QStringLiteral("LastImportedLabPlotProjects");
 		break;
 	case ProjectType::Origin:
-		lastImportedFile = QLatin1String("LastImportedOriginProject");
+		file = QStringLiteral("LastImportedOriginProject");
+		files = QStringLiteral("LastImportedOriginProjects");
 		break;
 	}
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-	ui.leFileName->setText(conf.readEntry(lastImportedFile, ""));
+	m_cbFileName->setUrl(QUrl(conf.readEntry(file, "")));
+	QStringList urls = m_cbFileName->urls();
+	urls.append(conf.readXdgListEntry(files));
+	m_cbFileName->setUrls(urls);
+	fileNameChanged(m_cbFileName->currentText());
 }
 
 ImportProjectDialog::~ImportProjectDialog() {
-	//save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
+	// save current settings
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
-	QString lastImportedFile;
+	QString file;
+	QString files;
 	switch (m_projectType) {
 	case ProjectType::LabPlot:
-		lastImportedFile = QLatin1String("LastImportedLabPlotProject");
+		file = QStringLiteral("LastImportedLabPlotProject");
+		files = QStringLiteral("LastImportedLabPlotProjects");
 		break;
 	case ProjectType::Origin:
-		lastImportedFile = QLatin1String("LastImportedOriginProject");
+		file = QStringLiteral("LastImportedOriginProject");
+		files = QStringLiteral("LastImportedOriginProjects");
 		break;
 	}
 
-	conf.writeEntry(lastImportedFile, ui.leFileName->text());
+	conf.writeEntry(file, m_cbFileName->currentText());
+	conf.writeXdgListEntry(files, m_cbFileName->urls());
 }
 
 void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
@@ -186,14 +190,14 @@ void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
 void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	DEBUG("ImportProjectDialog::importTo()");
 
-	//determine the selected objects, convert the model indexes to string pathes
+	// determine the selected objects, convert the model indexes to string pathes
 	const QModelIndexList& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
 	QStringList selectedPathes;
-	for (int i = 0; i < indexes.size()/4; ++i) {
-		QModelIndex index = indexes.at(i*4);
+	for (int i = 0; i < indexes.size() / 4; ++i) {
+		QModelIndex index = indexes.at(i * 4);
 		const auto* aspect = static_cast<const AbstractAspect*>(index.internalPointer());
 
-		//path of the current aspect and the pathes of all aspects it depends on
+		// path of the current aspect and the pathes of all aspects it depends on
 		selectedPathes << aspect->path();
 		QDEBUG(" aspect path: " << aspect->path());
 		for (const auto* depAspect : aspect->dependsOn())
@@ -203,18 +207,18 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 
 	Folder* targetFolder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
 
-	//check whether the selected pathes already exist in the target folder and warn the user
+	// check whether the selected pathes already exist in the target folder and warn the user
 	const QString& targetFolderPath = targetFolder->path();
 	const Project* targetProject = targetFolder->project();
 	QStringList targetAllPathes;
 	for (const auto* aspect : targetProject->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive)) {
-		if (!dynamic_cast<const Folder*>(aspect))
+		if (aspect && !dynamic_cast<const Folder*>(aspect))
 			targetAllPathes << aspect->path();
 	}
 
 	QStringList existingPathes;
 	for (const auto& path : selectedPathes) {
-		const QString& newPath = targetFolderPath + path.right(path.length() - path.indexOf('/'));
+		const QString& newPath = targetFolderPath + path.right(path.length() - path.indexOf(QLatin1Char('/')));
 		if (targetAllPathes.indexOf(newPath) != -1)
 			existingPathes << path;
 	}
@@ -225,19 +229,24 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 
 	if (!existingPathes.isEmpty()) {
 		QString msg = i18np("The object listed below already exists in target folder and will be overwritten:",
-		                    "The objects listed below already exist in target folder and will be overwritten:",
-		                    existingPathes.size());
-		msg += '\n';
+							"The objects listed below already exist in target folder and will be overwritten:",
+							existingPathes.size());
+		msg += QLatin1Char('\n');
 		for (const auto& path : existingPathes)
-			msg += '\n' + path.right(path.length() - path.indexOf('/') - 1); //strip away the name of the root folder "Project"
-		msg += "\n\n" + i18n("Do you want to proceed?");
+			msg += QLatin1Char('\n') + path.right(path.length() - path.indexOf(QLatin1Char('/')) - 1); // strip away the name of the root folder "Project"
+		msg += QStringLiteral("\n\n") + i18n("Do you want to proceed?");
 
-		const int rc = KMessageBox::warningYesNo(nullptr, msg, i18n("Override existing objects?"));
-		if (rc == KMessageBox::No)
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+		auto status =
+			KMessageBox::warningTwoActions(nullptr, msg, i18n("Override existing objects?"), KStandardGuiItem::overwrite(), KStandardGuiItem::cancel());
+#else
+		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Override existing objects?"));
+#endif
+		if (status == KMessageBox::No)
 			return;
 	}
 
-	//show a progress bar in the status bar
+	// show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);
@@ -248,7 +257,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	//import the selected project objects into the specified folder
+	// import the selected project objects into the specified folder
 	QElapsedTimer timer;
 	timer.start();
 	connect(m_projectParser, &ProjectParser::completed, progressBar, &QProgressBar::setValue);
@@ -259,7 +268,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 #endif
 
 	m_projectParser->importTo(targetFolder, selectedPathes);
-	statusBar->showMessage( i18n("Project data imported in %1 seconds.", (float)timer.elapsed()/1000) );
+	statusBar->showMessage(i18n("Project data imported in %1 seconds.", (float)timer.elapsed() / 1000));
 
 	QApplication::restoreOverrideCursor();
 	statusBar->removeWidget(progressBar);
@@ -269,7 +278,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
  * show the content of the project in the tree view
  */
 void ImportProjectDialog::refreshPreview() {
-	QString project = ui.leFileName->text();
+	const QString& project = m_cbFileName->currentText();
 	m_projectParser->setProjectFileName(project);
 
 #ifdef HAVE_LIBORIGIN
@@ -286,18 +295,17 @@ void ImportProjectDialog::refreshPreview() {
 
 	ui.tvPreview->setModel(m_projectParser->model());
 
-	connect(ui.tvPreview->selectionModel(), &QItemSelectionModel::selectionChanged,
-		this, &ImportProjectDialog::selectionChanged);
+	connect(ui.tvPreview->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ImportProjectDialog::selectionChanged);
 
-	//show top-level containers only
+	// show top-level containers only
 	if (ui.tvPreview->model()) {
-		QModelIndex root = ui.tvPreview->model()->index(0,0);
+		QModelIndex root = ui.tvPreview->model()->index(0, 0);
 		showTopLevelOnly(root);
 	}
 
-	//select the first top-level node and
-	//expand the tree to show all available top-level objects and adjust the header sizes
-	ui.tvPreview->setCurrentIndex(ui.tvPreview->model()->index(0,0));
+	// select the first top-level node and
+	// expand the tree to show all available top-level objects and adjust the header sizes
+	ui.tvPreview->setCurrentIndex(ui.tvPreview->model()->index(0, 0));
 	ui.tvPreview->expandAll();
 	ui.tvPreview->header()->resizeSections(QHeaderView::ResizeToContents);
 }
@@ -326,29 +334,27 @@ bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
 	return false;
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
-void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
-	Q_UNUSED(deselected);
-
-	//determine the dependent objects and select/deselect them too
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
+void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const QItemSelection& /*deselected*/) {
+	// determine the dependent objects and select/deselect them too
 	const QModelIndexList& indexes = selected.indexes();
 	if (indexes.isEmpty())
 		return;
 
-	//for the just selected aspect, determine all the objects it depends on and select them, too
-	//TODO: we need a better "selection", maybe with tri-state check boxes in the tree view
+	// for the just selected aspect, determine all the objects it depends on and select them, too
+	// TODO: we need a better "selection", maybe with tri-state check boxes in the tree view
 	const auto* aspect = static_cast<const AbstractAspect*>(indexes.at(0).internalPointer());
 	const QVector<AbstractAspect*> aspects = aspect->dependsOn();
+
 	const auto* model = reinterpret_cast<AspectTreeModel*>(ui.tvPreview->model());
 	for (const auto* aspect : aspects) {
 		QModelIndex index = model->modelIndexOfAspect(aspect, 0);
 		ui.tvPreview->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 	}
 
-
-	//Ok-button is only enabled if some project objects were selected
+	// Ok-button is only enabled if some project objects were selected
 	bool enable = (selected.indexes().size() != 0);
 	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(enable);
 	if (enable)
@@ -361,7 +367,7 @@ void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const
 	opens a file dialog and lets the user select the project file.
 */
 void ImportProjectDialog::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 
 	QString title;
 	QString lastDir;
@@ -370,13 +376,13 @@ void ImportProjectDialog::selectFile() {
 	switch (m_projectType) {
 	case ProjectType::LabPlot:
 		title = i18nc("@title:window", "Open LabPlot Project");
-		lastDirConfEntryName = QLatin1String("LastImportLabPlotProjectDir");
+		lastDirConfEntryName = QStringLiteral("LastImportLabPlotProjectDir");
 		supportedFormats = i18n("LabPlot Projects (%1)", Project::supportedExtensions());
 		break;
 	case ProjectType::Origin:
 #ifdef HAVE_LIBORIGIN
 		title = i18nc("@title:window", "Open Origin Project");
-		lastDirConfEntryName = QLatin1String("LastImportOriginProjecttDir");
+		lastDirConfEntryName = QStringLiteral("LastImportOriginProjecttDir");
 		supportedFormats = i18n("Origin Projects (%1)", OriginProjectParser::supportedExtensions());
 #endif
 		break;
@@ -385,16 +391,21 @@ void ImportProjectDialog::selectFile() {
 	lastDir = conf.readEntry(lastDirConfEntryName, "");
 	QString path = QFileDialog::getOpenFileName(this, title, lastDir, supportedFormats);
 	if (path.isEmpty())
-		return; //cancel was clicked in the file-dialog
+		return; // cancel was clicked in the file-dialog
 
-	int pos = path.lastIndexOf(QLatin1String("/"));
+	int pos = path.lastIndexOf(QLatin1Char('/'));
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != lastDir)
 			conf.writeEntry(lastDirConfEntryName, newDir);
 	}
 
-	ui.leFileName->setText(path);
+	QStringList urls = m_cbFileName->urls();
+	urls.insert(0, QUrl::fromLocalFile(path).url());
+	m_cbFileName->setUrls(urls);
+	m_cbFileName->setCurrentText(urls.first());
+	fileNameChanged(path); // why do I have to call this function separately
+
 	refreshPreview();
 }
 
@@ -403,18 +414,16 @@ void ImportProjectDialog::fileNameChanged(const QString& name) {
 
 	// make relative path
 #ifdef HAVE_WINDOWS
-	if ( !fileName.isEmpty() && fileName.at(1) != QLatin1String(":"))
+	if (!fileName.isEmpty() && fileName.at(1) != QLatin1Char(':'))
 #else
-	if ( !fileName.isEmpty() && fileName.at(0) != QLatin1String("/"))
+	if (!fileName.isEmpty() && fileName.at(0) != QLatin1Char('/'))
 #endif
-		fileName = QDir::homePath() + QLatin1String("/") + fileName;
+		fileName = QDir::homePath() + QStringLiteral("/") + fileName;
 
 	bool fileExists = QFile::exists(fileName);
-	GuiTools::highlight(ui.leFileName, !fileExists);
-
 	if (!fileExists) {
-		//file doesn't exist -> delete the content preview that is still potentially
-		//available from the previously selected file
+		// file doesn't exist -> delete the content preview that is still potentially
+		// available from the previously selected file
 		ui.tvPreview->setModel(nullptr);
 		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 		return;
@@ -424,11 +433,11 @@ void ImportProjectDialog::fileNameChanged(const QString& name) {
 }
 
 void ImportProjectDialog::newFolder() {
-	QString path = ui.leFileName->text();
-	QString name = path.right( path.length() - path.lastIndexOf(QLatin1String("/"))-1 );
+	const QString& path = m_cbFileName->currentText();
+	QString name = path.right(path.length() - path.lastIndexOf(QLatin1Char('/')) - 1);
 
 	bool ok;
-	QInputDialog* dlg = new QInputDialog(this);
+	auto* dlg = new QInputDialog(this);
 	name = dlg->getText(this, i18n("Add new folder"), i18n("Folder name:"), QLineEdit::Normal, name, &ok);
 	if (ok) {
 		auto* folder = new Folder(name);

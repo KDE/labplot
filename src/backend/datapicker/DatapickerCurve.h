@@ -1,37 +1,20 @@
-/***************************************************************************
-    File                 : DatapickerCurve.h
-    Project              : LabPlot
-    Description          : container for Curve-Point and Datasheet/Spreadsheet
-                           of datapicker
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : DatapickerCurve.h
+	Project              : LabPlot
+	Description          : container for Curve-Point and Datasheet/Spreadsheet
+	of datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef DATAPICKERCURVE_H
 #define DATAPICKERCURVE_H
 
 #include "backend/core/AbstractAspect.h"
-#include "backend/lib/macros.h"
 #include "backend/datapicker/DatapickerImage.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 class DatapickerPoint;
@@ -41,14 +24,14 @@ class Column;
 class Spreadsheet;
 class AbstractColumn;
 
-class DatapickerCurve: public AbstractAspect {
+class DatapickerCurve : public AbstractAspect {
 	Q_OBJECT
 
 public:
 	explicit DatapickerCurve(const QString&);
 	~DatapickerCurve() override;
 
-	enum class ErrorType {NoError, SymmetricError, AsymmetricError};
+	enum class ErrorType { NoError, SymmetricError, AsymmetricError };
 	struct Errors {
 		ErrorType x;
 		ErrorType y;
@@ -60,14 +43,12 @@ public:
 	void addDatasheet(DatapickerImage::GraphType);
 	void updatePoints();
 	void updatePoint(const DatapickerPoint*);
+	void updateColumns(bool datetime);
 
+	void suppressUpdatePoint(bool);
+
+	Symbol* symbol() const;
 	BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)
-	BASIC_D_ACCESSOR_DECL(Symbol::Style, pointStyle, PointStyle)
-	BASIC_D_ACCESSOR_DECL(qreal, pointOpacity, PointOpacity)
-	BASIC_D_ACCESSOR_DECL(qreal, pointRotationAngle, PointRotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, pointSize, PointSize)
-	CLASS_D_ACCESSOR_DECL(QBrush, pointBrush, PointBrush)
-	CLASS_D_ACCESSOR_DECL(QPen, pointPen, PointPen)
 	BASIC_D_ACCESSOR_DECL(qreal, pointErrorBarSize, PointErrorBarSize)
 	CLASS_D_ACCESSOR_DECL(QBrush, pointErrorBarBrush, PointErrorBarBrush)
 	CLASS_D_ACCESSOR_DECL(QPen, pointErrorBarPen, PointErrorBarPen)
@@ -104,8 +85,13 @@ private:
 	Column* appendColumn(const QString&);
 
 	Spreadsheet* m_datasheet{nullptr};
+	bool m_supressResizeDatasheet{false};
+	bool m_datetime{false};
 
-signals:
+	void childAdded(const AbstractAspect* child);
+	void childRemoved(const AbstractAspect* child);
+
+Q_SIGNALS:
 	void curveErrorTypesChanged(const DatapickerCurve::Errors&);
 	void posXColumnChanged(const AbstractColumn*);
 	void posYColumnChanged(const AbstractColumn*);

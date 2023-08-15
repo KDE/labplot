@@ -1,56 +1,20 @@
-/***************************************************************************
-File		: MQTTClient.cpp
-Project		: LabPlot
-Description	: Represents a MQTT Client
---------------------------------------------------------------------
-Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
+/*
+	File		: MQTTClient.cpp
+	Project		: LabPlot
+	Description	: Represents a MQTT Client
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
 
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "backend/datasources/MQTTClient.h"
-
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
-
 #include "backend/datasources/filters/AsciiFilter.h"
-#include "backend/datasources/filters/FITSFilter.h"
-#include "backend/datasources/filters/BinaryFilter.h"
-#include "backend/core/Project.h"
-#include "kdefrontend/spreadsheet/PlotDataDialog.h"
-
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-
+#include "backend/lib/XmlStreamReader.h"
 #include "kdefrontend/datasources/MQTTErrorWidget.h"
 
-#include <QFileInfo>
-#include <QDateTime>
-#include <QProcess>
-#include <QDir>
-#include <QMenu>
 #include <QTimer>
-#include <QMessageBox>
-
-#include <QIcon>
-#include <QAction>
-#include <KLocalizedString>
 
 /*!
   \class MQTTClient
@@ -59,10 +23,13 @@ It manages the MQTTSubscriptions, and the MQTTTopics.
 
   \ingroup datasources
 */
-MQTTClient::MQTTClient(const QString& name) : Folder(name, AspectType::MQTTClient),
-	m_updateTimer(new QTimer(this)),
-	m_client(new QMqttClient(this)),
-	m_willTimer(new QTimer(this)) {
+MQTTClient::MQTTClient(const QString& name)
+	: Folder(name, AspectType::MQTTClient)
+	, m_updateTimer(new QTimer(this))
+	, m_client(new QMqttClient(this))
+	, m_willTimer(new QTimer(this)) {
+	// stop reading from the source before removing the child from the project
+	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, this, &MQTTClient::pauseReading);
 
 	connect(m_updateTimer, &QTimer::timeout, this, &MQTTClient::read);
 	connect(m_client, &QMqttClient::connected, this, &MQTTClient::onMQTTConnect);
@@ -71,10 +38,9 @@ MQTTClient::MQTTClient(const QString& name) : Folder(name, AspectType::MQTTClien
 }
 
 MQTTClient::~MQTTClient() {
-	emit clientAboutToBeDeleted(m_client->hostname(), m_client->port());
-	//stop reading before deleting the objects
+	Q_EMIT clientAboutToBeDeleted(m_client->hostname(), m_client->port());
+	// stop reading before deleting the objects
 	pauseReading();
-	qDebug() << "Delete MQTTClient: " << m_client->hostname() << m_client->port();
 
 	delete m_filter;
 	delete m_updateTimer;
@@ -232,7 +198,7 @@ MQTTClient::UpdateType MQTTClient::updateType() const {
  * \brief Returns the MQTTClient's icon
  */
 QIcon MQTTClient::icon() const {
-	return QIcon::fromTheme("network-server-database");
+	return QIcon::fromTheme(QStringLiteral("network-server-database"));
 }
 
 /*!
@@ -331,7 +297,7 @@ void MQTTClient::setMQTTClientId(const QString& clientId) {
 /*!
  * \brief Returns the ID of the client
  */
-QString MQTTClient::clientID () const {
+QString MQTTClient::clientID() const {
 	return m_client->clientId();
 }
 
@@ -383,51 +349,49 @@ QVector<QString> MQTTClient::MQTTSubscriptions() const {
  * \param QoS
  */
 void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
-	//Check whether the subscription already exists, if it doesn't, we can add it
+	// Check whether the subscription already exists, if it doesn't, we can add it
 	if (!m_subscriptions.contains(topicName)) {
-		const QMqttTopicFilter filter {topicName};
+		const QMqttTopicFilter filter{topicName};
 		QMqttSubscription* temp = m_client->subscribe(filter, QoS);
 
 		if (temp) {
-// 			qDebug()<<"Subscribe to: "<< temp->topic() << "  " << temp->qos();
+			// 			qDebug()<<"Subscribe to: "<< temp->topic() << "  " << temp->qos();
 			m_subscriptions.push_back(temp->topic().filter());
 			m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
-			MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
+			auto* newSubscription = new MQTTSubscription(temp->topic().filter());
 			newSubscription->setMQTTClient(this);
 
 			addChildFast(newSubscription);
 			m_MQTTSubscriptions.push_back(newSubscription);
 
-			//Search for inferior subscriptions, that the new subscription contains
+			// Search for inferior subscriptions, that the new subscription contains
 			bool found = false;
 			QVector<MQTTSubscription*> inferiorSubscriptions;
 			for (auto* subscription : m_MQTTSubscriptions) {
-				if (checkTopicContains(topicName, subscription->subscriptionName())
-				        && topicName != subscription->subscriptionName()) {
+				if (checkTopicContains(topicName, subscription->subscriptionName()) && topicName != subscription->subscriptionName()) {
 					found = true;
 					inferiorSubscriptions.push_back(subscription);
 				}
 			}
 
-			//If there are some inferior subscriptions, we have to deal with them
+			// If there are some inferior subscriptions, we have to deal with them
 			if (found) {
 				for (auto* inferiorSubscription : inferiorSubscriptions) {
-// 					qDebug()<<"Reparent topics of inferior subscription: "<< inferiorSubscription->subscriptionName();
+					// 					qDebug()<<"Reparent topics of inferior subscription: "<< inferiorSubscription->subscriptionName();
 
-					//We have to reparent every topic of the inferior subscription, so no data is lost
+					// We have to reparent every topic of the inferior subscription, so no data is lost
 					QVector<MQTTTopic*> topics = inferiorSubscription->topics();
 					for (auto* topic : topics) {
 						topic->reparent(newSubscription);
 					}
 
-					//Then remove the subscription and every connected information
-					QMqttTopicFilter unsubscribeFilter {inferiorSubscription->subscriptionName()};
+					// Then remove the subscription and every connected information
+					QMqttTopicFilter unsubscribeFilter{inferiorSubscription->subscriptionName()};
 					m_client->unsubscribe(unsubscribeFilter);
 
 					for (int j = 0; j < m_MQTTSubscriptions.size(); ++j) {
-						if (m_MQTTSubscriptions[j]->subscriptionName() ==
-						        inferiorSubscription->subscriptionName()) {
+						if (m_MQTTSubscriptions[j]->subscriptionName() == inferiorSubscription->subscriptionName()) {
 							m_MQTTSubscriptions.remove(j);
 						}
 					}
@@ -440,7 +404,7 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 
 			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::MQTTSubscriptionMessageReceived);
 
-			emit MQTTTopicsChanged();
+			Q_EMIT MQTTTopicsChanged();
 		}
 	}
 }
@@ -451,26 +415,26 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
  * \param name, the name of the subscription to remove
  */
 void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
-	//We can only remove the subscription if it exists
+	// We can only remove the subscription if it exists
 	if (m_subscriptions.contains(subscriptionName)) {
-		//unsubscribe from the topic
+		// unsubscribe from the topic
 		const QMqttTopicFilter filter{subscriptionName};
 		m_client->unsubscribe(filter);
-// 		qDebug()<<"Unsubscribe from: " << subscriptionName;
+		// 		qDebug()<<"Unsubscribe from: " << subscriptionName;
 
-		//Remove every connected information
+		// Remove every connected information
 		m_subscriptions.removeAll(subscriptionName);
 
 		for (int i = 0; i < m_MQTTSubscriptions.size(); ++i) {
 			if (m_MQTTSubscriptions[i]->subscriptionName() == subscriptionName) {
 				MQTTSubscription* removeSubscription = m_MQTTSubscriptions[i];
 				m_MQTTSubscriptions.remove(i);
-				//Remove every topic of the subscription as well
+				// Remove every topic of the subscription as well
 				QVector<MQTTTopic*> topics = removeSubscription->topics();
-				for (int j = 0; j < topics.size(); ++j) {
-					m_topicNames.removeAll(topics[j]->topicName());
-				}
-				//Remove the MQTTSubscription
+				for (const auto& topic : topics)
+					m_topicNames.removeAll(topic->topicName());
+
+				// Remove the MQTTSubscription
 				removeChild(removeSubscription);
 				break;
 			}
@@ -484,7 +448,7 @@ void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
 				break;
 			}
 		}
-		emit MQTTTopicsChanged();
+		Q_EMIT MQTTTopicsChanged();
 	}
 }
 
@@ -496,29 +460,28 @@ void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
  * \param QoS
  */
 void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 QoS) {
-	//We can't add the subscription if it already exists
+	// We can't add the subscription if it already exists
 	if (!m_subscriptions.contains(topicName)) {
-		//Subscribe to the topic
-		QMqttTopicFilter filter {topicName};
+		// Subscribe to the topic
+		QMqttTopicFilter filter{topicName};
 		QMqttSubscription* temp = m_client->subscribe(filter, QoS);
 		if (temp) {
-			//Add the MQTTSubscription and other connected data
-// 			qDebug()<<"Add subscription before remove: " << temp->topic() << "  " << temp->qos();
+			// Add the MQTTSubscription and other connected data
+			// 			qDebug()<<"Add subscription before remove: " << temp->topic() << "  " << temp->qos();
 			m_subscriptions.push_back(temp->topic().filter());
 			m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
-			MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
+			auto* newSubscription = new MQTTSubscription(temp->topic().filter());
 			newSubscription->setMQTTClient(this);
 
 			addChildFast(newSubscription);
 			m_MQTTSubscriptions.push_back(newSubscription);
 
-			//Search for the subscription the topic belonged to
+			// Search for the subscription the topic belonged to
 			bool found = false;
 			MQTTSubscription* superiorSubscription = nullptr;
 			for (auto* subscription : m_MQTTSubscriptions) {
-				if (checkTopicContains(subscription->subscriptionName(), topicName)
-				        && topicName != subscription->subscriptionName()) {
+				if (checkTopicContains(subscription->subscriptionName(), topicName) && topicName != subscription->subscriptionName()) {
 					found = true;
 					superiorSubscription = subscription;
 					break;
@@ -526,10 +489,10 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
 			}
 
 			if (found) {
-				//Search for topics belonging to the superior(old) subscription
-				//which are also contained by the new subscription
+				// Search for topics belonging to the superior(old) subscription
+				// which are also contained by the new subscription
 				QVector<MQTTTopic*> topics = superiorSubscription->topics();
-// 				qDebug()<< topics.size();
+				// 				qDebug()<< topics.size();
 
 				QVector<MQTTTopic*> inferiorTopics;
 				for (auto* topic : topics) {
@@ -538,7 +501,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
 					}
 				}
 
-				//Reparent these topics, in order to avoid data loss
+				// Reparent these topics, in order to avoid data loss
 				for (auto* inferiorTopic : inferiorTopics) {
 					inferiorTopic->reparent(newSubscription);
 				}
@@ -555,10 +518,10 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
  * \param parent, the name of the MQTTSubscription
  */
 void MQTTClient::reparentTopic(const QString& topicName, const QString& parentTopicName) {
-	//We can only reparent if the parent containd the topic
+	// We can only reparent if the parent contained the topic
 	if (m_subscriptions.contains(parentTopicName) && m_topicNames.contains(topicName)) {
-// 		qDebug() << "Reparent " << topicName << " to " << parentTopicName;
-		//search for the parent MQTTSubscription
+		// 		qDebug() << "Reparent " << topicName << " to " << parentTopicName;
+		// search for the parent MQTTSubscription
 		bool found = false;
 		MQTTSubscription* superiorSubscription = nullptr;
 		for (auto* subscription : m_MQTTSubscriptions) {
@@ -570,12 +533,12 @@ void MQTTClient::reparentTopic(const QString& topicName, const QString& parentTo
 		}
 
 		if (found) {
-			//get every topic of the MQTTClient
+			// get every topic of the MQTTClient
 			QVector<MQTTTopic*> topics = children<MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
-			//Search for the given topic among the MQTTTopics
+			// Search for the given topic among the MQTTTopics
 			for (auto* topic : topics) {
 				if (topicName == topic->topicName()) {
-					//if found, it is reparented to the parent MQTTSubscription
+					// if found, it is reparented to the parent MQTTSubscription
 					topic->reparent(superiorSubscription);
 					break;
 				}
@@ -597,26 +560,30 @@ bool MQTTClient::checkTopicContains(const QString& superior, const QString& infe
 		return true;
 	else {
 		if (superior.contains(QLatin1String("/"))) {
-			QStringList superiorList = superior.split('/', QString::SkipEmptyParts);
-			QStringList inferiorList = inferior.split('/', QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+			QStringList superiorList = superior.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+			QStringList inferiorList = inferior.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+#else
+			QStringList superiorList = superior.split(QLatin1Char('/'), QString::SkipEmptyParts);
+			QStringList inferiorList = inferior.split(QLatin1Char('/'), QString::SkipEmptyParts);
+#endif
 
-			//a longer topic can't contain a shorter one
+			// a longer topic can't contain a shorter one
 			if (superiorList.size() > inferiorList.size())
 				return false;
 
 			bool ok = true;
 			for (int i = 0; i < superiorList.size(); ++i) {
 				if (superiorList.at(i) != inferiorList.at(i)) {
-					if ((superiorList.at(i) != '+') &&
-					        !(superiorList.at(i) == '#' && i == superiorList.size() - 1)) {
-						//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
-						//then superior can't contain inferior
+					if ((superiorList.at(i) != QLatin1Char('+')) && !(superiorList.at(i) == QLatin1Char('#') && i == superiorList.size() - 1)) {
+						// if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
+						// then superior can't contain inferior
 						ok = false;
 						break;
-					} else if (i == superiorList.size() - 1 && (superiorList.at(i) == '+' && inferiorList.at(i) == '#') ) {
-						//if the two topics differ at the last level
-						//and the superior's current level is + while the inferior's is #(which can be only in the last position)
-						//then superior can't contain inferior
+					} else if (i == superiorList.size() - 1 && (superiorList.at(i) == QLatin1Char('+') && inferiorList.at(i) == QLatin1Char('#'))) {
+						// if the two topics differ at the last level
+						// and the superior's current level is + while the inferior's is #(which can be only in the last position)
+						// then superior can't contain inferior
 						ok = false;
 						break;
 					}
@@ -636,15 +603,19 @@ bool MQTTClient::checkTopicContains(const QString& superior, const QString& infe
  * \return The name of the common topic, if it exists, otherwise an empty string
  */
 QString MQTTClient::checkCommonLevel(const QString& first, const QString& second) {
-	QStringList firstList = first.split('/', QString::SkipEmptyParts);
-	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	QStringList firstList = first.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+	QStringList secondtList = second.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+#else
+	QStringList firstList = first.split(QLatin1Char('/'), QString::SkipEmptyParts);
+	QStringList secondtList = second.split(QLatin1Char('/'), QString::SkipEmptyParts);
+#endif
 	QString commonTopic;
 
 	if (!firstList.isEmpty()) {
-		//the two topics have to be the same size and can't be identic
+		// the two topics have to be the same size and can't be identic
 		if ((firstList.size() == secondtList.size()) && (first != second)) {
-
-			//the index where they differ
+			// the index where they differ
 			int differIndex = -1;
 			for (int i = 0; i < firstList.size(); ++i) {
 				if (firstList.at(i) != secondtList.at(i)) {
@@ -653,17 +624,16 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 				}
 			}
 
-			//they can differ at only one level and that can't be the first
+			// they can differ at only one level and that can't be the first
 			bool differ = false;
 			if (differIndex > 0) {
-				for (int j = differIndex +1; j < firstList.size(); ++j) {
+				for (int j = differIndex + 1; j < firstList.size(); ++j) {
 					if (firstList.at(j) != secondtList.at(j)) {
 						differ = true;
 						break;
 					}
 				}
-			}
-			else
+			} else
 				differ = true;
 
 			if (!differ) {
@@ -671,17 +641,17 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 					if (i != differIndex) {
 						commonTopic.append(firstList.at(i));
 					} else {
-						//we put '+' wildcard at the level where they differ
-						commonTopic.append('+');
+						// we put '+' wildcard at the level where they differ
+						commonTopic.append(QStringLiteral("+"));
 					}
 
 					if (i != firstList.size() - 1)
-						commonTopic.append("/");
+						commonTopic.append(QStringLiteral("/"));
 				}
 			}
 		}
 	}
-// 	qDebug() << first << " " << second << " common topic: "<<commonTopic;
+	// 	qDebug() << first << " " << second << " common topic: "<<commonTopic;
 	return commonTopic;
 }
 
@@ -716,8 +686,8 @@ bool MQTTClient::MQTTWillUse() const {
  *
  * \param topic
  */
-void  MQTTClient::setWillTopic(const QString& topic) {
-// 	qDebug() << "Set will topic:" << topic;
+void MQTTClient::setWillTopic(const QString& topic) {
+	// 	qDebug() << "Set will topic:" << topic;
 	m_MQTTWill.willTopic = topic;
 }
 
@@ -799,7 +769,7 @@ void MQTTClient::updateWillMessage() {
 	QVector<const MQTTTopic*> topics = children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 	const MQTTTopic* willTopic = nullptr;
 
-	//Search for the will topic
+	// Search for the will topic
 	for (const auto* topic : topics) {
 		if (topic->topicName() == m_MQTTWill.willTopic) {
 			willTopic = topic;
@@ -807,67 +777,125 @@ void MQTTClient::updateWillMessage() {
 		}
 	}
 
-	//if the will topic is found we can update the will message
+	// if the will topic is found we can update the will message
 	if (willTopic != nullptr) {
-		//To update the will message we have to disconnect first, then after setting everything connect again
-		if (m_MQTTWill.enabled && (m_client->state() == QMqttClient::ClientState::Connected) ) {
-			//Disconnect only once (disconnecting may take a while)
+		// To update the will message we have to disconnect first, then after setting everything connect again
+		if (m_MQTTWill.enabled && (m_client->state() == QMqttClient::ClientState::Connected)) {
+			// Disconnect only once (disconnecting may take a while)
 			if (!m_disconnectForWill) {
-// 				qDebug() << "Disconnecting from host in order to update will message";
+				// 				qDebug() << "Disconnecting from host in order to update will message";
 				m_client->disconnectFromHost();
 				m_disconnectForWill = true;
 			}
-			//Try to update again
+			// Try to update again
 			updateWillMessage();
 		}
-		//If client is disconnected we can update the settings
+		// If client is disconnected we can update the settings
 		else if (m_MQTTWill.enabled && (m_client->state() == QMqttClient::ClientState::Disconnected) && m_disconnectForWill) {
 			m_client->setWillQoS(m_MQTTWill.willQoS);
-// 			qDebug()<<"Will QoS" << m_MQTTWill.willQoS;
-
 			m_client->setWillRetain(m_MQTTWill.willRetain);
-// 			qDebug()<<"Will retain" << m_MQTTWill.willRetain;
-
 			m_client->setWillTopic(m_MQTTWill.willTopic);
-// 			qDebug()<<"Will Topic" << m_MQTTWill.willTopic;
 
-			//Set the will message according to m_willMessageType
+			// Set the will message according to m_willMessageType
 			switch (m_MQTTWill.willMessageType) {
 			case WillMessageType::OwnMessage:
 				m_client->setWillMessage(m_MQTTWill.willOwnMessage.toUtf8());
-// 				qDebug()<<"Will own message" << m_MQTTWill.willOwnMessage;
+				// 				qDebug()<<"Will own message" << m_MQTTWill.willOwnMessage;
 				break;
 			case WillMessageType::Statistics: {
-				const auto asciiFilter = willTopic->filter();
-
-				//If the topic's asciiFilter was found, get the needed statistics
-				if (asciiFilter != nullptr) {
-					//Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
-					if ((asciiFilter->MQTTColumnMode() == AbstractColumn::ColumnMode::Integer) ||
-					        (asciiFilter->MQTTColumnMode() == AbstractColumn::ColumnMode::Numeric)) {
-						m_client->setWillMessage(asciiFilter->MQTTColumnStatistics(willTopic).toUtf8());
-					}
-					//Otherwise set empty message
-					else {
-						m_client->setWillMessage(QByteArray());
-					}
-// 					qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
-				}
+				// Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
+				// check the column mode of the last column in the topic for this.
+				// TODO: check this logic again - why last column only?
+				const auto* col = willTopic->child<Column>(willTopic->childCount<Column>() - 1);
+				auto mode = col->columnMode();
+				if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::Double)
+					m_client->setWillMessage(this->statistics(willTopic).toUtf8());
+				else
+					m_client->setWillMessage(QByteArray()); // empty message
+				// 					qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
 				break;
 			}
 			case WillMessageType::LastMessage:
 				m_client->setWillMessage(m_MQTTWill.willLastMessage.toUtf8());
-// 				qDebug()<<"Will last message:\n" << m_MQTTWill.willLastMessage;
+				// 				qDebug()<<"Will last message:\n" << m_MQTTWill.willLastMessage;
 				break;
 			default:
 				break;
 			}
 			m_disconnectForWill = false;
-			//Reconnect with the updated message
+			// Reconnect with the updated message
 			m_client->connectToHost();
-// 			qDebug()<< "Reconnect to host after updating will message";
+			// 			qDebug()<< "Reconnect to host after updating will message";
 		}
 	}
+}
+
+/*!
+ * \brief Returns the statistical data that is needed by the topic for its MQTTClient's will message
+ * \param topic
+ */
+QString MQTTClient::statistics(const MQTTTopic* topic) const {
+	const auto* col = topic->child<Column>(topic->childCount<Column>() - 1);
+	QString statistics;
+
+	QVector<bool> willStatistics = topic->mqttClient()->willStatistics();
+	// Add every statistical data to the string, the flag of which is set true
+	for (int i = 0; i <= willStatistics.size(); i++) {
+		if (willStatistics[i]) {
+			switch (static_cast<MQTTClient::WillStatisticsType>(i)) {
+			case MQTTClient::WillStatisticsType::ArithmeticMean:
+				statistics += QStringLiteral("Arithmetic mean: ") + QString::number(col->statistics().arithmeticMean) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::ContraharmonicMean:
+				statistics += QStringLiteral("Contraharmonic mean: ") + QString::number(col->statistics().contraharmonicMean) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::Entropy:
+				statistics += QStringLiteral("Entropy: ") + QString::number(col->statistics().entropy) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::GeometricMean:
+				statistics += QStringLiteral("Geometric mean: ") + QString::number(col->statistics().geometricMean) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::HarmonicMean:
+				statistics += QStringLiteral("Harmonic mean: ") + QString::number(col->statistics().harmonicMean) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::Kurtosis:
+				statistics += QStringLiteral("Kurtosis: ") + QString::number(col->statistics().kurtosis) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::Maximum:
+				statistics += QStringLiteral("Maximum: ") + QString::number(col->statistics().maximum) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::MeanDeviation:
+				statistics += QStringLiteral("Mean deviation: ") + QString::number(col->statistics().meanDeviation) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::MeanDeviationAroundMedian:
+				statistics +=
+					QStringLiteral("Mean deviation around median: ") + QString::number(col->statistics().meanDeviationAroundMedian) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::Median:
+				statistics += QStringLiteral("Median: ") + QString::number(col->statistics().median) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::MedianDeviation:
+				statistics += QStringLiteral("Median deviation: ") + QString::number(col->statistics().medianDeviation) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::Minimum:
+				statistics += QStringLiteral("Minimum: ") + QString::number(col->statistics().minimum) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::Skewness:
+				statistics += QStringLiteral("Skewness: ") + QString::number(col->statistics().skewness) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::StandardDeviation:
+				statistics += QStringLiteral("Standard deviation: ") + QString::number(col->statistics().standardDeviation) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::Variance:
+				statistics += QStringLiteral("Variance: ") + QString::number(col->statistics().variance) + QStringLiteral("\n");
+				break;
+			case MQTTClient::WillStatisticsType::NoStatistics:
+			default:
+				break;
+			}
+		}
+	}
+	return statistics;
 }
 
 /*!
@@ -953,9 +981,9 @@ void MQTTClient::stopWillTimer() const {
 	m_willTimer->stop();
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
 /*!
  *\brief called periodically when update type is TimeInterval
@@ -965,16 +993,16 @@ void MQTTClient::read() {
 		return;
 
 	if (!m_prepared) {
-// 		qDebug()<<"Connect";
-		//connect to the broker
+		// 		qDebug()<<"Connect";
+		// connect to the broker
 		m_client->connectToHost();
 		m_prepared = true;
 	}
 
 	if ((m_client->state() == QMqttClient::ClientState::Connected) && m_MQTTFirstConnectEstablished) {
-// 		qDebug()<<"Read";
-		//Signal for every MQTTTopic that they can read
-		emit readFromTopics();
+		// 		qDebug()<<"Read";
+		// Signal for every MQTTTopic that they can read
+		Q_EMIT readFromTopics();
 	}
 }
 
@@ -983,22 +1011,22 @@ void MQTTClient::read() {
  */
 void MQTTClient::onMQTTConnect() {
 	if (m_client->error() == QMqttClient::NoError) {
-		//if this is the first connection (after setting the options in ImportFileWidget or loading saved project)
+		// if this is the first connection (after setting the options in ImportFileWidget or loading saved project)
 		if (!m_MQTTFirstConnectEstablished) {
-// 			qDebug()<<"connection made in MQTTClient";
+			// 			qDebug()<<"connection made in MQTTClient";
 
-			//Subscribe to initial or loaded topics
+			// Subscribe to initial or loaded topics
 			QMapIterator<QMqttTopicFilter, quint8> i(m_subscribedTopicNameQoS);
 			while (i.hasNext()) {
 				i.next();
-// 				qDebug()<<i.key();
-				QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
+				// 				qDebug()<<i.key();
+				QMqttSubscription* temp = m_client->subscribe(i.key(), i.value());
 				if (temp) {
-					//If we didn't load the MQTTClient from xml we have to add the MQTTSubscriptions
+					// If we didn't load the MQTTClient from xml we have to add the MQTTSubscriptions
 					if (!m_loaded) {
 						m_subscriptions.push_back(temp->topic().filter());
 
-						MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
+						auto* newSubscription = new MQTTSubscription(temp->topic().filter());
 						newSubscription->setMQTTClient(this);
 
 						addChildFast(newSubscription);
@@ -1010,23 +1038,23 @@ void MQTTClient::onMQTTConnect() {
 				}
 			}
 			m_MQTTFirstConnectEstablished = true;
-			//Signal that the initial subscriptions were made
-			emit MQTTSubscribed();
+			// Signal that the initial subscriptions were made
+			Q_EMIT MQTTSubscribed();
 		}
-		//if there was already a connection made(happens after updating will message)
+		// if there was already a connection made(happens after updating will message)
 		else {
-// 			qDebug() << "Start resubscribing after will message update";
-			//Only the client has to make the subscriptions again, every other connected data is still available
+			// 			qDebug() << "Start resubscribing after will message update";
+			// Only the client has to make the subscriptions again, every other connected data is still available
 			QMapIterator<QMqttTopicFilter, quint8> i(m_subscribedTopicNameQoS);
 			while (i.hasNext()) {
 				i.next();
 				QMqttSubscription* temp = m_client->subscribe(i.key(), i.value());
 				if (temp) {
-// 					qDebug()<<temp->topic()<<"  "<<temp->qos();
+					// 					qDebug()<<temp->topic()<<"  "<<temp->qos();
 					connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::MQTTSubscriptionMessageReceived);
 				}
-// 				else
-// 					qDebug()<<"Couldn't subscribe after will update";
+				// 				else
+				// 					qDebug()<<"Couldn't subscribe after will update";
 			}
 		}
 	}
@@ -1037,25 +1065,25 @@ void MQTTClient::onMQTTConnect() {
  * It passes the message to the appropriate MQTTSubscription which will pass it to the appropriate MQTTTopic
  */
 void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
-	//Decide to interpret retain message or not
+	// Decide to interpret retain message or not
 	if (!msg.retain() || m_MQTTRetain) {
-		//If this is the first message from the topic, save its name
+		// If this is the first message from the topic, save its name
 		if (!m_topicNames.contains(msg.topic().name()))
 			m_topicNames.push_back(msg.topic().name());
 
-		//Pass the message and the topic name to the MQTTSubscription which contains the topic
+		// Pass the message and the topic name to the MQTTSubscription which contains the topic
 		for (auto* subscription : m_MQTTSubscriptions) {
 			if (checkTopicContains(subscription->subscriptionName(), msg.topic().name())) {
-				subscription->messageArrived(msg.payload(), msg.topic().name());
+				subscription->messageArrived(QLatin1String(msg.payload()), msg.topic().name());
 				break;
 			}
 		}
 
-		//if the message was received by the will topic, update the last message received by it
+		// if the message was received by the will topic, update the last message received by it
 		if (msg.topic().name() == m_MQTTWill.willTopic) {
-			m_MQTTWill.willLastMessage = QString(msg.payload());
+			m_MQTTWill.willLastMessage = QLatin1String(msg.payload());
 
-			emit MQTTTopicsChanged();
+			Q_EMIT MQTTTopicsChanged();
 		}
 	}
 }
@@ -1065,7 +1093,7 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
  */
 void MQTTClient::MQTTErrorChanged(QMqttClient::ClientError clientError) {
 	if (clientError != QMqttClient::ClientError::NoError) {
-		MQTTErrorWidget* errorWidget = new MQTTErrorWidget(clientError, this);
+		auto* errorWidget = new MQTTErrorWidget(clientError, this);
 		errorWidget->show();
 	}
 }
@@ -1077,16 +1105,16 @@ void MQTTClient::MQTTErrorChanged(QMqttClient::ClientError clientError) {
  *
  * \param name, the name of the subscription
  */
-void MQTTClient::subscriptionLoaded(const QString &name) {
+void MQTTClient::subscriptionLoaded(const QString& name) {
 	if (!name.isEmpty()) {
-// 		qDebug() << "Finished loading: " << name;
-		//Save information about the subscription
+		// 		qDebug() << "Finished loading: " << name;
+		// Save information about the subscription
 		m_subscriptionsLoaded++;
 		m_subscriptions.push_back(name);
-		QMqttTopicFilter filter {name};
+		QMqttTopicFilter filter{name};
 		m_subscribedTopicNameQoS[filter] = 0;
 
-		//Save the topics belonging to the subscription
+		// Save the topics belonging to the subscription
 		for (const auto* subscription : m_MQTTSubscriptions) {
 			if (subscription->subscriptionName() == name) {
 				const auto& topics = subscription->topics();
@@ -1097,65 +1125,65 @@ void MQTTClient::subscriptionLoaded(const QString &name) {
 			}
 		}
 
-		//Check whether every subscription was loaded or not
+		// Check whether every subscription was loaded or not
 		if (m_subscriptionsLoaded == m_subscriptionCountToLoad) {
-			//if everything was loaded we can start reading
+			// if everything was loaded we can start reading
 			m_loaded = true;
 			read();
 		}
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
   Saves as XML.
  */
 void MQTTClient::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("MQTTClient");
+	writer->writeStartElement(QStringLiteral("MQTTClient"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//general
-	writer->writeStartElement("general");
-	writer->writeAttribute("subscriptionCount", QString::number(m_MQTTSubscriptions.size()));
-	writer->writeAttribute("updateType", QString::number(static_cast<int>(m_updateType)));
-	writer->writeAttribute("readingType", QString::number(static_cast<int>(m_readingType)));
-	writer->writeAttribute("keepValues", QString::number(m_keepNValues));
+	// general
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("subscriptionCount"), QString::number(m_MQTTSubscriptions.size()));
+	writer->writeAttribute(QStringLiteral("updateType"), QString::number(static_cast<int>(m_updateType)));
+	writer->writeAttribute(QStringLiteral("readingType"), QString::number(static_cast<int>(m_readingType)));
+	writer->writeAttribute(QStringLiteral("keepValues"), QString::number(m_keepNValues));
 
 	if (m_updateType == UpdateType::TimeInterval)
-		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
+		writer->writeAttribute(QStringLiteral("updateInterval"), QString::number(m_updateInterval));
 
 	if (m_readingType != ReadingType::TillEnd)
-		writer->writeAttribute("sampleSize", QString::number(m_sampleSize));
+		writer->writeAttribute(QStringLiteral("sampleSize"), QString::number(m_sampleSize));
 
-	writer->writeAttribute("host", m_client->hostname());
-	writer->writeAttribute("port", QString::number(m_client->port()));
-	writer->writeAttribute("username", m_client->username());
-	writer->writeAttribute("password", m_client->password());
-	writer->writeAttribute("clientId", m_client->clientId());
-	writer->writeAttribute("useRetain", QString::number(m_MQTTRetain));
-	writer->writeAttribute("useWill", QString::number(m_MQTTWill.enabled));
-	writer->writeAttribute("willTopic", m_MQTTWill.willTopic);
-	writer->writeAttribute("willOwnMessage", m_MQTTWill.willOwnMessage);
-	writer->writeAttribute("willQoS", QString::number(m_MQTTWill.willQoS));
-	writer->writeAttribute("willRetain", QString::number(m_MQTTWill.willRetain));
-	writer->writeAttribute("willMessageType", QString::number(static_cast<int>(m_MQTTWill.willMessageType)));
-	writer->writeAttribute("willUpdateType", QString::number(static_cast<int>(m_MQTTWill.willUpdateType)));
-	writer->writeAttribute("willTimeInterval", QString::number(m_MQTTWill.willTimeInterval));
+	writer->writeAttribute(QStringLiteral("host"), m_client->hostname());
+	writer->writeAttribute(QStringLiteral("port"), QString::number(m_client->port()));
+	writer->writeAttribute(QStringLiteral("username"), m_client->username());
+	writer->writeAttribute(QStringLiteral("password"), m_client->password());
+	writer->writeAttribute(QStringLiteral("clientId"), m_client->clientId());
+	writer->writeAttribute(QStringLiteral("useRetain"), QString::number(m_MQTTRetain));
+	writer->writeAttribute(QStringLiteral("useWill"), QString::number(m_MQTTWill.enabled));
+	writer->writeAttribute(QStringLiteral("willTopic"), m_MQTTWill.willTopic);
+	writer->writeAttribute(QStringLiteral("willOwnMessage"), m_MQTTWill.willOwnMessage);
+	writer->writeAttribute(QStringLiteral("willQoS"), QString::number(m_MQTTWill.willQoS));
+	writer->writeAttribute(QStringLiteral("willRetain"), QString::number(m_MQTTWill.willRetain));
+	writer->writeAttribute(QStringLiteral("willMessageType"), QString::number(static_cast<int>(m_MQTTWill.willMessageType)));
+	writer->writeAttribute(QStringLiteral("willUpdateType"), QString::number(static_cast<int>(m_MQTTWill.willUpdateType)));
+	writer->writeAttribute(QStringLiteral("willTimeInterval"), QString::number(m_MQTTWill.willTimeInterval));
 
 	for (int i = 0; i < m_MQTTWill.willStatistics.count(); ++i)
-		writer->writeAttribute("willStatistics"+QString::number(i), QString::number(m_MQTTWill.willStatistics[i]));
-	writer->writeAttribute("useID", QString::number(m_MQTTUseID));
-	writer->writeAttribute("useAuthentication", QString::number(m_MQTTUseAuthentication));
+		writer->writeAttribute(QStringLiteral("willStatistics") + QString::number(i), QString::number(m_MQTTWill.willStatistics[i]));
+	writer->writeAttribute(QStringLiteral("useID"), QString::number(m_MQTTUseID));
+	writer->writeAttribute(QStringLiteral("useAuthentication"), QString::number(m_MQTTUseAuthentication));
 
 	writer->writeEndElement();
 
-	//filter
+	// filter
 	m_filter->save(writer);
 
-	//MQTTSubscription
+	// MQTTSubscription
 	for (auto* sub : children<MQTTSubscription>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		sub->save(writer);
 
@@ -1175,167 +1203,167 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "MQTTClient")
+		if (reader->isEndElement() && reader->name() == QLatin1String("MQTTClient"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "general") {
+		} else if (reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("subscriptionCount").toString();
+			str = attribs.value(QStringLiteral("subscriptionCount")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'subscriptionCount'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'subscriptionCount'")));
 			else
-				m_subscriptionCountToLoad =  str.toInt();
+				m_subscriptionCountToLoad = str.toInt();
 
-			str = attribs.value("keepValues").toString();
+			str = attribs.value(QStringLiteral("keepValues")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'keepValues'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'keepValues'")));
 			else
-				m_keepNValues =  str.toInt();
+				m_keepNValues = str.toInt();
 
-			str = attribs.value("updateType").toString();
+			str = attribs.value(QStringLiteral("updateType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'updateType'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'updateType'")));
 			else
-				m_updateType =  static_cast<UpdateType>(str.toInt());
+				m_updateType = static_cast<UpdateType>(str.toInt());
 
-			str = attribs.value("readingType").toString();
+			str = attribs.value(QStringLiteral("readingType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'readingType'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'readingType'")));
 			else
-				m_readingType =  static_cast<ReadingType>(str.toInt());
+				m_readingType = static_cast<ReadingType>(str.toInt());
 
 			if (m_updateType == UpdateType::TimeInterval) {
-				str = attribs.value("updateInterval").toString();
+				str = attribs.value(QStringLiteral("updateInterval")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'updateInterval'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'updateInterval'")));
 				else
 					m_updateInterval = str.toInt();
 			}
 
 			if (m_readingType != ReadingType::TillEnd) {
-				str = attribs.value("sampleSize").toString();
+				str = attribs.value(QStringLiteral("sampleSize")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'sampleSize'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'sampleSize'")));
 				else
 					m_sampleSize = str.toInt();
 			}
 
-			str = attribs.value("host").toString();
+			str = attribs.value(QStringLiteral("host")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'host'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'host'")));
 			else
 				m_client->setHostname(str);
 
-			str = attribs.value("port").toString();
+			str = attribs.value(QStringLiteral("port")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'port'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'port'")));
 			else
 				m_client->setPort(str.toUInt());
 
-			str = attribs.value("useAuthentication").toString();
+			str = attribs.value(QStringLiteral("useAuthentication")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'useAuthentication'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'useAuthentication'")));
 			else
 				m_MQTTUseAuthentication = str.toInt();
 
 			if (m_MQTTUseAuthentication) {
-				str = attribs.value("username").toString();
+				str = attribs.value(QStringLiteral("username")).toString();
 				if (!str.isEmpty())
 					m_client->setUsername(str);
 
-				str = attribs.value("password").toString();
+				str = attribs.value(QStringLiteral("password")).toString();
 				if (!str.isEmpty())
 					m_client->setPassword(str);
 			}
 
-			str = attribs.value("useID").toString();
+			str = attribs.value(QStringLiteral("useID")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'useID'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'useID'")));
 			else
 				m_MQTTUseID = str.toInt();
 
 			if (m_MQTTUseID) {
-				str = attribs.value("clientId").toString();
+				str = attribs.value(QStringLiteral("clientId")).toString();
 				if (!str.isEmpty())
 					m_client->setClientId(str);
 			}
 
-			str = attribs.value("useRetain").toString();
+			str = attribs.value(QStringLiteral("useRetain")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'useRetain'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'useRetain'")));
 			else
 				m_MQTTRetain = str.toInt();
 
-			str = attribs.value("useWill").toString();
+			str = attribs.value(QStringLiteral("useWill")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'useWill'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'useWill'")));
 			else
 				m_MQTTWill.enabled = str.toInt();
 
 			if (m_MQTTWill.enabled) {
-				str = attribs.value("willTopic").toString();
+				str = attribs.value(QStringLiteral("willTopic")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willTopic'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willTopic'")));
 				else
 					m_MQTTWill.willTopic = str;
 
-				str = attribs.value("willOwnMessage").toString();
+				str = attribs.value(QStringLiteral("willOwnMessage")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willOwnMessage'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willOwnMessage'")));
 				else
 					m_MQTTWill.willOwnMessage = str;
 
-				str = attribs.value("willQoS").toString();
+				str = attribs.value(QStringLiteral("willQoS")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willQoS'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willQoS'")));
 				else
 					m_MQTTWill.willQoS = str.toUInt();
 
-				str = attribs.value("willRetain").toString();
+				str = attribs.value(QStringLiteral("willRetain")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willRetain'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willRetain'")));
 				else
 					m_MQTTWill.willRetain = str.toInt();
 
-				str = attribs.value("willMessageType").toString();
+				str = attribs.value(QStringLiteral("willMessageType")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willMessageType'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willMessageType'")));
 				else
 					m_MQTTWill.willMessageType = static_cast<MQTTClient::WillMessageType>(str.toInt());
 
-				str = attribs.value("willUpdateType").toString();
+				str = attribs.value(QStringLiteral("willUpdateType")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willUpdateType'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willUpdateType'")));
 				else
 					m_MQTTWill.willUpdateType = static_cast<MQTTClient::WillUpdateType>(str.toInt());
 
-				str = attribs.value("willTimeInterval").toString();
+				str = attribs.value(QStringLiteral("willTimeInterval")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willTimeInterval'")));
 				else
 					m_MQTTWill.willTimeInterval = str.toInt();
 
 				for (int i = 0; i < m_MQTTWill.willStatistics.count(); ++i) {
-					str = attribs.value("willStatistics"+QString::number(i)).toString();
+					str = attribs.value(QStringLiteral("willStatistics") + QString::number(i)).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
+						reader->raiseWarning(attributeWarning.arg(QStringLiteral("'willTimeInterval'")));
 					else
 						m_MQTTWill.willStatistics[i] = str.toInt();
 				}
 			}
-		} else if (reader->name() == "asciiFilter") {
+		} else if (reader->name() == QLatin1String("asciiFilter")) {
 			setFilter(new AsciiFilter);
 			if (!m_filter->load(reader))
 				return false;
-		} else if (reader->name() == "MQTTSubscription") {
-			MQTTSubscription* subscription = new MQTTSubscription(QString());
+		} else if (reader->name() == QLatin1String("MQTTSubscription")) {
+			auto* subscription = new MQTTSubscription(QString());
 			subscription->setMQTTClient(this);
 			m_MQTTSubscriptions.push_back(subscription);
 			connect(subscription, &MQTTSubscription::loaded, this, &MQTTClient::subscriptionLoaded);
@@ -1344,12 +1372,12 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 			addChildFast(subscription);
-		} else {// unknown element
+		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
 	return !reader->hasError();
 }
-

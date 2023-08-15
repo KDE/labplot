@@ -1,31 +1,12 @@
-/***************************************************************************
-    File                 : XYIntegrationCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by an integration
-    --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : XYIntegrationCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by an integration
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef XYINTEGRATIONCURVE_H
 #define XYINTEGRATIONCURVE_H
@@ -42,27 +23,25 @@ class XYIntegrationCurve : public XYAnalysisCurve {
 
 public:
 	struct IntegrationData {
-		IntegrationData() : xRange(2) {};
+		IntegrationData(){};
 
-		nsl_int_method_type method{nsl_int_method_trapezoid};	// method for integration
-		bool absolute{false};		// absolute area?
-		bool autoRange{true};		// use all data?
-		QVector<double> xRange;		// x range for integration
+		nsl_int_method_type method{nsl_int_method_trapezoid}; // method for integration
+		bool absolute{false}; // absolute area?
+		bool autoRange{true}; // use all data?
+		// TODO: use Range
+		QVector<double> xRange{0, 0}; // x range for integration
 	};
-	struct IntegrationResult {
-		IntegrationResult() {};
+	struct IntegrationResult : public XYAnalysisCurve::Result {
+		IntegrationResult(){};
 
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
-		double value{0.0};	// final result of integration
+		double value{0.0}; // final result of integration
 	};
 
 	explicit XYIntegrationCurve(const QString& name);
 	~XYIntegrationCurve() override;
 
 	void recalculate() override;
+	virtual const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -78,7 +57,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYIntegrationCurve)
 
-signals:
+Q_SIGNALS:
 	void integrationDataChanged(const XYIntegrationCurve::IntegrationData&);
 };
 

@@ -1,38 +1,18 @@
-/***************************************************************************
-File                 : ROOTFilter.h
-Project              : LabPlot
-Description          : ROOT(CERN) I/O-filter
---------------------------------------------------------------------
-Copyright            : (C) 2018 Christoph Roick (chrisito@gmx.de)
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+/*
+	File                 : ROOTFilter.h
+	Project              : LabPlot
+	Description          : ROOT(CERN) I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef ROOTFILTER_H
 #define ROOTFILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <QVector>
-
-class QStringList;
 class ROOTFilterPrivate;
 class QStringList;
 class QIODevice;
@@ -45,7 +25,7 @@ public:
 	ROOTFilter();
 	~ROOTFilter() override;
 
-	//UNUSED enum class ColumnTypes {Center = 1, Low = 2, Content = 4, Error = 8};
+	// UNUSED enum class ColumnTypes {Center = 1, Low = 2, Content = 4, Error = 8};
 
 	static QString fileInfoString(const QString&);
 
@@ -54,7 +34,8 @@ public:
 	 *
 	 * The ROOT file is kept open until the file name is changed
 	 */
-	void readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) override;
+	void
+	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	/// Currently writing to ROOT files is not supported
 	void write(const QString& fileName, AbstractDataSource*) override;
 
@@ -62,10 +43,9 @@ public:
 	void saveFilterSettings(const QString&) const override;
 
 	/// Internal directory structure in a ROOT file
-	struct Directory
-	{
+	struct Directory {
 		QString name;
-		QVector<QPair<QString, quint64> > content;
+		QVector<QPair<QString, quint64>> content;
 		QVector<Directory> children;
 	};
 

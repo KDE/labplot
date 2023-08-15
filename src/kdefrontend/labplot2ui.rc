@@ -21,15 +21,15 @@
 </ToolBar>
 
 <ToolBar name="datapicker_toolbar">
-<text>Datapicker</text>
+<text>Data Extractor</text>
 </ToolBar>
 
 <ToolBar name="spreadsheet_toolbar">
 <text>Spreadsheet</text>
 </ToolBar>
 
-<ToolBar name="cas_worksheet_toolbar">
-<text>CAS Worksheet</text>
+<ToolBar name="notebook_toolbar">
+<text>Notebook</text>
 </ToolBar>
 
 <ToolBar name="cartesian_plot_toolbar" position="left">
@@ -38,6 +38,7 @@
 
 <MenuBar>
 <Menu name="file" ><text>&amp;File</text>
+<Action name="file_example_open" />
 <Menu name="new"><text>&amp;Add New</text>
 	<Action name="new_workbook" />
 	<Action name="new_spreadsheet" />
@@ -52,12 +53,12 @@
 	<Action name="new_live_datasource" />
 	<Action name="new_database_datasource" />
 	<Separator/>
-	<Menu name="new_cas_worksheet"><text>&amp;CAS Worksheet</text>
+	<Menu name="new_notebook"><text>&amp;Notebook</text>
 	    <ActionList name="backends_list" />
 	</Menu>
 </Menu>
 <Separator/>
-<Menu name="import"><text>Import</text>
+<Menu name="import"><text>Import Data</text>
 	<Action name="import_file" />
 	<Action name="import_sql" />
     <Action name="import_dataset_datasource" />
@@ -76,13 +77,13 @@
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
 <Menu name="matrix"><text>&amp;Matrix</text></Menu>
 <Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
-<Menu name="cas_worksheet"><text>&amp;CAS Worksheet</text></Menu>
-<Menu name="analysis"><text>&amp;Analysis</text></Menu>
-<Menu name="datapicker"><text>&amp;Datapicker</text></Menu>
+<Menu name="notebook"><text>&amp;Notebook</text></Menu>
+<Menu name="datapicker"><text>&amp;Data Extractor</text></Menu>
 <!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->
 <!-- <Menu name="script"><text>&amp;Script</text></Menu> -->
 <Menu name="tools"><text>&amp;Tools</text>
-            <Action name="edit_fits" />
+	<Action name="color_maps" />
+	<Action name="edit_fits" />
 </Menu>
 <Menu name="windows"><text>&amp;Windows</text>
 <Action name="close window" />

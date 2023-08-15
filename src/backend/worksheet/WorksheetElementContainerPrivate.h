@@ -1,65 +1,44 @@
-/***************************************************************************
-    File                 : WorksheetElementContainerPrivate.h
-    Project              : LabPlot
-    Description          : Private members of WorksheetElementContainer.
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : WorksheetElementContainerPrivate.h
+	Project              : LabPlot
+	Description          : Private members of WorksheetElementContainer.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2012-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef WORKSHEETELEMENTCONTAINERPRIVATE_H
 #define WORKSHEETELEMENTCONTAINERPRIVATE_H
 
-#include <QGraphicsItem>
+#include "WorksheetElementPrivate.h"
 
 class QGraphicsSceneContextMenuEvent;
 class WorksheetElementContainer;
 
-class WorksheetElementContainerPrivate : public QGraphicsItem {
-
+class WorksheetElementContainerPrivate : public WorksheetElementPrivate {
 public:
 	explicit WorksheetElementContainerPrivate(WorksheetElementContainer*);
-	~WorksheetElementContainerPrivate() override= default;
+	~WorksheetElementContainerPrivate() override = default;
 
-	QString name() const;
 	QRectF boundingRect() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
-	bool swapVisible(bool on);
 	void prepareGeometryChangeRequested();
-	void recalcShapeAndBoundingRect();
+	void recalcShapeAndBoundingRect() override;
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	virtual void retransform() override;
 
-	WorksheetElementContainer* q;
+	WorksheetElementContainer* q{nullptr};
 	QRectF boundingRectangle;
 	QPainterPath containerShape;
 	QRectF rect;
 	bool m_hovered{false};
 	bool m_printing{false};
 
-signals:
+Q_SIGNALS:
 	void selectedChange(QGraphicsItem*);
 };
 

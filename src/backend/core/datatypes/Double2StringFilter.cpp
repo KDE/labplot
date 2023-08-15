@@ -1,36 +1,17 @@
-/***************************************************************************
-    File                 : Double2StringFilter.cpp
-    Project              : AbstractColumn
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
-    Description          : Locale-aware conversion filter double -> QString.
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : Double2StringFilter.cpp
+	Project              : AbstractColumn
+	Description          : Locale-aware conversion filter double -> QString.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "Double2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
 #include <QUndoCommand>
+#include <QXmlStreamWriter>
 
 #include <KLocalizedString>
 
@@ -58,9 +39,9 @@ private:
 	int m_other_digits;
 };
 
-void Double2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) const {
-	writer->writeAttribute("format", QString(QChar(numericFormat())));
-	writer->writeAttribute("digits", QString::number(numDigits()));
+void Double2StringFilter::writeExtraAttributes(QXmlStreamWriter* writer) const {
+	writer->writeAttribute(QStringLiteral("format"), QChar::fromLatin1(numericFormat()));
+	writer->writeAttribute(QStringLiteral("digits"), QString::number(numDigits()));
 }
 
 bool Double2StringFilter::load(XmlStreamReader* reader, bool preview) {
@@ -68,16 +49,16 @@ bool Double2StringFilter::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	QXmlStreamAttributes attribs = reader->attributes();
-	QString format_str = attribs.value(reader->namespaceUri().toString(), "format").toString();
-	QString digits_str = attribs.value(reader->namespaceUri().toString(), "digits").toString();
+	QString format_str = attribs.value(reader->namespaceUri().toString(), QStringLiteral("format")).toString();
+	QString digits_str = attribs.value(reader->namespaceUri().toString(), QStringLiteral("digits")).toString();
 
 	if (AbstractSimpleFilter::load(reader, preview)) {
 		bool ok;
 		int digits = digits_str.toInt(&ok);
-		if (ok)
+		if (ok && m_digits != digits)
 			setNumDigits(digits);
 
-		if (format_str.size() >= 1)
+		if (format_str.size() >= 1 && QLatin1Char(m_format) != format_str)
 			setNumericFormat(format_str.at(0).toLatin1());
 	} else
 		return false;
@@ -94,7 +75,8 @@ void Double2StringFilter::setNumDigits(int digits) {
 }
 
 Double2StringFilterSetFormatCmd::Double2StringFilterSetFormatCmd(Double2StringFilter* target, char new_format)
-	: m_target(target), m_other_format(new_format) {
+	: m_target(target)
+	, m_other_format(new_format) {
 	if (m_target->parentAspect())
 		setText(i18n("%1: set numeric format to '%2'", m_target->parentAspect()->name(), new_format));
 	else
@@ -105,7 +87,7 @@ void Double2StringFilterSetFormatCmd::redo() {
 	char tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
 	m_other_format = tmp;
-	emit m_target->formatChanged();
+	Q_EMIT m_target->formatChanged();
 }
 
 void Double2StringFilterSetFormatCmd::undo() {
@@ -113,7 +95,8 @@ void Double2StringFilterSetFormatCmd::undo() {
 }
 
 Double2StringFilterSetDigitsCmd::Double2StringFilterSetDigitsCmd(Double2StringFilter* target, int new_digits)
-	: m_target(target), m_other_digits(new_digits) {
+	: m_target(target)
+	, m_other_digits(new_digits) {
 	if (m_target->parentAspect())
 		setText(i18n("%1: set decimal digits to %2", m_target->parentAspect()->name(), new_digits));
 	else
@@ -124,10 +107,9 @@ void Double2StringFilterSetDigitsCmd::redo() {
 	int tmp = m_target->m_digits;
 	m_target->m_digits = m_other_digits;
 	m_other_digits = tmp;
-	emit m_target->digitsChanged();
+	Q_EMIT m_target->digitsChanged();
 }
 
 void Double2StringFilterSetDigitsCmd::undo() {
 	redo();
 }
-

@@ -2,14 +2,15 @@
 # but be aware, some frameworks need patching to have this working
 
 # reference: https://cgit.kde.org/kate.git/tree/mac/emerge-deploy.sh
-# run in kde/..
+# run in CraftRoot/..
 
 # errors are fatal
 set -e
 
 NAME=labplot2
-VERSION=2.8.0
-PREFIX=kde/Applications
+VERSION=2.10.1
+CRAFTROOT=CraftRoot
+PREFIX=$CRAFTROOT/Applications
 INPREFIX=$PREFIX/$NAME.app/Contents
 TMPDIR=LabPlot2
 SIGNATURE="Stefan Gerlach"
@@ -20,52 +21,60 @@ GCP=/opt/local/libexec/gnubin/cp
 #########################################
 
 mkdir -pv $INPREFIX/share/{appdata,applications}
+mkdir -pv $INPREFIX/Resources/kxmlgui5/labplot2
 
 echo "Running macdeployqt ..."
 # -verbose=3
-macdeployqt $PREFIX/$NAME.app -verbose=2
+LIBPATH=/Users/user/$CRAFTROOT/lib
+macdeployqt $PREFIX/$NAME.app -verbose=2 -libpath=$LIBPATH
 
 #########################################
 
 echo "Install files"
 # splash
-cp -v kde/share/$NAME/splash.png $INPREFIX/Resources/
+cp -v $CRAFTROOT/share/$NAME/splash.png $INPREFIX/Resources/
 # rc-file
 # Standardlocation (QSP): ~/Library/Application\ Support/kxmlgui5/labplot2/labplot2ui.rc
 # using hardcoded path:
-cp -v kde/share/kxmlgui5/$NAME/${NAME}ui.rc $INPREFIX/Resources/
+cp -v $CRAFTROOT/share/kxmlgui5/$NAME/${NAME}ui.rc $INPREFIX/Resources/
 # themes
-cp -vr kde/share/$NAME/themes $INPREFIX/Resources/
+cp -vr $CRAFTROOT/share/$NAME/themes $INPREFIX/Resources/
 # gsl_distros, fit_models, colorchooser
-cp -vr kde/share/$NAME/pics $INPREFIX/Resources/
+cp -vr $CRAFTROOT/share/$NAME/pics $INPREFIX/Resources/
 # color schemes (needs patched kcolorschememanager.cpp)
-cp -vr kde/share/$NAME/color-schemes $INPREFIX/Resources/color-schemes
+cp -vr $CRAFTROOT/share/$NAME/color-schemes $INPREFIX/Resources/color-schemes
 #datasets
-cp -vr kde/share/$NAME/datasets $INPREFIX/Resources/datasets
+cp -vr $CRAFTROOT/share/$NAME/datasets $INPREFIX/Resources/datasets
+#color maps
+cp -vr $CRAFTROOT/share/$NAME/colormaps $INPREFIX/Resources/colormaps
+#examples
+cp -vr $CRAFTROOT/share/$NAME/examples $INPREFIX/Resources/examples
 # appdata
-cp -v kde/share/metainfo/org.kde.labplot2.appdata.xml $INPREFIX/share/appdata/
-cp -v kde/share/applications/org.kde.$NAME.desktop $INPREFIX/share/applications/
+cp -v $CRAFTROOT/share/metainfo/org.kde.labplot2.appdata.xml $INPREFIX/share/appdata/
+cp -v $CRAFTROOT/share/applications/org.kde.$NAME.desktop $INPREFIX/share/applications/
 
 # cantor
-cp -v kde/Applications/cantor.app/Contents/MacOS/cantor $INPREFIX/MacOS
-cp -v kde/Applications/cantor_scripteditor.app/Contents/MacOS/cantor_scripteditor $INPREFIX/MacOS
-cp -vr kde/plugins/cantor $INPREFIX/PlugIns
-cp -v kde/lib/libcantor_config.dylib $INPREFIX/Frameworks/
-# not available in cantor master
-#cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
+cp -v $CRAFTROOT/Applications/cantor.app/Contents/MacOS/cantor $INPREFIX/MacOS
+cp -v $CRAFTROOT/Applications/cantor_scripteditor.app/Contents/MacOS/cantor_scripteditor $INPREFIX/MacOS
+cp -v $CRAFTROOT/Applications/cantor_pythonserver.app/Contents/MacOS/cantor_pythonserver $INPREFIX/MacOS
+cp -vr $CRAFTROOT/plugins/cantor $INPREFIX/PlugIns
+cp -v $CRAFTROOT/lib/libcantor_config.dylib $INPREFIX/Frameworks/
+# libcantorlibs.XX.dylib pulled in by macdeployqt may be broken
+#$GCP -Pv kde/lib/libcantorlibs* $INPREFIX/Frameworks/
+cp -v $CRAFTROOT/share/kxmlgui5/cantor/*.rc $INPREFIX/Resources/kxmlgui5/labplot2/
 
 # icons
-cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
+cp -vf $CRAFTROOT/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
 
 # kcharselect data
 mkdir -p $INPREFIX/Resources/kf5/kcharselect
-cp -v kde/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/kf5/kcharselect/
+cp -v $CRAFTROOT/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/kf5/kcharselect/
 
 # misc
-cp -v labplot/admin/Info.plist $INPREFIX
+cp -v Info.plist $INPREFIX
 
 # translation (locale)
-cd kde/share
+cd $CRAFTROOT/share
 $GCP -vf --parents locale/*/LC_MESSAGES/labplot2.mo ../../$INPREFIX/Resources
 $GCP -vf --parents locale/*/LC_MESSAGES/kconfigwidgets5.mo ../../$INPREFIX/Resources
 $GCP -vf --parents locale/*/LC_MESSAGES/kxmlgui5.mo ../../$INPREFIX/Resources

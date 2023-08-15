@@ -1,31 +1,12 @@
-/***************************************************************************
-    File                 : XYDataReductionCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by a data reduction
-    --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : XYDataReductionCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by a data reduction
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef XYDATAREDUCTIONCURVE_H
 #define XYDATAREDUCTIONCURVE_H
@@ -43,23 +24,20 @@ class XYDataReductionCurve : public XYAnalysisCurve {
 
 public:
 	struct DataReductionData {
-		DataReductionData() : xRange(2) {};
+		DataReductionData(){};
 
-		nsl_geom_linesim_type type{nsl_geom_linesim_type_douglas_peucker_variant};	// type of simplification
-		bool autoTolerance{true};	// automatic tolerance
-		double tolerance{0.0};		// tolerance
-		bool autoTolerance2{true};	// automatic tolerance2
-		double tolerance2{0.0};		// tolerance2
-		bool autoRange{true};		// use all data?
-		QVector<double> xRange;		// x range for integration
+		nsl_geom_linesim_type type{nsl_geom_linesim_type_douglas_peucker_variant}; // type of simplification
+		bool autoTolerance{true}; // automatic tolerance
+		double tolerance{0.0}; // tolerance
+		bool autoTolerance2{true}; // automatic tolerance2
+		double tolerance2{0.0}; // tolerance2
+		bool autoRange{true}; // use all data?
+		// TODO: use Range
+		QVector<double> xRange{0., 0.}; // x range for integration
 	};
-	struct DataReductionResult {
-		DataReductionResult() {};
+	struct DataReductionResult : public XYAnalysisCurve::Result {
+		DataReductionResult(){};
 
-		bool available{false};
-		bool valid{false};
-		QString status;
-		qint64 elapsedTime{0};
 		size_t npoints{0};
 		double posError{0};
 		double areaError{0};
@@ -69,6 +47,7 @@ public:
 	~XYDataReductionCurve() override;
 
 	void recalculate() override;
+	const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -84,7 +63,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYDataReductionCurve)
 
-signals:
+Q_SIGNALS:
 	void dataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
 	void completed(int); //!< int ranging from 0 to 100 notifies about the status of the analysis process
 };

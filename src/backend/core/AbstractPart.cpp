@@ -1,44 +1,18 @@
-/***************************************************************************
-    File                 : AbstractPart.cpp
-    Project              : LabPlot
-    Description          : Base class of Aspects with MDI windows as views.
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2012 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : AbstractPart.cpp
+	Project              : LabPlot
+	Description          : Base class of Aspects with MDI windows as views.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "backend/core/AbstractPart.h"
-#include "backend/core/Workbook.h"
-#include "backend/datapicker/Datapicker.h"
-#include "backend/datapicker/DatapickerCurve.h"
-#include "backend/datasources/LiveDataSource.h"
-#include "backend/matrix/Matrix.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "commonfrontend/core/PartMdiView.h"
-#ifdef HAVE_MQTT
-#include "backend/datasources/MQTTTopic.h"
-#endif
+#include "backend/core/Settings.h"
+#include "commonfrontend/core/ContentDockWidget.h"
 
+#include <DockManager.h>
 #include <QMenu>
 #include <QStyle>
 
@@ -53,8 +27,8 @@ AbstractPart::AbstractPart(const QString& name, AspectType type)
 }
 
 AbstractPart::~AbstractPart() {
-	if (m_mdiWindow)
-		delete m_mdiWindow;
+	if (m_dockWidget)
+		delete m_dockWidget;
 }
 
 /**
@@ -73,15 +47,29 @@ AbstractPart::~AbstractPart() {
  * A new view is only created the first time this method is called;
  * after that, a pointer to the pre-existing view is returned.
  */
-PartMdiView* AbstractPart::mdiSubWindow() const {
-	if (!m_mdiWindow)
-		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this));
+ContentDockWidget* AbstractPart::dockWidget() const {
+#ifndef SDK
+	if (!m_dockWidget) {
+		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
+		connect(m_dockWidget, &ads::CDockWidget::closed, [this] {
+			const bool deleteOnClose = Settings::readDockPosBehaviour() == Settings::DockPosBehaviour::AboveLastActive;
+			if (deleteOnClose && !m_suppressDeletion) {
+				m_dockWidget->dockManager()->removeDockWidget(m_dockWidget);
+				m_dockWidget = nullptr;
+				deleteView();
+			}
+		});
+	}
+#endif
+	return m_dockWidget;
+}
 
-	return m_mdiWindow;
+void AbstractPart::suppressDeletion(bool suppress) {
+	m_suppressDeletion = suppress;
 }
 
 bool AbstractPart::hasMdiSubWindow() const {
-	return m_mdiWindow;
+	return m_dockWidget;
 }
 
 /*!
@@ -89,10 +77,12 @@ bool AbstractPart::hasMdiSubWindow() const {
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
 void AbstractPart::deleteView() const {
-	//if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
-	//here just set the pointer to 0.
-	if (dynamic_cast<const Workbook*>(parentAspect()) || dynamic_cast<const Datapicker*>(parentAspect())
-			|| dynamic_cast<const Datapicker*>(parentAspect()->parentAspect())) {
+	// if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
+	// here just set the pointer to 0.
+	auto* parent = parentAspect();
+	auto type = parent->type();
+	if (type == AspectType::Workbook || type == AspectType::Datapicker
+		|| (parent->parentAspect() && parent->parentAspect()->type() == AspectType::Datapicker)) {
 		m_partView = nullptr;
 		return;
 	}
@@ -100,7 +90,6 @@ void AbstractPart::deleteView() const {
 	if (m_partView) {
 		delete m_partView;
 		m_partView = nullptr;
-		m_mdiWindow = nullptr;
 	}
 }
 
@@ -108,57 +97,67 @@ void AbstractPart::deleteView() const {
  * \brief Return AbstractAspect::createContextMenu() plus operations on the primary view.
  */
 QMenu* AbstractPart::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-	Q_ASSERT(menu);
+	auto type = this->type();
+	QMenu* menu;
+	if (type != AspectType::StatisticsSpreadsheet) {
+		menu = AbstractAspect::createContextMenu();
+		menu->addSeparator();
+	} else
+		menu = new QMenu();
+
+	// import actions for spreadsheet and matrix
+	if ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && type != AspectType::LiveDataSource && type != AspectType::MQTTTopic) {
+		QMenu* subMenu = new QMenu(i18n("Import Data"), menu);
+		subMenu->addAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("From File..."), this, &AbstractPart::importFromFileRequested);
+		subMenu->addAction(QIcon::fromTheme(QLatin1String("document-import")),
+						   i18n("From SQL Database..."),
+						   this,
+						   &AbstractPart::importFromSQLDatabaseRequested);
+		menu->addMenu(subMenu);
+		menu->addSeparator();
+	}
+
+	// export/print actions
+	if (type != AspectType::CantorWorksheet)
+		menu->addAction(QIcon::fromTheme(QLatin1String("document-export-database")), i18n("Export"), this, &AbstractPart::exportRequested);
+	menu->addAction(QIcon::fromTheme(QLatin1String("document-print")), i18n("Print"), this, &AbstractPart::printRequested);
+	menu->addAction(QIcon::fromTheme(QLatin1String("document-print-preview")), i18n("Print Preview"), this, &AbstractPart::printPreviewRequested);
 	menu->addSeparator();
 
-	if (m_mdiWindow) {
-		if ( (dynamic_cast<Spreadsheet*>(this) || dynamic_cast<Matrix*>(this))
-			&& !dynamic_cast<const LiveDataSource*>(this)
-#ifdef HAVE_MQTT
-			&& !dynamic_cast<const MQTTTopic*>(this)
-#endif
-		) {
-			QMenu* subMenu = new QMenu(i18n("Import Data"), menu);
-			subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From File"), this, SIGNAL(importFromFileRequested()));
-			subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From SQL Database"), this, SIGNAL(importFromSQLDatabaseRequested()));
-			menu->addMenu(subMenu);
-			menu->addSeparator();
-		}
-
-		menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, SIGNAL(exportRequested()));
-		menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
-		menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
-		menu->addSeparator();
-
-		const QStyle *widget_style = m_mdiWindow->style();
-		if (m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
-			QAction* action = menu->addAction(i18n("&Restore"), m_mdiWindow, SLOT(showNormal()));
-			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarNormalButton));
-		}
-
-		if (!(m_mdiWindow->windowState() & Qt::WindowMinimized))	{
-			QAction* action = menu->addAction(i18n("Mi&nimize"), m_mdiWindow, SLOT(showMinimized()));
-			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMinButton));
-		}
-
-		if (!(m_mdiWindow->windowState() & Qt::WindowMaximized))	{
-			QAction* action = menu->addAction(i18n("Ma&ximize"), m_mdiWindow, SLOT(showMaximized()));
-			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMaxButton));
+	// window state related actions
+	if (m_dockWidget) {
+		const QStyle* style = m_dockWidget->style();
+		if (!m_dockWidget->isClosed()) {
+			auto* action = menu->addAction(i18n("&Close"), [this]() {
+				m_dockWidget->toggleView(false);
+			});
+			action->setIcon(style->standardIcon(QStyle::SP_TitleBarCloseButton));
+		} else {
+			menu->addAction(i18n("Show"), [this]() {
+				m_dockWidget->toggleView(true);
+			});
 		}
 	} else {
-		//data spreadsheets in the datapicker curves cannot be hidden/minimized, don't show this menu entry
-		if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect())) )
-			menu->addAction(i18n("Show"), this, SIGNAL(showRequested()));
+		// if the mdi window was closed, add the "Show" action.
+		// Don't add it for:
+		//* children of a workbook, cannot be hidden/minimized
+		//* data spreadsheets in datapicker curves
+		auto parentType = parentAspect()->type();
+		bool disableShow = ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && parentType == AspectType::Workbook)
+			|| (type == AspectType::Spreadsheet && parentType == AspectType::DatapickerCurve);
+		if (!disableShow) {
+			menu->addAction(i18n("Show"), [this]() {
+				m_dockWidget->toggleView(true);
+			});
+		}
 	}
 
 	return menu;
 }
 
 bool AbstractPart::isDraggable() const {
-	//TODO: moving workbook children doesn't work at the moment, don't allow to move it for now
-	if ((type() == AspectType::Spreadsheet || type() == AspectType::Matrix)
-		&& parentAspect()->type() == AspectType::Workbook)
+	// TODO: moving workbook children doesn't work at the moment, don't allow to move it for now
+	if ((type() == AspectType::Spreadsheet || type() == AspectType::Matrix) && parentAspect()->type() == AspectType::Workbook)
 		return false;
 	else
 		return true;

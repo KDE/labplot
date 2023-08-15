@@ -1,108 +1,81 @@
-/***************************************************************************
-    File                 : CartesianPlotLegendPrivate.h
-    Project              : LabPlot
-    Description          : Private members of CartesianPlotLegend
-    --------------------------------------------------------------------
-    Copyright            : (C) 2013-2018 by Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
+/*
+	File                 : CartesianPlotLegendPrivate.h
+	Project              : LabPlot
+	Description          : Private members of CartesianPlotLegend
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef CARTESIANPLOTLEGENDPRIVATE_H
 #define CARTESIANPLOTLEGENDPRIVATE_H
 
-#include <QGraphicsItem>
-#include <QPen>
+#include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QFont>
 
-class QBrush;
+class Background;
 class CartesianPlotLegend;
+class Line;
 class XYCurve;
+
+class QBrush;
 class QGraphicsSceneContextMenuEvent;
 class QKeyEvent;
 
-class CartesianPlotLegendPrivate : public QGraphicsItem {
+class CartesianPlotLegendPrivate : public WorksheetElementPrivate {
 public:
 	explicit CartesianPlotLegendPrivate(CartesianPlotLegend* owner);
 
 	CartesianPlotLegend* const q;
 
-	QString name() const;
-	bool swapVisible(bool on);
-	void retransform();
+	void retransform() override;
 	void updatePosition();
 
-	//QGraphicsItem's virtual functions
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+	// QGraphicsItem's virtual functions
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	virtual void recalcShapeAndBoundingRect() override;
 
-	bool suppressItemChangeEvent{false};
-	bool suppressRetransform{false};
-	bool m_printing{false};
 	bool m_hovered{false};
 
-	QList<WorksheetElement*> curvesList; //list containing all visible curves
 	QRectF rect;
 	QFont labelFont;
 	QColor labelColor;
-	bool labelColumnMajor;
-	WorksheetElement::PositionWrapper position; //position in parent's coordinate system
-	qreal rotationAngle;
-	float lineSymbolWidth; //the width of line+symbol
-	QList<float> maxColumnTextWidths; //the maximal width of the text within each column
-	int columnCount; //the actual number of columns, can be smaller then the specified layoutColumnCount
-	int rowCount; //the number of rows in the legend, depends on the number of curves and on columnCount
+	bool labelColumnMajor{true};
+	qreal lineSymbolWidth{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)}; // the width of line+symbol
+	QList<double> maxColumnTextWidths; // the maximal width of the text within each column
+	int columnCount{0}; // the actual number of columns, can be smaller than the specified layoutColumnCount
+	int rowCount{0}; // the number of rows in the legend, depends on the number of curves and on columnCount
+
+	const CartesianPlot* plot{nullptr};
+
 	TextLabel* title{nullptr};
+	Background* background{nullptr};
 
-	//Background
-	PlotArea::BackgroundType backgroundType;
-	PlotArea::BackgroundColorStyle backgroundColorStyle;
-	PlotArea::BackgroundImageStyle backgroundImageStyle;
-	Qt::BrushStyle backgroundBrushStyle;
-	QColor backgroundFirstColor;
-	QColor backgroundSecondColor;
-	QString backgroundFileName;
-	float backgroundOpacity;
+	// Border
+	Line* borderLine{nullptr};
+	qreal borderCornerRadius{0.0};
 
-	//Border
-	QPen borderPen;
-	qreal borderCornerRadius;
-	qreal borderOpacity;
-
-	//Layout
-	float layoutTopMargin;
-	float layoutBottomMargin;
-	float layoutLeftMargin;
-	float layoutRightMargin;
-	float layoutVerticalSpacing;
-	float layoutHorizontalSpacing;
-	int layoutColumnCount;
+	// Layout
+	qreal layoutTopMargin{Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter)};
+	qreal layoutBottomMargin{Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter)};
+	qreal layoutLeftMargin{Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter)};
+	qreal layoutRightMargin{Worksheet::convertToSceneUnits(0.2, Worksheet::Unit::Centimeter)};
+	qreal layoutVerticalSpacing{Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter)};
+	qreal layoutHorizontalSpacing{Worksheet::convertToSceneUnits(0.1, Worksheet::Unit::Centimeter)};
+	int layoutColumnCount{1};
 
 private:
+	QList<WorksheetElement*> m_curves; // list containing all visible curves
+	QStringList m_names;
+
+	bool translatePainter(QPainter*, int& row, int& col, int height);
+
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-	void keyPressEvent(QKeyEvent*) override;
 };
 
 #endif

@@ -1,31 +1,13 @@
-/***************************************************************************
-    File                 : Integer2MonthFilter.h
-    Project              : AbstractColumn
-    --------------------------------------------------------------------
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description          : Conversion filter int -> QDateTime, interpreting
-                           the input numbers as months of the year.
+/*
+	File                 : Integer2MonthFilter.h
+	Project              : AbstractColumn
+	Description          : Conversion filter int -> QDateTime, interpreting
+	the input numbers as months of the year.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef INTEGER2MONTH_FILTER_H
 #define INTEGER2MONTH_FILTER_H
 
@@ -45,23 +27,25 @@ public:
 		return dateTimeAt(row).time();
 	}
 	QDateTime dateTimeAt(int row) const override {
-		if (!m_inputs.value(0)) return QDateTime();
+		if (!m_inputs.value(0))
+			return QDateTime();
 		int inputValue = m_inputs.value(0)->integerAt(row);
 		// Don't use Julian days here since support for years < 1 is bad
 		// Use 1900-01-01 instead
-		QDate result_date = QDate(1900,1,1).addMonths(inputValue);
-		QTime result_time = QTime(0,0,0,0);
+		QDate result_date = QDate(1900, 1, 1).addMonths(inputValue);
+		QTime result_time = QTime(0, 0, 0, 0);
 		return QDateTime(result_date, result_time);
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Month; }
+	AbstractColumn::ColumnMode columnMode() const override {
+		return AbstractColumn::ColumnMode::Month;
+	}
 
 protected:
-	bool inputAcceptable(int, const AbstractColumn *source) override {
+	bool inputAcceptable(int, const AbstractColumn* source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::Integer;
 	}
 };
 
 #endif // ifndef INTEGER2MONTH_FILTER_H
-

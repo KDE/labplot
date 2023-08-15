@@ -1,37 +1,17 @@
-/***************************************************************************
-    File                 : ProjectDock.cpp
-    Project              : LabPlot
-    Description          : widget for project properties
-    --------------------------------------------------------------------
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2013 Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : ProjectDock.cpp
+	Project              : LabPlot
+	Description          : widget for project properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "ProjectDock.h"
 #include "backend/core/Project.h"
-#include "kdefrontend/TemplateHandler.h"
-#include <KConfigGroup>
-#include <KConfig>
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
 /*!
   \class ProjectDock
@@ -40,96 +20,88 @@
   \ingroup kdefrontend
 */
 
-ProjectDock::ProjectDock(QWidget *parent): BaseDock(parent) {
+ProjectDock::ProjectDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	// leComment = ui.tbComment; // not a qlineedit
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(1.2 * m_leName->height());
+
+	QString msg = i18n(
+		"If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
+		"Uncheck this option to reduce the size of the project file at costs of the longer project load times.");
+
+	ui.lSaveCalculations->setToolTip(msg);
+	ui.chkSaveCalculations->setToolTip(msg);
 
 	// SLOTS
 	connect(ui.leName, &QLineEdit::textChanged, this, &ProjectDock::nameChanged);
 	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);
-	connect(ui.tbComment, &QTextBrowser::textChanged, this, &ProjectDock::commentChanged);
-
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
-	ui.verticalLayout->addWidget(templateHandler);
-	templateHandler->show();
-	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ProjectDock::loadConfig);
-	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ProjectDock::saveConfig);
-
-	this->retranslateUi();
+	connect(ui.teComment, &QTextEdit::textChanged, this, &ProjectDock::commentChanged);
+	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &ProjectDock::saveCalculationsChanged);
 }
 
-void ProjectDock::setProject(Project *project) {
-	m_initializing = true;
+void ProjectDock::setProject(Project* project) {
 	m_project = project;
-	m_aspect = project;
+	setAspects(QList<Project*>({project}));
+
+	CONDITIONAL_LOCK_RETURN;
 	ui.leFileName->setText(project->fileName());
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
+	ui.leName->setText(m_project->name());
+	ui.leAuthor->setText(m_project->author());
+
+	ui.teComment->setText(m_project->comment());
+
+	// resize the height of the comment field to fit the content (word wrap is ignored)
+	const QFont& font = ui.teComment->document()->defaultFont();
+	QFontMetrics fontMetrics(font);
+	const QSize& textSize = fontMetrics.size(0, m_project->comment());
+	double height = textSize.height() + 50;
+	ui.teComment->setMinimumSize(0, height);
+	ui.teComment->resize(ui.teComment->width(), height);
+
 	ui.lVersion->setText(project->version());
 	ui.lCreated->setText(project->creationTime().toString());
 	ui.lModified->setText(project->modificationTime().toString());
 
-	//show default properties of the project
-	KConfig config(QString(), KConfig::SimpleConfig);
-	loadConfig(config);
+	bool visible = !project->children<XYAnalysisCurve>(AbstractAspect::ChildIndexFlag::Recursive).isEmpty();
+	ui.lSettings->setVisible(visible);
+	ui.lineSettings->setVisible(visible);
+	ui.lSaveCalculations->setVisible(visible);
+	ui.chkSaveCalculations->setVisible(visible);
+	ui.chkSaveCalculations->setChecked(project->saveCalculations());
 
-	connect(m_project, &Project::aspectDescriptionChanged, this, &ProjectDock::projectDescriptionChanged);
-
-	m_initializing = false;
+	connect(m_project, &Project::aspectDescriptionChanged, this, &ProjectDock::aspectDescriptionChanged);
+	connect(m_project, &Project::authorChanged, this, &ProjectDock::projectAuthorChanged);
+	connect(m_project, &Project::saveCalculationsChanged, this, &ProjectDock::projectSaveCalculationsChanged);
 }
 
 //************************************************************
 //****************** SLOTS ********************************
 //************************************************************
-void ProjectDock::retranslateUi() {
+void ProjectDock::authorChanged() {
+	CONDITIONAL_LOCK_RETURN;
+
+	m_project->setAuthor(ui.leAuthor->text());
 }
 
-void ProjectDock::authorChanged(const QString& author) {
-	if (m_initializing)
-		return;
+void ProjectDock::saveCalculationsChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
-	m_project->setAuthor(author);
-}
-
-void ProjectDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_project->setComment(ui.tbComment->toPlainText());
+	m_project->setSaveCalculations(state);
 }
 
 //*************************************************************
 //******** SLOTs for changes triggered in Project   ***********
 //*************************************************************
-void ProjectDock::projectDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_project != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-			ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.tbComment->toPlainText())
-			ui.tbComment->setText(aspect->comment());
-
-	m_initializing = false;
+void ProjectDock::projectAuthorChanged(const QString& author) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.leAuthor->setText(author);
 }
 
-//*************************************************************
-//************************* Settings **************************
-//*************************************************************
-void ProjectDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group( "Project" );
-
-	ui.leName->setText( group.readEntry("Name", m_project->name()) );
-	ui.leAuthor->setText( group.readEntry("Author", m_project->author()) );
-	ui.tbComment->setText( group.readEntry("Comment", m_project->comment()) );
-}
-
-void ProjectDock::saveConfig(KConfig& config) {
-	KConfigGroup group = config.group( "Project" );
-
-	group.writeEntry("Name", ui.leName->text());
-	group.writeEntry("Author", ui.leAuthor->text());
-	group.writeEntry("Comment", ui.tbComment->toPlainText());
+void ProjectDock::projectSaveCalculationsChanged(bool b) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chkSaveCalculations->setChecked(b);
 }

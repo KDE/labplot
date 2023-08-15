@@ -1,30 +1,12 @@
-/***************************************************************************
-    File                 : SettingsDialog.h
-    Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
-    Description          : application settings dialog
+/*
+	File                 : SettingsDialog.h
+	Project              : LabPlot
+	Description          : application settings dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
@@ -34,12 +16,13 @@ class QAbstractButton;
 class SettingsGeneralPage;
 class SettingsSpreadsheetPage;
 class SettingsWorksheetPage;
+class SettingsNotebookPage;
 // class SettingsWelcomePage;
 class SettingsDatasetsPage;
 
 #ifdef HAVE_KUSERFEEDBACK
 namespace KUserFeedback {
-	class FeedbackConfigWidget;
+class FeedbackConfigWidget;
 }
 #endif
 
@@ -50,7 +33,7 @@ public:
 	explicit SettingsDialog(QWidget*);
 	~SettingsDialog() override;
 
-private slots:
+private Q_SLOTS:
 	void changed();
 	void slotButtonClicked(QAbstractButton*);
 
@@ -59,7 +42,10 @@ private:
 	SettingsGeneralPage* m_generalPage;
 	SettingsWorksheetPage* m_worksheetPage;
 	SettingsSpreadsheetPage* m_spreadsheetPage;
-// 	SettingsWelcomePage* m_welcomePage;
+#ifdef HAVE_CANTOR_LIBS
+	SettingsNotebookPage* m_notebookPage;
+#endif
+	// 	SettingsWelcomePage* m_welcomePage;
 	SettingsDatasetsPage* m_datasetsPage;
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -69,7 +55,7 @@ private:
 	void applySettings();
 	void restoreDefaults();
 
-signals:
+Q_SIGNALS:
 	void settingsChanged();
 	void resetWelcomeScreen();
 };

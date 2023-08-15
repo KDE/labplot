@@ -1,41 +1,24 @@
-/***************************************************************************
-    File                 : AsciiFilterTest.h
-    Project              : LabPlot
-    Description          : Tests for the ascii filter
-    --------------------------------------------------------------------
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
+/*
+	File                 : AsciiFilterTest.h
+	Project              : LabPlot
+	Description          : Tests for the ascii filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef ASCIIFILTERTEST_H
 #define ASCIIFILTERTEST_H
 
+#include "../../CommonTest.h"
 #include <QtTest>
 
-class AsciiFilterTest : public QObject {
+class AsciiFilterTest : public CommonTest {
 	Q_OBJECT
 
-private slots:
-	void initTestCase();
-
-	//empty and sparse files
+private Q_SLOTS:
+	// empty and sparse files
 	void testEmptyFileAppend();
 	void testEmptyFilePrepend();
 	void testEmptyFileReplace();
@@ -46,7 +29,7 @@ private slots:
 	void testSparseFile02();
 	void testSparseFile03();
 
-	//header handling
+	// header handling
 	void testHeader01();
 	void testHeader02();
 	void testHeader03();
@@ -54,9 +37,14 @@ private slots:
 	void testHeader05();
 	void testHeader06();
 	void testHeader07();
+	void testHeader07a();
 	void testHeader08();
+	void testHeader09();
+	void testHeader10();
+	void testHeader11();
+	void testHeader11a();
 
-	//read ranges
+	// read ranges
 	void testColumnRange00();
 	void testColumnRange01();
 	void testColumnRange02();
@@ -71,24 +59,44 @@ private slots:
 
 	void testRowColumnRange00();
 
-	//different separators
+	// different separators
 
-	//qouted strings
+	// qouted strings
 	void testQuotedStrings00();
 	void testQuotedStrings01();
 	void testQuotedStrings02();
 	void testQuotedStrings03();
+	void testQuotedStrings04();
+	void testQuotedStrings05();
 
-	//different locales
+	// different locales
+	void testUtf8Cyrillic();
 
-	//handling of NANs
+	// handling of NANs
 
-	//automatically skip comments
+	// automatically skip comments
 	void testComments00();
 	void testComments01();
 	void testComments02();
 
-	//datetime data
+	// datetime data
 	void testDateTime00();
+	void testDateTimeHex();
+
+	// matrix import
+	void testMatrixHeader();
+
+	// benchmarks
+
+	void benchDoubleImport_data();
+	// this is called multiple times (warm-up of BENCHMARK)
+	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
+	void benchDoubleImport();
+	void benchDoubleImport_cleanup(); // delete data
+
+private:
+	QString benchDataFileName;
+	const size_t lines = 1e6;
+	static const int paths = 5;
 };
 #endif

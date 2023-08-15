@@ -1,45 +1,28 @@
-/***************************************************************************
-File		: MQTTClient.h
-Project		: LabPlot
-Description	: Represents a MQTT Client
---------------------------------------------------------------------
-Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
+/*
+	File		: MQTTClient.h
+	Project		: LabPlot
+	Description	: Represents a MQTT Client
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
 
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef MQTTCLIENT_H
 #define MQTTCLIENT_H
 
 #include "backend/core/Folder.h"
 
+#include <QMap>
 #include <QVector>
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttMessage>
 #include <QtMqtt/QMqttSubscription>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttTopicName>
-#include <QMap>
 
 class AsciiFilter;
 class MQTTSubscription;
+class MQTTTopic;
 class QAction;
 class QTimer;
 class QString;
@@ -48,27 +31,13 @@ class MQTTClient : public Folder {
 	Q_OBJECT
 
 public:
-	enum class UpdateType {
-		TimeInterval = 0,
-		NewData
-	};
+	enum class UpdateType { TimeInterval = 0, NewData };
 
-	enum class ReadingType {
-		ContinuousFixed = 0,
-		FromEnd,
-		TillEnd
-	};
+	enum class ReadingType { ContinuousFixed = 0, FromEnd, TillEnd };
 
-	enum class WillMessageType {
-		OwnMessage = 0,
-		Statistics,
-		LastMessage
-	};
+	enum class WillMessageType { OwnMessage = 0, Statistics, LastMessage };
 
-	enum class WillUpdateType {
-		TimePeriod = 0,
-		OnClick
-	};
+	enum class WillUpdateType { TimePeriod = 0, OnClick };
 
 	enum class WillStatisticsType {
 		NoStatistics = -1,
@@ -100,7 +69,7 @@ public:
 		QString willLastMessage;
 		int willTimeInterval{1000};
 		WillUpdateType willUpdateType{MQTTClient::WillUpdateType::TimePeriod};
-		QVector<bool> willStatistics{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		QVector<bool> willStatistics{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	};
 
 	explicit MQTTClient(const QString& name);
@@ -142,7 +111,7 @@ public:
 	quint16 clientPort() const;
 	QString clientPassword() const;
 	QString clientUserName() const;
-	QString clientID () const;
+	QString clientID() const;
 
 	void updateNow();
 	void pauseReading();
@@ -167,6 +136,7 @@ public:
 
 	void setWillTopic(const QString&);
 	QString willTopic() const;
+	QString statistics(const MQTTTopic*) const;
 
 	void setWillRetain(bool);
 	bool willRetain() const;
@@ -189,7 +159,7 @@ public:
 	void startWillTimer() const;
 	void stopWillTimer() const;
 
-	void updateWillMessage() ;
+	void updateWillMessage();
 
 	void setMQTTRetain(bool);
 	bool MQTTRetain() const;
@@ -237,16 +207,16 @@ private:
 	int m_subscriptionCountToLoad{0};
 	MQTTWill m_MQTTWill;
 
-public slots:
+public Q_SLOTS:
 	void read();
 
-private slots:
+private Q_SLOTS:
 	void onMQTTConnect();
 	void MQTTSubscriptionMessageReceived(const QMqttMessage&);
 	void MQTTErrorChanged(QMqttClient::ClientError);
 	void subscriptionLoaded(const QString&);
 
-signals:
+Q_SIGNALS:
 	void MQTTSubscribed();
 	void MQTTTopicsChanged();
 	void readFromTopics();

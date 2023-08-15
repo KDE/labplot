@@ -1,54 +1,41 @@
-/***************************************************************************
-    File                 : SpreadsheetTest.h
-    Project              : LabPlot
-    Description          : Tests for the Spreadsheet
-    --------------------------------------------------------------------
-    Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
+/*
+	File                 : SpreadsheetTest.h
+	Project              : LabPlot
+	Description          : Tests for the Spreadsheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef SPREADSHEETTEST_H
 #define SPREADSHEETTEST_H
 
-#include <QtTest>
+#include "../CommonTest.h"
 
-class SpreadsheetTest : public QObject {
+class Spreadsheet;
+
+class SpreadsheetTest : public CommonTest {
 	Q_OBJECT
 
-private slots:
-	void initTestCase();
+private Q_SLOTS:
+	// copy and paste
 
-	//copy and paste
-
-	//handling of different column modes
+	// handling of different column modes
 	void testCopyPasteColumnMode00();
 	void testCopyPasteColumnMode01();
 	void testCopyPasteColumnMode02();
 	void testCopyPasteColumnMode03();
+	void testCopyPasteColumnMode04();
+	void testCopyPasteColumnMode05();
+	void testCopyPasteColumnMode06();
 
-	//handling of spreadsheet size changes
+	// handling of spreadsheet size changes
 	void testCopyPasteSizeChange00();
 	void testCopyPasteSizeChange01();
 
-	// sorting tests
+	// sorting
 	void testSortSingleNumeric1();
 	void testSortSingleNumeric2();
 	void testSortSingleInteger1();
@@ -73,6 +60,54 @@ private slots:
 
 	void testSortPerformanceNumeric1();
 	void testSortPerformanceNumeric2();
+
+	// flattening
+	void testFlatten00();
+	void testFlatten01();
+	void testFlatten02();
+	void testFlatten03();
+
+	// search&replace
+	void testSearchSimple00();
+
+	void testSearchExtended00();
+	void testSearchExtended01();
+	void testSearchExtended02();
+	void testSearchExtended03();
+
+	void testSearchFindAll();
+	void testSearchReplaceAll();
+
+	// size changes
+	void testInsertRows();
+	void testRemoveRows();
+	void testInsertColumns();
+	void testRemoveColumns();
+
+	void testInsertRowsSuppressUpdate();
+	void testInsertColumnsSuppressUpdate();
+
+	void testLinkSpreadsheetsUndoRedo();
+	void testLinkSpreadsheetDeleteAdd();
+	void testLinkSpreadsheetAddRow();
+	void testLinkSpreadsheetRemoveRow();
+	void testLinkSpreadsheetRecalculate();
+	void testLinkSpreadsheetSaveLoad();
+
+	// statistics spreadsheet
+	void testStatisticsSpreadsheetToggle();
+	void testStatisticsSpreadsheetChangeMetrics();
+	void testStatisticsSpreadsheetChildIndex();
+	void testStatisticsSpreadsheetChildIndexAfterUndoRedo();
+
+#ifdef HAVE_VECTOR_BLF
+	void testLinkSpreadSheetImportBLF();
+#endif // HAVE_VECTOR_BLF
+
+	void testNaming();
+
+private:
+	Spreadsheet* createSearchReplaceSpreadsheet();
 };
 
 #endif

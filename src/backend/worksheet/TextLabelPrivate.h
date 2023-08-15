@@ -1,110 +1,86 @@
-/***************************************************************************
-    File                 : TextLabelPrivate.h
-    Project              : LabPlot
-    Description          : Private members of TextLabel
-    --------------------------------------------------------------------
-    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2019 by Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : TextLabelPrivate.h
+	Project              : LabPlot
+	Description          : Private members of TextLabel
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef TEXTLABELPRIVATE_H
 #define TEXTLABELPRIVATE_H
 
-#include <QStaticText>
-#include <QFutureWatcher>
-#include <QGraphicsItem>
+#include "src/backend/worksheet/TextLabel.h"
+#include "src/backend/worksheet/WorksheetElementPrivate.h"
+#include "tools/TeXRenderer.h"
 #include <QDesktopWidget>
+#include <QFutureWatcher>
+#include <QStaticText>
+
+#include <gsl/gsl_const_cgs.h>
 
 class QGraphicsSceneHoverEvent;
+class CartesianPlot;
+class CartesianCoordinateSystem;
+class ScaledTextItem;
+class TextLabel;
+class QStaticText;
 
-class TextLabelPrivate: public QGraphicsItem {
+class TextLabelPrivate : public WorksheetElementPrivate {
 public:
 	explicit TextLabelPrivate(TextLabel*);
 
-	qreal rotationAngle{0.0};
-	//scaling:
-	//we need to scale from the font size specified in points to scene units.
-	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
-	// -> take this into account
-	double scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
+	double zoomFactor{-1.0};
 	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
-	double teXImageScaleFactor{Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
+	double teXImageScaleFactor{Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
-	QFont teXFont{"Computer Modern", 42};
+	QFont teXFont{QStringLiteral("Computer Modern"), 12}; // reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
-	QColor backgroundColor{Qt::white}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
+	QColor backgroundColor{Qt::white}; // same as fontColor
 	QImage teXImage;
-	QFutureWatcher<QImage> teXImageFutureWatcher;
-	bool teXRenderSuccessful{false};
+	QByteArray teXPdfData;
+	QFutureWatcher<QByteArray> teXImageFutureWatcher;
+	TeXRenderer::Result teXRenderResult;
 
 	// see TextLabel::init() for type specific default settings
-	// position in parent's coordinate system, the label gets aligned around this point
-	WorksheetElement::PositionWrapper position{
-		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)),
-		TextLabel::HorizontalPosition::Center, TextLabel::VerticalPosition::Center};
-	bool positionInvalid{false};
-
-	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
-	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
 
 	TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
-	QString name() const;
-	void retransform();
-	bool swapVisible(bool on);
-	virtual void recalcShapeAndBoundingRect();
+	void retransform() override;
+	void updateBoundingRect();
+	void setZoomFactor(double);
+	virtual void recalcShapeAndBoundingRect() override;
 	void updatePosition();
-	QPointF positionFromItemPosition(QPointF);
 	void updateText();
 	void updateTeXImage();
 	void updateBorder();
-	QStaticText staticText;
+	QRectF size();
+	QPointF findNearestGluePoint(QPointF scenePoint);
+	TextLabel::GluePoint gluePointAt(int index);
 
-	bool suppressItemChangeEvent{false};
-	bool suppressRetransform{false};
-	bool m_printing{false};
+	ScaledTextItem* m_textItem{nullptr};
 	bool m_hovered{false};
 
-	QRectF boundingRectangle; //bounding rectangle of the text
-	QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text
+	QRectF transformedBoundingRectangle; // bounding rectangle of transformed (rotated etc.) text
 	QPainterPath borderShapePath;
 	QPainterPath labelShape;
 
-	//reimplemented from QGraphicsItem
+	// reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* = nullptr) override;
+	TextLabel* const q{nullptr};
 
-	TextLabel* const q;
+	// used in the InfoElement (Marker) to attach the line to the label
+	QVector<TextLabel::GluePoint> m_gluePoints;
+	QVector<TextLabel::GluePoint> m_gluePointsTransformed;
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-	void keyPressEvent(QKeyEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };

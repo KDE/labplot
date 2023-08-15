@@ -1,0 +1,5 @@
+add_executable (HilbertTransformTest HilbertTransformTest.cpp)
+
+target_link_libraries(HilbertTransformTest labplot2lib labplot2test)
+
+add_test(NAME HilbertTransformTest COMMAND HilbertTransformTest)

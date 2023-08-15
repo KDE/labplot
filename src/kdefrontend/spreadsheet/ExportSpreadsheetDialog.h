@@ -1,30 +1,11 @@
-/***************************************************************************
-    File                 : ExportSpreadsheetDialog.h
-    Project              : LabPlot
-    Description          : export spreadsheet dialog
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014-2019 by Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : ExportSpreadsheetDialog.h
+	Project              : LabPlot
+	Description          : export spreadsheet dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef EXPORTSPREADSHEETDIALOG_H
 #define EXPORTSPREADSHEETDIALOG_H
@@ -33,7 +14,7 @@
 #include <QLocale>
 
 namespace Ui {
-	class ExportSpreadsheetWidget;
+class ExportSpreadsheetWidget;
 }
 
 class QPushButton;
@@ -47,6 +28,7 @@ public:
 	~ExportSpreadsheetDialog() override;
 
 	QString path() const;
+	void setProjectFileName(const QString&);
 	void setFileName(const QString&);
 	void setMatrixMode(bool);
 	void setExportSelection(bool);
@@ -66,26 +48,22 @@ public:
 	void setExportTo(const QStringList& to);
 	void setExportToImage(bool possible);
 
-	enum class Format {
-		ASCII,
-		Binary,
-		LaTeX,
-		FITS,
-		SQLite
-	};
+	enum class Format { ASCII, LaTeX, FITS, Excel, SQLite };
 
 	Format format() const;
+
 private:
 	Ui::ExportSpreadsheetWidget* ui;
 	bool m_showOptions{true};
 	bool m_matrixMode{false};
 	Format m_format{Format::ASCII};
+	QString m_projectPath;
 
 	QPushButton* m_showOptionsButton;
 	QPushButton* m_okButton;
 	QPushButton* m_cancelButton;
 
-private slots:
+private Q_SLOTS:
 	void setFormat(ExportSpreadsheetDialog::Format);
 	void slotButtonClicked(QAbstractButton*);
 	void okClicked();

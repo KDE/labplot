@@ -1,55 +1,41 @@
-/***************************************************************************
-    File             : XYFitCurveDock.h
-    Project          : LabPlot
-    --------------------------------------------------------------------
-    Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2017-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description      : widget for editing properties of equation curves
+/*
+	File             : XYFitCurveDock.h
+	Project          : LabPlot
+	Description      : widget for editing properties of equation curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef XYFITCURVEDOCK_H
 #define XYFITCURVEDOCK_H
 
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "ui_xyfitcurvedockgeneraltab.h"
 
+class AspectTreeModel;
 class TreeViewComboBox;
 class FitParametersWidget;
 class KMessageWidget;
 
-class XYFitCurveDock: public XYCurveDock {
+class XYFitCurveDock : public XYCurveDock {
 	Q_OBJECT
 
 public:
 	explicit XYFitCurveDock(QWidget* parent);
+	~XYFitCurveDock() override;
+
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
 
 private:
 	void initGeneralTab() override;
-	void showFitResult();
+	void updatePlotRanges() override;
 	void updateSettings(const AbstractColumn*);
+	void showFitResult();
 	bool eventFilter(QObject*, QEvent*) override;
 
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
@@ -66,19 +52,21 @@ private:
 	QList<double> parameterValues;
 	bool m_parametersValid{true};
 	KMessageWidget* m_messageWidget{nullptr};
+	AspectTreeModel* m_dataSourceModel{nullptr};
 
 protected:
-	void setModel() override;
+	void setModel();
 
-private slots:
-	//SLOTs for changes triggered in XYFitCurveDock
-	//general tab
+private Q_SLOTS:
+	// SLOTs for changes triggered in XYFitCurveDock
+	// general tab
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xWeightChanged(int);
 	void yWeightChanged(int);
 	void categoryChanged(int);
 	void modelTypeChanged(int);
+	void algorithmChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void xErrorColumnChanged(const QModelIndex&);
@@ -98,7 +86,7 @@ private slots:
 	void showOptions();
 	void insertFunction(const QString&) const;
 	void insertConstant(const QString&) const;
-	void setPlotXRange();
+	//	void setPlotXRange();
 	void recalculateClicked();
 	void updateModelEquation();
 	void expressionChanged();
@@ -109,11 +97,11 @@ private slots:
 	void resultCopy(bool copyAll = false);
 	void resultCopyAll();
 
-	//SLOTs for changes triggered in XYCurve
-	//General-Tab
-	void curveDescriptionChanged(const AbstractAspect*);
+	// SLOTs for changes triggered in XYCurve
+	// General-Tab
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
+	void curveDataSourceHistogramChanged(const Histogram*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveXErrorColumnChanged(const AbstractColumn*);

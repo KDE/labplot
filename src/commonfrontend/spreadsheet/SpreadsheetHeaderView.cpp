@@ -1,31 +1,12 @@
-/***************************************************************************
-    File                 : SpreadsheetHeaderView.cpp
-    Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
-    Description          : Horizontal header for SpreadsheetView displaying comments in a second header
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : SpreadsheetHeaderView.cpp
+	Project              : LabPlot
+	Description          : Horizontal header for SpreadsheetView displaying comments in a second header
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "SpreadsheetHeaderView.h"
 #include "SpreadsheetCommentsHeaderModel.h"
@@ -46,7 +27,8 @@
  \ingroup commonfrontend
 */
 
-SpreadsheetCommentsHeaderView::SpreadsheetCommentsHeaderView(QWidget* parent) : QHeaderView(Qt::Horizontal, parent) {
+SpreadsheetCommentsHeaderView::SpreadsheetCommentsHeaderView(QWidget* parent)
+	: QHeaderView(Qt::Horizontal, parent) {
 }
 
 SpreadsheetCommentsHeaderView::~SpreadsheetCommentsHeaderView() {
@@ -75,7 +57,8 @@ void SpreadsheetCommentsHeaderView::setModel(QAbstractItemModel* model) {
 
  \ingroup commonfrontend
 */
-SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent) : QHeaderView(Qt::Horizontal, parent) {
+SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
+	: QHeaderView(Qt::Horizontal, parent) {
 	setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	m_slave = new SpreadsheetCommentsHeaderView();
 	m_slave->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -134,16 +117,16 @@ void SpreadsheetHeaderView::showComments(bool on) {
   adjust geometry and repaint header .
 */
 void SpreadsheetHeaderView::refresh() {
-	//TODO
-	// adjust geometry and repaint header (still looking for a more elegant solution)
-	int width = sectionSize(count()-1);
-	m_slave->setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
+	// TODO
+	//  adjust geometry and repaint header (still looking for a more elegant solution)
+	int width = sectionSize(count() - 1);
+	m_slave->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
 	m_slave->updateGeometry();
 	m_slave->setStretchLastSection(false); // ugly hack part 2
-	setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
+	setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
 	updateGeometry();
 	setStretchLastSection(false); // ugly hack part 2
-	resizeSection(count()-1, width);
+	resizeSection(count() - 1, width);
 
 	update();
 }
@@ -151,9 +134,9 @@ void SpreadsheetHeaderView::refresh() {
 /*!
   Reacts to a header data change.
 */
-void SpreadsheetHeaderView::headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast) {
-	Q_UNUSED(logicalFirst);
-	Q_UNUSED(logicalLast);
+void SpreadsheetHeaderView::headerDataChanged(Qt::Orientation orientation, int /*logicalFirst*/, int logicalLast) {
+	if (logicalLast < 0)
+		return;
 	if (orientation == Qt::Horizontal)
 		refresh();
 }

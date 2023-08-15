@@ -1,436 +1,338 @@
-/***************************************************************************
-    File                 : CustomPointDock.cpp
-    Project              : LabPlot
-    Description          : widget for Datapicker-Point properties
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : CustomPointDock.cpp
+	Project              : LabPlot
+	Description          : widget for CustomPoint properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "CustomPointDock.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
-
 #include "kdefrontend/TemplateHandler.h"
-#include "kdefrontend/GuiTools.h"
+#include "kdefrontend/widgets/SymbolWidget.h"
 
-#include <KLocalizedString>
 #include <KConfig>
-#include <KConfigGroup>
-#include <KSharedConfig>
+#include <KLocalizedString>
 
-#include <QPainter>
-#include <QDir>
-
-CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
+CustomPointDock::CustomPointDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
-	//Validators
-	ui.lePositionX->setValidator( new QDoubleValidator(ui.lePositionX) );
-	ui.lePositionY->setValidator( new QDoubleValidator(ui.lePositionY) );
+	//"Symbol"-tab
+	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
+	symbolWidget = new SymbolWidget(ui.tabSymbol);
+	hboxLayout->addWidget(symbolWidget);
+	hboxLayout->setContentsMargins(2, 2, 2, 2);
+	hboxLayout->setSpacing(2);
 
-	//adjust layouts in the tabs
+	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
-		layout->setContentsMargins(2,2,2,2);
+		layout->setContentsMargins(2, 2, 2, 2);
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
 
-	updateLocale();
+	CustomPointDock::updateLocale();
 
-	//SLOTS
-	//General
+	// Positioning and alignment
+	ui.cbPositionX->addItem(i18n("Left"));
+	ui.cbPositionX->addItem(i18n("Center"));
+	ui.cbPositionX->addItem(i18n("Right"));
+
+	ui.cbPositionY->addItem(i18n("Top"));
+	ui.cbPositionY->addItem(i18n("Center"));
+	ui.cbPositionY->addItem(i18n("Bottom"));
+
+	// SLOTS
+	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &CustomPointDock::commentChanged);
-	connect( ui.lePositionX, SIGNAL(returnPressed()), this, SLOT(positionXChanged()) );
-	connect( ui.lePositionY, SIGNAL(returnPressed()), this, SLOT(positionYChanged()) );
-	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect(ui.teComment, &QTextEdit::textChanged, this, &CustomPointDock::commentChanged);
+	connect(ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::plotRangeChanged);
 
-	//Symbols
-	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolStyleChanged(int)) );
-	connect( ui.sbSymbolSize, SIGNAL(valueChanged(double)), this, SLOT(symbolSizeChanged(double)) );
-	connect( ui.sbSymbolRotation, SIGNAL(valueChanged(int)), this, SLOT(symbolRotationChanged(int)) );
-	connect( ui.sbSymbolOpacity, SIGNAL(valueChanged(int)), this, SLOT(symbolOpacityChanged(int)) );
-	connect( ui.cbSymbolFillingStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolFillingStyleChanged(int)) );
-	connect( ui.kcbSymbolFillingColor, SIGNAL(changed(QColor)), this, SLOT(symbolFillingColorChanged(QColor)) );
-	connect( ui.cbSymbolBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolBorderStyleChanged(int)) );
-	connect( ui.kcbSymbolBorderColor, SIGNAL(changed(QColor)), this, SLOT(symbolBorderColorChanged(QColor)) );
-	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolBorderWidthChanged(double)) );
+	// positioning
+	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CustomPointDock::bindingChanged);
+	connect(ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionXChanged);
+	connect(ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionYChanged);
+	connect(ui.sbPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::customPositionYChanged);
+	connect(ui.sbPositionXLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::positionXLogicalChanged);
+	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &CustomPointDock::positionXLogicalDateTimeChanged);
+	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CustomPointDock::positionYLogicalChanged);
+	connect(ui.dtePositionYLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &CustomPointDock::positionYLogicalDateTimeChanged);
 
-	//Template handler
+	// Template handler
+	auto* frame = new QFrame(this);
+	auto* hlayout = new QHBoxLayout(frame);
+	hlayout->setContentsMargins(0, 11, 0, 11);
+
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CustomPoint);
-	ui.verticalLayout->addWidget(templateHandler);
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	hlayout->addWidget(templateHandler);
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CustomPointDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CustomPointDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &CustomPointDock::info);
 
-	init();
+	ui.verticalLayout->addWidget(frame);
 }
 
-void CustomPointDock::init() {
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
-
-	QPainter pa;
-	int iconSize = 20;
-	QPixmap pm(iconSize, iconSize);
-	QPen pen(Qt::SolidPattern, 0);
-	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
-	QTransform trafo;
-	trafo.scale(15, 15);
-	for (int i = 0; i < 18; ++i) {
-		auto style = (Symbol::Style)i;
-		pm.fill(Qt::transparent);
-		pa.begin(&pm);
-		pa.setPen( pen );
-		pa.setRenderHint(QPainter::Antialiasing);
-		pa.translate(iconSize/2,iconSize/2);
-		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
-		pa.end();
-		ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
-	}
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
-	m_initializing = false;
-}
-
-void CustomPointDock::setPoints(QList<CustomPoint*> list) {
-	m_initializing = true;
-	m_pointsList = list;
-	m_point = list.first();
-	m_aspect = list.first();
+void CustomPointDock::setPoints(QList<CustomPoint*> points) {
+	CONDITIONAL_LOCK_RETURN;
+	m_points = points;
+	m_point = m_points.first();
+	setAspects(points);
 	Q_ASSERT(m_point);
 
-	//if there is more then one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
+	QList<Symbol*> symbols;
+	for (auto* point : m_points)
+		symbols << point->symbol();
+
+	symbolWidget->setSymbols(symbols);
+
+	// if there is more than one point in the list, disable the comment and name widgets in "general"
+	if (m_points.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 		ui.leName->setText(m_point->name());
-		ui.leComment->setText(m_point->comment());
+		ui.teComment->setText(m_point->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 
-	//show the properties of the first custom point
+	// show the properties of the first custom point
 	this->load();
+	initConnections();
+	updatePlotRanges(); // needed when loading project
 
-	//SIGNALs/SLOTs
-	// general
-	connect(m_point, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(pointDescriptionChanged(const AbstractAspect*)));
-	connect(m_point, SIGNAL(positionChanged(QPointF)), this, SLOT(pointPositionChanged(QPointF)));
-	connect(m_point, SIGNAL(visibleChanged(bool)), this, SLOT(pointVisibilityChanged(bool)));
+	// for custom points being children of an InfoElement, the position is changed
+	// via the parent settings -> disable the positioning here.
+	bool enabled = (m_point->parentAspect()->type() != AspectType::InfoElement);
+	ui.chbBindLogicalPos->setEnabled(enabled);
+	ui.sbPositionXLogical->setEnabled(enabled);
+	ui.lPositionXLogicalDateTime->setEnabled(enabled);
+	ui.sbPositionYLogical->setEnabled(enabled);
+	ui.lPositionYLogicalDateTime->setEnabled(enabled);
+}
 
-	//symbol
-	connect(m_point, SIGNAL(symbolStyleChanged(Symbol::Style)), this, SLOT(pointSymbolStyleChanged(Symbol::Style)));
-	connect(m_point, SIGNAL(symbolSizeChanged(qreal)), this, SLOT(pointSymbolSizeChanged(qreal)));
-	connect(m_point, SIGNAL(symbolRotationAngleChanged(qreal)), this, SLOT(pointSymbolRotationAngleChanged(qreal)));
-	connect(m_point, SIGNAL(symbolOpacityChanged(qreal)), this, SLOT(pointSymbolOpacityChanged(qreal)));
-	connect(m_point, SIGNAL(symbolBrushChanged(QBrush)), this, SLOT(pointSymbolBrushChanged(QBrush)));
-	connect(m_point, SIGNAL(symbolPenChanged(QPen)), this, SLOT(pointSymbolPenChanged(QPen)));
+void CustomPointDock::initConnections() const {
+	// SIGNALs/SLOTs
+	//  general
+	connect(m_point, &CustomPoint::aspectDescriptionChanged, this, &CustomPointDock::aspectDescriptionChanged);
+	connect(m_point, &WorksheetElement::plotRangeListChanged, this, &CustomPointDock::updatePlotRanges);
+	connect(m_point, &CustomPoint::visibleChanged, this, &CustomPointDock::pointVisibilityChanged);
+	connect(m_point, &CustomPoint::positionChanged, this, &CustomPointDock::pointPositionChanged);
+	connect(m_point, &CustomPoint::positionLogicalChanged, this, &CustomPointDock::pointPositionLogicalChanged);
+	connect(m_point, &CustomPoint::coordinateBindingEnabledChanged, this, &CustomPointDock::pointCoordinateBindingEnabledChanged);
 }
 
 /*
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void CustomPointDock::updateLocale() {
-	SET_NUMBER_LOCALE
-	ui.sbSymbolSize->setLocale(numberLocale);
-	ui.sbSymbolBorderWidth->setLocale(numberLocale);
+	const auto numberLocale = QLocale();
+	ui.sbPositionX->setLocale(numberLocale);
+	ui.sbPositionY->setLocale(numberLocale);
+	ui.sbPositionXLogical->setLocale(numberLocale);
+	ui.sbPositionYLogical->setLocale(numberLocale);
+	symbolWidget->updateLocale();
+}
+
+void CustomPointDock::updatePlotRanges() {
+	updatePlotRangeList(ui.cbPlotRanges);
 }
 
 //**********************************************************
 //**** SLOTs for changes triggered in CustomPointDock ******
 //**********************************************************
 //"General"-tab
-void CustomPointDock::positionXChanged() {
-	if (m_initializing)
-		return;
+/*!
+	called when label's current horizontal position relative to its parent (left, center, right ) is changed.
+*/
+void CustomPointDock::positionXChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
-	bool ok;
-	SET_NUMBER_LOCALE
-	double x = numberLocale.toDouble(ui.lePositionX->text(), &ok);
-	if (ok) {
-		QPointF pos{m_point->position()};
-		pos.setX(x);
-		for (auto* point : m_pointsList)
-			point->setPosition(pos);
+	auto horPos = WorksheetElement::HorizontalPosition(index);
+	for (auto* point : m_points) {
+		auto position = point->position();
+		position.horizontalPosition = horPos;
+		point->setPosition(position);
 	}
 }
 
-void CustomPointDock::positionYChanged() {
-	if (m_initializing)
-		return;
+/*!
+	called when label's current horizontal position relative to its parent (top, center, bottom) is changed.
+*/
+void CustomPointDock::positionYChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
-	bool ok;
-	SET_NUMBER_LOCALE
-	double y = numberLocale.toDouble(ui.lePositionY->text(), &ok);
-	if (ok) {
-		QPointF pos{m_point->position()};
-		pos.setY(y);
-		for (auto* point : m_pointsList)
-			point->setPosition(pos);
+	auto verPos = WorksheetElement::VerticalPosition(index);
+	for (auto* point : m_points) {
+		auto position = point->position();
+		position.verticalPosition = verPos;
+		point->setPosition(position);
 	}
+}
+
+void CustomPointDock::customPositionXChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	const double x = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* point : m_points) {
+		auto position = point->position();
+		position.point.setX(x);
+		point->setPosition(position);
+	}
+}
+
+void CustomPointDock::customPositionYChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	const double y = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* point : m_points) {
+		auto position = point->position();
+		position.point.setY(y);
+		point->setPosition(position);
+	}
+}
+
+// positioning using logical plot coordinates
+void CustomPointDock::positionXLogicalChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	QPointF pos = m_point->positionLogical();
+	pos.setX(value);
+	for (auto* point : m_points)
+		point->setPositionLogical(pos);
+}
+
+void CustomPointDock::positionXLogicalDateTimeChanged(qint64 value) {
+	CONDITIONAL_LOCK_RETURN;
+
+	QPointF pos = m_point->positionLogical();
+	pos.setX(value);
+	for (auto* point : m_points)
+		point->setPositionLogical(pos);
+}
+
+void CustomPointDock::positionYLogicalChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	QPointF pos = m_point->positionLogical();
+	pos.setY(value);
+	for (auto* point : m_points)
+		point->setPositionLogical(pos);
+}
+
+void CustomPointDock::positionYLogicalDateTimeChanged(qint64 value) {
+	CONDITIONAL_LOCK_RETURN;
+
+	QPointF pos = m_point->positionLogical();
+	pos.setY(value);
+	for (auto* point : m_points)
+		point->setPositionLogical(pos);
 }
 
 void CustomPointDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
-	m_point->beginMacro(i18n("%1 CustomPoints: visibility changed", m_pointsList.count()));
-	for (auto* point : m_pointsList)
+	m_point->beginMacro(i18n("%1 CustomPoints: visibility changed", m_points.count()));
+	for (auto* point : m_points)
 		point->setVisible(state);
 	m_point->endMacro();
 }
 
-void CustomPointDock::symbolStyleChanged(int index) {
-	auto style = Symbol::Style(index);
-	//enable/disable the  filling options in the GUI depending on the currently selected points.
-	if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
-		ui.cbSymbolFillingStyle->setEnabled(true);
-		bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
-		ui.kcbSymbolFillingColor->setEnabled(!noBrush);
-	} else {
-		ui.kcbSymbolFillingColor->setEnabled(false);
-		ui.cbSymbolFillingStyle->setEnabled(false);
+/*!
+ * \brief CustomPointDock::bindingChanged
+ * Bind CustomPoint to the cartesian plot coords or not
+ * \param checked
+ */
+void CustomPointDock::bindingChanged(bool checked) {
+	ui.chbBindLogicalPos->setChecked(checked);
+
+	// widgets for positioning using absolute plot distances
+	ui.lPositionX->setVisible(!checked);
+	ui.cbPositionX->setVisible(!checked);
+	ui.sbPositionX->setVisible(!checked);
+
+	ui.lPositionY->setVisible(!checked);
+	ui.cbPositionY->setVisible(!checked);
+	ui.sbPositionY->setVisible(!checked);
+
+	// widgets for positioning using logical plot coordinates
+	const auto* plot = static_cast<const CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
+	if (plot) {
+		// x
+		bool numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
+		if (numeric) {
+			ui.lPositionXLogical->setVisible(checked);
+			ui.sbPositionXLogical->setVisible(checked);
+		} else {
+			ui.lPositionXLogicalDateTime->setVisible(checked);
+			ui.dtePositionXLogical->setVisible(checked);
+		}
+
+		// y
+		numeric = (plot->yRangeFormatDefault() == RangeT::Format::Numeric);
+		if (numeric) {
+			ui.lPositionYLogical->setVisible(checked);
+			ui.sbPositionYLogical->setVisible(checked);
+		} else {
+			ui.lPositionYLogicalDateTime->setVisible(checked);
+			ui.dtePositionYLogical->setVisible(checked);
+		}
 	}
 
-	bool noLine = (Qt::PenStyle(ui.cbSymbolBorderStyle->currentIndex()) == Qt::NoPen);
-	ui.kcbSymbolBorderColor->setEnabled(!noLine);
-	ui.sbSymbolBorderWidth->setEnabled(!noLine);
+	CONDITIONAL_LOCK_RETURN;
 
-	if (m_initializing)
-		return;
-
-	m_point->beginMacro(i18n("%1 CustomPoints: style changed", m_pointsList.count()));
-	for (auto* point : m_pointsList)
-		point->setSymbolStyle(style);
-	m_point->endMacro();
-}
-
-void CustomPointDock::symbolSizeChanged(double value) {
-	if (m_initializing)
-		return;
-
-	m_point->beginMacro(i18n("%1 CustomPoints: size changed", m_pointsList.count()));
-	for (auto* point : m_pointsList)
-		point->setSymbolSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-	m_point->endMacro();
-}
-
-void CustomPointDock::symbolRotationChanged(int value) {
-	if (m_initializing)
-		return;
-
-	m_point->beginMacro(i18n("%1 CustomPoints: rotation changed", m_pointsList.count()));
-	for (auto* point : m_pointsList)
-		point->setSymbolRotationAngle(value);
-	m_point->endMacro();
-}
-
-void CustomPointDock::symbolOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (double)value/100.;
-	m_point->beginMacro(i18n("%1 CustomPoints: opacity changed", m_pointsList.count()));
-	for (auto* point : m_pointsList)
-		point->setSymbolOpacity(opacity);
-	m_point->endMacro();
-}
-
-void CustomPointDock::symbolFillingStyleChanged(int index) {
-	auto brushStyle = Qt::BrushStyle(index);
-	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
-
-	if (m_initializing)
-		return;
-
-	QBrush brush;
-	m_point->beginMacro(i18n("%1 CustomPoints: filling style changed", m_pointsList.count()));
-	for (auto* point : m_pointsList) {
-		brush = point->symbolBrush();
-		brush.setStyle(brushStyle);
-		point->setSymbolBrush(brush);
-	}
-	m_point->endMacro();
-}
-
-void CustomPointDock::symbolFillingColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QBrush brush;
-	m_point->beginMacro(i18n("%1 CustomPoints: filling color changed", m_pointsList.count()));
-	for (auto* point : m_pointsList) {
-		brush = point->symbolBrush();
-		brush.setColor(color);
-		point->setSymbolBrush(brush);
-	}
-	m_point->endMacro();
-
-	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color);
-	m_initializing = false;
-}
-
-void CustomPointDock::symbolBorderStyleChanged(int index) {
-	auto penStyle = Qt::PenStyle(index);
-
-	if (penStyle == Qt::NoPen) {
-		ui.kcbSymbolBorderColor->setEnabled(false);
-		ui.sbSymbolBorderWidth->setEnabled(false);
-	} else {
-		ui.kcbSymbolBorderColor->setEnabled(true);
-		ui.sbSymbolBorderWidth->setEnabled(true);
-	}
-
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	m_point->beginMacro(i18n("%1 CustomPoints: border style changed", m_pointsList.count()));
-	for (auto* point : m_pointsList) {
-		pen = point->symbolPen();
-		pen.setStyle(penStyle);
-		point->setSymbolPen(pen);
-	}
-	m_point->endMacro();
-}
-
-void CustomPointDock::symbolBorderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	m_point->beginMacro(i18n("%1 CustomPoints: border color changed", m_pointsList.count()));
-	for (auto* point : m_pointsList) {
-		pen = point->symbolPen();
-		pen.setColor(color);
-		point->setSymbolPen(pen);
-	}
-	m_point->endMacro();
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, color);
-	m_initializing = false;
-}
-
-void CustomPointDock::symbolBorderWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	m_point->beginMacro(i18n("%1 CustomPoints: border width changed", m_pointsList.count()));
-	for (auto* point : m_pointsList) {
-		pen = point->symbolPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-		point->setSymbolPen(pen);
-	}
-	m_point->endMacro();
+	for (auto* point : m_points)
+		point->setCoordinateBindingEnabled(checked);
 }
 
 //*********************************************************
 //**** SLOTs for changes triggered in CustomPoint *********
 //*********************************************************
 //"General"-tab
-void CustomPointDock::pointDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_point != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
-		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
-		ui.leComment->setText(aspect->comment());
-	}
-	m_initializing = false;
+void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapper& position) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
+	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
+	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
 }
 
-void CustomPointDock::pointPositionChanged(QPointF position) {
-	m_initializing = true;
-	SET_NUMBER_LOCALE
-	ui.lePositionX->setText(numberLocale.toString(position.x()));
-	ui.lePositionY->setText(numberLocale.toString(position.y()));
-	m_initializing = false;
+void CustomPointDock::pointCoordinateBindingEnabledChanged(bool enabled) {
+	CONDITIONAL_LOCK_RETURN;
+	bindingChanged(enabled);
 }
 
-//"Symbol"-tab
-void CustomPointDock::pointSymbolStyleChanged(Symbol::Style style) {
-	m_initializing = true;
-	ui.cbSymbolStyle->setCurrentIndex((int)style);
-	m_initializing = false;
-}
-
-void CustomPointDock::pointSymbolSizeChanged(qreal size) {
-	m_initializing = true;
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
-	m_initializing = false;
-}
-
-void CustomPointDock::pointSymbolRotationAngleChanged(qreal angle) {
-	m_initializing = true;
-	ui.sbSymbolRotation->setValue(qRound(angle));
-	m_initializing = false;
-}
-
-void CustomPointDock::pointSymbolOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbSymbolOpacity->setValue( qRound(opacity*100.0) );
-	m_initializing = false;
-}
-
-void CustomPointDock::pointSymbolBrushChanged(const QBrush& brush) {
-	m_initializing = true;
-	ui.cbSymbolFillingStyle->setCurrentIndex((int) brush.style());
-	ui.kcbSymbolFillingColor->setColor(brush.color());
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, brush.color());
-	m_initializing = false;
-}
-
-void CustomPointDock::pointSymbolPenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
-	ui.kcbSymbolBorderColor->setColor( pen.color());
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, pen.color());
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
+void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbPositionXLogical->setValue(pos.x());
+	ui.dtePositionXLogical->setMSecsSinceEpochUTC(pos.x());
+	ui.sbPositionYLogical->setValue(pos.y());
+	ui.dtePositionYLogical->setMSecsSinceEpochUTC(pos.y());
 }
 
 void CustomPointDock::pointVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //**********************************************************
@@ -440,31 +342,65 @@ void CustomPointDock::load() {
 	if (!m_point)
 		return;
 
-	m_initializing = true;
+	// Geometry
+	// widgets for positioning using absolute plot distances
+	ui.cbPositionX->setCurrentIndex((int)m_point->position().horizontalPosition);
+	positionXChanged(ui.cbPositionX->currentIndex());
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_point->position().point.x(), m_worksheetUnit));
+	ui.cbPositionY->setCurrentIndex((int)m_point->position().verticalPosition);
+	positionYChanged(ui.cbPositionY->currentIndex());
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_point->position().point.y(), m_worksheetUnit));
 
-	SET_NUMBER_LOCALE
-	ui.lePositionX->setText(numberLocale.toString(m_point->position().x()));
-	ui.lePositionY->setText(numberLocale.toString(m_point->position().y()));
+	// widgets for positioning using logical plot coordinates
+	bool allowLogicalCoordinates = (m_point->plot() != nullptr);
+	ui.lBindLogicalPos->setVisible(allowLogicalCoordinates);
+	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);
 
-	ui.cbSymbolStyle->setCurrentIndex( (int)m_point->symbolStyle() );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_point->symbolSize(), Worksheet::Unit::Point) );
-	ui.sbSymbolRotation->setValue( m_point->symbolRotationAngle() );
-	ui.sbSymbolOpacity->setValue( qRound(m_point->symbolOpacity()*100.0) );
+	if (allowLogicalCoordinates) {
+		const auto* plot = static_cast<const CartesianPlot*>(m_point->plot());
 
-	ui.cbSymbolFillingStyle->setCurrentIndex( (int) m_point->symbolBrush().style() );
-	ui.kcbSymbolFillingColor->setColor(  m_point->symbolBrush().color() );
+		// x
+		bool numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
+		ui.lPositionXLogical->setVisible(numeric);
+		ui.sbPositionXLogical->setVisible(numeric);
+		ui.lPositionXLogicalDateTime->setVisible(!numeric);
+		ui.dtePositionXLogical->setVisible(!numeric);
+		if (numeric)
+			ui.sbPositionXLogical->setValue(m_point->positionLogical().x());
+		else {
+			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
+			ui.dtePositionXLogical->setMSecsSinceEpochUTC(m_point->positionLogical().x());
+		}
 
-	ui.cbSymbolBorderStyle->setCurrentIndex( (int) m_point->symbolPen().style() );
-	ui.kcbSymbolBorderColor->setColor( m_point->symbolPen().color() );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_point->symbolPen().widthF(), Worksheet::Unit::Point) );
+		// y
+		numeric = (plot->yRangeFormatDefault() == RangeT::Format::Numeric);
+		ui.lPositionYLogical->setVisible(numeric);
+		ui.sbPositionYLogical->setVisible(numeric);
+		ui.lPositionYLogicalDateTime->setVisible(!numeric);
+		ui.dtePositionYLogical->setVisible(!numeric);
+		if (numeric)
+			ui.sbPositionYLogical->setValue(m_point->positionLogical().y());
+		else {
+			ui.dtePositionYLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
+			ui.dtePositionYLogical->setMSecsSinceEpochUTC(m_point->positionLogical().y());
+		}
 
-	ui.chkVisible->setChecked( m_point->isVisible() );
-
-	m_initializing = false;
+		bindingChanged(m_point->coordinateBindingEnabled());
+	} else {
+		ui.lPositionXLogical->hide();
+		ui.sbPositionXLogical->hide();
+		ui.lPositionYLogical->hide();
+		ui.sbPositionYLogical->hide();
+		ui.lPositionXLogicalDateTime->hide();
+		ui.dtePositionXLogical->hide();
+		ui.lPositionYLogicalDateTime->hide();
+		ui.dtePositionYLogical->hide();
+	}
+	ui.chkVisible->setChecked(m_point->isVisible());
 }
 
 void CustomPointDock::loadConfigFromTemplate(KConfig& config) {
-	//extract the name of the template from the file name
+	// extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QLatin1String("/"));
 	if (index != -1)
@@ -472,46 +408,18 @@ void CustomPointDock::loadConfigFromTemplate(KConfig& config) {
 	else
 		name = config.name();
 
-	int size = m_pointsList.size();
+	int size = m_points.size();
 	if (size > 1)
 		m_point->beginMacro(i18n("%1 custom points: template \"%2\" loaded", size, name));
 	else
 		m_point->beginMacro(i18n("%1: template \"%2\" loaded", m_point->name(), name));
 
-	this->loadConfig(config);
+	symbolWidget->loadConfig(config.group("CustomPoint"));
 
 	m_point->endMacro();
 }
 
-void CustomPointDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group( "CustomPoint" );
-
-	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_point->symbolStyle()) );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_point->symbolSize()), Worksheet::Unit::Point) );
-	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_point->symbolRotationAngle()) );
-	ui.sbSymbolOpacity->setValue( qRound(group.readEntry("SymbolOpacity", m_point->symbolOpacity())*100.0) );
-	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_point->symbolBrush().style()) );
-	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_point->symbolBrush().color()) );
-	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_point->symbolPen().style()) );
-	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", m_point->symbolPen().color()) );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_point->symbolPen().widthF()), Worksheet::Unit::Point) );
-
-	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, ui.kcbSymbolFillingColor->color());
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, ui.kcbSymbolBorderColor->color());
-	m_initializing = false;
-}
-
 void CustomPointDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group( "CustomPoint" );
-	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->currentText());
-	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(), Worksheet::Unit::Point));
-	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
-	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100.0);
-	group.writeEntry("SymbolFillingStyle", ui.cbSymbolFillingStyle->currentIndex());
-	group.writeEntry("SymbolFillingColor", ui.kcbSymbolFillingColor->color());
-	group.writeEntry("SymbolBorderStyle", ui.cbSymbolBorderStyle->currentIndex());
-	group.writeEntry("SymbolBorderColor", ui.kcbSymbolBorderColor->color());
-	group.writeEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(ui.sbSymbolBorderWidth->value(), Worksheet::Unit::Point));
-	config.sync();
+	KConfigGroup group = config.group("CustomPoint");
+	symbolWidget->saveConfig(group);
 }

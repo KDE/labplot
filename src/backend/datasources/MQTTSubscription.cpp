@@ -1,33 +1,16 @@
-/***************************************************************************
-File		: MQTTSubscription.cpp
-Project		: LabPlot
-Description	: Represents a subscription made in MQTTClient
---------------------------------------------------------------------
-Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
+/*
+	File		: MQTTSubscription.cpp
+	Project		: LabPlot
+	Description	: Represents a subscription made in MQTTClient
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
 
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "backend/datasources/MQTTSubscription.h"
-#include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/MQTTClient.h"
+#include "backend/datasources/MQTTTopic.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
 #include <QIcon>
@@ -39,8 +22,9 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
   \ingroup datasources
 */
-MQTTSubscription::MQTTSubscription(const QString& name) : Folder(name, AspectType::MQTTSubscription),
-	m_subscriptionName(name) {
+MQTTSubscription::MQTTSubscription(const QString& name)
+	: Folder(name, AspectType::MQTTSubscription)
+	, m_subscriptionName(name) {
 	qDebug() << "New MQTTSubscription: " << name;
 }
 
@@ -77,15 +61,14 @@ MQTTClient* MQTTSubscription::mqttClient() const {
 void MQTTSubscription::messageArrived(const QString& message, const QString& topicName) {
 	bool found = false;
 	QVector<MQTTTopic*> topics = children<MQTTTopic>();
-	//search for the topic among the MQTTTopic children
-	for (auto* topic: topics) {
+	// search for the topic among the MQTTTopic children
+	for (auto* topic : topics) {
 		if (topicName == topic->topicName()) {
-			//pass the message to the topic
+			// pass the message to the topic
 			topic->newMessage(message);
 
-			//read the message if needed
-			if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) &&
-			        !m_MQTTClient->isPaused())
+			// read the message if needed
+			if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
 				topic->read();
 
 			found = true;
@@ -93,10 +76,10 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 		}
 	}
 
-	//if the topic can't be found, we add it as a new MQTTTopic, and read from it if needed
+	// if the topic can't be found, we add it as a new MQTTTopic, and read from it if needed
 	if (!found) {
-		MQTTTopic* newTopic = new MQTTTopic(topicName, this, false);
-		addChildFast(newTopic); //no need for undo/redo here
+		auto* newTopic = new MQTTTopic(topicName, this, false);
+		addChildFast(newTopic); // no need for undo/redo here
 		newTopic->newMessage(message);
 		if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
 			newTopic->read();
@@ -125,26 +108,26 @@ void MQTTSubscription::setMQTTClient(MQTTClient* client) {
  *\brief Returns the icon of MQTTSubscription
  */
 QIcon MQTTSubscription::icon() const {
-	return QIcon::fromTheme("mail-signed-full");
+	return QIcon::fromTheme(QStringLiteral("mail-signed-full"));
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
   Saves as XML.
  */
 void MQTTSubscription::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("MQTTSubscription");
+	writer->writeStartElement(QStringLiteral("MQTTSubscription"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//general
-	writer->writeStartElement("general");
-	writer->writeAttribute("subscriptionName", m_subscriptionName);
+	// general
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("subscriptionName"), m_subscriptionName);
 	writer->writeEndElement();
 
-	//MQTTTopics
+	// MQTTTopics
 	for (auto* topic : children<MQTTTopic>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		topic->save(writer);
 
@@ -162,32 +145,32 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "MQTTSubscription")
+		if (reader->isEndElement() && reader->name() == QLatin1String("MQTTSubscription"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "general") {
+		} else if (reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
-			m_subscriptionName = attribs.value("subscriptionName").toString();
-		} else if(reader->name() == QLatin1String("MQTTTopic")) {
-			MQTTTopic* topic = new MQTTTopic(QString(), this, false);
+			m_subscriptionName = attribs.value(QStringLiteral("subscriptionName")).toString();
+		} else if (reader->name() == QLatin1String("MQTTTopic")) {
+			auto* topic = new MQTTTopic(QString(), this, false);
 			if (!topic->load(reader, preview)) {
 				delete topic;
 				return false;
 			}
 			addChildFast(topic);
-		} else {// unknown element
+		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
-	emit loaded(this->subscriptionName());
+	Q_EMIT loaded(this->subscriptionName());
 	return !reader->hasError();
 }
-

@@ -1,31 +1,13 @@
-/***************************************************************************
-    File                 : String2DateTimeFilter.h
-    Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
-    Description          : Conversion filter QString -> QDateTime.
+/*
+	File                 : String2DateTimeFilter.h
+	Project              : LabPlot
+	Description          : Conversion filter QString -> QDateTime.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef STRING2DATE_TIME_FILTER_H
 #define STRING2DATE_TIME_FILTER_H
 
@@ -45,7 +27,9 @@ class String2DateTimeFilter : public AbstractSimpleFilter {
 
 public:
 	//! Standard constructor.
-	explicit String2DateTimeFilter(const QString& format="yyyy-MM-dd hh:mm:ss.zzz") : m_format(format) {}
+	explicit String2DateTimeFilter(const QString& format = QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"))
+		: m_format(format) {
+	}
 	//! Set the format string to be used for conversion.
 	void setFormat(const QString& format);
 	//! Return the format string
@@ -53,7 +37,9 @@ public:
 	 * The default format string is "yyyy-MM-dd hh:mm:ss.zzz".
 	 * \sa QDate::toString()
 	 */
-	QString format() const { return m_format; }
+	QString format() const {
+		return m_format;
+	}
 
 	//! Return the data type of the column
 	AbstractColumn::ColumnMode columnMode() const override;
@@ -69,8 +55,8 @@ private:
 	//! The format string.
 	QString m_format;
 
-	static const char * date_formats[];
-	static const char * time_formats[];
+	static const char* date_formats[];
+	static const char* time_formats[];
 
 public:
 	QDateTime dateTimeAt(int row) const override;
@@ -79,8 +65,7 @@ public:
 
 protected:
 	//! Using typed ports: only string inputs are accepted.
-	bool inputAcceptable(int, const AbstractColumn *source) override;
+	bool inputAcceptable(int, const AbstractColumn* source) override;
 };
 
 #endif // ifndef STRING2DATE_TIME_FILTER_H
-

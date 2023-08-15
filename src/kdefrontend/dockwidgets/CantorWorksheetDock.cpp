@@ -1,83 +1,85 @@
-/***************************************************************************
-    File                 : CantorWorksheetDock.cpp
-    Project              : LabPlot
-    Description          : widget for CantorWorksheet properties
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
-    Copyright            : (C) 2015-2018 Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : CantorWorksheetDock.cpp
+	Project              : LabPlot
+	Description          : widget for CantorWorksheet properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "CantorWorksheetDock.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
-#include <KParts/ReadWritePart>
+
+#include <3rdparty/cantor/panelplugin.h>
+
 #include <QAction>
 
-CantorWorksheetDock::CantorWorksheetDock(QWidget* parent) : BaseDock(parent) {
+CantorWorksheetDock::CantorWorksheetDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
-	ui.tabWidget->setMovable(true);
+	// 	ui.tabWidget->setMovable(true); //don't allow to move tabs until we properly keep track of the help panel's position
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
-	//SLOTs
-	//General
+	// SLOTs
+	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CantorWorksheetDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &CantorWorksheetDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &CantorWorksheetDock::commentChanged);
 	connect(ui.bEvaluate, &QPushButton::pressed, this, &CantorWorksheetDock::evaluateWorksheet);
 	connect(ui.bRestart, &QPushButton::pressed, this, &CantorWorksheetDock::restartBackend);
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_cantorworksheetlist = list;
 	m_worksheet = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
-	//show name/comment
-	ui.leName->setText(m_worksheet->name());
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
-	ui.leComment->setText(m_worksheet->comment());
-
-	//show all available plugins
+	// remove the available panel plugins first
 	int k = 0;
 	int prev_index = ui.tabWidget->currentIndex();
 	for (int i : index) {
-		ui.tabWidget->removeTab(i-k);
+		ui.tabWidget->removeTab(i - k);
 		++k;
 	}
 
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
+
 	if (m_cantorworksheetlist.size() == 1) {
-		QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
+		// show name/comment
+		ui.leName->setText(m_worksheet->name());
+		ui.teComment->setText(m_worksheet->comment());
+
+		// add available panel plugins
+		const auto& plugins = m_cantorworksheetlist.first()->getPlugins();
 		index.clear();
 		for (auto* plugin : plugins) {
-			if (plugin->name() == QLatin1String("File Browser"))
+			// skip the "File Browser" plugin
+			// in the new code of Cantor the plugin id is set as the object name and we can use it.
+			// for the older version we need to rely on the translated name...
+			// TODO: remove the dependency on the plugin name later.
+			if (plugin->objectName() == QLatin1String("FileBrowserPanel") || plugin->name() == i18n("File Browser"))
 				continue;
+
 			connect(plugin, &Cantor::PanelPlugin::visibilityRequested, this, &CantorWorksheetDock::visibilityRequested);
-			plugin->setParentWidget(this);
 			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
 			index.append(i);
+
+			if (plugin->objectName() == QLatin1String("HelpPanel"))
+				m_helpPanelIndex = i;
+			else if (plugin->objectName() == QLatin1String("DocumentationPanel"))
+				m_documentationPanelIndex = i;
 		}
+	} else {
+		// don't show any name/comment when multiple notebooks were selected
+		ui.leName->setText(QString());
+		ui.teComment->setText(QString());
 	}
+
 	ui.tabWidget->setCurrentIndex(prev_index);
 
 	if (m_worksheet->part()) {
@@ -88,9 +90,8 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		ui.bRestart->hide();
 	}
 
-	//SIGNALs/SLOTs
-	connect(m_worksheet, &AbstractAspect::aspectDescriptionChanged, this, &CantorWorksheetDock::worksheetDescriptionChanged);
-	m_initializing = false;
+	// SIGNALs/SLOTs
+	connect(m_worksheet, &AbstractAspect::aspectDescriptionChanged, this, &CantorWorksheetDock::aspectDescriptionChanged);
 }
 
 //*************************************************************
@@ -98,34 +99,24 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 //*************************************************************
 // "General"-tab
 void CantorWorksheetDock::evaluateWorksheet() {
-	m_worksheet->part()->action("evaluate_worksheet")->trigger();
+	for (auto* nb : m_cantorworksheetlist)
+		nb->evaluate();
 }
 
 void CantorWorksheetDock::restartBackend() {
-	m_worksheet->part()->action("restart_backend")->trigger();
+	for (auto* nb : m_cantorworksheetlist)
+		nb->restart();
 }
 
 /*!
  * this slot is called when the visibility for one of the panels in Cantor is requested.
- * At the moment this can only happen for the integrated help in Maxima, R, etc.
- * Here we hard-code the selection of the second tab being for the help.
- * TODO: improve this logic without hard-coding for a fixed index.
+ * At the moment this can only happen for the integrated help in Maxima and in R and
+ * for the integrated documentation.
  */
 void CantorWorksheetDock::visibilityRequested() {
-	ui.tabWidget->setCurrentIndex(1);
-}
-
-//*************************************************************
-//******** SLOTs for changes triggered in CantorWorksheet ***********
-//*************************************************************
-void CantorWorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_worksheet != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
-	m_initializing = false;
+	const auto& name = QObject::sender()->objectName();
+	if (name == QLatin1String("HelpPanel"))
+		ui.tabWidget->setCurrentIndex(m_helpPanelIndex);
+	else if (name == QLatin1String("DocumentationPanel"))
+		ui.tabWidget->setCurrentIndex(m_documentationPanelIndex);
 }

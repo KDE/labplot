@@ -1,30 +1,13 @@
-/***************************************************************************
-File                 : MQTTWillSettingsWidget.cpp
-Project              : LabPlot
-Description          : widget for managing MQTT connection's will settings
---------------------------------------------------------------------
-Copyright            : (C) 2018 by Ferencz Kovacs (kferike98@gmail.com)
-Copyright            : (C) 2018 Fabian Kristof (fkristofszabolcs@gmail.com)
- ***************************************************************************/
+/*
+	File                 : MQTTWillSettingsWidget.cpp
+	Project              : LabPlot
+	Description          : widget for managing MQTT connection's will settings
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
+	SPDX-FileCopyrightText: 2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "MQTTWillSettingsWidget.h"
 
 /*!
@@ -33,16 +16,18 @@ Copyright            : (C) 2018 Fabian Kristof (fkristofszabolcs@gmail.com)
 
 	\ingroup kdefrontend
  */
-MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient::MQTTWill& will, const QVector<QString>& topics) : QWidget(parent), m_will(will) {
+MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient::MQTTWill& will, const QVector<QString>& topics)
+	: QWidget(parent)
+	, m_will(will) {
 	ui.setupUi(this);
 	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000));
 
 	connect(ui.cbWillMessageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willMessageTypeChanged);
 	connect(ui.cbWillUpdate, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willUpdateTypeChanged);
 
-	connect(ui.chbEnabled, &QCheckBox::stateChanged, this, &MQTTWillSettingsWidget::enableWillSettings);
-	connect(ui.chbWillRetain, &QCheckBox::stateChanged, [this](int state) {
-		m_will.willRetain = (state == Qt::Checked);
+	connect(ui.chbEnabled, &QCheckBox::toggled, this, &MQTTWillSettingsWidget::enableWillSettings);
+	connect(ui.chbWillRetain, &QCheckBox::toggled, [this](bool state) {
+		m_will.willRetain = state;
 	});
 	connect(ui.leWillOwnMessage, &QLineEdit::textChanged, [this](const QString& text) {
 		m_will.willOwnMessage = text;
@@ -120,9 +105,10 @@ void MQTTWillSettingsWidget::willUpdateTypeChanged(int index) {
  */
 void MQTTWillSettingsWidget::loadSettings(const MQTTClient::MQTTWill& will, const QVector<QString>& topics) {
 	ui.chbEnabled->setChecked(will.enabled);
+	enableWillSettings(will.enabled);
 
 	ui.cbWillTopic->addItems(topics.toList());
-	//Set back the initial value
+	// Set back the initial value
 	if (!will.willTopic.isEmpty())
 		ui.cbWillTopic->setCurrentText(will.willTopic);
 
@@ -150,8 +136,8 @@ void MQTTWillSettingsWidget::loadSettings(const MQTTClient::MQTTWill& will, cons
 	}
 }
 
-void MQTTWillSettingsWidget::enableWillSettings(int state) {
-	const bool enabled = m_will.enabled = (state == Qt::Checked);
+void MQTTWillSettingsWidget::enableWillSettings(bool enabled) {
+	m_will.enabled = enabled;
 	ui.lWillMessageType->setEnabled(enabled);
 	ui.cbWillMessageType->setEnabled(enabled);
 	ui.lWillOwnMessage->setEnabled(enabled);

@@ -1,30 +1,12 @@
-/***************************************************************************
-    File                 : ImageTools.cpp
-    Project              : LabPlot
-    Description          : Collection of different image processing algorithms
-    --------------------------------------------------------------------
-    Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : ImageTools.cpp
+	Project              : LabPlot
+	Description          : Collection of different image processing algorithms
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #include "ImageTools.h"
 
 /*!
@@ -33,8 +15,8 @@
 	\ingroup tools
 */
 QImage ImageTools::blurred(const QImage& image, QRect rect, int radius, bool alphaOnly) {
-	int tab[] = { 14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2 };
-	int alpha = (radius < 1)  ? 16 : (radius > 17) ? 1 : tab[radius-1];
+	int tab[] = {14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2};
+	int alpha = (radius < 1) ? 16 : (radius > 17) ? 1 : tab[radius - 1];
 
 	QImage result = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 	int r1 = rect.top();
@@ -50,7 +32,7 @@ QImage ImageTools::blurred(const QImage& image, QRect rect, int radius, bool alp
 	int i2 = 3;
 
 	if (alphaOnly)
-		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::LittleEndian)*3;
+		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::LittleEndian) * 3;
 
 	for (int col = c1; col <= c2; col++) {
 		p = result.scanLine(r1) + col * 4;

@@ -1,61 +1,43 @@
-/***************************************************************************
-    File                 : Integer2DateTimeFilter.h
-    Project              : AbstractColumn
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
-    Description          : Conversion filter int -> QDateTime, interpreting
-                           the input numbers as Julian days.
+/*
+	File                 : Integer2DateTimeFilter.h
+	Project              : AbstractColumn
+	Description          : Conversion filter int -> QDateTime, interpreting
+	the input numbers as Julian days.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef INTEGER2DATE_TIME_FILTER_H
 #define INTEGER2DATE_TIME_FILTER_H
 
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
 
-//! Conversion filter double -> QDateTime, interpreting the input numbers as (fractional) Julian days.
+//! Conversion filter int -> QDateTime, interpreting the input as seconds since epoch
 class Integer2DateTimeFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	QDate dateAt(int row) const override {
-		if (!m_inputs.value(0)) return QDate();
-		int inputValue = m_inputs.value(0)->integerAt(row);
-		return QDate(1900, 1, 1 + inputValue);
-	}
 	QDateTime dateTimeAt(int row) const override {
-		return QDateTime(dateAt(row), QTime());
+		DEBUG(Q_FUNC_INFO)
+		QDateTime dt = QDateTime::fromSecsSinceEpoch(0, Qt::UTC);
+		int inputValue = m_inputs.value(0)->integerAt(row);
+		return dt.addMSecs(inputValue); // TODO: select unit (ms, s, min, hour, days)
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::DateTime; }
+	AbstractColumn::ColumnMode columnMode() const override {
+		return AbstractColumn::ColumnMode::DateTime;
+	}
 
 protected:
 	//! Using typed ports: only double inputs are accepted.
-	bool inputAcceptable(int, const AbstractColumn *source) override {
+	bool inputAcceptable(int, const AbstractColumn* source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::Integer;
 	}
 };
 
 #endif // ifndef INTEGER2DATE_TIME_FILTER_H
-

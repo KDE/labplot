@@ -1,38 +1,22 @@
-/***************************************************************************
-    File                 : WorksheetElementContainer.cpp
-    Project              : LabPlot
-    Description          : Worksheet element container - parent of multiple elements
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
+/*
+	File                 : WorksheetElementContainer.cpp
+	Project              : LabPlot
+	Description          : Worksheet element container - parent of multiple elements
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "backend/worksheet/WorksheetElementContainer.h"
-#include "backend/worksheet/WorksheetElementContainerPrivate.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
+#include "backend/worksheet/ResizeItem.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/WorksheetElementContainerPrivate.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
@@ -50,19 +34,17 @@
  */
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)
-	: WorksheetElement(name, type), d_ptr(new WorksheetElementContainerPrivate(this)) {
-
-	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
+	: WorksheetElement(name, new WorksheetElementContainerPrivate(this), type) {
+	connect(this, &WorksheetElementContainer::childAspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd, AspectType type)
-	: WorksheetElement(name, type), d_ptr(dd) {
-
-	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
+	: WorksheetElement(name, dd, type) {
+	connect(this, &WorksheetElementContainer::childAspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 WorksheetElementContainer::~WorksheetElementContainer() = default;
 
 QGraphicsItem* WorksheetElementContainer::graphicsItem() const {
@@ -78,44 +60,39 @@ STD_SWAP_METHOD_SETTER_CMD_IMPL(WorksheetElementContainer, SetVisible, bool, swa
 void WorksheetElementContainer::setVisible(bool on) {
 	Q_D(WorksheetElementContainer);
 
-	//take care of proper ordering on the undo-stack,
-	//when making the container and all its children visible/invisible.
-	//if visible is set true, change the visibility of the container first
+	// take care of proper ordering on the undo-stack,
+	// when making the container and all its children visible/invisible.
+	// if visible is set true, change the visibility of the container first
 	if (on) {
-		beginMacro( i18n("%1: set visible", name()) );
-		exec( new WorksheetElementContainerSetVisibleCmd(d, on, ki18n("%1: set visible")) );
+		beginMacro(i18n("%1: set visible", name()));
+		exec(new WorksheetElementContainerSetVisibleCmd(d, on, ki18n("%1: set visible")));
 	} else
-		beginMacro( i18n("%1: set invisible", name()) );
+		beginMacro(i18n("%1: set invisible", name()));
 
-	//change the visibility of all children
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
-	for (auto* elem : childList) {
+	// change the visibility of all children
+	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
+	for (auto* elem : elements) {
 		auto* curve = dynamic_cast<XYCurve*>(elem);
 		if (curve) {
-			//making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
-			//this needs to avoided by supressing the retransformation in the curves.
-			curve->suppressRetransform(true);
+			// making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
+			// this should be avoided by supressing the retransformation in the curves.
+			curve->setSuppressRetransform(true);
 			elem->setVisible(on);
-			curve->suppressRetransform(false);
-		} else
+			curve->setSuppressRetransform(false);
+		} else if (elem)
 			elem->setVisible(on);
 	}
 
-	//if visible is set false, change the visibility of the container last
+	// if visible is set false, change the visibility of the container last
 	if (!on)
 		exec(new WorksheetElementContainerSetVisibleCmd(d, false, ki18n("%1: set invisible")));
 
 	endMacro();
 }
 
-bool WorksheetElementContainer::isVisible() const {
-	Q_D(const WorksheetElementContainer);
-	return d->isVisible();
-}
-
 bool WorksheetElementContainer::isFullyVisible() const {
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
-	for (const auto* elem : childList) {
+	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
+	for (const auto* elem : elements) {
 		if (!elem->isVisible())
 			return false;
 	}
@@ -127,38 +104,52 @@ void WorksheetElementContainer::setPrinting(bool on) {
 	d->m_printing = on;
 }
 
-void WorksheetElementContainer::retransform() {
-// 	if (isLoading())
-// 		return;
+void WorksheetElementContainer::setResizeEnabled(bool enabled) {
+	if (m_resizeItem)
+		m_resizeItem->setVisible(enabled);
+	else {
+		if (enabled) {
+			m_resizeItem = new ResizeItem(this);
+			m_resizeItem->setRect(rect());
+		}
+	}
+}
 
-	PERFTRACE("WorksheetElementContainer::retransform()");
+void WorksheetElementContainer::retransform() {
+	if (isLoading())
+		return;
+
+	PERFTRACE(QStringLiteral("WorksheetElementContainer::retransform()"));
 	Q_D(WorksheetElementContainer);
 
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
-	for (auto* child : childList)
+	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
+	for (auto* child : elements)
 		child->retransform();
 
 	d->recalcShapeAndBoundingRect();
+
+	if (m_resizeItem)
+		m_resizeItem->setRect(rect());
 }
 
 /*!
  * called if the size of the worksheet page was changed and the content has to be adjusted/resized (\c pageResize = true)
  * or if a new rectangular for the element container was set (\c pageResize = false).
- * In the second case, \c WorksheetElement::handleResize() is called for every worksheet child to adjuste the content to the new size.
+ * In the second case, \c WorksheetElement::handleResize() is called for every worksheet child to adjust the content to the new size.
  * In the first case, a new rectangular for the container is calculated and set first, which on the other hand, triggers the content adjustments
  * in the container children.
  */
 void WorksheetElementContainer::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	DEBUG("WorksheetElementContainer::handleResize()");
+	DEBUG(Q_FUNC_INFO);
 	Q_D(const WorksheetElementContainer);
 	if (pageResize) {
 		QRectF rect(d->rect);
-		rect.setWidth(d->rect.width()*horizontalRatio);
-		rect.setHeight(d->rect.height()*verticalRatio);
+		rect.setWidth(d->rect.width() * horizontalRatio);
+		rect.setHeight(d->rect.height() * verticalRatio);
 		setRect(rect);
 	} else {
-// 		for (auto* elem : children<WorksheetElement>(IncludeHidden))
-// 			elem->handleResize(horizontalRatio, verticalRatio);
+		// 		for (auto* elem : children<WorksheetElement>(IncludeHidden))
+		// 			elem->handleResize(horizontalRatio, verticalRatio);
 	}
 }
 
@@ -202,15 +193,13 @@ void WorksheetElementContainer::prepareGeometryChange() {
 	d->prepareGeometryChangeRequested();
 }
 
-//################################################################
-//################### Private implementation ##########################
-//################################################################
-WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner) : q(owner) {
+// ################################################################
+// ################### Private implementation ##########################
+// ################################################################
+WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer* owner)
+	: WorksheetElementPrivate(owner)
+	, q(owner) {
 	setAcceptHoverEvents(true);
-}
-
-QString WorksheetElementContainerPrivate::name() const {
-	return q->name();
 }
 
 void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -234,46 +223,34 @@ void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*
 	}
 }
 
-bool WorksheetElementContainerPrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-
-	//When making a graphics item invisible, it gets deselected in the scene.
-	//In this case we don't want to deselect the item in the project explorer.
-	//We need to supress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	worksheet->suppressSelectionChangedEvent(true);
-	setVisible(on);
-	emit q->visibleChanged(on);
-	worksheet->suppressSelectionChangedEvent(false);
-
-	return oldValue;
-}
-
 void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
-	prepareGeometryChange();
+	prepareGeometryChange(); // this is not const!
 	recalcShapeAndBoundingRect();
 }
 
 void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
-// 	if (q->isLoading())
-// 		return;
+	// 	if (q->isLoading())
+	// 		return;
 
-	//old logic calculating the bounding box as as the box covering all children.
-	//we might need this logic later once we implement something like selection of multiple plots, etc.
-// 	boundingRectangle = QRectF();
-// 	QVector<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-// 	foreach (const WorksheetElement* elem, childList)
-// 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
-//
-	float penWidth = 2.;
+	// old logic calculating the bounding box as the box covering all children.
+	// we might need this logic later once we implement something like selection of multiple plots, etc.
+	// 	boundingRectangle = QRectF();
+	// 	QVector<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	// 	foreach (const WorksheetElement* elem, childList)
+	// 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
+	//
+	qreal penWidth = 2.;
 	boundingRectangle = q->rect();
-	boundingRectangle = QRectF(-boundingRectangle.width()/2 - penWidth / 2, -boundingRectangle.height()/2 - penWidth / 2,
-				  boundingRectangle.width() + penWidth, boundingRectangle.height() + penWidth);
+	// QDEBUG(Q_FUNC_INFO << ", bound rect = " << boundingRectangle)
+	boundingRectangle = QRectF(-boundingRectangle.width() / 2. - penWidth / 2.,
+							   -boundingRectangle.height() / 2. - penWidth / 2.,
+							   boundingRectangle.width() + penWidth,
+							   boundingRectangle.height() + penWidth);
 
 	QPainterPath path;
 	path.addRect(boundingRectangle);
 
-	//make the shape somewhat thicker then the hoveredPen to make the selection/hovering box more visible
+	// make the shape somewhat thicker than the hoveredPen to make the selection/hovering box more visible
 	containerShape = QPainterPath();
 	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
 }
@@ -284,10 +261,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 }
 
 // Inherited from QGraphicsItem
-void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;
 
@@ -300,4 +274,7 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(containerShape);
 	}
+}
+
+void WorksheetElementContainerPrivate::retransform() {
 }

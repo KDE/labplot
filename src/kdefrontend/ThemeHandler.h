@@ -1,32 +1,13 @@
-/***************************************************************************
-    File                 : ThemeHandler.h
-    Project              : LabPlot
-    Description          : Widget for handling saving and loading of themes
-    --------------------------------------------------------------------
-    Copyright            : (C) 2016 Prakriti Bhardwaj (p_bhardwaj14@informatik.uni-kl.de)
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : ThemeHandler.h
+	Project              : LabPlot
+	Description          : Widget for handling saving and loading of themes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Prakriti Bhardwaj <p_bhardwaj14@informatik.uni-kl.de>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef THEMEHANDLER_H
 #define THEMEHANDLER_H
@@ -45,7 +26,7 @@ public:
 	static QStringList themes();
 	static const QString themeFilePath(const QString&);
 
-public  slots:
+public Q_SLOTS:
 	void setCurrentTheme(const QString&);
 
 private:
@@ -54,18 +35,18 @@ private:
 	QString m_currentTheme;
 	QString m_currentLocalTheme;
 
-        QPushButton* m_pbLoadTheme;
-//      QPushButton* m_pbSaveTheme;
-// 	QPushButton* pbPublishTheme;
+	QPushButton* m_pbLoadTheme;
+	// QPushButton* m_pbSaveTheme;
+	// 	QPushButton* pbPublishTheme;
 
-private slots:
+private Q_SLOTS:
 	void loadSelected(const QString&);
 	void showPanel();
-// 	void saveMenu();
-// 	void saveNewSelected(const QString&);
-// 	void publishThemes();
+	// 	void saveMenu();
+	// 	void saveNewSelected(const QString&);
+	// 	void publishThemes();
 
-signals:
+Q_SIGNALS:
 	void loadThemeRequested(const QString&);
 	void saveThemeRequested(KConfig&);
 	void info(const QString&);

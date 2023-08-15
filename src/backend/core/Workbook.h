@@ -1,31 +1,13 @@
-/***************************************************************************
-    File                 : Workbook.h
-    Project              : LabPlot
-    Description          : Aspect providing a container for storing data
+/*
+	File                 : Workbook.h
+	Project              : LabPlot
+	Description          : Aspect providing a container for storing data
 				in form of spreadsheets and matrices
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke(alexander.semke@web.de)
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef WORKBOOK_H
 #define WORKBOOK_H
 
@@ -55,19 +37,22 @@ public:
 	Matrix* currentMatrix() const;
 	void setChildSelectedInView(int index, bool selected);
 
+	QVector<AspectType> pasteTypes() const override;
+	void processDropEvent(const QVector<quintptr>&) override;
+
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-public slots:
+public Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 
 private:
 	mutable WorkbookView* m_view{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void workbookItemSelected(int);
 };

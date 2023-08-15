@@ -1,0 +1,18 @@
+[
+	{
+		"name" : "General",
+		"description" : "Various example projects demoing LabPlot's features and capabilities"
+	},
+	{
+		"name" : "Statistics",
+		"description" : "Various example projects demoing LabPlot's features and capabilities relevant for the statistical analysis of data"
+	},
+	{
+		"name" : "Analysis",
+		"description" : "Various example projects demoing LabPlot's features and capabilities relevant for the analysis of data"
+	},
+	{
+		"name" : "Computing",
+		"description" : "Various example projects based different on open-source computer algebra systems and programming languages used for scientific computations"
+	}
+]

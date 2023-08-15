@@ -1,38 +1,21 @@
-/***************************************************************************
-    File                 : SortDialog.h
-    Project              : LabPlot
-    Description          : Sorting options dialog
-    --------------------------------------------------------------------
-	Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : SortDialog.h
+	Project              : LabPlot
+	Description          : Sorting options dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #include "SortDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 
 #include <QPushButton>
 #include <QWindow>
 
 #include <KConfigGroup>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -41,8 +24,9 @@
 
 	\ingroup kdefrontend
  */
-SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
-	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
+SortDialog::SortDialog(QWidget* parent)
+	: QDialog(parent) {
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("view-sort-ascending")));
 	setWindowTitle(i18nc("@title:window", "Sort Columns"));
 	setSizeGripEnabled(true);
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -54,12 +38,11 @@ SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::sortColumns);
 	connect(ui.buttonBox, &QDialogButtonBox::rejected, this, &SortDialog::reject);
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::accept);
-	connect(ui.cbSorting, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
-			this, &SortDialog::changeType);
+	connect(ui.cbSorting, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SortDialog::changeType);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SortDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("SortDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -72,8 +55,8 @@ SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
 }
 
 SortDialog::~SortDialog() {
-	//save the current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SortDialog"));
+	// save the current settings
+	KConfigGroup conf = Settings::group(QLatin1String("SortDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	// general settings
@@ -86,7 +69,7 @@ void SortDialog::sortColumns() {
 	if (ui.cbSorting->currentIndex() == Together)
 		leading = m_columns.at(ui.cbColumns->currentIndex());
 
-	emit sort(leading, m_columns, ui.cbOrdering->currentIndex() == Qt::AscendingOrder);
+	Q_EMIT sort(leading, m_columns, ui.cbOrdering->currentIndex() == Qt::AscendingOrder);
 }
 
 void SortDialog::setColumns(const QVector<Column*>& columns) {

@@ -1,30 +1,12 @@
-/***************************************************************************
-    File                 : XYFitCurvePrivate.h
-    Project              : LabPlot
-    Description          : Private members of XYFitCurve
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : XYFitCurvePrivate.h
+	Project              : LabPlot
+	Description          : Private members of XYFitCurve
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef XYFITCURVEPRIVATE_H
 #define XYFITCURVEPRIVATE_H
@@ -34,19 +16,24 @@
 
 class XYFitCurve;
 class Column;
+class Histogram;
 
-extern "C" {
 #include <gsl/gsl_multifit_nlin.h>
-}
 
 class XYFitCurvePrivate : public XYAnalysisCurvePrivate {
 public:
 	explicit XYFitCurvePrivate(XYFitCurve*);
 	~XYFitCurvePrivate() override;
 
-	void recalculate();
-	void evaluate(bool preview = false);
+	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
+	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) override;
+	virtual void resetResults() override;
+	void runLevenbergMarquardt(const AbstractColumn* xcol, const AbstractColumn* ycol, Range<double> xRange);
+	void runMaximumLikelihood(const AbstractColumn* xcol, double normalization);
+	bool evaluate(bool preview = false);
 
+	const Histogram* dataSourceHistogram{nullptr};
+	QString dataSourceHistogramPath;
 	const AbstractColumn* xErrorColumn{nullptr}; //<! column storing the values for the x-error to be used in the fit
 	const AbstractColumn* yErrorColumn{nullptr}; //<! column storing the values for the y-error to be used in the fit
 	QString xErrorColumnPath;
@@ -63,7 +50,7 @@ public:
 
 private:
 	void prepareResultColumns();
-	void writeSolverState(gsl_multifit_fdfsolver*, double chi = NAN);
+	void writeSolverState(gsl_multifit_fdfsolver*, double chi = qQNaN());
 };
 
 #endif

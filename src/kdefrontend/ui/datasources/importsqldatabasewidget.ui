@@ -88,14 +88,14 @@
       <item row="3" column="0">
        <widget class="QLabel" name="lDecimalSeparator">
         <property name="text">
-         <string>Decimal Separator:</string>
+         <string>Decimal separator:</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="lDateTimeFormat">
         <property name="text">
-         <string>DateTime Format:</string>
+         <string>DateTime format:</string>
         </property>
        </widget>
       </item>
@@ -236,7 +236,7 @@
       </widget>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
-        <string>Data portion to read</string>
+        <string>Data Portion to Read</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">

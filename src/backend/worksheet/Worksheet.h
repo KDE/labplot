@@ -1,58 +1,47 @@
-/***************************************************************************
-    File                 : Worksheet.h
-    Project              : LabPlot
-    Description          : Worksheet (2D visualization) part
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2019 by Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
+/*
+	File                 : Worksheet.h
+	Project              : LabPlot
+	Description          : Worksheet (2D visualization) part
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef WORKSHEET_H
 #define WORKSHEET_H
 
 #include "backend/core/AbstractPart.h"
-#include "backend/worksheet/plots/PlotArea.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 class QGraphicsItem;
 class QGraphicsScene;
 class QRectF;
 
+class Background;
 class WorksheetPrivate;
 class WorksheetView;
 class TreeModel;
 class XYCurve;
-class CartesianPlot;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Worksheet : public AbstractPart {
+#else
 class Worksheet : public AbstractPart {
+#endif
 	Q_OBJECT
 
 public:
 	explicit Worksheet(const QString& name, bool loading = false);
 	~Worksheet() override;
 
-	enum class Unit {Millimeter, Centimeter, Inch, Point};
-	enum class Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
-	enum class CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
+	enum class Unit { Millimeter, Centimeter, Inch, Point };
+	enum class Layout { NoLayout, VerticalLayout, HorizontalLayout, GridLayout };
+	enum class CartesianPlotActionMode { ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY };
+	enum class ZoomFit { None, Fit, FitToHeight, FitToWidth, FitToSelection };
 
 	static double convertToSceneUnits(const double value, const Worksheet::Unit unit);
 	static double convertFromSceneUnits(const double value, const Worksheet::Unit unit);
@@ -60,7 +49,10 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
+
 	QVector<AbstractAspect*> dependsOn() const override;
+	WorksheetElement* currentSelection();
+	QVector<AspectType> pasteTypes() const override;
 
 	bool exportView() const override;
 	bool printView() override;
@@ -72,6 +64,7 @@ public:
 	QRectF pageRect() const;
 	void setPageRect(const QRectF&);
 	QGraphicsScene* scene() const;
+	double zoomFactor() const;
 	void update();
 	void setPrinting(bool) const;
 	void setThemeName(const QString&);
@@ -86,33 +79,27 @@ public:
 	void setCartesianPlotActionMode(CartesianPlotActionMode mode);
 	CartesianPlotActionMode cartesianPlotCursorMode();
 	void setCartesianPlotCursorMode(CartesianPlotActionMode mode);
+	void setInteractive(bool);
 	void setPlotsLocked(bool);
 	bool plotsLocked();
-	int getPlotCount();
-	CartesianPlot* getPlot(int index);
+	int plotCount();
+	CartesianPlot* plot(int index);
 	TreeModel* cursorModel();
 
 	void cursorModelPlotAdded(const QString& name);
 	void cursorModelPlotRemoved(const QString& name);
 
-	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
-	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
-	CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
-
+	Background* background() const;
 	BASIC_D_ACCESSOR_DECL(bool, scaleContent, ScaleContent)
 	BASIC_D_ACCESSOR_DECL(bool, useViewSize, UseViewSize)
+	BASIC_D_ACCESSOR_DECL(ZoomFit, zoomFit, ZoomFit)
 	BASIC_D_ACCESSOR_DECL(Worksheet::Layout, layout, Layout)
-	BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutLeftMargin, LayoutLeftMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutRightMargin, LayoutRightMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutHorizontalSpacing, LayoutHorizontalSpacing)
-	BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
+	BASIC_D_ACCESSOR_DECL(double, layoutTopMargin, LayoutTopMargin)
+	BASIC_D_ACCESSOR_DECL(double, layoutBottomMargin, LayoutBottomMargin)
+	BASIC_D_ACCESSOR_DECL(double, layoutLeftMargin, LayoutLeftMargin)
+	BASIC_D_ACCESSOR_DECL(double, layoutRightMargin, LayoutRightMargin)
+	BASIC_D_ACCESSOR_DECL(double, layoutHorizontalSpacing, LayoutHorizontalSpacing)
+	BASIC_D_ACCESSOR_DECL(double, layoutVerticalSpacing, LayoutVerticalSpacing)
 	BASIC_D_ACCESSOR_DECL(int, layoutRowCount, LayoutRowCount)
 	BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
@@ -126,11 +113,14 @@ public:
 
 	typedef WorksheetPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void setTheme(const QString&);
+	void cartesianPlotAxisShift(int delta, Dimension dim, int index);
+	void cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
 	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotMouseMoveSelectionMode(QPointF logicStart, QPointF logicEnd);
 	void cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos);
 	void cartesianPlotMouseReleaseZoomSelectionMode();
 	void cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos);
@@ -154,7 +144,7 @@ private:
 	mutable WorksheetView* m_view{nullptr};
 	friend class WorksheetPrivate;
 
-private slots:
+private Q_SLOTS:
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
@@ -162,35 +152,30 @@ private slots:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void itemSelected(QGraphicsItem*);
 	void itemDeselected(QGraphicsItem*);
 	void requestUpdate();
-	void useViewSizeRequested();
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
 	void propertiesExplorerRequested();
+	void childContextMenuRequested(AspectType, QMenu*);
 
-	void backgroundTypeChanged(PlotArea::BackgroundType);
-	void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
-	void backgroundBrushStyleChanged(Qt::BrushStyle);
-	void backgroundFirstColorChanged(const QColor&);
-	void backgroundSecondColorChanged(const QColor&);
-	void backgroundFileNameChanged(const QString&);
-	void backgroundOpacityChanged(float);
 	void scaleContentChanged(bool);
+	void useViewSizeChanged(bool);
 	void pageRectChanged(const QRectF&);
+
 	void layoutChanged(Worksheet::Layout);
-	void layoutTopMarginChanged(float);
-	void layoutBottomMarginChanged(float);
-	void layoutLeftMarginChanged(float);
-	void layoutRightMarginChanged(float);
-	void layoutVerticalSpacingChanged(float);
-	void layoutHorizontalSpacingChanged(float);
+	void layoutTopMarginChanged(double);
+	void layoutBottomMarginChanged(double);
+	void layoutLeftMarginChanged(double);
+	void layoutRightMarginChanged(double);
+	void layoutVerticalSpacingChanged(double);
+	void layoutHorizontalSpacingChanged(double);
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
+
 	void themeChanged(const QString&);
 };
 

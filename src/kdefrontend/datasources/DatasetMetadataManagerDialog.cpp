@@ -1,41 +1,23 @@
-/***************************************************************************
-File                 : DatasetMetadataManagerDialog.cpp
-Project              : LabPlot
-Description          : Dialog for managing a metadata file of a dataset
---------------------------------------------------------------------
-Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : DatasetMetadataManagerDialog.cpp
+	Project              : LabPlot
+	Description          : Dialog for managing a metadata file of a dataset
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "src/kdefrontend/datasources/DatasetMetadataManagerDialog.h"
+#include "backend/core/Settings.h"
 #include "src/kdefrontend/datasources/DatasetMetadataManagerWidget.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 #include <QDialogButtonBox>
-#include <QWindow>
 #include <QPushButton>
+#include <QWindow>
 
 /*!
 	\class DatasetMetadataManagerDialog
@@ -43,10 +25,11 @@ Copyright            : (C) 2019 Ferencz Kovacs (kferike98@gmail.com)
 
 	\ingroup kdefrontend
  */
-DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, const QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetMap) : QDialog(parent),
-	m_mainWidget(new DatasetMetadataManagerWidget(this, datasetMap)),
-	m_buttonBox(nullptr),
-	m_okButton(nullptr) {
+DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetMap)
+	: QDialog(parent)
+	, m_mainWidget(new DatasetMetadataManagerWidget(this, datasetMap))
+	, m_buttonBox(nullptr)
+	, m_okButton(nullptr) {
 	connect(m_mainWidget, &DatasetMetadataManagerWidget::checkOk, this, &DatasetMetadataManagerDialog::checkOkButton);
 
 	setWindowTitle(i18nc("@title:window", "Dataset metadata manager"));
@@ -55,16 +38,16 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 	m_okButton = m_buttonBox->button(QDialogButtonBox::Ok);
 	m_okButton->setEnabled(false);
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
+	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(m_mainWidget);
 	layout->addWidget(m_buttonBox);
 
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatasetMetadataManagerDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -76,8 +59,8 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 }
 
 DatasetMetadataManagerDialog::~DatasetMetadataManagerDialog() {
-	//save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerDialog");
+	// save current settings
+	KConfigGroup conf = Settings::group(QStringLiteral("DatasetMetadataManagerDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

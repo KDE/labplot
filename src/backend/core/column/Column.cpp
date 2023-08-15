@@ -1,67 +1,43 @@
-/***************************************************************************
-    File                 : Column.cpp
-    Project              : LabPlot
-    Description          : Aspect that manages a column
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : Column.cpp
+	Project              : LabPlot
+	Description          : Aspect that manages a column
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "backend/core/column/Column.h"
+#include "backend/core/AbstractSimpleFilter.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/column/columncommands.h"
-#include "backend/core/Project.h"
-#include "backend/lib/trace.h"
-#include "backend/lib/XmlStreamReader.h"
-#include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/core/datatypes/String2DateTimeFilter.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/trace.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #include <KLocalizedString>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QClipboard>
 #include <QFont>
 #include <QFontMetrics>
 #include <QIcon>
 #include <QMenu>
+#include <QMimeData>
 #include <QThreadPool>
 
 #include <array>
-#include <unordered_map>
-
-extern "C" {
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_sort.h>
-#include <gsl/gsl_statistics.h>
-}
 
 /**
  * \class Column
@@ -80,8 +56,38 @@ extern "C" {
  */
 
 Column::Column(const QString& name, ColumnMode mode)
-	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, mode)) {
+	: AbstractColumn(name, AspectType::Column)
+	, d(new ColumnPrivate(this, mode)) {
+	init();
+}
 
+Column::Column(const QString& name, const QVector<double>& data)
+	: AbstractColumn(name, AspectType::Column)
+	, d(new ColumnPrivate(this, ColumnMode::Double, new QVector<double>(data))) {
+	init();
+}
+
+Column::Column(const QString& name, const QVector<int>& data)
+	: AbstractColumn(name, AspectType::Column)
+	, d(new ColumnPrivate(this, ColumnMode::Integer, new QVector<int>(data))) {
+	init();
+}
+
+Column::Column(const QString& name, const QVector<qint64>& data)
+	: AbstractColumn(name, AspectType::Column)
+	, d(new ColumnPrivate(this, ColumnMode::BigInt, new QVector<qint64>(data))) {
+	init();
+}
+
+Column::Column(const QString& name, const QVector<QString>& data)
+	: AbstractColumn(name, AspectType::Column)
+	, d(new ColumnPrivate(this, ColumnMode::Text, new QVector<QString>(data))) {
+	init();
+}
+
+Column::Column(const QString& name, const QVector<QDateTime>& data, ColumnMode mode)
+	: AbstractColumn(name, AspectType::Column)
+	, d(new ColumnPrivate(this, mode, new QVector<QDateTime>(data))) {
 	init();
 }
 
@@ -96,14 +102,6 @@ void Column::init() {
 	d->outputFilter()->setHidden(true);
 	addChildFast(d->inputFilter());
 	addChildFast(d->outputFilter());
-	m_suppressDataChangedSignal = false;
-
-	m_copyDataAction = new QAction(QIcon::fromTheme("edit-copy"), i18n("Copy Data"), this);
-	connect(m_copyDataAction, &QAction::triggered, this, &Column::copyData);
-
-	m_usedInActionGroup = new QActionGroup(this);
-	connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
-	connect(this, &AbstractColumn::maskingChanged, this, [=]{d->invalidate();});
 }
 
 Column::~Column() {
@@ -112,95 +110,175 @@ Column::~Column() {
 }
 
 QMenu* Column::createContextMenu() {
+	if (parentAspect()->type() == AspectType::StatisticsSpreadsheet)
+		return nullptr;
+
+	// initialize the actions if not done yet
+	if (!m_copyDataAction) {
+		m_copyDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Data"), this);
+		connect(m_copyDataAction, &QAction::triggered, this, &Column::copyData);
+
+		m_pasteDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-paste")), i18n("Paste Data"), this);
+		connect(m_pasteDataAction, &QAction::triggered, this, &Column::pasteData);
+
+		m_usedInActionGroup = new QActionGroup(this);
+		connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
+		connect(this, &AbstractColumn::maskingChanged, this, [=] {
+			d->invalidate();
+		});
+	}
+
 	QMenu* menu = AbstractAspect::createContextMenu();
 	QAction* firstAction{nullptr};
 
-	 //insert after "rename" and "delete" actions, if available.
-	 //MQTTTopic columns don't have these actions
+	// insert after "rename" and "delete" actions, if available.
+	// MQTTTopic columns don't have these actions
 	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
-	//add actions available in SpreadsheetView
-	//TODO: we don't need to add anything from the view for MQTTTopic columns.
-	//at the moment it's ok to check to the null pointer for firstAction here.
-	//later, once we have some actions in the menu also for MQTT topics we'll
-	//need to explicitly to dynamic_cast for MQTTTopic
-	if (firstAction)
-		emit requestProjectContextMenu(menu);
+	// add actions available in SpreadsheetView
+	// TODO: we don't need to add anything from the view for MQTTTopic columns.
+	// at the moment it's ok to check to the null pointer for firstAction here.
+	// later, once we have some actions in the menu also for MQTT topics we'll
+	// need to explicitly to dynamic_cast for MQTTTopic
+	if (firstAction && parentAspect()->type() == AspectType::Spreadsheet) {
+		auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
+		spreadsheet->fillColumnContextMenu(menu, this);
+	}
 
 	//"Used in" menu containing all curves where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
-	usedInMenu->setIcon(QIcon::fromTheme("go-next-view"));
+	usedInMenu->setIcon(QIcon::fromTheme(QStringLiteral("go-next-view")));
 
-	//remove previously added actions
+	// remove previously added actions
 	for (auto* action : m_usedInActionGroup->actions())
 		m_usedInActionGroup->removeAction(action);
 
 	Project* project = this->project();
+	bool showIsUsed = false;
 
-	//add curves where the column is currently in use
-	usedInMenu->addSection(i18n("XY-Curves"));
-	auto curves = project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	// add curves where the column is currently in use
+	bool sectionAdded = false;
+	const auto& curves = project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* curve : curves) {
 		bool used = false;
 
 		const auto* analysisCurve = dynamic_cast<const XYAnalysisCurve*>(curve);
 		if (analysisCurve) {
 			if (analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet
-					&& (analysisCurve->xDataColumn() == this || analysisCurve->yDataColumn() == this || analysisCurve->y2DataColumn() == this) )
+				&& (analysisCurve->xDataColumn() == this || analysisCurve->yDataColumn() == this || analysisCurve->y2DataColumn() == this))
 				used = true;
 		} else {
-			if (curve->xColumn() == this || curve->yColumn() == this)
+			if (curve->xColumn() == this || curve->yColumn() == this || curve->xErrorMinusColumn() == this || curve->xErrorPlusColumn() == this
+				|| curve->yErrorMinusColumn() == this || curve->yErrorPlusColumn() == this)
+				used = true;
+		}
+
+		if (!used) {
+			// the column is not used direclty as a data source, check the values custom column
+			if (curve->valuesColumn() == this)
 				used = true;
 		}
 
 		if (used) {
+			if (!sectionAdded) {
+				usedInMenu->addSection(i18n("XY-Curves"));
+				sectionAdded = true;
+			}
+
 			QAction* action = new QAction(curve->icon(), curve->name(), m_usedInActionGroup);
 			action->setData(curve->path());
 			usedInMenu->addAction(action);
+			showIsUsed = true;
 		}
 	}
 
-	//add histograms where the column is used
-	usedInMenu->addSection(i18n("Histograms"));
-	auto hists = project->children<Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
+	// add histograms where the column is used
+	sectionAdded = false;
+	const auto& hists = project->children<Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* hist : hists) {
 		bool used = (hist->dataColumn() == this);
 		if (used) {
+			if (!sectionAdded) {
+				usedInMenu->addSection(i18n("Histograms"));
+				sectionAdded = true;
+			}
 			QAction* action = new QAction(hist->icon(), hist->name(), m_usedInActionGroup);
 			action->setData(hist->path());
 			usedInMenu->addAction(action);
+			showIsUsed = true;
 		}
 	}
 
-	//add calculated columns where the column is used in formula variables
-	usedInMenu->addSection(i18n("Calculated Columns"));
-	QVector<Column*> columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+	// add axes where the column is used as a custom column for ticks positions or labels
+	sectionAdded = false;
+	const auto& axes = project->children<Axis>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* axis : axes) {
+		bool used = (axis->majorTicksColumn() == this || axis->minorTicksColumn() == this || axis->labelsTextColumn() == this);
+		if (used) {
+			if (!sectionAdded) {
+				usedInMenu->addSection(i18n("Axes"));
+				sectionAdded = true;
+			}
+			QAction* action = new QAction(axis->icon(), axis->name(), m_usedInActionGroup);
+			action->setData(axis->path());
+			usedInMenu->addAction(action);
+			showIsUsed = true;
+		}
+	}
+
+	// add calculated columns where the column is used in formula variables
+	sectionAdded = false;
+	const auto& columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 	const QString& path = this->path();
 	for (const auto* column : columns) {
-		auto paths = column->formulaVariableColumnPaths();
-		if (paths.indexOf(path) != -1) {
+		int index = -1;
+		for (int i = 0; i < column->formulaData().count(); i++) {
+			if (path == column->formulaData().at(i).columnName()) {
+				index = i;
+				break;
+			}
+		}
+
+		if (index != -1) {
+			if (!sectionAdded) {
+				usedInMenu->addSection(i18n("Calculations"));
+				sectionAdded = true;
+			}
 			QAction* action = new QAction(column->icon(), column->name(), m_usedInActionGroup);
 			action->setData(column->path());
 			usedInMenu->addAction(action);
+			showIsUsed = true;
 		}
 	}
-
 
 	if (firstAction)
 		menu->insertSeparator(firstAction);
 
-	menu->insertMenu(firstAction, usedInMenu);
-	menu->insertSeparator(firstAction);
+	if (showIsUsed) {
+		menu->insertMenu(firstAction, usedInMenu);
+		menu->insertSeparator(firstAction);
+	}
 
-	menu->insertAction(firstAction, m_copyDataAction);
-	menu->insertSeparator(firstAction);
+	if (hasValues()) {
+		menu->insertAction(firstAction, m_copyDataAction);
+		menu->insertSeparator(firstAction);
+	}
+
+	// pasting of data is only possible for spreadsheet columns
+	if (parentAspect()->type() == AspectType::Spreadsheet) {
+		const auto* mimeData = QApplication::clipboard()->mimeData();
+		if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
+			menu->insertAction(firstAction, m_pasteDataAction);
+			menu->insertSeparator(firstAction);
+		}
+	}
 
 	return menu;
 }
 
 void Column::updateLocale() {
-	SET_NUMBER_LOCALE;
+	const auto numberLocale = QLocale();
 	d->inputFilter()->setNumberLocale(numberLocale);
 	d->outputFilter()->setNumberLocale(numberLocale);
 }
@@ -216,32 +294,39 @@ void Column::copyData() {
 	QString output;
 	int rows = rowCount();
 
-	//TODO: use locale of filter?
-	SET_NUMBER_LOCALE;
-	if (columnMode() == ColumnMode::Numeric) {
+	// TODO: use locale of filter?
+	const auto numberLocale = QLocale();
+	if (columnMode() == ColumnMode::Double) {
 		const Double2StringFilter* filter = static_cast<Double2StringFilter*>(outputFilter());
 		char format = filter->numericFormat();
 		for (int r = 0; r < rows; r++) {
 			output += numberLocale.toString(valueAt(r), format, 16); // copy with max. precision
-			if (r < rows-1)
-				output += '\n';
+			if (r < rows - 1)
+				output += QLatin1Char('\n');
 		}
 	} else if (columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt) {
 		for (int r = 0; r < rowCount(); r++) {
 			output += numberLocale.toString(valueAt(r));
-			if (r < rows-1)
-				output += '\n';
+			if (r < rows - 1)
+				output += QLatin1Char('\n');
 		}
 	} else {
 		for (int r = 0; r < rowCount(); r++) {
 			output += asStringColumn()->textAt(r);
-			if (r < rows-1)
-				output += '\n';
+			if (r < rows - 1)
+				output += QLatin1Char('\n');
 		}
 	}
 
 	QApplication::clipboard()->setText(output);
 }
+
+void Column::pasteData() {
+	auto* spreadsheet = dynamic_cast<Spreadsheet*>(parentAspect());
+	if (spreadsheet)
+		static_cast<SpreadsheetView*>(spreadsheet->view())->pasteIntoSelection();
+}
+
 /*!
  *
  */
@@ -252,29 +337,28 @@ void Column::setSuppressDataChangedSignal(bool b) {
 void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 	const Project* project = this->project();
 
-	//when executing tests we don't create any project,
-	//add a null-pointer check for tests here.
+	// when executing tests we don't create any project,
+	// add a null-pointer check for tests here.
 	if (!project)
 		return;
 
-	auto curves = project->children<const XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& curves = project->children<const XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 
-	//determine the plots where the column is consumed
+	// determine the plots where the column is consumed
 	for (const auto* curve : curves) {
-		if (curve->xColumn() == this || curve->yColumn() == this
-			|| (curve->xErrorType() == XYCurve::ErrorType::Symmetric && curve->xErrorPlusColumn() == this)
-			|| (curve->xErrorType() == XYCurve::ErrorType::Asymmetric && (curve->xErrorPlusColumn() == this ||curve->xErrorMinusColumn() == this))
+		if (curve->xColumn() == this || curve->yColumn() == this || (curve->xErrorType() == XYCurve::ErrorType::Symmetric && curve->xErrorPlusColumn() == this)
+			|| (curve->xErrorType() == XYCurve::ErrorType::Asymmetric && (curve->xErrorPlusColumn() == this || curve->xErrorMinusColumn() == this))
 			|| (curve->yErrorType() == XYCurve::ErrorType::Symmetric && curve->yErrorPlusColumn() == this)
-			|| (curve->yErrorType() == XYCurve::ErrorType::Asymmetric && (curve->yErrorPlusColumn() == this ||curve->yErrorMinusColumn() == this)) ) {
+			|| (curve->yErrorType() == XYCurve::ErrorType::Asymmetric && (curve->yErrorPlusColumn() == this || curve->yErrorMinusColumn() == this))) {
 			auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
 			if (plots.indexOf(plot) == -1)
 				plots << plot;
 		}
 	}
 
-	auto hists = project->children<const Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& hists = project->children<const Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* hist : hists) {
-		if (hist->dataColumn() == this ) {
+		if (hist->dataColumn() == this) {
 			auto* plot = static_cast<CartesianPlot*>(hist->parentAspect());
 			if (plots.indexOf(plot) == -1)
 				plots << plot;
@@ -285,10 +369,10 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 /**
  * \brief Set the column mode
  *
- * This sets the column mode and, if
- * necessary, converts it to another datatype.
+ * This sets the column mode and, if necessary, converts it to another datatype.
  */
 void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
+	DEBUG(Q_FUNC_INFO)
 	if (mode == columnMode())
 		return;
 
@@ -299,11 +383,13 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
 	exec(new ColumnSetModeCmd(d, mode));
 
 	if (d->inputFilter() != old_input_filter) {
+		DEBUG(Q_FUNC_INFO << ", INPUT")
 		removeChild(old_input_filter);
 		addChild(d->inputFilter());
 		d->inputFilter()->input(0, m_string_io);
 	}
 	if (d->outputFilter() != old_output_filter) {
+		DEBUG(Q_FUNC_INFO << ", OUTPUT")
 		removeChild(old_output_filter);
 		addChild(d->outputFilter());
 		d->outputFilter()->input(0, this);
@@ -349,7 +435,8 @@ QVector<AspectType> Column::dropableOn() const {
  */
 bool Column::copy(const AbstractColumn* other) {
 	Q_CHECK_PTR(other);
-	if (other->columnMode() != columnMode()) return false;
+	if (other->columnMode() != columnMode())
+		return false;
 	exec(new ColumnFullCopyCmd(d, other));
 	return true;
 }
@@ -366,37 +453,36 @@ bool Column::copy(const AbstractColumn* other) {
  */
 bool Column::copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) {
 	Q_CHECK_PTR(source);
-	if (source->columnMode() != columnMode()) return false;
+	if (source->columnMode() != columnMode())
+		return false;
 	exec(new ColumnPartialCopyCmd(d, source, source_start, dest_start, num_rows));
 	return true;
+}
+
+void Column::invalidateProperties() {
+	d->invalidate();
 }
 
 /**
  * \brief Insert some empty (or initialized with zero) rows
  */
-void Column::handleRowInsertion(int before, int count) {
-	AbstractColumn::handleRowInsertion(before, count);
-	exec(new ColumnInsertRowsCmd(d, before, count));
+void Column::handleRowInsertion(int before, int count, QUndoCommand* parent) {
+	Q_ASSERT(parent);
+	AbstractColumn::handleRowInsertion(before, count, parent);
+	new ColumnInsertRowsCmd(d, before, count, parent);
 	if (!m_suppressDataChangedSignal)
-		emit dataChanged(this);
-
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
+		Q_EMIT dataChanged(this);
 }
 
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
-void Column::handleRowRemoval(int first, int count) {
-	AbstractColumn::handleRowRemoval(first, count);
-	exec(new ColumnRemoveRowsCmd(d, first, count));
+void Column::handleRowRemoval(int first, int count, QUndoCommand* parent) {
+	Q_ASSERT(parent);
+	AbstractColumn::handleRowRemoval(first, count, parent);
+	new ColumnRemoveRowsCmd(d, first, count, parent);
 	if (!m_suppressDataChangedSignal)
-		emit dataChanged(this);
-
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
+		Q_EMIT dataChanged(this);
 }
 
 /**
@@ -424,8 +510,23 @@ void Column::setWidth(int value) {
 /**
  * \brief Clear the whole column
  */
-void Column::clear() {
-	exec(new ColumnClearCmd(d));
+void Column::clear(QUndoCommand* parent) {
+	if (d->formula().isEmpty()) {
+		auto* command = new ColumnClearCmd(d, parent);
+		if (!parent)
+			exec(command);
+	} else {
+		auto* command = new QUndoCommand(i18n("%1: clear column", name()), parent);
+		bool execute = false;
+		if (!parent) {
+			execute = true;
+			parent = command;
+		}
+		new ColumnClearCmd(d, parent);
+		new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false, parent);
+		if (execute)
+			exec(parent);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -439,28 +540,24 @@ void Column::clear() {
 /**
  * \brief Returns the formula used to generate column values
  */
-QString Column:: formula() const {
+QString Column::formula() const {
 	return d->formula();
 }
 
-const QStringList& Column::formulaVariableNames() const {
-	return d->formulaVariableNames();
+const QVector<Column::FormulaData>& Column::formulaData() const {
+	return d->formulaData();
 }
 
-const QVector<Column*>& Column::formulaVariableColumns() const {
-	return d->formulaVariableColumns();
+void Column::setFormulaVariableColumn(Column* c) {
+	d->setFormulVariableColumn(c);
 }
 
-const QStringList& Column::formulaVariableColumnPaths() const {
-	return d->formulaVariableColumnPaths();
+void Column::setFormulVariableColumnsPath(int index, const QString& path) {
+	d->setFormulVariableColumnsPath(index, path);
 }
 
-void Column::setformulVariableColumnsPath(int index, const QString& path) {
-	d->setformulVariableColumnsPath(index, path);
-}
-
-void Column::setformulVariableColumn(int index, Column* column) {
-	d->setformulVariableColumn(index, column);
+void Column::setFormulVariableColumn(int index, Column* column) {
+	d->setFormulVariableColumn(index, column);
 }
 
 bool Column::formulaAutoUpdate() const {
@@ -470,8 +567,7 @@ bool Column::formulaAutoUpdate() const {
 /**
  * \brief Sets the formula used to generate column values
  */
-void Column::setFormula(const QString& formula, const QStringList& variableNames,
-						const QVector<Column*>& columns, bool autoUpdate) {
+void Column::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate) {
 	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns, autoUpdate));
 }
 
@@ -481,10 +577,9 @@ void Column::setFormula(const QString& formula, const QStringList& variableNames
  * "variable columns".
  */
 void Column::updateFormula() {
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
+	invalidateProperties();
 	d->updateFormula();
+	Q_EMIT formulaChanged(this);
 }
 
 /**
@@ -523,7 +618,11 @@ void Column::clearFormulas() {
  * Use this only when columnMode() is Text
  */
 void Column::setTextAt(int row, const QString& new_value) {
-	exec(new ColumnSetTextCmd(d, row, new_value));
+	exec(new ColumnSetCmd<QString>(d, row, textAt(row), new_value));
+}
+
+void Column::setText(const QVector<QString>& texts) {
+	replaceTexts(-1, texts);
 }
 
 /**
@@ -532,8 +631,22 @@ void Column::setTextAt(int row, const QString& new_value) {
  * Use this only when columnMode() is Text
  */
 void Column::replaceTexts(int first, const QVector<QString>& new_values) {
-	if (!new_values.isEmpty()) //TODO: do we really need this check?
-		exec(new ColumnReplaceTextsCmd(d, first, new_values));
+	if (isLoading())
+		d->replaceTexts(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<QString>(d, first, new_values));
+}
+
+int Column::dictionaryIndex(int row) const {
+	return d->dictionaryIndex(row);
+}
+
+const QMap<QString, int>& Column::frequencies() const {
+	return d->frequencies();
+}
+
+void Column::addValueLabel(const QString& value, const QString& label) {
+	d->addValueLabel(value, label);
 }
 
 /**
@@ -560,7 +673,14 @@ void Column::setTimeAt(int row, QTime new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value) {
-	exec(new ColumnSetDateTimeCmd(d, row, new_value));
+	if (isLoading())
+		d->setValueAt(row, new_value);
+	else
+		exec(new ColumnSetCmd<QDateTime>(d, row, dateTimeAt(row), new_value));
+}
+
+void Column::setDateTimes(const QVector<QDateTime>& dateTimes) {
+	replaceDateTimes(-1, dateTimes);
 }
 
 /**
@@ -569,8 +689,19 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
-	if (!new_values.isEmpty())
-		exec(new ColumnReplaceDateTimesCmd(d, first, new_values));
+	if (isLoading())
+		d->replaceDateTimes(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<QDateTime>(d, first, new_values));
+}
+
+void Column::addValueLabel(const QDateTime& value, const QString& label) {
+	d->addValueLabel(value, label);
+	project()->setChanged(true);
+}
+
+void Column::setValues(const QVector<double>& values) {
+	replaceValues(-1, values);
 }
 
 /**
@@ -579,7 +710,10 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
  * Use this only when columnMode() is Numeric
  */
 void Column::setValueAt(int row, const double new_value) {
-	exec(new ColumnSetValueCmd(d, row, new_value));
+	if (isLoading())
+		d->setValueAt(row, new_value);
+	else
+		exec(new ColumnSetCmd<double>(d, row, valueAt(row), new_value));
 }
 
 /**
@@ -588,8 +722,20 @@ void Column::setValueAt(int row, const double new_value) {
  * Use this only when columnMode() is Numeric
  */
 void Column::replaceValues(int first, const QVector<double>& new_values) {
-	if (!new_values.isEmpty())
-		exec(new ColumnReplaceValuesCmd(d, first, new_values));
+	if (isLoading())
+		d->replaceValues(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<double>(d, first, new_values));
+}
+
+void Column::addValueLabel(double value, const QString& label) {
+	d->addValueLabel(value, label);
+	if (project())
+		project()->setChanged(true);
+}
+
+void Column::setIntegers(const QVector<int>& integers) {
+	replaceInteger(-1, integers);
 }
 
 /**
@@ -598,7 +744,10 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
  * Use this only when columnMode() is Integer
  */
 void Column::setIntegerAt(int row, const int new_value) {
-	exec(new ColumnSetIntegerCmd(d, row, new_value));
+	if (isLoading())
+		d->setValueAt(row, new_value);
+	else
+		exec(new ColumnSetCmd<int>(d, row, integerAt(row), new_value));
 }
 
 /**
@@ -607,8 +756,19 @@ void Column::setIntegerAt(int row, const int new_value) {
  * Use this only when columnMode() is Integer
  */
 void Column::replaceInteger(int first, const QVector<int>& new_values) {
-	if (!new_values.isEmpty())
-		exec(new ColumnReplaceIntegerCmd(d, first, new_values));
+	if (isLoading())
+		d->replaceInteger(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<int>(d, first, new_values));
+}
+
+void Column::addValueLabel(int value, const QString& label) {
+	d->addValueLabel(value, label);
+	project()->setChanged(true);
+}
+
+void Column::setBigInts(const QVector<qint64>& bigInts) {
+	replaceBigInt(-1, bigInts);
 }
 
 /**
@@ -617,10 +777,10 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
  * Use this only when columnMode() is BigInt
  */
 void Column::setBigIntAt(int row, const qint64 new_value) {
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
-	exec(new ColumnSetBigIntCmd(d, row, new_value));
+	if (isLoading())
+		d->setValueAt(row, new_value);
+	else
+		exec(new ColumnSetCmd<qint64>(d, row, bigIntAt(row), new_value));
 }
 
 /**
@@ -629,8 +789,15 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
  * Use this only when columnMode() is BigInt
  */
 void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
-	if (!new_values.isEmpty())
-		exec(new ColumnReplaceBigIntCmd(d, first, new_values));
+	if (isLoading())
+		d->replaceBigInt(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<qint64>(d, first, new_values));
+}
+
+void Column::addValueLabel(qint64 value, const QString& label) {
+	d->addValueLabel(value, label);
+	project()->setChanged(true);
 }
 
 /*!
@@ -639,217 +806,24 @@ void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
  * \see AbstractColumn::properties
  */
 AbstractColumn::Properties Column::properties() const {
-	if (!d->propertiesAvailable)
+	if (!d->available.properties)
 		d->updateProperties();
 
 	return d->properties;
 }
 
 const Column::ColumnStatistics& Column::statistics() const {
-	if (!d->statisticsAvailable)
-		calculateStatistics();
+	if (!d->available.statistics)
+		d->calculateStatistics();
 
 	return d->statistics;
 }
 
-void Column::calculateStatistics() const {
-	if ( (columnMode() != ColumnMode::Numeric) && (columnMode() != ColumnMode::Integer)
-			&& (columnMode() != ColumnMode::BigInt) )
-		return;
-
-	PERFTRACE("calculate column statistics");
-
-	d->statistics = ColumnStatistics();
-	ColumnStatistics& statistics = d->statistics;
-
-	int rowValuesSize = 0;
-	int notNanCount = 0;
-	double val;
-	double columnSum = 0.0;
-	double columnProduct = 1.0;
-	double columnSumNeg = 0.0;
-	double columnSumSquare = 0.0;
-	statistics.minimum = INFINITY;
-	statistics.maximum = -INFINITY;
-	std::unordered_map<double, int> frequencyOfValues;
-	QVector<double> rowData;
-	if (columnMode() == ColumnMode::Numeric) {
-		auto* rowValues = reinterpret_cast<QVector<double>*>(data());
-		rowValuesSize = rowValues->size();
-		rowData.reserve(rowValuesSize);
-
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || isMasked(row))
-				continue;
-
-			if (val < statistics.minimum)
-				statistics.minimum = val;
-			if (val > statistics.maximum)
-				statistics.maximum = val;
-			columnSum += val;
-			columnSumNeg += (1.0 / val);
-			columnSumSquare += val*val;
-			columnProduct *= val;
-			if (frequencyOfValues.find(val) != frequencyOfValues.end())
-				frequencyOfValues.operator [](val)++;
-			else
-				frequencyOfValues.insert(std::make_pair(val, 1));
-			++notNanCount;
-			rowData.push_back(val);
-		}
-	} else if (columnMode() == ColumnMode::Integer) {
-		//TODO: code duplication because of the reinterpret_cast...
-		auto* rowValues = reinterpret_cast<QVector<int>*>(data());
-		rowValuesSize = rowValues->size();
-		rowData.reserve(rowValuesSize);
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || isMasked(row))
-				continue;
-
-			if (val < statistics.minimum)
-				statistics.minimum = val;
-			if (val > statistics.maximum)
-				statistics.maximum = val;
-			columnSum += val;
-			columnSumNeg += (1.0 / val);
-			columnSumSquare += val*val;
-			columnProduct *= val;
-			if (frequencyOfValues.find(val) != frequencyOfValues.end())
-				frequencyOfValues.operator [](val)++;
-			else
-				frequencyOfValues.insert(std::make_pair(val, 1));
-			++notNanCount;
-			rowData.push_back(val);
-		}
-	} else if (columnMode() == ColumnMode::BigInt) {
-		//TODO: code duplication because of the reinterpret_cast...
-		auto* rowValues = reinterpret_cast<QVector<qint64>*>(data());
-		rowValuesSize = rowValues->size();
-		rowData.reserve(rowValuesSize);
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || isMasked(row))
-				continue;
-
-			if (val < statistics.minimum)
-				statistics.minimum = val;
-			if (val > statistics.maximum)
-				statistics.maximum = val;
-			columnSum += val;
-			columnSumNeg += (1.0 / val);
-			columnSumSquare += val*val;
-			columnProduct *= val;
-			if (frequencyOfValues.find(val) != frequencyOfValues.end())
-				frequencyOfValues.operator [](val)++;
-			else
-				frequencyOfValues.insert(std::make_pair(val, 1));
-			++notNanCount;
-			rowData.push_back(val);
-		}
-	}
-
-	if (notNanCount == 0) {
-		d->statisticsAvailable = true;
-		return;
-	}
-
-	if (rowData.size() < rowValuesSize)
-		rowData.squeeze();
-
-	statistics.size = notNanCount;
-	statistics.arithmeticMean = columnSum / notNanCount;
-	statistics.geometricMean = pow(columnProduct, 1.0 / notNanCount);
-	statistics.harmonicMean = notNanCount / columnSumNeg;
-	statistics.contraharmonicMean = columnSumSquare / columnSum;
-
-	//calculate the mode, the most frequent value in the data set
-	int maxFreq = 0;
-	double mode = NAN;
-	for (const auto& it : frequencyOfValues) {
-		if (it.second > maxFreq) {
-			maxFreq = it.second;
-			mode = it.first;
-		}
-	}
-	//check how many times the max frequency occurs in the data set.
-	//if more than once, we have a multi-modal distribution and don't show any mode
-	int maxFreqOccurance = 0;
-	for (const auto& it : frequencyOfValues) {
-		if (it.second == maxFreq)
-			++maxFreqOccurance;
-
-		if (maxFreqOccurance > 1) {
-			mode = NAN;
-			break;
-		}
-	}
-	statistics.mode = mode;
-
-	double columnSumVariance = 0;
-	double columnSumMeanDeviation = 0.0;
-	double columnSumMedianDeviation = 0.0;
-	double sumForCentralMoment_r3 = 0.0;
-	double sumForCentralMoment_r4 = 0.0;
-
-	//sort the data to calculate the percentiles
-	gsl_sort(rowData.data(), 1, notNanCount);
-// 	statistics.median = (notNanCount%2) ? rowData.at((int)((notNanCount-1)/2)) :
-// 	                    (rowData.at((int)((notNanCount-1)/2)) + rowData.at((int)(notNanCount/2)))/2.0;
-	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.25);
-	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.50);
-	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.75);
-	statistics.iqr = statistics.thirdQuartile - statistics.firstQuartile;
-	statistics.trimean = (statistics.firstQuartile + 2*statistics.median + statistics.thirdQuartile) / 4;
-
-	QVector<double> absoluteMedianList;
-	absoluteMedianList.reserve((int)notNanCount);
-	absoluteMedianList.resize((int)notNanCount);
-
-	for (int row = 0; row < notNanCount; ++row) {
-		val = rowData.value(row);
-		columnSumVariance += gsl_pow_2(val - statistics.arithmeticMean);
-
-		sumForCentralMoment_r3 += gsl_pow_3(val - statistics.arithmeticMean);
-		sumForCentralMoment_r4 += gsl_pow_4(val - statistics.arithmeticMean);
-		columnSumMeanDeviation += fabs(val - statistics.arithmeticMean);
-
-		absoluteMedianList[row] = fabs(val - statistics.median);
-		columnSumMedianDeviation += absoluteMedianList[row];
-	}
-
-	statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
-
-	//sort the data to calculate the median
-	gsl_sort(absoluteMedianList.data(), 1, notNanCount);
-	statistics.medianDeviation = (notNanCount%2) ? absoluteMedianList.at((int)((notNanCount-1)/2)) :
-	                             (absoluteMedianList.at((int)((notNanCount-1)/2)) + absoluteMedianList.at((int)(notNanCount/2)))/2.0;
-
-	const double centralMoment_r3 = sumForCentralMoment_r3 / notNanCount;
-	const double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
-
-	statistics.variance = columnSumVariance / notNanCount;
-	if (notNanCount != 1)
-		statistics.standardDeviation = sqrt(statistics.variance * notNanCount / (notNanCount - 1));
-	else
-		statistics.standardDeviation = NAN;
-	statistics.skewness = centralMoment_r3 / gsl_pow_3(statistics.standardDeviation);
-	statistics.kurtosis = (centralMoment_r4 / gsl_pow_4(statistics.standardDeviation)) - 3.0;
-	statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
-
-	double entropy = 0.0;
-	for (const auto& v : frequencyOfValues) {
-		const double frequencyNorm = static_cast<double>(v.second) / notNanCount;
-		entropy += (frequencyNorm * log2(frequencyNorm));
-	}
-
-	statistics.entropy = -entropy;
-
-	d->statisticsAvailable = true;
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////////
+
+void Column::setData(void* data) {
+	d->setData(data);
+}
 
 void* Column::data() const {
 	return d->data();
@@ -859,12 +833,12 @@ void* Column::data() const {
  * return \c true if the column has numeric values, \c false otherwise.
  */
 bool Column::hasValues() const {
-	if (d->hasValuesAvailable)
+	if (d->available.hasValues)
 		return d->hasValues;
 
 	bool foundValues = false;
 	switch (columnMode()) {
-	case ColumnMode::Numeric: {
+	case ColumnMode::Double: {
 		for (int row = 0; row < rowCount(); ++row) {
 			if (!std::isnan(valueAt(row))) {
 				foundValues = true;
@@ -884,7 +858,7 @@ bool Column::hasValues() const {
 	}
 	case ColumnMode::Integer:
 	case ColumnMode::BigInt:
-		//integer column has always valid values
+		// integer values are always valid
 		foundValues = true;
 		break;
 	case ColumnMode::DateTime:
@@ -901,7 +875,7 @@ bool Column::hasValues() const {
 	}
 
 	d->hasValues = foundValues;
-	d->hasValuesAvailable = true;
+	d->available.hasValues = true;
 	return d->hasValues;
 }
 
@@ -914,7 +888,7 @@ void Column::setFromColumn(int i, AbstractColumn* col, int j) {
 		return;
 
 	switch (columnMode()) {
-	case ColumnMode::Numeric:
+	case ColumnMode::Double:
 		setValueAt(i, col->valueAt(j));
 		break;
 	case ColumnMode::Integer:
@@ -933,7 +907,6 @@ void Column::setFromColumn(int i, AbstractColumn* col, int j) {
 		break;
 	}
 }
-
 
 /**
  * \brief Return the content of row 'row'.
@@ -971,6 +944,10 @@ QDateTime Column::dateTimeAt(int row) const {
 	return d->dateTimeAt(row);
 }
 
+double Column::doubleAt(int row) const {
+	return d->doubleAt(row);
+}
+
 /**
  * \brief Return the double value in row 'row'
  */
@@ -994,17 +971,57 @@ qint64 Column::bigIntAt(int row) const {
 
 /*
  * call this function if the data of the column was changed directly via the data()-pointer
- * and not via the setValueAt() in order to emit the dataChanged-signal.
+ * and not via the setValueAt() in order to Q_EMIT the dataChanged-signal.
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
-    d->propertiesAvailable = false;
-
 	if (!m_suppressDataChangedSignal)
-		emit dataChanged(this);
+		Q_EMIT dataChanged(this);
 
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
+	invalidateProperties();
+}
+
+bool Column::valueLabelsInitialized() const {
+	return d->valueLabelsInitialized();
+}
+
+void Column::setLabelsMode(ColumnMode mode) {
+	d->setLabelsMode(mode);
+	project()->setChanged(true);
+}
+
+void Column::valueLabelsRemoveAll() {
+	d->valueLabelsRemoveAll();
+	project()->setChanged(true);
+}
+
+void Column::removeValueLabel(const QString& key) {
+	d->removeValueLabel(key);
+	project()->setChanged(true);
+}
+
+const QVector<Column::ValueLabel<QString>>* Column::textValueLabels() const {
+	return d->textValueLabels();
+}
+
+const QVector<Column::ValueLabel<QDateTime>>* Column::dateTimeValueLabels() const {
+	return d->dateTimeValueLabels();
+}
+
+int Column::valueLabelsCount() const {
+	return d->valueLabelsCount();
+}
+
+const QVector<Column::ValueLabel<double>>* Column::valueLabels() const {
+	return d->valueLabels();
+}
+
+const QVector<Column::ValueLabel<int>>* Column::intValueLabels() const {
+	return d->intValueLabels();
+}
+
+const QVector<Column::ValueLabel<qint64>>* Column::bigIntValueLabels() const {
+	return d->bigIntValueLabels();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1015,7 +1032,10 @@ void Column::setChanged() {
  * \brief Return an icon to be used for decorating the views and spreadsheet column headers
  */
 QIcon Column::icon() const {
-	return iconForMode(columnMode());
+	if (formula().isEmpty())
+		return modeIcon(columnMode());
+	else
+		return QIcon::fromTheme(QLatin1String("mathmode"));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1027,28 +1047,35 @@ QIcon Column::icon() const {
  * \brief Save the column as XML
  */
 void Column::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("column");
+	writer->writeStartElement(QStringLiteral("column"));
 	writeBasicAttributes(writer);
 
-	writer->writeAttribute("rows", QString::number(rowCount()));
-	writer->writeAttribute("designation", QString::number(static_cast<int>(plotDesignation())));
-	writer->writeAttribute("mode", QString::number(static_cast<int>(columnMode())));
-	writer->writeAttribute("width", QString::number(width()));
+	writer->writeAttribute(QStringLiteral("rows"), QString::number(rowCount()));
+	writer->writeAttribute(QStringLiteral("designation"), QString::number(static_cast<int>(plotDesignation())));
+	writer->writeAttribute(QStringLiteral("mode"), QString::number(static_cast<int>(columnMode())));
+	writer->writeAttribute(QStringLiteral("width"), QString::number(width()));
 
-	//save the formula used to generate column values, if available
-	if (!formula().isEmpty() ) {
-		writer->writeStartElement("formula");
-		writer->writeAttribute("autoUpdate", QString::number(d->formulaAutoUpdate()));
-		writer->writeTextElement("text", formula());
+	// save the formula used to generate column values, if available
+	if (!formula().isEmpty()) {
+		writer->writeStartElement(QStringLiteral("formula"));
+		writer->writeAttribute(QStringLiteral("autoUpdate"), QString::number(d->formulaAutoUpdate()));
+		writer->writeTextElement(QStringLiteral("text"), formula());
 
-		writer->writeStartElement("variableNames");
-		for (const auto& name : formulaVariableNames())
-			writer->writeTextElement("name", name);
+		QStringList formulaVariableNames;
+		QStringList formulaVariableColumnPaths;
+		for (auto& d : formulaData()) {
+			formulaVariableNames << d.variableName();
+			formulaVariableColumnPaths << d.columnName();
+		}
+
+		writer->writeStartElement(QStringLiteral("variableNames"));
+		for (const auto& name : formulaVariableNames)
+			writer->writeTextElement(QStringLiteral("name"), name);
 		writer->writeEndElement();
 
-		writer->writeStartElement("columnPathes");
-		for (const auto& path : formulaVariableColumnPaths())
-			writer->writeTextElement("path", path);
+		writer->writeStartElement(QStringLiteral("columnPathes"));
+		for (const auto& path : formulaVariableColumnPaths)
+			writer->writeTextElement(QStringLiteral("path"), path);
 		writer->writeEndElement();
 
 		writer->writeEndElement();
@@ -1056,50 +1083,148 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 	writeCommentElement(writer);
 
-	writer->writeStartElement("input_filter");
+	writer->writeStartElement(QStringLiteral("input_filter"));
 	d->inputFilter()->save(writer);
 	writer->writeEndElement();
 
-	writer->writeStartElement("output_filter");
+	writer->writeStartElement(QStringLiteral("output_filter"));
 	d->outputFilter()->save(writer);
 	writer->writeEndElement();
 
 	XmlWriteMask(writer);
 
-	//TODO: formula in cells is not implemented yet
-	// 	QVector< Interval<int> > formulas = formulaIntervals();
-	// 	foreach(const Interval<int>& interval, formulas) {
-	// 		writer->writeStartElement("formula");
-	// 		writer->writeAttribute("start_row", QString::number(interval.start()));
-	// 		writer->writeAttribute("end_row", QString::number(interval.end()));
-	// 		writer->writeCharacters(formula(interval.start()));
-	// 		writer->writeEndElement();
-	// 	}
+	// TODO: formula in cells is not implemented yet
+	//  	QVector< Interval<int> > formulas = formulaIntervals();
+	//  	foreach(const Interval<int>& interval, formulas) {
+	//  		writer->writeStartElement(QStringLiteral("formula"));
+	//  		writer->writeAttribute(QStringLiteral("start_row"), QString::number(interval.start()));
+	//  		writer->writeAttribute(QStringLiteral("end_row"), QString::number(interval.end()));
+	//  		writer->writeCharacters(formula(interval.start()));
+	//  		writer->writeEndElement();
+	//  	}
 
+	// value labels
+	if (valueLabelsInitialized()) {
+		writer->writeStartElement(QStringLiteral("valueLabels"));
+		switch (d->m_labels.mode()) {
+		case AbstractColumn::ColumnMode::Double: {
+			const auto* labels = const_cast<Column*>(this)->valueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::Integer: {
+			const auto* labels = const_cast<Column*>(this)->intValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			const auto* labels = const_cast<Column*>(this)->bigIntValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text: {
+			const auto* labels = const_cast<Column*>(this)->textValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), it->value);
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime: {
+			const auto* labels = const_cast<Column*>(this)->dateTimeValueLabels();
+			if (labels) {
+				auto it = labels->constBegin();
+				while (it != labels->constEnd()) {
+					writer->writeStartElement(QStringLiteral("valueLabel"));
+					writer->writeAttribute(QStringLiteral("value"), QString::number(it->value.toMSecsSinceEpoch()));
+					writer->writeAttribute(QStringLiteral("label"), it->label);
+					writer->writeEndElement();
+					++it;
+				}
+			}
+			break;
+		}
+		}
+
+		writer->writeEndElement(); // "valueLabels"
+	}
+
+	// conditional formatting
+	if (hasHeatmapFormat()) {
+		writer->writeStartElement(QStringLiteral("heatmapFormat"));
+		const auto& format = heatmapFormat();
+		writer->writeAttribute(QStringLiteral("min"), QString::number(format.min));
+		writer->writeAttribute(QStringLiteral("max"), QString::number(format.max));
+		writer->writeAttribute(QStringLiteral("name"), format.name);
+		writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(format.type)));
+		for (const auto& color : format.colors) {
+			writer->writeStartElement(QStringLiteral("color"));
+			WRITE_QCOLOR(color)
+			writer->writeEndElement(); // "color"
+		}
+		writer->writeEndElement(); // "heatmapFormat"
+	}
+
+	// data
 	int i;
 	switch (columnMode()) {
-	case ColumnMode::Numeric: {
-			const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
-			size_t size = d->rowCount() * sizeof(double);
-			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
-			break;
-		}
+	case ColumnMode::Double: {
+		const char* data = reinterpret_cast<const char*>(static_cast<QVector<double>*>(d->data())->constData());
+		size_t size = d->rowCount() * sizeof(double);
+		writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
+		break;
+	}
 	case ColumnMode::Integer: {
-			const char* data = reinterpret_cast<const char*>(static_cast< QVector<int>* >(d->data())->constData());
-			size_t size = d->rowCount() * sizeof(int);
-			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
-			break;
-		}
+		const char* data = reinterpret_cast<const char*>(static_cast<QVector<int>*>(d->data())->constData());
+		size_t size = d->rowCount() * sizeof(int);
+		writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
+		break;
+	}
 	case ColumnMode::BigInt: {
-			const char* data = reinterpret_cast<const char*>(static_cast< QVector<qint64>* >(d->data())->constData());
-			size_t size = d->rowCount() * sizeof(qint64);
-			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
-			break;
-		}
+		const char* data = reinterpret_cast<const char*>(static_cast<QVector<qint64>*>(d->data())->constData());
+		size_t size = d->rowCount() * sizeof(qint64);
+		writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
+		break;
+	}
 	case ColumnMode::Text:
 		for (i = 0; i < rowCount(); ++i) {
-			writer->writeStartElement("row");
-			writer->writeAttribute("index", QString::number(i));
+			writer->writeStartElement(QStringLiteral("row"));
+			writer->writeAttribute(QStringLiteral("index"), QString::number(i));
 			writer->writeCharacters(textAt(i));
 			writer->writeEndElement();
 		}
@@ -1108,9 +1233,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 	case ColumnMode::Month:
 	case ColumnMode::Day:
 		for (i = 0; i < rowCount(); ++i) {
-			writer->writeStartElement("row");
-			writer->writeAttribute("index", QString::number(i));
-			writer->writeCharacters(dateTimeAt(i).toString("yyyy-dd-MM hh:mm:ss:zzz"));
+			writer->writeStartElement(QStringLiteral("row"));
+			writer->writeAttribute(QStringLiteral("index"), QString::number(i));
+			writer->writeCharacters(dateTimeAt(i).toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
 			writer->writeEndElement();
 		}
 		break;
@@ -1119,25 +1244,24 @@ void Column::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); // "column"
 }
 
-//TODO: extra header
+// TODO: extra header
 class DecodeColumnTask : public QRunnable {
 public:
-	DecodeColumnTask(ColumnPrivate* priv, const QString& content) {
-		m_private = priv;
-		m_content = content;
-	};
+	DecodeColumnTask(ColumnPrivate* priv, const QString& content)
+		: m_private(priv)
+		, m_content(content){};
 	void run() override {
 		QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
-		if (m_private->columnMode() == AbstractColumn::ColumnMode::Numeric) {
-			auto* data = new QVector<double>(bytes.size()/(int)sizeof(double));
+		if (m_private->columnMode() == AbstractColumn::ColumnMode::Double) {
+			auto* data = new QVector<double>(bytes.size() / (int)sizeof(double));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
 		} else if (m_private->columnMode() == AbstractColumn::ColumnMode::BigInt) {
-			auto* data = new QVector<qint64>(bytes.size()/(int)sizeof(qint64));
+			auto* data = new QVector<qint64>(bytes.size() / (int)sizeof(qint64));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
 		} else {
-			auto* data = new QVector<int>(bytes.size()/(int)sizeof(int));
+			auto* data = new QVector<int>(bytes.size() / (int)sizeof(int));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
 		}
@@ -1158,65 +1282,165 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
-	QString str = attribs.value("rows").toString();
+	QString str = attribs.value(QStringLiteral("rows")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("rows").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("rows")).toString());
 	else
 		d->resizeTo(str.toInt());
 
-	str = attribs.value("designation").toString();
+	str = attribs.value(QStringLiteral("designation")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("designation").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("designation")).toString());
 	else
-		d->setPlotDesignation( AbstractColumn::PlotDesignation(str.toInt()) );
+		d->setPlotDesignation(AbstractColumn::PlotDesignation(str.toInt()));
 
-	str = attribs.value("mode").toString();
+	str = attribs.value(QStringLiteral("mode")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("mode").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("mode")).toString());
 	else
-		setColumnModeFast( AbstractColumn::ColumnMode(str.toInt()) );
+		setColumnModeFast(AbstractColumn::ColumnMode(str.toInt()));
 
-	str = attribs.value("width").toString();
+	str = attribs.value(QStringLiteral("width")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("width").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
 	else
 		d->setWidth(str.toInt());
+
+	QVector<QDateTime> dateTimeVector;
+	QVector<QString> textVector;
 
 	// read child elements
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement()) break;
+		if (reader->isEndElement() && reader->name() == QLatin1String("column"))
+			break;
 
 		if (reader->isStartElement()) {
 			bool ret_val = true;
-			if (reader->name() == "comment")
+			if (reader->name() == QLatin1String("comment"))
 				ret_val = readCommentElement(reader);
-			else if (reader->name() == "input_filter")
+			else if (reader->name() == QLatin1String("input_filter"))
 				ret_val = XmlReadInputFilter(reader);
-			else if (reader->name() == "output_filter")
+			else if (reader->name() == QLatin1String("output_filter"))
 				ret_val = XmlReadOutputFilter(reader);
-			else if (reader->name() == "mask")
+			else if (reader->name() == QLatin1String("mask"))
 				ret_val = XmlReadMask(reader);
-			else if (reader->name() == "formula")
+			else if (reader->name() == QLatin1String("formula"))
 				ret_val = XmlReadFormula(reader);
-			else if (reader->name() == "row")
-				ret_val = XmlReadRow(reader);
-			else { // unknown element
+			else if (reader->name() == QLatin1String("heatmapFormat")) {
+				attribs = reader->attributes();
+
+				auto& format = heatmapFormat();
+				str = attribs.value(QStringLiteral("min")).toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("min")).toString());
+				else
+					format.min = str.toDouble();
+
+				str = attribs.value(QStringLiteral("max")).toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("max")).toString());
+				else
+					format.max = str.toDouble();
+
+				str = attribs.value(QStringLiteral("name")).toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("name")).toString());
+				else
+					format.name = str;
+
+				str = attribs.value(QStringLiteral("type")).toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("max")).toString());
+				else
+					format.type = static_cast<Formatting>(str.toInt());
+
+				ret_val = true;
+			} else if (reader->name() == QLatin1String("color")) {
+				attribs = reader->attributes();
+				QColor color;
+				READ_QCOLOR(color);
+				auto& format = heatmapFormat();
+				format.colors << color;
+				ret_val = true;
+			} else if (reader->name() == QLatin1String("valueLabels")) {
+				continue;
+			} else if (reader->name() == QLatin1String("valueLabel")) {
+				attribs = reader->attributes();
+				const QString& label = attribs.value(QLatin1String("label")).toString();
+				switch (columnMode()) {
+				case AbstractColumn::ColumnMode::Double:
+					addValueLabel(attribs.value(QLatin1String("value")).toDouble(), label);
+					break;
+				case AbstractColumn::ColumnMode::Integer:
+					addValueLabel(attribs.value(QLatin1String("value")).toInt(), label);
+					break;
+				case AbstractColumn::ColumnMode::BigInt:
+					addValueLabel(attribs.value(QLatin1String("value")).toLongLong(), label);
+					break;
+				case AbstractColumn::ColumnMode::Text:
+					addValueLabel(attribs.value(QLatin1String("value")).toString(), label);
+					break;
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Day:
+				case AbstractColumn::ColumnMode::DateTime:
+					addValueLabel(QDateTime::fromMSecsSinceEpoch(attribs.value(QLatin1String("value")).toLongLong(), Qt::UTC), label);
+					break;
+				}
+			} else if (reader->name() == QLatin1String("row")) {
+				// Assumption: the next elements are all rows
+				switch (columnMode()) {
+				case Column::ColumnMode::Double:
+				case Column::ColumnMode::BigInt:
+				case Column::ColumnMode::Integer:
+					/* handled differently*/
+					break;
+				case Column::ColumnMode::DateTime:
+				case Column::ColumnMode::Month:
+				case Column::ColumnMode::Day: {
+					dateTimeVector << QDateTime::fromString(reader->readElementText() + QStringLiteral("Z"),
+															QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt")); // timezone is important
+					break;
+				}
+				case Column::ColumnMode::Text: {
+					textVector << reader->readElementText();
+					break;
+				}
+				}
+			} else { // unknown element
 				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-				if (!reader->skipToEndElement()) return false;
+				if (!reader->skipToEndElement())
+					return false;
 			}
 			if (!ret_val)
 				return false;
 		}
+
 		if (!preview) {
 			QString content = reader->text().toString().trimmed();
-			if (!content.isEmpty() && ( columnMode() == ColumnMode::Numeric ||
-				columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt)) {
+			// Datetime and text are read in row by row
+			if (!content.isEmpty() && (columnMode() == ColumnMode::Double || columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt)) {
 				auto* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
 			}
 		}
+	}
+
+	switch (columnMode()) {
+	case AbstractColumn::ColumnMode::Double:
+	case AbstractColumn::ColumnMode::BigInt:
+	case AbstractColumn::ColumnMode::Integer:
+		/* handled above*/
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		setDateTimes(dateTimeVector);
+		break;
+	case AbstractColumn::ColumnMode::Text:
+		setText(textVector);
+		break;
 	}
 
 	return !reader->error();
@@ -1230,11 +1454,14 @@ void Column::finalizeLoad() {
  * \brief Read XML input filter element
  */
 bool Column::XmlReadInputFilter(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() == true && reader->name() == "input_filter");
-	if (!reader->skipToNextTag()) return false;
-	if (!d->inputFilter()->load(reader, false)) return false;
-	if (!reader->skipToNextTag()) return false;
-	Q_ASSERT(reader->isEndElement() == true && reader->name() == "input_filter");
+	Q_ASSERT(reader->isStartElement() == true && reader->name() == QLatin1String("input_filter"));
+	if (!reader->skipToNextTag())
+		return false;
+	if (!d->inputFilter()->load(reader, false))
+		return false;
+	if (!reader->skipToNextTag())
+		return false;
+	Q_ASSERT(reader->isEndElement() == true && reader->name() == QLatin1String("input_filter"));
 	return true;
 }
 
@@ -1242,11 +1469,14 @@ bool Column::XmlReadInputFilter(XmlStreamReader* reader) {
  * \brief Read XML output filter element
  */
 bool Column::XmlReadOutputFilter(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() == true && reader->name() == "output_filter");
-	if (!reader->skipToNextTag()) return false;
-	if (!d->outputFilter()->load(reader, false)) return false;
-	if (!reader->skipToNextTag()) return false;
-	Q_ASSERT(reader->isEndElement() == true && reader->name() == "output_filter");
+	Q_ASSERT(reader->isStartElement() == true && reader->name() == QLatin1String("output_filter"));
+	if (!reader->skipToNextTag())
+		return false;
+	if (!d->outputFilter()->load(reader, false))
+		return false;
+	if (!reader->skipToNextTag())
+		return false;
+	Q_ASSERT(reader->isEndElement() == true && reader->name() == QLatin1String("output_filter"));
 	return true;
 }
 
@@ -1258,26 +1488,29 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 	QStringList variableNames;
 	QStringList columnPathes;
 
-	//read the autoUpdate attribute if available (older project files created with <2.8 don't have it)
+	// read the autoUpdate attribute if available (older project files created with <2.8 don't have it)
 	bool autoUpdate = false;
-	if (reader->attributes().hasAttribute("autoUpdate"))
-		autoUpdate = reader->attributes().value("autoUpdate").toInt();
+	if (reader->attributes().hasAttribute(QStringLiteral("autoUpdate")))
+		autoUpdate = reader->attributes().value(QStringLiteral("autoUpdate")).toInt();
 
 	while (reader->readNext()) {
-		if (reader->isEndElement()) break;
+		if (reader->isEndElement())
+			break;
 
-		if (reader->name() == "text")
+		if (reader->name() == QLatin1String("text"))
 			formula = reader->readElementText();
-		else if (reader->name() == "variableNames") {
+		else if (reader->name() == QLatin1String("variableNames")) {
 			while (reader->readNext()) {
-				if (reader->name() == "variableNames" && reader->isEndElement()) break;
+				if (reader->name() == QLatin1String("variableNames") && reader->isEndElement())
+					break;
 
 				if (reader->isStartElement())
 					variableNames << reader->readElementText();
 			}
-		} else if (reader->name() == "columnPathes") {
+		} else if (reader->name() == QLatin1String("columnPathes")) {
 			while (reader->readNext()) {
-				if (reader->name() == "columnPathes" && reader->isEndElement()) break;
+				if (reader->name() == QLatin1String("columnPathes") && reader->isEndElement())
+					break;
 
 				if (reader->isStartElement())
 					columnPathes << reader->readElementText();
@@ -1290,36 +1523,35 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 	return true;
 }
 
-//TODO: read cell formula, not implemented yet
-// bool Column::XmlReadFormula(XmlStreamReader* reader)
-// {
-// 	Q_ASSERT(reader->isStartElement() && reader->name() == "formula");
+// TODO: read cell formula, not implemented yet
+//  bool Column::XmlReadFormula(XmlStreamReader* reader)
+//  {
+//  	Q_ASSERT(reader->isStartElement() && reader->name() == QLatin1String("formula"));
 //
-// 	bool ok1, ok2;
-// 	int start, end;
-// 	start = reader->readAttributeInt("start_row", &ok1);
-// 	end = reader->readAttributeInt("end_row", &ok2);
-// 	if (!ok1 || !ok2)
-// 	{
-// 		reader->raiseError(i18n("invalid or missing start or end row"));
-// 		return false;
-// 	}
-// 	setFormula(Interval<int>(start,end), reader->readElementText());
+//  	bool ok1, ok2;
+//  	int start, end;
+//  	start = reader->readAttributeInt("start_row", &ok1);
+//  	end = reader->readAttributeInt("end_row", &ok2);
+//  	if (!ok1 || !ok2)
+//  	{
+//  		reader->raiseError(i18n("invalid or missing start or end row"));
+//  		return false;
+//  	}
+//  	setFormula(Interval<int>(start,end), reader->readElementText());
 //
-// 	return true;
-// }
-
+//  	return true;
+//  }
 
 /**
  * \brief Read XML row element
  */
 bool Column::XmlReadRow(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() == true && reader->name() == "row");
+	Q_ASSERT(reader->isStartElement() == true && reader->name() == QLatin1String("row"));
 
 	//	QXmlStreamAttributes attribs = reader->attributes();
 
 	bool ok;
-	int index = reader->readAttributeInt("index", &ok);
+	int index = reader->readAttributeInt(QStringLiteral("index"), &ok);
 	if (!ok) {
 		reader->raiseError(i18n("invalid or missing row index"));
 		return false;
@@ -1327,7 +1559,7 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 
 	QString str = reader->readElementText();
 	switch (columnMode()) {
-	case ColumnMode::Numeric: {
+	case ColumnMode::Double: {
 		double value = str.toDouble(&ok);
 		if (!ok) {
 			reader->raiseError(i18n("invalid row value"));
@@ -1361,7 +1593,10 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
 	case ColumnMode::Day:
-		QDateTime date_time = QDateTime::fromString(str,"yyyy-dd-MM hh:mm:ss:zzz");
+		// Same as in the Variable Parser. UTC must be used, otherwise
+		// some dates are not valid. For example (2017-03-26)
+		QDateTime date_time =
+			QDateTime::fromString(str + QStringLiteral("Z"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt")); // last t is important. It is the timezone
 		setDateTimeAt(index, date_time);
 		break;
 	}
@@ -1391,6 +1626,13 @@ AbstractColumn::ColumnMode Column::columnMode() const {
 	return d->columnMode();
 }
 
+QString Column::columnModeString() const {
+	return AbstractColumn::columnModeString(d->columnMode());
+}
+
+void Column::resizeTo(int rows) {
+	d->resizeTo(rows);
+}
 /**
  * \brief Return the data vector size
  */
@@ -1405,8 +1647,8 @@ int Column::rowCount() const {
  * Rows beyond this can be masked etc. but should be ignored by filters,
  * plots etc.
  */
-int Column::availableRowCount() const {
-	return d->availableRowCount();
+int Column::availableRowCount(int max) const {
+	return d->availableRowCount(max);
 }
 
 /**
@@ -1416,31 +1658,8 @@ AbstractColumn::PlotDesignation Column::plotDesignation() const {
 	return d->plotDesignation();
 }
 
-QString Column::plotDesignationString() const {
-	switch (plotDesignation()) {
-	case PlotDesignation::NoDesignation:
-		return QString("");
-	case PlotDesignation::X:
-		return QLatin1String("[X]");
-	case PlotDesignation::Y:
-		return QLatin1String("[Y]");
-	case PlotDesignation::Z:
-		return QLatin1String("[Z]");
-	case PlotDesignation::XError:
-		return QLatin1String("[") + i18n("X-error") + QLatin1Char(']');
-	case PlotDesignation::XErrorPlus:
-		return QLatin1String("[") + i18n("X-error +") + QLatin1Char(']');
-	case PlotDesignation::XErrorMinus:
-		return QLatin1String("[") + i18n("X-error -") + QLatin1Char(']');
-	case PlotDesignation::YError:
-		return QLatin1String("[") + i18n("Y-error") + QLatin1Char(']');
-	case PlotDesignation::YErrorPlus:
-		return QLatin1String("[") + i18n("Y-error +") + QLatin1Char(']');
-	case PlotDesignation::YErrorMinus:
-		return QLatin1String("[") + i18n("Y-error -") + QLatin1Char(']');
-	}
-
-	return QString("");
+QString Column::plotDesignationString(bool withBrackets) const {
+	return AbstractColumn::plotDesignationString(d->plotDesignation(), withBrackets);
 }
 
 AbstractSimpleFilter* Column::outputFilter() const {
@@ -1478,7 +1697,7 @@ QString Column::formula(int row) const {
  * 	list << QString(interval.toString() + ": " + my_column.formula(interval.start()));
  * \endcode
  */
-QVector< Interval<int> > Column::formulaIntervals() const {
+QVector<Interval<int>> Column::formulaIntervals() const {
 	return d->formulaIntervals();
 }
 
@@ -1491,13 +1710,11 @@ void Column::handleFormatChange() {
 		input_filter->setFormat(output_filter->format());
 	}
 
-	emit aspectDescriptionChanged(this); // the icon for the type changed
+	Q_EMIT aspectDescriptionChanged(this); // the icon for the type changed
 	if (!m_suppressDataChangedSignal)
-		emit formatChanged(this); // all cells must be repainted
+		Q_EMIT formatChanged(this); // all cells must be repainted
 
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
+	d->available.setUnavailable();
 }
 
 /*!
@@ -1507,26 +1724,18 @@ void Column::handleFormatChange() {
  * for \c count < 0, the minimum of the last \p count elements is returned.
  */
 double Column::minimum(int count) const {
-	double min = INFINITY;
-	if (count == 0 && d->statisticsAvailable)
-		min = const_cast<Column*>(this)->statistics().minimum;
+	if (count == 0 && d->available.min)
+		return d->statistics.minimum;
 	else {
-		int start, end;
+		int startIndex = 0, endIndex = rowCount() - 1;
 
-		if (count == 0) {
-			start = 0;
-			end = rowCount();
-		} else if (count > 0) {
-			start  = 0;
-			end = qMin(rowCount(), count);
-		} else {
-			start = qMax(rowCount() + count, 0);
-			end = rowCount();
-		}
-		return minimum(start, end);
+		if (count > 0)
+			endIndex = std::min(rowCount() - 1, count - 1);
+		else if (count < 0)
+			startIndex = std::max(rowCount() - count, 0);
+
+		return minimum(startIndex, endIndex);
 	}
-
-	return min;
 }
 
 /*!
@@ -1537,6 +1746,9 @@ double Column::minimum(int count) const {
  * \p endIndex
  */
 double Column::minimum(int startIndex, int endIndex) const {
+#ifdef PERFTRACE_AUTOSCALE
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+#endif
 	double min = INFINITY;
 
 	if (rowCount() == 0)
@@ -1545,23 +1757,24 @@ double Column::minimum(int startIndex, int endIndex) const {
 	if (startIndex > endIndex && startIndex >= 0 && endIndex >= 0)
 		std::swap(startIndex, endIndex);
 
-	startIndex = qMax(startIndex, 0);
-	endIndex = qMax(endIndex, 0);
+	startIndex = std::max(startIndex, 0);
+	endIndex = std::max(endIndex, 0);
 
-	startIndex = qMin(startIndex, rowCount() - 1);
-	endIndex = qMin(endIndex, rowCount() - 1);
+	startIndex = std::min(startIndex, rowCount() - 1);
+	endIndex = std::min(endIndex, rowCount() - 1);
 
-	int foundIndex = 0;
+	if (startIndex == 0 && endIndex == rowCount() - 1 && d->available.min)
+		return d->statistics.minimum;
 
 	ColumnMode mode = columnMode();
 	Properties property = properties();
-	if (property == Properties::No) {
+	if (property == Properties::No || property == Properties::NonMonotonic) {
 		// skipping values is only in Properties::No needed, because
 		// when there are invalid values the property must be Properties::No
 		switch (mode) {
-		case ColumnMode::Numeric: {
+		case ColumnMode::Double: {
 			auto* vec = static_cast<QVector<double>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 
@@ -1576,7 +1789,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::Integer: {
 			auto* vec = static_cast<QVector<int>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 
@@ -1589,7 +1802,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::BigInt: {
 			auto* vec = static_cast<QVector<qint64>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 
@@ -1604,7 +1817,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 			break;
 		case ColumnMode::DateTime: {
 			auto* vec = static_cast<QVector<QDateTime>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 
@@ -1617,30 +1830,36 @@ double Column::minimum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::Day:
 		case ColumnMode::Month:
-		default:
 			break;
 		}
-		return min;
-	}
+	} else { // monotonic: use the properties knowledge to determine maximum faster
+		int foundIndex = 0;
+		if (property == Properties::Constant || property == Properties::MonotonicIncreasing)
+			foundIndex = startIndex;
+		else if (property == Properties::MonotonicDecreasing) {
+			foundIndex = endIndex;
+			foundIndex = std::max(0, foundIndex);
+		}
 
-	// use the properties knowledge to determine maximum faster
-	if (property == Properties::Constant || property == Properties::MonotonicIncreasing)
-		foundIndex = startIndex;
-	else if (property == Properties::MonotonicDecreasing)
-		foundIndex = endIndex;
-
-	switch (mode) {
-		case ColumnMode::Numeric:
+		switch (mode) {
+		case ColumnMode::Double:
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
-			return valueAt(foundIndex);
+			min = valueAt(foundIndex);
+			break;
 		case ColumnMode::DateTime:
 		case ColumnMode::Month:
 		case ColumnMode::Day:
-			return dateTimeAt(foundIndex).toMSecsSinceEpoch();
-		case ColumnMode::Text:
-		default:
+			min = dateTimeAt(foundIndex).toMSecsSinceEpoch();
 			break;
+		case ColumnMode::Text:
+			break;
+		}
+	}
+
+	if (startIndex == 0 && endIndex == rowCount() - 1) {
+		d->available.min = true;
+		d->statistics.minimum = min;
 	}
 
 	return min;
@@ -1653,27 +1872,21 @@ double Column::minimum(int startIndex, int endIndex) const {
  * for \c count < 0, the maximum of the last \p count elements is returned.
  */
 double Column::maximum(int count) const {
-	double max = -INFINITY;
-
-	if (count == 0 && d->statisticsAvailable)
-		max = const_cast<Column*>(this)->statistics().maximum;
+#ifdef PERFTRACE_AUTOSCALE
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+#endif
+	if (count == 0 && d->available.max)
+		return d->statistics.maximum;
 	else {
-		int start, end;
+		int startIndex = 0, endIndex = rowCount() - 1;
 
-		if (count == 0) {
-			start = 0;
-			end = rowCount();
-		} else if (count > 0) {
-			start  = 0;
-			end = qMin(rowCount(), count);
-		} else {
-			start = qMax(rowCount() + count, 0);
-			end = rowCount();
-		}
-		return maximum(start, end);
+		if (count > 0)
+			endIndex = std::min(rowCount() - 1, count - 1);
+		else if (count < 0)
+			startIndex = std::max(rowCount() - count, 0);
+
+		return maximum(startIndex, endIndex);
 	}
-
-	return max;
 }
 
 /*!
@@ -1691,20 +1904,22 @@ double Column::maximum(int startIndex, int endIndex) const {
 	if (startIndex > endIndex && startIndex >= 0 && endIndex >= 0)
 		std::swap(startIndex, endIndex);
 
-	startIndex = qMax(startIndex, 0);
-	endIndex = qMax(endIndex, 0);
+	startIndex = std::max(startIndex, 0);
+	endIndex = std::max(endIndex, 0);
 
-	startIndex = qMin(startIndex, rowCount() - 1);
-	endIndex = qMin(endIndex, rowCount() - 1);
-	int foundIndex = 0;
+	startIndex = std::min(startIndex, rowCount() - 1);
+	endIndex = std::min(endIndex, rowCount() - 1);
+
+	if (startIndex == 0 && endIndex == rowCount() - 1 && d->available.max)
+		return d->statistics.maximum;
 
 	ColumnMode mode = columnMode();
 	Properties property = properties();
-	if (property == Properties::No) {
+	if (property == Properties::No || property == Properties::NonMonotonic) {
 		switch (mode) {
-		case ColumnMode::Numeric: {
+		case ColumnMode::Double: {
 			auto* vec = static_cast<QVector<double>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 				const double val = vec->at(row);
@@ -1718,7 +1933,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::Integer: {
 			auto* vec = static_cast<QVector<int>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 				const int val = vec->at(row);
@@ -1730,7 +1945,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::BigInt: {
 			auto* vec = static_cast<QVector<qint64>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 				const qint64 val = vec->at(row);
@@ -1744,7 +1959,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 			break;
 		case ColumnMode::DateTime: {
 			auto* vec = static_cast<QVector<QDateTime>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 				const qint64 val = vec->at(row).toMSecsSinceEpoch();
@@ -1756,30 +1971,36 @@ double Column::maximum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::Day:
 		case ColumnMode::Month:
-		default:
 			break;
 		}
-		return max;
-	}
+	} else { // monotonic: use the properties knowledge to determine maximum faster
+		int foundIndex = 0;
+		if (property == Properties::Constant || property == Properties::MonotonicDecreasing)
+			foundIndex = startIndex;
+		else if (property == Properties::MonotonicIncreasing) {
+			foundIndex = endIndex;
+			foundIndex = std::max(0, foundIndex);
+		}
 
-	// use the properties knowledge to determine maximum faster
-	if (property == Properties::Constant || property == Properties::MonotonicDecreasing)
-		foundIndex = startIndex;
-	else if (property == Properties::MonotonicIncreasing)
-		foundIndex = endIndex;
-
-	switch (mode) {
-		case ColumnMode::Numeric:
+		switch (mode) {
+		case ColumnMode::Double:
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
-			return valueAt(foundIndex);
+			max = valueAt(foundIndex);
+			break;
 		case ColumnMode::DateTime:
 		case ColumnMode::Month:
 		case ColumnMode::Day:
-			return dateTimeAt(foundIndex).toMSecsSinceEpoch();
-		case ColumnMode::Text:
-		default:
+			max = dateTimeAt(foundIndex).toMSecsSinceEpoch();
 			break;
+		case ColumnMode::Text:
+			break;
+		}
+	}
+
+	if (startIndex == 0 && endIndex == rowCount() - 1) {
+		d->statistics.maximum = max;
+		d->available.max = true;
 	}
 	return max;
 }
@@ -1794,67 +2015,53 @@ double Column::maximum(int startIndex, int endIndex) const {
  */
 // TODO: testing if it is faster than calculating log2.
 // TODO: put into NSL when useful
-int Column::calculateMaxSteps (unsigned int value) {
+int Column::calculateMaxSteps(unsigned int value) {
 	const std::array<signed char, 256> LogTable256 = {
-		-1,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
-		4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
-		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
-		5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
-		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
-		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
-		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
-		6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
-		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
-		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
-		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
-		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
-		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
-		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
-		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
-		7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
-	};
+		-1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+		5,	5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+		6,	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7,
+		7,	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+		7,	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+		7,	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7};
 
-	unsigned int r;		// r will be lg(v)
-	unsigned int t, tt;	// temporaries
+	unsigned int r; // r will be lg(v)
+	unsigned int t, tt; // temporaries
 	if ((tt = value >> 16))
 		r = (t = tt >> 8) ? 24 + LogTable256[t] : 16 + LogTable256[tt];
 	else
 		r = (t = value >> 8) ? 8 + LogTable256[t] : LogTable256[value];
 
-	return r+1;
+	return r + 1;
 }
 
 /*!
-* Find index which corresponds to a @p x . In a vector of values
-* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
-* @param x
-* @return -1 if index not found, otherwise the index
-*/
+ * Find index which corresponds to a @p x . In a vector of values
+ * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+ * @param x
+ * @return -1 if index not found, otherwise the index
+ */
 int Column::indexForValue(double x, QVector<double>& column, Properties properties) {
 	int rowCount = column.count();
 	if (rowCount == 0)
 		return -1;
 
-	double prevValue = 0;
-	//qint64 prevValueDateTime = 0;
-	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
-			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
 		bool increase = true;
-		if(properties == AbstractColumn::Properties::MonotonicDecreasing)
+		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
 			increase = false;
 
 		int lowerIndex = 0;
-		int higherIndex = rowCount-1;
+		int higherIndex = rowCount - 1;
 
-		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount))+1;
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount)) + 1;
 
 		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
-			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
-			double value = column[index];
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+			double value = column.at(index);
 
 			if (higherIndex - lowerIndex < 2) {
-				if (qAbs(column[lowerIndex] - x) < qAbs(column[higherIndex] - x))
+				if (std::abs(column.at(lowerIndex) - x) < std::abs(column.at(higherIndex) - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -1870,20 +2077,18 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 				lowerIndex = index;
 			else if (value < x && !increase)
 				higherIndex = index;
-
 		}
 	} else if (properties == AbstractColumn::Properties::Constant) {
 		return 0;
-	} else {
-		// AbstractColumn::Properties::No
+	} else { // AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// simple way
 		int index = 0;
-		prevValue = column[0];
+		double prevValue = column.at(0);
 		for (int row = 0; row < rowCount; row++) {
-			double value = column[row];
+			double value = column.at(row);
 			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
-					prevValue = value;
-					index = row;
+				prevValue = value;
+				index = row;
 			}
 		}
 		return index;
@@ -1892,37 +2097,34 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 }
 
 /*!
-* Find index which corresponds to a @p x . In a vector of values
-* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
-* @param x
-* @return -1 if index not found, otherwise the index
-*/
+ * Find index which corresponds to a @p x . In a vector of values
+ * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+ * @param x
+ * @return -1 if index not found, otherwise the index
+ */
 int Column::indexForValue(const double x, const QVector<QPointF>& points, Properties properties) {
 	int rowCount = points.count();
 
 	if (rowCount == 0)
 		return -1;
 
-	double prevValue = 0;
-	//qint64 prevValueDateTime = 0;
-	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
-			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
 		bool increase = true;
-		if(properties == AbstractColumn::Properties::MonotonicDecreasing)
+		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
 			increase = false;
 
 		int lowerIndex = 0;
 		int higherIndex = rowCount - 1;
 
-		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount))+1;
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount)) + 1;
 
 		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
-			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
-			double value = points[index].x();
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+			double value = points.at(index).x();
 
 			if (higherIndex - lowerIndex < 2) {
-				if (qAbs(points[lowerIndex].x() - x) < qAbs(points[higherIndex].x() - x))
+				if (std::abs(points.at(lowerIndex).x() - x) < std::abs(points.at(higherIndex).x() - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -1938,22 +2140,20 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
 				lowerIndex = index;
 			else if (value < x && !increase)
 				higherIndex = index;
-
 		}
 
 	} else if (properties == AbstractColumn::Properties::Constant) {
 		return 0;
 	} else {
-		// AbstractColumn::Properties::No
+		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// naiv way
-		prevValue = points[0].x();
+		double prevValue = points.at(0).x();
 		int index = 0;
 		for (int row = 0; row < rowCount; row++) {
-
-			double value = points[row].x();
-			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
-					prevValue = value;
-					index = row;
+			double value = points.at(row).x();
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				prevValue = value;
+				index = row;
 			}
 		}
 		return index;
@@ -1962,36 +2162,34 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
 }
 
 /*!
-* Find index which corresponds to a @p x . In a vector of values
-* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
-* @param x
-* @return -1 if index not found, otherwise the index
-*/
+ * Find index which corresponds to a @p x . In a vector of values
+ * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+ * @param x
+ * @return -1 if index not found, otherwise the index
+ */
 int Column::indexForValue(double x, QVector<QLineF>& lines, Properties properties) {
 	int rowCount = lines.count();
 	if (rowCount == 0)
 		return -1;
+
 	// use only p1 to find index
-	double prevValue = 0;
-	//qint64 prevValueDateTime = 0;
-	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
-			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
 		bool increase = true;
-		if(properties == AbstractColumn::Properties::MonotonicDecreasing)
+		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
 			increase = false;
 
 		int lowerIndex = 0;
-		int higherIndex = rowCount-1;
+		int higherIndex = rowCount - 1;
 
-		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount))+1;
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount)) + 1;
 
 		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
-			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
-			double value = lines[index].p1().x();
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+			double value = lines.at(index).p1().x();
 
 			if (higherIndex - lowerIndex < 2) {
-				if (qAbs(lines[lowerIndex].p1().x() - x) < qAbs(lines[higherIndex].p1().x() - x))
+				if (std::abs(lines.at(lowerIndex).p1().x() - x) < std::abs(lines.at(higherIndex).p1().x() - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -2007,19 +2205,18 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 				lowerIndex = index;
 			else if (value < x && !increase)
 				higherIndex = index;
-
 		}
 
 	} else if (properties == AbstractColumn::Properties::Constant) {
 		return 0;
 	} else {
-		// AbstractColumn::Properties::No
+		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// naiv way
 		int index = 0;
-		prevValue = lines[0].p1().x();
+		double prevValue = lines.at(0).p1().x();
 		for (int row = 0; row < rowCount; row++) {
-			double value = lines[row].p1().x();
-			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+			double value = lines.at(row).p1().x();
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
 				prevValue = value;
 				index = row;
 			}
@@ -2030,13 +2227,11 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 }
 
 int Column::indexForValue(double x) const {
-
 	double prevValue = 0;
 	qint64 prevValueDateTime = 0;
 	auto mode = columnMode();
 	auto property = properties();
-	if (property == Properties::MonotonicIncreasing ||
-			property == Properties::MonotonicDecreasing) {
+	if (property == Properties::MonotonicIncreasing || property == Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
 		bool increase = (property != Properties::MonotonicDecreasing);
 
@@ -2046,15 +2241,15 @@ int Column::indexForValue(double x) const {
 		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount())) + 1;
 
 		switch (mode) {
-		case ColumnMode::Numeric:
+		case ColumnMode::Double:
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
-				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
 				double value = valueAt(index);
 
 				if (higherIndex - lowerIndex < 2) {
-					if (qAbs(valueAt(lowerIndex) - x) < qAbs(valueAt(higherIndex) - x))
+					if (std::abs(valueAt(lowerIndex) - x) < std::abs(valueAt(higherIndex) - x))
 						index = lowerIndex;
 					else
 						index = higherIndex;
@@ -2070,7 +2265,6 @@ int Column::indexForValue(double x) const {
 					lowerIndex = index;
 				else if (value < x && !increase)
 					higherIndex = index;
-
 			}
 			break;
 		case ColumnMode::Text:
@@ -2080,11 +2274,11 @@ int Column::indexForValue(double x) const {
 		case ColumnMode::Day: {
 			qint64 xInt64 = static_cast<qint64>(x);
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
-				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
+				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
 				qint64 value = dateTimeAt(index).toMSecsSinceEpoch();
 
 				if (higherIndex - lowerIndex < 2) {
-					if (abs(dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < abs(dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
+					if (std::abs(dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < std::abs(dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
 						index = lowerIndex;
 					else
 						index = higherIndex;
@@ -2100,7 +2294,6 @@ int Column::indexForValue(double x) const {
 					lowerIndex = index;
 				else if (value < xInt64 && !increase)
 					higherIndex = index;
-
 			}
 		}
 		}
@@ -2114,7 +2307,7 @@ int Column::indexForValue(double x) const {
 		// naiv way
 		int index = 0;
 		switch (mode) {
-		case ColumnMode::Numeric:
+		case ColumnMode::Double:
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
 			for (int row = 0; row < rowCount(); row++) {
@@ -2124,11 +2317,9 @@ int Column::indexForValue(double x) const {
 					prevValue = valueAt(row);
 
 				double value = valueAt(row);
-				if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
-					if (row < rowCount() - 1) {
-						prevValue = value;
-						index = row;
-					}
+				if (std::abs(value - x) <= std::abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
+					prevValue = value;
+					index = row;
 				}
 			}
 			return index;
@@ -2146,7 +2337,7 @@ int Column::indexForValue(double x) const {
 					prevValueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
 
 				qint64 value = dateTimeAt(row).toMSecsSinceEpoch();
-				if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
+				if (std::abs(value - xInt64) <= std::abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
 					prevValueDateTime = value;
 					index = row;
 				}
@@ -2160,7 +2351,7 @@ int Column::indexForValue(double x) const {
 
 /*!
  * Finds the minimal and maximal index which are between v1 and v2
- * \brief Column::indicesForX
+ * \brief Column::indicesMinMax
  * \param v1
  * \param v2
  * \param start
@@ -2168,7 +2359,7 @@ int Column::indexForValue(double x) const {
  * \return
  */
 bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
-
+	// DEBUG(Q_FUNC_INFO << ", values = " << v1 << " .. " << v2)
 	start = -1;
 	end = -1;
 	if (rowCount() == 0)
@@ -2179,90 +2370,95 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		qSwap(v1, v2);
 
 	Properties property = properties();
-	if (property == Properties::MonotonicIncreasing ||
-		property == Properties::MonotonicDecreasing) {
+	if (property == Properties::MonotonicIncreasing || property == Properties::MonotonicDecreasing) {
 		start = indexForValue(v1);
 		end = indexForValue(v2);
 
 		switch (columnMode()) {
-			case ColumnMode::Integer:
-			case ColumnMode::BigInt:
-			case ColumnMode::Numeric: {
+		case ColumnMode::Integer:
+		case ColumnMode::BigInt:
+		case ColumnMode::Double: {
 			if (start > 0 && valueAt(start - 1) <= v2 && valueAt(start - 1) >= v1)
 				start--;
 			if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
 				end++;
 
 			break;
-			}
-			case ColumnMode::DateTime:
-			case ColumnMode::Month:
-			case ColumnMode::Day: {
-				qint64 v1int64 = v1;
-				qint64 v2int64 = v2;
-				qint64 value;
-				if (start > 0) {
-					value = dateTimeAt(start -1).toMSecsSinceEpoch();
-					if (value <= v2int64 && value >= v1int64)
-						start--;
-				}
-
-				if (end > rowCount() - 1) {
-					value = dateTimeAt(end + 1).toMSecsSinceEpoch();
-					if (value <= v2int64 && value >= v1int64)
-						end++;
-				}
-				break;
-			}
-			case ColumnMode::Text:
-				return false;
 		}
+		case ColumnMode::DateTime:
+		case ColumnMode::Month:
+		case ColumnMode::Day: {
+			qint64 v1int64 = v1;
+			qint64 v2int64 = v2;
+			qint64 value;
+			if (start > 0) {
+				value = dateTimeAt(start - 1).toMSecsSinceEpoch();
+				if (value <= v2int64 && value >= v1int64)
+					start--;
+			}
+
+			if (end > rowCount() - 1) {
+				value = dateTimeAt(end + 1).toMSecsSinceEpoch();
+				if (value <= v2int64 && value >= v1int64)
+					end++;
+			}
+			break;
+		}
+		case ColumnMode::Text:
+			return false;
+		}
+		// DEBUG("monotonic start/end = " << start << "/" << end)
+
 		return true;
 	} else if (property == Properties::Constant) {
 		start = 0;
 		end = rowCount() - 1;
 		return true;
 	}
-	// property == Properties::No
+	// property == Properties::No || AbstractColumn::Properties::NonMonotonic
 	switch (columnMode()) {
-		case ColumnMode::Integer:
-		case ColumnMode::BigInt:
-		case ColumnMode::Numeric: {
-			double value;
-			for (int i = 0; i < rowCount(); i++) {
-				if (!isValid(i) || isMasked(i))
-					continue;
-				value = valueAt(i);
-				if (value <= v2 && value >= v1) {
-					end = i;
-					if (start < 0)
-						start = i;
-				}
-
+	case ColumnMode::Integer:
+	case ColumnMode::BigInt:
+	case ColumnMode::Double: {
+		double value;
+		for (int i = 0; i < rowCount(); i++) {
+			if (!isValid(i) || isMasked(i))
+				continue;
+			value = valueAt(i);
+			if (value <= v2 && value >= v1) {
+				end = i;
+				if (start < 0)
+					start = i;
 			}
-			break;
 		}
-		case ColumnMode::DateTime:
-		case ColumnMode::Month:
-		case ColumnMode::Day: {
-			qint64 value;
-			qint64 v2int64 = v2;
-			qint64 v1int64 = v2;
-			for (int i = 0; i < rowCount(); i++) {
-				if (!isValid(i) || isMasked(i))
-					continue;
-				value = dateTimeAt(i).toMSecsSinceEpoch();
-				if (value <= v2int64 && value >= v1int64) {
-					end = i;
-					if (start < 0)
-						start = i;
-				}
-			}
-			break;
-		}
-		case ColumnMode::Text:
-			return false;
-
+		break;
 	}
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day: {
+		qint64 value;
+		qint64 v2int64 = v2;
+		qint64 v1int64 = v2;
+		for (int i = 0; i < rowCount(); i++) {
+			if (!isValid(i) || isMasked(i))
+				continue;
+			value = dateTimeAt(i).toMSecsSinceEpoch();
+			if (value <= v2int64 && value >= v1int64) {
+				end = i;
+				if (start < 0)
+					start = i;
+			}
+		}
+		break;
+	}
+	case ColumnMode::Text:
+		return false;
+	}
+	// DEBUG("non-monotonic start/end = " << start << "/" << end)
+
 	return true;
+}
+
+AbstractColumn::ColumnMode Column::labelsMode() const {
+	return d->m_labels.mode();
 }

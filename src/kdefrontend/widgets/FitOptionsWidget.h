@@ -1,38 +1,20 @@
-/***************************************************************************
-    File                 : FitOptionsWidget.h
-    Project              : LabPlot
-    Description          : widget for editing advanced fit parameters
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014-2020 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+/*
+	File                 : FitOptionsWidget.h
+	Project              : LabPlot
+	Description          : widget for editing advanced fit parameters
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef FITOPTIONSWIDGET_H
 #define FITOPTIONSWIDGET_H
 
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "ui_fitoptionswidget.h"
 
-class FitOptionsWidget: public QWidget {
+class FitOptionsWidget : public QWidget {
 	Q_OBJECT
 
 public:
@@ -46,23 +28,23 @@ private:
 	bool m_dateTimeRange{false};
 	const QLocale locale;
 
-signals:
+Q_SIGNALS:
 	void finished();
 	void optionsChanged();
 
-private slots:
+private Q_SLOTS:
 	void autoRangeChanged();
 	void autoEvalRangeChanged();
 	void fitRangeMinChanged();
 	void fitRangeMaxChanged();
-	void fitRangeMinDateTimeChanged(const QDateTime&);
-	void fitRangeMaxDateTimeChanged(const QDateTime&);
+	void fitRangeMinDateTimeChanged(qint64);
+	void fitRangeMaxDateTimeChanged(qint64);
 	void evalRangeMinChanged();
 	void evalRangeMaxChanged();
-	void evalRangeMinDateTimeChanged(const QDateTime&);
-	void evalRangeMaxDateTimeChanged(const QDateTime&);
+	void evalRangeMinDateTimeChanged(qint64);
+	void evalRangeMaxDateTimeChanged(qint64);
 	void applyClicked();
 	void changed();
 };
 
-#endif //FITOPTIONSWIDGET_H
+#endif // FITOPTIONSWIDGET_H

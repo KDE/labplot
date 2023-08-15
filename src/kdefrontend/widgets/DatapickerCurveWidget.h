@@ -1,39 +1,22 @@
-/***************************************************************************
-    File                 : ImageWidget.h
-    Project              : LabPlot
-    Description          : widget for datapicker properties
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : ImageWidget.h
+	Project              : LabPlot
+	Description          : widget for datapicker properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
 
- ***************************************************************************/
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
-
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef DATAPICKERCURVEWIDGET_H
 #define DATAPICKERCURVEWIDGET_H
 
-#include "ui_datapickercurvewidget.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
+#include "ui_datapickercurvewidget.h"
 
+class SymbolWidget;
 
 class DatapickerCurveWidget : public BaseDock {
 	Q_OBJECT
@@ -48,42 +31,25 @@ public:
 
 private:
 	Ui::DatapickerCurveWidget ui;
-	void init();
 	void hideErrorBarWidgets(bool);
 
 	DatapickerCurve* m_curve{nullptr};
 	QList<DatapickerCurve*> m_curveList;
-	bool m_initializing;
+	SymbolWidget* symbolWidget{nullptr};
 	bool m_suppressTypeChange{false};
 
-private slots:
-	//SLOTs for changes triggered in DatapickerCurveDock
+private Q_SLOTS:
+	// SLOTs for changes triggered in DatapickerCurveDock
 	void updateSymbolWidgets();
 	void xErrorTypeChanged(int);
 	void yErrorTypeChanged(int);
-	void styleChanged(int);
-	void sizeChanged(double);
-	void rotationChanged(int);
-	void opacityChanged(int);
-	void fillingStyleChanged(int);
-	void fillingColorChanged(const QColor&);
-	void borderStyleChanged(int);
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
 	void visibilityChanged(bool);
 	void errorBarFillingStyleChanged(int);
 	void errorBarFillingColorChanged(const QColor&);
 	void errorBarSizeChanged(double);
 
-	//SLOTs for changes triggered in DatapickerCurve
-	void curveDescriptionChanged(const AbstractAspect*);
+	// SLOTs for changes triggered in DatapickerCurve
 	void curveErrorsChanged(DatapickerCurve::Errors);
-	void symbolStyleChanged(Symbol::Style);
-	void symbolSizeChanged(qreal);
-	void symbolRotationAngleChanged(qreal);
-	void symbolOpacityChanged(qreal);
-	void symbolBrushChanged(const QBrush&);
-	void symbolPenChanged(const QPen&);
 	void symbolVisibleChanged(bool);
 	void symbolErrorBarSizeChanged(qreal);
 	void symbolErrorBarBrushChanged(const QBrush&);

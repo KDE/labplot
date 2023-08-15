@@ -1,30 +1,12 @@
-/***************************************************************************
-    File                 : SpreadsheetItemDelegate.cpp
-    Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2010-2020 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : SpreadsheetItemDelegate.cpp
+	Project              : LabPlot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2010-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #include "SpreadsheetItemDelegate.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 
@@ -43,13 +25,12 @@ of masked cells used in SpreadsheetView.
 \ingroup commonfrontend
 */
 
-SpreadsheetItemDelegate::SpreadsheetItemDelegate(QObject* parent) : QItemDelegate(parent) {
+SpreadsheetItemDelegate::SpreadsheetItemDelegate(QObject* parent)
+	: QItemDelegate(parent) {
 	installEventFilter(this);
 }
 
-void SpreadsheetItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
-		const QModelIndex& index) const {
-
+void SpreadsheetItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const {
 	QItemDelegate::paint(painter, option, index);
 	if (!index.data(static_cast<int>(SpreadsheetModel::CustomDataRole::MaskingRole)).toBool())
 		return;
@@ -59,11 +40,11 @@ void SpreadsheetItemDelegate::paint(QPainter* painter, const QStyleOptionViewIte
 	painter->restore();
 }
 
-void SpreadsheetItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const {
+void SpreadsheetItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const {
 	model->setData(index, editor->metaObject()->userProperty().read(editor), Qt::EditRole);
 }
 
-void SpreadsheetItemDelegate::setEditorData(QWidget* editor, const QModelIndex& index ) const {
+void SpreadsheetItemDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const {
 	editor->metaObject()->userProperty().write(editor, index.data(Qt::EditRole));
 }
 
@@ -71,13 +52,13 @@ bool SpreadsheetItemDelegate::eventFilter(QObject* editor, QEvent* event) {
 	if (event->type() == QEvent::KeyPress) {
 		auto* keyEvent = static_cast<QKeyEvent*>(event);
 		if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-			emit commitData((QWidget*)editor);
-			emit closeEditor((QWidget*)editor, QAbstractItemDelegate::NoHint);
-			emit returnPressed();
+			Q_EMIT commitData(static_cast<QWidget*>(editor));
+			Q_EMIT closeEditor(static_cast<QWidget*>(editor), QAbstractItemDelegate::NoHint);
+			Q_EMIT returnPressed();
 			return true;
 		}
 	} else if (event->type() == QEvent::InputMethodQuery) {
-		emit editorEntered();
+		Q_EMIT editorEntered();
 		return true;
 	}
 

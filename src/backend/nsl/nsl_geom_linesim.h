@@ -1,30 +1,11 @@
-/***************************************************************************
-    File                 : nsl_geom_linesim.h
-    Project              : LabPlot
-    Description          : NSL geometry line simplification functions
-    --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : nsl_geom_linesim.h
+	Project              : LabPlot
+	Description          : NSL geometry line simplification functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 /*
 	TODO:
@@ -40,9 +21,18 @@
 #include <stdlib.h>
 
 #define NSL_GEOM_LINESIM_TYPE_COUNT 10
-typedef enum {nsl_geom_linesim_type_douglas_peucker_variant, nsl_geom_linesim_type_douglas_peucker, nsl_geom_linesim_type_visvalingam_whyatt,
-	nsl_geom_linesim_type_reumann_witkam, nsl_geom_linesim_type_perpdist, nsl_geom_linesim_type_nthpoint, nsl_geom_linesim_type_raddist,
-	nsl_geom_linesim_type_interp, nsl_geom_linesim_type_opheim, nsl_geom_linesim_type_lang} nsl_geom_linesim_type;
+typedef enum {
+	nsl_geom_linesim_type_douglas_peucker_variant,
+	nsl_geom_linesim_type_douglas_peucker,
+	nsl_geom_linesim_type_visvalingam_whyatt,
+	nsl_geom_linesim_type_reumann_witkam,
+	nsl_geom_linesim_type_perpdist,
+	nsl_geom_linesim_type_nthpoint,
+	nsl_geom_linesim_type_raddist,
+	nsl_geom_linesim_type_interp,
+	nsl_geom_linesim_type_opheim,
+	nsl_geom_linesim_type_lang
+} nsl_geom_linesim_type;
 extern const char* nsl_geom_linesim_type_name[];
 
 /*********** error calculation functions *********/

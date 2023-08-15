@@ -1,39 +1,21 @@
-/***************************************************************************
-    File                 : DatabaseManagerWidget.h
-    Project              : LabPlot
-    Description          : widget for managing database connections
-    --------------------------------------------------------------------
-    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : DatabaseManagerWidget.h
+	Project              : LabPlot
+	Description          : widget for managing database connections
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef DATABASEMANAGERWIDGET_H
 #define DATABASEMANAGERWIDGET_H
 
 #include "ui_databasemanagerwidget.h"
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
-#include <repository.h>
+#include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
-	class SyntaxHighlighter;
+class SyntaxHighlighter;
 }
 #endif
 
@@ -44,7 +26,7 @@ public:
 	explicit DatabaseManagerWidget(QWidget*, QString);
 
 	struct SQLConnection {
-		int port;
+		int port{0};
 		QString name;
 		QString driver;
 		QString hostName;
@@ -78,7 +60,7 @@ private:
 	int defaultPort(const QString&) const;
 	void dataChanged();
 
-private slots:
+private Q_SLOTS:
 	void loadConnections();
 	void addConnection();
 	void deleteConnection();
@@ -91,12 +73,12 @@ private slots:
 	void hostChanged();
 	void portChanged();
 	void databaseNameChanged();
-	void customConnectionEnabledChanged(int);
+	void customConnectionEnabledChanged(bool);
 	void customConnectionChanged();
 	void userNameChanged();
 	void passwordChanged();
 
-signals:
+Q_SIGNALS:
 	void changed();
 };
 

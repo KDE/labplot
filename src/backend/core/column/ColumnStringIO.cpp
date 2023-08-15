@@ -1,42 +1,25 @@
-/***************************************************************************
-    File                 : ColumnStringIO.cpp
-    Project              : LabPlot
-    Description          : String-IO interface of Column.
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2013-2017 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : ColumnStringIO.cpp
+	Project              : LabPlot
+	Description          : String-IO interface of Column.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2013-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
-
+#include "backend/core/column/ColumnStringIO.h"
+#include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
-#include "backend/core/column/ColumnStringIO.h"
 
 /**
  * \class ColumnStringIO
  * \brief String-IO interface of Column.
  */
 ColumnStringIO::ColumnStringIO(Column* owner)
-	: AbstractColumn(QString(), AspectType::ColumnStringIO), m_owner(owner) {
+	: AbstractColumn(QString(), AspectType::ColumnStringIO)
+	, m_owner(owner) {
 }
 
 AbstractColumn::ColumnMode ColumnStringIO::columnMode() const {
@@ -47,16 +30,12 @@ AbstractColumn::PlotDesignation ColumnStringIO::plotDesignation() const {
 	return m_owner->plotDesignation();
 }
 
-QString ColumnStringIO::plotDesignationString() const {
-	return m_owner->plotDesignationString();
-}
-
 int ColumnStringIO::rowCount() const {
 	return m_owner->rowCount();
 }
 
-int ColumnStringIO::availableRowCount() const {
-	return m_owner->availableRowCount();
+int ColumnStringIO::availableRowCount(int max) const {
+	return m_owner->availableRowCount(max);
 }
 
 bool ColumnStringIO::isValid(int row) const {
@@ -66,13 +45,12 @@ bool ColumnStringIO::isValid(int row) const {
 	return m_owner->isValid(row);
 }
 
-void ColumnStringIO::setTextAt(int row, const QString &value) {
+void ColumnStringIO::setTextAt(int row, const QString& value) {
 	m_setting = true;
 	m_to_set = value;
 	m_owner->copy(m_owner->d->inputFilter()->output(0), 0, row, 1);
 	m_setting = false;
 	m_to_set.clear();
-	m_owner->setChanged();
 }
 
 QString ColumnStringIO::textAt(int row) const {
@@ -82,23 +60,25 @@ QString ColumnStringIO::textAt(int row) const {
 		return m_owner->d->outputFilter()->output(0)->textAt(row);
 }
 
-bool ColumnStringIO::copy(const AbstractColumn *other) {
-	if (other->columnMode() != AbstractColumn::ColumnMode::Text) return false;
-	m_owner->d->inputFilter()->input(0,other);
+bool ColumnStringIO::copy(const AbstractColumn* other) {
+	if (other->columnMode() != AbstractColumn::ColumnMode::Text)
+		return false;
+	m_owner->d->inputFilter()->input(0, other);
 	m_owner->copy(m_owner->d->inputFilter()->output(0));
-	m_owner->d->inputFilter()->input(0,this);
+	m_owner->d->inputFilter()->input(0, this);
 	return true;
 }
 
-bool ColumnStringIO::copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows) {
-	if (source->columnMode() != AbstractColumn::ColumnMode::Text) return false;
-	m_owner->d->inputFilter()->input(0,source);
+bool ColumnStringIO::copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) {
+	if (source->columnMode() != AbstractColumn::ColumnMode::Text)
+		return false;
+	m_owner->d->inputFilter()->input(0, source);
 	m_owner->copy(m_owner->d->inputFilter()->output(0), source_start, dest_start, num_rows);
-	m_owner->d->inputFilter()->input(0,this);
+	m_owner->d->inputFilter()->input(0, this);
 	return true;
 }
 
 void ColumnStringIO::replaceTexts(int start_row, const QVector<QString>& texts) {
-	Column tmp("tmp", texts);
+	Column tmp(QStringLiteral("tmp"), texts);
 	copy(&tmp, 0, start_row, texts.size());
 }

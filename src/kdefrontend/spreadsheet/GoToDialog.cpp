@@ -1,31 +1,14 @@
-/***************************************************************************
-    File                 : GoToDialog.cpp
-    Project              : LabPlot
-    Description          : Dialog to provide the cell coordinates to navigate to
-    --------------------------------------------------------------------
-    Copyright            : (C) 2020 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : GoToDialog.cpp
+	Project              : LabPlot
+	Description          : Dialog to provide the cell coordinates to navigate to
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #include "GoToDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -39,8 +22,6 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KConfigGroup>
-#include <KSharedConfig>
 #include <KWindowConfig>
 
 /*!
@@ -49,36 +30,37 @@
 
 	\ingroup kdefrontend
  */
-GoToDialog::GoToDialog(QWidget* parent) : QDialog(parent) {
+GoToDialog::GoToDialog(QWidget* parent)
+	: QDialog(parent) {
 	setWindowTitle(i18nc("@title:window", "Go to Cell"));
 
 	auto* layout = new QGridLayout(this);
 
-	//row
+	// row
 	auto* label = new QLabel(i18n("Row:"));
 	layout->addWidget(label, 0, 0);
 
 	leRow = new QLineEdit(this);
 	leRow->setValidator(new QIntValidator(leRow));
-	leRow->setText("1");
+	leRow->setText(QStringLiteral("1"));
 	layout->addWidget(leRow, 0, 1);
 
-	//column
+	// column
 	label = new QLabel(i18n("Column:"));
 	layout->addWidget(label, 1, 0);
 
 	leColumn = new QLineEdit(this);
 	leColumn->setValidator(new QIntValidator(leColumn));
-	leColumn->setText("1");
+	leColumn->setText(QStringLiteral("1"));
 	layout->addWidget(leColumn, 1, 1);
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	connect(btnBox, &QDialogButtonBox::accepted, this, &GoToDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &GoToDialog::reject);
 	layout->addWidget(btnBox, 2, 1);
 
-	//restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("GoToDialog"));
+	// restore saved settings if available
+	KConfigGroup conf = Settings::group(QLatin1String("GoToDialog"));
 
 	create(); // ensure there's a window created
 	if (conf.exists()) {
@@ -89,23 +71,20 @@ GoToDialog::GoToDialog(QWidget* parent) : QDialog(parent) {
 }
 
 GoToDialog::~GoToDialog() {
-	//save the current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("GoToDialog"));
+	// save the current settings
+	KConfigGroup conf = Settings::group(QLatin1String("GoToDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 int GoToDialog::row() {
-	SET_NUMBER_LOCALE
 	bool ok;
-	int row = numberLocale.toInt(leRow->text(), &ok);
+	int row = QLocale().toInt(leRow->text(), &ok);
 
 	return ok ? row : 0;
 }
 
-
 int GoToDialog::column() {
-	SET_NUMBER_LOCALE
 	bool ok;
-	int col = numberLocale.toInt(leColumn->text(), &ok);
+	int col = QLocale().toInt(leColumn->text(), &ok);
 	return ok ? col : 0;
 }

@@ -6,6 +6,40 @@ SLOCCount comes with ABSOLUTELY NO WARRANTY, and you are welcome to
 redistribute it under certain conditions as specified by the GNU GPL license;
 see the documentation for details.
 
+-----2.10-----
+SLOC    Directory       SLOC-by-Language (Sorted)
+81675   backend         cpp=75739,ansic=5379,yacc=540,python=17
+45295   kdefrontend     cpp=45295
+20968   3rdparty        cpp=20967,sh=1
+11974   commonfrontend  cpp=11974
+719     tools           cpp=719
+82      Plugins         cpp=82
+20      top_dir         sh=20
+0       doc             (none)
+
+
+Totals grouped by language (dominant language first):
+cpp:         154776 (96.29%)
+ansic:         5379 (3.35%)
+yacc:           540 (0.34%)
+sh:              21 (0.01%)
+python:          17 (0.01%)
+
+
+* Total Physical Source Lines of Code (SLOC)                = 160,733
+* Development Effort Estimate, Person-Years (Person-Months) = 41.44 (497.30)
+  (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+* Schedule Estimate, Years (Months)                         = 2.21 (26.46)
+  (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+* Estimated Average Number of Developers (Effort/Schedule)  = 18.79
+* Total Estimated Cost to Develop                           = $ 5,598,245
+  (average salary = $56,286/year, overhead = 2.40).
+
+  
+-----2.9-----
+TODO:
+
+
 -----2.8-----
 SLOC    Directory       SLOC-by-Language (Sorted)
 62820   backend         cpp=58077,ansic=4245,yacc=481,python=17

@@ -1,210 +1,191 @@
-/***************************************************************************
-    File                 : ReferenceLineDock.cpp
-    Project              : LabPlot
-    Description          : Dock widget for the reference line on the plot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : ReferenceLineDock.cpp
+	Project              : LabPlot
+	Description          : Dock widget for the reference line on the plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "ReferenceLineDock.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-
 #include "kdefrontend/TemplateHandler.h"
-#include "kdefrontend/GuiTools.h"
+#include "kdefrontend/widgets/LineWidget.h"
 
-#include <KLocalizedString>
 #include <KConfig>
-#include <KConfigGroup>
-#include <KSharedConfig>
+#include <KLocalizedString>
 
-ReferenceLineDock::ReferenceLineDock(QWidget* parent) : BaseDock(parent) {
+ReferenceLineDock::ReferenceLineDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
-	ui.lePosition->setValidator( new QDoubleValidator(ui.lePosition) );
+	auto* layout = static_cast<QHBoxLayout*>(ui.tabLine->layout());
+	lineWidget = new LineWidget(ui.tabLine);
+	layout->insertWidget(0, lineWidget);
 
-	SET_NUMBER_LOCALE
-	ui.sbLineWidth->setLocale(numberLocale);
-
-	//SLOTS
-	//General
+	// SLOTS
+	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &ReferenceLineDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &ReferenceLineDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &ReferenceLineDock::commentChanged);
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
-	connect(ui.lePosition, &QLineEdit::textChanged, this, &ReferenceLineDock::positionChanged);
+	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::positionLogicalChanged);
+	connect(ui.dtePosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
 
-	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::styleChanged);
-	connect(ui.kcbLineColor, &KColorButton::changed, this, &ReferenceLineDock::colorChanged);
-	connect(ui.sbLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ReferenceLineDock::widthChanged);
-	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ReferenceLineDock::opacityChanged);
+	// Template handler
+	auto* frame = new QFrame(this);
+	auto* hlayout = new QHBoxLayout(frame);
+	hlayout->setContentsMargins(0, 11, 0, 11);
 
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbLineStyle, QColor(Qt::black));
-	m_initializing = false;
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::ReferenceLine);
+	hlayout->addWidget(templateHandler);
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ReferenceLineDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ReferenceLineDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &ReferenceLineDock::info);
+
+	ui.verticalLayout->addWidget(frame);
 }
 
 void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_linesList = list;
 	m_line = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 	Q_ASSERT(m_line);
 
-	//if there is more then one point in the list, disable the comment and name widgets in "general"
+	// if there is more than one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 		ui.leName->setText(m_line->name());
-		ui.leComment->setText(m_line->comment());
+		ui.teComment->setText(m_line->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 
-	//show the properties of the first reference line
+	// show the properties of the first reference line
 	this->load();
 
-	//SIGNALs/SLOTs
-	connect(m_line, &AbstractAspect::aspectDescriptionChanged,this, &ReferenceLineDock::lineDescriptionChanged);
+	QList<Line*> lines;
+	for (auto* line : m_linesList)
+		lines << line->line();
+	lineWidget->setLines(lines);
+
+	updatePlotRanges();
+
+	// SIGNALs/SLOTs
+	connect(m_line, &AbstractAspect::aspectDescriptionChanged, this, &ReferenceLineDock::aspectDescriptionChanged);
+	connect(m_line, &WorksheetElement::plotRangeListChanged, this, &ReferenceLineDock::updatePlotRanges);
 	connect(m_line, &ReferenceLine::visibleChanged, this, &ReferenceLineDock::lineVisibilityChanged);
 
-	//position
+	// position
 	connect(m_line, &ReferenceLine::orientationChanged, this, &ReferenceLineDock::lineOrientationChanged);
-	connect(m_line, &ReferenceLine::positionChanged, this, &ReferenceLineDock::linePositionChanged);
-
-	//line
-	connect(m_line, &ReferenceLine::penChanged, this, &ReferenceLineDock::linePenChanged);
-	connect(m_line, &ReferenceLine::opacityChanged, this, &ReferenceLineDock::lineOpacityChanged);
+	connect(m_line, &ReferenceLine::positionLogicalChanged, this, &ReferenceLineDock::linePositionLogicalChanged);
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void ReferenceLineDock::updateLocale() {
-	SET_NUMBER_LOCALE
-	ui.sbLineWidth->setLocale(numberLocale);
+	CONDITIONAL_LOCK_RETURN;
+	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
+	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
+		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric)
+			ui.sbPosition->setValue(m_line->positionLogical().y());
+	} else {
+		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric)
+			ui.sbPosition->setValue(m_line->positionLogical().x());
+	}
 
-	Lock lock(m_initializing);
-	ui.lePosition->setText(numberLocale.toString(m_line->position()));
+	lineWidget->updateLocale();
+}
+
+void ReferenceLineDock::updatePlotRanges() {
+	updatePlotRangeList(ui.cbPlotRanges);
+}
+
+void ReferenceLineDock::updateWidgetsOrientation(ReferenceLine::Orientation orientation) {
+	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
+	bool numeric;
+	if (orientation == ReferenceLine::Orientation::Horizontal) {
+		ui.lPosition->setText(QStringLiteral("y:"));
+		ui.lPositionDateTime->setText(QStringLiteral("y:"));
+		numeric = (plot->yRangeFormatDefault() == RangeT::Format::Numeric);
+	} else {
+		ui.lPosition->setText(QStringLiteral("x:"));
+		ui.lPositionDateTime->setText(QStringLiteral("x:"));
+		numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
+	}
+
+	ui.lPosition->setVisible(numeric);
+	ui.sbPosition->setVisible(numeric);
+	ui.lPositionDateTime->setVisible(!numeric);
+	ui.dtePosition->setVisible(!numeric);
 }
 
 //**********************************************************
 //*** SLOTs for changes triggered in ReferenceLineDock *****
 //**********************************************************
-//Position
+// Position
 void ReferenceLineDock::orientationChanged(int index) {
 	auto orientation{ReferenceLine::Orientation(index)};
-	if (orientation == ReferenceLine::Orientation::Horizontal)
-		ui.lPosition->setText(QLatin1String("y:"));
-	else
-		ui.lPosition->setText(QLatin1String("x:"));
+	updateWidgetsOrientation(orientation);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* line : m_linesList)
 		line->setOrientation(orientation);
+
+	// call this slot to show the x or y value depending on the new orientation
+	linePositionLogicalChanged(m_line->positionLogical());
 }
 
-void ReferenceLineDock::positionChanged() {
-	if (m_initializing)
-		return;
-
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double pos{ numberLocale.toDouble(ui.lePosition->text(), &ok) };
-	if (ok) {
-		for (auto* line : m_linesList)
-			line->setPosition(pos);
-	}
-}
-
-//Line
-void ReferenceLineDock::styleChanged(int index) {
-	if (m_initializing)
-		return;
-
-	const auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* line : m_linesList) {
-		pen = line->pen();
-		pen.setStyle(penStyle);
-		line->setPen(pen);
-	}
-}
-
-void ReferenceLineDock::colorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+void ReferenceLineDock::positionLogicalChanged(double pos) {
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* line : m_linesList) {
-		QPen pen = line->pen();
-		pen.setColor(color);
-		line->setPen(pen);
+		auto positionLogical = line->positionLogical();
+		if (line->orientation() == ReferenceLine::Orientation::Horizontal)
+			positionLogical.setY(pos);
+		else
+			positionLogical.setX(pos);
+		line->setPositionLogical(positionLogical);
 	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbLineStyle, color);
-	m_initializing = false;
 }
 
-void ReferenceLineDock::widthChanged(double value) {
-	if (m_initializing)
-		return;
+void ReferenceLineDock::positionLogicalDateTimeChanged(qint64 pos) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* line : m_linesList) {
-		QPen pen = line->pen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-		line->setPen(pen);
+		auto positionLogical = line->positionLogical();
+		if (line->orientation() == ReferenceLine::Orientation::Horizontal)
+			positionLogical.setY(pos);
+		else
+			positionLogical.setX(pos);
+		line->setPositionLogical(positionLogical);
 	}
-}
-
-void ReferenceLineDock::opacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (double)value/100.;
-	for (auto* line : m_linesList)
-		line->setOpacity(opacity);
 }
 
 void ReferenceLineDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* line : m_linesList)
 		line->setVisible(state);
@@ -213,50 +194,25 @@ void ReferenceLineDock::visibilityChanged(bool state) {
 //*************************************************************
 //******* SLOTs for changes triggered in ReferenceLine ********
 //*************************************************************
-void ReferenceLineDock::lineDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_line != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
-
-	m_initializing = false;
-}
-
-void ReferenceLineDock::linePositionChanged(double position) {
-	m_initializing = true;
-	ui.lePosition->setText(QString::number(position));
-	m_initializing = false;
+void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogical) {
+	CONDITIONAL_LOCK_RETURN;
+	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
+		ui.sbPosition->setValue(positionLogical.y());
+		ui.dtePosition->setMSecsSinceEpochUTC(positionLogical.y());
+	} else {
+		ui.sbPosition->setValue(positionLogical.x());
+		ui.dtePosition->setMSecsSinceEpochUTC(positionLogical.x());
+	}
 }
 
 void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orientation) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
-	m_initializing = false;
-}
-
-void ReferenceLineDock::linePenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbLineStyle->setCurrentIndex( (int)pen.style());
-	ui.kcbLineColor->setColor( pen.color());
-	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color());
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Unit::Point) );
-	m_initializing = false;
-}
-
-void ReferenceLineDock::lineOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbLineOpacity->setValue( round(opacity*100.0) );
-	m_initializing = false;
 }
 
 void ReferenceLineDock::lineVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //**********************************************************
@@ -266,16 +222,54 @@ void ReferenceLineDock::load() {
 	if (!m_line)
 		return;
 
-	m_initializing = true;
+	// No lock!
 
-	SET_NUMBER_LOCALE
-	ui.cbOrientation->setCurrentIndex(static_cast<int>(m_line->orientation()));
-	ui.lePosition->setText(numberLocale.toString(m_line->position()));
-	ui.cbLineStyle->setCurrentIndex( (int) m_line->pen().style() );
-	ui.kcbLineColor->setColor( m_line->pen().color() );
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_line->pen().widthF(), Worksheet::Unit::Point) );
-	ui.sbLineOpacity->setValue( round(m_line->opacity()*100.0) );
-	ui.chkVisible->setChecked( m_line->isVisible() );
+	auto orientation = m_line->orientation();
+	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
+	updateWidgetsOrientation(orientation);
 
-	m_initializing = false;
+	// position
+	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
+	if (orientation == ReferenceLine::Orientation::Horizontal) {
+		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric)
+			ui.sbPosition->setValue(m_line->positionLogical().y());
+		else { // DateTime
+			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
+			ui.dtePosition->setMSecsSinceEpochUTC(m_line->positionLogical().y());
+		}
+	} else {
+		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric)
+			ui.sbPosition->setValue(m_line->positionLogical().x());
+		else { // DateTime
+			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
+			ui.dtePosition->setMSecsSinceEpochUTC(m_line->positionLogical().x());
+		}
+	}
+
+	ui.chkVisible->setChecked(m_line->isVisible());
+}
+
+void ReferenceLineDock::loadConfigFromTemplate(KConfig& config) {
+	// extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QLatin1String("/"));
+	if (index != -1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+
+	int size = m_linesList.size();
+	if (size > 1)
+		m_line->beginMacro(i18n("%1 reference lines: template \"%2\" loaded", size, name));
+	else
+		m_line->beginMacro(i18n("%1: template \"%2\" loaded", m_line->name(), name));
+
+	lineWidget->loadConfig(config.group("ReferenceLine"));
+
+	m_line->endMacro();
+}
+
+void ReferenceLineDock::saveConfigAsTemplate(KConfig& config) {
+	KConfigGroup group = config.group(QStringLiteral("ReferenceLine"));
+	lineWidget->saveConfig(group);
 }

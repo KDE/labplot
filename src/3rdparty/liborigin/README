@@ -1,0 +1,73 @@
+liborigin, standalone version
+---------------------
+
+This code is a standalone library for reading OriginLab project files.
+
+It is based on the code at
+	http://sourceforge.net/projects/liborigin (upstream)
+	https://github.com/SciDAVis/liborigin
+	http://soft.proindependent.com/liborigin2 (not available anymore)
+
+Additionally, some fixes were applied to silence UBSan warnings caused by
+uninitialised POD struct members.
+
+AUTHORS:  
+	Stefan Gerlach	2005-2023
+	Miquel Garriga	2014-2018
+	Knut Franke	2010
+	Ion Vasilief	2006-2010
+	Alex Kargovsky	2007-2009
+	Russell Standish
+
+DEPENDENCIES: tree.hh (included) http://tree.phi-sci.com/
+
+---------------------------------------------------------------------------
+COMPILING: liborigin uses CMake for the building process.
+		CMake is available at http://www.cmake.org/
+
+After installing CMake on your system, issue the following commands:
+	$ mkdir build
+	$ cd build
+	$ cmake ..
+	$ make
+	$ make install
+
+This will compile and install:
+	a shared and a static version of liborigin library
+	opj2dat, a program to extract data tables of an origin project into ASCII .dat files
+	liborigin.pc a pkg-config metadata file to get compiler and linker flags
+	c++ devel headers
+
+To disable shared or static libraries you can also specify the cmake options
+-DBUILD_SHARED_LIBS=off or -DBUILD_STATIC_LIBS=off. opj2dat will be build if one of them is enabled.
+
+Doc generation requires doxygen (http://doxygen.org)
+
+To include liborigin in a project using cmake add
+	find_package(PkgConfig)
+	pkg_check_modules(liborigin liborigin>=3.0.0)
+	target_link_libraries( my_target ${liborigin_LIBRARIES} )
+	target_include_directories( my_target PUBLIC ${liborigin_INCLUDE_DIRS} )
+to the project CMakeLists.txt file.
+
+To include liborigin in a project using qmake add
+	CONFIG += link_pkgconfig
+	PKGCONFIG += liborigin
+to the project.pro file.
+
+Logging of origin file parsing process is deactivated by default.
+To enable it define a GENERATE_CODE_FOR_LOG variable at the cmake command:
+    $ cmake -DGENERATE_CODE_FOR_LOG=1 ..
+
+---------------------------------------------------------------------------
+FEATURES:
+	* supports the import of any project from version 3.5 to latest (2022b)
+	* includes a pkg-config metadata file
+
+---------------------------------------------------------------------------
+EXAMPLES:
+	* opj2dat (included) extracts the data tables of an origin project file into dat files
+---------------------------------------------------------------------------
+RELATED PROJECTS:
+	* Ropj (https://github.com/aitap/Ropj)
+	* openopj (https://github.com/jgonera/openopj)

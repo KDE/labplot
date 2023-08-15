@@ -1,42 +1,25 @@
-/***************************************************************************
-File		: MQTTTopic.cpp
-Project		: LabPlot
-Description	: Represents a topic of a MQTTSubscription
---------------------------------------------------------------------
-Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
+/*
+	File		: MQTTTopic.cpp
+	Project		: LabPlot
+	Description	: Represents a topic of a MQTTSubscription
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
 
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "backend/datasources/MQTTTopic.h"
 
-#include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTClient.h"
-#include "kdefrontend/spreadsheet/PlotDataDialog.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "kdefrontend/spreadsheet/PlotDataDialog.h"
 
-#include <QMenu>
-#include <QIcon>
-#include <QAction>
 #include <KLocalizedString>
+#include <QAction>
+#include <QIcon>
+#include <QMenu>
 
 /*!
   \class MQTTTopic
@@ -44,12 +27,11 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
   \ingroup datasources
 */
-MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading) :
-	Spreadsheet(name, loading, AspectType::MQTTTopic),
-	m_topicName(name),
-	m_MQTTClient(subscription->mqttClient()),
-	m_filter(new AsciiFilter) {
-
+MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading)
+	: Spreadsheet(name, loading, AspectType::MQTTTopic)
+	, m_topicName(name)
+	, m_MQTTClient(subscription->mqttClient())
+	, m_filter(new AsciiFilter) {
 	auto mainFilter = m_MQTTClient->filter();
 
 	m_filter->setAutoModeEnabled(mainFilter->isAutoModeEnabled());
@@ -58,6 +40,7 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 		m_filter->setSeparatingCharacter(mainFilter->separatingCharacter());
 		m_filter->setDateTimeFormat(mainFilter->dateTimeFormat());
 		m_filter->setCreateIndexEnabled(mainFilter->createIndexEnabled());
+		m_filter->setCreateTimestampEnabled(mainFilter->createTimestampEnabled());
 		m_filter->setSimplifyWhitespacesEnabled(mainFilter->simplifyWhitespacesEnabled());
 		m_filter->setNaNValueToZero(mainFilter->NaNValueToZeroEnabled());
 		m_filter->setRemoveQuotesEnabled(mainFilter->removeQuotesEnabled());
@@ -79,12 +62,12 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 	}
 
 	connect(m_MQTTClient, &MQTTClient::readFromTopics, this, &MQTTTopic::read);
-	qDebug()<<"New MqttTopic: " << m_topicName;
+	qDebug() << "New MqttTopic: " << m_topicName;
 	initActions();
 }
 
 MQTTTopic::~MQTTTopic() {
-	qDebug()<<"MqttTopic destructor:"<<m_topicName;
+	qDebug() << "MqttTopic destructor:" << m_topicName;
 	delete m_filter;
 }
 
@@ -110,7 +93,7 @@ AsciiFilter* MQTTTopic::filter() const {
  *\brief Returns the MQTTTopic's icon
  */
 QIcon MQTTTopic::icon() const {
-	return QIcon::fromTheme("text-plain");
+	return QIcon::fromTheme(QStringLiteral("text-plain"));
 }
 
 /*!
@@ -121,8 +104,8 @@ QMenu* MQTTTopic::createContextMenu() {
 
 	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
-	//there're already actions available there. Skip the first title-action
-	//and insert the action at the beginning of the menu.
+	// there're already actions available there. Skip the first title-action
+	// and insert the action at the beginning of the menu.
 	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
@@ -156,26 +139,26 @@ QString MQTTTopic::topicName() const {
  *\brief Initializes the actions of MQTTTopic
  */
 void MQTTTopic::initActions() {
-	m_plotDataAction = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
+	m_plotDataAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("Plot data"), this);
 	connect(m_plotDataAction, &QAction::triggered, this, &MQTTTopic::plotData);
 }
 
 /*!
  *\brief Returns the MQTTClient the topic belongs to
  */
-MQTTClient *MQTTTopic::mqttClient() const {
+MQTTClient* MQTTTopic::mqttClient() const {
 	return m_MQTTClient;
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
 /*!
  *\brief Plots the data stored in MQTTTopic
  */
 void MQTTTopic::plotData() {
-	PlotDataDialog* dlg = new PlotDataDialog(this);
+	auto* dlg = new PlotDataDialog(this);
 	dlg->exec();
 }
 
@@ -190,35 +173,35 @@ void MQTTTopic::read() {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
   Saves as XML.
  */
 void MQTTTopic::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("MQTTTopic");
+	writer->writeStartElement(QStringLiteral("MQTTTopic"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//general
-	writer->writeStartElement("general");
-	writer->writeAttribute("topicName", m_topicName);
-	writer->writeAttribute("filterPrepared", QString::number(m_filter->isPrepared()));
-	writer->writeAttribute("filterSeparator", m_filter->separator());
-	writer->writeAttribute("messagePufferSize", QString::number(m_messagePuffer.size()));
+	// general
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("topicName"), m_topicName);
+	writer->writeAttribute(QStringLiteral("filterPrepared"), QString::number(m_filter->isPrepared()));
+	writer->writeAttribute(QStringLiteral("filterSeparator"), m_filter->separator());
+	writer->writeAttribute(QStringLiteral("messagePufferSize"), QString::number(m_messagePuffer.size()));
 	for (int i = 0; i < m_messagePuffer.count(); ++i)
-		writer->writeAttribute("message"+QString::number(i), m_messagePuffer[i]);
+		writer->writeAttribute(QStringLiteral("message") + QString::number(i), m_messagePuffer[i]);
 	writer->writeEndElement();
 
-	//filter
+	// filter
 	m_filter->save(writer);
 
-	//Columns
+	// Columns
 	for (auto* col : children<Column>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		col->save(writer);
 
-	writer->writeEndElement(); //MQTTTopic
+	writer->writeEndElement(); // MQTTTopic
 }
 
 /*!
@@ -238,57 +221,57 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "MQTTTopic")
+		if (reader->isEndElement() && reader->name() == QLatin1String("MQTTTopic"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "general") {
+		} else if (reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("topicName").toString();
+			str = attribs.value(QStringLiteral("topicName")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'topicName'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'topicName'")));
 			else {
-				m_topicName =  str;
+				m_topicName = str;
 				setName(str);
 			}
 
-			str = attribs.value("filterPrepared").toString();
+			str = attribs.value(QStringLiteral("filterPrepared")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'filterPrepared'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'filterPrepared'")));
 			else {
-				isFilterPrepared =  str.toInt();
+				isFilterPrepared = str.toInt();
 			}
 
-			str = attribs.value("filterSeparator").toString();
+			str = attribs.value(QStringLiteral("filterSeparator")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'filterSeparator'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'filterSeparator'")));
 			else {
-				separator =  str;
+				separator = str;
 			}
 
 			int pufferSize = 0;
-			str = attribs.value("messagePufferSize").toString();
+			str = attribs.value(QStringLiteral("messagePufferSize")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'messagePufferSize'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'messagePufferSize'")));
 			else
 				pufferSize = str.toInt();
 			for (int i = 0; i < pufferSize; ++i) {
-				str = attribs.value("message"+QString::number(i)).toString();
+				str = attribs.value(QStringLiteral("message") + QString::number(i)).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'message"+QString::number(i)+'\''));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'message") + QString::number(i) + QLatin1Char('\'')));
 				else
 					m_messagePuffer.push_back(str);
 			}
-		} else if (reader->name() == "asciiFilter") {
+		} else if (reader->name() == QLatin1String("asciiFilter")) {
 			if (!m_filter->load(reader))
 				return false;
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Text);
 			if (!column->load(reader, preview)) {
 				delete column;
@@ -296,14 +279,14 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 			addChild(column);
-		} else {// unknown element
+		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())
 				return false;
 		}
 	}
 
-	//prepare filter for reading
+	// prepare filter for reading
 	m_filter->setPreparedForMQTT(isFilterPrepared, this, separator);
 
 	return !reader->hasError();

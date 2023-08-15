@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>696</width>
-    <height>591</height>
+    <width>470</width>
+    <height>469</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -45,8 +45,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>668</width>
-           <height>124</height>
+           <width>414</width>
+           <height>73</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout">
@@ -71,7 +71,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="lXColumn">
             <property name="text">
-             <string>X-data:</string>
+             <string>X-Data:</string>
             </property>
            </widget>
           </item>
@@ -111,7 +111,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="lYColumn">
             <property name="text">
-             <string>Y-data:</string>
+             <string>Y-Data:</string>
             </property>
            </widget>
           </item>
@@ -151,13 +151,13 @@
    <item row="1" column="0">
     <widget class="QGroupBox" name="gbCurvePlacement">
      <property name="title">
-      <string>Curve Placement</string>
+      <string>Placement</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QRadioButton" name="rbCurvePlacement1">
+       <widget class="QRadioButton" name="rbCurvePlacementAllInOnePlotArea">
         <property name="text">
-         <string>&amp;All curves in one plot</string>
+         <string>All Plots in one Plot Area</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -165,9 +165,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="rbCurvePlacement2">
+       <widget class="QRadioButton" name="rbCurvePlacementAllInOwnPlotArea">
         <property name="text">
-         <string>One p&amp;lot per curve</string>
+         <string>One Plot Area per Plot</string>
         </property>
        </widget>
       </item>
@@ -177,13 +177,13 @@
    <item row="2" column="0">
     <widget class="QGroupBox" name="gbPlotPlacement">
      <property name="title">
-      <string>Add Curves to</string>
+      <string>Add Plots to</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="rbPlotPlacement1">
+       <widget class="QRadioButton" name="rbPlotPlacementExistingPlotArea">
         <property name="text">
-         <string>E&amp;xisting plot</string>
+         <string>Existing Plot Area</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -191,16 +191,16 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QRadioButton" name="rbPlotPlacement2">
+       <widget class="QRadioButton" name="rbPlotPlacementExistingWorksheet">
         <property name="text">
-         <string>&amp;New plot in an existing worksheet</string>
+         <string>&amp;New Plot Area in an existing Worksheet</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QRadioButton" name="rbPlotPlacement3">
+       <widget class="QRadioButton" name="rbPlotPlacementNewWorksheet">
         <property name="text">
-         <string>New plot in a new wor&amp;ksheet</string>
+         <string>New Plot Area in a new Worksheet</string>
         </property>
        </widget>
       </item>
@@ -223,7 +223,7 @@
       <item row="4" column="0">
        <widget class="QCheckBox" name="chkCreateDataCurve">
         <property name="text">
-         <string>Create curve for original data</string>
+         <string>Create Plot for original Data</string>
         </property>
         <property name="checked">
          <bool>true</bool>

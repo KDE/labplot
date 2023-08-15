@@ -1,38 +1,19 @@
-/***************************************************************************
-    File                 : AbstractCoordinateSystem.cpp
-    Project              : LabPlot
-    Description          : Base class of all worksheet coordinate systems.
-    --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : AbstractCoordinateSystem.cpp
+	Project              : LabPlot
+	Description          : Base class of all worksheet coordinate systems.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2012-2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
 
-extern "C" {
-#include <gsl/gsl_math.h>
-}
+#include "backend/nsl/nsl_math.h"
+#include <cmath>
 
 /**
  * \class AbstractCoordinateSystem
@@ -41,8 +22,7 @@ extern "C" {
  *  \ingroup backend\worksheet
  */
 
-AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot* plot) {
-	Q_UNUSED(plot)
+AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot*) {
 }
 
 AbstractCoordinateSystem::~AbstractCoordinateSystem() = default;
@@ -91,21 +71,16 @@ AbstractCoordinateSystem::~AbstractCoordinateSystem() = default;
  * \return false if line is completely outside, otherwise true
  */
 
-// TODO: put into NSL
-double round(double value, int precision) {
-	//TODO: there must be faster ways to get this (lookup table?)
-	double order = gsl_pow_int(10., precision);
-	return int(value*order + (value < 0 ? -0.5 : 0.5))/order;
-}
-
-bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult) {
-	//we usually clip on large rectangles, so we don't need high precision here -> round to one float digit
-	//this prevents some subtle float rounding artifacts that lead to disappearance
-	//of lines along the boundaries of the rect. (e.g. axis lines).
-	qreal x1 = round(line->x1(), 1);
-	qreal x2 = round(line->x2(), 1);
-	qreal y1 = round(line->y1(), 1);
-	qreal y2 = round(line->y2(), 1);
+bool AbstractCoordinateSystem::clipLineToRect(QLineF* line, const QRectF& rect, LineClipResult* clipResult) {
+	//	QDEBUG(Q_FUNC_INFO << ", line = " << *line << ", rect = " << rect)
+	// we usually clip on large rectangles, so we don't need high precision here -> round to one float digit
+	// this prevents some subtle float rounding artifacts that lead to disappearance
+	// of lines along the boundaries of the rect. (e.g. axis lines).
+	qreal x1 = nsl_math_trunc_places(line->x1(), 1);
+	qreal x2 = nsl_math_trunc_places(line->x2(), 1);
+	qreal y1 = nsl_math_trunc_places(line->y1(), 1);
+	qreal y2 = nsl_math_trunc_places(line->y2(), 1);
+	//	DEBUG(Q_FUNC_INFO << "x1/x2 y1/y2 = " << x1 << "/" << x2 << " " << y1 << "/" << y2)
 
 	qreal left;
 	qreal right;
@@ -118,14 +93,8 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 
 	enum { Left, Right, Top, Bottom };
 	// clip the lines, after cohen-sutherland, see e.g. http://www.nondot.org/~sabre/graphpro/line6.html
-	int p1 = ((x1 < left) << Left)
-	         | ((x1 > right) << Right)
-	         | ((y1 < top) << Top)
-	         | ((y1 > bottom) << Bottom);
-	int p2 = ((x2 < left) << Left)
-	         | ((x2 > right) << Right)
-	         | ((y2 < top) << Top)
-	         | ((y2 > bottom) << Bottom);
+	int p1 = ((x1 < left) << Left) | ((x1 > right) << Right) | ((y1 < top) << Top) | ((y1 > bottom) << Bottom);
+	int p2 = ((x2 < left) << Left) | ((x2 > right) << Right) | ((y2 < top) << Top) | ((y2 > bottom) << Bottom);
 
 	if (p1 & p2)
 		// completely outside
@@ -137,36 +106,34 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 
 		// clip x coordinates
 		if (x1 < left) {
-			y1 += dy/dx * (left - x1);
+			y1 += dy / dx * (left - x1);
 			x1 = left;
 			if (clipResult)
 				clipResult->xClippedLeft[0] = true;
 		} else if (x1 > right) {
-			y1 -= dy/dx * (x1 - right);
+			y1 -= dy / dx * (x1 - right);
 			x1 = right;
 			if (clipResult)
 				clipResult->xClippedRight[0] = true;
 		}
 		if (x2 < left) {
-			y2 += dy/dx * (left - x2);
+			y2 += dy / dx * (left - x2);
 			x2 = left;
 			if (clipResult)
 				clipResult->xClippedLeft[1] = true;
 		} else if (x2 > right) {
-			y2 -= dy/dx * (x2 - right);
+			y2 -= dy / dx * (x2 - right);
 			x2 = right;
 			if (clipResult)
 				clipResult->xClippedRight[1] = true;
 		}
-		p1 = ((y1 < top) << Top)
-		     | ((y1 > bottom) << Bottom);
-		p2 = ((y2 < top) << Top)
-		     | ((y2 > bottom) << Bottom);
+		p1 = ((y1 < top) << Top) | ((y1 > bottom) << Bottom);
+		p2 = ((y2 < top) << Top) | ((y2 > bottom) << Bottom);
 		if (p1 & p2)
 			return false;
 		// clip y coordinates
 		if (y1 < top) {
-			x1 += dx/dy * (top - y1);
+			x1 += dx / dy * (top - y1);
 			y1 = top;
 			if (clipResult) {
 				clipResult->xClippedRight[0] = false;
@@ -174,7 +141,7 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 				clipResult->yClippedTop[0] = true;
 			}
 		} else if (y1 > bottom) {
-			x1 -= dx/dy * (y1 - bottom);
+			x1 -= dx / dy * (y1 - bottom);
 			y1 = bottom;
 			if (clipResult) {
 				clipResult->xClippedRight[0] = false;
@@ -183,7 +150,7 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 			}
 		}
 		if (y2 < top) {
-			x2 += dx/dy * (top - y2);
+			x2 += dx / dy * (top - y2);
 			y2 = top;
 			if (clipResult) {
 				clipResult->xClippedRight[1] = false;
@@ -191,7 +158,7 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 				clipResult->yClippedTop[1] = true;
 			}
 		} else if (y2 > bottom) {
-			x2 -= dx/dy * (y2 - bottom);
+			x2 -= dx / dy * (y2 - bottom);
 			y2 = bottom;
 			if (clipResult) {
 				clipResult->xClippedRight[1] = false;
@@ -202,23 +169,4 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 		*line = QLineF(QPointF(x1, y1), QPointF(x2, y2));
 	}
 	return true;
-}
-
-//more intelligent comparison of floats,
-//taken from Knuth's "The art of computer programming"
-//TODO: put into NSL?
-bool AbstractCoordinateSystem::approximatelyEqual(double a, double b, double epsilon) {
-	return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
-}
-
-bool AbstractCoordinateSystem::essentiallyEqual(double a, double b, double epsilon) {
-	return fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon);
-}
-
-bool AbstractCoordinateSystem::definitelyGreaterThan(double a, double b, double epsilon) {
-	return (a - b) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
-}
-
-bool AbstractCoordinateSystem::definitelyLessThan(double a, double b, double epsilon) {
-	return (b - a) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }

@@ -1,29 +1,11 @@
-/***************************************************************************
-File                 : MQTTSubscriptionWidget.h
-Project              : LabPlot
-Description          : manage topics and subscribing
---------------------------------------------------------------------
-Copyright            : (C) 2019 by Kovacs Ferencz (kferike98@gmail.com)
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+/*
+	File                 : MQTTSubscriptionWidget.h
+	Project              : LabPlot
+	Description          : manage topics and subscribing
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef MQTTSUBSCRIPTIONWIDGET_H
 #define MQTTSUBSCRIPTIONWIDGET_H
@@ -37,10 +19,7 @@ class MQTTSubscriptionWidget : public QWidget {
 public:
 	explicit MQTTSubscriptionWidget(QWidget* parent = nullptr);
 	~MQTTSubscriptionWidget() override;
-	enum class MQTTParentWidget {
-		ImportFileWidget,
-		LiveDataDock
-	};
+	enum class MQTTParentWidget { ImportFileWidget, LiveDataDock };
 
 	void setTopicList(const QStringList& topicList);
 	QStringList getTopicList();
@@ -59,7 +38,7 @@ public:
 	static bool checkTopicContains(const QString&, const QString&);
 	static void findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
 
-signals:
+Q_SIGNALS:
 	void subscriptionChanged();
 	void makeSubscription(const QString& name, quint8 QoS);
 	void MQTTUnsubscribeFromTopic(const QString&, QVector<QTreeWidgetItem*> children);
@@ -71,7 +50,6 @@ signals:
 private:
 	Ui::MQTTSubscriptionWidget ui;
 	MQTTParentWidget m_parent;
-	QWidget* m_parentWidget;
 	QCompleter* m_subscriptionCompleter{nullptr};
 	QCompleter* m_topicCompleter{nullptr};
 	QStringList m_topicList;
@@ -83,12 +61,12 @@ private:
 	void updateSubscriptionCompleter();
 
 	static void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
-	static void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level);
+	static void restoreSubscriptionChildren(QTreeWidgetItem* topic, QTreeWidgetItem* subscription, const QStringList& list, int level);
 	static int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
 	static int commonLevelIndex(const QString& first, const QString& second);
 	static QString checkCommonLevel(const QString&, const QString&);
 
-private slots:
+private Q_SLOTS:
 	void mqttAvailableTopicDoubleClicked(QTreeWidgetItem* item, int column);
 	void mqttSubscribedTopicDoubleClicked(QTreeWidgetItem* item, int column);
 	void mqttSubscribe();

@@ -1,0 +1,43 @@
+Dependencies:
+- 'on': ['Linux/Qt5', 'FreeBSD/Qt5', 'Windows/Qt5']
+  'require':
+    'frameworks/extra-cmake-modules': '@stable'
+    'frameworks/kcrash': '@stable'
+    'frameworks/kguiaddons': '@stable'
+    'frameworks/ki18n': '@stable'
+    'frameworks/kparts': '@stable'
+    'frameworks/kwidgetsaddons': '@stable'
+    'frameworks/kdoctools': '@stable'
+    'frameworks/karchive': '@stable'
+    'frameworks/kconfig': '@stable'
+    'frameworks/kcoreaddons': '@stable'
+    'frameworks/kitemviews': '@stable'
+    'frameworks/ktexteditor': '@stable'
+    'frameworks/kxmlgui': '@stable'
+    'frameworks/knewstuff': '@stable'
+    'libraries/kuserfeedback': '@stable'
+    'education/cantor': '@stable'
+- 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6']
+  'require':
+    'frameworks/extra-cmake-modules': '@latest-kf6'
+    'frameworks/kcrash': '@latest-kf6'
+    'frameworks/kguiaddons': '@latest-kf6'
+    'frameworks/ki18n': '@latest-kf6'
+    'frameworks/kparts': '@latest-kf6'
+    'frameworks/kwidgetsaddons': '@latest-kf6'
+    'frameworks/kdoctools': '@latest-kf6'
+    'frameworks/karchive': '@latest-kf6'
+    'frameworks/kconfig': '@latest-kf6'
+    'frameworks/kcoreaddons': '@latest-kf6'
+    'frameworks/kitemviews': '@latest-kf6'
+    'frameworks/ktexteditor': '@latest-kf6'
+    'frameworks/kxmlgui': '@latest-kf6'
+    'frameworks/knewstuff': '@latest-kf6'
+    'libraries/kuserfeedback': '@latest-kf6'
+
+Environment:
+  KDECI_BUILD: "TRUE"
+
+Options:
+  setup-dbus-session: False
+  require-passing-tests-on: ['@all']

@@ -1,91 +1,109 @@
-/***************************************************************************
-    File                 : aspectcommands.h
-    Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2007-2010 by Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2007-2009 Tilman Benkert(thzs@gmx.net)
-    Copyright            : (C) 2013-2017 by Alexander Semke (alexander.semke@web.de)
-    Description          : Undo commands used by AbstractAspect.
-                           Only meant to be used within AbstractAspect.cpp
+/*
+	File                 : aspectcommands.h
+	Project              : LabPlot
+	Description          : Undo commands used by AbstractAspect.
+	Only meant to be used within AbstractAspect.cpp
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef ASPECTCOMMANDS_H
 #define ASPECTCOMMANDS_H
 
 #include "AspectPrivate.h"
-#include <QUndoCommand>
 #include <KLocalizedString>
+#include <QUndoCommand>
 
 class AspectChildRemoveCmd : public QUndoCommand {
 public:
-	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child)
-		: m_target(target), m_child(child), m_index(-1) {
+	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_target(target)
+		, m_child(child)
+		, m_moved(child->isMoved()) {
 		setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
 	}
 
 	~AspectChildRemoveCmd() override {
-		//TODO: this makes labplot crashing on project close/save.
-// 			if (m_removed)
-// 				delete m_child;
+		// TODO: this makes labplot crashing on project close/save.
+		// 			if (m_removed)
+		// 				delete m_child;
 	}
 
 	// calling redo transfers ownership of m_child to the undo command
 	void redo() override {
+		// QDEBUG(Q_FUNC_INFO << ", TARGET = " << m_target->q << " CHILD = " << m_child << ", PARENT = " << m_child->parentAspect())
 		AbstractAspect* nextSibling;
 		if (m_child == m_target->m_children.last())
 			nextSibling = nullptr;
 		else
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
-		emit m_target->q->aspectAboutToBeRemoved(m_child);
+		// emit the "about to be removed" signal also for all children columns so the curves can react.
+		// no need to notify when the parent is just being moved (move up, moved down in the project explorer),
+		//(move = delete at the current position + insert at the new position)
+		if (!m_moved) {
+			const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* col : columns)
+				emit col->parentAspect()->childAspectAboutToBeRemoved(col);
+		}
+
+		// no need to emit signals if the aspect is hidden, the only exceptions is it's a datapicker point
+		// and we need to react on its removal in order to update the data spreadsheet.
+		// TODO: the check for hidden was added originally to avoid crashes in the debug build of Qt because
+		// of asserts for negative values in the model. It also helps wrt. the performance since we don't need
+		// to react on such events in the model for hidden aspects. Adding here the exception for the datapicker
+		// will most probably trigger again crashes in the debug build of Qt if the datapicker is involved but we
+		// rather accept this "edge case" than having no undo/redo for position changes for datapicker points until
+		// we have a better solution.
+		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
+			emit m_target->q->childAspectAboutToBeRemoved(m_child);
+
 		m_index = m_target->removeChild(m_child);
-		emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
-//		m_removed = true;
+
+		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
+			emit m_target->q->childAspectRemoved(m_target->q, nextSibling, m_child);
+
+		// QDEBUG(Q_FUNC_INFO << ", DONE. CHILD = " << m_child)
+		//		m_removed = true;
 	}
 
 	// calling undo transfers ownership of m_child back to its parent aspect
 	void undo() override {
 		Q_ASSERT(m_index != -1); // m_child must be a child of m_target->q
 
-		emit m_target->q->aspectAboutToBeAdded(m_target->q, nullptr, m_child);
+		if (m_moved)
+			m_child->setMoved(true);
+
+		emit m_target->q->childAspectAboutToBeAdded(m_target->q, nullptr, m_child);
+		emit m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
 		m_target->insertChild(m_index, m_child);
-		emit m_target->q->aspectAdded(m_child);
-// 		m_removed = false;
+		m_child->finalizeAdd();
+		emit m_target->q->childAspectAdded(m_child);
+
+		if (m_moved)
+			m_child->setMoved(false);
+		// 		m_removed = false;
 	}
 
 protected:
-	AbstractAspectPrivate* m_target;
-	AbstractAspect* m_child;
-	int m_index;
-// 	bool m_removed{false};
+	AbstractAspectPrivate* m_target{nullptr};
+	AbstractAspect* m_child{nullptr};
+	int m_index{-1};
+	bool m_moved{false};
+	// 	bool m_removed{false};
 };
 
 class AspectChildAddCmd : public AspectChildRemoveCmd {
 public:
-	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index)
-		: AspectChildRemoveCmd(target, child) {
+	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index, QUndoCommand* parent)
+		: AspectChildRemoveCmd(target, child, parent) {
 		setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
 		m_index = index;
-// 		m_removed = true;
+		// 		m_removed = true;
 	}
 
 	void redo() override {
@@ -99,32 +117,34 @@ public:
 
 class AspectChildReparentCmd : public QUndoCommand {
 public:
-	AspectChildReparentCmd(AbstractAspectPrivate* target, AbstractAspectPrivate* new_parent,
-	                       AbstractAspect* child, int new_index)
-		: m_target(target), m_new_parent(new_parent), m_child(child), m_new_index(new_index) {
+	AspectChildReparentCmd(AbstractAspectPrivate* target, AbstractAspectPrivate* new_parent, AbstractAspect* child, int new_index)
+		: m_target(target)
+		, m_new_parent(new_parent)
+		, m_child(child)
+		, m_new_index(new_index) {
 		setText(i18n("%1: move %2 to %3.", m_target->m_name, m_child->name(), m_new_parent->m_name));
 	}
 
 	// calling redo transfers ownership of m_child to the new parent aspect
 	void redo() override {
-		emit m_child->aspectAboutToBeRemoved(m_child);
+		emit m_child->childAspectAboutToBeRemoved(m_child);
 		m_index = m_target->removeChild(m_child);
 		m_new_parent->insertChild(m_new_index, m_child);
-		emit m_child->aspectAdded(m_child);
+		emit m_child->childAspectAdded(m_child);
 	}
 
 	// calling undo transfers ownership of m_child back to its previous parent aspect
 	void undo() override {
 		Q_ASSERT(m_index != -1);
-		emit m_child->aspectAboutToBeRemoved(m_child);
+		emit m_child->childAspectAboutToBeRemoved(m_child);
 		m_new_parent->removeChild(m_child);
 		m_target->insertChild(m_index, m_child);
-		emit m_child->aspectAdded(m_child);
+		emit m_child->childAspectAdded(m_child);
 	}
 
 protected:
-	AbstractAspectPrivate * m_target;
-	AbstractAspectPrivate * m_new_parent;
+	AbstractAspectPrivate* m_target;
+	AbstractAspectPrivate* m_new_parent;
 	AbstractAspect* m_child;
 	int m_index{-1};
 	int m_new_index;

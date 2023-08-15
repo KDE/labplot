@@ -1,32 +1,15 @@
-/***************************************************************************
-File                 : LiveDataDock.cpp
-Project              : LabPlot
-Description          : Dock widget for live data properties
---------------------------------------------------------------------
-Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
-Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
-Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
-***************************************************************************/
+/*
+	File                 : LiveDataDock.cpp
+	Project              : LabPlot
+	Description          : Dock widget for live data properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
 #include "LiveDataDock.h"
 #include "kdefrontend/GuiTools.h"
 
@@ -39,34 +22,34 @@ Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
 #include <KLocalizedString>
 
 #ifdef HAVE_MQTT
-#include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
 #include "kdefrontend/datasources/MQTTSubscriptionWidget.h"
+#include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
+#include <QMenu>
 #include <QMessageBox>
 #include <QWidgetAction>
-#include <QMenu>
 #endif
 
-LiveDataDock::LiveDataDock(QWidget* parent) : BaseDock(parent)
+LiveDataDock::LiveDataDock(QWidget* parent)
+	: BaseDock(parent)
 #ifdef HAVE_MQTT
-	,
-	m_subscriptionWidget(new MQTTSubscriptionWidget(this))
+	, m_subscriptionWidget(new MQTTSubscriptionWidget(this))
 #endif
 {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	//leComment = // not available
+	// leComment = // not available
 
 	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &LiveDataDock::nameChanged);
 	connect(ui.bPausePlayReading, &QPushButton::clicked, this, &LiveDataDock::pauseContinueReading);
 	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
-	connect(ui.sbUpdateInterval, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
+	connect(ui.sbUpdateInterval, QOverload<int>::of(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
 
-	connect(ui.sbKeepNValues, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::keepNValuesChanged);
-	connect(ui.sbSampleSize, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleSizeChanged);
-	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
-	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
+	connect(ui.sbKeepNValues, QOverload<int>::of(&QSpinBox::valueChanged), this, &LiveDataDock::keepNValuesChanged);
+	connect(ui.sbSampleSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &LiveDataDock::sampleSizeChanged);
+	connect(ui.cbUpdateType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
+	connect(ui.cbReadingType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
 
 #ifdef HAVE_MQTT
 	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);
@@ -89,7 +72,7 @@ LiveDataDock::LiveDataDock(QWidget* parent) : BaseDock(parent)
 
 #ifdef HAVE_MQTT
 LiveDataDock::~LiveDataDock() {
-	for (auto & host : m_hosts)
+	for (auto& host : m_hosts)
 		delete host.client;
 
 	delete m_subscriptionWidget;
@@ -105,15 +88,12 @@ LiveDataDock::~LiveDataDock() = default;
  */
 void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
-	if (m_mqttClient == client)
-		return;
 	auto oldclient = m_mqttClient;
 	m_mqttClient = nullptr; // prevent updates due to changes to input widgets
+	const QPair<QString, quint16> id(client->clientHostName(), client->clientPort());
 
 	ui.leName->setText(client->name());
-	const QPair<QString, quint16> id(client->clientHostName(), client->clientPort());
 	ui.leSourceInfo->setText(QStringLiteral("%1:%2").arg(id.first).arg(id.second));
-
 	ui.sbUpdateInterval->setValue(client->updateInterval());
 	ui.cbUpdateType->setCurrentIndex(static_cast<int>(client->updateType()));
 	ui.cbReadingType->setCurrentIndex(static_cast<int>(client->readingType()));
@@ -123,7 +103,8 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		ui.sbUpdateInterval->hide();
 	}
 
-	if (client->isPaused()) {
+	m_paused = client->isPaused();
+	if (m_paused) {
 		ui.bPausePlayReading->setText(i18n("Continue reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
@@ -141,15 +122,15 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		ui.sbSampleSize->setValue(client->sampleSize());
 
 	// disable "whole file" option
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+	const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	auto* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	if (ui.cbReadingType->currentIndex() == static_cast<int>(LiveDataSource::ReadingType::WholeFile))
 		ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 
 	m_mqttClient = client; // updates may be applied from now on
 
-	//show MQTT connected options
+	// show MQTT connected options
 	ui.lTopics->show();
 	ui.swSubscriptions->setVisible(true);
 	m_subscriptionWidget->setVisible(true);
@@ -158,7 +139,8 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	ui.bLWT->show();
 
 	m_previousHost = m_currentHost;
-	//if there isn't a client with this hostname we instantiate a new one
+
+	// if there isn't a client with this hostname we instantiate a new one
 	auto it = m_hosts.find(id);
 	if (it == m_hosts.end()) {
 		m_currentHost = &m_hosts[id];
@@ -174,7 +156,6 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, client, &MQTTClient::addBeforeRemoveSubscription);
 		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, client, &MQTTClient::removeMQTTSubscription);
 		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, client, &MQTTClient::addMQTTSubscription);
-
 
 		m_currentHost->client->setHostname(id.first);
 		m_currentHost->client->setPort(id.second);
@@ -195,18 +176,18 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 	if (m_previousMQTTClient == nullptr) {
 		m_updateSubscriptionConn = connect(client, &MQTTClient::MQTTSubscribed, [this]() {
-			emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+			Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 		});
 
-		//Fill the subscription tree(useful if the MQTTClient was loaded)
+		// Fill the subscription tree(useful if the MQTTClient was loaded)
 		QVector<QString> topics = client->topicNames();
 		for (const auto& topic : topics)
 			addTopicToTree(topic);
-		emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+		Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 	}
 
-	//if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
-	//and clear the tree widgets
+	// if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
+	// and clear the tree widgets
 	else if (m_previousMQTTClient->clientHostName() != client->clientHostName()) {
 		disconnect(m_updateSubscriptionConn);
 		disconnect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
@@ -217,21 +198,21 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::reparentTopic, m_previousMQTTClient, &MQTTClient::reparentTopic);
 		disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, m_previousMQTTClient, &MQTTClient::addBeforeRemoveSubscription);
 		disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, m_previousMQTTClient, &MQTTClient::removeMQTTSubscription);
-		disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription,  m_previousMQTTClient, &MQTTClient::addMQTTSubscription);
+		disconnect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, m_previousMQTTClient, &MQTTClient::addMQTTSubscription);
 
 		m_previousHost->topicList = m_subscriptionWidget->getTopicList();
 		m_subscriptionWidget->setTopicList(m_currentHost->topicList);
 
-		emit MQTTClearTopics();
-		//repopulating the tree widget with the already known topics of the client
-		for (int i = 0; i < m_currentHost->addedTopics.size(); ++i)
-			addTopicToTree(m_currentHost->addedTopics.at(i));
+		Q_EMIT MQTTClearTopics();
+		// repopulating the tree widget with the already known topics of the client
+		for (const auto& topic : m_currentHost->addedTopics)
+			addTopicToTree(topic);
 
-		//fill subscriptions tree widget
-		emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+		// fill subscriptions tree widget
+		Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 
 		m_updateSubscriptionConn = connect(client, &MQTTClient::MQTTSubscribed, [this]() {
-			emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+			Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 		});
 		connect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 
@@ -256,13 +237,11 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 #ifdef HAVE_MQTT
 	m_mqttClient = nullptr;
 #endif
-// 	if (m_liveDataSource == source)
-// 		return;
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
 
 	ui.leName->setText(source->name());
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 	const LiveDataSource::SourceType sourceType = source->sourceType();
 	const LiveDataSource::ReadingType readingType = source->readingType();
 	const LiveDataSource::UpdateType updateType = source->updateType();
@@ -278,8 +257,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 		GuiTools::highlight(ui.leSourceInfo, invalid);
 		break;
 	}
-	case LiveDataSource::SourceType::NetworkTcpSocket:
-	case LiveDataSource::SourceType::NetworkUdpSocket:
+	case LiveDataSource::SourceType::NetworkTCPSocket:
+	case LiveDataSource::SourceType::NetworkUDPSocket:
 		ui.leSourceInfo->setText(QStringLiteral("%1:%2").arg(source->host()).arg(source->port()));
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
@@ -297,7 +276,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 		ui.sbUpdateInterval->hide();
 	}
 
-	if (source->isPaused()) {
+	m_paused = source->isPaused();
+	if (m_paused) {
 		ui.bPausePlayReading->setText(i18n("Continue Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
@@ -309,11 +289,11 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 
 	// disable "whole file" when having no file (i.e. socket or port)
 	auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+	auto* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		//for file types other than ASCII and binary we support re-reading the whole file only
-		//select "read whole file" and deactivate the combobox
+		// for file types other than ASCII and binary we support re-reading the whole file only
+		// select "read whole file" and deactivate the combobox
 		if (fileType != AbstractFileFilter::FileType::Ascii && fileType != AbstractFileFilter::FileType::Binary) {
 			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 			ui.cbReadingType->setEnabled(false);
@@ -325,8 +305,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 
-	if (((sourceType == LiveDataSource::SourceType::FileOrPipe || sourceType == LiveDataSource::SourceType::NetworkUdpSocket) &&
-	        (readingType == LiveDataSource::ReadingType::ContinuousFixed || readingType == LiveDataSource::ReadingType::FromEnd)))
+	if (((sourceType == LiveDataSource::SourceType::FileOrPipe || sourceType == LiveDataSource::SourceType::NetworkUDPSocket)
+		 && (readingType == LiveDataSource::ReadingType::ContinuousFixed || readingType == LiveDataSource::ReadingType::FromEnd)))
 		ui.sbSampleSize->setValue(source->sampleSize());
 	else {
 		ui.lSampleSize->hide();
@@ -336,8 +316,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	// disable "on new data"-option if not available
 	model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
 	item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
-	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::NetworkUdpSocket ||
-	        sourceType == LiveDataSource::SourceType::SerialPort)
+	if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket || sourceType == LiveDataSource::SourceType::NetworkUDPSocket
+		|| sourceType == LiveDataSource::SourceType::SerialPort)
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	else
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -381,23 +361,23 @@ void LiveDataDock::updateNow() {
 
 void LiveDataDock::nameChanged(const QString& name) {
 	if (m_liveDataSource) {
-		if (!m_liveDataSource->setName(name, false)) {
-			ui.leName->setStyleSheet("background:red;");
+		if (!m_liveDataSource->setName(name, AbstractAspect::NameHandling::UniqueRequired)) {
+			SET_WARNING_STYLE(m_leName)
 			ui.leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 			return;
 		}
 	}
 #ifdef HAVE_MQTT
 	else if (m_mqttClient) {
-		if (!m_mqttClient->setName(name, false)) {
-			ui.leName->setStyleSheet("background:red;");
+		if (!m_mqttClient->setName(name, AbstractAspect::NameHandling::UniqueRequired)) {
+			SET_WARNING_STYLE(m_leName)
 			ui.leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 			return;
 		}
 	}
 #endif
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 }
 
 /*!
@@ -405,25 +385,25 @@ void LiveDataDock::nameChanged(const QString& name) {
  * \param idx
  */
 void LiveDataDock::updateTypeChanged(int idx) {
-	if (m_liveDataSource)  {
+	if (m_liveDataSource) {
 		DEBUG("LiveDataDock::updateTypeChanged()");
 		const auto updateType = static_cast<LiveDataSource::UpdateType>(idx);
 
 		switch (updateType) {
 		case LiveDataSource::UpdateType::TimeInterval: {
-				ui.lUpdateInterval->show();
-				ui.sbUpdateInterval->show();
-				const auto s = m_liveDataSource->sourceType();
-				const auto r = m_liveDataSource->readingType();
-				const bool showSampleSize = ((s == LiveDataSource::SourceType::FileOrPipe || s == LiveDataSource::SourceType::NetworkUdpSocket) &&
-				                             (r == LiveDataSource::ReadingType::ContinuousFixed || r == LiveDataSource::ReadingType::FromEnd));
-				ui.lSampleSize->setVisible(showSampleSize);
-				ui.sbSampleSize->setVisible(showSampleSize);
+			ui.lUpdateInterval->show();
+			ui.sbUpdateInterval->show();
+			const auto s = m_liveDataSource->sourceType();
+			const auto r = m_liveDataSource->readingType();
+			const bool showSampleSize = ((s == LiveDataSource::SourceType::FileOrPipe || s == LiveDataSource::SourceType::NetworkUDPSocket)
+										 && (r == LiveDataSource::ReadingType::ContinuousFixed || r == LiveDataSource::ReadingType::FromEnd));
+			ui.lSampleSize->setVisible(showSampleSize);
+			ui.sbSampleSize->setVisible(showSampleSize);
 
-				m_liveDataSource->setUpdateType(updateType);
-				m_liveDataSource->setUpdateInterval(ui.sbUpdateInterval->value());
-				break;
-			}
+			m_liveDataSource->setUpdateType(updateType);
+			m_liveDataSource->setUpdateInterval(ui.sbUpdateInterval->value());
+			break;
+		}
 		case LiveDataSource::UpdateType::NewData:
 			ui.lUpdateInterval->hide();
 			ui.sbUpdateInterval->hide();
@@ -459,15 +439,14 @@ void LiveDataDock::updateTypeChanged(int idx) {
  * \param idx
  */
 void LiveDataDock::readingTypeChanged(int idx) {
-	if (m_liveDataSource)  {
+	if (m_liveDataSource) {
 		const auto type = static_cast<LiveDataSource::ReadingType>(idx);
 		const auto sourceType = m_liveDataSource->sourceType();
 		const auto updateType = m_liveDataSource->updateType();
 
-		if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
-			|| sourceType == LiveDataSource::SourceType::SerialPort
-		        || type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile
-		        || updateType == LiveDataSource::UpdateType::NewData) {
+		if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket || sourceType == LiveDataSource::SourceType::LocalSocket
+			|| sourceType == LiveDataSource::SourceType::SerialPort || type == LiveDataSource::ReadingType::TillEnd
+			|| type == LiveDataSource::ReadingType::WholeFile || updateType == LiveDataSource::UpdateType::NewData) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {
@@ -479,7 +458,7 @@ void LiveDataDock::readingTypeChanged(int idx) {
 	}
 #ifdef HAVE_MQTT
 	else if (m_mqttClient) {
-		MQTTClient::ReadingType type = static_cast<MQTTClient::ReadingType>(idx);
+		auto type = static_cast<MQTTClient::ReadingType>(idx);
 
 		if (type == MQTTClient::ReadingType::TillEnd) {
 			ui.lSampleSize->hide();
@@ -570,13 +549,10 @@ void LiveDataDock::pauseContinueReading() {
  * \param state the state of the checbox
  */
 void LiveDataDock::useWillMessage(bool use) {
-	qDebug()<<"Use will message: " << use;
-
 	if (use) {
 		m_mqttClient->setMQTTWillUse(true);
 		if (m_mqttClient->willUpdateType() == MQTTClient::WillUpdateType::OnClick)
 			ui.bWillUpdateNow->show();
-
 	} else {
 		m_mqttClient->setMQTTWillUse(false);
 		ui.bWillUpdateNow->hide();
@@ -654,7 +630,7 @@ void LiveDataDock::willUpdateTypeChanged(int updateType) {
 	} else if (updateType == static_cast<int>(MQTTClient::WillUpdateType::OnClick)) {
 		ui.bWillUpdateNow->show();
 
-		//if update type is on click we stop the will timer
+		// if update type is on click we stop the will timer
 		m_mqttClient->stopWillTimer();
 	}
 }
@@ -684,10 +660,10 @@ void LiveDataDock::willUpdateIntervalChanged(int interval) {
  */
 void LiveDataDock::statisticsChanged(MQTTClient::WillStatisticsType willStatisticsType) {
 	if (willStatisticsType != MQTTClient::WillStatisticsType::NoStatistics) {
-		//if it's not already added and it's checked we add it
+		// if it's not already added and it's checked we add it
 		if (!m_mqttClient->willStatistics().at(static_cast<int>(willStatisticsType)))
 			m_mqttClient->addWillStatistics(willStatisticsType);
-		else //otherwise remove it
+		else // otherwise remove it
 			m_mqttClient->removeWillStatistics(willStatisticsType);
 	}
 }
@@ -705,8 +681,7 @@ void LiveDataDock::onMQTTConnect() {
  *\brief called when the client receives a message
  * if the message arrived from a new topic, the topic is put in twTopics
  */
-void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
-	Q_UNUSED(message)
+void LiveDataDock::mqttMessageReceived(const QByteArray& /*message*/, const QMqttTopicName& topic) {
 	if (!m_currentHost->addedTopics.contains(topic.name())) {
 		m_currentHost->addedTopics.push_back(topic.name());
 		addTopicToTree(topic.name());
@@ -718,18 +693,22 @@ void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTop
  *
  * \param topicName the name of the topic, which will be added to the tree widget
  */
-void LiveDataDock::addTopicToTree(const QString &topicName) {
+void LiveDataDock::addTopicToTree(const QString& topicName) {
 	QStringList name;
-	QChar sep = '/';
+	QChar sep = QLatin1Char('/');
 	QString rootName;
 	if (topicName.contains(sep)) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		QStringList list = topicName.split(sep, Qt::SkipEmptyParts);
+#else
 		QStringList list = topicName.split(sep, QString::SkipEmptyParts);
+#endif
 
 		if (!list.isEmpty()) {
 			rootName = list.at(0);
 			name.append(list.at(0));
 			QTreeWidgetItem* currentItem;
-			//check whether the first level of the topic can be found in twTopics
+			// check whether the first level of the topic can be found in twTopics
 			int topItemIdx = -1;
 			for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
 				if (m_subscriptionWidget->topLevelTopic(i)->text(0) == list.at(0)) {
@@ -737,8 +716,8 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 					break;
 				}
 			}
-			//if not we simply add every level of the topic to the tree
-			if ( topItemIdx < 0) {
+			// if not we simply add every level of the topic to the tree
+			if (topItemIdx < 0) {
 				currentItem = new QTreeWidgetItem(name);
 				m_subscriptionWidget->addTopic(currentItem);
 				for (int i = 1; i < list.size(); ++i) {
@@ -748,8 +727,8 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 					currentItem = currentItem->child(0);
 				}
 			}
-			//otherwise we search for the first level that isn't part of the tree,
-			//then add every level of the topic to the tree from that certain level
+			// otherwise we search for the first level that isn't part of the tree,
+			// then add every level of the topic to the tree from that certain level
 			else {
 				currentItem = m_subscriptionWidget->topLevelTopic(topItemIdx);
 				int listIdx = 1;
@@ -765,12 +744,12 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 						}
 					}
 					if (!found) {
-						//this is the level that isn't present in the tree
+						// this is the level that isn't present in the tree
 						break;
 					}
 				}
 
-				//add every level to the tree starting with the first level that isn't part of the tree
+				// add every level to the tree starting with the first level that isn't part of the tree
 				for (; listIdx < list.size(); ++listIdx) {
 					name.clear();
 					name.append(list.at(listIdx));
@@ -785,26 +764,29 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 		m_subscriptionWidget->addTopic(new QTreeWidgetItem(name));
 	}
 
-	//if a subscribed topic contains the new topic, we have to update twSubscriptions
+	// if a subscribed topic contains the new topic, we have to update twSubscriptions
 	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
-		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(QLatin1Char('/'), Qt::SkipEmptyParts);
+#else
+		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(QLatin1Char('/'), QString::SkipEmptyParts);
+#endif
 		if (rootName == subscriptionName[0]) {
-			emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+			Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 			break;
 		}
 	}
 
-	//signals that a newTopic was added, in order to fill the completer of leTopics
-	//we have to pass the whole topic name, not just the root name, for testing purposes
-	emit newTopic(topicName);
+	// signals that a newTopic was added, in order to fill the completer of leTopics
+	// we have to pass the whole topic name, not just the root name, for testing purposes
+	Q_EMIT newTopic(topicName);
 }
 
 /*!
  *\brief called when a client receives a message, if the clients hostname isn't identic with the host name of MQTTClient
  * if the message arrived from a new topic, the topic is added to the host data
  */
-void LiveDataDock::mqttMessageReceivedInBackground(const QByteArray& message, const QMqttTopicName& topic) {
-	Q_UNUSED(message)
+void LiveDataDock::mqttMessageReceivedInBackground(const QByteArray& /*message*/, const QMqttTopicName& topic) {
 	if (!m_currentHost->addedTopics.contains(topic.name()))
 		m_currentHost->addedTopics.push_back(topic.name());
 }
@@ -821,7 +803,7 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
 	if (it == m_hosts.end())
 		return;
 
-	MQTTHost & host = it.value();
+	MQTTHost& host = it.value();
 
 	if (host.count > 1) {
 		--host.count;
@@ -830,13 +812,13 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
 
 	host.client->disconnectFromHost();
 
-	if (m_previousMQTTClient != nullptr && m_previousMQTTClient->clientHostName() == hostname) {
+	if (m_previousMQTTClient && m_previousMQTTClient->clientHostName() == hostname) {
 		disconnect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 		m_previousMQTTClient = nullptr;
 	}
 
-	if (m_mqttClient->clientHostName() == hostname) {
-		emit MQTTClearTopics();
+	if (m_mqttClient && m_mqttClient->clientHostName() == hostname) {
+		Q_EMIT MQTTClearTopics();
 		m_mqttClient = nullptr;
 	}
 
@@ -849,7 +831,11 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
  * \param topic
  */
 bool LiveDataDock::testSubscribe(const QString& topic) {
-	QStringList topicList = topic.split('/', QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	QStringList topicList = topic.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+#else
+	QStringList topicList = topic.split(QLatin1Char('/'), QString::SkipEmptyParts);
+#endif
 	QTreeWidgetItem* currentItem = nullptr;
 	for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
 		if (m_subscriptionWidget->topLevelTopic(i)->text(0) == topicList[0]) {
@@ -859,8 +845,8 @@ bool LiveDataDock::testSubscribe(const QString& topic) {
 	}
 
 	if (currentItem) {
-		for (int i = 1 ; i < topicList.size(); ++i) {
-			if (topicList[i] == '#')
+		for (int i = 1; i < topicList.size(); ++i) {
+			if (topicList[i] == QLatin1Char('#'))
 				break;
 
 			for (int j = 0; j < currentItem->childCount(); ++j) {
@@ -869,7 +855,6 @@ bool LiveDataDock::testSubscribe(const QString& topic) {
 					break;
 				} else if (j == currentItem->childCount() - 1)
 					return false;
-
 			}
 		}
 	} else
@@ -899,7 +884,7 @@ bool LiveDataDock::testUnsubscribe(const QString& topic) {
 				return true;
 			} else {
 				for (int i = 0; i < currentItem->childCount(); ++i) {
-					qDebug()<<currentItem->child(i)->text(0)<<" "<<topic;
+					qDebug() << currentItem->child(i)->text(0) << " " << topic;
 					if (MQTTSubscriptionWidget::checkTopicContains(currentItem->child(i)->text(0), topic)) {
 						currentItem = currentItem->child(i);
 						break;
@@ -932,7 +917,7 @@ void LiveDataDock::showWillSettings() {
 		menu.close();
 	});
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&willSettingsWidget);
 	menu.addAction(widgetAction);
 
@@ -941,8 +926,8 @@ void LiveDataDock::showWillSettings() {
 }
 
 void LiveDataDock::enableWill(bool enable) {
-	if(enable) {
-		if(!ui.bLWT->isEnabled())
+	if (enable) {
+		if (!ui.bLWT->isEnabled())
 			ui.bLWT->setEnabled(enable);
 	} else
 		ui.bLWT->setEnabled(enable);

@@ -1,30 +1,12 @@
-/***************************************************************************
-    File                 : MatrixFunctionDialog.h
-    Project              : LabPlot
-    Description          : Dialog for generating matrix values from a mathematical function
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015-2019 by Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : MatrixFunctionDialog.h
+	Project              : LabPlot
+	Description          : Dialog for generating matrix values from a mathematical function
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef MATRIXFUNCTIONDIALOG_H
 #define MATRIXFUNCTIONDIALOG_H
 
@@ -46,13 +28,13 @@ private:
 	Matrix* m_matrix;
 	QPushButton* m_okButton;
 
-private slots:
+private Q_SLOTS:
 	void generate();
 	void checkValues();
 	void showConstants();
 	void showFunctions();
-	void insertFunction(const QString&);
-	void insertConstant(const QString&);
+	void insertFunction(const QString&) const;
+	void insertConstant(const QString&) const;
 };
 
 #endif

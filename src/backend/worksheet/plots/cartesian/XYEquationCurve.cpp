@@ -1,30 +1,12 @@
-/***************************************************************************
-    File                 : XYEquationCurve.cpp
-    Project              : LabPlot
-    Description          : A xy-curve defined by a mathematical equation
-    --------------------------------------------------------------------
-    Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : XYEquationCurve.cpp
+	Project              : LabPlot
+	Description          : A xy-curve defined by a mathematical equation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 /*!
   \class XYEquationCurve
@@ -36,27 +18,29 @@
 #include "XYEquationCurve.h"
 #include "XYEquationCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Folder.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/commandtemplates.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 
-#include <QIcon>
 #include <KLocalizedString>
+#include <QIcon>
 
 XYEquationCurve::XYEquationCurve(const QString& name)
 	: XYCurve(name, new XYEquationCurvePrivate(this), AspectType::XYEquationCurve) {
-
 	init();
 }
 
 XYEquationCurve::XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd)
 	: XYCurve(name, dd, AspectType::XYEquationCurve) {
-
 	init();
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 XYEquationCurve::~XYEquationCurve() = default;
 
 void XYEquationCurve::init() {
@@ -68,15 +52,15 @@ void XYEquationCurve::init() {
 	d->yColumn->setHidden(true);
 	addChildFast(d->yColumn);
 
-	//TODO: read from the saved settings for XYEquationCurve?
+	// TODO: read from the saved settings for XYEquationCurve?
 	d->lineType = XYCurve::LineType::Line;
-	d->symbolsStyle = Symbol::Style::NoSymbols;
+	d->symbol->setStyle(Symbol::Style::NoSymbols);
 
 	setUndoAware(false);
-	suppressRetransform(true);
+	setSuppressRetransform(true);
 	setXColumn(d->xColumn);
 	setYColumn(d->yColumn);
-	suppressRetransform(false);
+	setSuppressRetransform(false);
 	setUndoAware(true);
 }
 
@@ -85,62 +69,98 @@ void XYEquationCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYEquationCurve::dataAvailable() const {
+	Q_D(const XYEquationCurve);
+	return (d->equationData.count > 0);
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYEquationCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-equation-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYEquationCurve, XYEquationCurve::EquationData, equationData, equationData)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
-STD_SETTER_CMD_IMPL_F_S(XYEquationCurve, SetEquationData, XYEquationCurve::EquationData, equationData, recalculate);
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
+STD_SETTER_CMD_IMPL_F_S(XYEquationCurve, SetEquationData, XYEquationCurve::EquationData, equationData, recalculate)
 void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equationData) {
 	Q_D(XYEquationCurve);
-	if ( (equationData.expression1 != d->equationData.expression1)
-		|| (equationData.expression2 != d->equationData.expression2)
-		|| (equationData.min != d->equationData.min)
-		|| (equationData.max != d->equationData.max)
-		|| (equationData.count != d->equationData.count) )
+	if ((equationData.expression1 != d->equationData.expression1) || (equationData.expression2 != d->equationData.expression2)
+		|| (equationData.min != d->equationData.min) || (equationData.max != d->equationData.max) || (equationData.count != d->equationData.count))
 		exec(new XYEquationCurveSetEquationDataCmd(d, equationData, ki18n("%1: set equation")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
-XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner) : XYCurvePrivate(owner),
-	xColumn(new Column("x", AbstractColumn::ColumnMode::Numeric)),
-	yColumn(new Column("y", AbstractColumn::ColumnMode::Numeric)),
-	xVector(static_cast<QVector<double>* >(xColumn->data())),
-	yVector(static_cast<QVector<double>* >(yColumn->data())),
-	q(owner)  {
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
+/*!
+ * creates a new spreadsheet having the data with the results of the calculation.
+ * the new spreadsheet is added to the current folder.
+ */
+void XYEquationCurve::createDataSpreadsheet() {
+	if (!xColumn() || !yColumn())
+		return;
+
+	auto* spreadsheet = new Spreadsheet(i18n("%1 - Data", name()));
+	spreadsheet->removeColumns(0, spreadsheet->columnCount()); // remove default columns
+	spreadsheet->setRowCount(xColumn()->rowCount());
+
+	// x values
+	auto* data = static_cast<const Column*>(xColumn())->data();
+	auto* xColumn = new Column(QLatin1String("x"), *static_cast<QVector<double>*>(data));
+	xColumn->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+	spreadsheet->addChild(xColumn);
+
+	// y values
+	data = static_cast<const Column*>(yColumn())->data();
+	auto* yColumn = new Column(QLatin1String("y"), *static_cast<QVector<double>*>(data));
+	yColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+	spreadsheet->addChild(yColumn);
+
+	// add the new spreadsheet to the current folder
+	folder()->addChild(spreadsheet);
 }
 
-//no need to delete xColumn and yColumn, they are deleted
-//when the parent aspect is removed
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
+XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner)
+	: XYCurvePrivate(owner)
+	, xColumn(new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double))
+	, yColumn(new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double))
+	, xVector(static_cast<QVector<double>*>(xColumn->data()))
+	, yVector(static_cast<QVector<double>*>(yColumn->data()))
+	, q(owner) {
+}
+
+// no need to delete xColumn and yColumn, they are deleted
+// when the parent aspect is removed
 XYEquationCurvePrivate::~XYEquationCurvePrivate() = default;
 
 void XYEquationCurvePrivate::recalculate() {
-	//resize the vector if a new number of point to calculate was provided
+	// resize the vector if a new number of point to calculate was provided
 	if (equationData.count != xVector->size()) {
 		if (equationData.count >= 1) {
 			xVector->resize(equationData.count);
 			yVector->resize(equationData.count);
 		} else {
-			//invalid number of points provided
+			// invalid number of points provided
 			xVector->clear();
 			yVector->clear();
 			recalcLogicalPoints();
-			emit q->dataChanged();
+			Q_EMIT q->dataChanged();
 			return;
 		}
+		xColumn->invalidateProperties();
+		yColumn->invalidateProperties();
 	} else {
 		if (equationData.count < 1)
 			return;
@@ -149,46 +169,50 @@ void XYEquationCurvePrivate::recalculate() {
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	bool rc = false;
 	if (equationData.type == XYEquationCurve::EquationType::Cartesian) {
-		rc = parser->evaluateCartesian( equationData.expression1, equationData.min, equationData.max,
-						equationData.count, xVector, yVector );
+		rc = parser->evaluateCartesian(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
 	} else if (equationData.type == XYEquationCurve::EquationType::Polar) {
-		rc = parser->evaluatePolar( equationData.expression1, equationData.min, equationData.max,
-						equationData.count, xVector, yVector );
+		rc = parser->evaluatePolar(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
 	} else if (equationData.type == XYEquationCurve::EquationType::Parametric) {
-		rc = parser->evaluateParametric(equationData.expression1, equationData.expression2,
-						equationData.min, equationData.max, equationData.count,
-						xVector, yVector);
+		rc = parser->evaluateParametric(equationData.expression1,
+										equationData.expression2,
+										equationData.min,
+										equationData.max,
+										equationData.count,
+										xVector,
+										yVector);
 	}
 
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();
 	}
+	xColumn->invalidateProperties();
+	yColumn->invalidateProperties();
 
 	recalcLogicalPoints();
-	emit q->dataChanged();
+	Q_EMIT q->dataChanged();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
-void XYEquationCurve::save(QXmlStreamWriter* writer) const{
+void XYEquationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYEquationCurve);
 
-	writer->writeStartElement("xyEquationCurve");
+	writer->writeStartElement(QStringLiteral("xyEquationCurve"));
 
-	//write xy-curve information
+	// write xy-curve information
 	XYCurve::save(writer);
 
-	//write xy-equationCurve specific information
-	writer->writeStartElement("equationData");
-	writer->writeAttribute( "type", QString::number(static_cast<int>(d->equationData.type)) );
-	writer->writeAttribute( "expression1", d->equationData.expression1 );
-	writer->writeAttribute( "expression2", d->equationData.expression2 );
-	writer->writeAttribute( "min", d->equationData.min);
-	writer->writeAttribute( "max", d->equationData.max );
-	writer->writeAttribute( "count", QString::number(d->equationData.count) );
+	// write xy-equationCurve specific information
+	writer->writeStartElement(QStringLiteral("equationData"));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->equationData.type)));
+	writer->writeAttribute(QStringLiteral("expression1"), d->equationData.expression1);
+	writer->writeAttribute(QStringLiteral("expression2"), d->equationData.expression2);
+	writer->writeAttribute(QStringLiteral("min"), d->equationData.min);
+	writer->writeAttribute(QStringLiteral("max"), d->equationData.max);
+	writer->writeAttribute(QStringLiteral("count"), QString::number(d->equationData.count));
 	writer->writeEndElement();
 
 	writer->writeEndElement();
@@ -198,22 +222,22 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYEquationCurve);
 
-	KLocalizedString attributeWarning = ki18n( "Attribute '%1' missing or empty, default value is used" );
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyEquationCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyEquationCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyCurve") {
-			if ( !XYCurve::load(reader, preview) )
+		if (reader->name() == QLatin1String("xyCurve")) {
+			if (!XYCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "equationData") {
+		} else if (!preview && reader->name() == QLatin1String("equationData")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", equationData.type, XYEquationCurve::EquationType);
@@ -224,6 +248,10 @@ bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("count", equationData.count, int);
 		}
 	}
+
+	// Recalculate, otherwise xColumn and yColumn are not updated
+	// and so autoscale is wrong
+	recalculate();
 
 	return true;
 }

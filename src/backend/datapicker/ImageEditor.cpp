@@ -1,44 +1,25 @@
-/***************************************************************************
-    File                 : ImageEditor.cpp
-    Project              : LabPlot
-    Description          : Edit Image on the basis of input color attributes
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : ImageEditor.cpp
+	Project              : LabPlot
+	Description          : Edit Image on the basis of input color attributes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "ImageEditor.h"
-#include <QThreadPool>
 #include <QElapsedTimer>
 #include <QMutex>
+#include <QThreadPool>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 static const QRgb white = QColor(Qt::white).rgb();
 static const QRgb black = QColor(Qt::black).rgb();
 static const double colorScale = gsl_hypot3(255, 255, 255);
 
-//Intensity, Foreground, Saturation and Value are from 0 to 100, Hue is from 0 to 360
+// Intensity, Foreground, Saturation and Value are from 0 to 100, Hue is from 0 to 360
 static const int maxIntensity = 100;
 static const int maxForeground = 100;
 static const int maxHue = 360;
@@ -49,14 +30,13 @@ QMutex mutex;
 
 class DiscretizeTask : public QRunnable {
 public:
-	DiscretizeTask(int start, int end, QImage* plotImage, QImage* originalImage, const DatapickerImage::EditorSettings& settings, QColor background) :
-		m_start(start),
-		m_end(end),
-		m_plotImage(plotImage),
-		m_originalImage(originalImage),
-		m_settings(settings),
-		m_background(std::move(background))
-		{};
+	DiscretizeTask(int start, int end, QImage* plotImage, const QImage* originalImage, const DatapickerImage::EditorSettings& settings, QColor background)
+		: m_start(start)
+		, m_end(end)
+		, m_plotImage(plotImage)
+		, m_originalImage(originalImage)
+		, m_settings(settings)
+		, m_background(std::move(background)){};
 
 	void run() override {
 		for (int y = m_start; y < m_end; ++y) {
@@ -77,7 +57,7 @@ public:
 					continue;
 
 				value = ImageEditor::discretizeIntensity(x, y, m_originalImage);
-				if (!ImageEditor::pixelIsOn(value, DatapickerImage::ColorAttributes::Saturation, m_settings))
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::ColorAttributes::Intensity, m_settings))
 					continue;
 
 				value = ImageEditor::discretizeForeground(x, y, m_background, m_originalImage);
@@ -93,7 +73,7 @@ private:
 	int m_start;
 	int m_end;
 	QImage* m_plotImage;
-	QImage* m_originalImage;
+	const QImage* m_originalImage;
 	DatapickerImage::EditorSettings m_settings;
 	QColor m_background;
 };
@@ -101,15 +81,15 @@ private:
 /*!
  *
  */
-void ImageEditor::discretize(QImage* plotImage, QImage* originalImage,
-                             const DatapickerImage::EditorSettings& settings, QColor background) {
+void ImageEditor::discretize(QImage* plotImage, const QImage* originalImage, const DatapickerImage::EditorSettings& settings, QColor background) {
 	plotImage->fill(white);
 	QThreadPool* pool = QThreadPool::globalInstance();
-	int range = ceil(double(plotImage->height())/pool->maxThreadCount());
+	int range = ceil(double(plotImage->height()) / pool->maxThreadCount());
 	for (int i = 0; i < pool->maxThreadCount(); ++i) {
-		const int start = i*range;
-		int end = (i+1)*range;
-		if (end > plotImage->height()) end = plotImage->height();
+		const int start = i * range;
+		int end = (i + 1) * range;
+		if (end > plotImage->height())
+			end = plotImage->height();
 		auto* task = new DiscretizeTask(start, end, plotImage, originalImage, settings, background);
 		pool->start(task);
 	}
@@ -127,16 +107,16 @@ bool ImageEditor::processedPixelIsOn(const QImage& plotImage, int x, int y) {
 	return (gray < BLACK_WHITE_THRESHOLD);
 }
 
-//##############################################################################
-//#####################  private helper functions  #############################
-//##############################################################################
+// ##############################################################################
+// #####################  private helper functions  #############################
+// ##############################################################################
 QRgb ImageEditor::findBackgroundColor(const QImage* plotImage) {
 	ColorList::iterator itrC;
 	ColorList colors;
 	int x, y = 0;
 	for (x = 0; x < plotImage->width(); ++x) {
 		ColorEntry c;
-		c.color = plotImage->pixel(x,y);
+		c.color = plotImage->pixel(x, y);
 		c.count = 0;
 
 		bool found = false;
@@ -165,9 +145,9 @@ QRgb ImageEditor::findBackgroundColor(const QImage* plotImage) {
 }
 
 void ImageEditor::uploadHistogram(int* bins, QImage* originalImage, QColor background, DatapickerImage::ColorAttributes type) {
-	//reset bin
+	// reset bin
 	for (int i = 0; i <= colorAttributeMax(type); ++i)
-		bins [i] = 0;
+		bins[i] = 0;
 
 	for (int x = 0; x < originalImage->width(); ++x) {
 		for (int y = 0; y < originalImage->height(); ++y) {
@@ -178,8 +158,8 @@ void ImageEditor::uploadHistogram(int* bins, QImage* originalImage, QColor backg
 }
 
 int ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes type) {
-	//Intensity, Foreground, Saturation and Value are from 0 to 100
-	//Hue is from 0 to 360
+	// Intensity, Foreground, Saturation and Value are from 0 to 100
+	// Hue is from 0 to 360
 	switch (type) {
 	case DatapickerImage::ColorAttributes::None:
 		return 0;
@@ -203,11 +183,11 @@ bool ImageEditor::colorCompare(QRgb color1, QRgb color2) {
 }
 
 int ImageEditor::discretizeHue(int x, int y, const QImage* originalImage) {
-	const QColor color(originalImage->pixel(x,y));
+	const QColor color(originalImage->pixel(x, y));
 	const int h = color.hue();
 	int value = h * maxHue / 359;
 
-	if (value < 0) //QColor::hue() can return -1
+	if (value < 0) // QColor::hue() can return -1
 		value = 0;
 	if (maxHue < value)
 		value = maxHue;
@@ -216,7 +196,7 @@ int ImageEditor::discretizeHue(int x, int y, const QImage* originalImage) {
 }
 
 int ImageEditor::discretizeSaturation(int x, int y, const QImage* originalImage) {
-	const QColor color(originalImage->pixel(x,y));
+	const QColor color(originalImage->pixel(x, y));
 	const int s = color.saturation();
 	int value = s * maxSaturation / 255;
 
@@ -227,7 +207,7 @@ int ImageEditor::discretizeSaturation(int x, int y, const QImage* originalImage)
 }
 
 int ImageEditor::discretizeValue(int x, int y, const QImage* originalImage) {
-	const QColor color(originalImage->pixel(x,y));
+	const QColor color(originalImage->pixel(x, y));
 	const int v = color.value();
 	int value = v * maxValue / 255;
 
@@ -238,13 +218,13 @@ int ImageEditor::discretizeValue(int x, int y, const QImage* originalImage) {
 }
 
 int ImageEditor::discretizeIntensity(int x, int y, const QImage* originalImage) {
-	const QRgb color = originalImage->pixel(x,y);
+	const QRgb color = originalImage->pixel(x, y);
 	const int r = qRed(color);
 	const int g = qGreen(color);
 	const int b = qBlue(color);
 
 	const double intensity = gsl_hypot3(r, g, b);
-	int value = (int) (intensity * maxIntensity / colorScale + 0.5);
+	int value = (int)(intensity * maxIntensity / colorScale + 0.5);
 
 	if (maxIntensity < value)
 		value = maxIntensity;
@@ -253,7 +233,7 @@ int ImageEditor::discretizeIntensity(int x, int y, const QImage* originalImage) 
 }
 
 int ImageEditor::discretizeForeground(int x, int y, const QColor background, const QImage* originalImage) {
-	const QRgb color = originalImage->pixel(x,y);
+	const QRgb color = originalImage->pixel(x, y);
 	const int r = qRed(color);
 	const int g = qGreen(color);
 	const int b = qBlue(color);
@@ -261,7 +241,7 @@ int ImageEditor::discretizeForeground(int x, int y, const QColor background, con
 	const int gBg = background.green();
 	const int bBg = background.blue();
 	const double distance = gsl_hypot3(r - rBg, g - gBg, b - bBg);
-	int value = (int) (distance * maxForeground / colorScale + 0.5);
+	int value = (int)(distance * maxForeground / colorScale + 0.5);
 
 	if (maxForeground < value)
 		value = maxForeground;
@@ -269,9 +249,8 @@ int ImageEditor::discretizeForeground(int x, int y, const QColor background, con
 	return value;
 }
 
-int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorAttributes type,
-        const QColor background, const QImage* originalImage) {
-	const QColor color(originalImage->pixel(x,y));
+int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorAttributes type, const QColor background, const QImage* originalImage) {
+	const QColor color(originalImage->pixel(x, y));
 
 	// convert hue from 0 to 359, saturation from 0 to 255, value from 0 to 255
 	int value = 0;
@@ -283,7 +262,7 @@ int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorA
 		const int g = color.green();
 		const int b = color.blue();
 		const double intensity = gsl_hypot3(r, g, b);
-		value = (int) (intensity * maxIntensity / colorScale + 0.5);
+		value = (int)(intensity * maxIntensity / colorScale + 0.5);
 		if (maxIntensity < value)
 			value = maxIntensity;
 		break;
@@ -296,7 +275,7 @@ int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorA
 		const int gBg = background.green();
 		const int bBg = background.blue();
 		const double distance = gsl_hypot3(r - rBg, g - gBg, b - bBg);
-		value = (int) (distance * maxForeground / colorScale + 0.5);
+		value = (int)(distance * maxForeground / colorScale + 0.5);
 		if (maxForeground < value)
 			value = maxForeground;
 		break;
@@ -336,7 +315,7 @@ bool ImageEditor::pixelIsOn(int value, int low, int high) {
 		return ((low <= value) || (value <= high));
 }
 
-bool ImageEditor::pixelIsOn( int value, DatapickerImage::ColorAttributes type, const DatapickerImage::EditorSettings& settings ) {
+bool ImageEditor::pixelIsOn(int value, DatapickerImage::ColorAttributes type, const DatapickerImage::EditorSettings& settings) {
 	switch (type) {
 	case DatapickerImage::ColorAttributes::None:
 		break;

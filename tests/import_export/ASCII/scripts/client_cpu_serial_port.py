@@ -10,4 +10,4 @@ print(s)
 
 while True:
   x = s.read(3)
-  print 'read ' + x
+  print('read ' + x)

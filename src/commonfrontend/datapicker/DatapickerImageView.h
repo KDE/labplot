@@ -1,29 +1,12 @@
-/***************************************************************************
-    File                 : DatapickerImageView.h
-    Project              : LabPlot
-    Description          : DatapickerImage view for datapicker
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+/*
+	File                 : DatapickerImageView.h
+	Project              : LabPlot
+	Description          : DatapickerImage view for datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
 
- ***************************************************************************/
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef DATAPICKERIMAGEVIEW_H
 #define DATAPICKERIMAGEVIEW_H
@@ -53,8 +36,7 @@ public:
 	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
 
 private:
-	enum class MouseMode {Navigation, ZoomSelection,
-		ReferencePointsEntry, CurvePointsEntry, CurveSegmentsEntry};
+	enum class MouseMode { Navigation, ZoomSelection, ReferencePointsEntry, CurvePointsEntry, CurveSegmentsEntry };
 
 	void initActions();
 	void initMenus();
@@ -63,8 +45,9 @@ private:
 	void exportPaint(QPainter*, const QRectF& targetRect, const QRectF& sourceRect);
 	void updateMagnificationWindow();
 
-	//events
+	// events
 	void contextMenuEvent(QContextMenuEvent*) override;
+	void keyPressEvent(QKeyEvent* event) override;
 	void wheelEvent(QWheelEvent*) override;
 	void mousePressEvent(QMouseEvent*) override;
 	void mouseReleaseEvent(QMouseEvent*) override;
@@ -81,7 +64,7 @@ private:
 	float m_rotationAngle{0.0};
 	int m_numScheduledScalings{0};
 
-	//Menus
+	// Menus
 	QMenu* m_zoomMenu;
 	QMenu* m_viewMouseModeMenu;
 	QMenu* m_viewImageMenu;
@@ -94,7 +77,7 @@ private:
 	QAction* currentMagnificationAction{nullptr};
 	QAction* currentPlotPointsTypeAction{nullptr};
 
-	//Actions
+	// Actions
 	QAction* zoomInViewAction;
 	QAction* zoomOutViewAction;
 	QAction* zoomOriginAction;
@@ -123,12 +106,12 @@ private:
 	QAction* fourTimesMagnificationAction;
 	QAction* fiveTimesMagnificationAction;
 
-public slots:
+public Q_SLOTS:
 	void createContextMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*);
 
-private slots:
+private Q_SLOTS:
 	void mouseModeChanged(QAction*);
 	void magnificationChanged(QAction*);
 	void changeZoom(QAction*);
@@ -142,8 +125,10 @@ private slots:
 	void scalingTime();
 	void animFinished();
 
-signals:
+Q_SIGNALS:
 	void statusInfo(const QString&);
+
+	friend class DatapickerTest;
 };
 
 #endif

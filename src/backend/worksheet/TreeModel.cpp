@@ -1,47 +1,29 @@
-/***************************************************************************
-File                 : TreeModel.cpp
-Project              : LabPlot
-Description 	     : This is an abstract treemodel which can be used by a treeview
---------------------------------------------------------------------
-Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+/*
+	File                 : TreeModel.cpp
+	Project              : LabPlot
+	Description 	     : This is an abstract treemodel which can be used by a treeview
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
 
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "TreeModel.h"
 
-//##########################################################
-// TreeItem ###############################################
-//##########################################################
+// ##########################################################
+//  TreeItem ###############################################
+// ##########################################################
 
-TreeItem::TreeItem(const QVector<QVariant>& data, TreeItem* parent) :
-	itemData(data),
-	parentItem(parent) {
+TreeItem::TreeItem(const QVector<QVariant>& data, TreeItem* parent)
+	: itemData(data)
+	, parentItem(parent) {
 }
 
 TreeItem::~TreeItem() {
 	qDeleteAll(childItems);
 }
 
-TreeItem *TreeItem::child(int number) {
+TreeItem* TreeItem::child(int number) {
 	return childItems.value(number);
 }
 
@@ -74,7 +56,7 @@ bool TreeItem::insertChildren(int position, int count, int columns) {
 
 	for (int row = 0; row < count; ++row) {
 		QVector<QVariant> data(columns);
-		TreeItem *item = new TreeItem(data, this);
+		auto* item = new TreeItem(data, this);
 		childItems.insert(position, item);
 	}
 
@@ -88,7 +70,7 @@ bool TreeItem::insertColumns(int position, int columns) {
 	for (int column = 0; column < columns; ++column)
 		itemData.insert(position, QVariant());
 
-	foreach (TreeItem *child, childItems)
+	foreach (TreeItem* child, childItems)
 		child->insertColumns(position, columns);
 
 	return true;
@@ -115,7 +97,7 @@ bool TreeItem::removeColumns(int position, int columns) {
 	for (int column = 0; column < columns; ++column)
 		itemData.remove(position);
 
-	foreach (TreeItem *child, childItems)
+	foreach (TreeItem* child, childItems)
 		child->removeColumns(position, columns);
 
 	return true;
@@ -137,14 +119,14 @@ bool TreeItem::setBackgroundColor(int column, const QVariant& value) {
 	return true;
 }
 
-//##########################################################
-// TreeModel ###############################################
-//##########################################################
+// ##########################################################
+//  TreeModel ###############################################
+// ##########################################################
 
 TreeModel::TreeModel(const QStringList& headers, QObject* parent)
 	: QAbstractItemModel(parent) {
 	QVector<QVariant> rootData;
-	for (auto header : headers)
+	for (auto& header : headers)
 		rootData << header;
 
 	rootItem = new TreeItem(rootData);
@@ -165,12 +147,12 @@ QVariant TreeModel::treeData(const int row, const int column, const QModelIndex&
 
 QVariant TreeModel::data(const QModelIndex& index, int role) const {
 	if (!index.isValid())
-		return QVariant();
+		return {};
 
 	if (role != Qt::DisplayRole && role != Qt::EditRole && role != Qt::BackgroundRole)
-		return QVariant();
+		return {};
 
-	TreeItem *item = getItem(index);
+	TreeItem* item = getItem(index);
 
 	if (role != Qt::BackgroundRole)
 		return item->data(index.column());
@@ -185,9 +167,9 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex& index) const {
 	return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }
 
-TreeItem *TreeModel::getItem(const QModelIndex& index) const {
+TreeItem* TreeModel::getItem(const QModelIndex& index) const {
 	if (index.isValid()) {
-		TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+		auto* item = static_cast<TreeItem*>(index.internalPointer());
 		if (item)
 			return item;
 	}
@@ -198,20 +180,20 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int rol
 	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
 		return rootItem->data(section);
 
-	return QVariant();
+	return {};
 }
 
 QModelIndex TreeModel::index(int row, int column, const QModelIndex& parent) const {
 	if (parent.isValid() && parent.column() != 0)
-		return QModelIndex();
+		return {};
 
-	TreeItem *parentItem = getItem(parent);
+	TreeItem* parentItem = getItem(parent);
 
-	TreeItem *childItem = parentItem->child(row);
+	TreeItem* childItem = parentItem->child(row);
 	if (childItem)
 		return createIndex(row, column, childItem);
 	else
-		return QModelIndex();
+		return {};
 }
 
 bool TreeModel::insertColumns(int position, int columns, const QModelIndex& parent) {
@@ -225,7 +207,7 @@ bool TreeModel::insertColumns(int position, int columns, const QModelIndex& pare
 }
 
 bool TreeModel::insertRows(int position, int rows, const QModelIndex& parent) {
-	TreeItem *parentItem = getItem(parent);
+	TreeItem* parentItem = getItem(parent);
 	bool success;
 
 	beginInsertRows(parent, position, position + rows - 1);
@@ -235,15 +217,15 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex& parent) {
 	return success;
 }
 
-QModelIndex TreeModel::parent(const QModelIndex &index) const {
+QModelIndex TreeModel::parent(const QModelIndex& index) const {
 	if (!index.isValid())
-		return QModelIndex();
+		return {};
 
-	TreeItem *childItem = getItem(index);
-	TreeItem *parentItem = childItem->parent();
+	TreeItem* childItem = getItem(index);
+	TreeItem* parentItem = childItem->parent();
 
 	if (parentItem == rootItem)
-		return QModelIndex();
+		return {};
 
 	return createIndex(parentItem->childNumber(), 0, parentItem);
 }
@@ -262,7 +244,7 @@ bool TreeModel::removeColumns(int position, int columns, const QModelIndex& pare
 }
 
 bool TreeModel::removeRows(int position, int rows, const QModelIndex& parent) {
-	TreeItem *parentItem = getItem(parent);
+	TreeItem* parentItem = getItem(parent);
 
 	beginRemoveRows(parent, position, position + rows - 1);
 	bool success = parentItem->removeChildren(position, rows);
@@ -271,8 +253,8 @@ bool TreeModel::removeRows(int position, int rows, const QModelIndex& parent) {
 	return success;
 }
 
-int TreeModel::rowCount(const QModelIndex &parent) const {
-	TreeItem *parentItem = getItem(parent);
+int TreeModel::rowCount(const QModelIndex& parent) const {
+	TreeItem* parentItem = getItem(parent);
 
 	return parentItem->childCount();
 }
@@ -283,21 +265,20 @@ bool TreeModel::setTreeData(const QVariant& data, const int row, const int colum
 }
 
 bool TreeModel::setData(const QModelIndex& index, const QVariant& value, int role) {
-
 	if (role == Qt::EditRole || role == Qt::DisplayRole) {
-		TreeItem *item = getItem(index);
+		TreeItem* item = getItem(index);
 		bool result = item->setData(index.column(), value);
 
 		if (result)
-			emit dataChanged(index, index);
+			Q_EMIT dataChanged(index, index);
 
 		return result;
 	} else if (role == Qt::BackgroundRole) {
-		TreeItem *item = getItem(index);
+		TreeItem* item = getItem(index);
 		bool result = item->setBackgroundColor(index.column(), value);
 
 		if (result)
-			emit dataChanged(index, index);
+			Q_EMIT dataChanged(index, index);
 	}
 
 	return false;
@@ -310,7 +291,7 @@ bool TreeModel::setHeaderData(int section, Qt::Orientation orientation, const QV
 	bool result = rootItem->setData(section, value);
 
 	if (result)
-		emit headerDataChanged(orientation, section, section);
+		Q_EMIT headerDataChanged(orientation, section, section);
 
 	return result;
 }

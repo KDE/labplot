@@ -1,29 +1,11 @@
-/***************************************************************************
-File                 : SlidingPanel.cpp
-Project              : LabPlot
-Description          : Sliding panel shown in the presenter widget
---------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+/*
+	File                 : SlidingPanel.cpp
+	Project              : LabPlot
+	Description          : Sliding panel shown in the presenter widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "SlidingPanel.h"
 
 #include <QApplication>
@@ -35,7 +17,8 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include <KLocalizedString>
 
-SlidingPanel::SlidingPanel(QWidget *parent, const QString &worksheetName) : QFrame(parent) {
+SlidingPanel::SlidingPanel(QWidget* parent, const QString& worksheetName)
+	: QFrame(parent) {
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	m_worksheetName = new QLabel(worksheetName);
@@ -70,7 +53,7 @@ SlidingPanel::~SlidingPanel() {
 }
 
 void SlidingPanel::movePanel(qreal value) {
-	move(0, -height() + static_cast<int>(value * height()) );
+	move(0, -height() + static_cast<int>(value * height()));
 	raise();
 }
 
@@ -82,8 +65,7 @@ QSize SlidingPanel::sizeHint() const {
 	QSize sh;
 	const QRect& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
 	sh.setWidth(screenSize.width());
-	sh.setHeight(m_worksheetName->sizeHint().height()
-				 + layout()->contentsMargins().top() + layout()->contentsMargins().bottom());
+	sh.setHeight(m_worksheetName->sizeHint().height() + layout()->contentsMargins().top() + layout()->contentsMargins().bottom());
 
 	return sh;
 }

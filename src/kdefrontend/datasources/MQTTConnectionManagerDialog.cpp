@@ -1,36 +1,18 @@
-/***************************************************************************
-File                 : MQTTConnectionManagerDialog.cpp
-Project              : LabPlot
-Description          : widget for managing MQTT connections
---------------------------------------------------------------------
-Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
-
-***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : MQTTConnectionManagerDialog.cpp
+	Project              : LabPlot
+	Description          : widget for managing MQTT connections
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "MQTTConnectionManagerDialog.h"
 #include "MQTTConnectionManagerWidget.h"
+#include "backend/core/Settings.h"
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 #include <QDialogButtonBox>
@@ -42,29 +24,29 @@ Copyright            : (C) 2018 Ferencz Kovacs (kferike98@gmail.com)
 
 	\ingroup kdefrontend
 */
-MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const QString& conn, bool changed) : QDialog(parent),
-	mainWidget(new MQTTConnectionManagerWidget(this, conn)),
-	m_initialConnectionChanged(changed),
-	m_initialConnection(conn) {
-
-	setWindowIcon(QIcon::fromTheme("labplot-MQTT"));
+MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const QString& conn, bool changed)
+	: QDialog(parent)
+	, mainWidget(new MQTTConnectionManagerWidget(this, conn))
+	, m_initialConnectionChanged(changed)
+	, m_initialConnection(conn) {
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("labplot-MQTT")));
 	setWindowTitle(i18nc("@title:window", "MQTT Connections"));
 
 	m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
+	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(mainWidget);
 	layout->addWidget(m_buttonBox);
 
 	connect(mainWidget, &MQTTConnectionManagerWidget::changed, this, &MQTTConnectionManagerDialog::changed);
-	connect(m_buttonBox->button(QDialogButtonBox::Ok),&QPushButton::clicked, this, &MQTTConnectionManagerDialog::save);
+	connect(m_buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &MQTTConnectionManagerDialog::save);
 	connect(m_buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &MQTTConnectionManagerDialog::close);
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "MQTTConnectionManagerDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("MQTTConnectionManagerDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -83,14 +65,13 @@ QString MQTTConnectionManagerDialog::connection() const {
  * \brief Returns whether the initial connection has been changed
  * \return m_initialConnectionChanged
  */
-bool MQTTConnectionManagerDialog::initialConnectionChanged() const
-{
+bool MQTTConnectionManagerDialog::initialConnectionChanged() const {
 	return m_initialConnectionChanged;
 }
 
 MQTTConnectionManagerDialog::~MQTTConnectionManagerDialog() {
-	//save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "MQTTConnectionManagerDialog");
+	// save current settings
+	KConfigGroup conf = Settings::group(QStringLiteral("MQTTConnectionManagerDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
@@ -100,7 +81,7 @@ MQTTConnectionManagerDialog::~MQTTConnectionManagerDialog() {
 void MQTTConnectionManagerDialog::changed() {
 	setWindowTitle(i18nc("@title:window", "MQTT Connections  [Changed]"));
 
-	//set true if initial connection was changed
+	// set true if initial connection was changed
 	if (mainWidget->connection() == m_initialConnection)
 		m_initialConnectionChanged = true;
 
@@ -116,7 +97,7 @@ void MQTTConnectionManagerDialog::changed() {
  * \brief Saves the settings for the mainWidget
  */
 void MQTTConnectionManagerDialog::save() {
-	//ok-button was clicked, save the connections if they were changed
+	// ok-button was clicked, save the connections if they were changed
 	if (m_changed)
 		mainWidget->saveConnections();
 }

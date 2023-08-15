@@ -1,41 +1,26 @@
-/***************************************************************************
-    File                 : HDF5OptionsWidget.cpp
-    Project              : LabPlot
-    Description          : widget providing options for the import of HDF5 data
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-***************************************************************************/
+/*
+	File                 : HDF5OptionsWidget.cpp
+	Project              : LabPlot
+	Description          : widget providing options for the import of HDF5 data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "HDF5OptionsWidget.h"
 #include "ImportFileWidget.h"
 #include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/lib/macros.h"
 
- /*!
-	\class HDF5OptionsWidget
-	\brief Widget providing options for the import of HDF5 data
+/*!
+   \class HDF5OptionsWidget
+   \brief Widget providing options for the import of HDF5 data
 
-	\ingroup kdefrontend
- */
-HDF5OptionsWidget::HDF5OptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
+   \ingroup kdefrontend
+*/
+HDF5OptionsWidget::HDF5OptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
+	: QWidget(parent)
+	, m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
 
 	QStringList hdf5headers;
@@ -49,7 +34,7 @@ HDF5OptionsWidget::HDF5OptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 	ui.twContent->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 
 	connect(ui.twContent, &QTreeWidget::itemSelectionChanged, this, &HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
@@ -60,22 +45,26 @@ void HDF5OptionsWidget::clear() {
 	ui.twPreview->clear();
 }
 
-void HDF5OptionsWidget::updateContent(HDF5Filter* filter, const QString& fileName) {
+int HDF5OptionsWidget::updateContent(HDF5Filter* filter, const QString& fileName) {
 	ui.twContent->clear();
-	QTreeWidgetItem *rootItem = ui.twContent->invisibleRootItem();
-	filter->parse(fileName, rootItem);
+	QTreeWidgetItem* rootItem = ui.twContent->invisibleRootItem();
+	int status = filter->parse(fileName, rootItem);
+	if (status != 0) // parsing failed
+		return status;
 
 	ui.twContent->insertTopLevelItem(0, rootItem);
 	ui.twContent->expandAll();
 	ui.twContent->resizeColumnToContents(0);
 	ui.twContent->resizeColumnToContents(3);
+
+	return 0;
 }
 
 /*!
 	updates the selected data set of a HDF5 file when a new tree widget item is selected
 */
 void HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged() {
-	DEBUG("hdf5TreeWidgetSelectionChanged()");
+	DEBUG(Q_FUNC_INFO);
 	auto items = ui.twContent->selectedItems();
 	QDEBUG("SELECTED ITEMS =" << items);
 
@@ -86,24 +75,29 @@ void HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged() {
 	if (item->data(2, Qt::DisplayRole).toString() == i18n("data set"))
 		m_fileWidget->refreshPreview();
 	else
-		DEBUG("non data set selected in HDF5 tree widget");
+		DEBUG(Q_FUNC_INFO << ", non data set selected in HDF5 tree widget");
 }
 
 /*!
 	return list of selected HDF5 item names
-	selects all items if nothing is selected
+	selects first item if nothing is selected
 */
 const QStringList HDF5OptionsWidget::selectedNames() const {
-	DEBUG("HDF5OptionsWidget::selectedNames()");
+	DEBUG(Q_FUNC_INFO);
 	QStringList names;
 
-	if (ui.twContent->selectedItems().size() == 0)
-		ui.twContent->selectAll();
+	if (ui.twContent->selectedItems().size() == 0 && ui.twContent->topLevelItem(0)) {
+		const auto& child = ui.twContent->topLevelItem(0)->child(0);
+		if (child && child->child(0))
+			ui.twContent->setCurrentItem(child->child(0));
+		else
+			ui.twContent->setCurrentItem(child);
+	}
 
 	// the data link is saved in the second column
 	for (auto* item : ui.twContent->selectedItems())
 		names << item->text(1);
-	QDEBUG("	HDF5OptionsWidget: selected names =" << names);
+	QDEBUG(Q_FUNC_INFO << ", selected names =" << names);
 
 	return names;
 }

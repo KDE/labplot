@@ -1,30 +1,12 @@
-/***************************************************************************
-    File                 : ResizableTextEdit.h
-    Project              : LabPlot
-    Description          : Extended TextEdit to allow the manual resize by the user
-    --------------------------------------------------------------------
-    Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
+/*
+	File                 : ResizableTextEdit.h
+	Project              : LabPlot
+	Description          : Extended TextEdit to allow the manual resize by the user
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #ifndef RESIZABLETEXTEDIT_H
 #define RESIZABLETEXTEDIT_H
 
@@ -51,6 +33,7 @@ private:
 	ResizableTextEdit* m_parent;
 	QPoint m_pos;
 	bool m_pressed{false};
+	bool m_hovered{false};
 	bool m_vertResizeOnly;
 };
 
@@ -60,6 +43,7 @@ public:
 	explicit ResizableTextEdit(QWidget*, bool vertResizeOnly = true);
 	void addSize(QSize);
 	QSize sizeHint() const override;
+	QString text() const;
 
 protected:
 	void resizeEvent(QResizeEvent*) override;

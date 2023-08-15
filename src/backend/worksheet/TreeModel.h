@@ -1,30 +1,12 @@
-/***************************************************************************
-File                 : TreeModel.h
-Project              : LabPlot
-Description 	     : This is an abstract treemodel which can be used by a treeview
---------------------------------------------------------------------
-Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+/*
+	File                 : TreeModel.h
+	Project              : LabPlot
+	Description 	     : This is an abstract treemodel which can be used by a treeview
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
 
-***************************************************************************/
-
-/***************************************************************************
-*                                                                         *
-*  This program is free software; you can redistribute it and/or modify   *
-*  it under the terms of the GNU General Public License as published by   *
-*  the Free Software Foundation; either version 2 of the License, or      *
-*  (at your option) any later version.                                    *
-*                                                                         *
-*  This program is distributed in the hope that it will be useful,        *
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
-*  GNU General Public License for more details.                           *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the Free Software           *
-*   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
-*   Boston, MA  02110-1301  USA                                           *
-*                                                                         *
-***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef TREEMODEL_H
 #define TREEMODEL_H
@@ -38,7 +20,7 @@ Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
  */
 class TreeItem {
 public:
-	explicit TreeItem(const QVector<QVariant>& data, TreeItem* parent = 0);
+	explicit TreeItem(const QVector<QVariant>& data, TreeItem* parent = nullptr);
 	~TreeItem();
 
 	TreeItem* child(int number);
@@ -48,7 +30,7 @@ public:
 	QVariant backgroundColor() const;
 	bool insertChildren(int position, int count, int columns);
 	bool insertColumns(int position, int columns);
-	TreeItem *parent();
+	TreeItem* parent();
 	bool removeChildren(int position, int count);
 	bool removeColumns(int position, int columns);
 	int childNumber() const;
@@ -56,50 +38,41 @@ public:
 	bool setBackgroundColor(int column, const QVariant& value);
 
 private:
-    QList<TreeItem*> childItems;
-    QVector<QVariant> itemData;
-	QColor m_backgroundColor{QColor(0,0,0,0)};
-    TreeItem *parentItem{nullptr};
+	QList<TreeItem*> childItems;
+	QVector<QVariant> itemData;
+	QColor m_backgroundColor{QColor(0, 0, 0, 0)};
+	TreeItem* parentItem{nullptr};
 };
 /*!
  * \brief The TreeModel class
  * This is an abstract treemodel which can be used by a treeview
  */
 class TreeModel : public QAbstractItemModel {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit TreeModel(const QStringList& headers, QObject* parent = nullptr);
 	~TreeModel();
 	QVariant treeData(const int row, const int column, const QModelIndex& parent = QModelIndex(), const int role = Qt::EditRole);
 	QVariant data(const QModelIndex&, int role) const override;
-	QVariant headerData(int section, Qt::Orientation orientation,
-						int role = Qt::DisplayRole) const override;
+	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-	QModelIndex index(int row, int column,
-						const QModelIndex& parent = QModelIndex()) const override;
+	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	QModelIndex parent(const QModelIndex&) const override;
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
 	Qt::ItemFlags flags(const QModelIndex&) const override;
-	bool setTreeData(const QVariant& data, const int row, const int column,
-						const QModelIndex& parent = QModelIndex(), int role = Qt::EditRole);
-	bool setData(const QModelIndex&, const QVariant& value,
-					int role = Qt::EditRole) override;
+	bool setTreeData(const QVariant& data, const int row, const int column, const QModelIndex& parent = QModelIndex(), int role = Qt::EditRole);
+	bool setData(const QModelIndex&, const QVariant& value, int role = Qt::EditRole) override;
 	int compareStrings(const QString& value, const int row, const int column, const QModelIndex& parent = QModelIndex());
-	bool setHeaderData(int section, Qt::Orientation orientation,
-						const QVariant& value, int role = Qt::EditRole) override;
+	bool setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role = Qt::EditRole) override;
 
-	bool insertColumns(int position, int columns,
-						const QModelIndex& parent = QModelIndex()) override;
-	bool removeColumns(int position, int columns,
-						const QModelIndex& parent = QModelIndex()) override;
-	bool insertRows(int position, int rows,
-					const QModelIndex& parent = QModelIndex()) override;
-	bool removeRows(int position, int rows,
-					const QModelIndex& parent = QModelIndex()) override;
+	bool insertColumns(int position, int columns, const QModelIndex& parent = QModelIndex()) override;
+	bool removeColumns(int position, int columns, const QModelIndex& parent = QModelIndex()) override;
+	bool insertRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
+	bool removeRows(int position, int rows, const QModelIndex& parent = QModelIndex()) override;
 
 private:
 	TreeItem* getItem(const QModelIndex&) const;

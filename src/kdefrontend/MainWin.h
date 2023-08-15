@@ -1,36 +1,20 @@
-/***************************************************************************
-    File                 : MainWin.h
-    Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description          : Main window of the application
- ***************************************************************************/
+/*
+	File                 : MainWin.h
+	Project              : LabPlot
+	Description          : Main window of the application
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <KXmlGuiWindow>
+#include <QStringLiteral>
 #include <QTimer>
 
 class AbstractAspect;
@@ -49,46 +33,14 @@ class Spreadsheet;
 class Matrix;
 class PivotTable;
 class GuiObserver;
-class AxisDock;
 class CursorDock;
-class NoteDock;
-class CartesianPlotDock;
-class HistogramDock;
-class BarChartPlotDock;
-class CartesianPlotLegendDock;
-class CustomPointDock;
-class ReferenceLineDock;
-class ColumnDock;
-class HypothesisTestDock;
-class CorrelationCoefficientDock;
-class LiveDataDock;
-class MatrixDock;
-class PivotTableDock;
-class ProjectDock;
-class SpreadsheetDock;
-class XYCurveDock;
-class XYEquationCurveDock;
-class XYDataReductionCurveDock;
-class XYDifferentiationCurveDock;
-class XYIntegrationCurveDock;
-class XYInterpolationCurveDock;
-class XYSmoothCurveDock;
-class XYFitCurveDock;
-class XYFourierFilterCurveDock;
-class XYFourierTransformCurveDock;
-class XYConvolutionCurveDock;
-class XYCorrelationCurveDock;
-class WorksheetDock;
-class ImageDock;
-class LabelWidget;
-class DatapickerImageWidget;
-class DatapickerCurveWidget;
+class ContentDockWidget;
 class MemoryWidget;
 class CartesianPlot;
+class InfoElementDialog;
 
 #ifdef HAVE_CANTOR_LIBS
 class CantorWorksheet;
-class CantorWorksheetDock;
 #endif
 
 class ImportDatasetWidget;
@@ -105,47 +57,58 @@ class QToolButton;
 class QQuickWidget;
 
 class KColorSchemeManager;
+class KHamburgerMenu;
 class KRecentFilesAction;
+class KToggleAction;
+class KToggleFullScreenAction;
+
+namespace ads {
+class CDockManager;
+class CDockWidget;
+}
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/Provider>
 #endif
 
-#ifdef Q_OS_MAC
-	class KDMacTouchBar;
+#ifdef HAVE_TOUCHBAR
+class KDMacTouchBar;
 #endif
 
 class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
 
 public:
-	explicit MainWin(QWidget* parent = nullptr, const QString& filename = nullptr);
+	explicit MainWin(QWidget* parent = nullptr, const QString& filename = QString());
 	~MainWin() override;
 
 	void showPresenter();
 	AspectTreeModel* model() const;
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
+	static void updateLocale();
 
-	enum class LoadOnStart {Nothing, NewProject, NewProjectWorksheet, LastProject, WelcomeScreen};
-	enum class TitleBarMode {ShowFilePath, ShowFileName, ShowProjectName};
+	enum class LoadOnStart { Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen };
+	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };
 
 #ifdef HAVE_KUSERFEEDBACK
-	KUserFeedback::Provider& userFeedbackProvider() {return m_userFeedbackProvider;}
+	KUserFeedback::Provider& userFeedbackProvider() {
+		return m_userFeedbackProvider;
+	}
 #endif
 
 private:
-	QMdiArea* m_mdiArea{nullptr};
+	ads::CDockManager* m_DockManager{nullptr};
 	KColorSchemeManager* m_schemeManager{nullptr};
-	QMdiSubWindow* m_currentSubWindow{nullptr};
+	ContentDockWidget* m_currentDock{nullptr}; // Currently selected dock
 	Project* m_project{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	ProjectExplorer* m_projectExplorer{nullptr};
-	QDockWidget* m_projectExplorerDock{nullptr};
-	QDockWidget* m_propertiesDock{nullptr};
+	ads::CDockWidget* m_projectExplorerDock{nullptr};
+	ads::CDockWidget* m_propertiesDock{nullptr};
 	AbstractAspect* m_currentAspect{nullptr};
+	ads::CDockWidget* m_currentAspectDock{nullptr};
 	Folder* m_currentFolder{nullptr};
-	QString m_currentFileName;
 	QString m_undoViewEmptyLabel;
 	bool m_suppressCurrentSubWindowChangedEvent{false};
 	bool m_closing{false};
@@ -154,31 +117,37 @@ private:
 	QTimer m_autoSaveTimer;
 	bool m_showWelcomeScreen{false};
 	bool m_saveWelcomeScreen{true};
+	int undoStackIndexLastSave{0};
 	MemoryWidget* m_memoryInfoWidget{nullptr};
-	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 	QMdiSubWindow* m_welcomeWindow{nullptr};
 	QQuickWidget* m_welcomeWidget{nullptr};
-// 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
+	// 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget{nullptr};
 	QString m_lastOpenFileFilter;
+	const Worksheet* m_lastWorksheet{nullptr};
+	const Spreadsheet* m_lastSpreadsheet{nullptr};
 	TitleBarMode m_titleBarMode{TitleBarMode::ShowFilePath};
 
 #ifdef HAVE_KUSERFEEDBACK
-    KUserFeedback::Provider m_userFeedbackProvider;
+	KUserFeedback::Provider m_userFeedbackProvider;
 #endif
 
 #ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 	KDMacTouchBar* m_touchBar;
+#endif
 	QAction* m_undoIconOnlyAction;
 	QAction* m_redoIconOnlyAction;
 #endif
 
 	KRecentFilesAction* m_recentProjectsAction;
+	QAction* m_searchAction;
 	QAction* m_saveAction;
 	QAction* m_saveAsAction;
 	QAction* m_printAction;
 	QAction* m_printPreviewAction;
 	QAction* m_importFileAction;
+	QAction* m_importFileAction_2;
 	QAction* m_importSqlAction;
 	QAction* m_importDatasetAction;
 	QAction* m_importLabPlotAction;
@@ -204,82 +173,43 @@ private:
 	QAction* m_redoAction;
 	QAction* m_closeWindowAction;
 	QAction* m_closeAllWindowsAction;
-	QAction* m_tileWindowsAction;
-	QAction* m_cascadeWindowsAction;
 	QAction* m_nextWindowAction;
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
-	QAction* m_editFitsFileAction;
 
-	//toggling doch widgets and the status bar
+	// toggling dock widgets, status bar and full screen
 	QAction* m_toggleProjectExplorerDockAction;
 	QAction* m_togglePropertiesDockAction;
-	QAction* m_toggleStatusBarAction;
+	KToggleAction* m_toggleStatusBarAction;
 	QAction* m_toggleMemoryInfoAction;
+	KToggleFullScreenAction* m_toggleFullScreenAction;
 
-	//window visibility
+	// window visibility
 	QAction* m_visibilityFolderAction;
 	QAction* m_visibilitySubfolderAction;
 	QAction* m_visibilityAllAction;
 
-	//Menus
+	// Menus
 	QMenu* m_visibilityMenu{nullptr};
 	QMenu* m_newMenu{nullptr};
-	QMenu* m_importMenu;
-	QMenu* m_editMenu{nullptr};
+	QMenu* m_importMenu{nullptr};
+	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
-	//Docks
+	// Docks
+	ads::CDockWidget* cursorDock{nullptr};
+
 	QStackedWidget* stackedWidget{nullptr};
-	AxisDock* axisDock{nullptr};
-	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};
-	NoteDock* notesDock{nullptr};
-	CartesianPlotDock* cartesianPlotDock{nullptr};
-	CartesianPlotLegendDock* cartesianPlotLegendDock{nullptr};
-	ColumnDock* columnDock{nullptr};
-    HypothesisTestDock* hypothesisTestDock{nullptr};
-    CorrelationCoefficientDock* correlationCoefficientDock{nullptr};
-	LiveDataDock* m_liveDataDock{nullptr};
-	MatrixDock* matrixDock{nullptr};
-	PivotTableDock* pivotTableDock{nullptr};
-	SpreadsheetDock* spreadsheetDock{nullptr};
-	ProjectDock* projectDock{nullptr};
-	XYCurveDock* xyCurveDock{nullptr};
-	XYEquationCurveDock* xyEquationCurveDock{nullptr};
-	XYDataReductionCurveDock* xyDataReductionCurveDock{nullptr};
-	XYDifferentiationCurveDock* xyDifferentiationCurveDock{nullptr};
-	XYIntegrationCurveDock* xyIntegrationCurveDock{nullptr};
-	XYInterpolationCurveDock* xyInterpolationCurveDock{nullptr};
-	XYSmoothCurveDock* xySmoothCurveDock{nullptr};
-	XYFitCurveDock* xyFitCurveDock{nullptr};
-	XYFourierFilterCurveDock* xyFourierFilterCurveDock{nullptr};
-	XYFourierTransformCurveDock* xyFourierTransformCurveDock{nullptr};
-	XYConvolutionCurveDock* xyConvolutionCurveDock{nullptr};
-	XYCorrelationCurveDock* xyCorrelationCurveDock{nullptr};
-	HistogramDock* histogramDock{nullptr};
-	WorksheetDock* worksheetDock{nullptr};
-	LabelWidget* textLabelDock{nullptr};
-	ImageDock* imageDock{nullptr};
-	CustomPointDock* customPointDock{nullptr};
-	ReferenceLineDock* referenceLineDock{nullptr};
-	DatapickerImageWidget* datapickerImageDock{nullptr};
-	DatapickerCurveWidget* datapickerCurveDock{nullptr};
 
 	void initActions();
 	void initMenus();
 	bool warnModified();
-	void activateSubWindowForAspect(const AbstractAspect*) const;
+	void activateSubWindowForAspect(const AbstractAspect*);
 	bool save(const QString&);
-// 	void toggleShowWidget(QWidget* widget, bool showToRight);
-// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
+	// 	void toggleShowWidget(QWidget* widget, bool showToRight);
+	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 
 	Spreadsheet* activeSpreadsheet() const;
-
-	//Cantor
-#ifdef HAVE_CANTOR_LIBS
-	QMenu* m_newCantorWorksheetMenu;
-	CantorWorksheetDock* cantorWorksheetDock{nullptr};
-#endif
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver{nullptr};
@@ -289,13 +219,20 @@ protected:
 	void dragEnterEvent(QDragEnterEvent*) override;
 	void dropEvent(QDropEvent*) override;
 
-private slots:
+private Q_SLOTS:
 	void initGUI(const QString&);
-// 	QQuickWidget* createWelcomeScreen();
-// 	void resetWelcomeScreen();
-	void createMdiArea();
+	// 	QQuickWidget* createWelcomeScreen();
+	// 	void resetWelcomeScreen();
+	// void createMdiArea();
+	void createADS();
+	void changeVisibleAllDocks(bool);
+	void activateNextDock();
+	void activatePreviousDock();
+	void dockWidgetAboutToBeRemoved(ads::CDockWidget*);
+	void dockWidgetRemoved(ads::CDockWidget*);
+	void dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now);
 	void updateGUI();
-	void updateGUIOnProjectChanges();
+	void updateGUIOnProjectChanges(const QByteArray& windowState = QByteArray());
 	void undo();
 	void redo();
 
@@ -324,7 +261,7 @@ private slots:
 	void colorSchemeChanged(QAction*);
 	void openDatasetExample();
 
-	//Cantor
+	// Cantor
 #ifdef HAVE_CANTOR_LIBS
 	void newCantorWorksheet(QAction* action);
 	void cantorSettingsDialog();
@@ -340,31 +277,34 @@ private slots:
 	void newWorksheet();
 	void newNotes();
 	void newDatapicker();
-	//TODO: void newScript();
-	void newLiveDataSourceActionTriggered();
+	// TODO: void newScript();
+	void newLiveDataSource();
 
 	void createContextMenu(QMenu*) const;
 	void createFolderContextMenu(const Folder*, QMenu*) const;
 
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
-	void handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*);
-	void handleCurrentAspectChanged(AbstractAspect* );
-	void handleCurrentSubWindowChanged(QMdiSubWindow*);
+	void handleAspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*);
+	void handleCurrentAspectChanged(AbstractAspect*);
+	//	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleShowSubWindowRequested();
 
 	void handleSettingsChanges();
 
-	void setMdiWindowVisibility(QAction*);
-	void updateMdiWindowVisibility() const;
+	void setDockVisibility(QAction*);
+	void updateDockWindowVisibility() const;
 	void toggleDockWidget(QAction*);
-	void toggleStatusBar();
+	void toggleStatusBar(bool);
+	void toggleMenuBar(bool);
 	void toggleMemoryInfo();
-	void toggleFullScreen();
+	void toggleFullScreen(bool);
 	void projectExplorerDockVisibilityChanged(bool);
 	void propertiesDockVisibilityChanged(bool);
 	void cursorDockVisibilityChanged(bool);
 	void propertiesExplorerRequested();
+
+	void focusCursorDock();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 };
