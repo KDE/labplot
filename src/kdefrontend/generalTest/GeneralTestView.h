@@ -29,10 +29,11 @@
 #ifndef GENERALTESTVIEW_H
 #define GENERALTESTVIEW_H
 
-#include <QWidget>
-
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
+
+#include <QLocale>
+#include <QWidget>
 
 class Column;
 class GeneralTest;
@@ -79,13 +80,13 @@ protected:
 	QLabel* m_labelInputStatsTable;
 	QTableView* m_inputStatsTable;
 	QPushButton* m_clearInputStats;
-public slots:
+
+public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
 	void changed();
 	void clearResult();
-protected slots:
 };
 
 #endif

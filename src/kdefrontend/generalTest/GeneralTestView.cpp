@@ -70,10 +70,10 @@ GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
 
 	m_statsTable->setReadOnly(true);
 
-	m_testName->setStyleSheet("background-color: white");
-	m_statsTable->setStyleSheet("background-color: white");
-	m_summaryResults->setStyleSheet("QToolTip { color: black; background-color: yellow; border: 0px; }");
-	m_inputStatsWidget->setStyleSheet("background-color: white");
+	m_testName->setStyleSheet(QLatin1String("background-color: white"));
+	m_statsTable->setStyleSheet(QLatin1String("background-color: white"));
+	m_summaryResults->setStyleSheet(QLatin1String("QToolTip { color: black; background-color: yellow; border: 0px; }"));
+	m_inputStatsWidget->setStyleSheet(QLatin1String("background-color: white"));
 
 	m_testName->hide();
 	m_statsTable->hide();
@@ -82,11 +82,11 @@ GeneralTestView::GeneralTestView(GeneralTest* GeneralTest) : QWidget(),
 
 	auto* layout = new QVBoxLayout(this);
 
-	m_labelInputStatsTable->setText("<h3>" + i18n("Statistic Table"));
+	m_labelInputStatsTable->setText(QLatin1String("<h3>") + i18n("Statistic Table"));
 	m_labelInputStatsTable->setToolTip(i18n("Fill this table with pre-calculated statistic value and then press recalculate") +
-									   "<br><br>" +
+									   QLatin1String("<br><br>") +
 									   i18n("You can leave one or more columns empty if you feel they are not useful") +
-									   "</h3>");
+									   QLatin1String("</h3>"));
 	m_clearInputStats->setText(i18n("Clear"));
 	m_clearInputStats->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
@@ -208,9 +208,6 @@ void GeneralTestView::exportToFile(const QString& path, const bool exportHeader,
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
-
-	PERFTRACE("export pivot table to file");
-
 }
 
 void GeneralTestView::exportToLaTeX(const QString & path, const bool exportHeaders,
@@ -225,6 +222,4 @@ void GeneralTestView::exportToLaTeX(const QString & path, const bool exportHeade
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
-
-	PERFTRACE("export pivot table to latex");
 }

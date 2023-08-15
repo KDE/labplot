@@ -21,9 +21,12 @@ class AxisDock;
 class InfoElementDock;
 class NoteDock;
 class CartesianPlotDock;
+class CorrelationCoefficientDock;
 class HistogramDock;
+class HypothesisTestDock;
 class BarPlotDock;
 class LollipopPlotDock;
+class PivotTableDock;
 class BoxPlotDock;
 class QQPlotDock;
 class CartesianPlotLegendDock;
@@ -108,6 +111,10 @@ private:
 	ReferenceRangeDock* m_referenceRangeDock{nullptr};
 	DatapickerImageWidget* m_datapickerImageDock{nullptr};
 	DatapickerCurveWidget* m_datapickerCurveDock{nullptr};
+
+    HypothesisTestDock* m_hypothesisTestDock{nullptr};
+    CorrelationCoefficientDock* m_correlationCoefficientDock{nullptr};
+	PivotTableDock* m_pivotTableDock{nullptr};
 
 #ifdef HAVE_CANTOR_LIBS
 	CantorWorksheetDock* m_cantorWorksheetDock{nullptr};

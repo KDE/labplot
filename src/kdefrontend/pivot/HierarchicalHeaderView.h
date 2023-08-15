@@ -134,10 +134,10 @@ protected:
 	int rowSpanSize(int column, int from, int spanCount) const;
 	int getSectionRange(QModelIndex& index, int* beginSection, int* endSection) const;
 
-protected slots:
+protected Q_SLOTS:
 	void onSectionResized(int logicalIndex,int oldSize,int newSize);
 
-signals:
+Q_SIGNALS:
 	void sectionPressed(int from, int to);
 
 private:

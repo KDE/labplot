@@ -29,8 +29,11 @@
 #ifndef HYPOTHESISTESTDOCK_H
 #define HYPOTHESISTESTDOCK_H
 
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/generalTest/HypothesisTest.h"
+
 #include "ui_hypothesistestdock.h"
+
 #include <QSqlDatabase>
 
 class AbstractAspect;
@@ -43,7 +46,7 @@ class QStandardItemModel;
 class QStandardItem;
 class QComboBox;
 
-class HypothesisTestDock : public QWidget {
+class HypothesisTestDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -52,7 +55,6 @@ public:
 
 private:
 	Ui::HypothesisTestDock ui;
-	bool m_initializing{false};
 	TreeViewComboBox* cbSpreadsheet{nullptr};
 	HypothesisTest* m_hypothesisTest{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
@@ -82,7 +84,7 @@ private:
 	QList<Column* > m_twoCategoricalCols;
 	QList<Column* > m_multiCategoricalCols;
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in PivotTableDock
 	//        void nameChanged();
 	//        void commentChanged();
@@ -116,8 +118,8 @@ private slots:
 	//        void loadConfigFromTemplate(KConfig&);
 	//        void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	//        void info(const QString&);
 };
 
-#endif // PIVOTTABLEDOCK_H
+#endif // HYPOTHESISTESTDOCK_H

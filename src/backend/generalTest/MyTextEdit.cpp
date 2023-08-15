@@ -72,12 +72,12 @@ void MyTextEdit::setHtml(QString text) {
 }
 
 void MyTextEdit::extractToolTips(QString &text, bool insert) {
-	QString startToolTip = "[tooltip]";
-	QString endToolTip = "[/tooltip]";
-	QString startData = "[data]";
-	QString endData = "[/data]";
-	QString startTip = "[tip]";
-	QString endTip = "[/tip]";
+	QString startToolTip = QLatin1String("[tooltip]");
+	QString endToolTip = QLatin1String("[/tooltip]");
+	QString startData = QLatin1String("[data]");
+	QString endData = QLatin1String("[/data]");
+	QString startTip = QLatin1String("[tip]");
+	QString endTip = QLatin1String("[/tip]");
 
 	int i_startToolTip = 0;
 	int i_endToolTip = 0;
@@ -99,7 +99,7 @@ void MyTextEdit::extractToolTips(QString &text, bool insert) {
 					i_startData < i_endToolTip && i_endData < i_endToolTip)
 				data = text.mid(i_startData + startData.size(), i_endData - i_startData - startData.size());
 			else {
-				data = "";
+				data = QString();
 				i_endData = i_startToolTip + startToolTip.size();
 			}
 
@@ -110,7 +110,7 @@ void MyTextEdit::extractToolTips(QString &text, bool insert) {
 					i_startTip < i_endToolTip && i_endTip < i_endToolTip)
 				tip = text.mid(i_startTip + startTip.size(), i_endTip - i_startTip - startTip.size());
 			else
-				tip = "";
+				tip = QString();
 			text.replace(i_startToolTip, i_endToolTip - i_startToolTip + endToolTip.size(), data);
 
 			if (insert) {
@@ -123,4 +123,3 @@ void MyTextEdit::extractToolTips(QString &text, bool insert) {
 		}
 	}
 }
-

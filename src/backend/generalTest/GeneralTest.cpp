@@ -31,7 +31,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
-
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/generalTest/MyTableModel.h"
 
 #include <QLabel>
@@ -94,7 +94,7 @@ QAbstractItemModel* GeneralTest::inputStatsTableModel() {
 
 void GeneralTest::setColumns(QStringList cols) {
 	m_columns.clear();
-	Column* column = new Column("column");
+	Column* column = new Column(QLatin1String("column"));
 	for (QString col : cols) {
 		if (!cols.isEmpty()) {
 			column = m_dataSourceSpreadsheet->column(col);
@@ -138,7 +138,7 @@ QString GeneralTest::round(QVariant number, int precision) {
 int GeneralTest::findCount(const Column *column) {
 	int N = column->rowCount();
 	switch (column->columnMode()) {
-	case (AbstractColumn::ColumnMode::Numeric):
+	case (AbstractColumn::ColumnMode::Double):
 	case (AbstractColumn::ColumnMode::Integer): {
 		for (int i = 0; i < N; i++)
 			if (std::isnan(column->valueAt(i))) {
@@ -315,7 +315,9 @@ void GeneralTest::countPartitions(Column* column, int& np, int& totalRows) {
 	column->setColumnMode(originalColMode);
 }
 
-GeneralTest::GeneralErrorType GeneralTest::findStatsCategorical(Column* column1, Column* column2, int n[], double sum[], double mean[], double std[], QMap<QString, int>& colName, const int& np, const int& totalRows) {
+GeneralTest::GeneralErrorType GeneralTest::findStatsCategorical(Column* column1, Column* column2, int n[], double sum[],
+																double mean[], double std[], QMap<QString, int>& colName,
+																const int& np, const int& totalRows) {
 	Column* columns[] = {column1, column2};
 
 	for (int i = 0; i < np; i++) {
@@ -376,7 +378,7 @@ QString GeneralTest::getHtmlTable(int row, int column, QVariant* rowMajor) {
 		return QString();
 
 	QString table;
-	table = "<style type=text/css>"
+	table = QLatin1String("<style type=text/css>"
 			".tg  {border-collapse:collapse;border-spacing:0;border:none;border-color:#ccc;}"
 			".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}"
 			".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}"
@@ -384,43 +386,43 @@ QString GeneralTest::getHtmlTable(int row, int column, QVariant* rowMajor) {
 			".tg .tg-btxf{background-color:#f9f9f9;border-color:inherit;text-align:left;vertical-align:top}"
 			"</style>"
 			"<table class=tg>"
-			"  <tr>";
+			"  <tr>");
 
-	QString bg = "tg-0pky";
+	QString bg = QLatin1String("tg-0pky");
 	bool pky = true;
 
 	QString element;
-	table += "  <tr>";
+	table += QLatin1String("  <tr>");
 	for (int j = 0; j < column; j++) {
 		element = rowMajor[j].toString();
-		table += "    <th class=" + bg + "><b>" + i18n("%1", element) + "</b></th>";
+		table += QLatin1String("    <th class=") + bg + QLatin1String("><b>") + i18n("%1", element) + QLatin1String("</b></th>");
 	}
-	table += "  </tr>";
+	table += QLatin1String("  </tr>");
 
 	if (pky)
-		bg = "tg-0pky";
+		bg = QLatin1String("tg-0pky");
 	else
-		bg = "tg-btxf";
+		bg = QLatin1String("tg-btxf");
 	pky = !pky;
 
 	for (int i = 1; i < row; i++) {
-		table += "  <tr>";
+		table += QLatin1String("  <tr>");
 
 		QString element = round(rowMajor[i*column]);
-		table += "    <td class=" + bg + "><b>" + i18n("%1", element) + "</b></td>";
+		table += QLatin1String("    <td class=") + bg + QLatin1String("><b>") + i18n("%1", element) + QLatin1String("</b></td>");
 		for (int j = 1; j < column; j++) {
 			element = round(rowMajor[i*column+j]);
-			table += "    <td class=" + bg + ">" + i18n("%1", element) + "</td>";
+			table += QLatin1String("    <td class=") + bg + QLatin1String(">") + i18n("%1", element) + QLatin1String("</td>");
 		}
 
-		table += "  </tr>";
+		table += QLatin1String("  </tr>");
 		if (pky)
-			bg = "tg-0pky";
+			bg = QLatin1String("tg-0pky");
 		else
-			bg = "tg-btxf";
+			bg = QLatin1String("tg-btxf");
 		pky = !pky;
 	}
-	table +=  "</table>";
+	table +=  QLatin1String("</table>");
 
 	return table;
 }
@@ -431,37 +433,37 @@ QString GeneralTest::getHtmlTable3(const QList<GeneralTest::HtmlCell*>& rowMajor
 	if (rowMajorSize == 0)
 		return QString();
 
-	QString startToolTip = "[tooltip]";
-	QString endToolTip = "[/tooltip]";
-	QString startData = "[data]";
-	QString endData = "[/data]";
-	QString startTip = "[tip]";
-	QString endTip = "[/tip]";
+	QString startToolTip = QLatin1String("[tooltip]");
+	QString endToolTip = QLatin1String("[/tooltip]");
+	QString startData = QLatin1String("[data]");
+	QString endData = QLatin1String("[/data]");
+	QString startTip = QLatin1String("[tip]");
+	QString endTip = QLatin1String("[/tip]");
 
 	QString table;
-	table = "<style type=text/css>"
+	table = QLatin1String("<style type=text/css>"
 			".tg  {border-collapse:collapse;border: 1px solid black;}"
 			".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#fff;}"
 			".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:bold;padding:10px 5px;border: 1px solid black;overflow:hidden;word-break:normal;color:#333;background-color:#f0f0f0;}"
-			"</style>";
+			"</style>");
 
-	table += "<table class=tg>";
+	table += QLatin1String("<table class=tg>");
 
-	table += "  <tr>";
+	table += QLatin1String("  <tr>");
 	int prevLevel = 0;
 	for (int i = 0; i < rowMajorSize; i++) {
 		HtmlCell* currHtmlCell = rowMajor[i];
 		if (currHtmlCell->level != prevLevel) {
-			table += "  </tr>";
-			table += "  <tr>";
+			table += QLatin1String("  </tr>");
+			table += QLatin1String("  <tr>");
 			prevLevel = currHtmlCell->level;
 		}
-		QString HtmlCellStartTag = "<td ";
-		QString HtmlCellEndTag = "</td>";
+		QString HtmlCellStartTag = QLatin1String("<td ");
+		QString HtmlCellEndTag = QLatin1String("</td>");
 
 		if (currHtmlCell->isHeader) {
-			HtmlCellStartTag = "<th ";
-			HtmlCellEndTag = "</th>";
+			HtmlCellStartTag = QLatin1String("<th ");
+			HtmlCellEndTag = QLatin1String("</th>");
 		}
 
 		QString HtmlCellData = i18n("%1", currHtmlCell->data);
@@ -473,20 +475,20 @@ QString GeneralTest::getHtmlTable3(const QList<GeneralTest::HtmlCell*>& rowMajor
 					   endToolTip;
 
 		table += HtmlCellStartTag +
-				"rowspan=" + QString::number(currHtmlCell->rowSpanCount) +
-				" " +
-				"colspan=" + QString::number(currHtmlCell->columnSpanCount) +
-				">" +
+				QLatin1String("rowspan=") + QString::number(currHtmlCell->rowSpanCount) +
+				QLatin1String(" ") +
+				QLatin1String("colspan=") + QString::number(currHtmlCell->columnSpanCount) +
+				QLatin1String(">") +
 				HtmlCellData +
 				HtmlCellEndTag;
 	}
-	table += "  <tr>";
-	table += "</table>";
+	table += QLatin1String("  <tr>");
+	table += QLatin1String("</table>");
 	return table;
 }
 
 QString GeneralTest::getLine(const QString& msg, const QString& color) {
-	return "<p style=color:" + color + ";>" + i18n("%1", msg) + "</p>";
+	return QLatin1String("<p style=color:") + color + QLatin1String(";>") + i18n("%1", msg) + QLatin1String("</p>");
 }
 
 void GeneralTest::printLine(const int& index, const QString& msg, const QString& color) {
@@ -505,7 +507,7 @@ void GeneralTest::printTooltip(const int &index, const QString &msg) {
 }
 
 void GeneralTest::printError(const QString& errorMsg) {
-	printLine(0, errorMsg, "red");
+	printLine(0, errorMsg, QLatin1String("red"));
 }
 
 
@@ -517,7 +519,7 @@ void GeneralTest::printError(const QString& errorMsg) {
   Saves as XML.
  */
 void GeneralTest::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("GeneralTest");
+	writer->writeStartElement(QLatin1String("GeneralTest"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 

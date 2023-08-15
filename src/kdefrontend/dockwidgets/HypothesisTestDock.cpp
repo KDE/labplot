@@ -55,9 +55,12 @@
 //TODO: To add tooltips in docks for non obvious widgets.
 //TODO: Add functionality for database along with spreadsheet.
 
-HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
+HypothesisTestDock::HypothesisTestDock(QWidget* parent) : BaseDock(parent) {
 	//QDEBUG("in hypothesis test constructor ");
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(2 * m_leName->height());
 
 	ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
 	ui.cbDataSourceType->addItem(i18n("Database"));
@@ -65,9 +68,9 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	cbSpreadsheet = new TreeViewComboBox;
 	ui.gridLayout->addWidget(cbSpreadsheet, 5, 4, 1, 3);
 
-	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
+	ui.bDatabaseManager->setIcon(QIcon::fromTheme(QLatin1String("network-server-database")));
 	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
-	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  QLatin1String("sql_connections");
 
 	// adding item to tests and testtype combo box;
 
@@ -95,7 +98,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	ui.chbEqualVariance->hide();
 	ui.chbEqualVariance->setChecked(true);
 	ui.lPopulationSigma->hide();
-	ui.lPopulationSigma->setToolTip( i18n("Sigma of Population") +" <br/> <br/> " +
+	ui.lPopulationSigma->setToolTip( i18n("Sigma of Population") + QLatin1String(" <br/> <br/> ") +
 									 i18n("Hint: Z-Test if preffered over T-Test if this is known"));
 	ui.chbPopulationSigma->hide();
 	ui.lePopulationSigma->hide();
@@ -141,7 +144,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	ui.lAlpha->setToolTip( i18n("Significance Level"));
 	ui.leMuo->hide();
 	ui.leAlpha->hide();
-	ui.pbPerformTest->setIcon(QIcon::fromTheme("run-build"));
+	ui.pbPerformTest->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
 
 	ui.leMuo->setText( i18n("%1", m_populationMean));
 	ui.leAlpha->setText( i18n("%1", m_significanceLevel));
@@ -166,7 +169,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : QWidget(parent) {
 	//    ui.bRemoveColumn->setEnabled(false);
 
 	//    connect(ui.leName, &QLineEdit::textChanged, this, &HypothesisTestDock::nameChanged);
-	//    connect(ui.leComment, &QLineEdit::textChanged, this, &HypothesisTestDock::commentChanged);
+	//    connect(ui.teComment, &QLineEdit::textChanged, this, &HypothesisTestDock::commentChanged);
 	connect(ui.cbDataSourceType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 			this, &HypothesisTestDock::dataSourceTypeChanged);
 
@@ -244,7 +247,7 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
 
 	//show the properties
 	ui.leName->setText(m_hypothesisTest->name());
-	ui.leComment->setText(m_hypothesisTest->comment());
+	ui.teComment->setText(m_hypothesisTest->comment());
 	ui.cbDataSourceType->setCurrentIndex(m_hypothesisTest->dataSourceType());
 	if (m_hypothesisTest->dataSourceType() == HypothesisTest::DataSourceType::DataSourceSpreadsheet)
 		setModelIndexFromAspect(cbSpreadsheet, m_hypothesisTest->dataSourceSpreadsheet());
@@ -496,7 +499,7 @@ void HypothesisTestDock::setModelIndexFromAspect(TreeViewComboBox* cb, const Abs
 //    if (m_initializing)
 //        return;
 
-//    m_hypothesisTest->setComment(ui.leComment->text());
+//    m_hypothesisTest->setComment(ui.teComment->text());
 //}
 
 void HypothesisTestDock::dataSourceTypeChanged(int index) {
@@ -514,7 +517,7 @@ void HypothesisTestDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	m_hypothesisTest->setComment(ui.leComment->text());
+	m_hypothesisTest->setComment(ui.teComment->text());
 
 }
 
@@ -540,7 +543,7 @@ void HypothesisTestDock::changeCbCol2Label() {
 	Column* col1 = m_hypothesisTest->dataSourceSpreadsheet()->column(selected_text);
 
 	if (!ui.chbCategorical->isChecked()
-		&& (col1->columnMode() == AbstractColumn::ColumnMode::Integer || col1->columnMode() == AbstractColumn::ColumnMode::Numeric)) {
+		&& (col1->columnMode() == AbstractColumn::ColumnMode::Integer || col1->columnMode() == AbstractColumn::ColumnMode::Double)) {
 		ui.lCol2->setText( i18n("Independent Var. 2"));
 		ui.chbCategorical->setChecked(false);
 		ui.chbCategorical->setEnabled(true);
@@ -688,8 +691,8 @@ void HypothesisTestDock::hypothesisTestDescriptionChanged(const AbstractAspect* 
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 
 	m_initializing = false;
 }
@@ -774,7 +777,7 @@ void HypothesisTestDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
 	m_multiCategoricalCols.clear();
 
 	for (auto* col : spreadsheet->children<Column>()) {
-		if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::Numeric)
+		if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::Double)
 			m_onlyValuesCols.append(col);
 		else {
 			int np = 0, n_rows = 0;

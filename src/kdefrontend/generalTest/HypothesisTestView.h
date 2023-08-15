@@ -44,9 +44,6 @@ public:
 
 private:
 	HypothesisTest* m_hypothesisTest;
-
-public slots:
-private slots:
 };
 
 #endif

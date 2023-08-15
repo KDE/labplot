@@ -47,7 +47,7 @@
 CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
 
 	cbSpreadsheet = new TreeViewComboBox;
 	ui.gridLayout->addWidget(cbSpreadsheet, 4, 3, 1, 3);
@@ -57,8 +57,8 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : BaseDo
 	ui.cbTest->addItem( i18n("Spearman"), CorrelationCoefficient::Spearman);
 	ui.cbTest->addItem( i18n("Chi Square"), CorrelationCoefficient::ChiSquare);
 
-	ui.leNRows->setText("2");
-	ui.leNColumns->setText("2");
+	ui.leNRows->setText(QLatin1String("2"));
+	ui.leNColumns->setText(QLatin1String("2"));
 
 	ui.leNRows->setValidator(new QIntValidator(this));
 	ui.leNColumns->setValidator(new QIntValidator(this));
@@ -82,7 +82,7 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : BaseDo
 	ui.lAlpha->hide();
 	ui.leAlpha->hide();
 	ui.pbPerformTest->setEnabled(false);
-	ui.pbPerformTest->setIcon(QIcon::fromTheme("run-build"));
+	ui.pbPerformTest->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
 
 	connect(cbSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &CorrelationCoefficientDock::spreadsheetChanged);
 	connect(ui.cbTest, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CorrelationCoefficientDock::showTestType);
@@ -102,7 +102,7 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : BaseDo
 void CorrelationCoefficientDock::setCorrelationCoefficient(CorrelationCoefficient* CorrelationCoefficient) {
 	Lock lock(m_initializing);
 	m_correlationCoefficient = CorrelationCoefficient;
-	m_aspect = m_correlationCoefficient;
+	//setAspects(list);
 
 	//show all available spreadsheets in the combo box
 	m_aspectTreeModel = new AspectTreeModel(m_correlationCoefficient->project());
@@ -118,7 +118,7 @@ void CorrelationCoefficientDock::setCorrelationCoefficient(CorrelationCoefficien
 
 	//show the properties of the correlation
 	ui.leName->setText(m_correlationCoefficient->name());
-	ui.leComment->setText(m_correlationCoefficient->comment());
+	ui.teComment->setText(m_correlationCoefficient->comment());
 	setModelIndexFromAspect(cbSpreadsheet, m_correlationCoefficient->dataSourceSpreadsheet());
 	setColumnsComboBoxModel(m_correlationCoefficient->dataSourceSpreadsheet());
 
@@ -210,8 +210,8 @@ void CorrelationCoefficientDock::correlationCoefficientDescriptionChanged(const 
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 
 	m_initializing = false;
 }

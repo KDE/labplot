@@ -309,9 +309,9 @@ void SpreadsheetView::initActions() {
 	bool hasStatisticsSpreadsheet = (m_spreadsheet->children<StatisticsSpreadsheet>().size() == 1);
 	action_statistics_spreadsheet->setChecked(hasStatisticsSpreadsheet);
 
-	action_pivot_table = new QAction(QIcon::fromTheme("table"), i18n("Pivot Table"), this);
-    action_do_hypothesis_test = new QAction(i18n("Hypothesis Test"), this);
-    action_find_correlation_coefficient = new QAction(i18n("Correlation Coefficient"), this);
+	action_pivot_table = new QAction(QIcon::fromTheme(QLatin1String("table")), i18n("Pivot Table"), this);
+	action_do_hypothesis_test = new QAction(i18n("Hypothesis Test"), this);
+	action_find_correlation_coefficient = new QAction(i18n("Correlation Coefficient"), this);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);

@@ -44,9 +44,6 @@ public:
 
 private:
 	CorrelationCoefficient* m_CorrelationCoefficient;
-
-public slots:
-private slots:
 };
 
 #endif  // CORRELATIONCOEFFICIENTVIEW_H

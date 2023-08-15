@@ -67,7 +67,7 @@ private:
 	QList<Column*> m_twoCategoricalCols;
 	QList<Column*> m_multiCategoricalCols;
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in CorrelationCoefficientDock
 	void showTestType();
 	void showCorrelationCoefficient();

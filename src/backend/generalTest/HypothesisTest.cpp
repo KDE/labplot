@@ -70,7 +70,6 @@ void HypothesisTest::setTail(HypothesisTailType tail) {
 void HypothesisTest::performTest(int test, bool categoricalVariable, bool equalVariance, bool calculateStats) {
 	m_pValue.clear();
 	m_statisticValue.clear();
-	m_statsTable = "";
 	for (int i = 0; i < RESULTLINESCOUNT; i++) {
 		m_resultLine[i]->clear();
 		m_resultLine[i]->setToolTip(QString());
@@ -81,26 +80,26 @@ void HypothesisTest::performTest(int test, bool categoricalVariable, bool equalV
 
 	switch (testSubtype(test)) {
 	case TwoSampleIndependent: {
-		m_currTestName = "<h2>" + i18n("Two Sample Independent Test") + "</h2>";
+		m_currTestName = QLatin1String("<h2>") + i18n("Two Sample Independent Test") + QLatin1String("</h2>");
 		performTwoSampleIndependentTest(testType(test), categoricalVariable, equalVariance, calculateStats);
 		break;
 	}
 	case TwoSamplePaired:
-		m_currTestName = "<h2>" + i18n("Two Sample Paired Test") + "</h2>";
+		m_currTestName = QLatin1String("<h2>") + i18n("Two Sample Paired Test") + QLatin1String("</h2>");
 		performTwoSamplePairedTest(testType(test));
 		break;
 	case OneSample: {
-		m_currTestName = "<h2>" + i18n("One Sample Test") + "</h2>";
+		m_currTestName = QLatin1String("<h2>") + i18n("One Sample Test") + QLatin1String("</h2>");
 		performOneSampleTest(testType(test));
 		break;
 	}
 	case OneWay: {
-		m_currTestName = "<h2>" + i18n("One Way Anova") + "</h2>";
+		m_currTestName = QLatin1String("<h2>") + i18n("One Way Anova") + QLatin1String("</h2>");
 		performOneWayAnova();
 		break;
 	}
 	case TwoWay: {
-		m_currTestName = "<h2>" + i18n("Two Way Anova") + "</h2>";
+		m_currTestName = QLatin1String("<h2>") + i18n("Two Way Anova") + QLatin1String("</h2>");
 		performTwoWayAnova();
 		break;
 	}
@@ -112,13 +111,13 @@ void HypothesisTest::performTest(int test, bool categoricalVariable, bool equalV
 void HypothesisTest::performLeveneTest(bool categoricalVariable) {
 	m_pValue.clear();
 	m_statisticValue.clear();
-	m_statsTable = "";
+	m_statsTable = QString();
 	for (int i = 0; i < RESULTLINESCOUNT; i++) {
 		m_resultLine[i]->clear();
 		m_resultLine[i]->setToolTip(QString());
 	}
 
-	m_currTestName = "<h2>" + i18n("Levene Test for Equality of Variance") + "</h2>";
+	m_currTestName = QLatin1String("<h2>") + i18n("Levene Test for Equality of Variance") + QLatin1String("</h2>");
 	m_performLeveneTest(categoricalVariable);
 	emit changed();
 }
@@ -189,7 +188,7 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 		col2Name = m_inputStatsTableModel->data(m_inputStatsTableModel->index(2, 0)).toString();
 	} else {
 		if (m_columns.size() != 2) {
-			printError("Inappropriate number of m_columns selected");
+			printError(i18n("Inappropriate number of columns selected"));
 			return;
 		}
 
@@ -200,7 +199,7 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 			for (int i = 0; i < 2; i++) {
 				findStats(m_columns[i], n[i], sum[i], mean[i], std[i]);
 				if (n[i] == 0) {
-					printError("At least two values should be there in every column");
+					printError(i18n("At least two values should be there in every column"));
 					return;
 				}
 				if (std[i] == 0.0) {
@@ -231,7 +230,7 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 				return;
 			}
 			case ErrorEmptyColumn: {
-				printError("At least one of selected column is empty");
+				printError(i18n("At least one of selected column is empty"));
 				return;
 			}
 			case NoError:
@@ -242,14 +241,14 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 			while (iter.hasNext()) {
 				iter.next();
 				if (iter.value() == 1)
-					col1Name = baseColName + " " + iter.key();
+					col1Name = baseColName + QLatin1String(" ") + iter.key();
 				else
-					col2Name = baseColName + " " + iter.key();
+					col2Name = baseColName + QLatin1String(" ") + iter.key();
 			}
 		}
 	}
 
-	QVariant rowMajor[] = {"", "N", "Sum", "Mean", "Std",
+	QVariant rowMajor[] = {QString(), QLatin1String("N"), QLatin1String("Sum"), QLatin1String("Mean"), QLatin1String("Std"),
 						   col1Name, n[0], sum[0], mean[0], std[0],
 						   col2Name, n[1], sum[1], mean[1], std[1]
 						  };
@@ -259,9 +258,9 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 	for (int i = 0; i < 2; i++) {
 		if (n[i] == 0) {
 			if (calculateStats)
-				printError("At least two values should be there in every column");
+				printError(i18n("At least two values should be there in every column"));
 			else
-				printError("In Statistic Table you filled above, value of N for every row should be > 0");
+				printError(i18n("In Statistic Table you filled above, value of N for every row should be > 0"));
 			return;
 		}
 		if (std[i] == 0.0) {
@@ -278,7 +277,7 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 
 	switch (testType(test)) {
 	case TTest: {
-		testName = "T";
+		testName = QLatin1String("T");
 
 		if (equalVariance) {
 			df = n[0] + n[1] - 2;
@@ -287,7 +286,7 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 					(n[1]-1) * stdSq[1] ) / df;
 			//				QDEBUG("equal variance : spSq is " << spSq);
 			m_statisticValue.append((mean[0] - mean[1]) / sqrt(spSq / n[0] + spSq / n[1]));
-			printLine(9, "<b>Assumption:</b> Equal Variance b/w both population means");
+			printLine(9, i18n("<b>Assumption:</b> Equal Variance b/w both population means"));
 		} else {
 			double temp_val;
 			temp_val = gsl_pow_2( gsl_pow_2(std[0]) / n[0] + gsl_pow_2(std[1]) / n[1]);
@@ -297,17 +296,17 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 
 			m_statisticValue.append((mean[0] - mean[1]) / (sqrt( (gsl_pow_2(std[0])/n[0]) +
 					(gsl_pow_2(std[1])/n[1]))));
-			printLine(9, "<b>Assumption:</b> UnEqual Variance b/w both population means");
+			printLine(9, i18n("<b>Assumption:</b> UnEqual Variance b/w both population means"));
 		}
 
-		printLine(6, i18n("Degree of Freedom is %1", df), "green");
+		printLine(6, i18n("Degree of Freedom is %1", df), QLatin1String("green"));
 		printTooltip(6, i18n("Number of independent Pieces of information that went into calculating the estimate"));
 
-		printLine(8, "<b>Assumption:</b> Both Populations approximately follow normal distribution");
+		printLine(8, i18n("<b>Assumption:</b> Both Populations approximately follow normal distribution"));
 		break;
 	}
 	case ZTest: {
-		testName = "Z";
+		testName = QLatin1String("Z");
 		spSq = stdSq[0] / n[0] + stdSq[1] / n[1];
 
 		double zValue = (mean[0] - mean[1]) / sqrt(spSq);
@@ -316,15 +315,15 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 	}
 	}
 
-	m_currTestName = "<h2>" + i18n("Two Sample Independent %1 Test for %2 vs %3", testName, col1Name, col2Name) + "</h2>";
+	m_currTestName = QLatin1String("<h2>") + i18n("Two Sample Independent %1 Test for %2 vs %3", testName, col1Name, col2Name) + QLatin1String("</h2>");
 	m_pValue.append(getPValue(test, m_statisticValue[0], col1Name, col2Name, df));
 
-	printLine(2, i18n("Significance level is %1", round(m_significanceLevel)), "blue");
+	printLine(2, i18n("Significance level is %1", round(m_significanceLevel)), QLatin1String("blue"));
 
-	printLine(4, i18n("%1 Value is %2 ", testName, round(m_statisticValue[0])), "green");
+	printLine(4, i18n("%1 Value is %2 ", testName, round(m_statisticValue[0])), QLatin1String("green"));
 	printTooltip(4, i18n("More is the |%1-value|, more safely we can reject the null hypothesis", testName));
 
-	printLine(5, i18n("P Value is %1 ", m_pValue[0]), "green");
+	printLine(5, i18n("P Value is %1 ", m_pValue[0]), QLatin1String("green"));
 	printTooltip(5, getPValueTooltip(m_pValue[0]));
 
 	return;
@@ -334,14 +333,14 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 
 void HypothesisTest::performTwoSamplePairedTest(int test) {
 	if (m_columns.size() != 2) {
-		printError("Inappropriate number of m_columns selected");
+		printError(i18n("Inappropriate number of m_columns selected"));
 
 		return;
 	}
 
 	for (int i = 0; i < 2; i++) {
 		if ( !m_columns[0]->isNumeric()) {
-			printError("select only m_columns with numbers");
+			printError(i18n("select only columns with numbers"));
 			return;
 		}
 	}
@@ -352,26 +351,26 @@ void HypothesisTest::performTwoSamplePairedTest(int test) {
 
 	switch (errorCode) {
 	case ErrorUnqualSize: {
-		printError("both m_columns are having different sizes");
+		printError(i18n("both columns have different sizes"));
 
 		return;
 	}
 	case ErrorEmptyColumn: {
-		printError("m_columns are empty");
+		printError(i18n("columns are empty"));
 		return;
 	}
 	case NoError:
 		break;
 	}
 
-	QVariant rowMajor[] = {"", "N", "Sum", "Mean", "Std",
-						   "difference", n, sum, mean, std
+	QVariant rowMajor[] = {QString(), QLatin1String("N"), QLatin1String("Sum"), QLatin1String("Mean"), QLatin1String("Std"),
+						   QLatin1String("difference"), n, sum, mean, std
 						  };
 
 	m_statsTable = getHtmlTable(2, 5, rowMajor);
 
 	if (std == 0.0) {
-		printError("Standard deviation of the difference is 0");
+		printError(i18n("Standard deviation of the difference is 0"));
 		return;
 	}
 
@@ -383,12 +382,12 @@ void HypothesisTest::performTwoSamplePairedTest(int test) {
 	case TTest: {
 		m_statisticValue[0] = mean / (std / sqrt(n));
 		df = n - 1;
-		testName = "T";
-		printLine(6, i18n("Degree of Freedom is %1</p", df), "green");
+		testName = QLatin1String("T");
+		printLine(6, i18n("Degree of Freedom is %1</p", df), QLatin1String("green"));
 		break;
 	}
 	case ZTest: {
-		testName = "Z";
+		testName = QLatin1String("Z");
 		m_statisticValue[0] = mean / (std / sqrt(n));
 		df = n - 1;
 		break;
@@ -396,11 +395,11 @@ void HypothesisTest::performTwoSamplePairedTest(int test) {
 	}
 
 	m_pValue.append(getPValue(test, m_statisticValue[0], m_columns[0]->name(), i18n("%1", m_populationMean), df));
-	m_currTestName = "<h2>" + i18n("One Sample %1 Test for %2 vs %3", testName, m_columns[0]->name(), m_columns[1]->name()) + "</h2>";
+	m_currTestName = QLatin1String("<h2>") + i18n("One Sample %1 Test for %2 vs %3", testName, m_columns[0]->name(), m_columns[1]->name()) + QLatin1String("</h2>");
 
-	printLine(2, i18n("Significance level is %1 ", round(m_significanceLevel)), "blue");
-	printLine(4, i18n("%1 Value is %2 ", testName, round(m_statisticValue[0])), "green");
-	printLine(5, i18n("P Value is %1 ", m_pValue[0]), "green");
+	printLine(2, i18n("Significance level is %1 ", round(m_significanceLevel)), QLatin1String("blue"));
+	printLine(4, i18n("%1 Value is %2 ", testName, round(m_statisticValue[0])), QLatin1String("green"));
+	printLine(5, i18n("P Value is %1 ", m_pValue[0]), QLatin1String("green"));
 
 	printTooltip(5, getPValueTooltip(m_pValue[0]));
 	return;
@@ -410,12 +409,12 @@ void HypothesisTest::performTwoSamplePairedTest(int test) {
 
 void HypothesisTest::performOneSampleTest(int test) {
 	if (m_columns.size() != 1) {
-		printError("Inappropriate number of m_columns selected");
+		printError(i18n("Inappropriate number of m_columns selected"));
 		return;
 	}
 
 	if ( !m_columns[0]->isNumeric()) {
-		printError("select only m_columns with numbers");
+		printError(i18n("select only m_columns with numbers"));
 		return;
 	}
 
@@ -425,7 +424,7 @@ void HypothesisTest::performOneSampleTest(int test) {
 
 	switch (errorCode) {
 	case ErrorEmptyColumn: {
-		printError("column is empty");
+		printError(i18n("column is empty"));
 		return;
 	}
 	case NoError:
@@ -435,14 +434,14 @@ void HypothesisTest::performOneSampleTest(int test) {
 	}
 	}
 
-	QVariant rowMajor[] = {"", "N", "Sum", "Mean", "Std",
+	QVariant rowMajor[] = {QString(), QLatin1String("N"), QLatin1String("Sum"), QLatin1String("Mean"), QLatin1String("Std"),
 						   m_columns[0]->name(), n, sum, mean, std
 						  };
 
 	m_statsTable = getHtmlTable(2, 5, rowMajor);
 
 	if (std == 0.0) {
-		printError("Standard deviation is 0");
+		printError(i18n("Standard deviation is 0"));
 		return;
 	}
 
@@ -451,14 +450,14 @@ void HypothesisTest::performOneSampleTest(int test) {
 
 	switch (test) {
 	case TTest: {
-		testName = "T";
+		testName = QLatin1String("T");
 		m_statisticValue.append((mean - m_populationMean) / (std / sqrt(n)));
 		df = n - 1;
-		printLine(6, i18n("Degree of Freedom is %1", df), "blue");
+		printLine(6, i18n("Degree of Freedom is %1", df), QLatin1String("blue"));
 		break;
 	}
 	case ZTest: {
-		testName = "Z";
+		testName = QLatin1String("Z");
 		df = 0;
 		m_statisticValue.append((mean - m_populationMean) / (std / sqrt(n)));
 		break;
@@ -466,11 +465,11 @@ void HypothesisTest::performOneSampleTest(int test) {
 	}
 
 	m_pValue.append(getPValue(test, m_statisticValue[0], m_columns[0]->name(), i18n("%1",m_populationMean), df));
-	m_currTestName = "<h2>" + i18n("One Sample %1 Test for %2", testName, m_columns[0]->name()) + "</h2>";
+	m_currTestName = QLatin1String("<h2>") + i18n("One Sample %1 Test for %2", testName, m_columns[0]->name()) + QLatin1String("</h2>");
 
-	printLine(2, i18n("Significance level is %1", round(m_significanceLevel)), "blue");
-	printLine(4, i18n("%1 Value is %2", testName, round(m_statisticValue[0])), "green");
-	printLine(5, i18n("P Value is %1", m_pValue[0]), "green");
+	printLine(2, i18n("Significance level is %1", round(m_significanceLevel)), QLatin1String("blue"));
+	printLine(4, i18n("%1 Value is %2", testName, round(m_statisticValue[0])), QLatin1String("green"));
+	printLine(5, i18n("P Value is %1", m_pValue[0]), QLatin1String("green"));
 
 	printTooltip(5, getPValueTooltip(m_pValue[0]));
 	return;
@@ -535,18 +534,18 @@ void HypothesisTest::performOneWayAnova() {
 	QMapIterator<QString, int> i(classnameToIndex);
 	while (i.hasNext()) {
 		i.next();
-		colNames[i.value()-1] = baseColName + " " + i.key();
+		colNames[i.value()-1] = baseColName + QLatin1String(" ") + i.key();
 	}
 
 	// now printing the statistics and result;
 	int rowCount = np + 1, columnCount = 5;
 	QVariant* rowMajor = new QVariant[rowCount*columnCount];
 	// header data;
-	rowMajor[0] = "";
-	rowMajor[1] = "Ni";
-	rowMajor[2] = "Sum";
-	rowMajor[3] = "Mean";
-	rowMajor[4] = "Std";
+	rowMajor[0] = QString();
+	rowMajor[1] = QLatin1String("Ni");
+	rowMajor[2] = QLatin1String("Sum");
+	rowMajor[3] = QLatin1String("Mean");
+	rowMajor[4] = QLatin1String("Std");
 
 	// table data
 	for (int row_i = 1; row_i < rowCount ; row_i++) {
@@ -557,35 +556,35 @@ void HypothesisTest::performOneWayAnova() {
 		rowMajor[row_i*columnCount + 4]	= std[row_i - 1];
 	}
 
-	m_statsTable = "<h3>" + i18n("Group Summary Statistics") + "</h3>";
+	m_statsTable = QLatin1String("<h3>") + i18n("Group Summary Statistics") + QLatin1String("</h3>");
 
 	m_statsTable += getHtmlTable(rowCount, columnCount, rowMajor);
 
-	m_statsTable += getLine("");
-	m_statsTable += getLine("");
-	m_statsTable += "<h3>" + i18n("Grand Summary Statistics") + "</h3>";
-	m_statsTable += getLine("");
+	m_statsTable += getLine(QString());
+	m_statsTable += getLine(QString());
+	m_statsTable += QLatin1String("<h3>") + i18n("Grand Summary Statistics") + QLatin1String("</h3>");
+	m_statsTable += getLine(QString());
 	m_statsTable += getLine(i18n("Overall Mean is %1", round(yBar)));
 
 	rowCount = 4;
 	columnCount = 3;
 	rowMajor->clear();
 
-	rowMajor[0] = "";
-	rowMajor[1] = "Between Groups";
-	rowMajor[2] = "Within Groups";
+	rowMajor[0] = QString();
+	rowMajor[1] = i18n("Between Groups");
+	rowMajor[2] = i18n("Within Groups");
 
 	int baseIndex = 0;
 	baseIndex = 1 * columnCount;
-	rowMajor[baseIndex + 0] = "Sum of Squares";
+	rowMajor[baseIndex + 0] = i18n("Sum of Squares");
 	rowMajor[baseIndex + 1] = sB;
 	rowMajor[baseIndex + 2] = sW;
 	baseIndex = 2 * columnCount;
-	rowMajor[baseIndex + 0] = "Degree of Freedom";
+	rowMajor[baseIndex + 0] = i18n("Degree of Freedom");
 	rowMajor[baseIndex + 1] = fB;
 	rowMajor[baseIndex + 2] = fW;
 	baseIndex = 3 * columnCount;
-	rowMajor[baseIndex + 0] = "Mean Square Value";
+	rowMajor[baseIndex + 0] = i18n("Mean Square Value");
 	rowMajor[baseIndex + 1] = msB;
 	rowMajor[baseIndex + 2] = msW;
 
@@ -597,8 +596,8 @@ void HypothesisTest::performOneWayAnova() {
 	delete[] std;
 	delete[] colNames;
 
-	printLine(1, i18n("F Value is %1", round(m_statisticValue[0])), "green");
-	printLine(2, i18n("P Value is %1 ", m_pValue[0]), "green");
+	printLine(1, i18n("F Value is %1", round(m_statisticValue[0])), QLatin1String("green"));
+	printLine(2, i18n("P Value is %1 ", m_pValue[0]), QLatin1String("green"));
 
 	printTooltip(2, getPValueTooltip(m_pValue[0]));
 	return;
@@ -627,7 +626,7 @@ void HypothesisTest::performTwoWayAnova() {
 		}
 
 	if (totalRows_a != totalRows_b) {
-		printError("There is missing data in at least one of the rows");
+		printError(i18n("There is missing data in at least one of the rows"));
 		return;
 	}
 
@@ -659,12 +658,12 @@ void HypothesisTest::performTwoWayAnova() {
 	for (int i = 0; i < np_a; i++)
 		for (int j = 0; j < np_b; j++) {
 			if (replicates[i][j] == 0) {
-				printError("Dataset should have at least one data value corresponding to each feature combination");
+				printError(i18n("Dataset should have at least one data value corresponding to each feature combination"));
 				return;
 			}
 			if (replicates[i][j] != replicate) {
-				printError("Number of experiments perfomed for each combination of levels <br/>"
-						   "between Independet Var.1 and Independent Var.2 must be equal");
+				printError(i18n("Number of experiments perfomed for each combination of levels <br/>"
+						   "between Independet Var.1 and Independent Var.2 must be equal"));
 				return;
 			}
 			groupMean[i][j] /= replicates[i][j];
@@ -740,14 +739,14 @@ void HypothesisTest::performTwoWayAnova() {
 	// printing table;
 	// HtmlCell constructor structure; data, level, rowSpanCount, m_columnspanCount, isHeader;
 	QList<HtmlCell*> rowMajor;
-	rowMajor.append(new HtmlCell("", 0, true, "", 2, 1));
+	rowMajor.append(new HtmlCell(QString(), 0, true, QString(), 2, 1));
 	for (int i = 0; i < np_b; i++)
-		rowMajor.append(new HtmlCell(partitionNames_b[i], 0, true, "", 1, 2));
-	rowMajor.append(new HtmlCell("Mean", 0, true, "", 2));
+		rowMajor.append(new HtmlCell(partitionNames_b[i], 0, true, QString(), 1, 2));
+	rowMajor.append(new HtmlCell(i18n("Mean"), 0, true, QString(), 2));
 
 	for (int i = 0; i < np_b; i++) {
-		rowMajor.append(new HtmlCell("Mean", 1, true));
-		rowMajor.append(new HtmlCell("Replicate", 1, true));
+		rowMajor.append(new HtmlCell(i18n("Mean"), 1, true));
+		rowMajor.append(new HtmlCell(i18n("Replicate"), 1, true));
 	}
 
 	int level = 2;
@@ -761,23 +760,23 @@ void HypothesisTest::performTwoWayAnova() {
 		level++;
 	}
 
-	rowMajor.append(new HtmlCell("Mean", level, true));
+	rowMajor.append(new HtmlCell(i18n("Mean"), level, true));
 	for (int i = 0; i < np_b; i++)
-		rowMajor.append(new HtmlCell(round(mean_b[i]), level, false, "", 1, 2));
+		rowMajor.append(new HtmlCell(round(mean_b[i]), level, false, QString(), 1, 2));
 	rowMajor.append(new HtmlCell(round(mean), level));
 
-	m_statsTable = "<h3>" + i18n("Contingency Table") + "</h3>";
+	m_statsTable = QLatin1String("<h3>") + i18n("Contingency Table") + QLatin1String("</h3>");
 	m_statsTable += getHtmlTable3(rowMajor);
 
-	m_statsTable += "</br>";
-	m_statsTable += "<h3>" + i18n("results table") + "</h3>";
+	m_statsTable += QLatin1String("</br>");
+	m_statsTable += QLatin1String("<h3>") + i18n("results table") + QLatin1String("</h3>");
 
 	rowMajor.clear();
 	level = 0;
-	rowMajor.append(new HtmlCell("", level, true));
-	rowMajor.append(new HtmlCell("SS", level, true));
-	rowMajor.append(new HtmlCell("DF", level, true, "degree of freedom"));
-	rowMajor.append(new HtmlCell("MS", level, true));
+	rowMajor.append(new HtmlCell(QString(), level, true));
+	rowMajor.append(new HtmlCell(QLatin1String("SS"), level, true));
+	rowMajor.append(new HtmlCell(QLatin1String("DF"), level, true, i18n("degree of freedom")));
+	rowMajor.append(new HtmlCell(QLatin1String("MS"), level, true));
 
 	level++;
 	rowMajor.append(new HtmlCell(m_columns[0]->name(), level, true));
@@ -792,13 +791,13 @@ void HypothesisTest::performTwoWayAnova() {
 	rowMajor.append(new HtmlCell(round(ms_b), level));
 
 	level++;
-	rowMajor.append(new HtmlCell("Interaction", level, true));
+	rowMajor.append(new HtmlCell(i18n("Interaction"), level, true));
 	rowMajor.append(new HtmlCell(round(ss_interaction), level));
 	rowMajor.append(new HtmlCell(df_interaction, level));
 	rowMajor.append(new HtmlCell(round(ms_interaction), level));
 
 	level++;
-	rowMajor.append(new HtmlCell("Within", level, true));
+	rowMajor.append(new HtmlCell(i18n("Within"), level, true));
 	rowMajor.append(new HtmlCell(round(ss_within), level));
 	rowMajor.append(new HtmlCell(df_within, level));
 	rowMajor.append(new HtmlCell(round(ms_within), level));
@@ -812,12 +811,12 @@ void HypothesisTest::performTwoWayAnova() {
 	double m_pValue_a = nsl_stats_fdist_p(fValue_a, static_cast<size_t>(np_a - 1), df_a);
 	double m_pValue_b = nsl_stats_fdist_p(fValue_b, static_cast<size_t>(np_b - 1), df_b);
 
-	printLine(0, "F(df<sub>" + m_columns[0]->name() + "</sub>, df<sub>within</sub>) is " + round(fValue_a), "blue");
-	printLine(1, "F(df<sub>" + m_columns[1]->name() + "</sub>, df<sub>within</sub>) is " + round(fValue_b), "blue");
-	printLine(2, "F(df<sub>interaction</sub>, df<sub>within</sub>) is " + round(fValue_interaction), "blue");
+	printLine(0, QLatin1String("F(df<sub>") + m_columns[0]->name() + i18n("</sub>, df<sub>within</sub>) is ") + round(fValue_a), QLatin1String("blue"));
+	printLine(1, QLatin1String("F(df<sub>") + m_columns[1]->name() + i18n("</sub>, df<sub>within</sub>) is ") + round(fValue_b), QLatin1String("blue"));
+	printLine(2, QLatin1String("F(df<sub>interaction</sub>, df<sub>within</sub>) is ") + round(fValue_interaction), QLatin1String("blue"));
 
-	printLine(4, "P(df<sub>" + m_columns[0]->name() + "</sub>, df<sub>within</sub>) is " + round(m_pValue_a), "blue");
-	printLine(5, "P(df<sub>" + m_columns[1]->name() + "</sub>, df<sub>within</sub>) is " + round(m_pValue_b), "blue");
+	printLine(4, QLatin1String("P(df<sub>") + m_columns[0]->name() + i18n("</sub>, df<sub>within</sub>) is ") + round(m_pValue_a), QLatin1String("blue"));
+	printLine(5, QLatin1String("P(df<sub>") + m_columns[1]->name() + i18n("</sub>, df<sub>within</sub>) is ") + round(m_pValue_b), QLatin1String("blue"));
 	//    printLine(2, "P(df<sub>interaction</sub>, df<sub>within</sub>) is " + round(fValue_interaction), "blue");
 
 	m_statisticValue.append(fValue_a);
@@ -849,7 +848,7 @@ void HypothesisTest::performTwoWayAnova() {
 // ni			= number of elements in group i
 void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 	if (m_columns.size() != 2) {
-		printError("Inappropriate number of m_columns selected");
+		printError(i18n("Inappropriate number of columns selected"));
 		return;
 	}
 
@@ -862,7 +861,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 		countPartitions(m_columns[0], np, n);
 
 	if (np < 2) {
-		printError("Select at least two m_columns / classes");
+		printError(i18n("Select at least two columns / classes"));
 		return;
 	}
 
@@ -909,8 +908,8 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 			if (ni[i] > 0)
 				yiBar[i] /= ni[i];
 			else {
-				printError("One of the selected m_columns is empty <br/> "
-						   "or have choosen Independent Var.1 wrongly");
+				printError(i18n("One of the selected m_columns is empty <br/> "
+						   "or have choosen Independent Var.1 wrongly"));
 				return;
 			}
 		}
@@ -990,8 +989,8 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 			if (ni[i] > 0)
 				yiBar[i] /= ni[i];
 			else {
-				printError("One of the selected m_columns is empty <br/> "
-						   "or have choosen Independent Var.1 wrongly");
+				printError(i18n("One of the selected m_columns is empty <br/> "
+						   "or have choosen Independent Var.1 wrongly"));
 				m_columns[0]->setColumnMode(originalColMode);
 				return;
 			}
@@ -1026,7 +1025,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 			numberatorValue += ni[i]*gsl_pow_2( (ziBar[i]-ziBarBar));
 
 		if (denominatorValue == 0.0) {
-			printError( "number of data points is less or than equal to number of categorical variables");
+			printError(i18n("number of data points is less or than equal to number of categorical variables"));
 			m_columns[0]->setColumnMode(originalColMode);
 			return;
 		}
@@ -1036,7 +1035,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 		QMapIterator<QString, int> i(classnameToIndex);
 		while (i.hasNext()) {
 			i.next();
-			colNames[i.value()-1] = m_columns[0]->name() + " " + i.key();
+			colNames[i.value()-1] = m_columns[0]->name() + QLatin1String(" ") + i.key();
 		}
 
 		m_columns[0]->setColumnMode(originalColMode);
@@ -1050,10 +1049,10 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 
 	QVariant* rowMajor = new QVariant[rowCount*columnCount];
 	// header data;
-	rowMajor[0] = "";
-	rowMajor[1] = "Ni";
-	rowMajor[2] = "yiBar";
-	rowMajor[3] = "ziBar";
+	rowMajor[0] = QString();
+	rowMajor[1] = QLatin1String("Ni");
+	rowMajor[2] = QLatin1String("yiBar");
+	rowMajor[3] = QLatin1String("ziBar");
 
 	// table data
 	for (int row_i = 1; row_i < rowCount; row_i++) {
@@ -1072,19 +1071,19 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 
 	m_pValue.append(nsl_stats_fdist_p(fValue, static_cast<size_t>(np-1), df));
 
-	printLine(0, "Null Hypothesis: Variance is equal between all classes", "blue");
-	printLine(1, "Alternate Hypothesis: Variance is not equal in at-least one pair of classes", "blue");
-	printLine(2, i18n("Significance level is %1", round(m_significanceLevel)), "blue");
-	printLine(4, i18n("F Value is %1 ", round(fValue)), "green");
-	printLine(5, i18n("P Value is %1 ", m_pValue[0]), "green");
-	printLine(6, i18n("Degree of Freedom is %1", df), "green");
+	printLine(0, i18n("Null Hypothesis: Variance is equal between all classes"), QLatin1String("blue"));
+	printLine(1, i18n("Alternate Hypothesis: Variance is not equal in at-least one pair of classes"), QLatin1String("blue"));
+	printLine(2, i18n("Significance level is %1", round(m_significanceLevel)), QLatin1String("blue"));
+	printLine(4, i18n("F Value is %1 ", round(fValue)), QLatin1String("green"));
+	printLine(5, i18n("P Value is %1 ", m_pValue[0]), QLatin1String("green"));
+	printLine(6, i18n("Degree of Freedom is %1", df), QLatin1String("green"));
 
 	printTooltip(5, getPValueTooltip(m_pValue[0]));
 
 	if (m_pValue[0] <= m_significanceLevel)
-		printLine(8, "Requirement for homogeneity is not met", "red");
+		printLine(8, i18n("Requirement for homogeneity is not met"), QLatin1String("red"));
 	else
-		printLine(8, "Requirement for homogeneity is met", "green");
+		printLine(8, i18n("Requirement for homogeneity is met"), QLatin1String("green"));
 
 	m_statisticValue.append(fValue);
 	return;
@@ -1145,8 +1144,8 @@ double HypothesisTest::getPValue(const int& test, double& value, const QString& 
 	}
 	}
 
-	printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, nullHypothesisSign, col2Name), "blue");
-	printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, alternateHypothesisSign, col2Name), "blue");
+	printLine(0, i18n("Null Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, nullHypothesisSign, col2Name), QLatin1String("blue"));
+	printLine(1, i18n("Alternate Hypothesis: Population mean of %1 %2 Population mean of %3 ", col1Name, alternateHypothesisSign, col2Name), QLatin1String("blue"));
 
 	if (pValue > 1)
 		return 1;

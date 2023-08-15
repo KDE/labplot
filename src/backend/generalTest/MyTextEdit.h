@@ -40,7 +40,8 @@ public:
     void setHtml(QString text);
 
     void extractToolTips(QString& text, bool insert = true);
-protected slots:
+
+protected Q_SLOTS:
     bool event(QEvent *e);
 
 private:

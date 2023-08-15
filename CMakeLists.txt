@@ -258,7 +258,7 @@ option(ENABLE_LIBCERF "Build with libcerf support" ON)
 option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
 option(ENABLE_ROOT "Build with ROOT (CERN) support" ON)
 option(ENABLE_READSTAT "Build with ReadStat support" ON)
-option(ENABLE_MATIO "Build with Matio support" ON
+option(ENABLE_MATIO "Build with Matio support" ON)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)

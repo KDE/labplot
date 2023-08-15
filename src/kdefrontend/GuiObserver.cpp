@@ -67,6 +67,7 @@
 #include "kdefrontend/dockwidgets/MatrixDock.h"
 #include "kdefrontend/dockwidgets/NoteDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
+#include "kdefrontend/dockwidgets/PivotTableDock.h"
 #include "kdefrontend/dockwidgets/QQPlotDock.h"
 #include "kdefrontend/dockwidgets/ReferenceLineDock.h"
 #include "kdefrontend/dockwidgets/ReferenceRangeDock.h"
@@ -98,6 +99,8 @@
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QToolBar>
+
+
 
 /*!
   \class GuiObserver
@@ -476,6 +479,21 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_liveDataDock, m_mainWindow->stackedWidget);
 		m_liveDataDock->setLiveDataSource(static_cast<LiveDataSource*>(selectedAspects.first()));
 		break;
+	case AspectType::PivotTable:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Pivot Table"));
+		raiseDock(m_pivotTableDock, m_mainWindow->stackedWidget);
+		m_pivotTableDock->setPivotTable(static_cast<PivotTable*>(selectedAspects.first()));
+		break;
+	case AspectType::HypothesisTest:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Hypothesis Test"));
+		raiseDock(m_hypothesisTestDock, m_mainWindow->stackedWidget);
+		m_hypothesisTestDock->setHypothesisTest(static_cast<HypothesisTest*>(selectedAspects.first()));
+		break;
+	case AspectType::CorrelationCoefficient:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Correlation Coefficient"));
+		raiseDock(m_correlationCoefficientDock, m_mainWindow->stackedWidget);
+		m_correlationCoefficientDock->setCorrelationCoefficient(static_cast<CorrelationCoefficient*>(selectedAspects.first()));
+		break;
 	case AspectType::AbstractAspect:
 	case AspectType::AbstractColumn:
 	case AspectType::AbstractDataSource:
@@ -486,17 +504,9 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 	case AspectType::DatapickerImage:
 	case AspectType::DatapickerPoint:
 	case AspectType::Folder:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Folder"));
-		raiseDock(m_aspectDock, m_mainWindow->stackedWidget);
-		m_aspectDock->setAspects(selectedAspects);
-		break;
 	case AspectType::PlotArea:
 	case AspectType::SimpleFilterColumn:
 	case AspectType::Workbook:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Workbook"));
-		raiseDock(m_aspectDock, m_mainWindow->stackedWidget);
-		m_aspectDock->setAspects(selectedAspects);
-		break;
 	case AspectType::WorksheetElement:
 	case AspectType::WorksheetElementContainer:
 	case AspectType::WorksheetElementGroup:
@@ -504,43 +514,8 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		clearDock();
 		return;
 	}
-	case AspectType::PivotTable:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Pivot Table"));
-		raiseDock(m_pivotTableDock, m_mainWindow->stackedWidget);
-		m_pivotTableDock->setPivotTable(static_cast<PivotTable*>(selectedAspects.first()));
-		break;
-	case AspectType::HypothesisTest
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Hypothesis Test"));
-		raiseDock(hypothesisTestDock, m_mainWindow->stackedWidget);
-		hypothesisTestDock->setHypothesisTest(static_cast<HypothesisTest*>(selectedAspects.first()));
-		break;
-	case AspectType::CorrelationCoefficient:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Correlation Coefficient"));
-		raiseDock(correlationCoefficientDock, m_mainWindow->stackedWidget);
-		>correlationCoefficientDock->setCorrelationCoefficient(static_cast<CorrelationCoefficient*>(selectedAspects.first()));
-		break;
-    case AspectType::AbstractAspect:
-    case AspectType::AbstractColumn:
-    case AspectType::AbstractDataSource:
-    case AspectType::AbstractFilter:
-    case AspectType::AbstractPart:
-    case AspectType::AbstractPlot:
-    case AspectType::ColumnStringIO:
-    case AspectType::DatapickerImage:
-    case AspectType::DatapickerPoint:
-    case AspectType::Folder:
-    case AspectType::PlotArea:
-    case AspectType::SimpleFilterColumn:
-    case AspectType::Workbook:
-    case AspectType::WorksheetElement:
-    case AspectType::WorksheetElementContainer:
-    case AspectType::WorksheetElementGroup:
-    case AspectType::XYAnalysisCurve:
-        clearDock();
-        return;
-    }
 
-    m_mainWindow->stackedWidget->currentWidget()->show();
+	m_mainWindow->stackedWidget->currentWidget()->show();
 }
 
 /*!

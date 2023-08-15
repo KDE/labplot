@@ -62,7 +62,6 @@ CorrelationCoefficient::~CorrelationCoefficient() {
 }
 
 void CorrelationCoefficient::performTest(int test, bool categoricalVariable, bool calculateStats) {
-	m_statsTable = "";
 	m_correlationValue = 0;
 	m_statisticValue.clear();
 	m_pValue.clear();
@@ -72,22 +71,22 @@ void CorrelationCoefficient::performTest(int test, bool categoricalVariable, boo
 
 	switch (testType(test)) {
 	case CorrelationCoefficient::Pearson: {
-		m_currTestName = "<h2>" + i18n("Pearson's r Correlation Test") + "</h2>";
+		m_currTestName = QLatin1String("<h2>") + i18n("Pearson's r Correlation Test") + QLatin1String("</h2>");
 		performPearson(categoricalVariable);
 		break;
 	}
 	case CorrelationCoefficient::Kendall:
-		m_currTestName = "<h2>" + i18n("Kendall's Rank Correlation Test") + "</h2>";
+		m_currTestName = QLatin1String("<h2>") + i18n("Kendall's Rank Correlation Test") + QLatin1String("</h2>");
 		performKendall();
 		break;
 	case CorrelationCoefficient::Spearman: {
-		m_currTestName = "<h2>" + i18n("Spearman Correlation Coefficient Test") + "</h2>";
+		m_currTestName = QLatin1String("<h2>") + i18n("Spearman Correlation Coefficient Test") + QLatin1String("</h2>");
 		performSpearman();
 		break;
 	}
 	case CorrelationCoefficient::ChiSquare:
 		if (testSubtype(test) == CorrelationCoefficient::IndependenceTest) {
-			m_currTestName = "<h2>" + i18n("Chi Square Independence Test") + "</h2>";
+			m_currTestName = QLatin1String("<h2>") + i18n("Chi Square Independence Test") + QLatin1String("</h2>");
 			performChiSquareIndpendence(calculateStats);
 		}
 		break;
@@ -159,13 +158,13 @@ void CorrelationCoefficient::exportStatTableToSpreadsheet() {
 	Column* col2 = m_dataSourceSpreadsheet->column(spreadsheetColCount + 1);
 	Column* col3 = m_dataSourceSpreadsheet->column(spreadsheetColCount + 2);
 
-	col1->setName("Independent Var. 1");
-	col2->setName("Independent Var. 2");
-	col3->setName("Data Values");
+	col1->setName(i18n("Independent Var. 1"));
+	col2->setName(i18n("Independent Var. 2"));
+	col3->setName(i18n("Data Values"));
 
 	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
 	col2->setColumnMode(AbstractColumn::ColumnMode::Text);
-	col3->setColumnMode(AbstractColumn::ColumnMode::Numeric);
+	col3->setColumnMode(AbstractColumn::ColumnMode::Double);
 
 	int index = 0;
 	for (int i = 1; i < rowCount; i++)
@@ -200,12 +199,12 @@ void CorrelationCoefficient::exportStatTableToSpreadsheet() {
 //TODO: find p value
 void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 	if (m_columns.count() != 2) {
-		printError("Select only 2 columns ");
+		printError(i18n("Select only 2 columns"));
 		return;
 	}
 
 	if (categoricalVariable) {
-		printLine(1, "currently categorical variable not supported", "blue");
+		printLine(1, i18n("currently categorical variable not supported"), QLatin1String("blue"));
 		return;
 	}
 
@@ -214,12 +213,12 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 
 
 	if (!m_columns[1]->isNumeric())
-		printError("Column " + col2Name + " should contain only numeric or interger values");
+		printError(i18n("Column %1 should contain only numeric or interger values", col2Name));
 
 
 	int N = findCount(m_columns[0]);
 	if (N != findCount(m_columns[1])) {
-		printError("Number of data values in Column: " + col1Name + "and Column: " + col2Name + "are not equal");
+		printError(i18n("Number of data values in Column %1 and in Column %2 are not equal", col1Name, col2Name));
 		return;
 	}
 
@@ -241,12 +240,12 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 
 	// horizontal header
 	QString sigma = UTF8_QSTRING("Σ");
-	rowMajor.append(new HtmlCell("", level, true));
+	rowMajor.append(new HtmlCell(QString(), level, true));
 
-	rowMajor.append(new HtmlCell("N", level, true, "Total Number of Observations"));
-	rowMajor.append(new HtmlCell(QString(sigma + "Scores"), level, true, "Sum of Scores in each column"));
-	rowMajor.append(new HtmlCell(QString(sigma + "Scores<sup>2</sup>"), level, true, "Sum of Squares of scores in each column"));
-	rowMajor.append(new HtmlCell(QString(sigma + "(" + UTF8_QSTRING("∏") + "Scores)"), level, true, "Sum of product of scores of both columns"));
+	rowMajor.append(new HtmlCell(QLatin1String("N"), level, true, i18n("Total Number of Observations")));
+	rowMajor.append(new HtmlCell(QString(sigma + QLatin1String("Scores")), level, true, i18n("Sum of Scores in each column")));
+	rowMajor.append(new HtmlCell(QString(sigma + QLatin1String("Scores<sup>2</sup>")), level, true, i18n("Sum of Squares of scores in each column")));
+	rowMajor.append(new HtmlCell(QString(sigma + QLatin1String("(") + UTF8_QSTRING("∏") + QLatin1String("Scores)")), level, true, i18n("Sum of product of scores of both columns")));
 
 	//data with vertical header.
 	level++;
@@ -255,7 +254,7 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 	rowMajor.append(new HtmlCell(sumCol1, level));
 	rowMajor.append(new HtmlCell(sumSqCol1, level));
 
-	rowMajor.append(new HtmlCell(sumCol12, level, false, "", 2, 1));
+	rowMajor.append(new HtmlCell(sumCol12, level, false, QString(), 2, 1));
 
 	level++;
 	rowMajor.append(new HtmlCell(col2Name, level, true));
@@ -270,7 +269,7 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 			sqrt((N * sumSqCol1 - gsl_pow_2(sumCol1)) *
 				 (N * sumSqCol2 - gsl_pow_2(sumCol2)));
 
-	printLine(0, QString("Correlation Value is %1").arg(round(m_correlationValue)), "green");
+	printLine(0, i18n("Correlation Value is %1", round(m_correlationValue)), QLatin1String("green"));
 
 }
 
@@ -284,7 +283,7 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 // TODO: find P Value from Z Value
 void CorrelationCoefficient::performKendall() {
 	if (m_columns.count() != 2) {
-		printError("Select only 2 columns ");
+		printError(i18n("Select only 2 columns "));
 		return;
 	}
 
@@ -293,7 +292,7 @@ void CorrelationCoefficient::performKendall() {
 
 	int N = findCount(m_columns[0]);
 	if (N != findCount(m_columns[1])) {
-		printError("Number of data values in Column: " + col1Name + "and Column: " + col2Name + "are not equal");
+		printError(i18n("Number of data values in Column %1 and in Column %2 are not equal", col1Name, col2Name));
 		return;
 	}
 
@@ -303,8 +302,8 @@ void CorrelationCoefficient::performKendall() {
 			for (int i = 0; i < N; i++)
 				col2Ranks[int(m_columns[0]->valueAt(i)) - 1] = int(m_columns[1]->valueAt(i));
 		} else {
-			printError(QString("Ranking System should be same for both Column: %1 and Column: %2 <br/>"
-							   "Hint: Check for data types of columns").arg(col1Name).arg(col2Name));
+			printError(i18n("Ranking System should be same for both Column: %1 and Column: %2 <br/>"
+							   "Hint: Check for data types of columns", col1Name, col2Name));
 			return;
 		}
 	} else {
@@ -318,7 +317,7 @@ void CorrelationCoefficient::performKendall() {
 
 		for (int i = 0; i < N; i++) {
 			if (ValueToRank[m_columns[0]->textAt(i)] != 0) {
-				printError("Currently ties are not supported");
+				printError(i18n("Currently ties are not supported"));
 				m_columns[0]->setColumnMode(origCol1Mode);
 				m_columns[1]->setColumnMode(origCol2Mode);
 				return;
@@ -343,11 +342,11 @@ void CorrelationCoefficient::performKendall() {
 	m_statisticValue.append((3 * (nCorcordant - nDiscordant)) /
 							sqrt(N * (N- 1) * (2 * N + 5) / 2));
 
-	printLine(0, QString("Number of Discordants are %1").arg(nDiscordant), "green");
-	printLine(1, QString("Number of Concordant are %1").arg(nCorcordant), "green");
+	printLine(0, i18n("Number of Discordants are %1", nDiscordant), QLatin1String("green"));
+	printLine(1, i18n("Number of Concordant are %1", nCorcordant), QLatin1String("green"));
 
-	printLine(2, QString("Tau a is %1").arg(round(m_correlationValue)), "green");
-	printLine(3, QString("Z Value is %1").arg(round(m_statisticValue[0])), "green");
+	printLine(2, i18n("Tau a is %1", round(m_correlationValue)), QLatin1String("green"));
+	printLine(3, i18n("Z Value is %1", round(m_statisticValue[0])), QLatin1String("green"));
 
 	return;
 }
@@ -357,7 +356,7 @@ void CorrelationCoefficient::performKendall() {
 
 void CorrelationCoefficient::performSpearman() {
 	if (m_columns.count() != 2) {
-		printError("Select only 2 columns ");
+		printError(i18n("Select only 2 columns "));
 		return;
 	}
 
@@ -366,7 +365,7 @@ void CorrelationCoefficient::performSpearman() {
 
 	int N = findCount(m_columns[0]);
 	if (N != findCount(m_columns[1])) {
-		printError("Number of data values in Column: " + col1Name + "and Column: " + col2Name + "are not equal");
+		printError(i18n("Number of data values in Column %1 and in Column %2 are not equal", col1Name, col2Name));
 		return;
 	}
 
@@ -407,7 +406,7 @@ void CorrelationCoefficient::performSpearman() {
 
 	m_correlationValue = s12 / std::sqrt(s1 * s2);
 
-	printLine(0, QString("Spearman Rank Correlation value is %1").arg(m_correlationValue), "green");
+	printLine(0, i18n("Spearman Rank Correlation value is %1", m_correlationValue), QLatin1String("green"));
 }
 
 /***********************************************Chi Square Test for Indpendence******************************************************************/
@@ -451,7 +450,7 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 			verticalHeader.append(m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 0)).toString());
 	} else {
 		if (m_columns.count() != 3) {
-			printError("Select only 3 columns ");
+			printError(i18n("Select only 3 columns"));
 			return;
 		}
 
@@ -503,7 +502,7 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 	}
 
 	if (overallTotal == 0)
-		printError("Enter some data: All columns are empty");
+		printError(i18n("Enter some data: All columns are empty"));
 
 	QVector<QVector<double>> expectedValues(rowCount, QVector<double>(columnCount));
 
@@ -511,14 +510,14 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 		for (int j = 0; j < columnCount; j++)
 			expectedValues[i][j] = (double(sumRows[i]) * double(sumColumns[j])) / overallTotal;
 
-	m_statsTable += "<h3>" + i18n("Observed Value Table") + "</h3>";
+	m_statsTable += QLatin1String("<h3>") + i18n("Observed Value Table") + QLatin1String("</h3>");
 	QList<HtmlCell*> rowMajor;
 	int level = 0;
 	// horizontal header
 	for (int i = 0; i < columnCount + 1; i++)
 		rowMajor.append(new HtmlCell(horizontalHeader[i], level, true));
 
-	rowMajor.append(new HtmlCell("Total", level, true));
+	rowMajor.append(new HtmlCell(i18n("Total"), level, true));
 
 	//data with vertical header.
 	for (int i = 1; i < rowCount + 1; i++) {
@@ -531,23 +530,23 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 	}
 
 	level++;
-	rowMajor.append(new HtmlCell("Total", level, true));
+	rowMajor.append(new HtmlCell(i18n("Total"), level, true));
 	for (int i = 0; i < columnCount; i++)
 		rowMajor.append(new HtmlCell(round(sumColumns[i]), level));
 
 	rowMajor.append(new HtmlCell(round(overallTotal), level));
 	m_statsTable += getHtmlTable3(rowMajor);
 
-	m_statsTable += "<br>";
+	m_statsTable += QLatin1String("<br>");
 
-	m_statsTable += "<h3>" + i18n("Expected Value Table") + "</h3>";
+	m_statsTable += QLatin1String("<h3>") + i18n("Expected Value Table") + QLatin1String("</h3>");
 	rowMajor.clear();
 	level = 0;
 	// horizontal header
 	for (int i = 0; i < columnCount + 1; i++)
 		rowMajor.append(new HtmlCell(horizontalHeader[i], level, true));
 
-	rowMajor.append(new HtmlCell("Total", level, true));
+	rowMajor.append(new HtmlCell(i18n("Total"), level, true));
 
 	//data with vertical header.
 	for (int i = 1; i < rowCount + 1; i++) {
@@ -560,7 +559,7 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 	}
 
 	level++;
-	rowMajor.append(new HtmlCell("Total", level, true));
+	rowMajor.append(new HtmlCell(i18n("Total"), level, true));
 	for (int i = 0; i < columnCount; i++)
 		rowMajor.append(new HtmlCell(round(sumColumns[i]), level));
 
@@ -576,8 +575,8 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 
 	m_statisticValue.append(chiSquareVal);
 	int df = (rowCount - 1) * (columnCount - 1);
-	printLine(0, "Degree of Freedom is " + QString::number(df), "blue");
-	printLine(1, "Chi Square Statistic Value is " + round(chiSquareVal), "green");
+	printLine(0, i18n("Degree of Freedom is %1", df), QLatin1String("blue"));
+	printLine(1, i18n("Chi Square Statistic Value is %1", round(chiSquareVal)), QLatin1String("green"));
 }
 
 /***********************************************Helper Functions******************************************************************/

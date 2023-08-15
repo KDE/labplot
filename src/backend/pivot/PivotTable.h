@@ -49,8 +49,8 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
 	POINTER_D_ACCESSOR_DECL(Spreadsheet, dataSourceSpreadsheet, DataSourceSpreadsheet)
-	CLASS_D_ACCESSOR_DECL(QString, dataSourceConnection, DataSourceConnection)
-	CLASS_D_ACCESSOR_DECL(QString, dataSourceTable, DataSourceTable)
+	//CLASS_D_ACCESSOR_DECL(QString, dataSourceConnection, DataSourceConnection)
+	//CLASS_D_ACCESSOR_DECL(QString, dataSourceTable, DataSourceTable)
 
 	QAbstractItemModel* dataModel() const;
 	void setDataModel(QAbstractItemModel*) const;
@@ -81,8 +81,6 @@ public:
 
 	typedef PivotTablePrivate Private;
 
-public slots:
-
 private:
 	void init();
 
@@ -90,7 +88,7 @@ private:
 	mutable PivotTableView* m_view{nullptr};
 	friend class PivotTablePrivate;
 
-signals:
+Q_SIGNALS:
 	void changed();
 	void requestProjectContextMenu(QMenu*);
 	void dataSourceTypeChanged(PivotTable::DataSourceType);

@@ -29,6 +29,7 @@
 #ifndef PIVOTTABLEDOCK_H
 #define PIVOTTABLEDOCK_H
 
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/pivot/PivotTable.h"
 #include "ui_pivottabledock.h"
 #include <QSqlDatabase>
@@ -38,7 +39,7 @@ class PivotTable;
 class TreeViewComboBox;
 class KConfig;
 
-class PivotTableDock : public QWidget {
+class PivotTableDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -47,7 +48,6 @@ public:
 
 private:
 	Ui::PivotTableDock ui;
-	bool m_initializing{false};
 	TreeViewComboBox* cbSpreadsheet{nullptr};
 	PivotTable* m_pivotTable{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
@@ -61,7 +61,7 @@ private:
 	void updateFields();
 	bool fieldSelected(const QString&);
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in PivotTableDock
 	void nameChanged();
 	void commentChanged();
@@ -83,7 +83,7 @@ private slots:
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

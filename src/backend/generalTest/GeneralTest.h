@@ -57,7 +57,7 @@ public:
 		QString tooltip;
 		int rowSpanCount;
 		int columnSpanCount;
-		HtmlCell(QVariant data = "", int level = 0, bool isHeader = false, QString tooltip = "", int rowSpanCount = 1, int columnSpanCount = 1) {
+		HtmlCell(QVariant data, int level = 0, bool isHeader = false, QString tooltip = QString(), int rowSpanCount = 1, int columnSpanCount = 1) {
 			this->data = data.toString();
 			this->level = level;
 			this->isHeader = isHeader;
@@ -95,10 +95,10 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-public slots:
+public Q_SLOTS:
 	void clearInputStatsTable();
 
-signals:
+Q_SIGNALS:
 	void changed();
 	void requestProjectContextMenu(QMenu*);
 	void dataSourceTypeChanged(GeneralTest::DataSourceType);
@@ -141,8 +141,8 @@ protected:
 	QString getHtmlTable(int row, int column, QVariant* rowMajor);
 	QString getHtmlTable3(const QList<HtmlCell*>& rowMajor);
 
-	QString getLine(const QString& msg, const QString& color = "black");
-	void printLine(const int& index, const QString& msg, const QString& color = "black");
+	QString getLine(const QString& msg, const QString& color = QLatin1String("black"));
+	void printLine(const int& index, const QString& msg, const QString& color = QLatin1String("black"));
 	void printTooltip(const int& index, const QString& msg);
 	void printError(const QString& errorMsg);
 

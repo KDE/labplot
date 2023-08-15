@@ -49,7 +49,7 @@
 
   \ingroup kdefrontend
 */
-PivotTableDock::PivotTableDock(QWidget* parent) : QWidget(parent) {
+PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 
 	ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
@@ -58,9 +58,9 @@ PivotTableDock::PivotTableDock(QWidget* parent) : QWidget(parent) {
 	cbSpreadsheet = new TreeViewComboBox;
 	ui.gridLayout->addWidget(cbSpreadsheet, 5, 3, 1, 4);
 
-	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
+	ui.bDatabaseManager->setIcon(QIcon::fromTheme(QLatin1String("network-server-database")));
 	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
-	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  QLatin1String("sql_connections");
 	readConnections();
 
 	auto* style = ui.bAddRow->style();
@@ -137,14 +137,14 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 	if (m_pivotTable->dataSourceType() == PivotTable::DataSourceSpreadsheet)
 		setModelIndexFromAspect(cbSpreadsheet, m_pivotTable->dataSourceSpreadsheet());
 	else
-		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_pivotTable->dataSourceConnection()));
+//		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_pivotTable->dataSourceConnection()));
 
 	this->dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
 
 	//available dimensions and measures
 	ui.lwFields->clear();
 	for (auto dimension : m_pivotTable->dimensions())
-		ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme("draw-text"), dimension));
+		ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme(QLatin1String("draw-text")), dimension));
 
 	for (auto measure : m_pivotTable->measures())
 		ui.lwFields->addItem(new QListWidgetItem(measure));
@@ -245,7 +245,7 @@ void PivotTableDock::updateFields() {
 	ui.lwFields->clear();
 	for (auto dimension : m_pivotTable->dimensions())
 		if (!fieldSelected(dimension))
-			ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme("draw-text"), dimension));
+			ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme(QLatin1String("draw-text")), dimension));
 
 	for (auto measure : m_pivotTable->measures())
 		if (!fieldSelected(measure))
@@ -349,7 +349,7 @@ void PivotTableDock::connectionChanged() {
 	}
 
 	//open the selected connection
-	QDEBUG("PivotTableDock: connecting to " + connection);
+//	QDEBUG("PivotTableDock: connecting to " + connection);
 	const QString& driver = group.readEntry("Driver");
 	m_db = QSqlDatabase::addDatabase(driver);
 
@@ -386,7 +386,7 @@ void PivotTableDock::connectionChanged() {
 	//show all available database tables
 	if (m_db.tables().size()) {
 		for (auto table : m_db.tables())
-			ui.cbTable->addItem(QIcon::fromTheme("view-form-table"), table);
+			ui.cbTable->addItem(QIcon::fromTheme(QLatin1String("view-form-table")), table);
 		ui.cbTable->setCurrentIndex(0);
 	}
 

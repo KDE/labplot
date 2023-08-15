@@ -29,10 +29,11 @@
 #ifndef PIVOTTABLEVIEW_H
 #define PIVOTTABLEVIEW_H
 
-#include <QWidget>
-
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
+
+#include <QLocale>
+#include <QWidget>
 
 class Column;
 class PivotTable;
@@ -76,13 +77,13 @@ private:
 	HierarchicalHeaderView* m_verticalHeaderView{nullptr};
 	bool m_readOnly{false};
 
-public slots:
+public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*) const;
 	void changed();
 
-private slots:
+private Q_SLOTS:
 	void goToCell();
 	void goToCell(int row, int col);
 };

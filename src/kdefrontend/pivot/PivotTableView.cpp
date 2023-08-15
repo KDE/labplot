@@ -202,9 +202,6 @@ void PivotTableView::exportToFile(const QString& path, const bool exportHeader, 
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
-
-	PERFTRACE("export pivot table to file");
-
 }
 
 void PivotTableView::exportToLaTeX(const QString & path, const bool exportHeaders,
@@ -219,6 +216,4 @@ void PivotTableView::exportToLaTeX(const QString & path, const bool exportHeader
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
-
-	PERFTRACE("export pivot table to latex");
 }

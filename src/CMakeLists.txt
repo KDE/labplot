@@ -363,7 +363,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/DBCParser.cpp
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
-	${BACKEND_DIR}/gsl/ExpressionParser.cp
+	${BACKEND_DIR}/gsl/ExpressionParser.cpp
 	${BACKEND_DIR}/generalTest/CorrelationCoefficient.cpp
 	${BACKEND_DIR}/generalTest/GeneralTest.cpp
 	${BACKEND_DIR}/generalTest/HypothesisTest.cpp

@@ -63,8 +63,8 @@ PivotTable::PivotTable(const QString& name, bool loading) : AbstractPart(name, A
 //##############################################################################
 BASIC_D_READER_IMPL(PivotTable, PivotTable::DataSourceType, dataSourceType, dataSourceType)
 BASIC_D_READER_IMPL(PivotTable, Spreadsheet*, dataSourceSpreadsheet, dataSourceSpreadsheet)
-CLASS_D_READER_IMPL(PivotTable, QString, dataSourceConnection, dataSourceConnection)
-CLASS_D_READER_IMPL(PivotTable, QString, dataSourceTable, dataSourceTable)
+// CLASS_D_READER_IMPL(PivotTable, QString, dataSourceConnection, dataSourceConnection)
+// CLASS_D_READER_IMPL(PivotTable, QString, dataSourceTable, dataSourceTable)
 
 QAbstractItemModel* PivotTable::dataModel() const {
 	return d->dataModel;
@@ -164,7 +164,7 @@ QMenu* PivotTable::createContextMenu() {
   Returns an icon to be used for decorating my views.
   */
 QIcon PivotTable::icon() const {
-	return QIcon::fromTheme("labplot-spreadsheet");
+	return QIcon::fromTheme(QLatin1String("labplot-spreadsheet"));
 }
 
 //##############################################################################
@@ -258,7 +258,7 @@ void PivotTablePrivate::recalculate() {
 
 	if (rows.isEmpty() && columns.isEmpty() && !showTotals) {
 		//notify about the new result
-        emit q->changed();
+		emit q->changed();
 		return;
 	}
 
@@ -268,43 +268,43 @@ void PivotTablePrivate::recalculate() {
 		createDb();
 
 	//construct the SQL statement string
-	QString query{"SELECT "};
+	QString query = QLatin1String("SELECT ");
 	QString groupByString;
 
 	if (!showNulls) {
 		//if we don't need to show combinations with empty intersections, put everything into GROUP BY
 		if (!rows.isEmpty())
-			groupByString = rows.join(',');
+			groupByString = rows.join(QLatin1Char(','));
 
 		if (!columns.isEmpty()) {
 			if (!groupByString.isEmpty())
-				groupByString += ',';
-			groupByString += columns.join(',');
+				groupByString += QLatin1Char(',');
+			groupByString += columns.join(QLatin1Char(','));
 		}
 
 		if (!groupByString.isEmpty()) {
 			query += groupByString;
 // 			if (showTotals)
-			query += ", COUNT(*) FROM pivot";
+			query += QLatin1String(", COUNT(*) FROM pivot");
 
-			query += " GROUP BY " + groupByString;
+			query += QLatin1String(" GROUP BY ") + groupByString;
 
 			if (!sortDimension.isEmpty()) {
 				switch (sortType) {
 				case PivotTable::NoSort:
-					query += " ORDER BY " + sortDimension;
+					query += QLatin1String(" ORDER BY ") + sortDimension;
 					break;
 				case PivotTable::SortAscending:
-					query += " ORDER BY " + sortDimension + " ASC";
+					query += QLatin1String(" ORDER BY ") + sortDimension + QLatin1String(" ASC");
 					break;
 				case PivotTable::SortDescending:
-					query += " ORDER BY " + sortDimension + " DESC";
+					query += QLatin1String(" ORDER BY ") + sortDimension + QLatin1String(" DESC");
 					break;
 				}
 			}
 		} else {
 			//no dimensions selected, show totals only
-			query += "COUNT(*) FROM pivot";
+			query += QLatin1String("COUNT(*) FROM pivot");
 		}
 	} else {
 
@@ -312,13 +312,13 @@ void PivotTablePrivate::recalculate() {
 
     //QDEBUG(query);
 
-    qDebug()<<"query is " << query;
+	//qDebug()<<"query is " << query;
 
 	//execute the query
 	QSqlQuery sqlQuery;
 	if (!sqlQuery.exec(query)) {
 		RESET_CURSOR;
-		KMessageBox::error(nullptr, i18n("Failed to process the query.") + "\n" + sqlQuery.lastError().databaseText());
+		KMessageBox::error(nullptr, i18n("Failed to process the query.") + QLatin1Char('\n') + sqlQuery.lastError().databaseText());
 		emit q->changed();
 		return;
 	}
@@ -333,13 +333,14 @@ void PivotTablePrivate::recalculate() {
 //	DEBUG("number rows: " << rowsCount);
 //	DEBUG("number values: " << valuesCount);
 //	DEBUG("index of the first value column: " << firstValueIndex);
-
+/*
     qDebug() << "number of columns " << columnsCount;
     qDebug() << "number of rows" << rowsCount;
     qDebug() << "number of values" << valuesCount;
     qDebug() << "index of first value column " << firstValueIndex;
 
 	qDebug()<<"model in recalculate " << horizontalHeaderModel;
+	*/
 	if (!horizontalHeaderModel) {
 		RESET_CURSOR;
 		return;
@@ -356,7 +357,7 @@ void PivotTablePrivate::recalculate() {
 		//horizontal header
 		horizontalHeaderModel->setColumnCount(1);
 		horizontalHeaderModel->setRowCount(1);
-		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), "Totals", Qt::DisplayRole);
+		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), i18n("Totals"), Qt::DisplayRole);
 	} else if (columns.isEmpty()) {
 		//no column labels provided, we have:
 		//* all labels on rows
@@ -368,11 +369,11 @@ void PivotTablePrivate::recalculate() {
 		verticalHeaderModel->setColumnCount(rows.count());
 
 		//horizontal header
-        horizontalHeaderModel->setColumnCount(valuesCount);
+		horizontalHeaderModel->setColumnCount(valuesCount);
 		horizontalHeaderModel->setRowCount(1);
 
 		//TODO: only "Totals" value at the moment, needs to be extended later when we allow to add other values
-		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), "Totals", Qt::DisplayRole);
+		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), i18n("Totals"), Qt::DisplayRole);
 	} else if (rows.isEmpty()) {
 		//no row labels provided, we have:
 		//* all labels on rows
@@ -403,24 +404,24 @@ void PivotTablePrivate::recalculate() {
 	if (columns.isEmpty() && rows.isEmpty()) {
 
 	} else if (columns.isEmpty()) {
-		qDebug()<<"everything on rows";
-        int* start_span = new int[firstValueIndex];
-        int* end_span = new int[firstValueIndex];
-        QString* last_value= new QString[firstValueIndex];
+		//qDebug()<<"everything on rows";
+		int* start_span = new int[firstValueIndex];
+		int* end_span = new int[firstValueIndex];
+		QString* last_value= new QString[firstValueIndex];
 
-        verticalHeaderModel->setRowCount(row+1);
-        for (int i = 0; i < firstValueIndex; ++i) {
-            start_span[i] = 1;
-            end_span[i] = 1;
-            last_value[i] = "";
-            verticalHeaderModel->setData(verticalHeaderModel->index(row, i), rows.at(i), Qt::DisplayRole);
-        }
-        row++;
+		verticalHeaderModel->setRowCount(row+1);
+		for (int i = 0; i < firstValueIndex; ++i) {
+			start_span[i] = 1;
+			end_span[i] = 1;
+			last_value[i] = QString();
+			verticalHeaderModel->setData(verticalHeaderModel->index(row, i), rows.at(i), Qt::DisplayRole);
+		}
+		row++;
 
 
 		while (sqlQuery.next()) {
-			qDebug()<<"row: " << row;
-            verticalHeaderModel->setRowCount(row+1);
+			//qDebug()<<"row: " << row;
+			verticalHeaderModel->setRowCount(row+1);
 
 //            if(sqlQuery.value(0).toString() != last_value)
 //            {
@@ -430,28 +431,28 @@ void PivotTablePrivate::recalculate() {
 //                last_value = sqlQuery.value(0).toString();
 //            }
 //            end_span = end_span + 1;
-            bool parent_header_changed = false;
-            for (int i = 0; i < firstValueIndex; ++i) {
-                QString queryVal = sqlQuery.value(i).toString();
-                qDebug()<<"adding to the horizontal header " << query;
+			bool parent_header_changed = false;
+			for (int i = 0; i < firstValueIndex; ++i) {
+				QString queryVal = sqlQuery.value(i).toString();
+				//qDebug()<<"adding to the horizontal header " << query;
 
-                if(queryVal != last_value[i] || parent_header_changed)
-                {
-                    verticalHeaderModel->setData(verticalHeaderModel->index(row, i), queryVal, Qt::DisplayRole);
+				if(queryVal != last_value[i] || parent_header_changed)
+				{
+					verticalHeaderModel->setData(verticalHeaderModel->index(row, i), queryVal, Qt::DisplayRole);
 
-                    if(end_span[i] > start_span[i]+1)
-                        verticalHeaderModel->setSpan(start_span[i],i,end_span[i]-start_span[i],0);
-                    start_span[i] = end_span[i];
-                    parent_header_changed = true;
-                 }
-                 last_value[i] = queryVal;
-                 end_span[i] = end_span[i] + 1;
+					if(end_span[i] > start_span[i]+1)
+						verticalHeaderModel->setSpan(start_span[i],i,end_span[i]-start_span[i],0);
+					start_span[i] = end_span[i];
+					parent_header_changed = true;
+				}
+				last_value[i] = queryVal;
+				end_span[i] = end_span[i] + 1;
 			}
 
 			//values
-            for (int i = firstValueIndex; i < columnsCount; ++i) {
+			for (int i = firstValueIndex; i < columnsCount; ++i) {
 				QString value = sqlQuery.value(i).toString();
-				qDebug()<<"adding value " << value;
+				//qDebug()<<"adding value " << value;
 				if (rowsCount == -1)
 					dataModel->setRowCount(row + 1);
 				dataModel->setItem(row, i - firstValueIndex, new QStandardItem(value));
@@ -459,15 +460,15 @@ void PivotTablePrivate::recalculate() {
 
 			++row;
 		}
-        for(int i = 0; i < firstValueIndex; ++i){
-            if(end_span[i] > start_span[i]){
-                verticalHeaderModel->setSpan(start_span[i],i,end_span[i]-start_span[i],0);
-            }
-        }
-        verticalHeaderModel->setSpan(1,0,0,rows.count());
+		for(int i = 0; i < firstValueIndex; ++i){
+			if(end_span[i] > start_span[i]){
+				verticalHeaderModel->setSpan(start_span[i],i,end_span[i]-start_span[i],0);
+			}
+		}
+		verticalHeaderModel->setSpan(1,0,0,rows.count());
 
 	} else if (rows.isEmpty()) {
-		qDebug()<<"everything on columns";
+		//qDebug()<<"everything on columns";
 // 		for (int i = firstValueIndex; i < columnsCount; ++i) {
 // 			QString value = sqlQuery.value(i).toString();
 // 			if (rowsCount == -1)
@@ -493,7 +494,7 @@ void PivotTablePrivate::createDb() {
 			dimensions << col->name();
 	}
 
-	PERFTRACE("export spreadsheet to SQLite database");
+	//PERFTRACE("export spreadsheet to SQLite database");
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	//create database
@@ -517,10 +518,11 @@ void PivotTablePrivate::createDb() {
 
 		query += QLatin1String("\"") + col->name() + QLatin1String("\" ");
 		switch (col->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 			query += QLatin1String("REAL");
 			break;
 		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::BigInt:
 			query += QLatin1String("INTEGER");
 			break;
 		case AbstractColumn::ColumnMode::Text:
@@ -535,16 +537,16 @@ void PivotTablePrivate::createDb() {
 	QSqlQuery q;
 	if (!q.exec(query)) {
 		RESET_CURSOR;
-		KMessageBox::error(nullptr, i18n("Failed to create the SQLite database.") + "\n" + q.lastError().databaseText());
+		KMessageBox::error(nullptr, i18n("Failed to create the SQLite database.") + QLatin1Char('\n') + q.lastError().databaseText());
 		db.close();
 		return;
 	}
 
 	//create bulk insert statement
 	{
-	PERFTRACE("Create the bulk insert statement");
+	//PERFTRACE("Create the bulk insert statement");
 	q.exec(QLatin1String("BEGIN TRANSACTION;"));
-	query = "INSERT INTO '" + QLatin1String("pivot") + "' (";
+	query = QLatin1String("INSERT INTO 'pivot' (");
 	for (int i = 0; i < cols; ++i) {
 		if (i != 0)
 			query += QLatin1String(", ");
@@ -563,7 +565,7 @@ void PivotTablePrivate::createDb() {
 				query += QLatin1String(", ");
 
 			QString text = col->asStringColumn()->textAt(i);
-			text = text.replace("'", "''");
+			text = text.replace(QLatin1String("'"), QLatin1String("''"));
 			query += QLatin1Char('\'') + text + QLatin1Char('\'');
 		}
 		query += QLatin1String(")");
@@ -591,7 +593,7 @@ void PivotTablePrivate::createDb() {
   Saves as XML.
  */
 void PivotTable::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("pivotTable");
+	writer->writeStartElement(QLatin1String("pivotTable"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 	//TODO:
