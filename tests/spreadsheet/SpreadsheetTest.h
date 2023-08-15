@@ -84,6 +84,9 @@ private Q_SLOTS:
 	void testInsertColumns();
 	void testRemoveColumns();
 
+	void testInsertRowsBegin(); // insert row at the beginning
+	void testRemoveRowsBegin(); // remove first row
+
 	void testInsertRowsSuppressUpdate();
 	void testInsertColumnsSuppressUpdate();
 

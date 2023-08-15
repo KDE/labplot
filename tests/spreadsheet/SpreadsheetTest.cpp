@@ -2136,6 +2136,89 @@ void SpreadsheetTest::testRemoveRows() {
 	QCOMPARE(rowsRemovedCounter, 2); // set and redo()
 }
 
+void SpreadsheetTest::testInsertRowsBegin() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter]() {
+		rowsAboutToBeInsertedCounter++;
+	});
+	int rowsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsInserted, [&rowsInsertedCounter]() {
+		rowsInsertedCounter++;
+	});
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter]() {
+		rowsAboutToBeRemovedCounter++;
+	});
+	int rowsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsRemoved, [&rowsRemovedCounter]() {
+		rowsRemovedCounter++;
+	});
+
+	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+	sheet->insertRows(0, 1); // No crash shall happen
+	QCOMPARE(sheet->rowCount(), 101);
+	QCOMPARE(model->rowCount(), 101);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->rowCount(), 101);
+	QCOMPARE(model->rowCount(), 101);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 2); // set and redo()
+	QCOMPARE(rowsInsertedCounter, 2); // set and redo()
+	QCOMPARE(rowsAboutToBeRemovedCounter, 1); // undo()
+	QCOMPARE(rowsRemovedCounter, 1); // undo()
+}
+void SpreadsheetTest::testRemoveRowsBegin() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+	int rowsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeInserted, [&rowsAboutToBeInsertedCounter]() {
+		rowsAboutToBeInsertedCounter++;
+	});
+	int rowsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsInserted, [&rowsInsertedCounter]() {
+		rowsInsertedCounter++;
+	});
+	int rowsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsAboutToBeRemoved, [&rowsAboutToBeRemovedCounter]() {
+		rowsAboutToBeRemovedCounter++;
+	});
+	int rowsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::rowsRemoved, [&rowsRemovedCounter]() {
+		rowsRemovedCounter++;
+	});
+
+	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+	sheet->removeRows(0, 1);
+	QCOMPARE(sheet->rowCount(), 99);
+	QCOMPARE(model->rowCount(), 99);
+
+	sheet->undoStack()->undo();
+	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
+	sheet->undoStack()->redo();
+	QCOMPARE(sheet->rowCount(), 99);
+	QCOMPARE(model->rowCount(), 99);
+
+	QCOMPARE(rowsAboutToBeInsertedCounter, 1); // undo
+	QCOMPARE(rowsInsertedCounter, 1); // undo
+	QCOMPARE(rowsAboutToBeRemovedCounter, 2); // set and redo()
+	QCOMPARE(rowsRemovedCounter, 2); // set and redo()
+}
+
 void SpreadsheetTest::testInsertColumns() {
 	Project project;
 	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
