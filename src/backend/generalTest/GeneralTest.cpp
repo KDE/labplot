@@ -46,7 +46,6 @@ extern "C" {
 #include "backend/nsl/nsl_stats.h"
 }
 
-
 GeneralTest::GeneralTest(const QString& name, const AspectType& type) : AbstractPart(name, type),
 	m_summaryLayout(new QVBoxLayout()),
 	m_inputStatsTableModel(new MyTableModel()) {
@@ -58,15 +57,6 @@ GeneralTest::GeneralTest(const QString& name, const AspectType& type) : Abstract
 }
 
 GeneralTest::~GeneralTest() {
-}
-
-void GeneralTest::setDataSourceType(DataSourceType type) {
-	if (type != m_dataSourceType)
-		m_dataSourceType = type;
-}
-
-GeneralTest::DataSourceType GeneralTest::dataSourceType() const {
-	return m_dataSourceType;
 }
 
 void GeneralTest::setDataSourceSpreadsheet(Spreadsheet* spreadsheet) {

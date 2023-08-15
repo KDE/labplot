@@ -1088,24 +1088,22 @@ void SpreadsheetView::goToCell(int row, int col) {
 }
 
 void SpreadsheetView::createPivotTable() {
-	PivotTable* pivot = new PivotTable(i18n("Pivot Table for %1", m_spreadsheet->name()));
+	auto* pivot = new PivotTable(i18n("Pivot Table for %1", m_spreadsheet->name()));
 	pivot->setDataSourceType(PivotTable::DataSourceSpreadsheet);
 	pivot->setDataSourceSpreadsheet(m_spreadsheet);
-    m_spreadsheet->parentAspect()->addChild(pivot);
+	m_spreadsheet->parentAspect()->addChild(pivot);
 }
 
 void SpreadsheetView::doHypothesisTest() {
-    HypothesisTest* hypothesis_test = new HypothesisTest(i18n("Hypothesis Test for %1", m_spreadsheet->name()));
-    hypothesis_test->setDataSourceType(HypothesisTest::DataSourceSpreadsheet);
-    hypothesis_test->setDataSourceSpreadsheet(m_spreadsheet);
-    m_spreadsheet->parentAspect()->addChild(hypothesis_test);
+	auto* hypothesis_test = new HypothesisTest(i18n("Hypothesis Test for %1", m_spreadsheet->name()));
+	hypothesis_test->setDataSourceSpreadsheet(m_spreadsheet);
+	m_spreadsheet->parentAspect()->addChild(hypothesis_test);
 }
 
 void SpreadsheetView::findCorrelationCoefficient() {
-    CorrelationCoefficient* correlation_coefficient = new CorrelationCoefficient(i18n("Correlation Coefficient for %1", m_spreadsheet->name()));
-    correlation_coefficient->setDataSourceType(CorrelationCoefficient::DataSourceSpreadsheet);
-    correlation_coefficient->setDataSourceSpreadsheet(m_spreadsheet);
-    m_spreadsheet->parentAspect()->addChild(correlation_coefficient);
+	auto* correlation_coefficient = new CorrelationCoefficient(i18n("Correlation Coefficient for %1", m_spreadsheet->name()));
+	correlation_coefficient->setDataSourceSpreadsheet(m_spreadsheet);
+	m_spreadsheet->parentAspect()->addChild(correlation_coefficient);
 }
 
 void SpreadsheetView::selectCell(int row, int col) {

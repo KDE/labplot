@@ -31,17 +31,13 @@
 
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/generalTest/HypothesisTest.h"
-
 #include "ui_hypothesistestdock.h"
-
-#include <QSqlDatabase>
 
 class AbstractAspect;
 class AspectTreeModel;
 class HypothesisTest;
 class TreeViewComboBox;
 class KConfig;
-class QScrollArea;
 class QStandardItemModel;
 class QStandardItem;
 class QComboBox;
@@ -58,19 +54,13 @@ private:
 	TreeViewComboBox* cbSpreadsheet{nullptr};
 	HypothesisTest* m_hypothesisTest{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	QSqlDatabase m_db;
-	QString m_configPath;
 	double m_populationMean{0};
 	double m_significanceLevel{0.05};
 	//        void load();
 	//        void loadConfig(KConfig&);
 	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
-	//        void readConnections();
-	//        void updateFields();
-	//        bool fieldSelected(const QString&);
 	int m_test;
 	HypothesisTest::HypothesisTailType m_tail;
-	QScrollArea* scrollDock;
 
 	void countPartitions(Column *column, int &np, int &total_rows);
 	void setColumnsComboBoxModel(Spreadsheet* spreadsheet);
@@ -85,10 +75,7 @@ private:
 	QList<Column* > m_multiCategoricalCols;
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in PivotTableDock
-	//        void nameChanged();
-	//        void commentChanged();
-	void dataSourceTypeChanged(int);
+	//SLOTs for changes triggered in HypothesisTestDock
 	void showTestType();
 	void showHypothesisTest();
 	void doHypothesisTest();
@@ -102,17 +89,9 @@ private Q_SLOTS:
 	void onRbH1OneTail1Toggled(bool checked);
 	void onRbH1OneTail2Toggled(bool checked);
 	void onRbH1TwoTailToggled(bool checked);
-	//        void connectionChanged();
-	//        void tableChanged();
-	//        void showDatabaseManager();
 
-	//        //SLOTs for changes triggered in PivotTable
+	// SLOTs for changes triggered in HypothesisTest
 	void hypothesisTestDescriptionChanged(const AbstractAspect*);
-
-	//        void addRow();
-	//        void removeRow();
-	//        void addColumn();
-	//        void removeColumn();
 
 	//        //save/load template
 	//        void loadConfigFromTemplate(KConfig&);

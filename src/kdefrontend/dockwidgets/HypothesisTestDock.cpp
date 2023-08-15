@@ -32,20 +32,16 @@
 #include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
-#include "kdefrontend/datasources/DatabaseManagerDialog.h"
-#include "kdefrontend/datasources/DatabaseManagerWidget.h"
 #include "kdefrontend/TemplateHandler.h"
 
+#include <QAbstractItemModel>
 #include <QDir>
-#include <QSqlError>
-#include <QScrollArea>
+#include <QStandardItemModel>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KMessageBox>
 
-#include <QStandardItemModel>
-#include <QAbstractItemModel>
 /*!
   \class HypothesisTestDock
   \brief Provides a dock (widget) for hypothesis testing:
@@ -62,18 +58,10 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : BaseDock(parent) {
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(2 * m_leName->height());
 
-	ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	ui.cbDataSourceType->addItem(i18n("Database"));
-
 	cbSpreadsheet = new TreeViewComboBox;
 	ui.gridLayout->addWidget(cbSpreadsheet, 5, 4, 1, 3);
 
-	ui.bDatabaseManager->setIcon(QIcon::fromTheme(QLatin1String("network-server-database")));
-	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
-	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  QLatin1String("sql_connections");
-
 	// adding item to tests and testtype combo box;
-
 	ui.cbTest->addItem( i18n("T Test"), HypothesisTest::TTest);
 	ui.cbTest->addItem( i18n("Z Test"), HypothesisTest::ZTest);
 	ui.cbTest->addItem( i18n("ANOVA"), HypothesisTest::Anova);
@@ -170,15 +158,9 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : BaseDock(parent) {
 
 	//    connect(ui.leName, &QLineEdit::textChanged, this, &HypothesisTestDock::nameChanged);
 	//    connect(ui.teComment, &QLineEdit::textChanged, this, &HypothesisTestDock::commentChanged);
-	connect(ui.cbDataSourceType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &HypothesisTestDock::dataSourceTypeChanged);
+
 
 	connect(cbSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::spreadsheetChanged);
-	//    connect(ui.cbConnection, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-	//            this, &HypothesisTestDock::connectionChanged);
-	//    connect(ui.cbTable, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-	//            this, &HypothesisTestDock::tableChanged);
-	//    connect(ui.bDatabaseManager, &QPushButton::clicked, this, &HypothesisTestDock::showDatabaseManager);
 
 	//    connect(ui.bAddRow,  &QPushButton::clicked, this, &HypothesisTestDock::addRow);
 	//    connect(ui.bRemoveRow, &QPushButton::clicked, this,&HypothesisTestDock::removeRow);
@@ -248,15 +230,8 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
 	//show the properties
 	ui.leName->setText(m_hypothesisTest->name());
 	ui.teComment->setText(m_hypothesisTest->comment());
-	ui.cbDataSourceType->setCurrentIndex(m_hypothesisTest->dataSourceType());
-	if (m_hypothesisTest->dataSourceType() == HypothesisTest::DataSourceType::DataSourceSpreadsheet)
-		setModelIndexFromAspect(cbSpreadsheet, m_hypothesisTest->dataSourceSpreadsheet());
-	//    else
-	//        ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_hypothesisTest->dataSourceConnection()));
-
+	setModelIndexFromAspect(cbSpreadsheet, m_hypothesisTest->dataSourceSpreadsheet());
 	setColumnsComboBoxModel(m_hypothesisTest->dataSourceSpreadsheet());
-
-	this->dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
 
 	//setting rows and columns in combo box;
 
@@ -264,7 +239,6 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
 	//	connect(m_hypothesisTest, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(hypothesisTestDescriptionChanged(const AbstractAspect*)));
 
 	m_initializing = false;
-
 }
 
 void HypothesisTestDock::showTestType() {
@@ -380,147 +354,9 @@ void HypothesisTestDock::setModelIndexFromAspect(TreeViewComboBox* cb, const Abs
 		cb->setCurrentModelIndex(QModelIndex());
 }
 
-///*!
-//    shows the database manager where the connections are created and edited.
-//    The selected connection is selected in the connection combo box in this widget.
-//**/
-//void HypothesisTestDock::showDatabaseManager() {
-//    DatabaseManagerDialog* dlg = new DatabaseManagerDialog(this, ui.cbConnection->currentText());
-
-//    if (dlg->exec() == QDialog::Accepted) {
-//        //re-read the available connections to be in sync with the changes in DatabaseManager
-//        m_initializing = true;
-//        ui.cbConnection->clear();
-//        readConnections();
-
-//        //select the connection the user has selected in DatabaseManager
-//        const QString& conn = dlg->connection();
-//        ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conn));
-//        m_initializing = false;
-
-//        connectionChanged();
-//    }
-
-//    delete dlg;
-//}
-
-///*!
-//    loads all available saved connections
-//*/
-//void HypothesisTestDock::readConnections() {
-//    DEBUG("ImportSQLDatabaseWidget: reading available connections");
-//    KConfig config(m_configPath, KConfig::SimpleConfig);
-//    for (const auto& name : config.groupList())
-//        ui.cbConnection->addItem(name);
-//}
-
-///*!
-// * adds the selected field to the rows
-// */
-//void HypothesisTestDock::addRow() {
-//    QString field = ui.lwFields->currentItem()->text();
-//    ui.lwRows->addItem(field);
-//    ui.lwFields->takeItem(ui.lwFields->currentRow());
-//    m_hypothesisTest->addToRows(field);
-//}
-
-///*!
-// * removes the selected field from the rows
-// */
-//void HypothesisTestDock::removeRow() {
-//    const QString& field = ui.lwRows->currentItem()->text();
-//    ui.lwRows->takeItem(ui.lwRows->currentRow());
-//    m_hypothesisTest->removeFromRows(field);
-//    updateFields();
-//}
-
-///*!
-// * adds the selected field to the columns
-// */
-//void HypothesisTestDock::addColumn() {
-//    QString field = ui.lwFields->currentItem()->text();
-//    ui.lwColumns->addItem(field);
-//    ui.lwFields->takeItem(ui.lwFields->currentRow());
-//    m_hypothesisTest->addToColumns(field);
-//}
-
-///*!
-// * removes the selected field from the columns
-// */
-//void HypothesisTestDock::removeColumn() {
-//    const QString& field = ui.lwColumns->currentItem()->text();
-//    ui.lwColumns->takeItem(ui.lwColumns->currentRow());
-//    m_hypothesisTest->removeFromColumns(field);
-//    updateFields();
-//}
-
-///*!
-// * re-populates the content of the "Fields" list widget by adding the non-selected fields only.
-// * called when a selected field is removed from rows or columns.
-// */
-//void HypothesisTestDock::updateFields() {
-//    ui.lwFields->clear();
-//    for (auto dimension : m_hypothesisTest->dimensions())
-//        if (!fieldSelected(dimension))
-//            ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme("draw-text"), dimension));
-
-//    for (auto measure : m_hypothesisTest->measures())
-//        if (!fieldSelected(measure))
-//            ui.lwFields->addItem(new QListWidgetItem(measure));
-//}
-
-///*!
-// * return \c true if the field name \c field was selected among rows or columns,
-// * return \c false otherwise.
-// * */
-//bool HypothesisTestDock::fieldSelected(const QString& field) {
-//    for (int i = 0; i<ui.lwRows->count(); ++i)
-//        if (ui.lwRows->item(i)->text() == field)
-//            return true;
-
-//    for (int i = 0; i<ui.lwColumns->count(); ++i)
-//        if (ui.lwColumns->item(i)->text() == field)
-//            return true;
-
-//    return false;
-//}
-
 ////*************************************************************
 ////****** SLOTs for changes triggered in HypothesisTestDock *******
 ////*************************************************************
-//void HypothesisTestDock::nameChanged() {
-//    if (m_initializing)
-//        return;
-
-//    m_hypothesisTest->setName(ui.leName->text());
-//}
-
-//void HypothesisTestDock::commentChanged() {
-//    if (m_initializing)
-//        return;
-
-//    m_hypothesisTest->setComment(ui.teComment->text());
-//}
-
-void HypothesisTestDock::dataSourceTypeChanged(int index) {
-	//QDEBUG("in dataSourceTypeChanged");
-	HypothesisTest::DataSourceType type = static_cast<HypothesisTest::DataSourceType>(index);
-	bool showDatabase = (type == HypothesisTest::DataSourceType::DataSourceDatabase);
-	ui.lSpreadsheet->setVisible(!showDatabase);
-	cbSpreadsheet->setVisible(!showDatabase);
-	ui.lConnection->setVisible(showDatabase);
-	ui.cbConnection->setVisible(showDatabase);
-	ui.bDatabaseManager->setVisible(showDatabase);
-	ui.lTable->setVisible(showDatabase);
-	ui.cbTable->setVisible(showDatabase);
-
-	if (m_initializing)
-		return;
-
-	m_hypothesisTest->setComment(ui.teComment->text());
-
-}
-
 void HypothesisTestDock::spreadsheetChanged(const QModelIndex& index) {
 	//QDEBUG("in spreadsheetChanged");
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -588,96 +424,6 @@ void HypothesisTestDock::chbCalculateStatsStateChanged() {
 	if (m_hypothesisTest != nullptr)
 		m_hypothesisTest->initInputStatsTable(m_test, ui.chbCalculateStats->isChecked());
 }
-
-
-//void HypothesisTestDock::connectionChanged() {
-//    if (ui.cbConnection->currentIndex() == -1) {
-//        ui.lTable->hide();
-//        ui.cbTable->hide();
-//        return;
-//    }
-
-//    //clear the previously shown tables
-//    ui.cbTable->clear();
-//    ui.lTable->show();
-//    ui.cbTable->show();
-
-//    const QString& connection = ui.cbConnection->currentText();
-
-//    //connection name was changed, determine the current connections settings
-//    KConfig config(m_configPath, KConfig::SimpleConfig);
-//    KConfigGroup group = config.group(connection);
-
-//    //close and remove the previos connection, if available
-//    if (m_db.isOpen()) {
-//        m_db.close();
-//        QSqlDatabase::removeDatabase(m_db.driverName());
-//    }
-
-//    //open the selected connection
-//    //QDEBUG("HypothesisTestDock: connecting to " + connection);
-//    const QString& driver = group.readEntry("Driver");
-//    m_db = QSqlDatabase::addDatabase(driver);
-
-//    const QString& dbName = group.readEntry("DatabaseName");
-//    if (DatabaseManagerWidget::isFileDB(driver)) {
-//        if (!QFile::exists(dbName)) {
-//            KMessageBox::error(this, i18n("Couldn't find the database file '%1'. Please check the connection settings.", dbName),
-//                               appendRow     i18n("Connection Failed"));
-//            return;
-//        } else
-//            m_db.setDatabaseName(dbName);
-//    } else if (DatabaseManagerWidget::isODBC(driver)) {
-//        if (group.readEntry("CustomConnectionEnabled", false))
-//            m_db.setDatabaseName(group.readEntry("CustomConnectionString"));
-//        else
-//            m_db.setDatabaseName(dbName);
-//    } else {
-//        m_db.setDatabaseName(dbName);
-//        m_db.setHostName( group.readEntry("HostName") );
-//        m_db.setPort( group.readEntry("Port", 0) );
-//        m_db.setUserName( group.readEntry("UserName") );
-//        m_db.setPassword( group.readEntry("Password") );
-//    }
-
-//    WAIT_CURSOR;
-//    if (!m_db.open()) {
-//        RESET_CURSOR;
-//        KMessageBox::error(this, i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText()) +
-//                                    QLatin1String("\n\n") + m_db.lastError().databaseText(),
-//                                 i18n("Connection Failed"));
-//        return;
-//    }
-
-//    //show all available database tables
-//    if (m_db.tables().size()) {
-//        for (auto table : m_db.tables())
-//            ui.cbTable->addItem(QIcon::fromTheme("view-form-table"), table);
-//        ui.cbTable->setCurrentIndex(0);
-//    }
-
-//    RESET_CURSOR;
-
-//    if (m_initializing)
-//        return;
-
-//// 	m_hypothesisTest->setDataSourceConnection(connection);
-//}
-
-//void HypothesisTestDock::tableChanged() {
-//    const QString& table = ui.cbTable->currentText();
-
-//    //show all attributes of the selected table
-//// 	for (const auto* col : spreadsheet->children<Column>()) {
-//// 		QListWidgetItem* item = new QListWidgetItem(col->icon(), col->name());
-//// 		ui.lwFields->addItem(item);
-//// 	}
-
-//    if (m_initializing)
-//        return;
-
-//// 	m_hypothesisTest->setDataSourceTable(table);
-//}
 
 ////*************************************************************
 ////******** SLOTs for changes triggered in Spreadsheet *********

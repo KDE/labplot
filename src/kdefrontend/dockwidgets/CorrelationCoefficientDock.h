@@ -48,7 +48,6 @@ public:
 
 private:
 	Ui::CorrelationCoefficientDock ui;
-	bool m_initializing{false};
 	TreeViewComboBox* cbSpreadsheet{nullptr};
 	CorrelationCoefficient* m_correlationCoefficient{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};

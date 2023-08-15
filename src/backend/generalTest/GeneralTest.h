@@ -48,8 +48,6 @@ public:
 	explicit GeneralTest(const QString& name, const AspectType& type);
 	~GeneralTest() override;
 
-	enum DataSourceType {DataSourceSpreadsheet, DataSourceDatabase};
-
 	struct HtmlCell {
 		QString data;
 		int level;
@@ -69,8 +67,6 @@ public:
 
 	enum GeneralErrorType {ErrorUnqualSize, ErrorEmptyColumn, NoError};
 
-	void setDataSourceType(DataSourceType type);
-	DataSourceType dataSourceType() const;
 	void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
 	Spreadsheet* dataSourceSpreadsheet() const;
 
@@ -101,11 +97,9 @@ public Q_SLOTS:
 Q_SIGNALS:
 	void changed();
 	void requestProjectContextMenu(QMenu*);
-	void dataSourceTypeChanged(GeneralTest::DataSourceType);
 	void dataSourceSpreadsheetChanged(Spreadsheet*);
 
 protected:
-	DataSourceType m_dataSourceType{GeneralTest::DataSourceSpreadsheet};
 	Spreadsheet* m_dataSourceSpreadsheet{nullptr};
 	QVector<Column*> m_columns;
 	QStringList m_allColumns;
@@ -146,7 +140,6 @@ protected:
 	void printTooltip(const int& index, const QString& msg);
 	void printError(const QString& errorMsg);
 
-	bool m_dbCreated{false};
 	mutable GeneralTestView* m_view{nullptr};
 };
 
