@@ -2076,13 +2076,17 @@ void SpreadsheetTest::testInsertRows() {
 	});
 
 	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
 	sheet->setRowCount(101); // No crash shall happen
 	QCOMPARE(sheet->rowCount(), 101);
+	QCOMPARE(model->rowCount(), 101);
 
 	sheet->undoStack()->undo();
 	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
 	sheet->undoStack()->redo();
 	QCOMPARE(sheet->rowCount(), 101);
+	QCOMPARE(model->rowCount(), 101);
 
 	QCOMPARE(rowsAboutToBeInsertedCounter, 2); // set and redo()
 	QCOMPARE(rowsInsertedCounter, 2); // set and redo()
@@ -2114,13 +2118,17 @@ void SpreadsheetTest::testRemoveRows() {
 	});
 
 	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
 	sheet->setRowCount(10); // No crash shall happen
 	QCOMPARE(sheet->rowCount(), 10);
+	QCOMPARE(model->rowCount(), 10);
 
 	sheet->undoStack()->undo();
 	QCOMPARE(sheet->rowCount(), 100);
+	QCOMPARE(model->rowCount(), 100);
 	sheet->undoStack()->redo();
 	QCOMPARE(sheet->rowCount(), 10);
+	QCOMPARE(model->rowCount(), 10);
 
 	QCOMPARE(rowsAboutToBeInsertedCounter, 1); // undo
 	QCOMPARE(rowsInsertedCounter, 1); // undo
@@ -2153,13 +2161,17 @@ void SpreadsheetTest::testInsertColumns() {
 	});
 
 	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
 	sheet->setColumnCount(5); // No crash shall happen
 	QCOMPARE(sheet->columnCount(), 5);
+	QCOMPARE(model->columnCount(), 5);
 
 	sheet->undoStack()->undo();
 	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
 	sheet->undoStack()->redo();
 	QCOMPARE(sheet->columnCount(), 5);
+	QCOMPARE(model->columnCount(), 5);
 
 	QCOMPARE(columnsAboutToBeInsertedCounter, 2); // set and redo()
 	QCOMPARE(columnsInsertedCounter, 2); // set and redo()
@@ -2192,13 +2204,17 @@ void SpreadsheetTest::testRemoveColumns() {
 	});
 
 	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
 	sheet->setColumnCount(1); // No crash shall happen
 	QCOMPARE(sheet->columnCount(), 1);
+	QCOMPARE(model->columnCount(), 1);
 
 	sheet->undoStack()->undo();
 	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
 	sheet->undoStack()->redo();
 	QCOMPARE(sheet->columnCount(), 1);
+	QCOMPARE(model->columnCount(), 1);
 
 	QCOMPARE(columnsAboutToBeInsertedCounter, 1); // undo()
 	QCOMPARE(columnsInsertedCounter, 1); // undo()
