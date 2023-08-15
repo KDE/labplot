@@ -206,9 +206,9 @@ public:
 		QUndoCommand::redo();
 
 		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsInserted(m_last + 1);
+			Q_EMIT m_spreadsheet->rowsInserted(m_spreadsheet->rowCount());
 		else
-			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
+			Q_EMIT m_spreadsheet->rowsRemoved(m_spreadsheet->rowCount());
 		RESET_CURSOR;
 		m_spreadsheet->emitRowCountChanged();
 	}
@@ -222,9 +222,9 @@ public:
 		QUndoCommand::undo();
 
 		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
+			Q_EMIT m_spreadsheet->rowsRemoved(m_spreadsheet->rowCount());
 		else
-			Q_EMIT m_spreadsheet->rowsInserted(m_last + 1);
+			Q_EMIT m_spreadsheet->rowsInserted(m_spreadsheet->rowCount());
 		RESET_CURSOR;
 		m_spreadsheet->emitRowCountChanged();
 	}
