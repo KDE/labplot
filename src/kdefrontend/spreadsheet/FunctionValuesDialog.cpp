@@ -104,7 +104,6 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	const Column* firstColumn{m_columns.first()};
 
 	// formula expression
-	// Todo Evaluate firstColumn->formula() and change matching bracket color;
 	ui.teEquation->setText(firstColumn->formula());
 	// variables
 	const auto& formulaData = firstColumn->formulaData();
@@ -253,15 +252,15 @@ void FunctionValuesDialog::insertConstant(const QString& constantsName) const {
 void FunctionValuesDialog::addVariable() {
 	auto* layout{ui.gridLayoutVariables};
 	int row{m_variableLineEdits.size()};
-
 	// text field for the variable name
-	auto* le{new QLineEdit()};
+	auto* le{new QLineEdit};
+	QRegExpValidator* validator = new QRegExpValidator(QRegExp(QLatin1String("[a-zA-Z_][a-zA-Z_0-9]*")), le);
+	le->setValidator(validator);
 	// hardcoding size is bad. 40 is enough for three letters
 	le->setMaximumWidth(40);
 	connect(le, &QLineEdit::textChanged, this, &FunctionValuesDialog::variableNameChanged);
 	layout->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;
-
 	auto* l{new QLabel(QStringLiteral("="))};
 	layout->addWidget(l, row, 1, 1, 1);
 	m_variableLabels << l;
