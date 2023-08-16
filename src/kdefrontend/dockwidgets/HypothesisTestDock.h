@@ -1,30 +1,12 @@
-/***************************************************************************
-    File                 : HypothesisTestDock.h
-    Project              : LabPlot
-    Description          : widget for hypothesis testing properties
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+/*
+	File                 : HypothesisTestDock.h
+	Project              : LabPlot
+	Description          : Dock for Hypothesis Test
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019  Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef HYPOTHESISTESTDOCK_H
 #define HYPOTHESISTESTDOCK_H
@@ -35,12 +17,7 @@
 
 class AbstractAspect;
 class AspectTreeModel;
-class HypothesisTest;
 class TreeViewComboBox;
-class KConfig;
-class QStandardItemModel;
-class QStandardItem;
-class QComboBox;
 
 class HypothesisTestDock : public BaseDock {
 	Q_OBJECT
@@ -52,14 +29,12 @@ public:
 private:
 	Ui::HypothesisTestDock ui;
 	TreeViewComboBox* cbSpreadsheet{nullptr};
-	HypothesisTest* m_hypothesisTest{nullptr};
+	HypothesisTest* m_test{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	double m_populationMean{0};
 	double m_significanceLevel{0.05};
-	//        void load();
-	//        void loadConfig(KConfig&);
 	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
-	int m_test;
+	int m_type;
 	HypothesisTest::HypothesisTailType m_tail;
 
 	void countPartitions(Column *column, int &np, int &total_rows);
@@ -70,9 +45,9 @@ private:
 	int testType(int test);
 	int testSubtype(int test);
 
-	QList<Column* > m_onlyValuesCols;
-	QList<Column* > m_twoCategoricalCols;
-	QList<Column* > m_multiCategoricalCols;
+	QList<Column*> m_onlyValuesCols;
+	QList<Column*> m_twoCategoricalCols;
+	QList<Column*> m_multiCategoricalCols;
 
 private Q_SLOTS:
 	//SLOTs for changes triggered in HypothesisTestDock
@@ -92,10 +67,6 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in HypothesisTest
 	void hypothesisTestDescriptionChanged(const AbstractAspect*);
-
-	//        //save/load template
-	//        void loadConfigFromTemplate(KConfig&);
-	//        void saveConfigAsTemplate(KConfig&);
 
 Q_SIGNALS:
 	//        void info(const QString&);

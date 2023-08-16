@@ -1,53 +1,24 @@
-/***************************************************************************
+/*
 	File                 : HypothesisTest.cpp
 	Project              : LabPlot
-	Description          : Doing Hypothesis-Test on data provided
+	Description          : Hypothesis Test
 	--------------------------------------------------------------------
-	Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-FileCopyrightText: 2019  Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "HypothesisTest.h"
 #include "kdefrontend/generalTest/HypothesisTestView.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/macros.h"
-
 #include "backend/generalTest/MyTableModel.h"
+#include "backend/nsl/nsl_stats.h"
 
-#include <QStandardItemModel>
 #include <QLabel>
-#include <QTableView>
-#include <QVBoxLayout>
-#include <QCheckBox>
-
 #include <KLocalizedString>
 
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
-
-extern "C" {
-#include "backend/nsl/nsl_stats.h"
-}
 
 HypothesisTest::HypothesisTest(const QString &name) : GeneralTest(name, AspectType::HypothesisTest) {
 }
@@ -67,7 +38,7 @@ void HypothesisTest::setTail(HypothesisTailType tail) {
 	m_tail = tail;
 }
 
-void HypothesisTest::performTest(int test, bool categoricalVariable, bool equalVariance, bool calculateStats) {
+void HypothesisTest::test(int test, bool categoricalVariable, bool equalVariance, bool calculateStats) {
 	m_pValue.clear();
 	m_statisticValue.clear();
 	for (int i = 0; i < RESULTLINESCOUNT; i++) {
@@ -108,7 +79,7 @@ void HypothesisTest::performTest(int test, bool categoricalVariable, bool equalV
 	emit changed();
 }
 
-void HypothesisTest::performLeveneTest(bool categoricalVariable) {
+void HypothesisTest::leveneTest(bool categoricalVariable) {
 	m_pValue.clear();
 	m_statisticValue.clear();
 	m_statsTable = QString();
@@ -118,7 +89,7 @@ void HypothesisTest::performLeveneTest(bool categoricalVariable) {
 	}
 
 	m_currTestName = QLatin1String("<h2>") + i18n("Levene Test for Equality of Variance") + QLatin1String("</h2>");
-	m_performLeveneTest(categoricalVariable);
+	performLeveneTest(categoricalVariable);
 	emit changed();
 }
 
@@ -169,8 +140,7 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 	QString col2Name;
 
 	if (!calculateStats) {
-		QString textValue;
-		QDEBUG("m_inputStatsTable row and column count " << m_inputStatsTableModel->rowCount() << m_inputStatsTableModel->columnCount());
+		//QDEBUG("m_inputStatsTable row and column count " << m_inputStatsTableModel->rowCount() << m_inputStatsTableModel->columnCount());
 
 		for (int i = 1; i < 3; i++) {
 			n[i - 1] = m_inputStatsTableModel->data(m_inputStatsTableModel->index(i, 1)).toInt();
@@ -325,8 +295,6 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 
 	printLine(5, i18n("P Value is %1 ", m_pValue[0]), QLatin1String("green"));
 	printTooltip(5, getPValueTooltip(m_pValue[0]));
-
-	return;
 }
 
 /********************************Two Sample Paired ***************************************/
@@ -334,7 +302,6 @@ void HypothesisTest::performTwoSampleIndependentTest(int test, bool categoricalV
 void HypothesisTest::performTwoSamplePairedTest(int test) {
 	if (m_columns.size() != 2) {
 		printError(i18n("Inappropriate number of m_columns selected"));
-
 		return;
 	}
 
@@ -528,7 +495,6 @@ void HypothesisTest::performOneWayAnova() {
 	msW = sW / fW;
 	m_statisticValue.append(msB / msW);
 
-
 	m_pValue.append(nsl_stats_fdist_p(m_statisticValue[0], static_cast<size_t>(np-1), fW));
 
 	QMapIterator<QString, int> i(classnameToIndex);
@@ -600,7 +566,6 @@ void HypothesisTest::performOneWayAnova() {
 	printLine(2, i18n("P Value is %1 ", m_pValue[0]), QLatin1String("green"));
 
 	printTooltip(2, getPValueTooltip(m_pValue[0]));
-	return;
 }
 
 /*************************************Two Way Anova***************************************/
@@ -846,7 +811,7 @@ void HypothesisTest::performTwoWayAnova() {
 // ziBar		= mean of Zij for group i
 // ziBarBar	= mean for all zij
 // ni			= number of elements in group i
-void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
+void HypothesisTest::performLeveneTest(bool categoricalVariable) {
 	if (m_columns.size() != 2) {
 		printError(i18n("Inappropriate number of columns selected"));
 		return;

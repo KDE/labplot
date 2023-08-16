@@ -1,30 +1,12 @@
-/***************************************************************************
+/*
 	File                 : HypothesisTest.h
 	Project              : LabPlot
-	Description          : Doing Hypothesis-Test on data provided
+	Description          : Hypothesis Test
 	--------------------------------------------------------------------
-	Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-FileCopyrightText: 2019  Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef HYPOTHESISTEST_H
 #define HYPOTHESISTEST_H
@@ -56,8 +38,8 @@ public:
 	void setSignificanceLevel(QVariant alpha);
 	void setTail(HypothesisTailType tail);
 
-	void performTest(int test, bool categoricalVariable = true, bool equalVariance = true, bool calculateStats = true);
-	void performLeveneTest(bool categoricalVariable);
+	void test(int test, bool categoricalVariable = true, bool equalVariance = true, bool calculateStats = true);
+	void leveneTest(bool categoricalVariable);
 	void initInputStatsTable(int test, bool calculateStats);
 
 	QList<double>& statisticValue();
@@ -70,10 +52,10 @@ private:
 	void performOneSampleTest(int test);
 	void performOneWayAnova();
 	void performTwoWayAnova();
-	void m_performLeveneTest(bool categoricalVariable);
+	void performLeveneTest(bool categoricalVariable);
 
 	double getPValue(const int &test, double& value,
-	                 const QString& col1Name, const QString& col2name,
+					 const QString& col1Name, const QString& col2name,
 					 const int df);
 
 	QString getPValueTooltip(const double& pValue);
