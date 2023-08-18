@@ -81,7 +81,6 @@ QAbstractItemModel* GeneralTest::inputStatsTableModel() {
 	return m_inputStatsTableModel;
 }
 
-
 void GeneralTest::setColumns(QStringList cols) {
 	m_columns.clear();
 	Column* column = new Column(QLatin1String("column"));
@@ -94,10 +93,9 @@ void GeneralTest::setColumns(QStringList cols) {
 	delete column;
 }
 
-void GeneralTest::setColumns(const QVector<Column *> &cols) {
+void GeneralTest::setColumns(const QVector<Column*> &cols) {
 	m_columns = cols;
 }
-
 
 /********************************************************************************************************************
 *                                 Protected functions implementations [Helper Functions]
@@ -124,42 +122,13 @@ QString GeneralTest::round(QVariant number, int precision) {
 	return i18n("%1", number.toString());
 }
 
-//TODO: Doesn't Column already have a function for this?
-int GeneralTest::findCount(const Column *column) {
-	int N = column->rowCount();
-	switch (column->columnMode()) {
-	case (AbstractColumn::ColumnMode::Double):
-	case (AbstractColumn::ColumnMode::Integer): {
-		for (int i = 0; i < N; i++)
-			if (std::isnan(column->valueAt(i))) {
-				N = i;
-				break;
-			}
-		break;
-	}
-	case (AbstractColumn::ColumnMode::Month):
-	case (AbstractColumn::ColumnMode::Day):
-	case (AbstractColumn::ColumnMode::Text): {
-		for (int i = 0; i < N; i++)
-			if (column->textAt(i).isEmpty()) {
-				N = i;
-				break;
-			}
-		break;
-	}
-	case (AbstractColumn::ColumnMode::DateTime):
-		break;
-	}
-	return N;
-}
-
 // TODO: put into Column
 double GeneralTest::findSum(const Column *column, int N) {
 	if (!column->isNumeric())
 		return 0;
 
 	if (N < 0)
-		N = findCount(column);
+		N = column->statistics().size;
 
 	double sum = 0;
 	for (int i = 0; i < N; i++)
@@ -173,7 +142,7 @@ double GeneralTest::findSumSq(const Column *column, int N) {
 		return 0;
 
 	if (N < 0)
-		N = findCount(column);
+		N = column->statistics().size;
 
 	double sumSq = 0;
 	for (int i = 0; i < N; i++)
@@ -181,56 +150,21 @@ double GeneralTest::findSumSq(const Column *column, int N) {
 	return sumSq;
 }
 
-// TODO: put into Column
-double GeneralTest::findMean(const Column *column, int N) {
-	if (!column->isNumeric())
-		return 0;
-
-	if (N < 0)
-		N = findCount(column);
-
-	double sum = findSum(column, N);
-	return sum / N;
-}
-
-// TODO: put into Column
-double GeneralTest::findStd(const Column *column, int N, double mean) {
-	if (!column->isNumeric())
-		return 0;
-
-	double std = 0;
-	for (int i = 0; i < N; i++) {
-		double row = column->valueAt(i);
-		std += gsl_pow_2(row - mean);
-	}
-
-	if (N > 1)
-		std = std / (N-1);
-	std = sqrt(std);
-	return std;
-}
-
-// TODO: put into Column
-double GeneralTest::findStd(const Column *column, int N) {
-	if (!column->isNumeric())
-		return 0;
-
-	if (N < 0)
-		N = findCount(column);
-
-	double mean = findMean(column, N);
-	return findStd(column, N, mean);
-}
-
 GeneralTest::GeneralErrorType GeneralTest::findStats(const Column* column, int& count, double& sum, double& mean, double& std) {
+	/*
 	count = findCount(column);
 	sum = findSum(column, count);
 	mean = findMean(column, count);
 	std = findStd(column, count, mean);
-
+*/
+	const auto& statistics = column->statistics();
+	count = statistics.size;
 	if (count < 1)
 		return GeneralTest::ErrorEmptyColumn;
 
+	mean = statistics.arithmeticMean;
+	sum = findSum(column, count);
+	std = statistics.standardDeviation;
 	return GeneralTest::NoError;
 }
 
@@ -500,11 +434,9 @@ void GeneralTest::printError(const QString& errorMsg) {
 	printLine(0, errorMsg, QLatin1String("red"));
 }
 
-
 /********************************************************************************************************************
 *                                          virtual functions implementations
 ********************************************************************************************************************/
-
 /*!
   Saves as XML.
  */
@@ -512,7 +444,6 @@ void GeneralTest::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement(QLatin1String("GeneralTest"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
-
 	writer->writeEndElement();
 }
 
@@ -520,7 +451,7 @@ void GeneralTest::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool GeneralTest::load(XmlStreamReader* reader, bool preview) {
-	Q_UNUSED(preview);
+	Q_UNUSED(preview)
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -528,9 +459,6 @@ bool GeneralTest::load(XmlStreamReader* reader, bool preview) {
 }
 
 void GeneralTest::clearInputStatsTable() {
-//	int rowCount = m_inputStatsTableModel->rowCount();
-//	int columnCount = m_inputStatsTableModel->columnCount();
-
 	QList<QStandardItem *> horizontalHeader = m_inputStatsTableModel->takeRow(0);
 	QList<QStandardItem *> verticalHeader = m_inputStatsTableModel->takeColumn(0);
 
@@ -556,18 +484,6 @@ bool GeneralTest::printView() {
 bool GeneralTest::printPreview() const {
 	return true;
 }
-
-/*! Constructs a primary view on me.
-  This method may be called multiple times during the life time of an Aspect, or it might not get
-  called at all. Aspects must not depend on the existence of a view for their operation.
-*/
-//QWidget* GeneralTest::view() const {
-//        if (!m_partView) {
-//            m_view = new HypothesisTestView(const_cast<GeneralTest*>(this));
-//            m_partView = m_view;
-//        }
-//    return m_partView;
-//}
 
 /*!
   Returns a new context menu. The caller takes ownership of the menu.

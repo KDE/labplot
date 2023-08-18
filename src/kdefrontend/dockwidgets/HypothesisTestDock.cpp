@@ -26,7 +26,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : BaseDock(parent) {
 	m_teComment->setFixedHeight(2 * m_leName->height());
 
 	cbSpreadsheet = new TreeViewComboBox;
-	ui.gridLayout->addWidget(cbSpreadsheet, 5, 4, 1, 3);
+	ui.gridLayout->addWidget(cbSpreadsheet, 4, 3, 1, 3);
 
 	// adding item to tests and testtype combo box;
 	ui.cbTest->addItem( i18n("T Test"), HypothesisTest::TTest);
@@ -87,10 +87,12 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : BaseDock(parent) {
 	ui.rbH0OneTail2->setEnabled(false);
 
 	// setting muo and alpha buttons
-	ui.lMuo->setText( i18n("%1", mu0));
-	ui.lAlpha->setText( i18n("%1", UTF8_QSTRING("α")));
-	ui.leMuo->setText( i18n("%1", m_populationMean));
-	ui.leAlpha->setText( i18n("%1", m_significanceLevel));
+	ui.lMuo->setText(QLatin1String("mu0"));
+	ui.lAlpha->setText(QString::fromUtf8("α"));
+	ui.leMuo->setText(QLocale().toString(0.0));
+	ui.leAlpha->setText(QLocale().toString(0.05));
+	ui.leMuo->setValidator(new QDoubleValidator(ui.leMuo));
+	ui.leAlpha->setValidator(new QDoubleValidator(ui.leAlpha));
 
 	ui.lMuo->hide();
 	ui.lMuo->setToolTip( i18n("Population Mean"));
@@ -99,9 +101,6 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : BaseDock(parent) {
 	ui.leMuo->hide();
 	ui.leAlpha->hide();
 	ui.pbPerformTest->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
-
-	ui.leMuo->setText( i18n("%1", m_populationMean));
-	ui.leAlpha->setText( i18n("%1", m_significanceLevel));
 
 	connect(cbSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::spreadsheetChanged);
 	connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::showTestType);
@@ -127,10 +126,9 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent) : BaseDock(parent) {
 	emit ui.cbTestType->currentIndexChanged(0);
 }
 
-void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
-	//QDEBUG("in set hypothesis test");
-	m_initializing = true;
-	m_test = HypothesisTest;
+void HypothesisTestDock::setHypothesisTest(HypothesisTest* test) {
+	CONDITIONAL_LOCK_RETURN
+	m_test = test;
 
 	m_aspectTreeModel = new AspectTreeModel(m_test->project());
 
@@ -149,12 +147,8 @@ void HypothesisTestDock::setHypothesisTest(HypothesisTest* HypothesisTest) {
 	setModelIndexFromAspect(cbSpreadsheet, m_test->dataSourceSpreadsheet());
 	setColumnsComboBoxModel(m_test->dataSourceSpreadsheet());
 
-	//setting rows and columns in combo box;
-
 	//undo functions
 	connect(m_test, &HypothesisTest::aspectDescriptionChanged, this, &HypothesisTestDock::aspectDescriptionChanged);
-
-	m_initializing = false;
 }
 
 void HypothesisTestDock::showTestType() {
@@ -220,17 +214,25 @@ void HypothesisTestDock::showHypothesisTest() {
 	ui.pbLeveneTest->setEnabled(nonEmptySelectedColumns());
 }
 
-void HypothesisTestDock::doHypothesisTest()  {
-	//QDEBUG("in doHypothesisTest");
+void HypothesisTestDock::doHypothesisTest() {
 	m_test->setTail(m_tail);
-	m_test->setPopulationMean(ui.leMuo->text());
-	m_test->setSignificanceLevel(ui.leAlpha->text());
 
-	QVector<Column*> cols;
+
+	bool ok;
+	double value = QLocale().toDouble(ui.leMuo->text(), &ok);
+	if (!ok)
+		return; // TODO
+	m_test->setPopulationMean(value);
+
+	value = QLocale().toDouble(ui.leAlpha->text(), &ok);
+	if (!ok)
+		return; // TODO
+	m_test->setSignificanceLevel(value);
 
 	if (ui.cbCol1->count() == 0)
 		return;
 
+	QVector<Column*> cols;
 	cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
 
 	if (testSubtype(m_type) == HypothesisTest::TwoWay)
@@ -247,16 +249,21 @@ void HypothesisTestDock::doHypothesisTest()  {
 				 ui.chbCalculateStats->isChecked());
 }
 
-void HypothesisTestDock::performLeveneTest()  {
-	QVector<Column*> cols;
-
+void HypothesisTestDock::performLeveneTest() {
 	if (ui.cbCol1->count() == 0 || ui.cbCol2->count() == 0)
 		return;
 
+	QVector<Column*> cols;
 	cols << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
 	cols << reinterpret_cast<Column*>(ui.cbCol2->currentData().toLongLong());
 	m_test->setColumns(cols);
-	m_test->setSignificanceLevel(ui.leAlpha->text());
+
+	bool ok;
+	const double value = QLocale().toDouble(ui.leAlpha->text(), &ok);
+	if (!ok)
+		return; // TODO
+	m_test->setSignificanceLevel(value);
+
 	m_test->leveneTest(ui.chbCategorical->isChecked());
 }
 
@@ -335,54 +342,12 @@ void HypothesisTestDock::chbCalculateStatsStateChanged() {
 	ui.chbCategorical->setVisible(calculateStats && m_type == (HypothesisTest::TTest | HypothesisTest::TwoSampleIndependent));
 
 	if (m_test != nullptr)
-		m_test->initInputStatsTable(m_type, ui.chbCalculateStats->isChecked());
+		m_test->initInputStatsTable(m_type, calculateStats);
 }
 
 ////*************************************************************
-////******** SLOTs for changes triggered in Spreadsheet *********
+////**** SLOTs for changes triggered in HypothesisTestDock ******
 ////*************************************************************
-void HypothesisTestDock::hypothesisTestDescriptionChanged(const AbstractAspect* aspect) {
-	//QDEBUG("in hypothesisTestDescriptionChanged");
-
-	if (m_test != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->setText(aspect->comment());
-
-	m_initializing = false;
-}
-
-////*************************************************************
-////******************** SETTINGS *******************************
-////*************************************************************
-//void HypothesisTestDock::load() {
-
-//}
-
-//void HypothesisTestDock::loadConfigFromTemplate(KConfig& config) {
-//    Q_UNUSED(config);
-//}
-
-///*!
-//    loads saved matrix properties from \c config.
-// */
-//void HypothesisTestDock::loadConfig(KConfig& config) {
-//    Q_UNUSED(config);
-//}
-
-///*!
-//    saves matrix properties to \c config.
-// */
-//void HypothesisTestDock::saveConfigAsTemplate(KConfig& config) {
-//    Q_UNUSED(config);
-//}
-
-//TODO: Rather than inbuilt slots use own decided slots for checked rather than clicked
-
 // for alternate hypothesis
 // one_tail_1 is mu > mu0; one_tail_2 is mu < mu0; two_tail = mu != mu0;
 void HypothesisTestDock::onRbH1OneTail1Toggled(bool checked) {
@@ -453,8 +418,6 @@ void HypothesisTestDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
 	showHypothesisTest();
 }
 
-
-//TODO: change from if else to switch case:
 void HypothesisTestDock::setColumnsComboBoxView() {
 
 	ui.cbCol1->clear();

@@ -31,14 +31,12 @@ private:
 	TreeViewComboBox* cbSpreadsheet{nullptr};
 	HypothesisTest* m_test{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	double m_populationMean{0};
-	double m_significanceLevel{0.05};
 	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
 	int m_type;
 	HypothesisTest::HypothesisTailType m_tail;
 
-	void countPartitions(Column *column, int &np, int &total_rows);
-	void setColumnsComboBoxModel(Spreadsheet* spreadsheet);
+	void countPartitions(Column*, int &np, int &total_rows);
+	void setColumnsComboBoxModel(Spreadsheet*);
 	void setColumnsComboBoxView();
 	bool nonEmptySelectedColumns();
 
@@ -64,9 +62,6 @@ private Q_SLOTS:
 	void onRbH1OneTail1Toggled(bool checked);
 	void onRbH1OneTail2Toggled(bool checked);
 	void onRbH1TwoTailToggled(bool checked);
-
-	// SLOTs for changes triggered in HypothesisTest
-	void hypothesisTestDescriptionChanged(const AbstractAspect*);
 
 Q_SIGNALS:
 	//        void info(const QString&);

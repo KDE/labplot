@@ -1,50 +1,20 @@
-/***************************************************************************
+/*
 	File                 : CorrelationCoefficient.cpp
 	Project              : LabPlot
-	Description          : Finding Correlation Coefficient on data provided
+	Description          : Correlation Coefficients/Tests
 	--------------------------------------------------------------------
-	Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	SPDX-FileCopyrightText: 2019  Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "CorrelationCoefficient.h"
-#include "GeneralTest.h"
 #include "kdefrontend/generalTest/CorrelationCoefficientView.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
-
 #include "backend/generalTest/MyTableModel.h"
 
-#include <QVector>
-#include <QStandardItemModel>
-#include <QLocale>
 #include <QLabel>
-#include <QVBoxLayout>
-#include <QWidget>
-#include <QtMath>
-#include <QQueue>
-#include <QTableView>
-
 #include <KLocalizedString>
 
 #include <gsl/gsl_math.h>
@@ -208,33 +178,32 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 		return;
 	}
 
-	QString col1Name = m_columns[0]->name();
-	QString col2Name = m_columns[1]->name();
+	auto* col1 = m_columns.at(0);
+	auto* col2 = m_columns.at(1);
+	QString col1Name = col1->name();
+	QString col2Name = col2->name();
 
-
-	if (!m_columns[1]->isNumeric())
+	if (!col2->isNumeric())
 		printError(i18n("Column %1 should contain only numeric or interger values", col2Name));
 
-
-	int N = findCount(m_columns[0]);
-	if (N != findCount(m_columns[1])) {
+	int N = col1->statistics().size;
+	if (N != col2->statistics().size) {
 		printError(i18n("Number of data values in Column %1 and in Column %2 are not equal", col1Name, col2Name));
 		return;
 	}
 
-	double sumCol1 = findSum(m_columns[0], N);
-	double sumCol2 = findSum(m_columns[1], N);
-	double sumSqCol1 = findSumSq(m_columns[0], N);
-	double sumSqCol2 = findSumSq(m_columns[1], N);
+	double sumCol1 = findSum(col1, N);
+	double sumCol2 = findSum(col2, N);
+	double sumSqCol1 = findSumSq(col1, N);
+	double sumSqCol2 = findSumSq(col2, N);
 
 	double sumCol12 = 0;
-
 	for (int i = 0; i < N; i++)
-		sumCol12 += m_columns[0]->valueAt(i) *
-				m_columns[1]->valueAt(i);
+		sumCol12 += col1->valueAt(i) * col2->valueAt(i);
 
 	// printing table;
 	// HtmlCell constructor structure; data, level, rowSpanCount, m_columnspanCount, isHeader;
+
 	QList<HtmlCell*> rowMajor;
 	int level = 0;
 
@@ -270,7 +239,6 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 				 (N * sumSqCol2 - gsl_pow_2(sumCol2)));
 
 	printLine(0, i18n("Correlation Value is %1", round(m_correlationValue)), QLatin1String("green"));
-
 }
 
 /***********************************************Kendall ******************************************************************/
@@ -287,49 +255,51 @@ void CorrelationCoefficient::performKendall() {
 		return;
 	}
 
-	QString col1Name = m_columns[0]->name();
-	QString col2Name = m_columns[1]->name();
+	auto* col1 = m_columns.at(0);
+	auto* col2 = m_columns.at(1);
+	QString col1Name = col1->name();
+	QString col2Name = col2->name();
 
-	int N = findCount(m_columns[0]);
-	if (N != findCount(m_columns[1])) {
+	int N = col1->statistics().size;
+	if (N != col2->statistics().size) {
 		printError(i18n("Number of data values in Column %1 and in Column %2 are not equal", col1Name, col2Name));
 		return;
 	}
 
 	QVector<int> col2Ranks(N);
-	if (m_columns[0]->isNumeric()) {
-		if (m_columns[0]->isNumeric() && m_columns[1]->isNumeric()) {
+	if (col1->isNumeric()) {
+		if (col1->isNumeric() && col2->isNumeric()) {
 			for (int i = 0; i < N; i++)
-				col2Ranks[int(m_columns[0]->valueAt(i)) - 1] = int(m_columns[1]->valueAt(i));
+				col2Ranks[int(col1->valueAt(i)) - 1] = int(col2->valueAt(i));
 		} else {
 			printError(i18n("Ranking System should be same for both Column: %1 and Column: %2 <br/>"
 							   "Hint: Check for data types of columns", col1Name, col2Name));
 			return;
 		}
 	} else {
-		AbstractColumn::ColumnMode origCol1Mode = m_columns[0]->columnMode();
-		AbstractColumn::ColumnMode origCol2Mode = m_columns[1]->columnMode();
+		AbstractColumn::ColumnMode origCol1Mode = col1->columnMode();
+		AbstractColumn::ColumnMode origCol2Mode = col2->columnMode();
 
-		m_columns[0]->setColumnMode(AbstractColumn::ColumnMode::Text);
-		m_columns[1]->setColumnMode(AbstractColumn::ColumnMode::Text);
+		col1->setColumnMode(AbstractColumn::ColumnMode::Text);
+		col2->setColumnMode(AbstractColumn::ColumnMode::Text);
 
 		QMap<QString, int> ValueToRank;
 
 		for (int i = 0; i < N; i++) {
-			if (ValueToRank[m_columns[0]->textAt(i)] != 0) {
+			if (ValueToRank[col1->textAt(i)] != 0) {
 				printError(i18n("Currently ties are not supported"));
-				m_columns[0]->setColumnMode(origCol1Mode);
-				m_columns[1]->setColumnMode(origCol2Mode);
+				col1->setColumnMode(origCol1Mode);
+				col2->setColumnMode(origCol2Mode);
 				return;
 			}
-			ValueToRank[m_columns[0]->textAt(i)] = i + 1;
+			ValueToRank[col1->textAt(i)] = i + 1;
 		}
 
 		for (int i = 0; i < N; i++)
-			col2Ranks[i] = ValueToRank[m_columns[1]->textAt(i)];
+			col2Ranks[i] = ValueToRank[col2->textAt(i)];
 
-		m_columns[0]->setColumnMode(origCol1Mode);
-		m_columns[1]->setColumnMode(origCol2Mode);
+		col1->setColumnMode(origCol1Mode);
+		col2->setColumnMode(origCol2Mode);
 	}
 
 	int nPossiblePairs = (N * (N - 1)) / 2;
@@ -360,27 +330,29 @@ void CorrelationCoefficient::performSpearman() {
 		return;
 	}
 
-	QString col1Name = m_columns[0]->name();
-	QString col2Name = m_columns[1]->name();
+	auto* col1 = m_columns.at(0);
+	auto* col2 = m_columns.at(1);
+	QString col1Name = col1->name();
+	QString col2Name = col2->name();
 
-	int N = findCount(m_columns[0]);
-	if (N != findCount(m_columns[1])) {
+	int N = col1->statistics().size;
+	if (N != col2->statistics().size) {
 		printError(i18n("Number of data values in Column %1 and in Column %2 are not equal", col1Name, col2Name));
 		return;
 	}
 
 	QMap<double, int> col1Ranks;
-	convertToRanks(m_columns[0], N, col1Ranks);
+	convertToRanks(col1, N, col1Ranks);
 
 	QMap<double, int> col2Ranks;
-	convertToRanks(m_columns[1], N, col2Ranks);
+	convertToRanks(col2, N, col2Ranks);
 
 	double ranksCol1Mean = 0;
 	double ranksCol2Mean = 0;
 
 	for (int i = 0; i < N; i++) {
-		ranksCol1Mean += col1Ranks[int(m_columns[0]->valueAt(i))];
-		ranksCol2Mean += col2Ranks[int(m_columns[1]->valueAt(i))];
+		ranksCol1Mean += col1Ranks[int(col1->valueAt(i))];
+		ranksCol2Mean += col2Ranks[int(col2->valueAt(i))];
 	}
 
 	ranksCol1Mean /= N;
@@ -391,8 +363,8 @@ void CorrelationCoefficient::performSpearman() {
 	double s2 = 0;
 
 	for (int i = 0; i < N; i++) {
-		double centeredRank_1 = col1Ranks[int(m_columns[0]->valueAt(i))] - ranksCol1Mean;
-		double centeredRank_2 = col2Ranks[int(m_columns[1]->valueAt(i))] - ranksCol2Mean;
+		double centeredRank_1 = col1Ranks[int(col1->valueAt(i))] - ranksCol1Mean;
+		double centeredRank_2 = col2Ranks[int(col2->valueAt(i))] - ranksCol2Mean;
 
 		s12 += centeredRank_1 * centeredRank_2;
 
@@ -454,7 +426,9 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 			return;
 		}
 
-		int nRows = findCount(m_columns[0]);
+		auto* col1 = m_columns.at(0);
+		auto* col2 = m_columns.at(1);
+		int nRows = col1->statistics().size;
 
 		rowCount = 0;
 		columnCount = 0;
@@ -465,8 +439,8 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 		QMap<QString, int> independentVar1;
 		QMap<QString, int> independentVar2;
 		for (int i = 0; i < nRows; i++) {
-			QString cell1Text = m_columns[0]->textAt(i);
-			QString cell2Text = m_columns[1]->textAt(i);
+			QString cell1Text = col1->textAt(i);
+			QString cell2Text = col2->textAt(i);
 
 			if (independentVar1[cell1Text] == 0) {
 				independentVar1[cell1Text] = ++columnCount;
@@ -487,8 +461,8 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 
 
 		for (int i = 0; i < nRows; i++) {
-			QString cell1Text = m_columns[0]->textAt(i);
-			QString cell2Text = m_columns[1]->textAt(i);
+			QString cell1Text = col1->textAt(i);
+			QString cell2Text = col2->textAt(i);
 			int cellValue = int(m_columns[2]->valueAt(i));
 
 			int partition1Number = independentVar1[cell1Text] - 1;
@@ -642,10 +616,6 @@ void CorrelationCoefficient::convertToRanks(const Column* col, int N, QMap<doubl
 		ranks[sortedList[i]] = i + 1;
 
 	delete[] sortedList;
-}
-
-void CorrelationCoefficient::convertToRanks(const Column* col, QMap<double, int> &ranks) {
-	convertToRanks(col, findCount(col), ranks);
 }
 
 /***********************************************Virtual Functions******************************************************************/

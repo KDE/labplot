@@ -12,6 +12,7 @@
 #include "kdefrontend/generalTest/HypothesisTestView.h"
 #include "backend/core/column/Column.h"
 #include "backend/generalTest/MyTableModel.h"
+#include "backend/lib/macros.h"
 #include "backend/nsl/nsl_stats.h"
 
 #include <QLabel>
@@ -26,12 +27,12 @@ HypothesisTest::HypothesisTest(const QString &name) : GeneralTest(name, AspectTy
 HypothesisTest::~HypothesisTest() {
 }
 
-void HypothesisTest::setPopulationMean(QVariant populationMean) {
-	m_populationMean = populationMean.toDouble();
+void HypothesisTest::setPopulationMean(double mean) {
+	m_populationMean = mean;
 }
 
-void HypothesisTest::setSignificanceLevel(QVariant alpha) {
-	m_significanceLevel = alpha.toDouble();
+void HypothesisTest::setSignificanceLevel(double alpha) {
+	m_significanceLevel = alpha;
 }
 
 void HypothesisTest::setTail(HypothesisTailType tail) {

@@ -34,9 +34,9 @@ public:
 	};
 	enum HypothesisTailType {Positive, Negative, Two};
 
-	void setPopulationMean(QVariant populationMean);
-	void setSignificanceLevel(QVariant alpha);
-	void setTail(HypothesisTailType tail);
+	void setPopulationMean(double);
+	void setSignificanceLevel(double);
+	void setTail(HypothesisTailType);
 
 	void test(int test, bool categoricalVariable = true, bool equalVariance = true, bool calculateStats = true);
 	void leveneTest(bool categoricalVariable);

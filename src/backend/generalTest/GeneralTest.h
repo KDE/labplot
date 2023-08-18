@@ -30,7 +30,6 @@
 #define GENERALTEST_H
 
 #include "backend/core/AbstractPart.h"
-#include "backend/lib/macros.h"
 #include "kdefrontend/generalTest/GeneralTestView.h"
 
 class Spreadsheet;
@@ -116,17 +115,9 @@ protected:
 	int testSubtype(int test);
 
 	QString round(QVariant number, int precision = 3);
-
-	int findCount(const Column* column);
 	double findSum(const Column* column, int N = -1);
 	double findSumSq(const Column* column, int N = -1);
-	double findMean(const Column* column, int N = -1);
-	double findStd(const Column* column, int N, double mean);
-	double findStd(const Column* column, int N = -1);
-
 	void countPartitions(Column* column, int& np, int& totalRows);
-
-//    double findSumProducts(const Column* columns[], int N = -1);
 
 	GeneralErrorType findStats(const Column* column,int& count, double& sum, double& mean, double& std);
 	GeneralErrorType findStatsPaired(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& std);
