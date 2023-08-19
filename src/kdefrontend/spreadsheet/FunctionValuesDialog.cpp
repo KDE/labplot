@@ -167,6 +167,9 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 	} else if (le->text().at(0).isDigit()) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name starts with a digit."));
+	} else if (le->text().contains(QRegExp(QLatin1String("[^A-Za-z0-9_]")))) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("Provided variable name contains special character."));
 	} else {
 		le->setStyleSheet(QString());
 		le->setToolTip(QString());
@@ -254,7 +257,7 @@ void FunctionValuesDialog::addVariable() {
 	int row{m_variableLineEdits.size()};
 	// text field for the variable name
 	auto* le{new QLineEdit};
-	QRegExpValidator* validator = new QRegExpValidator(QRegExp(QLatin1String("[a-zA-Z_][a-zA-Z_0-9]*")), le);
+	QRegExpValidator* validator = new QRegExpValidator(QRegExp(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
 	le->setValidator(validator);
 	// hardcoding size is bad. 40 is enough for three letters
 	le->setMaximumWidth(40);
