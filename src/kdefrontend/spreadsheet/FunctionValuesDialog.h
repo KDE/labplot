@@ -28,7 +28,6 @@ public:
 	~FunctionValuesDialog() override;
 	void setColumns(const QVector<Column*>&);
 	bool validVariableName(QLineEdit*); // check if variable is already defined as constant or function
-	bool static parseVariableName(const QString&);// parse to check valid variable name
 
 private:
 	Ui::FunctionValuesWidget ui;
