@@ -1,31 +1,12 @@
-﻿/***************************************************************************
-    File                 : CorrelationCoefficientDock.cpp
-    Project              : LabPlot
-    Description          : widget for correlation test properties
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
-    Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+﻿/*
+	File                 : CorrelationCoefficient.cpp
+	Project              : LabPlot
+	Description          : Dock for Correlation Coefficients/Tests
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019  Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "CorrelationCoefficientDock.h"
 #include "backend/generalTest/CorrelationCoefficient.h"
@@ -48,9 +29,10 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : BaseDo
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(2 * m_leName->height());
 
 	cbSpreadsheet = new TreeViewComboBox;
-	ui.gridLayout->addWidget(cbSpreadsheet, 4, 3, 1, 3);
+	ui.gridLayout->addWidget(cbSpreadsheet, 4,2, 1, 2);
 
 	ui.cbTest->addItem( i18n("Pearson r"), CorrelationCoefficient::Pearson);
 	ui.cbTest->addItem( i18n("Kendall"), CorrelationCoefficient::Kendall);
@@ -101,11 +83,11 @@ CorrelationCoefficientDock::CorrelationCoefficientDock(QWidget* parent) : BaseDo
 
 void CorrelationCoefficientDock::setCorrelationCoefficient(CorrelationCoefficient* CorrelationCoefficient) {
 	Lock lock(m_initializing);
-	m_correlationCoefficient = CorrelationCoefficient;
+	m_coefficient = CorrelationCoefficient;
 	//setAspects(list);
 
 	//show all available spreadsheets in the combo box
-	m_aspectTreeModel = new AspectTreeModel(m_correlationCoefficient->project());
+	m_aspectTreeModel = new AspectTreeModel(m_coefficient->project());
 
 	QList<AspectType> list{AspectType::Folder, AspectType::Workbook,
 	                       AspectType::Spreadsheet, AspectType::LiveDataSource};
@@ -117,12 +99,12 @@ void CorrelationCoefficientDock::setCorrelationCoefficient(CorrelationCoefficien
 	cbSpreadsheet->setModel(m_aspectTreeModel);
 
 	//show the properties of the correlation
-	ui.leName->setText(m_correlationCoefficient->name());
-	ui.teComment->setText(m_correlationCoefficient->comment());
-	setModelIndexFromAspect(cbSpreadsheet, m_correlationCoefficient->dataSourceSpreadsheet());
-	setColumnsComboBoxModel(m_correlationCoefficient->dataSourceSpreadsheet());
+	ui.leName->setText(m_coefficient->name());
+	ui.teComment->setText(m_coefficient->comment());
+	setModelIndexFromAspect(cbSpreadsheet, m_coefficient->dataSourceSpreadsheet());
+	setColumnsComboBoxModel(m_coefficient->dataSourceSpreadsheet());
 
-	connect(m_correlationCoefficient, &CorrelationCoefficient::aspectDescriptionChanged, this, &CorrelationCoefficientDock::correlationCoefficientDescriptionChanged);
+	connect(m_coefficient, &CorrelationCoefficient::aspectDescriptionChanged, this, &CorrelationCoefficientDock::aspectDescriptionChanged);
 }
 
 void CorrelationCoefficientDock::showTestType() {
@@ -173,8 +155,8 @@ void CorrelationCoefficientDock::findCorrelationCoefficient()  {
 	if (testSubType(m_test) == CorrelationCoefficient::IndependenceTest)
 		cols << reinterpret_cast<Column*>(ui.cbCol3->currentData().toLongLong());
 
-	m_correlationCoefficient->setColumns(cols);
-	m_correlationCoefficient->performTest(m_test, ui.chbCategorical->isChecked(), ui.chbCalculateStats->isChecked());
+	m_coefficient->setColumns(cols);
+	m_coefficient->performTest(m_test, ui.chbCategorical->isChecked(), ui.chbCalculateStats->isChecked());
 }
 
 void CorrelationCoefficientDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
@@ -192,7 +174,7 @@ void CorrelationCoefficientDock::spreadsheetChanged(const QModelIndex& index) {
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
 	setColumnsComboBoxModel(spreadsheet);
-	m_correlationCoefficient->setDataSourceSpreadsheet(spreadsheet);
+	m_coefficient->setDataSourceSpreadsheet(spreadsheet);
 }
 
 void CorrelationCoefficientDock::col1IndexChanged(int index) {
@@ -203,24 +185,11 @@ void CorrelationCoefficientDock::col1IndexChanged(int index) {
 ////*************************************************************
 ////******** SLOTs for changes triggered in Spreadsheet *********
 ////*************************************************************
-void CorrelationCoefficientDock::correlationCoefficientDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_correlationCoefficient != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->setText(aspect->comment());
-
-	m_initializing = false;
-}
-
 void CorrelationCoefficientDock::changeCbCol2Label() {
 	if (ui.cbCol1->count() == 0) return;
 
 	QString selected_text = ui.cbCol1->currentText();
-	Column* col1 = m_correlationCoefficient->dataSourceSpreadsheet()->column(selected_text);
+	Column* col1 = m_coefficient->dataSourceSpreadsheet()->column(selected_text);
 
 	if (m_test == (CorrelationCoefficient::Kendall | CorrelationCoefficient::Spearman) ||
 			(!ui.chbCategorical->isChecked() && col1->isNumeric())) {
@@ -264,23 +233,23 @@ void CorrelationCoefficientDock::chbColumnStatsStateChanged() {
 	} else
 		ui.pbPerformTest->setEnabled(true);
 
-	if (m_correlationCoefficient != nullptr)
-		m_correlationCoefficient->initInputStatsTable(m_test, chbChecked, ui.leNRows->text().toInt(), ui.leNColumns->text().toInt());
+	if (m_coefficient != nullptr)
+		m_coefficient->initInputStatsTable(m_test, chbChecked, ui.leNRows->text().toInt(), ui.leNColumns->text().toInt());
 }
 
 void CorrelationCoefficientDock::leNRowsChanged() {
-	if (m_correlationCoefficient != nullptr)
-		m_correlationCoefficient->setInputStatsTableNRows(ui.leNRows->text().toInt());
+	if (m_coefficient != nullptr)
+		m_coefficient->setInputStatsTableNRows(ui.leNRows->text().toInt());
 }
 
 void CorrelationCoefficientDock::leNColumnsChanged() {
-	if (m_correlationCoefficient != nullptr)
-		m_correlationCoefficient->setInputStatsTableNCols(ui.leNColumns->text().toInt());
+	if (m_coefficient != nullptr)
+		m_coefficient->setInputStatsTableNCols(ui.leNColumns->text().toInt());
 }
 
 void CorrelationCoefficientDock::exportStatsTableToSpreadsheet() {
 	if (ui.chbCalculateStats->isVisible() && !ui.chbCalculateStats->isChecked())
-		m_correlationCoefficient->exportStatTableToSpreadsheet();
+		m_coefficient->exportStatTableToSpreadsheet();
 }
 
 void CorrelationCoefficientDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
@@ -387,7 +356,7 @@ void CorrelationCoefficientDock::countPartitions(Column *column, int &np, int &t
 	QString cell_value;
 	QMap<QString, bool> discovered_categorical_var;
 
-	AbstractColumn::ColumnMode original_col_mode = column->columnMode();
+	auto original_col_mode = column->columnMode();
 	column->setColumnMode(AbstractColumn::ColumnMode::Text);
 
 	for (int i = 0; i < total_rows; i++) {

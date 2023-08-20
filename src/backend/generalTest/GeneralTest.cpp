@@ -27,7 +27,7 @@
  ***************************************************************************/
 
 #include "GeneralTest.h"
-#include "kdefrontend/generalTest/HypothesisTestView.h"
+#include "kdefrontend/generalTest/GeneralTestView.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
@@ -493,4 +493,12 @@ QMenu* GeneralTest::createContextMenu() {
 	//    Q_ASSERT(menu);
 	//    emit requestProjectContextMenu(menu);
 	return menu;
+}
+
+QWidget* GeneralTest::view() const {
+	if (!m_partView) {
+		m_view = new GeneralTestView(const_cast<GeneralTest*>(this));
+		m_partView = m_view;
+	}
+	return m_partView;
 }

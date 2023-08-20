@@ -81,7 +81,7 @@ public:
 	//virtual methods
 	//    QIcon icon() const override;
 	QMenu* createContextMenu() override;
-//    QWidget* view() const override;
+	QWidget* view() const override;
 
 	bool exportView() const override;
 	bool printView() override;

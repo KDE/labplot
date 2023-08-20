@@ -44,7 +44,6 @@ public:
 
 	QList<double>& statisticValue();
 	QList<double>& pValue();
-	QWidget* view() const override;
 
 private:
 	void performTwoSampleIndependentTest(int test, bool categoricalVariable = false, bool equalVariance = true, bool calculateStats = true);

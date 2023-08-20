@@ -13,8 +13,6 @@
 
 #include "GeneralTest.h"
 
-class CorrelationCoefficientView;
-
 class CorrelationCoefficient : public GeneralTest {
 	Q_OBJECT
 
@@ -31,12 +29,6 @@ public:
 	//Subtype
 		IndependenceTest = 0x10
 	};
-
-	double correlationValue() const;
-	QList<double> statisticValue() const;
-	QList<double> pValue() const;
-
-	QWidget* view() const override;
 
 	void performTest(int test, bool categoricalVariable = false, bool calculateStats = true);
 	void initInputStatsTable(int test, bool calculateStats, int nRows, int nColumns);

@@ -9,7 +9,6 @@
 */
 
 #include "HypothesisTest.h"
-#include "kdefrontend/generalTest/HypothesisTestView.h"
 #include "backend/core/column/Column.h"
 #include "backend/generalTest/MyTableModel.h"
 #include "backend/lib/macros.h"
@@ -1123,13 +1122,4 @@ QString HypothesisTest::getPValueTooltip(const double &pValue) {
 		return i18n("We can safely reject Null Hypothesis for significance level %1", round(m_significanceLevel));
 
 	return i18n("There is a plausibility for Null Hypothesis to be true");
-}
-
-// Virtual functions
-QWidget* HypothesisTest::view() const {
-	if (!m_partView) {
-		m_view = new HypothesisTestView(const_cast<HypothesisTest*>(this));
-		m_partView = m_view;
-	}
-	return m_partView;
 }

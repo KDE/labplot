@@ -9,7 +9,6 @@
 */
 
 #include "CorrelationCoefficient.h"
-#include "kdefrontend/generalTest/CorrelationCoefficientView.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/lib/macros.h"
 #include "backend/generalTest/MyTableModel.h"
@@ -84,19 +83,6 @@ void CorrelationCoefficient::initInputStatsTable(int test, bool calculateStats, 
 	emit changed();
 }
 
-
-double CorrelationCoefficient::correlationValue() const {
-	return m_correlationValue;
-}
-
-QList<double> CorrelationCoefficient::statisticValue() const {
-	return m_statisticValue;
-}
-
-QList<double> CorrelationCoefficient::pValue() const {
-	return m_pValue;
-}
-
 void CorrelationCoefficient::setInputStatsTableNRows(int nRows) {
 	int nRows_old = m_inputStatsTableModel->rowCount();
 	m_inputStatsTableModel->setRowCount(nRows + 1);
@@ -119,7 +105,6 @@ void CorrelationCoefficient::exportStatTableToSpreadsheet() {
 
 	int rowCount = m_inputStatsTableModel->rowCount();
 	int columnCount = m_inputStatsTableModel->columnCount();
-
 	int spreadsheetColCount = m_dataSourceSpreadsheet->columnCount();
 
 	m_dataSourceSpreadsheet->insertColumns(spreadsheetColCount, 3);
@@ -192,6 +177,7 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 		return;
 	}
 
+	// calculate the correlation coefficient
 	double sumCol1 = findSum(col1, N);
 	double sumCol2 = findSum(col2, N);
 	double sumSqCol1 = findSumSq(col1, N);
@@ -200,6 +186,10 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 	double sumCol12 = 0;
 	for (int i = 0; i < N; i++)
 		sumCol12 += col1->valueAt(i) * col2->valueAt(i);
+
+	m_correlationValue = (N * sumCol12 - sumCol1*sumCol2) /
+			sqrt((N * sumSqCol1 - gsl_pow_2(sumCol1)) *
+				 (N * sumSqCol2 - gsl_pow_2(sumCol2)));
 
 	// printing table;
 	// HtmlCell constructor structure; data, level, rowSpanCount, m_columnspanCount, isHeader;
@@ -210,7 +200,6 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 	// horizontal header
 	QString sigma = UTF8_QSTRING("Σ");
 	rowMajor.append(new HtmlCell(QString(), level, true));
-
 	rowMajor.append(new HtmlCell(QLatin1String("N"), level, true, i18n("Total Number of Observations")));
 	rowMajor.append(new HtmlCell(QString(sigma + QLatin1String("Scores")), level, true, i18n("Sum of Scores in each column")));
 	rowMajor.append(new HtmlCell(QString(sigma + QLatin1String("Scores<sup>2</sup>")), level, true, i18n("Sum of Squares of scores in each column")));
@@ -231,12 +220,7 @@ void CorrelationCoefficient::performPearson(bool categoricalVariable) {
 	rowMajor.append(new HtmlCell(sumCol2, level));
 	rowMajor.append(new HtmlCell(sumSqCol2, level));
 
-	m_statsTable += getHtmlTable3(rowMajor);
-
-
-	m_correlationValue = (N * sumCol12 - sumCol1*sumCol2) /
-			sqrt((N * sumSqCol1 - gsl_pow_2(sumCol1)) *
-				 (N * sumSqCol2 - gsl_pow_2(sumCol2)));
+	m_statsTable = getHtmlTable3(rowMajor);
 
 	printLine(0, i18n("Correlation Value is %1", round(m_correlationValue)), QLatin1String("green"));
 }
@@ -302,11 +286,9 @@ void CorrelationCoefficient::performKendall() {
 		col2->setColumnMode(origCol2Mode);
 	}
 
-	int nPossiblePairs = (N * (N - 1)) / 2;
-
-	int nDiscordant = findDiscordants(col2Ranks.data(), 0, N - 1);
-	int nCorcordant = nPossiblePairs - nDiscordant;
-
+	const int nPossiblePairs = (N * (N - 1)) / 2;
+	const int nDiscordant = findDiscordants(col2Ranks.data(), 0, N - 1);
+	const int nCorcordant = nPossiblePairs - nDiscordant;
 	m_correlationValue = double(nCorcordant - nDiscordant) / nPossiblePairs;
 
 	m_statisticValue.append((3 * (nCorcordant - nDiscordant)) /
@@ -458,7 +440,6 @@ void CorrelationCoefficient::performChiSquareIndpendence(bool calculateStats) {
 		observedValues.resize(rowCount);
 		for (int i = 0; i < rowCount; i++)
 			observedValues[i].resize(columnCount);
-
 
 		for (int i = 0; i < nRows; i++) {
 			QString cell1Text = col1->textAt(i);
@@ -616,14 +597,4 @@ void CorrelationCoefficient::convertToRanks(const Column* col, int N, QMap<doubl
 		ranks[sortedList[i]] = i + 1;
 
 	delete[] sortedList;
-}
-
-/***********************************************Virtual Functions******************************************************************/
-
-QWidget* CorrelationCoefficient::view() const {
-	if (!m_partView) {
-		m_view = new CorrelationCoefficientView(const_cast<CorrelationCoefficient*>(this));
-		m_partView = m_view;
-	}
-	return m_partView;
 }
