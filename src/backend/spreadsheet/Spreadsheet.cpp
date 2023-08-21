@@ -323,18 +323,18 @@ void Spreadsheet::maskEmptyRows() {
  * returns the list of all rows having at least one missing/empty value.
  */
 QVector<int> Spreadsheet::rowsWithMissingValues() const {
-	QVector<int> rowsToRemove;
+	QVector<int> rows;
 	const auto& columns = children<Column>();
 	for (int row = 0; row < rowCount(); ++row) {
 		for (auto col : columns) {
 			if (col->asStringColumn()->textAt(row).isEmpty()) {
-				rowsToRemove << row;
+				rows << row;
 				break;
 			}
 		}
 	}
 
-	return rowsToRemove;
+	return rows;
 }
 
 void Spreadsheet::appendColumns(int count) {
