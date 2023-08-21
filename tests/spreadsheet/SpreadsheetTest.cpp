@@ -1245,7 +1245,7 @@ void SpreadsheetTest::testMaskRowsWithMissingValues() {
 	// missing value for row = 2
 	col1->setValueAt(3, 3.);
 
-	// mask rows with empty values and check the results
+	// remove rows with empty values and check the results
 	sheet.maskEmptyRows();
 	QCOMPARE(sheet.rowCount(), 5);
 	QCOMPARE(col0->isMasked(0), false);
