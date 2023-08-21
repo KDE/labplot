@@ -1194,6 +1194,73 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 }
 
 // **********************************************************
+// ********************* drop/mask  *************************
+// **********************************************************
+void SpreadsheetTest::testRemoveRowsWithMissingValues() {
+	// prepare the spreadsheet
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(5);
+
+	auto* col0{sheet.column(0)};
+	col0->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col0->setValueAt(0, 0.);
+	// missing value for row = 1
+	col0->setValueAt(2, 2.);
+	col0->setValueAt(3, 3.);
+
+	auto* col1{sheet.column(1)};
+	col1->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col1->setValueAt(0, 0.);
+	col1->setValueAt(1, 1.);
+	// missing value for row = 2
+	col1->setValueAt(3, 3.);
+
+	// remove rows with empty values and check the results
+	sheet.removeEmptyRows();
+	QCOMPARE(sheet.rowCount(), 2);
+	QCOMPARE(col0->valueAt(0), 0.);
+	QCOMPARE(col0->valueAt(1), 3.);
+	QCOMPARE(col1->valueAt(0), 0.);
+	QCOMPARE(col1->valueAt(1), 3.);
+}
+
+void SpreadsheetTest::testMaskRowsWithMissingValues() {
+	// prepare the spreadsheet
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(5);
+
+	auto* col0{sheet.column(0)};
+	col0->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col0->setValueAt(0, 0.);
+	// missing value for row = 1
+	col0->setValueAt(2, 2.);
+	col0->setValueAt(3, 3.);
+
+	auto* col1{sheet.column(1)};
+	col1->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col1->setValueAt(0, 0.);
+	col1->setValueAt(1, 1.);
+	// missing value for row = 2
+	col1->setValueAt(3, 3.);
+
+	// remove rows with empty values and check the results
+	sheet.maskEmptyRows();
+	QCOMPARE(sheet.rowCount(), 5);
+	QCOMPARE(col0->isMasked(0), false);
+	QCOMPARE(col0->isMasked(1), true);
+	QCOMPARE(col0->isMasked(2), true);
+	QCOMPARE(col0->isMasked(3), false);
+	QCOMPARE(col0->isMasked(4), true);
+	QCOMPARE(col1->isMasked(0), false);
+	QCOMPARE(col1->isMasked(1), true);
+	QCOMPARE(col1->isMasked(2), true);
+	QCOMPARE(col1->isMasked(3), false);
+	QCOMPARE(col1->isMasked(4), true);
+}
+
+// **********************************************************
 // ********************* flattening  ************************
 // **********************************************************
 void SpreadsheetTest::testFlatten00() {

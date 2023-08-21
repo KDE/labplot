@@ -280,6 +280,63 @@ void Spreadsheet::appendRow() {
 	insertRows(rowCount(), 1);
 }
 
+/*!
+ * removes all rows in the spreadsheet if the value in one of the columns is missing/empty.
+ */
+void Spreadsheet::removeEmptyRows() {
+	auto rows = rowsWithMissingValues();
+	if (rows.isEmpty())
+		return;
+
+	WAIT_CURSOR;
+	beginMacro(i18n("%1: remove rows with missing values", name()));
+
+	for (int row = rows.count() - 1; row >= 0; --row)
+		removeRows(rows.at(row), 1);
+
+	endMacro();
+	RESET_CURSOR;
+}
+
+/*!
+ * masks all rows in the spreadsheet if the value in one of the columns is missing/empty.
+ */
+void Spreadsheet::maskEmptyRows() {
+	auto rows = rowsWithMissingValues();
+	if (rows.isEmpty())
+		return;
+
+	WAIT_CURSOR;
+	beginMacro(i18n("%1: mask rows with missing values", name()));
+
+	const auto& columns = children<Column>();
+	for (int row : rows) {
+		for (auto col : columns)
+			col->setMasked(row);
+	}
+
+	endMacro();
+	RESET_CURSOR;
+}
+
+/*!
+ * returns the list of all rows having at least one missing/empty value.
+ */
+QVector<int> Spreadsheet::rowsWithMissingValues() const {
+	QVector<int> rowsToRemove;
+	const auto& columns = children<Column>();
+	for (int row = 0; row < rowCount(); ++row) {
+		for (auto col : columns) {
+			if (col->asStringColumn()->textAt(row).isEmpty()) {
+				rowsToRemove << row;
+				break;
+			}
+		}
+	}
+
+	return rowsToRemove;
+}
+
 void Spreadsheet::appendColumns(int count) {
 	insertColumns(columnCount(), count);
 }

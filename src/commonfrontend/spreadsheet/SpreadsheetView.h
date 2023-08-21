@@ -190,6 +190,8 @@ private:
 	QAction* action_insert_rows_below{nullptr};
 	QAction* action_remove_rows{nullptr};
 	QAction* action_clear_rows{nullptr};
+	QAction* action_remove_missing_value_rows{nullptr};
+	QAction* action_mask_missing_value_rows{nullptr};
 	QAction* action_statistics_rows{nullptr};
 
 	// analysis and plot data menu actions

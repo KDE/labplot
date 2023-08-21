@@ -63,6 +63,10 @@ private Q_SLOTS:
 	void testSortPerformanceNumeric1();
 	void testSortPerformanceNumeric2();
 
+	// drop/mask
+	void testRemoveRowsWithMissingValues();
+	void testMaskRowsWithMissingValues();
+
 	// flattening
 	void testFlatten00();
 	void testFlatten01();
