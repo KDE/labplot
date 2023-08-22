@@ -284,7 +284,7 @@ void Spreadsheet::appendRow() {
  * removes all rows in the spreadsheet if the value in one of the columns is missing/empty.
  */
 void Spreadsheet::removeEmptyRows() {
-	auto rows = rowsWithMissingValues();
+	const auto& rows = rowsWithMissingValues();
 	if (rows.isEmpty())
 		return;
 
@@ -302,7 +302,7 @@ void Spreadsheet::removeEmptyRows() {
  * masks all rows in the spreadsheet if the value in one of the columns is missing/empty.
  */
 void Spreadsheet::maskEmptyRows() {
-	auto rows = rowsWithMissingValues();
+	const auto& rows = rowsWithMissingValues();
 	if (rows.isEmpty())
 		return;
 
@@ -311,7 +311,7 @@ void Spreadsheet::maskEmptyRows() {
 
 	const auto& columns = children<Column>();
 	for (int row : rows) {
-		for (auto col : columns)
+		for (const auto& col : columns)
 			col->setMasked(row);
 	}
 
@@ -326,7 +326,7 @@ QVector<int> Spreadsheet::rowsWithMissingValues() const {
 	QVector<int> rows;
 	const auto& columns = children<Column>();
 	for (int row = 0; row < rowCount(); ++row) {
-		for (auto col : columns) {
+		for (const auto& col : columns) {
 			if (col->asStringColumn()->textAt(row).isEmpty()) {
 				rows << row;
 				break;
