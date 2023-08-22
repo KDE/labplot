@@ -147,17 +147,19 @@ StatisticsSpreadsheet* Spreadsheet::statisticsSpreadsheet() const {
  */
 void Spreadsheet::updateHorizontalHeader() {
 #ifndef SDK
-	const QString& oldHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
-	m_model->updateHorizontalHeader();
-	const QString& newHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
+	if (m_model) {
+		const QString& oldHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
+		m_model->updateHorizontalHeader();
+		const QString& newHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
 
-	// if the header name of the first column has changed (column mode to be shown, etc.),
-	// reset the column widths and request the view to adjuste the column sizes to the  content
-	if (oldHeader != newHeader && m_view) {
-		const auto& columns = children<Column>();
-		for (auto col : columns)
-			col->setWidth(0);
-		m_view->resizeHeader();
+		// if the header name of the first column has changed (column mode to be shown, etc.),
+		// reset the column widths and request the view to adjuste the column sizes to the  content
+		if (oldHeader != newHeader && m_view) {
+			const auto& columns = children<Column>();
+			for (auto col : columns)
+				col->setWidth(0);
+			m_view->resizeHeader();
+		}
 	}
 #endif
 }
@@ -204,9 +206,9 @@ public:
 		QUndoCommand::redo();
 
 		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsInserted(m_last + 1);
+			Q_EMIT m_spreadsheet->rowsInserted(m_spreadsheet->rowCount());
 		else
-			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
+			Q_EMIT m_spreadsheet->rowsRemoved(m_spreadsheet->rowCount());
 		RESET_CURSOR;
 		m_spreadsheet->emitRowCountChanged();
 	}
@@ -220,9 +222,9 @@ public:
 		QUndoCommand::undo();
 
 		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsRemoved(m_first);
+			Q_EMIT m_spreadsheet->rowsRemoved(m_spreadsheet->rowCount());
 		else
-			Q_EMIT m_spreadsheet->rowsInserted(m_last + 1);
+			Q_EMIT m_spreadsheet->rowsInserted(m_spreadsheet->rowCount());
 		RESET_CURSOR;
 		m_spreadsheet->emitRowCountChanged();
 	}
@@ -276,6 +278,63 @@ void Spreadsheet::appendRows(int count) {
 
 void Spreadsheet::appendRow() {
 	insertRows(rowCount(), 1);
+}
+
+/*!
+ * removes all rows in the spreadsheet if the value in one of the columns is missing/empty.
+ */
+void Spreadsheet::removeEmptyRows() {
+	const auto& rows = rowsWithMissingValues();
+	if (rows.isEmpty())
+		return;
+
+	WAIT_CURSOR;
+	beginMacro(i18n("%1: remove rows with missing values", name()));
+
+	for (int row = rows.count() - 1; row >= 0; --row)
+		removeRows(rows.at(row), 1);
+
+	endMacro();
+	RESET_CURSOR;
+}
+
+/*!
+ * masks all rows in the spreadsheet if the value in one of the columns is missing/empty.
+ */
+void Spreadsheet::maskEmptyRows() {
+	const auto& rows = rowsWithMissingValues();
+	if (rows.isEmpty())
+		return;
+
+	WAIT_CURSOR;
+	beginMacro(i18n("%1: mask rows with missing values", name()));
+
+	const auto& columns = children<Column>();
+	for (int row : rows) {
+		for (const auto& col : columns)
+			col->setMasked(row);
+	}
+
+	endMacro();
+	RESET_CURSOR;
+}
+
+/*!
+ * returns the list of all rows having at least one missing/empty value.
+ */
+QVector<int> Spreadsheet::rowsWithMissingValues() const {
+	QVector<int> rows;
+	const auto& columns = children<Column>();
+	for (int row = 0; row < rowCount(); ++row) {
+		for (const auto& col : columns) {
+			if (col->asStringColumn()->textAt(row).isEmpty()) {
+				rows << row;
+				break;
+			}
+		}
+	}
+
+	return rows;
 }
 
 void Spreadsheet::appendColumns(int count) {
@@ -1181,7 +1240,6 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	const KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 	QXmlStreamAttributes attribs;
 
@@ -1200,7 +1258,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 				attribs = reader->attributes();
 				str = attribs.value(QStringLiteral("enabled")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("enabled")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("enabled"));
 				else
 					d->linking.linking = static_cast<bool>(str.toInt());
 
@@ -1223,7 +1281,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 				} else
 					addChildFast(d->statisticsSpreadsheet);
 			} else { // unknown element
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())
 					return false;
 			}

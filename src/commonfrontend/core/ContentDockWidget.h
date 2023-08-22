@@ -21,15 +21,14 @@ class ContentDockWidget : public ads::CDockWidget {
 	Q_OBJECT
 
 public:
-	explicit ContentDockWidget(AbstractPart*, bool deleteOnClose);
+	explicit ContentDockWidget(AbstractPart*);
 	~ContentDockWidget() override;
 	AbstractPart* part() const;
+	void suppressDeletion(bool);
 
 private:
-	void closeEvent();
 	AbstractPart* m_part;
 	bool m_closing{false};
-	bool mDeleteOnClose{false};
 
 private Q_SLOTS:
 	void handleAspectDescriptionChanged(const AbstractAspect*);

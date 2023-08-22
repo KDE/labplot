@@ -636,7 +636,6 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -669,91 +668,91 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("axisPointLogicalX1")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalX1")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalX1"));
 			else
 				d->axisPoints.logicalPos[0].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalY1")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalY1")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalY1"));
 			else
 				d->axisPoints.logicalPos[0].setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalZ1")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalZ1")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalZ1"));
 			else
 				d->axisPoints.logicalPos[0].setZ(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalX2")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalX2")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalX2"));
 			else
 				d->axisPoints.logicalPos[1].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalY2")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalY2")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalY2"));
 			else
 				d->axisPoints.logicalPos[1].setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalZ2")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalZ2")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalZ2"));
 			else
 				d->axisPoints.logicalPos[1].setZ(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalX3")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalX3")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalX3"));
 			else
 				d->axisPoints.logicalPos[2].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalY3")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalY3")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalY3"));
 			else
 				d->axisPoints.logicalPos[2].setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalZ3")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalZ3")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalZ3"));
 			else
 				d->axisPoints.logicalPos[2].setZ(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneX1")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneX1")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneX1"));
 			else
 				d->axisPoints.scenePos[0].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneY1")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneY1")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneY1"));
 			else
 				d->axisPoints.scenePos[0].setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneX2")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneX2")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneX2"));
 			else
 				d->axisPoints.scenePos[1].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneY2")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneY2")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneY2"));
 			else
 				d->axisPoints.scenePos[1].setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneX3")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneX3")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneX3"));
 			else
 				d->axisPoints.scenePos[2].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneY3")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneY3")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneY3"));
 			else
 				d->axisPoints.scenePos[2].setY(str.toDouble());
 
@@ -782,25 +781,25 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("pointRotationAngle")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointRotationAngle")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointRotationAngle"));
 			else
 				d->symbol->setRotationAngle(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointOpacity")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointOpacity")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointOpacity"));
 			else
 				d->symbol->setOpacity(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointSize")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointSize")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointSize"));
 			else
 				d->symbol->setSize(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointStyle")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointStyle")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointStyle"));
 			else
 				d->symbol->setStyle(static_cast<Symbol::Style>(str.toInt()));
 
@@ -808,26 +807,26 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			QBrush brush;
 			str = attribs.value(QStringLiteral("brush_style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_style"));
 			else
 				brush.setStyle(static_cast<Qt::BrushStyle>(str.toInt()));
 
 			QColor color;
 			str = attribs.value(QStringLiteral("brush_color_r")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_r")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_r"));
 			else
 				color.setRed(str.toInt());
 
 			str = attribs.value(QStringLiteral("brush_color_g")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_g")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_g"));
 			else
 				color.setGreen(str.toInt());
 
 			str = attribs.value(QStringLiteral("brush_color_b")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_b")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_b"));
 			else
 				color.setBlue(str.toInt());
 
@@ -838,25 +837,25 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			QPen pen;
 			str = attribs.value(QStringLiteral("style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("style"));
 			else
 				pen.setStyle(static_cast<Qt::PenStyle>(str.toInt()));
 
 			str = attribs.value(QStringLiteral("color_r")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_r")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_r"));
 			else
 				color.setRed(str.toInt());
 
 			str = attribs.value(QStringLiteral("color_g")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_g")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_g"));
 			else
 				color.setGreen(str.toInt());
 
 			str = attribs.value(QStringLiteral("color_b")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_b")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_b"));
 			else
 				color.setBlue(str.toInt());
 
@@ -864,7 +863,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 			else
 				pen.setWidthF(str.toDouble());
 
@@ -884,7 +883,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 				addChild(datapickerPoint);
 			}
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

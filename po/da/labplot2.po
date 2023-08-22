@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-13 00:41+0000\n"
+"POT-Creation-Date: 2023-08-14 00:42+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -56,7 +56,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:831
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
-#: src/backend/note/Note.cpp:167 src/backend/spreadsheet/Spreadsheet.cpp:1184
+#: src/backend/note/Note.cpp:167 src/backend/spreadsheet/Spreadsheet.cpp:1186
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:291
 #: src/backend/worksheet/Background.cpp:223 src/backend/worksheet/Image.cpp:430
 #: src/backend/worksheet/InfoElement.cpp:1163
@@ -108,7 +108,7 @@ msgstr ""
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
-#: src/backend/spreadsheet/Spreadsheet.cpp:1226
+#: src/backend/spreadsheet/Spreadsheet.cpp:1228
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:317
 #: src/backend/worksheet/Image.cpp:465
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3128
@@ -428,7 +428,7 @@ msgid "UNDEFINED"
 msgstr ""
 
 #: src/backend/core/AbstractColumn.cpp:327
-#: src/backend/spreadsheet/Spreadsheet.cpp:192
+#: src/backend/spreadsheet/Spreadsheet.cpp:194
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -436,7 +436,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/backend/core/AbstractColumn.cpp:329
-#: src/backend/spreadsheet/Spreadsheet.cpp:194
+#: src/backend/spreadsheet/Spreadsheet.cpp:196
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -484,26 +484,26 @@ msgid "In%1"
 msgstr ""
 
 #. i18n: ectx: Menu (import)
-#: src/backend/core/AbstractPart.cpp:99 src/kdefrontend/labplot2ui.rc:60
+#: src/backend/core/AbstractPart.cpp:110 src/kdefrontend/labplot2ui.rc:60
 #, fuzzy, kde-format
 #| msgid "Import"
 msgid "Import Data"
 msgstr "Importér"
 
-#: src/backend/core/AbstractPart.cpp:100 src/kdefrontend/MainWin.cpp:705
+#: src/backend/core/AbstractPart.cpp:111 src/kdefrontend/MainWin.cpp:705
 #: src/kdefrontend/MainWin.cpp:714
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "From File..."
 msgstr "Billeder"
 
-#: src/backend/core/AbstractPart.cpp:102 src/kdefrontend/MainWin.cpp:721
+#: src/backend/core/AbstractPart.cpp:113 src/kdefrontend/MainWin.cpp:721
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:111
+#: src/backend/core/AbstractPart.cpp:122
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:309
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:313
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
@@ -514,23 +514,23 @@ msgstr ""
 msgid "Export"
 msgstr "Eksportér"
 
-#: src/backend/core/AbstractPart.cpp:112
+#: src/backend/core/AbstractPart.cpp:123
 #, kde-format
 msgid "Print"
 msgstr "Udskriv"
 
-#: src/backend/core/AbstractPart.cpp:113
+#: src/backend/core/AbstractPart.cpp:124
 #, kde-format
 msgid "Print Preview"
 msgstr "Vis udskrift"
 
-#: src/backend/core/AbstractPart.cpp:120 src/kdefrontend/MainWin.cpp:788
+#: src/backend/core/AbstractPart.cpp:131 src/kdefrontend/MainWin.cpp:788
 #, fuzzy, kde-format
 #| msgid "Close &All"
 msgid "&Close"
 msgstr "Luk &alle"
 
-#: src/backend/core/AbstractPart.cpp:125 src/backend/core/AbstractPart.cpp:138
+#: src/backend/core/AbstractPart.cpp:136 src/backend/core/AbstractPart.cpp:149
 #, kde-format
 msgid "Show"
 msgstr "Vis"
@@ -1953,7 +1953,7 @@ msgstr "ukendt"
 #: src/backend/datasources/filters/MatioFilter.cpp:448
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:672 src/kdefrontend/MainWin.cpp:2021
+#: src/kdefrontend/MainWin.cpp:672 src/kdefrontend/MainWin.cpp:2031
 #, kde-format
 msgid "Matrix"
 msgstr ""
@@ -5711,7 +5711,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:487
-#: src/backend/spreadsheet/Spreadsheet.cpp:606
+#: src/backend/spreadsheet/Spreadsheet.cpp:608
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: Kopiér %2"
@@ -5733,7 +5733,7 @@ msgstr[0] "%1: Tilføj %2 kolonner"
 msgstr[1] "%1: Tilføj %2 kolonner"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
-#: src/backend/spreadsheet/Spreadsheet.cpp:541
+#: src/backend/spreadsheet/Spreadsheet.cpp:543
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: Ryd"
@@ -6782,19 +6782,19 @@ msgstr "Højde"
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:363
+#: src/backend/spreadsheet/Spreadsheet.cpp:365
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set linking"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:383
+#: src/backend/spreadsheet/Spreadsheet.cpp:385
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set linked spreadsheet"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:438
+#: src/backend/spreadsheet/Spreadsheet.cpp:440
 #, fuzzy, kde-format
 #| msgid "Enter column"
 msgid "%1: insert 1 column"
@@ -6802,7 +6802,7 @@ msgid_plural "%1: insert %2 columns"
 msgstr[0] "Gå ind i kolonne"
 msgstr[1] "Gå ind i kolonne"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:440
+#: src/backend/spreadsheet/Spreadsheet.cpp:442
 #, fuzzy, kde-format
 #| msgid "Remo&ve Columns"
 msgid "%1: remove 1 column"
@@ -6810,76 +6810,76 @@ msgid_plural "%1: remove %2 columns"
 msgstr[0] "Fjer&n kolonner"
 msgstr[1] "Fjer&n kolonner"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:549
+#: src/backend/spreadsheet/Spreadsheet.cpp:551
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "%1: clear selected columns"
 msgstr "%1: Klip markerede celler"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:572
+#: src/backend/spreadsheet/Spreadsheet.cpp:574
 #, kde-format
 msgid "%1: clear all masks"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:598
+#: src/backend/spreadsheet/Spreadsheet.cpp:600
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:723
+#: src/backend/spreadsheet/Spreadsheet.cpp:725
 #, fuzzy, kde-format
 #| msgid "%1: add %2 column(s)"
 msgid "%1: sort columns"
 msgstr "%1: Tilføj %2 kolonner"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1088
+#: src/backend/spreadsheet/Spreadsheet.cpp:1090
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1460
+#: src/backend/spreadsheet/Spreadsheet.cpp:1462
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1463
+#: src/backend/spreadsheet/Spreadsheet.cpp:1465
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1466
+#: src/backend/spreadsheet/Spreadsheet.cpp:1468
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1469
+#: src/backend/spreadsheet/Spreadsheet.cpp:1471
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1472
+#: src/backend/spreadsheet/Spreadsheet.cpp:1474
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1475
+#: src/backend/spreadsheet/Spreadsheet.cpp:1477
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1478
+#: src/backend/spreadsheet/Spreadsheet.cpp:1480
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -10896,7 +10896,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:60
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:666
-#: src/kdefrontend/MainWin.cpp:2003 src/kdefrontend/SettingsDialog.cpp:68
+#: src/kdefrontend/MainWin.cpp:2013 src/kdefrontend/SettingsDialog.cpp:68
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:237
 #, kde-format
 msgid "Spreadsheet"
@@ -11085,7 +11085,7 @@ msgstr "%1: Klip markerede celler"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:344
-#: src/kdefrontend/MainWin.cpp:2478
+#: src/kdefrontend/MainWin.cpp:2488
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12253,7 +12253,7 @@ msgid "Open LabPlot Project"
 msgstr "Åbn projekt"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:380
-#: src/kdefrontend/MainWin.cpp:1486
+#: src/kdefrontend/MainWin.cpp:1496
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -12267,7 +12267,7 @@ msgid "Open Origin Project"
 msgstr "Åbn projekt"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:386
-#: src/kdefrontend/MainWin.cpp:1491
+#: src/kdefrontend/MainWin.cpp:1501
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
@@ -12512,7 +12512,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2791
+#: src/kdefrontend/MainWin.cpp:2801
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -14109,7 +14109,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:189 src/kdefrontend/MainWin.cpp:1433
+#: src/kdefrontend/GuiObserver.cpp:189 src/kdefrontend/MainWin.cpp:1443
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
@@ -14925,14 +14925,14 @@ msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:678
-#: src/kdefrontend/MainWin.cpp:2039 src/kdefrontend/SettingsDialog.cpp:63
+#: src/kdefrontend/MainWin.cpp:2049 src/kdefrontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
 msgstr ""
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:661
-#: src/kdefrontend/MainWin.cpp:1995
+#: src/kdefrontend/MainWin.cpp:2005
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
@@ -15057,7 +15057,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:656 src/kdefrontend/MainWin.cpp:1987
+#: src/kdefrontend/MainWin.cpp:656 src/kdefrontend/MainWin.cpp:1997
 #, kde-format
 msgid "Workbook"
 msgstr ""
@@ -15087,7 +15087,7 @@ msgstr ""
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:684 src/kdefrontend/MainWin.cpp:2047
+#: src/kdefrontend/MainWin.cpp:684 src/kdefrontend/MainWin.cpp:2057
 #, fuzzy, kde-format
 #| msgid "Notes"
 msgid "Note"
@@ -15101,7 +15101,7 @@ msgstr ""
 #. i18n("Note/Script"),this);
 #. actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
 #. connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
-#: src/kdefrontend/MainWin.cpp:693 src/kdefrontend/MainWin.cpp:1979
+#: src/kdefrontend/MainWin.cpp:693 src/kdefrontend/MainWin.cpp:1989
 #, kde-format
 msgid "Folder"
 msgstr "Mappe"
@@ -15296,103 +15296,103 @@ msgstr "Det aktuelle projekt %1 er blevet ændret. Vil du gemme det?"
 msgid "Save Project"
 msgstr "Gem projekt"
 
-#: src/kdefrontend/MainWin.cpp:1420
+#: src/kdefrontend/MainWin.cpp:1430
 #, fuzzy, kde-format
 #| msgid "Project Explorer"
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Projektudforsker"
 
-#: src/kdefrontend/MainWin.cpp:1477
+#: src/kdefrontend/MainWin.cpp:1487
 #, fuzzy, kde-format
 #| msgid "%1: clear"
 msgid "%1: created"
 msgstr "%1: Ryd"
 
-#: src/kdefrontend/MainWin.cpp:1497
+#: src/kdefrontend/MainWin.cpp:1507
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Luk projekt"
 
-#: src/kdefrontend/MainWin.cpp:1498
+#: src/kdefrontend/MainWin.cpp:1508
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1505
+#: src/kdefrontend/MainWin.cpp:1515
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1509
+#: src/kdefrontend/MainWin.cpp:1519
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Åbn projekt"
 
-#: src/kdefrontend/MainWin.cpp:1526
+#: src/kdefrontend/MainWin.cpp:1536
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektfilen %1 er allerede åben."
 
-#: src/kdefrontend/MainWin.cpp:1526
+#: src/kdefrontend/MainWin.cpp:1536
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Open Project"
 msgstr "Åbn projekt"
 
-#: src/kdefrontend/MainWin.cpp:1539
+#: src/kdefrontend/MainWin.cpp:1549
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1589 src/kdefrontend/MainWin.cpp:1593
-#: src/kdefrontend/MainWin.cpp:1598 src/kdefrontend/MainWin.cpp:1603
-#: src/kdefrontend/MainWin.cpp:1607 src/kdefrontend/MainWin.cpp:1654
-#: src/kdefrontend/MainWin.cpp:1659 src/kdefrontend/MainWin.cpp:1664
-#: src/kdefrontend/MainWin.cpp:1670
+#: src/kdefrontend/MainWin.cpp:1599 src/kdefrontend/MainWin.cpp:1603
+#: src/kdefrontend/MainWin.cpp:1608 src/kdefrontend/MainWin.cpp:1613
+#: src/kdefrontend/MainWin.cpp:1617 src/kdefrontend/MainWin.cpp:1664
+#: src/kdefrontend/MainWin.cpp:1669 src/kdefrontend/MainWin.cpp:1674
+#: src/kdefrontend/MainWin.cpp:1680
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to open project"
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/kdefrontend/MainWin.cpp:1589 src/kdefrontend/MainWin.cpp:1598
-#: src/kdefrontend/MainWin.cpp:1603 src/kdefrontend/MainWin.cpp:1654
-#: src/kdefrontend/MainWin.cpp:1659 src/kdefrontend/MainWin.cpp:1664
+#: src/kdefrontend/MainWin.cpp:1599 src/kdefrontend/MainWin.cpp:1608
+#: src/kdefrontend/MainWin.cpp:1613 src/kdefrontend/MainWin.cpp:1664
+#: src/kdefrontend/MainWin.cpp:1669 src/kdefrontend/MainWin.cpp:1674
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to process the content of the file '%1'."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/kdefrontend/MainWin.cpp:1593 src/kdefrontend/MainWin.cpp:1607
-#: src/kdefrontend/MainWin.cpp:1670
+#: src/kdefrontend/MainWin.cpp:1603 src/kdefrontend/MainWin.cpp:1617
+#: src/kdefrontend/MainWin.cpp:1680
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to open the file '%1'."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/kdefrontend/MainWin.cpp:1684
+#: src/kdefrontend/MainWin.cpp:1694
 #, fuzzy, kde-format
 #| msgid "Project %1 opened"
 msgid "%1: opened"
 msgstr "Projektet %1 åbnet"
 
-#: src/kdefrontend/MainWin.cpp:1694
+#: src/kdefrontend/MainWin.cpp:1704
 #, fuzzy, kde-format
 #| msgid "Project successfully opened."
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projektet blev åbnet."
 
-#: src/kdefrontend/MainWin.cpp:1790
+#: src/kdefrontend/MainWin.cpp:1800
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Gem projekt"
 
-#: src/kdefrontend/MainWin.cpp:1792
+#: src/kdefrontend/MainWin.cpp:1802
 #, fuzzy, kde-format
 #| msgid "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 msgid ""
@@ -15400,78 +15400,78 @@ msgid ""
 "*.LML.XZ)"
 msgstr "LabPlot-projekter (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 
-#: src/kdefrontend/MainWin.cpp:1818
+#: src/kdefrontend/MainWin.cpp:1828
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for reading!"
 msgid "Couldn't open the temporary file for writing."
 msgstr "Beklager. Kunne ikke åbne filen til læsning!"
 
-#: src/kdefrontend/MainWin.cpp:1873
+#: src/kdefrontend/MainWin.cpp:1883
 #, kde-format
 msgid "Project saved"
 msgstr "Projekt gemt"
 
-#: src/kdefrontend/MainWin.cpp:1889
+#: src/kdefrontend/MainWin.cpp:1899
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1894
+#: src/kdefrontend/MainWin.cpp:1904
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/kdefrontend/MainWin.cpp:1939
+#: src/kdefrontend/MainWin.cpp:1949
 #, fuzzy, kde-format
 #| msgid "Changed"
 msgid "Changed"
 msgstr "Ændret"
 
-#: src/kdefrontend/MainWin.cpp:1954 src/kdefrontend/MainWin.cpp:1966
+#: src/kdefrontend/MainWin.cpp:1964 src/kdefrontend/MainWin.cpp:1976
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1956 src/kdefrontend/MainWin.cpp:1968
+#: src/kdefrontend/MainWin.cpp:1966 src/kdefrontend/MainWin.cpp:1978
 #, kde-format
 msgid "%1 printed"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2724
+#: src/kdefrontend/MainWin.cpp:2734
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, fuzzy, kde-format
 #| msgid "Data, -"
 msgid "Dataset%1"
 msgstr "Data, -"
 
-#: src/kdefrontend/MainWin.cpp:2754
+#: src/kdefrontend/MainWin.cpp:2764
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2761
+#: src/kdefrontend/MainWin.cpp:2771
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2773
+#: src/kdefrontend/MainWin.cpp:2783
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2791
+#: src/kdefrontend/MainWin.cpp:2801
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2795
+#: src/kdefrontend/MainWin.cpp:2805
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
 msgstr "Kilde til fildata"
 
-#: src/kdefrontend/MainWin.cpp:2839
+#: src/kdefrontend/MainWin.cpp:2849
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""

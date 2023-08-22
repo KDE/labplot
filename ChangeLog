@@ -9,6 +9,7 @@ New features:
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
 		* Column statistics spreadsheet - child spreadsheet showing various statistical properties of the parent spreadsheet
+		* Remove/mask rows with missing values
 	* [notebook]
 		* Export to PDF
 	* [import]

@@ -257,7 +257,6 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Value);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 
 	auto attribs = reader->attributes();
@@ -271,7 +270,7 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(QStringLiteral("numericFormat")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("numericFormat")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("numericFormat"));
 	else
 		d->numericFormat = *(str.toLatin1().data());
 

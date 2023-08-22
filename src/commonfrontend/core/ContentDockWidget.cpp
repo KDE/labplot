@@ -27,13 +27,11 @@
  * this class automatically updates the window title when AbstractAspect::caption() is changed
  * and holds the connection to the actual data visualized in this window via the pointer to \c AbstractPart.
  */
-ContentDockWidget::ContentDockWidget(AbstractPart* part, bool deleteOnClose)
+ContentDockWidget::ContentDockWidget(AbstractPart* part)
 	: ads::CDockWidget(part->name())
-	, m_part(part)
-	, mDeleteOnClose(deleteOnClose) {
+	, m_part(part) {
 	setWindowIcon(m_part->icon());
 	setWidget(m_part->view());
-	setFeature(DockWidgetDeleteOnClose, deleteOnClose);
 	handleAspectDescriptionChanged(m_part);
 
 	// resize the MDI sub window to fit the content of the view
@@ -44,7 +42,6 @@ ContentDockWidget::ContentDockWidget(AbstractPart* part, bool deleteOnClose)
 
 	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &ContentDockWidget::handleAspectDescriptionChanged);
 	connect(m_part, QOverload<const AbstractAspect*>::of(&AbstractPart::childAspectAboutToBeRemoved), this, &ContentDockWidget::handleAspectAboutToBeRemoved);
-	connect(this, &ads::CDockWidget::closed, this, &ContentDockWidget::closeEvent);
 }
 
 ContentDockWidget::~ContentDockWidget() {
@@ -67,11 +64,6 @@ void ContentDockWidget::handleAspectAboutToBeRemoved(const AbstractAspect* aspec
 		return;
 
 	close();
-}
-
-void ContentDockWidget::closeEvent() {
-	if (mDeleteOnClose)
-		m_part->deleteView();
 }
 
 void ContentDockWidget::slotWindowStateChanged(Qt::WindowStates /*oldState*/, Qt::WindowStates newState) {

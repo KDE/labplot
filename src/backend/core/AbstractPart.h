@@ -40,8 +40,11 @@ public:
 	virtual void registerShortcuts(){};
 	virtual void unregisterShortcuts(){};
 
+	void suppressDeletion(bool suppress);
+
 private:
 	mutable ContentDockWidget* m_dockWidget{nullptr};
+	bool m_suppressDeletion{false};
 
 protected:
 	mutable QWidget* m_partView{nullptr};
