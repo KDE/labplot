@@ -29,7 +29,6 @@
 #include <KLocalizedString>
 
 #include <KWindowConfig>
-#include <QStack>
 
 /*!
 	\class FunctionValuesDialog
@@ -104,7 +103,7 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	const Column* firstColumn{m_columns.first()};
 
 	// formula expression
-	ui.teEquation->setText(firstColumn->formula());
+	ui.teEquation->setPlainText(firstColumn->formula());
 	// variables
 	const auto& formulaData = firstColumn->formulaData();
 	if (formulaData.isEmpty()) { // no formula was used for this column -> add the first variable "x"
@@ -179,10 +178,11 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 }
 
 void FunctionValuesDialog::checkValues() {
-	bool isVarError = false;
+	bool isValid = true;
 	if (!ui.teEquation->isValid()) { // check whether the formula syntax is correct
 		DEBUG(Q_FUNC_INFO << ", syntax incorrect")
-		m_okButton->setEnabled(false);
+		isValid = false;
+		m_okButton->setEnabled(isValid);
 		return;
 	}
 
@@ -196,8 +196,8 @@ void FunctionValuesDialog::checkValues() {
 		auto* cb = m_variableDataColumns.at(i);
 		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
-			m_okButton->setEnabled(false);
-			isVarError = true;
+			isValid = false;
+			m_okButton->setEnabled(isValid);
 		}
 
 		// TODO: why is the column check disabled?
@@ -210,8 +210,8 @@ void FunctionValuesDialog::checkValues() {
 				}
 		*/
 	}
-	if (!isVarError)
-		m_okButton->setEnabled(true);
+	if (isValid)
+		m_okButton->setEnabled(isValid);
 }
 
 void FunctionValuesDialog::showConstants() {
