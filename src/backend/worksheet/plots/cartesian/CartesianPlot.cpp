@@ -4966,7 +4966,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("image")) {
 			auto* image = new Image(QString());
 			image->setIsLoading(true);
-			if (!image->load(reader, preview))
+			if (image->load(reader, preview))
 				addChildFast(image);
 			else {
 				delete image;
