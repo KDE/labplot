@@ -8,13 +8,14 @@
 */
 
 #include "FormattingHeatmapDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/colormaps/ColorMapsDialog.h"
 #include "tools/ColorMapsManager.h"
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 #include <QDialogButtonBox>
@@ -71,7 +72,7 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	const KConfigGroup conf(KSharedConfig::openConfig(), "FormattingHeatmapDialog");
+	const KConfigGroup conf = Settings::group(QStringLiteral("FormattingHeatmapDialog"));
 	if (conf.exists()) {
 		auto state = (Qt::CheckState)(conf.readEntry("AutoRange", (int)Qt::Checked));
 		ui.chkAutoRange->setCheckState(state);
@@ -89,7 +90,7 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 
 FormattingHeatmapDialog::~FormattingHeatmapDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "FormattingHeatmapDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FormattingHeatmapDialog"));
 	conf.writeEntry("AutoRange", (int)ui.chkAutoRange->checkState());
 	conf.writeEntry("Highlight", ui.cbHightlight->currentIndex());
 	KWindowConfig::saveWindowSize(windowHandle(), conf);

@@ -9,13 +9,13 @@
 */
 
 #include "AsciiOptionsWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
 \class AsciiOptionsWidget
@@ -179,7 +179,7 @@ void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
 }
 
 void AsciiOptionsWidget::loadSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportAscii");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportAscii"));
 
 	ui.cbCommentCharacter->setCurrentText(conf.readEntry("CommentCharacter", "#"));
 	ui.cbSeparatingCharacter->setCurrentText(conf.readEntry("SeparatingCharacter", "auto"));
@@ -202,7 +202,7 @@ void AsciiOptionsWidget::loadSettings() const {
 }
 
 void AsciiOptionsWidget::saveSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportAscii");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportAscii"));
 
 	conf.writeEntry("CommentCharacter", ui.cbCommentCharacter->currentText());
 	conf.writeEntry("SeparatingCharacter", ui.cbSeparatingCharacter->currentText());

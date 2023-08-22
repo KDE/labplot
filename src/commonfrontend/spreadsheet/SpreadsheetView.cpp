@@ -11,6 +11,7 @@
 
 #include "SpreadsheetView.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
@@ -138,7 +139,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 		resize(w + 50, h);
 	}
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
+	KConfigGroup group = Settings::group(QStringLiteral("Spreadsheet"));
 	showComments(group.readEntry(QLatin1String("ShowComments"), false));
 }
 
@@ -310,7 +311,7 @@ void SpreadsheetView::initActions() {
 	action_insert_column_right = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Column Right"), this);
 	action_insert_columns_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Multiple Columns Left"), this);
 	action_insert_columns_right = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Multiple Columns Right"), this);
-	action_remove_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Remove Columns"), this);
+	action_remove_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Remove Selected Column(s)"), this);
 	action_clear_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Content"), this);
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
@@ -354,8 +355,9 @@ void SpreadsheetView::initActions() {
 	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
 	action_divide_value = new QAction(i18n("Divide"), this);
 	action_divide_value->setData(AddSubtractValueDialog::Divide);
-	action_drop_values = new QAction(QIcon::fromTheme(QStringLiteral("delete-table-row")), i18n("Drop"), this);
-	action_mask_values = new QAction(QIcon::fromTheme(QStringLiteral("hide_table_row")), i18n("Mask"), this);
+	action_drop_values = new QAction(QIcon::fromTheme(QStringLiteral("delete-table-row")), i18n("Drop Values"), this);
+	action_mask_values = new QAction(QIcon::fromTheme(QStringLiteral("hide_table_row")), i18n("Mask Values"), this);
+
 	action_reverse_columns = new QAction(QIcon::fromTheme(QStringLiteral("reverse")), i18n("Reverse"), this);
 	// 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
 
@@ -453,8 +455,10 @@ void SpreadsheetView::initActions() {
 	// action_insert_row_below->setShortcut(Qt::Key_Insert);
 	action_insert_rows_above = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Multiple Rows Above"), this);
 	action_insert_rows_below = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Multiple Rows Below"), this);
-	action_remove_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Rows"), this);
+	action_remove_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Selected Row(s)"), this);
 	action_clear_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clea&r Content"), this);
+	action_remove_missing_value_rows = new QAction(QIcon::fromTheme(QStringLiteral("delete-table-row")), i18n("Remove Rows With Missing Values"), this);
+	action_mask_missing_value_rows = new QAction(QIcon::fromTheme(QStringLiteral("hide_table_row")), i18n("Mask Rows With Missing Values"), this);
 	action_statistics_rows = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Row Statisti&cs"), this);
 
 	// plot data action
@@ -737,6 +741,9 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addSeparator();
 		m_columnMenu->addAction(action_remove_columns);
 		m_columnMenu->addAction(action_clear_columns);
+		m_columnMenu->addSeparator();
+		m_columnMenu->addAction(action_remove_missing_value_rows);
+		m_columnMenu->addAction(action_mask_missing_value_rows);
 	}
 	{
 		m_columnMenu->addSeparator();
@@ -797,6 +804,10 @@ void SpreadsheetView::initMenus() {
 
 		m_rowMenu->addAction(action_remove_rows);
 		m_rowMenu->addAction(action_clear_rows);
+		m_rowMenu->addSeparator();
+
+		m_rowMenu->addAction(action_remove_missing_value_rows);
+		m_rowMenu->addAction(action_mask_missing_value_rows);
 	}
 	m_rowMenu->addSeparator();
 	m_rowMenu->addAction(action_statistics_rows);
@@ -883,6 +894,8 @@ void SpreadsheetView::connectActions() {
 	connect(action_insert_rows_below, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::insertRowsBelow));
 	connect(action_remove_rows, &QAction::triggered, this, &SpreadsheetView::removeSelectedRows);
 	connect(action_clear_rows, &QAction::triggered, this, &SpreadsheetView::clearSelectedRows);
+	connect(action_remove_missing_value_rows, &QAction::triggered, m_spreadsheet, &Spreadsheet::removeEmptyRows);
+	connect(action_mask_missing_value_rows, &QAction::triggered, m_spreadsheet, &Spreadsheet::maskEmptyRows);
 	connect(action_statistics_rows, &QAction::triggered, this, &SpreadsheetView::showRowStatistics);
 	connect(action_toggle_comments, &QAction::triggered, this, &SpreadsheetView::toggleComments);
 
@@ -1751,7 +1764,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	QVector<QStringList> cellTexts;
 
 	try {
-		QString input_str = QLatin1String(mime_data->data(QStringLiteral("text/plain"))).trimmed();
+		QString input_str = QString::fromUtf8(mime_data->data(QStringLiteral("text/plain"))).trimmed();
 		QString separator;
 		if (input_str.indexOf(QLatin1String("\r\n")) != -1)
 			separator = QLatin1String("\r\n");
@@ -1769,7 +1782,7 @@ void SpreadsheetView::pasteIntoSelection() {
 		const auto numberLocale = QLocale();
 		// TEST ' ' as group separator:
 		// numberLocale = QLocale(QLocale::French, QLocale::France);
-		const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+		const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 		for (int i = 0; i < input_row_count; i++) {
 			if (hasTabs)
 				cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
@@ -2569,7 +2582,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 			}
 		} else {
 			// no columns available anymore -> resize the spreadsheet and the new column to the default size
-			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
+			KConfigGroup group = Settings::group(QStringLiteral("Spreadsheet"));
 			const int rows = group.readEntry(QLatin1String("RowCount"), 100);
 			m_spreadsheet->setRowCount(rows);
 

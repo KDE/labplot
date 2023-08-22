@@ -209,7 +209,7 @@ void InfoElementDock::positionDateTimeChanged(qint64 value) {
 		element->setPositionLogical(value);
 }
 
-void InfoElementDock::curveSelectionChanged(bool state) {
+void InfoElementDock::curveSelectionChanged(bool enabled) {
 	CONDITIONAL_LOCK_RETURN;
 	if (!m_sameParent)
 		return;
@@ -226,7 +226,7 @@ void InfoElementDock::curveSelectionChanged(bool state) {
 	}
 
 	// add/remove the changed curve
-	if (state && curve) {
+	if (enabled && curve) {
 		for (auto* element : m_elements)
 			element->addCurve(curve);
 

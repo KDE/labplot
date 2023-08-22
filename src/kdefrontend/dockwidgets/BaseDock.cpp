@@ -13,19 +13,19 @@
 #include "AxisDock.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 
 #include "backend/nsl/nsl_math.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <QComboBox>
 
 BaseDock::BaseDock(QWidget* parent)
 	: QWidget(parent) {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	m_units = (Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 
 	if (m_units == Units::Imperial)

@@ -7,6 +7,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "FITSHeaderEditAddUnitDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/FITSFilter.h"
 
 #include <QCompleter>
@@ -15,7 +16,6 @@
 #include <QVBoxLayout>
 #include <QWindow>
 
-#include <KSharedConfig>
 #include <KWindowConfig>
 
 FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QWidget* parent)
@@ -45,7 +45,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditAddUnitDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditAddUnitDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -54,7 +54,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 }
 
 FITSHeaderEditAddUnitDialog::~FITSHeaderEditAddUnitDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditAddUnitDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditAddUnitDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

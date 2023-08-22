@@ -9,6 +9,7 @@
 */
 
 #include "LabelWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -102,7 +103,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 		l->setVerticalSpacing(2);
 	}
 
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
 	if (m_units == BaseDock::Units::Imperial)
 		m_worksheetUnit = Worksheet::Unit::Inch;
@@ -512,7 +513,7 @@ void LabelWidget::setBorderAvailable(bool b) {
 }
 
 void LabelWidget::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
 	if (units == m_units)
 		return;
@@ -1500,7 +1501,7 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 		else
 			m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("Markdown")));
 #endif
-		KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("Settings_Worksheet"));
+		KConfigGroup conf = Settings::group(QLatin1String("Settings_Worksheet"));
 		QString engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
 		if (engine == QLatin1String("xelatex") || engine == QLatin1String("lualatex")) {
 			ui.lFontTeX->setVisible(true);

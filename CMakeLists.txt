@@ -528,7 +528,7 @@ IF (ENABLE_EXCEL)
 		endif ()
         ENDIF ()
 ELSE ()
-	add_definitions (-EXCEL_DISABLED)
+	add_definitions (-DEXCEL_DISABLED)
 	MESSAGE (STATUS "XLSX support DISABLED")
 ENDIF ()
 

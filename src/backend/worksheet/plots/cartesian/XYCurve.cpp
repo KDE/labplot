@@ -19,6 +19,7 @@
 #include "XYCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -1828,6 +1829,8 @@ void XYCurvePrivate::updateValues() {
 	m_valuePoints.reserve(numberOfPoints);
 	m_valueStrings.reserve(numberOfPoints);
 
+	calculateScenePoints();
+
 	// determine the value string for all points that are currently visible in the plot
 	int i{0};
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
@@ -1976,9 +1979,6 @@ void XYCurvePrivate::updateValues() {
 	QPointF tempPoint;
 	QFontMetrics fm(valuesFont);
 	const int h{fm.ascent()};
-
-	if (m_valueStrings.count())
-		calculateScenePoints();
 
 	i = 0;
 	for (const auto& string : qAsConst(m_valueStrings)) {
@@ -2711,6 +2711,8 @@ void XYCurvePrivate::updateErrorBars() {
 	QVector<QPointF> pointsErrorBarAnchorY;
 	const auto errorBarsType = errorBarsLine->errorBarsType();
 
+	calculateScenePoints();
+
 	for (int i = 0; i < m_logicalPoints.size(); ++i) {
 		if (!m_pointVisible.at(i))
 			continue;
@@ -2974,7 +2976,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if (!q->isPrinting() && KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true))
+	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)

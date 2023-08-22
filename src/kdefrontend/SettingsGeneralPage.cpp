@@ -12,9 +12,10 @@
 #include "backend/lib/macros.h"
 #include "kdefrontend/MainWin.h" // LoadOnStart
 
+#include "backend/core/Settings.h"
+
 #include <KConfigGroup>
 #include <KI18n/KLocalizedString>
-#include <KSharedConfig>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -25,6 +26,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
 	retranslateUi();
 
+	connect(ui.cbDockWindowPositionReopen, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbTitleBar, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbUnits, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
@@ -86,7 +88,7 @@ void SettingsGeneralPage::applySettings() {
 	if (!m_changed)
 		return;
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	KConfigGroup group = Settings::settingsGeneral();
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentData().toInt());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
@@ -106,6 +108,7 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
+	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
 }
 
 void SettingsGeneralPage::restoreDefaults() {
@@ -120,10 +123,11 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkAutoSave->setChecked(false);
 	ui.sbAutoSaveInterval->setValue(5);
 	ui.chkCompatible->setChecked(false);
+	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehaviour::AboveLastActive)));
 }
 
 void SettingsGeneralPage::loadSettings() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(loadOnStart));
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
@@ -147,6 +151,8 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
+
+	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::readDockPosBehaviour())));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -157,6 +163,11 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->addItem(i18n("Create New Project with Spreadsheet"), static_cast<int>(MainWin::LoadOnStart::NewProjectSpreadsheet));
 	ui.cbLoadOnStart->addItem(i18n("Load Last Used Project"), static_cast<int>(MainWin::LoadOnStart::LastProject));
 	// 	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
+
+	ui.cbDockWindowPositionReopen->setToolTip(i18n("Controls the behavior of where the dock widgets are placed after being re-opened."));
+	ui.cbDockWindowPositionReopen->clear();
+	ui.cbDockWindowPositionReopen->addItem(i18n("Original Position"), static_cast<int>(Settings::DockPosBehaviour::OriginalPos));
+	ui.cbDockWindowPositionReopen->addItem(i18n("On top of the last active Dock Widget"), static_cast<int>(Settings::DockPosBehaviour::AboveLastActive));
 
 	ui.cbTitleBar->clear();
 	ui.cbTitleBar->addItem(i18n("Show File Path"));

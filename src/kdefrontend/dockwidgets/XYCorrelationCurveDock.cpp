@@ -15,7 +15,6 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QMenu>
 #include <QWidgetAction>

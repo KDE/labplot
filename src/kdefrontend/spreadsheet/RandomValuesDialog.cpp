@@ -9,6 +9,7 @@
 */
 
 #include "RandomValuesDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -93,7 +94,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	const KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
+	const KConfigGroup conf = Settings::group(QStringLiteral("RandomValuesDialog"));
 
 	const int dist = conf.readEntry("Distribution", defaultDist);
 	ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(dist));
@@ -117,7 +118,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 
 RandomValuesDialog::~RandomValuesDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("RandomValuesDialog"));
 	// saving enum value to be consistent
 	conf.writeEntry("Distribution", ui.cbDistribution->itemData(ui.cbDistribution->currentIndex()).toInt());
 	const auto numberLocale = QLocale();

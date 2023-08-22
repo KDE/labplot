@@ -10,6 +10,7 @@
 
 #include "Note.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "commonfrontend/note/NoteView.h"
@@ -59,7 +60,7 @@ bool Note::printPreview() const {
 }
 
 bool Note::exportView() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportNote");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportNote"));
 	QString dir = conf.readEntry("LastDir", "");
 	QString extensions = i18n("Text file (*.txt)");
 

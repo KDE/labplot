@@ -979,8 +979,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 	ui.lLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
 	ui.cbLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
-	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels);
-	cbLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels);
+	const auto customValues = m_axis->labelsTextType() == Axis::LabelsTextType::CustomValues;
+	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels && customValues);
+	cbLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels && customValues);
 
 	switch (type) {
 	case Axis::TicksType::TotalNumber: {

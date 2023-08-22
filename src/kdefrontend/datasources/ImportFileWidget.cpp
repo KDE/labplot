@@ -22,6 +22,7 @@
 #include "MatioOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "ROOTOptionsWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/filters.h"
 #include "backend/lib/macros.h"
 #include <QCompleter>
@@ -42,7 +43,7 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KUrlComboBox>
 
 #ifdef HAVE_MQTT
@@ -262,7 +263,7 @@ void ImportFileWidget::loadSettings() {
 		confName = QStringLiteral("LiveDataImport");
 	else
 		confName = QStringLiteral("FileImport");
-	KConfigGroup conf(KSharedConfig::openConfig(), confName);
+	KConfigGroup conf = Settings::group(confName);
 
 	// read the source type first since settings in fileNameChanged() depend on this
 	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
@@ -371,7 +372,7 @@ ImportFileWidget::~ImportFileWidget() {
 		confName = QStringLiteral("LiveDataImport");
 	else
 		confName = QStringLiteral("FileImport");
-	KConfigGroup conf(KSharedConfig::openConfig(), confName);
+	KConfigGroup conf = Settings::group(confName);
 
 	// general settings
 	conf.writeEntry("Type", (int)currentFileType());
@@ -883,7 +884,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 */
 void ImportFileWidget::selectFile() {
 	DEBUG(Q_FUNC_INFO)
-	KConfigGroup conf(KSharedConfig::openConfig(), QStringLiteral("ImportFileWidget"));
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileWidget"));
 	const QString& dir = conf.readEntry(QStringLiteral("LastDir"), "");
 	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the File Data Source"), dir);
 	DEBUG("	dir = " << STDSTRING(dir))
@@ -913,7 +914,7 @@ void ImportFileWidget::selectFile() {
 void ImportFileWidget::selectDBCFile() {
 	DEBUG(Q_FUNC_INFO)
 	const QString entry = QStringLiteral("DBCDir");
-	KConfigGroup conf(KSharedConfig::openConfig(), QStringLiteral("ImportFileWidget"));
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileWidget"));
 	const QString& dir = conf.readEntry(entry, "");
 	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the DBC file"), dir, i18n("DBC file (*.dbc)"));
 	DEBUG("	dir = " << STDSTRING(dir))

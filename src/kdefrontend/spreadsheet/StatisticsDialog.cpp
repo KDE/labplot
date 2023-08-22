@@ -10,6 +10,7 @@
 
 #include "StatisticsDialog.h"
 #include "StatisticsColumnWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 
@@ -21,7 +22,7 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 #include <cmath>
@@ -60,7 +61,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>&
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "StatisticsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("StatisticsDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -69,7 +70,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>&
 }
 
 StatisticsDialog::~StatisticsDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "StatisticsDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("StatisticsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
