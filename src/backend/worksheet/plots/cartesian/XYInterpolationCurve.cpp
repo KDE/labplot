@@ -470,9 +470,9 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 		} else { // unknown element
-				reader->raiseUnknownElementWarning();
-				if (!reader->skipToEndElement())
-					return false;
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

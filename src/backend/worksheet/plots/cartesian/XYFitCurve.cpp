@@ -2932,9 +2932,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			else if (column->name() == QLatin1String("residuals"))
 				d->residualsColumn = column;
 		} else { // unknown element
-				reader->raiseUnknownElementWarning();
-				if (!reader->skipToEndElement())
-					return false;
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

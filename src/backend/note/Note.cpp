@@ -187,9 +187,9 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 			READ_QFONT(m_textFont);
 			m_note = attribs.value(QStringLiteral("text")).toString();
 		} else { // unknown element
-				reader->raiseUnknownElementWarning();
-				if (!reader->skipToEndElement())
-					return false;
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
