@@ -685,10 +685,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 				filter->setStartColumn(ui.sbStartColumn->value());
 			if (ui.sbEndColumn->value() != -1)
 				filter->setEndColumn(ui.sbEndColumn->value());
-		} else {
-			// TODO: load from the selected template
-			//filter->loadFilterSettings(ui.cbFilter->currentText());
-		}
+		} else
+			// templates are handled in fileTypeChanged()
 
 		break;
 	}
@@ -704,10 +702,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			filter->setAutoModeEnabled(false);
 			if (m_binaryOptionsWidget)
 				m_binaryOptionsWidget->applyFilterSettings(filter);
-		} else {
-			// TODO: load filter settings
-			//  			filter->setFilterName( ui.cbFilter->currentText() );
-		}
+		} else
+			// templates are handled in fileTypeChanged()
 
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
@@ -716,10 +712,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	}
 	case AbstractFileFilter::FileType::Excel: {
 		DEBUG(Q_FUNC_INFO << ", Excel");
-
-		if (!m_currentFilter) {
+		if (!m_currentFilter)
 			m_currentFilter.reset(new ExcelFilter);
-		}
 
 		auto filter = static_cast<ExcelFilter*>(m_currentFilter.get());
 		filter->setStartRow(ui.sbStartRow->value());
@@ -1056,7 +1050,7 @@ void ImportFileWidget::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QLatin1String("StartColumn"), ui.sbStartRow->value());
 	group.writeEntry(QLatin1String("EndColumn"), ui.sbStartRow->value());
 
-	// add the currently added namee of the template and make it current
+	// add the currently added name of the template and make it current
 	auto name = TemplateHandler::templateName(config);
 	ui.cbFilter->addItem(name);
 	ui.cbFilter->setCurrentText(name);
@@ -1105,6 +1099,7 @@ void ImportFileWidget::hidePropertyWidgets() {
 void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	auto fileType = currentFileType();
 	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
+	Q_EMIT error(QString()); // clear the potential error message that was shown for the previous file type
 	initOptionsWidget();
 
 	// default
@@ -1519,10 +1514,11 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 }
 
 /*!
-	enables the options if the filter "custom" was chosen. Disables the options otherwise.
+ * called when the filter settings type (custom, automatic, from a template) was changed.
+ * enables the options if the filter "custom" was chosen. Disables the options otherwise.
 */
 void ImportFileWidget::filterChanged(int index) {
-	// ignore filter for these formats
+	// filter settings are available for ASCII and Binary only, ignore for other file types
 	auto fileType = currentFileType();
 	if (fileType != AbstractFileFilter::FileType::Ascii && fileType != AbstractFileFilter::FileType::Binary) {
 		ui.swOptions->setEnabled(true);
@@ -1535,7 +1531,7 @@ void ImportFileWidget::filterChanged(int index) {
 	} else if (index == 1) { // custom
 		ui.swOptions->setEnabled(true);
 		m_templateHandler->show();
-	} else {
+	} else { // templates
 		ui.swOptions->setEnabled(false);
 		m_templateHandler->hide();
 		auto config = m_templateHandler->config(ui.cbFilter->currentText());
