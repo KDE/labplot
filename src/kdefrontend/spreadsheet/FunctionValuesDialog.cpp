@@ -197,7 +197,7 @@ void FunctionValuesDialog::checkValues() {
 		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
 			isValid = false;
-			m_okButton->setEnabled(isValid);
+			break;
 		}
 
 		// TODO: why is the column check disabled?
@@ -210,8 +210,7 @@ void FunctionValuesDialog::checkValues() {
 				}
 		*/
 	}
-	if (isValid)
-		m_okButton->setEnabled(isValid);
+	m_okButton->setEnabled(isValid);
 }
 
 void FunctionValuesDialog::showConstants() {
