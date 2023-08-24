@@ -175,11 +175,14 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 }
 
 void FunctionValuesDialog::checkValues() {
+	// initialize valid button with true value
+	m_okButton->setToolTip(i18n("Generate function values"));
 	bool isValid = true;
 	if (!ui.teEquation->isValid()) { // check whether the formula syntax is correct
 		DEBUG(Q_FUNC_INFO << ", syntax incorrect")
 		isValid = false;
 		m_okButton->setEnabled(isValid);
+		m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 		return;
 	}
 
@@ -194,6 +197,7 @@ void FunctionValuesDialog::checkValues() {
 		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
 			isValid = false;
+			m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 			break;
 		}
 
