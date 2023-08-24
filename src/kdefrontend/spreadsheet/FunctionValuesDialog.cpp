@@ -75,7 +75,6 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::accepted, this, &FunctionValuesDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FunctionValuesDialog::reject);
 	m_okButton->setText(i18n("&Generate"));
-//	m_okButton->setToolTip(i18n("Generate function values"));
 
 	connect(ui.bAddVariable, &QPushButton::pressed, this, &FunctionValuesDialog::addVariable);
 	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &FunctionValuesDialog::checkValues);
@@ -206,7 +205,7 @@ void FunctionValuesDialog::checkValues() {
 				}
 		*/
 	}
-	if(isValid)
+	if (isValid)
 		m_okButton->setToolTip(i18n("Generate function values"));
 	else
 		m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
