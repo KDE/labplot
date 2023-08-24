@@ -75,7 +75,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::accepted, this, &FunctionValuesDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FunctionValuesDialog::reject);
 	m_okButton->setText(i18n("&Generate"));
-	m_okButton->setToolTip(i18n("Generate function values"));
+//	m_okButton->setToolTip(i18n("Generate function values"));
 
 	connect(ui.bAddVariable, &QPushButton::pressed, this, &FunctionValuesDialog::addVariable);
 	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &FunctionValuesDialog::checkValues);
@@ -176,18 +176,14 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 
 void FunctionValuesDialog::checkValues() {
 	// initialize valid button with true value
-	m_okButton->setToolTip(i18n("Generate function values"));
 	bool isValid = true;
 	if (!ui.teEquation->isValid()) { // check whether the formula syntax is correct
 		DEBUG(Q_FUNC_INFO << ", syntax incorrect")
 		isValid = false;
-		m_okButton->setEnabled(isValid);
-		m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
-		return;
 	}
 
 	// check whether for the variables where a name was provided also a column was selected
-	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
+	for (int i = 0; i < m_variableDataColumns.size() && isValid == true; ++i) {
 		auto varName = m_variableLineEdits.at(i)->text();
 		DEBUG(Q_FUNC_INFO << ", variable " << i + 1)
 		// ignore empty
@@ -197,7 +193,6 @@ void FunctionValuesDialog::checkValues() {
 		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
 			isValid = false;
-			m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 			break;
 		}
 
@@ -211,6 +206,10 @@ void FunctionValuesDialog::checkValues() {
 				}
 		*/
 	}
+	if(isValid)
+		m_okButton->setToolTip(i18n("Generate function values"));
+	else
+		m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 	m_okButton->setEnabled(isValid);
 }
 
