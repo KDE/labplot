@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-23 00:42+0000\n"
-"PO-Revision-Date: 2023-08-11 10:45+0100\n"
+"PO-Revision-Date: 2023-08-23 22:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -6377,13 +6377,12 @@ msgstr "Trikubo"
 #: src/backend/spreadsheet/Spreadsheet.cpp:292
 #, kde-format
 msgid "%1: remove rows with missing values"
-msgstr ""
+msgstr "%1: forigi vicojn kun mankantaj valoroj"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:310
-#, fuzzy, kde-format
-#| msgid "%1: fill matrix with function values"
+#, kde-format
 msgid "%1: mask rows with missing values"
-msgstr "%1: plenigi matricon per funkciovaloroj"
+msgstr "%1: maski vicojn kun mankantaj valoroj"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:422
 #, kde-format
@@ -9621,10 +9620,9 @@ msgid "Insert Multiple Columns Right"
 msgstr "Enmeti Multoblajn Kolumnojn Dekstre"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
-#, fuzzy, kde-format
-#| msgid "%1: remove selected column(s)"
+#, kde-format
 msgid "Remove Selected Column(s)"
-msgstr "%1: forigi elektita(j)n kolumnon(j)"
+msgstr "Forigi Elektita(j)n Kolumno(j)n"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
@@ -9653,18 +9651,14 @@ msgid "Divide"
 msgstr "Dividi"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Drop Values"
+#, kde-format
 msgid "Drop Values"
 msgstr "Faligi Valorojn"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Mask Values"
+#, kde-format
 msgid "Mask Values"
-msgstr "Maskaj Valoroj"
+msgstr "Maski Valorojn"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:361
 #, kde-format
@@ -9799,20 +9793,19 @@ msgid "Insert Multiple Rows Below"
 msgstr "Enmeti Multoblajn Vicojn Malsupre"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:458
-#, fuzzy, kde-format
-#| msgid "%1: remove selected rows(s)"
+#, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr "%1: forigi elektita(j)n vicojn"
+msgstr "Forigi Elektita(j)n &Vico(j)n"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
 msgid "Remove Rows With Missing Values"
-msgstr ""
+msgstr "Forigi Vicojn Kun Mankantaj Valoroj"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:461
 #, kde-format
 msgid "Mask Rows With Missing Values"
-msgstr ""
+msgstr "Maski Vicojn Kun Mankantaj Valoroj"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:462
 #, kde-format
@@ -22211,15 +22204,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "unknown cartesianPlot element '%1'"
-#~ msgstr "nekonata cartesianPlot-elemento '%1'"
-
-#~ msgid "Remove Columns"
-#~ msgstr "Forigi Kolumnojn"
-
-#~ msgid "Drop"
-#~ msgstr "Drop"
-
-#~ msgid "Mask"
-#~ msgstr "Masko"

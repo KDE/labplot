@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-23 00:42+0000\n"
-"PO-Revision-Date: 2023-08-11 09:30+0300\n"
+"PO-Revision-Date: 2023-08-23 08:08+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -6445,13 +6445,12 @@ msgstr "Трикубічна"
 #: src/backend/spreadsheet/Spreadsheet.cpp:292
 #, kde-format
 msgid "%1: remove rows with missing values"
-msgstr ""
+msgstr "%1: вилучено рядки з пропущеними значеннями"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:310
-#, fuzzy, kde-format
-#| msgid "%1: fill matrix with function values"
+#, kde-format
 msgid "%1: mask rows with missing values"
-msgstr "%1: заповнити матрицю значеннями функції"
+msgstr "%1: замасковано рядки з пропущеними значеннями"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:422
 #, kde-format
@@ -9713,10 +9712,9 @@ msgid "Insert Multiple Columns Right"
 msgstr "Вставити декілька стовпчиків правіше"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
-#, fuzzy, kde-format
-#| msgid "%1: remove selected column(s)"
+#, kde-format
 msgid "Remove Selected Column(s)"
-msgstr "%1: вилучити позначені стовпчики"
+msgstr "Вилучити позначені стовпчики"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
@@ -9745,16 +9743,12 @@ msgid "Divide"
 msgstr "Поділити"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Drop Values"
+#, kde-format
 msgid "Drop Values"
 msgstr "Скинути значення"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Mask Values"
+#, kde-format
 msgid "Mask Values"
 msgstr "Маскування значень"
 
@@ -9891,20 +9885,19 @@ msgid "Insert Multiple Rows Below"
 msgstr "Вставити декілька рядків нижче"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:458
-#, fuzzy, kde-format
-#| msgid "Remo&ve Selected Rows"
+#, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "Ви&лучити позначені рядки"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
 msgid "Remove Rows With Missing Values"
-msgstr ""
+msgstr "Вилучити рядки з пропущеними значеннями"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:461
 #, kde-format
 msgid "Mask Rows With Missing Values"
-msgstr ""
+msgstr "Маскувати рядки з пропущеними значеннями"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:462
 #, kde-format

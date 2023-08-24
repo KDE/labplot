@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-23 00:42+0000\n"
-"PO-Revision-Date: 2023-08-13 00:26+0200\n"
+"PO-Revision-Date: 2023-08-23 09:19+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.3.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6413,13 +6413,12 @@ msgstr "Trikubično"
 #: src/backend/spreadsheet/Spreadsheet.cpp:292
 #, kde-format
 msgid "%1: remove rows with missing values"
-msgstr ""
+msgstr "%1: odstrani vrstice z manjkajočimi vrednostmi"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:310
-#, fuzzy, kde-format
-#| msgid "%1: fill matrix with function values"
+#, kde-format
 msgid "%1: mask rows with missing values"
-msgstr "%1: izpolnite matriko z vrednostmi funkcij"
+msgstr "%1: maskiraj vrstice z manjkajočimi vrednostmi"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:422
 #, kde-format
@@ -9683,10 +9682,9 @@ msgid "Insert Multiple Columns Right"
 msgstr "Vstavi več stolpcev desno"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
-#, fuzzy, kde-format
-#| msgid "%1: remove selected column(s)"
+#, kde-format
 msgid "Remove Selected Column(s)"
-msgstr "%1: odstrani izbrane stolpce"
+msgstr "Odstrani izbrani/e stolpec(e)"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
@@ -9715,16 +9713,12 @@ msgid "Divide"
 msgstr "Deli"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Drop Values"
+#, kde-format
 msgid "Drop Values"
 msgstr "Izpusti vrednosti"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Mask Values"
+#, kde-format
 msgid "Mask Values"
 msgstr "Maskiraj vrednosti"
 
@@ -9861,20 +9855,19 @@ msgid "Insert Multiple Rows Below"
 msgstr "Vstavi več vrstic spodaj"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:458
-#, fuzzy, kde-format
-#| msgid "%1: remove selected rows(s)"
+#, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr "%1: odstrani izbrane vrstice"
+msgstr "Odstrani izbrano/e vrstico/e"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
 msgid "Remove Rows With Missing Values"
-msgstr ""
+msgstr "Odstrani vrstice z manjkajočimi vrednostmi"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:461
 #, kde-format
 msgid "Mask Rows With Missing Values"
-msgstr ""
+msgstr "Maskiraj vrstice z manjkajočimi vrednostmi"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:462
 #, kde-format

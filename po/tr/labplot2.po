@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-23 00:42+0000\n"
-"PO-Revision-Date: 2023-08-11 13:32+0300\n"
+"PO-Revision-Date: 2023-08-23 13:33+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -6387,13 +6387,12 @@ msgstr "Üçlü Küp"
 #: src/backend/spreadsheet/Spreadsheet.cpp:292
 #, kde-format
 msgid "%1: remove rows with missing values"
-msgstr ""
+msgstr "%1: Değer olmayan satırları kaldır"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:310
-#, fuzzy, kde-format
-#| msgid "%1: fill matrix with function values"
+#, kde-format
 msgid "%1: mask rows with missing values"
-msgstr "%1: matrisi işlev değerleriyle doldur"
+msgstr "%1: Değer olmayan satırları maskele"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:422
 #, kde-format
@@ -9633,10 +9632,9 @@ msgid "Insert Multiple Columns Right"
 msgstr "Sağa Birden Çok Sütun Ekle"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
-#, fuzzy, kde-format
-#| msgid "%1: remove selected column(s)"
+#, kde-format
 msgid "Remove Selected Column(s)"
-msgstr "%1: Seçili sütunları kaldır"
+msgstr "Seçili Sütunları Kaldır"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
@@ -9665,16 +9663,12 @@ msgid "Divide"
 msgstr "Böl"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Drop Values"
+#, kde-format
 msgid "Drop Values"
 msgstr "Değerleri Bırak"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Mask Values"
+#, kde-format
 msgid "Mask Values"
 msgstr "Değerleri Maskele"
 
@@ -9811,20 +9805,19 @@ msgid "Insert Multiple Rows Below"
 msgstr "Aşağı Birden Çok Satır Ekle"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:458
-#, fuzzy, kde-format
-#| msgid "%1: remove selected rows(s)"
+#, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr "%1: Seçili satırları kaldır"
+msgstr "Seçili Satırları &Kaldır"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
 msgid "Remove Rows With Missing Values"
-msgstr ""
+msgstr "Değer Olmayan Satırları Kaldır"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:461
 #, kde-format
 msgid "Mask Rows With Missing Values"
-msgstr ""
+msgstr "Değer Olmayan Satırları Maskele"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:462
 #, kde-format
