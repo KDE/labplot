@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Sorting options dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,7 +15,6 @@
 #include <QWindow>
 
 #include <KConfigGroup>
-
 #include <KWindowConfig>
 
 /*!
@@ -72,13 +71,20 @@ void SortDialog::sortColumns() {
 	Q_EMIT sort(leading, m_columns, ui.cbOrdering->currentIndex() == Qt::AscendingOrder);
 }
 
-void SortDialog::setColumns(const QVector<Column*>& columns) {
+void SortDialog::setColumns(const QVector<Column*>& columns, const Column* leadingColumn) {
 	m_columns = columns;
 
-	for (auto* col : m_columns)
+	int index = 0;
+	int leadingColumnIndex = 0;
+	for (auto* col : m_columns) {
 		ui.cbColumns->addItem(col->name());
+		if (leadingColumn && col == leadingColumn)
+			leadingColumnIndex = index;
 
-	ui.cbColumns->setCurrentIndex(0);
+		++index;
+	}
+
+	ui.cbColumns->setCurrentIndex(leadingColumnIndex);
 
 	if (m_columns.size() == 1) {
 		ui.lSorting->hide();

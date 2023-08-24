@@ -217,7 +217,6 @@ private:
 	QMenu* m_columnManipulateDataMenu{nullptr};
 	QMenu* m_columnNormalizeMenu{nullptr};
 	QMenu* m_columnLadderOfPowersMenu{nullptr};
-	QMenu* m_columnSortMenu{nullptr};
 	QMenu* m_rowMenu{nullptr};
 	QMenu* m_spreadsheetMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};

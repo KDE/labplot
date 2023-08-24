@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Sorting options dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,7 +21,7 @@ public:
 	explicit SortDialog(QWidget* parent = nullptr);
 	~SortDialog() override;
 
-	void setColumns(const QVector<Column*>&);
+	void setColumns(const QVector<Column*>&, const Column* leadingColumn = nullptr);
 
 	enum { Separately = 0, Together = 1 };
 

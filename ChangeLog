@@ -11,6 +11,7 @@ New features:
 		* Extended search and replace
 		* Column statistics spreadsheet - child spreadsheet showing various statistical properties of the parent spreadsheet
 		* Remove/mask rows with missing values
+		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
 	* [notebook]
 		* Export to PDF
 

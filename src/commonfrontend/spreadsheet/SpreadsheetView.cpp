@@ -439,9 +439,9 @@ void SpreadsheetView::initActions() {
 	ladderAction->setData(InverseSquared);
 
 	// sort and statistics
-	action_sort_columns = new QAction(QIcon::fromTheme(QString()), i18n("&Selected Columns"), this);
-	action_sort_asc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("&Ascending"), this);
-	action_sort_desc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("&Descending"), this);
+	action_sort_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-sort")), i18n("&Sort..."), this);
+	action_sort_asc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("Sort &Ascending"), this);
+	action_sort_desc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("Sort &Descending"), this);
 	action_statistics_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
 	// conditional formatting
@@ -722,14 +722,11 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addMenu(m_columnManipulateDataMenu);
 		m_columnMenu->addSeparator();
 
-		m_columnSortMenu = new QMenu(i18n("Sort"), this);
-		m_columnSortMenu->setIcon(QIcon::fromTheme(QStringLiteral("view-sort-ascending")));
-		m_columnSortMenu->addAction(action_sort_asc_column);
-		m_columnSortMenu->addAction(action_sort_desc_column);
-		m_columnSortMenu->addAction(action_sort_columns);
+		m_columnMenu->addAction(action_sort_columns);
+		m_columnMenu->addAction(action_sort_asc_column);
+		m_columnMenu->addAction(action_sort_desc_column);
 		m_columnMenu->addSeparator();
-		m_columnMenu->addMenu(m_columnSortMenu);
-		m_columnMenu->addSeparator();
+
 		m_columnMenu->addMenu(m_formattingMenu);
 		m_columnMenu->addSeparator();
 
@@ -744,8 +741,7 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addSeparator();
 		m_columnMenu->addAction(action_remove_missing_value_rows);
 		m_columnMenu->addAction(action_mask_missing_value_rows);
-	}
-	{
+	} else {
 		m_columnMenu->addSeparator();
 		m_columnMenu->addMenu(m_formattingMenu);
 	}
@@ -931,6 +927,7 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 	// toolBar->addAction(action_statistics_columns);
 	if (!m_readOnly) {
 		toolBar->addSeparator();
+		toolBar->addAction(action_sort_columns);
 		toolBar->addAction(action_sort_asc_column);
 		toolBar->addAction(action_sort_desc_column);
 	}
@@ -1019,15 +1016,15 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 			menu->insertMenu(firstAction, m_columnGenerateDataMenu);
 			menu->insertSeparator(firstAction);
 		}
+
 		if (numeric || datetime) {
 			menu->insertMenu(firstAction, m_columnManipulateDataMenu);
 			menu->insertSeparator(firstAction);
 		}
 
-		menu->insertMenu(firstAction, m_columnSortMenu);
-		action_sort_asc_column->setVisible(true);
-		action_sort_desc_column->setVisible(true);
-		action_sort_columns->setVisible(false);
+		menu->addAction(action_sort_columns);
+		menu->addAction(action_sort_asc_column);
+		menu->addAction(action_sort_desc_column);
 
 		checkColumnMenus(numeric, datetime, text, hasValues);
 	}
@@ -1374,17 +1371,6 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
-			const auto& columns = selectedColumns();
-			if (columns.size() == 1) {
-				action_sort_columns->setVisible(false);
-				action_sort_asc_column->setVisible(true);
-				action_sort_desc_column->setVisible(true);
-			} else {
-				action_sort_columns->setVisible(true);
-				action_sort_asc_column->setVisible(false);
-				action_sort_desc_column->setVisible(false);
-			}
-
 			// check whether we have non-numeric columns selected and deactivate actions for numeric columns
 			bool numeric = true;
 			bool plottable = true;
@@ -1393,6 +1379,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool hasValues = false;
 			bool hasFormat = false;
 			bool enoughValues = false; // enough for statistics (> 1)
+			const auto& columns = selectedColumns();
 
 			for (const auto* col : columns) {
 				if (!col->isNumeric()) {
@@ -1616,7 +1603,9 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, b
 	m_columnLadderOfPowersMenu->setEnabled(numeric);
 
 	// sort is possible for all data types if values are available
-	m_columnSortMenu->setEnabled(hasValues);
+	action_sort_columns->setEnabled(hasValues);
+	action_sort_asc_column->setEnabled(hasValues);
+	action_sort_desc_column->setEnabled(hasValues);
 
 	if (isColumnSelected(0, true)) {
 		action_freeze_columns->setVisible(true);
@@ -3479,19 +3468,31 @@ void SpreadsheetView::showSearchReplace(bool replace) {
 }
 
 //! Open the sort dialog for the given columns
-void SpreadsheetView::sortDialog(const QVector<Column*>& cols) {
-	if (cols.isEmpty())
+void SpreadsheetView::sortDialog(const QVector<Column*>& selectedColumns) {
+	if (selectedColumns.isEmpty())
 		return;
 
-	for (auto* col : cols)
+	QVector<Column*> columnsToSort;
+	Column* leadingColumn{nullptr};
+
+	// in case one single column was selected, we allow to sort the whole spreadsheet (all columns)
+	// with the current selected column being the leading column
+	if (selectedColumns.size() == 1) {
+		columnsToSort = m_spreadsheet->children<Column>();
+		leadingColumn = selectedColumns.constFirst();
+	} else
+		columnsToSort = selectedColumns;
+
+	for (auto* col : columnsToSort)
 		col->setSuppressDataChangedSignal(true);
 
 	auto* dlg = new SortDialog();
 	connect(dlg, &SortDialog::sort, m_spreadsheet, &Spreadsheet::sortColumns);
-	dlg->setColumns(cols);
+	dlg->setColumns(columnsToSort, leadingColumn);
+
 	int rc = dlg->exec();
 
-	for (auto* col : cols) {
+	for (auto* col : columnsToSort) {
 		col->setSuppressDataChangedSignal(false);
 		if (rc == QDialog::Accepted)
 			col->setChanged();
