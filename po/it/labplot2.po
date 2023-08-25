@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-23 00:42+0000\n"
-"PO-Revision-Date: 2023-06-18 08:27+0200\n"
+"PO-Revision-Date: 2023-08-12 15:26+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5502,17 +5502,15 @@ msgid "%1: mirror vertically"
 msgstr "%1: rispecchia verticalmente"
 
 #: src/backend/note/Note.cpp:47
-#, fuzzy, kde-format
-#| msgid "Print"
+#, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
-msgstr "Stampa"
+msgstr "Stampa nota"
 
 #: src/backend/note/Note.cpp:65
-#, fuzzy, kde-format
-#| msgid "LaTeX files (*.tex)"
+#, kde-format
 msgid "Text file (*.txt)"
-msgstr "File LaTeX (*.tex)"
+msgstr "File di testo (*.txt)"
 
 #: src/backend/note/Note.cpp:67
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:382
@@ -5523,17 +5521,14 @@ msgid "Export to File"
 msgstr "Esporta su file"
 
 #: src/backend/note/Note.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export to File"
+#, kde-format
 msgid "Export failed"
-msgstr "Esporta su file"
+msgstr "Esportazione fallita"
 
 #: src/backend/note/Note.cpp:81
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid "Failed to open '%1' for writing."
-msgstr "Impossibile aprire il file «%1» in lettura."
+msgstr "Impossibile aprire «%1» in scrittura."
 
 #: src/backend/note/Note.cpp:160
 #, kde-format
@@ -6560,38 +6555,32 @@ msgid "Count"
 msgstr "Conteggio"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:34
-#, fuzzy, kde-format
-#| msgid "Arithmetic mean"
+#, kde-format
 msgid "ArithmeticMean"
 msgstr "Media aritmetica"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:35
-#, fuzzy, kde-format
-#| msgid "Geometric mean"
+#, kde-format
 msgid "GeometricMean"
 msgstr "Media geometrica"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:36
-#, fuzzy, kde-format
-#| msgid "Harmonic mean"
+#, kde-format
 msgid "HarmonicMean"
 msgstr "Media armonica"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:37
-#, fuzzy, kde-format
-#| msgid "Contraharmonic mean"
+#, kde-format
 msgid "ContraharmonicMean"
 msgstr "Media contrarmonica"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:39
-#, fuzzy, kde-format
-#| msgid "First Quartile"
+#, kde-format
 msgid "FirstQuartile"
 msgstr "Primo quartile"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:41
-#, fuzzy, kde-format
-#| msgid "Third Quartile"
+#, kde-format
 msgid "ThirdQuartile"
 msgstr "Terzo quartile"
 
@@ -6602,62 +6591,52 @@ msgid "Interquartile Range"
 msgstr "Scarto interquartile"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:43
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile1"
-msgstr "Percentile"
+msgstr "Percentile1"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:44
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile5"
-msgstr "Percentile"
+msgstr "Percentile5"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:45
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile10"
-msgstr "Percentile"
+msgstr "Percentile10"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:46
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile90"
-msgstr "Percentile"
+msgstr "Percentile90"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:47
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile95"
-msgstr "Percentile"
+msgstr "Percentile95"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:48
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile99"
-msgstr "Percentile"
+msgstr "Percentile99"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:51
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "StandardDeviation"
 msgstr "Deviazione standard"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:52
-#, fuzzy, kde-format
-#| msgid "Mean deviation"
+#, kde-format
 msgid "MeanDeviation"
 msgstr "Deviazione media"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:53
-#, fuzzy, kde-format
-#| msgid "Mean deviation around median"
+#, kde-format
 msgid "MeanDeviationAroundMedian"
 msgstr "Deviazione media attorno la mediana"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:54
-#, fuzzy, kde-format
-#| msgid "Median deviation"
+#, kde-format
 msgid "MedianDeviation"
 msgstr "Deviazione mediana"
 
@@ -6863,10 +6842,9 @@ msgid "%1: set line width"
 msgstr "%1: imposta la larghezza della linea"
 
 #: src/backend/worksheet/Line.cpp:153
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set line color"
-msgstr "%1: imposta il colore delle etichette"
+msgstr "%1: imposta il colore della linea"
 
 #: src/backend/worksheet/Line.cpp:160
 #, kde-format
@@ -7412,10 +7390,9 @@ msgstr "Grafico a scatola"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#, fuzzy, kde-format
-#| msgid "Normal Q-Q Plot"
+#, kde-format
 msgid "Q-Q Plot"
-msgstr "Grafico Q-Q normale"
+msgstr "Grafico Q-Q"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:392
@@ -7428,10 +7405,9 @@ msgstr "Grafico a barre"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:355
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:395
-#, fuzzy, kde-format
-#| msgid "All Plots"
+#, kde-format
 msgid "Lollipop Plot"
-msgstr "Tutti i grafici"
+msgstr "Grafico lecca-lecca"
 
 #. i18n("Data Operation"), this);
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:358
@@ -7637,16 +7613,14 @@ msgid "Add New"
 msgstr "Aggiungi nuovo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical Plots"
-msgstr "Statistiche"
+msgstr "Grafici statistici"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:539
-#, fuzzy, kde-format
-#| msgid "Bar Plot"
+#, kde-format
 msgid "Bar Plots"
-msgstr "Grafico a barre"
+msgstr "Grafici a barre"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:546
 #, kde-format
@@ -8100,10 +8074,9 @@ msgstr ""
 "più grande del minimo."
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
-#, fuzzy, kde-format
-#| msgid "%1: set position"
+#, kde-format
 msgid "%1: set distribution"
-msgstr "%1: imposta la posizione"
+msgstr "%1: imposta distribuzione"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #, kde-format
@@ -8131,10 +8104,9 @@ msgid "%1: set symbol size"
 msgstr "%1: imposta la dimensione dei simboli"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:163
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set symbol color"
-msgstr "%1: imposta il colore delle etichette"
+msgstr "%1: imposta il colore del simbolo"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:170
 #, kde-format
@@ -12378,10 +12350,9 @@ msgid "Column:"
 msgstr "Colonna:"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:537
-#, fuzzy, kde-format
-#| msgid "%1 cartesian plots: template \"%2\" loaded"
+#, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
-msgstr "%1 grafici cartesiani: modello «%2» caricato"
+msgstr "%1 grafici a barre: modello «%2» caricato"
 
 #: src/kdefrontend/dockwidgets/BaseDock.cpp:149
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:366
@@ -12460,10 +12431,9 @@ msgstr ""
 "relativa al suo valore predefinito."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:766
-#, fuzzy, kde-format
-#| msgid "%1 custom points: template \"%2\" loaded"
+#, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr "%1 punti personalizzati: modello «%2» caricato"
+msgstr "%1 grafico a scatola: modello «%2» caricato"
 
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:65
 #, kde-format
@@ -12901,10 +12871,9 @@ msgid "Data, +:"
 msgstr "Dati, +:"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:773
-#, fuzzy, kde-format
-#| msgid "%1 axes: template \"%2\" loaded"
+#, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
-msgstr "%1 assi: modello «%2» caricato"
+msgstr "%1 istogrammi: modello «%2» caricato"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:248
 #, kde-format
@@ -12956,10 +12925,9 @@ msgid "Couldn't subscribe to all available topics. Something went wrong"
 msgstr "Impossibile iscriversi a tutti gli argomenti. Qualcosa è andato storto"
 
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:509
-#, fuzzy, kde-format
-#| msgid "%1 cartesian plots: template \"%2\" loaded"
+#, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
-msgstr "%1 grafici cartesiani: modello «%2» caricato"
+msgstr "%1 grafici lecca-lecca: modello «%2» caricato"
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:35
 #, kde-format
@@ -13005,11 +12973,13 @@ msgstr "%1 linee di riferimento: modello «%2» caricato"
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
+"Abilita il collegamento per sincronizzare il numero di righe con un altro "
+"foglio elettronico"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:59
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "Foglio elettronico per sincronizzare il numero di righe con"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:248
 #, kde-format
@@ -13660,12 +13630,10 @@ msgid "Properties: Bar Plot"
 msgstr "Proprietà: grafico a barre"
 
 #: src/kdefrontend/GuiObserver.cpp:365
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Box Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
-msgstr "Proprietà: grafico a scatola"
+msgstr "Proprietà: grafico lecca-lecca"
 
 #: src/kdefrontend/GuiObserver.cpp:370
 #, kde-format
@@ -13674,11 +13642,10 @@ msgid "Properties: Box Plot"
 msgstr "Proprietà: grafico a scatola"
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Normal Q-Q Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr "Grafico Q-Q normale"
+msgstr "Grafico Q-Q"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -15041,17 +15008,18 @@ msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened."
 msgstr ""
+"Controlla il comportamento su dove vengono posizionati gli oggetti "
+"agganciabili dopo essere stati riaperti."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:169
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original Position"
-msgstr "Dimensione originale"
+msgstr "Posizione originale"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, kde-format
 msgid "On top of the last active Dock Widget"
-msgstr ""
+msgstr "Sopra l'ultimo oggetto agganciabile attivo"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:173
 #, kde-format
@@ -19540,17 +19508,15 @@ msgstr "Distribuzione:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:151
-#, fuzzy, kde-format
-#| msgid "f(x) ="
+#, kde-format
 msgid "p(x) ="
-msgstr "f(x) ="
+msgstr "p(x) ="
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentiles"
-msgstr "Percentile"
+msgstr "Percentili"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
@@ -20932,10 +20898,9 @@ msgstr "Conforme a GUM"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:241
-#, fuzzy, kde-format
-#| msgid "Box Plot Placement"
+#, kde-format
 msgid "Dock widget placement:"
-msgstr "Piazzamento del grafico a scatola"
+msgstr "Piazzamento dell'oggetto agganciabile:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

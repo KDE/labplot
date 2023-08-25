@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-23 00:42+0000\n"
-"PO-Revision-Date: 2023-08-11 08:17+0200\n"
+"PO-Revision-Date: 2023-08-24 05:27+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1020,12 +1020,12 @@ msgstr "არასწორი მეტამონაცემების �
 #: src/backend/datasources/DatasetHandler.cpp:68
 #, kde-format
 msgid "The metadata file for the selected dataset is invalid."
-msgstr ""
+msgstr "მონაცემების ფაილი არასწორიამონიშნული მონაცემების სეტისთვის."
 
 #: src/backend/datasources/DatasetHandler.cpp:156
 #, kde-format
 msgid "There is no download URL present in the metadata file!"
-msgstr ""
+msgstr "მეტამონაცემების ფაილი გადმოწერის ბმულს არ შეიცავს!"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:218
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:377
@@ -1289,7 +1289,7 @@ msgstr "სუპერბლოკის ზომა: %1 ბაიტი"
 #: src/backend/datasources/filters/HDF5Filter.cpp:259
 #, kde-format
 msgid "Size of superblock extension: %1 bytes"
-msgstr ""
+msgstr "სუპერბლოკის გაფართოების ზომა: %1 ბაიტი"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:240
 #, kde-format
@@ -1971,7 +1971,7 @@ msgstr "შეკუმშვა: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:177
 #, kde-format
 msgid "Endianess: %1"
-msgstr ""
+msgstr "ბოლოიანობა: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:179
 #, kde-format
@@ -2049,12 +2049,12 @@ msgstr "TStreamerInfo ჩანაწერის ზომა: %1 ბაიტ�
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:89
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1"
-msgstr ""
+msgstr "მსხვილბოლოიანი მხარდაჭერილი არაა. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:92
 #, kde-format
 msgid "Message too long. CAN id: %1"
-msgstr ""
+msgstr "შეტყობინება მეტისმეტად გრძელია. CAN id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:95
 #, kde-format
@@ -2074,7 +2074,7 @@ msgstr "გადაყვანის გამოთვლა შეუძლ�
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:104
 #, kde-format
 msgid "No dbc parser installed"
-msgstr ""
+msgstr "DBC დამმუშავებელი დაყენებული არაა"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, kde-format
@@ -2444,12 +2444,12 @@ msgstr "ატომური მაგნეტრონი"
 #: src/backend/gsl/constants.cpp:96
 #, kde-format
 msgid "Magnetic moment of the electron [absolute value]"
-msgstr ""
+msgstr "ელექტრონის მაგნიტური მომენტი [აბსოლუტური მნიშვნელობა]"
 
 #: src/backend/gsl/constants.cpp:101
 #, kde-format
 msgid "Magnetic moment of the proton"
-msgstr ""
+msgstr "პროტონის მაგნიტური მომენტი"
 
 #: src/backend/gsl/constants.cpp:102
 #, kde-format
@@ -9581,10 +9581,9 @@ msgid "Insert Multiple Columns Right"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
-#, fuzzy, kde-format
-#| msgid "&Selected Columns"
+#, kde-format
 msgid "Remove Selected Column(s)"
-msgstr "&მონიშნული სვეტები"
+msgstr "მონიშნული სვეტების წაშლა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
@@ -9613,16 +9612,14 @@ msgid "Divide"
 msgstr "გაყოფა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
-#, fuzzy, kde-format
-#| msgid "No Values"
+#, kde-format
 msgid "Drop Values"
-msgstr "მნიშვნელობის გარეშე"
+msgstr "მნიშვნელობის მოცილება"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Mask Values"
-msgstr "მნიშვნელობები"
+msgstr "მნიშვნელობების შენიღბვა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:361
 #, kde-format
@@ -9757,10 +9754,9 @@ msgid "Insert Multiple Rows Below"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:458
-#, fuzzy, kde-format
-#| msgid "%1: remove selected rows"
+#, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr "%1: მონიშნული მწკრივების წაშლა"
+msgstr "&მონიშნული მწკრივების წაშლა"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
@@ -15091,7 +15087,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
-msgstr ""
+msgstr "მნიშვნელობების შენიღბვა"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:78
 #, kde-format
@@ -15107,7 +15103,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Drop Values"
-msgstr ""
+msgstr "მნიშვნელობის მოცილება"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:946
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:953
@@ -19966,7 +19962,7 @@ msgstr ""
 #: src/kdefrontend/ui/fitoptionswidget.ui:69
 #, kde-format
 msgid "Tolerance:"
-msgstr ""
+msgstr "დაშვება:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseDataErrors)
 #: src/kdefrontend/ui/fitoptionswidget.ui:76
