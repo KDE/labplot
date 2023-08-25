@@ -37,7 +37,6 @@ SortDialog::SortDialog(QWidget* parent)
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::sortColumns);
 	connect(ui.buttonBox, &QDialogButtonBox::rejected, this, &SortDialog::reject);
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::accept);
-	connect(ui.cbSorting, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SortDialog::changeType);
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
@@ -49,8 +48,6 @@ SortDialog::SortDialog(QWidget* parent)
 		resize(QSize(300, 0).expandedTo(minimumSize()));
 
 	ui.cbOrdering->setCurrentIndex(conf.readEntry(QLatin1String("Ordering"), 0));
-	ui.cbSorting->setCurrentIndex(conf.readEntry(QLatin1String("Sorting"), 0));
-	changeType(ui.cbSorting->currentIndex());
 }
 
 SortDialog::~SortDialog() {
@@ -60,14 +57,10 @@ SortDialog::~SortDialog() {
 
 	// general settings
 	conf.writeEntry(QLatin1String("Ordering"), ui.cbOrdering->currentIndex());
-	conf.writeEntry(QLatin1String("Sorting"), ui.cbSorting->currentIndex());
 }
 
 void SortDialog::sortColumns() {
-	Column* leading{nullptr};
-	if (ui.cbSorting->currentIndex() == Together)
-		leading = m_columns.at(ui.cbColumns->currentIndex());
-
+	Column* leading = m_columns.at(ui.cbColumns->currentIndex());
 	Q_EMIT sort(leading, m_columns, ui.cbOrdering->currentIndex() == Qt::AscendingOrder);
 }
 
@@ -87,16 +80,7 @@ void SortDialog::setColumns(const QVector<Column*>& columns, const Column* leadi
 	ui.cbColumns->setCurrentIndex(leadingColumnIndex);
 
 	if (m_columns.size() == 1) {
-		ui.lSorting->hide();
-		ui.cbSorting->hide();
 		ui.lColumns->hide();
 		ui.cbColumns->hide();
 	}
-}
-
-void SortDialog::changeType(int Type) {
-	if (Type == Together)
-		ui.cbColumns->setEnabled(true);
-	else
-		ui.cbColumns->setEnabled(false);
 }

@@ -23,11 +23,8 @@ public:
 
 	void setColumns(const QVector<Column*>&, const Column* leadingColumn = nullptr);
 
-	enum { Separately = 0, Together = 1 };
-
 private Q_SLOTS:
 	void sortColumns();
-	void changeType(int index);
 
 Q_SIGNALS:
 	void sort(Column*, QVector<Column*>, bool ascending);
