@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-07-05 22:18+0200\n"
+"PO-Revision-Date: 2023-08-25 12:46+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2985,7 +2985,7 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:186 src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Percentile"
-msgstr ""
+msgstr "Percentile"
 
 #: src/backend/gsl/ExpressionParser.cpp:194
 #, kde-format
@@ -5301,7 +5301,7 @@ msgstr[1] ""
 #, fuzzy, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
-msgstr[0] "Adde columna"
+msgstr[0] "Adder Columna..."
 msgstr[1] ""
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
@@ -9105,7 +9105,7 @@ msgstr ""
 #: src/commonfrontend/matrix/MatrixView.cpp:929
 #, kde-format
 msgid "%1: remove selected column(s)"
-msgstr ""
+msgstr "%1: Remove Columna(s) Seligite"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:939
 #, kde-format
@@ -11869,17 +11869,17 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:50
 #, kde-format
 msgid "10/90 percentiles"
-msgstr ""
+msgstr "10/90 percentiles"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:51
 #, kde-format
 msgid "5/95 percentiles"
-msgstr ""
+msgstr "5/95 percentiles"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:52
 #, kde-format
 msgid "1/99 percentiles"
-msgstr ""
+msgstr "1/99 percentiles"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:58
 #, kde-format
@@ -14833,7 +14833,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
-msgstr ""
+msgstr "Mascara Valores"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:77
 #, kde-format
@@ -14849,7 +14849,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Drop Values"
-msgstr ""
+msgstr "Abandona Valores"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:945
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:952
@@ -14862,12 +14862,12 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:967
 #, kde-format
 msgid "%1: mask values"
-msgstr ""
+msgstr "%1: Mascara Valores"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1023
 #, kde-format
 msgid "%1: drop values"
-msgstr ""
+msgstr "%1: Abandona Valores"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:34
 #, kde-format
@@ -19394,7 +19394,7 @@ msgstr "Peso:"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:138
 #, kde-format
 msgid "Percentile:"
-msgstr ""
+msgstr "Percentile:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:145
