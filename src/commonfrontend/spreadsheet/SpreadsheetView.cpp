@@ -3446,6 +3446,9 @@ void SpreadsheetView::showSearchReplace(bool replace) {
 	});
 }
 
+/*!
+ * sorts the selected columns separately of each other in ascending order.
+ */
 void SpreadsheetView::sortAscending() {
 	const auto& cols = selectedColumns();
 	if (cols.isEmpty() || !hasValues(cols))
@@ -3453,13 +3456,16 @@ void SpreadsheetView::sortAscending() {
 
 	for (auto* col : cols)
 		col->setSuppressDataChangedSignal(true);
-	m_spreadsheet->sortColumns(cols.first(), cols, true);
+	m_spreadsheet->sortColumns(nullptr, cols, true);
 	for (auto* col : cols) {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
 }
 
+/*!
+ * sorts the selected columns separately of each other in descending order.
+ */
 void SpreadsheetView::sortDescending() {
 	const auto& cols = selectedColumns();
 	if (cols.isEmpty() || !hasValues(cols))
@@ -3467,13 +3473,17 @@ void SpreadsheetView::sortDescending() {
 
 	for (auto* col : cols)
 		col->setSuppressDataChangedSignal(true);
-	m_spreadsheet->sortColumns(cols.first(), cols, false);
+	m_spreadsheet->sortColumns(nullptr, cols, false);
 	for (auto* col : cols) {
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
 }
 
+/*!
+ * custom sort of all or selected columns in the spreadsheet together by allowing
+ * to specify the "sort by"-column(s) in the SortDialog.
+ */
 void SpreadsheetView::sortCustom() {
 	const auto& cols = selectedColumns();
 	QVector<Column*> columnsToSort;
