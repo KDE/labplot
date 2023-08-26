@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-23 00:42+0000\n"
-"PO-Revision-Date: 2023-07-20 23:12+0200\n"
+"PO-Revision-Date: 2023-08-25 12:41+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5361,7 +5361,7 @@ msgstr[1] ""
 #, fuzzy, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
-msgstr[0] "Adde columna"
+msgstr[0] "Adder Columna..."
 msgstr[1] ""
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:126
@@ -6492,10 +6492,9 @@ msgid "ArithmeticMean"
 msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:35
-#, fuzzy, kde-format
-#| msgid "Geometric"
+#, kde-format
 msgid "GeometricMean"
-msgstr "Geometric"
+msgstr "GeometricMedie"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:36
 #, kde-format
@@ -6524,52 +6523,44 @@ msgid "Interquartile Range"
 msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:43
-#, fuzzy, kde-format
-#| msgid "Percent"
+#, kde-format
 msgid "Percentile1"
-msgstr "Percentage"
+msgstr "Percentile1"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:44
-#, fuzzy, kde-format
-#| msgid "Percent"
+#, kde-format
 msgid "Percentile5"
-msgstr "Percentage"
+msgstr "Percentile5"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:45
-#, fuzzy, kde-format
-#| msgid "Percent"
+#, kde-format
 msgid "Percentile10"
-msgstr "Percentage"
+msgstr "Percentile10"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:46
-#, fuzzy, kde-format
-#| msgid "Percent"
+#, kde-format
 msgid "Percentile90"
-msgstr "Percentage"
+msgstr "Percentile90"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:47
-#, fuzzy, kde-format
-#| msgid "Percent"
+#, kde-format
 msgid "Percentile95"
-msgstr "Percentage"
+msgstr "Percentile95"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:48
-#, fuzzy, kde-format
-#| msgid "Percent"
+#, kde-format
 msgid "Percentile99"
-msgstr "Percentage"
+msgstr "Percentile99"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:51
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "StandardDeviation"
-msgstr "Deviation standard"
+msgstr "DeviationStandard"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:52
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "MeanDeviation"
-msgstr "Deviation standard"
+msgstr "DeviationMedie"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:53
 #, kde-format
@@ -6577,10 +6568,9 @@ msgid "MeanDeviationAroundMedian"
 msgstr ""
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:54
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "MedianDeviation"
-msgstr "Deviation standard"
+msgstr "DeviationMedian"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberLine)
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
@@ -7332,10 +7322,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgid "Q-Q Plot"
-msgstr "Plot (Tracia)"
+msgstr "Q-Q Plot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:392
@@ -8015,10 +8004,9 @@ msgid ""
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:278
-#, fuzzy, kde-format
-#| msgid "%1: set position"
+#, kde-format
 msgid "%1: set distribution"
-msgstr "%1: assigna position"
+msgstr "%1: assigna distribution"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #, kde-format
@@ -9578,10 +9566,9 @@ msgid "Column Statistics..."
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:304
-#, fuzzy, kde-format
-#| msgid "Create Data Spreadsheet"
+#, kde-format
 msgid "Column Statistics Spreadsheet"
-msgstr "Crea Folio de calculo electronic  de datos"
+msgstr "Folio de calculo electronic  de statisticas de columna "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:310
 #, kde-format
@@ -9604,10 +9591,9 @@ msgid "Insert Multiple Columns Right"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
-#, fuzzy, kde-format
-#| msgid "Remove Columns"
+#, kde-format
 msgid "Remove Selected Column(s)"
-msgstr "Remove columnas"
+msgstr "Remove Columna(s) Seligite"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
@@ -9636,16 +9622,14 @@ msgid "Divide"
 msgstr "Divide"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
-#, fuzzy, kde-format
-#| msgid "No Values"
+#, kde-format
 msgid "Drop Values"
-msgstr "Necun Valores"
+msgstr "Abandona Valores"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Mask Values"
-msgstr "Valores"
+msgstr "Mascara Valores"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:361
 #, kde-format
@@ -9780,10 +9764,9 @@ msgid "Insert Multiple Rows Below"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:458
-#, fuzzy, kde-format
-#| msgid "Remo&ve Rows"
+#, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr "Remo&ve rangos"
+msgstr "Remo&ve Rango(s) Seligite"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
@@ -13356,11 +13339,10 @@ msgid "Properties: Box Plot"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:375
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr "Plot (Tracia)"
+msgstr "Q-Q Plot"
 
 #: src/kdefrontend/GuiObserver.cpp:380
 #, kde-format
@@ -14706,10 +14688,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:169
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original Position"
-msgstr "Grandor original"
+msgstr "Position original"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:170
 #, kde-format
@@ -19155,17 +19136,15 @@ msgstr "Distribution:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:151
-#, fuzzy, kde-format
-#| msgid "f(x) ="
+#, kde-format
 msgid "p(x) ="
-msgstr "f(x) = "
+msgstr "p(x) ="
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Percent"
+#, kde-format
 msgid "Percentiles"
-msgstr "Percentage"
+msgstr "Percentiles"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
