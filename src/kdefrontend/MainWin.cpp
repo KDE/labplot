@@ -1539,8 +1539,8 @@ void MainWin::openProject(const QString& filename) {
 
 	// check whether the file can be opened for reading at all before closing the current project
 	// and creating a new project and trying to load
-	QFile file (filename);
-	if (!file.exists() ){
+	QFile file(filename);
+	if (!file.exists()) {
 		KMessageBox::error(this, i18n("The project file %1 doesn't exist.", filename), i18n("Open Project"));
 		return;
 	}

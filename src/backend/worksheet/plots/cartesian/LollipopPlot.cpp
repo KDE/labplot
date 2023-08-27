@@ -718,6 +718,8 @@ void LollipopPlotPrivate::updateValues() {
 				m_valuesPoints << QPointF(pointsScene.at(i).x(), pointsScene.at(i).y() + offset);
 		}
 		break;
+	case Value::Center:
+		break;
 	}
 
 	QTransform trafo;
