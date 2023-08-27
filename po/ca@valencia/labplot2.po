@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-23 00:42+0000\n"
-"PO-Revision-Date: 2023-08-11 09:34+0200\n"
+"PO-Revision-Date: 2023-08-25 16:13+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -2859,7 +2859,7 @@ msgstr "Error amb el domini d'entrada, p. ex., sqrt(-1)"
 #: src/backend/gsl/errors.h:28
 #, kde-format
 msgid "Output range error, e.g. exp(1e100)"
-msgstr "Error amb l'interval d'eixida, p. ex. exp(1e100)"
+msgstr "Error amb l'interval d'eixida, p. ex., exp(1e100)"
 
 #: src/backend/gsl/errors.h:30
 #, kde-format
@@ -4299,7 +4299,7 @@ msgstr "Integral del cosinus"
 #: src/backend/gsl/functions.cpp:512
 #, kde-format
 msgid "Arctangent integral"
-msgstr "Integral de l'arc tangent"
+msgstr "Integral de l'arctangent"
 
 #: src/backend/gsl/functions.cpp:515
 #, kde-format
@@ -6473,13 +6473,12 @@ msgstr "Tri-cúbica"
 #: src/backend/spreadsheet/Spreadsheet.cpp:292
 #, kde-format
 msgid "%1: remove rows with missing values"
-msgstr ""
+msgstr "%1: elimina les files amb els valors que falten"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:310
-#, fuzzy, kde-format
-#| msgid "%1: fill matrix with function values"
+#, kde-format
 msgid "%1: mask rows with missing values"
-msgstr "%1: emplena la matriu amb els valors de la funció"
+msgstr "%1: emmascara les files amb els valors que falten"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:422
 #, kde-format
@@ -7654,7 +7653,7 @@ msgstr "Exponencial invers"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:517
 #, kde-format
 msgid "Arc Tangent"
-msgstr "Arc tangent"
+msgstr "Arctangent"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:486
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:525
@@ -9739,10 +9738,9 @@ msgid "Insert Multiple Columns Right"
 msgstr "Inserix múltiples columnes a la dreta"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:314
-#, fuzzy, kde-format
-#| msgid "%1: remove selected column(s)"
+#, kde-format
 msgid "Remove Selected Column(s)"
-msgstr "%1: elimina les columnes seleccionades"
+msgstr "Elimina les columnes seleccionades"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:316
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
@@ -9771,18 +9769,14 @@ msgid "Divide"
 msgstr "Dividix"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Drop Values"
+#, kde-format
 msgid "Drop Values"
-msgstr "Valors de l'omissió"
+msgstr "Valors d'omissió"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Mask Values"
+#, kde-format
 msgid "Mask Values"
-msgstr "Valors de l'emmascarament"
+msgstr "Valors d'emmascarament"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:361
 #, kde-format
@@ -9917,20 +9911,19 @@ msgid "Insert Multiple Rows Below"
 msgstr "Inserix múltiples files davall"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:458
-#, fuzzy, kde-format
-#| msgid "%1: remove selected rows(s)"
+#, kde-format
 msgid "Remo&ve Selected Row(s)"
-msgstr "%1: elimina les files seleccionades"
+msgstr "E&limina les files seleccionades"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
 msgid "Remove Rows With Missing Values"
-msgstr ""
+msgstr "Elimina les files amb els valors que falten"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:461
 #, kde-format
 msgid "Mask Rows With Missing Values"
-msgstr ""
+msgstr "Emmascara les files amb els valors que falten"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:462
 #, kde-format
@@ -22431,15 +22424,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "unknown cartesianPlot element '%1'"
-#~ msgstr "element de «diagramaCartesià» desconegut «%1»"
-
-#~ msgid "Remove Columns"
-#~ msgstr "Elimina columnes"
-
-#~ msgid "Drop"
-#~ msgstr "Omet"
-
-#~ msgid "Mask"
-#~ msgstr "Emmascara"

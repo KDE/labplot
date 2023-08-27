@@ -10107,9 +10107,7 @@ msgid "Divide"
 msgstr "&Dividir"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:358
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Drop Values"
+#, kde-format
 msgid "Drop Values"
 msgstr "Valores de caída"
 
