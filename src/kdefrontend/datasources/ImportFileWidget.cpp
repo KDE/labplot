@@ -688,7 +688,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		} else
 			// templates are handled in fileTypeChanged()
 
-		break;
+			break;
 	}
 	case AbstractFileFilter::FileType::Binary: {
 		DEBUG(Q_FUNC_INFO << ", Binary");
@@ -705,7 +705,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		} else
 			// templates are handled in fileTypeChanged()
 
-		filter->setStartRow(ui.sbStartRow->value());
+			filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 
 		break;
@@ -1518,7 +1518,7 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 /*!
  * called when the filter settings type (custom, automatic, from a template) was changed.
  * enables the options if the filter "custom" was chosen. Disables the options otherwise.
-*/
+ */
 void ImportFileWidget::filterChanged(int index) {
 	// filter settings are available for ASCII and Binary only, ignore for other file types
 	auto fileType = currentFileType();
