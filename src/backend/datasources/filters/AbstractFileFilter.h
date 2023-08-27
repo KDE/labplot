@@ -49,7 +49,7 @@ public:
 
 	virtual QStringList lastErrors();
 
-	// save/load in hte project XML
+	// save/load in the project XML
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*) = 0;
 

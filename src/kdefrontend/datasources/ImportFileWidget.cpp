@@ -282,7 +282,7 @@ void ImportFileWidget::loadSettings() {
 		}
 	}
 
-	fileTypeChanged(); // call it to load the filter templates for the current file type and to select the last user index below
+	fileTypeChanged(); // call it to load the filter templates for the current file type and to select the last used index in cbFilter below
 
 	if (m_fileName.isEmpty()) {
 		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
@@ -1207,13 +1207,15 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 			ui.cbFilter->addItems(names);
 		}
 
-		// if one of the custom and filter specific templates was selected, switch to "Automatic" when
-		// switching to a different file/filter type and keep the previous selection "Automatic" or "Custom" otherwise
-		if (lastUsedFilterIndex > 2)
-			lastUsedFilterIndex = 0;
+		if (lastUsedFilterIndex != -1) {
+			// if one of the custom and filter specific templates was selected, switch to "Automatic" when
+			// switching to a different file/filter type and keep the previous selection "Automatic" or "Custom" otherwise
+			if (lastUsedFilterIndex > 2)
+				lastUsedFilterIndex = 0;
 
-		ui.cbFilter->setCurrentIndex(lastUsedFilterIndex);
-		filterChanged(lastUsedFilterIndex);
+			ui.cbFilter->setCurrentIndex(lastUsedFilterIndex);
+			filterChanged(lastUsedFilterIndex);
+		}
 	}
 
 	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
