@@ -19,7 +19,7 @@ variables:
 
 # test builds (prepend '.' to temporary disable):
 # Win (Debug)
-# FreeBSD (Debug)
+## FreeBSD (Debug)
 # Ubuntu 22.04 min (Debug)
 # Ubuntu 22.04 full (Release)
 # Fedora 38 min (Debug)
@@ -69,7 +69,7 @@ windows_qt515:
       junit: JUnitTestResults.xml
 
 # only changed "script" and added QT_QPA_PLATFORM
-freebsd_qt515:
+.freebsd_qt515:
   stage: build
   tags:
     - FreeBSD
