@@ -19,13 +19,14 @@ variables:
 
 # test builds (prepend '.' to temporary disable):
 # Win (Debug)
-# FreeBSD (Debug)
+## FreeBSD (Debug)
 # Ubuntu 22.04 min (Debug)
 # Ubuntu 22.04 full (Release)
 # Fedora 38 min (Debug)
 # Fedora 38 full (Release)
-# OS 15.5 min (Release)
-# OS 15.5 full (Debug)
+## OS 15.5 min (Release)
+## OS 15.5 full (Debug)
+# Tumbleweed full (Debug)
 
 workflow:
   rules:
@@ -42,7 +43,7 @@ workflow:
 # only changed "script" and added QT_QPA_PLATFORM
 windows_qt515:
   stage: build
-  image: kdeorg/windows-msvc2019-qt515:latest
+  image: invent-registry.kde.org/sysadmin/ci-images/windows-msvc2019-qt515:latest
   tags:
     - Windows
   variables:
@@ -64,8 +65,6 @@ windows_qt515:
   artifacts:
     expire_in: 2 weeks
     when: on_success
-    #paths:
-    #  - _install
     reports:
       junit: JUnitTestResults.xml
 
@@ -134,7 +133,7 @@ fedora_38_min:
   stage: build
   image: fedora:38
   only:
-#    - merge_requests
+    - merge_requests
     - master
   before_script:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build xorg-x11-server-Xvfb mesa-dri-drivers wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel zlib-devel qt5-qtbase-private-devel
@@ -167,7 +166,7 @@ fedora_38_full:
 # see fedora_38_min
 #    - xvfb-run ctest -T Test --output-on-failure
 
-leap_15.5_min:
+.leap_15.5_min:
   stage: build
   image: opensuse/leap:15.5
   only:
@@ -187,7 +186,7 @@ leap_15.5_min:
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
 
-leap_15.5_full:
+.leap_15.5_full:
   stage: build
   image: opensuse/leap:15.5
   only:

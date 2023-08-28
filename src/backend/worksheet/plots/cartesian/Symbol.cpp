@@ -245,7 +245,6 @@ bool Symbol::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Symbol);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 	const auto& attribs = reader->attributes();
 	READ_INT_VALUE("symbolsStyle", style, Symbol::Style);

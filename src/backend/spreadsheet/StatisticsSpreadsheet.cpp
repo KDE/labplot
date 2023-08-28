@@ -288,11 +288,10 @@ bool StatisticsSpreadsheet::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	const KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	const auto& attribs = reader->attributes();
 	const auto& str = attribs.value(QStringLiteral("metrics")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("metrics")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("metrics"));
 	else
 		m_metrics = static_cast<StatisticsSpreadsheet::Metric>(str.toInt());
 
@@ -314,7 +313,7 @@ bool StatisticsSpreadsheet::load(XmlStreamReader* reader, bool preview) {
 				}
 				addChildFast(column);
 			} else { // unknown element
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())
 					return false;
 			}

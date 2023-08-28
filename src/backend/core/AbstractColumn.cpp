@@ -10,13 +10,14 @@
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
+#include "backend/core/Settings.h"
 #include "backend/core/abstractcolumncommands.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/XmlStreamReader.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <QDateTime>
 #include <QIcon>
 
@@ -151,7 +152,7 @@ QString AbstractColumn::timeUnitString(TimeUnit unit) {
 QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBrackets) {
 	QString s;
 
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	switch (d) {
 	case PlotDesignation::NoDesignation:
 		s = i18n("None");

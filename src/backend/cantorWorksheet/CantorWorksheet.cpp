@@ -12,6 +12,7 @@
 #include "CantorWorksheet.h"
 #include "VariableParser.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -113,7 +114,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 		}
 
 		// default settings
-		const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
+		const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
 
 		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
 		// and we need to go through the actions provided in cantor_part.
@@ -401,7 +402,6 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	bool rc = false;
 
@@ -421,13 +421,13 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 
 			m_backendName = attribs.value(QStringLiteral("backend_name")).toString().trimmed();
 			if (m_backendName.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("backend_name")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("backend_name"));
 		} else if (!preview && reader->name() == QLatin1String("worksheet")) {
 			attribs = reader->attributes();
 
 			QString str = attribs.value(QStringLiteral("content")).toString().trimmed();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("content")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("content"));
 
 			QByteArray content = QByteArray::fromBase64(str.toLatin1());
 			rc = init(&content);
@@ -452,7 +452,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 			column->setFixed(true);
 			addChild(column);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

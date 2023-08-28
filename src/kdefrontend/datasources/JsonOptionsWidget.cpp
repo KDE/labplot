@@ -10,6 +10,7 @@
 
 #include "JsonOptionsWidget.h"
 #include "ImportFileWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/JsonFilter.h"
 #include "backend/datasources/filters/QJsonModel.h"
@@ -18,7 +19,6 @@
 #include <KConfigGroup>
 #include <KFilterDev>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
 \class JsonOptionsWidget
@@ -73,7 +73,7 @@ void JsonOptionsWidget::clearModel() {
 }
 
 void JsonOptionsWidget::loadSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportJson"));
 
 	const QChar decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
@@ -86,7 +86,7 @@ void JsonOptionsWidget::loadSettings() const {
 }
 
 void JsonOptionsWidget::saveSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportJson"));
 
 	conf.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());

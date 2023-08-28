@@ -10,6 +10,7 @@
 */
 
 #include "WorksheetDock.h"
+#include "backend/core/Settings.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
@@ -92,7 +93,7 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 	connect(m_themeHandler, &ThemeHandler::loadThemeRequested, this, &WorksheetDock::loadTheme);
 	connect(m_themeHandler, &ThemeHandler::info, this, &WorksheetDock::info);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Worksheet"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &WorksheetDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &WorksheetDock::saveConfigAsTemplate);
@@ -173,7 +174,7 @@ void WorksheetDock::updateLocale() {
 }
 
 void WorksheetDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
@@ -400,7 +401,7 @@ void WorksheetDock::pageChanged(int i) {
 }
 
 /*!
- * \brief called when the width or the the highth of the page was changed manually
+ * \brief called when the width or the height of the page was changed manually
  */
 void WorksheetDock::sizeChanged() {
 	CONDITIONAL_RETURN_NO_LOCK;
@@ -620,14 +621,7 @@ void WorksheetDock::load() {
 }
 
 void WorksheetDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_worksheetList.size();
 	if (size > 1)
 		m_worksheet->beginMacro(i18n("%1 worksheets: template \"%2\" loaded", size, name));

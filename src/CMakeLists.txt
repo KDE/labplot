@@ -283,6 +283,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractPart.cpp
 	${BACKEND_DIR}/core/Workbook.cpp
 	${BACKEND_DIR}/core/AspectTreeModel.cpp
+	${BACKEND_DIR}/core/Settings.cpp
 	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
@@ -627,7 +628,8 @@ ENDIF ()
 
 IF (ENABLE_LIBORIGIN)
 	IF (LIBORIGIN_FOUND)
-		target_include_directories( labplot2lib PRIVATE ${LIBORIGIN_INCLUDE_DIR} )
+		# if system headers are missing: use the provided
+		target_include_directories( labplot2lib PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
 		target_link_libraries( labplot2lib ${LIBORIGIN_LIBRARIES} )
 	ELSE () # own version
 		target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )

@@ -114,19 +114,6 @@ void HDF5Filter::write(const QString& fileName, AbstractDataSource* dataSource) 
 }
 
 ///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void HDF5Filter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void HDF5Filter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-///////////////////////////////////////////////////////////////////////
 
 void HDF5Filter::setCurrentDataSetName(const QString& ds) {
 	DEBUG(Q_FUNC_INFO << ", name = " << STDSTRING(ds))
@@ -2165,7 +2152,5 @@ void HDF5Filter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool HDF5Filter::load(XmlStreamReader*) {
-	// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
-	// 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

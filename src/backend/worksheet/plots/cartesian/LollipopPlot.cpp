@@ -9,6 +9,7 @@
 
 #include "LollipopPlot.h"
 #include "LollipopPlotPrivate.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -717,6 +718,8 @@ void LollipopPlotPrivate::updateValues() {
 				m_valuesPoints << QPointF(pointsScene.at(i).x(), pointsScene.at(i).y() + offset);
 		}
 		break;
+	case Value::Center:
+		break;
 	}
 
 	QTransform trafo;
@@ -874,7 +877,7 @@ void LollipopPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIte
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if (KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true))
+	if (Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
@@ -984,7 +987,6 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool firstLineRead = false;
@@ -1015,7 +1017,7 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (reader->name() == QLatin1String("column")) {
@@ -1046,7 +1048,7 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("values")) {
 			d->value->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

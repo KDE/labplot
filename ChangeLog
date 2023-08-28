@@ -5,12 +5,17 @@ New features:
 		* New visualization types:
 			* Lollipop plot
 			* Q-Q plot
+		* New worksheet theme "Dracula"
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
 		* Extended search and replace
 		* Column statistics spreadsheet - child spreadsheet showing various statistical properties of the parent spreadsheet
+		* Remove/mask rows with missing values
+		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
 	* [notebook]
 		* Export to PDF
+	* [import]
+		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
@@ -19,6 +24,7 @@ Bug fixes:
 	* Set mousemode to selection when leaving the plot (Issue #614)
 	* Fix plot range field not being updated (Issue #603)
 	* Fix wrong axis tick type used (Issue #571)
+	* Fix wrong infoelement position when removing active curve (Issue #666)
 
 Internal:
 	* Switch from C++11 to C++17

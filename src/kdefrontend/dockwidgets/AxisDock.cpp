@@ -212,7 +212,7 @@ AxisDock::AxisDock(QWidget* parent)
 	auto* hlayout = new QHBoxLayout(frame);
 	hlayout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Axis);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Axis"));
 	hlayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &AxisDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &AxisDock::saveConfigAsTemplate);
@@ -979,8 +979,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 	ui.lLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
 	ui.cbLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
-	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels);
-	cbLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels);
+	const auto customValues = m_axis->labelsTextType() == Axis::LabelsTextType::CustomValues;
+	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels && customValues);
+	cbLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels && customValues);
 
 	switch (type) {
 	case Axis::TicksType::TotalNumber: {
@@ -1987,14 +1988,7 @@ void AxisDock::updateAxisColor() {
 }
 
 void AxisDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_axesList.size();
 	if (size > 1)
 		m_axis->beginMacro(i18n("%1 axes: template \"%2\" loaded", size, name));

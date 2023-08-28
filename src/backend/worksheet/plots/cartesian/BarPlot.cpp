@@ -10,6 +10,7 @@
 #include "BarPlot.h"
 #include "BarPlotPrivate.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -387,6 +388,7 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 	value = new Value(QString());
 	q->addChild(value);
 	value->setHidden(true);
+	value->setcenterPositionAvailable(true);
 	if (!q->isLoading())
 		value->init(group);
 
@@ -709,10 +711,13 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			lines << QLineF(x + width, offset, x, offset);
 			lines << QLineF(x, offset, x, value + offset);
 
-			if (value > 0)
+			if (value > 0) {
 				m_stackedBarPositiveOffsets[valueIndex] += value;
-			else
+				m_valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
+			} else {
 				m_stackedBarNegativeOffsets[valueIndex] += value;
+				m_valuesPointsLogical << QPointF(x + width / 2, m_stackedBarNegativeOffsets.at(valueIndex));
+			}
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -749,6 +754,8 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			lines << QLineF(x, offset, x, value + offset);
 
 			m_stackedBarPositiveOffsets[valueIndex] += value;
+
+			m_valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -829,11 +836,13 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			lines << QLineF(offset, y + width, offset, y);
 			lines << QLineF(offset, y, value + offset, y);
 
-			if (value > 0)
+			if (value > 0) {
 				m_stackedBarPositiveOffsets[valueIndex] += value;
-			else
+				m_valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
+			} else {
 				m_stackedBarNegativeOffsets[valueIndex] += value;
-
+				m_valuesPointsLogical << QPointF(m_stackedBarNegativeOffsets.at(valueIndex), y + width / 2);
+			}
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
@@ -868,6 +877,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			lines << QLineF(offset, y, value + offset, y);
 
 			m_stackedBarPositiveOffsets[valueIndex] += value;
+			m_valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -955,10 +965,17 @@ void BarPlotPrivate::updateValues() {
 				continue;
 
 			auto& point = m_valuesPointsLogical.at(i);
-			if (orientation == BarPlot::Orientation::Vertical)
-				m_valuesStrings << prefix + QString::number(point.y()) + suffix;
-			else
-				m_valuesStrings << prefix + QString::number(point.x()) + suffix;
+			if (orientation == BarPlot::Orientation::Vertical) {
+				if (type == BarPlot::Type::Stacked_100_Percent)
+					m_valuesStrings << prefix + QString::number(point.y(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
+				else
+					m_valuesStrings << prefix + QString::number(point.y()) + suffix;
+			} else {
+				if (type == BarPlot::Type::Stacked_100_Percent)
+					m_valuesStrings << prefix + QString::number(point.x(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
+				else
+					m_valuesStrings << prefix + QString::number(point.x()) + suffix;
+			}
 		}
 	} else if (value->type() == Value::CustomColumn) {
 		const auto* valuesColumn = value->column();
@@ -975,7 +992,10 @@ void BarPlotPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + suffix;
+				if (type == BarPlot::Type::Stacked_100_Percent)
+					m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), 1) + QString::fromStdString("%");
+				else
+					m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
@@ -999,18 +1019,39 @@ void BarPlotPrivate::updateValues() {
 	qreal w;
 	const qreal h = fm.ascent();
 	int offset = value->distance();
-
 	switch (value->position()) {
 	case Value::Above:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
 			const auto& point = pointsScene.at(i);
+
 			if (orientation == BarPlot::Orientation::Vertical)
 				m_valuesPoints << QPointF(point.x() - w / 2, point.y() - offset);
 			else
 				m_valuesPoints << QPointF(point.x(), point.y() - offset);
 		}
 		break;
+	case Value::Center: {
+		QVector<qreal> listBarWidth;
+		for (int i = 0, j = 0; i < m_barLines.size(); i++) {
+			auto& columnBarLines = m_barLines.at(i);
+
+			for (int i = 0; i < columnBarLines.size(); i++, j++) { // loop over the different data columns
+				if (visiblePoints.at(j) == true)
+					listBarWidth.append(columnBarLines.at(i).at(1).length());
+			}
+		}
+		for (int i = 0; i < m_valuesStrings.size(); i++) {
+			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
+			if (orientation == BarPlot::Orientation::Vertical)
+				m_valuesPoints << QPointF(point.x() - w / 2,
+										  point.y() + listBarWidth.at(i) / 2 + offset - Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
+			else
+				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - w - offset, point.y() + h / 2);
+		}
+		break;
+	}
 	case Value::Under:
 		for (int i = 0; i < m_valuesStrings.size(); i++) {
 			w = fm.boundingRect(m_valuesStrings.at(i)).width();
@@ -1177,7 +1218,7 @@ void BarPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if (KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true))
+	if (Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
@@ -1289,7 +1330,6 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool firstBackgroundRead = false;
@@ -1322,7 +1362,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (reader->name() == QLatin1String("column")) {
@@ -1353,7 +1393,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("values")) {
 			d->value->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

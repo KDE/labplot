@@ -11,6 +11,7 @@
 #include "FunctionValuesDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/lib/macros.h"
@@ -26,7 +27,7 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -74,7 +75,6 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::accepted, this, &FunctionValuesDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FunctionValuesDialog::reject);
 	m_okButton->setText(i18n("&Generate"));
-	m_okButton->setToolTip(i18n("Generate function values"));
 
 	connect(ui.bAddVariable, &QPushButton::pressed, this, &FunctionValuesDialog::addVariable);
 	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &FunctionValuesDialog::checkValues);
@@ -84,7 +84,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FunctionValuesDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -93,7 +93,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 }
 
 FunctionValuesDialog::~FunctionValuesDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FunctionValuesDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
@@ -103,7 +103,6 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 
 	// formula expression
 	ui.teEquation->setPlainText(firstColumn->formula());
-
 	// variables
 	const auto& formulaData = firstColumn->formulaData();
 	if (formulaData.isEmpty()) { // no formula was used for this column -> add the first variable "x"
@@ -163,35 +162,37 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 	} else if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
 		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
+	} else if (le->text().contains(QRegExp(QLatin1String("^[0-9]|[^a-zA-Z0-9_]")))) {
+		SET_WARNING_STYLE(le)
+		le->setToolTip(i18n("Provided variable name starts with a digit or contains special character."));
 	} else {
 		le->setStyleSheet(QString());
 		le->setToolTip(QString());
 		isValid = true;
 	}
-
 	return isValid;
 }
 
 void FunctionValuesDialog::checkValues() {
+	// initialize valid button with true value
+	bool isValid = true;
 	if (!ui.teEquation->isValid()) { // check whether the formula syntax is correct
 		DEBUG(Q_FUNC_INFO << ", syntax incorrect")
-		m_okButton->setEnabled(false);
-		return;
+		isValid = false;
 	}
 
 	// check whether for the variables where a name was provided also a column was selected
-	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
-		auto varName = m_variableLineEdits.at(i)->text().simplified();
+	for (int i = 0; i < m_variableDataColumns.size() && isValid == true; ++i) {
+		auto varName = m_variableLineEdits.at(i)->text();
 		DEBUG(Q_FUNC_INFO << ", variable " << i + 1)
-		// ignore empty or not used variables
-		if (varName.isEmpty() || !ui.teEquation->toPlainText().contains(varName))
+		// ignore empty
+		if (varName.isEmpty())
 			continue;
-
 		auto* cb = m_variableDataColumns.at(i);
 		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
-			m_okButton->setEnabled(false);
-			return;
+			isValid = false;
+			break;
 		}
 
 		// TODO: why is the column check disabled?
@@ -204,8 +205,11 @@ void FunctionValuesDialog::checkValues() {
 				}
 		*/
 	}
-
-	m_okButton->setEnabled(true);
+	if (isValid)
+		m_okButton->setToolTip(i18n("Generate function values"));
+	else
+		m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
+	m_okButton->setEnabled(isValid);
 }
 
 void FunctionValuesDialog::showConstants() {
@@ -249,15 +253,16 @@ void FunctionValuesDialog::insertConstant(const QString& constantsName) const {
 void FunctionValuesDialog::addVariable() {
 	auto* layout{ui.gridLayoutVariables};
 	int row{m_variableLineEdits.size()};
-
 	// text field for the variable name
-	auto* le{new QLineEdit()};
+	auto* le{new QLineEdit};
+	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
+	QRegExpValidator* validator = new QRegExpValidator(QRegExp(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
+	le->setValidator(validator);
 	// hardcoding size is bad. 40 is enough for three letters
 	le->setMaximumWidth(40);
 	connect(le, &QLineEdit::textChanged, this, &FunctionValuesDialog::variableNameChanged);
 	layout->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;
-
 	auto* l{new QLabel(QStringLiteral("="))};
 	layout->addWidget(l, row, 1, 1, 1);
 	m_variableLabels << l;
@@ -390,7 +395,6 @@ void FunctionValuesDialog::generate() {
 		col->setFormula(expression, variableNames, variableColumns, autoUpdate);
 		col->updateFormula();
 	}
-
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }

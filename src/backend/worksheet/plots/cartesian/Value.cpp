@@ -85,6 +85,7 @@ QString& Value::columnPath() const {
 	return d->columnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Value, Value::Position, position, position)
+BASIC_SHARED_D_READER_IMPL(Value, bool, centerPositionAvailable, centerPositionAvailable)
 BASIC_SHARED_D_READER_IMPL(Value, double, distance, distance)
 BASIC_SHARED_D_READER_IMPL(Value, double, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(Value, double, opacity, opacity)
@@ -104,6 +105,10 @@ void Value::setType(Value::Type type) {
 	Q_D(Value);
 	if (type != d->type)
 		exec(new ValueSetTypeCmd(d, type, ki18n("%1: set values type")));
+}
+void Value::setcenterPositionAvailable(bool available) {
+	Q_D(Value);
+	d->centerPositionAvailable = available;
 }
 
 STD_SETTER_CMD_IMPL_F_S(Value, SetColumn, const AbstractColumn*, column, updateValue)
@@ -252,7 +257,6 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Value);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 
 	auto attribs = reader->attributes();
@@ -266,7 +270,7 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(QStringLiteral("numericFormat")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("numericFormat")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("numericFormat"));
 	else
 		d->numericFormat = *(str.toLatin1().data());
 

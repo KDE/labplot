@@ -30,7 +30,6 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <cmath>
 

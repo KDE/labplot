@@ -13,6 +13,7 @@
 #include "HistogramDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
@@ -78,7 +79,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	layout->insertWidget(0, backgroundWidget);
 
 	// Tab "Error Bars"
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	if (group.readEntry("GUMTerms", false)) {
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
 		ui.lErrorBar->setText(i18n("X Uncertainty"));
@@ -146,7 +147,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Histogram);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Histogram"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &HistogramDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &HistogramDock::saveConfigAsTemplate);
@@ -191,7 +192,7 @@ void HistogramDock::init() {
 	ui.cbNormalization->addItem(i18n("Probability Density"));
 
 	// Error-bars
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	if (group.readEntry("GUMTerms", false)) {
 		ui.cbErrorType->addItem(i18n("No Uncertainties"));
 		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
@@ -759,14 +760,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 }
 
 void HistogramDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_curvesList.size();
 	if (size > 1)
 		m_curve->beginMacro(i18n("%1 histograms: template \"%2\" loaded", size, name));

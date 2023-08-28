@@ -11,6 +11,7 @@
 #ifndef BARPLOTPRIVATE_H
 #define BARPLOTPRIVATE_H
 
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <QPen>
 

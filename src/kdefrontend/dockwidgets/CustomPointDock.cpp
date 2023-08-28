@@ -75,7 +75,7 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 	auto* hlayout = new QHBoxLayout(frame);
 	hlayout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CustomPoint);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("CustomPoint"));
 	hlayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CustomPointDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CustomPointDock::saveConfigAsTemplate);
@@ -400,14 +400,7 @@ void CustomPointDock::load() {
 }
 
 void CustomPointDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_points.size();
 	if (size > 1)
 		m_point->beginMacro(i18n("%1 custom points: template \"%2\" loaded", size, name));

@@ -11,6 +11,7 @@
 
 #include "CartesianPlotDock.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
@@ -214,7 +215,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(m_themeHandler, &ThemeHandler::info, this, &CartesianPlotDock::info);
 
 	// templates for plot properties
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlot);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("CartesianPlot"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotDock::saveConfigAsTemplate);
@@ -542,7 +543,7 @@ void CartesianPlotDock::updateLocale() {
 }
 
 void CartesianPlotDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
@@ -1805,14 +1806,7 @@ void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
 //******************** SETTINGS *******************************
 //*************************************************************
 void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_plotList.size();
 	if (size > 1)
 		m_plot->beginMacro(i18n("%1 cartesian plots: template \"%2\" loaded", size, name));

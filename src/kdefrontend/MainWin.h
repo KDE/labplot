@@ -18,6 +18,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <KXmlGuiWindow>
+#include <QStringLiteral>
 #include <QTimer>
 
 class AbstractAspect;

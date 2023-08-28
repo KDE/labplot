@@ -349,7 +349,7 @@ void CDockAreaTabBar::onCloseOtherTabsRequested()
 				CDockWidget::DockWidgetDeleteOnClose) ? 1 : 0;
 			closeTab(i);
 
-			// If the the dock widget blocks closing, i.e. if the flag
+			// If the dock widget blocks closing, i.e. if the flag
 			// CustomCloseHandling is set, and the dock widget is still open,
 			// then we do not need to correct the index
 			if (Tab->dockWidget()->isClosed())

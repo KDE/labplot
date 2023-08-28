@@ -14,6 +14,7 @@
 #include "ui_binaryoptionswidget.h"
 
 class BinaryFilter;
+class KConfig;
 
 class BinaryOptionsWidget : public QWidget {
 	Q_OBJECT
@@ -22,7 +23,11 @@ public:
 	explicit BinaryOptionsWidget(QWidget*);
 	void applyFilterSettings(BinaryFilter*) const;
 	void loadSettings() const;
-	void saveSettings();
+	void saveSettings() const;
+
+	// save/load template
+	void loadConfigFromTemplate(KConfig&) const;
+	void saveConfigAsTemplate(KConfig&) const;
 
 private:
 	Ui::BinaryOptionsWidget ui;

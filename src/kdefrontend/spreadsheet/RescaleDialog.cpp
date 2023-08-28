@@ -9,6 +9,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "RescaleDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 
@@ -16,7 +17,6 @@
 #include <QPushButton>
 #include <QWindow>
 
-#include <KSharedConfig>
 #include <KWindowConfig>
 
 /*!
@@ -47,7 +47,7 @@ RescaleDialog::RescaleDialog(QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("RescaleDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("RescaleDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -65,7 +65,7 @@ RescaleDialog::RescaleDialog(QWidget* parent)
 
 RescaleDialog::~RescaleDialog() {
 	// save the current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("RescaleDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("RescaleDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	// general settings
