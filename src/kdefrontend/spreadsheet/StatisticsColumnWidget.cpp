@@ -373,7 +373,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	for (int i = 0; i < count; ++i) {
 		double x = min + i * step;
 		xData[i] = x;
-		yData[i] = nsl_kde(data.data(), x, h, n);
+		yData[i] = nsl_kde(data.data(), x, nsl_kernel_gauss, h, n);
 	}
 
 	auto* xColumn = new Column(QStringLiteral("x"));

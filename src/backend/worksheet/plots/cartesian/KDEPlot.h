@@ -56,6 +56,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, bandwidth, Bandwidth)
 
 	XYCurve* estimationCurve() const;
+	XYCurve* rugCurve() const;
 	Histogram* histogram() const;
 
 	void retransform() override;

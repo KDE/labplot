@@ -11,14 +11,12 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
-//#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
-//#include <QFrame>
 
 #include <KConfig>
 #include <KLocalizedString>
@@ -79,6 +77,12 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &KDEPlotDock::visibilityChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KDEPlotDock::plotRangeChanged);
+
+	// Margin Plots
+	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &KDEPlotDock::rugEnabledChanged);
+	connect(ui.sbRugLength, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &KDEPlotDock::rugLengthChanged);
+	connect(ui.sbRugWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &KDEPlotDock::rugWidthChanged);
+	connect(ui.sbRugOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &KDEPlotDock::rugOffsetChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -195,10 +199,17 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	connect(m_plot, &KDEPlot::kernelTypeChanged, this, &KDEPlotDock::plotKernelTypeChanged);
 	connect(m_plot, &KDEPlot::bandwidthTypeChanged, this, &KDEPlotDock::plotBandwidthTypeChanged);
 	connect(m_plot, &KDEPlot::bandwidthChanged, this, &KDEPlotDock::plotBandwidthChanged);
+
+	//"Margin Plots"-Tab
+	auto* curve = m_plot->rugCurve();
+	connect(curve, &XYCurve::rugEnabledChanged, this, &KDEPlotDock::plotRugEnabledChanged);
+	connect(curve, &XYCurve::rugLengthChanged, this, &KDEPlotDock::plotRugLengthChanged);
+	connect(curve, &XYCurve::rugWidthChanged, this, &KDEPlotDock::plotRugWidthChanged);
+	connect(curve, &XYCurve::rugOffsetChanged, this, &KDEPlotDock::plotRugOffsetChanged);
 }
 
 void KDEPlotDock::retranslateUi() {
-	//TODO unify with nsl_smooth_weight_type_name in nsl_smooth.c.
+	// TODO unify with nsl_smooth_weight_type_name in nsl_smooth.c.
 	ui.cbKernelType->clear();
 	ui.cbKernelType->addItem(i18n("Gauss"), static_cast<int>(nsl_kernel_gauss));
 	ui.cbKernelType->addItem(i18n("Uniform (Rectangular)"), static_cast<int>(nsl_kernel_uniform));
@@ -239,7 +250,7 @@ void KDEPlotDock::updatePlotRanges() {
 }
 
 //*************************************************************
-//**** SLOTs for changes triggered in KDEPlotDock *****
+//********* SLOTs for changes triggered in KDEPlotDock ********
 //*************************************************************
 
 // "General"-tab
@@ -270,10 +281,17 @@ void KDEPlotDock::kernelTypeChanged(int index) {
 void KDEPlotDock::bandwidthTypeChanged(int index) {
 	const nsl_kde_bandwidth_type type = static_cast<nsl_kde_bandwidth_type>(ui.cbBandwidthType->itemData(index).toInt());
 
+	bool custom = (type == nsl_kde_bandwidth_custom);
+	ui.lBandwidth->setEnabled(custom);
+	ui.sbBandwidth->setEnabled(custom);
+
 	CONDITIONAL_LOCK_RETURN
 
 	for (auto* plot : m_plots)
 		plot->setBandwidthType(type);
+
+	if (custom)
+		ui.sbBandwidth->setValue(m_plot->bandwidth());
 }
 
 void KDEPlotDock::bandwidthChanged(double value) {
@@ -289,6 +307,38 @@ void KDEPlotDock::visibilityChanged(bool state) {
 
 	for (auto* plot : m_plots)
 		plot->setVisible(state);
+}
+
+//"Margin Plots"-Tab
+void KDEPlotDock::rugEnabledChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* plot : m_plots)
+		plot->rugCurve()->setRugEnabled(state);
+}
+
+void KDEPlotDock::rugLengthChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* plot : m_plots)
+		plot->rugCurve()->setRugLength(length);
+}
+
+void KDEPlotDock::rugWidthChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* plot : m_plots)
+		plot->rugCurve()->setRugWidth(width);
+}
+
+void KDEPlotDock::rugOffsetChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* plot : m_plots)
+		plot->rugCurve()->setRugOffset(offset);
 }
 
 //*************************************************************
@@ -322,10 +372,29 @@ void KDEPlotDock::plotVisibilityChanged(bool on) {
 	ui.chkVisible->setChecked(on);
 }
 
+//"Margin Plot"-Tab
+void KDEPlotDock::plotRugEnabledChanged(bool status) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chkRugEnabled->setChecked(status);
+}
+void KDEPlotDock::plotRugLengthChanged(double value) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+}
+void KDEPlotDock::plotRugWidthChanged(double value) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+}
+void KDEPlotDock::plotRugOffsetChanged(double value) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+}
+
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
 void KDEPlotDock::load() {
+	// general
 	cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
 
 	int index = ui.cbKernelType->findData(static_cast<int>(m_plot->kernelType()));
@@ -335,6 +404,13 @@ void KDEPlotDock::load() {
 	ui.cbBandwidthType->setCurrentIndex(index);
 
 	ui.sbBandwidth->setValue(m_plot->bandwidth());
+
+	// Margin plots
+	const auto* curve = m_plot->rugCurve();
+	ui.chkRugEnabled->setChecked(curve->rugEnabled());
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(curve->rugWidth(), Worksheet::Unit::Point));
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(curve->rugLength(), Worksheet::Unit::Point));
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(curve->rugOffset(), Worksheet::Unit::Point));
 }
 
 void KDEPlotDock::loadConfig(KConfig& config) {

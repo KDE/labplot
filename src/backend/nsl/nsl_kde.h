@@ -21,16 +21,14 @@
 #endif
 __BEGIN_DECLS
 
+#include "nsl_sf_kernel.h"
 #include <stdlib.h>
 
 #define NSL_KDE_BANDWITH_TYPE_COUNT 2
-typedef enum {
-	nsl_kde_bandwidth_gaussian,
-	nsl_kde_bandwidth_custom
-} nsl_kde_bandwidth_type;
+typedef enum { nsl_kde_bandwidth_gaussian, nsl_kde_bandwidth_custom} nsl_kde_bandwidth_type;
 
 /* calculates the density at point x for the sample data with the bandwith h */
-double nsl_kde(const double data[], double x, double h, size_t n);
+double nsl_kde(const double data[], double x, nsl_kernel_type kernel, double h, size_t n);
 
 /* calculates the "normal distribution approximation" bandwidth */
 double nsl_kde_normal_dist_bandwidth(double* data, int n);

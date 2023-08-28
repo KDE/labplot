@@ -50,6 +50,7 @@ public:
 	QString yEstimationColumnPath;
 
 	Histogram* histogram{nullptr};
+	XYCurve* rugCurve{nullptr};
 
 	KDEPlot* const q;
 

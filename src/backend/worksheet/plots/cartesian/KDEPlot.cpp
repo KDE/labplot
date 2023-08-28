@@ -24,8 +24,8 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-#include "backend/nsl/nsl_sf_kernel.h"
 #include "backend/nsl/nsl_kde.h"
+#include "backend/nsl/nsl_sf_kernel.h"
 
 extern "C" {
 #include <gsl/gsl_cdf.h>
@@ -92,12 +92,22 @@ void KDEPlot::init() {
 	// histogram
 	d->histogram = new Histogram(QString());
 	d->histogram->setNormalization(Histogram::ProbabilityDensity);
+
+	// xy-curve for the rug plot
+	d->rugCurve = new XYCurve(QString());
+	d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	d->rugCurve->setHidden(true);
+	d->rugCurve->graphicsItem()->setParentItem(d);
+	d->rugCurve->line()->setStyle(Qt::NoPen);
+	d->rugCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
+	d->rugCurve->setRugOrientation(WorksheetElement::Orientation::Horizontal);
 }
 
 void KDEPlot::finalizeAdd() {
 	Q_D(KDEPlot);
 	WorksheetElement::finalizeAdd();
 	addChild(d->estimationCurve);
+	addChild(d->rugCurve);
 	// addChild(d->histogram);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
@@ -105,6 +115,7 @@ void KDEPlot::finalizeAdd() {
 	connect(this, &AbstractAspect::aspectDescriptionChanged, [this] {
 		Q_D(KDEPlot);
 		d->estimationCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+		d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->histogram->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	});
 }
@@ -159,6 +170,7 @@ void KDEPlot::setVisible(bool on) {
 	Q_D(KDEPlot);
 	beginMacro(on ? i18n("%1: set visible", name()) : i18n("%1: set invisible", name()));
 	d->estimationCurve->setVisible(on);
+	d->rugCurve->setVisible(on);
 	d->histogram->setVisible(on);
 	WorksheetElement::setVisible(on);
 	endMacro();
@@ -177,6 +189,11 @@ BASIC_SHARED_D_READER_IMPL(KDEPlot, double, bandwidth, bandwidth)
 XYCurve* KDEPlot::estimationCurve() const {
 	Q_D(const KDEPlot);
 	return d->estimationCurve;
+}
+
+XYCurve* KDEPlot::rugCurve() const {
+	Q_D(const KDEPlot);
+	return d->rugCurve;
 }
 
 Histogram* KDEPlot::histogram() const {
@@ -318,6 +335,7 @@ void KDEPlotPrivate::retransform() {
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	estimationCurve->retransform();
+	rugCurve->retransform();
 	// histogram->retransform();
 	recalcShapeAndBoundingRect();
 }
@@ -329,6 +347,8 @@ void KDEPlotPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	histogram->setDataColumn(dataColumn);
+	rugCurve->setXColumn(dataColumn);
+	rugCurve->setYColumn(dataColumn);
 
 	if (!dataColumn) {
 		xEstimationColumn->clear();
@@ -365,7 +385,7 @@ void KDEPlotPrivate::recalc() {
 	for (int i = 0; i < count; ++i) {
 		double x = min + i * step;
 		xData[i] = x;
-		yData[i] = nsl_kde(data.data(), x, h, n);
+		yData[i] = nsl_kde(data.data(), x, kernelType, h, n);
 	}
 
 	xEstimationColumn->setValues(xData);
@@ -426,6 +446,7 @@ void KDEPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	curveShape = QPainterPath();
 	curveShape.addPath(estimationCurve->graphicsItem()->shape());
+	curveShape.addPath(rugCurve->graphicsItem()->shape());
 	// curveShape.addPath(histogram->graphicsItem()->shape());
 
 	boundingRectangle = curveShape.boundingRect();
@@ -477,6 +498,7 @@ void KDEPlot::save(QXmlStreamWriter* writer) const {
 	// save the internal curves
 	d->estimationCurve->save(writer);
 	d->histogram->save(writer);
+	d->rugCurve->save(writer);
 
 	writer->writeEndElement(); // close "KDEPlot" section
 }
@@ -491,6 +513,8 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
+	bool estimationCurveInitialized = false;
+	bool rugCurveInitialized = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -526,8 +550,19 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 			if (!rc)
 				return false;
 		} else if (reader->name() == QLatin1String("xyCurve")) {
-			if (!d->estimationCurve->load(reader, preview))
-				return false;
+			if (!estimationCurveInitialized) {
+				if (!d->estimationCurve->load(reader, preview))
+					return false;
+				estimationCurveInitialized = true;
+			}
+
+			// TODO
+			// if (!rugCurveInitialized) {
+			// 	if (!d->rugCurve->load(reader, preview))
+			// 		return false;
+			// 	rugCurveInitialized = true;
+			// }
+
 		} else if (reader->name() == QLatin1String("histogram")) {
 			if (!d->histogram->load(reader, preview))
 				return false;
@@ -557,6 +592,7 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 	d->estimationCurve->line()->loadThemeConfig(group, themeColor);
 	d->estimationCurve->background()->loadThemeConfig(group, themeColor);
 	// d->histogram->loadThemeConfig(group);
+	d->rugCurve->symbol()->loadThemeConfig(group, themeColor);
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

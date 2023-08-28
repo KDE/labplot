@@ -7,7 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "nsl_kde.h"
 
 #include <gsl/gsl_math.h>
@@ -15,14 +14,44 @@
 #include <gsl/gsl_sort.h>
 #include <gsl/gsl_statistics.h>
 
-double nsl_kde_gauss_kernel(double x) {
-	return exp(-(gsl_pow_2(x) / 2)) / (M_SQRT2 * sqrt(M_PI));
-}
-
-double nsl_kde(const double* data, double x, double h, size_t n) {
+double nsl_kde(const double* data, double x, nsl_kernel_type kernel, double h, size_t n) {
 	double density = 0;
-	for (size_t i = 0; i < n; i++)
-		density += gsl_ran_gaussian_pdf((data[i] - x) / h, 1.) / (n * h);
+	switch (kernel) {
+	case nsl_kernel_uniform:
+		for (size_t i = 0; i < n; i++)
+			density += nsl_sf_kernel_uniform((data[i] - x) / h) / (n * h);
+		break;
+	case nsl_kernel_triangular:
+		for (size_t i = 0; i < n; i++)
+			density += nsl_sf_kernel_triangular((data[i] - x) / h) / (n * h);
+		break;
+	case nsl_kernel_binomial:
+		// TODO
+		break;
+	case nsl_kernel_parabolic:
+		for (size_t i = 0; i < n; i++)
+			density += nsl_sf_kernel_parabolic((data[i] - x) / h) / (n * h);
+		break;
+	case nsl_kernel_quartic:
+		for (size_t i = 0; i < n; i++)
+			density += nsl_sf_kernel_quartic((data[i] - x) / h) / (n * h);
+		break;
+	case nsl_kernel_triweight:
+		for (size_t i = 0; i < n; i++)
+			density += nsl_sf_kernel_triweight((data[i] - x) / h) / (n * h);
+		break;
+	case nsl_kernel_tricube:
+		for (size_t i = 0; i < n; i++)
+			density += nsl_sf_kernel_tricube((data[i] - x) / h) / (n * h);
+		break;
+	case nsl_kernel_cosine:
+		for (size_t i = 0; i < n; i++)
+			density += nsl_sf_kernel_cosine((data[i] - x) / h) / (n * h);
+		break;
+	case nsl_kernel_gauss:
+		for (size_t i = 0; i < n; i++)
+			density += nsl_sf_kernel_gaussian((data[i] - x) / h) / (n * h);
+	}
 
 	return density;
 }

@@ -65,6 +65,12 @@ private Q_SLOTS:
 	void bandwidthTypeChanged(int);
 	void bandwidthChanged(double);
 
+	//"Margin Plots"-Tab
+	void rugEnabledChanged(bool);
+	void rugLengthChanged(double);
+	void rugWidthChanged(double);
+	void rugOffsetChanged(double);
+
 	// SLOTs for changes triggered in KDEPlot
 	// General-Tab
 	void plotDataColumnChanged(const AbstractColumn*);
@@ -72,6 +78,12 @@ private Q_SLOTS:
 	void plotKernelTypeChanged(nsl_kernel_type);
 	void plotBandwidthTypeChanged(nsl_kde_bandwidth_type);
 	void plotBandwidthChanged(double);
+
+	//"Margin Plots"-Tab
+	void plotRugEnabledChanged(bool);
+	void plotRugLengthChanged(double);
+	void plotRugWidthChanged(double);
+	void plotRugOffsetChanged(double);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);
