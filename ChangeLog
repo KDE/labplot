@@ -14,6 +14,8 @@ New features:
 		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
 	* [notebook]
 		* Export to PDF
+	* [import]
+		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)

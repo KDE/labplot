@@ -235,14 +235,6 @@ void ExcelFilter::setCurrentSheet(const QString& sheet) {
 	d->currentSheet = sheet;
 }
 
-void ExcelFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName)
-}
-
-void ExcelFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName)
-}
-
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################

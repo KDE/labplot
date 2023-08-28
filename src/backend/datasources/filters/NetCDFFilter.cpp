@@ -158,19 +158,6 @@ void NetCDFFilter::write(const QString& fileName, AbstractDataSource* dataSource
 }
 
 ///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void NetCDFFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void NetCDFFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-///////////////////////////////////////////////////////////////////////
 
 void NetCDFFilter::setCurrentVarName(const QString& ds) {
 	d->currentVarName = ds;

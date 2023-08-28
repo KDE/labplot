@@ -125,18 +125,6 @@ void AsciiFilter::write(const QString& fileName, AbstractDataSource* dataSource)
 }
 
 /*!
-  loads the predefined filter settings for \c filterName
-*/
-void AsciiFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void AsciiFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-/*!
   returns the list with the names of all saved
   (system wide or user defined) filter settings.
 */

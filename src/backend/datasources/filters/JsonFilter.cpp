@@ -74,19 +74,6 @@ void JsonFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 	d->write(fileName, dataSource);
 }
 
-///////////////////////////////////////////////////////////////////////
-/*!
-loads the predefined filter settings for \c filterName
-*/
-void JsonFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-saves the current settings as a new filter with the name \c filterName
-*/
-void JsonFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
 /*!
 returns the list of all predefined data types.
 */

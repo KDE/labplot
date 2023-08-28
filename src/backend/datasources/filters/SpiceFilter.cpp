@@ -67,18 +67,6 @@ void SpiceFilter::write(const QString& fileName, AbstractDataSource* dataSource)
 	d->write(fileName, dataSource);
 }
 
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void SpiceFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void SpiceFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
 void SpiceFilter::setStartRow(const int r) {
 	d->startRow = r;
 }

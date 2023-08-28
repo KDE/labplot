@@ -35,9 +35,6 @@ public:
 											int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
 
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
-
 	void setCurrentDataSetName(const QString&);
 	const QString currentDataSetName() const;
 

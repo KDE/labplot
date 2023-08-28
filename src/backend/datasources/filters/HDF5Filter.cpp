@@ -114,19 +114,6 @@ void HDF5Filter::write(const QString& fileName, AbstractDataSource* dataSource) 
 }
 
 ///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void HDF5Filter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void HDF5Filter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-///////////////////////////////////////////////////////////////////////
 
 void HDF5Filter::setCurrentDataSetName(const QString& ds) {
 	DEBUG(Q_FUNC_INFO << ", name = " << STDSTRING(ds))

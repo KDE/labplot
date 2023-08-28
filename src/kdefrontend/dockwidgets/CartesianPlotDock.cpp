@@ -215,7 +215,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(m_themeHandler, &ThemeHandler::info, this, &CartesianPlotDock::info);
 
 	// templates for plot properties
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlot);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("CartesianPlot"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotDock::saveConfigAsTemplate);
@@ -1806,14 +1806,7 @@ void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
 //******************** SETTINGS *******************************
 //*************************************************************
 void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_plotList.size();
 	if (size > 1)
 		m_plot->beginMacro(i18n("%1 cartesian plots: template \"%2\" loaded", size, name));

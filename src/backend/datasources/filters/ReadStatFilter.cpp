@@ -52,19 +52,6 @@ void ReadStatFilter::write(const QString& fileName, AbstractDataSource* dataSour
 	// TODO: not implemented yet
 }
 
-///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void ReadStatFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void ReadStatFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
 void ReadStatFilter::setStartRow(const int r) {
 	d->m_startRow = r;
 }
