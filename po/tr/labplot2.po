@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-10 02:40+0000\n"
-"PO-Revision-Date: 2023-08-02 01:11+0300\n"
+"PO-Revision-Date: 2023-08-26 12:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
 "Language: tr\n"
@@ -14684,7 +14684,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:526
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
-msgstr ""
+msgstr "Bir resimden veri almak için bir veri çıkarıcısı oluşturur"
 
 #: src/kdefrontend/MainWin.cpp:532
 #, kde-format
