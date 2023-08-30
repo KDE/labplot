@@ -39,7 +39,7 @@ public:
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
 	nsl_kernel_type kernelType{nsl_kernel_gauss};
-	nsl_kde_bandwidth_type bandwidthType{nsl_kde_bandwidth_gaussian};
+	nsl_kde_bandwidth_type bandwidthType{nsl_kde_bandwidth_silverman};
 	double bandwidth{0.1};
 
 	// KDE curve

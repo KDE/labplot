@@ -89,7 +89,7 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("KDEPlot"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &KDEPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &KDEPlotDock::saveConfigAsTemplate);
@@ -214,7 +214,6 @@ void KDEPlotDock::retranslateUi() {
 	ui.cbKernelType->addItem(i18n("Gauss"), static_cast<int>(nsl_kernel_gauss));
 	ui.cbKernelType->addItem(i18n("Uniform (Rectangular)"), static_cast<int>(nsl_kernel_uniform));
 	ui.cbKernelType->addItem(i18n("Triangular"), static_cast<int>(nsl_kernel_triangular));
-	ui.cbKernelType->addItem(i18n("Binomial"), static_cast<int>(nsl_kernel_binomial));
 	ui.cbKernelType->addItem(i18n("Parabolic (Epanechnikov)"), static_cast<int>(nsl_kernel_parabolic));
 	ui.cbKernelType->addItem(i18n("Quartic (Biweight)"), static_cast<int>(nsl_kernel_quartic));
 	ui.cbKernelType->addItem(i18n("Triweight"), static_cast<int>(nsl_kernel_triweight));
@@ -222,7 +221,8 @@ void KDEPlotDock::retranslateUi() {
 	ui.cbKernelType->addItem(i18n("Cosine"), static_cast<int>(nsl_kernel_cosine));
 
 	ui.cbBandwidthType->clear();
-	ui.cbBandwidthType->addItem(i18n("Gaussian approximation"), static_cast<int>(nsl_kde_bandwidth_gaussian));
+	ui.cbBandwidthType->addItem(i18n("Silverman"), static_cast<int>(nsl_kde_bandwidth_silverman));
+	ui.cbBandwidthType->addItem(i18n("Scott"), static_cast<int>(nsl_kde_bandwidth_scott));
 	ui.cbBandwidthType->addItem(i18n("Custom"), static_cast<int>(nsl_kde_bandwidth_custom));
 }
 
@@ -270,7 +270,7 @@ void KDEPlotDock::dataColumnChanged(const QModelIndex& index) {
 }
 
 void KDEPlotDock::kernelTypeChanged(int index) {
-	const nsl_kernel_type type = static_cast<nsl_kernel_type>(ui.cbKernelType->itemData(index).toInt());
+	const auto type = static_cast<nsl_kernel_type>(ui.cbKernelType->itemData(index).toInt());
 
 	CONDITIONAL_LOCK_RETURN
 
@@ -279,19 +279,16 @@ void KDEPlotDock::kernelTypeChanged(int index) {
 }
 
 void KDEPlotDock::bandwidthTypeChanged(int index) {
-	const nsl_kde_bandwidth_type type = static_cast<nsl_kde_bandwidth_type>(ui.cbBandwidthType->itemData(index).toInt());
+	const auto type = static_cast<nsl_kde_bandwidth_type>(ui.cbBandwidthType->itemData(index).toInt());
 
 	bool custom = (type == nsl_kde_bandwidth_custom);
-	ui.lBandwidth->setEnabled(custom);
-	ui.sbBandwidth->setEnabled(custom);
+	ui.lBandwidth->setVisible(custom);
+	ui.sbBandwidth->setVisible(custom);
 
 	CONDITIONAL_LOCK_RETURN
 
 	for (auto* plot : m_plots)
 		plot->setBandwidthType(type);
-
-	if (custom)
-		ui.sbBandwidth->setValue(m_plot->bandwidth());
 }
 
 void KDEPlotDock::bandwidthChanged(double value) {

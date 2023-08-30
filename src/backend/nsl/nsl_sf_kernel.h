@@ -16,7 +16,6 @@
 typedef enum {
 	nsl_kernel_uniform,
 	nsl_kernel_triangular,
-	nsl_kernel_binomial,
 	nsl_kernel_parabolic,
 	nsl_kernel_quartic,
 	nsl_kernel_triweight,

@@ -133,12 +133,6 @@
          <property name="toolTip">
           <string/>
          </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> pt</string>
-         </property>
          <property name="minimum">
           <double>0.000000000000000</double>
          </property>

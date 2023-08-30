@@ -372,13 +372,16 @@ void KDEPlotPrivate::recalc() {
 	double max = *std::max_element(data.constBegin(), data.constEnd());
 	double step = (max - min) / count;
 	int n = data.count();
+	const auto& statistics = static_cast<const Column*>(dataColumn)->statistics();
+	const double sigma = statistics.standardDeviation;
+	const double iqr = statistics.iqr;
 
 	// bandwidth
 	double h;
 	if (bandwidthType == nsl_kde_bandwidth_custom)
 		h = bandwidth;
 	else
-		h = nsl_kde_bandwidth(data.data(), n, bandwidthType);
+		h = nsl_kde_bandwidth(n, sigma, iqr, bandwidthType);
 
 	h = std::max(h, 1e-6);
 

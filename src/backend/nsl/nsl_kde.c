@@ -19,44 +19,67 @@ double nsl_kde(const double* data, double x, nsl_kernel_type kernel, double h, s
 	switch (kernel) {
 	case nsl_kernel_uniform:
 		for (size_t i = 0; i < n; i++)
-			density += nsl_sf_kernel_uniform((data[i] - x) / h) / (n * h);
+			density += nsl_sf_kernel_uniform((data[i] - x) / h);
 		break;
 	case nsl_kernel_triangular:
 		for (size_t i = 0; i < n; i++)
-			density += nsl_sf_kernel_triangular((data[i] - x) / h) / (n * h);
-		break;
-	case nsl_kernel_binomial:
-		// TODO
+			density += nsl_sf_kernel_triangular((data[i] - x) / h);
 		break;
 	case nsl_kernel_parabolic:
 		for (size_t i = 0; i < n; i++)
-			density += nsl_sf_kernel_parabolic((data[i] - x) / h) / (n * h);
+			density += nsl_sf_kernel_parabolic((data[i] - x) / h);
 		break;
 	case nsl_kernel_quartic:
 		for (size_t i = 0; i < n; i++)
-			density += nsl_sf_kernel_quartic((data[i] - x) / h) / (n * h);
+			density += nsl_sf_kernel_quartic((data[i] - x) / h);
 		break;
 	case nsl_kernel_triweight:
 		for (size_t i = 0; i < n; i++)
-			density += nsl_sf_kernel_triweight((data[i] - x) / h) / (n * h);
+			density += nsl_sf_kernel_triweight((data[i] - x) / h);
 		break;
 	case nsl_kernel_tricube:
 		for (size_t i = 0; i < n; i++)
-			density += nsl_sf_kernel_tricube((data[i] - x) / h) / (n * h);
+			density += nsl_sf_kernel_tricube((data[i] - x) / h);
 		break;
 	case nsl_kernel_cosine:
 		for (size_t i = 0; i < n; i++)
-			density += nsl_sf_kernel_cosine((data[i] - x) / h) / (n * h);
+			density += nsl_sf_kernel_cosine((data[i] - x) / h);
 		break;
 	case nsl_kernel_gauss:
 		for (size_t i = 0; i < n; i++)
-			density += nsl_sf_kernel_gaussian((data[i] - x) / h) / (n * h);
+			density += nsl_sf_kernel_gaussian((data[i] - x) / h);
 	}
 
-	return density;
+	return density / (n * h);
 }
 
-double nsl_kde_normal_dist_bandwidth(double* data, int n) {
+double nsl_kde_bandwidth(int n, double sigma, double iqr, nsl_kde_bandwidth_type type) {
+	switch (type) {
+	case nsl_kde_bandwidth_silverman:
+		return 0.9 * GSL_MIN(sigma, iqr / 1.34) * pow(n, -0.2);
+	case nsl_kde_bandwidth_scott:
+		return 1.059 * sigma * pow(n, -0.2);
+	case nsl_kde_bandwidth_custom:
+		break;
+	}
+
+	return 1e-6;
+}
+
+double nsl_kde_bandwidth_from_data(double* data, int n, nsl_kde_bandwidth_type type) {
+	switch (type) {
+	case nsl_kde_bandwidth_silverman:
+		return nsl_kde_silverman_bandwidth(data, n);
+	case nsl_kde_bandwidth_scott:
+		return nsl_kde_scott_bandwidth(data, n);
+	case nsl_kde_bandwidth_custom:
+		break;
+	}
+
+	return 1e-6;
+}
+
+double nsl_kde_silverman_bandwidth(double* data, int n) {
 	gsl_sort(data, 1, n);
 	const double sigma = gsl_stats_sd(data, 1, n);
 	const double iqr = gsl_stats_quantile_from_sorted_data(data, 1, n, 0.75) - gsl_stats_quantile_from_sorted_data(data, 1, n, 0.25);
@@ -64,11 +87,9 @@ double nsl_kde_normal_dist_bandwidth(double* data, int n) {
 	return 0.9 * GSL_MIN(sigma, iqr / 1.34) * pow(n, -0.2);
 }
 
-double nsl_kde_bandwidth(double* data, int n, nsl_kde_bandwidth_type type) {
-	switch (type) {
-	case nsl_kde_bandwidth_gaussian:
-		return nsl_kde_normal_dist_bandwidth(data, n);
-	case nsl_kde_bandwidth_custom:
-		return 1e-6;
-	}
+double nsl_kde_scott_bandwidth(double* data, int n) {
+	// gsl_sort(data, 1, n);
+	const double sigma = gsl_stats_sd(data, 1, n);
+
+	return 1.059 * sigma * pow(n, 0.2);
 }
