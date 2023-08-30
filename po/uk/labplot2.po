@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-29 00:41+0000\n"
-"PO-Revision-Date: 2023-08-28 08:58+0300\n"
+"PO-Revision-Date: 2023-08-29 09:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -3003,10 +3003,9 @@ msgid "Comparison Functions"
 msgstr "Функції порівняння"
 
 #: src/backend/gsl/functions.cpp:46
-#, fuzzy, kde-format
-#| msgid "Logistic Function"
+#, kde-format
 msgid "Logical Functions"
-msgstr "Логістична функція"
+msgstr "Логічні функції"
 
 #: src/backend/gsl/functions.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -3400,34 +3399,32 @@ msgstr "equal"
 #: src/backend/gsl/functions.cpp:229
 #, kde-format
 msgid "equal with epsilon"
-msgstr ""
+msgstr "дорівнює епсилон"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format
 msgid "between with boundaries included"
-msgstr ""
+msgstr "на проміжку, включно з межами"
 
 #: src/backend/gsl/functions.cpp:231
 #, kde-format
 msgid "outside with boundaries included"
-msgstr ""
+msgstr "поза проміжком, включно з межами"
 
 #: src/backend/gsl/functions.cpp:232
 #, kde-format
 msgid "between with boundaries excluded"
-msgstr ""
+msgstr "на проміжку, не включно з межами"
 
 #: src/backend/gsl/functions.cpp:233
-#, fuzzy, kde-format
-#| msgid "Not inside of the bounding rect"
+#, kde-format
 msgid "outside with boundaries excluded"
-msgstr "Поза межами обмежувального прямокутника"
+msgstr "поза проміжком, не включно з межами"
 
 #: src/backend/gsl/functions.cpp:236
-#, fuzzy, kde-format
-#| msgid "if(condition, ifTrue, ifFalse)"
+#, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr "if(умова, якщоTrue, якщоFalse)"
+msgstr "if(умова; якщоTrue; якщоFalse)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -5341,33 +5338,29 @@ msgid "x"
 msgstr "x"
 
 #: src/backend/gsl/functions.cpp:1181
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "хв."
+msgstr "min"
 
 #: src/backend/gsl/functions.cpp:1183
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "макс."
+msgstr "max"
 
 #: src/backend/gsl/functions.cpp:1191
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "v1"
-msgstr "1"
+msgstr "v1"
 
 #: src/backend/gsl/functions.cpp:1193
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "v2"
-msgstr "2"
+msgstr "v2"
 
 #: src/backend/gsl/functions.cpp:1195
 #, kde-format
 msgid "ep"
-msgstr ""
+msgstr "ep"
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
@@ -9887,40 +9880,34 @@ msgid "Rescale to [a, b]"
 msgstr "Перемасштабувати до [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:441
-#, fuzzy, kde-format
-#| msgid "Export..."
+#, kde-format
 msgid "&Sort..."
-msgstr "Експортувати…"
+msgstr "&Упорядкувати…"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
-#, fuzzy, kde-format
-#| msgid "Insert Multiple Columns Left"
+#, kde-format
 msgid "Sort multiple columns together"
-msgstr "Вставити декілька стовпчиків лівіше"
+msgstr "Упорядкувати множину з декількох стовпчиків"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
-#, fuzzy, kde-format
-#| msgid "&Ascending"
+#, kde-format
 msgid "Sort &Ascending"
-msgstr "За з&ростанням"
+msgstr "Впорядкувати за з&ростанням"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:444
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in ascending order"
-msgstr "Спростити позначені стовпчики відносно:"
+msgstr "Упорядкувати позначені стовпчики окремо за зростанням"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
-#, fuzzy, kde-format
-#| msgid "&Descending"
+#, kde-format
 msgid "Sort &Descending"
-msgstr "&За спаданням"
+msgstr "Сортування за сп&аданням"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in descending order"
-msgstr "Спростити позначені стовпчики відносно:"
+msgstr "Упорядкувати позначені стовпчики окремо за спаданням"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
 #, kde-format
@@ -21534,10 +21521,9 @@ msgstr "Перемкнути на панель потужного пошуку �
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Sort"
+#, kde-format
 msgid "Sort by"
-msgstr "Упорядкувати"
+msgstr "Критерій упорядковування"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:64

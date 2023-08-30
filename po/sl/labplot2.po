@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-29 00:41+0000\n"
-"PO-Revision-Date: 2023-08-28 06:36+0200\n"
+"PO-Revision-Date: 2023-08-29 10:44+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -2989,10 +2989,9 @@ msgid "Comparison Functions"
 msgstr "Funkcije primerjav"
 
 #: src/backend/gsl/functions.cpp:46
-#, fuzzy, kde-format
-#| msgid "Logistic Function"
+#, kde-format
 msgid "Logical Functions"
-msgstr "Logistična funkcija"
+msgstr "Logične funkcije"
 
 #: src/backend/gsl/functions.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -3383,34 +3382,32 @@ msgstr "enako kot"
 #: src/backend/gsl/functions.cpp:229
 #, kde-format
 msgid "equal with epsilon"
-msgstr ""
+msgstr "enako epsilonu"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format
 msgid "between with boundaries included"
-msgstr ""
+msgstr "med vključno z mejami"
 
 #: src/backend/gsl/functions.cpp:231
 #, kde-format
 msgid "outside with boundaries included"
-msgstr ""
+msgstr "zunaj z vključenimi mejami"
 
 #: src/backend/gsl/functions.cpp:232
 #, kde-format
 msgid "between with boundaries excluded"
-msgstr ""
+msgstr "med z izključenimi mejami"
 
 #: src/backend/gsl/functions.cpp:233
-#, fuzzy, kde-format
-#| msgid "Not inside of the bounding rect"
+#, kde-format
 msgid "outside with boundaries excluded"
-msgstr "Ne znotraj omejevalnega pravok"
+msgstr "zunaj z izključenimi mejami"
 
 #: src/backend/gsl/functions.cpp:236
-#, fuzzy, kde-format
-#| msgid "if(condition, ifTrue, ifFalse)"
+#, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr "če(pogoj, čeTrue,čefFalse)"
+msgstr "če(pogoj; čeTrue; čeFalse)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -5309,33 +5306,29 @@ msgid "x"
 msgstr "x"
 
 #: src/backend/gsl/functions.cpp:1181
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "najm."
+msgstr "min"
 
 #: src/backend/gsl/functions.cpp:1183
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "najv."
+msgstr "max"
 
 #: src/backend/gsl/functions.cpp:1191
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "v1"
-msgstr "1"
+msgstr "v1"
 
 #: src/backend/gsl/functions.cpp:1193
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "v2"
-msgstr "2"
+msgstr "v2"
 
 #: src/backend/gsl/functions.cpp:1195
 #, kde-format
 msgid "ep"
-msgstr ""
+msgstr "ep"
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
@@ -9857,40 +9850,34 @@ msgid "Rescale to [a, b]"
 msgstr "Spremeni merilo na [a, b]:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:441
-#, fuzzy, kde-format
-#| msgid "Export..."
+#, kde-format
 msgid "&Sort..."
-msgstr "Izvozi ..."
+msgstr "Razvrsti..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
-#, fuzzy, kde-format
-#| msgid "Insert Multiple Columns Left"
+#, kde-format
 msgid "Sort multiple columns together"
-msgstr "Vstavi več stolpcev levo"
+msgstr "Razvrsti več stolpcev skupaj"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
-#, fuzzy, kde-format
-#| msgid "&Ascending"
+#, kde-format
 msgid "Sort &Ascending"
-msgstr "N&araščajoče"
+msgstr "Razvrsti n&araščajoče"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:444
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in ascending order"
-msgstr "Poravnaj izbrane stolpce relativno na:"
+msgstr "Razvrsti izbrane stolpce ločeno v naraščajočem vrstnem redu"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
-#, fuzzy, kde-format
-#| msgid "&Descending"
+#, kde-format
 msgid "Sort &Descending"
-msgstr "Pa&dajoče"
+msgstr "Razvrsti pa&dajoče"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in descending order"
-msgstr "Poravnaj izbrane stolpce relativno na:"
+msgstr "Razvrsti izbrane stolpce ločeno v padajočem vrstnem redu"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
 #, kde-format

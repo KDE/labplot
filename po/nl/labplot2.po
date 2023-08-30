@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-29 00:41+0000\n"
-"PO-Revision-Date: 2023-08-28 10:31+0200\n"
+"PO-Revision-Date: 2023-08-29 18:27+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -2979,10 +2979,9 @@ msgid "Comparison Functions"
 msgstr "Functies voor vergelijken"
 
 #: src/backend/gsl/functions.cpp:46
-#, fuzzy, kde-format
-#| msgid "Logistic Function"
+#, kde-format
 msgid "Logical Functions"
-msgstr "Logistieke functie"
+msgstr "Logische functies"
 
 #: src/backend/gsl/functions.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -3373,32 +3372,30 @@ msgstr "gelijkAan"
 #: src/backend/gsl/functions.cpp:229
 #, kde-format
 msgid "equal with epsilon"
-msgstr ""
+msgstr "gelijk aan epsilon"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format
 msgid "between with boundaries included"
-msgstr ""
+msgstr "tussen grenzen inclusief dezen"
 
 #: src/backend/gsl/functions.cpp:231
 #, kde-format
 msgid "outside with boundaries included"
-msgstr ""
+msgstr "buiten grenzen inclusief dezen"
 
 #: src/backend/gsl/functions.cpp:232
 #, kde-format
 msgid "between with boundaries excluded"
-msgstr ""
+msgstr "tussen grenzen exclusief dezen"
 
 #: src/backend/gsl/functions.cpp:233
-#, fuzzy, kde-format
-#| msgid "Not inside of the bounding rect"
+#, kde-format
 msgid "outside with boundaries excluded"
-msgstr "Niet binnen rechthoek"
+msgstr "tussen grenzen exclusief dezen"
 
 #: src/backend/gsl/functions.cpp:236
-#, fuzzy, kde-format
-#| msgid "if(condition, ifTrue, ifFalse)"
+#, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
 msgstr "if(voorwaarde, ifWaar, ifOnwaar)"
 
@@ -5300,33 +5297,29 @@ msgid "x"
 msgstr "x"
 
 #: src/backend/gsl/functions.cpp:1181
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "min."
+msgstr "min"
 
 #: src/backend/gsl/functions.cpp:1183
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "max."
+msgstr "max"
 
 #: src/backend/gsl/functions.cpp:1191
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "v1"
-msgstr "1"
+msgstr "v1"
 
 #: src/backend/gsl/functions.cpp:1193
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "v2"
-msgstr "2"
+msgstr "v2"
 
 #: src/backend/gsl/functions.cpp:1195
 #, kde-format
 msgid "ep"
-msgstr ""
+msgstr "ep"
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
@@ -9810,40 +9803,34 @@ msgid "Rescale to [a, b]"
 msgstr "Herschalen naar [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:441
-#, fuzzy, kde-format
-#| msgid "&Sort"
+#, kde-format
 msgid "&Sort..."
-msgstr "&Sorteren"
+msgstr "&Sorteren..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
-#, fuzzy, kde-format
-#| msgid "Insert Multiple Columns Left"
+#, kde-format
 msgid "Sort multiple columns together"
-msgstr "Voeg meerdere kolommen links in"
+msgstr "Meerdere kolommen samen sorteren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
-#, fuzzy, kde-format
-#| msgid "&Ascending"
+#, kde-format
 msgid "Sort &Ascending"
-msgstr "&Oplopend"
+msgstr "&Oplopend sorteren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:444
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in ascending order"
-msgstr "Geselecteerde kolommen plat maken relatief tot:"
+msgstr "De geselecteerde kolommen gescheiden in oplopende volgorde sorteren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
-#, fuzzy, kde-format
-#| msgid "&Descending"
+#, kde-format
 msgid "Sort &Descending"
-msgstr "Aflopen&d"
+msgstr "Aflopen&d sorteren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in descending order"
-msgstr "Geselecteerde kolommen plat maken relatief tot:"
+msgstr "De geselecteerde kolommen gescheiden in aflopende volgorde sorteren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
 #, kde-format
@@ -21416,10 +21403,9 @@ msgstr "Ga naar de geavanceerde zoek-en-vervang-balk"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Sort"
+#, kde-format
 msgid "Sort by"
-msgstr "Sorteren"
+msgstr "Sorteren op"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:64
