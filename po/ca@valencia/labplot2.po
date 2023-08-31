@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-29 00:41+0000\n"
-"PO-Revision-Date: 2023-08-25 16:13+0200\n"
+"PO-Revision-Date: 2023-08-29 15:30+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -3020,10 +3020,9 @@ msgstr "Funcions de comparació"
 
 # Nota: https://en.wikipedia.org/wiki/Logistic_function
 #: src/backend/gsl/functions.cpp:46
-#, fuzzy, kde-format
-#| msgid "Logistic Function"
+#, kde-format
 msgid "Logical Functions"
-msgstr "Funció logística"
+msgstr "Funcions lògiques"
 
 #: src/backend/gsl/functions.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -3421,37 +3420,36 @@ msgstr "més_petitIgualQue"
 msgid "equal"
 msgstr "igual"
 
+# skip-rule: barb-igual
 #: src/backend/gsl/functions.cpp:229
 #, kde-format
 msgid "equal with epsilon"
-msgstr ""
+msgstr "igual amb èpsilon"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format
 msgid "between with boundaries included"
-msgstr ""
+msgstr "entre amb els límits inclosos"
 
 #: src/backend/gsl/functions.cpp:231
 #, kde-format
 msgid "outside with boundaries included"
-msgstr ""
+msgstr "fora amb els límits inclosos"
 
 #: src/backend/gsl/functions.cpp:232
 #, kde-format
 msgid "between with boundaries excluded"
-msgstr ""
+msgstr "entre amb els límits exclosos"
 
 #: src/backend/gsl/functions.cpp:233
-#, fuzzy, kde-format
-#| msgid "Not inside of the bounding rect"
+#, kde-format
 msgid "outside with boundaries excluded"
-msgstr "No està a dins del rectangle contenidor"
+msgstr "fora amb els límits exclosos"
 
 #: src/backend/gsl/functions.cpp:236
-#, fuzzy, kde-format
-#| msgid "if(condition, ifTrue, ifFalse)"
+#, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr "si(condició, siCerta, siFalsa)"
+msgstr "si(condició; siCerta; siFalsa)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -5374,33 +5372,29 @@ msgid "x"
 msgstr "x"
 
 #: src/backend/gsl/functions.cpp:1181
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "mín."
+msgstr "min"
 
 #: src/backend/gsl/functions.cpp:1183
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "màx."
+msgstr "max"
 
 #: src/backend/gsl/functions.cpp:1191
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "v1"
-msgstr "1"
+msgstr "v1"
 
 #: src/backend/gsl/functions.cpp:1193
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "v2"
-msgstr "2"
+msgstr "v2"
 
 #: src/backend/gsl/functions.cpp:1195
 #, kde-format
 msgid "ep"
-msgstr ""
+msgstr "ep"
 
 #: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
@@ -9914,40 +9908,34 @@ msgid "Rescale to [a, b]"
 msgstr "Canvia l'escala a [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:441
-#, fuzzy, kde-format
-#| msgid "Export..."
+#, kde-format
 msgid "&Sort..."
-msgstr "Exporta..."
+msgstr "&Ordena..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
-#, fuzzy, kde-format
-#| msgid "Insert Multiple Columns Left"
+#, kde-format
 msgid "Sort multiple columns together"
-msgstr "Inserix múltiples columnes a l'esquerra"
+msgstr "Ordena múltiples columnes juntes"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
-#, fuzzy, kde-format
-#| msgid "&Ascending"
+#, kde-format
 msgid "Sort &Ascending"
-msgstr "&Ascendent"
+msgstr "Ordenació &ascendent"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:444
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in ascending order"
-msgstr "Aplana les columnes seleccionades en relació amb:"
+msgstr "Ordena separadament les columnes seleccionades en ordre ascendent"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
-#, fuzzy, kde-format
-#| msgid "&Descending"
+#, kde-format
 msgid "Sort &Descending"
-msgstr "&Descendent"
+msgstr "Ordenació &descendent"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in descending order"
-msgstr "Aplana les columnes seleccionades en relació amb:"
+msgstr "Ordena separadament les columnes seleccionades en ordre descendent"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
 #, kde-format
@@ -14750,16 +14738,14 @@ msgid "Open Project"
 msgstr "Obri un projecte"
 
 #: src/kdefrontend/MainWin.cpp:1544
-#, fuzzy, kde-format
-#| msgid "The provided file doesn't exist."
+#, kde-format
 msgid "The project file %1 doesn't exist."
-msgstr "El fitxer proporcionat no existix."
+msgstr "El fitxer de projecte %1 no existix."
 
 #: src/kdefrontend/MainWin.cpp:1549
-#, fuzzy, kde-format
-#| msgid "Couldn't save the file '%1'."
+#, kde-format
 msgid "Couldn't read the project file %1."
-msgstr "No s'ha pogut guardar el fitxer «%1»."
+msgstr "No s'ha pogut llegir el fitxer de projecte %1."
 
 #: src/kdefrontend/MainWin.cpp:1563
 #, kde-format
@@ -15815,15 +15801,12 @@ msgstr ""
 "Utilitzeu-ne un altre."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:167
-#, fuzzy, kde-format
-#| msgid ""
-#| "Provided variable name is already reserved for a name of a constant. "
-#| "Please use another name."
+#, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr ""
-"El nom subministrat a la variable ja està reservat per al nom d'una funció. "
-"Utilitzeu-ne un altre."
+"El nom proporcionat de la variable comença amb un dígit o conté un caràcter "
+"especial."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:211
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:258
@@ -15832,6 +15815,8 @@ msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
 "a letter"
 msgstr ""
+"El nom de la variable només pot contindre lletres, dígits i «-», i cal que "
+"comence amb una lletra"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:302
 #, kde-format
@@ -21600,10 +21585,9 @@ msgstr "Canvia a la barra potent de busca i de substitució"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Sort"
+#, kde-format
 msgid "Sort by"
-msgstr "Ordena"
+msgstr "Ordena per"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:64
@@ -22479,42 +22463,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Conditions"
-#~ msgstr "Condicions"
-
-#~ msgid "Dawson integral"
-#~ msgstr "Integral de Dawson"
-
-#~ msgid "&Sort Spreadsheet"
-#~ msgstr "O&rdena el full de càlcul"
-
-#~ msgid "&Selected Columns"
-#~ msgstr "Columnes &seleccionades"
-
-#~ msgid "Sort columns:"
-#~ msgstr "Ordena les columnes:"
-
-#~ msgid "Separately"
-#~ msgstr "Separades"
-
-#~ msgid "Together"
-#~ msgstr "Juntes"
-
-#~ msgid "Leading column:"
-#~ msgstr "Columna inicial:"
-
-#~ msgid "Save Filter Settings as"
-#~ msgstr "Guarda la configuració del filtre com a"
-
-#~ msgid "Filter name:"
-#~ msgstr "Nom del filtre:"
-
-#~ msgid "new filter"
-#~ msgstr "filtre nou"
-
-#~ msgid "Save the current filter settings"
-#~ msgstr "Guarda la configuració del filtre actual"
-
-#~ msgid "Manage filters"
-#~ msgstr "Gestiona els filtres"
