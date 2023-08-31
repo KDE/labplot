@@ -47,14 +47,6 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	estimationBackgroundWidget = new BackgroundWidget(ui.tabKDE);
 	hBoxLayout->insertWidget(5, estimationBackgroundWidget);
 
-	// Tab "Histogram"
-	gridLayout = static_cast<QGridLayout*>(ui.tabHistogram->layout());
-	histogramLineWidget = new LineWidget(ui.tabHistogram);
-	gridLayout->addWidget(histogramLineWidget, 3, 0, 0, 3);
-
-	histogramBackgroundWidget = new BackgroundWidget(ui.tabHistogram);
-	gridLayout->addWidget(histogramBackgroundWidget, 5, 0, 0, 3);
-
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -148,13 +140,9 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	for (auto* plot : m_plots) {
 		estimationLines << plot->estimationCurve()->line();
 		estimationBackgrounds << plot->estimationCurve()->background();
-		histogramLines << plot->histogram()->line();
-		histogramBackgrounds << plot->histogram()->background();
 	}
 	estimationLineWidget->setLines(estimationLines);
 	estimationBackgroundWidget->setBackgrounds(estimationBackgrounds);
-	histogramLineWidget->setLines(histogramLines);
-	histogramBackgroundWidget->setBackgrounds(histogramBackgrounds);
 
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
@@ -231,7 +219,6 @@ void KDEPlotDock::retranslateUi() {
  */
 void KDEPlotDock::updateLocale() {
 	estimationLineWidget->updateLocale();
-	histogramLineWidget->updateLocale();
 }
 
 void KDEPlotDock::updatePlotRanges() {

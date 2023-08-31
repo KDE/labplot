@@ -44,8 +44,6 @@ protected:
 	Ui::KDEPlotDock ui;
 	LineWidget* estimationLineWidget{nullptr};
 	BackgroundWidget* estimationBackgroundWidget{nullptr};
-	LineWidget* histogramLineWidget{nullptr};
-	BackgroundWidget* histogramBackgroundWidget{nullptr};
 
 	QList<KDEPlot*> m_plots;
 	KDEPlot* m_plot{nullptr};

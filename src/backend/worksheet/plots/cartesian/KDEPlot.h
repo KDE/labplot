@@ -18,7 +18,6 @@
 class AbstractColumn;
 class KDEPlotPrivate;
 class XYCurve;
-class Histogram;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -57,7 +56,6 @@ public:
 
 	XYCurve* estimationCurve() const;
 	XYCurve* rugCurve() const;
-	Histogram* histogram() const;
 
 	void retransform() override;
 	void recalc();

@@ -49,7 +49,6 @@ public:
 	Column* yEstimationColumn{nullptr};
 	QString yEstimationColumnPath;
 
-	Histogram* histogram{nullptr};
 	XYCurve* rugCurve{nullptr};
 
 	KDEPlot* const q;

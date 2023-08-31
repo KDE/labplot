@@ -89,10 +89,6 @@ void KDEPlot::init() {
 	addChildFast(d->yEstimationColumn);
 	d->estimationCurve->setYColumn(d->yEstimationColumn);
 
-	// histogram
-	d->histogram = new Histogram(QString());
-	d->histogram->setNormalization(Histogram::ProbabilityDensity);
-
 	// xy-curve for the rug plot
 	d->rugCurve = new XYCurve(QString());
 	d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
@@ -108,7 +104,6 @@ void KDEPlot::finalizeAdd() {
 	WorksheetElement::finalizeAdd();
 	addChild(d->estimationCurve);
 	addChild(d->rugCurve);
-	// addChild(d->histogram);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
@@ -116,7 +111,6 @@ void KDEPlot::finalizeAdd() {
 		Q_D(KDEPlot);
 		d->estimationCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
-		d->histogram->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	});
 }
 
@@ -171,7 +165,6 @@ void KDEPlot::setVisible(bool on) {
 	beginMacro(on ? i18n("%1: set visible", name()) : i18n("%1: set invisible", name()));
 	d->estimationCurve->setVisible(on);
 	d->rugCurve->setVisible(on);
-	d->histogram->setVisible(on);
 	WorksheetElement::setVisible(on);
 	endMacro();
 }
@@ -196,11 +189,6 @@ XYCurve* KDEPlot::rugCurve() const {
 	return d->rugCurve;
 }
 
-Histogram* KDEPlot::histogram() const {
-	Q_D(const KDEPlot);
-	return d->histogram;
-}
-
 bool KDEPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
 	Q_D(const KDEPlot);
 	return d->estimationCurve->minMax(dim, indexRange, r);
@@ -212,7 +200,7 @@ double KDEPlot::minimum(const Dimension dim) const {
 	case Dimension::X:
 		return d->estimationCurve->minimum(dim);
 	case Dimension::Y:
-		return std::min(d->estimationCurve->minimum(dim), d->histogram->minimum(dim));
+		return d->estimationCurve->minimum(dim);
 	}
 	return NAN;
 }
@@ -223,7 +211,7 @@ double KDEPlot::maximum(const Dimension dim) const {
 	case Dimension::X:
 		return d->estimationCurve->maximum(dim);
 	case Dimension::Y:
-		return std::max(d->estimationCurve->maximum(dim), d->histogram->maximum(dim));
+		return d->estimationCurve->maximum(dim);
 	}
 	return NAN;
 }
@@ -336,7 +324,6 @@ void KDEPlotPrivate::retransform() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	estimationCurve->retransform();
 	rugCurve->retransform();
-	// histogram->retransform();
 	recalcShapeAndBoundingRect();
 }
 
@@ -346,7 +333,6 @@ void KDEPlotPrivate::retransform() {
 void KDEPlotPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
-	histogram->setDataColumn(dataColumn);
 	rugCurve->setXColumn(dataColumn);
 	rugCurve->setYColumn(dataColumn);
 
@@ -450,8 +436,6 @@ void KDEPlotPrivate::recalcShapeAndBoundingRect() {
 	curveShape = QPainterPath();
 	curveShape.addPath(estimationCurve->graphicsItem()->shape());
 	curveShape.addPath(rugCurve->graphicsItem()->shape());
-	// curveShape.addPath(histogram->graphicsItem()->shape());
-
 	boundingRectangle = curveShape.boundingRect();
 }
 
@@ -500,7 +484,6 @@ void KDEPlot::save(QXmlStreamWriter* writer) const {
 
 	// save the internal curves
 	d->estimationCurve->save(writer);
-	d->histogram->save(writer);
 	d->rugCurve->save(writer);
 
 	writer->writeEndElement(); // close "KDEPlot" section
@@ -560,17 +543,16 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 
 			// TODO
-			// if (!rugCurveInitialized) {
-			// 	if (!d->rugCurve->load(reader, preview))
-			// 		return false;
-			// 	rugCurveInitialized = true;
-			// }
-
-		} else if (reader->name() == QLatin1String("histogram")) {
-			if (!d->histogram->load(reader, preview))
+			if (!rugCurveInitialized) {
+				if (!d->rugCurve->load(reader, preview))
+					return false;
+				rugCurveInitialized = true;
+			}
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
 				return false;
 		}
-		// handle unknown element
 	}
 	return true;
 }
@@ -594,7 +576,6 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 
 	d->estimationCurve->line()->loadThemeConfig(group, themeColor);
 	d->estimationCurve->background()->loadThemeConfig(group, themeColor);
-	// d->histogram->loadThemeConfig(group);
 	d->rugCurve->symbol()->loadThemeConfig(group, themeColor);
 
 	d->m_suppressRecalc = false;
