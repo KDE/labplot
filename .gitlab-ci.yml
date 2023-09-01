@@ -8,8 +8,8 @@ include:
 #  needs more work
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
-# Fails readstat (readstat.c:157 function declaration without a prototype is deprecated)
 # replaced with own target
+# Fails readstat (readstat.c:157 function declaration without a prototype is deprecated)
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
 

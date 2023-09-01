@@ -685,10 +685,11 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 				filter->setStartColumn(ui.sbStartColumn->value());
 			if (ui.sbEndColumn->value() != -1)
 				filter->setEndColumn(ui.sbEndColumn->value());
-		} else
+		} else {
 			// templates are handled in fileTypeChanged()
+		}
 
-			break;
+		break;
 	}
 	case AbstractFileFilter::FileType::Binary: {
 		DEBUG(Q_FUNC_INFO << ", Binary");
