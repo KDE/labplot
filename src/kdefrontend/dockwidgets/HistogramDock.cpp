@@ -4,15 +4,13 @@
 	Description          : widget for Histogram properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "HistogramDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
@@ -160,10 +158,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	init();
 }
 
-HistogramDock::~HistogramDock() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-}
+HistogramDock::~HistogramDock() = default;
 
 void HistogramDock::init() {
 	// General
@@ -207,8 +202,9 @@ void HistogramDock::init() {
 }
 
 void HistogramDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
@@ -228,11 +224,11 @@ void HistogramDock::setModel() {
 	cbErrorMinusColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 
-	cbDataColumn->setModel(m_aspectTreeModel);
-	cbErrorPlusColumn->setModel(m_aspectTreeModel);
-	cbErrorMinusColumn->setModel(m_aspectTreeModel);
+	cbDataColumn->setModel(model);
+	cbErrorPlusColumn->setModel(model);
+	cbErrorMinusColumn->setModel(model);
 }
 
 void HistogramDock::setCurves(QList<Histogram*> list) {
@@ -241,7 +237,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	Q_ASSERT(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
 
 	// initialize widgets for common properties

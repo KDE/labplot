@@ -9,8 +9,6 @@
 
 #include "BoxPlotDock.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -175,7 +173,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	m_boxPlot = list.first();
 	setAspects(list);
 	Q_ASSERT(m_boxPlot);
-	m_aspectTreeModel = new AspectTreeModel(m_boxPlot->project());
 	setModel();
 
 	// if there is more than one point in the list, disable the comment and name widgets in "general"
@@ -256,11 +253,12 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 }
 
 void BoxPlotDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list{AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 }
 
 /*
@@ -355,7 +353,7 @@ void BoxPlotDock::addDataColumn() {
 										AspectType::XYSmoothCurve,
 										AspectType::CantorWorksheet};
 	cb->setTopLevelClasses(list);
-	cb->setModel(m_aspectTreeModel);
+	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BoxPlotDock::dataColumnChanged);
 
 	int index = m_dataComboBoxes.size();

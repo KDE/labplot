@@ -9,7 +9,6 @@
 
 #include "QQPlotDock.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
@@ -90,14 +89,12 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	retranslateUi();
 }
 
-QQPlotDock::~QQPlotDock() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-}
+QQPlotDock::~QQPlotDock() = default;
 
 void QQPlotDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
@@ -115,9 +112,9 @@ void QQPlotDock::setModel() {
 	cbDataColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 
-	cbDataColumn->setModel(m_aspectTreeModel);
+	cbDataColumn->setModel(model);
 }
 
 void QQPlotDock::setPlots(QList<QQPlot*> list) {
@@ -126,7 +123,6 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 	m_plot = list.first();
 	setAspects(list);
 	Q_ASSERT(m_plot);
-	m_aspectTreeModel = new AspectTreeModel(m_plot->project());
 	setModel();
 
 	// initialize widgets for common properties

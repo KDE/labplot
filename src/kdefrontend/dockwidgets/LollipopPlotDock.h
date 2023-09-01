@@ -15,7 +15,6 @@
 #include "ui_lollipopplotdock.h"
 
 class AbstractAspect;
-class AspectTreeModel;
 class LineWidget;
 class SymbolWidget;
 class ValueWidget;
@@ -38,7 +37,6 @@ private:
 	ValueWidget* valueWidget{nullptr};
 	QList<LollipopPlot*> m_plots;
 	LollipopPlot* m_plot{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 	TreeViewComboBox* cbXColumn{nullptr};
 
 	QGridLayout* m_gridLayout;

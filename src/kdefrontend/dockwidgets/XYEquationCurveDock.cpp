@@ -9,8 +9,6 @@
 */
 
 #include "XYEquationCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
@@ -152,7 +150,6 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	m_equationCurve = static_cast<XYEquationCurve*>(m_curve);
 	Q_ASSERT(m_equationCurve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	XYCurveDock::setModel();
 	initGeneralTab();
 	initTabs();
