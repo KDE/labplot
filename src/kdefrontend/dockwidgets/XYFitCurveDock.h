@@ -55,7 +55,7 @@ private:
 	AspectTreeModel* m_dataSourceModel{nullptr};
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYFitCurveDock

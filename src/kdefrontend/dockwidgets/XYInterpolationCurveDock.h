@@ -33,9 +33,6 @@ private:
 	void showInterpolationResult();
 
 	Ui::XYInterpolationCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYInterpolationCurve* m_interpolationCurve{nullptr};
 	XYInterpolationCurve::InterpolationData m_interpolationData;
@@ -43,7 +40,7 @@ private:
 	bool m_dateTimeRange{false};
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYInterpolationCurveDock

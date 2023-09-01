@@ -6,7 +6,7 @@
 
 find_package(PkgConfig QUIET)
 if (PKG_CONFIG_FOUND)
-	pkg_check_modules(PC_LIBORIGIN liborigin>=3.0.0 QUIET)
+	pkg_check_modules(PC_LIBORIGIN liborigin>=3.0.2 QUIET)
 endif ()
 
 find_library(LIBORIGIN_LIBRARIES

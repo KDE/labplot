@@ -27,9 +27,9 @@
 extern "C" {
 #include "backend/nsl/nsl_diff.h"
 #include "backend/nsl/nsl_int.h"
+}
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
-}
 
 #include <QElapsedTimer>
 #include <QIcon>
@@ -59,9 +59,9 @@ QIcon XYInterpolationCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYInterpolationCurve, XYInterpolationCurve::InterpolationData, interpolationData, interpolationData)
 
 const XYAnalysisCurve::Result& XYInterpolationCurve::result() const {
@@ -69,18 +69,18 @@ const XYAnalysisCurve::Result& XYInterpolationCurve::result() const {
 	return d->interpolationResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYInterpolationCurve, SetInterpolationData, XYInterpolationCurve::InterpolationData, interpolationData, recalculate)
 void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::InterpolationData& interpolationData) {
 	Q_D(XYInterpolationCurve);
 	exec(new XYInterpolationCurveSetInterpolationDataCmd(d, interpolationData, ki18n("%1: set options and perform the interpolation")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYInterpolationCurvePrivate::XYInterpolationCurvePrivate(XYInterpolationCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -377,9 +377,9 @@ bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYInterpolationCurve);
@@ -426,7 +426,6 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYInterpolationCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -470,6 +469,10 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

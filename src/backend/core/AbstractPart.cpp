@@ -9,8 +9,10 @@
 */
 
 #include "backend/core/AbstractPart.h"
-#include "commonfrontend/core/PartMdiView.h"
+#include "backend/core/Settings.h"
+#include "commonfrontend/core/ContentDockWidget.h"
 
+#include <DockManager.h>
 #include <QMenu>
 #include <QStyle>
 
@@ -25,8 +27,8 @@ AbstractPart::AbstractPart(const QString& name, AspectType type)
 }
 
 AbstractPart::~AbstractPart() {
-	if (m_mdiWindow)
-		delete m_mdiWindow;
+	if (m_dockWidget)
+		delete m_dockWidget;
 }
 
 /**
@@ -45,16 +47,29 @@ AbstractPart::~AbstractPart() {
  * A new view is only created the first time this method is called;
  * after that, a pointer to the pre-existing view is returned.
  */
-PartMdiView* AbstractPart::mdiSubWindow() const {
+ContentDockWidget* AbstractPart::dockWidget() const {
 #ifndef SDK
-	if (!m_mdiWindow)
-		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this));
+	if (!m_dockWidget) {
+		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
+		connect(m_dockWidget, &ads::CDockWidget::closed, [this] {
+			const bool deleteOnClose = Settings::readDockPosBehaviour() == Settings::DockPosBehaviour::AboveLastActive;
+			if (deleteOnClose && !m_suppressDeletion) {
+				m_dockWidget->dockManager()->removeDockWidget(m_dockWidget);
+				m_dockWidget = nullptr;
+				deleteView();
+			}
+		});
+	}
 #endif
-	return m_mdiWindow;
+	return m_dockWidget;
+}
+
+void AbstractPart::suppressDeletion(bool suppress) {
+	m_suppressDeletion = suppress;
 }
 
 bool AbstractPart::hasMdiSubWindow() const {
-	return m_mdiWindow;
+	return m_dockWidget;
 }
 
 /*!
@@ -75,7 +90,6 @@ void AbstractPart::deleteView() const {
 	if (m_partView) {
 		delete m_partView;
 		m_partView = nullptr;
-		m_mdiWindow = nullptr;
 	}
 }
 
@@ -83,9 +97,13 @@ void AbstractPart::deleteView() const {
  * \brief Return AbstractAspect::createContextMenu() plus operations on the primary view.
  */
 QMenu* AbstractPart::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-	menu->addSeparator();
 	auto type = this->type();
+	QMenu* menu;
+	if (type != AspectType::StatisticsSpreadsheet) {
+		menu = AbstractAspect::createContextMenu();
+		menu->addSeparator();
+	} else
+		menu = new QMenu();
 
 	// import actions for spreadsheet and matrix
 	if ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && type != AspectType::LiveDataSource && type != AspectType::MQTTTopic) {
@@ -107,21 +125,17 @@ QMenu* AbstractPart::createContextMenu() {
 	menu->addSeparator();
 
 	// window state related actions
-	if (m_mdiWindow) {
-		const QStyle* style = m_mdiWindow->style();
-		if (m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
-			auto* action = menu->addAction(i18n("&Restore"), m_mdiWindow, &QMdiSubWindow::showNormal);
-			action->setIcon(style->standardIcon(QStyle::SP_TitleBarNormalButton));
-		}
-
-		if (!(m_mdiWindow->windowState() & Qt::WindowMinimized)) {
-			auto* action = menu->addAction(i18n("Mi&nimize"), m_mdiWindow, &QMdiSubWindow::showMinimized);
-			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMinButton));
-		}
-
-		if (!(m_mdiWindow->windowState() & Qt::WindowMaximized)) {
-			auto* action = menu->addAction(i18n("Ma&ximize"), m_mdiWindow, &QMdiSubWindow::showMaximized);
-			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMaxButton));
+	if (m_dockWidget) {
+		const QStyle* style = m_dockWidget->style();
+		if (!m_dockWidget->isClosed()) {
+			auto* action = menu->addAction(i18n("&Close"), [this]() {
+				m_dockWidget->toggleView(false);
+			});
+			action->setIcon(style->standardIcon(QStyle::SP_TitleBarCloseButton));
+		} else {
+			menu->addAction(i18n("Show"), [this]() {
+				m_dockWidget->toggleView(true);
+			});
 		}
 	} else {
 		// if the mdi window was closed, add the "Show" action.
@@ -131,8 +145,11 @@ QMenu* AbstractPart::createContextMenu() {
 		auto parentType = parentAspect()->type();
 		bool disableShow = ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && parentType == AspectType::Workbook)
 			|| (type == AspectType::Spreadsheet && parentType == AspectType::DatapickerCurve);
-		if (!disableShow)
-			menu->addAction(i18n("Show"), this, &AbstractPart::showRequested);
+		if (!disableShow) {
+			menu->addAction(i18n("Show"), [this]() {
+				m_dockWidget->toggleView(true);
+			});
+		}
 	}
 
 	return menu;

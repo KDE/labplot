@@ -31,16 +31,12 @@ private:
 	void showCorrelationResult();
 
 	Ui::XYCorrelationCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbDataSourceCurve{nullptr};
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
-	TreeViewComboBox* cbY2DataColumn{nullptr};
 
 	XYCorrelationCurve* m_correlationCurve{nullptr};
 	XYCorrelationCurve::CorrelationData m_correlationData;
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYCorrelationCurveDock

@@ -23,7 +23,9 @@ class NoteDock;
 class CartesianPlotDock;
 class HistogramDock;
 class BarPlotDock;
+class LollipopPlotDock;
 class BoxPlotDock;
+class QQPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ReferenceLineDock;
@@ -33,6 +35,7 @@ class LiveDataDock;
 class MatrixDock;
 class ProjectDock;
 class SpreadsheetDock;
+class StatisticsSpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
 class XYDataReductionCurveDock;
@@ -77,6 +80,7 @@ private:
 	LiveDataDock* m_liveDataDock{nullptr};
 	MatrixDock* m_matrixDock{nullptr};
 	SpreadsheetDock* m_spreadsheetDock{nullptr};
+	StatisticsSpreadsheetDock* m_statisticsSpreadsheetDock{nullptr};
 	ProjectDock* m_projectDock{nullptr};
 	XYCurveDock* m_xyCurveDock{nullptr};
 	XYEquationCurveDock* m_xyEquationCurveDock{nullptr};
@@ -93,7 +97,9 @@ private:
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
 	HistogramDock* m_histogramDock{nullptr};
 	BarPlotDock* m_barPlotDock{nullptr};
+	LollipopPlotDock* m_lollipopPlotDock{nullptr};
 	BoxPlotDock* m_boxPlotDock{nullptr};
+	QQPlotDock* m_qqPlotDock{nullptr};
 	WorksheetDock* m_worksheetDock{nullptr};
 	LabelWidget* m_textLabelDock{nullptr};
 	ImageDock* m_imageDock{nullptr};
@@ -108,7 +114,7 @@ private:
 #endif
 
 private Q_SLOTS:
-	void selectedAspectsChanged(QList<AbstractAspect*>&);
+	void selectedAspectsChanged(const QList<AbstractAspect*>&);
 	void hiddenAspectSelected(const AbstractAspect*);
 };
 

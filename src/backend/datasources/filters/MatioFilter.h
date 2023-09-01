@@ -39,9 +39,6 @@ public:
 										int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
 
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
-
 	void setCurrentVarName(const QString&);
 	void setSelectedVarNames(const QStringList&);
 	const QStringList selectedVarNames() const;

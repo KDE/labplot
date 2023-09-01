@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for Range
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2021-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -27,23 +27,24 @@ void RangeTest::testNiceExtend() {
 													   {{0., .41}, {0., .45}},
 													   {{0, .36}, {0., .4}},
 													   {{0, .19}, {0., .2}},
-													   {{0., .17}, {0., .2}},
+													   {{0., .17}, {0., .18}},
 													   {{0, 995.}, {0, 1000.}},
-													   {{0.75, 2.25}, {0.5, 2.5}},
-													   {{0, .21}, {0., .25}}};
+													   {{0, .21}, {0., .25}},
+													   {{0.7, 104.9}, {0, 120}}};
 	QVector<QPair<Range<double>, Range<double>>> tests2{// QCOMPARE is too strict
-														{{0., .13}, {0., .15}},
-														{{0, .15}, {0., .15}},
+														{{0., .13}, {0., .14}},
+														{{0, .15}, {0., .16}},
 														{{0., .61}, {0., .7}},
 														{{0, .51}, {0., .6}},
 														{{0, .31}, {0., .35}},
+														{{0.75, 2.25}, {0.6, 2.4}},
 														{{0., .26}, {0., .3}}};
 
 	for (auto& test : tests) {
 		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
-		// WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
-		// WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
 		QCOMPARE(test.first, test.second);
 	}
 	for (auto& test : tests2) {
@@ -83,6 +84,103 @@ void RangeTest::testTickCount() {
 	}
 }
 
+void RangeTest::testLimits() {
+	QVector<QPair<Range<double>, Range<double>>> tests{{{0, 1, RangeT::Format::Numeric, RangeT::Scale::Log10}, {0.1, 1.}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Log10}, {1., 10.}},
+													   {{0, 1, RangeT::Format::Numeric, RangeT::Scale::Log2}, {0.5, 1.}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Log2}, {1., 2.}},
+													   {{0, 1, RangeT::Format::Numeric, RangeT::Scale::Ln}, {1 / M_E, 1.}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Ln}, {1., M_E}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Sqrt}, {0., 1.}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Square}, {0., 1.}},
+													   {{-1, 0, RangeT::Format::Numeric, RangeT::Scale::Inverse}, {0., 1.}}};
+
+	for (auto& test : tests) {
+		test.first.fixLimits();
+		DEBUG(test.first.toStdString() << " -> " << test.second.toStdString())
+		QCOMPARE(test.first, test.second);
+	}
+}
+
+///////////////////////////////////
+
+void RangeTest::testNiceExtendLog10() {
+	QVector<QPair<Range<double>, Range<double>>> tests{{{0.2, 201.}, {0.1, 1000.}}};
+	QVector<QPair<Range<double>, Range<double>>> tests2{{{0.005, 56789.}, {0.001, 100000.}}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Log10);
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		QCOMPARE(test.first, test.second);
+	}
+	for (auto& test : tests2) {
+		test.first.setScale(RangeT::Scale::Log10);
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		// WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		// WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		FuzzyCompare(test.first.start(), test.second.start(), DBL_EPSILON);
+		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);
+	}
+}
+void RangeTest::testTickCountLog10() {
+	QVector<QPair<Range<double>, int>> tests{{{1., 1000.}, 4}, {{0.1, 100.}, 4}, {{100., 100000.}, 4}, {{0.001, 10000.}, 8}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Log10);
+		DEBUG(test.second);
+		QCOMPARE(test.first.autoTickCount(), test.second);
+	}
+}
+
+void RangeTest::testNiceExtendLog2() {
+	QVector<QPair<Range<double>, Range<double>>> tests{{{1.5, 7.2}, {1., 8.}}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Log2);
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		QCOMPARE(test.first, test.second);
+	}
+}
+void RangeTest::testTickCountLog2() {
+	QVector<QPair<Range<double>, int>> tests{{{1., 8.}, 4}, {{.5, 4.}, 4}, {{4., 32.}, 4}, {{.25, 32.}, 8}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Log2);
+		DEBUG(test.second);
+		QCOMPARE(test.first.autoTickCount(), test.second);
+	}
+}
+void RangeTest::testNiceExtendLn() {
+	QVector<QPair<Range<double>, Range<double>>> tests{{{4., 32.}, {M_E, pow(M_E, 4.)}}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Ln);
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		QCOMPARE(test.first, test.second);
+	}
+}
+void RangeTest::testTickCountLn() {
+	QVector<QPair<Range<double>, int>> tests{{{1., pow(M_E, 3)}, 4},
+											 {{1. / M_E, pow(M_E, 2)}, 4},
+											 {{pow(M_E, 2), pow(M_E, 5)}, 4},
+											 {{pow(M_E, -2.), pow(M_E, 5)}, 8}};
+
+	for (auto& test : tests) {
+		test.first.setScale(RangeT::Scale::Ln);
+		DEBUG(test.second);
+		QCOMPARE(test.first.autoTickCount(), test.second);
+	}
+}
 ///////////// Performance ////////////////////////////////
 /*
 void ParserTest::testPerformance1() {

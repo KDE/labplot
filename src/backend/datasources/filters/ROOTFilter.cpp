@@ -43,12 +43,6 @@ void ROOTFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 	d->write(fileName, dataSource);
 }
 
-void ROOTFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-void ROOTFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
 void ROOTFilter::setCurrentObject(const QString& object) {
 	d->currentObject = object;
 }

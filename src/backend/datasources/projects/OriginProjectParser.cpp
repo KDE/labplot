@@ -10,7 +10,6 @@
 */
 
 #include "backend/datasources/projects/OriginProjectParser.h"
-#include "3rdparty/liborigin/OriginFile.h"
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
@@ -153,9 +152,9 @@ unsigned int OriginProjectParser::findNoteByName(const QString& name) {
 	return 0;
 }
 
-//##############################################################################
-//############## Deserialization from Origin's project tree ####################
-//##############################################################################
+// ##############################################################################
+// ############## Deserialization from Origin's project tree ####################
+// ##############################################################################
 bool OriginProjectParser::load(Project* project, bool preview) {
 	DEBUG(Q_FUNC_INFO);
 
@@ -2102,9 +2101,9 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//########################### Helper functions  ################################
-//##############################################################################
+// ##############################################################################
+// ########################### Helper functions  ################################
+// ##############################################################################
 QDateTime OriginProjectParser::creationTime(tree<Origin::ProjectNode>::iterator it) const {
 	// this logic seems to be correct only for the first node (project node). For other nodes the current time is returned.
 	char time_str[21];

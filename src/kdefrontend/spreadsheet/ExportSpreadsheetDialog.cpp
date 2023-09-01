@@ -9,6 +9,7 @@
 */
 
 #include "ExportSpreadsheetDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "kdefrontend/GuiTools.h"
@@ -17,7 +18,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
 
@@ -103,7 +104,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-export-database")));
 
 	// restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->chkExportHeader->setChecked(conf.readEntry("Header", true));
@@ -137,7 +138,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 
 ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
 	conf.writeEntry("Header", ui->chkExportHeader->isChecked());
 	conf.writeEntry("Separator", ui->cbSeparator->currentText());
@@ -171,11 +172,11 @@ void ExportSpreadsheetDialog::setProjectFileName(const QString& name) {
 void ExportSpreadsheetDialog::setFileName(const QString& name) {
 	if (m_projectPath.isEmpty()) {
 		// no project folder is available (yet), use the last used directory in this dialog
-		KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+		KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));
 		QString dir = conf.readEntry("LastDir", "");
 		if (dir.isEmpty()) { // use project dir as fallback
-			KConfigGroup conf2(KSharedConfig::openConfig(), "MainWin");
-			dir = conf2.readEntry("LastOpenDir", "");
+			KConfigGroup confMainWin = Settings::group(QStringLiteral("MainWin"));
+			dir = confMainWin.readEntry("LastOpenDir", "");
 			if (dir.isEmpty())
 				dir = QDir::homePath();
 		}
@@ -314,7 +315,7 @@ void ExportSpreadsheetDialog::okClicked() {
 			if (status == KMessageBox::No)
 				return;
 		}
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
 	conf.writeEntry("Header", ui->chkExportHeader->isChecked());
 	conf.writeEntry("Separator", ui->cbSeparator->currentText());
@@ -350,7 +351,7 @@ void ExportSpreadsheetDialog::toggleOptions() {
 	opens a file dialog and lets the user select the file.
 */
 void ExportSpreadsheetDialog::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));
 	QString dir = conf.readEntry("LastDir", "");
 
 	QString extensions;

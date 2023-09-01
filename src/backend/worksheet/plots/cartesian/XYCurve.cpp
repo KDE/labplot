@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,6 +19,7 @@
 #include "XYCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -42,11 +43,9 @@
 #include <KConfig>
 #include <KLocalizedString>
 
-extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
-}
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
@@ -269,10 +268,10 @@ void XYCurve::setHover(bool on) {
 	d->setHover(on);
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
-// general
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
+//  general
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, legendVisible, legendVisible)
 
 // data source
@@ -368,9 +367,24 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 	return d->sourceDataChangedSinceLastRecalc;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+double XYCurve::minimum(const Dimension) const {
+	// TODO
+	return NAN;
+}
+
+double XYCurve::maximum(const Dimension) const {
+	// TODO
+	return NAN;
+}
+
+bool XYCurve::hasData() const {
+	Q_D(const XYCurve);
+	return (d->xColumn != nullptr || d->yColumn != nullptr);
+}
+
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 
 // 1) add XYCurveSetXColumnCmd as friend class to XYCurve
 // 2) add XYCURVE_COLUMN_CONNECT(x) as private method to XYCurve
@@ -662,9 +676,9 @@ void XYCurve::setRugOffset(double offset) {
 		exec(new XYCurveSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void XYCurve::retransform() {
 	Q_D(XYCurve);
 	d->retransform();
@@ -854,17 +868,17 @@ void XYCurve::valuesColumnNameChanged() {
 	setValuesColumnPath(d->valuesColumn->path());
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 
 void XYCurve::navigateTo() {
 	project()->navigateTo(navigateToAction->data().toString());
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYCurvePrivate::XYCurvePrivate(XYCurve* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
@@ -1815,6 +1829,8 @@ void XYCurvePrivate::updateValues() {
 	m_valuePoints.reserve(numberOfPoints);
 	m_valueStrings.reserve(numberOfPoints);
 
+	calculateScenePoints();
+
 	// determine the value string for all points that are currently visible in the plot
 	int i{0};
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
@@ -1963,9 +1979,6 @@ void XYCurvePrivate::updateValues() {
 	QPointF tempPoint;
 	QFontMetrics fm(valuesFont);
 	const int h{fm.ascent()};
-
-	if (m_valueStrings.count())
-		calculateScenePoints();
 
 	i = 0;
 	for (const auto& string : qAsConst(m_valueStrings)) {
@@ -2698,6 +2711,8 @@ void XYCurvePrivate::updateErrorBars() {
 	QVector<QPointF> pointsErrorBarAnchorY;
 	const auto errorBarsType = errorBarsLine->errorBarsType();
 
+	calculateScenePoints();
+
 	for (int i = 0; i < m_logicalPoints.size(); ++i) {
 		if (!m_pointVisible.at(i))
 			continue;
@@ -2851,7 +2866,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	if (background->position() != Background::Position::No) {
 		painter->setOpacity(background->opacity());
 		painter->setPen(Qt::SolidLine);
-		drawFilling(painter);
+		for (const auto& polygon : qAsConst(m_fillPolygons))
+			drawFillingPollygon(polygon, painter, background);
 	}
 
 	// draw lines
@@ -2960,7 +2976,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if (!q->isPrinting() && KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true))
+	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
@@ -3013,95 +3029,6 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
 	}
 }
 
-void XYCurvePrivate::drawFilling(QPainter* painter) {
-	for (const auto& pol : qAsConst(m_fillPolygons)) {
-		QRectF rect = pol.boundingRect();
-		if (background->type() == Background::Type::Color) {
-			switch (background->colorStyle()) {
-			case Background::ColorStyle::SingleColor: {
-				painter->setBrush(QBrush(background->firstColor()));
-				break;
-			}
-			case Background::ColorStyle::HorizontalLinearGradient: {
-				QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-				linearGrad.setColorAt(0, background->firstColor());
-				linearGrad.setColorAt(1, background->secondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case Background::ColorStyle::VerticalLinearGradient: {
-				QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-				linearGrad.setColorAt(0, background->firstColor());
-				linearGrad.setColorAt(1, background->secondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-				QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-				linearGrad.setColorAt(0, background->firstColor());
-				linearGrad.setColorAt(1, background->secondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-				QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-				linearGrad.setColorAt(0, background->firstColor());
-				linearGrad.setColorAt(1, background->secondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case Background::ColorStyle::RadialGradient: {
-				QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-				radialGrad.setColorAt(0, background->firstColor());
-				radialGrad.setColorAt(1, background->secondColor());
-				painter->setBrush(QBrush(radialGrad));
-				break;
-			}
-			}
-		} else if (background->type() == Background::Type::Image) {
-			if (!background->fileName().trimmed().isEmpty()) {
-				QPixmap pix(background->fileName());
-				switch (background->imageStyle()) {
-				case Background::ImageStyle::ScaledCropped:
-					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-					break;
-				case Background::ImageStyle::Scaled:
-					pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-					break;
-				case Background::ImageStyle::ScaledAspectRatio:
-					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-					break;
-				case Background::ImageStyle::Centered: {
-					QPixmap backpix(rect.size().toSize());
-					backpix.fill();
-					QPainter p(&backpix);
-					p.drawPixmap(QPointF(0, 0), pix);
-					p.end();
-					painter->setBrush(QBrush(backpix));
-					painter->setBrushOrigin(-pix.size().width() / 2, -pix.size().height() / 2);
-					break;
-				}
-				case Background::ImageStyle::Tiled:
-					painter->setBrush(QBrush(pix));
-					break;
-				case Background::ImageStyle::CenterTiled:
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				}
-			}
-		} else if (background->type() == Background::Type::Pattern)
-			painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-
-		painter->drawPolygon(pol);
-	}
-}
-
 /*!
  * checks if the mousePress event was done near the histogram shape
  * and selects the graphics item if it is the case.
@@ -3137,9 +3064,9 @@ void XYCurvePrivate::setHover(bool on) {
 	update();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYCurve);
@@ -3234,7 +3161,6 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -3257,7 +3183,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
@@ -3286,7 +3212,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("numericFormat")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("numericFormat")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("numericFormat"));
 			else
 				d->valuesNumericFormat = *(str.toLatin1().data());
 
@@ -3321,15 +3247,19 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("rugLength", rugLength);
 			READ_DOUBLE_VALUE("rugWidth", rugWidth);
 			READ_DOUBLE_VALUE("rugOffset", rugOffset);
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 

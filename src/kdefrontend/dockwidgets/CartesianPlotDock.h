@@ -52,6 +52,7 @@ private:
 	bool m_updateUI{true};
 
 	void autoScaleRange(const Dimension, const int index, bool);
+	void load();
 	void loadConfig(KConfig&);
 
 private Q_SLOTS:
@@ -164,8 +165,6 @@ private Q_SLOTS:
 	// save/load themes
 	void loadTheme(const QString&);
 	void saveTheme(KConfig&) const;
-
-	void load();
 
 Q_SIGNALS:
 	void info(const QString&);

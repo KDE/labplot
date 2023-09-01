@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Box Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -11,7 +11,6 @@
 #define BOXPLOT_H
 
 #include "backend/lib/macros.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
 class BoxPlotPrivate;
@@ -87,8 +86,9 @@ public:
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	double minimum(CartesianCoordinateSystem::Dimension dim) const;
-	double maximum(CartesianCoordinateSystem::Dimension dim) const;
+	double minimum(CartesianCoordinateSystem::Dimension) const override;
+	double maximum(CartesianCoordinateSystem::Dimension) const override;
+	bool hasData() const override;
 
 	typedef BoxPlotPrivate Private;
 

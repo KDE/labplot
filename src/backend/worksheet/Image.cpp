@@ -193,9 +193,9 @@ void Image::setKeepRatio(bool keepRatio) {
 		exec(new ImageSetKeepRatioCmd(d, keepRatio, ki18n("%1: change keep ratio")));
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ImagePrivate::ImagePrivate(Image* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -373,9 +373,9 @@ void ImagePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Image::save(QXmlStreamWriter* writer) const {
 	Q_D(const Image);
@@ -427,7 +427,6 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	Q_D(Image);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -462,7 +461,7 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("border")) {
 			d->borderLine->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -477,9 +476,9 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Image::loadThemeConfig(const KConfig& config) {
 	Q_D(Image);
 	const auto& group = config.group("CartesianPlot");

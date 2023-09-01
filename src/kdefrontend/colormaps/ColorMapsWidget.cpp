@@ -8,6 +8,7 @@
 */
 
 #include "kdefrontend/colormaps/ColorMapsWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "tools/ColorMapsManager.h"
 
@@ -61,7 +62,7 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent)
 	connect(ui.lwColorMaps, &QListWidget::itemSelectionChanged, this, &ColorMapsWidget::colorMapChanged);
 
 	// select the last used collection
-	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsWidget"));
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
 		ui.cbCollections->setCurrentIndex(0);
@@ -86,7 +87,7 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent)
 
 ColorMapsWidget::~ColorMapsWidget() {
 	// save the selected collection
-	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsWidget"));
 	conf.writeEntry("Collection", ui.cbCollections->currentText());
 	conf.writeEntry("ViewIndex", ui.stackedWidget->currentIndex());
 	if (ui.lwColorMaps->currentItem())
@@ -131,7 +132,8 @@ void ColorMapsWidget::collectionChanged(int) {
 	m_completer = new QCompleter(colorMapNames, this);
 	connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &ColorMapsWidget::activated);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
-	m_completer->setCaseSensitivity(Qt::CaseSensitive);
+	m_completer->setCaseSensitivity(Qt::CaseInsensitive);
+	m_completer->setFilterMode(Qt::MatchContains);
 	ui.leSearch->setCompleter(m_completer);
 }
 

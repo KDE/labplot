@@ -12,7 +12,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/XYHilbertTransformCurve.h"
 
-//##############################################################################
+// ##############################################################################
 
 void HilbertTransformTest::test1() {
 	// data

@@ -22,7 +22,7 @@ class Value : public AbstractAspect {
 
 public:
 	enum Type { NoValues, BinEntries, CustomColumn };
-	enum Position { Above, Under, Left, Right };
+	enum Position { Above, Under, Left, Right, Center };
 
 	explicit Value(const QString& name);
 	~Value() override;
@@ -39,6 +39,7 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, column, Column)
 	QString& columnPath() const;
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
+	BASIC_D_ACCESSOR_DECL(bool, centerPositionAvailable, centerPositionAvailable)
 	BASIC_D_ACCESSOR_DECL(double, distance, Distance)
 	BASIC_D_ACCESSOR_DECL(double, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)

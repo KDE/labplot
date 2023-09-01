@@ -12,6 +12,7 @@
 #include "BoxPlotPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -23,6 +24,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "kdefrontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
@@ -199,7 +201,7 @@ QIcon BoxPlot::staticIcon() {
 	QPixmap pm(iconSize, iconSize);
 
 	QPen pen(Qt::SolidLine);
-	pen.setColor(DARKMODE ? Qt::white : Qt::black);
+	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
 
 	pm.fill(Qt::transparent);
@@ -448,6 +450,11 @@ double BoxPlot::maximum(const Dimension dim) const {
 	return NAN;
 }
 
+bool BoxPlot::hasData() const {
+	Q_D(const BoxPlot);
+	return !d->dataColumns.isEmpty();
+}
+
 /* ============================ setter methods and undo commands ================= */
 
 // General
@@ -465,7 +472,8 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
+			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::updateLegendRequested);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
 		}
 	}
@@ -565,9 +573,9 @@ void BoxPlot::setRugOffset(double offset) {
 		exec(new BoxPlotSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
 void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(BoxPlot);
@@ -580,9 +588,9 @@ void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void BoxPlot::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Axis::Orientation::Horizontal);
@@ -595,9 +603,9 @@ void BoxPlot::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner)
 	: PlotPrivate(owner)
 	, q(owner) {
@@ -1585,10 +1593,12 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 
 		if (!m_boxRect.at(i).isEmpty()) {
 			// draw the box filling
-			if (backgrounds.at(i)->enabled()) {
+			const auto* background = backgrounds.at(i);
+			if (background->enabled()) {
 				painter->setOpacity(backgrounds.at(i)->opacity());
 				painter->setPen(Qt::NoPen);
-				drawFilling(painter, i);
+				const QPolygonF& polygon = m_fillPolygon.at(i);
+				drawFillingPollygon(polygon, painter, background);
 			}
 
 			// draw the border
@@ -1664,98 +1674,6 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 	symbolWhiskerEnd->draw(painter, m_whiskerEndPoints.at(index));
 }
 
-void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
-	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-
-	const QPolygonF& polygon = m_fillPolygon.at(index);
-	const QRectF& rect = polygon.boundingRect();
-
-	const auto* background = backgrounds.at(index);
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (background->type() == Background::Type::Image) {
-		if (!background->fileName().trimmed().isEmpty()) {
-			QPixmap pix(background->fileName());
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Centered: {
-				QPixmap backpix(rect.size().toSize());
-				backpix.fill();
-				QPainter p(&backpix);
-				p.drawPixmap(QPointF(0, 0), pix);
-				p.end();
-				painter->setBrush(QBrush(backpix));
-				painter->setBrushOrigin(-pix.size().width() / 2, -pix.size().height() / 2);
-				break;
-			}
-			case Background::ImageStyle::Tiled:
-				painter->setBrush(QBrush(pix));
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern)
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-
-	painter->drawPolygon(polygon);
-}
-
 void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;
@@ -1764,7 +1682,7 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if (KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true))
+	if (Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
@@ -1822,9 +1740,9 @@ void BoxPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void BoxPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const BoxPlot);
@@ -1846,6 +1764,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	for (auto* column : d->dataColumns) {
 		writer->writeStartElement(QStringLiteral("column"));
 		writer->writeAttribute(QStringLiteral("path"), column->path());
@@ -1901,7 +1820,6 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool firstBackgroundRead = false;
@@ -1934,6 +1852,12 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xMax", xMax);
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
+
+			str = attribs.value(QStringLiteral("visible")).toString();
+			if (str.isEmpty())
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
+			else
+				d->setVisible(str.toInt());
 		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 
@@ -2048,9 +1972,9 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void BoxPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))

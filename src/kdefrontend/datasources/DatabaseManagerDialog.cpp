@@ -9,9 +9,10 @@
 
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
+#include "backend/core/Settings.h"
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 #include <QDialogButtonBox>
@@ -43,7 +44,7 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& con
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatabaseManagerDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -57,7 +58,7 @@ QString DatabaseManagerDialog::connection() const {
 
 DatabaseManagerDialog::~DatabaseManagerDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatabaseManagerDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

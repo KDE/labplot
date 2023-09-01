@@ -31,9 +31,6 @@ public:
 	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
-
 	void setImportFormat(const ImageFilter::ImportFormat);
 	ImageFilter::ImportFormat importFormat() const;
 

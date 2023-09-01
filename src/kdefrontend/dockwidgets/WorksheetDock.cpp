@@ -10,6 +10,7 @@
 */
 
 #include "WorksheetDock.h"
+#include "backend/core/Settings.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
@@ -92,7 +93,7 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 	connect(m_themeHandler, &ThemeHandler::loadThemeRequested, this, &WorksheetDock::loadTheme);
 	connect(m_themeHandler, &ThemeHandler::info, this, &WorksheetDock::info);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Worksheet"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &WorksheetDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &WorksheetDock::saveConfigAsTemplate);
@@ -104,12 +105,12 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 }
 
 void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_worksheetList = list;
 	m_worksheet = list.first();
 	setAspects(list);
 
-	// if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
+	// if there are more than one worksheet in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -129,6 +130,12 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	}
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
+
+	// set the initial standard page and the orientation to A4/portrait.
+	// this should be used as default initial setting when the user switches
+	// from Custom to Standard Page
+	ui.cbPage->setCurrentIndex(ui.cbPage->findData(QPageSize::A4));
+	ui.cbOrientation->setCurrentIndex(0);
 
 	// show the properties of the first worksheet
 	this->load();
@@ -152,8 +159,6 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	connect(m_worksheet, &Worksheet::layoutColumnCountChanged, this, &WorksheetDock::worksheetLayoutColumnCountChanged);
 
 	connect(m_worksheet, &Worksheet::themeChanged, m_themeHandler, &ThemeHandler::setCurrentTheme);
-
-	m_initializing = false;
 }
 
 void WorksheetDock::updateLocale() {
@@ -169,7 +174,7 @@ void WorksheetDock::updateLocale() {
 }
 
 void WorksheetDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
@@ -345,21 +350,31 @@ void WorksheetDock::sizeTypeChanged(int index) {
 	if (m_initializing) // don't lock here since we potentially need to call setters in pageChanged() below
 		return;
 
-	if (index == 0) { // viewSize
+	switch (sizeType) {
+	case SizeType::ViewSize:
 		for (auto* worksheet : m_worksheetList)
 			worksheet->setUseViewSize(true);
-	} else if (index == 1) { // standard page
+		break;
+	case SizeType::StandardPage:
 		pageChanged(ui.cbPage->currentIndex());
-	} else { // custom size
+		break;
+	case SizeType::Custom:
 		if (m_worksheet->useViewSize()) {
 			for (auto* worksheet : m_worksheetList)
 				worksheet->setUseViewSize(false);
 		}
 		sizeChanged();
+		break;
 	}
 }
 
+/*!
+ * \brief called when one of the standard page sizes was changed
+ * \param i - index of the page size in the combobox
+ */
 void WorksheetDock::pageChanged(int i) {
+	CONDITIONAL_LOCK_RETURN;
+
 	// determine the width and the height of the to be used predefined layout
 	const auto index = ui.cbPage->itemData(i).value<QPageSize::PageSizeId>();
 	QSizeF s = QPageSize::size(index, QPageSize::Millimeter);
@@ -375,28 +390,29 @@ void WorksheetDock::pageChanged(int i) {
 		ui.sbHeight->setValue(s.height() / 25.4);
 	}
 
-	CONDITIONAL_LOCK_RETURN;
-
-	double w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Unit::Millimeter);
-	double h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Unit::Millimeter);
+	const double w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Unit::Millimeter);
+	const double h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Unit::Millimeter);
 	for (auto* worksheet : m_worksheetList) {
+		worksheet->beginMacro(i18n("%1: set page size", worksheet->name()));
 		worksheet->setUseViewSize(false);
 		worksheet->setPageRect(QRectF(0, 0, w, h));
+		worksheet->endMacro();
 	}
 }
 
+/*!
+ * \brief called when the width or the height of the page was changed manually
+ */
 void WorksheetDock::sizeChanged() {
 	CONDITIONAL_RETURN_NO_LOCK;
 
-	double w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
-	double h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
+	const double w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
+	const double h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
 	for (auto* worksheet : m_worksheetList)
 		worksheet->setPageRect(QRectF(0, 0, w, h));
 }
 
 void WorksheetDock::orientationChanged(int /*index*/) {
-	CONDITIONAL_LOCK_RETURN;
-
 	this->pageChanged(ui.cbPage->currentIndex());
 }
 
@@ -605,14 +621,7 @@ void WorksheetDock::load() {
 }
 
 void WorksheetDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_worksheetList.size();
 	if (size > 1)
 		m_worksheet->beginMacro(i18n("%1 worksheets: template \"%2\" loaded", size, name));

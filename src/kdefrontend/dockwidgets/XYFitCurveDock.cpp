@@ -10,10 +10,8 @@
 */
 
 #include "XYFitCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/gsl/ExpressionParser.h"
-#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -23,9 +21,7 @@
 #include "kdefrontend/widgets/FitParametersWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
-}
 
 #include <KMessageWidget>
 
@@ -46,7 +42,7 @@ extern "C" {
 		(2D-curves defined by a fit model) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -223,7 +219,7 @@ void XYFitCurveDock::setupGeneral() {
  * load curve settings
  */
 void XYFitCurveDock::initGeneralTab() {
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -321,12 +317,13 @@ void XYFitCurveDock::setModel() {
 	cbYErrorColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	auto* model = aspectModel();
+	model->setSelectableAspects(list);
 
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-	cbXErrorColumn->setModel(m_aspectTreeModel);
-	cbYErrorColumn->setModel(m_aspectTreeModel);
+	cbXDataColumn->setModel(model);
+	cbYDataColumn->setModel(model);
+	cbXErrorColumn->setModel(model);
+	cbYErrorColumn->setModel(model);
 
 	XYCurveDock::setModel();
 }
@@ -340,7 +337,6 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_fitCurve = static_cast<XYFitCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 
 	// we need a second model for data source comboboxes which will be dynamically
 	// updated in the slot depending on the current type (spreadsheet, curve or histogram)
@@ -1007,7 +1003,7 @@ void XYFitCurveDock::updateModelEquation() {
 		QImage image = GuiTools::importPDFFile(file);
 
 		// use system palette for background
-		if (DARKMODE) {
+		if (GuiTools::isDarkMode()) {
 			// invert image if in dark mode
 			image.invertPixels();
 

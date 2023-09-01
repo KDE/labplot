@@ -18,14 +18,12 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
-}
 
-//##############################################################################
-//#################  linear regression with NIST datasets ######################
-//##############################################################################
+// ##############################################################################
+// #################  linear regression with NIST datasets ######################
+// ##############################################################################
 void FitTest::testLinearNorris() {
 	// NIST data for Norris dataset
 	QVector<double> xData = {0.2,	337.4, 118.2, 884.6, 10.1,	226.5, 666.3, 996.3, 448.6, 777.0, 558.2, 0.4,	 0.6,  775.5, 666.9, 338.0, 447.5, 11.6,
@@ -899,9 +897,9 @@ void FitTest::testLinearR_lm2() {
 	FuzzyCompare(fitResult.bic, 426.4202, 1.e-7);
 }
 
-//##############################################################################
-//#############  non-linear regression with NIST datasets  #####################
-//##############################################################################
+// ##############################################################################
+// #############  non-linear regression with NIST datasets  #####################
+// ##############################################################################
 
 void FitTest::testNonLinearMisra1a() {
 	// NIST data for Misra1a dataset
@@ -2090,7 +2088,7 @@ void FitTest::testNonLinearRat43() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x), 1/b4)");
+	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x); 1/b4)");
 	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	fitData.eps = 1.e-9;
 	const int np = fitData.paramNames.size();
@@ -2155,7 +2153,7 @@ void FitTest::testNonLinearRat43_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x), 1/b4)");
+	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x); 1/b4)");
 	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	fitData.eps = 1.e-10;
 	const int np = fitData.paramNames.size();
@@ -2220,7 +2218,7 @@ void FitTest::testNonLinearRat43_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x), 1/b4)");
+	fitData.model = QStringLiteral("b1/pow(1 + exp(b2-b3*x); 1/b4)");
 	fitData.paramNames << QStringLiteral("b1") << QStringLiteral("b2") << QStringLiteral("b3") << QStringLiteral("b4");
 	// fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -2322,9 +2320,9 @@ void FitTest::testNonLinearMichaelis_Menten() {
 	DEBUG(std::setprecision(15) << fitResult.sse); // result: 0.0252438073757174
 	FuzzyCompare(fitResult.sse, 0.0252438073989537, 1.e-9);
 }
-//##############################################################################
-//#########################  Fits with weights #################################
-//##############################################################################
+// ##############################################################################
+// #########################  Fits with weights #################################
+// ##############################################################################
 
 // see http://gnuplot.sourceforge.net/demo_5.2/fit.html
 void FitTest::testNonLinearGP_lcdemo() {
@@ -3073,9 +3071,8 @@ void FitTest::testHistogramGaussianML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3128,9 +3125,8 @@ void FitTest::testHistogramExponentialML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3176,9 +3172,8 @@ void FitTest::testHistogramLaplaceML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3218,9 +3213,8 @@ void FitTest::testHistogramCauchyML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3260,9 +3254,8 @@ void FitTest::testHistogramLognormalML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3302,9 +3295,8 @@ void FitTest::testHistogramPoissonML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit
@@ -3348,9 +3340,8 @@ void FitTest::testHistogramBinomialML() {
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet.addChild(plot);
 
-	plot->addHistogram();
-	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
-	QVERIFY(hist != nullptr);
+	auto* hist = new Histogram(QStringLiteral("Histogram"));
+	plot->addChild(hist);
 	hist->setDataColumn(spreadsheet.column(0));
 
 	// Do the fit

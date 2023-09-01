@@ -67,6 +67,9 @@ private:
 	void adjustWorksheetSize(Worksheet*) const;
 	void setAxesTitles(CartesianPlot*, const QString& yColumnName = QString()) const;
 
+	void setAxesColumnLabels(CartesianPlot*, const QString& columnName);
+	void setAxesColumnLabels(CartesianPlot*, const Column*);
+
 private Q_SLOTS:
 	void plot();
 	void curvePlacementChanged();

@@ -9,8 +9,6 @@
 */
 
 #include "XYConvolutionCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
@@ -27,7 +25,7 @@ extern "C" {
 		(2D-curves defined by a convolution) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -116,7 +114,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 
 void XYConvolutionCurveDock::initGeneralTab() {
 	DEBUG(Q_FUNC_INFO);
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -185,39 +183,11 @@ void XYConvolutionCurveDock::initGeneralTab() {
 
 void XYConvolutionCurveDock::setModel() {
 	DEBUG(Q_FUNC_INFO);
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Datapicker,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYCurve,
-						   AspectType::XYAnalysisCurve};
-	cbDataSourceCurve->setTopLevelClasses(list);
+	auto list = defaultColumnTopLevelClasses();
+	list.append(AspectType::XYConvolutionCurve);
 
-	QList<const AbstractAspect*> hiddenAspects;
-	for (auto* curve : m_curvesList)
-		hiddenAspects << curve;
-	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
+	XYAnalysisCurveDock::setModel(list);
 
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYConvolutionCurve};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-	cbY2DataColumn->setTopLevelClasses(list);
-
-	cbDataSourceCurve->setModel(m_aspectTreeModel);
-	cbXDataColumn->setModel(m_aspectTreeModel);
-	cbYDataColumn->setModel(m_aspectTreeModel);
-	cbY2DataColumn->setModel(m_aspectTreeModel);
-
-	XYCurveDock::setModel();
 	DEBUG("XYConvolutionCurveDock::setModel() DONE");
 }
 
@@ -230,7 +200,6 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_convolutionCurve = static_cast<XYConvolutionCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
 

@@ -242,9 +242,9 @@ void ReferenceRange::setPositionLogicalEnd(QPointF pos) {
 		exec(new ReferenceRangeSetPositionLogicalEndCmd(d, pos, ki18n("%1: set end logical position")));
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void ReferenceRange::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Orientation::Horizontal);
@@ -267,9 +267,9 @@ void ReferenceRange::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ReferenceRangePrivate::ReferenceRangePrivate(ReferenceRange* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -281,9 +281,12 @@ ReferenceRangePrivate::ReferenceRangePrivate(ReferenceRange* owner)
 }
 
 QPointF ReferenceRangePrivate::recalculateRect() {
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	if (!cs->isValid())
+		return QPointF();
+
 	// calculate rect in logical coordinates
 	QPointF p1, p2;
-	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	switch (orientation) {
 	case ReferenceRange::Orientation::Vertical: {
 		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
@@ -640,9 +643,9 @@ void ReferenceRangePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void ReferenceRange::save(QXmlStreamWriter* writer) const {
 	Q_D(const ReferenceRange);
@@ -674,7 +677,6 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -696,25 +698,25 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("logicalPosStartX")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosStartX")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosStartX"));
 			else
 				d->positionLogicalStart.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("logicalPosStartY")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosStartY")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosStartY"));
 			else
 				d->positionLogicalStart.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("logicalPosEndX")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosEndX")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosEndX"));
 			else
 				d->positionLogicalEnd.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("logicalPosEndY")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosEndY")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosEndY"));
 			else
 				d->positionLogicalEnd.setY(str.toDouble());
 		} else if (!preview && reader->name() == QStringLiteral("background"))
@@ -722,7 +724,7 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 		else if (!preview && reader->name() == QStringLiteral("line"))
 			d->line->load(reader, preview);
 		else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -730,9 +732,9 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void ReferenceRange::loadThemeConfig(const KConfig& config) {
 	// determine the index of the current range in the list of all range children
 	// and apply the theme color for this index

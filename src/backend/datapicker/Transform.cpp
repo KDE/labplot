@@ -9,13 +9,11 @@
 */
 
 #include "Transform.h"
-// TODO: replace with GSL or better methods
-#include <cmath>
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
 #include <gsl/gsl_math.h>
-}
+// TODO: replace with GSL or better methods
+#include <cmath>
 
 // Transform::Transform() = default;
 

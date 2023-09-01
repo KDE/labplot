@@ -609,10 +609,19 @@
   <tabstop>tabWidget</tabstop>
   <tabstop>leName</tabstop>
   <tabstop>teComment</tabstop>
+  <tabstop>cbSizeType</tabstop>
   <tabstop>cbPage</tabstop>
   <tabstop>cbOrientation</tabstop>
+  <tabstop>sbWidth</tabstop>
+  <tabstop>sbHeight</tabstop>
   <tabstop>chScaleContent</tabstop>
   <tabstop>cbLayout</tabstop>
+  <tabstop>sbLayoutTopMargin</tabstop>
+  <tabstop>sbLayoutBottomMargin</tabstop>
+  <tabstop>sbLayoutLeftMargin</tabstop>
+  <tabstop>sbLayoutRightMargin</tabstop>
+  <tabstop>sbLayoutHorizontalSpacing</tabstop>
+  <tabstop>sbLayoutVerticalSpacing</tabstop>
   <tabstop>sbLayoutRowCount</tabstop>
   <tabstop>sbLayoutColumnCount</tabstop>
  </tabstops>

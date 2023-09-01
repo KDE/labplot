@@ -772,7 +772,7 @@
 <para
 >Cal proporcionar el nom del fitxer que conté les dades a importar. El botó <guibutton
 >Informació del fitxer</guibutton
-> obre un diàleg on es mostra informació sobre el fitxer seleccionat. El tipus de les dades es pot especificar: actualment, només s'admeten fitxers ASCII que contenen diversos conjunts de dades (vectors) emmagatzemats com a columnes. El filtre (automàtic o personalitzat) determina com s'ha d'analitzar el fitxer. Seleccionat el filtre «personalitzat», es poden proporcionar manualment diversos paràmetres com ara el caràcter de separació, &etc;. </para>
+> obre un diàleg on es mostra informació sobre el fitxer seleccionat. El tipus de les dades es pot especificar: actualment, només s'admeten fitxers ASCII que contenen diversos conjunts de dades (vectors) emmagatzemats com a columnes. El filtre (automàtic o personalitzat) determina com s'ha d'analitzar el fitxer. Seleccionat el filtre «personalitzat», es poden proporcionar manualment diversos paràmetres com ara el caràcter de separació, &etc; </para>
 <para
 >La fila d'inici i final a llegir es pot personalitzar utilitzant la pestanya <guilabel
 >Porció de dades a llegir</guilabel

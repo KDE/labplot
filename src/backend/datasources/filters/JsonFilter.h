@@ -45,9 +45,6 @@ public:
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device, int lines);
 
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
-
 	void setDataRowType(const QJsonValue::Type);
 	QJsonValue::Type dataRowType() const;
 

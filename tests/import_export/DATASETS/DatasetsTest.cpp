@@ -61,9 +61,9 @@ void DatasetsTest::copyFiles() {
 	QFile::copy(m_dataDir + QStringLiteral("DatasetCollections.json"), m_jsonDir + QStringLiteral("DatasetCollections.json"));
 }
 
-//##############################################################################
-//#####################  Test processing metadata files  #######################
-//##############################################################################
+// ##############################################################################
+// #####################  Test processing metadata files  #######################
+// ##############################################################################
 
 void DatasetsTest::removeFiles() {
 	DEBUG(Q_FUNC_INFO)

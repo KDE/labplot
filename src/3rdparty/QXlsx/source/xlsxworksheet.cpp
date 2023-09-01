@@ -191,18 +191,18 @@ Worksheet *Worksheet::copy(const QString &distName, int distId) const
 
 	sheet_d->dimension = d->dimension;
 
-	QMapIterator<int, QMap<int, QSharedPointer<Cell> > > it(d->cellTable);
+    QMapIterator<int, QMap<int, std::shared_ptr<Cell> > > it(d->cellTable);
     while (it.hasNext())
     {
 		it.next();
 		int row = it.key();
-		QMapIterator<int, QSharedPointer<Cell> > it2(it.value());
+        QMapIterator<int, std::shared_ptr<Cell> > it2(it.value());
         while (it2.hasNext())
         {
 			it2.next();
 			int col = it2.key();
 
-			QSharedPointer<Cell> cell(new Cell(it2.value().data()));
+            auto cell = std::make_shared<Cell>(it2.value().get());
 			cell->d_ptr->parent = sheet;
 
 			if (cell->cellType() == Cell::SharedStringType)
@@ -450,7 +450,7 @@ bool Worksheet::write(int row, int column, const QVariant &value, const Format &
         else if (d->workbook->isStringsToNumbersEnabled() && (value.toDouble(&ok), ok))
         {
 			//Try convert string to number if the flag enabled.
-			ret = writeString(row, column, value.toString(), format);
+			ret = writeNumeric(row, column, value.toDouble(), format);
         }
         else
         {
@@ -599,7 +599,7 @@ Cell *Worksheet::cellAt(int row, int col) const
     if (!it->contains(col))
 		return nullptr;
 
-    return (*it)[col].data();
+    return (*it)[col].get();
 }
 
 Format WorksheetPrivate::cellFormat(int row, int col) const
@@ -647,7 +647,7 @@ bool Worksheet::writeString(int row, int column, const RichString &value, const 
 	if (value.fragmentCount() == 1 && value.fragmentFormat(0).isValid())
 		fmt.mergeFormat(value.fragmentFormat(0));
 	d->workbook->styles()->addXfFormat(fmt);
-	QSharedPointer<Cell> cell = QSharedPointer<Cell>(new Cell(value.toPlainString(), Cell::SharedStringType, fmt, this));
+    auto cell = std::make_shared<Cell>(value.toPlainString(), Cell::SharedStringType, fmt, this);
 	cell->d_ptr->richString = value;
 	d->cellTable[row][column] = cell;
 	return true;
@@ -717,7 +717,7 @@ bool Worksheet::writeInlineString(int row, int column, const QString &value, con
 
 	Format fmt = format.isValid() ? format : d->cellFormat(row, column);
 	d->workbook->styles()->addXfFormat(fmt);
-	d->cellTable[row][column] = QSharedPointer<Cell>(new Cell(value, Cell::InlineStringType, fmt, this));
+    d->cellTable[row][column] = std::make_shared<Cell>(value, Cell::InlineStringType, fmt, this);
 	return true;
 }
 
@@ -746,7 +746,7 @@ bool Worksheet::writeNumeric(int row, int column, double value, const Format &fo
 
 	Format fmt = format.isValid() ? format : d->cellFormat(row, column);
 	d->workbook->styles()->addXfFormat(fmt);
-	d->cellTable[row][column] = QSharedPointer<Cell>(new Cell(value, Cell::NumberType, fmt, this));
+    d->cellTable[row][column] = std::make_shared<Cell>(value, Cell::NumberType, fmt, this);
 	return true;
 }
 
@@ -792,7 +792,7 @@ bool Worksheet::writeFormula(int row, int column, const CellFormula &formula_, c
 		d->sharedFormulaMap[si] = formula;
 	}
 
-	QSharedPointer<Cell> data = QSharedPointer<Cell>(new Cell(result, Cell::NumberType, fmt, this));
+    auto data = std::make_shared<Cell>(result, Cell::NumberType, fmt, this);
 	data->d_ptr->formula = formula;
 	d->cellTable[row][column] = data;
 
@@ -806,15 +806,13 @@ bool Worksheet::writeFormula(int row, int column, const CellFormula &formula_, c
 					if(Cell *cell = cellAt(r, c)) {
 						cell->d_ptr->formula = sf;
 					} else {
-						QSharedPointer<Cell> newCell = QSharedPointer<Cell>(new Cell(result, Cell::NumberType, fmt, this));
+                        auto newCell = std::make_shared<Cell>(result, Cell::NumberType, fmt, this);
 						newCell->d_ptr->formula = sf;
 						d->cellTable[r][c] = newCell;
 					}
 				}
 			}
 		}
-	} else if (formula.formulaType() == CellFormula::SharedType) {
-
 	}
 
 	return true;
@@ -847,7 +845,7 @@ bool Worksheet::writeBlank(int row, int column, const Format &format)
 	d->workbook->styles()->addXfFormat(fmt);
 
 	//Note: NumberType with an invalid QVariant value means blank.
-	d->cellTable[row][column] = QSharedPointer<Cell>(new Cell(QVariant(), Cell::NumberType, fmt, this));
+    d->cellTable[row][column] = std::make_shared<Cell>(QVariant{}, Cell::NumberType, fmt, this);
 
 	return true;
 }
@@ -876,7 +874,7 @@ bool Worksheet::writeBool(int row, int column, bool value, const Format &format)
 
 	Format fmt = format.isValid() ? format : d->cellFormat(row, column);
 	d->workbook->styles()->addXfFormat(fmt);
-	d->cellTable[row][column] = QSharedPointer<Cell>(new Cell(value, Cell::BooleanType, fmt, this));
+    d->cellTable[row][column] = std::make_shared<Cell>(value, Cell::BooleanType, fmt, this);
 
 	return true;
 }
@@ -910,7 +908,7 @@ bool Worksheet::writeDateTime(int row, int column, const QDateTime &dt, const Fo
 
 	double value = datetimeToNumber(dt, d->workbook->isDate1904());
 
-	d->cellTable[row][column] = QSharedPointer<Cell>(new Cell(value, Cell::NumberType, fmt, this));
+    d->cellTable[row][column] = std::make_shared<Cell>(value, Cell::NumberType, fmt, this);
 
 	return true;
 }
@@ -940,7 +938,7 @@ bool Worksheet::writeDate(int row, int column, const QDate &dt, const Format &fo
 
     double value = datetimeToNumber(QDateTime(dt, QTime(0,0,0)), d->workbook->isDate1904());
 
-    d->cellTable[row][column] = QSharedPointer<Cell>(new Cell(value, Cell::NumberType, fmt, this));
+    d->cellTable[row][column] = std::make_shared<Cell>(value, Cell::NumberType, fmt, this);
 
     return true;
 }
@@ -973,7 +971,7 @@ bool Worksheet::writeTime(int row, int column, const QTime &t, const Format &for
 		fmt.setNumberFormat(QStringLiteral("hh:mm:ss"));
 	d->workbook->styles()->addXfFormat(fmt);
 
-	d->cellTable[row][column] = QSharedPointer<Cell>(new Cell(timeToNumber(t), Cell::NumberType, fmt, this));
+    d->cellTable[row][column] = std::make_shared<Cell>(timeToNumber(t), Cell::NumberType, fmt, this);
 
 	return true;
 }
@@ -1039,7 +1037,7 @@ bool Worksheet::writeHyperlink(int row, int column, const QUrl &url, const Forma
 
 	//Write the hyperlink string as normal string.
 	d->sharedStrings()->addSharedString(displayString);
-	d->cellTable[row][column] = QSharedPointer<Cell>(new Cell(displayString, Cell::SharedStringType, fmt, this));
+    d->cellTable[row][column] = std::make_shared<Cell>(displayString, Cell::SharedStringType, fmt, this);
 
 	//Store the hyperlink data in a separate table
 	d->urlTable[row][column] = QSharedPointer<XlsxHyperlinkData>(new XlsxHyperlinkData(XlsxHyperlinkData::External, urlString, locationString, QString(), tip));
@@ -1072,7 +1070,7 @@ bool Worksheet::addConditionalFormatting(const ConditionalFormatting &cf)
 		return false;
 
 	for (int i=0; i<cf.d->cfRules.size(); ++i) {
-		const QSharedPointer<XlsxCfRuleData> &rule = cf.d->cfRules[i];
+        const std::shared_ptr<XlsxCfRuleData> &rule = cf.d->cfRules[i];
 		if (!rule->dxfFormat.isEmpty())
 			d->workbook->styles()->addDxfFormat(rule->dxfFormat);
 		rule->priority = 1;
@@ -1096,10 +1094,10 @@ int Worksheet::insertImage(int row, int column, const QImage &image)
 
 	if (!d->drawing)
     {
-		d->drawing = QSharedPointer<Drawing>(new Drawing(this, F_NewFromScratch));
+        d->drawing = std::make_shared<Drawing>(this, F_NewFromScratch);
     }
 
-    DrawingOneCellAnchor* anchor = new DrawingOneCellAnchor(d->drawing.data(), DrawingAnchor::Picture);
+    DrawingOneCellAnchor* anchor = new DrawingOneCellAnchor(d->drawing.get(), DrawingAnchor::Picture);
 
 	/*
 		The size are expressed as English Metric Units (EMUs).
@@ -1196,9 +1194,9 @@ Chart *Worksheet::insertChart(int row, int column, const QSize &size)
 	Q_D(Worksheet);
 
 	if (!d->drawing)
-		d->drawing = QSharedPointer<Drawing>(new Drawing(this, F_NewFromScratch));
+        d->drawing = std::make_shared<Drawing>(this, F_NewFromScratch);
 
-	DrawingOneCellAnchor *anchor = new DrawingOneCellAnchor(d->drawing.data(), DrawingAnchor::Picture);
+    DrawingOneCellAnchor *anchor = new DrawingOneCellAnchor(d->drawing.get(), DrawingAnchor::Picture);
 
 	/*
 		The size are expressed as English Metric Units (EMUs). There are
@@ -1482,9 +1480,9 @@ void Worksheet::saveToXmlFile(QIODevice *device) const
         writer.writeEndElement(); // pageSetup
 
     } // if ( !d->Prid.isEmpty() )
-	
+
     // headerFooter
-    if( !(d->MoodFooter.isNull()) ||
+    if( !(d->ModdHeader.isNull()) ||
         !(d->MoodFooter.isNull()) )
     {
         writer.writeStartElement(QStringLiteral("headerFooter")); // headerFooter
@@ -1516,7 +1514,7 @@ void Worksheet::saveToXmlFile(QIODevice *device) const
 	writer.writeEndDocument();
 }
 
-//{{ liufeijin 
+//{{ liufeijin
 bool Worksheet::setStartPage(int spagen)
 {
     Q_D(Worksheet);
@@ -1593,7 +1591,7 @@ void WorksheetPrivate::saveXmlSheetData(QXmlStreamWriter &writer) const
 	}
 }
 
-void WorksheetPrivate::saveXmlCellData(QXmlStreamWriter &writer, int row, int col, QSharedPointer<Cell> cell) const
+void WorksheetPrivate::saveXmlCellData(QXmlStreamWriter &writer, int row, int col, std::shared_ptr<Cell> cell) const
 {
     Q_Q(const Worksheet);
 
@@ -1837,7 +1835,7 @@ void WorksheetPrivate::saveXmlDrawings(QXmlStreamWriter &writer) const
 	if (!drawing)
 		return;
 
-	int idx = workbook->drawings().indexOf(drawing.data());
+    int idx = workbook->drawings().indexOf(drawing.get());
     relationships->addWorksheetRelationship(QStringLiteral("/drawing"), QStringLiteral("../drawings/drawing%1.xml").arg(idx+1));
 
 	writer.writeEmptyElement(QStringLiteral("drawing"));
@@ -2339,11 +2337,11 @@ void WorksheetPrivate::loadXmlSheetData(QXmlStreamReader &reader)
 
 	Q_ASSERT(reader.name() == QLatin1String("sheetData"));
 
-	while (!reader.atEnd() && !(reader.name() == QLatin1String("sheetData") && reader.tokenType() == QXmlStreamReader::EndElement)) 
+	while (!reader.atEnd() && !(reader.name() == QLatin1String("sheetData") && reader.tokenType() == QXmlStreamReader::EndElement))
 	{
-		if (reader.readNextStartElement()) 
+		if (reader.readNextStartElement())
 		{
-			if (reader.name() == QLatin1String("row")) 
+			if (reader.name() == QLatin1String("row"))
 			{
 				QXmlStreamAttributes attributes = reader.attributes();
 
@@ -2351,14 +2349,14 @@ void WorksheetPrivate::loadXmlSheetData(QXmlStreamReader &reader)
 						|| attributes.hasAttribute(QLatin1String("customHeight"))
 						|| attributes.hasAttribute(QLatin1String("hidden"))
 						|| attributes.hasAttribute(QLatin1String("outlineLevel"))
-						|| attributes.hasAttribute(QLatin1String("collapsed"))) 
+						|| attributes.hasAttribute(QLatin1String("collapsed")))
 				{
 
 					QSharedPointer<XlsxRowInfo> info(new XlsxRowInfo);
                     if (attributes.hasAttribute(QLatin1String("customFormat")) &&
                             attributes.hasAttribute(QLatin1String("s")))
                     {
-						int idx = attributes.value(QLatin1String("s")).toString().toInt();
+						int idx = attributes.value(QLatin1String("s")).toInt();
 						info->format = workbook->styles()->xfFormat(idx);
 					}
 
@@ -2368,7 +2366,7 @@ void WorksheetPrivate::loadXmlSheetData(QXmlStreamReader &reader)
 						//Row height is only specified when customHeight is set
                         if(attributes.hasAttribute(QLatin1String("ht")))
                         {
-							info->height = attributes.value(QLatin1String("ht")).toString().toDouble();
+							info->height = attributes.value(QLatin1String("ht")).toDouble();
 						}
 					}
 
@@ -2377,20 +2375,20 @@ void WorksheetPrivate::loadXmlSheetData(QXmlStreamReader &reader)
 					info->collapsed = attributes.value(QLatin1String("collapsed")) == QLatin1String("1");
 
 					if (attributes.hasAttribute(QLatin1String("outlineLevel")))
-						info->outlineLevel = attributes.value(QLatin1String("outlineLevel")).toString().toInt();
+						info->outlineLevel = attributes.value(QLatin1String("outlineLevel")).toInt();
 
 					//"r" is optional too.
                     if (attributes.hasAttribute(QLatin1String("r")))
                     {
-						int row = attributes.value(QLatin1String("r")).toString().toInt();
+						int row = attributes.value(QLatin1String("r")).toInt();
 						rowsInfo[row] = info;
 					}
 				}
 
-			} 
+			}
 			else if (reader.name() == QLatin1String("c")) // Cell
-			{ 
-				
+			{
+
 				//Cell
 				QXmlStreamAttributes attributes = reader.attributes();
 				QString r = attributes.value(QLatin1String("r")).toString();
@@ -2400,9 +2398,9 @@ void WorksheetPrivate::loadXmlSheetData(QXmlStreamReader &reader)
 				Format format;
 				qint32 styleIndex = -1;
 				if (attributes.hasAttribute(QLatin1String("s"))) // Style (defined in the styles.xml file)
-				{ 
+				{
 					//"s" == style index
-					int idx = attributes.value(QLatin1String("s")).toString().toInt();
+					int idx = attributes.value(QLatin1String("s")).toInt();
 					format = workbook->styles()->xfFormat(idx);
 					styleIndex = idx;
 				}
@@ -2410,12 +2408,12 @@ void WorksheetPrivate::loadXmlSheetData(QXmlStreamReader &reader)
                 // Cell::CellType cellType = Cell::NumberType;
                 Cell::CellType cellType = Cell::CustomType;
 
-				if (attributes.hasAttribute(QLatin1String("t"))) // Type 
+				if (attributes.hasAttribute(QLatin1String("t"))) // Type
 				{
-					QString typeString = attributes.value(QLatin1String("t")).toString();
+					const auto typeString = attributes.value(QLatin1String("t"));
                     if (typeString == QLatin1String("s")) // Shared string
 					{
-						cellType = Cell::SharedStringType; 
+						cellType = Cell::SharedStringType;
 					}
                     else if (typeString == QLatin1String("inlineStr")) //  Inline String
 					{
@@ -2448,15 +2446,13 @@ void WorksheetPrivate::loadXmlSheetData(QXmlStreamReader &reader)
 					}
 				}
 
-                // [dev54] temp cell for checking datetype
-                Cell tempCell(QVariant(), cellType, format, q, styleIndex);
-                if ( tempCell.isDateTime() )
-                {
-                    cellType = Cell::DateType;
-                }
+				if (Cell::isDateType(cellType, format))
+				{
+					cellType = Cell::DateType;
+				}
 
 				// create a heap of new cell
-				QSharedPointer<Cell> cell(new Cell(QVariant(), cellType, format, q, styleIndex));
+                auto cell = std::make_shared<Cell>(QVariant{}, cellType, format, q, styleIndex);
 
                 while (!reader.atEnd() &&
                        !(reader.name() == QLatin1String("c") &&
@@ -2474,28 +2470,28 @@ void WorksheetPrivate::loadXmlSheetData(QXmlStreamReader &reader)
                                 int si = formula.sharedIndex();
                                 sharedFormulaMap[ si ] = formula;
 							}
-						} 
-						else if (reader.name() == QLatin1String("v")) // Value 
+						}
+						else if (reader.name() == QLatin1String("v")) // Value
 						{
 							QString value = reader.readElementText();
-							if (cellType == Cell::SharedStringType) 
+							if (cellType == Cell::SharedStringType)
 							{
 								int sst_idx = value.toInt();
 								sharedStrings()->incRefByStringIndex(sst_idx);
 								RichString rs = sharedStrings()->getSharedString(sst_idx);
 								QString strPlainString = rs.toPlainString();
-								cell->d_func()->value = strPlainString; 
+								cell->d_func()->value = strPlainString;
 								if (rs.isRichString())
 									cell->d_func()->richString = rs;
-							} 
-							else if (cellType == Cell::NumberType) 
+							}
+							else if (cellType == Cell::NumberType)
 							{
 								cell->d_func()->value = value.toDouble();
-							} 
-							else if (cellType == Cell::BooleanType) 
+							}
+							else if (cellType == Cell::BooleanType)
 							{
 								cell->d_func()->value = value.toInt() ? true : false;
-							} 
+							}
                             else  if (cellType == Cell::DateType)
                             {
                                 // [dev54] DateType
@@ -2508,11 +2504,11 @@ void WorksheetPrivate::loadXmlSheetData(QXmlStreamReader &reader)
                                 // cell->d_func()->value = vDatetimeValue;
                                 cell->d_func()->value = dValue; // dev67
                             }
-							else 
+							else
                             {
                                 // ELSE type
 								cell->d_func()->value = value;
-							} 
+							}
 
                         }
                         else if (reader.name() == QLatin1String("is"))
@@ -2567,8 +2563,8 @@ void WorksheetPrivate::loadXmlColumnsInfo(QXmlStreamReader &reader)
                 QSharedPointer<XlsxColumnInfo> info(new XlsxColumnInfo(0, 1, false));
 
 				QXmlStreamAttributes colAttrs = reader.attributes();
-				int min = colAttrs.value(QLatin1String("min")).toString().toInt();
-				int max = colAttrs.value(QLatin1String("max")).toString().toInt();
+				int min = colAttrs.value(QLatin1String("min")).toInt();
+				int max = colAttrs.value(QLatin1String("max")).toInt();
 				info->firstColumn = min;
 				info->lastColumn = max;
 
@@ -2583,7 +2579,7 @@ void WorksheetPrivate::loadXmlColumnsInfo(QXmlStreamReader &reader)
                 // [dev54]
                 if (colAttrs.hasAttribute(QLatin1String("width")))
                 {
-					double width = colAttrs.value(QLatin1String("width")).toString().toDouble();
+					double width = colAttrs.value(QLatin1String("width")).toDouble();
 					info->width = width;
                     info->isSetWidth = true; // [dev54]
 				}
@@ -2593,13 +2589,13 @@ void WorksheetPrivate::loadXmlColumnsInfo(QXmlStreamReader &reader)
 
                 if (colAttrs.hasAttribute(QLatin1String("style")))
                 {
-					int idx = colAttrs.value(QLatin1String("style")).toString().toInt();
+					int idx = colAttrs.value(QLatin1String("style")).toInt();
 					info->format = workbook->styles()->xfFormat(idx);
 				}
 
 				if (colAttrs.hasAttribute(QLatin1String("outlineLevel")))
                 {
-					info->outlineLevel = colAttrs.value(QLatin1String("outlineLevel")).toString().toInt();
+					info->outlineLevel = colAttrs.value(QLatin1String("outlineLevel")).toInt();
                 }
 
                 // qDebug() << "[debug] " << __FUNCTION__ << min << max << info->width << hasWidth;
@@ -2630,7 +2626,7 @@ void WorksheetPrivate::loadXmlMergeCells(QXmlStreamReader &reader)
     }
     else
     {
-        count = attributes.value(QLatin1String("count")).toString().toInt();
+        count = attributes.value(QLatin1String("count")).toInt();
     }
 
     while ( !reader.atEnd() &&
@@ -2664,7 +2660,7 @@ void WorksheetPrivate::loadXmlDataValidations(QXmlStreamReader &reader)
 {
 	Q_ASSERT(reader.name() == QLatin1String("dataValidations"));
 	QXmlStreamAttributes attributes = reader.attributes();
-	int count = attributes.value(QLatin1String("count")).toString().toInt();
+	int count = attributes.value(QLatin1String("count")).toInt();
 
 	while (!reader.atEnd() && !(reader.name() == QLatin1String("dataValidations")
 			&& reader.tokenType() == QXmlStreamReader::EndElement)) {
@@ -2717,7 +2713,7 @@ void WorksheetPrivate::loadXmlSheetFormatProps(QXmlStreamReader &reader)
     {
         if(attrib.name() == QLatin1String("baseColWidth") )
         {
-			formatProps.baseColWidth = attrib.value().toString().toInt();
+			formatProps.baseColWidth = attrib.value().toInt();
         }
         else if(attrib.name() == QLatin1String("customHeight"))
         {
@@ -2725,21 +2721,21 @@ void WorksheetPrivate::loadXmlSheetFormatProps(QXmlStreamReader &reader)
         }
         else if(attrib.name() == QLatin1String("defaultColWidth"))
         {
-            double dDefaultColWidth = attrib.value().toString().toDouble();
+            double dDefaultColWidth = attrib.value().toDouble();
             formatProps.defaultColWidth = dDefaultColWidth;
             isSetWidth = true;
         }
         else if(attrib.name() == QLatin1String("defaultRowHeight"))
         {
-			formatProps.defaultRowHeight = attrib.value().toString().toDouble();
+			formatProps.defaultRowHeight = attrib.value().toDouble();
         }
         else if(attrib.name() == QLatin1String("outlineLevelCol"))
         {
-			formatProps.outlineLevelCol = attrib.value().toString().toInt();
+			formatProps.outlineLevelCol = attrib.value().toInt();
         }
         else if(attrib.name() == QLatin1String("outlineLevelRow"))
         {
-			formatProps.outlineLevelRow = attrib.value().toString().toInt();
+			formatProps.outlineLevelRow = attrib.value().toInt();
         }
         else if(attrib.name() == QLatin1String("thickBottom"))
         {
@@ -2950,12 +2946,10 @@ bool Worksheet::loadFromXmlFile(QIODevice *device)
 				QString rId = reader.attributes().value(QStringLiteral("r:id")).toString();
 				QString name = d->relationships->getRelationshipById(rId).target;
 
-                QString str = *( splitPath(filePath()).begin() );
-                str = str + QLatin1String("/");
-                str = str + name;
-                QString path = QDir::cleanPath( str );
+                const auto parts = splitPath(filePath());
+                QString path = QDir::cleanPath(parts.first() + QLatin1String("/") + name);
 
-				d->drawing = QSharedPointer<Drawing>(new Drawing(this, F_LoadFromExists));
+                d->drawing = std::make_shared<Drawing>(this, F_LoadFromExists);
 				d->drawing->setFilePath(path);
             }
             else if (reader.name() == QLatin1String("extLst"))
@@ -3003,7 +2997,6 @@ void WorksheetPrivate::validateDimension()
         {
             lastColumn = (--it.value().constEnd()).key();
         }
-
     }
 
 	CellRange cr(firstRow, firstColumn, lastRow, lastColumn);
@@ -3048,21 +3041,21 @@ QVector<CellLocation> Worksheet::getFullCells(int* maxRow, int* maxCol)
         return ret;
     }
 
-    QMapIterator< int, QMap< int, QSharedPointer<Cell> > > _it( d->cellTable );
+    QMapIterator< int, QMap< int, std::shared_ptr<Cell> > > _it( d->cellTable );
 
     while ( _it.hasNext() )
     {
         _it.next();
 
         int keyI = _it.key(); // key (cell row)
-        QMapIterator<int, QSharedPointer<Cell> > _iit( _it.value() ); // value
+        QMapIterator<int, std::shared_ptr<Cell> > _iit( _it.value() ); // value
 
         while ( _iit.hasNext() )
         {
             _iit.next();
 
             int keyII = _iit.key(); // key (cell column)
-            QSharedPointer<Cell> ptrCell = _iit.value(); // value
+            std::shared_ptr<Cell> ptrCell = _iit.value(); // value
 
             CellLocation cl;
 

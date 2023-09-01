@@ -10,12 +10,9 @@
 #ifndef RANGE_H
 #define RANGE_H
 
-#include "macros.h" //const auto numberLocale = QLocale();
-
-extern "C" {
 #include "backend/gsl/parser.h"
 #include "backend/nsl/nsl_math.h"
-}
+#include "macros.h" //const auto numberLocale = QLocale();
 
 #include <QStringList>
 #include <cmath>
@@ -226,6 +223,41 @@ public:
 	QString toLocaleString(bool round = true) const {
 		return this->toString(round, QLocale());
 	}
+
+	// fix start and end when not supported by scale
+	void fixLimits() {
+		switch (m_scale) {
+		case Scale::Linear: // all values are allowed (catch inf, nan?)
+			break;
+		case Scale::Log10:
+			if (m_end <= 0)
+				m_end = 10.;
+			if (m_start <= 0)
+				m_start = m_end / 10.;
+			break;
+		case Scale::Log2:
+			if (m_end <= 0)
+				m_end = 2.;
+			if (m_start <= 0)
+				m_start = m_end / 2.;
+			break;
+		case Scale::Ln:
+			if (m_end <= 0)
+				m_end = M_E;
+			if (m_start <= 0)
+				m_start = m_end / M_E;
+			break;
+		case Scale::Sqrt:
+		case Scale::Square:
+		case Scale::Inverse:
+			if (m_end <= 0) // end must be > 0 for start to be < end
+				m_end = 1.;
+			if (m_start < 0)
+				m_start = 0.;
+			break;
+		}
+	}
+
 	// extend/shrink range to nice numbers (used in auto scaling)
 	//  get nice size to extend to (see Glassner: Graphic Gems)
 	double niceSize(double size, bool round) {
@@ -236,7 +268,7 @@ public:
 		if (round) {
 			if (fraction < 1.5)
 				niceFraction = 1;
-			else if (fraction <= 2)
+			else if (fraction <= 2.5)
 				niceFraction = 2;
 			else if (fraction < 7)
 				niceFraction = 5;
@@ -252,7 +284,7 @@ public:
 			else
 				niceFraction = 10;
 		}
-		DEBUG(Q_FUNC_INFO << ", fraction = " << fraction);
+		DEBUG(Q_FUNC_INFO << ", round = " << round << ", fraction = " << fraction);
 		DEBUG(Q_FUNC_INFO << ", nice fraction = " << niceFraction);
 
 		return niceFraction * std::pow(10., exponent);
@@ -263,18 +295,21 @@ public:
 	void niceExtend(bool extend = true) { // extend == false means shrink
 		if (length() == 0)
 			return;
+
+		if (isLogScale(scale()) && (m_start <= 0 || m_end <= 0))
+			return;
+
+		double base = 10.;
 		double oldSize = size();
 		switch (scale()) {
 		case Scale::Linear:
-			break;
 		case Scale::Log10:
-			oldSize = log10(oldSize);
-			break;
+			break; // default base
 		case Scale::Log2:
-			oldSize = log2(oldSize);
+			base = 2.;
 			break;
 		case Scale::Ln:
-			oldSize = log(oldSize);
+			base = M_E;
 			break;
 		case Scale::Sqrt:
 			oldSize = sqrt(oldSize);
@@ -284,38 +319,34 @@ public:
 			break;
 		case Scale::Inverse:
 			oldSize = 1. / oldSize;
-			break;
 		}
-		// DEBUG("old size = " << oldSize)
+
+		if (isLogScale(scale())) {
+			if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
+				m_start = nsl_math_round_basex(m_start, -1, base);
+				m_end = nsl_math_round_basex(m_end, -1, base) * base;
+			} else {
+				m_start = nsl_math_round_basex(m_start, -1, base) * base;
+				m_end = nsl_math_round_basex(m_end, -1, base);
+			}
+			return; // log scales end here
+		}
+
+		DEBUG(Q_FUNC_INFO << ", scale = " << (int)scale() << ", old size = " << oldSize)
 
 		const double newSize = niceSize(oldSize, false);
 		DEBUG(Q_FUNC_INFO << ", new size = " << newSize);
 		const double maxTicks = 10; // TODO: parameter?
 		const double spacing = niceSize(newSize / (maxTicks - 1), true);
-		// DEBUG("spacing = " << spacing)
+		DEBUG("spacing = " << spacing)
 
 		// extend/shrink range
 		double new_start = m_start, new_end = m_end;
 		switch (scale()) {
 		case Scale::Linear:
-			break;
-		case Scale::Log10:
-			if (m_start <= 0 || m_end <= 0)
-				return;
-			new_start = log10(m_start);
-			new_end = log10(m_end);
-			break;
+		case Scale::Log10: // log-scales already done
 		case Scale::Log2:
-			if (m_start <= 0 || m_end <= 0)
-				return;
-			new_start = log2(m_start);
-			new_end = log2(m_end);
-			break;
 		case Scale::Ln:
-			if (m_start <= 0 || m_end <= 0)
-				return;
-			new_start = log(m_start);
-			new_end = log(m_end);
 			break;
 		case Scale::Sqrt:
 			if (m_start < 0 || m_end < 0)
@@ -332,8 +363,8 @@ public:
 				return;
 			new_start = 1. / m_start;
 			new_end = 1. / m_end;
-			break;
 		}
+
 		if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
 			new_start = std::floor(new_start / spacing) * spacing;
 			new_end = std::ceil(new_end / spacing) * spacing;
@@ -341,22 +372,13 @@ public:
 			new_start = std::ceil(new_start / spacing) * spacing;
 			new_end = std::floor(new_end / spacing) * spacing;
 		}
-		// DEBUG(" tmp new range: " << new_start << " .. " << new_end)
+		DEBUG(" tmp new range: " << new_start << " .. " << new_end)
 
 		switch (scale()) {
 		case Scale::Linear:
-			break;
-		case Scale::Log10:
-			new_start = pow(10, new_start);
-			new_end = pow(10, new_end);
-			break;
+		case Scale::Log10: // log-scales already done
 		case Scale::Log2:
-			new_start = exp2(new_start);
-			new_end = exp2(new_end);
-			break;
 		case Scale::Ln:
-			new_start = exp(new_start);
-			new_end = exp(new_end);
 			break;
 		case Scale::Sqrt:
 			new_start *= new_start;
@@ -373,7 +395,6 @@ public:
 				return;
 			new_start = 1. / new_start;
 			new_end = 1. / new_end;
-			break;
 		}
 
 		if (std::abs(new_end - new_start) == 0) // avoid empty range
@@ -384,12 +405,43 @@ public:
 		DEBUG(Q_FUNC_INFO << ", new range: " << toStdString())
 	}
 	int autoTickCount() const {
+		QDEBUG(Q_FUNC_INFO << ", scale = " << scale())
+
 		if (length() == 0)
 			return 0;
 
+		if (isLogScale(scale()) && (m_start <= 0 || m_end <= 0))
+			return 1; // datetime test expects value > 0
+
+		double order = 0.;
+		switch (scale()) {
+		case Scale::Linear:
+		case Scale::Sqrt:
+		case Scale::Square:
+		case Scale::Inverse:
+			break;
+		case Scale::Log10:
+			order = log10(m_end) - log10(m_start);
+			break;
+		case Scale::Log2:
+			order = log2(m_end) - log2(m_start);
+			break;
+		case Scale::Ln:
+			order = log(m_end) - log(m_start);
+			break;
+		}
+
+		if (isLogScale(scale())) {
+			DEBUG(Q_FUNC_INFO << ", order = " << std::round(order))
+			if (order >= 0)
+				return std::round(order) + 1;
+			else // reverse range
+				return -std::round(order) + 1;
+		} // log scales end here
+
 		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", length() = " << length())
-		const double order = pow(10.0, std::floor(log10(length())));
-		;
+		order = pow(10.0, std::floor(log10(length())));
+
 		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order)
 		const int factor = qRound(100 * length() / order);
 		DEBUG(Q_FUNC_INFO << ", factor = " << factor)

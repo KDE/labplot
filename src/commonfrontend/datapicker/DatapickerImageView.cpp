@@ -345,21 +345,24 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 	painter->restore();
 }
 
-//##############################################################################
-//####################################  Events   ###############################
-//##############################################################################
+// ##############################################################################
+// ####################################  Events   ###############################
+// ##############################################################################
 void DatapickerImageView::keyPressEvent(QKeyEvent* event) {
 	if (event->matches(QKeySequence::Paste)) {
 		const QClipboard* clipboard = QApplication::clipboard();
 		const QMimeData* mimeData = clipboard->mimeData();
 		if (mimeData->hasImage()) {
-			m_image->setOriginalImage(qvariant_cast<QImage>(mimeData->imageData()));
+			m_image->setImage(qvariant_cast<QImage>(mimeData->imageData()), QStringLiteral(""), true);
 			event->accept();
 		} else if (mimeData->hasText()) {
 			// Check if it is a filepath
-			QFileInfo fi(mimeData->text());
+			QString text = mimeData->text();
+			if (text.startsWith(QStringLiteral("file://")))
+				text.replace(QStringLiteral("file://"), QStringLiteral(""));
+			QFileInfo fi(text);
 			if (fi.exists()) {
-				m_image->setOriginalImage(fi.absoluteFilePath());
+				m_image->setImage(fi.absoluteFilePath(), true);
 				event->accept();
 			}
 		}
@@ -587,9 +590,9 @@ void DatapickerImageView::contextMenuEvent(QContextMenuEvent*) {
 	menu->exec(QCursor::pos());
 }
 
-//##############################################################################
-//####################################  SLOTs   ###############################
-//##############################################################################
+// ##############################################################################
+// ####################################  SLOTs   ###############################
+// ##############################################################################
 void DatapickerImageView::mouseModeChanged(QAction* action) {
 	m_mouseMode = (DatapickerImageView::MouseMode)action->data().toInt();
 

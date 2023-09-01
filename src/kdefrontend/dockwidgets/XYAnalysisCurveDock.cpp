@@ -1,5 +1,7 @@
 #include "XYAnalysisCurveDock.h"
 
+#include "commonfrontend/widgets/TreeViewComboBox.h"
+
 XYAnalysisCurveDock::XYAnalysisCurveDock(QWidget* parent)
 	: XYCurveDock(parent) {
 }
@@ -39,4 +41,38 @@ void XYAnalysisCurveDock::showResult(const XYAnalysisCurve* curve, QTextEdit* te
 
 QString XYAnalysisCurveDock::customText() const {
 	return QStringLiteral("");
+}
+
+void XYAnalysisCurveDock::setModel(const QList<AspectType>& topLevelClasses) {
+	if (cbDataSourceCurve) {
+		// The FourierTransformCurveDock and the XYHilbertTransformCurveDock don't use this datasource
+		// choosing therefore cbDataSourceCurve will not be initialized
+		QList<AspectType> list{AspectType::Folder,
+							   AspectType::Datapicker,
+							   AspectType::Worksheet,
+							   AspectType::CartesianPlot,
+							   AspectType::XYCurve,
+							   AspectType::XYAnalysisCurve};
+		cbDataSourceCurve->setTopLevelClasses(list);
+
+		QList<const AbstractAspect*> hiddenAspects;
+		for (auto* curve : m_curvesList)
+			hiddenAspects << curve;
+		cbDataSourceCurve->setHiddenAspects(hiddenAspects);
+	}
+
+	auto* model = aspectModel();
+	if (cbY2DataColumn) {
+		cbY2DataColumn->setTopLevelClasses(topLevelClasses);
+		cbY2DataColumn->setModel(model);
+	}
+
+	cbXDataColumn->setTopLevelClasses(topLevelClasses);
+	cbYDataColumn->setTopLevelClasses(topLevelClasses);
+
+	cbDataSourceCurve->setModel(model);
+	cbXDataColumn->setModel(model);
+	cbYDataColumn->setModel(model);
+
+	XYCurveDock::setModel();
 }

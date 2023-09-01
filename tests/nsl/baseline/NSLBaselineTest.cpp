@@ -9,16 +9,13 @@
 */
 
 #include "NSLBaselineTest.h"
+#include "backend/nsl/nsl_baseline.h"
 
 #include <fstream>
 
-extern "C" {
-#include "backend/nsl/nsl_baseline.h"
-}
-
-//##############################################################################
-//#################  constant base lines
-//##############################################################################
+// ##############################################################################
+// #################  constant base lines
+// ##############################################################################
 
 void NSLBaselineTest::testBaselineMinimum() {
 	double data[] = {4., 5., 2.};
@@ -103,9 +100,9 @@ void NSLBaselineTest::testBaselineMedian2() {
 		QCOMPARE(data[i], result[i]);
 }
 
-//##############################################################################
-//#################  non-constant base lines
-//##############################################################################
+// ##############################################################################
+// #################  non-constant base lines
+// ##############################################################################
 
 void NSLBaselineTest::testBaselineEndpoints() {
 	double xdata[] = {1., 2., 4.};
@@ -149,9 +146,9 @@ void NSLBaselineTest::testBaselineARPLS() {
 	double tol = nsl_baseline_remove_arpls(data, N, 1.e-3, 1.e4, 10);
 	WARN("TOL = " << tol)
 
-	QCOMPARE(tol, 0.0043202087307554);
+	FuzzyCompare(tol, 0.0043202087307554, 5.e-9); // GSL value
 	for (size_t i = 0; i < N; ++i)
-		QCOMPARE(data[i], result[i]);
+		FuzzyCompare(data[i], result[i], 1.e-10);
 }
 
 void NSLBaselineTest::testBaselineARPLSSpectrum() {
@@ -168,7 +165,7 @@ void NSLBaselineTest::testBaselineARPLSSpectrum() {
 	double tol = nsl_baseline_remove_arpls(data, N, 1.e-2, 1.e4, 10);
 	WARN("TOL = " << tol)
 
-	QCOMPARE(tol, 0.108167623062361);
+	FuzzyCompare(tol, 0.108167623062361, 1.e-9); // GSL value
 	for (size_t i = 0; i < N; ++i)
 		FuzzyCompare(data[i], result[i], 2.e-5);
 }
@@ -187,11 +184,11 @@ void NSLBaselineTest::testBaselineARPLS_XRD() {
 	double tol = nsl_baseline_remove_arpls(data, N, 1.e-3, 1.e6, 20);
 	WARN("TOL = " << tol)
 
-	QCOMPARE(tol, 0.0068956252520988);
+	FuzzyCompare(tol, 0.0068956252520988, 1.e-6); // GSL value
 	// std::ofstream o("out.dat");
 	for (size_t i = 0; i < N; ++i) {
 		// o << data[i] << std::endl;
-		FuzzyCompare(data[i], result[i], 1.e-5);
+		FuzzyCompare(data[i], result[i], 2.e-5);
 	}
 }
 

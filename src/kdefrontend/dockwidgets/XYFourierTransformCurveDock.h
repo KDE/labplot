@@ -31,14 +31,12 @@ private:
 	void showTransformResult();
 
 	Ui::XYFourierTransformCurveDockGeneralTab uiGeneralTab;
-	TreeViewComboBox* cbXDataColumn{nullptr};
-	TreeViewComboBox* cbYDataColumn{nullptr};
 
 	XYFourierTransformCurve* m_transformCurve{nullptr};
 	XYFourierTransformCurve::TransformData m_transformData;
 
 protected:
-	void setModel() override;
+	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYFourierTransformCurveDock

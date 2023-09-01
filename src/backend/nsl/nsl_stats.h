@@ -10,6 +10,17 @@
 #ifndef NSL_STATS_H
 #define NSL_STATS_H
 
+#undef __BEGIN_DECLS
+#undef __END_DECLS
+#ifdef __cplusplus
+#define __BEGIN_DECLS extern "C" {
+#define __END_DECLS }
+#else
+#define __BEGIN_DECLS /* empty */
+#define __END_DECLS /* empty */
+#endif
+__BEGIN_DECLS
+
 #include <stdlib.h>
 
 /* estimation types of quantile (see https://en.wikipedia.org/wiki/Quantile,
@@ -87,5 +98,7 @@ double nsl_stats_aicc(double sse, size_t n, size_t np, int version);
 
 /* Schwarz Bayesian information criterion (BIC, SBC, SBIC) */
 double nsl_stats_bic(double sse, size_t n, size_t np, int version);
+
+__END_DECLS
 
 #endif /* NSL_STATS_H */

@@ -27,7 +27,6 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 
-extern "C" {
 #include "backend/gsl/parser.h"
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
@@ -40,7 +39,6 @@ extern "C" {
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
-}
 
 #include <QDateTime>
 #include <QElapsedTimer>
@@ -875,9 +873,9 @@ QIcon XYFitCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 const AbstractColumn* XYFitCurve::residualsColumn() const {
 	Q_D(const XYFitCurve);
 	return d->residualsColumn;
@@ -907,9 +905,9 @@ const XYFitCurve::FitResult& XYFitCurve::fitResult() const {
 	return d->fitResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetDataSourceHistogram, const Histogram*, dataSourceHistogram, retransform)
 void XYFitCurve::setDataSourceHistogram(const Histogram* histogram) {
 	Q_D(XYFitCurve);
@@ -960,9 +958,9 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 	exec(new XYFitCurveSetFitDataCmd(d, fitData, ki18n("%1: set fit options and perform the fit")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -2662,9 +2660,9 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s, double chi) 
 	fitResult.solverOutput += state;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFitCurve);
@@ -2807,7 +2805,6 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFitCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str, model;
 
@@ -2934,6 +2931,10 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 			else if (column->name() == QLatin1String("residuals"))
 				d->residualsColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

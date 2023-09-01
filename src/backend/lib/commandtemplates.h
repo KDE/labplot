@@ -17,6 +17,32 @@
 
 #include <KLocalizedString>
 
+#include "backend/lib/macros.h"
+
+/*!
+ * \brief The LongExecutionCmd class
+ * Use this undo command if you expect long execution times
+ * Executes all child commands and sets the cursor to the waiting symbol
+ */
+class LongExecutionCmd : public QUndoCommand {
+public:
+	LongExecutionCmd(const QString& text, QUndoCommand* parent = nullptr)
+		: QUndoCommand(text, parent) {
+	}
+
+	virtual void redo() override {
+		WAIT_CURSOR;
+		QUndoCommand::redo();
+		RESET_CURSOR;
+	}
+
+	virtual void undo() override {
+		WAIT_CURSOR;
+		QUndoCommand::undo();
+		RESET_CURSOR;
+	}
+};
+
 template<class target_class, typename value_type>
 class StandardSetterCmd : public QUndoCommand {
 public:

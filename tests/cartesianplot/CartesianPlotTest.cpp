@@ -37,9 +37,9 @@ void CartesianPlotTest::initTestCase() {
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
 
-//##############################################################################
-//#####################  import of LabPlot projects ############################
-//##############################################################################
+// ##############################################################################
+// #####################  import of LabPlot projects ############################
+// ##############################################################################
 
 #define LOAD_PROJECT_DATA_CHANGE                                                                                                                               \
 	Project project;                                                                                                                                           \
@@ -320,7 +320,7 @@ void CartesianPlotTest::equationCurveEquationChangedAutoScale() {
 	equationData.max = QStringLiteral("10");
 	eqc->setEquationData(equationData);
 
-	CHECK_RANGE(plot, curve2, Dimension::X, -5., 10.); // NiceExtend Changes the xrange to -5 instead of 4
+	CHECK_RANGE(plot, curve2, Dimension::X, -4., 10.);
 	CHECK_RANGE(plot, curve2, Dimension::Y, 0., 10.);
 
 	QCOMPARE(plot->autoScale(Dimension::Y, cs->index(Dimension::Y)), true);
@@ -338,7 +338,7 @@ void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 	equationData.max = QStringLiteral("10");
 	eqc->setEquationData(equationData);
 
-	CHECK_RANGE(plot, curve2, Dimension::X, -5., 10.); // NiceExtend Changes the xrange to -5 instead of 4
+	CHECK_RANGE(plot, curve2, Dimension::X, -4., 10.);
 	CHECK_RANGE(plot, curve2, Dimension::Y, 0., 1.);
 
 	QCOMPARE(plot->autoScale(Dimension::Y, cs->index(Dimension::Y)), false);

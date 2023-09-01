@@ -9,6 +9,7 @@
 */
 
 #include "ImageDock.h"
+#include "backend/core/Settings.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/GuiTools.h"
@@ -126,7 +127,7 @@ void ImageDock::setImages(QList<Image*> list) {
 
 	updateLocale();
 
-	// if there are more then one image in the list, disable the name and comment field in the tab "general"
+	// if there are more than one image in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -191,7 +192,7 @@ void ImageDock::updateLocale() {
 }
 
 void ImageDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;

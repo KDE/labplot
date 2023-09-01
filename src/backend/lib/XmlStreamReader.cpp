@@ -95,6 +95,16 @@ void XmlStreamReader::raiseWarning(const QString& message) {
 	m_warnings.append(i18n("line %1, column %2: %3", lineNumber(), columnNumber(), message));
 }
 
+void XmlStreamReader::raiseMissingAttributeWarning(const QString& attribute) {
+	static auto warning = i18n("Attribute '%1' missing or empty, default value is used");
+	m_warnings.append(i18n("line %1, column %2: %3", lineNumber(), columnNumber(), warning.arg(attribute)));
+}
+
+void XmlStreamReader::raiseUnknownElementWarning() {
+	static auto warning = i18n("unknown element '%1'");
+	m_warnings.append(i18n("line %1, column %2: %3", lineNumber(), columnNumber(), warning.arg(name())));
+}
+
 void XmlStreamReader::raiseMissingCASWarning(const QString& name) {
 	m_missingCASPlugins.append(name);
 }

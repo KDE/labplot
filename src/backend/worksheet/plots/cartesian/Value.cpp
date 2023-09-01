@@ -75,9 +75,9 @@ void Value::draw(QPainter* painter, const QVector<QPointF>& points, const QVecto
 	}
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Value, Value::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(Value, const AbstractColumn*, column, column)
 QString& Value::columnPath() const {
@@ -85,6 +85,7 @@ QString& Value::columnPath() const {
 	return d->columnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Value, Value::Position, position, position)
+BASIC_SHARED_D_READER_IMPL(Value, bool, centerPositionAvailable, centerPositionAvailable)
 BASIC_SHARED_D_READER_IMPL(Value, double, distance, distance)
 BASIC_SHARED_D_READER_IMPL(Value, double, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(Value, double, opacity, opacity)
@@ -96,14 +97,18 @@ BASIC_SHARED_D_READER_IMPL(Value, QString, suffix, suffix)
 BASIC_SHARED_D_READER_IMPL(Value, QColor, color, color)
 BASIC_SHARED_D_READER_IMPL(Value, QFont, font, font)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(Value, SetType, Value::Type, type, updateValue)
 void Value::setType(Value::Type type) {
 	Q_D(Value);
 	if (type != d->type)
 		exec(new ValueSetTypeCmd(d, type, ki18n("%1: set values type")));
+}
+void Value::setcenterPositionAvailable(bool available) {
+	Q_D(Value);
+	d->centerPositionAvailable = available;
 }
 
 STD_SETTER_CMD_IMPL_F_S(Value, SetColumn, const AbstractColumn*, column, updateValue)
@@ -113,7 +118,7 @@ void Value::setColumn(const AbstractColumn* column) {
 		exec(new ValueSetColumnCmd(d, column, ki18n("%1: set values column")));
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Value::updateRequested);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Value::columnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Value::columnAboutToBeRemoved);
 		}
 	}
 }
@@ -203,9 +208,9 @@ void Value::columnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ValuePrivate::ValuePrivate(Value* owner)
 	: q(owner) {
 }
@@ -222,9 +227,9 @@ void ValuePrivate::updatePixmap() {
 	Q_EMIT q->updatePixmapRequested();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Value::save(QXmlStreamWriter* writer) const {
 	Q_D(const Value);
@@ -252,7 +257,6 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Value);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 
 	auto attribs = reader->attributes();
@@ -266,7 +270,7 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(QStringLiteral("numericFormat")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("numericFormat")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("numericFormat"));
 	else
 		d->numericFormat = *(str.toLatin1().data());
 
@@ -283,9 +287,9 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Value::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
 	setOpacity(group.readEntry("ValueOpacity", 1.0));
 	setColor(group.readEntry("ValueColor", themeColor));

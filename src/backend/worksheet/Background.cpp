@@ -66,9 +66,9 @@ void Background::init(const KConfigGroup& group) {
 		d->position = (Position)group.readEntry(d->prefix + QStringLiteral("Position"), static_cast<int>(Position::No));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Background, bool, enabledAvailable, enabledAvailable)
 BASIC_SHARED_D_READER_IMPL(Background, bool, positionAvailable, positionAvailable)
 
@@ -83,9 +83,9 @@ BASIC_SHARED_D_READER_IMPL(Background, QColor, secondColor, secondColor)
 BASIC_SHARED_D_READER_IMPL(Background, QString, fileName, fileName)
 BASIC_SHARED_D_READER_IMPL(Background, double, opacity, opacity)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 void Background::setEnabledAvailable(bool available) {
 	Q_D(Background);
 	d->enabledAvailable = available;
@@ -166,9 +166,9 @@ void Background::setOpacity(double opacity) {
 		exec(new BackgroundSetOpacityCmd(d, opacity, ki18n("%1: set background opacity")));
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 BackgroundPrivate::BackgroundPrivate(Background* owner)
 	: q(owner) {
 }
@@ -185,9 +185,9 @@ void BackgroundPrivate::updatePosition() {
 	Q_EMIT q->updatePositionRequested();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Background::save(QXmlStreamWriter* writer) const {
 	Q_D(const Background);
@@ -220,7 +220,6 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Background);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 
 	auto attribs = reader->attributes();
@@ -238,37 +237,37 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(QStringLiteral("firstColor_r")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("firstColor_r")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("firstColor_r"));
 	else
 		d->firstColor.setRed(str.toInt());
 
 	str = attribs.value(QStringLiteral("firstColor_g")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("firstColor_g")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("firstColor_g"));
 	else
 		d->firstColor.setGreen(str.toInt());
 
 	str = attribs.value(QStringLiteral("firstColor_b")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("firstColor_b")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("firstColor_b"));
 	else
 		d->firstColor.setBlue(str.toInt());
 
 	str = attribs.value(QStringLiteral("secondColor_r")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("secondColor_r")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("secondColor_r"));
 	else
 		d->secondColor.setRed(str.toInt());
 
 	str = attribs.value(QStringLiteral("secondColor_g")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("secondColor_g")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("secondColor_g"));
 	else
 		d->secondColor.setGreen(str.toInt());
 
 	str = attribs.value(QStringLiteral("secondColor_b")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("secondColor_b")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("secondColor_b"));
 	else
 		d->secondColor.setBlue(str.toInt());
 
@@ -280,9 +279,9 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Background::loadThemeConfig(const KConfigGroup& group) {
 	Q_D(const Background);
 	const QColor themeColor = group.readEntry(d->prefix + QStringLiteral("FirstColor"), QColor(Qt::white));

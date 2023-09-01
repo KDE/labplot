@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all plots like scatter plot, box plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -11,6 +11,7 @@
 #define PLOT_H
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 class PlotPrivate;
 class QPointF;
@@ -20,6 +21,12 @@ class Plot : public WorksheetElement {
 
 public:
 	virtual ~Plot();
+
+	virtual bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
+	virtual double minimum(CartesianCoordinateSystem::Dimension dim) const = 0;
+	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
+
+	virtual bool hasData() const = 0;
 
 	virtual bool activatePlot(QPointF mouseScenePos, double maxDist = -1) = 0;
 	virtual void setHover(bool on) = 0;

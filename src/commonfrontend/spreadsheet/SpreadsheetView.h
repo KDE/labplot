@@ -19,6 +19,7 @@
 
 class AbstractAspect;
 class Column;
+class SearchReplaceWidget;
 class Spreadsheet;
 class SpreadsheetHeaderView;
 class SpreadsheetModel;
@@ -26,6 +27,7 @@ class SpreadsheetModel;
 class QActionGroup;
 class QFrame;
 class QItemSelection;
+class QItemSelectionModel;
 class QLineEdit;
 class QMenu;
 class QPrinter;
@@ -48,6 +50,7 @@ public:
 	~SpreadsheetView() override;
 
 	void resizeHeader();
+	void setFocus();
 
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
@@ -63,7 +66,6 @@ public:
 	int firstSelectedRow(bool full = false) const;
 	int lastSelectedRow(bool full = false) const;
 	IntervalAttribute<bool> selectedRows(bool full = false) const;
-
 	bool isCellSelected(int row, int col) const;
 	void setCellSelected(int row, int col, bool select = true);
 	void setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select = true);
@@ -88,6 +90,7 @@ private:
 	void exportToExcel(const QString& path, bool exportHeaders) const;
 	void exportToSQLite(const QString& path) const;
 	int maxRowToExport() const;
+	bool hasValues(const QVector<Column*>);
 
 	void insertColumnsLeft(int);
 	void insertColumnsRight(int);
@@ -97,20 +100,22 @@ private:
 
 	void updateFrozenTableGeometry();
 
+	QItemSelectionModel* selectionModel();
+
 	QTableView* m_tableView{nullptr};
 	QTableView* m_frozenTableView{nullptr};
 	bool m_editorEntered{false};
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetModel* m_model;
 	SpreadsheetHeaderView* m_horizontalHeader;
-	QFrame* m_frameSearch{nullptr};
-	QLineEdit* m_leSearch{nullptr};
+	SearchReplaceWidget* m_searchReplaceWidget{nullptr};
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
 	void checkSpreadsheetSelectionMenu();
 	void checkColumnMenus(bool numeric, bool datetime, bool text, bool hasValues);
+	void showSearchReplace(bool replace);
 
 	// selection related actions
 	QAction* action_cut_selection{nullptr};
@@ -133,12 +138,13 @@ private:
 	QAction* action_select_all{nullptr};
 	QAction* action_clear_spreadsheet{nullptr};
 	QAction* action_clear_masks{nullptr};
-	QAction* action_sort_spreadsheet{nullptr};
 	QAction* action_formatting_heatmap{nullptr};
 	QAction* action_formatting_remove{nullptr};
 	QAction* action_go_to_cell{nullptr};
 	QAction* action_search{nullptr};
+	QAction* action_search_replace{nullptr};
 	QAction* action_statistics_all_columns{nullptr};
+	QAction* action_statistics_spreadsheet{nullptr};
 
 	// column related actions
 	QAction* action_insert_column_left{nullptr};
@@ -171,9 +177,9 @@ private:
 	QAction* action_join_columns{nullptr};
 	QActionGroup* normalizeColumnActionGroup{nullptr};
 	QActionGroup* ladderOfPowersActionGroup{nullptr};
-	QAction* action_sort_columns{nullptr};
-	QAction* action_sort_asc_column{nullptr};
-	QAction* action_sort_desc_column{nullptr};
+	QAction* action_sort{nullptr};
+	QAction* action_sort_asc{nullptr};
+	QAction* action_sort_desc{nullptr};
 	QAction* action_statistics_columns{nullptr};
 	QAction* action_freeze_columns{nullptr};
 
@@ -184,6 +190,8 @@ private:
 	QAction* action_insert_rows_below{nullptr};
 	QAction* action_remove_rows{nullptr};
 	QAction* action_clear_rows{nullptr};
+	QAction* action_remove_missing_value_rows{nullptr};
+	QAction* action_mask_missing_value_rows{nullptr};
 	QAction* action_statistics_rows{nullptr};
 
 	// analysis and plot data menu actions
@@ -209,14 +217,15 @@ private:
 	QMenu* m_columnManipulateDataMenu{nullptr};
 	QMenu* m_columnNormalizeMenu{nullptr};
 	QMenu* m_columnLadderOfPowersMenu{nullptr};
-	QMenu* m_columnSortMenu{nullptr};
 	QMenu* m_rowMenu{nullptr};
 	QMenu* m_spreadsheetMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_analyzePlotMenu{nullptr};
 
+	bool m_suppressResize{false};
+
 public Q_SLOTS:
-	void handleAspectAdded(const AbstractAspect*);
+	void handleAspectsAdded(int first, int last);
 	void createContextMenu(QMenu*);
 	void fillColumnContextMenu(QMenu*, Column*);
 	void fillToolBar(QToolBar*);
@@ -230,18 +239,16 @@ public Q_SLOTS:
 	void fillWithRowNumbers();
 	void selectColumn(int);
 	void deselectColumn(int);
+	void goToCell(int row, int col);
+	void selectCell(int row, int col);
+	void clearSelection();
 
 private Q_SLOTS:
-	void goToCell(int row, int col);
-	void showSearch();
+	void searchReplace();
 	void toggleComments();
 	void goToNextColumn();
 	void goToPreviousColumn();
 	void goToCell();
-	void sortSpreadsheet();
-	void sortDialog(const QVector<Column*>&);
-	void searchTextChanged(const QString&);
-	void searchReturnPressed();
 	void formatHeatmap();
 	void removeFormat();
 
@@ -287,9 +294,9 @@ private Q_SLOTS:
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
 
-	void sortSelectedColumns();
-	void sortColumnAscending();
-	void sortColumnDescending();
+	void sortCustom();
+	void sortAscending();
+	void sortDescending();
 
 	void setSelectionAs();
 
@@ -303,7 +310,7 @@ private Q_SLOTS:
 	void handleHorizontalSectionMoved(int index, int from, int to);
 	void handleHorizontalHeaderDoubleClicked(int index);
 	void handleHeaderDataChanged(Qt::Orientation, int first, int last);
-	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+	void handleAspectAboutToBeRemoved(int first, int last);
 	void updateHeaderGeometry(Qt::Orientation, int first, int last);
 
 	void columnClicked(int);

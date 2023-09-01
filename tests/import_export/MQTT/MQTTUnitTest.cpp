@@ -36,9 +36,9 @@ void MQTTUnitTest::initTestCase() {
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
 
-//##############################################################################
-//###################  check superior and inferior relations  ##################
-//##############################################################################
+// ##############################################################################
+// ###################  check superior and inferior relations  ##################
+// ##############################################################################
 void MQTTUnitTest::testContainFalse() {
 	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("contain_false.txt");
@@ -85,9 +85,9 @@ void MQTTUnitTest::testContainTrue() {
 	}
 }
 
-//##############################################################################
-//############################  check common topics  ###########################
-//##############################################################################
+// ##############################################################################
+// ############################  check common topics  ###########################
+// ##############################################################################
 void MQTTUnitTest::testCommonTrue() {
 	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("common_true.txt");
@@ -134,9 +134,9 @@ void MQTTUnitTest::testCommonFalse() {
 	}
 }
 
-//##############################################################################
-//#################  test handling of data received by messages  ###############
-//##############################################################################
+// ##############################################################################
+// #################  test handling of data received by messages  ###############
+// ##############################################################################
 void MQTTUnitTest::testIntegerMessage() {
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
@@ -402,9 +402,9 @@ void MQTTUnitTest::testTextMessage() {
 	}
 }
 
-//##############################################################################
-//#####################  test subscribing and unsubscribing  ###################
-//##############################################################################
+// ##############################################################################
+// #####################  test subscribing and unsubscribing  ###################
+// ##############################################################################
 /*void MQTTUnitTest::testSubscriptions() {
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);

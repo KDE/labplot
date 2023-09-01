@@ -40,9 +40,6 @@ public:
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
-
 	void setVectors(const size_t);
 	size_t vectors() const;
 

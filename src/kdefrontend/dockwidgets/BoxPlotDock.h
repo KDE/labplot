@@ -14,7 +14,6 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_boxplotdock.h"
 
-class AbstractAspect;
 class AspectTreeModel;
 class BoxPlot;
 class BackgroundWidget;
@@ -43,15 +42,15 @@ private:
 
 	QList<BoxPlot*> m_boxPlots;
 	BoxPlot* m_boxPlot{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 
 	QGridLayout* m_gridLayout;
 	QPushButton* m_buttonNew;
 	QVector<TreeViewComboBox*> m_dataComboBoxes;
 	QVector<QPushButton*> m_removeButtons;
 
-	void setModel();
+	void load();
 	void loadConfig(KConfig&);
+	void setModel();
 	void setDataColumns() const;
 	void loadDataColumns();
 	void updateSymbolWidgets();

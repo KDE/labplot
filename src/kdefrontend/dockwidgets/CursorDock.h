@@ -31,6 +31,9 @@ public:
 	~CursorDock();
 	void setWorksheet(Worksheet*);
 
+Q_SIGNALS:
+	void cursorUsed();
+
 public Q_SLOTS:
 	void plotCursor0EnableChanged(bool);
 	void plotCursor1EnableChanged(bool);

@@ -12,7 +12,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 
-//##############################################################################
+// ##############################################################################
 
 void IntegrationTest::testLinear() {
 	// data

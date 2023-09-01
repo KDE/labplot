@@ -90,6 +90,9 @@ void BackgroundWidget::adjustLayout() {
 		return;
 
 	auto* parentWidget = parentGridLayout->itemAtPosition(0, 0)->widget();
+	if (!parentWidget)
+		return;
+
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	auto* widget = gridLayout->itemAtPosition(2, 0)->widget(); // use the third line, the first two are optional and not always visible
 
@@ -430,8 +433,6 @@ void BackgroundWidget::load() {
 }
 
 void BackgroundWidget::loadConfig(const KConfigGroup& group) {
-	CONDITIONAL_LOCK_RETURN; // need to lock here since this function is also called from outside
-
 	ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), (int)m_background->type()));
 	ui.cbColorStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ColorStyle"), (int)m_background->colorStyle()));
 	ui.cbImageStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ImageStyle"), (int)m_background->imageStyle()));

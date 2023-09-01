@@ -152,9 +152,9 @@ void XYAnalysisCurve::copyData(QVector<double>& xData,
 	}
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, XYAnalysisCurve::DataSourceType, dataSourceType, dataSourceType)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const XYCurve*, dataSourceCurve, dataSourceCurve)
 const QString& XYAnalysisCurve::dataSourceCurvePath() const {
@@ -173,9 +173,9 @@ bool XYAnalysisCurve::saveCalculations() const {
 	return const_cast<XYAnalysisCurve*>(this)->project()->saveCalculations();
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetDataSourceType, XYAnalysisCurve::DataSourceType, dataSourceType)
 void XYAnalysisCurve::setDataSourceType(DataSourceType type) {
 	Q_D(XYAnalysisCurve);
@@ -212,7 +212,7 @@ void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
 		handleSourceDataChanged();
 		if (column) {
 			setXDataColumnPath(column->path());
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &XYAnalysisCurve::xDataColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &XYAnalysisCurve::xDataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::xDataColumnNameChanged);
 			// TODO disconnect on undo
@@ -230,7 +230,7 @@ void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 		handleSourceDataChanged();
 		if (column) {
 			setYDataColumnPath(column->path());
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &XYAnalysisCurve::yDataColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &XYAnalysisCurve::yDataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::yDataColumnNameChanged);
 			// TODO disconnect on undo
@@ -248,7 +248,7 @@ void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
 		handleSourceDataChanged();
 		if (column) {
 			setY2DataColumnPath(column->path());
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &XYAnalysisCurve::y2DataColumnAboutToBeRemoved);
+			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &XYAnalysisCurve::y2DataColumnAboutToBeRemoved);
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::y2DataColumnNameChanged);
 			// TODO disconnect on undo
@@ -272,9 +272,9 @@ void XYAnalysisCurve::setY2DataColumnPath(const QString& path) {
 	d->y2DataColumnPath = path;
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 void XYAnalysisCurve::handleSourceDataChanged() {
 	Q_D(XYAnalysisCurve);
 	d->sourceDataChangedSinceLastRecalc = true;
@@ -362,9 +362,9 @@ void XYAnalysisCurve::createDataSpreadsheet() {
 	folder()->addChild(spreadsheet);
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYAnalysisCurvePrivate::XYAnalysisCurvePrivate(XYAnalysisCurve* owner)
 	: XYCurvePrivate(owner)
 	, q(owner) {
@@ -435,9 +435,9 @@ bool XYAnalysisCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColu
 	return tmpXDataColumn && tmpYDataColumn;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYAnalysisCurve);
@@ -463,7 +463,6 @@ void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYAnalysisCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -485,6 +484,10 @@ bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 			READ_COLUMN(y2DataColumn);
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

@@ -16,7 +16,6 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_histogramdock.h"
 
-class AspectTreeModel;
 class BackgroundWidget;
 class LineWidget;
 class SymbolWidget;
@@ -40,6 +39,7 @@ private:
 	void updateValuesWidgets();
 	void updatePlotRanges() override;
 	void updateLocale() override;
+	void load();
 	void loadConfig(KConfig&);
 
 protected:
@@ -52,7 +52,6 @@ protected:
 
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 
 	virtual void setModel();
 

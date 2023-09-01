@@ -9,8 +9,6 @@
 */
 
 #include "AxisDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
@@ -30,10 +28,8 @@
 #include <QPainter>
 #include <QTimer>
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
 #include <gsl/gsl_math.h>
-}
 
 namespace {
 enum PositionAlignmentComboBoxIndex {
@@ -214,7 +210,7 @@ AxisDock::AxisDock(QWidget* parent)
 	auto* hlayout = new QHBoxLayout(frame);
 	hlayout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Axis);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Axis"));
 	hlayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &AxisDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &AxisDock::saveConfigAsTemplate);
@@ -225,10 +221,7 @@ AxisDock::AxisDock(QWidget* parent)
 	init();
 }
 
-AxisDock::~AxisDock() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-}
+AxisDock::~AxisDock() = default;
 
 void AxisDock::init() {
 	CONDITIONAL_LOCK_RETURN;
@@ -328,11 +321,12 @@ void AxisDock::setModel() {
 	cbLabelsTextColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	auto* model = aspectModel();
+	model->setSelectableAspects(list);
 
-	cbMajorTicksColumn->setModel(m_aspectTreeModel);
-	cbMinorTicksColumn->setModel(m_aspectTreeModel);
-	cbLabelsTextColumn->setModel(m_aspectTreeModel);
+	cbMajorTicksColumn->setModel(model);
+	cbMinorTicksColumn->setModel(model);
+	cbLabelsTextColumn->setModel(model);
 }
 
 /*!
@@ -345,12 +339,11 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	m_axis = list.first();
 	setAspects(list);
 	Q_ASSERT(m_axis != nullptr);
-	m_aspectTreeModel = new AspectTreeModel(m_axis->project());
 	this->setModel();
 
 	labelWidget->setAxes(list);
 
-	// if there are more then one axis in the list, disable the tab "general"
+	// if there are more than one axis in the list, disable the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -522,7 +515,7 @@ void AxisDock::activateTitleTab() {
 
 void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
 	if (column)
-		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+		cb->setCurrentModelIndex(aspectModel()->modelIndexOfAspect(column));
 	else
 		cb->setCurrentModelIndex(QModelIndex());
 }
@@ -716,8 +709,12 @@ void AxisDock::scaleChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto scale = static_cast<RangeT::Scale>(index);
-	for (auto* axis : m_axesList)
+	for (auto* axis : m_axesList) {
 		axis->setScale(scale);
+
+		if (axis->majorTicksAutoNumber())
+			ui.sbMajorTicksNumber->setValue(axis->majorTicksNumber());
+	}
 }
 
 void AxisDock::rangeTypeChanged(int index) {
@@ -977,8 +974,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 	ui.lLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
 	ui.cbLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
-	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels);
-	cbLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels);
+	const auto customValues = m_axis->labelsTextType() == Axis::LabelsTextType::CustomValues;
+	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels && customValues);
+	cbLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels && customValues);
 
 	switch (type) {
 	case Axis::TicksType::TotalNumber: {
@@ -1053,6 +1051,8 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		updateMajorTicksStartType(false);
 		break;
 	}
+	case Axis::TicksType::CustomValues:
+		break;
 	}
 
 	CONDITIONAL_LOCK_RETURN;
@@ -1983,14 +1983,7 @@ void AxisDock::updateAxisColor() {
 }
 
 void AxisDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_axesList.size();
 	if (size > 1)
 		m_axis->beginMacro(i18n("%1 axes: template \"%2\" loaded", size, name));

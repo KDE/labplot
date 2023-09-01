@@ -11,7 +11,7 @@ add_definitions (-DSDK)
 include(GenerateExportHeader)
 
 # do not process these files
-set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
+set_property(SOURCE gsl_parser.hpp gsl_parser.cpp PROPERTY SKIP_AUTOMOC ON)
 
 set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/GuiTools.cpp
@@ -156,7 +156,7 @@ set(COMMONFRONTEND_SOURCES
 
 bison_target(GslParser
 	${BACKEND_DIR}/gsl/parser.y
-	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
+	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.cpp
 )
 set(GENERATED_SOURCES
 	${BISON_GslParser_OUTPUTS}

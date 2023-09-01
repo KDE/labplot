@@ -110,6 +110,9 @@ Column::~Column() {
 }
 
 QMenu* Column::createContextMenu() {
+	if (parentAspect()->type() == AspectType::StatisticsSpreadsheet)
+		return nullptr;
+
 	// initialize the actions if not done yet
 	if (!m_copyDataAction) {
 		m_copyDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Data"), this);
@@ -463,9 +466,10 @@ void Column::invalidateProperties() {
 /**
  * \brief Insert some empty (or initialized with zero) rows
  */
-void Column::handleRowInsertion(int before, int count) {
-	AbstractColumn::handleRowInsertion(before, count);
-	exec(new ColumnInsertRowsCmd(d, before, count));
+void Column::handleRowInsertion(int before, int count, QUndoCommand* parent) {
+	Q_ASSERT(parent);
+	AbstractColumn::handleRowInsertion(before, count, parent);
+	new ColumnInsertRowsCmd(d, before, count, parent);
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
 }
@@ -473,9 +477,10 @@ void Column::handleRowInsertion(int before, int count) {
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
-void Column::handleRowRemoval(int first, int count) {
-	AbstractColumn::handleRowRemoval(first, count);
-	exec(new ColumnRemoveRowsCmd(d, first, count));
+void Column::handleRowRemoval(int first, int count, QUndoCommand* parent) {
+	Q_ASSERT(parent);
+	AbstractColumn::handleRowRemoval(first, count, parent);
+	new ColumnRemoveRowsCmd(d, first, count, parent);
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
 }
@@ -505,14 +510,22 @@ void Column::setWidth(int value) {
 /**
  * \brief Clear the whole column
  */
-void Column::clear() {
-	if (d->formula().isEmpty())
-		exec(new ColumnClearCmd(d));
-	else {
-		beginMacro(i18n("%1: clear column", name()));
-		exec(new ColumnClearCmd(d));
-		exec(new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false));
-		endMacro();
+void Column::clear(QUndoCommand* parent) {
+	if (d->formula().isEmpty()) {
+		auto* command = new ColumnClearCmd(d, parent);
+		if (!parent)
+			exec(command);
+	} else {
+		auto* command = new QUndoCommand(i18n("%1: clear column", name()), parent);
+		bool execute = false;
+		if (!parent) {
+			execute = true;
+			parent = command;
+		}
+		new ColumnClearCmd(d, parent);
+		new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false, parent);
+		if (execute)
+			exec(parent);
 	}
 }
 
@@ -968,17 +981,22 @@ void Column::setChanged() {
 	invalidateProperties();
 }
 
-bool Column::hasValueLabels() const {
-	return d->hasValueLabels();
+bool Column::valueLabelsInitialized() const {
+	return d->valueLabelsInitialized();
+}
+
+void Column::setLabelsMode(ColumnMode mode) {
+	d->setLabelsMode(mode);
+	project()->setChanged(true);
+}
+
+void Column::valueLabelsRemoveAll() {
+	d->valueLabelsRemoveAll();
+	project()->setChanged(true);
 }
 
 void Column::removeValueLabel(const QString& key) {
 	d->removeValueLabel(key);
-	project()->setChanged(true);
-}
-
-void Column::clearValueLabels() {
-	d->clearValueLabels();
 	project()->setChanged(true);
 }
 
@@ -1086,7 +1104,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	//  	}
 
 	// value labels
-	if (hasValueLabels()) {
+	if (valueLabelsInitialized()) {
 		writer->writeStartElement(QStringLiteral("valueLabels"));
 		switch (d->m_labels.mode()) {
 		case AbstractColumn::ColumnMode::Double: {
@@ -1261,30 +1279,29 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value(QStringLiteral("rows")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("rows")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("rows"));
 	else
 		d->resizeTo(str.toInt());
 
 	str = attribs.value(QStringLiteral("designation")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("designation")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("designation"));
 	else
 		d->setPlotDesignation(AbstractColumn::PlotDesignation(str.toInt()));
 
 	str = attribs.value(QStringLiteral("mode")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("mode")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("mode"));
 	else
 		setColumnModeFast(AbstractColumn::ColumnMode(str.toInt()));
 
 	str = attribs.value(QStringLiteral("width")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 	else
 		d->setWidth(str.toInt());
 
@@ -1316,25 +1333,25 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				auto& format = heatmapFormat();
 				str = attribs.value(QStringLiteral("min")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("min")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("min"));
 				else
 					format.min = str.toDouble();
 
 				str = attribs.value(QStringLiteral("max")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("max")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("max"));
 				else
 					format.max = str.toDouble();
 
 				str = attribs.value(QStringLiteral("name")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("name")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("name"));
 				else
 					format.name = str;
 
 				str = attribs.value(QStringLiteral("type")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("max")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("max"));
 				else
 					format.type = static_cast<Formatting>(str.toInt());
 
@@ -1391,7 +1408,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				}
 				}
 			} else { // unknown element
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())
 					return false;
 			}

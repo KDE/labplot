@@ -14,6 +14,7 @@
 #include "WorksheetElement.h"
 #include "WorksheetPrivate.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Image.h"
@@ -40,7 +41,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /**
  * \class Worksheet
@@ -54,9 +54,9 @@
 Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)
 	, d(new WorksheetPrivate(this)) {
-	connect(this, &Worksheet::aspectAdded, this, &Worksheet::handleAspectAdded);
-	connect(this, &Worksheet::aspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
-	connect(this, &Worksheet::aspectRemoved, this, &Worksheet::handleAspectRemoved);
+	connect(this, &Worksheet::childAspectAdded, this, &Worksheet::handleAspectAdded);
+	connect(this, &Worksheet::childAspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
+	connect(this, &Worksheet::childAspectRemoved, this, &Worksheet::handleAspectRemoved);
 
 	d->background = new Background(QString());
 	addChild(d->background);
@@ -101,7 +101,7 @@ void Worksheet::init() {
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
 
 	// default theme
-	KConfigGroup settings = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+	KConfigGroup settings = Settings::group(QStringLiteral("Settings_Worksheet"));
 	d->theme = settings.readEntry(QStringLiteral("Theme"), QString());
 	loadTheme(d->theme);
 }
@@ -1478,9 +1478,9 @@ void Worksheet::updateCompleteCursorTreeModel() {
 	}
 }
 
-//##############################################################################
-//######################  Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ######################  Private implementation ###############################
+// ##############################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet* owner)
 	: q(owner)
 	, m_scene(new QGraphicsScene()) {
@@ -1636,9 +1636,9 @@ void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, double 
 	elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void Worksheet::save(QXmlStreamWriter* writer) const {
@@ -1702,7 +1702,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	// clear the theme that was potentially set in init() in order to correctly load here the worksheets without any theme used
 	d->theme.clear();
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1725,25 +1724,25 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				d->pageRect.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 			else
 				d->pageRect.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 			else
 				d->pageRect.setWidth(str.toDouble());
 
 			str = attribs.value(QStringLiteral("height")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("height"));
 			else
 				d->pageRect.setHeight(str.toDouble());
 
@@ -1794,8 +1793,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			} else
 				addChildFast(image);
 		} else { // unknown element
-			if (!preview)
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -1810,9 +1808,9 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Worksheet::loadTheme(const QString& theme) {
 	KConfigGroup group;
 	KConfig* config = nullptr;

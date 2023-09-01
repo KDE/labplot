@@ -16,9 +16,9 @@
 #include <QObject>
 
 #ifdef HAVE_EXCEL
-#include "3rdparty/QXlsx/header/xlsxcellrange.h"
-#include "3rdparty/QXlsx/header/xlsxcellreference.h"
-#include "3rdparty/QXlsx/header/xlsxdocument.h"
+#include "xlsxcellrange.h"
+#include "xlsxcellreference.h"
+#include "xlsxdocument.h"
 #endif
 
 class ExcelFilterPrivate;
@@ -58,9 +58,6 @@ public:
 	void setCurrentSheet(const QString& sheet);
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	virtual void write(const QString& fileName, AbstractDataSource*) override;
-
-	virtual void loadFilterSettings(const QString& filterName) override;
-	virtual void saveFilterSettings(const QString& filterName) const override;
 
 	virtual void save(QXmlStreamWriter*) const override;
 	virtual bool load(XmlStreamReader*) override;

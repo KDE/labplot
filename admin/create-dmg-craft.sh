@@ -8,7 +8,7 @@
 set -e
 
 NAME=labplot2
-VERSION=2.10.0
+VERSION=2.10.1
 CRAFTROOT=CraftRoot
 PREFIX=$CRAFTROOT/Applications
 INPREFIX=$PREFIX/$NAME.app/Contents

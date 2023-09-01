@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>470</width>
-    <height>439</height>
+    <height>469</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -45,8 +45,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>442</width>
-           <height>89</height>
+           <width>414</width>
+           <height>73</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout">
@@ -155,7 +155,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QRadioButton" name="rbCurvePlacement1">
+       <widget class="QRadioButton" name="rbCurvePlacementAllInOnePlotArea">
         <property name="text">
          <string>All Plots in one Plot Area</string>
         </property>
@@ -165,7 +165,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="rbCurvePlacement2">
+       <widget class="QRadioButton" name="rbCurvePlacementAllInOwnPlotArea">
         <property name="text">
          <string>One Plot Area per Plot</string>
         </property>
@@ -181,7 +181,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="rbPlotPlacement1">
+       <widget class="QRadioButton" name="rbPlotPlacementExistingPlotArea">
         <property name="text">
          <string>Existing Plot Area</string>
         </property>
@@ -191,14 +191,14 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QRadioButton" name="rbPlotPlacement2">
+       <widget class="QRadioButton" name="rbPlotPlacementExistingWorksheet">
         <property name="text">
          <string>&amp;New Plot Area in an existing Worksheet</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QRadioButton" name="rbPlotPlacement3">
+       <widget class="QRadioButton" name="rbPlotPlacementNewWorksheet">
         <property name="text">
          <string>New Plot Area in a new Worksheet</string>
         </property>

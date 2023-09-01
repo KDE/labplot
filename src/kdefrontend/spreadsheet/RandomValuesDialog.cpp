@@ -9,6 +9,7 @@
 */
 
 #include "RandomValuesDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -24,13 +25,10 @@
 #include <KLocalizedString>
 #include <KWindowConfig>
 
-#include <cmath>
-
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
+#include <cmath>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 /*!
 	\class RandomValuesDialog
@@ -62,6 +60,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 	layout->addWidget(buttonBox);
 	setLayout(layout);
 	setAttribute(Qt::WA_DeleteOnClose);
+
 	QVector<QPair<QString, int>> distros;
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
 		distros << QPair<QString, int>(i18n(nsl_sf_stats_distribution_name[i]), i);
@@ -95,31 +94,31 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	const KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
-	if (conf.exists()) {
-		const int dist = conf.readEntry("Distribution", defaultDist);
-		ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(dist));
-		if (ui.cbDistribution->currentIndex() == 0) // if index=0 no signal is emitted above, call this slot directly
-			this->distributionChanged();
-		const auto numberLocale = QLocale();
-		// read parameter or set values for default dist
-		ui.leParameter1->setText(numberLocale.toString(conf.readEntry("Parameter1", 0.0)));
-		ui.leParameter2->setText(numberLocale.toString(conf.readEntry("Parameter2", 1.0)));
-		ui.leParameter3->setText(numberLocale.toString(conf.readEntry("Parameter3", 1.0)));
-		ui.leSeed->setText(conf.readEntry("Seed", QString()));
+	const KConfigGroup conf = Settings::group(QStringLiteral("RandomValuesDialog"));
 
+	const int dist = conf.readEntry("Distribution", defaultDist);
+	ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(dist));
+	if (ui.cbDistribution->currentIndex() == 0) // if index=0 no signal is emitted above, call this slot directly
+		this->distributionChanged();
+	const auto numberLocale = QLocale();
+	// read parameter or set values for default dist
+	ui.leParameter1->setText(numberLocale.toString(conf.readEntry("Parameter1", 0.0)));
+	ui.leParameter2->setText(numberLocale.toString(conf.readEntry("Parameter2", 1.0)));
+	ui.leParameter3->setText(numberLocale.toString(conf.readEntry("Parameter3", 1.0)));
+	ui.leSeed->setText(conf.readEntry("Seed", QString()));
+
+	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else {
 		ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(defaultDist));
-
 		resize(QSize(400, 0).expandedTo(minimumSize()));
 	}
 }
 
 RandomValuesDialog::~RandomValuesDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("RandomValuesDialog"));
 	// saving enum value to be consistent
 	conf.writeEntry("Distribution", ui.cbDistribution->itemData(ui.cbDistribution->currentIndex()).toInt());
 	const auto numberLocale = QLocale();
@@ -367,7 +366,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	QImage image = GuiTools::importPDFFile(file);
 
 	// use system palette for background
-	if (DARKMODE) {
+	if (GuiTools::isDarkMode()) {
 		// invert image if in dark mode
 		image.invertPixels();
 

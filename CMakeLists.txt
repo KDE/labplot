@@ -1,10 +1,11 @@
-project(labplot2)
-
 cmake_minimum_required (VERSION 3.17.0 FATAL_ERROR)
+project(labplot2)
+set(LABPLOT_VERSION 2.10.1)
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -31,7 +32,8 @@ include(FeatureSummary)
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 # Qt6 not supported yet
-set(QT_MAJOR_VERSION "5")
+set(QT_VERSION_MAJOR "5")
+set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
 #if (QT_MAJOR_VERSION STREQUAL "6")
 #    set(QT_MIN_VERSION "6.4.0")
 #    set(KF_MIN_VERSION "5.240.0")
@@ -52,6 +54,9 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 	Widgets
 	Test
 )
+
+# building QADS or Xlsx require Qt5GuiPrivate (QADS is required, Xlsx is optional)
+find_package(Qt5Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
 
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
 	Archive
@@ -74,6 +79,7 @@ OPTIONAL_COMPONENTS
 	Parts
 	SyntaxHighlighting
 )
+
 # TODO: make NewStuff optional?
 IF (KF${KF_MAJOR_VERSION}NewStuff_FOUND)
 	add_definitions (-DHAVE_KF5_NEW_STUFF)
@@ -115,7 +121,7 @@ set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wu
 set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
-set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++11")
+set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++17")
 
 if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
 	message(STATUS "GNU C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
@@ -179,7 +185,7 @@ endif ()
 ##########################################################
 
 # see also https://wiki.qt.io/Using_QString_Effectively
-add_definitions(
+set(LABPLOT_COMPILE_DEFINITIONS
     -DQT_NO_CAST_TO_ASCII
     -DQT_NO_CAST_FROM_ASCII
     -DQT_NO_CAST_FROM_BYTEARRAY
@@ -202,7 +208,7 @@ endif()
 
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.10.0\")
+add_definitions (-DLVERSION=\"${LABPLOT_VERSION}\")
 add_definitions (-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions (-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
 set(BUILD_SHARED_LIBS true)
@@ -220,7 +226,7 @@ if (CMAKE_VERSION VERSION_GREATER "3.5")
       message(STATUS "Clang-tidy supported, found and enabled: ${CLANG_TIDY_EXE}")
       set(CLANG_TIDY_CHECKS "modernize-*,-modernize-use-trailing-return-type,clang-analyzer-*,-clang-analyzer-cplusplus*")
       #set(CLANG_TIDY_CHECKS "-*,modernize-*,clang-analyzer-*")
-      # -extra-arg=--std=c++11
+      # -extra-arg=--std=c++17
       set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-checks=${CLANG_TIDY_CHECKS};-header-filter='${CMAKE_SOURCE_DIR}/*'"
         CACHE STRING "" FORCE)
     else()
@@ -260,6 +266,7 @@ option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_EXCEL "Build with Excel (xlsx) support" ON)
 option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" ON)
+option(ENABLE_EIGEN3 "Build with Eigen3 support" ON)
 IF (APPLE)
 	option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
 ENDIF ()
@@ -280,8 +287,6 @@ IF (Poppler_FOUND)
 	# MESSAGE (STATUS "Poppler libraries: ${Poppler_LIBRARIES}")
 	add_definitions (-DHAVE_POPPLER)
 ENDIF ()
-
-
 
 ### liborigin (included) ###############################
 IF (ENABLE_LIBORIGIN)
@@ -319,7 +324,8 @@ IF (ENABLE_CANTOR)
 	ELSE ()
 		MESSAGE (STATUS "Cantor Library NOT FOUND")
 	ENDIF ()
-	ELSE ()
+ELSE ()
+		add_definitions (-DCANTOR_DISABLED)
 		MESSAGE (STATUS "Cantor Library DISABLED")
 ENDIF ()
 
@@ -337,29 +343,30 @@ ENDIF ()
 
 ### HDF5 (optional) ##############################
 IF (ENABLE_HDF5)
-FIND_PACKAGE(HDF5 COMPONENTS C)
-SET_PACKAGE_PROPERTIES (HDF5 PROPERTIES
-	DESCRIPTION "Reading and writing self describing array data"
-	URL "https://www.hdfgroup.org/solutions/hdf5/"
-)
-IF (HDF5_FOUND)
-	add_definitions (-DHAVE_HDF5)
-	IF (MSVC_FOUND)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DH5_BUILT_AS_DYNAMIC_LIB")
+	FIND_PACKAGE(HDF5 COMPONENTS C)
+	SET_PACKAGE_PROPERTIES (HDF5 PROPERTIES
+		DESCRIPTION "Reading and writing self describing array data"
+		URL "https://www.hdfgroup.org/solutions/hdf5/"
+	)
+	IF (HDF5_FOUND)
+		add_definitions (-DHAVE_HDF5)
+		IF (MSVC_FOUND)
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DH5_BUILT_AS_DYNAMIC_LIB")
+		ENDIF ()
+		IF (HDF5_VERSION VERSION_GREATER "1.9")
+			add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
+		ENDIF ()
+		IF (HDF5_VERSION VERSION_GREATER "1.10.0.1")
+			add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
+			add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_1)
+		ENDIF ()
+		include_directories (${HDF5_INCLUDE_DIRS})
+	ELSE ()
+		MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library NOT FOUND")
+		SET(HDF5_LIBRARIES "")
 	ENDIF ()
-	IF (HDF5_VERSION VERSION_GREATER "1.9")
-		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
-	ENDIF ()
-	IF (HDF5_VERSION VERSION_GREATER "1.10.0.1")
-		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
-		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_1)
-	ENDIF ()
-	include_directories (${HDF5_INCLUDE_DIRS})
 ELSE ()
-	MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library NOT FOUND")
-	SET(HDF5_LIBRARIES "")
-ENDIF ()
-ELSE ()
+	add_definitions (-DHDF5_DISABLED)
 	MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library DISABLED")
 ENDIF ()
 
@@ -381,6 +388,7 @@ IF (ENABLE_NETCDF)
 		MESSAGE (STATUS "Network Common Data Format (NetCDF) Library NOT FOUND")
 	ENDIF ()
 ELSE ()
+	add_definitions (-DNETCDF_DISABLED)
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library DISABLED")
 ENDIF ()
 
@@ -433,6 +441,7 @@ IF (ENABLE_FITS)
 		MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library NOT FOUND")
 	ENDIF ()
 ELSE ()
+	add_definitions (-FITS_DISABLED)
 	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library DISABLED")
 ENDIF ()
 
@@ -470,6 +479,7 @@ IF (ENABLE_ROOT)
 		MESSAGE (STATUS "ZIP libraries ZLIB or LZ4 (needed for ROOT importer) NOT FOUND")
 	ENDIF ()
 ELSE ()
+	add_definitions (-DROOT_DISABLED)
 	MESSAGE (STATUS "ROOT (CERN) importer DISABLED")
 ENDIF ()
 
@@ -497,6 +507,7 @@ IF (ENABLE_READSTAT)
 		SET(READSTAT_LIBRARIES "")
 	ENDIF ()
 ELSE ()
+	add_definitions (-DREADSTAT_DISABLED)
 	MESSAGE (STATUS "ReadStat support DISABLED")
 ENDIF ()
 
@@ -512,13 +523,13 @@ IF (ENABLE_EXCEL)
 
 			MESSAGE (STATUS "QXlsx library NOT FOUND. Building own version.")
 			add_definitions (-DHAVE_EXCEL)
-		ELSE ()
+		else ()
 			MESSAGE (STATUS "Missing Qt5::GuiPrivate to build own QXlsx.")
-		ENDIF ()
+		endif ()
         ENDIF ()
-
 ELSE ()
-        MESSAGE (STATUS "Excel support DISABLED")
+	add_definitions (-DEXCEL_DISABLED)
+	MESSAGE (STATUS "XLSX support DISABLED")
 ENDIF ()
 
 ###  Matio (optional) ##############################################
@@ -530,6 +541,7 @@ IF (ENABLE_MATIO)
 		MESSAGE (STATUS "Matio library NOT FOUND.")
 	ENDIF ()
 ELSE ()
+	add_definitions (-DMATIO_DISABLED)
 	MESSAGE (STATUS "Matio support DISABLED")
 ENDIF ()
 
@@ -542,11 +554,29 @@ IF (ENABLE_DISCOUNT)
 		TYPE OPTIONAL)
 	IF (Discount_FOUND)
 		add_definitions (-DHAVE_DISCOUNT)
+		MESSAGE (STATUS "Found Markdown Library Discount ${Discount_VERSION}")
+		IF (${Discount_VERSION} AND ${Discount_VERSION} VERSION_GREATER "2.99")
+			add_definitions (-DHAVE_DISCOUNT3)
+		ENDIF ()
 	ELSE ()
 		MESSAGE (STATUS "Discount library NOT FOUND.")
 	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Discount DISABLED")
+ENDIF ()
+
+### Eigen (optional) #############################
+IF (ENABLE_EIGEN3)
+	FIND_PACKAGE (Eigen3)
+	IF (EIGEN3_FOUND)
+		MESSAGE (STATUS "Found Eigen3 library version ${EIGEN3_VERSION_STRING}")
+		add_definitions (-DHAVE_EIGEN3)
+		include_directories (${EIGEN3_INCLUDE_DIR})
+	ELSE ()
+		MESSAGE (STATUS "Eigen3 library NOT FOUND.")
+	ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "Eigen3 support DISABLED")
 ENDIF ()
 
 ### Touch bar on macOS (optional) #############################

@@ -58,9 +58,9 @@ QIcon XYFourierTransformCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFourierTransformCurve, XYFourierTransformCurve::TransformData, transformData, transformData)
 
 const XYAnalysisCurve::Result& XYFourierTransformCurve::result() const {
@@ -68,18 +68,18 @@ const XYAnalysisCurve::Result& XYFourierTransformCurve::result() const {
 	return d->transformResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYFourierTransformCurve, SetTransformData, XYFourierTransformCurve::TransformData, transformData, recalculate)
 void XYFourierTransformCurve::setTransformData(const XYFourierTransformCurve::TransformData& transformData) {
 	Q_D(XYFourierTransformCurve);
 	exec(new XYFourierTransformCurveSetTransformDataCmd(d, transformData, ki18n("%1: set transform options and perform the Fourier transform")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYFourierTransformCurvePrivate::XYFourierTransformCurvePrivate(XYFourierTransformCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -210,9 +210,9 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFourierTransformCurve);
@@ -255,7 +255,6 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierTransformCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -297,6 +296,10 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

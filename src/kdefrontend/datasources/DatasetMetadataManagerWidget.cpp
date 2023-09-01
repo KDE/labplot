@@ -8,12 +8,14 @@
 */
 
 #include "kdefrontend/datasources/DatasetMetadataManagerWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/DatasetModel.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <KConfigGroup>
-#include <KSharedConfig>
+
 #include <QDir>
 #include <QFile>
 #include <QHBoxLayout>
@@ -39,8 +41,8 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 	ui.setupUi(this);
 	m_datasetModel = new DatasetModel(datasetMap);
 
-	m_baseColor = DARKMODE ? QStringLiteral("#5f5f5f") : QStringLiteral("#ffffff");
-	m_textColor = DARKMODE ? QStringLiteral("#ffffff") : QStringLiteral("#000000");
+	m_baseColor = GuiTools::isDarkMode() ? QStringLiteral("#5f5f5f") : QStringLiteral("#ffffff");
+	m_textColor = GuiTools::isDarkMode() ? QStringLiteral("#ffffff") : QStringLiteral("#000000");
 
 	ui.cbCollection->addItems(m_datasetModel->collections());
 	ui.cbCategory->addItems(m_datasetModel->categories(ui.cbCollection->currentText()));
@@ -77,7 +79,7 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 }
 
 DatasetMetadataManagerWidget::~DatasetMetadataManagerWidget() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatasetMetadataManagerWidget"));
 
 	// filter settings
 	conf.writeEntry("separator", ui.cbSeparatingCharacter->currentText());
@@ -98,7 +100,7 @@ DatasetMetadataManagerWidget::~DatasetMetadataManagerWidget() {
  * @brief Loads the settings of the widget.
  */
 void DatasetMetadataManagerWidget::loadSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("DatasetMetadataManagerWidget"));
 	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("commentChar", "#"));
 	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("separator", "auto"));
 	// TODO: use general setting for decimal separator?

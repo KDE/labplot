@@ -142,7 +142,12 @@ private:
 
 class ColumnSetGlobalFormulaCmd : public QUndoCommand {
 public:
-	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames, QVector<Column*> columns, bool autoUpdate);
+	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
+									   QString formula,
+									   QStringList variableNames,
+									   QVector<Column*> columns,
+									   bool autoUpdate,
+									   QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;

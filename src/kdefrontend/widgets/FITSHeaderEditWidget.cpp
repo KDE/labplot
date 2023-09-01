@@ -10,13 +10,14 @@
 #include "FITSHeaderEditWidget.h"
 #include "FITSHeaderEditAddUnitDialog.h"
 #include "FITSHeaderEditNewKeywordDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/lib/macros.h"
 #include "ui_fitsheadereditwidget.h"
 
 #include <KConfigGroup>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <kcoreaddons_version.h>
 
 #include <QContextMenuEvent>
@@ -167,7 +168,7 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
  * then the file is parsed, so the treeview for the extensions is built and the table is filled.
  */
 void FITSHeaderEditWidget::openFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditWidget"));
 	QString dir = conf.readEntry("LastDir", "");
 	QString fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Open FITS File"), dir, i18n("FITS files (*.fits *.fit *.fts)"));
 	if (fileName.isEmpty())

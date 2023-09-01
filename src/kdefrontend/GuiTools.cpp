@@ -9,6 +9,7 @@
 */
 
 #include "GuiTools.h"
+#include "backend/core/Settings.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <KI18n/KLocalizedString>
@@ -40,6 +41,10 @@ static std::array<QColor, colorsCount> colors = {
 	QColor(192, 88, 0),	   QColor(255, 128, 0),	  QColor(255, 168, 88), // orange
 	QColor(128, 128, 128), QColor(160, 160, 160), QColor(195, 195, 195) // grey
 };
+
+bool GuiTools::isDarkMode() {
+	return (QApplication::palette().color(QPalette::Base).lightness() < 128);
+}
 
 /*!
 	fills the ComboBox \c combobox with the six possible Qt::PenStyles, the color \c color is used.
@@ -157,7 +162,7 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 										   i18n("Backward Diag. Lines"),
 										   i18n("Forward Diag. Lines"),
 										   i18n("Crossing Diag. Lines")};
-	const QColor& borderColor = DARKMODE ? Qt::white : Qt::black;
+	const QColor& borderColor = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	for (int i = 0; i < 15; i++) {
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
@@ -237,7 +242,7 @@ void GuiTools::highlight(QWidget* widget, bool invalid) {
 void GuiTools::addSymbolStyles(QComboBox* cb) {
 	QPainter pa;
 	QPen pen(Qt::SolidPattern, 0);
-	const QColor& color = DARKMODE ? Qt::white : Qt::black;
+	const QColor& color = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	pen.setColor(color);
 	pa.setPen(pen);
 
@@ -262,7 +267,7 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 }
 
 QString GuiTools::openImageFile(const QString& className) {
-	KConfigGroup conf(KSharedConfig::openConfig(), className);
+	KConfigGroup conf = Settings::group(className);
 	const QString& dir = conf.readEntry(QLatin1String("LastImageDir"), QString());
 
 	QString formats;

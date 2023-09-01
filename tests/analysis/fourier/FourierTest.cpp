@@ -13,7 +13,7 @@
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 // #include "backend/worksheet/plots/cartesian/XYFourierFilterCurvePrivate.h"
 
-//##############################################################################
+// ##############################################################################
 
 const QString dataPath = QStringLiteral("data/"); // relative path
 

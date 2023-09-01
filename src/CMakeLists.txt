@@ -9,8 +9,16 @@ set(TOOLS_DIR tools)
 set(CMAKE_AUTOMOC ON)
 set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
-# do not process these files
-set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
+find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
+if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
+    option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
+    option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
+    if (TARGET Qt5::GuiPrivate)
+        MESSAGE (STATUS "Building local version of Qt-Advanced-Docking-System.")
+    else ()
+	MESSAGE (FATAL_ERROR "Missing Qt5::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
+    endif ()
+endif ()
 
 set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/DatasetModel.cpp
@@ -74,11 +82,14 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/LiveDataDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/LollipopPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/StatisticsSpreadsheetDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/QQPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYAnalysisCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
@@ -109,12 +120,12 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SampleValuesDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/SearchReplaceWidget.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsColumnWidget.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
-	${KDEFRONTEND_DIR}/worksheet/DynamicPresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/SlidingPanel.cpp
 	${KDEFRONTEND_DIR}/widgets/BackgroundWidget.cpp
@@ -148,7 +159,6 @@ endif()
 
 if (APPLE)
   list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/PresenterWidget_mac.mm)
-  list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/DynamicPresenterWidget_mac.mm)
 endif()
 
 
@@ -202,12 +212,15 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/linewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/lollipopplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/statisticsspreadsheetdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/qqplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui
@@ -236,6 +249,8 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/rescalewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/samplevalueswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/searchwidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/searchreplacewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
@@ -268,6 +283,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractPart.cpp
 	${BACKEND_DIR}/core/Workbook.cpp
 	${BACKEND_DIR}/core/AspectTreeModel.cpp
+	${BACKEND_DIR}/core/Settings.cpp
 	${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
@@ -305,7 +321,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2BigIntFilter.h
 	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
-	${BACKEND_DIR}/datapicker/Vector3D.cpp
 	${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
 	${BACKEND_DIR}/datapicker/DatapickerImage.cpp
 	${BACKEND_DIR}/datapicker/Datapicker.cpp
@@ -338,6 +353,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
+	${BACKEND_DIR}/gsl/constants.cpp
+	${BACKEND_DIR}/gsl/functions.cpp
 	${BACKEND_DIR}/lib/Range.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
@@ -347,6 +364,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/note/Note.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
+	${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
 	${BACKEND_DIR}/worksheet/Background.cpp
 	${BACKEND_DIR}/worksheet/Image.cpp
 	${BACKEND_DIR}/worksheet/Line.cpp
@@ -370,10 +388,12 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/LollipopPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Plot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/QQPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
@@ -407,7 +427,7 @@ IF (ENABLE_LIBORIGIN)
 ENDIF ()
 
 set(NSL_SOURCES
-	${BACKEND_DIR}/nsl/nsl_baseline.c
+	${BACKEND_DIR}/nsl/nsl_baseline.cpp
 	${BACKEND_DIR}/nsl/nsl_conv.c
 	${BACKEND_DIR}/nsl/nsl_corr.c
 	${BACKEND_DIR}/nsl/nsl_dft.c
@@ -450,7 +470,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
-	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
+	${COMMONFRONTEND_DIR}/core/ContentDockWidget.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
 	${COMMONFRONTEND_DIR}/widgets/MemoryWidget.cpp
@@ -482,8 +502,8 @@ set(TOOLS_SOURCES
 )
 
 bison_target(GslParser
-	${BACKEND_DIR}/gsl/parser.y
-	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
+	${BACKEND_DIR}/gsl/parser.ypp
+	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.cpp
 )
 set(GENERATED_SOURCES
 	${BISON_GslParser_OUTPUTS}
@@ -505,6 +525,15 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
 add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
+
+# add system QADS include path
+if (qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
+	get_target_property(QADS_INCLUDES ads::qt5advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
+	get_target_property(QADS_LIBRARIES ads::qt5advanceddocking INTERFACE_LINK_LIBRARIES)
+	MESSAGE (STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
+	target_include_directories( labplot2lib PRIVATE ${QADS_INCLUDES} )
+endif ()
+target_compile_definitions(labplot2lib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 target_link_libraries( labplot2lib
 	Qt${QT_MAJOR_VERSION}::Svg
@@ -537,7 +566,9 @@ target_link_libraries( labplot2lib
 	${LZ4_LIBRARIES}
 	${MATIO_LIBRARIES}
 	${ZLIB_LIBRARIES}
+	ads::qt${QT_VERSION_MAJOR}advanceddocking
 	)
+
 
 IF (Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
 	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::SerialPort )
@@ -582,7 +613,12 @@ ENDIF ()
 IF (ENABLE_EXCEL)
         # build before use
         IF (BUILD_EXCEL)
+                target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header" )
                 add_dependencies( labplot2lib QXlsx )
+        ENDIF ()
+
+        IF (QXLSX_FOUND)
+                target_include_directories( labplot2lib PRIVATE ${QXLSX_INCLUDE_DIR} )
         ENDIF ()
 
 	IF (QXLSX_FOUND OR BUILD_EXCEL)
@@ -592,8 +628,11 @@ ENDIF ()
 
 IF (ENABLE_LIBORIGIN)
 	IF (LIBORIGIN_FOUND)
+		# if system headers are missing: use the provided
+		target_include_directories( labplot2lib PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
 		target_link_libraries( labplot2lib ${LIBORIGIN_LIBRARIES} )
 	ELSE () # own version
+		target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
 		target_link_libraries( labplot2lib liborigin-static )
 	ENDIF()
 ENDIF ()
@@ -603,7 +642,8 @@ ENDIF ()
 
 IF (APPLE AND ENABLE_TOUCHBAR)
 	target_link_libraries( labplot2lib KDMacTouchBar )
-ENDIF()
+ENDIF ()
+
 
 # icons for the executable and project files on Windows and Mac OS X
 
@@ -647,6 +687,7 @@ ENDIF ()
 
 add_executable( labplot2 ${LABPLOT_SOURCE} ${qml_QRC} )
 target_link_libraries( labplot2 labplot2lib )
+target_compile_definitions(labplot2 PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 ############## installation ################################
 install( TARGETS labplot2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

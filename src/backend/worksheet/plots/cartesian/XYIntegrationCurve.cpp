@@ -23,9 +23,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
 #include <gsl/gsl_errno.h>
-}
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
@@ -61,9 +59,9 @@ QIcon XYIntegrationCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYIntegrationCurve, XYIntegrationCurve::IntegrationData, integrationData, integrationData)
 
 const XYIntegrationCurve::IntegrationResult& XYIntegrationCurve::integrationResult() const {
@@ -71,18 +69,18 @@ const XYIntegrationCurve::IntegrationResult& XYIntegrationCurve::integrationResu
 	return d->integrationResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYIntegrationCurve, SetIntegrationData, XYIntegrationCurve::IntegrationData, integrationData, recalculate)
 void XYIntegrationCurve::setIntegrationData(const XYIntegrationCurve::IntegrationData& integrationData) {
 	Q_D(XYIntegrationCurve);
 	exec(new XYIntegrationCurveSetIntegrationDataCmd(d, integrationData, ki18n("%1: set options and perform the integration")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -169,9 +167,9 @@ bool XYIntegrationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYIntegrationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYIntegrationCurve);
@@ -213,7 +211,6 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const {
 bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYIntegrationCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -252,6 +249,10 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

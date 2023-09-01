@@ -87,9 +87,13 @@ extern "C" {
 		QVERIFY2(res.at(i).compare(ref.at(i)) == 0,                                                                                                            \
 				 qPrintable(QStringLiteral("i=") + QString::number(i) + QStringLiteral(", res=") + res.at(i) + QStringLiteral(", ref=") + ref.at(i)));
 
+/*!
+ * Stores the labplot project to a temporary file
+ * The filename is then stored in the savePath variable
+ */
 #define SAVE_PROJECT(project_name)                                                                                                                             \
 	do {                                                                                                                                                       \
-		auto* tempFile = new QTemporaryFile(QStringLiteral("XXXXXX_") + QLatin1String(project_name), this);                                                    \
+		auto* tempFile = new QTemporaryFile(QStringLiteral("XXXXXX_") + QLatin1String(project_name) + QLatin1String(".lml"), this);                            \
 		QCOMPARE(tempFile->open(), true);                                                                                                                      \
 		savePath = tempFile->fileName();                                                                                                                       \
 		QFile file(savePath);                                                                                                                                  \
@@ -100,7 +104,8 @@ extern "C" {
 		QPixmap thumbnail;                                                                                                                                     \
 		project.save(thumbnail, &writer);                                                                                                                      \
 		file.close();                                                                                                                                          \
-		DEBUG(QStringLiteral("File stored as: ").toStdString() << tempFile->fileName().toStdString());                                                         \
+		DEBUG(QStringLiteral("File stored as: ").toStdString() << savePath.toStdString());                                                                     \
+		QVERIFY(!savePath.isEmpty());                                                                                                                          \
 	} while (0);
 
 ///////////////////////////////////////////////////////

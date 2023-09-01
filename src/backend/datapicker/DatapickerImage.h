@@ -82,8 +82,8 @@ public:
 
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();
-	bool setOriginalImage(const QImage&);
-	bool setOriginalImage(const QString&);
+	void setImage(const QImage&, const QString& filename, bool embedded);
+	void setImage(const QString&, bool embedded);
 
 	static QString graphTypeToString(const GraphType);
 	static GraphType stringToGraphType(const QString&);

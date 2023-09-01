@@ -384,6 +384,20 @@
    <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbType</tabstop>
+  <tabstop>cbPosition</tabstop>
+  <tabstop>sbDistance</tabstop>
+  <tabstop>sbRotation</tabstop>
+  <tabstop>sbOpacity</tabstop>
+  <tabstop>cbNumericFormat</tabstop>
+  <tabstop>sbPrecision</tabstop>
+  <tabstop>cbDateTimeFormat</tabstop>
+  <tabstop>lePrefix</tabstop>
+  <tabstop>leSuffix</tabstop>
+  <tabstop>kfrFont</tabstop>
+  <tabstop>kcbColor</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

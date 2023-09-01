@@ -24,42 +24,42 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 
 #define ALL_WORKSHEETELEMENT_TESTS(WorksheetElementType, DockType, dockSetElementsMethodName)                                                                  \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL, DockType, dockSetElementsMethodName);                                     \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_MOUSE_MOVE, DockType, dockSetElementsMethodName);                                             \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL, DockType, dockSetElementsMethodName)                                      \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_MOUSE_MOVE, DockType, dockSetElementsMethodName)                                              \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT_UNDO, DockType, dockSetElementsMethodName)                                     \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP_UNDO, DockType, dockSetElementsMethodName)                                        \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT_NO_COORD_BINDING, DockType, dockSetElementsMethodName)                         \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN_NO_COORD_BINDING, DockType, dockSetElementsMethodName)                          \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT, DockType, dockSetElementsMethodName);                                         \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEY_PRESSLEFT, DockType, dockSetElementsMethodName);                                          \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP, DockType, dockSetElementsMethodName);                                            \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN, DockType, dockSetElementsMethodName);                                          \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING, DockType, dockSetElementsMethodName);                            \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_COORDBINDING, DockType, dockSetElementsMethodName);                                    \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_COORDBINDING, DockType, dockSetElementsMethodName);                                    \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING, DockType, dockSetElementsMethodName);                                 \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING, DockType, dockSetElementsMethodName);                                 \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, MOUSE_MOVE_DATETIME, DockType, dockSetElementsMethodName);                                                     \
-	WORKSHEETELEMENT_TEST(WorksheetElementType, DOCK_CHANGE_DATETIME, DockType, dockSetElementsMethodName);
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT, DockType, dockSetElementsMethodName)                                          \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEY_PRESSLEFT, DockType, dockSetElementsMethodName)                                           \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP, DockType, dockSetElementsMethodName)                                             \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN, DockType, dockSetElementsMethodName)                                           \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING, DockType, dockSetElementsMethodName)                             \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_COORDBINDING, DockType, dockSetElementsMethodName)                                     \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_COORDBINDING, DockType, dockSetElementsMethodName)                                     \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING, DockType, dockSetElementsMethodName)                                  \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING, DockType, dockSetElementsMethodName)                                  \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, MOUSE_MOVE_DATETIME, DockType, dockSetElementsMethodName)                                                      \
+	WORKSHEETELEMENT_TEST(WorksheetElementType, DOCK_CHANGE_DATETIME, DockType, dockSetElementsMethodName)
 
 #define ALL_WORKSHEETELEMENT_TESTS2(WorksheetElementType, DockType, dockSetElementsMethodName)                                                                 \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL, DockType, dockSetElementsMethodName);                                    \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_MOUSE_MOVE, DockType, dockSetElementsMethodName);                                            \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL, DockType, dockSetElementsMethodName)                                     \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_MOUSE_MOVE, DockType, dockSetElementsMethodName)                                             \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT_UNDO, DockType, dockSetElementsMethodName)                                    \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP_UNDO, DockType, dockSetElementsMethodName)                                       \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT_NO_COORD_BINDING, DockType, dockSetElementsMethodName)                        \
 	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN_NO_COORD_BINDING, DockType, dockSetElementsMethodName)                         \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT, DockType, dockSetElementsMethodName);                                        \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEY_PRESSLEFT, DockType, dockSetElementsMethodName);                                         \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP, DockType, dockSetElementsMethodName);                                           \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN, DockType, dockSetElementsMethodName);                                         \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING, DockType, dockSetElementsMethodName);                           \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_COORDBINDING, DockType, dockSetElementsMethodName);                                   \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_COORDBINDING, DockType, dockSetElementsMethodName);                                   \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING, DockType, dockSetElementsMethodName);                                \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING, DockType, dockSetElementsMethodName);                                \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, MOUSE_MOVE_DATETIME, DockType, dockSetElementsMethodName);                                                    \
-	WORKSHEETELEMENT_TEST2(WorksheetElementType, DOCK_CHANGE_DATETIME, DockType, dockSetElementsMethodName);
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_RIGHT, DockType, dockSetElementsMethodName)                                         \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEY_PRESSLEFT, DockType, dockSetElementsMethodName)                                          \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_UP, DockType, dockSetElementsMethodName)                                            \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_KEYPRESS_DOWN, DockType, dockSetElementsMethodName)                                          \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_ENABLE_DISABLE_COORDBINDING, DockType, dockSetElementsMethodName)                            \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_COORDBINDING, DockType, dockSetElementsMethodName)                                    \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_COORDBINDING, DockType, dockSetElementsMethodName)                                    \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTX_NO_COORDBINDING, DockType, dockSetElementsMethodName)                                 \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, WORKSHEETELEMENT_SHIFTY_NO_COORDBINDING, DockType, dockSetElementsMethodName)                                 \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, MOUSE_MOVE_DATETIME, DockType, dockSetElementsMethodName)                                                     \
+	WORKSHEETELEMENT_TEST2(WorksheetElementType, DOCK_CHANGE_DATETIME, DockType, dockSetElementsMethodName)
 
 #define CHECK_REFERENCERANGE_RECT(referenceRange, xLeftRef, yTopRef, xRightRef, yBottomRef)                                                                    \
 	do {                                                                                                                                                       \
@@ -334,6 +334,41 @@ void WorksheetElementTest::referenceRangeYKeyPressUp() {
 	QCOMPARE(referenceRange->positionLogicalStart().y(), 0.55);
 	QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.65);
 	CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.65, 1., 0.55);
+}
+
+void WorksheetElementTest::referenceRangeSaveLoad() {
+	QString savePath;
+	{
+		SETUP_PROJECT
+
+		auto* referenceRange = new ReferenceRange(p, QStringLiteral("range"));
+		referenceRange->setOrientation(ReferenceRange::Orientation::Horizontal);
+		p->addChild(referenceRange);
+		referenceRange->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+		auto pp = referenceRange->position();
+		pp.point = QPointF(0, 0);
+		referenceRange->setPosition(pp);
+		referenceRange->setCoordinateBindingEnabled(true);
+		SAVE_PROJECT("testReferenceRangeSaveLoad")
+	}
+
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true); // shall not crash
+
+		const auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		const auto* p = ws->child<CartesianPlot>(0);
+		QVERIFY(p);
+		const auto* referenceRange = p->child<ReferenceRange>(0);
+		QVERIFY(referenceRange);
+
+		QCOMPARE(referenceRange->positionLogical().x(), 0.5);
+		QCOMPARE(referenceRange->positionLogical().y(), 0.5);
+		QCOMPARE(referenceRange->positionLogicalStart().y(), 0.45);
+		QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
+		CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
+	}
 }
 
 // TODO: create test with reference range with nonlinear ranges!

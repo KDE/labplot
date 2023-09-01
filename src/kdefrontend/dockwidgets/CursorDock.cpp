@@ -78,6 +78,8 @@ void CursorDock::setWorksheet(Worksheet* worksheet) {
 	for (const auto* plot : m_plotList) {
 		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor0EnableChanged, this, &CursorDock::plotCursor0EnableChanged);
 		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor1EnableChanged, this, &CursorDock::plotCursor1EnableChanged);
+		selectedPlotsConnection << connect(plot, &CartesianPlot::mousePressCursorModeSignal, this, &CursorDock::cursorUsed);
+		selectedPlotsConnection << connect(plot, &CartesianPlot::mousePressCursorModeSignal, this, &CursorDock::cursorUsed);
 	}
 }
 

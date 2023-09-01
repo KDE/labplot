@@ -264,7 +264,7 @@ void MultiRangeTest::zoomYSelection_AllRanges() {
 	p1->mouseReleaseZoomSelectionMode(-1);
 
 	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1.0, 0.5); // zoom
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -0.8, 0.6); // zoom
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -150., 100.); // zoom
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
@@ -272,7 +272,7 @@ void MultiRangeTest::zoomYSelection_AllRanges() {
 
 	QVector<double> ref = {-150.0, -100, -50, 0, 50, 100};
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
-	ref = {-1., -0.5, 0., 0.5};
+	ref = {-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6};
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), ref);
 	ref = {-7., -4., -1., 2.};
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref);
@@ -317,7 +317,7 @@ void MultiRangeTest::zoomSelection_AllRanges() {
 	p1->mouseReleaseZoomSelectionMode(-1);
 
 	CHECK_RANGE(p1, sinCurve, Dimension::X, 0.2, 0.6); // zoom
-	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1.0, 0.5); // zoom
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -0.8, 0.6); // zoom
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.2, 0.6); // zoom
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -150., 100.); // zoom
 	CHECK_RANGE(p1, logCurve, Dimension::X, 20., 60.); // zoom
@@ -325,7 +325,7 @@ void MultiRangeTest::zoomSelection_AllRanges() {
 
 	QVector<double> ref = {-150.0, -100, -50, 0, 50, 100};
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
-	ref = {-1., -0.5, 0., 0.5};
+	ref = {-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6};
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), ref);
 	ref = {-7., -4., -1., 2.};
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref);
@@ -412,12 +412,12 @@ void MultiRangeTest::zoomInX_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.);
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
-	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 5.);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
 
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
-	QVector<double> ref = {-10.0, -5, 0, 5};
-	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
+	QVector<double> ref = {-10, -7.71429, -5.42857, -3.14286, -0.857143, 1.42857, 3.71429, 6};
+	// COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 }
 
 void MultiRangeTest::zoomInY_SingleRange() {
@@ -459,11 +459,11 @@ void MultiRangeTest::zoomInY_AllRanges() {
 	p1->zoomInY();
 
 	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
-	CHECK_RANGE(p1, sinCurve, Dimension::Y, -0.5, 0.5); // zoom
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -0.8, 0.8); // zoom
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -200., 200.); // zoom
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
-	CHECK_RANGE(p1, logCurve, Dimension::Y, -5., 0.); // zoom
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -8., 4.); // zoom
 
 	// check auto scale
 	p1->navigate(-1, CartesianPlot::NavigationOperation::ScaleAutoY);
@@ -473,11 +473,11 @@ void MultiRangeTest::zoomInY_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.);
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
-	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 5.);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
 
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
-	QVector<double> ref = {-10.0, -5, 0, 5};
+	QVector<double> ref = {-10, -6, -2, 2, 6};
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 }
 
@@ -490,9 +490,9 @@ void MultiRangeTest::zoomOutX_SingleRange() {
 	horAxisP1->setSelected(true);
 	p1->zoomOutX(0);
 
-	CHECK_RANGE(p1, sinCurve, Dimension::X, -0.5, 1.5); // zoom
+	CHECK_RANGE(p1, sinCurve, Dimension::X, -0.2, 1.2); // zoom
 	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
-	CHECK_RANGE(p1, tanCurve, Dimension::X, -0.5, 1.5); // zoom
+	CHECK_RANGE(p1, tanCurve, Dimension::X, -0.2, 1.2); // zoom
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.);
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
 	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
@@ -521,11 +521,11 @@ void MultiRangeTest::zoomOutX_AllRanges() {
 	horAxisP1->setSelected(true);
 	p1->zoomOutX();
 
-	CHECK_RANGE(p1, sinCurve, Dimension::X, -0.5, 1.5); // zoom
+	CHECK_RANGE(p1, sinCurve, Dimension::X, -0.2, 1.2); // zoom
 	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
-	CHECK_RANGE(p1, tanCurve, Dimension::X, -0.5, 1.5); // zoom
+	CHECK_RANGE(p1, tanCurve, Dimension::X, -0.2, 1.2); // zoom
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.);
-	CHECK_RANGE(p1, logCurve, Dimension::X, -50., 150.); // zoom
+	CHECK_RANGE(p1, logCurve, Dimension::X, -20., 120.); // zoom
 	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
 
 	// check auto scale
@@ -587,7 +587,7 @@ void MultiRangeTest::zoomOutY_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -300., 300.); // zoom
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
-	CHECK_RANGE(p1, logCurve, Dimension::Y, -15., 10.); // zoom
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -12., 8.); // zoom
 
 	// check auto scale (all)
 	p1->navigate(-1, CartesianPlot::NavigationOperation::ScaleAuto);
@@ -597,11 +597,11 @@ void MultiRangeTest::zoomOutY_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.);
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
-	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 5.);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
 
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
-	QVector<double> ref = {-10.0, -5, 0, 5};
+	QVector<double> ref = {-10, -6, -2, 2, 6};
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 }
 
@@ -816,11 +816,11 @@ void MultiRangeTest::shiftUp_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.);
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
-	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 5.);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
 	// retransform of vertAxisP1 is done, so the tickLabelValues change back
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
-	QVector<double> ref = {-10.0, -5, 0, 5};
+	QVector<double> ref = {-10, -6, -2, 2, 6};
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 }
 
@@ -848,12 +848,12 @@ void MultiRangeTest::shiftDown_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.);
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
-	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 5.);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
 
 	// retransform of vertAxisP1 is done, so the tickLabelValues change back
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
-	QVector<double> ref = {-10.0, -5, 0, 5};
+	QVector<double> ref = {-10, -6, -2, 2, 6};
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 }
 

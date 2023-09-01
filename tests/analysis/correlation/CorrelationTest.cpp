@@ -12,7 +12,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
 
-//##############################################################################
+// ##############################################################################
 
 void CorrelationTest::testLinear() {
 	// data

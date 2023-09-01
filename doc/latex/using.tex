@@ -240,7 +240,7 @@ With this, powerfull calculations carried out inside of different CAS environmen
 \chapter{\LaTeX\, Typesetting}\label{ch:latex_typesetting}
 Besides rich text formatting, LabPlot supports \LaTeX\, typesetting in different areas of the application like in text labels, plot title, axis title, etc. In case the \LaTeX\, environment is available on the system (more about the prerequisites below), the user can switch between the \LaTeX\, and rich-text typesettings in the text fields for objects that support this.
 
-In \LaTeX\, mode when entering text in the text field, LabPlot automatically adds a mathematical environment, if not available yet. The user can simply start typing the mathematical expression which will be rendered correctly or, e.g. when combining with text, explicitly specify at which position the mathematical environment has to be used. LabPlot will add the propper header and footer. Following examples are valid inputs
+In \LaTeX\, mode when entering text in the text field, LabPlot automatically adds a mathematical environment, if not available yet. The user can simply start typing the mathematical expression which will be rendered correctly or, e.g. when combining with text, explicitly specify at which position the mathematical environment has to be used. LabPlot will add the proper header and footer. Following examples are valid inputs
 \begin{itemize}
 \item {
 \begin{lstlisting}
@@ -339,7 +339,7 @@ In case a complete \LaTeX document is provided, LabPlot merges the definitions o
 \item Switch to the mouse mode "Set Curve Points" and start selecting points on the imported image - the coordinates for the selected points are determined and added to the spreadsheet "Data".
 \end{itemize}
 
-It is possible to add more then one datapicker curve. This is useful in case the imported image contains several curves that need to be digitized.
+It is possible to add more than one datapicker curve. This is useful in case the imported image contains several curves that need to be digitized.
 The datapicker curve that is currently being selected in the \nameref{sec:project_explorer} is the "active" one - points clicked on the datapicker image will be calculated and added to its data spreadsheet.
 \begin{figure}
 \includegraphics[width=\textwidth]{images/datapicker_active_curve_data_spreadsheet.png}
@@ -384,7 +384,7 @@ Similar to \nameref{sec:worksheet}, the currently visible area in the datapicker
 \section{FITS Metadata Editor}
 FITS is an open standard file format widely used in the scientific community to store structured as well as unstructured multi-dimenstional data. One of the major features of the FITS format is the ability to store the metadata in human-readable \textit{headers}. Such headers are stored in the file, in addition to the actual data, as key-value pairs in the ASCII format and provide additional information about the origin of the data, its size, used measurement devices, etc. As described in more details in the section \nameref{sec:import}, LabPlot supports the import of data stored in the FITS format. In addition to that, LabPlot also provides the tool \textit{"FITS Metadata Editor"} that allows to inspect and to modify the metadata.
 
-In general, a FITS file consists of one or more \textit{Header + Data Unit}s (HDUs), where the first HDU is usually called the \textit{primary HDU}. A FITS file can have any number of additional HDUs, commonly called FITS \textit{extensions}. LabPlot's FITS Metadata Editor parses the metadata part of the selected FITS file only and shows all available headers (primary and extensional) in a tree view. Already existing key-value pairs can be modified or deleted, new pairs can be added. It is also possible to open and to edit more then one file at the same time.
+In general, a FITS file consists of one or more \textit{Header + Data Unit}s (HDUs), where the first HDU is usually called the \textit{primary HDU}. A FITS file can have any number of additional HDUs, commonly called FITS \textit{extensions}. LabPlot's FITS Metadata Editor parses the metadata part of the selected FITS file only and shows all available headers (primary and extensional) in a tree view. Already existing key-value pairs can be modified or deleted, new pairs can be added. It is also possible to open and to edit more than one file at the same time.
 
 \begin{figure}
 \includegraphics[width=\textwidth]{images/fits_metadata_editor.png}

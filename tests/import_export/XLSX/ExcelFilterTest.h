@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the Excel filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,7 +17,9 @@ class ExcelFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void importFile1();
-	void importFile2();
+	void importFile2Cols();
+	void importFile3Cols();
+	void importFileEmptyCells();
+	void importFileDatetime();
 };
 #endif

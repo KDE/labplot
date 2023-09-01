@@ -85,9 +85,6 @@ public:
 	static QStringList mandatoryTableExtensionKeywords();
 	static QStringList units();
 
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
-
 	void setStartRow(const int);
 	int startRow() const;
 	void setEndRow(const int);

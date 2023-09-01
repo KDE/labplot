@@ -8,6 +8,7 @@
 */
 
 #include "DatabaseManagerWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/GuiTools.h"
 
@@ -15,7 +16,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <kcoreaddons_version.h>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
@@ -180,8 +181,8 @@ void DatabaseManagerWidget::driverChanged() {
 		if (!m_highlighter) {
 			m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teCustomConnection->document());
 			m_highlighter->setDefinition(m_repository.definitionForName(QStringLiteral("INI Files")));
-			m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-											 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+			m_highlighter->setTheme(GuiTools::isDarkMode() ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+														   : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 		}
 #endif
 	} else {
@@ -207,7 +208,7 @@ void DatabaseManagerWidget::driverChanged() {
 }
 
 void DatabaseManagerWidget::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), QStringLiteral("DatabaseManagerWidget"));
+	KConfigGroup conf = Settings::group(QStringLiteral("DatabaseManagerWidget"));
 	QString dir = conf.readEntry(QStringLiteral("LastDir"), "");
 	QString path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the Database File"), dir);
 	if (path.isEmpty())
@@ -331,7 +332,7 @@ void DatabaseManagerWidget::addConnection() {
 	driverChanged();
 	m_initializing = false;
 
-	// we have now more then one connection, enable widgets
+	// we have now more than one connection, enable widgets
 	ui.tbDelete->setEnabled(true);
 	ui.leName->setEnabled(true);
 	ui.leDatabase->setEnabled(true);

@@ -12,10 +12,8 @@
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 void BinaryFilterTest::importInt8() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);

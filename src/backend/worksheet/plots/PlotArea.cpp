@@ -167,9 +167,9 @@ void PlotArea::setBorderCornerRadius(qreal radius) {
 		exec(new PlotAreaSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set plot area corner radius")));
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 PlotAreaPrivate::PlotAreaPrivate(PlotArea* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -341,9 +341,9 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void PlotArea::save(QXmlStreamWriter* writer) const {
@@ -373,7 +373,6 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -398,11 +397,11 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("borderCornerRadius")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("borderCornerRadius")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("borderCornerRadius"));
 			else
 				d->borderCornerRadius = str.toDouble();
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

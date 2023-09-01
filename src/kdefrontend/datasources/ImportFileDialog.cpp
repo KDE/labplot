@@ -12,6 +12,7 @@
 #include "ImportErrorDialog.h"
 #include "ImportFileWidget.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/filters.h"
@@ -27,7 +28,7 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageWidget>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 #include <QDialogButtonBox>
@@ -82,7 +83,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	m_importFileWidget->loadSettings();
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileDialog"));
 	if (conf.exists()) {
 		m_showOptions = conf.readEntry("ShowOptions", false);
 
@@ -113,7 +114,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 
 ImportFileDialog::~ImportFileDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileDialog"));
 	conf.writeEntry("ShowOptions", m_showOptions);
 	if (cbPosition)
 		conf.writeEntry("Position", cbPosition->currentIndex());
@@ -176,13 +177,20 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		return;
 	}
 
-	if (m_importFileWidget->isFileEmpty()) {
-		KMessageBox::information(nullptr, i18n("No data to import."), i18n("No Data"));
+	auto filter = m_importFileWidget->currentFileFilter();
+	if (m_importFileWidget->importValid()) {
+		auto errors = filter->lastErrors();
+		if (errors.isEmpty()) {
+			// Default message, because not all filters implement lastErrors yet
+			errors.append(i18n("No data to import."));
+		}
+		ImportErrorDialog* d = new ImportErrorDialog(errors);
+		d->setAttribute(Qt::WA_DeleteOnClose);
+		d->show();
 		return;
 	}
 
 	QString fileName = m_importFileWidget->fileName();
-	auto filter = m_importFileWidget->currentFileFilter();
 	auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 
 	// show a progress bar in the status bar

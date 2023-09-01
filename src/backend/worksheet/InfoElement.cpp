@@ -40,7 +40,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
 	setVisible(false);
 }
 
-InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double pos)
+InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double logicalPos)
 	: WorksheetElement(name, new InfoElementPrivate(this, curve), AspectType::InfoElement) {
 	Q_D(InfoElement);
 	m_plot = p;
@@ -56,14 +56,14 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		custompoint->setCoordinateBindingEnabled(true);
 		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
 		addChild(custompoint);
-		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
+		InfoElement::MarkerPoints_T markerpoint(custompoint, curve, curve->path());
 		markerpoints.append(markerpoint);
 
 		// setpos after label was created
 		if (curve->xColumn() && curve->yColumn()) {
 			bool valueFound;
 			double xpos;
-			double y = curve->y(pos, xpos, valueFound);
+			double y = curve->y(logicalPos, xpos, valueFound);
 			if (valueFound) {
 				d->positionLogical = xpos;
 				d->m_index = curve->xColumn()->indexForValue(xpos);
@@ -126,8 +126,8 @@ void InfoElement::init() {
 	initActions();
 	initMenus();
 
-	connect(this, &InfoElement::aspectRemoved, this, &InfoElement::childRemoved);
-	connect(this, &InfoElement::aspectAdded, this, &InfoElement::childAdded);
+	connect(this, &InfoElement::childAspectRemoved, this, &InfoElement::childRemoved);
+	connect(this, &InfoElement::childAspectAdded, this, &InfoElement::childAdded);
 
 	m_title = new TextLabel(i18n("Label"), m_plot);
 	m_title->setHidden(true);
@@ -251,7 +251,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	if (d->m_index < 0 && curve->xColumn())
 		d->m_index = curve->xColumn()->indexForValue(custompoint->positionLogical().x());
 
-	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
+	struct MarkerPoints_T markerpoint = {custompoint, curve, curve->path()};
 	markerpoints.append(markerpoint);
 
 	if (markerpoints.count() == 1) // first point
@@ -296,7 +296,7 @@ void InfoElement::addCurvePath(QString& curvePath, CustomPoint* custompoint) {
 		addChild(custompoint);
 	}
 
-	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), nullptr, curvePath};
+	struct MarkerPoints_T markerpoint = {custompoint, nullptr, curvePath};
 	markerpoints.append(markerpoint);
 }
 
@@ -346,6 +346,11 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 			removeChild(mp.customPoint);
 		}
 	}
+
+	setUndoAware(false);
+	if (curve->name() == connectionLineCurveName())
+		setConnectionLineCurveName(markerpoints.count() > 0 ? markerpoints.at(0).curve->name() : QStringLiteral());
+	setUndoAware(true);
 
 	m_title->setUndoAware(false);
 	m_title->setText(createTextLabelText());
@@ -750,9 +755,9 @@ void InfoElement::retransform() {
 void InfoElement::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
-//##############################################################################
-//######  Getter and setter methods ############################################
-//##############################################################################
+// ##############################################################################
+// ######  Getter and setter methods ############################################
+// ##############################################################################
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(InfoElement, double, positionLogical, positionLogical)
@@ -813,13 +818,13 @@ void InfoElement::setVisible(bool on) {
 		exec(new InfoElementSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 
 InfoElementPrivate::InfoElementPrivate(InfoElement* owner)
 	: WorksheetElementPrivate(owner)
@@ -1106,9 +1111,9 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent* event) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 void InfoElement::save(QXmlStreamWriter* writer) const {
 	Q_D(const InfoElement);
 
@@ -1155,7 +1160,6 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 	Q_D(InfoElement);
 
 	QXmlStreamAttributes attribs;
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 	QString curvePath;
 
@@ -1177,7 +1181,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				setVisible(str.toInt());
 
@@ -1213,15 +1217,19 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("point")) {
 			attribs = reader->attributes();
 			curvePath = attribs.value(QStringLiteral("curvepath")).toString();
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void InfoElement::loadThemeConfig(const KConfig& config) {
 	// use the color for the axis line from the theme also for info element's lines
 	const KConfigGroup& group = config.group("Axis");

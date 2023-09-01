@@ -73,15 +73,11 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 	double y(double x, bool& valueFound) const;
 	QDateTime yDateTime(double x, bool& valueFound) const;
-	bool minMax(const AbstractColumn* column1,
-				const AbstractColumn* column2,
-				const ErrorType errorType,
-				const AbstractColumn* errorPlusColumn,
-				const AbstractColumn* errorMinusColumn,
-				const Range<int>& indexRange,
-				Range<double>& yRange,
-				bool includeErrorBars) const;
-	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
+
+	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
+	double minimum(CartesianCoordinateSystem::Dimension dim) const override;
+	double maximum(CartesianCoordinateSystem::Dimension dim) const override;
+	bool hasData() const override;
 
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
@@ -181,6 +177,15 @@ private:
 	void connectYErrorPlusColumn(const AbstractColumn*);
 	void connectYErrorMinusColumn(const AbstractColumn*);
 	void connectValuesColumn(const AbstractColumn*);
+
+	bool minMax(const AbstractColumn* column1,
+				const AbstractColumn* column2,
+				const ErrorType errorType,
+				const AbstractColumn* errorPlusColumn,
+				const AbstractColumn* errorMinusColumn,
+				const Range<int>& indexRange,
+				Range<double>& yRange,
+				bool includeErrorBars) const;
 
 	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};

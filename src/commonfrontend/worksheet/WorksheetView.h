@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -64,6 +64,7 @@ public:
 	WorksheetElement* selectedElement() const;
 	QList<QGraphicsItem*> selectedItems() const;
 	double zoomFactor() const;
+	void processResize();
 
 	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
 	void registerShortcuts();
@@ -73,7 +74,6 @@ public:
 private:
 	void initBasicActions();
 	void initMenus();
-	void processResize();
 	void drawForeground(QPainter*, const QRectF&) override;
 	void drawBackground(QPainter*, const QRectF&) override;
 	void drawBackgroundItems(QPainter*, const QRectF&);
@@ -82,7 +82,7 @@ private:
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 	void handleAxisSelected(const Axis*);
-	void handleCartesianPlotSelected(const CartesianPlot*);
+	void handleCartesianPlotSelected(CartesianPlot*);
 	void handlePlotSelected();
 	void handleReferenceLineSelected();
 	void handleReferenceRangeSelected();
@@ -141,12 +141,11 @@ private:
 	QMenu* m_cartesianPlotMenu{nullptr};
 	QMenu* m_cartesianPlotMouseModeMenu{nullptr};
 	QMenu* m_cartesianPlotAddNewMenu{nullptr};
-	QMenu* m_cartesianPlotAddNewAnalysisMenu{nullptr};
 	QMenu* m_cartesianPlotZoomMenu{nullptr};
 	QMenu* m_cartesianPlotActionModeMenu{nullptr};
 	QMenu* m_cartesianPlotCursorModeMenu{nullptr};
-	QMenu* m_dataManipulationMenu{nullptr};
 
+	QToolButton* tbCartesianPlotAddNew{nullptr};
 	QToolButton* tbNewCartesianPlot{nullptr};
 	QToolButton* tbZoom{nullptr};
 	QToolButton* tbMagnification{nullptr};
@@ -203,6 +202,7 @@ private:
 	QAction* showPresenterMode{nullptr};
 
 	// Actions for cartesian plots
+	QAction* cartesianPlotAddNewAction{nullptr};
 	QAction* cartesianPlotApplyToSelectionAction{nullptr};
 	QAction* cartesianPlotApplyToAllAction{nullptr};
 	QAction* cartesianPlotApplyToAllXAction{nullptr};
@@ -215,29 +215,6 @@ private:
 	QAction* cartesianPlotZoomXSelectionModeAction{nullptr};
 	QAction* cartesianPlotZoomYSelectionModeAction{nullptr};
 	QAction* cartesianPlotCursorModeAction{nullptr};
-
-	QAction* addCurveAction{nullptr};
-	QAction* addHistogramAction{nullptr};
-	QAction* addBoxPlotAction{nullptr};
-	QAction* addEquationCurveAction{nullptr};
-	QAction* addDataOperationCurveAction{nullptr};
-	QAction* addDataReductionCurveAction{nullptr};
-	QAction* addDifferentiationCurveAction{nullptr};
-	QAction* addIntegrationCurveAction{nullptr};
-	QAction* addInterpolationCurveAction{nullptr};
-	QAction* addSmoothCurveAction{nullptr};
-	QAction* addFitCurveAction{nullptr};
-	QAction* addFourierFilterCurveAction{nullptr};
-	QAction* addFourierTransformCurveAction{nullptr};
-	QAction* addConvolutionCurveAction{nullptr};
-	QAction* addCorrelationCurveAction{nullptr};
-
-	QAction* addHorizontalAxisAction{nullptr};
-	QAction* addVerticalAxisAction{nullptr};
-	QAction* addLegendAction{nullptr};
-	QAction* addPlotTextLabelAction{nullptr};
-	QAction* addPlotImageAction{nullptr};
-	QAction* addCustomPointAction{nullptr};
 
 	QAction* scaleAutoXAction{nullptr};
 	QAction* scaleAutoYAction{nullptr};
@@ -253,23 +230,8 @@ private:
 	QAction* shiftUpYAction{nullptr};
 	QAction* shiftDownYAction{nullptr};
 
-	// Analysis menu
-	QAction* addDataOperationAction{nullptr};
-	QAction* addDataReductionAction{nullptr};
-	QAction* addDifferentiationAction{nullptr};
-	QAction* addIntegrationAction{nullptr};
-	QAction* addInterpolationAction{nullptr};
-	QAction* addSmoothAction{nullptr};
-	QAction* addFitAction{nullptr};
-	QAction* addFourierFilterAction{nullptr};
-	QAction* addFourierTransformAction{nullptr};
-	QAction* addHilbertTransformAction{nullptr};
-	QAction* addConvolutionAction{nullptr};
-	QAction* addCorrelationAction{nullptr};
-
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
-	void createAnalysisMenu(QMenu*);
 	void fillToolBar(QToolBar*);
 #ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
@@ -315,7 +277,6 @@ private Q_SLOTS:
 	void cartesianPlotActionModeChanged(QAction*);
 	void cartesianPlotCursorModeChanged(QAction*);
 	void cartesianPlotNavigationChanged(QAction*);
-	void cartesianPlotAddNew(QAction*);
 	void handleCartesianPlotActions();
 
 Q_SIGNALS:

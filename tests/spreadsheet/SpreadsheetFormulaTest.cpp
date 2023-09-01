@@ -360,6 +360,36 @@ void SpreadsheetFormulaTest::formulaCelli_2xpCelli_2y() {
 	}
 }
 
+///////////////////////// check group separator problem /////////////////////
+
+void SpreadsheetFormulaTest::formulaLocale() {
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	const int cols = 2;
+	const int rows = 3;
+	const QVector<double> xData{13000, 14000, 15000};
+
+	sheet.setColumnCount(cols);
+	sheet.setRowCount(rows);
+	auto* col0{sheet.column(0)};
+	col0->replaceValues(0, xData);
+
+	SpreadsheetView view(&sheet, false);
+	view.selectColumn(0);
+
+	QStringList variableNames;
+	variableNames << QLatin1String("x");
+	QVector<Column*> variableColumns;
+	variableColumns << sheet.column(0);
+	sheet.column(1)->setFormulaVariableColumn(sheet.column(0));
+
+	sheet.column(1)->setFormula(QLatin1String("mean(x)"), variableNames, variableColumns, true);
+	sheet.column(1)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++)
+		QCOMPARE(sheet.column(1)->valueAt(i), sheet.column(0)->valueAt(1));
+}
+
 ///////////////////////// more methods /////////////////////
 
 /*!

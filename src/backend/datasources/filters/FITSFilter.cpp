@@ -80,12 +80,6 @@ QList<FITSFilter::Keyword> FITSFilter::chduKeywords(const QString& fileName) {
 	return d->chduKeywords(fileName);
 }
 
-void FITSFilter::loadFilterSettings(const QString& /*fileName*/) {
-}
-
-void FITSFilter::saveFilterSettings(const QString& /*fileName*/) const {
-}
-
 /*!
  * \brief contains the {StandardKeywords \ MandatoryKeywords} keywords
  * \return A list of keywords
@@ -237,9 +231,9 @@ QString FITSFilter::fileInfoString(const QString& fileName) {
 	return info;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 
 FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner)
 	: q(owner) {
@@ -1577,9 +1571,9 @@ void FITSFilterPrivate::parseExtensions(const QString& fileName, QTreeWidget* tw
 
 FITSFilterPrivate::~FITSFilterPrivate() = default;
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.

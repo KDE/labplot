@@ -53,10 +53,6 @@ ENDIF ()
 
 IF (BUILD_EXCEL)
 	set(BUILD_SHARED_LIBS OFF)
-	# git clone -b v1.4.3 https://github.com/QtExcel/QXlsx.git tmp
-	# mv tmp/QXlsx .
-	# mv tmp/{LICENSE, README.md} QXlsx
-	# rm -rf tmp
 	add_subdirectory(QXlsx)
 ENDIF ()
 
@@ -75,10 +71,8 @@ if (ENABLE_VECTOR_BLF)
   if (${LOCAL_DBC_PARSER})
       FetchContent_Declare(
         dbc_parser_cpp
-        GIT_REPOSITORY https://github.com/Murmele/dbc_parser_cpp.git
-        GIT_TAG 3960d0930385c7e806df2a87476f33638cb08bfb
-        #GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
-        #GIT_TAG        master
+        GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
+        GIT_TAG 0f3b22b3fe124976a86a85fcd1bfdd55c20ca428 # At least this version is needed!
       )
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
@@ -116,12 +110,30 @@ if (ENABLE_VECTOR_BLF)
                           ${vector_blf_BINARY_DIR}/src) # config.h is in there
       target_link_libraries(labplot2lib Vector_BLF)
       target_compile_definitions(labplot2lib PRIVATE HAVE_VECTOR_BLF)
+      add_definitions (-DHAVE_VECTOR_BLF)
   else()
     pkg_check_modules(Vector_BLF IMPORTED_TARGET GLOBAL Vector_BLF)
     if (Vector_BLF_FOUND)
         target_link_libraries(labplot2lib PkgConfig::Vector_BLF)
         target_compile_definitions(labplot2lib PRIVATE HAVE_VECTOR_BLF)
+        add_definitions (-DHAVE_VECTOR_BLF)
     endif()
   endif()
+else()
+    add_definitions (-DVECTOR_BLF_DISABLED)
+endif()
+
+if (LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
+    FetchContent_Declare(
+        qt_advanced_dock
+        GIT_REPOSITORY https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git
+        GIT_TAG a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6
+      )
+      FetchContent_MakeAvailable(qt_advanced_dock)
+elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
+    # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
+    set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
+    set(ADS_VERSION ${LABPLOT_VERSION})
+    add_subdirectory(Qt-Advanced-Docking-System)
 endif()
 

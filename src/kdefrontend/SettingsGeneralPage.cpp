@@ -12,9 +12,10 @@
 #include "backend/lib/macros.h"
 #include "kdefrontend/MainWin.h" // LoadOnStart
 
+#include "backend/core/Settings.h"
+
 #include <KConfigGroup>
 #include <KI18n/KLocalizedString>
-#include <KSharedConfig>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -25,11 +26,9 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
 	retranslateUi();
 
+	connect(ui.cbDockWindowPositionReopen, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbTitleBar, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
-	connect(ui.cbInterface, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::interfaceChanged);
-	connect(ui.cbMdiVisibility, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
-	connect(ui.cbTabPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbUnits, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbDecimalSeparator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.chkGUMTerms, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
@@ -40,7 +39,6 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 
 	loadSettings();
-	interfaceChanged(ui.cbInterface->currentIndex());
 	autoSaveChanged(ui.chkAutoSave->isChecked());
 }
 
@@ -90,12 +88,9 @@ void SettingsGeneralPage::applySettings() {
 	if (!m_changed)
 		return;
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	KConfigGroup group = Settings::settingsGeneral();
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentData().toInt());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
-	group.writeEntry(QLatin1String("ViewMode"), ui.cbInterface->currentIndex());
-	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
-	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
 	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic)) // need to overwrite previous setting
 		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage));
@@ -113,14 +108,12 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
+	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
 }
 
 void SettingsGeneralPage::restoreDefaults() {
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(static_cast<int>(MainWin::LoadOnStart::NewProject)));
 	ui.cbTitleBar->setCurrentIndex(0);
-	ui.cbInterface->setCurrentIndex(0);
-	ui.cbTabPosition->setCurrentIndex(0);
-	ui.cbMdiVisibility->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
 	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
 	ui.chkGUMTerms->setChecked(false);
@@ -130,16 +123,14 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkAutoSave->setChecked(false);
 	ui.sbAutoSaveInterval->setValue(5);
 	ui.chkCompatible->setChecked(false);
+	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehaviour::AboveLastActive)));
 }
 
 void SettingsGeneralPage::loadSettings() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(loadOnStart));
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
-	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
-	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
-	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
 	// must be done, because locale.language() will return the default locale if AnyLanguage is passed
 	const auto l = static_cast<QLocale::Language>(group.readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
@@ -160,6 +151,8 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
+
+	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::readDockPosBehaviour())));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -171,25 +164,15 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->addItem(i18n("Load Last Used Project"), static_cast<int>(MainWin::LoadOnStart::LastProject));
 	// 	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
 
+	ui.cbDockWindowPositionReopen->setToolTip(i18n("Controls the behavior of where the dock widgets are placed after being re-opened."));
+	ui.cbDockWindowPositionReopen->clear();
+	ui.cbDockWindowPositionReopen->addItem(i18n("Original Position"), static_cast<int>(Settings::DockPosBehaviour::OriginalPos));
+	ui.cbDockWindowPositionReopen->addItem(i18n("On top of the last active Dock Widget"), static_cast<int>(Settings::DockPosBehaviour::AboveLastActive));
+
 	ui.cbTitleBar->clear();
 	ui.cbTitleBar->addItem(i18n("Show File Path"));
 	ui.cbTitleBar->addItem(i18n("Show File Name"));
 	ui.cbTitleBar->addItem(i18n("Show Project Name"));
-
-	ui.cbInterface->clear();
-	ui.cbInterface->addItem(i18n("Sub-window View"));
-	ui.cbInterface->addItem(i18n("Tabbed View"));
-
-	ui.cbMdiVisibility->clear();
-	ui.cbMdiVisibility->addItem(i18n("Show Windows of the Current Folder Only"));
-	ui.cbMdiVisibility->addItem(i18n("Show Windows of the Current Folder and its Subfolders Only"));
-	ui.cbMdiVisibility->addItem(i18n("Show all Windows"));
-
-	ui.cbTabPosition->clear();
-	ui.cbTabPosition->addItem(i18n("Top"));
-	ui.cbTabPosition->addItem(i18n("Bottom"));
-	ui.cbTabPosition->addItem(i18n("Left"));
-	ui.cbTabPosition->addItem(i18n("Right"));
 
 	ui.cbUnits->addItem(i18n("Metric"));
 	ui.cbUnits->addItem(i18n("Imperial"));
@@ -203,15 +186,6 @@ void SettingsGeneralPage::retranslateUi() {
 void SettingsGeneralPage::changed() {
 	m_changed = true;
 	Q_EMIT settingsChanged();
-}
-
-void SettingsGeneralPage::interfaceChanged(int index) {
-	bool tabbedView = (index == 1);
-	ui.lTabPosition->setVisible(tabbedView);
-	ui.cbTabPosition->setVisible(tabbedView);
-	ui.lMdiVisibility->setVisible(!tabbedView);
-	ui.cbMdiVisibility->setVisible(!tabbedView);
-	changed();
 }
 
 void SettingsGeneralPage::autoSaveChanged(bool state) {

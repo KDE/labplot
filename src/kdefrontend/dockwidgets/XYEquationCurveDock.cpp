@@ -9,8 +9,6 @@
 */
 
 #include "XYEquationCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
@@ -29,7 +27,7 @@
 		(2D-curves defined by a mathematical equation) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -103,7 +101,7 @@ void XYEquationCurveDock::setupGeneral() {
 }
 
 void XYEquationCurveDock::initGeneralTab() {
-	// if there are more then one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -152,7 +150,6 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	m_equationCurve = static_cast<XYEquationCurve*>(m_curve);
 	Q_ASSERT(m_equationCurve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	XYCurveDock::setModel();
 	initGeneralTab();
 	initTabs();

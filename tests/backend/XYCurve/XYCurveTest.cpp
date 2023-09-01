@@ -1431,9 +1431,9 @@ void XYCurveTest::updateLinesWithGapLineSkipDirectConnection() {
 	QCOMPARE(updateLinesCalled, true);
 }
 
-//######################################################################################
-// With Gap, skipGaps = True
-//######################################################################################
+// ######################################################################################
+//  With Gap, skipGaps = True
+// ######################################################################################
 void XYCurveTest::updateLinesWithGapLineSkipDirectConnection2() {
 	LOAD_PROJECT
 	bool updateLinesCalled = false;
@@ -1670,9 +1670,9 @@ void XYCurveTest::updateLinesWithGapLineSkipSegments3() {
 	QCOMPARE(updateLinesCalled, true);
 }
 
-//######################################################################################
-// With Gap, skipGaps = false
-//######################################################################################
+// ######################################################################################
+//  With Gap, skipGaps = false
+// ######################################################################################
 void XYCurveTest::updateLinesWithGapDirectConnection() {
 	LOAD_PROJECT
 	withGapCurve2->setLineSkipGaps(true);
@@ -1944,9 +1944,9 @@ void XYCurveTest::updateLinesLog10() {
 
 // TODO: create tests for Splines
 
-//############################################################################
-// Hover tests
-//############################################################################
+// ############################################################################
+//  Hover tests
+// ############################################################################
 void XYCurveTest::hooverCurveIntegerEndingZeros() {
 	LOAD_HOVER_PROJECT
 

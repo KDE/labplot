@@ -9,6 +9,8 @@
 #include <QSharedPointer>
 #include <QIODevice>
 
+#include <memory>
+
 #include "xlsxglobal.h"
 #include "xlsxabstractooxmlfile.h"
 #include "xlsxabstractsheet.h"
@@ -28,7 +30,7 @@ class Chartsheet;
 class Worksheet;
 class WorkbookPrivate;
 
-class Workbook : public AbstractOOXmlFile
+class QXLSX_EXPORT Workbook : public AbstractOOXmlFile
 {
     Q_DECLARE_PRIVATE(Workbook)
 public:
@@ -61,8 +63,8 @@ public:
     void setDefaultDateFormat(const QString &format);
 
     //internal used member
-    void addMediaFile(QSharedPointer<MediaFile> media, bool force=false);
-    QList<QSharedPointer<MediaFile> > mediaFiles() const;
+    void addMediaFile(std::shared_ptr<MediaFile> media, bool force=false);
+    QList<std::shared_ptr<MediaFile> > mediaFiles() const;
     void addChartFile(QSharedPointer<Chart> chartFile);
     QList<QSharedPointer<Chart> > chartFiles() const;
 

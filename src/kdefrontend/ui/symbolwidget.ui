@@ -30,6 +30,7 @@
     <widget class="QLabel" name="lGeneral">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -168,6 +169,7 @@
     <widget class="QLabel" name="lFilling">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -223,6 +225,7 @@
     <widget class="QLabel" name="lBorder">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -335,6 +338,17 @@
    <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbStyle</tabstop>
+  <tabstop>sbSize</tabstop>
+  <tabstop>sbRotation</tabstop>
+  <tabstop>sbOpacity</tabstop>
+  <tabstop>cbFillingStyle</tabstop>
+  <tabstop>kcbFillingColor</tabstop>
+  <tabstop>cbBorderStyle</tabstop>
+  <tabstop>kcbBorderColor</tabstop>
+  <tabstop>sbBorderWidth</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

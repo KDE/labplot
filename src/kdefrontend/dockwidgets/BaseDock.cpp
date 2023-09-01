@@ -4,7 +4,7 @@
 	Description          : Base Dock widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,28 +13,29 @@
 #include "AxisDock.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <QComboBox>
 
 BaseDock::BaseDock(QWidget* parent)
 	: QWidget(parent) {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	m_units = (Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 
 	if (m_units == Units::Imperial)
 		m_worksheetUnit = Worksheet::Unit::Inch;
 }
 
-BaseDock::~BaseDock() = default;
+BaseDock::~BaseDock() {
+	if (m_aspectModel)
+		delete m_aspectModel;
+}
 
 void BaseDock::updatePlotRangeList(QComboBox* cb) {
 	auto* element{static_cast<WorksheetElement*>(m_aspect)};
@@ -171,6 +172,13 @@ void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 		m_leName->setText(aspect->name());
 	else if (aspect->comment() != m_teComment->text())
 		m_teComment->document()->setPlainText(aspect->comment());
+}
+
+AspectTreeModel* BaseDock::aspectModel() {
+	if (!m_aspectModel)
+		m_aspectModel = new AspectTreeModel(m_aspect->project());
+
+	return m_aspectModel;
 }
 
 void BaseDock::spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue) {

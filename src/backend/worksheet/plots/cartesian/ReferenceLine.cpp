@@ -83,6 +83,7 @@ void ReferenceLine::init() {
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
+	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -205,9 +206,9 @@ void ReferenceLine::setOrientation(Orientation orientation) {
 		exec(new ReferenceLineSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void ReferenceLine::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Orientation::Horizontal);
@@ -230,9 +231,9 @@ void ReferenceLine::visibilityChangedSlot() {
 	this->setVisible(!d->isVisible());
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ReferenceLinePrivate::ReferenceLinePrivate(ReferenceLine* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -383,9 +384,9 @@ void ReferenceLinePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void ReferenceLine::save(QXmlStreamWriter* writer) const {
 	Q_D(const ReferenceLine);
@@ -411,7 +412,6 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -432,7 +432,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			auto str = attribs.value(QStringLiteral("position")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("position")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("position"));
 			else {
 				d->positionLogical.setX(str.toDouble());
 				d->positionLogical.setY(str.toDouble());
@@ -444,7 +444,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == QLatin1String("geometry")) {
@@ -455,7 +455,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("line")) {
 			d->line->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -463,9 +463,9 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void ReferenceLine::loadThemeConfig(const KConfig& config) {
 	Q_D(ReferenceLine);
 

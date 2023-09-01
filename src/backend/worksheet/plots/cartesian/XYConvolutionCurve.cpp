@@ -26,9 +26,7 @@
 #include <QIcon>
 #include <QThreadPool>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 XYConvolutionCurve::XYConvolutionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYConvolutionCurvePrivate(this), AspectType::XYConvolutionCurve) {
@@ -60,9 +58,9 @@ QIcon XYConvolutionCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYConvolutionCurve, XYConvolutionCurve::ConvolutionData, convolutionData, convolutionData)
 
 const XYConvolutionCurve::ConvolutionResult& XYConvolutionCurve::convolutionResult() const {
@@ -70,18 +68,18 @@ const XYConvolutionCurve::ConvolutionResult& XYConvolutionCurve::convolutionResu
 	return d->convolutionResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYConvolutionCurve, SetConvolutionData, XYConvolutionCurve::ConvolutionData, convolutionData, recalculate)
 void XYConvolutionCurve::setConvolutionData(const XYConvolutionCurve::ConvolutionData& convolutionData) {
 	Q_D(XYConvolutionCurve);
 	exec(new XYConvolutionCurveSetConvolutionDataCmd(d, convolutionData, ki18n("%1: set options and perform the convolution")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYConvolutionCurvePrivate::XYConvolutionCurvePrivate(XYConvolutionCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -231,9 +229,9 @@ bool XYConvolutionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYConvolutionCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYConvolutionCurve);
@@ -278,10 +276,8 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
-	DEBUG("XYConvolutionCurve::load()");
 	Q_D(XYConvolutionCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -325,6 +321,10 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

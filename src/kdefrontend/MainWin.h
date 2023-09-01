@@ -3,7 +3,11 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
+<<<<<<< HEAD
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+=======
 	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+>>>>>>> master
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -14,6 +18,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <KXmlGuiWindow>
+#include <QStringLiteral>
 #include <QTimer>
 
 class AbstractAspect;
@@ -29,6 +34,7 @@ class Spreadsheet;
 class Matrix;
 class GuiObserver;
 class CursorDock;
+class ContentDockWidget;
 class MemoryWidget;
 class CartesianPlot;
 class InfoElementDialog;
@@ -55,6 +61,11 @@ class KHamburgerMenu;
 class KRecentFilesAction;
 class KToggleAction;
 class KToggleFullScreenAction;
+
+namespace ads {
+class CDockManager;
+class CDockWidget;
+}
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/Provider>
@@ -87,15 +98,16 @@ public:
 #endif
 
 private:
-	QMdiArea* m_mdiArea{nullptr};
+	ads::CDockManager* m_DockManager{nullptr};
 	KColorSchemeManager* m_schemeManager{nullptr};
-	QMdiSubWindow* m_currentSubWindow{nullptr};
+	ContentDockWidget* m_currentDock{nullptr}; // Currently selected dock
 	Project* m_project{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	ProjectExplorer* m_projectExplorer{nullptr};
-	QDockWidget* m_projectExplorerDock{nullptr};
-	QDockWidget* m_propertiesDock{nullptr};
+	ads::CDockWidget* m_projectExplorerDock{nullptr};
+	ads::CDockWidget* m_propertiesDock{nullptr};
 	AbstractAspect* m_currentAspect{nullptr};
+	ads::CDockWidget* m_currentAspectDock{nullptr};
 	Folder* m_currentFolder{nullptr};
 	QString m_undoViewEmptyLabel;
 	bool m_suppressCurrentSubWindowChangedEvent{false};
@@ -105,6 +117,7 @@ private:
 	QTimer m_autoSaveTimer;
 	bool m_showWelcomeScreen{false};
 	bool m_saveWelcomeScreen{true};
+	int undoStackIndexLastSave{0};
 	MemoryWidget* m_memoryInfoWidget{nullptr};
 	QMdiSubWindow* m_welcomeWindow{nullptr};
 	QQuickWidget* m_welcomeWidget{nullptr};
@@ -157,8 +170,6 @@ private:
 	QAction* m_redoAction;
 	QAction* m_closeWindowAction;
 	QAction* m_closeAllWindowsAction;
-	QAction* m_tileWindowsAction;
-	QAction* m_cascadeWindowsAction;
 	QAction* m_nextWindowAction;
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
@@ -182,14 +193,15 @@ private:
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
 	// Docks
+	ads::CDockWidget* cursorDock{nullptr};
+
 	QStackedWidget* stackedWidget{nullptr};
-	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};
 
 	void initActions();
 	void initMenus();
 	bool warnModified();
-	void activateSubWindowForAspect(const AbstractAspect*) const;
+	void activateSubWindowForAspect(const AbstractAspect*);
 	bool save(const QString&);
 	// 	void toggleShowWidget(QWidget* widget, bool showToRight);
 	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
@@ -208,9 +220,16 @@ private Q_SLOTS:
 	void initGUI(const QString&);
 	// 	QQuickWidget* createWelcomeScreen();
 	// 	void resetWelcomeScreen();
-	void createMdiArea();
+	// void createMdiArea();
+	void createADS();
+	void changeVisibleAllDocks(bool);
+	void activateNextDock();
+	void activatePreviousDock();
+	void dockWidgetAboutToBeRemoved(ads::CDockWidget*);
+	void dockWidgetRemoved(ads::CDockWidget*);
+	void dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now);
 	void updateGUI();
-	void updateGUIOnProjectChanges();
+	void updateGUIOnProjectChanges(const QByteArray& windowState = QByteArray());
 	void undo();
 	void redo();
 
@@ -262,13 +281,13 @@ private Q_SLOTS:
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*);
 	void handleCurrentAspectChanged(AbstractAspect*);
-	void handleCurrentSubWindowChanged(QMdiSubWindow*);
+	//	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleShowSubWindowRequested();
 
 	void handleSettingsChanges();
 
-	void setMdiWindowVisibility(QAction*);
-	void updateMdiWindowVisibility() const;
+	void setDockVisibility(QAction*);
+	void updateDockWindowVisibility() const;
 	void toggleDockWidget(QAction*);
 	void toggleStatusBar(bool);
 	void toggleMenuBar(bool);
@@ -278,6 +297,8 @@ private Q_SLOTS:
 	void propertiesDockVisibilityChanged(bool);
 	void cursorDockVisibilityChanged(bool);
 	void propertiesExplorerRequested();
+
+	void focusCursorDock();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 };

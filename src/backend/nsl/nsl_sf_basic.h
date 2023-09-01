@@ -12,6 +12,18 @@
 
 #include "nsl_complex.h"
 #include <gsl/gsl_version.h>
+
+#undef __BEGIN_DECLS
+#undef __END_DECLS
+#ifdef __cplusplus
+#define __BEGIN_DECLS extern "C" {
+#define __END_DECLS }
+#else
+#define __BEGIN_DECLS /* empty */
+#define __END_DECLS /* empty */
+#endif
+__BEGIN_DECLS
+
 #include <stdint.h> /* fixed size int types */
 
 /* dummy function for parsing statistical methods */
@@ -197,5 +209,7 @@ double nsl_sf_pascal(double k, double p, double n);
 double nsl_sf_geometric(double k, double p);
 double nsl_sf_hypergeometric(double k, double n1, double n2, double t);
 double nsl_sf_logarithmic(double k, double p);
+
+__END_DECLS
 
 #endif /* NSL_SF_BASIC_H */
