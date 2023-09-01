@@ -4,7 +4,7 @@
 	Description      : Base dock widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,15 +12,16 @@
 #ifndef BASEDOCK
 #define BASEDOCK
 
+#include "backend/core/AspectTreeModel.h"
 #include "backend/worksheet/Worksheet.h"
 
-#include <QLineEdit>
 #include <QWidget>
 
 class AbstractAspect;
 class ResizableTextEdit;
 class QComboBox;
 class QDoubleSpinBox;
+class QLineEdit;
 
 class BaseDock : public QWidget {
 	Q_OBJECT
@@ -35,6 +36,7 @@ public:
 	virtual void updateUnits(){};
 	virtual void updatePlotRanges(){}; // used in worksheet element docks
 	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
+
 	template<typename T>
 	void setAspects(QList<T*> aspects) {
 		if (m_aspect)
@@ -52,6 +54,10 @@ public:
 			if (aspect->inherits(AspectType::AbstractAspect))
 				m_aspects.append(static_cast<AbstractAspect*>(aspect));
 		}
+
+		// delete the potentially available model, will be re-created if needed for the newly set aspects
+		delete m_aspectModel;
+		m_aspectModel = nullptr;
 	}
 
 	void disconnectAspect(const AbstractAspect* a) {
@@ -63,6 +69,8 @@ public:
 		return m_aspect;
 	}
 
+	AspectTreeModel* aspectModel();
+
 protected:
 	bool m_initializing{false};
 	QLineEdit* m_leName{nullptr};
@@ -70,9 +78,11 @@ protected:
 	Units m_units{Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 	void updatePlotRangeList(QComboBox*); // used in worksheet element docks
+
 private:
 	AbstractAspect* m_aspect{nullptr};
 	QList<AbstractAspect*> m_aspects;
+	AspectTreeModel* m_aspectModel{nullptr};
 
 protected Q_SLOTS:
 	void nameChanged();

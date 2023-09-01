@@ -10,9 +10,8 @@
 */
 
 #include "XYCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/core/Settings.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
@@ -181,10 +180,7 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	init();
 }
 
-XYCurveDock::~XYCurveDock() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-}
+XYCurveDock::~XYCurveDock() = default;
 
 void XYCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
@@ -394,8 +390,9 @@ QList<AspectType> XYCurveDock::defaultColumnTopLevelClasses() {
 }
 
 void XYCurveDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list = defaultColumnTopLevelClasses();
 	list.append(AspectType::XYFitCurve);
@@ -427,17 +424,17 @@ void XYCurveDock::setModel() {
 	else
 		list = {AspectType::Column};
 
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 
 	if (cbXColumn && cbYColumn) {
-		cbXColumn->setModel(m_aspectTreeModel);
-		cbYColumn->setModel(m_aspectTreeModel);
+		cbXColumn->setModel(model);
+		cbYColumn->setModel(model);
 	}
 
-	cbXErrorMinusColumn->setModel(m_aspectTreeModel);
-	cbXErrorPlusColumn->setModel(m_aspectTreeModel);
-	cbYErrorMinusColumn->setModel(m_aspectTreeModel);
-	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
+	cbXErrorMinusColumn->setModel(model);
+	cbXErrorPlusColumn->setModel(model);
+	cbYErrorMinusColumn->setModel(model);
+	cbYErrorPlusColumn->setModel(model);
 
 	// for value labels we need a dedicated model since we also want to allow
 	// to select text columns and we don't want to call enablePlottableColumnsOnly().
@@ -476,7 +473,6 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	Q_ASSERT(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
 	initGeneralTab();
 	initTabs();

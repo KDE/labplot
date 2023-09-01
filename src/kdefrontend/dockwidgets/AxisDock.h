@@ -19,7 +19,6 @@ class AbstractAspect;
 class LineWidget;
 class LabelWidget;
 class TreeViewComboBox;
-class AspectTreeModel;
 class AbstractColumn;
 class DateTimeSpinBox;
 class NumberSpinBox;
@@ -41,7 +40,6 @@ private:
 	Ui::AxisDock ui;
 	QList<Axis*> m_axesList;
 	Axis* m_axis{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 	LabelWidget* labelWidget; // Title
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;

@@ -9,8 +9,6 @@
 
 #include "LollipopPlotDock.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
@@ -123,7 +121,6 @@ void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
 	m_plot = list.first();
 	setAspects(list);
 	Q_ASSERT(m_plot);
-	m_aspectTreeModel = new AspectTreeModel(m_plot->project());
 	setModel();
 
 	// if there is more than one point in the list, disable the comment and name widgets in "general"
@@ -184,11 +181,12 @@ void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
 }
 
 void LollipopPlotDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list{AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 
 	list = {AspectType::Folder,
 			AspectType::Workbook,
@@ -204,7 +202,7 @@ void LollipopPlotDock::setModel() {
 			AspectType::CantorWorksheet};
 
 	cbXColumn->setTopLevelClasses(list);
-	cbXColumn->setModel(m_aspectTreeModel);
+	cbXColumn->setModel(model);
 }
 
 /*
@@ -336,7 +334,7 @@ void LollipopPlotDock::addDataColumn() {
 										AspectType::XYSmoothCurve,
 										AspectType::CantorWorksheet};
 	cb->setTopLevelClasses(list);
-	cb->setModel(m_aspectTreeModel);
+	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &LollipopPlotDock::dataColumnChanged);
 
 	int index = m_dataComboBoxes.size();

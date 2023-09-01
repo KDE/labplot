@@ -9,8 +9,6 @@
 */
 
 #include "AxisDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
@@ -223,10 +221,7 @@ AxisDock::AxisDock(QWidget* parent)
 	init();
 }
 
-AxisDock::~AxisDock() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-}
+AxisDock::~AxisDock() = default;
 
 void AxisDock::init() {
 	CONDITIONAL_LOCK_RETURN;
@@ -326,11 +321,12 @@ void AxisDock::setModel() {
 	cbLabelsTextColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	auto* model = aspectModel();
+	model->setSelectableAspects(list);
 
-	cbMajorTicksColumn->setModel(m_aspectTreeModel);
-	cbMinorTicksColumn->setModel(m_aspectTreeModel);
-	cbLabelsTextColumn->setModel(m_aspectTreeModel);
+	cbMajorTicksColumn->setModel(model);
+	cbMinorTicksColumn->setModel(model);
+	cbLabelsTextColumn->setModel(model);
 }
 
 /*!
@@ -343,7 +339,6 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	m_axis = list.first();
 	setAspects(list);
 	Q_ASSERT(m_axis != nullptr);
-	m_aspectTreeModel = new AspectTreeModel(m_axis->project());
 	this->setModel();
 
 	labelWidget->setAxes(list);
@@ -520,7 +515,7 @@ void AxisDock::activateTitleTab() {
 
 void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
 	if (column)
-		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+		cb->setCurrentModelIndex(aspectModel()->modelIndexOfAspect(column));
 	else
 		cb->setCurrentModelIndex(QModelIndex());
 }

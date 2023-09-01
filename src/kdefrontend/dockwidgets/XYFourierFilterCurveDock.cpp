@@ -9,8 +9,6 @@
 */
 
 #include "XYFourierFilterCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
@@ -205,7 +203,6 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_filterCurve = static_cast<XYFourierFilterCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_filterData = m_filterCurve->filterData();
 

@@ -9,8 +9,6 @@
 
 #include "BarPlotDock.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
@@ -134,7 +132,6 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	m_barPlot = list.first();
 	setAspects(list);
 	Q_ASSERT(m_barPlot);
-	m_aspectTreeModel = new AspectTreeModel(m_barPlot->project());
 	setModel();
 
 	// if there is more than one point in the list, disable the comment and name widgets in "general"
@@ -198,11 +195,12 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 }
 
 void BarPlotDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list{AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 
 	list = {AspectType::Folder,
 			AspectType::Workbook,
@@ -218,7 +216,7 @@ void BarPlotDock::setModel() {
 			AspectType::CantorWorksheet};
 
 	cbXColumn->setTopLevelClasses(list);
-	cbXColumn->setModel(m_aspectTreeModel);
+	cbXColumn->setModel(model);
 }
 
 /*
@@ -343,7 +341,7 @@ void BarPlotDock::addDataColumn() {
 										AspectType::XYSmoothCurve,
 										AspectType::CantorWorksheet};
 	cb->setTopLevelClasses(list);
-	cb->setModel(m_aspectTreeModel);
+	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::dataColumnChanged);
 
 	int index = m_dataComboBoxes.size();

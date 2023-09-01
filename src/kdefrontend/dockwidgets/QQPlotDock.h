@@ -14,7 +14,6 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_qqplotdock.h"
 
-class AspectTreeModel;
 class LineWidget;
 class QQPlot;
 class SymbolWidget;
@@ -44,7 +43,6 @@ protected:
 
 	QList<QQPlot*> m_plots;
 	QQPlot* m_plot{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 
 	virtual void setModel();
 

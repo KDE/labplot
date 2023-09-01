@@ -15,7 +15,6 @@
 #include "ui_barplotdock.h"
 
 class AbstractAspect;
-class AspectTreeModel;
 class BackgroundWidget;
 class LineWidget;
 class ValueWidget;
@@ -38,7 +37,6 @@ private:
 	ValueWidget* valueWidget{nullptr};
 	QList<BarPlot*> m_barPlots;
 	BarPlot* m_barPlot{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 	TreeViewComboBox* cbXColumn{nullptr};
 
 	QGridLayout* m_gridLayout;

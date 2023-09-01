@@ -9,8 +9,6 @@
 */
 
 #include "XYCorrelationCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
@@ -187,7 +185,6 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	m_correlationCurve = static_cast<XYCorrelationCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_correlationData = m_correlationCurve->correlationData();
 
