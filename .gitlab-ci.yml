@@ -4,7 +4,7 @@
 
 include:
 # Tumbleweed (disabled until readstat fixes GCC 13 issue)
-  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
+#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
 #  needs more work
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
 # replaced with own target
@@ -129,7 +129,7 @@ workflow:
 # 1 test fails: FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-.fedora_38_min:
+fedora_38_min:
   stage: build
   image: fedora:38
   only:

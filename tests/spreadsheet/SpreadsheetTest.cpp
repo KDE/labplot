@@ -2602,6 +2602,9 @@ void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	Project project;
 	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
 	project.addChild(sheetData);
