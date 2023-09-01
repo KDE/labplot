@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-29 00:41+0000\n"
-"PO-Revision-Date: 2023-08-28 23:10+0100\n"
+"PO-Revision-Date: 2023-08-31 05:57+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -2982,10 +2982,9 @@ msgid "Comparison Functions"
 msgstr "Komparofunkcioj"
 
 #: src/backend/gsl/functions.cpp:46
-#, fuzzy, kde-format
-#| msgid "Logistic Function"
+#, kde-format
 msgid "Logical Functions"
-msgstr "Loĝistika Funkcio"
+msgstr "Logikaj Funkcioj"
 
 #: src/backend/gsl/functions.cpp:48
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -3376,34 +3375,32 @@ msgstr "egalas"
 #: src/backend/gsl/functions.cpp:229
 #, kde-format
 msgid "equal with epsilon"
-msgstr ""
+msgstr "egalas kun epsilono"
 
 #: src/backend/gsl/functions.cpp:230
 #, kde-format
 msgid "between with boundaries included"
-msgstr ""
+msgstr "intere kun limoj inkluzivitaj"
 
 #: src/backend/gsl/functions.cpp:231
 #, kde-format
 msgid "outside with boundaries included"
-msgstr ""
+msgstr "ekstere kun limoj inkluzivitaj"
 
 #: src/backend/gsl/functions.cpp:232
 #, kde-format
 msgid "between with boundaries excluded"
-msgstr ""
+msgstr "intere kun limoj ekskluzivitaj"
 
 #: src/backend/gsl/functions.cpp:233
-#, fuzzy, kde-format
-#| msgid "Not inside of the bounding rect"
+#, kde-format
 msgid "outside with boundaries excluded"
-msgstr "Ne interne de la salma rekta"
+msgstr "ekstere kun limoj ekskluzivitaj"
 
 #: src/backend/gsl/functions.cpp:236
-#, fuzzy, kde-format
-#| msgid "if(condition, ifTrue, ifFalse)"
+#, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr "if(kondiĉo, seVera, seMalvera)"
+msgstr "if(kondiĉo; seVera; seMalvera)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -5285,28 +5282,24 @@ msgid "x"
 msgstr "x"
 
 #: src/backend/gsl/functions.cpp:1181
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "min."
+msgstr "min"
 
 #: src/backend/gsl/functions.cpp:1183
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "maks."
+msgstr "maks"
 
 #: src/backend/gsl/functions.cpp:1191
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "v1"
-msgstr "1"
+msgstr "v1"
 
 #: src/backend/gsl/functions.cpp:1193
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "v2"
-msgstr "2"
+msgstr "v2"
 
 #: src/backend/gsl/functions.cpp:1195
 #, kde-format
@@ -9795,40 +9788,34 @@ msgid "Rescale to [a, b]"
 msgstr "Reskalo al [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:441
-#, fuzzy, kde-format
-#| msgid "Export..."
+#, kde-format
 msgid "&Sort..."
-msgstr "Eksporti..."
+msgstr "&Ordigi..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
-#, fuzzy, kde-format
-#| msgid "Insert Multiple Columns Left"
+#, kde-format
 msgid "Sort multiple columns together"
-msgstr "Enmeti Multoblajn Kolumnojn Maldekstre"
+msgstr "Ordigi multoblajn kolumnojn kune"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
-#, fuzzy, kde-format
-#| msgid "&Ascending"
+#, kde-format
 msgid "Sort &Ascending"
-msgstr "Kresk&anta"
+msgstr "Ordigi Kresk&ante"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:444
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in ascending order"
-msgstr "Platigi elektitajn kolumnojn rilate al:"
+msgstr "Ordigi la elektitajn kolumnojn aparte en kreska ordo"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:445
-#, fuzzy, kde-format
-#| msgid "&Descending"
+#, kde-format
 msgid "Sort &Descending"
-msgstr "&Malkreskanta"
+msgstr "Or&digi Malkreske"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns relative to:"
+#, kde-format
 msgid "Sort the selected columns separately in descending order"
-msgstr "Platigi elektitajn kolumnojn rilate al:"
+msgstr "Ordigi la elektitajn kolumnojn aparte en malkreska ordo"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:450
 #, kde-format
@@ -21382,10 +21369,9 @@ msgstr "Ŝalti al potenca serĉ- kaj anstataŭig-breto"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Sort"
+#, kde-format
 msgid "Sort by"
-msgstr "Ordigi"
+msgstr "Ordigi laŭ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:64
@@ -22254,27 +22240,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "Conditions"
-#~ msgstr "Kondiĉoj"
-
-#~ msgid "Dawson integral"
-#~ msgstr "Dawson integralo"
-
-#~ msgid "&Sort Spreadsheet"
-#~ msgstr "&Ordigi Tabelfolion"
-
-#~ msgid "&Selected Columns"
-#~ msgstr "&Selektitaj Kolumnoj"
-
-#~ msgid "Sort columns:"
-#~ msgstr "Ordigi kolumnojn:"
-
-#~ msgid "Separately"
-#~ msgstr "Aparte"
-
-#~ msgid "Together"
-#~ msgstr "Kune"
-
-#~ msgid "Leading column:"
-#~ msgstr "Ĉefa kolumno:"
