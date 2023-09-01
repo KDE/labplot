@@ -56,7 +56,7 @@ ubuntu_22.04_min:
   stage: build
   image: ubuntu:22.04
   only:
-#    - merge_requests
+    - merge_requests
     - master
   before_script:
     - apt update
