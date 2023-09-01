@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2020 Volker Krause <vkrause@kde.org>
-# SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+# SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 # SPDX-License-Identifier: CC0-1.0
 
 include:
@@ -15,18 +15,18 @@ include:
 # needed for tests (use "ctest -V" for more output)
 variables:
   QT_TEST_TIMEOUT_FUNCTION: "600"
-  QT_QPA_PLATFORM: "eglfs"
+#  QT_QPA_PLATFORM: "eglfs"
 
 # test builds (prepend '.' to temporary disable):
 # Win (Debug)
 ## FreeBSD (Debug)
-# Ubuntu 22.04 min (Debug)
-# Ubuntu 22.04 full (Release)
+## Ubuntu 22.04 min (Debug)
+## Ubuntu 22.04 full (Release)
 # Fedora 38 min (Debug)
-# Fedora 38 full (Release)
+## Fedora 38 full (Release)
 ## OS 15.5 min (Release)
 ## OS 15.5 full (Debug)
-# Tumbleweed full (Debug)
+## Tumbleweed full (Debug)
 
 workflow:
   rules:
@@ -95,7 +95,7 @@ windows_qt515:
 
 ########################################################
 
-ubuntu_22.04_min:
+.ubuntu_22.04_min:
   stage: build
   image: ubuntu:22.04
   only:
@@ -112,7 +112,7 @@ ubuntu_22.04_min:
 # 1 test fails: FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-ubuntu_22.04_full:
+.ubuntu_22.04_full:
   stage: build
   image: ubuntu:22.04
   only:
@@ -149,7 +149,7 @@ fedora_38_min:
 # FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-fedora_38_full:
+.fedora_38_full:
   stage: build
   image: fedora:38
   only:
@@ -206,7 +206,7 @@ fedora_38_full:
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
 
-tumbleweed_full:
+.tumbleweed_full:
   stage: build
   image: opensuse/tumbleweed
   only:
