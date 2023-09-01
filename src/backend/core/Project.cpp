@@ -22,7 +22,9 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
@@ -984,6 +986,32 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		RESTORE_COLUMN_POINTER(value, column, Column);
 		RESTORE_COLUMN_POINTER(hist, errorPlusColumn, ErrorPlusColumn);
 		RESTORE_COLUMN_POINTER(hist, errorMinusColumn, ErrorMinusColumn);
+	}
+
+	// QQ-plots
+	QVector<QQPlot*> qqPlots;
+	if (hasChildren)
+		qqPlots = aspect->children<QQPlot>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::QQPlot)
+		qqPlots << static_cast<QQPlot*>(aspect);
+
+	for (auto* plot : qqPlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
+	}
+
+	// KDE-plots
+	QVector<KDEPlot*> kdePlots;
+	if (hasChildren)
+		kdePlots = aspect->children<KDEPlot>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::KDEPlot)
+		kdePlots << static_cast<KDEPlot*>(aspect);
+
+	for (auto* plot : kdePlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
 	}
 
 	// box plots

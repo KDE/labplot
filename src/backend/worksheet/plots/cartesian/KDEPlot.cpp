@@ -102,8 +102,8 @@ void KDEPlot::init() {
 void KDEPlot::finalizeAdd() {
 	Q_D(KDEPlot);
 	WorksheetElement::finalizeAdd();
-	addChild(d->estimationCurve);
-	addChild(d->rugCurve);
+	addChildFast(d->estimationCurve);
+	addChildFast(d->rugCurve);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
@@ -473,8 +473,9 @@ void KDEPlot::save(QXmlStreamWriter* writer) const {
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->dataColumn, dataColumn);
-	WRITE_COLUMN(d->xEstimationColumn, xEstimationColumn);
-	WRITE_COLUMN(d->yEstimationColumn, yEstimationColumn);
+	writer->writeAttribute(QStringLiteral("kernelType"), QString::number(d->kernelType));
+	writer->writeAttribute(QStringLiteral("bandwidthType"), QString::number(d->bandwidthType));
+	writer->writeAttribute(QStringLiteral("bandwidth"), QString::number(d->bandwidth));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
@@ -516,9 +517,9 @@ bool KDEPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 			READ_COLUMN(dataColumn);
-			READ_COLUMN(xEstimationColumn);
-			READ_COLUMN(yEstimationColumn);
-
+			READ_INT_VALUE("kernelType", kernelType, nsl_kernel_type);
+			READ_INT_VALUE("bandwidthType", bandwidthType, nsl_kde_bandwidth_type);
+			READ_DOUBLE_VALUE("bandwidth", bandwidth);
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
