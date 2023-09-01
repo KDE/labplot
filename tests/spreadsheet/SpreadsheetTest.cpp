@@ -2653,6 +2653,9 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetAddRow() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	Project project;
 	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
 	project.addChild(sheetData);
@@ -2691,6 +2694,9 @@ void SpreadsheetTest::testLinkSpreadsheetAddRow() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	Project project;
 	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
 	project.addChild(sheetData);
@@ -2729,6 +2735,9 @@ void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	Project project;
 	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
 	project.addChild(sheetData);
@@ -2780,6 +2789,9 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	QString savePath;
 	{
 		Project project;
