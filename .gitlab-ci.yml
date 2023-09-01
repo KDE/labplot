@@ -18,7 +18,7 @@ variables:
   QT_TEST_TIMEOUT_FUNCTION: "600"
 
 # test builds (prepend '.' to temporary disable):
-## Ubuntu 22.04 min (Debug)
+# Ubuntu 22.04 min (Debug)
 ## Ubuntu 22.04 full (Release)
 ## Fedora 38 min (Debug)
 ## Fedora 38 full (Release)
@@ -52,7 +52,7 @@ freebsd_qt515:
 
 ########################################################
 
-.ubuntu_22.04_min:
+ubuntu_22.04_min:
   stage: build
   image: ubuntu:22.04
   only:
@@ -86,7 +86,7 @@ freebsd_qt515:
 # 1 test fails: FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-fedora_38_min:
+.fedora_38_min:
   stage: build
   image: fedora:38
   only:
