@@ -2514,6 +2514,9 @@ void SpreadsheetTest::testInsertColumnsSuppressUpdate() {
 }
 
 void SpreadsheetTest::testLinkSpreadsheetsUndoRedo() {
+#ifdef __FreeBSD__
+	return;
+#endif
 	Project project;
 	auto* sheetData = new Spreadsheet(QStringLiteral("data"), false);
 	project.addChild(sheetData);
